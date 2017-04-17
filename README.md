@@ -162,4 +162,6 @@ finance-tax-platform
 - [x] 数据缓存[redis](https://redis.io)
 - [x] 数据库[Mysql](https://www.mysql.com)
 
-### [接口规范](http://118.118.116.229:9800/cszj/finance-tax-platform/RESTful.md)
+### 接口规范
+
+参考项目根目录结构中的`RESTful.md`
