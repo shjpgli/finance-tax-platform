@@ -1,0 +1,165 @@
+## 财税平台
+
+### 安装说明
+
+如果没有特别说明，下面的安装以macOS平台为例，其他平台的安装类似，可以参考对应的官方安装说明文档。在macOS平台，通常使用`brew`包管理工具安装，
+关于brew的安装使用请参考[官方网站](https://brew.sh)。
+
+#### apache kafka安装
+
+安装命令：
+> brew install kafka
+
+启动服务(安装是会将kafka的bin目录加入PATH中)：
+> zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties &
+> kafka-server-start /usr/local/etc/kafka/server.properties &
+kafka依赖zookeeper, 如果没有报错，说明启动成功。
+
+##### 设置多个broker集群
+
+到目前，只是单一的运行一个broker，没什么意思。对于Kafka,一个broker仅仅只是一个集群的大小, 所有多设几个broker.首先为每个broker创建一个配置文件:
+> cp server.properties server-1.properties 
+> cp server.properties server-2.properties
+
+现在编辑这些新建的文件，设置以下属性：
+
+server-1.properties: 
+
+    broker.id=1 
+    listeners=PLAINTEXT://:9093 
+    log.dir=/tmp/kafka-logs-1
+
+server-2.properties: 
+
+    broker.id=2 
+    listeners=PLAINTEXT://:9094 
+    log.dir=/tmp/kafka-logs-2
+
+broker.id是集群中每个节点的唯一且永久的名称，我们修改端口和日志分区是因为我们现在在同一台机器上运行，要防止broker在同一端口上注册和覆盖对方的数据。
+
+我们已经运行了zookeeper和刚才的一个kafka节点，所有我们只需要在启动2个新的kafka节点。
+
+> kafka-server-start /usr/local/etc/kafka/server-1.properties &
+... 
+> kafka-server-start /usr/local/etc/kafka/server-2.properties &
+...
+
+[kafka-manager](https://github.com/yahoo/kafka-manager)是yahoo开源的kafka管理工具，它支持如下功能：
+* 管理多个集群
+* 方便查看集群状态
+* 执行preferred replica election
+* 批量为多个Topic生成并执行Partition分配方案
+* 创建Topic
+* 删除Topic（只支持0.8.2及以上版本，同时要求在Broker中将delete.topic.enable设置为true）
+* 为已有Topic添加Partition
+* 更新Topic配置
+* 在Broker JMX Reporter开启的前提下，轮询Broker级别和Topic级别的Metrics
+* 监控Consumer Group及其消费状态
+* 支持添加和查看LogKafka
+
+#### redis安装
+
+安装命令：
+> brew install redis
+
+创建集群节点，单节点的redis也是可以支持分布式session共享的；但是为了高可靠性，我们创建redis集群。
+redis集群至少要3个节点；现在创建一个3主3从的redis集群：
+> mkdir redis_cluster && cd redis_cluster
+> mkdir 7000 7001 7002 7003 7004 7005
+
+每个节点中需要一个redis.conf配置文件，文件内容如下(注意修改对应的端口号)：
+
+    port 7000
+    cluster-enabled yes
+    cluster-config-file node_7000.conf
+    cluster-node-timeout 5000
+    appendonly yes
+    #bind 127.0.0.1
+
+启动集群：
+> redis-server /usr/local/Cellar/redis/redis_cluster/7000/redis.conf &
+> redis-server /usr/local/Cellar/redis/redis_cluster/7001/redis.conf &
+> redis-server /usr/local/Cellar/redis/redis_cluster/7002/redis.conf &
+> redis-server /usr/local/Cellar/redis/redis_cluster/7003/redis.conf &
+> redis-server /usr/local/Cellar/redis/redis_cluster/7004/redis.conf &
+> redis-server /usr/local/Cellar/redis/redis_cluster/7005/redis.conf &
+
+依次启动6个redis实例。查看redis实例：
+> ps -ef | grep redis
+
+这时候的6个实例还没有成为集群，只是6个单独的节点，要让6个节点成为集群，需要使用redis源码中的`redis-trib.rb`。
+你首先要安装它(下载包的src目录中已经包含)：
+> gem install redis
+
+创建集群：
+> ~/Downloads/redis-3.2.8/src/redis-trib.rb create --replicas 1 127.0.0.1:7000 127.0.0.1:7001 \
+  127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005
+
+命令完成之后，你会看到大量的输出信息，安装完成。
+
+redis常用命令：
+> redis-cli -c -p 7000
+> redis 127.0.0.1:7000> set foo bar
+> -> Redirected to slot [12182] located at 127.0.0.1:7002
+> OK
+> redis 127.0.0.1:7002> set hello world
+> -> Redirected to slot [866] located at 127.0.0.1:7000
+> OK
+> redis 127.0.0.1:7000> get foo
+> -> Redirected to slot [12182] located at 127.0.0.1:7002
+> "bar"
+> redis 127.0.0.1:7000> get hello
+> -> Redirected to slot [866] located at 127.0.0.1:7000
+> "world"
+
+#### 项目安装
+
+项目由三个子项目组成，使用`maven`管理依赖，在安装之前请确保你已经安装了`mvn`,可以通过`mvn -v`查看是否安装，
+或参考[官方文档](http://maven.apache.org)安装。项目目录结构如下：
+finance-tax-platform
+    ├── README.md
+    ├── RESTful.md
+    ├── abc12366-bangbang
+    ├── abc12366-common
+    ├── abc12366-core
+    ├── abc12366-gateway
+    ├── abc12366-message
+    └── pom.xml
+
+项目安装(在项目根路径)：
+> mvn clean install
+
+客户端安装需要依赖服务端，在服务端没启动时，可以跳过测试安装：
+> mvn clean install -Dmaven.test.skip=true
+
+启动`abc12366-core`：
+> cd abc12366-core && mvn spring-boot:run
+
+或调试模式启动：
+> cd abc12366-core && mvn spring-boot:run --debug
+
+下面需要注意启动顺序，项目之间会有依赖；否则某些情况下可能会有警告。
+
+#### 数据库
+
+项目使用mysql数据库，在开发阶段，系统会自动创建数据表、初始化数据，脚本在每个项目的`resources`目录下，`schema.sql`(数据表结构),
+`data.sql`(初始化数据)。系统发布阶段、或多人开发时相关的脚本需要全部注释。
+
+### 接口测试
+
+推荐使用跨平台命令行方式的`curl`或基于chrome浏览器的图形化工具`postman`。由于postman工具需要科学上网科学上网才能在web store中下载，
+所以还需要一个科学上网工具[`lantern`](https://github.com/getlantern/lantern)。
+
+### 涉及到的技术和框架
+
+- [x] RESTful接口[Spring WebMvc](http://spring.io)
+- [x] [Spring Boot](http://spring.io)
+- [x] 统一日志[logback based on SLF4J](https://www.slf4j.org)
+- [x] 消息中间件[apache kafka](http://kafka.apache.org)
+- [x] 数据校验[Hibernate Validator](http://hibernate.org/validator/)
+- [x] 数据访问DAO[Spring Mybatis](http://www.mybatis.org/spring/)
+- [x] 数据库连接池[Druid](https://github.com/alibaba/druid/)
+- [x] 数据缓存[redis](https://redis.io)
+- [x] 数据库[Mysql](https://www.mysql.com)
+
+### [接口规范](http://118.118.116.229:9800/cszj/finance-tax-platform/RESTful.md)
