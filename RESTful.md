@@ -1,13 +1,15 @@
 # RESTful API 规范 v1.0
 
-本规范适用于艾博克`财税平台`SOA系统。需要访问SOA系统的第二方、第三方App需要在系统中注册、登录之后会返回一个Access-Token，App以后的每次访问都需要在请求头中携带Access-Token，才能访问本系统API。用户使用本系统API同样需要用户登录之后返回的Token。Token可以作为用户唯一身份标识。
+本规范适用于艾博克`财税平台`SOA系统。需要访问SOA系统的第二方、第三方App需要在系统中注册、登录之后会返回一个Access-Token，
+App以后的每次访问都需要在请求头中携带Access-Token，才能访问本系统API。
+用户使用本系统API同样需要用户登录之后返回的Token,Token可以作为用户唯一身份标识。
 
 Access-Token包含App信息、加密算法、加密密钥；Token包含创建时间、过期时间、用户信息、加密算法、加密密钥。
 
 ### URI规范
 * 不要用大写
 * 单词间使用下划线'_'
-* 不使用动词，资源要使用名词复数形式，如：user、rooms、tickets
+* 不使用动词（如select、query、update），资源要使用名词或名词复数形式（如user、rooms、tickets）
 * 层级 `>=` 三层，则使用'?'带参数
 	+ ~~users/1/address/2/citys~~ (不好)
 	+ /citys?users=1&address=2; (好)
@@ -65,18 +67,14 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 * ?type=1&state=closed
 * ?limit=10：指定返回记录的数量
 * ?offset=10：指定返回记录的开始位置。
-* ?page=2&per_page=100：指定第几页，以及每页的记录数。
-* ?sortby=name&order=asc：指定返回结果按照哪个属性排序，以及排序顺序。
+* ?page=2&size=100：指定第几页，以及每页的记录数。
+* ?sort=name&order=asc：指定返回结果按照哪个属性排序，以及排序顺序。
 * ?animal_type_id=1：指定筛选条件
 
-#### 排序
-* `+`升序，如?sort=+create_time，根据create_time升序
-* `-`降序，如?sort=-create_time，根据create_time降序
-
 #### 分页
-* ?limit=10&offset=10
-* limit：返回记录数量
-* offset：返回记录的开始位置
+* ?page=2&size=100
+* page：指定第几页
+* size：每页的记录数
 
 #### 单参数多字段
 使用`,` 分隔，如
@@ -113,10 +111,21 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 
 ### 错误处理
 如果状态码是4xx，就应该向用户返回出错信息。一般来说，返回的信息中将error作为键名，出错信息作为键值即可。
+
+常规错误时的错误处理：
 ```json
 {
 	code: 4000,
-    message: "请求的用户名不能为空"
+    message: "请求头Access-Token不正确"
+}
+```
+
+校验错误时的错误处理：
+```json
+{
+	code: 4001,
+	field: username
+	message: "用户名不能为空，有效长度在8-16位"
 }
 ```
 

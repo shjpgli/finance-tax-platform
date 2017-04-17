@@ -44,7 +44,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js"
-                ).excludePathPatterns("/test", "/version")
+                ).excludePathPatterns("/error", "/test", "/version")
                 .excludePathPatterns("/app/**")
                 .excludePathPatterns("/register", "/login", "/refresh")
                 .excludePathPatterns("/druid/**");

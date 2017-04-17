@@ -137,6 +137,7 @@ finance-tax-platform
 * `abc12366-gateway`通用网关，除`abc12366-common`子项目之外，其他子项目都需要经过本项目才能访问对应子项目的API
 * `abc12366-message`消息子系统，所以子项目需要发送消息都通过本项目
 * `pom.xml`maven项目管理依赖配置文件
+**在代码层面，原则上所有子项目除了依赖`abc12366-common`之外，相互之间不能存在依赖。**
 
 项目安装(在项目根路径)：
 > mvn clean install

@@ -1,7 +1,7 @@
 package com.abc12366.common.util;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * 读取Properties文件
@@ -20,12 +20,13 @@ public class Properties {
         this.filePath = filePath;
     }
 
-    public String getValue(String code) throws IOException {
+    public String getValue(int code) throws IOException {
         if (properties == null) {
             properties = new java.util.Properties();
         }
-        InputStream inputStream = java.util.Properties.class.getClassLoader().getResourceAsStream(filePath);
-        properties.load(inputStream);
-        return properties.getProperty(code);
+        InputStreamReader isr = new InputStreamReader(Properties.class.getClassLoader().getResourceAsStream(filePath),
+                "UTF-8");
+        properties.load(isr);
+        return properties.getProperty(String.valueOf(code));
     }
 }

@@ -1,6 +1,7 @@
 package com.abc12366.gateway.component;
 
-import com.abc12366.common.util.Message;
+import com.abc12366.common.model.BodyStatus;
+import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.service.AppService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,21 +33,22 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
         String accessToken = request.getHeader("Access-Token");
         response.setContentType("text/plain;charset=UTF-8");
         if (StringUtils.isEmpty(accessToken)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, Message.C4000);
-            LOGGER.warn("URI:{}, IP:{}, Message:{}", request.getRequestURI(), request.getRemoteAddr(), Message.C4000);
+            BodyStatus bodyStatus = Utils.code(4000);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, bodyStatus.getMessage());
+            LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
         if (appService.isAuthentication(accessToken)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Message.C4001);
-            LOGGER.warn("URI:{}, IP:{}, Message:{}", request.getRequestURI(), request.getRemoteAddr(),
-                    Message.C4001);
+            BodyStatus bodyStatus = Utils.code(4001);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
+            LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
         // 4.App授权
         if (appService.isAuthentization(accessToken, request.getRequestURI())) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Message.C4002);
-            LOGGER.warn("URI:{}, IP:{}, Message:{}", request.getRequestURI(), request.getRemoteAddr(),
-                    Message.C4002);
+            BodyStatus bodyStatus = Utils.code(4002);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
+            LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
 

@@ -3,6 +3,7 @@ package com.abc12366.gateway.web;
 import com.abc12366.common.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,11 @@ public class IndexController {
     @GetMapping("/")
     public ResponseEntity index() {
         return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/error")
+    public ResponseEntity error() {
+        return new ResponseEntity(Utils.code(4000), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/test")

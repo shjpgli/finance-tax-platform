@@ -1,6 +1,6 @@
 package com.abc12366.gateway.component;
 
-import com.abc12366.common.util.Message;
+import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.Log;
 import com.abc12366.gateway.service.BlacklistService;
@@ -42,8 +42,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
         // 2.黑名单服务
         if (blacklistService.isBlacklist(addr)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Message.C4003);
-            LOGGER.info("URI:{}, IP:{}, Message:{}", uri, addr, Message.C4003);
+            BodyStatus bodyStatus = Utils.code(4003);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
+            LOGGER.info("URI:{}, IP:{}, BodyStatus:{}", uri, addr, bodyStatus);
             return false;
         }
 
