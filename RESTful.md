@@ -57,7 +57,7 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 ### 参数处理
 
 #### GET参数
-* 非id的参数使用'?'方式传输
+非id的参数使用'?'方式传输
 ```javascript
 	/users/1?state=closed
 ```
