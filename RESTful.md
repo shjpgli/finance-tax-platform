@@ -42,11 +42,12 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 
 ### 兼容
 很多客户只支持GET/POST请求，一般有两种方式模拟PUT等请求
-* 添加_method参数
+
+添加_method参数
 ```javascript
 	/users/1?_method=put&name=111
 ```
-* 添加X-HTTP-Method-Override请求头 (我们使用这种方式)
+添加X-HTTP-Method-Override请求头 (我们使用这种方式)
 ```javascript
 	X-HTTP-Method-Override: PUT
 ```
@@ -124,7 +125,7 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 ```json
 {
 	code: 4001,
-	field: username
+	field: username,
 	message: "用户名不能为空，有效长度在8-16位"
 }
 ```

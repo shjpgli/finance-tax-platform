@@ -26,7 +26,7 @@ public class IndexController {
 
     @GetMapping("/error")
     public ResponseEntity error() {
-        return new ResponseEntity(Utils.code(4000), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(Utils.bodyStatus(4000), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/test")

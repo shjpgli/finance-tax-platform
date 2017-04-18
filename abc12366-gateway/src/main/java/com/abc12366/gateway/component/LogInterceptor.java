@@ -42,7 +42,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
         // 2.黑名单服务
         if (blacklistService.isBlacklist(addr)) {
-            BodyStatus bodyStatus = Utils.code(4003);
+            BodyStatus bodyStatus = Utils.bodyStatus(4003);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
             LOGGER.info("URI:{}, IP:{}, BodyStatus:{}", uri, addr, bodyStatus);
             return false;

@@ -37,7 +37,7 @@ public class Utils {
      * @param code int
      * @return BodyStatus
      */
-    public static BodyStatus code(int code){
+    public static BodyStatus bodyStatus(int code){
         BodyStatus body = new BodyStatus();
         body.setCode(code);
         try {

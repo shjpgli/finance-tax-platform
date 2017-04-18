@@ -33,20 +33,20 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
         String accessToken = request.getHeader("Access-Token");
         response.setContentType("text/plain;charset=UTF-8");
         if (StringUtils.isEmpty(accessToken)) {
-            BodyStatus bodyStatus = Utils.code(4000);
+            BodyStatus bodyStatus = Utils.bodyStatus(4000);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, bodyStatus.getMessage());
             LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
         if (appService.isAuthentication(accessToken)) {
-            BodyStatus bodyStatus = Utils.code(4001);
+            BodyStatus bodyStatus = Utils.bodyStatus(4001);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
             LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
         // 4.App授权
         if (appService.isAuthentization(accessToken, request.getRequestURI())) {
-            BodyStatus bodyStatus = Utils.code(4002);
+            BodyStatus bodyStatus = Utils.bodyStatus(4002);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
             LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
