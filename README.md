@@ -121,22 +121,28 @@ redis常用命令：
 finance-tax-platform
     ├── README.md
     ├── RESTful.md
+    ├── abc12366-admin
     ├── abc12366-bangbang
+    ├── abc12366-cms
     ├── abc12366-common
-    ├── abc12366-core
     ├── abc12366-gateway
     ├── abc12366-message
+    ├── abc12366-uc
+    ├── finance-tax-platform.iml
     └── pom.xml
 
 项目结构介绍：
 * `README.md`包含了项目的简单介绍及如何安装项目，使用之前必读
 * `RESTful.md`开发接口定义的规范，开发本系统的接口必须严格安装规范执行
+* `abc12366-admin`为管理系统提供接口
 * `abc12366-bangbang`帮帮子系统
 * `abc12366-common`通用工具包,所以子项目的通用类都包含在这个子项目中
-* `abc12366-core`财税平台的核心业务--用户中心
+* `abc12366-cms`内容管理系统
+* `abc12366-uc`财税平台的核心业务--用户中心
 * `abc12366-gateway`通用网关，除`abc12366-common`子项目之外，其他子项目都需要经过本项目才能访问对应子项目的API
 * `abc12366-message`消息子系统，所以子项目需要发送消息都通过本项目
 * `pom.xml`maven项目管理依赖配置文件
+
 **在代码层面，原则上所有子项目除了依赖`abc12366-common`之外，相互之间不能存在依赖。**
 
 项目安装(在项目根路径)：
@@ -145,11 +151,11 @@ finance-tax-platform
 客户端安装需要依赖服务端，在服务端没启动时，可以跳过测试安装：
 > mvn clean install -Dmaven.test.skip=true
 
-启动`abc12366-core`：
-> cd abc12366-core && mvn spring-boot:run
+启动`abc12366-uc`：
+> cd abc12366-uc && mvn spring-boot:run
 
 或调试模式启动：
-> cd abc12366-core && mvn spring-boot:run --debug
+> cd abc12366-uc && mvn spring-boot:run --debug
 
 下面需要注意启动顺序，项目之间会有依赖；否则某些情况下可能会有警告。
 
