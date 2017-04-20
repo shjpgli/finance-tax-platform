@@ -1,5 +1,7 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.mapper.db1.ActiveUserMapper;
+import com.abc12366.uc.model.bo.ActiveUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

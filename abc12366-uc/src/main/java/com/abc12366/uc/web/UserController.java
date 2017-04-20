@@ -1,5 +1,8 @@
 package com.abc12366.uc.web;
 
+import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

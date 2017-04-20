@@ -1,6 +1,11 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
+import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.RegisterBO;
+import com.abc12366.uc.model.bo.TokenBO;
+import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

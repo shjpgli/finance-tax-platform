@@ -1,6 +1,13 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.mapper.db1.AuthorityMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
+import com.abc12366.uc.model.Authority;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.RegisterBO;
+import com.abc12366.uc.model.bo.UserBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

@@ -1,5 +1,7 @@
 package com.abc12366.uc.mapper.db1;
 
+import com.abc12366.uc.model.User;
+
 import java.util.List;
 
 /**

@@ -1,5 +1,7 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.mapper.db1.UserMapper;
+import com.abc12366.uc.model.User;
 import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
