@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.UserMapper2">
+
+    <select id="selectList" resultType="User">
+        select id, username, password, phone, enabled, lastPasswordResetDate, createDate, modifyDate,
+          authority as roles
+        from user a
+        left join authority b on a.id = b.userId
+    </select>
+
+    <select id="selectOne" resultType="User">
+        select id, username, password, phone, enabled, lastPasswordResetDate, createDate, modifyDate,
+        authority as roles
+        from user a
+        left join authority b on a.id = b.userId
+        where id = #{id}
+    </select>
+
+    <select id="selectByUsernameOrPhone" resultType="User">
+        select id, username, password, phone, enabled, lastPasswordResetDate, createDate, modifyDate,
+        authority as roles
+        from user a
+        left join authority b on a.id = b.userId
+        where username = #{username}
+        or phone = #{phone}
+    </select>
+
+    <insert id="insert" parameterType="User">
+        insert into user (id, username, password, phone, enabled, lastPasswordResetDate, createDate, modifyDate)
+        values (#{id}, #{username}, #{password}, #{phone}, #{enabled}, #{lastPasswordResetDate}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update">
+        update user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="lastPasswordResetDate != null">lastPasswordResetDate = #{lastPasswordResetDate},</if>
+            <if test="modifyDate != null">modifyDate = #{modifyDate}</if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

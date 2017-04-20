@@ -7,10 +7,12 @@ App以后的每次访问都需要在请求头中携带Access-Token，才能访�
 Access-Token包含App信息、加密算法、加密密钥；Token包含创建时间、过期时间、用户信息、加密算法、加密密钥。
 
 ### 完整URI
-> http://gateway.abc12366.com/api
-> http://bangbang.abc12366.com/api
-> http://core.abc12366.com/api
-> ...
+> http://api.abc12366.com/admin
+> http://api.abc12366.com/bangbang
+> http://api.abc12366.com/cms
+> http://api.abc12366.com/gateway
+> http://api.abc12366.com/message
+> http://api.abc12366.com/uc
 
 ### URI规范
 * 不要用大写
@@ -31,9 +33,7 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 ### Method
 * GET：查询资源
 * POST：创建资源
-* PUT/PATCH
-	+ PUT：全量更新资源（提供改变后的完整资源）
-	+ PATCH：局部更新资源（仅提供改变的属性）
+* PUT：全量更新资源（提供改变后的完整资源）
 * DELETE：删除资源
 
 #### 例子
@@ -41,7 +41,6 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 * GET /collection/resource：返回单个资源对象
 * POST /collection：返回新生成的资源对象
 * PUT /collection/resource：返回完整的资源对象
-* PATCH /collection/resource：返回完整的资源对象
 * DELETE /collection/resource：返回一个空文档
 
 ---
