@@ -3,11 +3,15 @@ abc12366-bangbang/abc12366-bangbang.iml
 abc12366-bangbang/target/
 abc12366-common/abc12366-common.iml
 abc12366-common/target/
-abc12366-core/abc12366-core.iml
-abc12366-core/target/
+abc12366-uc/abc12366-uc.iml
+abc12366-uc/target/
 abc12366-gateway/abc12366-gateway.iml
 abc12366-gateway/target/
 abc12366-message/abc12366-message.iml
 abc12366-message/target/
+abc12366-admin/abc12366-admin.iml
+abc12366-admin/target/
+abc12366-cms/abc12366-cms.iml
+abc12366-cms/target/
 finance-tax-platform.iml
 **/.DS_Store
