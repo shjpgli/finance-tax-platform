@@ -118,7 +118,8 @@ redis常用命令：
 
 项目由三个子项目组成，使用`maven`管理依赖，在安装之前请确保你已经安装了`mvn`,可以通过`mvn -v`查看是否安装，
 或参考[官方文档](http://maven.apache.org)安装。项目目录结构如下：
-finance-tax-platform
+    
+    finance-tax-platform
     ├── README.md
     ├── RESTful.md
     ├── abc12366-admin

@@ -7,6 +7,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-04-19 11:21 AM
@@ -19,8 +21,8 @@ public class RedisServiceImpl implements RedisService {
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-    @Autowired
+    
+    @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOperations;
 
     public void test(){
