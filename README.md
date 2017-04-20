@@ -13,15 +13,18 @@
 > brew install kafka
 
 启动服务(安装是会将kafka的bin目录加入PATH中)：
-> zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties &
-> kafka-server-start /usr/local/etc/kafka/server.properties &
+
+    zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties &
+    kafka-server-start /usr/local/etc/kafka/server.properties &
+    
 kafka依赖zookeeper, 如果没有报错，说明启动成功。
 
 ##### 设置多个broker集群
 
 到目前，只是单一的运行一个broker，没什么意思。对于Kafka,一个broker仅仅只是一个集群的大小, 所有多设几个broker.首先为每个broker创建一个配置文件:
-> cp server.properties server-1.properties 
-> cp server.properties server-2.properties
+
+    cp server.properties server-1.properties 
+    cp server.properties server-2.properties
 
 现在编辑这些新建的文件，设置以下属性：
 
@@ -41,10 +44,8 @@ broker.id是集群中每个节点的唯一且永久的名称，我们修改端�
 
 我们已经运行了zookeeper和刚才的一个kafka节点，所有我们只需要在启动2个新的kafka节点。
 
-> kafka-server-start /usr/local/etc/kafka/server-1.properties &
-... 
-> kafka-server-start /usr/local/etc/kafka/server-2.properties &
-...
+    kafka-server-start /usr/local/etc/kafka/server-1.properties &
+    kafka-server-start /usr/local/etc/kafka/server-2.properties &
 
 [kafka-manager](https://github.com/yahoo/kafka-manager)是yahoo开源的kafka管理工具，它支持如下功能：
 * 管理多个集群
@@ -66,8 +67,9 @@ broker.id是集群中每个节点的唯一且永久的名称，我们修改端�
 
 创建集群节点，单节点的redis也是可以支持分布式session共享的；但是为了高可靠性，我们创建redis集群。
 redis集群至少要3个节点；现在创建一个3主3从的redis集群：
-> mkdir redis_cluster && cd redis_cluster
-> mkdir 7000 7001 7002 7003 7004 7005
+    
+    mkdir redis_cluster && cd redis_cluster
+    mkdir 7000 7001 7002 7003 7004 7005
 
 每个节点中需要一个redis.conf配置文件，文件内容如下(注意修改对应的端口号)：
 
@@ -79,12 +81,13 @@ redis集群至少要3个节点；现在创建一个3主3从的redis集群：
     #bind 127.0.0.1
 
 启动集群：
-> redis-server /usr/local/Cellar/redis/redis_cluster/7000/redis.conf &
-> redis-server /usr/local/Cellar/redis/redis_cluster/7001/redis.conf &
-> redis-server /usr/local/Cellar/redis/redis_cluster/7002/redis.conf &
-> redis-server /usr/local/Cellar/redis/redis_cluster/7003/redis.conf &
-> redis-server /usr/local/Cellar/redis/redis_cluster/7004/redis.conf &
-> redis-server /usr/local/Cellar/redis/redis_cluster/7005/redis.conf &
+
+    redis-server /usr/local/Cellar/redis/redis_cluster/7000/redis.conf &
+    redis-server /usr/local/Cellar/redis/redis_cluster/7001/redis.conf &
+    redis-server /usr/local/Cellar/redis/redis_cluster/7002/redis.conf &
+    redis-server /usr/local/Cellar/redis/redis_cluster/7003/redis.conf &
+    redis-server /usr/local/Cellar/redis/redis_cluster/7004/redis.conf &
+    redis-server /usr/local/Cellar/redis/redis_cluster/7005/redis.conf &
 
 依次启动6个redis实例。查看redis实例：
 > ps -ef | grep redis
@@ -100,19 +103,20 @@ redis集群至少要3个节点；现在创建一个3主3从的redis集群：
 命令完成之后，你会看到大量的输出信息，安装完成。
 
 redis常用命令：
-> redis-cli -c -p 7000
-> redis 127.0.0.1:7000> set foo bar
-> -> Redirected to slot [12182] located at 127.0.0.1:7002
-> OK
-> redis 127.0.0.1:7002> set hello world
-> -> Redirected to slot [866] located at 127.0.0.1:7000
-> OK
-> redis 127.0.0.1:7000> get foo
-> -> Redirected to slot [12182] located at 127.0.0.1:7002
-> "bar"
-> redis 127.0.0.1:7000> get hello
-> -> Redirected to slot [866] located at 127.0.0.1:7000
-> "world"
+
+    redis-cli -c -p 7000
+    redis 127.0.0.1:7000> set foo bar
+    -> Redirected to slot [12182] located at 127.0.0.1:7002
+    OK
+    redis 127.0.0.1:7002> set hello world
+    -> Redirected to slot [866] located at 127.0.0.1:7000
+    OK
+    redis 127.0.0.1:7000> get foo
+    -> Redirected to slot [12182] located at 127.0.0.1:7002
+    "bar"
+    redis 127.0.0.1:7000> get hello
+    -> Redirected to slot [866] located at 127.0.0.1:7000
+    "world"
 
 #### 项目安装
 

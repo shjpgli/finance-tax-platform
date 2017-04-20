@@ -7,12 +7,13 @@ App以后的每次访问都需要在请求头中携带Access-Token，才能访�
 Access-Token包含App信息、加密算法、加密密钥；Token包含创建时间、过期时间、用户信息、加密算法、加密密钥。
 
 ### 完整URI
-> http://api.abc12366.com/admin
-> http://api.abc12366.com/bangbang
-> http://api.abc12366.com/cms
-> http://api.abc12366.com/gateway
-> http://api.abc12366.com/message
-> http://api.abc12366.com/uc
+
+	http://api.abc12366.com/admin
+	http://api.abc12366.com/bangbang
+	http://api.abc12366.com/cms
+	http://api.abc12366.com/gateway
+	http://api.abc12366.com/message
+	http://api.abc12366.com/uc
 
 ### URI规范
 * 不要用大写
