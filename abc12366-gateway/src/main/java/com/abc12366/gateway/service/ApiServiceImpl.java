@@ -1,7 +1,8 @@
 package com.abc12366.gateway.service;
 
 import com.abc12366.common.util.Utils;
-import com.abc12366.gateway.mapper.ApiMapper;
+import com.abc12366.gateway.mapper.db1.ApiMapper;
+import com.abc12366.gateway.mapper.db2.ApiRoMapper;
 import com.abc12366.gateway.model.Api;
 import com.abc12366.gateway.model.bo.ApiBO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,17 @@ public class ApiServiceImpl implements ApiService {
     @Autowired
     private ApiMapper apiMapper;
 
+    @Autowired
+    private ApiRoMapper apiRoMapper;
+
     @Override
     public List<Api> selectList() {
-        return apiMapper.selectList();
+        return apiRoMapper.selectList();
     }
 
     @Override
     public Api selectOne(String id) {
-        return apiMapper.selectOne(id);
+        return apiRoMapper.selectOne(id);
     }
 
     @Override

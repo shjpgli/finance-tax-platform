@@ -1,4 +1,4 @@
-package com.abc12366.uc.config;
+package com.abc12366.admin.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -120,7 +120,7 @@ public class DatabaseConfig implements EnvironmentAware {
         // 设置数据源
         sqlSessionFactoryBean.setDataSource(db1DataSource());
         // 自动重命名
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.abc12366.uc.model");
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.abc12366.admin.model");
         // 设置 typeHandler
 //        sqlSessionFactoryBean.setTypeHandlersPackage("com.example.project.typeHandler");
         // 添加拦截器插件 (如果有的话, 分页插件, 分表插件等)
@@ -129,7 +129,7 @@ public class DatabaseConfig implements EnvironmentAware {
         try {
             ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             sqlSessionFactoryBean.setMapperLocations(resolver
-                    .getResources("classpath:com/abc12366/uc/mapper/db1/*.xml"));
+                    .getResources("classpath:com/abc12366/admin/mapper/db1/*.xml"));
             return sqlSessionFactoryBean.getObject();
         } catch (Exception e) {
             LOGGER.error("初始化DB1SqlSessionFactory失败", e);
@@ -143,7 +143,7 @@ public class DatabaseConfig implements EnvironmentAware {
         // 设置数据源
         sqlSessionFactoryBean.setDataSource(db2DataSource());
         // 自动重命名
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.abc12366.uc.model");
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.abc12366.admin.model");
         // 设置 typeHandler
 //        sqlSessionFactoryBean.setTypeHandlersPackage("com.example.project.typeHandler");
         // 添加拦截器插件 (如果有的话, 分页插件, 分表插件等)
@@ -152,7 +152,7 @@ public class DatabaseConfig implements EnvironmentAware {
         try {
             ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             sqlSessionFactoryBean.setMapperLocations(resolver
-                    .getResources("classpath:com/abc12366/uc/mapper/db2/*.xml"));
+                    .getResources("classpath:com/abc12366/admin/mapper/db2/*.xml"));
             return sqlSessionFactoryBean.getObject();
         } catch (Exception e) {
             LOGGER.error("初始化DB2SqlSessionFactory失败", e);

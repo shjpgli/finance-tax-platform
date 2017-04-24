@@ -184,7 +184,9 @@ redis常用命令：
 - [x] 数据访问DAO[Spring Mybatis](http://www.mybatis.org/spring/)
 - [x] 数据库连接池[Druid](https://github.com/alibaba/druid/)
 - [x] 数据缓存[redis](https://redis.io)
+- [x] [Spring Data Redis](http://projects.spring.io/spring-data-redis/)
 - [x] 数据库[Mysql](https://www.mysql.com)
+- [x] 操作JSON[fastjson](https://github.com/alibaba/fastjson)
 
 ### 接口规范
 

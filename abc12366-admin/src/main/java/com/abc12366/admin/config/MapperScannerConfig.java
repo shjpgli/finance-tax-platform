@@ -1,4 +1,4 @@
-package com.abc12366.uc.config;
+package com.abc12366.admin.config;
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -20,7 +20,7 @@ public class MapperScannerConfig {
     public MapperScannerConfigurer db1MapperScannerConfigurer() {
         MapperScannerConfigurer configurer = new MapperScannerConfigurer();
         // 设置自动扫描包, 该包下的Mapper(Dao)将会被mybatis自动注册, 不用写实现类
-        configurer.setBasePackage("com.abc12366.uc.mapper.db1");
+        configurer.setBasePackage("com.abc12366.admin.mapper.db1");
         configurer.setSqlSessionFactoryBeanName("db1SqlSessionFactory");
         return configurer;
     }
@@ -29,7 +29,7 @@ public class MapperScannerConfig {
     public MapperScannerConfigurer db2MapperScannerConfigurer() {
         MapperScannerConfigurer configurer = new MapperScannerConfigurer();
         // 设置自动扫描包, 该包下的Mapper(Dao)将会被mybatis自动注册, 不用写实现类
-        configurer.setBasePackage("com.abc12366.uc.mapper.db2");
+        configurer.setBasePackage("com.abc12366.admin.mapper.db2");
         configurer.setSqlSessionFactoryBeanName("db2SqlSessionFactory");
         return configurer;
     }

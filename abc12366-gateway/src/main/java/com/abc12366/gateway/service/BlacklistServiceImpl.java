@@ -1,6 +1,6 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.gateway.mapper.BlacklistMapper;
+import com.abc12366.gateway.mapper.db2.BlacklistRoMapper;
 import com.abc12366.gateway.model.Blacklist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 public class BlacklistServiceImpl implements BlacklistService {
 
     @Autowired
-    private BlacklistMapper blacklistMapper;
+    private BlacklistRoMapper blacklistRoMapper;
 
     @Override
     public boolean isBlacklist(String addr) {
-        Blacklist blacklist = blacklistMapper.selectOne(addr);
+        Blacklist blacklist = blacklistRoMapper.selectOne(addr);
         return blacklist != null;
     }
 }

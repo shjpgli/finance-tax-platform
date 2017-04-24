@@ -20,13 +20,13 @@ public class Properties {
         this.filePath = filePath;
     }
 
-    public String getValue(int code) throws IOException {
+    public String getValue(String code) throws IOException {
         if (properties == null) {
             properties = new java.util.Properties();
         }
         InputStreamReader isr = new InputStreamReader(Properties.class.getClassLoader().getResourceAsStream(filePath),
                 "UTF-8");
         properties.load(isr);
-        return properties.getProperty(String.valueOf(code));
+        return properties.getProperty(code);
     }
 }
