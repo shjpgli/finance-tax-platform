@@ -1,4 +1,4 @@
-package com.abc12366.uc;
+package com.abc12366.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
  * @create 2017-02-20 2:09 PM
  * @since 1.0.0
  */
-@SpringBootApplication(scanBasePackages = "com.abc12366.uc, com.abc12366.gateway")
+@SpringBootApplication(scanBasePackages = "com.abc12366.admin, com.abc12366.gateway")
 @PropertySource("classpath:application.properties")
 @EnableAsync
 public class Application extends AsyncConfigurerSupport {

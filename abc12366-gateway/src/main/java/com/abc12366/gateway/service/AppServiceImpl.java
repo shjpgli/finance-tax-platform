@@ -1,7 +1,8 @@
 package com.abc12366.gateway.service;
 
 import com.abc12366.common.util.Utils;
-import com.abc12366.gateway.mapper.AppMapper;
+import com.abc12366.gateway.mapper.db1.AppMapper;
+import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.model.bo.AppRespBO;
@@ -23,9 +24,12 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private AppMapper appMapper;
 
+    @Autowired
+    private AppRoMapper appRoMapper;
+
     @Override
     public AppRespBO register(AppBO appBO) {
-        App app = appMapper.selectByName(appBO.getName());
+        App app = appRoMapper.selectByName(appBO.getName());
         if (app == null) {
             App newApp = new App.Builder()
                     .id(Utils.uuid())
@@ -50,7 +54,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public TokenBO login(AppBO appBO) {
-        App app = appMapper.selectByName(appBO.getName());
+        App app = appRoMapper.selectByName(appBO.getName());
 
         if (app != null && app.getPassword().equals(appBO.getPassword())) {
             return new TokenBO(app.getId());
@@ -60,7 +64,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public boolean isAuthentication(String accessToken) {
-        return appMapper.selectOne(accessToken) != null;
+        return appRoMapper.selectOne(accessToken) != null;
     }
 
     @Override

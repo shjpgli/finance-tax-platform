@@ -34,6 +34,6 @@ public class Message {
             properties = new Properties(MESSAGE);
         }
 
-        return properties.getValue(key);
+        return properties.getValue(String.valueOf(key));
     }
 }

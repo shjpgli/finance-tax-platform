@@ -1,6 +1,6 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.gateway.mapper.LogMapper;
+import com.abc12366.gateway.mapper.db1.LogMapper;
 import com.abc12366.gateway.model.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

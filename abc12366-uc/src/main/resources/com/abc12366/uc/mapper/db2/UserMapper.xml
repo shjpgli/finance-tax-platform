@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.uc.mapper.db2.UserMapper2">
+<mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
     <select id="selectList" resultType="User">
         select id, username, password, phone, enabled, lastPasswordResetDate, createDate, modifyDate,

@@ -45,7 +45,7 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         // 4.App授权
-        if (appService.isAuthentization(accessToken, request.getRequestURI())) {
+        if (!appService.isAuthentization(accessToken, request.getRequestURI())) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
             LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
