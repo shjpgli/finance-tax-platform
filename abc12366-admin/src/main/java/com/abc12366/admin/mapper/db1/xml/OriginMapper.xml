@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.admin.mapper.db1.OriginMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	originName,	refCount
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="origin" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM cms_origin
+		 WHERE originId = #{originId}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM cms_origin
+		 WHERE originId = #{originId}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="origin">
+		 INSERT INTO cms_origin
+ 		(originId,originName,refCount) 
+		 VALUES 
+ 		(#{originId},#{originName},#{refCount}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="origin">
+		 INSERT INTO cms_origin
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="originId != null">
+				 originId,
+			</if>
+			<if test="originName != null">
+				 originName,
+			</if>
+			<if test="refCount != null">
+				 refCount,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="originId!=null">
+				 #{originId},
+			</if>
+			<if test="originName!=null">
+				 #{originName},
+			</if>
+			<if test="refCount!=null">
+				 #{refCount},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="origin">
+		 UPDATE cms_origin
+ 		 <set> 
+			<if test="originName != null">
+				 originName = #{originName},
+			</if>
+			<if test="refCount != null">
+				 refCount = #{refCount},
+			</if>
+
+ 		 </set>
+		 WHERE originId = #{originId}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="origin">
+		 UPDATE cms_origin
+		 SET 
+			 originName = #{originName},
+			 refCount = #{refCount}
+		 WHERE originId = #{originId}
+	</update>
+
+</mapper>
