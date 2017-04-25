@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cms.mapper.ChannelMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="channel" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM cms_channel
+		 WHERE channelId = #{channelId}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM cms_channel
+		 WHERE channelId = #{channelId}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="channel">
+		 INSERT INTO cms_channel
+ 		(channelId,modelId,siteId,parentId,channelPath,priority,isDisplay) 
+		 VALUES 
+ 		(#{channelId},#{modelId},#{siteId},#{parentId},#{channelPath},#{priority},#{isDisplay}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="channel">
+		 INSERT INTO cms_channel
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="channelId != null">
+				 channelId,
+			</if>
+			<if test="modelId != null">
+				 modelId,
+			</if>
+			<if test="siteId != null">
+				 siteId,
+			</if>
+			<if test="parentId != null">
+				 parentId,
+			</if>
+			<if test="channelPath != null">
+				 channelPath,
+			</if>
+			<if test="priority != null">
+				 priority,
+			</if>
+			<if test="isDisplay != null">
+				 isDisplay,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="channelId!=null">
+				 #{channelId},
+			</if>
+			<if test="modelId!=null">
+				 #{modelId},
+			</if>
+			<if test="siteId!=null">
+				 #{siteId},
+			</if>
+			<if test="parentId!=null">
+				 #{parentId},
+			</if>
+			<if test="channelPath!=null">
+				 #{channelPath},
+			</if>
+			<if test="priority!=null">
+				 #{priority},
+			</if>
+			<if test="isDisplay!=null">
+				 #{isDisplay},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="channel">
+		 UPDATE cms_channel
+ 		 <set> 
+			<if test="modelId != null">
+				 modelId = #{modelId},
+			</if>
+			<if test="siteId != null">
+				 siteId = #{siteId},
+			</if>
+			<if test="parentId != null">
+				 parentId = #{parentId},
+			</if>
+			<if test="channelPath != null">
+				 channelPath = #{channelPath},
+			</if>
+			<if test="priority != null">
+				 priority = #{priority},
+			</if>
+			<if test="isDisplay != null">
+				 isDisplay = #{isDisplay},
+			</if>
+
+ 		 </set>
+		 WHERE channelId = #{channelId}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="channel">
+		 UPDATE cms_channel
+		 SET 
+			 modelId = #{modelId},
+			 siteId = #{siteId},
+			 parentId = #{parentId},
+			 channelPath = #{channelPath},
+			 priority = #{priority},
+			 isDisplay = #{isDisplay}
+		 WHERE channelId = #{channelId}
+	</update>
+
+</mapper>
