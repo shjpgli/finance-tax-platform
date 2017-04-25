@@ -5,6 +5,8 @@ import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.model.bo.AppRespBO;
 import com.abc12366.gateway.model.bo.TokenBO;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-04-05 1:11 PM
@@ -24,9 +26,9 @@ public interface AppService {
      * App登录获取token
      *
      * @param appBO AppBO
-     * @return TokenBO
+     * @return String token
      */
-    TokenBO login(AppBO appBO);
+    String login(AppBO appBO);
 
     /**
      * App验证
@@ -39,9 +41,8 @@ public interface AppService {
     /**
      * App授权
      *
-     * @param accessToken Access-Token
-     * @param requestURI uri
+     * @param request
      * @return true:已授权,false:未授权
      */
-    boolean isAuthentization(String accessToken, String requestURI);
+    boolean isAuthentization(HttpServletRequest request);
 }

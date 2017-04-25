@@ -1,8 +1,9 @@
 package com.abc12366.gateway.web;
 
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.model.bo.AppRespBO;
-import com.abc12366.gateway.model.bo.TokenBO;
 import com.abc12366.gateway.service.AppService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +36,14 @@ public class AppController {
     public ResponseEntity register(@Valid AppBO appBO) {
         LOGGER.info("{}", appBO);
         AppRespBO app = appService.register(appBO);
-        return app != null ? ResponseEntity.ok(app) : new ResponseEntity<>(HttpStatus.CONFLICT);
+        return app != null ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4007), HttpStatus.CONFLICT);
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@Valid AppBO appBO) {
         LOGGER.info("{}", appBO);
-        TokenBO tokenBO = appService.login(appBO);
-        return tokenBO != null ? ResponseEntity.ok(tokenBO) : new ResponseEntity<>(HttpStatus.CONFLICT);
+        String token = appService.login(appBO);
+        return token != null ? ResponseEntity.ok(Utils.kv(Constant.APP_TOKEN_HEAD, token))
+                : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
     }
 }

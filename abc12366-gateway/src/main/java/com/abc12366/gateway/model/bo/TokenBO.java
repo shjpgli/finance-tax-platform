@@ -1,6 +1,7 @@
 package com.abc12366.gateway.model.bo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -9,13 +10,81 @@ import java.io.Serializable;
  */
 public class TokenBO implements Serializable {
 
-    private final String token;
+    private String id;
+    private String name;
+    private Date createTime;
+    private Date expireTime;
 
-    public TokenBO(String token) {
-        this.token = token;
+    private TokenBO(Builder builder) {
+        setId(builder.id);
+        setName(builder.name);
+        setCreateTime(builder.createTime);
+        setExpireTime(builder.expireTime);
     }
 
-    public String getToken() {
-        return token;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    public static final class Builder {
+        private String id;
+        private String name;
+        private Date createTime;
+        private Date expireTime;
+
+        public Builder() {
+        }
+
+        public Builder id(String val) {
+            id = val;
+            return this;
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public Builder createTime(Date val) {
+            createTime = val;
+            return this;
+        }
+
+        public Builder expireTime(Date val) {
+            expireTime = val;
+            return this;
+        }
+
+        public TokenBO build() {
+            return new TokenBO(this);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.abc12366.gateway.model.bo;
 
+import java.util.Date;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-04-05 1:03 PM
@@ -7,20 +9,20 @@ package com.abc12366.gateway.model.bo;
  */
 public class AppRespBO {
 
+    // 主键UUID
     private String id;
-
+    // 应用名称
     private String name;
-
-    private String mark;
-
-    public AppRespBO() {
-    }
-
-    private AppRespBO(Builder builder) {
-        setId(builder.id);
-        setName(builder.name);
-        setMark(builder.mark);
-    }
+    // 授权时间起
+    private Date startTime;
+    // 授权时间止
+    private Date endTime;
+    // 描述信息
+    private String remark;
+    // 创建时间
+    private Date createTime;
+    // 修改时间
+    private Date lastUpdate;
 
     public String getId() {
         return id;
@@ -38,12 +40,44 @@ public class AppRespBO {
         this.name = name;
     }
 
-    public String getMark() {
-        return mark;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
@@ -51,35 +85,11 @@ public class AppRespBO {
         return "AppRespBO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", mark='" + mark + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
                 '}';
-    }
-
-    public static final class Builder {
-        private String id;
-        private String name;
-        private String mark;
-
-        public Builder() {
-        }
-
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
-
-        public Builder name(String val) {
-            name = val;
-            return this;
-        }
-
-        public Builder mark(String val) {
-            mark = val;
-            return this;
-        }
-
-        public AppRespBO build() {
-            return new AppRespBO(this);
-        }
     }
 }

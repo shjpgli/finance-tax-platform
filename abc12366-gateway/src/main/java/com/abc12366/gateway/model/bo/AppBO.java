@@ -12,20 +12,15 @@ import javax.validation.constraints.Size;
 public class AppBO {
 
     @NotEmpty(message = "应用名称不能为空")
-    @Size(min = 6, max = 32, message = "应用名称必须6-32位")
+    @Size(min = 6, max = 32, message = "应用名称必须为6-32位")
     private String name;
 
     @NotEmpty(message = "密码不能为空")
-    @Size(min = 8, max = 32, message = "应用名称必须6-32位")
+    @Size(min = 8, max = 32, message = "应用密码必须为8-32位")
     private String password;
 
-    private String mark;
-
-    private AppBO(Builder builder) {
-        setName(builder.name);
-        setPassword(builder.password);
-        setMark(builder.mark);
-    }
+    @Size(max = 200, message = "描述信息限制在200个中文")
+    private String remark;
 
     public String getName() {
         return name;
@@ -43,12 +38,12 @@ public class AppBO {
         this.password = password;
     }
 
-    public String getMark() {
-        return mark;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override
@@ -56,36 +51,7 @@ public class AppBO {
         return "AppBO{" +
                 "name='" + name + '\'' +
                 ", password='" + password + '\'' +
-                ", mark='" + mark + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
-    }
-
-
-    public static final class Builder {
-        private String name;
-        private String password;
-        private String mark;
-
-        public Builder() {
-        }
-
-        public Builder name(String val) {
-            name = val;
-            return this;
-        }
-
-        public Builder password(String val) {
-            password = val;
-            return this;
-        }
-
-        public Builder mark(String val) {
-            mark = val;
-            return this;
-        }
-
-        public AppBO build() {
-            return new AppBO(this);
-        }
     }
 }

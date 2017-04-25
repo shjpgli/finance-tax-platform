@@ -1,8 +1,9 @@
 package com.abc12366.gateway.component;
 
 import com.abc12366.common.model.BodyStatus;
+import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.gateway.model.Log;
+import com.abc12366.gateway.model.ApiLog;
 import com.abc12366.gateway.service.BlacklistService;
 import com.abc12366.gateway.service.LogService;
 import org.slf4j.Logger;
@@ -49,8 +50,8 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         }
 
         // 记录开始访问时间
-        long startTime = System.currentTimeMillis();
-        request.setAttribute("startTime", startTime);
+        long inTime = System.currentTimeMillis();
+        request.setAttribute("inTime", inTime);
         return true;
     }
 
@@ -67,22 +68,24 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         String userAgent = request.getHeader("User-Agent");
         String ip = request.getRemoteAddr();
-        long startTime = (long) request.getAttribute("startTime");
-        request.removeAttribute("startTime");
+        long inTime = (long) request.getAttribute("inTime");
+        request.removeAttribute("inTime");
 
-        long endTime = System.currentTimeMillis();
+        long outTime = System.currentTimeMillis();
         int status = response.getStatus();
-        String appId = request.getHeader("Access-Token");
+        String appId = request.getHeader(Constant.APP_TOKEN_HEAD);
+        String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
 
-        Log log = new Log.Builder()
+        ApiLog log = new ApiLog.Builder()
                 .id(Utils.uuid())
                 .uri(uri)
                 .userAgent(userAgent)
                 .ip(ip)
-                .startTime(startTime)
-                .endTime(endTime)
+                .inTime(inTime)
+                .outTime(outTime)
                 .status(status)
                 .appId(appId)
+                .userId(userId)
                 .build();
 
         // 5.访问计数

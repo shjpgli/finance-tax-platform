@@ -1,5 +1,7 @@
 package com.abc12366.gateway.model;
 
+import java.sql.Timestamp;
+
 /**
  * 日志信息对象
  *
@@ -7,34 +9,40 @@ package com.abc12366.gateway.model;
  * @create 2017-04-05 9:36 AM
  * @since 1.0.0
  */
-public class Log {
+public class ApiLog {
 
     // 主键UUID
     private String id;
     // 访问路径
     private String uri;
-    //    用户代理
+    // 用户代理
     private String userAgent;
-    //    IP地址
-    private String ip;
-    //    访问开始时间
-    private long startTime;
-    //    访问结束时间
-    private long endTime;
-    // 结果状态
-    private int status;
     // 访问的应用主键
     private String appId;
+    // 访问用户ID
+    private String userId;
+    // IP地址
+    private String ip;
+    // 访问开始时间
+    private long inTime;
+    // 访问结束时间
+    private long outTime;
+    // 结果状态
+    private int status;
+    // 附言
+    private String message;
 
-    private Log(Builder builder) {
+    private ApiLog(Builder builder) {
         setId(builder.id);
         setUri(builder.uri);
         setUserAgent(builder.userAgent);
-        setIp(builder.ip);
-        setStartTime(builder.startTime);
-        setEndTime(builder.endTime);
-        setStatus(builder.status);
         setAppId(builder.appId);
+        setUserId(builder.userId);
+        setIp(builder.ip);
+        setInTime(builder.inTime);
+        setOutTime(builder.outTime);
+        setStatus(builder.status);
+        setMessage(builder.message);
     }
 
     public String getId() {
@@ -61,6 +69,22 @@ public class Log {
         this.userAgent = userAgent;
     }
 
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getIp() {
         return ip;
     }
@@ -69,20 +93,20 @@ public class Log {
         this.ip = ip;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public long getInTime() {
+        return inTime;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
+    public void setInTime(long inTime) {
+        this.inTime = inTime;
     }
 
-    public long getEndTime() {
-        return endTime;
+    public long getOutTime() {
+        return outTime;
     }
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+    public void setOutTime(long outTime) {
+        this.outTime = outTime;
     }
 
     public int getStatus() {
@@ -93,25 +117,27 @@ public class Log {
         this.status = status;
     }
 
-    public String getAppId() {
-        return appId;
+    public String getMessage() {
+        return message;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
     public String toString() {
-        return "Log{" +
+        return "ApiLog{" +
                 "id='" + id + '\'' +
                 ", uri='" + uri + '\'' +
                 ", userAgent='" + userAgent + '\'' +
-                ", ip='" + ip + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", status=" + status +
                 ", appId='" + appId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", ip='" + ip + '\'' +
+                ", inTime=" + inTime +
+                ", outTime=" + outTime +
+                ", status=" + status +
+                ", message='" + message + '\'' +
                 '}';
     }
 
@@ -120,11 +146,13 @@ public class Log {
         private String id;
         private String uri;
         private String userAgent;
-        private String ip;
-        private long startTime;
-        private long endTime;
-        private int status;
         private String appId;
+        private String userId;
+        private String ip;
+        private long inTime;
+        private long outTime;
+        private int status;
+        private String message;
 
         public Builder() {
         }
@@ -144,18 +172,28 @@ public class Log {
             return this;
         }
 
+        public Builder appId(String val) {
+            appId = val;
+            return this;
+        }
+
+        public Builder userId(String val) {
+            userId = val;
+            return this;
+        }
+
         public Builder ip(String val) {
             ip = val;
             return this;
         }
 
-        public Builder startTime(long val) {
-            startTime = val;
+        public Builder inTime(long val) {
+            inTime = val;
             return this;
         }
 
-        public Builder endTime(long val) {
-            endTime = val;
+        public Builder outTime(long val) {
+            outTime = val;
             return this;
         }
 
@@ -164,13 +202,13 @@ public class Log {
             return this;
         }
 
-        public Builder appId(String val) {
-            appId = val;
+        public Builder message(String val) {
+            message = val;
             return this;
         }
 
-        public Log build() {
-            return new Log(this);
+        public ApiLog build() {
+            return new ApiLog(this);
         }
     }
 }

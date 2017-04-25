@@ -1,7 +1,7 @@
 package com.abc12366.gateway.service;
 
 
-import com.abc12366.gateway.model.Log;
+import com.abc12366.gateway.model.ApiLog;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -9,5 +9,5 @@ import com.abc12366.gateway.model.Log;
  * @since 1.0.0
  */
 public interface LogService {
-    void insert(Log log);
+    void insert(ApiLog log);
 }

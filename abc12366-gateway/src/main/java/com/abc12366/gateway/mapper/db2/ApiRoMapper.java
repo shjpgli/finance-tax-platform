@@ -11,13 +11,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface ApiRoMapper {
-    List<Api> selectList();
+    List<Api> selectList(Api api);
 
-    Api selectOne(String id);
-
-    int insert(Api api);
-
-    int update(Api api);
-
-    int delete(Api api);
+    Api selectOne(Api api);
 }

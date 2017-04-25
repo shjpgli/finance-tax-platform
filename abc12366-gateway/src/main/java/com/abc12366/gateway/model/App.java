@@ -13,33 +13,39 @@ public class App {
 
     // 主键UUID
     private String id;
-
     // 应用名称
     private String name;
-
     // 密码
     private String password;
-
+    // 访问授权码
+    private String accessToken;
+    // 上次重置Token时间
+    private Date lastResetTokenTime;
+    // 授权时间起
+    private Date startTime;
+    // 授权时间止
+    private Date endTime;
     // 描述信息
-    private String mark;
-
+    private String remark;
+    // 状态
     private boolean status;
-
-    private Date createDate;
-
-    private Date modifyDate;
-
-    public App() {
-    }
+    // 创建时间
+    private Date createTime;
+    // 修改时间
+    private Date lastUpdate;
 
     private App(Builder builder) {
         setId(builder.id);
         setName(builder.name);
         setPassword(builder.password);
-        setMark(builder.mark);
+        setAccessToken(builder.accessToken);
+        setLastResetTokenTime(builder.lastResetTokenTime);
+        setStartTime(builder.startTime);
+        setEndTime(builder.endTime);
+        setRemark(builder.remark);
         setStatus(builder.status);
-        setCreateDate(builder.createDate);
-        setModifyDate(builder.modifyDate);
+        setCreateTime(builder.createTime);
+        setLastUpdate(builder.lastUpdate);
     }
 
     public String getId() {
@@ -66,12 +72,44 @@ public class App {
         this.password = password;
     }
 
-    public String getMark() {
-        return mark;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public Date getLastResetTokenTime() {
+        return lastResetTokenTime;
+    }
+
+    public void setLastResetTokenTime(Date lastResetTokenTime) {
+        this.lastResetTokenTime = lastResetTokenTime;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public boolean isStatus() {
@@ -82,20 +120,20 @@ public class App {
         this.status = status;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
@@ -104,22 +142,29 @@ public class App {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
-                ", mark='" + mark + '\'' +
+                ", accessToken='" + accessToken + '\'' +
+                ", lastResetTokenTime='" + lastResetTokenTime + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", remark='" + remark + '\'' +
                 ", status=" + status +
-                ", createDate=" + createDate +
-                ", modifyDate=" + modifyDate +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
                 '}';
     }
-
 
     public static final class Builder {
         private String id;
         private String name;
         private String password;
-        private String mark;
+        private String accessToken;
+        private Date lastResetTokenTime;
+        private Date startTime;
+        private Date endTime;
+        private String remark;
         private boolean status;
-        private Date createDate;
-        private Date modifyDate;
+        private Date createTime;
+        private Date lastUpdate;
 
         public Builder() {
         }
@@ -139,8 +184,28 @@ public class App {
             return this;
         }
 
-        public Builder mark(String val) {
-            mark = val;
+        public Builder accessToken(String val) {
+            accessToken = val;
+            return this;
+        }
+
+        public Builder lastResetTokenTime(Date val) {
+            lastResetTokenTime = val;
+            return this;
+        }
+
+        public Builder startTime(Date val) {
+            startTime = val;
+            return this;
+        }
+
+        public Builder endTime(Date val) {
+            endTime = val;
+            return this;
+        }
+
+        public Builder remark(String val) {
+            remark = val;
             return this;
         }
 
@@ -149,13 +214,13 @@ public class App {
             return this;
         }
 
-        public Builder createDate(Date val) {
-            createDate = val;
+        public Builder createTime(Date val) {
+            createTime = val;
             return this;
         }
 
-        public Builder modifyDate(Date val) {
-            modifyDate = val;
+        public Builder lastUpdate(Date val) {
+            lastUpdate = val;
             return this;
         }
 

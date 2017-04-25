@@ -1,6 +1,7 @@
 package com.abc12366.gateway.component;
 
 import com.abc12366.common.model.BodyStatus;
+import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.service.AppService;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // 3.App验证
-        String accessToken = request.getHeader("Access-Token");
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
         response.setContentType("text/plain;charset=UTF-8");
         if (StringUtils.isEmpty(accessToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4000);
@@ -38,14 +39,14 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
             LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        if (appService.isAuthentication(accessToken)) {
+        if (!appService.isAuthentication(accessToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4001);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
             LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
         // 4.App授权
-        if (!appService.isAuthentization(accessToken, request.getRequestURI())) {
+        if (!appService.isAuthentization(request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
             LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);

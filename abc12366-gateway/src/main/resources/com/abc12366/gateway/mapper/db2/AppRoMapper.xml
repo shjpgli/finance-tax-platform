@@ -3,15 +3,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db2.AppRoMapper">
     <select id="selectOne" resultType="App">
-        SELECT id, name, password, mark, status, createDate, modifyDate
-        FROM app
+        SELECT id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
+        createTime, lastUpdate
+        FROM gw_app
         WHERE id = #{id}
-        AND status = '1'
     </select>
 
     <select id="selectByName" resultType="App">
-      SELECT id, name, password, mark, status, createDate, modifyDate
-      FROM app
+      SELECT id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
+      createTime, lastUpdate
+      FROM gw_app
       WHERE name = #{name}
     </select>
 </mapper>

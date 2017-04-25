@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.gateway.mapper.db1.LogMapper">
 
     <insert id="insert" parameterType="Log">
-        insert into log (id, uri, userAgent, ip, startTime, endTime, status, appId)
-        values (#{id}, #{uri}, #{userAgent}, #{ip}, #{startTime}, #{endTime}, #{status}, #{appId})
+        insert into gw_api_log (id, uri, userAgent, ip, inTime, outTime, status, appId, userId, message)
+        values (#{id}, #{uri}, #{userAgent}, #{ip}, #{startTime}, #{endTime}, #{status}, #{appId}, #{userId}, #{message})
     </insert>
 </mapper>

@@ -1,6 +1,6 @@
 package com.abc12366.gateway.mapper.db1;
 
-import com.abc12366.gateway.model.Log;
+import com.abc12366.gateway.model.ApiLog;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -9,5 +9,5 @@ import com.abc12366.gateway.model.Log;
  */
 public interface LogMapper {
 
-    int insert(Log log);
+    int insert(ApiLog log);
 }

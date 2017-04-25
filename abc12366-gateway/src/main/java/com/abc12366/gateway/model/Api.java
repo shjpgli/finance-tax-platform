@@ -13,26 +13,31 @@ public class Api {
 
     private String id;
     private String name;
-    private String mark;
+    private String uri;
+    // 接口方法
     private String method;
-    private String role;
+    // 版本
     private String version;
+    // 接口所属系统
     private String appId;
-    private String status;
-    private Date createDate;
-    private Date modifyDate;
+    // 是否需要验证用户身份
+    private boolean authentication;
+    // 接口状态
+    private boolean status;
+    private Date createTime;
+    private Date lastUpdate;
 
     private Api(Builder builder) {
         setId(builder.id);
         setName(builder.name);
-        setMark(builder.mark);
+        setUri(builder.uri);
         setMethod(builder.method);
-        setRole(builder.role);
         setVersion(builder.version);
         setAppId(builder.appId);
+        setAuthentication(builder.authentication);
         setStatus(builder.status);
-        setCreateDate(builder.createDate);
-        setModifyDate(builder.modifyDate);
+        setCreateTime(builder.createTime);
+        setLastUpdate(builder.lastUpdate);
     }
 
     public String getId() {
@@ -51,12 +56,12 @@ public class Api {
         this.name = name;
     }
 
-    public String getMark() {
-        return mark;
+    public String getUri() {
+        return uri;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getMethod() {
@@ -65,14 +70,6 @@ public class Api {
 
     public void setMethod(String method) {
         this.method = method;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getVersion() {
@@ -91,28 +88,36 @@ public class Api {
         this.appId = appId;
     }
 
-    public String getStatus() {
+    public boolean isAuthentication() {
+        return authentication;
+    }
+
+    public void setAuthentication(boolean authentication) {
+        this.authentication = authentication;
+    }
+
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
@@ -120,29 +125,28 @@ public class Api {
         return "Api{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", mark='" + mark + '\'' +
+                ", uri='" + uri + '\'' +
                 ", method='" + method + '\'' +
-                ", role='" + role + '\'' +
                 ", version='" + version + '\'' +
                 ", appId='" + appId + '\'' +
-                ", status='" + status + '\'' +
-                ", createDate=" + createDate +
-                ", modifyDate=" + modifyDate +
+                ", authentication=" + authentication +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
                 '}';
     }
-
 
     public static final class Builder {
         private String id;
         private String name;
-        private String mark;
+        private String uri;
         private String method;
-        private String role;
         private String version;
         private String appId;
-        private String status;
-        private Date createDate;
-        private Date modifyDate;
+        private boolean authentication;
+        private boolean status;
+        private Date createTime;
+        private Date lastUpdate;
 
         public Builder() {
         }
@@ -157,18 +161,13 @@ public class Api {
             return this;
         }
 
-        public Builder mark(String val) {
-            mark = val;
+        public Builder uri(String val) {
+            uri = val;
             return this;
         }
 
         public Builder method(String val) {
             method = val;
-            return this;
-        }
-
-        public Builder role(String val) {
-            role = val;
             return this;
         }
 
@@ -182,18 +181,23 @@ public class Api {
             return this;
         }
 
-        public Builder status(String val) {
+        public Builder authentication(boolean val) {
+            authentication = val;
+            return this;
+        }
+
+        public Builder status(boolean val) {
             status = val;
             return this;
         }
 
-        public Builder createDate(Date val) {
-            createDate = val;
+        public Builder createTime(Date val) {
+            createTime = val;
             return this;
         }
 
-        public Builder modifyDate(Date val) {
-            modifyDate = val;
+        public Builder lastUpdate(Date val) {
+            lastUpdate = val;
             return this;
         }
 
