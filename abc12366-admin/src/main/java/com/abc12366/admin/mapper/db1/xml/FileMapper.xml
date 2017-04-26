@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.admin.mapper.db1.FileMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	fileName,	fileIsvalid,	contentId
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="file" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM cms_file
+		 WHERE filePath = #{filePath}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM cms_file
+		 WHERE filePath = #{filePath}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="file">
+		 INSERT INTO cms_file
+ 		(filePath,fileName,fileIsvalid,contentId) 
+		 VALUES 
+ 		(#{filePath},#{fileName},#{fileIsvalid},#{contentId}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="file">
+		 INSERT INTO cms_file
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="filePath != null">
+				 filePath,
+			</if>
+			<if test="fileName != null">
+				 fileName,
+			</if>
+			<if test="fileIsvalid != null">
+				 fileIsvalid,
+			</if>
+			<if test="contentId != null">
+				 contentId,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="filePath!=null">
+				 #{filePath},
+			</if>
+			<if test="fileName!=null">
+				 #{fileName},
+			</if>
+			<if test="fileIsvalid!=null">
+				 #{fileIsvalid},
+			</if>
+			<if test="contentId!=null">
+				 #{contentId},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="file">
+		 UPDATE cms_file
+ 		 <set> 
+			<if test="fileName != null">
+				 fileName = #{fileName},
+			</if>
+			<if test="fileIsvalid != null">
+				 fileIsvalid = #{fileIsvalid},
+			</if>
+			<if test="contentId != null">
+				 contentId = #{contentId},
+			</if>
+
+ 		 </set>
+		 WHERE filePath = #{filePath}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="file">
+		 UPDATE cms_file
+		 SET 
+			 fileName = #{fileName},
+			 fileIsvalid = #{fileIsvalid},
+			 contentId = #{contentId}
+		 WHERE filePath = #{filePath}
+	</update>
+
+</mapper>
