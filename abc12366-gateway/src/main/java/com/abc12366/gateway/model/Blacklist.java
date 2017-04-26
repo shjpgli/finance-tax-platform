@@ -24,6 +24,8 @@ public class Blacklist {
     private boolean status;
     private Date createTime;
     private Date createUser;
+    // 辅助属性
+    private Date now;
 
     private Blacklist(Builder builder) {
         setId(builder.id);
@@ -35,6 +37,7 @@ public class Blacklist {
         setStatus(builder.status);
         setCreateTime(builder.createTime);
         setCreateUser(builder.createUser);
+        setNow(builder.now);
     }
 
     public String getId() {
@@ -109,6 +112,14 @@ public class Blacklist {
         this.createUser = createUser;
     }
 
+    public Date getNow() {
+        return now;
+    }
+
+    public void setNow(Date now) {
+        this.now = now;
+    }
+
     @Override
     public String toString() {
         return "Blacklist{" +
@@ -134,6 +145,7 @@ public class Blacklist {
         private boolean status;
         private Date createTime;
         private Date createUser;
+        private Date now;
 
         public Builder() {
         }
@@ -180,6 +192,11 @@ public class Blacklist {
 
         public Builder createUser(Date val) {
             createUser = val;
+            return this;
+        }
+
+        public Builder now(Date val) {
+            now = val;
             return this;
         }
 

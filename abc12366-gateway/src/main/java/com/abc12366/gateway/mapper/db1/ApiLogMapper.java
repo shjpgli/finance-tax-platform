@@ -7,7 +7,7 @@ import com.abc12366.gateway.model.ApiLog;
  * @create 2017-04-05 10:17 AM
  * @since 1.0.0
  */
-public interface LogMapper {
+public interface ApiLogMapper {
 
     int insert(ApiLog log);
 }

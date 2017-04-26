@@ -34,6 +34,24 @@ public class App {
     // 修改时间
     private Date lastUpdate;
 
+    public App() {
+    }
+
+    public App(String id, String name, String password, String accessToken, Date lastResetTokenTime, Date startTime,
+               Date endTime, String remark, boolean status, Date createTime, Date lastUpdate) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.accessToken = accessToken;
+        this.lastResetTokenTime = lastResetTokenTime;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.remark = remark;
+        this.status = status;
+        this.createTime = createTime;
+        this.lastUpdate = lastUpdate;
+    }
+
     private App(Builder builder) {
         setId(builder.id);
         setName(builder.name);

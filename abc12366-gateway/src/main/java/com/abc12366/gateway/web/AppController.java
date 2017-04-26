@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
@@ -24,7 +25,7 @@ import javax.validation.Valid;
  * @since 1.0.0
  */
 @Controller
-@RequestMapping("/app")
+@RequestMapping(path = "/app", headers = Constant.VERSION_HEAD + "=1")
 public class AppController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppController.class);
@@ -33,14 +34,14 @@ public class AppController {
     private AppService appService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@Valid AppBO appBO) {
+    public ResponseEntity register(@Valid @RequestBody AppBO appBO) {
         LOGGER.info("{}", appBO);
         AppRespBO app = appService.register(appBO);
         return app != null ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4007), HttpStatus.CONFLICT);
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@Valid AppBO appBO) {
+    public ResponseEntity login(@Valid @RequestBody AppBO appBO) {
         LOGGER.info("{}", appBO);
         String token = appService.login(appBO);
         return token != null ? ResponseEntity.ok(Utils.kv(Constant.APP_TOKEN_HEAD, token))

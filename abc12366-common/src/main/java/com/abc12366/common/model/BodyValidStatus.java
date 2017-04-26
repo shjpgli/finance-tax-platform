@@ -10,7 +10,7 @@ package com.abc12366.common.model;
 public class BodyValidStatus {
 
     // 错误代码
-    private String code;
+    private int code;
     // 错误代码解释
     private String message;
     // 错误字段
@@ -19,7 +19,7 @@ public class BodyValidStatus {
     public BodyValidStatus() {
     }
 
-    public BodyValidStatus(String code, String message, String field) {
+    public BodyValidStatus(int code, String message, String field) {
         this.code = code;
         this.message = message;
         this.field = field;
@@ -31,11 +31,11 @@ public class BodyValidStatus {
         setField(builder.field);
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -65,14 +65,14 @@ public class BodyValidStatus {
     }
 
     public static final class Builder {
-        private String code;
+        private int code;
         private String message;
         private String field;
 
         public Builder() {
         }
 
-        public Builder code(String val) {
+        public Builder code(int val) {
             code = val;
             return this;
         }

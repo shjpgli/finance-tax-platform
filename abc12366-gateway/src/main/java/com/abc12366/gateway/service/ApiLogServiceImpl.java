@@ -1,6 +1,6 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.gateway.mapper.db1.LogMapper;
+import com.abc12366.gateway.mapper.db1.ApiLogMapper;
 import com.abc12366.gateway.model.ApiLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-public class LogServiceImpl implements LogService {
+public class ApiLogServiceImpl implements ApiLogService {
 
     @Autowired
-    private LogMapper logMapper;
+    private ApiLogMapper apiLogMapper;
 
     @Override
     public void insert(ApiLog log) {
-        logMapper.insert(log);
+        apiLogMapper.insert(log);
     }
 }

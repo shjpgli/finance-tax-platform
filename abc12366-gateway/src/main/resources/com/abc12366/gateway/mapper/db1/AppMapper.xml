@@ -5,7 +5,7 @@
     <insert id="insert" parameterType="App">
         insert into gw_app (id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status, createTime, lastUpdate)
         values (#{id}, #{name}, #{password}, #{accessToken}, #{lastResetTokenTime}, #{startTime}, #{endTime},
-                #{remark}, #{status}, #{createTime}, #{lastUpdate}
+                #{remark}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
     <update id="update" parameterType="App">

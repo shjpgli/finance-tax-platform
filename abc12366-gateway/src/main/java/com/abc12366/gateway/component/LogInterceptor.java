@@ -5,7 +5,8 @@ import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.ApiLog;
 import com.abc12366.gateway.service.BlacklistService;
-import com.abc12366.gateway.service.LogService;
+import com.abc12366.gateway.service.ApiLogService;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogInterceptor.class);
 
     @Autowired
-    private LogService logService;
+    private ApiLogService apiLogService;
 
     @Autowired
     private BlacklistService blacklistService;
@@ -35,7 +36,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        response.setContentType("text/plain;charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         // 1.前置日志
         String addr = request.getRemoteAddr();
         String uri = request.getRequestURI();
@@ -44,8 +45,11 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         // 2.黑名单服务
         if (blacklistService.isBlacklist(addr)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4003);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
-            LOGGER.info("URI:{}, IP:{}, BodyStatus:{}", uri, addr, bodyStatus);
+            response.setStatus(403);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.info("URI:{}, IP:{}, {}", uri, addr, bodyStatus);
             return false;
         }
 
@@ -91,6 +95,6 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         // 5.访问计数
         // 6.后置日志和日志表
         LOGGER.info("{}", log);
-        logService.insert(log);
+        apiLogService.insert(log);
     }
 }

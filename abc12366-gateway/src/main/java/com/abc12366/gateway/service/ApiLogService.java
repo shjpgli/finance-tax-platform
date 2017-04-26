@@ -8,6 +8,6 @@ import com.abc12366.gateway.model.ApiLog;
  * @create 2017-04-05 11:48 AM
  * @since 1.0.0
  */
-public interface LogService {
+public interface ApiLogService {
     void insert(ApiLog log);
 }

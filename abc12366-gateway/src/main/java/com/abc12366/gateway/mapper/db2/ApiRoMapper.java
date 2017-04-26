@@ -11,7 +11,5 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface ApiRoMapper {
-    List<Api> selectList(Api api);
-
     Api selectOne(Api api);
 }

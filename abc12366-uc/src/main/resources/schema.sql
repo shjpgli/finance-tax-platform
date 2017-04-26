@@ -79,7 +79,7 @@ CREATE TABLE gw_app (
   COMMENT '授权应用名称',
   password           VARCHAR(64)             NOT NULL
   COMMENT '授权应用密码',
-  accessToken        VARCHAR(64) COMMENT '访问授权码',
+  accessToken        VARCHAR(400) COMMENT '访问授权码',
   lastResetTokenTime DATETIME COMMENT '上次重置授权码时间',
   startTime          DATETIME COMMENT '授权时间起',
   endTime            DATETIME COMMENT '授权时间止',

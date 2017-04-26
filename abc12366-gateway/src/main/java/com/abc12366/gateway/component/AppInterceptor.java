@@ -4,6 +4,7 @@ import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.service.AppService;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,24 +33,33 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
             throws Exception {
         // 3.App验证
         String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        response.setContentType("text/plain;charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         if (StringUtils.isEmpty(accessToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4000);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, bodyStatus.getMessage());
-            LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
+            response.setStatus(400);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
         if (!appService.isAuthentication(accessToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4001);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
-            LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
+            response.setStatus(401);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
         // 4.App授权
         if (!appService.isAuthentization(request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, bodyStatus.getMessage());
-            LOGGER.warn("URI:{}, IP:{}, BodyStatus:{}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
+            response.setStatus(403);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
 
