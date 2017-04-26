@@ -8,6 +8,13 @@
 		 id,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description
 	</sql>
 
+	<select id="listSite" resultType="Site">
+		select
+		<include refid="Base_Column_List" />
+		from site
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="site" parameterType="java.lang.String">
 		 SELECT

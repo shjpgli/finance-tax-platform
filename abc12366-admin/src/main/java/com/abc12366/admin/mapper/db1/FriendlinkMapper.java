@@ -12,14 +12,6 @@ import com.abc12366.admin.model.cms.Friendlink;
 
 public interface FriendlinkMapper{
 
-
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Friendlink  selectByPrimaryKey ( @Param("id") Long id );
-
 	/**
 	 * 
 	 * 删除（根据主键ID删除）

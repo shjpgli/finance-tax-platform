@@ -13,12 +13,6 @@ import com.abc12366.admin.model.cms.FriendlinkCtg;
 public interface FriendlinkCtgMapper{
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	FriendlinkCtg  selectByPrimaryKey ( @Param("id") Long id );
 
 	/**
 	 * 

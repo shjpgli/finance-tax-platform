@@ -1,8 +1,8 @@
 package com.abc12366.admin.service;
 
-import com.abc12366.admin.model.Dict;
-
 import java.util.List;
+
+import com.abc12366.admin.model.Dict;
 
 /**
  * @author lijun <ljun51@outlook.com>
