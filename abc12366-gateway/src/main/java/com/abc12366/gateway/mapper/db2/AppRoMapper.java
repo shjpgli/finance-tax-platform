@@ -11,5 +11,5 @@ public interface AppRoMapper {
 
     App selectByName(String name);
 
-    App selectOne(String id);
+    App selectOne(App app);
 }

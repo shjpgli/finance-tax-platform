@@ -1,13 +1,13 @@
 -- CREATE DATABASE IF NOT EXISTS `abc12366_gateway` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 USE `abc12366_gateway`;
 
-DROP TABLE IF EXISTS gw_api_log;
-DROP TABLE IF EXISTS gw_blacklist;
-DROP TABLE IF EXISTS gw_api;
-DROP TABLE IF EXISTS gw_app;
-DROP TABLE IF EXISTS gw_app_setting;
+# DROP TABLE IF EXISTS gw_api_log;
+# DROP TABLE IF EXISTS gw_blacklist;
+# DROP TABLE IF EXISTS gw_api;
+# DROP TABLE IF EXISTS gw_app;
+# DROP TABLE IF EXISTS gw_app_setting;
 
-CREATE TABLE gw_api_log (
+CREATE TABLE IF NOT EXISTS gw_api_log (
   id        VARCHAR(64) PRIMARY KEY NOT NULL
   COMMENT 'ID',
   uri       VARCHAR(256)            NOT NULL
@@ -27,7 +27,7 @@ CREATE TABLE gw_api_log (
   COLLATE = utf8_bin
   COMMENT '接口调用日志表';
 
-CREATE TABLE gw_blacklist (
+CREATE TABLE IF NOT EXISTS gw_blacklist (
   id         VARCHAR(64) PRIMARY KEY NOT NULL
   COMMENT 'ID',
   userId     VARCHAR(64) COMMENT 'userId',
@@ -48,7 +48,7 @@ CREATE TABLE gw_blacklist (
   COLLATE = utf8_bin
   COMMENT '接口调用日志表';
 
-CREATE TABLE gw_api (
+CREATE TABLE IF NOT EXISTS gw_api (
   id             VARCHAR(64) PRIMARY KEY NOT NULL
   COMMENT 'ID',
   name           VARCHAR(256)            NOT NULL
@@ -72,7 +72,7 @@ CREATE TABLE gw_api (
   COLLATE = utf8_bin
   COMMENT '服务接口表';
 
-CREATE TABLE gw_app (
+CREATE TABLE IF NOT EXISTS gw_app (
   id                 VARCHAR(64) PRIMARY KEY NOT NULL
   COMMENT 'appId',
   name               VARCHAR(32)             NOT NULL
@@ -94,7 +94,7 @@ CREATE TABLE gw_app (
   COLLATE = utf8_bin
   COMMENT '接入应用表';
 
-CREATE TABLE gw_app_setting (
+CREATE TABLE IF NOT EXISTS gw_app_setting (
   id             VARCHAR(64) PRIMARY KEY NOT NULL
   COMMENT 'ID',
   appId          VARCHAR(64)             NOT NULL
@@ -120,7 +120,7 @@ USE `abc12366_uc`;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS authority;
 
-CREATE TABLE user (
+CREATE TABLE IF NOT EXISTS user (
   id                    VARCHAR(64) PRIMARY KEY NOT NULL
   COMMENT 'ID',
   username              VARCHAR(32)             NOT NULL
@@ -140,7 +140,7 @@ CREATE TABLE user (
   COLLATE = utf8_bin
   COMMENT '用户信息表';
 
-CREATE TABLE authority (
+CREATE TABLE IF NOT EXISTS authority (
   userId    VARCHAR(64) NOT NULL
   COMMENT '用户ID，关联用户表',
   authority VARCHAR(64) NOT NULL

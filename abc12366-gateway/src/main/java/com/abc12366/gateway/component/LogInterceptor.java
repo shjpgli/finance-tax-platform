@@ -4,6 +4,7 @@ import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.ApiLog;
+import com.abc12366.gateway.model.bo.TokenBO;
 import com.abc12366.gateway.service.BlacklistService;
 import com.abc12366.gateway.service.ApiLogService;
 import com.alibaba.fastjson.JSON;
@@ -77,7 +78,8 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
         long outTime = System.currentTimeMillis();
         int status = response.getStatus();
-        String appId = request.getHeader(Constant.APP_TOKEN_HEAD);
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+        String appId = JSON.parseObject(Utils.decode(accessToken), TokenBO.class).getId();
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
 
         ApiLog log = new ApiLog.Builder()

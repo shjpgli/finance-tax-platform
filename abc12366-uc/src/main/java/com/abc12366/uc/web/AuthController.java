@@ -21,6 +21,7 @@ import javax.validation.Valid;
  * @since 1.0.0
  */
 @RestController
+@RequestMapping(headers = Constant.VERSION_HEAD + "=1")
 public class AuthController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);

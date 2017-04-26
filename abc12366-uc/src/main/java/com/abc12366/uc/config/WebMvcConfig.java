@@ -43,6 +43,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
-                .excludePathPatterns("/druid/**");
+                .excludePathPatterns("/druid/**")
+
+                .excludePathPatterns("/login", "/refresh", "/register", "/test");
     }
 }

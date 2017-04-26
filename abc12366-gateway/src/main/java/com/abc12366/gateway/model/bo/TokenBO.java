@@ -15,6 +15,16 @@ public class TokenBO implements Serializable {
     private Date createTime;
     private Date expireTime;
 
+    public TokenBO() {
+    }
+
+    public TokenBO(String id, String name, Date createTime, Date expireTime) {
+        this.id = id;
+        this.name = name;
+        this.createTime = createTime;
+        this.expireTime = expireTime;
+    }
+
     private TokenBO(Builder builder) {
         setId(builder.id);
         setName(builder.name);

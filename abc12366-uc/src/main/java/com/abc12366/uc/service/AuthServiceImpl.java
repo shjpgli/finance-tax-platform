@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.AuthorityMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
+import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Authority;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.LoginBO;
@@ -32,13 +33,16 @@ public class AuthServiceImpl implements AuthService {
     private UserMapper userMapper;
 
     @Autowired
+    private UserRoMapper userRoMapper;
+
+    @Autowired
     private AuthorityMapper authorityMapper;
 
     @Override
     public UserBO register(RegisterBO registerBO) {
         final String username = registerBO.getUsername();
         final String phone = registerBO.getPhone();
-        if(userMapper.selectByUsernameOrPhone(username) != null || userMapper.selectByUsernameOrPhone(phone) != null) {
+        if(userRoMapper.selectByUsernameOrPhone(username) != null || userRoMapper.selectByUsernameOrPhone(phone) != null) {
             return null;
         }
         final String rawPassword = registerBO.getPassword();

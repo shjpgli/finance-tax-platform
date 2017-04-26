@@ -103,7 +103,10 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public boolean isAuthentication(String accessToken) {
-        return appRoMapper.selectOne(accessToken) != null;
+        App app = new App.Builder()
+                .accessToken(accessToken)
+                .build();
+        return appRoMapper.selectOne(app) != null;
     }
 
     @Override

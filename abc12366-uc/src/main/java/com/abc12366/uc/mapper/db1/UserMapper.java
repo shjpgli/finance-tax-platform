@@ -11,14 +11,7 @@ import java.util.List;
  */
 public interface UserMapper {
 
-    List<User> selectList();
-
-    User selectOne(Long id);
-
     int insert(User user);
 
     int update(User user);
-
-    User selectByUsernameOrPhone(String usernameOrPhone);
-
 }

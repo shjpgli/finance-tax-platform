@@ -1,5 +1,6 @@
 package com.abc12366.uc.web;
 
+import com.abc12366.common.util.Constant;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
 import com.abc12366.uc.service.UserService;
@@ -21,7 +22,7 @@ import java.util.List;
  * @since 2.0.0
  */
 @RestController
-@RequestMapping(path = "/user", headers = "version=1")
+@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=1")
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
