@@ -11,7 +11,7 @@
 
     <artifactId>abc12366-cms</artifactId>
     <description>abc12366内容管理</description>
-	<packaging>jar</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,5 +44,19 @@
             <artifactId>druid</artifactId>
             <version>1.0.29</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>1.1.2.RELEASE</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

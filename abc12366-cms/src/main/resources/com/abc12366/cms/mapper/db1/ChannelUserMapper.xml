@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cms.mapper.db1.ChannelUserMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	userId
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="channelUser" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM cms_channel_user
+		 WHERE channelId = #{channelId}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM cms_channel_user
+		 WHERE channelId = #{channelId}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="channelUser">
+		 INSERT INTO cms_channel_user
+ 		(channelId,userId) 
+		 VALUES 
+ 		(#{channelId},#{userId}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="channelUser">
+		 INSERT INTO cms_channel_user
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="channelId != null">
+				 channelId,
+			</if>
+			<if test="userId != null">
+				 userId,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="channelId!=null">
+				 #{channelId},
+			</if>
+			<if test="userId!=null">
+				 #{userId},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="channelUser">
+		 UPDATE cms_channel_user
+ 		 <set> 
+			<if test="userId != null">
+				 userId = #{userId},
+			</if>
+
+ 		 </set>
+		 WHERE channelId = #{channelId}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="channelUser">
+		 UPDATE cms_channel_user
+		 SET 
+			 userId = #{userId}
+		 WHERE channelId = #{channelId}
+	</update>
+
+</mapper>
