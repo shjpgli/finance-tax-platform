@@ -13,12 +13,6 @@ import com.abc12366.admin.model.cms.Plug;
 public interface PlugMapper{
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Plug  selectByPrimaryKey ( @Param("id") Long id );
 
 	/**
 	 * 

@@ -13,12 +13,6 @@ import com.abc12366.admin.model.cms.Origin;
 public interface OriginMapper{
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Origin  selectByPrimaryKey ( @Param("id") Long id );
 
 	/**
 	 * 

@@ -15,13 +15,6 @@ public interface DictionaryMapper{
 
 	/**
 	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Dictionary  selectByPrimaryKey ( @Param("id") Long id );
-
-	/**
-	 * 
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/

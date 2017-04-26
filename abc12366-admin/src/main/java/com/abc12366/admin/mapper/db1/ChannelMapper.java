@@ -12,12 +12,6 @@ import com.abc12366.admin.model.cms.Channel;
 public interface ChannelMapper{
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Channel  selectByPrimaryKey ( @Param("id") Long id );
 
 	/**
 	 * 

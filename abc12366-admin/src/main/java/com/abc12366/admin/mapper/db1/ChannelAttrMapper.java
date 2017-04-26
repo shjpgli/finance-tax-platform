@@ -12,14 +12,6 @@ import com.abc12366.admin.model.cms.ChannelAttr;
 
 public interface ChannelAttrMapper{
 
-
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	ChannelAttr  selectByPrimaryKey ( @Param("id") Long id );
-
 	/**
 	 * 
 	 * 删除（根据主键ID删除）
