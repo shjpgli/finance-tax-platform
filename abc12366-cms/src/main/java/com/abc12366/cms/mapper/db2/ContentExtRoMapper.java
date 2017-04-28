@@ -17,7 +17,7 @@ public interface ContentExtRoMapper {
 	 * 查询(根据主键ID查询)
 	 * 
 	 **/
-	ContentExt selectByPrimaryKey(@Param("id") Long id);
+	ContentExt selectByPrimaryKey(@Param("contentId") String contentId);
 
 
 }

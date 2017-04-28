@@ -17,6 +17,6 @@ public interface ContentTxtRoMapper {
 	 * 查询(根据主键ID查询)
 	 * 
 	 **/
-	ContentTxt selectByPrimaryKey(@Param("id") Long id);
+	ContentTxt selectByPrimaryKey(@Param("contentId") String contentId);
 
 }

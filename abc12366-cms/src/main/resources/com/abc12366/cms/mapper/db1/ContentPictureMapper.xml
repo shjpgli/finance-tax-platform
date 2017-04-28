@@ -3,19 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.ContentPictureMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	priority,	imgPath,	description
-	</sql>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="contentPicture" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_content_picture
-		 WHERE contentId = #{contentId}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_content_picture
@@ -83,13 +70,13 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="contentPicture">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentPicture">
 		 UPDATE cms_content_picture
 		 SET 
 			 priority = #{priority},
 			 imgPath = #{imgPath},
 			 description = #{description}
-		 WHERE contentId = #{contentId}
+		 WHERE contentId = #{contentId} and priority = #{priority}
 	</update>
 
 </mapper>

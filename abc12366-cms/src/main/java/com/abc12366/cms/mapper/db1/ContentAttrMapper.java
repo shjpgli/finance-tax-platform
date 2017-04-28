@@ -11,14 +11,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface ContentAttrMapper{
 
-
-	/**
-	 * 
-	 * 查询(根据主键ID查询)
-	 * 
-	 **/
-	ContentAttr selectByPrimaryKey(@Param("id") Long id);
-
 	/**
 	 * 
 	 * 删除(根据主键ID删除)
