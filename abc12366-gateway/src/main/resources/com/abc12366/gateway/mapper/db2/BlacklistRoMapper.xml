@@ -15,6 +15,24 @@
             <if test="now != null">
                 AND startTime <![CDATA[<]]> #{now} AND #{now} <![CDATA[<]]> endTime
             </if>
+            <if test="id != null">
+                and id = #{id}
+            </if>
         </where>
+    </select>
+
+    <select id="selectOne" resultType="Blacklist">
+        SELECT id, userId, ip, startTime, endTime, remark, status, createTime, createUser
+        FROM gw_blacklist
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectList" resultType="Blacklist">
+        SELECT id, userId, ip, startTime, endTime, remark, status, createTime, createUser
+        FROM gw_blacklist
     </select>
 </mapper>

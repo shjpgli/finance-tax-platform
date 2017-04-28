@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.gateway.mapper.db2.AppSettingRoMapper">
+
+    <select id="selectOne" resultType="AppSetting">
+        select id, appId, apiId, timesPerMinute, timesPerHour, timesPerDay, status, createTime, lastUpdate
+        from gw_app_setting
+        <where>
+            <if test="appId != null">appId = #{appId}</if>
+            <if test="apiId != null">AND apiId = #{apiId}</if>
+            <if test="id != null">AND id = #{apiId}</if>
+        </where>
+    </select>
+
+    <select id="selectList" resultType="AppSettingApiBO">
+        SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
+        b.name, b.uri, b.method, b.version, b.authentication,
+        a.status, a.createTime, a.lastUpdate
+        FROM gw_app_setting a LEFT JOIN gw_api b ON a.apiId = b.id
+        <where>
+            <if test="name != null">b.name = #{name}</if>
+            <if test="uri != null">AND b.uri = #{uri}</if>
+            <if test="method != null">AND b.method = #{method}</if>
+            <if test="version != null">AND b.version = #{version}</if>
+            <if test="appId != null">AND a.appId = #{appId}</if>
+            <if test="status != null">AND a.status = #{status}</if>
+            <if test="1 != null">AND b.status = '1'</if>
+        </where>
+    </select>
+
+    <select id="isAuthentization" resultType="AppSettingApiBO">
+        SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
+        b.name, b.uri, b.method, b.version, b.authentication,
+        a.status, a.createTime, a.lastUpdate
+        FROM gw_app_setting a LEFT JOIN gw_api b ON a.apiId = b.id
+        <where>
+            <if test="name != null">b.name = #{name}</if>
+            <if test="uri != null">AND b.uri = #{uri}</if>
+            <if test="method != null">AND b.method = #{method}</if>
+            <if test="version != null">AND b.version = #{version}</if>
+            <if test="appId != null">AND a.appId = #{appId}</if>
+            <if test="status != null">AND a.status = #{status}</if>
+            <if test="1 != null">AND b.status = '1'</if>
+        </where>
+    </select>
+</mapper>

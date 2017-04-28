@@ -11,7 +11,9 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface BlacklistRoMapper {
-    Blacklist selectOne(String addr);
+    Blacklist selectOne(Blacklist blacklist);
 
     List<Blacklist> isBlacklist(Blacklist blackList);
+
+    List<Blacklist> selectList();
 }

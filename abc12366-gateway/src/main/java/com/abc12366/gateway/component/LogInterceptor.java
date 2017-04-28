@@ -8,6 +8,7 @@ import com.abc12366.gateway.model.bo.TokenBO;
 import com.abc12366.gateway.service.BlacklistService;
 import com.abc12366.gateway.service.ApiLogService;
 import com.alibaba.fastjson.JSON;
+import com.mysql.jdbc.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,10 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         long outTime = System.currentTimeMillis();
         int status = response.getStatus();
         String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        String appId = JSON.parseObject(Utils.decode(accessToken), TokenBO.class).getId();
+        String appId = null;
+        if (!StringUtils.isNullOrEmpty(accessToken)) {
+            appId = JSON.parseObject(Utils.decode(accessToken), TokenBO.class).getId();
+        }
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
 
         ApiLog log = new ApiLog.Builder()

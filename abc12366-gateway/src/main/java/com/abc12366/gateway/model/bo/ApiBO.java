@@ -1,5 +1,11 @@
 package com.abc12366.gateway.model.bo;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-03-28 11:28 AM
@@ -8,27 +14,37 @@ package com.abc12366.gateway.model.bo;
 public class ApiBO {
 
     private String id;
+
+    @NotEmpty
+    @Size(min = 4, max = 50)
     private String name;
-    private String mark;
+
+    @NotEmpty
+    @Size(min = 1, max = 128)
+    private String uri;
+
+    // 接口方法
+    @NotEmpty
+    @Pattern(regexp = "[GET|POST|PUT|DELETE|ALL]", message = "必须为HttpMethod方法")
     private String method;
-    private String role;
+
+    // 版本
+    @NotEmpty
+    @Pattern(regexp = "[1-9]")
     private String version;
+
+    // 接口所属系统
+    @NotEmpty
+    @Length(max = 64)
     private String appId;
-    private String status;
 
-    public ApiBO() {
-    }
+    // 是否需要验证用户身份
+    @NotEmpty
+    private boolean authentication;
 
-    private ApiBO(Builder builder) {
-        setId(builder.id);
-        setName(builder.name);
-        setMark(builder.mark);
-        setMethod(builder.method);
-        setRole(builder.role);
-        setVersion(builder.version);
-        setAppId(builder.appId);
-        setStatus(builder.status);
-    }
+    // 接口状态
+    @NotEmpty
+    private boolean status;
 
     public String getId() {
         return id;
@@ -46,12 +62,12 @@ public class ApiBO {
         this.name = name;
     }
 
-    public String getMark() {
-        return mark;
+    public String getUri() {
+        return uri;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getMethod() {
@@ -60,14 +76,6 @@ public class ApiBO {
 
     public void setMethod(String method) {
         this.method = method;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getVersion() {
@@ -86,83 +94,33 @@ public class ApiBO {
         this.appId = appId;
     }
 
-    public String getStatus() {
+    public boolean isAuthentication() {
+        return authentication;
+    }
+
+    public void setAuthentication(boolean authentication) {
+        this.authentication = authentication;
+    }
+
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
     @Override
     public String toString() {
         return "ApiBO{" +
-                "id='" + id + '\'' +
+                ", id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", mark='" + mark + '\'' +
+                ", uri='" + uri + '\'' +
                 ", method='" + method + '\'' +
-                ", role='" + role + '\'' +
                 ", version='" + version + '\'' +
                 ", appId='" + appId + '\'' +
-                ", status='" + status + '\'' +
+                ", authentication=" + authentication +
+                ", status=" + status +
                 '}';
-    }
-
-    public static final class Builder {
-        private String id;
-        private String name;
-        private String mark;
-        private String method;
-        private String role;
-        private String version;
-        private String appId;
-        private String status;
-
-        public Builder() {
-        }
-
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
-
-        public Builder name(String val) {
-            name = val;
-            return this;
-        }
-
-        public Builder mark(String val) {
-            mark = val;
-            return this;
-        }
-
-        public Builder method(String val) {
-            method = val;
-            return this;
-        }
-
-        public Builder role(String val) {
-            role = val;
-            return this;
-        }
-
-        public Builder version(String val) {
-            version = val;
-            return this;
-        }
-
-        public Builder appId(String val) {
-            appId = val;
-            return this;
-        }
-
-        public Builder status(String val) {
-            status = val;
-            return this;
-        }
-
-        public ApiBO build() {
-            return new ApiBO(this);
-        }
     }
 }

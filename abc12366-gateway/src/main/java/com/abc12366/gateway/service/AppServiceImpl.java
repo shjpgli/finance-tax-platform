@@ -3,12 +3,12 @@ package com.abc12366.gateway.service;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db1.AppMapper;
-import com.abc12366.gateway.mapper.db2.ApiRoMapper;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
-import com.abc12366.gateway.model.Api;
+import com.abc12366.gateway.mapper.db2.AppSettingRoMapper;
 import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.model.bo.AppRespBO;
+import com.abc12366.gateway.model.bo.AppSettingApiBO;
 import com.abc12366.gateway.model.bo.TokenBO;
 import com.alibaba.fastjson.JSON;
 import com.mysql.jdbc.StringUtils;
@@ -38,7 +38,7 @@ public class AppServiceImpl implements AppService {
     private AppRoMapper appRoMapper;
 
     @Autowired
-    private ApiRoMapper apiRoMapper;
+    private AppSettingRoMapper appSettingRoMapper;
 
     @Override
     public AppRespBO register(AppBO appBO) {
@@ -113,28 +113,29 @@ public class AppServiceImpl implements AppService {
     public boolean isAuthentization(HttpServletRequest request) {
         // 1.获取最佳匹配地址
         // path: /uc
-        String servletPath = request.getServletPath();
+//        String servletPath = request.getServletPath();
         // path: /test
         String bestMatchingPattern = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping.bestMatchingPattern");
-        String path = servletPath + bestMatchingPattern;
+//        String path = servletPath + bestMatchingPattern;
 
         // 2.查询接口表中是否存在对应的接口
         // 解码AppId
         String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        TokenBO tokenBO = JSON.parseObject(accessToken, TokenBO.class);
+        TokenBO tokenBO = JSON.parseObject(Utils.decode(accessToken), TokenBO.class);
         String appId = tokenBO.getId();
         String method = request.getMethod();
         String version = request.getHeader(Constant.VERSION_HEAD);
 
-        Api api = new Api.Builder().appId(appId)
-                .uri(path)
+        AppSettingApiBO appSettingApiBO = new AppSettingApiBO.Builder()
+                .appId(appId)
+                .uri(bestMatchingPattern)
                 .method(method)
                 .version(version)
                 .status(true)
                 .build();
         // 查询接口
-        api = apiRoMapper.selectOne(api);
-        return api != null && api.isAuthentication()
+        appSettingApiBO = appSettingRoMapper.isAuthentization(appSettingApiBO);
+        return appSettingApiBO != null && appSettingApiBO.isAuthentication()
                 && !StringUtils.isNullOrEmpty(request.getHeader(Constant.USER_TOKEN_HEAD));
     }
 }

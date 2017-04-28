@@ -1,2 +1,5 @@
-# insert into gw_app (id, name, password, startTime, endTime, status, createTime, lastUpdate) values ('8ad4d482-8766-495d-b453-c42534fb8383', 'abc12366', '8ddcff3a80f4189ca1c9d4d902c3c909',now(), now(), '1', now(), now());
+USE `abc12366_gateway`;
+
+# DELETE FROM gw_api;
+# insert into gw_api (id, name, uri, method, version, appId, authentication, status, createTime, lastUpdate) VALUES ('1', '用户列表', '/user','GET', 1, '2dedf548-8eeb-4459-b5ef-826927a1efb4', '1', '1', now(), now());
 

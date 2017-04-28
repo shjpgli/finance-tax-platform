@@ -1,5 +1,10 @@
 package com.abc12366.gateway.service;
 
+import com.abc12366.gateway.model.Blacklist;
+import com.abc12366.gateway.model.bo.BlacklistBO;
+
+import java.util.List;
+
 /**
  * 黑名单服务
  *
@@ -16,4 +21,14 @@ public interface BlacklistService {
      * @return true: 是名单，false:不是黑名单
      */
     boolean isBlacklist(String addr);
+
+    List<Blacklist> selectList();
+
+    Blacklist selectOne(String id);
+
+    Blacklist insert(BlacklistBO bo);
+
+    Blacklist update(BlacklistBO bo);
+
+    void delete(String id);
 }

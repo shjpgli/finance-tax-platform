@@ -27,6 +27,23 @@ public class Blacklist {
     // 辅助属性
     private Date now;
 
+    public Blacklist() {
+    }
+
+    public Blacklist(String id, String userId, String ip, Date startTime, Date endTime, String remark, boolean status,
+                     Date createTime, Date createUser, Date now) {
+        this.id = id;
+        this.userId = userId;
+        this.ip = ip;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.remark = remark;
+        this.status = status;
+        this.createTime = createTime;
+        this.createUser = createUser;
+        this.now = now;
+    }
+
     private Blacklist(Builder builder) {
         setId(builder.id);
         setUserId(builder.userId);

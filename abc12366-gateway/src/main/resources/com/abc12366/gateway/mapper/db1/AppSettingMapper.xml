@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.gateway.mapper.db1.AppSettingMapper">
+
+    <update id="update" parameterType="AppSetting">
+        UPDATE gw_app_setting
+        <set>
+            <if test="timesPerMinute ! = null">timesPerMinute = #{timesPerMinute},</if>
+            <if test="timesPerHour ! = null">timesPerHour = #{timesPerHour},</if>
+            <if test="timesPerDay ! = null">timesPerDay = #{timesPerDay},</if>
+            <if test="status ! = null">status = #{status},</if>
+            <if test="lastUpdate ! = null">lastUpdate = #{lastUpdate}</if>
+        </set>
+    </update>
+
+    <insert id="insert" parameterType="AppSetting">
+        INSERT INTO gw_app_setting
+        (id, appId, apiId, timesPerMinute, timesPerHour, timesPerDay, status, createTime, lastUpdate)
+        VALUES (#{id}, #{appId}, #{apiId}, #{timesPerMinute}, #{timesPerHour}, #{timesPerDay},
+                #{status}, #{createTime}, #{lastUpdate})
+    </insert>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM gw_app_setting WHERE id = #{id}
+    </delete>
+</mapper>

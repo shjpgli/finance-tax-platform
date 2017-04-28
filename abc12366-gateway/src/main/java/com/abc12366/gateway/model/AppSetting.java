@@ -25,6 +25,22 @@ public class AppSetting {
     private Date createTime;
     private Date lastUpdate;
 
+    public AppSetting() {
+    }
+
+    public AppSetting(String id, String appId, String apiId, int timesPerMinute, int timesPerHour, int timesPerDay,
+                      boolean status, Date createTime, Date lastUpdate) {
+        this.id = id;
+        this.appId = appId;
+        this.apiId = apiId;
+        this.timesPerMinute = timesPerMinute;
+        this.timesPerHour = timesPerHour;
+        this.timesPerDay = timesPerDay;
+        this.status = status;
+        this.createTime = createTime;
+        this.lastUpdate = lastUpdate;
+    }
+
     private AppSetting(Builder builder) {
         setId(builder.id);
         setAppId(builder.appId);
