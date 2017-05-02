@@ -3,4 +3,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db1.BlacklistMapper">
 
+    <insert id="insert" parameterType="Blacklist">
+        INSERT INTO gw_blacklist
+        (id, userId, ip, startTime, endTime, remark, status, createTime, createUser)
+        VALUES
+        (#{id}, #{userId}, #{ip}, #{startTime}, #{endTime}, #{remark}, #{status}, #{createTime}, #{createUser})
+    </insert>
+
+    <update id="update" parameterType="Blacklist">
+        UPDATE gw_blacklist
+        <set>
+            <if test="userId != null">userId = #{userId},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="startTime != null">startTime = #{startTime},</if>
+            <if test="endTime != null">endTime = #{endTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status}</if>
+        </set>
+    </update>
+
+    <delete id="delete" parameterType="Blacklist">
+        DELETE FROM gw_blacklist WHERE id = #{id}
+    </delete>
 </mapper>

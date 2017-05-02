@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface ApiRoMapper {
     Api selectOne(Api api);
+
+    List<Api> selectList();
 }

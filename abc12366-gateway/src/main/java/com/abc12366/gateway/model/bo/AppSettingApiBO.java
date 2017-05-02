@@ -1,56 +1,68 @@
-package com.abc12366.gateway.model;
+package com.abc12366.gateway.model.bo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
 /**
- * API信息表
+ * AppSetting与Api的关联对象
  *
  * @author lijun <ljun51@outlook.com>
- * @create 2017-04-05 2:55 PM
+ * @create 2017-04-27 2:46 PM
  * @since 1.0.0
  */
-public class Api {
+public class AppSettingApiBO {
 
     private String id;
+    private String appId;
+    private String apiId;
+    private int timesPerMinute;
+    private int timesPerHour;
+    private int timesPerDay;
     private String name;
     private String uri;
-    // 接口方法
     private String method;
-    // 版本
     private String version;
-    // 接口所属系统
-    private String appId;
-    // 是否需要验证用户身份
     private boolean authentication;
-    // 接口状态
     private boolean status;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
-    public Api() {
+    public AppSettingApiBO() {
     }
 
-    public Api(String id, String name, String uri, String method, String version, String appId, boolean authentication,
-               boolean status, Date createTime, Date lastUpdate) {
+    public AppSettingApiBO(String id, String appId, String apiId, int timesPerMinute, int timesPerHour, int timesPerDay,
+                           String name, String uri, String method, String version, boolean authentication,
+                           boolean status, Date createTime, Date lastUpdate) {
         this.id = id;
+        this.appId = appId;
+        this.apiId = apiId;
+        this.timesPerMinute = timesPerMinute;
+        this.timesPerHour = timesPerHour;
+        this.timesPerDay = timesPerDay;
         this.name = name;
         this.uri = uri;
         this.method = method;
         this.version = version;
-        this.appId = appId;
         this.authentication = authentication;
         this.status = status;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
     }
 
-    private Api(Builder builder) {
+    private AppSettingApiBO(Builder builder) {
         setId(builder.id);
+        setAppId(builder.appId);
+        setApiId(builder.apiId);
+        setTimesPerMinute(builder.timesPerMinute);
+        setTimesPerHour(builder.timesPerHour);
+        setTimesPerDay(builder.timesPerDay);
         setName(builder.name);
         setUri(builder.uri);
         setMethod(builder.method);
         setVersion(builder.version);
-        setAppId(builder.appId);
         setAuthentication(builder.authentication);
         setStatus(builder.status);
         setCreateTime(builder.createTime);
@@ -63,6 +75,46 @@ public class Api {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
+    }
+
+    public int getTimesPerMinute() {
+        return timesPerMinute;
+    }
+
+    public void setTimesPerMinute(int timesPerMinute) {
+        this.timesPerMinute = timesPerMinute;
+    }
+
+    public int getTimesPerHour() {
+        return timesPerHour;
+    }
+
+    public void setTimesPerHour(int timesPerHour) {
+        this.timesPerHour = timesPerHour;
+    }
+
+    public int getTimesPerDay() {
+        return timesPerDay;
+    }
+
+    public void setTimesPerDay(int timesPerDay) {
+        this.timesPerDay = timesPerDay;
     }
 
     public String getName() {
@@ -95,14 +147,6 @@ public class Api {
 
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
     }
 
     public boolean isAuthentication() {
@@ -139,13 +183,17 @@ public class Api {
 
     @Override
     public String toString() {
-        return "Api{" +
+        return "AppSettingApiBO{" +
                 "id='" + id + '\'' +
+                ", appId='" + appId + '\'' +
+                ", apiId='" + apiId + '\'' +
+                ", timesPerMinute=" + timesPerMinute +
+                ", timesPerHour=" + timesPerHour +
+                ", timesPerDay=" + timesPerDay +
                 ", name='" + name + '\'' +
                 ", uri='" + uri + '\'' +
                 ", method='" + method + '\'' +
                 ", version='" + version + '\'' +
-                ", appId='" + appId + '\'' +
                 ", authentication=" + authentication +
                 ", status=" + status +
                 ", createTime=" + createTime +
@@ -155,11 +203,15 @@ public class Api {
 
     public static final class Builder {
         private String id;
+        private String appId;
+        private String apiId;
+        private int timesPerMinute;
+        private int timesPerHour;
+        private int timesPerDay;
         private String name;
         private String uri;
         private String method;
         private String version;
-        private String appId;
         private boolean authentication;
         private boolean status;
         private Date createTime;
@@ -170,6 +222,31 @@ public class Api {
 
         public Builder id(String val) {
             id = val;
+            return this;
+        }
+
+        public Builder appId(String val) {
+            appId = val;
+            return this;
+        }
+
+        public Builder apiId(String val) {
+            apiId = val;
+            return this;
+        }
+
+        public Builder timesPerMinute(int val) {
+            timesPerMinute = val;
+            return this;
+        }
+
+        public Builder timesPerHour(int val) {
+            timesPerHour = val;
+            return this;
+        }
+
+        public Builder timesPerDay(int val) {
+            timesPerDay = val;
             return this;
         }
 
@@ -193,11 +270,6 @@ public class Api {
             return this;
         }
 
-        public Builder appId(String val) {
-            appId = val;
-            return this;
-        }
-
         public Builder authentication(boolean val) {
             authentication = val;
             return this;
@@ -218,8 +290,8 @@ public class Api {
             return this;
         }
 
-        public Api build() {
-            return new Api(this);
+        public AppSettingApiBO build() {
+            return new AppSettingApiBO(this);
         }
     }
 }

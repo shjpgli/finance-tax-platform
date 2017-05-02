@@ -32,6 +32,23 @@ public class ApiLog {
     // 附言
     private String message;
 
+    public ApiLog() {
+    }
+
+    public ApiLog(String id, String uri, String userAgent, String appId, String userId, String ip, long inTime,
+                  long outTime, int status, String message) {
+        this.id = id;
+        this.uri = uri;
+        this.userAgent = userAgent;
+        this.appId = appId;
+        this.userId = userId;
+        this.ip = ip;
+        this.inTime = inTime;
+        this.outTime = outTime;
+        this.status = status;
+        this.message = message;
+    }
+
     private ApiLog(Builder builder) {
         setId(builder.id);
         setUri(builder.uri);
