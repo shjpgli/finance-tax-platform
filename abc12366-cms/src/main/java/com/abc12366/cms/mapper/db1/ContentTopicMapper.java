@@ -11,14 +11,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface ContentTopicMapper{
 
-
-	/**
-	 * 
-	 * 查询(根据主键ID查询)
-	 * 
-	 **/
-	ContentTopic selectByPrimaryKey(@Param("id") Long id);
-
 	/**
 	 * 
 	 * 删除(根据主键ID删除)

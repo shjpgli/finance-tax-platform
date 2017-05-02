@@ -5,15 +5,51 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	channelId,	typeId,	modelId,	siteId,	sortDate,	topLevel,	hasTitleImg,	isRecommend,	status,	viewsDay,	commentsDay,	downloadsDay,	upsDay,	recommendLevel
+		contentId,	channelId,	typeId,	modelId,	siteId,	sortDate,	topLevel,	hasTitleImg,	isRecommend,	status,	viewsDay,	commentsDay,	downloadsDay,	upsDay,	recommendLevel
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="content" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Content" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_content
 		 WHERE contentId = #{contentId}
 	</select>
+
+	<!-- 查询（根据查询条件查询） -->
+	<select id="selectList" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
+		SELECT
+			a.contentId contentId,
+			b.title,
+			a.channelId channelId,
+			c.channelName channelName,
+			a.topLevel topLevel,
+			a.typeId typeId,
+			d.typeName typeName,
+			b.author author,
+			e.views views,
+			b.releaseDate releaseDate,
+			a.status STATUS,
+			b.needRegenerate needRegenerate,
+			a.recommendLevel recommendLevel
+		FROM cms_content a,cms_content_ext b,cms_channel_ext c,cms_content_type d,cms_content_count e
+		WHERE a.contentId = b.contentId AND a.channelId = c.channelId AND a.typeId = d.typeId AND a.contentId = e.contentId
+		<if test="title != null and title != ''">
+			AND title like CONCAT('%',#{title},'%')
+		</if>
+		<if test="author != null and author != ''">
+			AND author like CONCAT('%',#{author},'%')
+		</if>
+		<if test="typeId != null and typeId != ''">
+			AND typeId = #{typeId}
+		</if>
+		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+		<if test="minNum != null and maxNum != null">
+			AND  limit #{minNum},#{maxNum}
+		</if>
+
+	</select>
+
+
 
 </mapper>

@@ -1,4 +1,6 @@
 package com.abc12366.cms.model;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 
@@ -15,6 +17,7 @@ public class Content implements Serializable {
 	private String contentId;
 
 	/**栏目ID**/
+	@NotEmpty
 	private String channelId;
 
 	/**属性ID**/
