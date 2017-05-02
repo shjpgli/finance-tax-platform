@@ -5,7 +5,11 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
+<<<<<<< HEAD:abc12366-cms/src/main/resources/com/abc12366/cms/mapper/db2/ModelItemRoMapper.xml
 		modelitemId,	modelId,	field,	itemLabel,	priority,	defValue,	optValue,	textSize,	areaRows,	areaCols,	help,	helpPosition,	dataType,	isSingle,	isChannel,	isCustom,	isDisplay,	isRequired,	imageWidth,	imageHeight
+=======
+		 id,	modelId,	field,	itemLabel,	priority,	defValue,	optValue,	textSize,	areaRows,	areaCols,	help,	helpPosition,	dataType,	isSingle,	isChannel,	isCustom,	isDisplay,	isRequired,	imageWidth,	imageHeight
+>>>>>>> ea24fa8b352063d86a9238463b0e88c7c4842819:abc12366-cms/src/main/resources/com/abc12366/cms/mapper/db2/ModelItemRoMapper.xml
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -17,6 +21,7 @@
 	</select>
 
 
+<<<<<<< HEAD:abc12366-cms/src/main/resources/com/abc12366/cms/mapper/db2/ModelItemRoMapper.xml
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectModeList" resultType="com.abc12366.cms.model.ModelItem" parameterType="java.lang.String">
 		SELECT
@@ -26,4 +31,6 @@
 	</select>
 
 
+=======
+>>>>>>> ea24fa8b352063d86a9238463b0e88c7c4842819:abc12366-cms/src/main/resources/com/abc12366/cms/mapper/db2/ModelItemRoMapper.xml
 </mapper>
