@@ -42,6 +42,11 @@ public class GlobalExceptionHandler {
             LOGGER.error(bodyStatus.getMessage() + e);
             return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
 
+        } else if (e instanceof NumberFormatException) {
+            bodyStatus = Utils.bodyStatus(4008);
+            LOGGER.error(bodyStatus.getMessage() + e);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
+
         } else if (e instanceof MethodArgumentNotValidException) {
             BindingResult bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
             if (bindingResult.hasErrors() && bindingResult.hasFieldErrors()) {

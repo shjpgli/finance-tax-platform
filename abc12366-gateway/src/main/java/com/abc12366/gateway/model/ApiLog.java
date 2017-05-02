@@ -1,7 +1,5 @@
 package com.abc12366.gateway.model;
 
-import java.sql.Timestamp;
-
 /**
  * 日志信息对象
  *

@@ -24,4 +24,9 @@ public class Constant {
     public final static String USER_TOKEN_HEAD = "User-Token";
     // 用户token有效期：168小时
     public final static int USER_TOKEN_VALID_HOURS = 7 * 24;
+
+    // 分页-当前页
+    public final static String pageNum = "1";
+    // 分页-每页大小
+    public final static String pageSize = "10";
 }

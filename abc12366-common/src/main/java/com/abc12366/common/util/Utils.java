@@ -2,6 +2,8 @@ package com.abc12366.common.util;
 
 import com.abc12366.common.model.BodyStatus;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -29,9 +31,20 @@ public class Utils {
         return UUID.randomUUID().toString();
     }
 
-    public static Map kv(Object k, Object v) {
+    /**
+     * 返回Map形式的对象，参数必须为偶数个
+     *
+     * @param kvs 键值对
+     * @return Map
+     */
+    public static Map kv(Object... kvs) {
+        if (kvs.length / 2 != 0) {
+            new RuntimeException("Params must be key, value pairs.");
+        }
         Map<Object, Object> map = new HashMap<>();
-        map.put(k, v);
+        for (int i = 0; i < kvs.length; i += 2) {
+            map.put(kvs[i], kvs[i + 1]);
+        }
         return map;
     }
 
@@ -41,7 +54,7 @@ public class Utils {
      * @param code int
      * @return BodyStatus
      */
-    public static BodyStatus bodyStatus(int code){
+    public static BodyStatus bodyStatus(int code) {
         BodyStatus body = new BodyStatus();
         body.setCode(code);
         try {
@@ -69,6 +82,7 @@ public class Utils {
 
     /**
      * Base64 编码
+     *
      * @param str 需要编码的字符串
      * @return String
      */
@@ -78,6 +92,7 @@ public class Utils {
 
     /**
      * Base64 解码
+     *
      * @param str 需要解码的字符串
      * @return String
      */

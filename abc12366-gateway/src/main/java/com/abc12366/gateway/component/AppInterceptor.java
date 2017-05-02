@@ -53,15 +53,15 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         // 4.App授权
-        if (!appService.isAuthentization(request)) {
-            BodyStatus bodyStatus = Utils.bodyStatus(4002);
-            response.setStatus(403);
-            response.getWriter().write(JSON.toJSONString(bodyStatus));
-            response.getWriter().flush();
-            response.getWriter().close();
-            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
-            return false;
-        }
+//        if (!appService.isAuthentization(request)) {
+//            BodyStatus bodyStatus = Utils.bodyStatus(4002);
+//            response.setStatus(403);
+//            response.getWriter().write(JSON.toJSONString(bodyStatus));
+//            response.getWriter().flush();
+//            response.getWriter().close();
+//            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
+//            return false;
+//        }
 
         return true;
     }

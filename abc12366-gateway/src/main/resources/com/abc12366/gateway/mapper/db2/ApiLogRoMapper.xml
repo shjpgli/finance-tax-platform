@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.gateway.mapper.db2.ApiLogRoMapper">
+    <select id="selectList" resultType="ApiLog">
+        select id, uri, userAgent, userId, appId, ip, inTime, outTime, status, message
+        from gw_api_log
+    </select>
+
+    <select id="selectListPage" resultType="ApiLog">
+        select id, uri, userAgent, userId, appId, ip, inTime, outTime, status, message
+        from gw_api_log
+        <where>
+            <if test="uri != null">
+                uri = #{uri}
+            </if>
+        </where>
+    </select>
+</mapper>
