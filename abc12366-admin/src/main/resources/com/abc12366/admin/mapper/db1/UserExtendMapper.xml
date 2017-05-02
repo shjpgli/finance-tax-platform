@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.admin.mapper.UserExtendMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	userId,	orgId,	job,	phone,	address,	createTime,	lastUpdate
+	</sql>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM sys_user_extend
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="userExtend">
+		 INSERT INTO sys_user_extend
+ 		(id,userId,orgId,job,phone,address,createTime,lastUpdate) 
+		 VALUES 
+ 		(#{id},#{userId},#{orgId},#{job},#{phone},#{address},#{createTime},#{lastUpdate}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="userExtend">
+		 INSERT INTO sys_user_extend
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="userId != null">
+				 userId,
+			</if>
+			<if test="orgId != null">
+				 orgId,
+			</if>
+			<if test="job != null">
+				 job,
+			</if>
+			<if test="phone != null">
+				 phone,
+			</if>
+			<if test="address != null">
+				 address,
+			</if>
+			<if test="createTime != null">
+				 createTime,
+			</if>
+			<if test="lastUpdate != null">
+				 lastUpdate,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="userId!=null">
+				 #{userId},
+			</if>
+			<if test="orgId!=null">
+				 #{orgId},
+			</if>
+			<if test="job!=null">
+				 #{job},
+			</if>
+			<if test="phone!=null">
+				 #{phone},
+			</if>
+			<if test="address!=null">
+				 #{address},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="lastUpdate!=null">
+				 #{lastUpdate},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="userExtend">
+		 UPDATE sys_user_extend
+ 		 <set> 
+			<if test="userId != null">
+				 userId = #{userId},
+			</if>
+			<if test="orgId != null">
+				 orgId = #{orgId},
+			</if>
+			<if test="job != null">
+				 job = #{job},
+			</if>
+			<if test="phone != null">
+				 phone = #{phone},
+			</if>
+			<if test="address != null">
+				 address = #{address},
+			</if>
+			<if test="createTime != null">
+				 createTime = #{createTime},
+			</if>
+			<if test="lastUpdate != null">
+				 lastUpdate = #{lastUpdate},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="userExtend">
+		 UPDATE sys_user_extend
+		 SET 
+			 userId = #{userId},
+			 orgId = #{orgId},
+			 job = #{job},
+			 phone = #{phone},
+			 address = #{address},
+			 createTime = #{createTime},
+			 lastUpdate = #{lastUpdate}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
