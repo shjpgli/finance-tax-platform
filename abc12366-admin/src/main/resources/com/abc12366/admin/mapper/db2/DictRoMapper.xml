@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.admin.mapper.db2.DictRoMapper">
+
+    <select id="selectList" resultType="Dict">
+        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+        from sys_dict
+    </select>
+
+    <select id="selectOne" resultType="Dict">
+        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+        from sys_dict
+        where id = #{id}
+    </select>
+
+    <select id="selectFirstLevel" resultType="Dict">
+        select id, dictId, dictName
+        from sys_dict
+    </select>
+
+    <select id="selectByDictId" resultType="Dict">
+        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+        from sys_dict
+        where dictId = #{dictId}
+    </select>
+
+    <select id="selectByDictName" resultType="Dict">
+        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+        from sys_dict
+        where dictName = #{dictName}
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.admin.mapper.db1.MenuMapper">
+
+    <insert id="insert" parameterType="Menu">
+        insert into sys_menu (menuId, menuName, menuUrl, parentId, perms, type, icon, sort, status, remark)
+        values (#{menuId}, #{menuName}, #{menuUrl}, #{parentId},  #{perms}, #{type}, #{icon}, #{sort}, #{status}, #{remark})
+    </insert>
+
+    <update id="update">
+        update sys_menu
+        <set>
+            <if test="menuName != null">menuName = #{menuName},</if>
+            <if test="menuUrl != null">menuUrl = #{menuUrl},</if>
+            <if test="parentId != null">parentId = #{parentId},</if>
+            <if test="perms != null">perms = #{perms},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark}</if>
+        </set>
+        where menuId=#{menuId}
+    </update>
+
+    <delete id="delete">
+        delete from sys_menu
+        where menuId=#{menuId}
+    </delete>
+</mapper>

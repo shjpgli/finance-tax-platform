@@ -1,29 +1,37 @@
-package com.abc12366.admin.model;
+package com.abc12366.admin.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import java.lang.String;
 import java.util.Date;
 
 /**
- * @author lijun <ljun51@outlook.com>
- * @create 2017-04-24 3:10 PM
+ *
+ * @author liuguiyao
+ * @create 2017-04-27 10:08 AM
  * @since 1.0.0
  */
-public class Dict {
-
+public class DictBO{
     private String id;
+    @NotEmpty(message = "dictId不能为空")
     private String dictId;
+    @NotEmpty(message = "dictName不能为空")
     private String dictName;
+    @NotEmpty(message = "fieldKey不能为空")
     private String fieldKey;
+    @NotEmpty(message = "fieldValue不能为空")
     private String fieldValue;
+    @NotEmpty(message = "status不能为空")
     private boolean status;
     private Date createTime;
     private String createUser;
     private Date lastUpdate;
     private String lastUser;
 
-    public Dict() {
+    public DictBO() {
     }
 
-    public Dict(String id, String dictId, String dictName, String fieldKey, String fieldValue, boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser) {
+    public DictBO(String id, String dictId, String dictName, String fieldKey, String fieldValue, boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser) {
         this.id = id;
         this.dictId = dictId;
         this.dictName = dictName;
@@ -118,7 +126,7 @@ public class Dict {
 
     @Override
     public String toString() {
-        return "Dict{" +
+        return "DictBO{" +
                 "id='" + id + '\'' +
                 ", dictId='" + dictId + '\'' +
                 ", dictName='" + dictName + '\'' +
