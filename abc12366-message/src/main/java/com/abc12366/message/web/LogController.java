@@ -1,8 +1,6 @@
 package com.abc12366.message.web;
 
-import com.abc12366.common.util.Utils;
-import com.abc12366.common.web.BaseController;
-import com.abc12366.message.model.bo.HelloEvent;
+import com.abc12366.message.model.bo.ApiLogBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +8,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * 测试控制器
@@ -23,36 +20,27 @@ import org.springframework.web.client.RestTemplate;
  * @since 1.0.0
  */
 @RestController
-public class HelloController extends BaseController {
+public class LogController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(LogController.class);
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
 
-    public HelloController(RestTemplate restTemplate) {
-        super(restTemplate);
-    }
-
     /**
-     * Kafka hello生产者测试接口
+     * Kafka apilog生产者测试接口
      *
-     * @param name 用户名
-     * @return HelloEvent
+     * @param bo
      */
-    @GetMapping("/kafka/{name}")
-    public void hello(@PathVariable("name") String name){
+    @PostMapping("/kafka")
+    public void insertApiLog(@RequestBody ApiLogBO bo){
 
-        HelloEvent event = new HelloEvent();
-        event.setId(Utils.uuid());
-        event.setMsg("Hello, "+ name);
-
-        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("message_hello_topic", event);
+        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("gateway_apilog_topic", bo);
         future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
 
             @Override
             public void onFailure(Throwable throwable) {
-                LOGGER.info("Failed to send event:" + event);
+                LOGGER.info("Failed to send event:" + bo);
             }
 
             @Override

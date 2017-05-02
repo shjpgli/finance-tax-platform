@@ -1,4 +1,4 @@
-package com.abc12366.message.model;
+package com.abc12366.message.model.bo;
 
 import java.util.Calendar;
 
