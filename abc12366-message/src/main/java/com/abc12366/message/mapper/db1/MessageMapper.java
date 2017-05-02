@@ -1,4 +1,4 @@
-package com.abc12366.message.mapper;
+package com.abc12366.message.mapper.db1;
 
 /**
  * @author lijun <ljun51@outlook.com>

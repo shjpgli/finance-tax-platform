@@ -2,8 +2,6 @@ package com.abc12366.common.util;
 
 import com.abc12366.common.model.BodyStatus;
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.springframework.util.Assert;
 
 import java.io.IOException;

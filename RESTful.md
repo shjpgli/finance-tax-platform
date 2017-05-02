@@ -8,12 +8,11 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 
 ### 完整URI
 
-	http://api.abc12366.com/admin
-	http://api.abc12366.com/bangbang
-	http://api.abc12366.com/cms
-	http://api.abc12366.com/gateway
-	http://api.abc12366.com/message
-	http://api.abc12366.com/uc
+	http://api.abc12366.com:9500/admin
+	http://api.abc12366.com:9400/cms
+	http://api.abc12366.com:9300/bangbang
+	http://api.abc12366.com:9200/message
+	http://api.abc12366.com:9100/uc
 
 ### URI规范
 * 不要用大写

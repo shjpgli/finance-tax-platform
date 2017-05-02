@@ -5,11 +5,10 @@ package com.abc12366.message.model;
  * @create 2017-02-23 4:46 PM
  * @since 1.0.0
  */
-public class HelloRequestEvent {
+public class HelloEvent {
 
     private String id;
     private String msg;
-    private int attempts;
 
     public String getId() {
         return id;
@@ -27,20 +26,11 @@ public class HelloRequestEvent {
         this.msg = msg;
     }
 
-    public int getAttempts() {
-        return attempts;
-    }
-
-    public void setAttempts(int attempts) {
-        this.attempts = attempts;
-    }
-
     @Override
     public String toString() {
-        return "HelloRequestEvent{" +
+        return "HelloEvent{" +
                 "id='" + id + '\'' +
                 ", msg='" + msg + '\'' +
-                ", attempts=" + attempts +
                 '}';
     }
 }
