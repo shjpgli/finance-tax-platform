@@ -1,8 +1,9 @@
 package com.abc12366.admin.service;
 
-import java.util.List;
+import com.abc12366.admin.model.bo.DictBO;
+import com.abc12366.admin.model.bo.DictUpdateBO;
 
-import com.abc12366.admin.model.Dict;
+import java.util.List;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -10,5 +11,15 @@ import com.abc12366.admin.model.Dict;
  * @since 1.0.0
  */
 public interface DictService {
-    List<Dict> selectList();
+    List<DictBO> selectList();
+
+    DictBO selectOne(String id);
+
+    List<DictBO> selectFirstLevel();
+
+    DictBO insert(DictBO dictBO);
+
+    DictBO update(DictUpdateBO dictUpdateBO);
+
+    DictBO delete(String id);
 }
