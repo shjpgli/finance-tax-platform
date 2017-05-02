@@ -8,14 +8,6 @@
 		 id,	siteId,	friendlinkctgId,	siteName,	domain,	logo,	email,	description,	views,	isEnabled,	priority
 	</sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="friendlink" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_friendlink
-		 WHERE friendlinkId = #{friendlinkId}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_friendlink

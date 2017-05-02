@@ -8,14 +8,6 @@
 		 id,	name,	value,	type
 	</sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="dictionary" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_dictionary
-		 WHERE id = #{id}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_dictionary

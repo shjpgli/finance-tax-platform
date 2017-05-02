@@ -8,14 +8,6 @@
 		 id,	channelId,	topicName,	shortName,	keywords,	description,	titleImg,	contentImg,	tplContent,	priority,	isRecommend
 	</sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="topic" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_topic
-		 WHERE topicId = #{topicId}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_topic

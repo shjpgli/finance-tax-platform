@@ -18,7 +18,7 @@ public interface SiteMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("siteId") String siteId);
 
 	/**
 	 * 

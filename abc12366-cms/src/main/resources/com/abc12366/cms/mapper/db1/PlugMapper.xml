@@ -7,15 +7,6 @@
 	<sql id="Base_Column_List">
 		 id,	name,	path,	description,	author,	uploadTime,	installTime,	uninstallTime,	fileConflict,	isUsed,	plugPerms,	plugRepair
 	</sql>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="plug" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_plug
-		 WHERE plugId = #{plugId}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_plug
