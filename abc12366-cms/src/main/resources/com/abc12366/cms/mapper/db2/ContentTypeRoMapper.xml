@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	typeName,	imgWidth,	imgHeight,	hasImage,	isDisabled
+		typeId,	typeName,	imgWidth,	imgHeight,	hasImage,	isDisabled
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -14,6 +14,13 @@
 		 <include refid="Base_Column_List" />
 		 FROM cms_content_type
 		 WHERE typeId = #{typeId}
+	</select>
+
+	<!-- 查询（查询列表） -->
+	<select id="selectList" resultType="contentType" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cms_content_type
 	</select>
 
 

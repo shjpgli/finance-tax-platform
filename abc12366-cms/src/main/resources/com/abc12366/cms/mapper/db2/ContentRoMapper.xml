@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Content" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="content" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_content
@@ -17,7 +17,7 @@
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
-	<select id="selectList" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
+	<select id="selectList" resultType="contentListBo" parameterType="java.util.Map">
 		SELECT
 			a.contentId contentId,
 			b.title,
@@ -44,9 +44,6 @@
 			AND typeId = #{typeId}
 		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
-		<if test="minNum != null and maxNum != null">
-			AND  limit #{minNum},#{maxNum}
-		</if>
 
 	</select>
 

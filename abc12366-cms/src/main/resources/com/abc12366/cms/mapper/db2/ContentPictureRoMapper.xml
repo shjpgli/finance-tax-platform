@@ -18,7 +18,7 @@
 
 
 	<!-- 查询（根据contentId查询） -->
-	<select id="selectContentPictureList" resultType="com.abc12366.cms.model.ContentPicture" parameterType="java.lang.String">
+	<select id="selectContentPictureList" resultType="contentPicture" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_content_picture

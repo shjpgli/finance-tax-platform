@@ -70,7 +70,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.File">
+	<update id="updateByPrimaryKey" parameterType="file">
 		 UPDATE cms_file
 		 SET 
 			 fileName = #{fileName},
@@ -78,5 +78,20 @@
 			 contentId = #{contentId}
 		 WHERE filePath = #{filePath} and fileName = #{fileName}
 	</update>
+
+	<!-- 更新文件为1无效状态-->
+	<update id="updateByContentId" parameterType="java.lang.String">
+		UPDATE cms_file
+		SET
+		fileIsvalid = 1,
+		contentId = 'DELETE'
+		WHERE contentId = #{contentId}
+	</update>
+
+	<!--删除：根据contentId删除-->
+	<delete id="deleteByContentId" parameterType="java.lang.String">
+		DELETE FROM cms_file
+		WHERE contentId = #{contentId}
+	</delete>
 
 </mapper>

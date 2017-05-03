@@ -70,7 +70,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentPicture">
+	<update id="updateByPrimaryKey" parameterType="contentPicture">
 		 UPDATE cms_content_picture
 		 SET 
 			 priority = #{priority},
@@ -78,5 +78,11 @@
 			 description = #{description}
 		 WHERE contentId = #{contentId} and priority = #{priority}
 	</update>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByContentId" parameterType="java.lang.String">
+		DELETE FROM cms_content_picture
+		WHERE contentId = #{contentId}
+	</delete>
 
 </mapper>
