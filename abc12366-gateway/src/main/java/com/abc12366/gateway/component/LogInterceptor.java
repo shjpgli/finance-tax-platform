@@ -2,21 +2,23 @@ package com.abc12366.gateway.component;
 
 import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.DateUtils;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.ApiLog;
 import com.abc12366.gateway.model.bo.TokenBO;
 import com.abc12366.gateway.service.BlacklistService;
 import com.abc12366.gateway.service.ApiLogService;
 import com.alibaba.fastjson.JSON;
-import com.mysql.jdbc.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * IO拦截器
@@ -42,7 +44,28 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         // 1.前置日志
         String addr = request.getRemoteAddr();
         String uri = request.getRequestURI();
-        LOGGER.info("URI:{}, IP:{}, User-Agent:{}", uri, addr, request.getHeader("User-Agent"));
+        String version = request.getHeader(Constant.VERSION_HEAD);
+        LOGGER.info("URI:{}, Version:{}, IP:{}, User-Agent:{}", uri, version, addr, request.getHeader("User-Agent"));
+
+        // 版本头检查
+        if (StringUtils.isEmpty(version)) {
+            BodyStatus bodyStatus = Utils.bodyStatus(4009);
+            response.setStatus(400);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.info("URI:{}, Version:{}, IP:{}, {}", uri, version, addr, bodyStatus);
+            return false;
+        }
+        if (!(Constant.VERSION_1.equals(version) || Constant.VERSION_2.equals(version))) {
+            BodyStatus bodyStatus = Utils.bodyStatus(4010);
+            response.setStatus(400);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.info("URI:{}, Version:{}, IP:{}, {}", uri, version, addr, bodyStatus);
+            return false;
+        }
 
         // 2.黑名单服务
         if (blacklistService.isBlacklist(addr)) {
@@ -51,7 +74,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();
-            LOGGER.info("URI:{}, IP:{}, {}", uri, addr, bodyStatus);
+            LOGGER.info("URI:{}, Version:{}, IP:{}, {}", uri, version, addr, bodyStatus);
             return false;
         }
 
@@ -81,7 +104,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         int status = response.getStatus();
         String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
         String appId = null;
-        if (!StringUtils.isNullOrEmpty(accessToken)) {
+        if (!StringUtils.isEmpty(accessToken)) {
             appId = JSON.parseObject(Utils.decode(accessToken), TokenBO.class).getId();
         }
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
@@ -97,6 +120,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
                 .appId(appId)
                 .userId(userId)
                 .build();
+        log.setYyyyMMdd(DateUtils.getDateFormat(new Date(), "yyyyMMdd"));
 
         // 5.访问计数
         // 6.后置日志和日志表

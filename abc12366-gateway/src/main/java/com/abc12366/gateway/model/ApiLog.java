@@ -1,5 +1,7 @@
 package com.abc12366.gateway.model;
 
+import com.abc12366.gateway.model.bo.TableBO;
+
 /**
  * 日志信息对象
  *
@@ -7,7 +9,7 @@ package com.abc12366.gateway.model;
  * @create 2017-04-05 9:36 AM
  * @since 1.0.0
  */
-public class ApiLog {
+public class ApiLog extends TableBO {
 
     // 主键UUID
     private String id;
@@ -33,8 +35,9 @@ public class ApiLog {
     public ApiLog() {
     }
 
-    public ApiLog(String id, String uri, String userAgent, String appId, String userId, String ip, long inTime,
-                  long outTime, int status, String message) {
+    public ApiLog(String yyyyMMdd, String id, String uri, String userAgent, String appId, String userId, String ip,
+                  long inTime, long outTime, int status, String message) {
+        super(yyyyMMdd);
         this.id = id;
         this.uri = uri;
         this.userAgent = userAgent;
@@ -153,9 +156,8 @@ public class ApiLog {
                 ", outTime=" + outTime +
                 ", status=" + status +
                 ", message='" + message + '\'' +
-                '}';
+                "} " + super.toString();
     }
-
 
     public static final class Builder {
         private String id;

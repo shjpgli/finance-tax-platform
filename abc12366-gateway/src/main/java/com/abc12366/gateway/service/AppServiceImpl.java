@@ -63,12 +63,10 @@ public class AppServiceImpl implements AppService {
                     .lastUpdate(now)
                     .build();
 
-            int rows = appMapper.insert(newApp);
-            if (rows > 0) {
-                AppRespBO appRespDTO = new AppRespBO();
-                BeanUtils.copyProperties(newApp, appRespDTO);
-                return appRespDTO;
-            }
+            appMapper.insert(newApp);
+            AppRespBO appRespDTO = new AppRespBO();
+            BeanUtils.copyProperties(newApp, appRespDTO);
+            return appRespDTO;
         }
 
         return null;

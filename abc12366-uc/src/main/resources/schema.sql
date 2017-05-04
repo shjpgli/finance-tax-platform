@@ -117,37 +117,63 @@ CREATE TABLE IF NOT EXISTS gw_app_setting (
 -- CREATE DATABASE IF NOT EXISTS `abc12366_core` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 USE `abc12366_uc`;
 
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS authority;
+DROP TABLE IF EXISTS uc_user;
+DROP TABLE IF EXISTS uc_user_extend;
+DROP TABLE IF EXISTS uc_user_nsr;
 
-CREATE TABLE IF NOT EXISTS user (
-  id                    VARCHAR(64) PRIMARY KEY NOT NULL
-  COMMENT 'ID',
-  username              VARCHAR(32)             NOT NULL
-  COMMENT '用户名',
-  phone                 VARCHAR(11)             NOT NULL
-  COMMENT '手机号码',
-  password              VARCHAR(64)             NOT NULL
-  COMMENT '密码',
-  enabled               BOOLEAN                 NOT NULL
-  COMMENT '激活状态',
+create table IF NOT EXISTS uc_user(
+  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT '用户ID',
+  username varchar(32) not null COMMENT '用户名',
+  phone VARCHAR(11) NOT NULL COMMENT '手机号码',
+  password VARCHAR(64) not null COMMENT '密码',
+  token VARCHAR(64) COMMENT '用户令牌',
   lastPasswordResetDate DATETIME COMMENT '上次重置密码时间',
-  createDate            DATETIME COMMENT '创建时间',
-  modifyDate            DATETIME COMMENT '修改时间'
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_bin
-  COMMENT '用户信息表';
+  regMail VARCHAR(200) COMMENT '注册邮箱',
+  userPicturePath VARCHAR(100) COMMENT'用户图片路径',
+  regIP VARCHAR(50) COMMENT'注册IP',
+  salt VARCHAR(10) COMMENT '密码干扰串用来和密码进行配合验证，防止被暴力破解',
+  realName VARCHAR(200) COMMENT '真实名称',
+  status BOOLEAN not null COMMENT '激活状态',
+  createTime DATETIME COMMENT '创建时间',
+  lastUpdate DATETIME COMMENT '修改时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '用户信息表';
 
-CREATE TABLE IF NOT EXISTS authority (
-  userId    VARCHAR(64) NOT NULL
-  COMMENT '用户ID，关联用户表',
-  authority VARCHAR(64) NOT NULL
-  COMMENT '用户角色'
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_bin
-  COMMENT '用户角色表';
-CREATE UNIQUE INDEX idx_auth_id ON authority (userId, authority);
+create table IF NOT EXISTS uc_user_extend(
+  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT '主键',
+  userId VARCHAR(64) NOT NULL COMMENT '用户表主键',
+  signature VARCHAR(200) COMMENT'个性签名',
+  nickname VARCHAR(32) COMMENT'昵称',
+  sex CHAR(1) COMMENT'性别，0：女，1：男',
+  birthday DATE COMMENT'生日',
+  bloodType VARCHAR (2) COMMENT'血型',
+  weight VARCHAR(10) COMMENT'体重',
+  height VARCHAR(10) COMMENT'身高',
+  marital VARCHAR(6) COMMENT'婚姻状况',
+  education VARCHAR(32) COMMENT'教育程度',
+  graduate VARCHAR(100) COMMENT'毕业院校',
+  occupation VARCHAR(100) COMMENT'职业',
+  income VARCHAR(20) COMMENT'收入水平',
+  postAddress VARCHAR(200) COMMENT'通讯地址',
+  realName VARCHAR(16) COMMENT'真实姓名',
+  experence VARCHAR(20) COMMENT'经验等级',
+  weixin VARCHAR(50) COMMENT'微信账号',
+  qq VARCHAR(50) COMMENT'QQ账号',
+  safeQuestion VARCHAR(200) COMMENT'密保问题',
+  safeAnswer VARCHAR(200) COMMENT'密保答案',
+  province VARCHAR(50) COMMENT'所在地（省）',
+  city VARCHAR(30) COMMENT'所在（市）',
+  area VARCHAR(30) COMMENT'所在 （地区）',
+  createTime DATETIME COMMENT '创建时间',
+  lastUpdate DATETIME COMMENT '修改时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '用户信息扩展表';
+
+create table IF NOT EXISTS uc_user_nsr(
+  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT '纳税人信息表主键',
+  userId VARCHAR (64) NOT NULL COMMENT '用户编号',
+  djxh VARCHAR(64) COMMENT '登记序号',
+  nsrsbh VARCHAR(32) COMMENT '纳税人识别号',
+  shxydm VARCHAR(32) COMMENT '社会信用代码',
+  status BOOLEAN NOT NULL COMMENT'绑定状态，0：未绑定，1：已绑定',
+  createTime DATETIME COMMENT '创建时间',
+  lastUpdate DATE COMMENT'最后更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '用户与纳税人绑定表';
