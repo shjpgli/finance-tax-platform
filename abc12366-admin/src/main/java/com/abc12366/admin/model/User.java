@@ -25,12 +25,6 @@ public class User implements Serializable {
 	/**用户状态**/
 	private Integer status;
 
-	/**用户令牌**/
-	private String token;
-
-	/**最后重置token时间**/
-	private java.util.Date lastResetTokenTime;
-
 	/**创建时间**/
 	private java.util.Date createTime;
 
@@ -85,22 +79,6 @@ public class User implements Serializable {
 
 	public Integer getStatus(){
 		return this.status;
-	}
-
-	public void setToken(String token){
-		this.token = token;
-	}
-
-	public String getToken(){
-		return this.token;
-	}
-
-	public void setLastResetTokenTime(java.util.Date lastResetTokenTime){
-		this.lastResetTokenTime = lastResetTokenTime;
-	}
-
-	public java.util.Date getLastResetTokenTime(){
-		return this.lastResetTokenTime;
 	}
 
 	public void setCreateTime(java.util.Date createTime){

@@ -50,6 +50,6 @@ public interface UserMapper{
 
 	void updateUserPwdById(String userId, String pwd);
 
-	void updateUser(User user);
+	int updateUser(User user);
 
 }

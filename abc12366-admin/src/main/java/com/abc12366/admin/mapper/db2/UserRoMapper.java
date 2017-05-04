@@ -1,8 +1,10 @@
 package com.abc12366.admin.mapper.db2;
 
 import com.abc12366.admin.model.User;
-import com.abc12366.admin.vo.UserVO;
+import com.abc12366.admin.model.bo.UserBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -25,5 +27,9 @@ public interface UserRoMapper {
 
 	User selectUserById(String id);
 
-	UserVO selectUserVoById(String id);
+	UserBO selectUserVoById(String id);
+
+	List<User> selectList();
+
+    User selectOne(String id);
 }

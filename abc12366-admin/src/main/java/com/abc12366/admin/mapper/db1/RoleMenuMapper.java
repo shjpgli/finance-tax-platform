@@ -48,4 +48,6 @@ public interface RoleMenuMapper{
 	 **/
 	int updateByPrimaryKey(RoleMenu record);
 
+
+	void deleteById(String roleMenuId);
 }

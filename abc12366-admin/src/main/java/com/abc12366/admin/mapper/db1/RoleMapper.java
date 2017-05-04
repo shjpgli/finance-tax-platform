@@ -47,4 +47,9 @@ public interface RoleMapper{
 	 **/
 	int updateByPrimaryKey(Role record);
 
+	int deleteRoleById(String id);
+
+	int updateRole(Role role);
+
+
 }

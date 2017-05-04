@@ -22,4 +22,6 @@ public interface UserRoleRoMapper {
 	UserRole  selectByPrimaryKey(@Param("id") Long id);
 
 	List<UserRole> selectUserRoleByUserId(String id);
+
+	List<String> selectRoleIdListByUserId(String userId);
 }
