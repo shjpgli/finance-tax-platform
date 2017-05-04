@@ -46,7 +46,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ContentAttr">
+	<update id="updateByPrimaryKeySelective" parameterType="contentAttr">
 		 UPDATE cms_content_attr
  		 <set> 
 			<if test="attrName != null">
@@ -61,7 +61,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentAttr">
+	<update id="updateByPrimaryKey" parameterType="contentAttr">
 		 UPDATE cms_content_attr
 		 SET 
 			 attrName = #{attrName},

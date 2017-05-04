@@ -79,7 +79,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentTxt">
+	<update id="updateByPrimaryKey" parameterType="contentTxt">
 		 UPDATE cms_content_txt
 		 SET 
 			 txt = #{txt},

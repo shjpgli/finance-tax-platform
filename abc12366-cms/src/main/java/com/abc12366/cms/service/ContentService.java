@@ -25,6 +25,6 @@ public interface ContentService {
 
     String update(ContentSaveBo contentSaveDto);
 
-    String delete(Long contentId);
+    String delete(String contentId);
 
 }

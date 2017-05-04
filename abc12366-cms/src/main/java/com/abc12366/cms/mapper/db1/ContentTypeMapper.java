@@ -16,7 +16,7 @@ public interface ContentTypeMapper{
 	 * 删除(根据主键ID删除)
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("typeId") String typeId);
 
 	/**
 	 * 

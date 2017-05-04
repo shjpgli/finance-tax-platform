@@ -16,7 +16,7 @@ public interface ContentPictureMapper{
 	 * 删除(根据主键ID删除)
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("contentId") String contentId);
 
 	/**
 	 * 
@@ -45,5 +45,13 @@ public interface ContentPictureMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(ContentPicture record);
+
+	/**
+	 *
+	 * 删除(根据contentId删除)
+	 *
+	 **/
+	int deleteByContentId(String contentId);
+
 
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 内容管理模块
@@ -79,9 +80,13 @@ public class ContentServiceImpl implements ContentService{
 
     @Override
     public String save(ContentSaveBo contentSaveDto) {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
         Content content = contentSaveDto.getContent();
+        content.setContentId(uuid);
         ContentExt contentExt = contentSaveDto.getContentExt();
+        contentExt.setContentId(uuid);
         ContentTxt contentTxt = contentSaveDto.getContentTxt();
+        contentTxt.setContentId(uuid);
         List<ContentAttr> contentAttrList = contentSaveDto.getContentAttrList();
         List<ContentPicture> contentPictureList = contentSaveDto.getContentPictureList();
         List<File> fileList = contentSaveDto.getFileList();
@@ -89,12 +94,15 @@ public class ContentServiceImpl implements ContentService{
         contentExtMapper.insert(contentExt);
         contentTxtMapper.insert(contentTxt);
         for(ContentAttr contentAttr:contentAttrList){
+            contentAttr.setContentId(uuid);
             contentAttrMapper.insert(contentAttr);
         }
         for(ContentPicture contentPicture:contentPictureList){
+            contentPicture.setContentId(uuid);
             contentPictureMapper.insert(contentPicture);
         }
         for(File file:fileList){
+            file.setContentId(uuid);
             fileMapper.insert(file);
         }
 
@@ -135,11 +143,16 @@ public class ContentServiceImpl implements ContentService{
         for(ContentAttr contentAttr:contentAttrList){
             contentAttrMapper.updateByPrimaryKey(contentAttr);
         }
+        int priority = 0;
+        contentPictureMapper.deleteByContentId(content.getContentId());
         for(ContentPicture contentPicture:contentPictureList){
-            contentPictureMapper.updateByPrimaryKey(contentPicture);
+            contentPicture.setPriority(priority);
+            contentPictureMapper.insert(contentPicture);
+            priority++;
         }
+        fileMapper.deleteByContentId(content.getContentId());
         for(File file:fileList){
-            fileMapper.updateByPrimaryKey(file);
+            fileMapper.insert(file);
         }
 
         LOGGER.info("{}", "111");
@@ -147,13 +160,13 @@ public class ContentServiceImpl implements ContentService{
     }
 
     @Override
-    public String delete(Long contentId) {
-        int r = contentMapper.deleteByPrimaryKey(contentId);
+    public String delete(String contentId) {
         contentExtMapper.deleteByPrimaryKey(contentId);
         contentTxtMapper.deleteByPrimaryKey(contentId);
         contentAttrMapper.deleteByPrimaryKey(contentId);
         contentPictureMapper.deleteByPrimaryKey(contentId);
-        fileMapper.deleteByPrimaryKey(contentId);
+        fileMapper.updateByContentId(contentId);
+        int r = contentMapper.deleteByPrimaryKey(contentId);
         LOGGER.info("{}", r);
         return "r";
     }

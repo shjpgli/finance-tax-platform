@@ -16,7 +16,7 @@ public interface FileMapper{
 	 * 删除(根据主键ID删除)
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("contentId") String contentId);
 
 	/**
 	 * 
@@ -45,5 +45,19 @@ public interface FileMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(File record);
+
+	/**
+	 *
+	 * 更新文件为1(无效状态)
+	 *
+	 **/
+	int updateByContentId(String contentId);
+
+	/**
+	 *
+	 * 删除(根据主键ID删除)
+	 *
+	 **/
+	int deleteByContentId(String contentId);
 
 }
