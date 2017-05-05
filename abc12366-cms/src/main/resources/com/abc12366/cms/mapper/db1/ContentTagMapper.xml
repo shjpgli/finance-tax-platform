@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.cms.mapper.db1.ContentTagMapper">
-=======
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.ContentTagMapper">
@@ -20,7 +15,6 @@
         FROM cms_contenttag
         WHERE contentId = #{contentId}
     </select>
->>>>>>> ea24fa8b352063d86a9238463b0e88c7c4842819
 
     <!--删除：根据主键ID删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

@@ -12,7 +12,7 @@ import java.util.List;
  *
  **/
 @SuppressWarnings("serial")
-public class ContentSaveBo implements Serializable {
+public class ContentQueryBo implements Serializable {
 	private ContentBo content;//内容
 	private ContentExtBo contentExt;//内容扩展
 	private ContentTxtBo contentTxt;//内容文本
@@ -22,9 +22,6 @@ public class ContentSaveBo implements Serializable {
 
 	/**专题ID**/
 	private String topicId;
-
-	/**0 新增 1修改 2审核 3退回 4移动 5生成静态页 6删除到回收站 7归档 8出档 9推送共享**/
-	private Integer operateType;
 
 	public ContentBo getContent() {
 		return content;
@@ -80,13 +77,5 @@ public class ContentSaveBo implements Serializable {
 
 	public void setTopicId(String topicId) {
 		this.topicId = topicId;
-	}
-
-	public Integer getOperateType() {
-		return operateType;
-	}
-
-	public void setOperateType(Integer operateType) {
-		this.operateType = operateType;
 	}
 }

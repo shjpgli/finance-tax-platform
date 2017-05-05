@@ -24,5 +24,13 @@
 		WHERE contentId = #{contentId}
 	</select>
 
+	<!-- 查询（根据contentId查询） -->
+	<select id="selectContentAttrBoList" resultType="contentAttr" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cms_content_attr
+		WHERE contentId = #{contentId}
+	</select>
+
 
 </mapper>
