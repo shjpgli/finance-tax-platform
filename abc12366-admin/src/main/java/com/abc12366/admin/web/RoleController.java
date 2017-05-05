@@ -43,7 +43,7 @@ public class RoleController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity selectOne(@PathVariable("id")String id) {
+    public ResponseEntity selectOne(@PathVariable("id") String id) {
         RoleBO roleBO = new RoleBO();
         roleBO.setId(id);
         Role temp = roleService.selectOne(roleBO);
@@ -52,7 +52,7 @@ public class RoleController {
     }
 
     @GetMapping(path = "/selectRoleByName/{roleName}")
-    public ResponseEntity selectRoleByName(@PathVariable("roleName")String roleName) {
+    public ResponseEntity selectRoleByName(@PathVariable("roleName") String roleName) {
         RoleBO roleBO = new RoleBO();
         roleBO.setRoleName(roleName);
         Role temp = roleService.selectOne(roleBO);
@@ -69,14 +69,14 @@ public class RoleController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO,@PathVariable("id")String id) {
+    public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO, @PathVariable("id") String id) {
         int upd = roleService.updateRole(roleBO);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity deleteRoleById(@PathVariable("id")String id) {
+    public ResponseEntity deleteRoleById(@PathVariable("id") String id) {
         int del = roleService.deleteRoleById(id);
         LOGGER.info("{}", del);
         return ResponseEntity.ok(del);
@@ -94,9 +94,9 @@ public class RoleController {
     public ResponseEntity grant(String id, String resourceIds) {
         try {
             roleService.updateRoleMenu(id, resourceIds);
-            LOGGER.info("{}", id,resourceIds);
+            LOGGER.info("{}", id, resourceIds);
             return ResponseEntity.ok(200);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new ServiceException(4107);
         }
     }

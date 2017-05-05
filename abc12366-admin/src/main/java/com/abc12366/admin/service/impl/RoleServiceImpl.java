@@ -52,11 +52,11 @@ public class RoleServiceImpl implements RoleService {
 
         role.setRoleName(roleBO.getRoleName());
         Role temp = roleRoMapper.selectOne(role);
-        if(temp !=  null){
+        if (temp != null) {
             logger.warn("角色名称已存在，参数：{}", role.toString());
             throw new ServiceException(4111);
         }
-        BeanUtils.copyProperties(roleBO,role);
+        BeanUtils.copyProperties(roleBO, role);
         role.setId(Utils.uuid());
         Date date = new Date();
         role.setCreateTime(date);
@@ -87,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public int updateRole(RoleBO roleBO) {
         Role role = new Role();
-        BeanUtils.copyProperties(roleBO,role);
+        BeanUtils.copyProperties(roleBO, role);
         role.setUpdateTime(new Date());
         int update = roleMapper.updateRole(role);
         if (update != 1) {
@@ -132,7 +132,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role selectOne(RoleBO roleBO) {
         Role role = new Role();
-        BeanUtils.copyProperties(roleBO,role);
+        BeanUtils.copyProperties(roleBO, role);
         return roleRoMapper.selectOne(role);
     }
 }

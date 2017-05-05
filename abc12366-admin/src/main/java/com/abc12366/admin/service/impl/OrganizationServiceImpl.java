@@ -56,7 +56,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public void updateOrganization(OrganizationBO organizationBO) {
         Organization organization = new Organization();
-        BeanUtils.copyProperties(organizationBO,organization);
+        BeanUtils.copyProperties(organizationBO, organization);
         organization.setLastUpdate(new Date());
         int update = organizationMapper.update(organization);
         if (update != 1) {
