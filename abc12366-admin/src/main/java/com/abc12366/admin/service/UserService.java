@@ -1,7 +1,7 @@
 package com.abc12366.admin.service;
 
 import com.abc12366.admin.model.User;
-import com.abc12366.admin.vo.UserVO;
+import com.abc12366.admin.model.bo.UserBO;
 
 import java.util.List;
 
@@ -31,14 +31,21 @@ public interface UserService {
      *
      * @param user
      */
-    List<UserVO> selectUser(User user);
+    List<UserBO> selectUser(User user);
+
+
+    /**
+     * 用户列表
+     *
+     */
+    List<User> selectList();
 
     /**
      * 添加用户
      *
-     * @param userVO
+     * @param userBO
      */
-    void addUser(UserVO userVO);
+    int register(UserBO userBO);
 
     /**
      * 修改密码
@@ -54,20 +61,24 @@ public interface UserService {
      * @param id
      * @return
      */
-    UserVO selectUserVOById(String id);
+    UserBO selectUserVOById(String id);
 
     /**
      * 修改用户
      *
-     * @param userVO
+     * @param userBO
      */
-    void updateUser(UserVO userVO);
+    int updateUser(UserBO userBO);
 
     /**
      * 删除用户
      *
      * @param id
      */
-    void deleteUserById(String id);
+    int deleteUserById(String id);
 
+
+    User selectOne(String id);
+
+    UserBO login(UserBO userBO);
 }

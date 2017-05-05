@@ -1,6 +1,8 @@
-package com.abc12366.admin.vo;
+package com.abc12366.admin.model.bo;
 import com.abc12366.admin.model.Role;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,14 +13,18 @@ import java.util.List;
  * 
  **/
 @SuppressWarnings("serial")
-public class UserVO implements Serializable {
+public class UserBO implements Serializable {
 
 	/**ID**/
 	private String id;
 
 	/**用户名**/
+    @NotEmpty
+    @Size(min = 6, max = 32, message = "用户名称必须为6-32位")
 	private String username;
 
+    @NotEmpty
+    @Size(min = 6, max = 32, message = "用户密码必须为6-32位")
 	/**密码**/
 	private String password;
 
@@ -27,12 +33,6 @@ public class UserVO implements Serializable {
 
 	/**用户状态**/
 	private Integer status;
-
-	/**用户令牌**/
-	private String token;
-
-	/**最后重置token时间**/
-	private java.util.Date lastResetTokenTime;
 
 	/**创建时间**/
 	private java.util.Date createTime;
@@ -118,22 +118,6 @@ public class UserVO implements Serializable {
 
 	public Integer getStatus(){
 		return this.status;
-	}
-
-	public void setToken(String token){
-		this.token = token;
-	}
-
-	public String getToken(){
-		return this.token;
-	}
-
-	public void setLastResetTokenTime(java.util.Date lastResetTokenTime){
-		this.lastResetTokenTime = lastResetTokenTime;
-	}
-
-	public java.util.Date getLastResetTokenTime(){
-		return this.lastResetTokenTime;
 	}
 
 	public void setCreateTime(java.util.Date createTime){

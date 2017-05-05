@@ -1,99 +1,100 @@
 -- CREATE DATABASE IF NOT EXISTS `abc12366_admin` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-USE `abc12366_admin`;
-
-DROP TABLE IF EXISTS sys_dict;
-DROP TABLE IF EXISTS sys_menu;
-DROP TABLE IF EXISTS sys_organization;
-DROP TABLE IF EXISTS sys_user;
-DROP TABLE IF EXISTS sys_user_extend;
-DROP TABLE IF EXISTS sys_role;
-DROP TABLE IF EXISTS sys_user_role;
-DROP TABLE IF EXISTS sys_role_menu;
-
-create table IF NOT EXISTS sys_dict(
-  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
-  dictId VARCHAR(64) NOT NULL COMMENT '字典ID',
-  dictName VARCHAR(64) NOT NULL COMMENT '字典名称',
-  fieldKey VARCHAR(64) COMMENT '键名',
-  fieldValue VARCHAR(64) COMMENT '键值',
-  status BOOLEAN NOT NULL COMMENT '状态：0无效，1有效',
-  createTime DATETIME COMMENT '创建时间',
-  createUser VARCHAR(64) COMMENT '创建人ID',
-  lastUpdate DATETIME COMMENT '最后修改时间',
-  lastUser   VARCHAR(64) COMMENT '修改人ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '公共字典表';
-
-create table IF NOT EXISTS sys_menu (
-  menuId VARCHAR(64) PRIMARY KEY NOT NULL COMMENT '功能ID',
-  menuName VARCHAR(64) NOT NULL COMMENT '功能名称',
-  menuUrl VARCHAR(256) NOT NULL COMMENT '功能地址',
-  parentId VARCHAR(64) NOT NULL COMMENT '父菜单ID',
-  perms VARCHAR(500) COMMENT '授权（多个用逗号分割，如：user:list,user:create)',
-  type VARCHAR(2) COMMENT '类型：1目录，2菜单，3按钮',
-  icon VARCHAR(64) COMMENT '图标样式',
-  sort INT COMMENT '排序',
-  status BOOLEAN NOT NULL COMMENT '状态：0无效，1有效',
-  remark VARCHAR(200) COMMENT '备注'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统菜单表';
-
-CREATE TABLE sys_organization (
-  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
-  parentId VARCHAR(64) COMMENT '父ID',
-  name VARCHAR(64) NOT NULL COMMENT '机构名称',
-  code VARCHAR(32) COMMENT '机构代码',
-  areaId VARCHAR(64) COMMENT '地区编号',
-  type VARCHAR(1) COMMENT '机构类型',
-  contact VARCHAR(20) COMMENT '联系人',
-  phone VARCHAR(20) COMMENT '联系电话',
-  address VARCHAR(200) COMMENT '联系地址',
-  remark VARCHAR(1000) COMMENT '备注',
-  status BOOLEAN NOT NULL COMMENT '有效标志',
-  createUser VARCHAR(64) COMMENT '创建用户',
-  createTime DATETIME COMMENT '创建时间',
-  lastUser VARCHAR(64) COMMENT '修改用户',
-  lastUpdate DATETIME COMMENT '修改时间'
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统组织机构表';
-
-CREATE TABLE IF NOT EXISTS sys_user (
-  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
-  username VARCHAR(32) NOT NULL COMMENT '用户名',
-  password VARCHAR(32) NOT NULL COMMENT '密码',
-  nickname VARCHAR(64) COMMENT '昵称',
-  status BOOLEAN NOT NULL COMMENT '用户状态',
-  token VARCHAR(400) COMMENT '用户令牌',
-  lastResetTokenTime DATETIME COMMENT '最后重置token时间',
-  createTime DATETIME COMMENT '创建时间',
-  lastUpdate DATETIME COMMENT '最后修改时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统用户表';
-
-CREATE TABLE IF NOT EXISTS sys_user_extend (
-  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
-  userId VARCHAR(64) NOT NULL COMMENT '用户ID',
-  orgId VARCHAR(64) COMMENT '组织机构ID',
-  job VARCHAR(64) COMMENT '职务',
-  phone VARCHAR(20) COMMENT '联系方式',
-  address VARCHAR(200) COMMENT '联系地址',
-  createTime DATETIME COMMENT '创建时间',
-  lastUpdate DATETIME COMMENT '修改时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统用户扩展表';
-
-CREATE TABLE IF NOT EXISTS sys_role (
-  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
-  roleName VARCHAR(50) NOT NULL COMMENT '角色名称',
-  remark VARCHAR(1000) COMMENT '备注',
-  createTime DATETIME COMMENT '创建时间',
-  updateTime DATETIME COMMENT '修改时间',
-  status BOOLEAN NOT NULL COMMENT '状态'
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统角色表';
-
-CREATE TABLE IF NOT EXISTS sys_user_role (
-  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
-  userId VARCHAR(64) NOT NULL COMMENT '用户ID',
-  roleId VARCHAR(64) NOT NULL COMMENT '角色ID'
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统用户角色关联表';
-
-CREATE TABLE IF NOT EXISTS sys_role_menu (
-  id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
-  roleId VARCHAR(64) NOT NULL COMMENT '角色ID',
-  menuId VARCHAR(64) NOT NULL COMMENT '菜单ID'
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '角色菜单关联表';
+select * from sys_user;
+-- USE `abc12366_admin`;
+--
+-- DROP TABLE IF EXISTS sys_dict;
+-- DROP TABLE IF EXISTS sys_menu;
+-- DROP TABLE IF EXISTS sys_organization;
+-- DROP TABLE IF EXISTS sys_user;
+-- DROP TABLE IF EXISTS sys_user_extend;
+-- DROP TABLE IF EXISTS sys_role;
+-- DROP TABLE IF EXISTS sys_user_role;
+-- DROP TABLE IF EXISTS sys_role_menu;
+--
+-- create table IF NOT EXISTS sys_dict(
+--   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
+--   dictId VARCHAR(64) NOT NULL COMMENT '字典ID',
+--   dictName VARCHAR(64) NOT NULL COMMENT '字典名称',
+--   fieldKey VARCHAR(64) COMMENT '键名',
+--   fieldValue VARCHAR(64) COMMENT '键值',
+--   status BOOLEAN NOT NULL COMMENT '状态：0无效，1有效',
+--   createTime DATETIME COMMENT '创建时间',
+--   createUser VARCHAR(64) COMMENT '创建人ID',
+--   lastUpdate DATETIME COMMENT '最后修改时间',
+--   lastUser   VARCHAR(64) COMMENT '修改人ID'
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '公共字典表';
+--
+-- create table IF NOT EXISTS sys_menu (
+--   menuId VARCHAR(64) PRIMARY KEY NOT NULL COMMENT '功能ID',
+--   menuName VARCHAR(64) NOT NULL COMMENT '功能名称',
+--   menuUrl VARCHAR(256) NOT NULL COMMENT '功能地址',
+--   parentId VARCHAR(64) NOT NULL COMMENT '父菜单ID',
+--   perms VARCHAR(500) COMMENT '授权（多个用逗号分割，如：user:list,user:create)',
+--   type VARCHAR(2) COMMENT '类型：1目录，2菜单，3按钮',
+--   icon VARCHAR(64) COMMENT '图标样式',
+--   sort INT COMMENT '排序',
+--   status BOOLEAN NOT NULL COMMENT '状态：0无效，1有效',
+--   remark VARCHAR(200) COMMENT '备注'
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统菜单表';
+--
+-- CREATE TABLE sys_organization (
+--   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
+--   parentId VARCHAR(64) COMMENT '父ID',
+--   name VARCHAR(64) NOT NULL COMMENT '机构名称',
+--   code VARCHAR(32) COMMENT '机构代码',
+--   areaId VARCHAR(64) COMMENT '地区编号',
+--   type VARCHAR(1) COMMENT '机构类型',
+--   contact VARCHAR(20) COMMENT '联系人',
+--   phone VARCHAR(20) COMMENT '联系电话',
+--   address VARCHAR(200) COMMENT '联系地址',
+--   remark VARCHAR(1000) COMMENT '备注',
+--   status BOOLEAN NOT NULL COMMENT '有效标志',
+--   createUser VARCHAR(64) COMMENT '创建用户',
+--   createTime DATETIME COMMENT '创建时间',
+--   lastUser VARCHAR(64) COMMENT '修改用户',
+--   lastUpdate DATETIME COMMENT '修改时间'
+-- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统组织机构表';
+--
+-- CREATE TABLE IF NOT EXISTS sys_user (
+--   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
+--   username VARCHAR(32) NOT NULL COMMENT '用户名',
+--   password VARCHAR(32) NOT NULL COMMENT '密码',
+--   nickname VARCHAR(64) COMMENT '昵称',
+--   status BOOLEAN NOT NULL COMMENT '用户状态',
+--   token VARCHAR(400) COMMENT '用户令牌',
+--   lastResetTokenTime DATETIME COMMENT '最后重置token时间',
+--   createTime DATETIME COMMENT '创建时间',
+--   lastUpdate DATETIME COMMENT '最后修改时间'
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统用户表';
+--
+-- CREATE TABLE IF NOT EXISTS sys_user_extend (
+--   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
+--   userId VARCHAR(64) NOT NULL COMMENT '用户ID',
+--   orgId VARCHAR(64) COMMENT '组织机构ID',
+--   job VARCHAR(64) COMMENT '职务',
+--   phone VARCHAR(20) COMMENT '联系方式',
+--   address VARCHAR(200) COMMENT '联系地址',
+--   createTime DATETIME COMMENT '创建时间',
+--   lastUpdate DATETIME COMMENT '修改时间'
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统用户扩展表';
+--
+-- CREATE TABLE IF NOT EXISTS sys_role (
+--   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
+--   roleName VARCHAR(50) NOT NULL COMMENT '角色名称',
+--   remark VARCHAR(1000) COMMENT '备注',
+--   createTime DATETIME COMMENT '创建时间',
+--   updateTime DATETIME COMMENT '修改时间',
+--   status BOOLEAN NOT NULL COMMENT '状态'
+-- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统角色表';
+--
+-- CREATE TABLE IF NOT EXISTS sys_user_role (
+--   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
+--   userId VARCHAR(64) NOT NULL COMMENT '用户ID',
+--   roleId VARCHAR(64) NOT NULL COMMENT '角色ID'
+-- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统用户角色关联表';
+--
+-- CREATE TABLE IF NOT EXISTS sys_role_menu (
+--   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
+--   roleId VARCHAR(64) NOT NULL COMMENT '角色ID',
+--   menuId VARCHAR(64) NOT NULL COMMENT '菜单ID'
+-- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '角色菜单关联表';

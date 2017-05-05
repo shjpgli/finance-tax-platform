@@ -3,6 +3,8 @@ package com.abc12366.admin.mapper.db1;
 import com.abc12366.admin.model.UserRole;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * UserRoleMapper数据库操作接口类
@@ -46,6 +48,5 @@ public interface UserRoleMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(UserRole record);
-
 
 }

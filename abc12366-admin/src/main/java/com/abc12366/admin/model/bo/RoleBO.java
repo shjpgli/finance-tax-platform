@@ -1,4 +1,9 @@
-package com.abc12366.admin.vo;
+package com.abc12366.admin.model.bo;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -8,31 +13,26 @@ import java.io.Serializable;
  * 
  **/
 @SuppressWarnings("serial")
-public class RoleVO implements Serializable {
+public class RoleBO implements Serializable {
 
-	/**ID**/
 	private String id;
 
-	/**角色名称**/
+	@NotEmpty
+    @Size(min = 1, max = 50, message = "角色名称必须为1-50位")
 	private String roleName;
 
-	/**备注**/
 	private String remark;
 
-	/**创建时间**/
 	private java.util.Date createTime;
 
-	/**修改时间**/
 	private java.util.Date updateTime;
 
-	/**状态**/
-	private Integer status;
+    @NotNull
+    private Integer status;
 
-
-
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setId(String id){
+        this.id = id;
+    }
 
 	public String getId(){
 		return this.id;

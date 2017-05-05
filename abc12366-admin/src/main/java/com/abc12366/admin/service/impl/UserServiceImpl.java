@@ -5,16 +5,22 @@ import com.abc12366.admin.mapper.db1.UserMapper;
 import com.abc12366.admin.mapper.db1.UserRoleMapper;
 import com.abc12366.admin.mapper.db2.UserRoMapper;
 import com.abc12366.admin.mapper.db2.UserRoleRoMapper;
+import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserRole;
 import com.abc12366.admin.service.UserService;
-import com.abc12366.admin.vo.UserVO;
+import com.abc12366.admin.model.bo.UserBO;
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.model.bo.TokenBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -45,30 +51,65 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserVO> selectUser(User user) {
+    public List<UserBO> selectUser(User user) {
         return null;
     }
 
     @Override
-    public void addUser(UserVO userVO) {
+    public List<User> selectList() {
+        List<User> users = userRoMapper.selectList();
+        /*if(users != null){
+            List<UserBO> userBOs = new ArrayList<UserBO>();
+            for (User user:users){
+                UserBO userBO = new UserBO();
+                BeanUtils.copyProperties(user,userBO);
+                userBOs.add(userBO);
+            }
+            LOGGER.info("{}", userBOs);
+            return userBOs;
+        }*/
+        return users;
+    }
+
+    @Override
+    public int register(UserBO userBO) {
         User user = new User();
         try {
-            BeanUtils.copyProperties(user, userVO);
+            BeanUtils.copyProperties(userBO, user);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        userMapper.insert(user);
+        String password = user.getPassword();
+        user.setId(Utils.uuid());
+        try {
+            user.setPassword(Utils.md5(password));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Date date = new Date();
+        user.setCreateTime(date);
+        user.setLastUpdate(date);
+        TokenBO tokenBO = new TokenBO.Builder().id(user.getId())
+                .name(user.getUsername())
+                .createTime(date)
+                .expireTime(Utils.addHours(date, Constant.APP_TOKEN_VALID_HOURS))
+                .build();
+
+        String token = Utils.token(tokenBO);
+        int ins = userMapper.insert(user);
 
         String id = user.getId();
-        String[] roles = userVO.getRoleIds().split(",");
+        String[] roles = userBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
 
         for (String roleId : roles) {
+            userRole.setId(Utils.uuid());
             userRole.setUserId(id);
             userRole.setRoleId(roleId);
             userRoleMapper.insert(userRole);
         }
+        return ins;
     }
 
     @Override
@@ -77,21 +118,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVO selectUserVOById(String id) {
+    public UserBO selectUserVOById(String id) {
         return userRoMapper.selectUserVoById(id);
     }
 
     @Override
-    public void updateUser(UserVO userVO) {
+    public int updateUser(UserBO userBO) {
         User user = new User();
         try {
-            BeanUtils.copyProperties(user, userVO);
+            BeanUtils.copyProperties(user, userBO);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        userMapper.updateUser(user);
-        String id = userVO.getId();
+        user.setLastUpdate(new Date());
+        int upd = userMapper.updateUser(user);
+
+        String id = userBO.getId();
         List<UserRole> userRoles = userRoleRoMapper.selectUserRoleByUserId(id);
         if (userRoles != null && (!userRoles.isEmpty())) {
             for (UserRole userRole : userRoles) {
@@ -99,23 +142,37 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        String[] roles = userVO.getRoleIds().split(",");
+        String[] roles = userBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
         for (String roleId : roles) {
             userRole.setUserId(id);
             userRole.setRoleId(roleId);
             userRoleMapper.insert(userRole);
         }
+        return upd;
     }
 
     @Override
-    public void deleteUserById(String id) {
-        userMapper.deleteById(id);
+    public int deleteUserById(String id) {
+        int del = userMapper.deleteById(id);
         List<UserRole> userRoles = userRoleRoMapper.selectUserRoleByUserId(id);
         if (userRoles != null && (!userRoles.isEmpty())) {
             for (UserRole userRole : userRoles) {
                 userRoleMapper.deleteById(userRole.getId());
             }
         }
+        return del;
+    }
+
+    @Override
+    public User selectOne(String id) {
+//        User user = new User();
+//        BeanUtils.copyProperties(userBO,user);
+        return userRoMapper.selectOne(id);
+    }
+
+    @Override
+    public UserBO login(UserBO userBO) {
+        return null;
     }
 }
