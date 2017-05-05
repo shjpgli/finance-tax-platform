@@ -1,6 +1,7 @@
 package com.abc12366.common.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -15,5 +16,33 @@ public class DateUtils {
     public static String getDateFormat(Date date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(date);
+    }
+
+    /**
+     * 添加年份
+     *
+     * @param date 需要添加年份的日期
+     * @param year 需要添加的年份数
+     * @return Date 添加年份数之后的日期
+     */
+    public static Date addYears(Date date, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.YEAR, year);
+        return calendar.getTime();
+    }
+
+    /**
+     * 添加小时
+     *
+     * @param date 需要添加小时的日期
+     * @param hour 需要添加的小时数
+     * @return Date 添加小时数之后的日期
+     */
+    public static Date addHours(Date date, int hour) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR, hour);
+        return calendar.getTime();
     }
 }

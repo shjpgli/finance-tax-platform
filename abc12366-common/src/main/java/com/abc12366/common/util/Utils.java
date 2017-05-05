@@ -1,15 +1,16 @@
 package com.abc12366.common.util;
 
 import com.abc12366.common.model.BodyStatus;
-import com.alibaba.fastjson.JSON;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * 工具类
@@ -36,8 +37,8 @@ public class Utils {
      * @return Map
      */
     public static Map kv(Object... kvs) {
-        if (kvs.length / 2 != 0) {
-            new RuntimeException("Params must be key, value pairs.");
+        if (kvs.length % 2 != 0) {
+            throw new RuntimeException("Params must be key, value pairs.");
         }
         Map<Object, Object> map = new HashMap<>();
         for (int i = 0; i < kvs.length; i += 2) {
@@ -99,56 +100,11 @@ public class Utils {
     }
 
     /**
-     * 添加年份
-     *
-     * @param date 需要添加年份的日期
-     * @param year 需要添加的年份数
-     * @return Date 添加年份数之后的日期
-     */
-    public static Date addYears(Date date, int year) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.YEAR, year);
-        return calendar.getTime();
-    }
-
-    /**
-     * 添加小时
-     *
-     * @param date 需要添加小时的日期
-     * @param hour 需要添加的小时数
-     * @return Date 添加小时数之后的日期
-     */
-    public static Date addHours(Date date, int hour) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.HOUR, hour);
-        return calendar.getTime();
-    }
-
-    /**
      * 生成token
-     *
-     * @param obj 可以转换成json的对象
-     * @return String Base64编码后的字符串
+     * return String token
      */
-    public static String token(Object obj) {
-        String json = JSON.toJSONString(obj);
-        return encode(json);
+    public static String token() throws Exception {
+        return md5(uuid());
     }
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("md5: " + md5("888888"));
-        String str = encode("abc中文");
-        System.out.println("decode: " + str);
-        System.out.println("decode: " + decode(str));
-        System.out.println("-----------------------------------------");
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("now: " + sdf.format(date));
-        System.out.println("now + 3: " + sdf.format(addYears(date, 3)));
-        System.out.println("-----------------------------------------");
-        System.out.println("now: " + sdf.format(date));
-        System.out.println("now + 24: " + sdf.format(addHours(date, 24)));
-    }
 }

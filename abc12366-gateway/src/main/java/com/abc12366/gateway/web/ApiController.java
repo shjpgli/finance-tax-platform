@@ -19,7 +19,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(name = "/api", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(name = "/api", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class ApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);

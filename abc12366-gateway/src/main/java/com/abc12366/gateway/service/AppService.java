@@ -28,7 +28,7 @@ public interface AppService {
      * @param appBO AppBO
      * @return String token
      */
-    String login(AppBO appBO);
+    String login(AppBO appBO) throws Exception;
 
     /**
      * App验证

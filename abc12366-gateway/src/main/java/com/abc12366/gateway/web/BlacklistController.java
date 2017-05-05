@@ -19,7 +19,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/blacklist", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/blacklist", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class BlacklistController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppController.class);

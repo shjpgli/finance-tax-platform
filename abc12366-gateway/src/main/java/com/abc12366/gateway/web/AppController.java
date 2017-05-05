@@ -25,7 +25,7 @@ import javax.validation.Valid;
  * @since 1.0.0
  */
 @Controller
-@RequestMapping(path = "/app", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/app", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AppController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppController.class);
@@ -37,11 +37,14 @@ public class AppController {
     public ResponseEntity register(@Valid @RequestBody AppBO appBO) {
         LOGGER.info("{}", appBO);
         AppRespBO app = appService.register(appBO);
-        return app != null ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4007), HttpStatus.CONFLICT);
+        ResponseEntity responseEntity = app != null ? ResponseEntity.ok(app)
+                : new ResponseEntity<>(Utils.bodyStatus(4007), HttpStatus.CONFLICT);
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody AppBO appBO) {
+    public ResponseEntity login(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
         String token = appService.login(appBO);
         return token != null ? ResponseEntity.ok(Utils.kv(Constant.APP_TOKEN_HEAD, token))

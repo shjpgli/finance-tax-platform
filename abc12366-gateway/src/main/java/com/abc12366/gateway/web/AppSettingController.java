@@ -22,7 +22,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController()
-@RequestMapping(name = "/app/setting", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(name = "/app/setting", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AppSettingController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppController.class);

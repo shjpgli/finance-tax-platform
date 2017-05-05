@@ -1,6 +1,7 @@
 package com.abc12366.gateway.service;
 
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.DateUtils;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db1.AppMapper;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
@@ -58,7 +59,7 @@ public class AppServiceImpl implements AppService {
                     .remark(appBO.getRemark())
                     .status(true)
                     .startTime(now)
-                    .endTime(Utils.addYears(now, Constant.APP_VALID_YEARS))
+                    .endTime(DateUtils.addYears(now, Constant.APP_VALID_YEARS))
                     .createTime(now)
                     .lastUpdate(now)
                     .build();
@@ -73,7 +74,7 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public String login(AppBO appBO) {
+    public String login(AppBO appBO) throws Exception {
         App app = appRoMapper.selectByName(appBO.getName());
         String password = null;
         try {
@@ -83,13 +84,7 @@ public class AppServiceImpl implements AppService {
         }
         if (app != null && app.getPassword().equals(password)) {
             Date now = new Date();
-            TokenBO tokenBO = new TokenBO.Builder().id(app.getId())
-                    .name(app.getName())
-                    .createTime(now)
-                    .expireTime(Utils.addHours(now, Constant.APP_TOKEN_VALID_HOURS))
-                    .build();
-
-            String token = Utils.token(tokenBO);
+            String token = Utils.token();
             app.setAccessToken(token);
             app.setLastResetTokenTime(now);
             app.setLastUpdate(now);
