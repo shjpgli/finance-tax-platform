@@ -1,4 +1,4 @@
-package com.abc12366.cms.model;
+package com.abc12366.cms.model.bo;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  **/
 @SuppressWarnings("serial")
-public class Content implements Serializable {
+public class ContentBo implements Serializable {
 
 	/****/
 	private String contentId;
@@ -49,9 +49,6 @@ public class Content implements Serializable {
 
 	/**日评论数**/
 	private Integer commentsDay;
-
-	/**日下载数**/
-	private Integer downloadsDay = 0;
 
 	/**日顶数**/
 	private Integer upsDay;
@@ -155,14 +152,6 @@ public class Content implements Serializable {
 
 	public Integer getCommentsDay(){
 		return this.commentsDay;
-	}
-
-	public void setDownloadsDay(Integer downloadsDay){
-		this.downloadsDay = downloadsDay;
-	}
-
-	public Integer getDownloadsDay(){
-		return this.downloadsDay;
 	}
 
 	public void setUpsDay(Integer upsDay){

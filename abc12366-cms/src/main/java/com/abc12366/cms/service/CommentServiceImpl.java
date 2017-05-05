@@ -6,10 +6,13 @@ import com.abc12366.cms.mapper.db2.CommentExtRoMapper;
 import com.abc12366.cms.mapper.db2.CommentRoMapper;
 import com.abc12366.cms.model.Comment;
 import com.abc12366.cms.model.CommentExt;
-import com.abc12366.cms.model.bo.CommentListBo;
 import com.abc12366.cms.model.bo.CommentBo;
+import com.abc12366.cms.model.bo.CommentExtBo;
+import com.abc12366.cms.model.bo.CommentListBo;
+import com.abc12366.cms.model.bo.CommentSaveBo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,50 +41,101 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentListBo> selectList(Map<String, Object> map) {
+        //查询评论列表
         List<CommentListBo> comments = commentRoMapper.selectList(map);
         LOGGER.info("{}", comments);
         return comments;
     }
 
     @Override
-    public String save(CommentBo commentBo) {
-        Comment comment = commentBo.getComment();
+    public CommentSaveBo save(CommentSaveBo commentSaveBo) {
+        //评论信息
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        comment.setCommentId(uuid);
-        CommentExt commentExt = commentBo.getCommentExt();
-        commentExt.setCommentId(uuid);
+        CommentBo commentBo = commentSaveBo.getComment();
+        Comment comment = new Comment();
+        commentBo.setCommentId(uuid);
+        try {
+            BeanUtils.copyProperties(commentBo, comment);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        //评论扩展信息
+        CommentExtBo commentExtBo = commentSaveBo.getCommentExt();
+        CommentExt commentExt = new CommentExt();
+        commentExtBo.setCommentId(uuid);
+        try {
+            BeanUtils.copyProperties(commentExtBo, commentExt);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
         commentMapper.insert(comment);
         commentExtMapper.insert(commentExt);
-        LOGGER.info("{}", "111");
-        return "11111";
+        LOGGER.info("{}", commentSaveBo);
+        return commentSaveBo;
     }
 
     @Override
-    public CommentBo selectComment(String commentId) {
+    public CommentSaveBo selectComment(String commentId) {
+        //评论信息
         Comment comment = commentRoMapper.selectByPrimaryKey(commentId);
+        //评论扩展信息
         CommentExt commentExt = commentExtRoMapper.selectByPrimaryKey(commentId);
+        CommentSaveBo commentSaveBo = new CommentSaveBo();
         CommentBo commentBo = new CommentBo();
-        commentBo.setComment(comment);
-        commentBo.setCommentExt(commentExt);
-        LOGGER.info("{}", "111");
-        return commentBo;
+        try {
+            BeanUtils.copyProperties(comment, commentBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        CommentExtBo commentExtBo = new CommentExtBo();
+        try {
+            BeanUtils.copyProperties(commentExt, commentExtBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        commentSaveBo.setComment(commentBo);
+        commentSaveBo.setCommentExt(commentExtBo);
+        LOGGER.info("{}", commentSaveBo);
+        return commentSaveBo;
     }
 
     @Override
-    public String update(CommentBo commentBo) {
-        Comment comment = commentBo.getComment();
-        CommentExt commentExt = commentBo.getCommentExt();
+    public CommentSaveBo update(CommentSaveBo commentSaveBo) {
+        //评论信息
+        CommentBo commentBo = commentSaveBo.getComment();
+        Comment comment = new Comment();
+        try {
+            BeanUtils.copyProperties(commentBo, comment);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        //评论扩展信息
+        CommentExtBo commentExtBo = commentSaveBo.getCommentExt();
+        CommentExt commentExt = new CommentExt();
+        try {
+            BeanUtils.copyProperties(commentExtBo, commentExt);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
         commentMapper.updateByPrimaryKey(comment);
         commentExtMapper.updateByPrimaryKey(commentExt);
-        LOGGER.info("{}", "111");
-        return "11111";
+        LOGGER.info("{}", commentSaveBo);
+        return commentSaveBo;
     }
 
     @Override
     public String delete(String commentId) {
+        //删除评论信息
         commentExtMapper.deleteByPrimaryKey(commentId);
-        commentMapper.deleteByPrimaryKey(commentId);
-        LOGGER.info("{}", "111");
-        return "11111";
+        //删除评论扩展信息
+        int r = commentMapper.deleteByPrimaryKey(commentId);
+        LOGGER.info("{}", r);
+        return "";
     }
 }

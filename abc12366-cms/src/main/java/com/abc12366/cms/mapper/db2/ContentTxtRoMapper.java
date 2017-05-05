@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.ContentTxt;
+import com.abc12366.cms.model.bo.ContentTxtBo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -18,5 +19,14 @@ public interface ContentTxtRoMapper {
 	 * 
 	 **/
 	ContentTxt selectByPrimaryKey(@Param("contentId") String contentId);
+
+	/**
+	 *
+	 * 查询(根据主键ID查询)
+	 *
+	 **/
+	ContentTxtBo selectByContentId(String contentId);
+
+
 
 }

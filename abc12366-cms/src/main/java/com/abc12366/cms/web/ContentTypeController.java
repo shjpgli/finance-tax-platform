@@ -35,6 +35,7 @@ public class ContentTypeController {
 
     @GetMapping
     public ResponseEntity selectList() {
+        //查询内容类型列表
         List<ContentType> dataList = contentTypeService.selectList();
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(dataList);
@@ -43,6 +44,7 @@ public class ContentTypeController {
     @PostMapping
     public ResponseEntity save(@RequestBody ContentType contentType) {
         LOGGER.info("{}", contentType);
+        //新增内容类型
         String rtn = contentTypeService.save(contentType);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);
@@ -51,6 +53,7 @@ public class ContentTypeController {
     @GetMapping(path = "/{typeId}")
     public ResponseEntity selectOne(@PathVariable String typeId) {
         LOGGER.info("{}", typeId);
+        //查询内容类型
         ContentType contentType = contentTypeService.selectContentType(typeId);
         LOGGER.info("{}", contentType);
         return ResponseEntity.ok(contentType);
@@ -61,6 +64,7 @@ public class ContentTypeController {
                                  @Valid @RequestBody ContentType contentType) {
 
         LOGGER.info("{}", contentType);
+        //更新内容类型
         String rtn = contentTypeService.update(contentType);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);
@@ -69,6 +73,7 @@ public class ContentTypeController {
     @DeleteMapping(path = "/{typeId}")
     public ResponseEntity delete(@PathVariable String typeId) {
         LOGGER.info("{}", typeId);
+        //删除内容类型
         String rtn = contentTypeService.delete(typeId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);

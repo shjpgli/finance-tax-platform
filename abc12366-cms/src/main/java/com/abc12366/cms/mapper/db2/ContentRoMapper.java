@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.Content;
+import com.abc12366.cms.model.bo.ContentBo;
 import com.abc12366.cms.model.bo.ContentListBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,5 +30,12 @@ public interface ContentRoMapper {
 	 *
 	 **/
 	List<ContentListBo> selectList(Map<String,Object> map);
+
+	/**
+	 *
+	 * 查询(根据contentId查询)
+	 *
+	 **/
+	ContentBo selectByContentId(String contentId);
 
 }

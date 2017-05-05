@@ -2,7 +2,7 @@ package com.abc12366.cms.service;
 
 
 import com.abc12366.cms.model.bo.CommentListBo;
-import com.abc12366.cms.model.bo.CommentBo;
+import com.abc12366.cms.model.bo.CommentSaveBo;
 
 import java.util.List;
 import java.util.Map;
@@ -17,11 +17,11 @@ import java.util.Map;
 public interface CommentService {
     List<CommentListBo> selectList(Map<String, Object> map);
 
-    String save(CommentBo commentBo);
+    CommentSaveBo save(CommentSaveBo commentBo);
 
-    CommentBo selectComment(String commentId);
+    CommentSaveBo selectComment(String commentId);
 
-    String update(CommentBo commentBo);
+    CommentSaveBo update(CommentSaveBo commentBo);
 
     String delete(String commentId);
 

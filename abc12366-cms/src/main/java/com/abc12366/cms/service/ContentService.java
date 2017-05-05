@@ -1,6 +1,7 @@
 package com.abc12366.cms.service;
 
 import com.abc12366.cms.model.ModelItem;
+import com.abc12366.cms.model.bo.ContentQueryBo;
 import com.abc12366.cms.model.bo.ContentSaveBo;
 import com.abc12366.cms.model.bo.ContentListBo;
 
@@ -19,11 +20,11 @@ public interface ContentService {
 
     List<ModelItem> selectModeList(String modelId);
 
-    String save(ContentSaveBo contentSaveDto);
+    ContentSaveBo save(ContentSaveBo contentSaveBo);
 
-    ContentSaveBo selectContent(String contentId);
+    ContentQueryBo selectContent(String contentId);
 
-    String update(ContentSaveBo contentSaveDto);
+    ContentSaveBo update(ContentSaveBo contentSaveBo);
 
     String delete(String contentId);
 
