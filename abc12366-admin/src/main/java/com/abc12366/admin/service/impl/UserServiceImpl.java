@@ -189,7 +189,7 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             throw new ServiceException(4106);
         }
-        if(user != null && password.equals(user.getPassword())){
+        if (user != null && password.equals(user.getPassword())) {
             Date now = new Date();
             String userToken = null;
             try {
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
             appTemp.setAccessToken(appToken);
             App app = appRoMapper.selectOne(appTemp);
 
-            if(app == null){
+            if (app == null) {
                 throw new ServiceException(4123);
             }
             //查找用户登录信息
@@ -212,25 +212,25 @@ public class UserServiceImpl implements UserService {
             loginInfo.setAppId(app.getId());
             loginInfo.setToken(userToken);
             Date date = new Date();
-            loginInfo.setLastResetTokenTime(Utils.addHours(date,Constant.USER_TOKEN_VALID_HOURS));
+            loginInfo.setLastResetTokenTime(Utils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
             LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
             //判断该用户是否存在此应用的登录信息
-            if(info != null){
+            if (info != null) {
                 loginInfo.setId(info.getId());
                 int update = loginInfoMapper.update(loginInfo);
-                if(update != 1){
+                if (update != 1) {
                     LOGGER.error("修改登录信息失败：{}", update);
                     throw new ServiceException(4132);
                 }
-            }else {
+            } else {
                 loginInfo.setId(Utils.uuid());
                 int insert = loginInfoMapper.insertSelective(loginInfo);
-                if(insert != 1){
+                if (insert != 1) {
                     LOGGER.error("新增登录信息失败：{}", insert);
                     throw new ServiceException(4131);
                 }
             }
-            BeanUtils.copyProperties(user,userBO);
+            BeanUtils.copyProperties(user, userBO);
             userBO.setLoginInfo(loginInfo);
             return userBO;
         }

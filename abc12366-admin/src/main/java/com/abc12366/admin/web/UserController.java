@@ -17,7 +17,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- *
  * @author lizhongwei
  * @create 2017-05-02 10:08 AM
  * @since 1.0.0
@@ -37,14 +36,14 @@ public class UserController {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<User> dataList = userService.selectList();
         LOGGER.info("{}", dataList);
-        if(dataList != null && dataList.size()!=0){
+        if (dataList != null && dataList.size() != 0) {
             return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         }
         return ResponseEntity.ok(dataList);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity selectOne(@PathVariable("id")String id) {
+    public ResponseEntity selectOne(@PathVariable("id") String id) {
         User temp = userService.selectOne(id);
         LOGGER.info("{}", temp);
         return ResponseEntity.ok(temp);
@@ -52,14 +51,14 @@ public class UserController {
 
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateUser(@Valid @RequestBody UserBO userBO,@PathVariable("id")String id) {
+    public ResponseEntity updateUser(@Valid @RequestBody UserBO userBO, @PathVariable("id") String id) {
         int upd = userService.updateUser(userBO);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity deleteUserById(@PathVariable("id")String id) {
+    public ResponseEntity deleteUserById(@PathVariable("id") String id) {
         int del = userService.deleteUserById(id);
         LOGGER.info("{}", del);
         return ResponseEntity.ok(del);

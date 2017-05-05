@@ -1,9 +1,7 @@
 package com.abc12366.admin.web;
 
 import com.abc12366.admin.model.Organization;
-import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.bo.OrganizationBO;
-import com.abc12366.admin.model.bo.RoleBO;
 import com.abc12366.admin.service.OrganizationService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -67,7 +64,7 @@ public class OrganizationController {
      * @return
      */
     @GetMapping(path = "/{id}")
-    public ResponseEntity selectOne(@PathVariable("id")String id) {
+    public ResponseEntity selectOne(@PathVariable("id") String id) {
         Organization organization = organizationService.selectOrganizationById(id);
         LOGGER.info("{}", organization);
         return ResponseEntity.ok(organization);
@@ -75,11 +72,13 @@ public class OrganizationController {
 
     /**
      * 修改组织
+     *
      * @param organizationBO
      * @return
      */
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateOrganization(@Valid @RequestBody OrganizationBO organizationBO,@PathVariable("id")String id) {
+    public ResponseEntity updateOrganization(@Valid @RequestBody OrganizationBO organizationBO,
+                                             @PathVariable("id") String id) {
         organizationService.updateOrganization(organizationBO);
         LOGGER.info("修改组织成功");
         return ResponseEntity.ok(200);
@@ -92,7 +91,7 @@ public class OrganizationController {
      * @return
      */
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity deleteOrganizationById(@PathVariable("id")String id) {
+    public ResponseEntity deleteOrganizationById(@PathVariable("id") String id) {
         organizationService.deleteOrganizationById(id);
         LOGGER.info("删除组织成功");
         return ResponseEntity.ok(200);
