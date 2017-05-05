@@ -90,7 +90,7 @@
 		where id = #{id}
 	</select>
 
-	<select id="selectUserVoById" resultMap="userBoResultMap" parameterType="java.lang.String">
+	<select id="selectUserBoById" resultMap="userBoResultMap" parameterType="java.lang.String">
 		SELECT
 		t.id,
 		t.username,

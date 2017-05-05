@@ -24,7 +24,7 @@ public interface RoleService {
      *
      * @param roleBO
      */
-    int addRole(RoleBO roleBO);
+    Role addRole(RoleBO roleBO);
 
     /**
      * 根据id删除权限

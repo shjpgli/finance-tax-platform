@@ -27,7 +27,7 @@ public interface UserRoMapper {
 
 	User selectUserById(String id);
 
-	UserBO selectUserVoById(String id);
+	UserBO selectUserBoById(String id);
 
 	List<User> selectList();
 

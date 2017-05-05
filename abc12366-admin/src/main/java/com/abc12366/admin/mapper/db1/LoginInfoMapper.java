@@ -1,15 +1,15 @@
 package com.abc12366.admin.mapper.db1;
 
-import com.abc12366.admin.model.Organization;
+import com.abc12366.admin.model.LoginInfo;
 import org.apache.ibatis.annotations.Param;
 
 /**
  * 
- * OrganizationMapper数据库操作接口类
+ * LoginInfoMapper数据库操作接口类
  * 
  **/
 
-public interface OrganizationMapper{
+public interface LoginInfoMapper {
 
 
 	/**
@@ -17,34 +17,34 @@ public interface OrganizationMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") String id);
+	int deleteByPrimaryKey(@Param("id") Long id);
 
 	/**
 	 * 
 	 * 添加
 	 * 
 	 **/
-	int insert(Organization record);
+	int insert(LoginInfo record);
 
 	/**
 	 * 
 	 * 添加 （匹配有值的字段）
 	 * 
 	 **/
-	int insertSelective(Organization record);
+	int insertSelective(LoginInfo record);
 
 	/**
 	 * 
 	 * 修改 （匹配有值的字段）
 	 * 
 	 **/
-	int update(Organization record);
+	int update(LoginInfo record);
 
 	/**
 	 * 
 	 * 修改（根据主键ID修改）
 	 * 
 	 **/
-	int updateByPrimaryKey(Organization record);
+	int updateByPrimaryKey(LoginInfo record);
 
 }

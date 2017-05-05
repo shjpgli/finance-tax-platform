@@ -1,17 +1,22 @@
 package com.abc12366.admin.service.impl;
 
 
+import com.abc12366.admin.mapper.db1.LoginInfoMapper;
 import com.abc12366.admin.mapper.db1.UserMapper;
 import com.abc12366.admin.mapper.db1.UserRoleMapper;
+import com.abc12366.admin.mapper.db2.LoginInfoRoMapper;
 import com.abc12366.admin.mapper.db2.UserRoMapper;
 import com.abc12366.admin.mapper.db2.UserRoleRoMapper;
-import com.abc12366.admin.model.Role;
+import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserRole;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.admin.model.bo.UserBO;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.mapper.db2.AppRoMapper;
+import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.model.bo.TokenBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +24,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +43,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleRoMapper userRoleRoMapper;
+
+    @Autowired
+    private LoginInfoMapper loginInfoMapper;
+
+    @Autowired
+    private LoginInfoRoMapper loginInfoRoMapper;
+
+    @Autowired
+    private AppRoMapper appRoMapper;
 
     @Override
     public User selectUserByLoginName(String username) {
@@ -78,7 +91,7 @@ public class UserServiceImpl implements UserService {
             BeanUtils.copyProperties(userBO, user);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            throw new ServiceException(4105);
         }
         String password = user.getPassword();
         user.setId(Utils.uuid());
@@ -86,17 +99,12 @@ public class UserServiceImpl implements UserService {
             user.setPassword(Utils.md5(password));
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ServiceException(4106);
         }
         Date date = new Date();
         user.setCreateTime(date);
         user.setLastUpdate(date);
-        TokenBO tokenBO = new TokenBO.Builder().id(user.getId())
-                .name(user.getUsername())
-                .createTime(date)
-                .expireTime(Utils.addHours(date, Constant.APP_TOKEN_VALID_HOURS))
-                .build();
 
-        String token = Utils.token(tokenBO);
         int ins = userMapper.insert(user);
 
         String id = user.getId();
@@ -119,7 +127,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBO selectUserVOById(String id) {
-        return userRoMapper.selectUserVoById(id);
+        return userRoMapper.selectUserBoById(id);
     }
 
     @Override
@@ -129,7 +137,7 @@ public class UserServiceImpl implements UserService {
             BeanUtils.copyProperties(user, userBO);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            throw new ServiceException(4105);
         }
         user.setLastUpdate(new Date());
         int upd = userMapper.updateUser(user);
@@ -172,7 +180,60 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserBO login(UserBO userBO) {
+    public UserBO login(UserBO userBO, String appToken) {
+        User user = userRoMapper.selectUserByLoginName(userBO.getUsername());
+        String password = "";
+        try {
+            password = Utils.md5(userBO.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException(4106);
+        }
+        if(user != null && password.equals(user.getPassword())){
+            Date now = new Date();
+            String userToken = null;
+            try {
+                userToken = Utils.md5(Utils.uuid());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServiceException(4106);
+            }
+            //获取APP信息
+            App appTemp = new App();
+            appTemp.setAccessToken(appToken);
+            App app = appRoMapper.selectOne(appTemp);
+
+            if(app == null){
+                throw new ServiceException(4123);
+            }
+            //查找用户登录信息
+            LoginInfo loginInfo = new LoginInfo();
+            loginInfo.setUserId(user.getId());
+            loginInfo.setAppId(app.getId());
+            loginInfo.setToken(userToken);
+            Date date = new Date();
+            loginInfo.setLastResetTokenTime(Utils.addHours(date,Constant.USER_TOKEN_VALID_HOURS));
+            LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
+            //判断该用户是否存在此应用的登录信息
+            if(info != null){
+                loginInfo.setId(info.getId());
+                int update = loginInfoMapper.update(loginInfo);
+                if(update != 1){
+                    LOGGER.error("修改登录信息失败：{}", update);
+                    throw new ServiceException(4132);
+                }
+            }else {
+                loginInfo.setId(Utils.uuid());
+                int insert = loginInfoMapper.insertSelective(loginInfo);
+                if(insert != 1){
+                    LOGGER.error("新增登录信息失败：{}", insert);
+                    throw new ServiceException(4131);
+                }
+            }
+            BeanUtils.copyProperties(user,userBO);
+            userBO.setLoginInfo(loginInfo);
+            return userBO;
+        }
         return null;
     }
 }

@@ -9,11 +9,16 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="organization" parameterType="java.lang.String">
+	<select id="selectOrganizationById" resultType="organization" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM sys_organization
 		 WHERE id = #{id}
 	</select>
 
+    <select id="selectList" resultMap="organization">
+        select
+        <include refid="Base_Column_List"/>
+        from organization order by createTime
+    </select>
 </mapper>
