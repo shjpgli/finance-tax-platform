@@ -3,6 +3,7 @@ package com.abc12366.admin.web;
 import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.bo.RoleBO;
 import com.abc12366.admin.service.RoleService;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.github.pagehelper.Page;
@@ -41,33 +42,62 @@ public class RoleController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
-    @PostMapping(path = "/selectOne/{role}")
-    public ResponseEntity selectOne(@RequestBody RoleBO roleBO) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable("id")String id) {
+        RoleBO roleBO = new RoleBO();
+        roleBO.setId(id);
         Role temp = roleService.selectOne(roleBO);
         LOGGER.info("{}", temp);
         return ResponseEntity.ok(temp);
     }
 
-    @PostMapping(path = "/addRole/{roleBO}")
-    public ResponseEntity addRole(@Valid @RequestBody RoleBO roleBO) {
-        int insert = roleService.addRole(roleBO);
-        LOGGER.info("{}", insert);
-        return ResponseEntity.ok(insert);
+    @GetMapping(path = "/selectRoleByName/{roleName}")
+    public ResponseEntity selectRoleByName(@PathVariable("roleName")String roleName) {
+        RoleBO roleBO = new RoleBO();
+        roleBO.setRoleName(roleName);
+        Role temp = roleService.selectOne(roleBO);
+        LOGGER.info("{}", temp);
+        return ResponseEntity.ok(temp);
     }
 
-    @PostMapping(path = "/updateRole/{roleBO}")
-    public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO) {
+
+    @PostMapping
+    public ResponseEntity addRole(@Valid @RequestBody RoleBO roleBO) {
+        Role role = roleService.addRole(roleBO);
+        LOGGER.info("{}", role);
+        return ResponseEntity.ok(role);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO,@PathVariable("id")String id) {
         int upd = roleService.updateRole(roleBO);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);
     }
 
-    @DeleteMapping(path = "/deleteRoleById/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteRoleById(@PathVariable("id")String id) {
         int del = roleService.deleteRoleById(id);
         LOGGER.info("{}", del);
         return ResponseEntity.ok(del);
     }
 
-
+    /**
+     * 授权
+     *
+     * @param id
+     * @param resourceIds
+     * @return
+     */
+    @RequestMapping("/grant")
+    @ResponseBody
+    public ResponseEntity grant(String id, String resourceIds) {
+        try {
+            roleService.updateRoleMenu(id, resourceIds);
+            LOGGER.info("{}", id,resourceIds);
+            return ResponseEntity.ok(200);
+        }catch (RuntimeException e){
+            throw new ServiceException(4107);
+        }
+    }
 }

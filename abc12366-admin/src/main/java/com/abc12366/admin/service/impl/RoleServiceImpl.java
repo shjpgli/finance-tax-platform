@@ -10,6 +10,7 @@ import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.RoleMenu;
 import com.abc12366.admin.model.bo.RoleBO;
 import com.abc12366.admin.service.RoleService;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +47,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int addRole(RoleBO roleBO) {
+    public Role addRole(RoleBO roleBO) {
         Role role = new Role();
+
+        role.setRoleName(roleBO.getRoleName());
+        Role temp = roleRoMapper.selectOne(role);
+        if(temp !=  null){
+            logger.warn("角色名称已存在，参数：{}", role.toString());
+            throw new ServiceException(4111);
+        }
         BeanUtils.copyProperties(roleBO,role);
         role.setId(Utils.uuid());
         Date date = new Date();
@@ -56,9 +64,9 @@ public class RoleServiceImpl implements RoleService {
         int insert = roleMapper.insert(role);
         if (insert != 1) {
             logger.warn("插入失败，参数：{}", role.toString());
-            throw new RuntimeException("插入失败");
+            throw new ServiceException(4001);
         }
-        return insert;
+        return role;
     }
 
     @Override
@@ -66,7 +74,7 @@ public class RoleServiceImpl implements RoleService {
         int del = roleMapper.deleteRoleById(id);
         if (del != 1) {
             logger.warn("删除失败，id：{}", id);
-            throw new RuntimeException("删除失败");
+            throw new ServiceException(4003);
         }
         return del;
     }
@@ -84,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
         int update = roleMapper.updateRole(role);
         if (update != 1) {
             logger.warn("更新失败，参数：{}", roleBO.toString());
-            throw new RuntimeException("更新失败");
+            throw new ServiceException(4002);
         }
         return update;
     }

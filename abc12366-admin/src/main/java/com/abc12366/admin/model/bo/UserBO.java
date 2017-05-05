@@ -1,4 +1,5 @@
 package com.abc12366.admin.model.bo;
+import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.Role;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -47,6 +48,8 @@ public class UserBO implements Serializable {
     private String organizationId;
 
     private String organizationName;
+
+    private LoginInfo loginInfo;
 
     public String getOrganizationId() {
         return organizationId;
@@ -136,4 +139,11 @@ public class UserBO implements Serializable {
 		return this.lastUpdate;
 	}
 
+    public LoginInfo getLoginInfo() {
+        return loginInfo;
+    }
+
+    public void setLoginInfo(LoginInfo loginInfo) {
+        this.loginInfo = loginInfo;
+    }
 }

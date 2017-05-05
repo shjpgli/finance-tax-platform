@@ -50,19 +50,6 @@ public class UserController {
         return ResponseEntity.ok(temp);
     }
 
-    @PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody UserBO userBO) {
-        int registerNum = userService.register(userBO);
-        LOGGER.info("{}", registerNum);
-        return ResponseEntity.ok(registerNum);
-    }
-
-    @PostMapping(path = "/login")
-    public ResponseEntity login(@Valid @RequestBody UserBO userBO) {
-        UserBO user = userService.login(userBO);
-        LOGGER.info("{}", user);
-        return ResponseEntity.ok(user);
-    }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(@Valid @RequestBody UserBO userBO,@PathVariable("id")String id) {

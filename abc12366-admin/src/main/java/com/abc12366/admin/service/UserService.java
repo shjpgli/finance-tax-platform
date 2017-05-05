@@ -77,8 +77,9 @@ public interface UserService {
      */
     int deleteUserById(String id);
 
-
     User selectOne(String id);
 
-    UserBO login(UserBO userBO);
+    UserBO login(UserBO userBO, String appToken);
+
+
 }
