@@ -4,7 +4,6 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.AuthorityMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.Authority;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.RegisterBO;
@@ -42,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     public UserBO register(RegisterBO registerBO) {
         final String username = registerBO.getUsername();
         final String phone = registerBO.getPhone();
-        if(userRoMapper.selectByUsernameOrPhone(username) != null || userRoMapper.selectByUsernameOrPhone(phone) != null) {
+        if (userRoMapper.selectByUsernameOrPhone(username) != null || userRoMapper.selectByUsernameOrPhone(phone) != null) {
             return null;
         }
         final String rawPassword = registerBO.getPassword();
@@ -59,16 +58,6 @@ public class AuthServiceImpl implements AuthService {
                 .modifyDate(new Date())
                 .build();
         int rows = userMapper.insert(user);
-
-        if (rows > 0) {
-            for (String role : user.getRoles()) {
-                Authority authority = new Authority.Builder()
-                        .userId(user.getId())
-                        .authority(role).build();
-                authorityMapper.insert(authority);
-            }
-        }
-
         UserBO userDTO = new UserBO();
         BeanUtils.copyProperties(user, userDTO);
         LOGGER.info("{}", userDTO);

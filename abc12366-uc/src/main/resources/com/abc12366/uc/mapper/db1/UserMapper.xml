@@ -2,22 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.UserMapper">
-
     <insert id="insert" parameterType="User">
-        insert into user (id, username, password, phone, enabled, lastPasswordResetDate, createDate, modifyDate)
-        values (#{id}, #{username}, #{password}, #{phone}, #{enabled}, #{lastPasswordResetDate}, #{createDate}, #{modifyDate})
+        insert into uc_user (id, username, phone, password, regMail, userPicturePath, regIP, salt, realName, status, createTime, lastUpdate)
+        values (#{id}, #{username}, #{phone},#{password},  #{regMail}, #{userPicturePath}, #{regIP}, #{salt}, #{realName}, #{status}, #{createTime}, #{lastUpdate} )
     </insert>
 
     <update id="update">
-        update user
+        update uc_user
         <set>
             <if test="username != null">username = #{username},</if>
-            <if test="password != null">password = #{password},</if>
             <if test="phone != null">phone = #{phone},</if>
-            <if test="enabled != null">enabled = #{enabled},</if>
-            <if test="lastPasswordResetDate != null">lastPasswordResetDate = #{lastPasswordResetDate},</if>
-            <if test="modifyDate != null">modifyDate = #{modifyDate}</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="regMail != null">regMail = #{regMail},</if>
+            <if test="userPicturePath != null">userPicturePath = #{userPicturePath},</if>
+            <if test="regIP != null">regIP = #{regIP},</if>
+            <if test="salt != null">salt = #{salt},</if>
+            <if test="realName != null">realName = #{realName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate}</if>
         </set>
         where id=#{id}
     </update>
+
+    <delete id="delete">
+        delete from uc_user
+        where id=#{id}
+    </delete>
 </mapper>

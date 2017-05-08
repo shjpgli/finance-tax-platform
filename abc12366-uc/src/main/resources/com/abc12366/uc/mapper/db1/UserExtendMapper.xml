@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.UserExtendMapper">
+    <insert id="insert" parameterType="UserExtend">
+        insert into uc_user_extend (id, userId, signature, nickname,sex,birthday,bloodType,weight,height,marital,education,graduate,occupation,income,postAddres,realName,experence,weixin,qq,safeQuestion,safeAnswer,province,city,area,ceateTime,lastUpdate)
+        values (#{id}, #{userId}, #{signature},#{nickname},  #{sex}, #{birthday}, #{bloodType}, #{weight}, #{height}, #{marital}, #{education}, #{graduate}, #{occupation}, #{income}, #{height}, #{postAddres}, #{realName}, #{experence}, #{weixin}, #{height}, #{qq}, #{safeQuestion}, #{safeAnswer}, #{province}, #{city}, #{area}, #{ceateTime}, #{lastUpdate} )
+    </insert>
+
+    <update id="update">
+        update uc_user_extend
+        <set>
+            <if test="signature != null">signature = #{signature},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="bloodType != null">bloodType = #{bloodType},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="marital != null">marital = #{marital},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="graduate != null">graduate = #{graduate},</if>
+            <if test="occupation != null">occupation = #{occupation}</if>
+            <if test="income != null">income = #{income},</if>
+            <if test="postAddres != null">postAddres = #{postAddres},</if>
+            <if test="realName != null">realName = #{realName},</if>
+            <if test="experence != null">experence = #{experence},</if>
+            <if test="weixin != null">weixin = #{weixin},</if>
+            <if test="qq != null">qq = #{qq},</if>
+            <if test="safeQuestion != null">safeQuestion = #{safeQuestion},</if>
+            <if test="safeAnswer != null">safeAnswer = #{safeAnswer},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="area != null">area = #{area}</if>
+            <if test="ceateTime != null">ceateTime = #{ceateTime},</if>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from uc_user_extend
+        where userId=#{userId}
+    </delete>
+</mapper>

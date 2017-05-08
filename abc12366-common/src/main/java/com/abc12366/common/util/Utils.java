@@ -137,6 +137,18 @@ public class Utils {
         return encode(json);
     }
 
+    /**
+     * 生成盐值
+     *
+     * @param
+     * @return String Base64编码后的字符串
+     */
+    public static String salt() {
+        double salt = Math.random();
+        String saltValue = salt + "";
+        return saltValue.substring(saltValue.indexOf("0.") + 2, 8);
+    }
+
     public static void main(String[] args) throws Exception {
         System.out.println("md5: " + md5("888888"));
         String str = encode("abc中文");

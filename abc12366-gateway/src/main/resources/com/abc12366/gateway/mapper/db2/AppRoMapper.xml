@@ -22,4 +22,11 @@
       FROM gw_app
       WHERE name = #{name}
     </select>
+
+    <select id="selectByToken" resultType="App">
+        SELECT id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
+        createTime, lastUpdate
+        FROM gw_app
+        WHERE accessToken = #{accessToken}
+    </select>
 </mapper>
