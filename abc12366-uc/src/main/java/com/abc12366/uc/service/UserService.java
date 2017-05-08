@@ -1,8 +1,7 @@
 package com.abc12366.uc.service;
 
 
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
@@ -15,9 +14,15 @@ public interface UserService {
 
     List<UserBO> selectList();
 
-    UserBO selectOne(Long id);
+    UserBO selectOne(String userId);
 
     UserBO update(UserUpdateBO userUpdateBO);
 
     UserBO selectByUsernameOrPhone(String usernameOrPhone);
+
+    UserBO register(RegisterBO registerBO);
+
+    UserBO delete(String userId);
+
+    String login(LoginBO loginBO, String token);
 }

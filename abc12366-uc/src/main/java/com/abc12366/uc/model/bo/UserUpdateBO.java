@@ -10,17 +10,17 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class UserUpdateBO {
 
     @NotEmpty(message = "ID不能为空")
-    private Long id;
+    private String id;
 
     private String phone;
 
-    private boolean enabled;
+    private boolean status;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -32,20 +32,24 @@ public class UserUpdateBO {
         this.phone = phone;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public UserUpdateBO() {
+
     }
 
     @Override
     public String toString() {
         return "UserUpdateBO{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", phone='" + phone + '\'' +
-                ", enabled=" + enabled +
+                ", status=" + status +
                 '}';
     }
 }

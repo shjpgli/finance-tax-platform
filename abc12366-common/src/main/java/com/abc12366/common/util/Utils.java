@@ -107,4 +107,14 @@ public class Utils {
         return md5(uuid());
     }
 
+    /**
+     * 生成盐值
+     *
+     * @return String Base64编码后的字符串
+     */
+    public static String salt() {
+        double salt = Math.random();
+        String saltValue = salt + "";
+        return saltValue.substring(saltValue.indexOf("0.") + 2, 8);
+    }
 }

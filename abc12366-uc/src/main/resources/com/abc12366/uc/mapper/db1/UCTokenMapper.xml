@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.UCTokenMapper">
+    <insert id="insert" parameterType="UCToken">
+        insert into uc_token (id, appId, userId, token, lastTokenResetDate)
+        values (#{id}, #{appId}, #{userId}, #{token}, #{lastTokenResetDate})
+    </insert>
+
+    <update id="update">
+        update uc_token
+        <set>
+            <if test="appId != null">appId = #{appId},</if>
+            <if test="userId != null">userId = #{userId},</if>
+            <if test="token != null">token = #{token},</if>
+            <if test="lastTokenResetDate != null">lastTokenResetDate = #{lastTokenResetDate}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

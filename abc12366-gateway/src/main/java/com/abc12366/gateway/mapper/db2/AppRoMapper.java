@@ -12,4 +12,6 @@ public interface AppRoMapper {
     App selectByName(String name);
 
     App selectOne(App app);
+
+    App selectByToken(String appToken);
 }
