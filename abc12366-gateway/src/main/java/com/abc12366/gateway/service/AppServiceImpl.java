@@ -13,8 +13,6 @@ import com.abc12366.gateway.model.bo.AppSettingApiBO;
 import com.abc12366.gateway.model.bo.TokenBO;
 import com.alibaba.fastjson.JSON;
 import com.mysql.jdbc.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +28,6 @@ import java.util.Date;
 @Service
 public class AppServiceImpl implements AppService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AppServiceImpl.class);
-
     @Autowired
     private AppMapper appMapper;
 
@@ -42,22 +38,20 @@ public class AppServiceImpl implements AppService {
     private AppSettingRoMapper appSettingRoMapper;
 
     @Override
-    public AppRespBO register(AppBO appBO) {
-        App app = appRoMapper.selectByName(appBO.getName());
+    public AppRespBO register(AppBO bo) throws Exception {
+        App app = new App.Builder()
+                .name(bo.getName())
+                .build();
+        app = appRoMapper.selectOne(app);
         if (app == null) {
-            String password = null;
-            try {
-                password = Utils.md5(appBO.getPassword());
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage() + e);
-            }
+            String password = Utils.md5(bo.getPassword());
             Date now = new Date();
             App newApp = new App.Builder()
                     .id(Utils.uuid())
-                    .name(appBO.getName())
+                    .name(bo.getName())
                     .password(password)
-                    .remark(appBO.getRemark())
-                    .status(true)
+                    .remark(bo.getRemark())
+                    .status(false)
                     .startTime(now)
                     .endTime(DateUtils.addYears(now, Constant.APP_VALID_YEARS))
                     .createTime(now)
@@ -74,14 +68,13 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public String login(AppBO appBO) throws Exception {
-        App app = appRoMapper.selectByName(appBO.getName());
-        String password = null;
-        try {
-            password = Utils.md5(appBO.getPassword());
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage() + e);
-        }
+    public String login(AppBO bo) throws Exception {
+        App app = new App.Builder()
+                .name(bo.getName())
+                .status(true)
+                .build();
+        app = appRoMapper.selectOne(app);
+        String password = Utils.md5(bo.getPassword());
         if (app != null && app.getPassword().equals(password)) {
             Date now = new Date();
             String token = Utils.token();
@@ -98,6 +91,7 @@ public class AppServiceImpl implements AppService {
     public boolean isAuthentication(String accessToken) {
         App app = new App.Builder()
                 .accessToken(accessToken)
+                .status(true)
                 .build();
         return appRoMapper.selectOne(app) != null;
     }
@@ -112,10 +106,15 @@ public class AppServiceImpl implements AppService {
 //        String path = servletPath + bestMatchingPattern;
 
         // 2.查询接口表中是否存在对应的接口
-        // 解码AppId
         String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        TokenBO tokenBO = JSON.parseObject(Utils.decode(accessToken), TokenBO.class);
-        String appId = tokenBO.getId();
+        App app = new App.Builder()
+                .accessToken(accessToken)
+                .status(true)
+                .build();
+        app = appRoMapper.selectOne(app);
+        String appId = app.getId();
+        // 设置appId，用于在业务中快速获取有效AppId，在AppInterceptor.postHandle中删除。
+        request.setAttribute(Constant.APP_ID, appId);
         String method = request.getMethod();
         String version = request.getHeader(Constant.VERSION_HEAD);
 

@@ -29,14 +29,14 @@ public class ApiLog extends TableBO {
     private long outTime;
     // 结果状态
     private int status;
-    // 附言
-    private String message;
+    // 版本
+    private String version;
 
     public ApiLog() {
     }
 
     public ApiLog(String yyyyMMdd, String id, String uri, String userAgent, String appId, String userId, String ip,
-                  long inTime, long outTime, int status, String message) {
+                  long inTime, long outTime, int status, String version) {
         super(yyyyMMdd);
         this.id = id;
         this.uri = uri;
@@ -47,7 +47,7 @@ public class ApiLog extends TableBO {
         this.inTime = inTime;
         this.outTime = outTime;
         this.status = status;
-        this.message = message;
+        this.version = version;
     }
 
     private ApiLog(Builder builder) {
@@ -60,7 +60,7 @@ public class ApiLog extends TableBO {
         setInTime(builder.inTime);
         setOutTime(builder.outTime);
         setStatus(builder.status);
-        setMessage(builder.message);
+        setVersion(builder.version);
     }
 
     public String getId() {
@@ -135,12 +135,12 @@ public class ApiLog extends TableBO {
         this.status = status;
     }
 
-    public String getMessage() {
-        return message;
+    public String getVersion() {
+        return version;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     @Override
@@ -155,7 +155,7 @@ public class ApiLog extends TableBO {
                 ", inTime=" + inTime +
                 ", outTime=" + outTime +
                 ", status=" + status +
-                ", message='" + message + '\'' +
+                ", version='" + version + '\'' +
                 "} " + super.toString();
     }
 
@@ -169,7 +169,7 @@ public class ApiLog extends TableBO {
         private long inTime;
         private long outTime;
         private int status;
-        private String message;
+        private String version;
 
         public Builder() {
         }
@@ -219,8 +219,8 @@ public class ApiLog extends TableBO {
             return this;
         }
 
-        public Builder message(String val) {
-            message = val;
+        public Builder version(String val) {
+            version = val;
             return this;
         }
 

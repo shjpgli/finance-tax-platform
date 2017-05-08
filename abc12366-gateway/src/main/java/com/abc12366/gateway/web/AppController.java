@@ -34,7 +34,7 @@ public class AppController {
     private AppService appService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@Valid @RequestBody AppBO appBO) {
+    public ResponseEntity register(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
         AppRespBO app = appService.register(appBO);
         ResponseEntity responseEntity = app != null ? ResponseEntity.ok(app)
@@ -47,7 +47,8 @@ public class AppController {
     public ResponseEntity login(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
         String token = appService.login(appBO);
-        return token != null ? ResponseEntity.ok(Utils.kv(Constant.APP_TOKEN_HEAD, token))
+        return token != null ? ResponseEntity.ok(
+                Utils.kv(Constant.APP_TOKEN_HEAD, token, "expires_in", Constant.APP_TOKEN_VALID_SECONDS))
                 : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
     }
 }

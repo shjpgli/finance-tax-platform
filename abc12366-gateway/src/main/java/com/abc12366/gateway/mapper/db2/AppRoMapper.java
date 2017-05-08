@@ -9,8 +9,6 @@ import com.abc12366.gateway.model.App;
  */
 public interface AppRoMapper {
 
-    App selectByName(String name);
-
     App selectOne(App app);
 
     App selectByToken(String appToken);

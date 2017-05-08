@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional("db1TxManager")
     @Override
-    public String login(LoginBO loginBO, String appToken) {
+    public String login(LoginBO loginBO, String appToken) throws Exception {
         LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
         //判断apptoken是否为空，为空则不允许登录
         if (appToken == null || appToken.equals("")) {

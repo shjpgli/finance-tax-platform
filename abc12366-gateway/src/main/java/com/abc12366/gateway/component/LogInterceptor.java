@@ -108,6 +108,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
             appId = JSON.parseObject(Utils.decode(accessToken), TokenBO.class).getId();
         }
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
+        String version = request.getHeader(Constant.VERSION_HEAD);
 
         ApiLog log = new ApiLog.Builder()
                 .id(Utils.uuid())
@@ -119,6 +120,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
                 .status(status)
                 .appId(appId)
                 .userId(userId)
+                .version(version)
                 .build();
         log.setYyyyMMdd(DateUtils.getDateFormat(new Date(), "yyyyMMdd"));
 

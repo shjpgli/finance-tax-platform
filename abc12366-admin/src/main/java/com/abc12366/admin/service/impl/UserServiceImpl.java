@@ -14,6 +14,7 @@ import com.abc12366.admin.service.UserService;
 import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.DateUtils;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
@@ -212,7 +213,7 @@ public class UserServiceImpl implements UserService {
             loginInfo.setAppId(app.getId());
             loginInfo.setToken(userToken);
             Date date = new Date();
-            loginInfo.setLastResetTokenTime(Utils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
+            loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
             LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
             //判断该用户是否存在此应用的登录信息
             if (info != null) {

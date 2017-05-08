@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS gw_api_log (
   inTime    LONG COMMENT '访问时间',
   outTime   LONG COMMENT '响应时间',
   status    VARCHAR(4) COMMENT '结果代码',
-  message   VARCHAR(256) COMMENT '附言'
+  version   VARCHAR(10) COMMENT '版本'
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
