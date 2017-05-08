@@ -107,6 +107,10 @@ public class Utils {
         return md5(uuid());
     }
 
+    public static String token(String str) throws Exception {
+        return md5(str);
+    }
+
     /**
      * 生成盐值
      *

@@ -82,7 +82,7 @@ public class UserController {
         1.请求访问时获取token，token为空则需要用户名和密码登录
      */
     @PostMapping(path = "/login")
-    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) {
+    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", loginBO);
         String userToken = userService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
         LOGGER.info("{}", userToken);

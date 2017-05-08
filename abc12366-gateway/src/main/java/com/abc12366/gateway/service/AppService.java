@@ -20,7 +20,7 @@ public interface AppService {
      * @param appBO AppBO
      * @return AppRespBO
      */
-    AppRespBO register(AppBO appBO);
+    AppRespBO register(AppBO appBO) throws Exception;
 
     /**
      * App登录获取token

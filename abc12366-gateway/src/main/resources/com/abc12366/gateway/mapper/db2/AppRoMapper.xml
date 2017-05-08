@@ -10,17 +10,16 @@
             <if test="id != null">
                 id = #{id}
             </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
             <if test="accessToken != null">
                 AND accessToken = #{accessToken}
             </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
         </where>
-    </select>
-
-    <select id="selectByName" resultType="App">
-      SELECT id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
-      createTime, lastUpdate
-      FROM gw_app
-      WHERE name = #{name}
     </select>
 
     <select id="selectByToken" resultType="App">
