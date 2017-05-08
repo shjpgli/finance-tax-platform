@@ -73,9 +73,9 @@ public class ContentServiceImpl implements ContentService{
     }
 
     @Override
-    public List<ModelItem> selectModeList(String modelId) {
+    public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         //查询模型项
-        List<ModelItem> modelItems = modelItemRoMapper.selectModeList(modelId);
+        List<ModelItemBo> modelItems = modelItemRoMapper.selectList(map);
         LOGGER.info("{}", modelItems);
         return modelItems;
     }
