@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay
+		 channelId,channelName,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay
 	</sql>
 
 	<!--删除：根据主键ID删除-->
@@ -17,9 +17,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="channel">
 		 INSERT INTO cms_channel
- 		(channelId,modelId,siteId,parentId,channelPath,priority,isDisplay) 
+ 		(channelId,channelName,modelId,siteId,parentId,channelPath,priority,isDisplay)
 		 VALUES 
- 		(#{channelId},#{modelId},#{siteId},#{parentId},#{channelPath},#{priority},#{isDisplay}) 
+ 		(#{channelId},#{channelName},#{modelId},#{siteId},#{parentId},#{channelPath},#{priority},#{isDisplay})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -29,6 +29,9 @@
 			<if test="channelId != null">
 				 channelId,
 			</if>
+			 <if test="channelName != null">
+				 channelName,
+			 </if>
 			<if test="modelId != null">
 				 modelId,
 			</if>
@@ -53,6 +56,9 @@
 			<if test="channelId!=null">
 				 #{channelId},
 			</if>
+			 <if test="channelName!=null">
+				 #{channelName},
+			 </if>
 			<if test="modelId!=null">
 				 #{modelId},
 			</if>
@@ -78,9 +84,12 @@
 	<update id="updateByPrimaryKeySelective" parameterType="channel">
 		 UPDATE cms_channel
  		 <set> 
-			<if test="modelId != null">
-				 modelId = #{modelId},
+			<if test="channelName != null">
+				channelName = #{channelName},
 			</if>
+			 <if test="modelId != null">
+				 modelId = #{modelId},
+			 </if>
 			<if test="siteId != null">
 				 siteId = #{siteId},
 			</if>
@@ -104,7 +113,8 @@
 	<!-- 修 改-->
 	<update id="updateByPrimaryKey" parameterType="channel">
 		 UPDATE cms_channel
-		 SET 
+		 SET
+		 	channelName = #{channelName},
 			 modelId = #{modelId},
 			 siteId = #{siteId},
 			 parentId = #{parentId},

@@ -5,11 +5,11 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	channelName,	isStaticChannel,	isStaticContent,	pageSize,	link,	tplChannel,	tplContent,	titleImg,	contentImg,	hasTitleImg,	hasContentImg,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	commentControl,	allowUpdown,	isBlank,	allowShare
+		channelId,	channelName,	isStaticChannel,	isStaticContent,	pageSize,	link,	tplChannel,	tplContent,	titleImg,	contentImg,	hasTitleImg,	hasContentImg,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	commentControl,	allowUpdown,	isBlank,	allowShare
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="channelExt" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="channelExtBo" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_channel_ext
