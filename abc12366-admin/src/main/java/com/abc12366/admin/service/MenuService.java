@@ -12,7 +12,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface MenuService {
-    List<MenuBO> selectList();
+    List<Menu> selectList(Menu menu);
 
     List<MenuBO> selectByParentId(String parentId);
 

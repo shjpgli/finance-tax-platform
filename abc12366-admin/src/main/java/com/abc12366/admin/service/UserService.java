@@ -1,7 +1,9 @@
 package com.abc12366.admin.service;
 
 import com.abc12366.admin.model.User;
+import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.UserBO;
+import com.abc12366.admin.model.bo.UserExtendBO;
 
 import java.util.List;
 
@@ -37,8 +39,9 @@ public interface UserService {
     /**
      * 用户列表
      *
+     * @param user
      */
-    List<User> selectList();
+    List<User> selectList(User user);
 
     /**
      * 添加用户
@@ -82,4 +85,7 @@ public interface UserService {
     UserBO login(UserBO userBO, String appToken);
 
 
+    UserExtend selectUserExtendByUserId(String id);
+
+    UserExtend updateUserExtend(UserExtendBO userExtendBO);
 }

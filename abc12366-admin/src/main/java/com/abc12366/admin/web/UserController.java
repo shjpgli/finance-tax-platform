@@ -1,7 +1,9 @@
 package com.abc12366.admin.web;
 
 import com.abc12366.admin.model.User;
+import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.UserBO;
+import com.abc12366.admin.model.bo.UserExtendBO;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -32,9 +34,14 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam String username, @RequestParam String nickname, @RequestParam Boolean status) {
+        User user = new User();
+        user.setUsername(username);
+        user.setNickname(nickname);
+        user.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<User> dataList = userService.selectList();
+        List<User> dataList = userService.selectList(user);
         LOGGER.info("{}", dataList);
         if (dataList != null && dataList.size() != 0) {
             return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
@@ -52,6 +59,7 @@ public class UserController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(@Valid @RequestBody UserBO userBO, @PathVariable("id") String id) {
+        userBO.setId(id);
         int upd = userService.updateUser(userBO);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);
@@ -63,4 +71,31 @@ public class UserController {
         LOGGER.info("{}", del);
         return ResponseEntity.ok(del);
     }
+
+
+    /**
+     * 查看User详情
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "/extend/{id}")
+    public ResponseEntity selectUserExtend(@PathVariable("id") String id) {
+        UserExtend temp = userService.selectUserExtendByUserId(id);
+        LOGGER.info("{}", temp);
+        return ResponseEntity.ok(temp);
+    }
+
+    /**
+     * 更新User详情
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/extend/{id}")
+    public ResponseEntity updateUserExtend(@Valid @RequestBody UserExtendBO userExtendBO,@PathVariable("id") String id) {
+        userExtendBO.setUserId(id);
+        UserExtend userExtend = userService.updateUserExtend(userExtendBO);
+        LOGGER.info("{}", userExtend);
+        return ResponseEntity.ok(userExtend);
+    }
+
 }

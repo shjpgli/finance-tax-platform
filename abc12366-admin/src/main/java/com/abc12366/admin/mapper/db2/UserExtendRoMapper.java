@@ -17,6 +17,8 @@ public interface UserExtendRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	UserExtend  selectByPrimaryKey(@Param("id") Long id);
+	UserExtend  selectById(@Param("id") String id);
+
+	UserExtend selectUserExtendByUserId(String userId);
 
 }

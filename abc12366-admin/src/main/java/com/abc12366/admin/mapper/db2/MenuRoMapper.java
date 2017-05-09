@@ -12,7 +12,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface MenuRoMapper {
-    List<Menu> selectList();
+    List<Menu> selectList(Menu menu);
 
     List<Menu> selectByParentId(String parentId);
 
@@ -21,4 +21,6 @@ public interface MenuRoMapper {
     Menu selectByMenuName(String name);
 
     List<Menu> selectFirstLevel();
+
+    List<Menu> selectMenuByRoleId(String id);
 }

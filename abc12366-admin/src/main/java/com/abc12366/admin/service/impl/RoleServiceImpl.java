@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -42,10 +43,11 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public List<Role> selectList() {
-        return roleRoMapper.selectList();
+    public List<Role> selectList(Role role) {
+        return roleRoMapper.selectList(role);
     }
 
+    @Transactional("db2TxManager")
     @Override
     public Role addRole(RoleBO roleBO) {
         Role role = new Role();
@@ -69,6 +71,7 @@ public class RoleServiceImpl implements RoleService {
         return role;
     }
 
+    @Transactional("db2TxManager")
     @Override
     public int deleteRoleById(String id) {
         int del = roleMapper.deleteRoleById(id);
@@ -84,6 +87,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRoMapper.selectRoleById(id);
     }
 
+    @Transactional("db2TxManager")
     @Override
     public int updateRole(RoleBO roleBO) {
         Role role = new Role();
@@ -102,19 +106,23 @@ public class RoleServiceImpl implements RoleService {
         return roleRoMapper.selectMenuIdListByRoleId(id);
     }
 
+    @Transactional("db2TxManager")
     @Override
-    public void updateRoleMenu(String id, String resourceIds) {
+    public void updateRoleMenu(String id, String menuIds) {
         List<String> roleMenuIdList = roleRoMapper.selectRoleMenuIdListByRoleId(id);
         if (roleMenuIdList != null && (!roleMenuIdList.isEmpty())) {
             for (String roleMenuId : roleMenuIdList) {
-                roleMenuMapper.deleteById(roleMenuId);
+                if(roleMenuId != null){
+                    roleMenuMapper.deleteById(roleMenuId);
+                }
             }
         }
-        String[] resources = resourceIds.split(",");
+        String[] resources = menuIds.split(",");
         RoleMenu roleMenu = new RoleMenu();
         for (String menuId : resources) {
             roleMenu.setRoleId(id);
             roleMenu.setMenuId(menuId);
+            roleMenu.setId(Utils.uuid());
             roleMenuMapper.insert(roleMenu);
         }
     }

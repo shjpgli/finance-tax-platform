@@ -11,12 +11,9 @@
 		<result column="status" property="status" jdbcType="TINYINT"/>
 		<result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
 		<result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-		<result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
-		<result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
-
 		<collection property="rolesList" ofType="Role">
 			<id column="roleId" property="id"/>
-			<result column="roleName" property="name"/>
+			<result column="roleName" property="roleName"/>
 		</collection>
 	</resultMap>
 
@@ -34,33 +31,38 @@
 	</select>
 
 	<!-- 查询所有用户 -->
-	<select id="selectList" resultType="User">
+	<select id="selectList" resultType="User" parameterType="User">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM sys_user
+        <where>
+            1=1
+            <if test="username != null and username!=''"> and username = #{username}</if>
+            <if test="nickname != null and nickname!=''"> and nickname = #{nickname}</if>
+            <if test="status != null and status!=''"> AND status = #{status}</if>
+        </where>
 	</select>
 
     <!--查询单个用户及权限-->
    <!-- <select id="selectOne" resultMap="userBoResultMap" parameterType="User">
         SELECT
-        t.id,
-        t.username,
-        t.password,
-        t.nickname,
-        t.status,
-        t.token,
-        t.lastResetTokenTime,
-        t.createTime,
-        t.lastUpdate,
-        t.organization_id,
-        s.name AS organizationName,
-        o.id AS roleId,
-        o.roleName AS roleName
-        FROM
-        sys_user t
-        LEFT JOIN sys_user_role r ON t.id = r.userId
-        LEFT JOIN sys_role o ON r.roleId = o.id
-        LEFT JOIN sys_organization s ON s.id = t.organizationId
+		t.id,
+		t.username,
+		t.password,
+		t.nickname,
+		t.status,
+		t.createTime,
+		t.lastUpdate,
+		e.organizationId,
+		s.name AS organizationName,
+		o.id AS roleId,
+		o.roleName AS roleName
+		FROM
+		sys_user t
+		LEFT JOIN sys_user_role r ON t.id = r.userId
+		LEFT JOIN sys_role o ON r.roleId = o.id
+        LEFT JOIN sys_user_extend e.userId = t.userId
+		LEFT JOIN sys_organization s ON s.id = e.organizationId
         <where>
             <if test="id != null">AND id = #{id}</if>
             <if test="userName != null">userName = #{userName}</if>
@@ -76,12 +78,32 @@
         where id = #{id}
     </select>
 
-	<select id="selectUserByLoginName" resultType="User" parameterType="java.lang.String">
+	<select id="selectUserBOByLoginName" resultMap="userBoResultMap" parameterType="java.lang.String">
+        SELECT
+        t.id,
+        t.username,
+        t.password,
+        t.nickname,
+        t.status,
+        t.createTime,
+        t.lastUpdate,
+        o.id AS roleId,
+        o.roleName AS roleName
+        FROM
+        sys_user t
+        LEFT JOIN sys_user_role r ON t.id = r.userId
+        LEFT JOIN sys_role o ON r.roleId = o.id
+        <where>
+            t.username = #{username}
+        </where>
+	</select>
+
+<!--	<select id="selectUserByLoginName" resultType="User" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_user
 		where username = #{username}
-	</select>
+	</select>-->
 
 	<select id="selectUserById" resultType="User" parameterType="java.lang.Long">
 		select
@@ -91,23 +113,20 @@
 	</select>
 
 	<select id="selectUserBoById" resultMap="userBoResultMap" parameterType="java.lang.String">
-		SELECT
-		t.id,
-		t.username,
-		t.password,
-		t.nickname,
-		t.status,
-		t.createTime,
-		t.lastUpdate,
-		t.organization_id,
-		s.name AS organizationName,
-		o.id AS roleId,
-		o.roleName AS roleName
-		FROM
-		sys_user t
-		LEFT JOIN sys_user_role r ON t.id = r.userId
-		LEFT JOIN sys_role o ON r.roleId = o.id
-		LEFT JOIN sys_organization s ON s.id = t.organizationId
+        SELECT
+        t.id,
+        t.username,
+        t.password,
+        t.nickname,
+        t.status,
+        t.createTime,
+        t.lastUpdate,
+        o.id AS roleId,
+        o.roleName AS roleName
+        FROM
+        sys_user t
+        LEFT JOIN sys_user_role r ON t.id = r.userId
+        LEFT JOIN sys_role o ON r.roleId = o.id
 		<where>
 			t.id = #{id}
 		</where>

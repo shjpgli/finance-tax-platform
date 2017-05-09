@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationRoMapper.selectList();
     }
 
+    @Transactional("db2TxManager")
     @Override
     public Organization addOrganization(OrganizationBO organizationBO) {
         Organization organization = new Organization();
@@ -53,6 +55,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationRoMapper.selectOrganizationById(id);
     }
 
+    @Transactional("db2TxManager")
     @Override
     public void updateOrganization(OrganizationBO organizationBO) {
         Organization organization = new Organization();
@@ -65,6 +68,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
     }
 
+    @Transactional("db2TxManager")
     @Override
     public void deleteOrganizationById(String id) {
         int del = organizationMapper.deleteByPrimaryKey(id);

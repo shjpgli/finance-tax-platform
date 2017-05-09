@@ -45,6 +45,6 @@ public interface UserExtendMapper{
 	 * 修改（根据主键ID修改）
 	 * 
 	 **/
-	int updateByPrimaryKey(UserExtend record);
+	int updateUserExtentBO(UserExtend record);
 
 }

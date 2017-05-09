@@ -27,9 +27,9 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuRoMapper menuRoMapper;
     @Override
-    public List<MenuBO> selectList() {
-        List<Menu> menus = menuRoMapper.selectList();
-        if(menus == null||menus.size()==0){
+    public List<Menu> selectList(Menu menu) {
+        List<Menu> menus = menuRoMapper.selectList(menu);
+        /*if(menus == null||menus.size()==0){
             return null;
         }
         List<MenuBO> menuBOs = new ArrayList<>();
@@ -37,8 +37,8 @@ public class MenuServiceImpl implements MenuService {
             MenuBO menuBO = new MenuBO();
             BeanUtils.copyProperties(menu,menuBO);
             menuBOs.add(menuBO);
-        }
-        return menuBOs;
+        }*/
+        return menus;
     }
 
     @Override

@@ -81,7 +81,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="userExtend">
+	<update id="updateUserExtentBO" parameterType="userExtend">
 		 UPDATE sys_user_extend
  		 <set> 
 			<if test="userId != null">

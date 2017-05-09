@@ -28,7 +28,7 @@ public class RoleBO implements Serializable {
 	private java.util.Date updateTime;
 
     @NotNull
-    private Integer status;
+    private Boolean status;
 
     public void setId(String id){
         this.id = id;
@@ -70,12 +70,11 @@ public class RoleBO implements Serializable {
 		return this.updateTime;
 	}
 
-	public void setStatus(Integer status){
-		this.status = status;
-	}
+    public Boolean getStatus() {
+        return status;
+    }
 
-	public Integer getStatus(){
-		return this.status;
-	}
-
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }
