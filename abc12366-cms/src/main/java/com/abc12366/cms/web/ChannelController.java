@@ -44,7 +44,7 @@ public class ChannelController {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("modelId",modelId);
-        dataMap.put("isChannel",0);
+        dataMap.put("isChannel",1);
         List<ModelItemBo> contents = channelService.selectModeList(dataMap);
         LOGGER.info("{}", contents);
         return ResponseEntity.ok(contents);
