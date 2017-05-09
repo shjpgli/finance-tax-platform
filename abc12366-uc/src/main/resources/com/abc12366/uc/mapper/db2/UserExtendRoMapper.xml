@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.UserExtendRoMapper">
 
     <select id="selectOne" resultType="com.abc12366.uc.model.UserExtend">
-        select id, userId, signature, nickname,sex,rthday,bloodType,weight,height,marital,education,graduate,occupation,income,postAddres,realName,experence,weixin,qq,safeQuestion,safeAnswer,province,city,area,ceateTime,lastUpdate
+        select id, userId, signature, nickname,sex,birthday,bloodType,weight,height,marital,education,graduate,occupation,income,postAddress,realName,experience,weixin,qq,safeQuestion,safeAnswer,province,city,area,createTime,lastUpdate
         from uc_user_extend        
         where userId = #{userId}
     </select>

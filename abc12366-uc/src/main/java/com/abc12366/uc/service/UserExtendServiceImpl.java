@@ -5,10 +5,12 @@ import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
+import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -18,6 +20,7 @@ import java.util.Date;
  * @create 2017-05-05 10:08 AM
  * @since 1.0.0
  */
+@Service
 public class UserExtendServiceImpl implements UserExtendService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserExtendService.class);
@@ -25,6 +28,7 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Autowired
     private UserExtendMapper userExtendMapper;
 
+    @Autowired
     private UserExtendRoMapper userExtendRoMapper;
 
     @Override
@@ -47,7 +51,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             return null;
         }
         LOGGER.info("{}", userExtendBO);
-        if (!userExtendBO.getUserId().equals("")) {
+        if (userExtendBO.getUserId() != null && !userExtendBO.getUserId().equals("")) {
             UserExtend userExtend = userExtendRoMapper.selectOne(userExtendBO.getUserId());
             if (userExtend == null) {
                 userExtend = new UserExtend();
@@ -86,17 +90,22 @@ public class UserExtendServiceImpl implements UserExtendService {
 
     @Transactional("db1TxManager")
     @Override
-    public UserExtendBO update(UserExtendBO userExtendBO) {
-        if (userExtendBO == null) {
+    public UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO) {
+        LOGGER.info("{}", userExtendUpdateBO);
+        if (userExtendUpdateBO == null) {
             return null;
         }
-        if (!userExtendBO.getUserId().equals("")) {
-            UserExtend userExtend = userExtendRoMapper.selectOne(userExtendBO.getUserId());
+        if (!userExtendUpdateBO.getUserId().equals("")) {
+            UserExtend userExtend = userExtendRoMapper.selectOne(userExtendUpdateBO.getUserId());
             if (userExtend != null) {
-                BeanUtils.copyProperties(userExtendBO, userExtend);
-                userExtend.setLastUpdate(new Date());
-                int result = userExtendMapper.update(userExtend);
-                BeanUtils.copyProperties(userExtend, userExtendBO);
+                String id = userExtend.getId();
+                UserExtend userExtend1 = new UserExtend();
+                BeanUtils.copyProperties(userExtendUpdateBO, userExtend1);
+                userExtend1.setId(id);
+                userExtend1.setLastUpdate(new Date());
+                int result = userExtendMapper.update(userExtend1);
+                UserExtendBO userExtendBO = new UserExtendBO();
+                BeanUtils.copyProperties(userExtend1, userExtendBO);
                 if (result > 0) {
                     LOGGER.info("{}", userExtendBO);
                     return userExtendBO;

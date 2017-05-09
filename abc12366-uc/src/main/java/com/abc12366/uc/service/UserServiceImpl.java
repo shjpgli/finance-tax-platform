@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("{}", registerBO);
         User user = userRoMapper.selectByUsernameOrPhone(registerBO.getUsername());
         if (user == null) {
-            String password = null;
+            String password;
             String encodePassword = null;
             String salt = null;
             try {
@@ -194,13 +194,15 @@ public class UserServiceImpl implements UserService {
             } catch (Exception e) {
                 LOGGER.error(e.getMessage() + e);
             }
-            if (password.equals(user.getPassword())) {
+            if (user.getPassword().equals(password)) {
                 String userToken = Utils.token(Utils.uuid());
                 user.setLastUpdate(new Date());
                 int result = userMapper.update(user);
                 //更新用户主表后再更新uc_token表
                 if (result > 0) {
-                    App app = appRoMapper.selectByToken(appToken);
+                    App appTemp = new App();
+                    appTemp.setAccessToken(appToken);
+                    App app = appRoMapper.selectOne(appTemp);
                     UCToken ucToken = new UCToken();
                     ucToken.setId(Utils.uuid());
                     if (app.getId() != null) {
@@ -212,7 +214,7 @@ public class UserServiceImpl implements UserService {
                     ucToken.setToken(userToken);
                     ucToken.setLastTokenResetDate(new Date());
                     UCToken ucToken1 = ucTokenRoMapper.selectOne(user.getId(), app.getId());
-                    int result02 = 0;
+                    int result02;
                     //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
                     if (ucToken1 != null) {
                         result02 = ucTokenMapper.update(ucToken);

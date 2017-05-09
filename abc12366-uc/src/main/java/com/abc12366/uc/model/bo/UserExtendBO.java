@@ -1,5 +1,8 @@
 package com.abc12366.uc.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 
 /**
@@ -11,6 +14,7 @@ public class UserExtendBO {
     private String signature;
     private String nickname;
     private String sex;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
     private String bloodType;
     private String weight;
@@ -22,7 +26,7 @@ public class UserExtendBO {
     private String income;
     private String postAddress;
     private String realName;
-    private String experence;
+    private String experience;
     private String weixin;
     private String qq;
     private String safeQuestion;
@@ -36,7 +40,7 @@ public class UserExtendBO {
     public UserExtendBO() {
     }
 
-    public UserExtendBO(String id, String userId, String signature, String nickname, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String experence, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, Date createTime, Date lastUpdate) {
+    public UserExtendBO(String id, String userId, String signature, String nickname, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String experience, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, Date createTime, Date lastUpdate) {
         this.id = id;
         this.userId = userId;
         this.signature = signature;
@@ -53,7 +57,7 @@ public class UserExtendBO {
         this.income = income;
         this.postAddress = postAddress;
         this.realName = realName;
-        this.experence = experence;
+        this.experience = experience;
         this.weixin = weixin;
         this.qq = qq;
         this.safeQuestion = safeQuestion;
@@ -193,12 +197,12 @@ public class UserExtendBO {
         this.realName = realName;
     }
 
-    public String getExperence() {
-        return experence;
+    public String getExperience() {
+        return experience;
     }
 
-    public void setExperence(String experence) {
-        this.experence = experence;
+    public void setExperience(String experience) {
+        this.experience = experience;
     }
 
     public String getWeixin() {
@@ -275,7 +279,7 @@ public class UserExtendBO {
 
     @Override
     public String toString() {
-        return "UserExtend{" +
+        return "UserExtendBO{" +
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", signature='" + signature + '\'' +
@@ -292,7 +296,7 @@ public class UserExtendBO {
                 ", income='" + income + '\'' +
                 ", postAddress='" + postAddress + '\'' +
                 ", realName='" + realName + '\'' +
-                ", experence='" + experence + '\'' +
+                ", experience='" + experience + '\'' +
                 ", weixin='" + weixin + '\'' +
                 ", qq='" + qq + '\'' +
                 ", safeQuestion='" + safeQuestion + '\'' +

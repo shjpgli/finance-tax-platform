@@ -1,12 +1,15 @@
-package com.abc12366.uc.model;
+package com.abc12366.uc.model.bo;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Date;
 
 /**
- * Created by lgy on 2017-05-05.
+ * Created by lgy on 2017-05-09.
  */
-public class UserExtend {
+public class UserExtendUpdateBO {
     private String id;
+    @NotEmpty(message = "userId不能为空")
     private String userId;
     private String signature;
     private String nickname;
@@ -30,13 +33,11 @@ public class UserExtend {
     private String province;
     private String city;
     private String area;
-    private Date createTime;
-    private Date lastUpdate;
 
-    public UserExtend() {
+    public UserExtendUpdateBO() {
     }
 
-    public UserExtend(String id, String userId, String signature, String nickname, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String experience, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, Date createTime, Date lastUpdate) {
+    public UserExtendUpdateBO(String id, String userId, String signature, String nickname, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String experience, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area) {
         this.id = id;
         this.userId = userId;
         this.signature = signature;
@@ -61,8 +62,6 @@ public class UserExtend {
         this.province = province;
         this.city = city;
         this.area = area;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
     }
 
     public String getId() {
@@ -257,25 +256,9 @@ public class UserExtend {
         this.area = area;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
     @Override
     public String toString() {
-        return "UserExtend{" +
+        return "UserExtendUpdateBO{" +
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", signature='" + signature + '\'' +
@@ -300,8 +283,6 @@ public class UserExtend {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", area='" + area + '\'' +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
                 '}';
     }
 }

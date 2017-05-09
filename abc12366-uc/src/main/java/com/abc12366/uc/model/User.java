@@ -192,7 +192,6 @@ public class User {
         private Date lastPasswordResetDate;
         private Date createDate;
         private Date modifyDate;
-        private List<String> roles;
 
         public Builder() {
         }
@@ -234,11 +233,6 @@ public class User {
 
         public Builder modifyDate(Date val) {
             modifyDate = val;
-            return this;
-        }
-
-        public Builder roles(List<String> val) {
-            roles = val;
             return this;
         }
 

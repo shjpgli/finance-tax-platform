@@ -52,16 +52,18 @@ public class AuthServiceImpl implements AuthService {
                 .phone(registerBO.getPhone())
                 .password(rawPassword)
                 .lastPasswordResetDate(new Date())
-                .roles(asList("ROLE_USER"))
                 .enabled(true)
                 .createDate(new Date())
                 .modifyDate(new Date())
                 .build();
         int rows = userMapper.insert(user);
-        UserBO userDTO = new UserBO();
-        BeanUtils.copyProperties(user, userDTO);
-        LOGGER.info("{}", userDTO);
-        return userDTO;
+        if(rows>0){
+            UserBO userDTO = new UserBO();
+            BeanUtils.copyProperties(user, userDTO);
+            LOGGER.info("{}", userDTO);
+            return userDTO;
+        }
+        return null;
     }
 
     @Override

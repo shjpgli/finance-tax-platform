@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.UserExtendBO;
+import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 
 /**
  * @author liuguiyao
@@ -14,5 +15,5 @@ public interface UserExtendService {
 
     UserExtendBO delete(String userId);
 
-    UserExtendBO update(UserExtendBO userExtendBO);
+    UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO);
 }
