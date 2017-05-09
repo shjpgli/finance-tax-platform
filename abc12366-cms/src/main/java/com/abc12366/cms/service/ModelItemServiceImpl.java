@@ -34,7 +34,7 @@ public class ModelItemServiceImpl implements ModelItemService {
     public List<ModelItemBo> selectList(Map<String, Object> map) {
         //查询模型项列表
         List<ModelItemBo> modelItemBoList = modelItemRoMapper.selectList(map);
-        return null;
+        return modelItemBoList;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ModelItemServiceImpl implements ModelItemService {
         //保存模型项信息
         String uuid = UUID.randomUUID().toString().replace("-", "");
         ModelItem modelItem = new ModelItem();
-        modelItemBo.setModelId(uuid);
+        modelItemBo.setModelitemId(uuid);
         try {
             BeanUtils.copyProperties(modelItemBo, modelItem);
         } catch (Exception e) {
@@ -71,8 +71,8 @@ public class ModelItemServiceImpl implements ModelItemService {
     }
 
     @Override
-    public ModelItemBo selectModel(String modelItemId) {
-        ModelItemBo modelItemBo = modelItemRoMapper.selectByPrimaryKey(modelItemId);
+    public ModelItemBo selectModel(String modelitemId) {
+        ModelItemBo modelItemBo = modelItemRoMapper.selectByPrimaryKey(modelitemId);
         return modelItemBo;
     }
 

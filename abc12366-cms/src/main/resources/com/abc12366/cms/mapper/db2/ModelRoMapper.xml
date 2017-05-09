@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="model" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="modelBo" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_model
@@ -21,7 +21,6 @@
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_model
-		WHERE modelId = #{modelId}
 	</select>
 
 

@@ -21,7 +21,7 @@ public interface ModelItemRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	ModelItemBo selectByPrimaryKey(@Param("ModelItem") String modelitemId);
+	ModelItemBo selectByPrimaryKey(@Param("modelitemId") String modelitemId);
 
 	/**
 	 *

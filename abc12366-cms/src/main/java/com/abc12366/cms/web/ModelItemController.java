@@ -38,7 +38,7 @@ public class ModelItemController {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("modelId",modelId);
-        dataMap.put("isChannel",0);
+        dataMap.put("isChannel",isChannel);
         List<ModelItemBo> dataList = modelItemService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(dataList);
