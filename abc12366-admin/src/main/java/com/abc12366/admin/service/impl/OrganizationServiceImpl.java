@@ -29,8 +29,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationRoMapper organizationRoMapper;
 
     @Override
-    public List<Organization> selectList() {
-        return organizationRoMapper.selectList();
+    public List<Organization> selectList(Organization organization) {
+        return organizationRoMapper.selectList(organization);
     }
 
     @Transactional("db2TxManager")

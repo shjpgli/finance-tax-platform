@@ -21,7 +21,7 @@ import java.util.List;
  * @description：组织管理
  */
 @Controller
-@RequestMapping("/organization")
+@RequestMapping("/org")
 public class OrganizationController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(OrganizationController.class);
@@ -37,9 +37,13 @@ public class OrganizationController {
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam String name,@RequestParam Boolean status) {
+        Organization organization = new Organization();
+        organization.setName(name);
+        organization.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<Organization> dataList = organizationService.selectList();
+        List<Organization> dataList = organizationService.selectList(organization);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
@@ -85,7 +89,7 @@ public class OrganizationController {
     }
 
     /**
-     * 删除组织
+     * 删除组织--物理删除
      *
      * @param id
      * @return

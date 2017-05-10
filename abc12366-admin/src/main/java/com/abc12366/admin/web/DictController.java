@@ -1,8 +1,10 @@
 package com.abc12366.admin.web;
 
+import com.abc12366.admin.model.Dict;
 import com.abc12366.admin.model.bo.DictBO;
 import com.abc12366.admin.model.bo.DictUpdateBO;
 import com.abc12366.admin.service.DictService;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +45,25 @@ public class DictController {
         return ResponseEntity.ok(dictBOs);
     }
 
-    @GetMapping(path="/{id}")
-    public ResponseEntity selectOne(@PathVariable String id){
-        DictBO dictBO = dictService.selectOne(id);
-        LOGGER.info("{}",dictBO);
+    @GetMapping(path="/kv")
+    public ResponseEntity selectOne(@RequestParam String dictId,@RequestParam String dictName){
+        DictBO dictBO = null;
+        boolean isNull = false;
+        if(dictId != null && !"".equals(dictId)) {
+            isNull = true;
+        }
+        if(dictName != null && !"".equals(dictName)){
+            isNull = true;
+        }
+        if(isNull){
+            Dict dict = new Dict();
+            dict.setDictId(dictId);
+            dict.setDictName(dictName);
+            dictBO = dictService.selectOne(dict);
+            LOGGER.info("{}",dictBO);
+        }else {
+            throw new ServiceException(4124);
+        }
         return ResponseEntity.ok(dictBO);
     }
 

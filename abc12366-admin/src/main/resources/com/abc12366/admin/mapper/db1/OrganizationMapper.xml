@@ -15,7 +15,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="organization">
+	<insert id="insertSelective" parameterType="organization">
 		 INSERT INTO sys_organization
  		(id,parentId,name,code,areaId,type,contact,phone,address,remark,status,createUser,createTime,lastUser,lastUpdate) 
 		 VALUES 
@@ -23,7 +23,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="organization">
+	<insert id="insert" parameterType="organization">
 		 INSERT INTO sys_organization
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">

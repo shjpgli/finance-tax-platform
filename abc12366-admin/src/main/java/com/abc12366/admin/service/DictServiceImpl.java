@@ -60,13 +60,13 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-    public DictBO selectOne(String id){
-        Dict dict = dictRoMapper.selectOne(id);
+    public DictBO selectOne(Dict dict){
+        Dict dict1 = dictRoMapper.selectOne(dict);
         DictBO dictBO = new DictBO();
-        if(dict == null){
+        if(dict1 == null){
             return null;
         }
-        BeanUtils.copyProperties(dict,dictBO);
+        BeanUtils.copyProperties(dict1,dictBO);
         return dictBO;
     }
 
@@ -84,9 +84,6 @@ public class DictServiceImpl implements DictService {
         dict.setCreateTime(new Date());
         dict.setLastUpdate(new Date());
 
-        //TODO 暂时无法获取用户数据
-        //dict.setCreateUser("");
-        //dict.setLastUser("");
         dictMapper.insert(dict);
         BeanUtils.copyProperties(dict,dictBO);
         return dictBO;
@@ -95,7 +92,7 @@ public class DictServiceImpl implements DictService {
     @Transactional("db2TxManager")
     @Override
     public DictBO update(DictUpdateBO dictUpdateBO) {
-        Dict dict = dictRoMapper.selectOne(dictUpdateBO.getId());
+        Dict dict = dictRoMapper.selectByDictId(dictUpdateBO.getId());
         if(dict == null){
             return null;
         }
@@ -114,7 +111,7 @@ public class DictServiceImpl implements DictService {
     @Transactional("db2TxManager")
     @Override
     public DictBO delete(String id) {
-        Dict dict = dictRoMapper.selectOne(id);
+        Dict dict = dictRoMapper.selectByDictId(id);
         DictBO dictBO = new DictBO();
         if(dict != null){
             BeanUtils.copyProperties(dict,dictBO);
