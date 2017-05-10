@@ -4,6 +4,7 @@ import com.abc12366.cms.model.ModelItem;
 import com.abc12366.cms.model.bo.ContentQueryBo;
 import com.abc12366.cms.model.bo.ContentSaveBo;
 import com.abc12366.cms.model.bo.ContentListBo;
+import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -69,7 +70,10 @@ public class ContentController {
     @GetMapping(path = "/init")
     public ResponseEntity init(@RequestParam(value = "modelId", required = false) String modelId) {
         //查询模型项
-        List<ModelItem> contents = contentService.selectModeList(modelId);
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("modelId",modelId);
+        dataMap.put("isChannel",0);
+        List<ModelItemBo> contents = contentService.selectModeList(dataMap);
         LOGGER.info("{}", contents);
         return ResponseEntity.ok(contents);
     }

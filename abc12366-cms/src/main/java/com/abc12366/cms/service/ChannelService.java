@@ -2,18 +2,27 @@ package com.abc12366.cms.service;
 
 
 import com.abc12366.cms.model.Channel;
+import com.abc12366.cms.model.bo.ChannelBo;
+import com.abc12366.cms.model.bo.ChannelQueryBo;
+import com.abc12366.cms.model.bo.ChannelSaveBo;
+import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.vo.ChannelVO;
 import com.abc12366.cms.vo.SiteVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ChannelService {
 
-    List<ChannelVO> selectList();
+    List<ChannelBo> selectList();
 
-    int update(ChannelVO channelVO);
+    List<ModelItemBo> selectModeList(Map<String,Object> map);
 
-    ChannelVO selectOneById(String channel);
+    ChannelSaveBo save(ChannelSaveBo channelSaveBo);
 
-    List<Channel> selectListByParam(Channel channel);
+    ChannelQueryBo selectChannel(String channelId);
+
+    ChannelSaveBo update(ChannelSaveBo channelSaveBo);
+
+    String delete(String channelId);
 }

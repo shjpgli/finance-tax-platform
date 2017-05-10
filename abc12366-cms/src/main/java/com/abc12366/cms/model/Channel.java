@@ -13,6 +13,9 @@ public class Channel implements Serializable {
 	/****/
 	private String channelId;
 
+	/**栏目名称**/
+	private String channelName;
+
 	/**模型ID**/
 	private String modelId;
 
@@ -35,6 +38,14 @@ public class Channel implements Serializable {
 
 	public void setChannelId(String channelId){
 		this.channelId = channelId;
+	}
+
+	public String getChannelName() {
+		return channelName;
+	}
+
+	public void setChannelName(String channelName) {
+		this.channelName = channelName;
 	}
 
 	public String getChannelId(){

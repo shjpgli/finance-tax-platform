@@ -5,15 +5,22 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay
+		channelId,channelName,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="channel" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="channelBo" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_channel
 		 WHERE channelId = #{channelId}
+	</select>
+
+	<!-- 查询（根据查询条件查询） -->
+	<select id="selectList" resultType="channelBo" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cms_channel order by priority
 	</select>
 
 
