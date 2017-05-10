@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	modelId,	field,	itemLabel,	priority,	defValue,	optValue,	textSize,	areaRows,	areaCols,	help,	helpPosition,	dataType,	isSingle,	isChannel,	isCustom,	isDisplay,	isRequired,	imageWidth,	imageHeight
+		 modelitemId,	modelId,	field,	itemLabel,	priority,	defValue,	optValue,	textSize,	areaRows,	areaCols,	help,	helpPosition,	dataType,	isSingle,	isChannel,	isCustom,	isDisplay,	isRequired,	imageWidth,	imageHeight
 	</sql>
 
 	<!--删除：根据主键ID删除-->

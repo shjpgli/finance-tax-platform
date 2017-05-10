@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	modelName,	modelPath,	tplChannelPrefix,	tplContentPrefix,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	priority,	hasContent,	isDisabled,	isDef,	isGlobal,	siteId
+		 modelId,	modelName,	modelPath,	tplChannelPrefix,	tplContentPrefix,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	priority,	hasContent,	isDisabled,	isDef,	isGlobal,	siteId
 	</sql>
 
 	<!--删除：根据主键ID删除-->

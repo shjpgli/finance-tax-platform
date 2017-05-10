@@ -3,8 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db1.ApiLogMapper">
 
+    <select id="create" parameterType="TableBO">
+        CREATE TABLE IF NOT EXISTS gw_api_log_${yyyyMMdd} like gw_api_log
+    </select>
+
     <insert id="insert" parameterType="ApiLog">
-        insert into gw_api_log (id, uri, userAgent, ip, inTime, outTime, status, appId, userId, message)
-        values (#{id}, #{uri}, #{userAgent}, #{ip}, #{inTime}, #{outTime}, #{status}, #{appId}, #{userId}, #{message})
+        insert into gw_api_log_${yyyyMMdd} (id, uri, userAgent, ip, inTime, outTime, status, appId, userId, version)
+        values (#{id}, #{uri}, #{userAgent}, #{ip}, #{inTime}, #{outTime}, #{status}, #{appId}, #{userId}, #{version})
     </insert>
 </mapper>

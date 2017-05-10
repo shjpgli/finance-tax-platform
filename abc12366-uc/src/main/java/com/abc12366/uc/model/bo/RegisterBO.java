@@ -17,12 +17,45 @@ public class RegisterBO implements Serializable {
     private String username;
 
     @NotEmpty(message = "手机号不能为空")
-    @Size(min = 11, max= 11, message = "手机号必须为11为数字")
+    @Size(min = 11, max = 11, message = "手机号必须为11为数字")
     private String phone;
 
     @NotEmpty(message = "密码不能为空")
     @Size(min = 8, max = 32, message = "密码必须8-32位")
     private String password;
+
+    private String regMail;
+    private String realName;
+    private String userPicturePath;
+    private String regIP;
+    private String salt;
+
+    public String getRegMail() {
+        return regMail;
+    }
+
+    public void setRegMail(String regMail) {
+        this.regMail = regMail;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public RegisterBO(String username, String phone, String password, String regMail, String realName, String userPicturePath, String regIP, String salt) {
+        this.username = username;
+        this.phone = phone;
+        this.password = password;
+        this.regMail = regMail;
+        this.realName = realName;
+        this.userPicturePath = userPicturePath;
+        this.regIP = regIP;
+        this.salt = salt;
+    }
 
     public RegisterBO() {
     }
@@ -57,12 +90,41 @@ public class RegisterBO implements Serializable {
         this.password = password;
     }
 
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
+    }
+
+    public String getRegIP() {
+        return regIP;
+    }
+
+    public void setRegIP(String regIP) {
+        this.regIP = regIP;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     @Override
     public String toString() {
         return "RegisterBO{" +
                 "username='" + username + '\'' +
                 ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
+                ", regMail='" + regMail + '\'' +
+                ", realName='" + realName + '\'' +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", regIP='" + regIP + '\'' +
+                ", salt='" + salt + '\'' +
                 '}';
     }
 }

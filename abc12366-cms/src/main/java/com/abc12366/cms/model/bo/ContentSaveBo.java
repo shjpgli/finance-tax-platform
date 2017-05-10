@@ -13,12 +13,12 @@ import java.util.List;
  **/
 @SuppressWarnings("serial")
 public class ContentSaveBo implements Serializable {
-	private Content content;
-	private ContentExt contentExt;
-	private ContentTxt contentTxt;
-	private List<ContentAttr> contentAttrList;
-	private List<ContentPicture> contentPictureList;
-	private List<File> fileList;
+	private ContentBo content;//内容
+	private ContentExtBo contentExt;//内容扩展
+	private ContentTxtBo contentTxt;//内容文本
+	private List<ContentAttrBo> contentAttrList;//内容扩展属性
+	private List<ContentPictureBo> contentPictureList;//内容图片
+	private List<FileBo> fileList;//内容附件
 
 	/**专题ID**/
 	private String topicId;
@@ -26,51 +26,51 @@ public class ContentSaveBo implements Serializable {
 	/**0 新增 1修改 2审核 3退回 4移动 5生成静态页 6删除到回收站 7归档 8出档 9推送共享**/
 	private Integer operateType;
 
-	public Content getContent() {
+	public ContentBo getContent() {
 		return content;
 	}
 
-	public void setContent(Content content) {
+	public void setContent(ContentBo content) {
 		this.content = content;
 	}
 
-	public ContentExt getContentExt() {
+	public ContentExtBo getContentExt() {
 		return contentExt;
 	}
 
-	public void setContentExt(ContentExt contentExt) {
+	public void setContentExt(ContentExtBo contentExt) {
 		this.contentExt = contentExt;
 	}
 
-	public ContentTxt getContentTxt() {
+	public ContentTxtBo getContentTxt() {
 		return contentTxt;
 	}
 
-	public void setContentTxt(ContentTxt contentTxt) {
+	public void setContentTxt(ContentTxtBo contentTxt) {
 		this.contentTxt = contentTxt;
 	}
 
-	public List<ContentAttr> getContentAttrList() {
+	public List<ContentAttrBo> getContentAttrList() {
 		return contentAttrList;
 	}
 
-	public void setContentAttrList(List<ContentAttr> contentAttrList) {
+	public void setContentAttrList(List<ContentAttrBo> contentAttrList) {
 		this.contentAttrList = contentAttrList;
 	}
 
-	public List<ContentPicture> getContentPictureList() {
+	public List<ContentPictureBo> getContentPictureList() {
 		return contentPictureList;
 	}
 
-	public void setContentPictureList(List<ContentPicture> contentPictureList) {
+	public void setContentPictureList(List<ContentPictureBo> contentPictureList) {
 		this.contentPictureList = contentPictureList;
 	}
 
-	public List<File> getFileList() {
+	public List<FileBo> getFileList() {
 		return fileList;
 	}
 
-	public void setFileList(List<File> fileList) {
+	public void setFileList(List<FileBo> fileList) {
 		this.fileList = fileList;
 	}
 

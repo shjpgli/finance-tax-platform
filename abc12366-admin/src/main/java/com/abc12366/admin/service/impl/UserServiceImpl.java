@@ -7,11 +7,12 @@ import com.abc12366.admin.mapper.db1.UserMapper;
 import com.abc12366.admin.mapper.db1.UserRoleMapper;
 import com.abc12366.admin.mapper.db2.*;
 import com.abc12366.admin.model.*;
+import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.model.bo.UserExtendBO;
 import com.abc12366.admin.service.UserService;
-import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.DateUtils;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
@@ -219,7 +220,29 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4123);
             }
             //查找用户登录信息
-            LoginInfo loginInfo = getLoginInfo(user, userToken, app);
+            LoginInfo loginInfo = new LoginInfo();
+            loginInfo.setUserId(user.getId());
+            loginInfo.setAppId(app.getId());
+            loginInfo.setToken(userToken);
+            Date date = new Date();
+            loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
+            LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
+            //判断该用户是否存在此应用的登录信息
+            if (info != null) {
+                loginInfo.setId(info.getId());
+                int update = loginInfoMapper.update(loginInfo);
+                if (update != 1) {
+                    LOGGER.error("修改登录信息失败：{}", update);
+                    throw new ServiceException(4132);
+                }
+            } else {
+                loginInfo.setId(Utils.uuid());
+                int insert = loginInfoMapper.insertSelective(loginInfo);
+                if (insert != 1) {
+                    LOGGER.error("新增登录信息失败：{}", insert);
+                    throw new ServiceException(4131);
+                }
+            }
             BeanUtils.copyProperties(user, userBO);
             userBO.setLoginInfo(loginInfo);
 
@@ -273,7 +296,7 @@ public class UserServiceImpl implements UserService {
         loginInfo.setAppId(app.getId());
         loginInfo.setToken(userToken);
         Date date = new Date();
-        loginInfo.setLastResetTokenTime(Utils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
+        loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
         LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
         //判断该用户是否存在此应用的登录信息
         if (info != null) {

@@ -17,7 +17,7 @@ public interface CommentExtRoMapper {
 	 * 查询(根据主键ID查询)
 	 * 
 	 **/
-	CommentExt selectByPrimaryKey(@Param("id") Long id);
+	CommentExt selectByPrimaryKey(@Param("commentId") String commentId);
 
 
 }

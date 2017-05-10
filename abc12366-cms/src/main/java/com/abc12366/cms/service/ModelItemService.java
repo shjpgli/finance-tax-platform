@@ -1,21 +1,23 @@
 package com.abc12366.cms.service;
 
-
-import com.abc12366.cms.vo.ModelItemVO;
+import com.abc12366.cms.model.bo.ModelBo;
+import com.abc12366.cms.model.bo.ModelItemBo;
+import com.abc12366.cms.model.bo.ModelItemListBo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ModelItemService {
+    List<ModelItemBo> selectList(Map<String,Object> map);
 
-    List<ModelItemVO> selectList();
+    ModelItemListBo updateList(ModelItemListBo modelItemListBo);
 
-    int update(ModelItemVO modelItemVO);
+    ModelItemBo save(ModelItemBo modelItemBo);
 
-    ModelItemVO selectOneById(String modelItemId);
+    ModelItemBo selectModel(String modelItemId);
 
-    List<ModelItemVO> selectListByParam(ModelItemVO modelItemVO);
+    ModelItemBo update(ModelItemBo modelItemBo);
 
-    int delete(ModelItemVO modelItemVO);
+    String delete(String modelItemId);
 
-    int deleteById(String modelItemId);
 }

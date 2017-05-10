@@ -1,5 +1,7 @@
 package com.abc12366.gateway.model;
 
+import com.abc12366.gateway.model.bo.TableBO;
+
 /**
  * 日志信息对象
  *
@@ -7,7 +9,7 @@ package com.abc12366.gateway.model;
  * @create 2017-04-05 9:36 AM
  * @since 1.0.0
  */
-public class ApiLog {
+public class ApiLog extends TableBO {
 
     // 主键UUID
     private String id;
@@ -27,14 +29,15 @@ public class ApiLog {
     private long outTime;
     // 结果状态
     private int status;
-    // 附言
-    private String message;
+    // 版本
+    private String version;
 
     public ApiLog() {
     }
 
-    public ApiLog(String id, String uri, String userAgent, String appId, String userId, String ip, long inTime,
-                  long outTime, int status, String message) {
+    public ApiLog(String yyyyMMdd, String id, String uri, String userAgent, String appId, String userId, String ip,
+                  long inTime, long outTime, int status, String version) {
+        super(yyyyMMdd);
         this.id = id;
         this.uri = uri;
         this.userAgent = userAgent;
@@ -44,7 +47,7 @@ public class ApiLog {
         this.inTime = inTime;
         this.outTime = outTime;
         this.status = status;
-        this.message = message;
+        this.version = version;
     }
 
     private ApiLog(Builder builder) {
@@ -57,7 +60,7 @@ public class ApiLog {
         setInTime(builder.inTime);
         setOutTime(builder.outTime);
         setStatus(builder.status);
-        setMessage(builder.message);
+        setVersion(builder.version);
     }
 
     public String getId() {
@@ -132,12 +135,12 @@ public class ApiLog {
         this.status = status;
     }
 
-    public String getMessage() {
-        return message;
+    public String getVersion() {
+        return version;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     @Override
@@ -152,10 +155,9 @@ public class ApiLog {
                 ", inTime=" + inTime +
                 ", outTime=" + outTime +
                 ", status=" + status +
-                ", message='" + message + '\'' +
-                '}';
+                ", version='" + version + '\'' +
+                "} " + super.toString();
     }
-
 
     public static final class Builder {
         private String id;
@@ -167,7 +169,7 @@ public class ApiLog {
         private long inTime;
         private long outTime;
         private int status;
-        private String message;
+        private String version;
 
         public Builder() {
         }
@@ -217,8 +219,8 @@ public class ApiLog {
             return this;
         }
 
-        public Builder message(String val) {
-            message = val;
+        public Builder version(String val) {
+            version = val;
             return this;
         }
 

@@ -170,7 +170,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Content">
+	<update id="updateByPrimaryKey" parameterType="content">
 		 UPDATE cms_content
 		 SET 
 			 channelId = #{channelId},

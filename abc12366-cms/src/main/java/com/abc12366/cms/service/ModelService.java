@@ -2,17 +2,20 @@ package com.abc12366.cms.service;
 
 
 import com.abc12366.cms.model.Channel;
+import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.vo.ChannelVO;
 
 import java.util.List;
 
 public interface ModelService {
 
-    List<ChannelVO> selectList();
+    List<ModelBo> selectList();
 
-    int update(ChannelVO channelVO);
+    ModelBo save(ModelBo modelBo);
 
-    ChannelVO selectOneById(String channel);
+    ModelBo selectModel(String modelId);
 
-    List<Channel> selectListByParam(Channel channel);
+    ModelBo update(ModelBo modelBo);
+
+    String delete(String modelId);
 }

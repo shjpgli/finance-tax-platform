@@ -13,7 +13,7 @@ public interface UserRoMapper {
 
     List<User> selectList();
 
-    User selectOne(Long id);
+    User selectOne(String id);
 
     User selectByUsernameOrPhone(String usernameOrPhone);
 

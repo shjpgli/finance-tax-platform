@@ -13,5 +13,5 @@ import java.util.List;
  **/
 @SuppressWarnings("serial")
 public class ContentInitBo implements Serializable {
-	private List<ModelItem> contentModelItemBo;
+	private List<ModelItemBo> contentModelItemBo;
 }

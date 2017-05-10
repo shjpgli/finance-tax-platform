@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	ip,	text,	reply
+		commentId,	ip,	text,	reply
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

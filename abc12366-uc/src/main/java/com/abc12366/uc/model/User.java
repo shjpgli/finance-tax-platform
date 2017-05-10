@@ -13,53 +13,37 @@ import java.util.List;
 public class User {
 
     private String id;
-
     private String username;
-
-    private String password;
-
     private String phone;
-
-    private boolean enabled;
-
-    private Date lastPasswordResetDate;
-
-    private Date createDate;
-
-    private Date modifyDate;
-
-    private List<String> roles;
+    private String password;
+    private String regMail;
+    private String userPicturePath;
+    private String regIP;
+    private String salt;
+    private String realName;
+    private boolean status;
+    private Date createTime;
+    private Date lastUpdate;
 
     public User() {
     }
 
-    public User(String id, String username, String password, String phone, boolean enabled,
-                Date lastPasswordResetDate, Date createDate, Date modifyDate, List<String> roles) {
+    public User(Builder builder) {
+    }
+
+    public User(String id, String username, String phone, String password, String regMail, String userPicturePath, String regIP, String salt, String realName, boolean status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.phone = phone;
-        this.enabled = enabled;
-        this.lastPasswordResetDate = lastPasswordResetDate;
-        this.createDate = createDate;
-        this.modifyDate = modifyDate;
-        this.roles = roles;
-    }
-
-    private User(Builder builder) {
-        setId(builder.id);
-        setUsername(builder.username);
-        setPassword(builder.password);
-        setPhone(builder.phone);
-        setEnabled(builder.enabled);
-        setLastPasswordResetDate(builder.lastPasswordResetDate);
-        setCreateDate(builder.createDate);
-        setModifyDate(builder.modifyDate);
-        setRoles(builder.roles);
-    }
-
-    public User(User user) {
-        this.id= user.getId();
+        this.password = password;
+        this.regMail = regMail;
+        this.userPicturePath = userPicturePath;
+        this.regIP = regIP;
+        this.salt = salt;
+        this.realName = realName;
+        this.status = status;
+        this.createTime = createTime;
+        this.lastUpdate = lastUpdate;
     }
 
     public String getId() {
@@ -78,14 +62,6 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -94,58 +70,93 @@ public class User {
         this.phone = phone;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Date getLastPasswordResetDate() {
-        return lastPasswordResetDate;
+    public String getRegMail() {
+        return regMail;
     }
 
-    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
-        this.lastPasswordResetDate = lastPasswordResetDate;
+    public void setRegMail(String regMail) {
+        this.regMail = regMail;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public String getUserPicturePath() {
+        return userPicturePath;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
+    public String getRegIP() {
+        return regIP;
     }
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setRegIP(String regIP) {
+        this.regIP = regIP;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public String getSalt() {
+        return salt;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
-                ", enabled=" + enabled +
-                ", lastPasswordResetDate=" + lastPasswordResetDate +
-                ", createDate=" + createDate +
-                ", modifyDate=" + modifyDate +
-                ", roles=" + roles +
+                ", password='" + password + '\'' +
+                ", regMail='" + regMail + '\'' +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", regIP='" + regIP + '\'' +
+                ", salt='" + salt + '\'' +
+                ", realName='" + realName + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
                 '}';
     }
 
@@ -156,19 +167,21 @@ public class User {
 
         User user = (User) o;
 
-        if (enabled != user.enabled) return false;
+        if (status != user.status) return false;
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
-        if (lastPasswordResetDate != null ? !lastPasswordResetDate.equals(user.lastPasswordResetDate) : user.lastPasswordResetDate != null)
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (regMail != null ? !regMail.equals(user.regMail) : user.regMail != null) return false;
+        if (userPicturePath != null ? !userPicturePath.equals(user.userPicturePath) : user.userPicturePath != null)
             return false;
-        if (createDate != null ? !createDate.equals(user.createDate) : user.createDate != null) return false;
-        if (modifyDate != null ? !modifyDate.equals(user.modifyDate) : user.modifyDate != null) return false;
-        return !(roles != null ? !roles.equals(user.roles) : user.roles != null);
+        if (regIP != null ? !regIP.equals(user.regIP) : user.regIP != null) return false;
+        if (salt != null ? !salt.equals(user.salt) : user.salt != null) return false;
+        if (realName != null ? !realName.equals(user.realName) : user.realName != null) return false;
+        if (createTime != null ? !createTime.equals(user.createTime) : user.createTime != null) return false;
+        return !(lastUpdate != null ? !lastUpdate.equals(user.lastUpdate) : user.lastUpdate != null);
 
     }
-
 
     public static final class Builder {
         private String id;
@@ -179,7 +192,6 @@ public class User {
         private Date lastPasswordResetDate;
         private Date createDate;
         private Date modifyDate;
-        private List<String> roles;
 
         public Builder() {
         }
@@ -221,11 +233,6 @@ public class User {
 
         public Builder modifyDate(Date val) {
             modifyDate = val;
-            return this;
-        }
-
-        public Builder roles(List<String> val) {
-            roles = val;
             return this;
         }
 

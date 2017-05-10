@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.Channel;
+import com.abc12366.cms.model.bo.ChannelBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,7 +20,9 @@ public interface ChannelRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	Channel selectByPrimaryKey(@Param("id") Long id);
+	ChannelBo selectByPrimaryKey(@Param("channelId") String channelId);
 
-	List<Channel> selectListByParam(Channel channel);
+	List<ChannelBo> selectListByParam(Channel channel);
+
+	List<ChannelBo> selectList();
 }

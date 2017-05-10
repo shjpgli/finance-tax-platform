@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +37,11 @@ public class GlobalExceptionHandler {
             bodyStatus = Utils.bodyStatus(4005);
             LOGGER.warn(bodyStatus.getMessage() + e);
             return new ResponseEntity<>(bodyStatus, HttpStatus.METHOD_NOT_ALLOWED);
+
+        } else if (e instanceof HttpMediaTypeNotSupportedException) {
+            bodyStatus = Utils.bodyStatus(4011);
+            LOGGER.error(bodyStatus.getMessage() + e);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
 
         } else if (e instanceof HttpMessageNotReadableException) {
             bodyStatus = Utils.bodyStatus(4004);

@@ -15,11 +15,13 @@ public class Constant {
     public final static String VERSION_2 = "2";
 
     // App验证头
-    public final static String APP_TOKEN_HEAD = "App-Token";
+    public final static String APP_TOKEN_HEAD = "Access-Token";
+    // App ID
+    public final static String APP_ID = "App-Id";
     // App默认有效期：3年
     public final static int APP_VALID_YEARS = 3;
-    // App token有效期：168小时
-    public final static int APP_TOKEN_VALID_HOURS = 7 * 24;
+    // App token有效期：2小时
+    public final static long APP_TOKEN_VALID_SECONDS = 3600 * 2;
     // 用户验证头
     public final static String USER_TOKEN_HEAD = "User-Token";
     // 用户token有效期：168小时

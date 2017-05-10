@@ -1,8 +1,10 @@
 package com.abc12366.cms.service;
 
 import com.abc12366.cms.model.ModelItem;
+import com.abc12366.cms.model.bo.ContentQueryBo;
 import com.abc12366.cms.model.bo.ContentSaveBo;
 import com.abc12366.cms.model.bo.ContentListBo;
+import com.abc12366.cms.model.bo.ModelItemBo;
 
 import java.util.List;
 import java.util.Map;
@@ -17,14 +19,14 @@ import java.util.Map;
 public interface ContentService {
     List<ContentListBo> selectList(Map<String,Object> map);
 
-    List<ModelItem> selectModeList(String modelId);
+    List<ModelItemBo> selectModeList(Map<String,Object> map);
 
-    String save(ContentSaveBo contentSaveDto);
+    ContentSaveBo save(ContentSaveBo contentSaveBo);
 
-    ContentSaveBo selectContent(String contentId);
+    ContentQueryBo selectContent(String contentId);
 
-    String update(ContentSaveBo contentSaveDto);
+    ContentSaveBo update(ContentSaveBo contentSaveBo);
 
-    String delete(Long contentId);
+    String delete(String contentId);
 
 }

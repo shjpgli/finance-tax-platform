@@ -51,7 +51,7 @@ public class Content implements Serializable {
 	private Integer commentsDay;
 
 	/**日下载数**/
-	private Integer downloadsDay;
+	private Integer downloadsDay = 0;
 
 	/**日顶数**/
 	private Integer upsDay;

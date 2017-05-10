@@ -3,11 +3,12 @@ package com.abc12366.gateway.service;
 import com.abc12366.gateway.mapper.db1.ApiLogMapper;
 import com.abc12366.gateway.mapper.db2.ApiLogRoMapper;
 import com.abc12366.gateway.model.ApiLog;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.abc12366.gateway.model.bo.TableBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -24,8 +25,13 @@ public class ApiLogServiceImpl implements ApiLogService {
     @Autowired
     private ApiLogRoMapper apiLogRoMapper;
 
+    @Transactional(value = "gw1TxManager", rollbackFor = SQLException.class)
     @Override
     public void insert(ApiLog log) {
+        TableBO tableBO = new TableBO();
+        tableBO.setYyyyMMdd(log.getYyyyMMdd());
+        apiLogMapper.create(tableBO);
+
         apiLogMapper.insert(log);
     }
 

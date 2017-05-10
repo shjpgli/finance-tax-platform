@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,5 +65,13 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
 //        }
 
         return true;
+    }
+
+    @Override
+    public void postHandle(
+            HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+            throws Exception {
+        // 移除appId，用于在业务中快速获取有效AppId，在AppInterceptor.preHandle.isAuthentization中设置
+        request.removeAttribute(Constant.APP_ID);
     }
 }

@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.ModelItem;
+import com.abc12366.cms.model.bo.ModelItemBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,14 +21,14 @@ public interface ModelItemRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	ModelItem selectByPrimaryKey(@Param("id") Long id);
+	ModelItemBo selectByPrimaryKey(@Param("modelitemId") String modelitemId);
 
 	/**
 	 *
 	 * 查询（根据modelId查询）
 	 *
 	 **/
-	List<ModelItem> selectModeList(String modelId);
+	List<ModelItemBo> selectList(Map map);
 
 
 }

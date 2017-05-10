@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	commentUserId,	replyUserId,	contentId,	siteId,	createTime,	replyTime,	ups,	downs,	isRecommend,	isChecked,	score,	parentId,	replyCount
+		commentId,	commentUserId,	replyUserId,	contentId,	siteId,	createTime,	replyTime,	ups,	downs,	isRecommend,	isChecked,	score,	parentId,	replyCount
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -14,6 +14,43 @@
 		 <include refid="Base_Column_List" />
 		 FROM cms_comment
 		 WHERE commentId = #{commentId}
+	</select>
+
+	<!-- 查询（根据查询条件查询） -->
+	<select id="selectList" resultType="commentListBo" parameterType="java.util.Map">
+		SELECT a.commentId commentId,
+		b.text TEXT,
+		b.reply reply,
+		c.title title,
+		b.ip ip,
+		a.createTime createTime,
+		a.commentUserId commentUserId
+		FROM cms_comment a,cms_comment_ext b,cms_content_ext c
+		WHERE a.commentId = b.commentId AND a.contentId = c.contentId
+		<if test="contentId != null and contentId != ''">
+			AND c.contentId like CONCAT('%',#{contentId},'%')
+		</if>
+		<if test="isChecked != null and isChecked != ''">
+			AND a.isChecked like CONCAT('%',#{isChecked},'%')
+		</if>
+		<if test="isRecommend != null and isRecommend != ''">
+			AND a.isRecommend = #{isRecommend}
+		</if>
+		ORDER BY a.createTime DESC
+
+	</select>
+
+	<!-- 查询（根据contentId查询） -->
+	<select id="selectBycontentId" resultType="commentBo" parameterType="java.lang.String">
+		SELECT a.commentId commentId,
+			   b.text TEXT,
+			   b.reply reply,
+			   b.ip ip,
+			   a.createTime createTime,
+			   a.commentUserId commentUserId
+		FROM cms_comment a,cms_comment_ext b
+		WHERE a.commentId = b.commentId
+		AND a.contentId = #{contentId}
 	</select>
 
 

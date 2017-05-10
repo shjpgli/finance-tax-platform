@@ -10,8 +10,14 @@
             <if test="id != null">
                 id = #{id}
             </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
             <if test="accessToken != null">
                 AND accessToken = #{accessToken}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
             </if>
         </where>
     </select>

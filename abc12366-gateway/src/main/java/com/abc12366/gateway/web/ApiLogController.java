@@ -23,7 +23,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/log", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/log", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class ApiLogController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);

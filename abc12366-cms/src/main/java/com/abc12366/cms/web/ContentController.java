@@ -1,10 +1,15 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.ModelItem;
+import com.abc12366.cms.model.bo.ContentQueryBo;
 import com.abc12366.cms.model.bo.ContentSaveBo;
 import com.abc12366.cms.model.bo.ContentListBo;
+import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +37,8 @@ public class ContentController {
     private ContentService contentService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "minNum", required = false) String minNum,
-                                     @RequestParam(value = "maxNum", required = false) String maxNum,
+    public ResponseEntity selectList(@RequestParam(value = "pageNum", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "pageSize", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "title", required = false) String title,
                                      @RequestParam(value = "topLevel", required = false) String topLevel,
                                      @RequestParam(value = "typeId", required = false) String typeId,
@@ -41,55 +46,71 @@ public class ContentController {
                                      @RequestParam(value = "status", required = false) String status,
                                      @RequestParam(value = "recommendLevel", required = false) String recommendLevel) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("title", title);
-        dataMap.put("topLevel", topLevel);
-        dataMap.put("typeId", typeId);
-        dataMap.put("author", author);
-        dataMap.put("status", status);
+        dataMap.put("title", title);//标题
+        dataMap.put("topLevel", topLevel);//置顶级别
+        dataMap.put("typeId", typeId);//内容类型
+        dataMap.put("author", author);//作者
+        dataMap.put("status", status);//状态
         dataMap.put("recommendLevel", recommendLevel);
-        dataMap.put("minNum", minNum);
-        dataMap.put("maxNum", maxNum);
-        List<ContentListBo> contents = contentService.selectList(dataMap);
-        LOGGER.info("{}", contents);
-        return ResponseEntity.ok(contents);
+
+        // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.
+        // 当Service中有多条select语句时，建议放在Service中，这时需要将Page对象传递到Service实现方法，返回对象也是Page对象。
+        // 将List对象强制转成Page可以获取Page的相关属性。如：((Page)dataList).getTotal()，总记录数统一使用total返回。
+        // 代码解释：
+        // count=true(第一个),默认值为false，是查询总记录数
+        // pageSizeZero=true,默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 pageNum = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是 Page 类型）
+        // reasonable=true,分页合理化参数，默认值为false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        //查询内容列表
+        List<ContentListBo> dataList = contentService.selectList(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
     @GetMapping(path = "/init")
     public ResponseEntity init(@RequestParam(value = "modelId", required = false) String modelId) {
-        List<ModelItem> contents = contentService.selectModeList(modelId);
+        //查询模型项
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("modelId",modelId);
+        dataMap.put("isChannel",0);
+        List<ModelItemBo> contents = contentService.selectModeList(dataMap);
         LOGGER.info("{}", contents);
         return ResponseEntity.ok(contents);
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody ContentSaveBo contentSaveDto) {
-        LOGGER.info("{}", contentSaveDto);
-        String rtn = contentService.save(contentSaveDto);
-        LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+    public ResponseEntity save(@RequestBody ContentSaveBo contentSaveBo) {
+        LOGGER.info("{}", contentSaveBo);
+        //新增内容信息
+        contentSaveBo = contentService.save(contentSaveBo);
+        LOGGER.info("{}", contentSaveBo);
+        return ResponseEntity.ok(contentSaveBo);
     }
 
     @GetMapping(path = "/{contentId}")
     public ResponseEntity selectOne(@PathVariable String contentId) {
         LOGGER.info("{}", contentId);
-        ContentSaveBo contentSaveDto = contentService.selectContent(contentId);
-        LOGGER.info("{}", contentSaveDto);
-        return ResponseEntity.ok(contentSaveDto);
+        //根据内容ID查询内容信息
+        ContentQueryBo contentQueryBo = contentService.selectContent(contentId);
+        LOGGER.info("{}", contentQueryBo);
+        return ResponseEntity.ok(contentQueryBo);
     }
 
     @PutMapping(path = "/{contentId}")
     public ResponseEntity update(@PathVariable String contentId,
-                                 @Valid @RequestBody ContentSaveBo contentSaveDto) {
+                                 @Valid @RequestBody ContentSaveBo contentSaveBo) {
 
-        LOGGER.info("{}", contentSaveDto);
-        String rtn = contentService.update(contentSaveDto);
-        LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        LOGGER.info("{}", contentSaveBo);
+        //更新内容信息
+        contentSaveBo = contentService.update(contentSaveBo);
+        LOGGER.info("{}", contentSaveBo);
+        return ResponseEntity.ok(contentSaveBo);
     }
 
     @DeleteMapping(path = "/{contentId}")
-    public ResponseEntity delete(@PathVariable Long contentId) {
+    public ResponseEntity delete(@PathVariable String contentId) {
         LOGGER.info("{}", contentId);
+        //删除内容信息
         String rtn = contentService.delete(contentId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);
