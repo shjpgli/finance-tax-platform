@@ -13,7 +13,7 @@ public interface AuthService {
 
     UserBO register(RegisterBO registerBO);
 
-    String login(LoginBO loginBO);
+    String login(LoginBO loginBO, String token) throws Exception;
 
     String refresh(String oldToken);
 }

@@ -22,7 +22,7 @@ import java.util.List;
  * @since 2.0.0
  */
 @RestController
-@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" +Constant.VERSION_1)
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -61,31 +61,11 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO) {
-        LOGGER.info("{}", registerBO);
-        UserBO userBO1 = userService.register(registerBO);
-        LOGGER.info("{}", userBO1);
-        return ResponseEntity.ok(userBO1);
-    }
-
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity delete(@PathVariable String userId) {
         LOGGER.info("{}", userId);
         UserBO userBO = userService.delete(userId);
         LOGGER.info("{}", userBO);
         return ResponseEntity.ok(userBO);
-    }
-
-    /*
-    用户登录方法：
-        1.请求访问时获取token，token为空则需要用户名和密码登录
-     */
-    @PostMapping(path = "/login")
-    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
-        LOGGER.info("{}", loginBO);
-        String userToken = userService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
-        LOGGER.info("{}", userToken);
-        return userToken != null ? ResponseEntity.ok(userToken) : new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

@@ -110,6 +110,9 @@ public class UserServiceImpl implements UserService {
     public UserBO register(RegisterBO registerBO) {
         LOGGER.info("{}", registerBO);
         User user = userRoMapper.selectByUsernameOrPhone(registerBO.getUsername());
+        if(user == null){
+            user = userRoMapper.selectByUsernameOrPhone(registerBO.getPhone());
+        }
         if (user == null) {
             String password;
             String encodePassword = null;
