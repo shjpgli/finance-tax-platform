@@ -41,7 +41,7 @@ public class Organization implements Serializable {
 	private String remark;
 
 	/**有效标志**/
-	private Integer status;
+	private Boolean status;
 
 	/**创建用户**/
 	private String createUser;
@@ -137,14 +137,6 @@ public class Organization implements Serializable {
 		return this.remark;
 	}
 
-	public void setStatus(Integer status){
-		this.status = status;
-	}
-
-	public Integer getStatus(){
-		return this.status;
-	}
-
 	public void setCreateUser(String createUser){
 		this.createUser = createUser;
 	}
@@ -177,4 +169,11 @@ public class Organization implements Serializable {
 		return this.lastUpdate;
 	}
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }

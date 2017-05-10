@@ -1,4 +1,7 @@
 package com.abc12366.admin.model;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -20,12 +23,18 @@ public class UserExtend implements Serializable {
 	private String orgId;
 
 	/**职务**/
+    @NotEmpty
+    @Size(min = 0, max = 32, message = "职务长度为0-32位")
 	private String job;
 
 	/**联系方式**/
+    @NotEmpty
+    @Size(min = 0, max = 20, message = "联系方式长度0-20位")
 	private String phone;
 
 	/**联系地址**/
+    @NotEmpty
+    @Size(min = 0, max = 100, message = "地址长度为0-100位")
 	private String address;
 
 	/**创建时间**/

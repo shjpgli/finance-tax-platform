@@ -1,5 +1,6 @@
 package com.abc12366.admin.service;
 
+import com.abc12366.admin.model.Dict;
 import com.abc12366.admin.model.bo.DictBO;
 import com.abc12366.admin.model.bo.DictUpdateBO;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public interface DictService {
     List<DictBO> selectList();
 
-    DictBO selectOne(String id);
+    DictBO selectOne(Dict dict);
 
     List<DictBO> selectFirstLevel();
 

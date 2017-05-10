@@ -15,7 +15,7 @@ public interface DictRoMapper {
 
     List<Dict> selectFirstLevel();
 
-    Dict selectOne(String id);
+    Dict selectOne(Dict dict);
 
     Dict selectByDictId(String dictId);
 

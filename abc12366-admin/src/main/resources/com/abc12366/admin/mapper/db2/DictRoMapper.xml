@@ -8,10 +8,14 @@
         from sys_dict
     </select>
 
-    <select id="selectOne" resultType="Dict">
+    <select id="selectOne" resultType="Dict" parameterType="Dict">
         select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
         from sys_dict
-        where id = #{id}
+        <where>
+            1=1
+            <if test="dictId != null and dictId!=''"> and dictId = #{dictId}</if>
+            <if test="dictName != null and dictName!=''"> and dictName = #{dictName}</if>
+        </where>
     </select>
 
     <select id="selectFirstLevel" resultType="Dict">

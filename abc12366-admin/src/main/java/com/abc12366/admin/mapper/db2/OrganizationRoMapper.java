@@ -21,5 +21,5 @@ public interface OrganizationRoMapper {
 	 **/
 	Organization  selectOrganizationById(@Param("id") String id);
 
-    List<Organization> selectList();
+    List<Organization> selectList(Organization organization);
 }

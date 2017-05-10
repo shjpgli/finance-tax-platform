@@ -3,6 +3,7 @@ package com.abc12366.admin.model.bo;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -14,16 +15,20 @@ public class MenuBO {
 
     private String menuId;
     @NotEmpty(message = "menuName不能为空")
+    @Size(min = 2, max = 32, message = "菜单名称长度2-32位")
     private String menuName;
     @NotEmpty(message = "menuUrl不能为空")
+    @Size(min = 0, max = 128, message = "联系方式长度0-128位")
     private String menuUrl;
     private String parentId;
+    @Size(min = 0, max = 500, message = "授权长度0-500位")
     private String perms;
     private String type;
     private String icon;
     private int sort;
     @NotNull(message = "status不能为空")
     private boolean status;
+    @Size(min = 0, max = 100, message = "备注长度0-20位")
     private String remark;
 
     public MenuBO() {

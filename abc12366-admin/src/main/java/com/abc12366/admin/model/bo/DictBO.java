@@ -2,6 +2,7 @@ package com.abc12366.admin.model.bo;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.lang.String;
 import java.util.Date;
 
@@ -21,7 +22,7 @@ public class DictBO{
     private String fieldKey;
     @NotEmpty(message = "fieldValue不能为空")
     private String fieldValue;
-    @NotEmpty(message = "status不能为空")
+    @NotNull(message = "status不能为空")
     private boolean status;
     private Date createTime;
     private String createUser;
