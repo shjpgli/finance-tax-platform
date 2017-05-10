@@ -1,8 +1,13 @@
 package com.abc12366.admin.web;
 
+import com.abc12366.admin.model.Menu;
+import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.bo.MenuBO;
 import com.abc12366.admin.service.MenuService;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +34,27 @@ public class MenuController {
     private MenuService menuService;
 
     @GetMapping
-    public ResponseEntity selectList() {
-        List<MenuBO> menuBOs = menuService.selectList();
-        LOGGER.info("{}", menuBOs);
-        return ResponseEntity.ok(menuBOs);
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam String menuName, @RequestParam String parentId, @RequestParam String type) {
+        Menu menu = new Menu();
+        menu.setMenuName(menuName);
+        menu.setParentId(parentId);
+        menu.setType(type);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<Menu> dataList = menuService.selectList(menu);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
-    @GetMapping(path = "/firstLevel")
-    public ResponseEntity selectFirstLevel() {
+    @GetMapping(path = "/{parentId}")
+    public ResponseEntity selectFirstLevel(@PathVariable String parentId) {
         List<MenuBO> menuBOs = menuService.selectFirstLevel();
         LOGGER.info("{}", menuBOs);
         return ResponseEntity.ok(menuBOs);
     }
 
-    @GetMapping(path = "/{parentId}")
+    @GetMapping(path = "/project/{parentId}")
     public ResponseEntity selectByParentId(@PathVariable String parentId) {
         LOGGER.info("{}", parentId);
         List<MenuBO> menuBOs = menuService.selectByParentId(parentId);

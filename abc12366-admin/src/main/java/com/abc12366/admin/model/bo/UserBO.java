@@ -1,11 +1,13 @@
 package com.abc12366.admin.model.bo;
 import com.abc12366.admin.model.LoginInfo;
+import com.abc12366.admin.model.Menu;
 import com.abc12366.admin.model.Role;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,7 +35,7 @@ public class UserBO implements Serializable {
 	private String nickname;
 
 	/**用户状态**/
-	private Integer status;
+	private Boolean status;
 
 	/**创建时间**/
 	private java.util.Date createTime;
@@ -50,6 +52,8 @@ public class UserBO implements Serializable {
     private String organizationName;
 
     private LoginInfo loginInfo;
+
+    private Map<String,List<Menu>> menuMap;
 
     public String getOrganizationId() {
         return organizationId;
@@ -115,14 +119,6 @@ public class UserBO implements Serializable {
 		return this.nickname;
 	}
 
-	public void setStatus(Integer status){
-		this.status = status;
-	}
-
-	public Integer getStatus(){
-		return this.status;
-	}
-
 	public void setCreateTime(java.util.Date createTime){
 		this.createTime = createTime;
 	}
@@ -145,5 +141,21 @@ public class UserBO implements Serializable {
 
     public void setLoginInfo(LoginInfo loginInfo) {
         this.loginInfo = loginInfo;
+    }
+
+    public Map<String, List<Menu>> getMenuMap() {
+        return menuMap;
+    }
+
+    public void setMenuMap(Map<String, List<Menu>> menuMap) {
+        this.menuMap = menuMap;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

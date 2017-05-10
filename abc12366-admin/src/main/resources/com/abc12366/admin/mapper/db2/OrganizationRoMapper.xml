@@ -16,9 +16,9 @@
 		 WHERE id = #{id}
 	</select>
 
-    <select id="selectList" resultMap="organization">
+    <select id="selectList" resultType="organization">
         select
         <include refid="Base_Column_List"/>
-        from organization order by createTime
+        from sys_organization order by createTime
     </select>
 </mapper>

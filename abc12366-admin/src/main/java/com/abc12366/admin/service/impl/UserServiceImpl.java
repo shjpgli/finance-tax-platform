@@ -2,31 +2,31 @@ package com.abc12366.admin.service.impl;
 
 
 import com.abc12366.admin.mapper.db1.LoginInfoMapper;
+import com.abc12366.admin.mapper.db1.UserExtendMapper;
 import com.abc12366.admin.mapper.db1.UserMapper;
 import com.abc12366.admin.mapper.db1.UserRoleMapper;
-import com.abc12366.admin.mapper.db2.LoginInfoRoMapper;
-import com.abc12366.admin.mapper.db2.UserRoMapper;
-import com.abc12366.admin.mapper.db2.UserRoleRoMapper;
-import com.abc12366.admin.model.LoginInfo;
-import com.abc12366.admin.model.User;
-import com.abc12366.admin.model.UserRole;
-import com.abc12366.admin.service.UserService;
+import com.abc12366.admin.mapper.db2.*;
+import com.abc12366.admin.model.*;
 import com.abc12366.admin.model.bo.UserBO;
+import com.abc12366.admin.model.bo.UserExtendBO;
+import com.abc12366.admin.service.UserService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.DateUtils;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
-import com.abc12366.gateway.model.bo.TokenBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,6 +46,8 @@ public class UserServiceImpl implements UserService {
     private UserRoleRoMapper userRoleRoMapper;
 
     @Autowired
+    private MenuRoMapper menuRoMapper;
+    @Autowired
     private LoginInfoMapper loginInfoMapper;
 
     @Autowired
@@ -53,6 +55,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AppRoMapper appRoMapper;
+
+    @Autowired
+    private UserExtendRoMapper userExtendRoMapper;
+
+    @Autowired
+    private UserExtendMapper userExtendMapper;
 
     @Override
     public User selectUserByLoginName(String username) {
@@ -70,8 +78,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> selectList() {
-        List<User> users = userRoMapper.selectList();
+    public List<User> selectList(User user) {
+        List<User> users = userRoMapper.selectList(user);
         /*if(users != null){
             List<UserBO> userBOs = new ArrayList<UserBO>();
             for (User user:users){
@@ -85,6 +93,7 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    @Transactional("db2TxManager")
     @Override
     public int register(UserBO userBO) {
         User user = new User();
@@ -131,6 +140,7 @@ public class UserServiceImpl implements UserService {
         return userRoMapper.selectUserBoById(id);
     }
 
+    @Transactional("db2TxManager")
     @Override
     public int updateUser(UserBO userBO) {
         User user = new User();
@@ -161,6 +171,7 @@ public class UserServiceImpl implements UserService {
         return upd;
     }
 
+    @Transactional("db2TxManager")
     @Override
     public int deleteUserById(String id) {
         int del = userMapper.deleteById(id);
@@ -175,14 +186,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User selectOne(String id) {
-//        User user = new User();
-//        BeanUtils.copyProperties(userBO,user);
         return userRoMapper.selectOne(id);
     }
 
+
+    @Transactional("db2TxManager")
     @Override
     public UserBO login(UserBO userBO, String appToken) {
-        User user = userRoMapper.selectUserByLoginName(userBO.getUsername());
+//        User user = userRoMapper.selectUserByLoginName(userBO.getUsername());
+        UserBO user = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
         String password = "";
         try {
             password = Utils.md5(userBO.getPassword());
@@ -233,8 +245,75 @@ public class UserServiceImpl implements UserService {
             }
             BeanUtils.copyProperties(user, userBO);
             userBO.setLoginInfo(loginInfo);
+
+            //查询用户菜单信息
+            Map<String,List<Menu>> menuMap = new HashMap<String,List<Menu>>();
+            List<Role> roles = userBO.getRolesList();
+            for(Role role:roles){
+                List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
+                menuMap.put(role.getId(),menus);
+            }
+            userBO.setMenuMap(menuMap);
             return userBO;
         }
         return null;
+    }
+
+    @Override
+    public UserExtend selectUserExtendByUserId(String id) {
+        return userExtendRoMapper.selectUserExtendByUserId(id);
+    }
+
+    @Override
+    public UserExtend updateUserExtend(UserExtendBO userExtendBO) {
+        UserExtend userExtend = new UserExtend();
+        BeanUtils.copyProperties(userExtendBO,userExtend);
+        //查询该用户是否存在详情，不存在，insert；存在，Update
+        UserExtend extend = userExtendRoMapper.selectUserExtendByUserId(userExtendBO.getUserId());
+        Date date = new Date();
+        if (extend == null){
+            userExtend.setId(Utils.uuid());
+            userExtend.setCreateTime(date);
+            userExtend.setLastUpdate(date);
+            int insert = userExtendMapper.insert(userExtend);
+            if(insert != 1){
+                throw new ServiceException(4101);
+            }
+            return userExtend;
+        }else{
+            userExtend.setId(extend.getId());
+            int upd = userExtendMapper.updateUserExtentBO(userExtend);
+            if(upd != 1){
+                throw new ServiceException(4102);
+            }
+            return userExtend;
+        }
+    }
+
+    private LoginInfo getLoginInfo(UserBO user, String userToken, App app) {
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setUserId(user.getId());
+        loginInfo.setAppId(app.getId());
+        loginInfo.setToken(userToken);
+        Date date = new Date();
+        loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
+        LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
+        //判断该用户是否存在此应用的登录信息
+        if (info != null) {
+            loginInfo.setId(info.getId());
+            int update = loginInfoMapper.update(loginInfo);
+            if (update != 1) {
+                LOGGER.error("修改登录信息失败：{}", update);
+                throw new ServiceException(4132);
+            }
+        } else {
+            loginInfo.setId(Utils.uuid());
+            int insert = loginInfoMapper.insertSelective(loginInfo);
+            if (insert != 1) {
+                LOGGER.error("新增登录信息失败：{}", insert);
+                throw new ServiceException(4131);
+            }
+        }
+        return loginInfo;
     }
 }

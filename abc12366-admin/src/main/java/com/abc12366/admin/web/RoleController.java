@@ -1,7 +1,9 @@
 package com.abc12366.admin.web;
 
 import com.abc12366.admin.model.Role;
+import com.abc12366.admin.model.RoleMenu;
 import com.abc12366.admin.model.bo.RoleBO;
+import com.abc12366.admin.model.bo.RoleMenuBO;
 import com.abc12366.admin.service.RoleService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
@@ -35,9 +37,13 @@ public class RoleController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam String roleName, @RequestParam Boolean status) {
+        Role role = new Role();
+        role.setRoleName(roleName);
+        role.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<Role> dataList = roleService.selectList();
+        List<Role> dataList = roleService.selectList(role);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
@@ -85,16 +91,14 @@ public class RoleController {
     /**
      * 授权
      *
-     * @param id
-     * @param resourceIds
+     * @param roleMenuBO
      * @return
      */
-    @RequestMapping("/grant")
-    @ResponseBody
-    public ResponseEntity grant(String id, String resourceIds) {
+    @PostMapping("/grant")
+    public ResponseEntity grant(@Valid @RequestBody RoleMenuBO roleMenuBO) {
         try {
-            roleService.updateRoleMenu(id, resourceIds);
-            LOGGER.info("{}", id, resourceIds);
+            roleService.updateRoleMenu(roleMenuBO.getRoleId(), roleMenuBO.getMenuId());
+            LOGGER.info("{}", roleMenuBO.toString());
             return ResponseEntity.ok(200);
         } catch (RuntimeException e) {
             throw new ServiceException(4107);

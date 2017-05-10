@@ -23,7 +23,7 @@ public class User implements Serializable {
 	private String nickname;
 
 	/**用户状态**/
-	private Integer status;
+	private Boolean status;
 
 	/**创建时间**/
 	private java.util.Date createTime;
@@ -73,14 +73,6 @@ public class User implements Serializable {
 		return this.nickname;
 	}
 
-	public void setStatus(Integer status){
-		this.status = status;
-	}
-
-	public Integer getStatus(){
-		return this.status;
-	}
-
 	public void setCreateTime(java.util.Date createTime){
 		this.createTime = createTime;
 	}
@@ -97,4 +89,11 @@ public class User implements Serializable {
 		return this.lastUpdate;
 	}
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }

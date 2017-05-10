@@ -16,8 +16,9 @@ public interface RoleService {
      * 查询权限树
      *
      * @return
+     * @param role
      */
-    List<Role> selectList();
+    List<Role> selectList(Role role);
 
     /**
      * 添加权限
@@ -60,9 +61,9 @@ public interface RoleService {
      * 更新权限和资源的关联关系
      *
      * @param id
-     * @param resourceIds
+     * @param menuIds
      */
-    void updateRoleMenu(String id, String resourceIds);
+    void updateRoleMenu(String id, String menuIds);
 
     /**
      * 根据用户查询id查询权限集合

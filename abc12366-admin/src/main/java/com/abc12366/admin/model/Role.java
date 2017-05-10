@@ -26,7 +26,7 @@ public class Role implements Serializable {
 	private java.util.Date updateTime;
 
 	/**状态**/
-	private Integer status;
+	private Boolean status;
 
 
 
@@ -70,12 +70,12 @@ public class Role implements Serializable {
 		return this.updateTime;
 	}
 
-	public void setStatus(Integer status){
-		this.status = status;
-	}
 
-	public Integer getStatus(){
-		return this.status;
-	}
+    public Boolean getStatus() {
+        return status;
+    }
 
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }

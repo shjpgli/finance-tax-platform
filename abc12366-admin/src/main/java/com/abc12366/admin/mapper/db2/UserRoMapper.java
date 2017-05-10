@@ -25,11 +25,13 @@ public interface UserRoMapper {
 
 	User selectUserByLoginName(String username);
 
+	UserBO selectUserBOByLoginName(String username);
+
 	User selectUserById(String id);
 
 	UserBO selectUserBoById(String id);
 
-	List<User> selectList();
+	List<User> selectList(User user);
 
     User selectOne(String id);
 }
