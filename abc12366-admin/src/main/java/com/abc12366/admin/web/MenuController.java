@@ -25,7 +25,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/menu", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/menu", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class MenuController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DictController.class);
