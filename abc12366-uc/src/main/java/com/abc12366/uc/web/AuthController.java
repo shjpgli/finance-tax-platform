@@ -30,17 +30,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    /*
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@Valid @RequestBody LoginBO loginDTO) {
-        LOGGER.info("{}", loginDTO);
-
-        final String token = authService.login(loginDTO);
-
-        // Return the token
-        return ResponseEntity.ok(new TokenBO(token));
-    }*/
-
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refresh(@RequestHeader(Constant.USER_TOKEN_HEAD) String token) {
         String refreshedToken = authService.refresh(token);
@@ -51,19 +40,12 @@ public class AuthController {
         }
     }
 
-    /*
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO) {
-        LOGGER.info("{}", registerBO);
-        UserBO user = authService.register(registerBO);
-        return user != null ? ResponseEntity.ok(user) : new ResponseEntity<>(HttpStatus.CONFLICT);
-    }*/
-
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO) {
-        LOGGER.info("{}", registerBO);
         UserBO userBO = authService.register(registerBO);
-        LOGGER.info("{}", userBO);
+        if(userBO==null){
+            return ResponseEntity.badRequest().body(null);
+        }
         return ResponseEntity.ok(userBO);
     }
 
@@ -74,8 +56,8 @@ public class AuthController {
     @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", loginBO);
-        String userToken = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
-        LOGGER.info("{}", userToken);
-        return userToken != null ? ResponseEntity.ok(userToken) : new ResponseEntity<>(HttpStatus.CONFLICT);
+        String token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+        LOGGER.info("{}", token);
+        return token != null ? ResponseEntity.ok(token) : new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }

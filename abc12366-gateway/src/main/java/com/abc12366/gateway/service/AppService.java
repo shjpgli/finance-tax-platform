@@ -64,15 +64,6 @@ public interface AppService {
      * @return App对象
      */
     AppGeneralBO update(AppUpdateBO appUpdateBO);
-
-    /**
-     * 启用、禁用App
-     *
-     * @param
-     * @return
-     */
-    AppGeneralBO enableOrDisable(String id, boolean status);
-
     /**
      * 查询App对象
      *

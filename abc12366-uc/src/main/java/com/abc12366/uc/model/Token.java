@@ -5,9 +5,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 
 /**
- * Created by lgy on 2017-05-04.
+ *
+ * @author liuguiyao <435720953@qq.com>
+ * @create 2017-04-05 12:59 PM
+ * @since 1.0.0
  */
-public class UCToken {
+public class Token {
     private String id;
     @NotEmpty(message = "appId不能为空")
     private String appId;
@@ -16,7 +19,7 @@ public class UCToken {
     private String token;
     private Date lastTokenResetDate;
 
-    public UCToken() {
+    public Token() {
     }
 
     @Override
@@ -70,7 +73,7 @@ public class UCToken {
         this.lastTokenResetDate = lastTokenResetDate;
     }
 
-    public UCToken(String id, String appId, String userId, String token, Date lastTokenResetDate) {
+    public Token(String id, String appId, String userId, String token, Date lastTokenResetDate) {
 
         this.id = id;
         this.appId = appId;

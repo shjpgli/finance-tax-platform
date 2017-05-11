@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.uc.mapper.db1.UCTokenMapper">
-    <insert id="insert" parameterType="UCToken">
+<mapper namespace="com.abc12366.uc.mapper.db1.TokenMapper">
+    <insert id="insert" parameterType="Token">
         insert into uc_token (id, appId, userId, token, lastTokenResetDate)
         values (#{id}, #{appId}, #{userId}, #{token}, #{lastTokenResetDate})
     </insert>

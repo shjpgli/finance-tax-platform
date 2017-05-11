@@ -15,6 +15,6 @@ public interface UserRoMapper {
 
     User selectOne(String id);
 
-    User selectByUsernameOrPhone(String usernameOrPhone);
+    User selectByUsernameOrPhone(User user);
 
 }

@@ -20,8 +20,14 @@
         select id, username, phone, password, regMail, userPicturePath, regIP, salt, realName, status, createTime,
         lastUpdate
         from uc_user
-        where username = #{username}
-        or phone = #{phone}
+        <where>
+            <if test="username != null">
+                username = #{username}
+            </if>
+            <if test="phone != null">
+                OR phone = #{phone}
+            </if>
+        </where>
     </select>
 
 </mapper>

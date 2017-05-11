@@ -161,28 +161,8 @@ public class AppServiceImpl implements AppService {
             return null;
         }
         BeanUtils.copyProperties(appUpdateBO, app);
-        AppGeneralBO appGeneralBO = new AppGeneralBO();
-        BeanUtils.copyProperties(app, appGeneralBO);
+        app.setLastUpdate(new Date());
         appMapper.update(app);
-        return appGeneralBO;
-    }
-
-    @Transactional("gw1TxManager")
-    @Override
-    public AppGeneralBO enableOrDisable(String id, boolean status) {
-        LOGGER.info("{}:{}", id, status);
-        App app = appRoMapper.selectById(id);
-        if (app == null) {
-            return null;
-        }
-        if (status == app.isStatus()) {
-            return null;
-        }
-        app.setStatus(status);
-        int result = appMapper.update(app);
-        if (result <= 0) {
-            return null;
-        }
         AppGeneralBO appGeneralBO = new AppGeneralBO();
         BeanUtils.copyProperties(app, appGeneralBO);
         return appGeneralBO;

@@ -76,19 +76,12 @@ public class AppController {
         return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody AppUpdateBO appUpdateBO) {
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@RequestBody AppUpdateBO appUpdateBO, @PathVariable String id) {
         LOGGER.info("{}", appUpdateBO);
+        appUpdateBO.setId(id);
         AppGeneralBO app = appService.update(appUpdateBO);
         LOGGER.info("{}", app);
-        return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
-    }
-
-    @PutMapping(path = "/{id}")
-    public ResponseEntity enableOrDisable(@PathVariable String id, @RequestParam boolean status) {
-        LOGGER.info("{}:{}", id, status);
-        AppGeneralBO app = appService.enableOrDisable(id, status);
-        LOGGER.info("{}");
         return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
     }
 }

@@ -3,11 +3,11 @@ package com.abc12366.uc.service;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
-import com.abc12366.uc.mapper.db1.UCTokenMapper;
+import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
-import com.abc12366.uc.mapper.db2.UCTokenRoMapper;
+import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.UCToken;
+import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import org.slf4j.Logger;
@@ -42,10 +42,10 @@ public class UserServiceImpl implements UserService {
     private AppRoMapper appRoMapper;
 
     @Autowired
-    private UCTokenMapper ucTokenMapper;
+    private TokenMapper ucTokenMapper;
 
     @Autowired
-    private UCTokenRoMapper ucTokenRoMapper;
+    private TokenRoMapper tokenRoMapper;
 
     @Override
     public List<UserBO> selectList() {
@@ -95,7 +95,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO selectByUsernameOrPhone(String usernameOrPhone) {
         LOGGER.info("{}", usernameOrPhone);
-        User user = userRoMapper.selectByUsernameOrPhone(usernameOrPhone);
+        User userTemp = new User();
+        if(!usernameOrPhone.equals("")){
+            userTemp.setUsername(usernameOrPhone);
+            userTemp.setPhone(usernameOrPhone);
+        }
+        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);
@@ -109,10 +114,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO register(RegisterBO registerBO) {
         LOGGER.info("{}", registerBO);
-        User user = userRoMapper.selectByUsernameOrPhone(registerBO.getUsername());
-        if(user == null){
-            user = userRoMapper.selectByUsernameOrPhone(registerBO.getPhone());
-        }
+        User userTemp = new User();
+        userTemp.setUsername(registerBO.getUsername());
+        userTemp.setPhone(registerBO.getPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
         if (user == null) {
             String password;
             String encodePassword = null;
@@ -186,7 +191,10 @@ public class UserServiceImpl implements UserService {
         if (appToken == null || appToken.equals("")) {
             return null;
         }
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO.getUsernameOrPhone());
+        User userTemp = new User();
+        userTemp.setUsername(loginBO.getUsernameOrPhone());
+        userTemp.setPhone(loginBO.getUsernameOrPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
         String password = null;
 
         //根据用户名查看用户是否存在
@@ -206,7 +214,7 @@ public class UserServiceImpl implements UserService {
                     App appTemp = new App();
                     appTemp.setAccessToken(appToken);
                     App app = appRoMapper.selectOne(appTemp);
-                    UCToken ucToken = new UCToken();
+                    Token ucToken = new Token();
                     ucToken.setId(Utils.uuid());
                     if (app.getId() != null) {
                         ucToken.setAppId(app.getId());
@@ -216,7 +224,7 @@ public class UserServiceImpl implements UserService {
                     }
                     ucToken.setToken(userToken);
                     ucToken.setLastTokenResetDate(new Date());
-                    UCToken ucToken1 = ucTokenRoMapper.selectOne(user.getId(), app.getId());
+                    Token ucToken1 = tokenRoMapper.selectOne(user.getId(), app.getId());
                     int result02;
                     //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
                     if (ucToken1 != null) {

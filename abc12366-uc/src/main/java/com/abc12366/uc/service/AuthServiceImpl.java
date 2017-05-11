@@ -3,12 +3,11 @@ package com.abc12366.uc.service;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
-import com.abc12366.uc.mapper.db1.AuthorityMapper;
-import com.abc12366.uc.mapper.db1.UCTokenMapper;
+import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
-import com.abc12366.uc.mapper.db2.UCTokenRoMapper;
+import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.UCToken;
+import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.RegisterBO;
@@ -22,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
-
-import static java.util.Arrays.asList;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -45,19 +42,19 @@ public class AuthServiceImpl implements AuthService {
     private AppRoMapper appRoMapper;
 
     @Autowired
-    private UCTokenRoMapper ucTokenRoMapper;
+    private TokenRoMapper tokenRoMapper;
 
     @Autowired
-    private UCTokenMapper ucTokenMapper;
+    private TokenMapper tokenMapper;
 
     @Transactional("db1TxManager")
     @Override
     public UserBO register(RegisterBO registerBO) {
         LOGGER.info("{}", registerBO);
-        User user = userRoMapper.selectByUsernameOrPhone(registerBO.getUsername());
-        if(user == null){
-            user = userRoMapper.selectByUsernameOrPhone(registerBO.getPhone());
-        }
+        User userTemp = new User();
+        userTemp.setUsername(registerBO.getUsername());
+        userTemp.setPhone(registerBO.getPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
         if (user == null) {
             String password;
             String encodePassword = null;
@@ -105,15 +102,19 @@ public class AuthServiceImpl implements AuthService {
         }
         return null;
     }
+
     @Transactional("db1TxManager")
     @Override
-    public String login(LoginBO loginBO, String appToken)  throws Exception{
+    public String login(LoginBO loginBO, String appToken) throws Exception {
         LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
         //判断apptoken是否为空，为空则不允许登录
         if (appToken == null || appToken.equals("")) {
             return null;
         }
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO.getUsernameOrPhone());
+        User userTemp = new User();
+        userTemp.setUsername(loginBO.getUsernameOrPhone());
+        userTemp.setPhone(loginBO.getUsernameOrPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
         String password = null;
 
         //根据用户名查看用户是否存在
@@ -132,24 +133,31 @@ public class AuthServiceImpl implements AuthService {
                 if (result > 0) {
                     App appTemp = new App();
                     appTemp.setAccessToken(appToken);
+                    appTemp.setStatus(true);
                     App app = appRoMapper.selectOne(appTemp);
-                    UCToken ucToken = new UCToken();
-                    ucToken.setId(Utils.uuid());
-                    if (app.getId() != null) {
-                        ucToken.setAppId(app.getId());
+                    //如果不存在有效的注册应用，则不允许登录
+                    if (app == null) {
+                        return null;
                     }
-                    if (user.getId() != null) {
-                        ucToken.setUserId(user.getId());
-                    }
-                    ucToken.setToken(userToken);
-                    ucToken.setLastTokenResetDate(new Date());
-                    UCToken ucToken1 = ucTokenRoMapper.selectOne(user.getId(), app.getId());
+
+                    Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
                     int result02;
                     //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
-                    if (ucToken1 != null) {
-                        result02 = ucTokenMapper.update(ucToken);
+                    if (queryToken != null) {
+                        queryToken.setLastTokenResetDate(new Date());
+                        result02 = tokenMapper.update(queryToken);
                     } else {
-                        result02 = ucTokenMapper.insert(ucToken);
+                        Token token = new Token();
+                        token.setId(Utils.uuid());
+                        if (app.getId() != null) {
+                            token.setAppId(app.getId());
+                        }
+                        if (user.getId() != null) {
+                            token.setUserId(user.getId());
+                        }
+                        token.setToken(userToken);
+                        token.setLastTokenResetDate(new Date());
+                        result02 = tokenMapper.insert(token);
                     }
                     if (result02 > 0)
                         LOGGER.info("{}", userToken);
