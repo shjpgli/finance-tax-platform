@@ -1,6 +1,9 @@
 package com.abc12366.gateway.mapper.db2;
 
 import com.abc12366.gateway.model.App;
+import com.abc12366.gateway.model.bo.AppGeneralBO;
+
+import java.util.List;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -10,5 +13,9 @@ import com.abc12366.gateway.model.App;
 public interface AppRoMapper {
 
     App selectOne(App app);
+
+    App selectById(String id);
+
+    List<AppGeneralBO> selectList();
 
 }

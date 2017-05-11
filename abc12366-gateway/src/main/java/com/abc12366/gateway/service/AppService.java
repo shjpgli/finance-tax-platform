@@ -1,11 +1,14 @@
 package com.abc12366.gateway.service;
 
 
+import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.model.bo.AppBO;
+import com.abc12366.gateway.model.bo.AppGeneralBO;
 import com.abc12366.gateway.model.bo.AppRespBO;
-import com.abc12366.gateway.model.bo.TokenBO;
+import com.abc12366.gateway.model.bo.AppUpdateBO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -45,4 +48,36 @@ public interface AppService {
      * @return true:已授权,false:未授权
      */
     boolean isAuthentization(HttpServletRequest request);
+
+    /**
+     * App列表查询
+     *
+     * @param
+     * @return List<AppGeneralBO>
+     */
+    List<AppGeneralBO> selectList();
+
+    /**
+     * 修改App对象
+     *
+     * @param
+     * @return App对象
+     */
+    AppGeneralBO update(AppUpdateBO appUpdateBO);
+
+    /**
+     * 启用、禁用App
+     *
+     * @param
+     * @return
+     */
+    AppGeneralBO enableOrDisable(String id, boolean status);
+
+    /**
+     * 查询App对象
+     *
+     * @param
+     * @return App对象
+     */
+    AppGeneralBO selectById(String id);
 }

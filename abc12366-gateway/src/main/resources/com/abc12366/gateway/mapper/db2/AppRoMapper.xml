@@ -28,4 +28,16 @@
       FROM gw_app
       WHERE name = #{name}
     </select>
+
+    <select id="selectList" resultType="AppGeneralBO">
+        SELECT id, name, startTime, endTime, status, createTime, lastUpdate
+        FROM gw_app
+        ORDER BY lastUpdate DESC
+    </select>
+
+    <select id="selectById" resultType="App">
+        SELECT id, name, startTime, endTime, status, createTime, lastUpdate
+        FROM gw_app
+        WHERE id=#{id}
+    </select>
 </mapper>

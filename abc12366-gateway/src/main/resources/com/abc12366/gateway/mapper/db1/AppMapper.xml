@@ -8,16 +8,14 @@
                 #{remark}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
-    <update id="update" parameterType="App">
+    <update id="update" parameterType="AppUpdateBO">
         UPDATE gw_app
         <set>
-            <if test="password != null">password = #{password},</if>
-            <if test="accessToken != null">accessToken = #{accessToken},</if>
-            <if test="lastResetTokenTime != null">lastResetTokenTime = #{lastResetTokenTime},</if>
+            <if test="name != null">name = #{name},</if>
             <if test="startTime != null">startTime = #{startTime},</if>
             <if test="endTime != null">endTime = #{endTime},</if>
-            <if test="remark != null">remark = #{remark},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate}</if>
         </set>
         where id=#{id}

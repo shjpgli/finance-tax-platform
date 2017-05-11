@@ -12,5 +12,5 @@ public interface AppMapper {
 
     void insert(App newApp);
 
-    void update(App app);
+    int update(App app);
 }

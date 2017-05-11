@@ -7,18 +7,20 @@ import com.abc12366.gateway.mapper.db1.AppMapper;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.mapper.db2.AppSettingRoMapper;
 import com.abc12366.gateway.model.App;
-import com.abc12366.gateway.model.bo.AppBO;
-import com.abc12366.gateway.model.bo.AppRespBO;
-import com.abc12366.gateway.model.bo.AppSettingApiBO;
-import com.abc12366.gateway.model.bo.TokenBO;
+import com.abc12366.gateway.model.bo.*;
 import com.alibaba.fastjson.JSON;
 import com.mysql.jdbc.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -27,6 +29,8 @@ import java.util.Date;
  */
 @Service
 public class AppServiceImpl implements AppService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppServiceImpl.class);
 
     @Autowired
     private AppMapper appMapper;
@@ -39,6 +43,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public AppRespBO register(AppBO bo) throws Exception {
+        LOGGER.info("{}", bo);
         App app = new App.Builder()
                 .name(bo.getName())
                 .build();
@@ -61,6 +66,7 @@ public class AppServiceImpl implements AppService {
             appMapper.insert(newApp);
             AppRespBO appRespDTO = new AppRespBO();
             BeanUtils.copyProperties(newApp, appRespDTO);
+            LOGGER.info("{}", appRespDTO);
             return appRespDTO;
         }
 
@@ -69,6 +75,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public String login(AppBO bo) throws Exception {
+        LOGGER.info("{}", bo);
         App app = new App.Builder()
                 .name(bo.getName())
                 .status(true)
@@ -82,6 +89,7 @@ public class AppServiceImpl implements AppService {
             app.setLastResetTokenTime(now);
             app.setLastUpdate(now);
             appMapper.update(app);
+            LOGGER.info("{}", token);
             return token;
         }
         return null;
@@ -89,11 +97,14 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public boolean isAuthentication(String accessToken) {
+        LOGGER.info("{}", accessToken);
         App app = new App.Builder()
                 .accessToken(accessToken)
                 .status(true)
                 .build();
-        return appRoMapper.selectOne(app) != null;
+        boolean isAuthen = appRoMapper.selectOne(app) != null;
+        LOGGER.info("{}", isAuthen);
+        return isAuthen;
     }
 
     @Override
@@ -129,5 +140,63 @@ public class AppServiceImpl implements AppService {
         appSettingApiBO = appSettingRoMapper.isAuthentization(appSettingApiBO);
         return appSettingApiBO != null && appSettingApiBO.isAuthentication()
                 && !StringUtils.isNullOrEmpty(request.getHeader(Constant.USER_TOKEN_HEAD));
+    }
+
+    @Override
+    public List<AppGeneralBO> selectList() {
+        List<AppGeneralBO> apps = appRoMapper.selectList();
+        if (apps.size() < 1) {
+            return null;
+        }
+        LOGGER.info("{}", apps);
+        return apps;
+    }
+
+    @Transactional("gw1TxManager")
+    @Override
+    public AppGeneralBO update(AppUpdateBO appUpdateBO) {
+        LOGGER.info("{}", appUpdateBO);
+        App app = appRoMapper.selectById(appUpdateBO.getId());
+        if (app == null) {
+            return null;
+        }
+        BeanUtils.copyProperties(appUpdateBO, app);
+        AppGeneralBO appGeneralBO = new AppGeneralBO();
+        BeanUtils.copyProperties(app, appGeneralBO);
+        appMapper.update(app);
+        return appGeneralBO;
+    }
+
+    @Transactional("gw1TxManager")
+    @Override
+    public AppGeneralBO enableOrDisable(String id, boolean status) {
+        LOGGER.info("{}:{}", id, status);
+        App app = appRoMapper.selectById(id);
+        if (app == null) {
+            return null;
+        }
+        if (status == app.isStatus()) {
+            return null;
+        }
+        app.setStatus(status);
+        int result = appMapper.update(app);
+        if (result <= 0) {
+            return null;
+        }
+        AppGeneralBO appGeneralBO = new AppGeneralBO();
+        BeanUtils.copyProperties(app, appGeneralBO);
+        return appGeneralBO;
+    }
+
+    @Override
+    public AppGeneralBO selectById(String id) {
+        LOGGER.info("{}", id);
+        App app = appRoMapper.selectById(id);
+        if (app == null) {
+            return null;
+        }
+        AppGeneralBO appGeneralBO = new AppGeneralBO();
+        BeanUtils.copyProperties(app, appGeneralBO);
+        return appGeneralBO;
     }
 }

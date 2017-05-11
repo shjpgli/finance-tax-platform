@@ -3,19 +3,22 @@ package com.abc12366.gateway.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.bo.AppBO;
+import com.abc12366.gateway.model.bo.AppGeneralBO;
 import com.abc12366.gateway.model.bo.AppRespBO;
+import com.abc12366.gateway.model.bo.AppUpdateBO;
 import com.abc12366.gateway.service.AppService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 应用控制器
@@ -50,5 +53,42 @@ public class AppController {
         return token != null ? ResponseEntity.ok(
                 Utils.kv(Constant.APP_TOKEN_HEAD, token, "expires_in", Constant.APP_TOKEN_VALID_SECONDS))
                 : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize
+    ) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<AppGeneralBO> appList = appService.selectList();
+        LOGGER.info("{}", appList);
+        return (appList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) appList, "total", ((Page) appList).getTotal()));
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        AppGeneralBO app = appService.selectById(id);
+        LOGGER.info("{}", app);
+        return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping
+    public ResponseEntity update(@RequestBody AppUpdateBO appUpdateBO) {
+        LOGGER.info("{}", appUpdateBO);
+        AppGeneralBO app = appService.update(appUpdateBO);
+        LOGGER.info("{}", app);
+        return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @RequestParam boolean status) {
+        LOGGER.info("{}:{}", id, status);
+        AppGeneralBO app = appService.enableOrDisable(id, status);
+        LOGGER.info("{}");
+        return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
     }
 }
