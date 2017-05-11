@@ -21,7 +21,7 @@ import java.util.List;
  * @description：组织管理
  */
 @Controller
-@RequestMapping("/org")
+@RequestMapping(path = "/org", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class OrganizationController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(OrganizationController.class);
