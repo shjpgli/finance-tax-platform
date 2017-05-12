@@ -114,7 +114,6 @@ public class DatabaseConfig implements EnvironmentAware {
     }
 
     @Bean("db1SqlSessionFactory")
-    @Primary
     public SqlSessionFactory db1SqlSessionFactory() throws SQLException {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         // 设置数据源

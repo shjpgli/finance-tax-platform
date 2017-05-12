@@ -70,7 +70,6 @@ public class DictServiceImpl implements DictService {
         return dictBO;
     }
 
-    @Transactional("db2TxManager")
     @Override
     public DictBO insert(DictBO dictBO) {
         Dict dict = dictRoMapper.selectByDictName(dictBO.getDictName());
@@ -89,7 +88,6 @@ public class DictServiceImpl implements DictService {
         return dictBO;
     }
 
-    @Transactional("db2TxManager")
     @Override
     public DictBO update(DictUpdateBO dictUpdateBO) {
         Dict dict = dictRoMapper.selectByDictId(dictUpdateBO.getId());
@@ -108,7 +106,6 @@ public class DictServiceImpl implements DictService {
         return dictBO;
     }
 
-    @Transactional("db2TxManager")
     @Override
     public DictBO delete(String id) {
         Dict dict = dictRoMapper.selectByDictId(id);

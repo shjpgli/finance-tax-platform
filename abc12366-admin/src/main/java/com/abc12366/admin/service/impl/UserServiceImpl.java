@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public int register(UserBO userBO) {
         User user = new User();
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
         return userRoMapper.selectUserBoById(id);
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public int updateUser(UserBO userBO) {
         User user = new User();
@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
         return upd;
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public int deleteUserById(String id) {
         int del = userMapper.deleteById(id);
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public UserBO login(UserBO userBO, String appToken) {
 //        User user = userRoMapper.selectUserByLoginName(userBO.getUsername());
@@ -288,6 +288,18 @@ public class UserServiceImpl implements UserService {
             }
             return userExtend;
         }
+    }
+
+
+    @Override
+    public boolean isAuthentication(String userToken) {
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setToken(userToken);
+        LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
+        if(info != null){
+            return true;
+        }
+        return false;
     }
 
     private LoginInfo getLoginInfo(UserBO user, String userToken, App app) {
