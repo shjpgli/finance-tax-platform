@@ -28,16 +28,30 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new UserInterceptor();
     }
 
+    @Bean
+    public AppInterceptor appInterceptor() {
+        return new AppInterceptor();
+    }
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 前置日志、黑名单、后置日志、接口计数拦截
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**");
 
-        // App验证、授权拦截
+        // UserToken验证、授权拦截
         registry.addInterceptor(userInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/user/**")
+                .excludePathPatterns("/druid/**")
+
+                .excludePathPatterns("/login", "/refresh", "/register", "/test");
+
+        // App验证、授权拦截
+        registry.addInterceptor(userInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/app/**")
                 .excludePathPatterns("/druid/**")
 
                 .excludePathPatterns("/login", "/refresh", "/register", "/test");
