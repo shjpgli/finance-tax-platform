@@ -12,6 +12,7 @@
         UPDATE gw_app
         <set>
             <if test="name != null">name = #{name},</if>
+            <if test="accessToken != null">accessToken = #{accessToken},</if>
             <if test="startTime != null">startTime = #{startTime},</if>
             <if test="endTime != null">endTime = #{endTime},</if>
             <if test="status != null">status = #{status},</if>
