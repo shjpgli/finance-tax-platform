@@ -85,9 +85,7 @@ public class AuthServiceImpl implements AuthService {
             if (!StringUtils.isEmpty(registerBO.getSalt())) {
                 user.setSalt(registerBO.getSalt());
             }
-            if (!StringUtils.isEmpty(registerBO.getRealName())) {
-                user.setRealName(registerBO.getRealName());
-            }
+
             user.setStatus(true);
             user.setCreateTime(new Date());
             user.setLastUpdate(new Date());
@@ -144,7 +142,7 @@ public class AuthServiceImpl implements AuthService {
                     int result02;
                     //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
                     if (queryToken != null) {
-                        queryToken.setLastTokenResetDate(new Date());
+                        queryToken.setLastTokenResetTime(new Date());
                         result02 = tokenMapper.update(queryToken);
                     } else {
                         Token token = new Token();
@@ -156,7 +154,7 @@ public class AuthServiceImpl implements AuthService {
                             token.setUserId(user.getId());
                         }
                         token.setToken(userToken);
-                        token.setLastTokenResetDate(new Date());
+                        token.setLastTokenResetTime(new Date());
                         result02 = tokenMapper.insert(token);
                     }
                     if (result02 > 0)

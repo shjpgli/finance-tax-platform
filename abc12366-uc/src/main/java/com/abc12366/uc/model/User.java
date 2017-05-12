@@ -17,33 +17,42 @@ public class User {
     private String phone;
     private String password;
     private String regMail;
-    private String userPicturePath;
     private String regIP;
     private String salt;
-    private String realName;
+    private String nickname;
     private boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String userPicturePath;
+    private String maxUserPicturePath;
+    private String midUserPicturePath;
+    private String minUserPicturePath;
+    private int points;
+    private int exp;
+    private String vipLevel;
 
     public User() {
     }
 
-    public User(Builder builder) {
-    }
-
-    public User(String id, String username, String phone, String password, String regMail, String userPicturePath, String regIP, String salt, String realName, boolean status, Date createTime, Date lastUpdate) {
+    public User(String id, String username, String phone, String password, String regMail, String regIP, String salt, String nickname, boolean status, Date createTime, Date lastUpdate, String userPicturePath, String maxUserPicturePath, String midUserPicturePath, String minUserPicturePath, int points, int exp, String vipLevel) {
         this.id = id;
         this.username = username;
         this.phone = phone;
         this.password = password;
         this.regMail = regMail;
-        this.userPicturePath = userPicturePath;
         this.regIP = regIP;
         this.salt = salt;
-        this.realName = realName;
+        this.nickname = nickname;
         this.status = status;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
+        this.userPicturePath = userPicturePath;
+        this.maxUserPicturePath = maxUserPicturePath;
+        this.midUserPicturePath = midUserPicturePath;
+        this.minUserPicturePath = minUserPicturePath;
+        this.points = points;
+        this.exp = exp;
+        this.vipLevel = vipLevel;
     }
 
     public String getId() {
@@ -86,14 +95,6 @@ public class User {
         this.regMail = regMail;
     }
 
-    public String getUserPicturePath() {
-        return userPicturePath;
-    }
-
-    public void setUserPicturePath(String userPicturePath) {
-        this.userPicturePath = userPicturePath;
-    }
-
     public String getRegIP() {
         return regIP;
     }
@@ -110,12 +111,12 @@ public class User {
         this.salt = salt;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public boolean isStatus() {
@@ -142,6 +143,62 @@ public class User {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
+    }
+
+    public String getMaxUserPicturePath() {
+        return maxUserPicturePath;
+    }
+
+    public void setMaxUserPicturePath(String maxUserPicturePath) {
+        this.maxUserPicturePath = maxUserPicturePath;
+    }
+
+    public String getMidUserPicturePath() {
+        return midUserPicturePath;
+    }
+
+    public void setMidUserPicturePath(String midUserPicturePath) {
+        this.midUserPicturePath = midUserPicturePath;
+    }
+
+    public String getMinUserPicturePath() {
+        return minUserPicturePath;
+    }
+
+    public void setMinUserPicturePath(String minUserPicturePath) {
+        this.minUserPicturePath = minUserPicturePath;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
+
+    public String getVipLevel() {
+        return vipLevel;
+    }
+
+    public void setVipLevel(String vipLevel) {
+        this.vipLevel = vipLevel;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -150,48 +207,44 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
                 ", regMail='" + regMail + '\'' +
-                ", userPicturePath='" + userPicturePath + '\'' +
                 ", regIP='" + regIP + '\'' +
                 ", salt='" + salt + '\'' +
-                ", realName='" + realName + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
+                ", midUserPicturePath='" + midUserPicturePath + '\'' +
+                ", minUserPicturePath='" + minUserPicturePath + '\'' +
+                ", points=" + points +
+                ", exp=" + exp +
+                ", vipLevel='" + vipLevel + '\'' +
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (status != user.status) return false;
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (regMail != null ? !regMail.equals(user.regMail) : user.regMail != null) return false;
-        if (userPicturePath != null ? !userPicturePath.equals(user.userPicturePath) : user.userPicturePath != null)
-            return false;
-        if (regIP != null ? !regIP.equals(user.regIP) : user.regIP != null) return false;
-        if (salt != null ? !salt.equals(user.salt) : user.salt != null) return false;
-        if (realName != null ? !realName.equals(user.realName) : user.realName != null) return false;
-        if (createTime != null ? !createTime.equals(user.createTime) : user.createTime != null) return false;
-        return !(lastUpdate != null ? !lastUpdate.equals(user.lastUpdate) : user.lastUpdate != null);
-
+    public User(Builder builder) {
     }
 
     public static final class Builder {
         private String id;
         private String username;
-        private String password;
         private String phone;
-        private boolean enabled;
-        private Date lastPasswordResetDate;
-        private Date createDate;
-        private Date modifyDate;
+        private String password;
+        private String regMail;
+        private String regIP;
+        private String salt;
+        private String nickname;
+        private boolean status;
+        private Date createTime;
+        private Date lastUpdate;
+        private String userPicturePath;
+        private String maxUserPicturePath;
+        private String midUserPicturePath;
+        private String minUserPicturePath;
+        private int points;
+        private int exp;
+        private String vipLevel;
 
         public Builder() {
         }
@@ -206,33 +259,69 @@ public class User {
             return this;
         }
 
-        public Builder password(String val) {
-            password = val;
-            return this;
-        }
-
         public Builder phone(String val) {
             phone = val;
             return this;
         }
 
-        public Builder enabled(boolean val) {
-            enabled = val;
+        public Builder password(String val) {
+            password = val;
             return this;
         }
-
-        public Builder lastPasswordResetDate(Date val) {
-            lastPasswordResetDate = val;
+        public Builder regMail(String val) {
+            regMail = val;
             return this;
         }
-
-        public Builder createDate(Date val) {
-            createDate = val;
+        public Builder regIP(String val) {
+            regIP = val;
             return this;
         }
-
-        public Builder modifyDate(Date val) {
-            modifyDate = val;
+        public Builder salt(String val) {
+            salt = val;
+            return this;
+        }
+        public Builder nickname(String val) {
+            nickname = val;
+            return this;
+        }
+        public Builder status(boolean val) {
+            status = val;
+            return this;
+        }
+        public Builder createTime(Date val) {
+            createTime = val;
+            return this;
+        }
+        public Builder lastUpdate(Date val) {
+            lastUpdate = val;
+            return this;
+        }
+        public Builder userPicturePath(String val) {
+            userPicturePath = val;
+            return this;
+        }
+        public Builder maxUserPicturePath(String val) {
+            maxUserPicturePath = val;
+            return this;
+        }
+        public Builder midUserPicturePath(String val) {
+            midUserPicturePath = val;
+            return this;
+        }
+        public Builder minUserPicturePath(String val) {
+            minUserPicturePath = val;
+            return this;
+        }
+        public Builder points(int val) {
+            points = val;
+            return this;
+        }
+        public Builder exp(int val) {
+            exp = val;
+            return this;
+        }
+        public Builder vipLevel(String val) {
+            vipLevel = val;
             return this;
         }
 

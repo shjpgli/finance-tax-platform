@@ -16,30 +16,42 @@ public class UserBO {
     private String phone;
     private String password;
     private String regMail;
-    private String userPicturePath;
     private String regIP;
     private String salt;
-    private String realName;
+    private String nickname;
     private boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String userPicturePath;
+    private String maxUserPicturePath;
+    private String midUserPicturePath;
+    private String minUserPicturePath;
+    private int points;
+    private int exp;
+    private String vipLevel;
 
     public UserBO() {
     }
 
-    public UserBO(String id, String username, String phone, String password, String regMail, String userPicturePath, String regIP, String salt, String realName, boolean status, Date createTime, Date lastUpdate) {
+    public UserBO(String id, String username, String phone, String password, String regMail, String regIP, String salt, String nickname, boolean status, Date createTime, Date lastUpdate, String userPicturePath, String maxUserPicturePath, String midUserPicturePath, String minUserPicturePath, int points, int exp, String vipLevel) {
         this.id = id;
         this.username = username;
         this.phone = phone;
         this.password = password;
         this.regMail = regMail;
-        this.userPicturePath = userPicturePath;
         this.regIP = regIP;
         this.salt = salt;
-        this.realName = realName;
+        this.nickname = nickname;
         this.status = status;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
+        this.userPicturePath = userPicturePath;
+        this.maxUserPicturePath = maxUserPicturePath;
+        this.midUserPicturePath = midUserPicturePath;
+        this.minUserPicturePath = minUserPicturePath;
+        this.points = points;
+        this.exp = exp;
+        this.vipLevel = vipLevel;
     }
 
     public String getId() {
@@ -82,14 +94,6 @@ public class UserBO {
         this.regMail = regMail;
     }
 
-    public String getUserPicturePath() {
-        return userPicturePath;
-    }
-
-    public void setUserPicturePath(String userPicturePath) {
-        this.userPicturePath = userPicturePath;
-    }
-
     public String getRegIP() {
         return regIP;
     }
@@ -106,12 +110,12 @@ public class UserBO {
         this.salt = salt;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public boolean isStatus() {
@@ -138,6 +142,62 @@ public class UserBO {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
+    }
+
+    public String getMaxUserPicturePath() {
+        return maxUserPicturePath;
+    }
+
+    public void setMaxUserPicturePath(String maxUserPicturePath) {
+        this.maxUserPicturePath = maxUserPicturePath;
+    }
+
+    public String getMidUserPicturePath() {
+        return midUserPicturePath;
+    }
+
+    public void setMidUserPicturePath(String midUserPicturePath) {
+        this.midUserPicturePath = midUserPicturePath;
+    }
+
+    public String getMinUserPicturePath() {
+        return minUserPicturePath;
+    }
+
+    public void setMinUserPicturePath(String minUserPicturePath) {
+        this.minUserPicturePath = minUserPicturePath;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
+
+    public String getVipLevel() {
+        return vipLevel;
+    }
+
+    public void setVipLevel(String vipLevel) {
+        this.vipLevel = vipLevel;
+    }
+
     @Override
     public String toString() {
         return "UserBO{" +
@@ -146,13 +206,19 @@ public class UserBO {
                 ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
                 ", regMail='" + regMail + '\'' +
-                ", userPicturePath='" + userPicturePath + '\'' +
                 ", regIP='" + regIP + '\'' +
                 ", salt='" + salt + '\'' +
-                ", realName='" + realName + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
+                ", midUserPicturePath='" + midUserPicturePath + '\'' +
+                ", minUserPicturePath='" + minUserPicturePath + '\'' +
+                ", points=" + points +
+                ", exp=" + exp +
+                ", vipLevel='" + vipLevel + '\'' +
                 '}';
     }
 }

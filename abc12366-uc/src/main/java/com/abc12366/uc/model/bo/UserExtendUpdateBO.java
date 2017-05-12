@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Date;
@@ -8,12 +9,10 @@ import java.util.Date;
  * Created by lgy on 2017-05-09.
  */
 public class UserExtendUpdateBO {
-    private String id;
-    @NotEmpty(message = "userId不能为空")
     private String userId;
     private String signature;
-    private String nickname;
     private String sex;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
     private String bloodType;
     private String weight;
@@ -25,7 +24,6 @@ public class UserExtendUpdateBO {
     private String income;
     private String postAddress;
     private String realName;
-    private String experience;
     private String weixin;
     private String qq;
     private String safeQuestion;
@@ -33,15 +31,26 @@ public class UserExtendUpdateBO {
     private String province;
     private String city;
     private String area;
+    private Date createTime;
+    private Date lastUpdate;
+    private String tags;
+    private String idcard;
+    private String frontImage;
+    private String backImage;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date startTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
+    private String validStatus;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date validTime;
 
     public UserExtendUpdateBO() {
     }
 
-    public UserExtendUpdateBO(String id, String userId, String signature, String nickname, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String experience, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area) {
-        this.id = id;
+    public UserExtendUpdateBO(String userId, String signature, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, Date createTime, Date lastUpdate, String tags, String idcard, String frontImage, String backImage, Date startTime, Date endTime, String validStatus, Date validTime) {
         this.userId = userId;
         this.signature = signature;
-        this.nickname = nickname;
         this.sex = sex;
         this.birthday = birthday;
         this.bloodType = bloodType;
@@ -54,7 +63,6 @@ public class UserExtendUpdateBO {
         this.income = income;
         this.postAddress = postAddress;
         this.realName = realName;
-        this.experience = experience;
         this.weixin = weixin;
         this.qq = qq;
         this.safeQuestion = safeQuestion;
@@ -62,14 +70,16 @@ public class UserExtendUpdateBO {
         this.province = province;
         this.city = city;
         this.area = area;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.createTime = createTime;
+        this.lastUpdate = lastUpdate;
+        this.tags = tags;
+        this.idcard = idcard;
+        this.frontImage = frontImage;
+        this.backImage = backImage;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.validStatus = validStatus;
+        this.validTime = validTime;
     }
 
     public String getUserId() {
@@ -86,14 +96,6 @@ public class UserExtendUpdateBO {
 
     public void setSignature(String signature) {
         this.signature = signature;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     public String getSex() {
@@ -192,14 +194,6 @@ public class UserExtendUpdateBO {
         this.realName = realName;
     }
 
-    public String getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String experience) {
-        this.experience = experience;
-    }
-
     public String getWeixin() {
         return weixin;
     }
@@ -256,13 +250,91 @@ public class UserExtendUpdateBO {
         this.area = area;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getIdcard() {
+        return idcard;
+    }
+
+    public void setIdcard(String idcard) {
+        this.idcard = idcard;
+    }
+
+    public String getFrontImage() {
+        return frontImage;
+    }
+
+    public void setFrontImage(String frontImage) {
+        this.frontImage = frontImage;
+    }
+
+    public String getBackImage() {
+        return backImage;
+    }
+
+    public void setBackImage(String backImage) {
+        this.backImage = backImage;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getValidStatus() {
+        return validStatus;
+    }
+
+    public void setValidStatus(String validStatus) {
+        this.validStatus = validStatus;
+    }
+
+    public Date getValidTime() {
+        return validTime;
+    }
+
+    public void setValidTime(Date validTime) {
+        this.validTime = validTime;
+    }
+
     @Override
     public String toString() {
         return "UserExtendUpdateBO{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
+                "userId='" + userId + '\'' +
                 ", signature='" + signature + '\'' +
-                ", nickname='" + nickname + '\'' +
                 ", sex='" + sex + '\'' +
                 ", birthday=" + birthday +
                 ", bloodType='" + bloodType + '\'' +
@@ -275,7 +347,6 @@ public class UserExtendUpdateBO {
                 ", income='" + income + '\'' +
                 ", postAddress='" + postAddress + '\'' +
                 ", realName='" + realName + '\'' +
-                ", experience='" + experience + '\'' +
                 ", weixin='" + weixin + '\'' +
                 ", qq='" + qq + '\'' +
                 ", safeQuestion='" + safeQuestion + '\'' +
@@ -283,6 +354,16 @@ public class UserExtendUpdateBO {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", area='" + area + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", tags='" + tags + '\'' +
+                ", idcard='" + idcard + '\'' +
+                ", frontImage='" + frontImage + '\'' +
+                ", backImage='" + backImage + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", validStatus='" + validStatus + '\'' +
+                ", validTime=" + validTime +
                 '}';
     }
 }

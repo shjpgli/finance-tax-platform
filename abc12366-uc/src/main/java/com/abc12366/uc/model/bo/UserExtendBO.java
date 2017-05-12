@@ -9,10 +9,10 @@ import java.util.Date;
  * Created by lgy on 2017-05-05.
  */
 public class UserExtendBO {
-    private String id;
+
+    @NotEmpty(message = "userId不能为空")
     private String userId;
     private String signature;
-    private String nickname;
     private String sex;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
@@ -26,7 +26,6 @@ public class UserExtendBO {
     private String income;
     private String postAddress;
     private String realName;
-    private String experience;
     private String weixin;
     private String qq;
     private String safeQuestion;
@@ -34,17 +33,22 @@ public class UserExtendBO {
     private String province;
     private String city;
     private String area;
-    private Date createTime;
-    private Date lastUpdate;
+    private String tags;
+    private String idcard;
+    private String frontImage;
+    private String backImage;
+    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    private Date startTime;
+    private Date endTime;
+    private String validStatus;
+    private Date validTime;
 
     public UserExtendBO() {
     }
 
-    public UserExtendBO(String id, String userId, String signature, String nickname, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String experience, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, Date createTime, Date lastUpdate) {
-        this.id = id;
+    public UserExtendBO(String userId, String signature, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, String tags, String idcard, String frontImage, String backImage, Date startTime, Date endTime, String validStatus, Date validTime) {
         this.userId = userId;
         this.signature = signature;
-        this.nickname = nickname;
         this.sex = sex;
         this.birthday = birthday;
         this.bloodType = bloodType;
@@ -57,7 +61,6 @@ public class UserExtendBO {
         this.income = income;
         this.postAddress = postAddress;
         this.realName = realName;
-        this.experience = experience;
         this.weixin = weixin;
         this.qq = qq;
         this.safeQuestion = safeQuestion;
@@ -65,16 +68,14 @@ public class UserExtendBO {
         this.province = province;
         this.city = city;
         this.area = area;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.tags = tags;
+        this.idcard = idcard;
+        this.frontImage = frontImage;
+        this.backImage = backImage;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.validStatus = validStatus;
+        this.validTime = validTime;
     }
 
     public String getUserId() {
@@ -91,14 +92,6 @@ public class UserExtendBO {
 
     public void setSignature(String signature) {
         this.signature = signature;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     public String getSex() {
@@ -197,14 +190,6 @@ public class UserExtendBO {
         this.realName = realName;
     }
 
-    public String getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String experience) {
-        this.experience = experience;
-    }
-
     public String getWeixin() {
         return weixin;
     }
@@ -261,29 +246,75 @@ public class UserExtendBO {
         this.area = area;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getTags() {
+        return tags;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
-    public Date getLastUpdate() {
-        return lastUpdate;
+    public String getIdcard() {
+        return idcard;
     }
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setIdcard(String idcard) {
+        this.idcard = idcard;
+    }
+
+    public String getFrontImage() {
+        return frontImage;
+    }
+
+    public void setFrontImage(String frontImage) {
+        this.frontImage = frontImage;
+    }
+
+    public String getBackImage() {
+        return backImage;
+    }
+
+    public void setBackImage(String backImage) {
+        this.backImage = backImage;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getValidStatus() {
+        return validStatus;
+    }
+
+    public void setValidStatus(String validStatus) {
+        this.validStatus = validStatus;
+    }
+
+    public Date getValidTime() {
+        return validTime;
+    }
+
+    public void setValidTime(Date validTime) {
+        this.validTime = validTime;
     }
 
     @Override
     public String toString() {
         return "UserExtendBO{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
+                "userId='" + userId + '\'' +
                 ", signature='" + signature + '\'' +
-                ", nickname='" + nickname + '\'' +
                 ", sex='" + sex + '\'' +
                 ", birthday=" + birthday +
                 ", bloodType='" + bloodType + '\'' +
@@ -296,7 +327,6 @@ public class UserExtendBO {
                 ", income='" + income + '\'' +
                 ", postAddress='" + postAddress + '\'' +
                 ", realName='" + realName + '\'' +
-                ", experience='" + experience + '\'' +
                 ", weixin='" + weixin + '\'' +
                 ", qq='" + qq + '\'' +
                 ", safeQuestion='" + safeQuestion + '\'' +
@@ -304,8 +334,14 @@ public class UserExtendBO {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", area='" + area + '\'' +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
+                ", tags='" + tags + '\'' +
+                ", idcard='" + idcard + '\'' +
+                ", frontImage='" + frontImage + '\'' +
+                ", backImage='" + backImage + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", validStatus='" + validStatus + '\'' +
+                ", validTime=" + validTime +
                 '}';
     }
 }

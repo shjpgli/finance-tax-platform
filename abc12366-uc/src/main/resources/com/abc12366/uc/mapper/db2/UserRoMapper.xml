@@ -3,22 +3,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
-    <select id="selectList" resultType="com.abc12366.uc.model.User">
-        select id, username, phone, password, regMail, userPicturePath, regIP, salt, realName, status, createTime,
-        lastUpdate
+    <select id="selectList" resultType="User">
+        select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
+        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
+        ORDER BY lastUpdate DESC
     </select>
 
-    <select id="selectOne" resultType="com.abc12366.uc.model.User">
-        select id, username, phone, password, regMail, userPicturePath, regIP, salt, realName, status, createTime,
-        lastUpdate
+    <select id="selectOne" resultType="User">
+        select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
+        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
         where id = #{id}
     </select>
 
-    <select id="selectByUsernameOrPhone" resultType="com.abc12366.uc.model.User">
-        select id, username, phone, password, regMail, userPicturePath, regIP, salt, realName, status, createTime,
-        lastUpdate
+    <select id="selectByUsernameOrPhone" resultType="User">
+        select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
+        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
         <where>
             <if test="username != null">

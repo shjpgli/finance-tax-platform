@@ -20,7 +20,7 @@ import javax.validation.Valid;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/userextend", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/user/extend", headers = Constant.VERSION_HEAD + "=1")
 public class UserExtendController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserExtendController.class);
@@ -28,10 +28,10 @@ public class UserExtendController {
     @Autowired
     private UserExtendService userExtendService;
 
-    @GetMapping(path = "/{userId}")
-    public ResponseEntity selectOne(@PathVariable String userId) {
-        LOGGER.info("{}", userId);
-        UserExtendBO userExtendBO = userExtendService.selectOne(userId);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        UserExtendBO userExtendBO = userExtendService.selectOne(id);
         LOGGER.info("{}", userExtendBO);
         return ResponseEntity.ok(userExtendBO);
     }
@@ -44,17 +44,18 @@ public class UserExtendController {
         return ResponseEntity.ok(userExtendBO1);
     }
 
-    @DeleteMapping(path = "/{userId}")
-    public ResponseEntity delete(@PathVariable String userId) {
-        LOGGER.info("{}", userId);
-        UserExtendBO userExtendBO = userExtendService.delete(userId);
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        UserExtendBO userExtendBO = userExtendService.delete(id);
         LOGGER.info("{}", userExtendBO);
         return ResponseEntity.ok(userExtendBO);
     }
 
-    @PutMapping
-    public ResponseEntity update(@RequestBody UserExtendUpdateBO userExtendUpdateBO) {
-        LOGGER.info("{}", userExtendUpdateBO);
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String id) {
+        LOGGER.info("{}:{}", userExtendUpdateBO, id);
+        userExtendUpdateBO.setUserId(id);
         UserExtendBO userExtendBO1 = userExtendService.update(userExtendUpdateBO);
         LOGGER.info("{}", userExtendBO1);
         return ResponseEntity.ok(userExtendBO1);

@@ -17,20 +17,17 @@ public class Token {
     @NotEmpty(message = "userId不能为空")
     private String userId;
     private String token;
-    private Date lastTokenResetDate;
+    private Date lastTokenResetTime;
 
     public Token() {
     }
 
-    @Override
-    public String toString() {
-        return "UCToken{" +
-                "id='" + id + '\'' +
-                ", appId='" + appId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", token='" + token + '\'' +
-                ", lastTokenResetDate=" + lastTokenResetDate +
-                '}';
+    public Token(String id, String appId, String userId, String token, Date lastTokenResetTime) {
+        this.id = id;
+        this.appId = appId;
+        this.userId = userId;
+        this.token = token;
+        this.lastTokenResetTime = lastTokenResetTime;
     }
 
     public String getId() {
@@ -65,20 +62,22 @@ public class Token {
         this.token = token;
     }
 
-    public Date getLastTokenResetDate() {
-        return lastTokenResetDate;
+    public Date getLastTokenResetTime() {
+        return lastTokenResetTime;
     }
 
-    public void setLastTokenResetDate(Date lastTokenResetDate) {
-        this.lastTokenResetDate = lastTokenResetDate;
+    public void setLastTokenResetTime(Date lastTokenResetTime) {
+        this.lastTokenResetTime = lastTokenResetTime;
     }
 
-    public Token(String id, String appId, String userId, String token, Date lastTokenResetDate) {
-
-        this.id = id;
-        this.appId = appId;
-        this.userId = userId;
-        this.token = token;
-        this.lastTokenResetDate = lastTokenResetDate;
+    @Override
+    public String toString() {
+        return "Token{" +
+                "id='" + id + '\'' +
+                ", appId='" + appId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", token='" + token + '\'' +
+                ", lastTokenResetTime=" + lastTokenResetTime +
+                '}';
     }
 }

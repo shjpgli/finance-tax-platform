@@ -6,9 +6,11 @@ import com.abc12366.gateway.model.App;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
+import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -39,36 +39,29 @@ public class UserServiceImpl implements UserService {
     private UserRoMapper userRoMapper;
 
     @Autowired
-    private AppRoMapper appRoMapper;
-
-    @Autowired
-    private TokenMapper ucTokenMapper;
-
-    @Autowired
-    private TokenRoMapper tokenRoMapper;
+    private UserExtendRoMapper userExtendRoMapper;
 
     @Override
-    public List<UserBO> selectList() {
+    public List<User> selectList() {
         List<User> users = userRoMapper.selectList();
-        List<UserBO> userDTOs = new ArrayList<>();
-        for (User user : users) {
-            UserBO userDTO = new UserBO();
-            BeanUtils.copyProperties(user, userDTO);
-            userDTOs.add(userDTO);
+        if (users.size() < 1) {
+            return null;
         }
-        LOGGER.info("{}", userDTOs);
-        return userDTOs;
+        LOGGER.info("{}", users);
+        return users;
     }
 
     @Override
-    public UserBO selectOne(String userId) {
+    public Map selectOne(String userId) {
         LOGGER.info("{}", userId);
         User user = userRoMapper.selectOne(userId);
+        UserExtend user_extend = userExtendRoMapper.selectOne(userId);
         if (user != null) {
-            UserBO userDTO = new UserBO();
-            BeanUtils.copyProperties(user, userDTO);
-            LOGGER.info("{}", userDTO);
-            return userDTO;
+            Map map = new HashMap<>();
+            map.put("user", user);
+            map.put("user_extend", user_extend);
+            LOGGER.info("{}", map);
+            return map;
         }
         return null;
     }
@@ -96,7 +89,7 @@ public class UserServiceImpl implements UserService {
     public UserBO selectByUsernameOrPhone(String usernameOrPhone) {
         LOGGER.info("{}", usernameOrPhone);
         User userTemp = new User();
-        if(!usernameOrPhone.equals("")){
+        if (!usernameOrPhone.equals("")) {
             userTemp.setUsername(usernameOrPhone);
             userTemp.setPhone(usernameOrPhone);
         }
@@ -106,62 +99,6 @@ public class UserServiceImpl implements UserService {
             BeanUtils.copyProperties(user, userDTO);
             LOGGER.info("{}", userDTO);
             return userDTO;
-        }
-        return null;
-    }
-
-    @Transactional("db1TxManager")
-    @Override
-    public UserBO register(RegisterBO registerBO) {
-        LOGGER.info("{}", registerBO);
-        User userTemp = new User();
-        userTemp.setUsername(registerBO.getUsername());
-        userTemp.setPhone(registerBO.getPhone());
-        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
-        if (user == null) {
-            String password;
-            String encodePassword = null;
-            String salt = null;
-            try {
-                //密码生产规则：前台传密码md5之后的值，后台用该值加上salt再md5 ，salt是随机生成的六位整数
-                password = Utils.md5(registerBO.getPassword());
-                salt = Utils.salt();
-                encodePassword = Utils.md5(password + salt);
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage() + e);
-            }
-            user = new User();
-            BeanUtils.copyProperties(registerBO, user);
-
-            user.setId(Utils.uuid());
-            user.setSalt(salt);
-            user.setPassword(encodePassword);
-            if (!StringUtils.isEmpty(registerBO.getRegMail())) {
-                user.setRegMail(registerBO.getRegMail());
-            }
-            if (!StringUtils.isEmpty(registerBO.getUserPicturePath())) {
-                user.setUserPicturePath(registerBO.getUserPicturePath());
-            }
-            if (!StringUtils.isEmpty(registerBO.getRegIP())) {
-                user.setRegIP(registerBO.getRegIP());
-            }
-            if (!StringUtils.isEmpty(registerBO.getSalt())) {
-                user.setSalt(registerBO.getSalt());
-            }
-            if (!StringUtils.isEmpty(registerBO.getRealName())) {
-                user.setRealName(registerBO.getRealName());
-            }
-            user.setStatus(true);
-            user.setCreateTime(new Date());
-            user.setLastUpdate(new Date());
-
-            int result = userMapper.insert(user);
-            if (result > 0) {
-                UserBO userBO1 = new UserBO();
-                BeanUtils.copyProperties(user, userBO1);
-                LOGGER.info("{}", userBO1);
-                return userBO1;
-            }
         }
         return null;
     }
@@ -178,64 +115,6 @@ public class UserServiceImpl implements UserService {
                 BeanUtils.copyProperties(user, userBO);
                 LOGGER.info("{}", userBO);
                 return userBO;
-            }
-        }
-        return null;
-    }
-
-    @Transactional("db1TxManager")
-    @Override
-    public String login(LoginBO loginBO, String appToken) throws Exception {
-        LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
-        //判断apptoken是否为空，为空则不允许登录
-        if (appToken == null || appToken.equals("")) {
-            return null;
-        }
-        User userTemp = new User();
-        userTemp.setUsername(loginBO.getUsernameOrPhone());
-        userTemp.setPhone(loginBO.getUsernameOrPhone());
-        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
-        String password = null;
-
-        //根据用户名查看用户是否存在
-        if (user != null) {
-            try {
-                //登录密码进行处理，与表中的加密密码进行比对
-                password = Utils.md5(Utils.md5(loginBO.getPassword()) + user.getSalt());
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage() + e);
-            }
-            if (user.getPassword().equals(password)) {
-                String userToken = Utils.token(Utils.uuid());
-                user.setLastUpdate(new Date());
-                int result = userMapper.update(user);
-                //更新用户主表后再更新uc_token表
-                if (result > 0) {
-                    App appTemp = new App();
-                    appTemp.setAccessToken(appToken);
-                    App app = appRoMapper.selectOne(appTemp);
-                    Token ucToken = new Token();
-                    ucToken.setId(Utils.uuid());
-                    if (app.getId() != null) {
-                        ucToken.setAppId(app.getId());
-                    }
-                    if (user.getId() != null) {
-                        ucToken.setUserId(user.getId());
-                    }
-                    ucToken.setToken(userToken);
-                    ucToken.setLastTokenResetDate(new Date());
-                    Token ucToken1 = tokenRoMapper.selectOne(user.getId(), app.getId());
-                    int result02;
-                    //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
-                    if (ucToken1 != null) {
-                        result02 = ucTokenMapper.update(ucToken);
-                    } else {
-                        result02 = ucTokenMapper.insert(ucToken);
-                    }
-                    if (result02 > 0)
-                        LOGGER.info("{}", userToken);
-                    return userToken;
-                }
             }
         }
         return null;

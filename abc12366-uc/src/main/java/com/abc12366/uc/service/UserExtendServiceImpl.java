@@ -56,7 +56,6 @@ public class UserExtendServiceImpl implements UserExtendService {
             if (userExtend == null) {
                 userExtend = new UserExtend();
                 BeanUtils.copyProperties(userExtendBO, userExtend);
-                userExtend.setId(Utils.uuid());
                 userExtend.setCreateTime(new Date());
                 userExtend.setLastUpdate(new Date());
                 int result = userExtendMapper.insert(userExtend);
@@ -98,10 +97,8 @@ public class UserExtendServiceImpl implements UserExtendService {
         if (!userExtendUpdateBO.getUserId().equals("")) {
             UserExtend userExtend = userExtendRoMapper.selectOne(userExtendUpdateBO.getUserId());
             if (userExtend != null) {
-                String id = userExtend.getId();
                 UserExtend userExtend1 = new UserExtend();
                 BeanUtils.copyProperties(userExtendUpdateBO, userExtend1);
-                userExtend1.setId(id);
                 userExtend1.setLastUpdate(new Date());
                 int result = userExtendMapper.update(userExtend1);
                 UserExtendBO userExtendBO = new UserExtendBO();

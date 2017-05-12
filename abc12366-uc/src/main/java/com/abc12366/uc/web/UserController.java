@@ -1,8 +1,13 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.model.bo.AppGeneralBO;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User测试控制器类，包含CRUD接口；以常规JSON形式返回数据
@@ -31,18 +37,23 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity selectList() {
-        List<UserBO> users = userService.selectList();
-        LOGGER.info("{}", users);
-        return ResponseEntity.ok(users);
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<User> userList = userService.selectList();
+        LOGGER.info("{}", userList);
+        return (userList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("userList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
-    @GetMapping(path = "/{userId}")
-    public ResponseEntity<?> selectOne(@PathVariable String userId) {
-        LOGGER.info("{}", userId);
-        UserBO user = userService.selectOne(userId);
-        LOGGER.info("{}", user);
-        return ResponseEntity.ok(user);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> selectOne(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        Map map = userService.selectOne(id);
+        LOGGER.info("{}", map);
+        return ResponseEntity.ok(map);
     }
 
     @GetMapping(path = "/u/{usernameOrPhone}")
