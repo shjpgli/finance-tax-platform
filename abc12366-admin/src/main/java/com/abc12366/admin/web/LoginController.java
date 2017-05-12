@@ -16,7 +16,7 @@ import javax.validation.Valid;
  * @description：登录退出
  */
 @Controller
-@RequestMapping(path = "/login", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class LoginController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);

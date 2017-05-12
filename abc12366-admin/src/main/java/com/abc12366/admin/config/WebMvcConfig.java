@@ -40,18 +40,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**");
 
-        // UserToken验证、授权拦截
+        // App验证、授权拦截
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/user/**")
+                .excludePathPatterns("/app/**")
                 .excludePathPatterns("/druid/**")
 
                 .excludePathPatterns("/login", "/refresh", "/register", "/test");
 
-        // App验证、授权拦截
+        // UserToken验证、授权拦截
         registry.addInterceptor(userInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app/**")
                 .excludePathPatterns("/druid/**")
 
                 .excludePathPatterns("/login", "/register");
