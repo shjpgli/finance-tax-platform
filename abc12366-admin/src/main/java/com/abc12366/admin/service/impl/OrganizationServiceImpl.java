@@ -33,7 +33,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationRoMapper.selectList(organization);
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public Organization addOrganization(OrganizationBO organizationBO) {
         Organization organization = new Organization();
@@ -55,7 +55,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationRoMapper.selectOrganizationById(id);
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public void updateOrganization(OrganizationBO organizationBO) {
         Organization organization = new Organization();
@@ -68,7 +68,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public void deleteOrganizationById(String id) {
         int del = organizationMapper.deleteByPrimaryKey(id);

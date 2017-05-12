@@ -47,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRoMapper.selectList(role);
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public Role addRole(RoleBO roleBO) {
         Role role = new Role();
@@ -71,7 +71,7 @@ public class RoleServiceImpl implements RoleService {
         return role;
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public int deleteRoleById(String id) {
         int del = roleMapper.deleteRoleById(id);
@@ -87,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRoMapper.selectRoleById(id);
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public int updateRole(RoleBO roleBO) {
         Role role = new Role();
@@ -106,7 +106,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRoMapper.selectMenuIdListByRoleId(id);
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public void updateRoleMenu(String id, String menuIds) {
         List<String> roleMenuIdList = roleRoMapper.selectRoleMenuIdListByRoleId(id);

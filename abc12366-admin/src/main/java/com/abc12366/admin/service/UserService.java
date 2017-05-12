@@ -88,4 +88,11 @@ public interface UserService {
     UserExtend selectUserExtendByUserId(String id);
 
     UserExtend updateUserExtend(UserExtendBO userExtendBO);
+
+    /**
+     * 判断该tonken是否存在
+     * @param userToken
+     * @return
+     */
+    boolean isAuthentication(String userToken);
 }

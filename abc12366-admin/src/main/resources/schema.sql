@@ -36,7 +36,7 @@ select * from sys_user;
 --   status BOOLEAN NOT NULL COMMENT '状态：0无效，1有效',
 --   remark VARCHAR(200) COMMENT '备注'
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '系统菜单表';
---
+
 -- CREATE TABLE sys_organization (
 --   id VARCHAR(64) PRIMARY KEY NOT NULL COMMENT 'ID',
 --   parentId VARCHAR(64) COMMENT '父ID',

@@ -75,7 +75,7 @@ public class MenuServiceImpl implements MenuService {
         return menuBO;
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public MenuBO insert(MenuBO menuBO) {
         if(menuBO.getParentId()==null||menuBO.getParentId().trim().equals("")){
@@ -89,7 +89,7 @@ public class MenuServiceImpl implements MenuService {
         return menuBO;
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public MenuBO delete(String menuId) {
         Menu menu = menuRoMapper.selectByMenuId(menuId);
@@ -106,7 +106,7 @@ public class MenuServiceImpl implements MenuService {
         return menuBO;
     }
 
-    @Transactional("db2TxManager")
+    @Transactional("db1TxManager")
     @Override
     public MenuBO update(MenuBO menuBO) {
         Menu menu = menuRoMapper.selectByMenuId(menuBO.getMenuId());
