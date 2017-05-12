@@ -43,16 +43,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         // App验证、授权拦截
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app/**")
                 .excludePathPatterns("/druid/**")
 
-                .excludePathPatterns("/login", "/refresh", "/register", "/test");
+                .excludePathPatterns("/app/login", "/app/register", "/test");
 
         // UserToken验证、授权拦截
         registry.addInterceptor(userInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
-
+                .excludePathPatterns("/app/login", "/app/register", "/test")
                 .excludePathPatterns("/login", "/register");
     }
 }
