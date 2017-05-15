@@ -128,8 +128,9 @@ public class AppServiceImpl implements AppService {
         request.setAttribute(Constant.APP_ID, appId);
         String method = request.getMethod();
         String version = request.getHeader(Constant.VERSION_HEAD);
+        return true;
 
-        AppSettingApiBO appSettingApiBO = new AppSettingApiBO.Builder()
+      /*  AppSettingApiBO appSettingApiBO = new AppSettingApiBO.Builder()
                 .appId(appId)
                 .uri(bestMatchingPattern)
                 .method(method)
@@ -139,7 +140,7 @@ public class AppServiceImpl implements AppService {
         // 查询接口
         appSettingApiBO = appSettingRoMapper.isAuthentization(appSettingApiBO);
         return appSettingApiBO != null && appSettingApiBO.isAuthentication()
-                && !StringUtils.isNullOrEmpty(request.getHeader(Constant.USER_TOKEN_HEAD));
+                && !StringUtils.isNullOrEmpty(request.getHeader(Constant.USER_TOKEN_HEAD));*/
     }
 
     @Override

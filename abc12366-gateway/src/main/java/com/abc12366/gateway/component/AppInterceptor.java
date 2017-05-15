@@ -54,22 +54,20 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         // 4.App授权
-//        if (!appService.isAuthentization(request)) {
-//            BodyStatus bodyStatus = Utils.bodyStatus(4002);
-//            response.setStatus(403);
-//            response.getWriter().write(JSON.toJSONString(bodyStatus));
-//            response.getWriter().flush();
-//            response.getWriter().close();
-//            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
-//            return false;
-//        }
+        if (!appService.isAuthentization(request)) {
+            BodyStatus bodyStatus = Utils.bodyStatus(4002);
+            response.setStatus(403);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
+            return false;
+        }
 
         return true;
     }
 
-    @Override
-    public void postHandle(
-            HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
         // 移除appId，用于在业务中快速获取有效AppId，在AppInterceptor.preHandle.isAuthentization中设置
         request.removeAttribute(Constant.APP_ID);

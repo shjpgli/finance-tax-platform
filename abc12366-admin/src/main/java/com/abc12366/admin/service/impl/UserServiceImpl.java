@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional("db1TxManager")
     @Override
-    public UserBO login(UserBO userBO, String appToken) {
+    public UserBO login(UserBO userBO, String appId) {
 //        User user = userRoMapper.selectUserByLoginName(userBO.getUsername());
         UserBO user = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
         String password = "";
@@ -212,17 +212,18 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4106);
             }
             //获取APP信息
-            App appTemp = new App();
+            /*App appTemp = new App();
             appTemp.setAccessToken(appToken);
+            appTemp.setStatus(true);
             App app = appRoMapper.selectOne(appTemp);
 
             if (app == null) {
                 throw new ServiceException(4123);
-            }
+            }*/
             //查找用户登录信息
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(user.getId());
-            loginInfo.setAppId(app.getId());
+            loginInfo.setAppId(appId);
             loginInfo.setToken(userToken);
             Date date = new Date();
             loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));

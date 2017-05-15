@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -31,8 +32,9 @@ public class LoginController {
      */
     @PostMapping(value = "/login")
     @ResponseBody
-    public ResponseEntity loginPost(@Valid @RequestBody UserBO userBO, @RequestHeader(Constant.APP_TOKEN_HEAD) String appToken) {
-        UserBO user = userService.login(userBO, appToken);
+    public ResponseEntity loginPost(@Valid @RequestBody UserBO userBO, HttpServletRequest request) {
+        String appId = (String) request.getAttribute(Constant.APP_ID);
+        UserBO user = userService.login(userBO, appId);
         LOGGER.info("{}", user);
         return ResponseEntity.ok(user);
     }

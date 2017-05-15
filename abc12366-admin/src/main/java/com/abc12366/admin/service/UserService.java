@@ -82,7 +82,7 @@ public interface UserService {
 
     User selectOne(String id);
 
-    UserBO login(UserBO userBO, String appToken);
+    UserBO login(UserBO userBO, String appId);
 
 
     UserExtend selectUserExtendByUserId(String id);

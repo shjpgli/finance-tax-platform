@@ -102,11 +102,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
         long outTime = System.currentTimeMillis();
         int status = response.getStatus();
-        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        String appId = null;
-        if (!StringUtils.isEmpty(accessToken)) {
-            appId = JSON.parseObject(Utils.decode(accessToken), TokenBO.class).getId();
-        }
+        String appId = (String) request.getAttribute(Constant.APP_ID);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         String version = request.getHeader(Constant.VERSION_HEAD);
 
