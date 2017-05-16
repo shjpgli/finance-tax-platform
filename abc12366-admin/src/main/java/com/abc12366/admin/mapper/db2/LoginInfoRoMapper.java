@@ -21,4 +21,7 @@ public interface LoginInfoRoMapper {
 
 
     LoginInfo selectOne(LoginInfo loginInfo);
+
+    LoginInfo selectInfoByToken(LoginInfo loginInfo);
+
 }

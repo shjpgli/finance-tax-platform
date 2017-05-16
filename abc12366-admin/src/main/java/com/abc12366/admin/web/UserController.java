@@ -57,6 +57,13 @@ public class UserController {
     }
 
 
+    @PostMapping
+    public ResponseEntity addUser(@Valid @RequestBody UserBO userBO) {
+        int upd = userService.addUser(userBO);
+        LOGGER.info("{}", upd);
+        return ResponseEntity.ok(upd);
+    }
+
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(@Valid @RequestBody UserBO userBO, @PathVariable("id") String id) {
         userBO.setId(id);

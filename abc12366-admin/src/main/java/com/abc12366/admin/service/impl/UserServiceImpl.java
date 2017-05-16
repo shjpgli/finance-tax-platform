@@ -224,11 +224,11 @@ public class UserServiceImpl implements UserService {
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(user.getId());
             loginInfo.setAppId(appId);
-            loginInfo.setToken(userToken);
             Date date = new Date();
             loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
             LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
             //判断该用户是否存在此应用的登录信息
+            loginInfo.setToken(userToken);
             if (info != null) {
                 loginInfo.setId(info.getId());
                 int update = loginInfoMapper.update(loginInfo);
@@ -296,11 +296,47 @@ public class UserServiceImpl implements UserService {
     public boolean isAuthentication(String userToken) {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setToken(userToken);
-        LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
+        LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
         if(info != null){
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int addUser(UserBO userBO) {
+        User user = new User();
+        try {
+            BeanUtils.copyProperties(userBO, user);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new ServiceException(4105);
+        }
+        String password = user.getPassword();
+        user.setId(Utils.uuid());
+        try {
+            user.setPassword(Utils.md5(password));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException(4106);
+        }
+        Date date = new Date();
+        user.setCreateTime(date);
+        user.setLastUpdate(date);
+
+        int ins = userMapper.insert(user);
+
+        String id = user.getId();
+        String[] roles = userBO.getRoleIds().split(",");
+        UserRole userRole = new UserRole();
+
+        for (String roleId : roles) {
+            userRole.setId(Utils.uuid());
+            userRole.setUserId(id);
+            userRole.setRoleId(roleId);
+            userRoleMapper.insert(userRole);
+        }
+        return ins;
     }
 
     private LoginInfo getLoginInfo(UserBO user, String userToken, App app) {

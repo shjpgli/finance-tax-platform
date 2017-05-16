@@ -17,7 +17,7 @@ public class MenuBO {
     @NotEmpty(message = "menuName不能为空")
     @Size(min = 2, max = 32, message = "菜单名称长度2-32位")
     private String menuName;
-    @NotEmpty(message = "menuUrl不能为空")
+    //@NotEmpty(message = "menuUrl不能为空")
     @Size(min = 0, max = 128, message = "联系方式长度0-128位")
     private String menuUrl;
     private String parentId;

@@ -95,4 +95,6 @@ public interface UserService {
      * @return
      */
     boolean isAuthentication(String userToken);
+
+    int addUser(UserBO userBO);
 }
