@@ -3,14 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db1.BlacklistMapper">
 
-    <insert id="insert" parameterType="Blacklist">
+    <insert id="insert" parameterType="com.abc12366.gateway.model.Blacklist">
         INSERT INTO gw_blacklist
         (id, userId, ip, startTime, endTime, remark, status, createTime, createUser)
         VALUES
         (#{id}, #{userId}, #{ip}, #{startTime}, #{endTime}, #{remark}, #{status}, #{createTime}, #{createUser})
     </insert>
 
-    <update id="update" parameterType="Blacklist">
+    <update id="update" parameterType="com.abc12366.gateway.model.Blacklist">
         UPDATE gw_blacklist
         <set>
             <if test="userId != null">userId = #{userId},</if>
@@ -22,7 +22,7 @@
         </set>
     </update>
 
-    <delete id="delete" parameterType="Blacklist">
+    <delete id="delete" parameterType="com.abc12366.gateway.model.Blacklist">
         DELETE FROM gw_blacklist WHERE id = #{id}
     </delete>
 </mapper>
