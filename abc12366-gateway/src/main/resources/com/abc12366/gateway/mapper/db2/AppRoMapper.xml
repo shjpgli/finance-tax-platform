@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db2.AppRoMapper">
-    <select id="selectOne" resultType="App">
+    <select id="selectOne" resultType="com.abc12366.gateway.model.App">
         SELECT id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
         createTime, lastUpdate
         FROM gw_app
@@ -22,20 +22,20 @@
         </where>
     </select>
 
-    <select id="selectByName" resultType="App">
+    <select id="selectByName" resultType="com.abc12366.gateway.model.App">
       SELECT id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
       createTime, lastUpdate
       FROM gw_app
       WHERE name = #{name}
     </select>
 
-    <select id="selectList" resultType="AppGeneralBO">
+    <select id="selectList" resultType="com.abc12366.gateway.model.bo.AppGeneralBO">
         SELECT id, name, startTime, endTime, status, createTime, lastUpdate
         FROM gw_app
         ORDER BY lastUpdate DESC
     </select>
 
-    <select id="selectById" resultType="App">
+    <select id="selectById" resultType="com.abc12366.gateway.model.App">
         SELECT id, name, startTime, endTime, status, createTime, lastUpdate
         FROM gw_app
         WHERE id=#{id}

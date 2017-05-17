@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db2.AppSettingRoMapper">
 
-    <select id="selectOne" resultType="AppSetting">
+    <select id="selectOne" resultType="com.abc12366.gateway.model.AppSetting">
         select id, appId, apiId, timesPerMinute, timesPerHour, timesPerDay, status, createTime, lastUpdate
         from gw_app_setting
         <where>
@@ -13,7 +13,7 @@
         </where>
     </select>
 
-    <select id="selectList" resultType="AppSettingApiBO">
+    <select id="selectList" resultType="com.abc12366.gateway.model.bo.AppSettingApiBO">
         SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
         b.name, b.uri, b.method, b.version, b.authentication,
         a.status, a.createTime, a.lastUpdate
@@ -29,7 +29,7 @@
         </where>
     </select>
 
-    <select id="isAuthentization" resultType="AppSettingApiBO">
+    <select id="isAuthentization" resultType="com.abc12366.gateway.model.bo.AppSettingApiBO">
         SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
         b.name, b.uri, b.method, b.version, b.authentication,
         a.status, a.createTime, a.lastUpdate
