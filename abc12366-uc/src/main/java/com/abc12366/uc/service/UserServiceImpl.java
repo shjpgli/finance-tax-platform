@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
     private UserExtendRoMapper userExtendRoMapper;
 
     @Override
-    public List<User> selectList() {
-        List<User> users = userRoMapper.selectList();
+    public List<UserBO> selectList() {
+        List<UserBO> users = userRoMapper.selectList();
         if (users.size() < 1) {
             return null;
         }
@@ -54,9 +54,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map selectOne(String userId) {
         LOGGER.info("{}", userId);
-        User user = userRoMapper.selectOne(userId);
+        User userTemp = userRoMapper.selectOne(userId);
         UserExtend user_extend = userExtendRoMapper.selectOne(userId);
-        if (user != null) {
+        if (userTemp != null) {
+            UserBO user = new UserBO();
+            BeanUtils.copyProperties(userTemp, user);
             Map map = new HashMap<>();
             map.put("user", user);
             map.put("user_extend", user_extend);

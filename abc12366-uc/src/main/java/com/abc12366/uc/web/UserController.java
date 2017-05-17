@@ -2,8 +2,6 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.gateway.model.bo.AppGeneralBO;
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserService;
 import com.github.pagehelper.Page;
@@ -15,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +38,7 @@ public class UserController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<User> userList = userService.selectList();
+        List<UserBO> userList = userService.selectList();
         LOGGER.info("{}", userList);
         return (userList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :

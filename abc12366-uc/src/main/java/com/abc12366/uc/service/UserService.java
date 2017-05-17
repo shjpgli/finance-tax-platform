@@ -1,7 +1,6 @@
 package com.abc12366.uc.service;
 
 
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Map;
  */
 public interface UserService {
 
-    List<User> selectList();
+    List<UserBO> selectList();
 
     Map selectOne(String userId);
 
