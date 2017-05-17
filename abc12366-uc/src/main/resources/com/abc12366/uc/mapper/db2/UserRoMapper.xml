@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
-    <select id="selectList" resultType="User">
+    <select id="selectList" resultType="UserBO">
         select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
         userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user

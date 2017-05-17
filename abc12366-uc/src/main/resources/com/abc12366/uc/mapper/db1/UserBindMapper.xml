@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.UserBindMapper">
+
+    <insert id="dzsbBind" parameterType="UserDzsb">
+        insert into uc_user_dzsb(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate)
+        values (#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm}, #{status}, #{createTime}, #{lastUpdate})
+    </insert>
+
+    <update id="dzsbUnbind">
+        update uc_user_dzsb
+        <set>
+            status=FALSE,
+            lastUpdate=now()
+        </set>
+        where id=#{id}
+    </update>
+
+    <insert id="hngsBind" parameterType="UserHngs">
+        insert into uc_user_hngs(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, bsy, smrzzt, status, createTime, lastUpdate)
+        values(#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm},#{bsy},#{smrzzt}, #{status}, #{createTime}, #{lastUpdate})
+    </insert>
+
+    <update id="hngsUnbind">
+        update uc_user_hngs
+        <set>
+            status=FALSE,
+            lastUpdate= now()
+        </set>
+        where id=#{id}
+    </update>
+    <insert id="hndsBind" parameterType="UserHnds">
+        insert into uc_user_hnds(id, userId, username, subuser, nsrmc, nsrsbh, djxh, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate)
+        values(#{id}, #{userId}, #{username}, #{subuser}, #{nsrmc}, #{nsrsbh}, #{djxh}, #{shxydm},#{swjgMc}, #{swjgDm}, #{status}, #{createTime}, #{lastUpdate})
+    </insert>
+
+    <update id="hndsUnbind">
+        update uc_user_hnds
+        <set>
+            status=FALSE,
+            lastUpdate=now()
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

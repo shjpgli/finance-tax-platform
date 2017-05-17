@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.UserBindRoMapper">
+
+    <select id="userDzsbSelectById" resultType="UserDzsb">
+        select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
+        from uc_user_dzsb
+        where id=#{id}
+    </select>
+
+    <select id="userHngsSelectById" resultType="UserHngs">
+        select id,userId,djxh,nsrsbh,nsrmc,shxydm,swjgMc,swjgDm,bsy,smrzzt,status,createTime,lastUpdate
+        from uc_user_hngs
+        where id=#{id}
+    </select>
+    <select id="userHndsSelectById" resultType="UserHnds">
+        select id, userId, username, subuser, nsrmc, nsrsbh, djxh, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
+        from uc_user_hnds
+        where id=#{id}
+    </select>
+</mapper>

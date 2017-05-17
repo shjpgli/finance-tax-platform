@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.PointsRuleRoMapper">
+
+    <select id="selectList" resultType="PointsRuleBO" parameterType="Map">
+        select id, name, code, points, description, type, status, createTime, lastUpdate
+        from uc_upoints_rule
+        <where>
+            <if test="name!=null">name=#{name}</if>
+            <if test="code!=null">and code=#{code}</if>
+            <if test="type!=null">and type=#{type}</if>
+        </where>
+        ORDER BY lastUpdate DESC
+    </select>
+    <select id="selectOne" resultType="PointsRuleBO">
+        select id, name, code, points, description, type, status, createTime, lastUpdate
+        from uc_upoints_rule
+        where id=#{id}
+    </select>
+
+    <select id="selectByCode" resultType="PointsRule">
+        select id, name, code, points, description, type, status, createTime, lastUpdate
+        from uc_upoints_rule
+        where code=#{code}
+    </select>
+</mapper>
