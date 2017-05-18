@@ -1,5 +1,10 @@
 package com.abc12366.common.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * 常量定义
  *
@@ -31,4 +36,61 @@ public class Constant {
     public final static String pageNum = "1";
     // 分页-每页大小
     public final static String pageSize = "10";
+
+    //时间-当前日期
+    public final static String startTime = getTodaySting();
+
+    public final static String endTime = getTodaySting();
+
+
+
+
+    /**
+     * 获取当前系统当天日期String
+     * @return
+     */
+    public static String getTodaySting() {
+        Date date = new Date();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    /**
+     * 获取当前系统当天日期
+     * @param date
+     * @return
+     */
+    public static Date getToday(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, 0);
+        date = calendar.getTime();
+        return date;
+    }
+
+    /**
+     * 获取当前系统前一天日期
+     * @param date
+     * @return
+     */
+    public static Date getYesterDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        date = calendar.getTime();
+        return date;
+    }
+
+    /**
+     * 获取当前系统下一天日期
+     * @param date
+     * @return
+     */
+    public static Date getNextDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        date = calendar.getTime();
+        return date;
+    }
 }

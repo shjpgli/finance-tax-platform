@@ -38,7 +38,8 @@ public class OrganizationController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam String name,@RequestParam Boolean status) {
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "status", required = false) Boolean status) {
         Organization organization = new Organization();
         organization.setName(name);
         organization.setStatus(status);

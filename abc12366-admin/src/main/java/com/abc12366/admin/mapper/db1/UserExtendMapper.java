@@ -17,7 +17,7 @@ public interface UserExtendMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") String id);
+	int deleteByUserId(@Param("userId") String userId);
 
 	/**
 	 * 

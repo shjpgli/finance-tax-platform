@@ -14,15 +14,15 @@ import java.util.Date;
  */
 public class DictBO{
     private String id;
-    @NotEmpty(message = "dictId不能为空")
+    @NotEmpty
     private String dictId;
-    @NotEmpty(message = "dictName不能为空")
+    @NotEmpty
     private String dictName;
-    @NotEmpty(message = "fieldKey不能为空")
+    @NotEmpty
     private String fieldKey;
-    @NotEmpty(message = "fieldValue不能为空")
+    @NotEmpty
     private String fieldValue;
-    @NotNull(message = "status不能为空")
+    @NotNull
     private boolean status;
     private Date createTime;
     private String createUser;

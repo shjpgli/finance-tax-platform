@@ -40,10 +40,10 @@ public class LoginController {
     }
 
 
-    @PostMapping(path = "/register")
+    /*@PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody UserBO userBO) {
         int registerNum = userService.register(userBO);
         LOGGER.info("{}", registerNum);
         return ResponseEntity.ok(registerNum);
-    }
+    }*/
 }

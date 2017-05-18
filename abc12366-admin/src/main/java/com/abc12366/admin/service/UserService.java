@@ -4,6 +4,7 @@ import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.model.bo.UserExtendBO;
+import com.abc12366.admin.model.bo.UserUpdateBO;
 
 import java.util.List;
 
@@ -69,9 +70,9 @@ public interface UserService {
     /**
      * 修改用户
      *
-     * @param userBO
+     * @param userUpdateBO
      */
-    int updateUser(UserBO userBO);
+    int updateUser(UserUpdateBO userUpdateBO);
 
     /**
      * 删除用户
@@ -80,7 +81,7 @@ public interface UserService {
      */
     int deleteUserById(String id);
 
-    User selectOne(String id);
+    UserBO selectOne(String id);
 
     UserBO login(UserBO userBO, String appId);
 

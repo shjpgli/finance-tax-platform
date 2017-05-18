@@ -4,13 +4,13 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.ProductMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="delete" parameterType="java.lang.String">
-		 DELETE FROM uc_product
-		 WHERE id = #{id}
-	</delete>
+    <update id="updateStatus" parameterType="java.lang.String">
+        update uc_product set status = 0
+        WHERE id = #{id}
+    </update>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insert" parameterType="product">
+	<insert id="insert" parameterType="com.abc12366.uc.model.Product">
         INSERT INTO uc_product
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null">
@@ -98,7 +98,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="update" parameterType="product">
+	<update id="update" parameterType="com.abc12366.uc.model.Product">
         UPDATE uc_product
         <set>
             <if test="name != null">

@@ -38,7 +38,8 @@ public class RoleController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam String roleName, @RequestParam Boolean status) {
+                                     @RequestParam(value = "roleName", required = false) String roleName,
+                                     @RequestParam(value = "status", required = false) Boolean status) {
         Role role = new Role();
         role.setRoleName(roleName);
         role.setStatus(status);

@@ -8,7 +8,7 @@
         from sys_dict
     </select>
 
-    <select id="selectOne" resultType="Dict" parameterType="Dict">
+    <select id="selectOne" resultType="Dict" parameterType="com.abc12366.admin.model.Dict">
         select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
         from sys_dict
         <where>
@@ -18,18 +18,18 @@
         </where>
     </select>
 
-    <select id="selectFirstLevel" resultType="Dict">
+    <select id="selectFirstLevel" resultType="com.abc12366.admin.model.Dict">
         select id, dictId, dictName
         from sys_dict
     </select>
 
-    <select id="selectByDictId" resultType="Dict">
+    <select id="selectByDictId" resultType="com.abc12366.admin.model.Dict">
         select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
         from sys_dict
         where dictId = #{dictId}
     </select>
 
-    <select id="selectByDictName" resultType="Dict">
+    <select id="selectByDictName" resultType="com.abc12366.admin.model.Dict">
         select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
         from sys_dict
         where dictName = #{dictName}

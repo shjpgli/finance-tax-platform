@@ -4,13 +4,13 @@
 <mapper namespace="com.abc12366.admin.mapper.db1.LoginInfoMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+	<delete id="deleteByUserId" parameterType="java.lang.String">
 		 DELETE FROM sys_login_info
-		 WHERE id = #{id}
+		 WHERE userId = #{userId}
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="loginInfo">
+	<insert id="insert" parameterType="com.abc12366.admin.model.LoginInfo">
 		 INSERT INTO sys_login_info
  		(id,userId,appId,token,lastResetTokenTime) 
 		 VALUES 
@@ -18,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="loginInfo">
+	<insert id="insertSelective" parameterType="com.abc12366.admin.model.LoginInfo">
 		 INSERT INTO sys_login_info
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -58,7 +58,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="update" parameterType="loginInfo">
+	<update id="update" parameterType="com.abc12366.admin.model.LoginInfo">
 		 UPDATE sys_login_info
  		 <set> 
 			<if test="userId != null">
@@ -79,7 +79,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="loginInfo">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.admin.model.LoginInfo">
 		 UPDATE sys_login_info
 		 SET 
 			 userId = #{userId},

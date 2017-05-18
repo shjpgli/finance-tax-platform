@@ -5,7 +5,6 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.ProductMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Product;
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.service.ProductService;
 import org.springframework.beans.BeanUtils;
@@ -87,5 +86,10 @@ public class ProductServiceImpl implements ProductService {
         ProductBO productBO = new ProductBO();
         BeanUtils.copyProperties(product, productBO);
         return productBO;
+    }
+
+    @Override
+    public void updateStatus(String id) {
+        productMapper.updateStatus(id);
     }
 }

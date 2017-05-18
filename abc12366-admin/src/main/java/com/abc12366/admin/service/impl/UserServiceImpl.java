@@ -9,6 +9,7 @@ import com.abc12366.admin.mapper.db2.*;
 import com.abc12366.admin.model.*;
 import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.model.bo.UserExtendBO;
+import com.abc12366.admin.model.bo.UserUpdateBO;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
@@ -80,16 +81,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> selectList(User user) {
         List<User> users = userRoMapper.selectList(user);
-        /*if(users != null){
-            List<UserBO> userBOs = new ArrayList<UserBO>();
-            for (User user:users){
-                UserBO userBO = new UserBO();
-                BeanUtils.copyProperties(user,userBO);
-                userBOs.add(userBO);
-            }
-            LOGGER.info("{}", userBOs);
-            return userBOs;
-        }*/
         return users;
     }
 
@@ -142,18 +133,40 @@ public class UserServiceImpl implements UserService {
 
     @Transactional("db1TxManager")
     @Override
-    public int updateUser(UserBO userBO) {
+    public int updateUser(UserUpdateBO userUpdateBO) {
         User user = new User();
         try {
-            BeanUtils.copyProperties(user, userBO);
+            BeanUtils.copyProperties(userUpdateBO, user);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new ServiceException(4105);
         }
-        user.setLastUpdate(new Date());
+        Date date = new Date();
+        user.setLastUpdate(date);
+        //密码不为空时，给密码加密
+        if(userUpdateBO.getPassword() != null && !"".equals(userUpdateBO.getPassword())){
+            try {
+                user.setPassword(Utils.md5(userUpdateBO.getPassword()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         int upd = userMapper.updateUser(user);
+        if(upd != 1){
+            throw new ServiceException(4102);
+        }
 
-        String id = userBO.getId();
+        //修改用户详情
+        UserExtend userExtend = new UserExtend();
+        BeanUtils.copyProperties(userUpdateBO, userExtend);
+        userExtend.setUserId(user.getId());
+        userExtend.setLastUpdate(date);
+        int updExtend = userExtendMapper.updateUserExtentBO(userExtend);
+        if(updExtend != 1){
+            throw new ServiceException(4114);
+        }
+
+        String id = userUpdateBO.getId();
         List<UserRole> userRoles = userRoleRoMapper.selectUserRoleByUserId(id);
         if (userRoles != null && (!userRoles.isEmpty())) {
             for (UserRole userRole : userRoles) {
@@ -161,9 +174,10 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        String[] roles = userBO.getRoleIds().split(",");
+        String[] roles = userUpdateBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
         for (String roleId : roles) {
+            userRole.setId(Utils.uuid());
             userRole.setUserId(id);
             userRole.setRoleId(roleId);
             userRoleMapper.insert(userRole);
@@ -175,6 +189,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public int deleteUserById(String id) {
         int del = userMapper.deleteById(id);
+        userExtendMapper.deleteByUserId(id);
+        loginInfoMapper.deleteByUserId(id);
         List<UserRole> userRoles = userRoleRoMapper.selectUserRoleByUserId(id);
         if (userRoles != null && (!userRoles.isEmpty())) {
             for (UserRole userRole : userRoles) {
@@ -185,7 +201,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User selectOne(String id) {
+    public UserBO selectOne(String id) {
         return userRoMapper.selectOne(id);
     }
 
@@ -193,7 +209,6 @@ public class UserServiceImpl implements UserService {
     @Transactional("db1TxManager")
     @Override
     public UserBO login(UserBO userBO, String appId) {
-//        User user = userRoMapper.selectUserByLoginName(userBO.getUsername());
         UserBO user = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
         String password = "";
         try {
@@ -211,15 +226,6 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
                 throw new ServiceException(4106);
             }
-            //获取APP信息
-            /*App appTemp = new App();
-            appTemp.setAccessToken(appToken);
-            appTemp.setStatus(true);
-            App app = appRoMapper.selectOne(appTemp);
-
-            if (app == null) {
-                throw new ServiceException(4123);
-            }*/
             //查找用户登录信息
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(user.getId());
@@ -265,9 +271,10 @@ public class UserServiceImpl implements UserService {
         return userExtendRoMapper.selectUserExtendByUserId(id);
     }
 
+
     @Override
     public UserExtend updateUserExtend(UserExtendBO userExtendBO) {
-        UserExtend userExtend = new UserExtend();
+        /*UserExtend userExtend = new UserExtend();
         BeanUtils.copyProperties(userExtendBO,userExtend);
         //查询该用户是否存在详情，不存在，insert；存在，Update
         UserExtend extend = userExtendRoMapper.selectUserExtendByUserId(userExtendBO.getUserId());
@@ -288,7 +295,8 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4102);
             }
             return userExtend;
-        }
+        }*/
+        return  null;
     }
 
 
@@ -303,6 +311,7 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public int addUser(UserBO userBO) {
         User user = new User();
@@ -325,16 +334,38 @@ public class UserServiceImpl implements UserService {
         user.setLastUpdate(date);
 
         int ins = userMapper.insert(user);
-
+        if(ins != 1){
+            throw new ServiceException(4101);
+        }
+        UserExtend userExtend = new UserExtend();
+        BeanUtils.copyProperties(userBO,userExtend);
+        userExtend.setLastUpdate(date);
+        userExtend.setCreateTime(date);
+        userExtend.setUserId(user.getId());
+        /*userExtend.setLastUpdate(date);
+        userExtend.setCreateTime(date);
+        userExtend.setUserId(user.getId());
+        userExtend.setAddress(userBO.getAddress());
+        userExtend.setJob(userBO.getJob());
+        userExtend.setOrgId(userBO.getOrgId());
+        userExtend.setPhone(userBO.getPhone());*/
+        int extInsert = userExtendMapper.insert(userExtend);
+        if(extInsert != 1){
+            throw new ServiceException(4112);
+        }
         String id = user.getId();
         String[] roles = userBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
 
+        int roleIns = 0;
         for (String roleId : roles) {
             userRole.setId(Utils.uuid());
             userRole.setUserId(id);
             userRole.setRoleId(roleId);
-            userRoleMapper.insert(userRole);
+            roleIns=userRoleMapper.insert(userRole);
+            if(roleIns != 1){
+                throw new ServiceException(4113);
+            }
         }
         return ins;
     }

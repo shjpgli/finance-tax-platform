@@ -16,33 +16,16 @@ import java.util.Map;
  * 
  **/
 @SuppressWarnings("serial")
-public class UserBO extends UserExtendBO implements Serializable {
+public class UserUpdateBO extends UserExtendUpdateBO implements Serializable {
 
-	/**ID**/
 	private String id;
-
-	/**用户名**/
-    @NotEmpty
-    @Size(min = 6, max = 32)
 	private String username;
-
-    @NotEmpty
-    @Size(min = 6, max = 32)
-	/**密码**/
 	private String password;
-
-	/**昵称**/
 	private String nickname;
-
-	/**用户状态**/
 	private Boolean status;
-
 	private String roleIds;
-
 	private List<Role> rolesList;
-
     private LoginInfo loginInfo;
-
     private Map<String,List<Menu>> menuMap;
 
 	public List<Role> getRolesList() {

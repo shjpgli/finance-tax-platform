@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="user">
+	<insert id="insert" parameterType="com.abc12366.admin.model.User">
 		 INSERT INTO sys_user
  		(id,username,password,nickname,status,createTime,lastUpdate)
 		 VALUES 
@@ -18,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="user">
+	<insert id="insertSelective" parameterType="com.abc12366.admin.model.User">
 		 INSERT INTO sys_user
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -70,7 +70,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="user">
+	<update id="updateUser" parameterType="com.abc12366.admin.model.User">
 		 UPDATE sys_user
  		 <set> 
 			<if test="username != null">
@@ -97,7 +97,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="user">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.admin.model.User">
 		 UPDATE sys_user
 		 SET 
 			 username = #{username},

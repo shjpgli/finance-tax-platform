@@ -4,6 +4,7 @@ import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.model.bo.UserExtendBO;
+import com.abc12366.admin.model.bo.UserUpdateBO;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -35,7 +36,9 @@ public class UserController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam String username, @RequestParam String nickname, @RequestParam Boolean status) {
+                                     @RequestParam(value = "username", required = false) String username,
+                                     @RequestParam(value = "nickname", required = false) String nickname,
+                                     @RequestParam(value = "status", required = false) Boolean status) {
         User user = new User();
         user.setUsername(username);
         user.setNickname(nickname);
@@ -51,7 +54,7 @@ public class UserController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
-        User temp = userService.selectOne(id);
+        UserBO temp = userService.selectOne(id);
         LOGGER.info("{}", temp);
         return ResponseEntity.ok(temp);
     }
@@ -65,9 +68,9 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateUser(@Valid @RequestBody UserBO userBO, @PathVariable("id") String id) {
-        userBO.setId(id);
-        int upd = userService.updateUser(userBO);
+    public ResponseEntity updateUser(@Valid @RequestBody UserUpdateBO userUpdateBO, @PathVariable("id") String id) {
+        userUpdateBO.setId(id);
+        int upd = userService.updateUser(userUpdateBO);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);
     }

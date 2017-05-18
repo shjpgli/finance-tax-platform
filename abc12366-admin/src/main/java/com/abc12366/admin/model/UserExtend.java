@@ -13,9 +13,6 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class UserExtend implements Serializable {
 
-	/**ID**/
-	private String id;
-
 	/**用户ID**/
 	private String userId;
 
@@ -43,15 +40,6 @@ public class UserExtend implements Serializable {
 	/**修改时间**/
 	private java.util.Date lastUpdate;
 
-
-
-	public void setId(String id){
-		this.id = id;
-	}
-
-	public String getId(){
-		return this.id;
-	}
 
 	public void setUserId(String userId){
 		this.userId = userId;

@@ -6,7 +6,7 @@
     <sql id="Base_Column_List">
         menuId, menuName, menuUrl, parentId,  perms, type, icon, sort, status, remark
     </sql>
-    <select id="selectList" resultType="Menu" parameterType="Menu">
+    <select id="selectList" resultType="com.abc12366.admin.model.Menu" parameterType="com.abc12366.admin.model.Menu">
         select
         <include refid="Base_Column_List" />
         from sys_menu
@@ -18,35 +18,35 @@
         </where>
     </select>
 
-    <select id="selectByParentId" resultType="Menu">
+    <select id="selectByParentId" resultType="com.abc12366.admin.model.Menu">
         select
         <include refid="Base_Column_List" />
         from sys_menu
         where parentId = #{parentId}
     </select>
 
-    <select id="selectFirstLevel" resultType="Menu">
+    <select id="selectFirstLevel" resultType="com.abc12366.admin.model.Menu">
         select
         <include refid="Base_Column_List" />
         from sys_menu
         where parentId IS NULL
     </select>
 
-    <select id="selectByMenuId" resultType="Menu">
+    <select id="selectByMenuId" resultType="com.abc12366.admin.model.Menu">
         select
         <include refid="Base_Column_List" />
         from sys_menu
         where menuId = #{menuId}
     </select>
 
-    <select id="selectByMenuName" resultType="Menu">
+    <select id="selectByMenuName" resultType="com.abc12366.admin.model.Menu">
         select
         <include refid="Base_Column_List" />
         from sys_menu
         where menuName = #{menuName}
     </select>
 
-    <select id="selectMenuByRoleId" resultType="Menu">
+    <select id="selectMenuByRoleId" resultType="com.abc12366.admin.model.Menu">
         SELECT
         m.menuId,
         m.menuName,

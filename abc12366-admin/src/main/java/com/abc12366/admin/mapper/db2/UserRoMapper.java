@@ -33,5 +33,5 @@ public interface UserRoMapper {
 
 	List<User> selectList(User user);
 
-    User selectOne(String id);
+    UserBO selectOne(@Param("id") String id);
 }

@@ -4,26 +4,23 @@
 <mapper namespace="com.abc12366.admin.mapper.db1.UserExtendMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+	<delete id="deleteByUserId" parameterType="java.lang.String">
 		 DELETE FROM sys_user_extend
-		 WHERE id = #{id}
+		 WHERE userId = #{userId}
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="userExtend">
+	<insert id="insertSelective" parameterType="com.abc12366.admin.model.UserExtend">
 		 INSERT INTO sys_user_extend
- 		(id,userId,orgId,job,phone,address,createTime,lastUpdate) 
+ 		(userId,orgId,job,phone,address,createTime,lastUpdate)
 		 VALUES 
- 		(#{id},#{userId},#{orgId},#{job},#{phone},#{address},#{createTime},#{lastUpdate}) 
+ 		(#{userId},#{orgId},#{job},#{phone},#{address},#{createTime},#{lastUpdate})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="userExtend">
+	<insert id="insert" parameterType="com.abc12366.admin.model.UserExtend">
 		 INSERT INTO sys_user_extend
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="id != null">
-				 id,
-			</if>
 			<if test="userId != null">
 				 userId,
 			</if>
@@ -48,9 +45,6 @@
 
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="id!=null">
-				 #{id},
-			</if>
 			<if test="userId!=null">
 				 #{userId},
 			</if>
@@ -76,7 +70,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateUserExtentBO" parameterType="userExtend">
+	<update id="updateUserExtentBO" parameterType="com.abc12366.admin.model.UserExtend">
 		 UPDATE sys_user_extend
  		 <set> 
 			<if test="userId != null">
@@ -102,21 +96,20 @@
 			</if>
 
  		 </set>
-		 WHERE id = #{id}
+		 WHERE userId = #{userId}
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="userExtend">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.admin.model.UserExtend">
 		 UPDATE sys_user_extend
-		 SET 
-			 userId = #{userId},
+		 SET
 			 orgId = #{orgId},
 			 job = #{job},
 			 phone = #{phone},
 			 address = #{address},
 			 createTime = #{createTime},
 			 lastUpdate = #{lastUpdate}
-		 WHERE id = #{id}
+		 WHERE userId = #{userId}
 	</update>
 
 </mapper>

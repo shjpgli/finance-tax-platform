@@ -1,15 +1,15 @@
 package com.abc12366.uc.mapper.db1;
 
-import com.abc12366.uc.model.Product;
+import com.abc12366.uc.model.Order;
 import org.apache.ibatis.annotations.Param;
 
 /**
  * 
- * ProductMapper数据增删改库操作接口类
+ * OrderMapper数据库操作接口类
  * 
  **/
 
-public interface ProductMapper{
+public interface OrderMapper{
 
 
 	/**
@@ -17,14 +17,14 @@ public interface ProductMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int updateStatus(@Param("id") String id);
+	int deleteByIdAndUserId(Order order);
 
 	/**
 	 * 
 	 * 添加
 	 * 
 	 **/
-	int insert(Product record);
+	int insert(Order record);
 
 
 	/**
@@ -32,7 +32,6 @@ public interface ProductMapper{
 	 * 修改 （匹配有值的字段）
 	 * 
 	 **/
-	int update(Product record);
-
+	int update(Order record);
 
 }

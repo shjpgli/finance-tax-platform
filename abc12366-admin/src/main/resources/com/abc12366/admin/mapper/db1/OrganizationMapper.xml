@@ -15,7 +15,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insertSelective" parameterType="organization">
+	<insert id="insertSelective" parameterType="com.abc12366.admin.model.Organization">
 		 INSERT INTO sys_organization
  		(id,parentId,name,code,areaId,type,contact,phone,address,remark,status,createUser,createTime,lastUser,lastUpdate) 
 		 VALUES 
@@ -23,7 +23,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insert" parameterType="organization">
+	<insert id="insert" parameterType="com.abc12366.admin.model.Organization">
 		 INSERT INTO sys_organization
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -123,7 +123,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="update" parameterType="organization">
+	<update id="update" parameterType="com.abc12366.admin.model.Organization">
 		 UPDATE sys_organization
  		 <set> 
 			<if test="parentId != null">
@@ -174,7 +174,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="organization">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.admin.model.Organization">
 		 UPDATE sys_organization
 		 SET 
 			 parentId = #{parentId},

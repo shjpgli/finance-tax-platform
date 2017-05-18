@@ -36,7 +36,9 @@ public class MenuController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam String menuName, @RequestParam String parentId, @RequestParam String type) {
+                                     @RequestParam(value = "menuName", required = false) String menuName,
+                                     @RequestParam(value = "parentId", required = false) String parentId,
+                                     @RequestParam(value = "type", required = false) String type) {
         Menu menu = new Menu();
         menu.setMenuName(menuName);
         menu.setParentId(parentId);

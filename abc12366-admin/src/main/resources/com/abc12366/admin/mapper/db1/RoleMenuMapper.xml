@@ -15,7 +15,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="roleMenu">
+	<insert id="insert" parameterType="com.abc12366.admin.model.RoleMenu">
 		 INSERT INTO sys_role_menu
  		(id,roleId,menuId) 
 		 VALUES 
@@ -23,7 +23,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="roleMenu">
+	<insert id="insertSelective" parameterType="com.abc12366.admin.model.RoleMenu">
 		 INSERT INTO sys_role_menu
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -51,7 +51,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="roleMenu">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.admin.model.RoleMenu">
 		 UPDATE sys_role_menu
  		 <set> 
 			<if test="roleId != null">
@@ -66,7 +66,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="roleMenu">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.admin.model.RoleMenu">
 		 UPDATE sys_role_menu
 		 SET 
 			 roleId = #{roleId},

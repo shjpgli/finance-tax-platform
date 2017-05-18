@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectById" resultType="product" parameterType="java.lang.String">
+	<select id="selectById" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM uc_product
@@ -17,7 +17,7 @@
 	</select>
 
 	<!-- 查询（根据主键ID和状态查询） -->
-	<select id="selectByIdAndStatus" resultType="product" parameterType="java.lang.String">
+	<select id="selectByIdAndStatus" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM uc_product
@@ -25,7 +25,7 @@
 	</select>
 
 	<!-- 查询条件根据） -->
-	<select id="selectList" resultType="product" parameterType="product">
+	<select id="selectList" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM uc_product
@@ -38,7 +38,7 @@
 	</select>
 
     <!-- 查询条件根据） -->
-    <select id="selectProductList" resultType="product" parameterType="product">
+    <select id="selectProductList" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_product

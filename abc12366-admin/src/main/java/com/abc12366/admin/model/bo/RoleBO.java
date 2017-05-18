@@ -18,7 +18,7 @@ public class RoleBO implements Serializable {
 	private String id;
 
 	@NotEmpty
-    @Size(min = 1, max = 50, message = "角色名称必须为1-50位")
+    @Size(min = 1, max = 50)
 	private String roleName;
 
 	private String remark;

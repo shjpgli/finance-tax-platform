@@ -10,30 +10,15 @@ import java.io.Serializable;
  * 
  **/
 @SuppressWarnings("serial")
-public class UserExtendBO implements Serializable {
+public class UserExtendUpdateBO implements Serializable {
 
-	/**用户ID**/
 	private String userId;
-
-	/**组织机构ID**/
-    @NotEmpty
 	private String orgId;
-
     private String orgName;
-
-	/**职务**/
 	private String job;
-
-	/**联系方式**/
 	private String phone;
-
-	/**联系地址**/
 	private String address;
-
-	/**创建时间**/
 	private java.util.Date createTime;
-
-	/**修改时间**/
 	private java.util.Date lastUpdate;
 
 

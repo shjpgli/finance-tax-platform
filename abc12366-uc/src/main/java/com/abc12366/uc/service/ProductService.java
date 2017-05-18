@@ -24,4 +24,5 @@ public interface ProductService {
 
     ProductBO selectProduct(String id);
 
+    void updateStatus(String id);
 }

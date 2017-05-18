@@ -1,0 +1,34 @@
+package com.abc12366.uc.mapper.db2;
+
+import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.bo.OrderBO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * 
+ * OrderMapper数据库操作接口类
+ * 
+ **/
+
+public interface OrderRoMapper {
+
+
+	/**
+	 * 
+	 * 查询（根据主键ID查询）
+	 * 
+	 **/
+	Order  selectByPrimaryKey(@Param("id") String id);
+
+    List<OrderBO> selectList(OrderBO order);
+
+    Order selectById(String id);
+
+    List<OrderBO> selectOrderList(OrderBO order);
+
+    Order selectOrder(Order order);
+
+    List<OrderBO> selectCartList(OrderBO order);
+}

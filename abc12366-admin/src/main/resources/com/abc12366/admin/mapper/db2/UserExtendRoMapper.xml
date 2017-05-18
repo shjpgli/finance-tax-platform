@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectById" resultType="userExtend" parameterType="java.lang.String">
+	<select id="selectById" resultType="com.abc12366.admin.model.UserExtend" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM sys_user_extend
@@ -17,7 +17,7 @@
 	</select>
 
     <!-- 查询（根据UserID查询） -->
-    <select id="selectUserExtendByUserId" resultType="userExtend" parameterType="java.lang.String">
+    <select id="selectUserExtendByUserId" resultType="com.abc12366.admin.model.UserExtend" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM sys_user_extend

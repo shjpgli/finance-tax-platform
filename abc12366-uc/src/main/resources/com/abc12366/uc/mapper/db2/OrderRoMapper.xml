@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.OrderRoMapper">
+
+    <resultMap id="orderBOResultMap" type="com.abc12366.uc.model.bo.OrderBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="orderId" property="orderId" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="DOUBLE"/>
+        <result column="points" property="points" jdbcType="INTEGER"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="feedback" property="feedback" jdbcType="VARCHAR"/>
+        <association property="user" javaType="com.abc12366.uc.model.User">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="phone" property="phone"/>
+        </association>
+        <association property="product" javaType="com.abc12366.uc.model.Product">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="category" property="category"/>
+        </association>
+    </resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	userId,	orderId,	productId,	amount,	points,	num,	status,	createTime,	lastUpdate,	feedback
+	</sql>
+
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Order" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM uc_order
+		 WHERE id = #{id}
+	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectOrder" resultType="com.abc12366.uc.model.Order" parameterType="com.abc12366.uc.model.Order">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_order
+        WHERE id = #{id} and userId = #{userId}
+    </select>
+
+    <!-- 后台查询（根据条件查询） -->
+    <select id="selectList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+        SELECT
+        o.id,
+        o.userId,
+        o.orderId,
+        o.productId,
+        o.amount,
+        o.points,
+        o.num,
+        o.status,
+        o.createTime,
+        o.lastUpdate,
+        o.feedback,
+        u.username,
+        u.phone,
+        p.name,
+        p.category
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        left join uc_product p on p.id = o.productId
+        <where>
+            1 = 1
+            <if test=" user.username != null and user.username != '' ">
+                and u.username = #{user.username}
+            </if>
+            <if test=" user.phone != null and user.phone != '' ">
+                and u.phone = #{user.phone}
+            </if>
+            <if test=" product.name != null and product.name != '' ">
+                and p.name = #{product.name}
+            </if>
+            <if test=" product.category != null and product.category != '' ">
+                and p.category = #{product.category}
+            </if>
+           <if test="startTime != null">
+                <![CDATA[
+              and date_format(o.createTime, 'YYYY-MM-DD') >= date_format(#{startTime}, 'YYYY-MM-DD')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(o.createTime, 'YYYY-MM-DD') <= date_format(#{endTime}, 'YYYY-MM-DD')
+              ]]>
+            </if>
+        </where>
+
+        order by o.lastUpdate desc
+
+    </select>
+
+    <!-- 前台查询（根据条件查询） -->
+    <select id="selectOrderList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+        SELECT
+        o.id,
+        o.userId,
+        o.orderId,
+        o.productId,
+        o.amount,
+        o.points,
+        o.num,
+        o.status,
+        o.createTime,
+        o.lastUpdate,
+        o.feedback,
+        u.username,
+        u.phone,
+        p.name,
+        p.category
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        left join uc_product p on p.id = o.productId
+        <where>
+            1 = 1
+            <if test=" user.id != null and user.id != '' ">
+                and u.id = #{user.id}
+            </if>
+            <if test=" product.name != null and product.name != '' ">
+                and p.name = #{product.name}
+            </if>
+            <if test=" status != null and status != '' ">
+                and o.status != #{status}
+            </if>
+        </where>
+
+         order by o.lastUpdate desc
+
+    </select>
+
+    <!-- 前台查询（根据条件查询） -->
+    <select id="selectCartList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+        SELECT
+        o.id,
+        o.userId,
+        o.orderId,
+        o.productId,
+        o.amount,
+        o.points,
+        o.num,
+        o.status,
+        o.createTime,
+        o.lastUpdate,
+        o.feedback,
+        u.username,
+        u.phone,
+        p.name,
+        p.category
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        left join uc_product p on p.id = o.productId
+        <where>
+            <if test=" status != null and status != '' ">
+                o.status = #{status}
+            </if>
+        </where>
+
+        order by o.lastUpdate desc
+
+    </select>
+
+</mapper>
