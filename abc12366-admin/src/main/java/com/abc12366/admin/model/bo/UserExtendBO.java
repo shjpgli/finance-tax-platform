@@ -16,7 +16,6 @@ public class UserExtendBO implements Serializable {
 	private String userId;
 
 	/**组织机构ID**/
-    @NotEmpty
 	private String orgId;
 
     private String orgName;
