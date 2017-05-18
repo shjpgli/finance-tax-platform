@@ -42,7 +42,7 @@ public interface UserService {
      *
      * @param user
      */
-    List<User> selectList(User user);
+    List<UserBO> selectList(User user);
 
     /**
      * 添加用户

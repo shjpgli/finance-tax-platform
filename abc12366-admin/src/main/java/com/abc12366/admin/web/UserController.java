@@ -44,7 +44,7 @@ public class UserController {
         user.setNickname(nickname);
         user.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<User> dataList = userService.selectList(user);
+        List<UserBO> dataList = userService.selectList(user);
         LOGGER.info("{}", dataList);
         if (dataList != null && dataList.size() != 0) {
             return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
