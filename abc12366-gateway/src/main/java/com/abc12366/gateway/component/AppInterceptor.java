@@ -67,9 +67,9 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+    /*public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
         // 移除appId，用于在业务中快速获取有效AppId，在AppInterceptor.preHandle.isAuthentization中设置
         request.removeAttribute(Constant.APP_ID);
-    }
+    }*/
 }

@@ -103,8 +103,10 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         long outTime = System.currentTimeMillis();
         int status = response.getStatus();
         String appId = (String) request.getAttribute(Constant.APP_ID);
+        request.removeAttribute(Constant.APP_ID);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         String version = request.getHeader(Constant.VERSION_HEAD);
+
 
         ApiLog log = new ApiLog.Builder()
                 .id(Utils.uuid())

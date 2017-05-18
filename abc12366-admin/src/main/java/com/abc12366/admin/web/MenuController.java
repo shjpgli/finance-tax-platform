@@ -49,7 +49,7 @@ public class MenuController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
-    @GetMapping(path = "/{parentId}")
+    @GetMapping(path = "/parent/{parentId}")
     public ResponseEntity selectFirstLevel(@PathVariable String parentId) {
         List<MenuBO> menuBOs = menuService.selectFirstLevel();
         LOGGER.info("{}", menuBOs);
@@ -64,7 +64,7 @@ public class MenuController {
         return ResponseEntity.ok(menuBOs);
     }
 
-    @GetMapping(path = "/one/{menuId}")
+    @GetMapping(path = "/{menuId}")
     public ResponseEntity selectOne(@PathVariable String menuId) {
         LOGGER.info("{}", menuId);
         MenuBO menuBO = menuService.selectByMenuId(menuId);
