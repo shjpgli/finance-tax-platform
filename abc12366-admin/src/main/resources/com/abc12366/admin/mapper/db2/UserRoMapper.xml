@@ -17,7 +17,7 @@
         <result column="address" property="address" jdbcType="VARCHAR"/>
 		<result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
 		<result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-		<collection property="rolesList" ofType="Role">
+		<collection property="rolesList" ofType="com.abc12366.admin.model.Role">
 			<id column="roleId" property="id"/>
 			<result column="roleName" property="roleName"/>
 		</collection>

@@ -1,6 +1,7 @@
 package com.abc12366.admin.mapper.db2;
 
 import com.abc12366.admin.model.Role;
+import com.abc12366.admin.model.bo.RoleBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface RoleRoMapper {
 	List<Role> selectList(Role role);
 
 
-    Role selectRoleById(String id);
+    RoleBO selectRoleById(String id);
 
     List<String> selectMenuIdListByRoleId(String id);
 
@@ -34,4 +35,6 @@ public interface RoleRoMapper {
     List<Map<String,String>> selectRoleResourceListByRoleId(String roleId);
 
     Role selectOne(Role role);
+
+    Role selectRoleByName(Role role);
 }

@@ -53,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = new Role();
 
         role.setRoleName(roleBO.getRoleName());
-        Role temp = roleRoMapper.selectOne(role);
+        Role temp = roleRoMapper.selectRoleByName(role);
         if (temp != null) {
             logger.warn("角色名称已存在，参数：{}", role.toString());
             throw new ServiceException(4111);
@@ -67,6 +67,15 @@ public class RoleServiceImpl implements RoleService {
         if (insert != 1) {
             logger.warn("插入失败，参数：{}", role.toString());
             throw new ServiceException(4001);
+        }
+        String roleId = role.getId();
+        String[] resources = roleBO.getMenuIds().split(",");
+        RoleMenu roleMenu = new RoleMenu();
+        for (String menuId : resources) {
+            roleMenu.setRoleId(roleId);
+            roleMenu.setMenuId(menuId);
+            roleMenu.setId(Utils.uuid());
+            roleMenuMapper.insert(roleMenu);
         }
         return role;
     }
@@ -83,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role selectRoleById(String id) {
+    public RoleBO selectRoleById(String id) {
         return roleRoMapper.selectRoleById(id);
     }
 
@@ -97,6 +106,24 @@ public class RoleServiceImpl implements RoleService {
         if (update != 1) {
             logger.warn("更新失败，参数：{}", roleBO.toString());
             throw new ServiceException(4002);
+        }
+
+        String roleId = role.getId();
+        List<String> roleMenuIdList = roleRoMapper.selectRoleMenuIdListByRoleId(roleId);
+        if (roleMenuIdList != null && (!roleMenuIdList.isEmpty())) {
+            for (String roleMenuId : roleMenuIdList) {
+                if(roleMenuId != null){
+                    roleMenuMapper.deleteById(roleMenuId);
+                }
+            }
+        }
+        String[] resources = roleBO.getMenuIds().split(",");
+        RoleMenu roleMenu = new RoleMenu();
+        for (String menuId : resources) {
+            roleMenu.setRoleId(roleId);
+            roleMenu.setMenuId(menuId);
+            roleMenu.setId(Utils.uuid());
+            roleMenuMapper.insert(roleMenu);
         }
         return update;
     }
@@ -142,5 +169,12 @@ public class RoleServiceImpl implements RoleService {
         Role role = new Role();
         BeanUtils.copyProperties(roleBO, role);
         return roleRoMapper.selectOne(role);
+    }
+
+    @Override
+    public Role selectRoleByName(RoleBO roleBO) {
+        Role role = new Role();
+        BeanUtils.copyProperties(roleBO, role);
+        return roleRoMapper.selectRoleByName(role);
     }
 }

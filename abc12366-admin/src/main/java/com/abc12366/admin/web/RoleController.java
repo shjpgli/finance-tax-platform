@@ -53,7 +53,7 @@ public class RoleController {
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         RoleBO roleBO = new RoleBO();
         roleBO.setId(id);
-        Role temp = roleService.selectOne(roleBO);
+        RoleBO temp = roleService.selectRoleById(id);
         LOGGER.info("{}", temp);
         return ResponseEntity.ok(temp);
     }
@@ -62,7 +62,7 @@ public class RoleController {
     public ResponseEntity selectRoleByName(@PathVariable("roleName") String roleName) {
         RoleBO roleBO = new RoleBO();
         roleBO.setRoleName(roleName);
-        Role temp = roleService.selectOne(roleBO);
+        Role temp = roleService.selectRoleByName(roleBO);
         LOGGER.info("{}", temp);
         return ResponseEntity.ok(temp);
     }

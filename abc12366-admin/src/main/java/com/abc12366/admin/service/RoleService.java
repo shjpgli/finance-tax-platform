@@ -40,7 +40,7 @@ public interface RoleService {
      * @param id
      * @return
      */
-    Role selectRoleById(String id);
+    RoleBO selectRoleById(String id);
 
     /**
      * 更新权限
@@ -82,5 +82,17 @@ public interface RoleService {
     List<Map<String, String>> selectRoleResourceListByRoleId(String roleId);
 
 
+    /**
+     *
+     * @param roleBO
+     * @return
+     */
     Role selectOne(RoleBO roleBO);
+
+    /**
+     * 根据角色名称查询角色
+     * @param roleBO
+     * @return
+     */
+    Role selectRoleByName(RoleBO roleBO);
 }

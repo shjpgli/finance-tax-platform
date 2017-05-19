@@ -1,10 +1,12 @@
 package com.abc12366.admin.model.bo;
+import com.abc12366.admin.model.Menu;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -29,6 +31,10 @@ public class RoleBO implements Serializable {
 
     @NotNull
     private Boolean status;
+
+    private String menuIds;
+
+    private List<Menu> menuList;
 
     public void setId(String id){
         this.id = id;
@@ -76,5 +82,21 @@ public class RoleBO implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(String menuIds) {
+        this.menuIds = menuIds;
+    }
+
+    public List<Menu> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
     }
 }
