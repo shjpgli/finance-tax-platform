@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ import java.util.Map;
  * @since 2.0.0
  */
 @RestController
-@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" +Constant.VERSION_1)
+@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -34,11 +35,21 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<UserBO> userList = userService.selectList();
+    public ResponseEntity selectList(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String nickname,
+            @RequestParam(required = false) Boolean status,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}:{}:{}:{}", username, phone, nickname, status, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", username);
+        map.put("phone", phone);
+        map.put("nickname", nickname);
+        map.put("status", status);
+        List<UserBO> userList = userService.selectList(map);
         LOGGER.info("{}", userList);
         return (userList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
@@ -58,22 +69,23 @@ public class UserController {
         LOGGER.info("{}", usernameOrPhone);
         UserBO user = userService.selectByUsernameOrPhone(usernameOrPhone);
         LOGGER.info("{}", user);
-        return ResponseEntity.ok(user);
+        return (user != null) ? ResponseEntity.ok(user) : new ResponseEntity(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping()
-    public ResponseEntity update(@Valid @RequestBody UserUpdateBO userUpdateDTO) {
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@Valid @RequestBody UserUpdateBO userUpdateDTO, @PathVariable String id) {
         LOGGER.info("{}", userUpdateDTO);
+        userUpdateDTO.setId(id);
         UserBO user = userService.update(userUpdateDTO);
         LOGGER.info("{}", user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return (user != null) ? ResponseEntity.ok(user) : new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity delete(@PathVariable String userId) {
         LOGGER.info("{}", userId);
-        UserBO userBO = userService.delete(userId);
-        LOGGER.info("{}", userBO);
-        return ResponseEntity.ok(userBO);
+        UserBO user = userService.delete(userId);
+        LOGGER.info("{}", user);
+        return (user != null) ? ResponseEntity.ok(user) : new ResponseEntity(Utils.bodyStatus(4103), HttpStatus.BAD_REQUEST);
     }
 }

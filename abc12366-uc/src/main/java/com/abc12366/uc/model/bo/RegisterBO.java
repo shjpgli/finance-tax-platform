@@ -15,21 +15,22 @@ import java.util.Date;
  */
 public class RegisterBO implements Serializable {
 
-    @NotEmpty(message = "用户名不能为空")
-    @Size(min = 6, max = 32, message = "用户名必须6-32位")
-    private String username;
-
-    @NotEmpty(message = "手机号不能为空")
-    @Pattern(regexp = "^\\d{11}$", message = "手机号必须为11位数字")
-    @Size(min = 11, max = 11, message = "手机号必须为11位数字")
+    @NotEmpty
+    @Pattern(regexp = "^\\d{11}$")
+    @Size(min = 11, max = 11)
     private String phone;
 
-    @NotEmpty(message = "密码不能为空")
-    @Size(min = 8, max = 32, message = "密码必须8-32位")
+    @NotEmpty
+    @Size(min = 8, max = 32)
     private String password;
 
     @Email
     private String regMail;
+    private String username;
+    @Pattern(regexp = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
+            + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+            + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+            + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$")
     private String regIP;
     private String salt;
     private String nickname;

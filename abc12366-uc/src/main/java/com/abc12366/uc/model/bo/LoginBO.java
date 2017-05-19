@@ -12,12 +12,12 @@ import java.io.Serializable;
  */
 public class LoginBO implements Serializable {
 
-    @NotEmpty(message = "用户名不能为空")
-    @Size(min = 6, max = 32, message = "用户名必须6-32位")
+    @NotEmpty
+    @Size(min = 6, max = 32)
     private String usernameOrPhone;
 
-    @NotEmpty(message = "密码不能为空")
-    @Size(min = 8, max = 32, message = "密码必须8-32位")
+    @NotEmpty
+    @Size(min = 8, max = 32)
     private String password;
 
     public LoginBO() {

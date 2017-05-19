@@ -40,7 +40,7 @@ public class PointsLogController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}:{}", name, code, type, userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        Map map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("name", name);
         map.put("code", code);
         map.put("type", type);

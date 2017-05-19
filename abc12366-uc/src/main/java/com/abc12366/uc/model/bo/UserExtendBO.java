@@ -6,11 +6,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 
 /**
- * Created by lgy on 2017-05-05.
+ * @author liuguiyao<435720953@qq.com.com>
+ * @create 2017-05-05 10:18 PM
+ * @since 2.0.0
  */
 public class UserExtendBO {
 
-    @NotEmpty(message = "userId不能为空")
+    @NotEmpty
     private String userId;
     private String signature;
     private String sex;
@@ -37,7 +39,7 @@ public class UserExtendBO {
     private String idcard;
     private String frontImage;
     private String backImage;
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     private Date endTime;
     private String validStatus;

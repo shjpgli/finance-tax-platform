@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface UserService {
 
-    List<UserBO> selectList();
+    List<UserBO> selectList(Map map);
 
     Map selectOne(String userId);
 

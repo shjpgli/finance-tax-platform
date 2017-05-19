@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.PointsLogRoMapper">
 
-    <select id="selectList" resultType="PointsLogBO" parameterType="Map">
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.PointsLogBO" parameterType="java.util.Map">
         select uul.id,uul.userId,uul.ruleId,uur.name,uur.code,uur.type,uul.income,uul.outgo,uul.usablePoints,uul.createTime
         from uc_upoints_log uul, uc_upoints_rule uur
         <where>
