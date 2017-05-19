@@ -9,6 +9,7 @@ import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.Product;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.util.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,11 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectList(order);
     }
 
+    /**
+     * 查询单个订单
+     * @param id
+     * @return
+     */
     @Override
     public OrderBO selectOne(String id) {
         Order order = orderRoMapper.selectById(id);
@@ -46,6 +52,11 @@ public class OrderServiceImpl implements OrderService {
         return orderBO;
     }
 
+    /**
+     * 加入购物车
+     * @param orderBO
+     * @return
+     */
     @Override
     public OrderBO joinCart(OrderBO orderBO) {
         //判断产品数量
@@ -53,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         BeanUtils.copyProperties(orderBO, order);
         order.setId(Utils.uuid());
+        order.setOrderId(StringUtils.getOrderIdString());
         Date date = new Date();
         order.setCreateTime(date);
         order.setLastUpdate(date);
@@ -96,6 +108,11 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    /**
+     * 修改购物车
+     * @param orderBO
+     * @return
+     */
     @Override
     public OrderBO updateCart(OrderBO orderBO) {
         isValidate(orderBO);
@@ -119,6 +136,11 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectOrderList(order);
     }
 
+    /**
+     * 根据订单ID和用户ID删除购物车
+     * @param orderBO
+     * @return
+     */
     @Override
     public int deleteByIdAndUserId(OrderBO orderBO) {
         Order order = new Order();
@@ -131,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     *
+     *提交订单
      * @param orderBO
      * @return
      */
@@ -140,7 +162,14 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         BeanUtils.copyProperties(orderBO,order);
         Order temp = orderRoMapper.selectOrder(order);
-        //TODOd待开发
+        //判断支付方式
+        if(temp != null){
+            if(temp.getAmount() != 0){
+                //跳转支付界面
+            }else if(temp.getPoints() != 0){
+                //去查询用户计分表，减掉积分
+            }
+        }
         return null;
     }
 
@@ -157,18 +186,4 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectById(id);
     }
 
-
-
-   /* @Override
-    public List<Order> selectOrderList(Order order) {
-        return orderRoMapper.selectOrderList(order);
-    }
-
-    @Override
-    public OrderBO selectOrder(String id) {
-        Order order = orderRoMapper.selectByIdAndStatus(id);
-        OrderBO orderBO = new OrderBO();
-        BeanUtils.copyProperties(order, orderBO);
-        return orderBO;
-    }*/
 }

@@ -9,7 +9,7 @@
         <result column="amount" property="amount" jdbcType="DOUBLE"/>
         <result column="points" property="points" jdbcType="INTEGER"/>
         <result column="num" property="num" jdbcType="INTEGER"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="feedback" property="feedback" jdbcType="VARCHAR"/>

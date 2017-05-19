@@ -95,9 +95,6 @@
 	<update id="update" parameterType="com.abc12366.uc.model.Order">
 		 UPDATE uc_order
  		 <set>
-			<if test="orderId != null">
-				 orderId = #{orderId},
-			</if>
 			<if test="productId != null">
 				 productId = #{productId},
 			</if>
