@@ -2,7 +2,9 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserReturnBO;
+
+import java.util.Map;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -11,9 +13,9 @@ import com.abc12366.uc.model.bo.UserBO;
  */
 public interface AuthService {
 
-    UserBO register(RegisterBO registerBO);
+    UserReturnBO register(RegisterBO registerBO);
 
-    String login(LoginBO loginBO, String token) throws Exception;
+    Map login(LoginBO loginBO, String token) throws Exception;
 
     String refresh(String oldToken);
 }

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.UserBindMapper">
 
-    <insert id="dzsbBind" parameterType="UserDzsb">
+    <insert id="dzsbBind" parameterType="com.abc12366.uc.model.UserDzsb">
         insert into uc_user_dzsb(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate)
         values (#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
@@ -17,7 +17,7 @@
         where id=#{id}
     </update>
 
-    <insert id="hngsBind" parameterType="UserHngs">
+    <insert id="hngsBind" parameterType="com.abc12366.uc.model.UserHngs">
         insert into uc_user_hngs(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, bsy, smrzzt, status, createTime, lastUpdate)
         values(#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm},#{bsy},#{smrzzt}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
@@ -30,7 +30,7 @@
         </set>
         where id=#{id}
     </update>
-    <insert id="hndsBind" parameterType="UserHnds">
+    <insert id="hndsBind" parameterType="com.abc12366.uc.model.UserHnds">
         insert into uc_user_hnds(id, userId, username, subuser, nsrmc, nsrsbh, djxh, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate)
         values(#{id}, #{userId}, #{username}, #{subuser}, #{nsrmc}, #{nsrsbh}, #{djxh}, #{shxydm},#{swjgMc}, #{swjgDm}, #{status}, #{createTime}, #{lastUpdate})
     </insert>

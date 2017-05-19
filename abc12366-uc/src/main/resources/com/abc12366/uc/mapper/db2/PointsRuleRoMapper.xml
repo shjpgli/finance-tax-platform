@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.PointsRuleRoMapper">
 
-    <select id="selectList" resultType="PointsRuleBO" parameterType="Map">
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.PointsRuleBO" parameterType="java.util.Map">
         select id, name, code, points, description, type, status, createTime, lastUpdate
         from uc_upoints_rule
         <where>
@@ -13,13 +13,13 @@
         </where>
         ORDER BY lastUpdate DESC
     </select>
-    <select id="selectOne" resultType="PointsRuleBO">
+    <select id="selectOne" resultType="com.abc12366.uc.model.bo.PointsRuleBO">
         select id, name, code, points, description, type, status, createTime, lastUpdate
         from uc_upoints_rule
         where id=#{id}
     </select>
 
-    <select id="selectByCode" resultType="PointsRule">
+    <select id="selectByCode" resultType="com.abc12366.uc.model.PointsRule">
         select id, name, code, points, description, type, status, createTime, lastUpdate
         from uc_upoints_rule
         where code=#{code}

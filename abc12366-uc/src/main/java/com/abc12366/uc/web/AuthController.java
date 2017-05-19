@@ -1,10 +1,7 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.TokenBO;
-import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -22,7 +20,7 @@ import javax.validation.Valid;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(headers = Constant.VERSION_HEAD + "=" +Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AuthController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
@@ -42,21 +40,21 @@ public class AuthController {
 
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO) {
-        UserBO userBO = authService.register(registerBO);
-        if(userBO==null){
+        UserReturnBO userReturnBO = authService.register(registerBO);
+        if (userReturnBO == null) {
             return ResponseEntity.badRequest().body(null);
         }
-        return ResponseEntity.ok(userBO);
+        return ResponseEntity.ok(userReturnBO);
     }
 
     /*
-用户登录方法：
-    1.请求访问时获取token，token为空则需要用户名和密码登录
- */
+    用户登录方法：
+        1.请求访问时获取token，token为空则需要用户名和密码登录
+     */
     @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", loginBO);
-        String token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+        Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
         LOGGER.info("{}", token);
         return token != null ? ResponseEntity.ok(token) : new ResponseEntity<>(HttpStatus.CONFLICT);
     }

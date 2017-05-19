@@ -4,6 +4,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -12,10 +13,10 @@ import java.util.List;
  */
 public interface UserRoMapper {
 
-    List<UserBO> selectList();
+    List<UserBO> selectList(Map map);
 
     User selectOne(String id);
 
-    User selectByUsernameOrPhone(User user);
+    User selectByUsernameOrPhone(Map map);
 
 }

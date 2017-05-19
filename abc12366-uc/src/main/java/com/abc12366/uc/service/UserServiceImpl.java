@@ -1,14 +1,9 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.util.Utils;
-import com.abc12366.gateway.mapper.db2.AppRoMapper;
-import com.abc12366.gateway.model.App;
-import com.abc12366.uc.mapper.db1.TokenMapper;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.UserMapper;
-import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
@@ -42,8 +37,8 @@ public class UserServiceImpl implements UserService {
     private UserExtendRoMapper userExtendRoMapper;
 
     @Override
-    public List<UserBO> selectList() {
-        List<UserBO> users = userRoMapper.selectList();
+    public List<UserBO> selectList(Map map) {
+        List<UserBO> users = userRoMapper.selectList(map);
         if (users.size() < 1) {
             return null;
         }
@@ -59,7 +54,7 @@ public class UserServiceImpl implements UserService {
         if (userTemp != null) {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
-            Map map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
             map.put("user", user);
             map.put("user_extend", user_extend);
             LOGGER.info("{}", map);
@@ -73,14 +68,18 @@ public class UserServiceImpl implements UserService {
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
         User user = userRoMapper.selectOne(userUpdateBO.getId());
-        if (userUpdateBO.isStatus() != user.isStatus()) {
-            user.setStatus(userUpdateBO.isStatus());
+        if (user == null) {
+            LOGGER.warn("修改失败");
+            throw new ServiceException(4102);
         }
-        if (!StringUtils.isEmpty(userUpdateBO.getPhone()) && !userUpdateBO.getPhone().equals(user.getPhone())) {
-            user.setPhone(userUpdateBO.getPhone());
-        }
+        BeanUtils.copyProperties(userUpdateBO, user);
+
         user.setLastUpdate(new Date());
-        userMapper.update(user);
+        int result = userMapper.update(user);
+        if (result != 1) {
+            LOGGER.warn("修改失败");
+            throw new ServiceException(4102);
+        }
         UserBO userDTO = new UserBO();
         BeanUtils.copyProperties(user, userDTO);
         LOGGER.info("{}", userDTO);
@@ -90,12 +89,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO selectByUsernameOrPhone(String usernameOrPhone) {
         LOGGER.info("{}", usernameOrPhone);
-        User userTemp = new User();
-        if (!usernameOrPhone.equals("")) {
-            userTemp.setUsername(usernameOrPhone);
-            userTemp.setPhone(usernameOrPhone);
+        Map<String, String> map = new HashMap<>();
+        if (StringUtils.isEmpty(usernameOrPhone)) {
+            map.put("username", usernameOrPhone);
+            map.put("phone", usernameOrPhone);
         }
-        User user = userRoMapper.selectByUsernameOrPhone(userTemp);
+        User user = userRoMapper.selectByUsernameOrPhone(map);
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);
