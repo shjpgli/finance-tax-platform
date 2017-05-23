@@ -1,0 +1,20 @@
+package com.abc12366.uc.mapper.db2;
+
+import com.abc12366.uc.model.VipLevel;
+import com.abc12366.uc.model.bo.VipLevelBO;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Author: liuguiyao<435720953@qq.com>
+ * Date: 2017-05-19
+ * Time: 11:35
+ */
+public interface VipLevelRoMapper {
+    List<VipLevelBO> selectList(Map map);
+
+    VipLevelBO selectOne(String id);
+
+    VipLevel selectByLevel(String level);
+}

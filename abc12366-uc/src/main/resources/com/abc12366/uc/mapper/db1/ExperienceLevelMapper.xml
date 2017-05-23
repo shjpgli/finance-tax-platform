@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.ExperienceLevelMapper">
+    <insert id="insert" parameterType="com.abc12366.uc.model.ExperienceLevel">
+        insert into uc_uexp_level(id,name,value,topPerDay,status,lastUpdate,createTime)
+        values(#{id},#{name},#{value},#{topPerDay},#{status},#{lastUpdate},#{createTime})
+    </insert>
+    <update id="update" parameterType="com.abc12366.uc.model.ExperienceLevel">
+        update uc_uexp_level
+        <set>
+            <if test="name!=null">name=#{name},</if>
+            <if test="value!=null">value=#{value},</if>
+            <if test="topPerDay!=null">topPerDay=#{topPerDay},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate}</if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

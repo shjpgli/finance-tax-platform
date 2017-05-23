@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,6 +46,18 @@ public class UserController {
         LOGGER.info("{}:{}:{}:{}:{}:{}", username, phone, nickname, status, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         Map<String, Object> map = new HashMap<>();
+        if (username != null && StringUtils.isEmpty(username)) {
+            username = null;
+        }
+        if (phone != null && StringUtils.isEmpty(phone)) {
+            phone = null;
+        }
+        if (nickname != null && StringUtils.isEmpty(nickname)) {
+            nickname = null;
+        }
+        if (status != null && StringUtils.isEmpty(status)) {
+            status = null;
+        }
         map.put("username", username);
         map.put("phone", phone);
         map.put("nickname", nickname);
