@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.ExperienceLogRoMapper">
+
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.ExperienceLogQueryBO" parameterType="java.util.Map">
+        SELECT  uul.id,uul.userId,uul.ruleId,uur.name,uur.code,uur.type,uul.income,uul.outgo,uul.usableExp,uul.createTime
+        from uc_uexp_log uul, uc_uexp_rule uur
+        <where>
+            uul.ruleId = uur.id
+            <if test="name!=mull">
+                and name=#{name}
+            </if>
+            <if test="code!=mull">
+                and code=#{code}
+            </if>
+            <if test="type!=null">
+                and type=#{type}
+            </if>
+            <if test="userId!=null">
+                and userId=#{userId}
+            </if>
+        </where>
+        ORDER BY createTime DESC
+    </select>
+
+    <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExperienceLogQueryBO" parameterType="java.lang.String">
+        SELECT  id,userId,ruleId,name,code,type,income,outgo,usableExp,createTime
+        from uc_uexp_log uul, uc_uexp_rule uur
+        where uul.ruleId = uur.id
+        ORDER BY createTime DESC
+    </select>
+
+</mapper>
