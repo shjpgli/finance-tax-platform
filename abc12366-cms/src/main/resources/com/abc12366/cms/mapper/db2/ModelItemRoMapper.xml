@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="modelItemBo" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.ModelItem" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_model_item
@@ -18,7 +18,7 @@
 
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectList" resultType="modelItemBo" parameterType="java.util.Map">
+	<select id="selectList" resultType="com.abc12366.cms.model.ModelItem" parameterType="java.util.Map">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_model_item

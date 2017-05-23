@@ -21,14 +21,14 @@ public interface ModelItemRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	ModelItemBo selectByPrimaryKey(@Param("modelitemId") String modelitemId);
+	ModelItem selectByPrimaryKey(@Param("modelitemId") String modelitemId);
 
 	/**
 	 *
 	 * 查询（根据modelId查询）
 	 *
 	 **/
-	List<ModelItemBo> selectList(Map map);
+	List<ModelItem> selectList(Map map);
 
 
 }

@@ -14,7 +14,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="plug">
+	<insert id="insert" parameterType="com.abc12366.cms.model.Plug">
 		 INSERT INTO cms_plug
  		(plugId,name,path,description,author,uploadTime,installTime,uninstallTime,fileConflict,isUsed,plugPerms,plugRepair) 
 		 VALUES 
@@ -22,7 +22,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="plug">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.Plug">
 		 INSERT INTO cms_plug
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="plugId != null">
@@ -104,7 +104,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="plug">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.Plug">
 		 UPDATE cms_plug
  		 <set> 
 			<if test="name != null">
@@ -146,7 +146,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="plug">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Plug">
 		 UPDATE cms_plug
 		 SET 
 			 name = #{name},

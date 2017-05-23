@@ -15,7 +15,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="modelItem">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ModelItem">
 		 INSERT INTO cms_model_item
  		(modelitemId,modelId,field,itemLabel,priority,defValue,optValue,textSize,areaRows,areaCols,help,helpPosition,dataType,isSingle,isChannel,isCustom,isDisplay,isRequired,imageWidth,imageHeight) 
 		 VALUES 
@@ -23,7 +23,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="modelItem">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ModelItem">
 		 INSERT INTO cms_model_item
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="modelitemId != null">
@@ -153,7 +153,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="modelItem">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ModelItem">
 		 UPDATE cms_model_item
  		 <set> 
 			<if test="modelId != null">
@@ -219,7 +219,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="modelItem">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ModelItem">
 		 UPDATE cms_model_item
 		 SET 
 			 modelId = #{modelId},

@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -33,8 +34,19 @@ public class ModelItemServiceImpl implements ModelItemService {
     @Override
     public List<ModelItemBo> selectList(Map<String, Object> map) {
         //查询模型项列表
-        List<ModelItemBo> modelItemBoList = modelItemRoMapper.selectList(map);
-        return modelItemBoList;
+        List<ModelItem> modelItems = modelItemRoMapper.selectList(map);
+        List<ModelItemBo> modelItemBos = new ArrayList<>();
+        for(ModelItem modelItem : modelItems){
+            ModelItemBo modelItemBo = new ModelItemBo();
+            try {
+                BeanUtils.copyProperties(modelItem, modelItemBo);
+                modelItemBos.add(modelItemBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        return modelItemBos;
     }
 
     @Override
@@ -72,7 +84,14 @@ public class ModelItemServiceImpl implements ModelItemService {
 
     @Override
     public ModelItemBo selectModel(String modelitemId) {
-        ModelItemBo modelItemBo = modelItemRoMapper.selectByPrimaryKey(modelitemId);
+        ModelItem modelItem = modelItemRoMapper.selectByPrimaryKey(modelitemId);
+        ModelItemBo modelItemBo = new ModelItemBo();
+        try {
+            BeanUtils.copyProperties(modelItem, modelItemBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
         return modelItemBo;
     }
 

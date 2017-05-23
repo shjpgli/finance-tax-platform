@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="channelBo" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Channel" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_channel
@@ -17,7 +17,7 @@
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
-	<select id="selectList" resultType="channelBo" parameterType="java.lang.String">
+	<select id="selectList" resultType="com.abc12366.cms.model.Channel" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_channel order by priority

@@ -3,11 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.ChannelUserMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	userId
-	</sql>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_channel_user
@@ -15,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="channelUser">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ChannelUser">
 		 INSERT INTO cms_channel_user
  		(channelId,userId) 
 		 VALUES 
@@ -23,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="channelUser">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ChannelUser">
 		 INSERT INTO cms_channel_user
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="channelId != null">
@@ -45,7 +40,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="channelUser">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ChannelUser">
 		 UPDATE cms_channel_user
  		 <set> 
 			<if test="userId != null">
@@ -57,7 +52,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="channelUser">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ChannelUser">
 		 UPDATE cms_channel_user
 		 SET 
 			 userId = #{userId}

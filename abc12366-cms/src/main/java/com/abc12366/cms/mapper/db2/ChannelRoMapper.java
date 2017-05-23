@@ -20,9 +20,9 @@ public interface ChannelRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	ChannelBo selectByPrimaryKey(@Param("channelId") String channelId);
+	Channel selectByPrimaryKey(@Param("channelId") String channelId);
 
-	List<ChannelBo> selectListByParam(Channel channel);
+	List<Channel> selectListByParam(Channel channel);
 
-	List<ChannelBo> selectList();
+	List<Channel> selectList();
 }

@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="comment">
+	<insert id="insert" parameterType="com.abc12366.cms.model.Comment">
 		 INSERT INTO cms_comment
  		(commentId,commentUserId,replyUserId,contentId,siteId,createTime,replyTime,ups,downs,isRecommend,isChecked,score,parentId,replyCount) 
 		 VALUES 
@@ -18,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="comment">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.Comment">
 		 INSERT INTO cms_comment
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="commentId != null">
@@ -112,7 +112,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="comment">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.Comment">
 		 UPDATE cms_comment
  		 <set> 
 			<if test="commentUserId != null">
@@ -160,7 +160,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="comment">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Comment">
 		 UPDATE cms_comment
 		 SET 
 			 commentUserId = #{commentUserId},

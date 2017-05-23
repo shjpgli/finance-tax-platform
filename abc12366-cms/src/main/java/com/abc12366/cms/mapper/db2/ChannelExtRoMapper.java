@@ -1,6 +1,6 @@
 package com.abc12366.cms.mapper.db2;
 
-import com.abc12366.cms.model.bo.ChannelExtBo;
+import com.abc12366.cms.model.ChannelExt;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -17,7 +17,7 @@ public interface ChannelExtRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	ChannelExtBo selectByPrimaryKey(@Param("channelId") String channelId);
+	ChannelExt selectByPrimaryKey(@Param("channelId") String channelId);
 
 
 }

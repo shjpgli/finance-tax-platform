@@ -25,7 +25,7 @@ public interface ContentExtRoMapper {
 	 * 查询(根据contentId查询)
 	 *
 	 **/
-	ContentExtBo selectByContentId(String contentId);
+	ContentExt selectByContentId(String contentId);
 
 
 }

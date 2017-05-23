@@ -29,10 +29,4 @@ public interface FileRoMapper {
 	 **/
 	List<File> selectFileList(String contentId);
 
-	/**
-	 *
-	 * 查询(根据contentId查询)
-	 *
-	 **/
-	List<FileBo> selectFileBoList(String contentId);
 }

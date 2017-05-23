@@ -21,14 +21,14 @@ public interface ModelRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	ModelBo selectByPrimaryKey(@Param("modelId") String modelId);
+	Model selectByPrimaryKey(@Param("modelId") String modelId);
 
 	/**
 	 *
 	 * 查询(根据查询条件查询)
 	 *
 	 **/
-	List<ModelBo> selectList();
+	List<Model> selectList();
 
 
 }

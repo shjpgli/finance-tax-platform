@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="contenttagid">
+	<insert id="insert" parameterType="com.abc12366.cms.model.Contenttagid">
 		 INSERT INTO cms_contenttagid
  		(contentId,tagId,priority) 
 		 VALUES 
@@ -18,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="contenttagid">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.Contenttagid">
 		 INSERT INTO cms_contenttagid
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="contentId != null">
@@ -46,7 +46,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="contenttagid">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.Contenttagid">
 		 UPDATE cms_contenttagid
  		 <set> 
 			<if test="tagId != null">
@@ -61,7 +61,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="contenttagid">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Contenttagid">
 		 UPDATE cms_contenttagid
 		 SET 
 			 tagId = #{tagId},

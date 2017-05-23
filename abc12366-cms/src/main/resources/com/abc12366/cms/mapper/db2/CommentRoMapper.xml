@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="comment" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Comment" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_comment
@@ -17,7 +17,7 @@
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
-	<select id="selectList" resultType="commentListBo" parameterType="java.util.Map">
+	<select id="selectList" resultType="com.abc12366.cms.model.bo.CommentListBo" parameterType="java.util.Map">
 		SELECT a.commentId commentId,
 		b.text TEXT,
 		b.reply reply,
@@ -41,7 +41,7 @@
 	</select>
 
 	<!-- 查询（根据contentId查询） -->
-	<select id="selectBycontentId" resultType="commentBo" parameterType="java.lang.String">
+	<select id="selectBycontentId" resultType="com.abc12366.cms.model.bo.CommentBo" parameterType="java.lang.String">
 		SELECT a.commentId commentId,
 			   b.text TEXT,
 			   b.reply reply,

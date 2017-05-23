@@ -15,7 +15,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="model">
+	<insert id="insert" parameterType="com.abc12366.cms.model.Model">
 		 INSERT INTO cms_model
  		(modelId,modelName,modelPath,tplChannelPrefix,tplContentPrefix,titleImgWidth,titleImgHeight,contentImgWidth,contentImgHeight,priority,hasContent,isDisabled,isDef,isGlobal,siteId) 
 		 VALUES 
@@ -23,7 +23,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="model">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.Model">
 		 INSERT INTO cms_model
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="modelId != null">
@@ -123,7 +123,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="model">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.Model">
 		 UPDATE cms_model
  		 <set> 
 			<if test="modelName != null">
@@ -174,7 +174,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="model">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Model">
 		 UPDATE cms_model
 		 SET 
 			 modelName = #{modelName},

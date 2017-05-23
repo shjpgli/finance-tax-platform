@@ -11,6 +11,7 @@ import com.abc12366.cms.mapper.db2.ModelItemRoMapper;
 import com.abc12366.cms.model.Channel;
 import com.abc12366.cms.model.ChannelAttr;
 import com.abc12366.cms.model.ChannelExt;
+import com.abc12366.cms.model.ModelItem;
 import com.abc12366.cms.model.bo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -52,7 +54,18 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<ChannelBo> selectList() {
-        List<ChannelBo> channelBoList = channelRoMapper.selectList();
+        List<Channel> channelList = channelRoMapper.selectList();
+        List<ChannelBo> channelBoList = new ArrayList<>();
+        for(Channel channel : channelList){
+            try {
+                ChannelBo channelBo = new ChannelBo();
+                BeanUtils.copyProperties(channel,channelBo);
+                channelBoList.add(channelBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
         LOGGER.info("{}", channelBoList);
         return channelBoList;
     }
@@ -60,9 +73,20 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         //查询模型项
-        List<ModelItemBo> modelItems = modelItemRoMapper.selectList(map);
-        LOGGER.info("{}", modelItems);
-        return modelItems;
+        List<ModelItem> modelItems = modelItemRoMapper.selectList(map);
+        List<ModelItemBo> modelItemBos = new ArrayList<>();
+        for(ModelItem modelItem : modelItems){
+            ModelItemBo modelItemBo = new ModelItemBo();
+            try {
+                BeanUtils.copyProperties(modelItem, modelItemBo);
+                modelItemBos.add(modelItemBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        LOGGER.info("{}", modelItemBos);
+        return modelItemBos;
     }
 
     @Override
@@ -111,11 +135,36 @@ public class ChannelServiceImpl implements ChannelService {
     public ChannelQueryBo selectChannel(String channelId) {
         ChannelQueryBo channelQueryBo = new ChannelQueryBo();
         //查询栏目信息
-        ChannelBo channelBo = channelRoMapper.selectByPrimaryKey(channelId);
+        Channel channel = channelRoMapper.selectByPrimaryKey(channelId);
+        ChannelBo channelBo = new ChannelBo();
+        try {
+            BeanUtils.copyProperties(channel, channelBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
         //查询栏目扩展信息
-        ChannelExtBo channelExtBo = channelExtRoMapper.selectByPrimaryKey(channelId);
+        ChannelExt channelExt = channelExtRoMapper.selectByPrimaryKey(channelId);
+        ChannelExtBo channelExtBo = new ChannelExtBo();
+        try {
+            BeanUtils.copyProperties(channelExt, channelExtBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
         //查询栏目扩展项信息
-        List<ChannelAttrBo> channelAttrBoList = channelAttrRoMapper.selectByChannelId(channelId);
+        List<ChannelAttr> channelAttrList = channelAttrRoMapper.selectByChannelId(channelId);
+        List<ChannelAttrBo> channelAttrBoList = new ArrayList<>();
+        for(ChannelAttr channelAttr:channelAttrList){
+            ChannelAttrBo channelAttrBo = new ChannelAttrBo();
+            try {
+                BeanUtils.copyProperties(channelAttr, channelAttrBo);
+                channelAttrBoList.add(channelAttrBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
         channelQueryBo.setChannel(channelBo);
         channelQueryBo.setChannelExt(channelExtBo);
         channelQueryBo.setChannelAttrList(channelAttrBoList);

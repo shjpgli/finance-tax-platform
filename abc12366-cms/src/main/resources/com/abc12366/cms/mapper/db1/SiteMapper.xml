@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 siteId,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description
+	siteId,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description,	siteLogo,	copyrightExplain,	recordNum,	resourceSync,	staticSync,	staticIssue,	siteStatus
 	</sql>
 
 	<!--删除：根据主键ID删除-->
@@ -15,15 +15,15 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="site">
+	<insert id="insert" parameterType="com.abc12366.cms.model.Site">
 		 INSERT INTO cms_site
- 		(siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description) 
+ 		(siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description,siteLogo,copyrightExplain,recordNum,resourceSync,staticSync,staticIssue,siteStatus) 
 		 VALUES 
- 		(#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description}) 
+ 		(#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description},#{siteLogo},#{copyrightExplain},#{recordNum},#{resourceSync},#{staticSync},#{staticIssue},#{siteStatus}) 
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="site">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.Site">
 		 INSERT INTO cms_site
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="siteId != null">
@@ -94,6 +94,27 @@
 			</if>
 			<if test="description != null">
 				 description,
+			</if>
+			<if test="siteLogo != null">
+				 siteLogo,
+			</if>
+			<if test="copyrightExplain != null">
+				 copyrightExplain,
+			</if>
+			<if test="recordNum != null">
+				 recordNum,
+			</if>
+			<if test="resourceSync != null">
+				 resourceSync,
+			</if>
+			<if test="staticSync != null">
+				 staticSync,
+			</if>
+			<if test="staticIssue != null">
+				 staticIssue,
+			</if>
+			<if test="siteStatus != null">
+				 siteStatus,
 			</if>
 
 		 </trim>
@@ -167,11 +188,32 @@
 			<if test="description!=null">
 				 #{description},
 			</if>
+			<if test="siteLogo!=null">
+				 #{siteLogo},
+			</if>
+			<if test="copyrightExplain!=null">
+				 #{copyrightExplain},
+			</if>
+			<if test="recordNum!=null">
+				 #{recordNum},
+			</if>
+			<if test="resourceSync!=null">
+				 #{resourceSync},
+			</if>
+			<if test="staticSync!=null">
+				 #{staticSync},
+			</if>
+			<if test="staticIssue!=null">
+				 #{staticIssue},
+			</if>
+			<if test="siteStatus!=null">
+				 #{siteStatus},
+			</if>
 		 </trim>
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="site">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.Site">
 		 UPDATE cms_site
  		 <set> 
 			<if test="domain != null">
@@ -240,13 +282,34 @@
 			<if test="description != null">
 				 description = #{description},
 			</if>
+			<if test="siteLogo != null">
+				 siteLogo = #{siteLogo},
+			</if>
+			<if test="copyrightExplain != null">
+				 copyrightExplain = #{copyrightExplain},
+			</if>
+			<if test="recordNum != null">
+				 recordNum = #{recordNum},
+			</if>
+			<if test="resourceSync != null">
+				 resourceSync = #{resourceSync},
+			</if>
+			<if test="staticSync != null">
+				 staticSync = #{staticSync},
+			</if>
+			<if test="staticIssue != null">
+				 staticIssue = #{staticIssue},
+			</if>
+			<if test="siteStatus != null">
+				 siteStatus = #{siteStatus},
+			</if>
 
  		 </set>
 		 WHERE siteId = #{siteId}
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="site">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Site">
 		 UPDATE cms_site
 		 SET 
 			 domain = #{domain},
@@ -270,7 +333,14 @@
 			 domainRedirect = #{domainRedirect},
 			 tplIndex = #{tplIndex},
 			 keywords = #{keywords},
-			 description = #{description}
+			 description = #{description},
+			 siteLogo = #{siteLogo},
+			 copyrightExplain = #{copyrightExplain},
+			 recordNum = #{recordNum},
+			 resourceSync = #{resourceSync},
+			 staticSync = #{staticSync},
+			 staticIssue = #{staticIssue},
+			 siteStatus = #{siteStatus}
 		 WHERE siteId = #{siteId}
 	</update>
 

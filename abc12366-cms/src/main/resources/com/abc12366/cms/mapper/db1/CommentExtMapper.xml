@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="commentExt">
+	<insert id="insert" parameterType="com.abc12366.cms.model.CommentExt">
 		 INSERT INTO cms_comment_ext
  		(commentId,ip,text,reply) 
 		 VALUES 
@@ -18,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="commentExt">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.CommentExt">
 		 INSERT INTO cms_comment_ext
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="commentId != null">
@@ -52,7 +52,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="commentExt">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.CommentExt">
 		 UPDATE cms_comment_ext
  		 <set> 
 			<if test="ip != null">
@@ -70,7 +70,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="commentExt">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.CommentExt">
 		 UPDATE cms_comment_ext
 		 SET 
 			 ip = #{ip},

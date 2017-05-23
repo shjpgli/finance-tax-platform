@@ -15,7 +15,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="topic">
+	<insert id="insert" parameterType="com.abc12366.cms.model.Topic">
 		 INSERT INTO cms_topic
  		(topicId,channelId,topicName,shortName,keywords,description,titleImg,contentImg,tplContent,priority,isRecommend) 
 		 VALUES 
@@ -23,7 +23,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="topic">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.Topic">
 		 INSERT INTO cms_topic
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="topicId != null">
@@ -99,7 +99,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="topic">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.Topic">
 		 UPDATE cms_topic
  		 <set> 
 			<if test="channelId != null">
@@ -138,7 +138,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="topic">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Topic">
 		 UPDATE cms_topic
 		 SET 
 			 channelId = #{channelId},

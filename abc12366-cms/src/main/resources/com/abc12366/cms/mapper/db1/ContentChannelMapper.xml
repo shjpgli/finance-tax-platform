@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="contentChannel">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ContentChannel">
 		 INSERT INTO cms_content_channel
  		(channelId,contentId) 
 		 VALUES 
@@ -18,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="contentChannel">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ContentChannel">
 		 INSERT INTO cms_content_channel
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="channelId != null">
@@ -40,7 +40,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="contentChannel">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ContentChannel">
 		 UPDATE cms_content_channel
  		 <set> 
 			<if test="contentId != null">
@@ -52,7 +52,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="contentChannel">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentChannel">
 		 UPDATE cms_content_channel
 		 SET 
 			 contentId = #{contentId}

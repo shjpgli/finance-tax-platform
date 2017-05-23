@@ -5,11 +5,11 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	checkStep,	checkOpinion,	isRejected,	reviewer,	checkDate
+		contentId,	checkStep,	checkOpinion,	isRejected,	reviewer,	checkDate
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="contentCheck" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.ContentCheck" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_content_check

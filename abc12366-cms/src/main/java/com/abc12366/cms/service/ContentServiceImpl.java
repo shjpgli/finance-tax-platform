@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -75,9 +76,20 @@ public class ContentServiceImpl implements ContentService{
     @Override
     public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         //查询模型项
-        List<ModelItemBo> modelItems = modelItemRoMapper.selectList(map);
-        LOGGER.info("{}", modelItems);
-        return modelItems;
+        List<ModelItem> modelItems = modelItemRoMapper.selectList(map);
+        List<ModelItemBo> modelItemBos = new ArrayList<>();
+        for(ModelItem modelItem : modelItems){
+            ModelItemBo modelItemBo = new ModelItemBo();
+            try {
+                BeanUtils.copyProperties(modelItem, modelItemBo);
+                modelItemBos.add(modelItemBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        LOGGER.info("{}", modelItemBos);
+        return modelItemBos;
     }
 
     @Override
@@ -164,23 +176,83 @@ public class ContentServiceImpl implements ContentService{
     public ContentQueryBo selectContent(String contentId) {
         ContentQueryBo contentQueryBo = new ContentQueryBo();
         //内容
-        ContentBo content = contentRoMapper.selectByContentId(contentId);
+        Content content = contentRoMapper.selectByContentId(contentId);
         //内容扩展项
-        ContentExtBo contentExt = contentExtRoMapper.selectByContentId(contentId);
+        ContentExt contentExt = contentExtRoMapper.selectByContentId(contentId);
         //内容文本
-        ContentTxtBo contentTxt = contentTxtRoMapper.selectByContentId(contentId);
+        ContentTxt contentTxt = contentTxtRoMapper.selectByContentId(contentId);
         //内容扩展属性
-        List<ContentAttrBo> contentAttrList = contentAttrRoMapper.selectContentAttrBoList(contentId);
+        List<ContentAttr> contentAttrList = contentAttrRoMapper.selectContentAttrList(contentId);
         //内容图片
-        List<ContentPictureBo> contentPictureList = contentPictureRoMapper.selectContentPictureBoList(contentId);
+        List<ContentPicture> contentPictureList = contentPictureRoMapper.selectContentPictureList(contentId);
         //内容附件
-        List<FileBo> fileList = fileRoMapper.selectFileBoList(contentId);
-        contentQueryBo.setContent(content);
-        contentQueryBo.setContentExt(contentExt);
-        contentQueryBo.setContentTxt(contentTxt);
-        contentQueryBo.setContentAttrList(contentAttrList);
-        contentQueryBo.setContentPictureList(contentPictureList);
-        contentQueryBo.setFileList(fileList);
+        List<File> fileList = fileRoMapper.selectFileList(contentId);
+
+        ContentBo contentBo = new ContentBo();
+        try {
+            BeanUtils.copyProperties(content, contentBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        contentQueryBo.setContent(contentBo);
+
+        ContentExtBo contentExtBo = new ContentExtBo();
+        try {
+            BeanUtils.copyProperties(contentExt, contentExtBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        contentQueryBo.setContentExt(contentExtBo);
+
+        ContentTxtBo contentTxtBo = new ContentTxtBo();
+        try {
+            BeanUtils.copyProperties(contentTxt, contentTxtBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        contentQueryBo.setContentTxt(contentTxtBo);
+
+        List<ContentAttrBo> contentAttrBoList = new ArrayList<>();
+        for(ContentAttr contentAttr : contentAttrList){
+            ContentAttrBo contentAttrBo = new ContentAttrBo();
+            try {
+                BeanUtils.copyProperties(contentAttr, contentAttrBo);
+                contentAttrBoList.add(contentAttrBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        contentQueryBo.setContentAttrList(contentAttrBoList);
+
+        List<ContentPictureBo> contentPictureBoList = new ArrayList<>();
+        for(ContentPicture contentPicture : contentPictureList){
+            ContentPictureBo contentPictureBo = new ContentPictureBo();
+            try {
+                BeanUtils.copyProperties(contentPicture, contentPictureBo);
+                contentPictureBoList.add(contentPictureBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        contentQueryBo.setContentPictureList(contentPictureBoList);
+
+        List<FileBo> fileBoList = new ArrayList<>();
+        for(File file : fileList){
+            FileBo fileBo = new FileBo();
+            try {
+                BeanUtils.copyProperties(file, fileBo);
+                fileBoList.add(fileBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        contentQueryBo.setFileList(fileBoList);
         LOGGER.info("{}", contentQueryBo);
         return contentQueryBo;
     }

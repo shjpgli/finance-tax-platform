@@ -36,6 +36,6 @@ public interface ContentRoMapper {
 	 * 查询(根据contentId查询)
 	 *
 	 **/
-	ContentBo selectByContentId(String contentId);
+	Content selectByContentId(String contentId);
 
 }
