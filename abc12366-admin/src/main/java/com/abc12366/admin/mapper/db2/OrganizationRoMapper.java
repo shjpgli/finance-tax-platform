@@ -1,6 +1,7 @@
 package com.abc12366.admin.mapper.db2;
 
 import com.abc12366.admin.model.Organization;
+import com.abc12366.admin.model.bo.OrganizationBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface OrganizationRoMapper {
 	 **/
 	Organization  selectOrganizationById(@Param("id") String id);
 
-    List<Organization> selectList(Organization organization);
+    List<OrganizationBO> selectList(Organization organization);
 }

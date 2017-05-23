@@ -17,6 +17,12 @@
  		(#{id},#{username},#{password},#{nickname},#{status},#{createTime},#{lastUpdate})
 	</insert>
 
+    <update id="updateUserPwdById">
+        update sys_user
+        set password = #{password,jdbcType=VARCHAR},
+        lastUpdate = now()
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insertSelective" parameterType="com.abc12366.admin.model.User">
 		 INSERT INTO sys_user

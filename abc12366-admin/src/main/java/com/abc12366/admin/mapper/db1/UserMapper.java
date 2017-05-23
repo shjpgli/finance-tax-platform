@@ -48,7 +48,7 @@ public interface UserMapper{
 	int updateByPrimaryKey(User record);
 
 
-	void updateUserPwdById(String userId, String pwd);
+	int updateUserPwdById(@Param("id") String id, @Param("password") String password);
 
 	int updateUser(User user);
 

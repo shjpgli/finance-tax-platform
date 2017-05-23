@@ -3,6 +3,7 @@ package com.abc12366.gateway.model.bo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -39,11 +40,11 @@ public class ApiBO {
     private String appId;
 
     // 是否需要验证用户身份
-    @NotEmpty
+    @NotNull
     private boolean authentication;
 
     // 接口状态
-    @NotEmpty
+    @NotNull
     private boolean status;
 
     public String getId() {

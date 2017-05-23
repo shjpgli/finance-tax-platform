@@ -18,6 +18,7 @@ public class OrganizationBO implements Serializable {
 	/**父ID**/
 	private String parentId;
 
+    private String parentName;
 	/**机构名称**/
     @NotEmpty
 	private String name;
@@ -179,5 +180,13 @@ public class OrganizationBO implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

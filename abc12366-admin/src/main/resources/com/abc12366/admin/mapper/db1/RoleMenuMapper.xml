@@ -13,6 +13,10 @@
 		 DELETE FROM sys_role_menu
 		 WHERE id = #{id}
 	</delete>
+	<delete id="deleteById" parameterType="java.lang.String">
+		 DELETE FROM sys_role_menu
+		 WHERE id = #{id}
+	</delete>
 
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.admin.model.RoleMenu">

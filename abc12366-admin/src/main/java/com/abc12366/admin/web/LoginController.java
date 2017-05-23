@@ -39,6 +39,18 @@ public class LoginController {
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * 退出
+     * @param token
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/logout/{token}")
+    public ResponseEntity logout(@PathVariable("token") String token,HttpServletRequest request) {
+        LOGGER.info("登出");
+        userService.logout(token);
+        return ResponseEntity.ok(200);
+    }
 
     /*@PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody UserBO userBO) {

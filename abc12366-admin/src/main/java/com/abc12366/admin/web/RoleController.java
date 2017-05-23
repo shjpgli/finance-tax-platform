@@ -77,6 +77,7 @@ public class RoleController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO, @PathVariable("id") String id) {
+        roleBO.setId(id);
         int upd = roleService.updateRole(roleBO);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);

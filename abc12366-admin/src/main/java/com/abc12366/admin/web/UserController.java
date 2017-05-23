@@ -4,6 +4,7 @@ import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.model.bo.UserExtendBO;
+import com.abc12366.admin.model.bo.UserPasswordBO;
 import com.abc12366.admin.model.bo.UserUpdateBO;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.common.util.Constant;
@@ -71,6 +72,30 @@ public class UserController {
     public ResponseEntity updateUser(@Valid @RequestBody UserUpdateBO userUpdateBO, @PathVariable("id") String id) {
         userUpdateBO.setId(id);
         int upd = userService.updateUser(userUpdateBO);
+        LOGGER.info("{}", upd);
+        return ResponseEntity.ok(upd);
+    }
+
+    /**
+     * 修改用户密码
+     * @param userPasswordBO
+     * @return
+     */
+    @PutMapping(path = "/password")
+    public ResponseEntity updateUserPwd(@Valid @RequestBody UserPasswordBO userPasswordBO) {
+        int upd = userService.updateUserPwd(userPasswordBO);
+        LOGGER.info("{}", upd);
+        return ResponseEntity.ok(upd);
+    }
+
+    /**
+     * 重置用户密码
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/password/{id}")
+    public ResponseEntity resetUserPwd( @PathVariable("id") String id) {
+        int upd = userService.resetUserPwd(id);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);
     }

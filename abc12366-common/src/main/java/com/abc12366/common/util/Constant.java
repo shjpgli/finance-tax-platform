@@ -37,6 +37,8 @@ public class Constant {
     // 分页-每页大小
     public final static String pageSize = "10";
 
+    //系统设置默认密码
+    public final static String defaultPwd = "ABC12306";
     //时间-当前日期
     public final static String startTime = getTodaySting();
 

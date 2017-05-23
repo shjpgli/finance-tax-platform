@@ -9,6 +9,7 @@ import com.abc12366.admin.mapper.db2.*;
 import com.abc12366.admin.model.*;
 import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.model.bo.UserExtendBO;
+import com.abc12366.admin.model.bo.UserPasswordBO;
 import com.abc12366.admin.model.bo.UserUpdateBO;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.common.exception.ServiceException;
@@ -144,15 +145,15 @@ public class UserServiceImpl implements UserService {
         Date date = new Date();
         user.setLastUpdate(date);
         //密码不为空时，给密码加密
-        if(userUpdateBO.getPassword() != null && !"".equals(userUpdateBO.getPassword())){
+        /*if(userUpdateBO.getPassword() != null && !"".equals(userUpdateBO.getPassword())){
             try {
                 user.setPassword(Utils.md5(userUpdateBO.getPassword()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
         int upd = userMapper.updateUser(user);
-        if(upd != 1){
+        if (upd != 1) {
             throw new ServiceException(4102);
         }
 
@@ -162,7 +163,7 @@ public class UserServiceImpl implements UserService {
         userExtend.setUserId(user.getId());
         userExtend.setLastUpdate(date);
         int updExtend = userExtendMapper.updateUserExtentBO(userExtend);
-        if(updExtend != 1){
+        if (updExtend != 1) {
             throw new ServiceException(4114);
         }
 
@@ -254,16 +255,17 @@ public class UserServiceImpl implements UserService {
             userBO.setLoginInfo(loginInfo);
 
             //查询用户菜单信息
-            Map<String,List<Menu>> menuMap = new HashMap<String,List<Menu>>();
+            Map<String, List<Menu>> menuMap = new HashMap<String, List<Menu>>();
             List<Role> roles = userBO.getRolesList();
-            for(Role role:roles){
+            for (Role role : roles) {
                 List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
-                menuMap.put(role.getId(),menus);
+                menuMap.put(role.getId(), menus);
             }
             userBO.setMenuMap(menuMap);
             return userBO;
+        }else{
+            throw new ServiceException(4102);
         }
-        return null;
     }
 
     @Override
@@ -296,7 +298,7 @@ public class UserServiceImpl implements UserService {
             }
             return userExtend;
         }*/
-        return  null;
+        return null;
     }
 
 
@@ -305,7 +307,7 @@ public class UserServiceImpl implements UserService {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setToken(userToken);
         LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
-        if(info != null){
+        if (info != null) {
             return true;
         }
         return false;
@@ -334,11 +336,11 @@ public class UserServiceImpl implements UserService {
         user.setLastUpdate(date);
 
         int ins = userMapper.insert(user);
-        if(ins != 1){
+        if (ins != 1) {
             throw new ServiceException(4101);
         }
         UserExtend userExtend = new UserExtend();
-        BeanUtils.copyProperties(userBO,userExtend);
+        BeanUtils.copyProperties(userBO, userExtend);
         userExtend.setLastUpdate(date);
         userExtend.setCreateTime(date);
         userExtend.setUserId(user.getId());
@@ -350,7 +352,7 @@ public class UserServiceImpl implements UserService {
         userExtend.setOrgId(userBO.getOrgId());
         userExtend.setPhone(userBO.getPhone());*/
         int extInsert = userExtendMapper.insert(userExtend);
-        if(extInsert != 1){
+        if (extInsert != 1) {
             throw new ServiceException(4112);
         }
         String id = user.getId();
@@ -362,12 +364,64 @@ public class UserServiceImpl implements UserService {
             userRole.setId(Utils.uuid());
             userRole.setUserId(id);
             userRole.setRoleId(roleId);
-            roleIns=userRoleMapper.insert(userRole);
-            if(roleIns != 1){
+            roleIns = userRoleMapper.insert(userRole);
+            if (roleIns != 1) {
                 throw new ServiceException(4113);
             }
         }
         return ins;
+    }
+
+    @Override
+    public void logout(String token) {
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setToken(token);
+        //退出时，重置token
+        LoginInfo temp = loginInfoRoMapper.selectInfoByToken(loginInfo);
+        if (temp != null) {
+            try {
+                String newToken = Utils.md5(Utils.uuid());
+                temp.setToken(newToken);
+                loginInfoMapper.update(temp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    @Override
+    public int updateUserPwd(UserPasswordBO userPasswordBO) {
+
+        int update = 0;
+        UserBO user = userRoMapper.selectUserBOByLoginName(userPasswordBO.getUsername());
+        String newPassword ;
+        String oldPassword ;
+        try {
+            newPassword = Utils.md5(userPasswordBO.getNewPassword());
+            oldPassword = Utils.md5(userPasswordBO.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException(4106);
+        }
+        if (user != null && oldPassword.equals(user.getPassword())) {
+            update = userMapper.updateUserPwdById(user.getId(),newPassword);
+        }
+
+        return update;
+    }
+
+    @Override
+    public int resetUserPwd(String id) {
+        String newPassword ;
+        try {
+            newPassword = Utils.md5(Constant.defaultPwd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException(4106);
+        }
+        int update = userMapper.updateUserPwdById(id,newPassword);
+        return update;
     }
 
     private LoginInfo getLoginInfo(UserBO user, String userToken, App app) {

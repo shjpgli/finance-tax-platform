@@ -29,7 +29,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationRoMapper organizationRoMapper;
 
     @Override
-    public List<Organization> selectList(Organization organization) {
+    public List<OrganizationBO> selectList(Organization organization) {
         return organizationRoMapper.selectList(organization);
     }
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.UserAddressRoMapper">
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,	userId,	name,	province,	city,	area,	detail,	phone,	isDefault,	status,	createTime,	lastUpdate
+    </sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_user_address
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询UserId查询 -->
+    <select id="selectByUserId" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_user_address
+        WHERE userId = #{userId}
+    </select>
+
+    <select id="selectOne" resultType="com.abc12366.uc.model.UserAddress" parameterType="com.abc12366.uc.model.UserAddress">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_user_address
+        WHERE id = #{id} and userId = #{userId}
+    </select>
+
+</mapper>

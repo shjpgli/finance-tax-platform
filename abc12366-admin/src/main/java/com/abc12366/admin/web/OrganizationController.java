@@ -44,7 +44,7 @@ public class OrganizationController {
         organization.setName(name);
         organization.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<Organization> dataList = organizationService.selectList(organization);
+        List<OrganizationBO> dataList = organizationService.selectList(organization);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }

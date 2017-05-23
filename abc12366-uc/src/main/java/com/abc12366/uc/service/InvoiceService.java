@@ -9,13 +9,13 @@ import java.util.List;
  */
 public interface InvoiceService {
 
-    List<InvoiceBO> selectList(InvoiceBO product);
+    List<InvoiceBO> selectList(InvoiceBO invoice);
 
     InvoiceBO selectOne(String id);
 
-    InvoiceBO updateInvoice(InvoiceBO productBO);
+    InvoiceBO updateInvoice(InvoiceBO invoiceBO);
 
-    int deleteByIdAndUserId(InvoiceBO orderBO);
+    int deleteByIdAndUserId(InvoiceBO invoiceBO);
 
-    InvoiceBO addInvoice(InvoiceBO orderBO);
+    InvoiceBO addInvoice(InvoiceBO invoiceBO);
 }
