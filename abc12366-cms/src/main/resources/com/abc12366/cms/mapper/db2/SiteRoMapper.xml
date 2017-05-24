@@ -5,21 +5,24 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 siteId,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description
+		siteId,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description,	siteLogo,	copyrightExplain,	recordNum,	resourceSync,	staticSync,	staticIssue,	siteStatus
 	</sql>
-
-	<select id="listSite" resultType="Site">
-		select
-		<include refid="Base_Column_List" />
-		from cms_site
-	</select>
 	
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="site" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Site" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_site
 		 WHERE siteId = #{siteId}
 	</select>
+
+	<!-- 查询所有 -->
+	<select id="selectList" resultType="com.abc12366.cms.model.Site" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cms_site
+	</select>
+
+
 
 </mapper>

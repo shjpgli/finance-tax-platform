@@ -11,7 +11,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="contentAttachment">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ContentAttachment">
 		 INSERT INTO cms_content_attachment
  		(contentId,priority,attachmentPath,attachmentName,filename,downloadCount) 
 		 VALUES 
@@ -19,7 +19,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="contentAttachment">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ContentAttachment">
 		 INSERT INTO cms_content_attachment
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="contentId != null">
@@ -65,7 +65,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="contentAttachment">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ContentAttachment">
 		 UPDATE cms_content_attachment
  		 <set> 
 			<if test="priority != null">
@@ -89,7 +89,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="contentAttachment">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentAttachment">
 		 UPDATE cms_content_attachment
 		 SET 
 			 priority = #{priority},

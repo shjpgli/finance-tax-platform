@@ -15,7 +15,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="origin">
+	<insert id="insert" parameterType="com.abc12366.cms.model.Origin">
 		 INSERT INTO cms_origin
  		(originId,originName,refCount) 
 		 VALUES 
@@ -23,7 +23,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="origin">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.Origin">
 		 INSERT INTO cms_origin
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="originId != null">
@@ -51,7 +51,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="origin">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.Origin">
 		 UPDATE cms_origin
  		 <set> 
 			<if test="originName != null">
@@ -66,7 +66,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="origin">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.Origin">
 		 UPDATE cms_origin
 		 SET 
 			 originName = #{originName},

@@ -3,7 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.ContentExtMapper">
 
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_content_ext
@@ -11,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="contentExt">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ContentExt">
 		 INSERT INTO cms_content_ext
  		(contentId,title,shortTitle,author,origin,originUrl,description,releaseDate,mediaPath,mediaType,isBold,titleImg,contentImg,typeImg,link,tplContent,needRegenerate,toplevelDate,pigeonholeDate) 
 		 VALUES 
@@ -19,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="contentExt">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ContentExt">
 		 INSERT INTO cms_content_ext
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="contentId != null">
@@ -143,7 +142,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="contentExt">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ContentExt">
 		 UPDATE cms_content_ext
  		 <set> 
 			<if test="title != null">
@@ -206,7 +205,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="contentExt">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentExt">
 		 UPDATE cms_content_ext
 		 SET 
 			 title = #{title},

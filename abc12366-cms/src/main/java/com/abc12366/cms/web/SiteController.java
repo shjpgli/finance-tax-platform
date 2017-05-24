@@ -1,5 +1,7 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.SiteBo;
+import com.abc12366.cms.model.bo.SiteListBo;
 import com.abc12366.cms.service.SiteService;
 import com.abc12366.cms.vo.SiteVO;
 import org.slf4j.Logger;
@@ -20,26 +22,34 @@ public class SiteController {
 	@Autowired
     private SiteService siteService;
 	
-	@GetMapping(path = "/selectOneById/{id}")
-	public ResponseEntity<?> selectOneById(@PathVariable String id) {
-		LOGGER.info("{}", id);
-		SiteVO siteVO = siteService.selectOneById(id);
-		LOGGER.info("{}", siteVO);
-		return ResponseEntity.ok(siteVO);
+	@GetMapping(path = "/{siteId}")
+	public ResponseEntity<?> selectOneById(@PathVariable String siteId) {
+		LOGGER.info("{}", siteId);
+			SiteBo siteBo = siteService.selectOneById(siteId);
+		LOGGER.info("{}", siteBo);
+		return ResponseEntity.ok(siteBo);
 	}
 	@GetMapping
 	public ResponseEntity selectList() {
-		List<SiteVO> siteList = siteService.selectList();
+		List<SiteListBo> siteList = siteService.selectList();
 		LOGGER.info("{}", siteList);
 		return ResponseEntity.ok(siteList);
 	}
 
-	@PutMapping()
-	public ResponseEntity update(@Valid @RequestBody SiteVO siteVO) {
-		LOGGER.info("{}", siteVO);
-		int count = siteService.update(siteVO);
-		LOGGER.info("{}", siteVO);
-		return new ResponseEntity<>(siteVO, HttpStatus.OK);
+	@PostMapping
+	public ResponseEntity save(@Valid @RequestBody SiteBo siteBo) {
+		LOGGER.info("{}", siteBo);
+		siteBo = siteService.save(siteBo);
+		LOGGER.info("{}", siteBo);
+		return new ResponseEntity<>(siteBo, HttpStatus.OK);
+	}
+
+	@PutMapping(path = "/{siteId}")
+	public ResponseEntity update(@Valid @RequestBody SiteBo siteBo) {
+		LOGGER.info("{}", siteBo);
+		siteBo = siteService.update(siteBo);
+		LOGGER.info("{}", siteBo);
+		return new ResponseEntity<>(siteBo, HttpStatus.OK);
 	}
 
 

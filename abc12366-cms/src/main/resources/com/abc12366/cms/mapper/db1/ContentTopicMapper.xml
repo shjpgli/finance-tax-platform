@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="contentTopic">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ContentTopic">
 		 INSERT INTO cms_content_topic
  		(contentId,topicId) 
 		 VALUES 
@@ -18,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="contentTopic">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ContentTopic">
 		 INSERT INTO cms_content_topic
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="contentId != null">
@@ -40,7 +40,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="contentTopic">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ContentTopic">
 		 UPDATE cms_content_topic
  		 <set> 
 			<if test="topicId != null">
@@ -52,7 +52,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="contentTopic">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentTopic">
 		 UPDATE cms_content_topic
 		 SET 
 			 topicId = #{topicId}

@@ -1,16 +1,18 @@
 package com.abc12366.cms.service;
 
-
-import com.abc12366.cms.model.Site;
+import com.abc12366.cms.model.bo.SiteBo;
+import com.abc12366.cms.model.bo.SiteListBo;
 import com.abc12366.cms.vo.SiteVO;
 
 import java.util.List;
 
 public interface SiteService {
 
-    List<SiteVO> selectList();
+    List<SiteListBo> selectList();
 
-    int update(SiteVO siteVO);
+    SiteBo save(SiteBo siteBo);
 
-    SiteVO selectOneById(String id);
+    SiteBo update(SiteBo siteBo);
+
+    SiteBo selectOneById(String id);
 }

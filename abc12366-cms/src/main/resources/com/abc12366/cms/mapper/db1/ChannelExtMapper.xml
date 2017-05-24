@@ -3,11 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.ChannelExtMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	channelName,	isStaticChannel,	isStaticContent,	pageSize,	link,	tplChannel,	tplContent,	titleImg,	contentImg,	hasTitleImg,	hasContentImg,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	commentControl,	allowUpdown,	isBlank,	allowShare
-	</sql>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_channel_ext
@@ -15,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="channelExt">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ChannelExt">
 		 INSERT INTO cms_channel_ext
  		(channelId,channelName,isStaticChannel,isStaticContent,pageSize,link,tplChannel,tplContent,titleImg,contentImg,hasTitleImg,hasContentImg,titleImgWidth,titleImgHeight,contentImgWidth,contentImgHeight,commentControl,allowUpdown,isBlank,allowShare) 
 		 VALUES 
@@ -23,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="channelExt">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ChannelExt">
 		 INSERT INTO cms_channel_ext
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="channelId != null">
@@ -153,7 +148,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="channelExt">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ChannelExt">
 		 UPDATE cms_channel_ext
  		 <set> 
 			<if test="channelName != null">
@@ -219,7 +214,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="channelExt">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ChannelExt">
 		 UPDATE cms_channel_ext
 		 SET 
 			 channelName = #{channelName},

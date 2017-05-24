@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.Comment;
+import com.abc12366.cms.model.bo.CommentBo;
 import com.abc12366.cms.model.bo.CommentListBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,10 +33,10 @@ public interface CommentRoMapper {
 
 	/**
 	 *
-	 * 查询(根据主键ID查询)
+	 * 查询(根据contentId查询)
 	 *
 	 **/
-	Comment selectBycontentId(@Param("contentId") String contentId);
+	List<CommentBo> selectBycontentId(@Param("contentId") String contentId);
 
 
 }

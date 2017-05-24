@@ -29,10 +29,4 @@ public interface ContentPictureRoMapper {
 	 **/
 	List<ContentPicture> selectContentPictureList(String contentId);
 
-	/**
-	 *
-	 * 查询(根据contentId查询)
-	 *
-	 **/
-	List<ContentPictureBo> selectContentPictureBoList(String contentId);
 }

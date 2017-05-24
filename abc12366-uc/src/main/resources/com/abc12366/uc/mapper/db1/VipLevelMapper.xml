@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.VipLevelMapper">
+    <insert id="insert" parameterType="com.abc12366.uc.model.VipLevel">
+        insert into uc_uvip_level(id,level,factor,status,lastUpdate,createTime)
+        values(#{id}, #{level}, #{factor}, #{status}, #{lastUpdate}, #{createTime})
+    </insert>
+
+    <update id="update" parameterType="com.abc12366.uc.model.VipLevel">
+        update uc_uvip_level
+        <set>
+            <if test="level!=null">level = #{level},</if>
+            <if test="factor!=null">factor = #{factor},</if>
+            <if test="status!=null">status = #{status},</if>
+            <if test="lastUpdate!=null">lastUpdate = #{lastUpdate}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

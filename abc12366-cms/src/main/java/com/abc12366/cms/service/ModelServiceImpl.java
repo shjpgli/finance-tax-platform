@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +30,18 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public List<ModelBo> selectList() {
         //查询模型列表
-        List<ModelBo> modelBoList =  modelRoMapper.selectList();
+        List<Model> modelList =  modelRoMapper.selectList();
+        List<ModelBo> modelBoList = new ArrayList<>();
+        for(Model model : modelList){
+            ModelBo modelBo = new ModelBo();
+            try {
+                BeanUtils.copyProperties(model, modelBo);
+                modelBoList.add(modelBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
         return modelBoList;
     }
 
@@ -52,7 +64,14 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public ModelBo selectModel(String modelId) {
         //查询模型信息
-        ModelBo modelBo = modelRoMapper.selectByPrimaryKey(modelId);
+        Model model = modelRoMapper.selectByPrimaryKey(modelId);
+        ModelBo modelBo = new ModelBo();
+        try {
+            BeanUtils.copyProperties(model, modelBo);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
         return modelBo;
     }
 

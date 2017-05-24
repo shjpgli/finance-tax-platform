@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -41,6 +42,18 @@ public class PointsLogController {
         LOGGER.info("{}:{}:{}:{}:{}:{}", name, code, type, userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         Map<String, String> map = new HashMap<>();
+        if (name != null && StringUtils.isEmpty(name)) {
+            name = null;
+        }
+        if (code != null && StringUtils.isEmpty(code)) {
+            code = null;
+        }
+        if (type != null && StringUtils.isEmpty(type)) {
+            type = null;
+        }
+        if (userId != null && StringUtils.isEmpty(userId)) {
+            userId = null;
+        }
         map.put("name", name);
         map.put("code", code);
         map.put("type", type);

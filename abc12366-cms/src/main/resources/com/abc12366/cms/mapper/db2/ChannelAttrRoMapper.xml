@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="channelAttrBo" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.ChannelAttr" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_channel_attr
@@ -17,7 +17,7 @@
 	</select>
 
 	<!-- 查询（根据channelId查询） -->
-	<select id="selectByChannelId" resultType="channelAttrBo" parameterType="java.lang.String">
+	<select id="selectByChannelId" resultType="com.abc12366.cms.model.ChannelAttr" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_channel_attr

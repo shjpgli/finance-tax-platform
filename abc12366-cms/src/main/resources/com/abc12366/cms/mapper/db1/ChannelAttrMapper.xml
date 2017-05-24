@@ -3,11 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.ChannelAttrMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	attrName,	attrValue
-	</sql>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_channel_attr
@@ -15,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="channelAttr">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ChannelAttr">
 		 INSERT INTO cms_channel_attr
  		(channelId,attrName,attrValue) 
 		 VALUES 
@@ -23,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="channelAttr">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ChannelAttr">
 		 INSERT INTO cms_channel_attr
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="channelId != null">
@@ -51,7 +46,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="channelAttr">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ChannelAttr">
 		 UPDATE cms_channel_attr
  		 <set> 
 			<if test="attrName != null">
@@ -66,7 +61,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="channelAttr">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ChannelAttr">
 		 UPDATE cms_channel_attr
 		 SET 
 			 attrName = #{attrName},

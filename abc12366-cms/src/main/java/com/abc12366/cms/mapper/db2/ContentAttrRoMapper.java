@@ -29,12 +29,4 @@ public interface ContentAttrRoMapper {
 	 **/
 	List<ContentAttr> selectContentAttrList(String contentId);
 
-	/**
-	 *
-	 * 查询(根据contentId查询)
-	 *
-	 **/
-	List<ContentAttrBo> selectContentAttrBoList(String contentId);
-
-
 }

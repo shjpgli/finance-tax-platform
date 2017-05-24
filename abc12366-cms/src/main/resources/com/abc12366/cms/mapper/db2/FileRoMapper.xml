@@ -9,23 +9,15 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="file" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.File" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_file
 		 WHERE filePath = #{filePath}
 	</select>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectFileList" resultType="file" parameterType="java.lang.String">
-		SELECT
-		<include refid="Base_Column_List" />
-		FROM cms_file
-		WHERE contentId = #{contentId}
-	</select>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectFileBoList" resultType="fileBo" parameterType="java.lang.String">
+	<!-- 查询（根据contentId查询） -->
+	<select id="selectFileList" resultType="com.abc12366.cms.model.File" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_file

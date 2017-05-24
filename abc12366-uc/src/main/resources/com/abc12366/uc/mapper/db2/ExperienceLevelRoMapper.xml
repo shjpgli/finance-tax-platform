@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper">
+
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.ExperienceLevelBO" parameterType="java.util.Map">
+        SELECT  id,name,value,topPerDay,status,lastUpdate,createTime
+        from uc_uexp_level
+        <where>
+            <if test="name!=mull">
+                name=#{name}
+            </if>
+            <if test="status!=mull">
+                and status=#{status}
+            </if>
+        </where>
+        ORDER BY lastUpdate DESC
+    </select>
+
+    <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExperienceLevelBO" parameterType="java.lang.String">
+        SELECT  id,name,value,topPerDay,status,lastUpdate,createTime
+        from uc_uexp_level
+        where id=#{id}
+    </select>
+
+</mapper>

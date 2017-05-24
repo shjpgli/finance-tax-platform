@@ -3,11 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.ChannelCountMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	views,	viewsMonth,	viewsWeek,	viewsDay,	contentCountTotal,	contentCountDay,	contentCountWeek,	contentCountMonth,	contentCountYear
-	</sql>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_channel_count
@@ -15,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="channelCount">
+	<insert id="insert" parameterType="com.abc12366.cms.model.ChannelCount">
 		 INSERT INTO cms_channel_count
  		(channelId,views,viewsMonth,viewsWeek,viewsDay,contentCountTotal,contentCountDay,contentCountWeek,contentCountMonth,contentCountYear) 
 		 VALUES 
@@ -23,7 +18,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="channelCount">
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.ChannelCount">
 		 INSERT INTO cms_channel_count
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="channelId != null">
@@ -93,7 +88,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="channelCount">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.ChannelCount">
 		 UPDATE cms_channel_count
  		 <set> 
 			<if test="views != null">
@@ -129,7 +124,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="channelCount">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ChannelCount">
 		 UPDATE cms_channel_count
 		 SET 
 			 views = #{views},
