@@ -4,11 +4,75 @@
 <mapper namespace="com.abc12366.admin.mapper.db1.DictMapper">
 
     <insert id="insert" parameterType="com.abc12366.admin.model.Dict">
-        insert into sys_dict (id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser)
-        values (#{id}, #{dictId}, #{dictName}, #{fieldKey}, #{fieldValue}, #{status}, #{createTime}, #{createUser}, #{lastUpdate}, #{lastUser})
+        INSERT INTO sys_dict
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dictId != null">
+                dictId,
+            </if>
+            <if test="dictName != null">
+                dictName,
+            </if>
+            <if test="fieldKey != null">
+                fieldKey,
+            </if>
+            <if test="fieldValue != null">
+                fieldValue,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="createUser != null">
+                createUser,
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate,
+            </if>
+            <if test="lastUser != null">
+                lastUser,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="dictId!=null">
+                #{dictId},
+            </if>
+            <if test="dictName!=null">
+                #{dictName},
+            </if>
+            <if test="fieldKey!=null">
+                #{fieldKey},
+            </if>
+            <if test="fieldValue!=null">
+                #{fieldValue},
+            </if>
+            <if test="status!=null">
+                #{status},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="createUser!=null">
+                #{createUser},
+            </if>
+            <if test="lastUpdate!=null">
+                #{lastUpdate},
+            </if>
+            <if test="lastUser!=null">
+                #{lastUser},
+            </if>
+        </trim>
     </insert>
 
-    <update id="update">
+    <update id="update" parameterType="com.abc12366.admin.model.Dict">
         update sys_dict
         <set>
             <if test="dictId != null">dictId = #{dictId},</if>

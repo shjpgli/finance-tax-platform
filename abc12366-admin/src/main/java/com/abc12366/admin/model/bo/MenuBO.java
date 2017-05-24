@@ -21,6 +21,7 @@ public class MenuBO {
     @Size(min = 0, max = 128)
     private String menuUrl;
     private String parentId;
+    private String parentName;
     @Size(min = 0, max = 500)
     private String perms;
     private String type;
@@ -141,5 +142,13 @@ public class MenuBO {
                 ", status=" + status +
                 ", remark='" + remark + '\'' +
                 '}';
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

@@ -3,14 +3,19 @@ package com.abc12366.admin.service;
 import com.abc12366.admin.mapper.db1.MenuMapper;
 import com.abc12366.admin.mapper.db2.MenuRoMapper;
 import com.abc12366.admin.model.Menu;
+import com.abc12366.admin.model.Organization;
 import com.abc12366.admin.model.bo.MenuBO;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,13 +27,14 @@ import java.util.List;
 @Service
 public class MenuServiceImpl implements MenuService {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(MenuServiceImpl.class);
     @Autowired
     private MenuMapper menuMapper;
     @Autowired
     private MenuRoMapper menuRoMapper;
     @Override
-    public List<Menu> selectList(Menu menu) {
-        List<Menu> menus = menuRoMapper.selectList(menu);
+    public List<MenuBO> selectList(Menu menu) {
+        List<MenuBO> menus = menuRoMapper.selectList(menu);
         /*if(menus == null||menus.size()==0){
             return null;
         }
@@ -50,7 +56,7 @@ public class MenuServiceImpl implements MenuService {
             return null;
         }
         for(Menu menu : childrenTemp){
-            boolean hasChildren = hasChildren(menu);
+            boolean hasChildren = hasChildren(menu.getMenuId());
             if(hasChildren){
                 getChildren(menus, menu);
             }
@@ -66,13 +72,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuBO selectByMenuId(String menuId) {
-        Menu menu = menuRoMapper.selectByMenuId(menuId);
-        if(menu == null){
+        return menuRoMapper.selectByMenuId(menuId);
+        /*if(menu == null){
             return null;
         }
         MenuBO menuBO = new MenuBO();
         BeanUtils.copyProperties(menu, menuBO);
-        return menuBO;
+        return menuBO;*/
     }
 
     @Transactional("db1TxManager")
@@ -92,11 +98,11 @@ public class MenuServiceImpl implements MenuService {
     @Transactional("db1TxManager")
     @Override
     public MenuBO delete(String menuId) {
-        Menu menu = menuRoMapper.selectByMenuId(menuId);
+        MenuBO menu = menuRoMapper.selectByMenuId(menuId);
         if(menu == null){
             return null;
         }
-        boolean hasChildren = hasChildren(menu);
+        boolean hasChildren = hasChildren(menuId);
         if(hasChildren){
             deleteChildren(menuRoMapper.selectByParentId(menu.getMenuId()));
         }
@@ -109,21 +115,13 @@ public class MenuServiceImpl implements MenuService {
     @Transactional("db1TxManager")
     @Override
     public MenuBO update(MenuBO menuBO) {
-        Menu menu = menuRoMapper.selectByMenuId(menuBO.getMenuId());
-        if(menu == null){
-            return null;
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(menuBO,menu);
+        int update = menuMapper.update(menu);
+        if (update != 1) {
+            LOGGER.warn("更新失败，参数：{}", menu.toString());
+            throw new ServiceException(4002);
         }
-        menu.setMenuName(menuBO.getMenuName());
-        menu.setMenuUrl(menuBO.getMenuUrl());
-        menu.setParentId(menuBO.getParentId());
-        menu.setPerms(menuBO.getPerms());
-        menu.setType(menuBO.getType());
-        menu.setIcon(menuBO.getIcon());
-        menu.setSort(menuBO.getSort());
-        menu.setStatus(menuBO.isStatus());
-        menu.setRemark(menuBO.getRemark());
-        menuMapper.update(menu);
-        BeanUtils.copyProperties(menu, menuBO);
         return menuBO;
     }
 
@@ -143,8 +141,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public boolean hasChildren(Menu menu) {
-        List<Menu> menus = menuRoMapper.selectByParentId(menu.getMenuId());
+    public boolean hasChildren(String menuId) {
+        List<Menu> menus = menuRoMapper.selectByParentId(menuId);
         if(menus != null && menus.size()!=0){
             return true;
         }
@@ -155,7 +153,7 @@ public class MenuServiceImpl implements MenuService {
     public void deleteChildren(List<Menu> children) {
         if(children!=null && children.size()!=0){
             for(Menu menu : children){
-                if(hasChildren(menu)){
+                if(hasChildren(menu.getMenuId())){
                     deleteChildren(menuRoMapper.selectByParentId(menu.getMenuId()));
                 }
                 menuMapper.delete(menu.getMenuId());
@@ -168,7 +166,7 @@ public class MenuServiceImpl implements MenuService {
         List<Menu> children = menuRoMapper.selectByParentId(menu.getMenuId());
         menus.addAll(children);
         for(Menu m:children){
-            if(hasChildren(m)){
+            if(hasChildren(m.getMenuId())){
                 getChildren(menus,m);
             }
         }

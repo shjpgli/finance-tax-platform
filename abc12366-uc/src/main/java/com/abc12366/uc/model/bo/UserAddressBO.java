@@ -5,54 +5,36 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
-/**
- *
- * 收货地址信息
- *
- **/
-@SuppressWarnings("serial")
 public class UserAddressBO implements Serializable {
 
-    /**PK**/
     private String id;
 
-    /**用户ID**/
     private String userId;
 
-    /**收货人姓名**/
     @NotEmpty
     @Size(min = 2, max = 100)
     private String name;
 
-    /**省**/
     @Size(min = 0, max = 15)
     private String province;
 
-    /**市**/
     @Size(min = 0, max = 15)
     private String city;
 
-    /**区**/
     @Size(min = 0, max = 15)
     private String area;
 
-    /**详细地址**/
     @Size(min = 0, max = 100)
     private String detail;
 
-    /**手机号码**/
     private String phone;
 
-    /**是否默认地址**/
     private Boolean isDefault;
 
-    /**地址状态**/
     private Boolean status;
 
-    /****/
     private java.util.Date createTime;
 
-    /****/
     private java.util.Date lastUpdate;
 
 

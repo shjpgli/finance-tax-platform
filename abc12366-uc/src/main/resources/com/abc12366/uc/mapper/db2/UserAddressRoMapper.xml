@@ -16,8 +16,8 @@
         WHERE id = #{id}
     </select>
 
-    <!-- 查询UserId查询 -->
-    <select id="selectByUserId" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
+    <!-- 根据UserId查询 -->
+    <select id="selectList" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_user_address

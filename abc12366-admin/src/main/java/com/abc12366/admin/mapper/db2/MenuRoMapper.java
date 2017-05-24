@@ -12,11 +12,11 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface MenuRoMapper {
-    List<Menu> selectList(Menu menu);
+    List<MenuBO> selectList(Menu menu);
 
     List<Menu> selectByParentId(String parentId);
 
-    Menu selectByMenuId(String id);
+    MenuBO selectByMenuId(String id);
 
     Menu selectByMenuName(String name);
 

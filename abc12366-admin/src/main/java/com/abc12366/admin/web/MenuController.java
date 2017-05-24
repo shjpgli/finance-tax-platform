@@ -44,7 +44,7 @@ public class MenuController {
         menu.setParentId(parentId);
         menu.setType(type);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<Menu> dataList = menuService.selectList(menu);
+        List<MenuBO> dataList = menuService.selectList(menu);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *
- * ÊÕ»õµØÖ·ĞÅÏ¢
+ * æ”¶è´§åœ°å€ä¿¡æ¯
  *
  **/
 @SuppressWarnings("serial")
@@ -13,32 +13,32 @@ public class UserAddress implements Serializable {
     /**PK**/
     private String id;
 
-    /**ÓÃ»§ID**/
+    /**ç”¨æˆ·ID**/
     private String userId;
 
-    /**ÊÕ»õÈËĞÕÃû**/
+    /**æ”¶è´§äººå§“å**/
     private String name;
 
-    /**Ê¡**/
+    /**çœ**/
     private String province;
 
-    /**ÊĞ**/
+    /**å¸‚**/
     private String city;
 
-    /**Çø**/
+    /**åŒº**/
     private String area;
 
-    /**ÏêÏ¸µØÖ·**/
+    /**è¯¦ç»†åœ°å€**/
     private String detail;
 
-    /**ÊÖ»úºÅÂë**/
+    /**æ‰‹æœºå·ç **/
     private String phone;
 
-    /**ÊÇ·ñÄ¬ÈÏµØÖ·**/
-    private Integer isDefault;
+    /**æ˜¯å¦é»˜è®¤åœ°å€**/
+    private Boolean isDefault;
 
-    /**µØÖ·×´Ì¬**/
-    private Integer status;
+    /**åœ°å€çŠ¶æ€**/
+    private Boolean status;
 
     /****/
     private java.util.Date createTime;
@@ -112,19 +112,19 @@ public class UserAddress implements Serializable {
         return this.phone;
     }
 
-    public void setIsDefault(Integer isDefault){
+    public void setIsDefault(Boolean isDefault){
         this.isDefault = isDefault;
     }
 
-    public Integer getIsDefault(){
+    public Boolean getIsDefault(){
         return this.isDefault;
     }
 
-    public void setStatus(Integer status){
+    public void setStatus(Boolean status){
         this.status = status;
     }
 
-    public Integer getStatus(){
+    public Boolean getStatus(){
         return this.status;
     }
 
