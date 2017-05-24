@@ -88,17 +88,17 @@ public class Site implements Serializable {
 	/**备案号**varchar(30)**/
 	private String recordNum;
 
-	/**资源是否自动同步**tinyint(1)**/
-	private Integer resourceSync;
+	/**资源是否自动同步**varchar(1)**/
+	private String resourceSync;
 
-	/**静态页是否自动同步**tinyint(1)**/
-	private Integer staticSync;
+	/**静态页是否自动同步**varchar(1)**/
+	private String staticSync;
 
-	/**静态发布**tinyint(1)**/
-	private Integer staticIssue;
+	/**静态发布**varchar(1)**/
+	private String staticIssue;
 
-	/**站点状态**tinyint(1)**/
-	private Integer siteStatus;
+	/**站点状态**varchar(1)**/
+	private String siteStatus;
 
 
 
@@ -310,36 +310,35 @@ public class Site implements Serializable {
 		return this.recordNum;
 	}
 
-	public void setResourceSync(Integer resourceSync){
+	public String getResourceSync() {
+		return resourceSync;
+	}
+
+	public void setResourceSync(String resourceSync) {
 		this.resourceSync = resourceSync;
 	}
 
-	public Integer getResourceSync(){
-		return this.resourceSync;
+	public String getStaticSync() {
+		return staticSync;
 	}
 
-	public void setStaticSync(Integer staticSync){
+	public void setStaticSync(String staticSync) {
 		this.staticSync = staticSync;
 	}
 
-	public Integer getStaticSync(){
-		return this.staticSync;
+	public String getStaticIssue() {
+		return staticIssue;
 	}
 
-	public void setStaticIssue(Integer staticIssue){
+	public void setStaticIssue(String staticIssue) {
 		this.staticIssue = staticIssue;
 	}
 
-	public Integer getStaticIssue(){
-		return this.staticIssue;
+	public String getSiteStatus() {
+		return siteStatus;
 	}
 
-	public void setSiteStatus(Integer siteStatus){
+	public void setSiteStatus(String siteStatus) {
 		this.siteStatus = siteStatus;
 	}
-
-	public Integer getSiteStatus(){
-		return this.siteStatus;
-	}
-
 }

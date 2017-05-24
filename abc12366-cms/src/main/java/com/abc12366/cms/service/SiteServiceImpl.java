@@ -33,18 +33,18 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public List<SiteListBo> selectList() {
-        List<Site> siteList = siteRoMapper.selectList();
-        List<SiteListBo> siteListBo = new ArrayList<SiteListBo>();
-        for (Site site : siteList) {
-            SiteListBo siteBo = new SiteListBo();
-            try {
-                BeanUtils.copyProperties(site, siteBo);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
-            }
-            siteListBo.add(siteBo);
-        }
+        List<SiteListBo> siteListBo = siteRoMapper.selectList();
+//        List<SiteListBo> siteListBo = new ArrayList<SiteListBo>();
+//        for (Site site : siteList) {
+//            SiteListBo siteBo = new SiteListBo();
+//            try {
+//                BeanUtils.copyProperties(site, siteBo);
+//            } catch (Exception e) {
+//                LOGGER.error("类转换异常：{}", e);
+//                throw new RuntimeException("类型转换异常：{}", e);
+//            }
+//            siteListBo.add(siteBo);
+//        }
         LOGGER.info("{}", siteListBo);
         return siteListBo;
     }

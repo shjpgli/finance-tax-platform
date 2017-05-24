@@ -11,16 +11,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class CommentExtBo implements Serializable {
 
-	/****/
+	/**commentId**varchar(64)**/
 	private String commentId;
 
-	/**IP地址**/
+	/**IP地址**varchar(50)**/
 	private String ip;
 
-	/**评论内容**/
+	/**评论内容**longtext**/
 	private String text;
 
-	/**回复内容**/
+	/**回复内容**longtext**/
 	private String reply;
 
 

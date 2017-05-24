@@ -4,6 +4,8 @@ import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,12 @@ public class ModelController {
     private ModelService modelService;
 
     @GetMapping
-    public ResponseEntity selectList() {
+    public ResponseEntity selectList(@RequestParam(value = "pageNum", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "pageSize", defaultValue = Constant.pageSize) int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ModelBo> dataList = modelService.selectList();
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
 

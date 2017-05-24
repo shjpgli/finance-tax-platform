@@ -3,30 +3,29 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容审核信息表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentCheck implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/**审核步数**/
+	/**审核步数**tinyint(4)**/
 	private Integer checkStep;
 
-	/**审核意见**/
+	/**审核意见**varchar(255)**/
 	private String checkOpinion;
 
-	/**是否退回**/
+	/**是否退回**tinyint(1)**/
 	private Integer isRejected;
 
-	/****/
+	/**reviewer**int(11)**/
 	private Integer reviewer;
 
-	/**终审时间**/
+	/**终审时间**datetime**/
 	private java.util.Date checkDate;
 
 

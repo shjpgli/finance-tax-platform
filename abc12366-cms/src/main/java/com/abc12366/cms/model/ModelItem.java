@@ -10,64 +10,64 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ModelItem implements Serializable {
 
-	/****/
+	/**modelitemId**varchar(64)**/
 	private String modelitemId;
 
-	/****/
+	/**modelId**varchar(64)**/
 	private String modelId;
 
-	/**字段**/
+	/**字段**varchar(50)**/
 	private String field;
 
-	/**名称**/
+	/**名称**varchar(100)**/
 	private String itemLabel;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
-	/**默认值**/
+	/**默认值**varchar(255)**/
 	private String defValue;
 
-	/**可选项**/
+	/**可选项**varchar(255)**/
 	private String optValue;
 
-	/**长度**/
+	/**长度**varchar(20)**/
 	private String textSize;
 
-	/**文本行数**/
+	/**文本行数**varchar(3)**/
 	private String areaRows;
 
-	/**文本列数**/
+	/**文本列数**varchar(3)**/
 	private String areaCols;
 
-	/**帮助信息**/
+	/**帮助信息**varchar(255)**/
 	private String help;
 
-	/**帮助位置**/
+	/**帮助位置**varchar(1)**/
 	private String helpPosition;
 
-	/**数据类型**/
+	/**数据类型**int(11)**/
 	private Integer dataType;
 
-	/**是否独占一行**/
+	/**是否独占一行**tinyint(1)**/
 	private Integer isSingle;
 
-	/**是否栏目模型项**/
+	/**是否栏目模型项**tinyint(1)**/
 	private Integer isChannel;
 
-	/**是否自定义**/
+	/**是否自定义**tinyint(1)**/
 	private Integer isCustom;
 
-	/**是否显示**/
+	/**是否显示**tinyint(1)**/
 	private Integer isDisplay;
 
-	/**是否必填项**/
+	/**是否必填项**tinyint(1)**/
 	private Integer isRequired;
 
-	/**图片宽度**/
+	/**图片宽度**int(11)**/
 	private Integer imageWidth;
 
-	/**图片宽度**/
+	/**图片宽度**int(11)**/
 	private Integer imageHeight;
 
 

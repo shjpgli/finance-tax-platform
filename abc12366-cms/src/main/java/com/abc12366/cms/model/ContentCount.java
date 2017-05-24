@@ -3,66 +3,65 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容计数表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentCount implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/**总访问数**/
+	/**总访问数**int(11)**/
 	private Integer views;
 
-	/**月访问数**/
+	/**月访问数**int(11)**/
 	private Integer viewsMonth;
 
-	/**周访问数**/
+	/**周访问数**int(11)**/
 	private Integer viewsWeek;
 
-	/**日访问数**/
+	/**日访问数**int(11)**/
 	private Integer viewsDay;
 
-	/**总评论数**/
+	/**总评论数**int(11)**/
 	private Integer comments;
 
-	/**月评论数**/
+	/**月评论数**int(11)**/
 	private Integer commentsMonth;
 
-	/**周评论数**/
+	/**周评论数**smallint(6)**/
 	private Integer commentsWeek;
 
-	/**日评论数**/
+	/**日评论数**smallint(6)**/
 	private Integer commentsDay;
 
-	/**总下载数**/
+	/**总下载数**int(11)**/
 	private Integer downloads;
 
-	/**月下载数**/
+	/**月下载数**int(11)**/
 	private Integer downloadsMonth;
 
-	/**周下载数**/
+	/**周下载数**smallint(6)**/
 	private Integer downloadsWeek;
 
-	/**日下载数**/
+	/**日下载数**smallint(6)**/
 	private Integer downloadsDay;
 
-	/**总顶数**/
+	/**总顶数**int(11)**/
 	private Integer ups;
 
-	/**月顶数**/
+	/**月顶数**int(11)**/
 	private Integer upsMonth;
 
-	/**周顶数**/
+	/**周顶数**smallint(6)**/
 	private Integer upsWeek;
 
-	/**日顶数**/
+	/**日顶数**smallint(6)**/
 	private Integer upsDay;
 
-	/**总踩数**/
+	/**总踩数**int(11)**/
 	private Integer downs;
 
 

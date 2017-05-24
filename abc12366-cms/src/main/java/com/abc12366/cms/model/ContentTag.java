@@ -3,32 +3,23 @@ import java.io.Serializable;
 
 
 /**
- *
- * CMS内容标签关联表
- * add by xieyanmao on 2017-4-25
- *
+ * 
+ * CMS内容TAG表
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentTag implements Serializable {
 
-	/****/
-	private String contentId;
-
-	/****/
+	/**tagId**varchar(64)**/
 	private String tagId;
 
-	/****/
-	private Integer priority;
+	/**tag名称**varchar(50)**/
+	private String tagName;
+
+	/**被引用的次数**int(11)**/
+	private Integer refCounter;
 
 
-
-	public void setContentId(String contentId){
-		this.contentId = contentId;
-	}
-
-	public String getContentId(){
-		return this.contentId;
-	}
 
 	public void setTagId(String tagId){
 		this.tagId = tagId;
@@ -38,12 +29,20 @@ public class ContentTag implements Serializable {
 		return this.tagId;
 	}
 
-	public void setPriority(Integer priority){
-		this.priority = priority;
+	public void setTagName(String tagName){
+		this.tagName = tagName;
 	}
 
-	public Integer getPriority(){
-		return this.priority;
+	public String getTagName(){
+		return this.tagName;
+	}
+
+	public void setRefCounter(Integer refCounter){
+		this.refCounter = refCounter;
+	}
+
+	public Integer getRefCounter(){
+		return this.refCounter;
 	}
 
 }

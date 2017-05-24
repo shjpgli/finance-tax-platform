@@ -3,27 +3,26 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * 文章操作记录
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentRecord implements Serializable {
 
-	/****/
+	/**contentRecordId**varchar(64)**/
 	private String contentRecordId;
 
-	/**文章ID**/
+	/**文章ID**varchar(64)**/
 	private String contentId;
 
-	/**操作人**/
+	/**操作人**varchar(64)**/
 	private String userId;
 
-	/**操作时间**/
+	/**操作时间**datetime**/
 	private java.util.Date operateTime;
 
-	/**0 新增 1修改 2审核 3退回 4移动 5生成静态页 6删除到回收站 7归档 8出档 9推送共享**/
+	/**0 新增 1修改 2审核 3退回 4移动 5生成静态页 6删除到回收站 7归档 8出档 9推送共享**tinyint(2)**/
 	private Integer operateType;
 
 

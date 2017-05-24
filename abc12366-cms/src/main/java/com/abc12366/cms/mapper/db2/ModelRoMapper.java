@@ -28,7 +28,7 @@ public interface ModelRoMapper{
 	 * 查询(根据查询条件查询)
 	 *
 	 **/
-	List<Model> selectList();
+	List<ModelBo> selectList();
 
 
 }

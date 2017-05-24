@@ -10,13 +10,13 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Origin implements Serializable {
 
-	/****/
+	/**originId**varchar(64)**/
 	private String originId;
 
-	/**来源名称**/
+	/**来源名称**varchar(255)**/
 	private String originName;
 
-	/**来源文章总数**/
+	/**来源文章总数**int(11)**/
 	private Integer refCount;
 
 

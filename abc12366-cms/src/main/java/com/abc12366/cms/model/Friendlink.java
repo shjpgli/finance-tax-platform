@@ -10,37 +10,37 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Friendlink implements Serializable {
 
-	/****/
+	/**friendlinkId**varchar(64)**/
 	private String friendlinkId;
 
-	/****/
+	/**siteId**varchar(64)**/
 	private String siteId;
 
-	/****/
+	/**friendlinkctgId**varchar(64)**/
 	private String friendlinkctgId;
 
-	/**网站名称**/
+	/**网站名称**varchar(150)**/
 	private String siteName;
 
-	/**网站地址**/
+	/**网站地址**varchar(255)**/
 	private String domain;
 
-	/**图标**/
+	/**图标**varchar(150)**/
 	private String logo;
 
-	/**站长邮箱**/
+	/**站长邮箱**varchar(100)**/
 	private String email;
 
-	/**描述**/
+	/**描述**varchar(255)**/
 	private String description;
 
-	/**点击次数**/
+	/**点击次数**int(11)**/
 	private Integer views;
 
-	/**是否显示**/
+	/**是否显示**char(1)**/
 	private String isEnabled;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
 

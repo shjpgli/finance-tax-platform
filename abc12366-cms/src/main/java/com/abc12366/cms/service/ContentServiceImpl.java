@@ -76,18 +76,18 @@ public class ContentServiceImpl implements ContentService{
     @Override
     public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         //查询模型项
-        List<ModelItem> modelItems = modelItemRoMapper.selectList(map);
-        List<ModelItemBo> modelItemBos = new ArrayList<>();
-        for(ModelItem modelItem : modelItems){
-            ModelItemBo modelItemBo = new ModelItemBo();
-            try {
-                BeanUtils.copyProperties(modelItem, modelItemBo);
-                modelItemBos.add(modelItemBo);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
-            }
-        }
+        List<ModelItemBo> modelItemBos = modelItemRoMapper.selectList(map);
+//        List<ModelItemBo> modelItemBos = new ArrayList<>();
+//        for(ModelItem modelItem : modelItems){
+//            ModelItemBo modelItemBo = new ModelItemBo();
+//            try {
+//                BeanUtils.copyProperties(modelItem, modelItemBo);
+//                modelItemBos.add(modelItemBo);
+//            } catch (Exception e) {
+//                LOGGER.error("类转换异常：{}", e);
+//                throw new RuntimeException("类型转换异常：{}", e);
+//            }
+//        }
         LOGGER.info("{}", modelItemBos);
         return modelItemBos;
     }

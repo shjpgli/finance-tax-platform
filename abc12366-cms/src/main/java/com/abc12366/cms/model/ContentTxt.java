@@ -3,27 +3,26 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容文本表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentTxt implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/**文章内容**/
+	/**文章内容**longtext**/
 	private String txt;
 
-	/**扩展内容1**/
+	/**扩展内容1**longtext**/
 	private String txt1;
 
-	/**扩展内容2**/
+	/**扩展内容2**longtext**/
 	private String txt2;
 
-	/**扩展内容3**/
+	/**扩展内容3**longtext**/
 	private String txt3;
 
 

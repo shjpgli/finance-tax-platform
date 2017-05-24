@@ -10,64 +10,64 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ChannelExt implements Serializable {
 
-	/****/
+	/**channelId**varchar(64)**/
 	private String channelId;
 
-	/**名称**/
+	/**名称**varchar(100)**/
 	private String channelName;
 
-	/**是否栏目静态化**/
+	/**是否栏目静态化**char(1)**/
 	private String isStaticChannel;
 
-	/**是否内容静态化**/
+	/**是否内容静态化**char(1)**/
 	private String isStaticContent;
 
-	/**每页多少条记录**/
+	/**每页多少条记录**int(11)**/
 	private Integer pageSize;
 
-	/**外部链接**/
+	/**外部链接**varchar(255)**/
 	private String link;
 
-	/**栏目页模板**/
+	/**栏目页模板**varchar(100)**/
 	private String tplChannel;
 
-	/**内容页模板**/
+	/**内容页模板**varchar(100)**/
 	private String tplContent;
 
-	/**缩略图**/
+	/**缩略图**varchar(100)**/
 	private String titleImg;
 
-	/**内容图**/
+	/**内容图**varchar(100)**/
 	private String contentImg;
 
-	/**内容是否有缩略图**/
+	/**内容是否有缩略图**tinyint(1)**/
 	private Integer hasTitleImg;
 
-	/**内容是否有内容图**/
+	/**内容是否有内容图**tinyint(1)**/
 	private Integer hasContentImg;
 
-	/**内容标题图宽度**/
+	/**内容标题图宽度**int(11)**/
 	private Integer titleImgWidth;
 
-	/**内容标题图高度**/
+	/**内容标题图高度**int(11)**/
 	private Integer titleImgHeight;
 
-	/**内容内容图宽度**/
+	/**内容内容图宽度**int(11)**/
 	private Integer contentImgWidth;
 
-	/**内容内容图高度**/
+	/**内容内容图高度**int(11)**/
 	private Integer contentImgHeight;
 
-	/**评论(0:匿名;1:会员一次;2:关闭,3会员多次)**/
+	/**评论(0:匿名;1:会员一次;2:关闭,3会员多次)**int(11)**/
 	private Integer commentControl;
 
-	/**顶踩(true:开放;false:关闭)**/
+	/**顶踩(true:开放;false:关闭)**tinyint(1)**/
 	private Integer allowUpdown;
 
-	/**是否新窗口打开**/
+	/**是否新窗口打开**tinyint(1)**/
 	private Integer isBlank;
 
-	/**分享(true:开放;false:关闭)**/
+	/**分享(true:开放;false:关闭)**tinyint(1)**/
 	private Integer allowShare;
 
 

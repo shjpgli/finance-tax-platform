@@ -3,69 +3,68 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容扩展表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentExt implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/**标题**/
+	/**标题**varchar(150)**/
 	private String title;
 
-	/**简短标题**/
+	/**简短标题**varchar(150)**/
 	private String shortTitle;
 
-	/**作者**/
+	/**作者**varchar(100)**/
 	private String author;
 
-	/**来源**/
+	/**来源**varchar(100)**/
 	private String origin;
 
-	/**来源链接**/
+	/**来源链接**varchar(255)**/
 	private String originUrl;
 
-	/**描述**/
+	/**描述**varchar(255)**/
 	private String description;
 
-	/**发布日期**/
+	/**发布日期**datetime**/
 	private java.util.Date releaseDate;
 
-	/**媒体路径**/
+	/**媒体路径**varchar(255)**/
 	private String mediaPath;
 
-	/**媒体类型**/
+	/**媒体类型**varchar(20)**/
 	private String mediaType;
 
-	/**是否加粗**/
+	/**是否加粗**tinyint(1)**/
 	private Integer isBold;
 
-	/**标题图片**/
+	/**标题图片**varchar(100)**/
 	private String titleImg;
 
-	/**内容图片**/
+	/**内容图片**varchar(100)**/
 	private String contentImg;
 
-	/**类型图片**/
+	/**类型图片**varchar(100)**/
 	private String typeImg;
 
-	/**外部链接**/
+	/**外部链接**varchar(255)**/
 	private String link;
 
-	/**指定模板**/
+	/**指定模板**varchar(100)**/
 	private String tplContent;
 
-	/**需要重新生成静态页**/
+	/**需要重新生成静态页**tinyint(1)**/
 	private Integer needRegenerate;
 
-	/**固顶到期日期**/
+	/**固顶到期日期**datetime**/
 	private java.util.Date toplevelDate;
 
-	/**归档日期**/
+	/**归档日期**datetime**/
 	private java.util.Date pigeonholeDate;
 
 

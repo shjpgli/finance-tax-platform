@@ -3,30 +3,29 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容附件表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentAttachment implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
-	/**附件路径**/
+	/**附件路径**varchar(255)**/
 	private String attachmentPath;
 
-	/**附件名称**/
+	/**附件名称**varchar(100)**/
 	private String attachmentName;
 
-	/**文件名**/
+	/**文件名**varchar(100)**/
 	private String filename;
 
-	/**下载次数**/
+	/**下载次数**int(11)**/
 	private Integer downloadCount;
 
 

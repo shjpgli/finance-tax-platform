@@ -10,16 +10,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class FriendlinkCtg implements Serializable {
 
-	/****/
+	/**friendlinkctgId**varchar(64)**/
 	private String friendlinkctgId;
 
-	/****/
+	/**siteId**varchar(64)**/
 	private String siteId;
 
-	/**名称**/
+	/**名称**varchar(50)**/
 	private String friendlinkctgName;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
 

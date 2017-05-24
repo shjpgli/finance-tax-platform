@@ -10,49 +10,49 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Model implements Serializable {
 
-	/****/
+	/**modelId**varchar(64)**/
 	private String modelId;
 
-	/**名称**/
+	/**名称**varchar(100)**/
 	private String modelName;
 
-	/**路径**/
+	/**路径**varchar(100)**/
 	private String modelPath;
 
-	/**栏目模板前缀**/
+	/**栏目模板前缀**varchar(20)**/
 	private String tplChannelPrefix;
 
-	/**内容模板前缀**/
+	/**内容模板前缀**varchar(20)**/
 	private String tplContentPrefix;
 
-	/**栏目标题图宽度**/
+	/**栏目标题图宽度**int(11)**/
 	private Integer titleImgWidth;
 
-	/**栏目标题图高度**/
+	/**栏目标题图高度**int(11)**/
 	private Integer titleImgHeight;
 
-	/**栏目内容图宽度**/
+	/**栏目内容图宽度**int(11)**/
 	private Integer contentImgWidth;
 
-	/**栏目内容图高度**/
+	/**栏目内容图高度**int(11)**/
 	private Integer contentImgHeight;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
-	/**是否有内容**/
+	/**是否有内容**tinyint(1)**/
 	private Integer hasContent;
 
-	/**是否禁用**/
+	/**是否禁用**tinyint(1)**/
 	private Integer isDisabled;
 
-	/**是否默认模型**/
+	/**是否默认模型**tinyint(1)**/
 	private Integer isDef;
 
-	/**是否全站模型**/
+	/**是否全站模型**tinyint(1)**/
 	private Integer isGlobal;
 
-	/**非全站模型所属站点**/
+	/**非全站模型所属站点**int(11)**/
 	private Integer siteId;
 
 
