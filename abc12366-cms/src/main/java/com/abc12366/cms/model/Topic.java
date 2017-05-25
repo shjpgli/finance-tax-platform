@@ -10,37 +10,37 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Topic implements Serializable {
 
-	/****/
+	/**topicId**varchar(64)**/
 	private String topicId;
 
-	/****/
+	/**channelId**varchar(64)**/
 	private String channelId;
 
-	/**名称**/
+	/**名称**varchar(150)**/
 	private String topicName;
 
-	/**简称**/
+	/**简称**varchar(150)**/
 	private String shortName;
 
-	/**关键字**/
+	/**关键字**varchar(255)**/
 	private String keywords;
 
-	/**描述**/
+	/**描述**varchar(255)**/
 	private String description;
 
-	/**标题图**/
+	/**标题图**varchar(100)**/
 	private String titleImg;
 
-	/**内容图**/
+	/**内容图**varchar(100)**/
 	private String contentImg;
 
-	/**专题模板**/
+	/**专题模板**varchar(100)**/
 	private String tplContent;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
-	/**是否推??**/
+	/**是否推??**tinyint(1)**/
 	private Integer isRecommend;
 
 

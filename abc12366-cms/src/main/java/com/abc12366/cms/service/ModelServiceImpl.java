@@ -30,18 +30,18 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public List<ModelBo> selectList() {
         //查询模型列表
-        List<Model> modelList =  modelRoMapper.selectList();
-        List<ModelBo> modelBoList = new ArrayList<>();
-        for(Model model : modelList){
-            ModelBo modelBo = new ModelBo();
-            try {
-                BeanUtils.copyProperties(model, modelBo);
-                modelBoList.add(modelBo);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
-            }
-        }
+        List<ModelBo> modelBoList =  modelRoMapper.selectList();
+//        List<ModelBo> modelBoList = new ArrayList<>();
+//        for(Model model : modelList){
+//            ModelBo modelBo = new ModelBo();
+//            try {
+//                BeanUtils.copyProperties(model, modelBo);
+//                modelBoList.add(modelBo);
+//            } catch (Exception e) {
+//                LOGGER.error("类转换异常：{}", e);
+//                throw new RuntimeException("类型转换异常：{}", e);
+//            }
+//        }
         return modelBoList;
     }
 

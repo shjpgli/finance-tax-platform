@@ -23,6 +23,6 @@ public interface SiteRoMapper {
     /**
      * 查询所有
      **/
-    List<Site> selectList();
+    List<SiteListBo> selectList();
 
 }

@@ -11,16 +11,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class FileBo implements Serializable {
 
-	/**文件路径**/
+	/**文件路径**varchar(255)**/
 	private String filePath;
 
-	/**文件名字**/
+	/**文件名字**varchar(255)**/
 	private String fileName;
 
-	/**是否有效**/
+	/**是否有效**tinyint(1)**/
 	private Integer fileIsvalid;
 
-	/**内容id**/
+	/**内容id**varchar(64)**/
 	private String contentId;
 
 

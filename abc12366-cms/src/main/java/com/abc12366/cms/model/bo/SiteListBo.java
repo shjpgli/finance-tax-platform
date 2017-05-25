@@ -35,10 +35,10 @@ public class SiteListBo implements Serializable {
 	private String recordNum;
 
 	/**静态发布**tinyint(1)**/
-	private Integer staticIssue;
+	private String staticIssue;
 
 	/**站点状态**tinyint(1)**/
-	private Integer siteStatus;
+	private String siteStatus;
 
 	public String getSiteId() {
 		return siteId;
@@ -104,19 +104,19 @@ public class SiteListBo implements Serializable {
 		this.recordNum = recordNum;
 	}
 
-	public Integer getStaticIssue() {
+	public String getStaticIssue() {
 		return staticIssue;
 	}
 
-	public void setStaticIssue(Integer staticIssue) {
+	public void setStaticIssue(String staticIssue) {
 		this.staticIssue = staticIssue;
 	}
 
-	public Integer getSiteStatus() {
+	public String getSiteStatus() {
 		return siteStatus;
 	}
 
-	public void setSiteStatus(Integer siteStatus) {
+	public void setSiteStatus(String siteStatus) {
 		this.siteStatus = siteStatus;
 	}
 }

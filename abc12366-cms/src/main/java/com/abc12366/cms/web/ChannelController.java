@@ -5,6 +5,7 @@ import com.abc12366.cms.service.ChannelService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,13 @@ public class ChannelController {
     private ChannelService channelService;
 
     @GetMapping
-    public ResponseEntity selectList() {
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         //查询栏目列表
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ChannelBo> dataList = channelService.selectList();
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
     @GetMapping(path = "/init")

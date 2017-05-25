@@ -10,13 +10,13 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Contenttagid implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/****/
+	/**tagId**varchar(64)**/
 	private String tagId;
 
-	/****/
+	/**priority**int(11)**/
 	private Integer priority;
 
 

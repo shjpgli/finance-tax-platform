@@ -3,30 +3,29 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容类型表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentType implements Serializable {
 
-	/****/
+	/**typeId**varchar(64)**/
 	private String typeId;
 
-	/**名称**/
+	/**名称**varchar(20)**/
 	private String typeName;
 
-	/**图片宽**/
+	/**图片宽**int(11)**/
 	private Integer imgWidth;
 
-	/**图片高**/
+	/**图片高**int(11)**/
 	private Integer imgHeight;
 
-	/**是否有图片**/
+	/**是否有图片**tinyint(1)**/
 	private Integer hasImage;
 
-	/**是否禁用**/
+	/**是否禁用**tinyint(1)**/
 	private Integer isDisabled;
 
 

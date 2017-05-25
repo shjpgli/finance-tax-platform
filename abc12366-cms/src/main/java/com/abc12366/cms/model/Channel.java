@@ -10,42 +10,34 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Channel implements Serializable {
 
-	/****/
+	/**channelId**varchar(64)**/
 	private String channelId;
 
-	/**栏目名称**/
-	private String channelName;
-
-	/**模型ID**/
+	/**模型ID**varchar(64)**/
 	private String modelId;
 
-	/**站点ID**/
+	/**站点ID**varchar(64)**/
 	private String siteId;
 
-	/**父栏目ID**/
+	/**父栏目ID**varchar(64)**/
 	private String parentId;
 
-	/**访问路径**/
+	/**访问路径**varchar(30)**/
 	private String channelPath;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
-	/**是否显示**/
+	/**是否显示**tinyint(1)**/
 	private Integer isDisplay;
+
+	/**栏目名称**varchar(100)**/
+	private String channelName;
 
 
 
 	public void setChannelId(String channelId){
 		this.channelId = channelId;
-	}
-
-	public String getChannelName() {
-		return channelName;
-	}
-
-	public void setChannelName(String channelName) {
-		this.channelName = channelName;
 	}
 
 	public String getChannelId(){
@@ -98,6 +90,14 @@ public class Channel implements Serializable {
 
 	public Integer getIsDisplay(){
 		return this.isDisplay;
+	}
+
+	public void setChannelName(String channelName){
+		this.channelName = channelName;
+	}
+
+	public String getChannelName(){
+		return this.channelName;
 	}
 
 }

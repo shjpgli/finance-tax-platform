@@ -37,8 +37,8 @@ public class ContentController {
     private ContentService contentService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "pageNum", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "pageSize", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "title", required = false) String title,
                                      @RequestParam(value = "topLevel", required = false) String topLevel,
                                      @RequestParam(value = "typeId", required = false) String typeId,
@@ -60,7 +60,7 @@ public class ContentController {
         // count=true(第一个),默认值为false，是查询总记录数
         // pageSizeZero=true,默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 pageNum = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是 Page 类型）
         // reasonable=true,分页合理化参数，默认值为false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询内容列表
         List<ContentListBo> dataList = contentService.selectList(dataMap);
         LOGGER.info("{}", dataList);

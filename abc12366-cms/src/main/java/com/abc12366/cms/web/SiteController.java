@@ -3,7 +3,10 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.bo.SiteBo;
 import com.abc12366.cms.model.bo.SiteListBo;
 import com.abc12366.cms.service.SiteService;
-import com.abc12366.cms.vo.SiteVO;
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,25 +18,28 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/site")
+@RequestMapping(path = "/site",headers = Constant.VERSION_HEAD + "=1")
 public class SiteController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SiteController.class);
 	@Autowired
     private SiteService siteService;
+
+	@GetMapping
+	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+		List<SiteListBo> dataList = siteService.selectList();
+		LOGGER.info("{}", dataList);
+		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+	}
 	
 	@GetMapping(path = "/{siteId}")
-	public ResponseEntity<?> selectOneById(@PathVariable String siteId) {
+	public ResponseEntity<?> selectOneById(@PathVariable("siteId") String siteId) {
 		LOGGER.info("{}", siteId);
-			SiteBo siteBo = siteService.selectOneById(siteId);
+		SiteBo siteBo = siteService.selectOneById(siteId);
 		LOGGER.info("{}", siteBo);
 		return ResponseEntity.ok(siteBo);
-	}
-	@GetMapping
-	public ResponseEntity selectList() {
-		List<SiteListBo> siteList = siteService.selectList();
-		LOGGER.info("{}", siteList);
-		return ResponseEntity.ok(siteList);
 	}
 
 	@PostMapping
@@ -45,7 +51,7 @@ public class SiteController {
 	}
 
 	@PutMapping(path = "/{siteId}")
-	public ResponseEntity update(@Valid @RequestBody SiteBo siteBo) {
+	public ResponseEntity update(@Valid @RequestBody SiteBo siteBo, @PathVariable("siteId") String siteId) {
 		LOGGER.info("{}", siteBo);
 		siteBo = siteService.update(siteBo);
 		LOGGER.info("{}", siteBo);

@@ -3,24 +3,23 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容图片表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentPicture implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/**排列顺序**/
+	/**排列顺序**int(11)**/
 	private Integer priority;
 
-	/**图片地址**/
+	/**图片地址**varchar(100)**/
 	private String imgPath;
 
-	/**描述**/
+	/**描述**varchar(255)**/
 	private String description;
 
 

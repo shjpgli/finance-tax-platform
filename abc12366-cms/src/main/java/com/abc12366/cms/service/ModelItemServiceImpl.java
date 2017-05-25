@@ -34,18 +34,18 @@ public class ModelItemServiceImpl implements ModelItemService {
     @Override
     public List<ModelItemBo> selectList(Map<String, Object> map) {
         //查询模型项列表
-        List<ModelItem> modelItems = modelItemRoMapper.selectList(map);
-        List<ModelItemBo> modelItemBos = new ArrayList<>();
-        for(ModelItem modelItem : modelItems){
-            ModelItemBo modelItemBo = new ModelItemBo();
-            try {
-                BeanUtils.copyProperties(modelItem, modelItemBo);
-                modelItemBos.add(modelItemBo);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
-            }
-        }
+        List<ModelItemBo> modelItemBos = modelItemRoMapper.selectList(map);
+//        List<ModelItemBo> modelItemBos = new ArrayList<>();
+//        for(ModelItem modelItem : modelItems){
+//            ModelItemBo modelItemBo = new ModelItemBo();
+//            try {
+//                BeanUtils.copyProperties(modelItem, modelItemBo);
+//                modelItemBos.add(modelItemBo);
+//            } catch (Exception e) {
+//                LOGGER.error("类转换异常：{}", e);
+//                throw new RuntimeException("类型转换异常：{}", e);
+//            }
+//        }
         return modelItemBos;
     }
 

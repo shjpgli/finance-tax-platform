@@ -3,18 +3,17 @@ import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容栏目关联表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class ContentChannel implements Serializable {
 
-	/****/
+	/**channelId**varchar(64)**/
 	private String channelId;
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
 

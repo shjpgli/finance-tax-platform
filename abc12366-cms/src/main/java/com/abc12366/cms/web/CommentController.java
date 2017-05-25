@@ -34,8 +34,8 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "pageNum", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "pageSize", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "contentId", required = false) String contentId,
                                      @RequestParam(value = "isChecked", required = false) String isChecked,
                                      @RequestParam(value = "isRecommend", required = false) String isRecommend) {
@@ -43,7 +43,7 @@ public class CommentController {
         dataMap.put("contentId", contentId);//内容ID
         dataMap.put("isChecked", isChecked);//是否审核
         dataMap.put("isRecommend", isRecommend);//是否推荐
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询评论列表
         List<CommentListBo> dataList = commentService.selectList(dataMap);
         LOGGER.info("{}", dataList);

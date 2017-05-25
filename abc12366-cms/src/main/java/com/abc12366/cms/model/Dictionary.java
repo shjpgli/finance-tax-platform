@@ -10,16 +10,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Dictionary implements Serializable {
 
-	/****/
+	/**id**varchar(64)**/
 	private String id;
 
-	/**name**/
+	/**name**varchar(255)**/
 	private String name;
 
-	/**value**/
+	/**value**varchar(255)**/
 	private String value;
 
-	/**type**/
+	/**type**varchar(255)**/
 	private String type;
 
 

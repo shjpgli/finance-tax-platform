@@ -10,16 +10,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ChannelModel implements Serializable {
 
-	/****/
+	/**channelId**varchar(64)**/
 	private String channelId;
 
-	/**模型id**/
+	/**模型id**varchar(64)**/
 	private String modelId;
 
-	/**内容模板**/
+	/**内容模板**varchar(100)**/
 	private String tplContent;
 
-	/**排序**/
+	/**排序**int(11)**/
 	private Integer priority;
 
 

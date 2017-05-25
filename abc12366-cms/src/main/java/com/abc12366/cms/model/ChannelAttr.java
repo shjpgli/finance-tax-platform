@@ -10,13 +10,13 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ChannelAttr implements Serializable {
 
-	/****/
+	/**channelId**varchar(64)**/
 	private String channelId;
 
-	/**名称**/
+	/**名称**varchar(30)**/
 	private String attrName;
 
-	/**值**/
+	/**值**varchar(255)**/
 	private String attrValue;
 
 

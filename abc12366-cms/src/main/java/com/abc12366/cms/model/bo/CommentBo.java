@@ -11,46 +11,46 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class CommentBo implements Serializable {
 
-	/****/
+	/**commentId**varchar(64)**/
 	private String commentId;
 
-	/**评论用户ID**/
+	/**评论用户ID**int(11)**/
 	private Integer commentUserId;
 
-	/**回复用户ID**/
+	/**回复用户ID**int(11)**/
 	private Integer replyUserId;
 
-	/**内容ID**/
+	/**内容ID**varchar(64)**/
 	private String contentId;
 
-	/**站点ID**/
+	/**站点ID**varchar(64)**/
 	private String siteId;
 
-	/**评论时间**/
+	/**评论时间**datetime**/
 	private java.util.Date createTime;
 
-	/**回复时间**/
+	/**回复时间**datetime**/
 	private java.util.Date replyTime;
 
-	/**支持数**/
+	/**支持数**smallint(6)**/
 	private Integer ups;
 
-	/**反对数**/
+	/**反对数**smallint(6)**/
 	private Integer downs;
 
-	/**是否推荐**/
+	/**是否推荐**tinyint(1)**/
 	private Integer isRecommend;
 
-	/**是否审核**/
+	/**是否审核**tinyint(1)**/
 	private Integer isChecked;
 
-	/**评分**/
+	/**评分**int(11)**/
 	private Integer score;
 
-	/**父级评论**/
+	/**父级评论**int(11)**/
 	private Integer parentId;
 
-	/**回复数**/
+	/**回复数**int(11)**/
 	private Integer replyCount;
 
 

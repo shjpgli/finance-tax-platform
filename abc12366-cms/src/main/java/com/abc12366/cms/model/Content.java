@@ -1,62 +1,58 @@
 package com.abc12366.cms.model;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 
 
 /**
- *
+ * 
  * CMS内容表
- * add by xieyanmao on 2017-4-25
- *
+ * 
  **/
 @SuppressWarnings("serial")
 public class Content implements Serializable {
 
-	/****/
+	/**contentId**varchar(64)**/
 	private String contentId;
 
-	/**栏目ID**/
-	@NotEmpty
+	/**栏目ID**varchar(64)**/
 	private String channelId;
 
-	/**属性ID**/
+	/**属性ID**varchar(64)**/
 	private String typeId;
 
-	/**模型ID**/
+	/**模型ID**varchar(64)**/
 	private String modelId;
 
-	/**站点ID**/
+	/**站点ID**varchar(64)**/
 	private String siteId;
 
-	/**排序日期**/
+	/**排序日期**datetime**/
 	private java.util.Date sortDate;
 
-	/**固顶级别**/
+	/**固顶级别**tinyint(4)**/
 	private Integer topLevel;
 
-	/**是否有标题图**/
+	/**是否有标题图**tinyint(1)**/
 	private Integer hasTitleImg;
 
-	/**是否推荐**/
+	/**是否推荐**tinyint(1)**/
 	private Integer isRecommend;
 
-	/**状态(0:草稿;1:审核中;2:审核通过;3:回收站;4:投稿;5:归档)**/
+	/**状态(0:草稿;1:审核中;2:审核通过;3:回收站;4:投稿;5:归档)**tinyint(4)**/
 	private Integer status;
 
-	/**日访问数**/
+	/**日访问数**int(11)**/
 	private Integer viewsDay;
 
-	/**日评论数**/
+	/**日评论数**smallint(6)**/
 	private Integer commentsDay;
 
-	/**日下载数**/
-	private Integer downloadsDay = 0;
+	/**日下载数**smallint(6)**/
+	private Integer downloadsDay;
 
-	/**日顶数**/
+	/**日顶数**smallint(6)**/
 	private Integer upsDay;
 
-	/**推荐级别**/
+	/**推荐级别**tinyint(4)**/
 	private Integer recommendLevel;
 
 

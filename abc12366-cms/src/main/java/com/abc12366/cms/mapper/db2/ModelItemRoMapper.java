@@ -28,7 +28,7 @@ public interface ModelItemRoMapper{
 	 * 查询（根据modelId查询）
 	 *
 	 **/
-	List<ModelItem> selectList(Map map);
+	List<ModelItemBo> selectList(Map map);
 
 
 }

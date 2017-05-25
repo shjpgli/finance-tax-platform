@@ -10,10 +10,10 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ChannelUser implements Serializable {
 
-	/****/
+	/**channelId**varchar(64)**/
 	private String channelId;
 
-	/****/
+	/**userId**varchar(64)**/
 	private String userId;
 
 
