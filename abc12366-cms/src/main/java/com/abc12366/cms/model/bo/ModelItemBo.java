@@ -33,7 +33,7 @@ public class ModelItemBo implements Serializable {
 	private Integer priority;
 
 	/**可选项**varchar(255)**/
-	@Size(min = 0, max = 2550)
+	@Size(min = 0, max = 255)
 	private String optValue;
 
 	/**长度**varchar(20)**/
@@ -58,7 +58,7 @@ public class ModelItemBo implements Serializable {
 
 	/**数据类型**int(11)**/
 	@NotEmpty(message = "dataType不能为空！")
-	private Integer dataType;
+	private String dataType;
 
 	/**是否独占一行**tinyint(1)**/
 	private Integer isSingle;
@@ -163,11 +163,11 @@ public class ModelItemBo implements Serializable {
 		this.helpPosition = helpPosition;
 	}
 
-	public Integer getDataType() {
+	public String getDataType() {
 		return dataType;
 	}
 
-	public void setDataType(Integer dataType) {
+	public void setDataType(String dataType) {
 		this.dataType = dataType;
 	}
 
