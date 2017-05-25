@@ -12,7 +12,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface DictService {
-    List<DictBO> selectList();
+    List<Dict> selectList();
 
     DictBO selectOne(Dict dict);
 

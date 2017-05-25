@@ -30,9 +30,9 @@ public class DictServiceImpl implements DictService {
     private DictMapper dictMapper;
 
     @Override
-    public List<DictBO> selectList() {
+    public List<Dict> selectList() {
         List<Dict> dicts = dictRoMapper.selectList();
-        if(dicts == null || dicts.size()==0){
+        /*if(dicts == null || dicts.size()==0){
             return null;
         }
         List<DictBO> dictBOs = new ArrayList<>();
@@ -40,8 +40,8 @@ public class DictServiceImpl implements DictService {
             DictBO dictBO = new DictBO();
             BeanUtils.copyProperties(dict,dictBO);
             dictBOs.add(dictBO);
-        }
-        return dictBOs;
+        }*/
+        return dicts;
     }
 
     @Override

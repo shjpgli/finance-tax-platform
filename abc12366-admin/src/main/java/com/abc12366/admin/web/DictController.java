@@ -39,7 +39,7 @@ public class DictController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<DictBO> dictList = dictService.selectList();
+        List<Dict> dictList = dictService.selectList();
         LOGGER.info("{}",dictList);
         return (dictList == null) && dictList.size() != 0 ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
