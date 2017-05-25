@@ -23,7 +23,7 @@ public interface RoleRoMapper {
 	 **/
 	Role  selectByPrimaryKey(@Param("id") String id);
 
-	List<Role> selectList(Role role);
+	List<RoleBO> selectList(Role role);
 
 
     RoleBO selectRoleById(String id);

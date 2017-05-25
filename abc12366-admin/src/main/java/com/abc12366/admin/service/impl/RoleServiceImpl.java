@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public List<Role> selectList(Role role) {
+    public List<RoleBO> selectList(Role role) {
         return roleRoMapper.selectList(role);
     }
 

@@ -18,7 +18,7 @@ public interface RoleService {
      * @return
      * @param role
      */
-    List<Role> selectList(Role role);
+    List<RoleBO> selectList(Role role);
 
     /**
      * 添加权限
