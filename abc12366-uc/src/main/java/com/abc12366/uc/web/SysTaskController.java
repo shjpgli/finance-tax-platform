@@ -1,0 +1,106 @@
+package com.abc12366.uc.web;
+
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.bo.SysTaskBO;
+import com.abc12366.uc.model.bo.SysTaskInsertAndUpdateBO;
+import com.abc12366.uc.service.SysTaskService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * User: liuguiyao<435720953@qq.com.com>
+ * Date: 2017-05-23
+ * Time: 17:40
+ */
+@RestController
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class SysTaskController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SysTaskController.class);
+
+    @Autowired
+    private SysTaskService sysTaskService;
+
+    @GetMapping(path = "/task")
+    public ResponseEntity selectList(@RequestParam(required = false) String name,
+                                     @RequestParam(required = false) String type,
+                                     @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}:{}:{}", name, type, page, size);
+        Map<String, String> map = new HashMap<>();
+        if (name != null && StringUtils.isEmpty(name)) {
+            name = null;
+        }
+        if (type != null && StringUtils.isEmpty(type)) {
+            type = null;
+        }
+        map.put("name", name);
+        map.put("type", type);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<SysTaskBO> taskList = sysTaskService.selectList(map);
+        return ResponseEntity.ok(Utils.kv("taskList", taskList, "total", ((Page) taskList).getTotal()));
+    }
+
+    @GetMapping(path = "/tasks")
+    public ResponseEntity selectDeployedList(@RequestParam(required = false) String name,
+                                             @RequestParam(required = false) String type,
+                                             @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+                                             @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}:{}", name, type, page, size);
+        Map<String, String> map = new HashMap<>();
+        if (name != null && StringUtils.isEmpty(name)) {
+            name = null;
+        }
+        if (type != null && StringUtils.isEmpty(type)) {
+            type = null;
+        }
+        map.put("name", name);
+        map.put("type", type);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<SysTaskBO> taskList = sysTaskService.selectDeployedList(map);
+        return ResponseEntity.ok(Utils.kv("taskList", taskList, "total", ((Page) taskList).getTotal()));
+    }
+
+    @GetMapping(path = "/task/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        SysTaskBO sysTaskBO = sysTaskService.selectOne(id);
+        LOGGER.info("{}", sysTaskBO);
+        return ResponseEntity.ok(sysTaskBO);
+    }
+
+    @PostMapping(path = "/task")
+    public ResponseEntity insert(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskInsertBO) {
+        LOGGER.info("{}", sysTaskInsertBO);
+        SysTaskBO sysTaskBO = sysTaskService.insert(sysTaskInsertBO);
+        LOGGER.info("{}", sysTaskBO);
+        return ResponseEntity.ok(sysTaskBO);
+    }
+
+    @PutMapping(path = "/task/{id}")
+    public ResponseEntity update(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String id) {
+        LOGGER.info("{}:{}", sysTaskUpdateBO, id);
+        SysTaskBO sysTaskBO = sysTaskService.update(sysTaskUpdateBO, id);
+        LOGGER.info("{}", sysTaskBO);
+        return ResponseEntity.ok(sysTaskBO);
+    }
+
+    @DeleteMapping(path = "/task/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        boolean result = sysTaskService.delete(id);
+        return result ? ResponseEntity.ok(null) : new ResponseEntity(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
+    }
+}
