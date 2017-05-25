@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.SysTaskMapper">
+    <insert id="insert" parameterType="com.abc12366.uc.model.SysTask">
+        insert into uc_sys_task(id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl)
+        values(#{id},#{name},#{startTime},#{endTime},#{rule},#{points},#{type},#{status},#{createTime},#{lastUpdate},#{imageUrl})
+    </insert>
+    <update id="update" parameterType="com.abc12366.uc.model.SysTask">
+        update uc_sys_task
+        <set>
+            <if test="name!=null">name=#{name},</if>
+            <if test="startTime!=null">startTime=#{startTime},</if>
+            <if test="endTime!=null">endTime=#{endTime},</if>
+            <if test="rule!=null">rule=#{rule},</if>
+            <if test="points!=null">points=#{points},</if>
+            <if test="type!=null">type=#{type},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate},</if>
+            <if test="imageUrl!=null">imageUrl=#{imageUrl}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="java.lang.String">
+        update uc_sys_task
+        set status=FALSE
+        where id=#{id}
+    </update>
+</mapper>

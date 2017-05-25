@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.UserTaskRoMapper">
+
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserTaskBO" parameterType="java.util.Map">
+        SELECT id,userId,taskId,status,createTime,lastUpdate
+        from uc_user_task
+        <where>
+            <if test="id!=mull">
+                id=#{id}
+            </if>
+            <if test="id!=null">
+                and id=#{id}
+            </if>
+        </where>
+    </select>
+</mapper>
