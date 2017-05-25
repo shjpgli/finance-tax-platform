@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.gateway.mapper.db1.IpSettingMapper">
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM gw_ip_setting
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="ipSetting">
+		 INSERT INTO gw_ip_setting
+ 		(id,setTime,sameThreshold,distinctThreshold,disableTime) 
+		 VALUES 
+ 		(#{id},#{setTime},#{sameThreshold},#{distinctThreshold},#{disableTime}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="ipSetting">
+		 INSERT INTO gw_ip_setting
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="setTime != null">
+				 setTime,
+			</if>
+			<if test="sameThreshold != null">
+				 sameThreshold,
+			</if>
+			<if test="distinctThreshold != null">
+				 distinctThreshold,
+			</if>
+			<if test="disableTime != null">
+				 disableTime,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="setTime!=null">
+				 #{setTime},
+			</if>
+			<if test="sameThreshold!=null">
+				 #{sameThreshold},
+			</if>
+			<if test="distinctThreshold!=null">
+				 #{distinctThreshold},
+			</if>
+			<if test="disableTime!=null">
+				 #{disableTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="ipSetting">
+		 UPDATE gw_ip_setting
+ 		 <set> 
+			<if test="setTime != null">
+				 setTime = #{setTime},
+			</if>
+			<if test="sameThreshold != null">
+				 sameThreshold = #{sameThreshold},
+			</if>
+			<if test="distinctThreshold != null">
+				 distinctThreshold = #{distinctThreshold},
+			</if>
+			<if test="disableTime != null">
+				 disableTime = #{disableTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="ipSetting">
+		 UPDATE gw_ip_setting
+		 SET 
+			 setTime = #{setTime},
+			 sameThreshold = #{sameThreshold},
+			 distinctThreshold = #{distinctThreshold},
+			 disableTime = #{disableTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

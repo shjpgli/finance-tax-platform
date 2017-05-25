@@ -14,6 +14,7 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,12 +46,11 @@ public class UserController {
         user.setNickname(nickname);
         user.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<UserBO> dataList = userService.selectList(user);
-        LOGGER.info("{}", dataList);
-        if (dataList != null && dataList.size() != 0) {
-            return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
-        }
-        return ResponseEntity.ok(dataList);
+        List<UserBO> userList = userService.selectList(user);
+        LOGGER.info("{}", userList);
+        return (userList == null) && userList.size() != 0 ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("userList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")

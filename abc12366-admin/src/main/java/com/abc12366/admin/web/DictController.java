@@ -6,9 +6,13 @@ import com.abc12366.admin.model.bo.DictUpdateBO;
 import com.abc12366.admin.service.DictService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +36,14 @@ public class DictController {
     private DictService dictService;
 
     @GetMapping
-    public ResponseEntity selectList() {
-        List<DictBO> dictBOs = dictService.selectList();
-        LOGGER.info("{}",dictBOs);
-        return ResponseEntity.ok(dictBOs);
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<DictBO> dictList = dictService.selectList();
+        LOGGER.info("{}",dictList);
+        return (dictList == null) && dictList.size() != 0 ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dictList", (Page) dictList, "total", ((Page) dictList).getTotal()));
     }
 
     @GetMapping(path="/firstLevel")

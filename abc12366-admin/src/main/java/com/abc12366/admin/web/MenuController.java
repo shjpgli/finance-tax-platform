@@ -11,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,9 +45,11 @@ public class MenuController {
         menu.setParentId(parentId);
         menu.setType(type);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<MenuBO> dataList = menuService.selectList(menu);
-        LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        List<MenuBO> menuList = menuService.selectList(menu);
+        LOGGER.info("{}", menuList);
+        return (menuList == null) && menuList.size() != 0 ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("menuList", (Page) menuList, "total", ((Page) menuList).getTotal()));
     }
 
     @GetMapping(path = "/parent/{parentId}")

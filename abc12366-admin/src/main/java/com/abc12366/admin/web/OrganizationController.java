@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +45,11 @@ public class OrganizationController {
         organization.setName(name);
         organization.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrganizationBO> dataList = organizationService.selectList(organization);
-        LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        List<OrganizationBO> organizationList = organizationService.selectList(organization);
+        LOGGER.info("{}", organizationList);
+        return (organizationList == null) && organizationList.size() != 0 ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("organizationList", (Page) organizationList, "total", ((Page) organizationList).getTotal()));
     }
 
     /**
