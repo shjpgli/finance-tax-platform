@@ -36,15 +36,15 @@ public class ModelItemController {
     private ModelItemService modelItemService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "pageNum", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "pageSize", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "modelId", required = false) String modelId,
                                      @RequestParam(value = "isChannel", required = false) String isChannel) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("modelId",modelId);
         dataMap.put("isChannel",isChannel);
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ModelItemBo> dataList = modelItemService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));

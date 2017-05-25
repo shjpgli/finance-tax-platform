@@ -26,9 +26,9 @@ public class SiteController {
     private SiteService siteService;
 
 	@GetMapping
-	public ResponseEntity selectList(@RequestParam(value = "pageNum", defaultValue = Constant.pageNum) int pageNum,
-									 @RequestParam(value = "pageSize", defaultValue = Constant.pageSize) int pageSize) {
-		PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 		List<SiteListBo> dataList = siteService.selectList();
 		LOGGER.info("{}", dataList);
 		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
