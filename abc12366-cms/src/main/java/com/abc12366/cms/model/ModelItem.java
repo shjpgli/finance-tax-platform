@@ -47,7 +47,7 @@ public class ModelItem implements Serializable {
 	private String helpPosition;
 
 	/**数据类型**int(11)**/
-	private Integer dataType;
+	private String dataType;
 
 	/**是否独占一行**tinyint(1)**/
 	private Integer isSingle;
@@ -168,12 +168,12 @@ public class ModelItem implements Serializable {
 		return this.helpPosition;
 	}
 
-	public void setDataType(Integer dataType){
-		this.dataType = dataType;
+	public String getDataType() {
+		return dataType;
 	}
 
-	public Integer getDataType(){
-		return this.dataType;
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 
 	public void setIsSingle(Integer isSingle){
