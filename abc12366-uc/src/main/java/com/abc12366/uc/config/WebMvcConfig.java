@@ -2,6 +2,7 @@ package com.abc12366.uc.config;
 
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
+import com.abc12366.uc.component.UserInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +34,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new AppInterceptor();
     }
 
+    @Bean
+    public UserInterceptor userInterceptor(){
+        return new UserInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 前置日志、黑名单、后置日志、接口计数拦截
@@ -45,6 +51,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/app/**")
                 .excludePathPatterns("/druid/**")
 
+                .excludePathPatterns("/login", "/refresh", "/register", "/test");
+
+        //用户访问拦截
+        registry.addInterceptor(userInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/app/**")
+                .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/login", "/refresh", "/register", "/test");
     }
 }
