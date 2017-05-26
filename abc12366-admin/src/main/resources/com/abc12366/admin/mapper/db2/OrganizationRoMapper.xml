@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	parentId,	name,	code,	areaId,	type,	contact,	phone,	address,	remark,	status,	createUser,	createTime,	lastUser,	lastUpdate
+		 id,	parentId,	name,	code,	areaId,	type,	contact,	phone,	address,	remark,	status,	createUser,	createTime,	lastUser,	lastUpdate,	province,	city,	area
 	</sql>
 
 
@@ -26,6 +26,9 @@
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUser" property="lastUser" jdbcType="VARCHAR"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -54,7 +57,10 @@
         o.createUser,
         o.createTime,
         o.lastUser,
-        o.lastUpdate
+        o.lastUpdate,
+        o.province,
+        o.city,
+        o.area
         from sys_organization o
         left JOIN sys_organization p on o.parentId = p.id
         <where>
