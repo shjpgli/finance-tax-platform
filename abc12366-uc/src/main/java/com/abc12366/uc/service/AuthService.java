@@ -18,4 +18,8 @@ public interface AuthService {
     Map login(LoginBO loginBO, String token) throws Exception;
 
     String refresh(String oldToken);
+
+    boolean isAuthentication(String userToken);
+
+    boolean refreshToken(String token);
 }

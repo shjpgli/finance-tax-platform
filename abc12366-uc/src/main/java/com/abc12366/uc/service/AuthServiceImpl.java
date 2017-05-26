@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4101);
         }
         Map<String, String> map = new HashMap<>();
-        map.put("username", "username"+registerBO.getPhone());
+        map.put("username", "username" + registerBO.getPhone());
         if (!StringUtils.isEmpty(registerBO.getPhone())) {
             map.put("phone", registerBO.getPhone());
         }
@@ -197,5 +197,36 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String refresh(String oldToken) {
         return null;
+    }
+
+    @Override
+    public boolean isAuthentication(String userToken) {
+        Token token = tokenRoMapper.isAuthentication(userToken);
+        if (token == null) {
+            return false;
+        }
+        long lastTokenResetTime = token.getLastTokenResetTime().getTime();
+        long currentTime = new Date().getTime();
+        if (currentTime > (lastTokenResetTime + 1000 * Constant.APP_TOKEN_VALID_SECONDS)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean refreshToken(String oldToken) {
+        if (StringUtils.isEmpty(oldToken)) {
+            return false;
+        }
+        Token token = tokenRoMapper.isAuthentication(oldToken);
+        if (token == null) {
+            return false;
+        }
+        token.setLastTokenResetTime(new Date());
+        int result = tokenMapper.update(token);
+        if (result != 1) {
+            return false;
+        }
+        return true;
     }
 }
