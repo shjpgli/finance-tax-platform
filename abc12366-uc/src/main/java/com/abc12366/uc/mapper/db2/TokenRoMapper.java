@@ -8,4 +8,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface TokenRoMapper {
     Token selectOne(@Param("userId") String userId, @Param("appId") String appId);
+
+    Token isAuthentication(String userToken);
 }
