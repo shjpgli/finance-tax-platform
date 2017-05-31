@@ -62,7 +62,7 @@ public class MenuController {
     @GetMapping(path = "/project/{parentId}")
     public ResponseEntity selectByParentId(@PathVariable String parentId) {
         LOGGER.info("{}", parentId);
-        List<MenuBO> menuBOs = menuService.selectByParentId(parentId);
+        MenuBO menuBOs = menuService.selectByParentId(parentId);
         LOGGER.info("{}", menuBOs);
         return ResponseEntity.ok(menuBOs);
     }
@@ -86,9 +86,8 @@ public class MenuController {
     @DeleteMapping(path = "/{menuId}")
     public ResponseEntity delete(@PathVariable String menuId) {
         LOGGER.info("{}", menuId);
-        MenuBO menuBO = menuService.delete(menuId);
-        LOGGER.info("{}", menuBO);
-        return ResponseEntity.ok(menuBO);
+        menuService.delete(menuId);
+        return ResponseEntity.ok(null);
     }
 
     @PutMapping(path = "/{menuId}")

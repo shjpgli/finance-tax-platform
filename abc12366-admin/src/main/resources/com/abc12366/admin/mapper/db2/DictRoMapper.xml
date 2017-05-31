@@ -3,18 +3,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.admin.mapper.db2.DictRoMapper">
 
-    <select id="selectList" resultType="Dict">
-        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+    <sql id="Base_Column_List">
+        id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+    </sql>
+
+    <select id="selectList" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
+        select
+        <include refid="Base_Column_List" />
         from sys_dict
+        <where>
+            1=1
+            <if test="dictName != null and dictName!=''"> and dictName LIKE CONCAT('%',#{dictName},'%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
     </select>
 
-    <select id="selectOne" resultType="Dict" parameterType="com.abc12366.admin.model.Dict">
-        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+    <select id="selectOne" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
+        select
+        <include refid="Base_Column_List" />
         from sys_dict
         <where>
             1=1
             <if test="dictId != null and dictId!=''"> and dictId = #{dictId}</if>
-            <if test="dictName != null and dictName!=''"> and dictName = #{dictName}</if>
         </where>
     </select>
 
@@ -23,14 +33,23 @@
         from sys_dict
     </select>
 
+    <select id="selectById" resultType="com.abc12366.admin.model.Dict">
+        select
+        <include refid="Base_Column_List" />
+        from sys_dict
+        where id = #{id}
+    </select>
+
     <select id="selectByDictId" resultType="com.abc12366.admin.model.Dict">
-        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+        select
+        <include refid="Base_Column_List" />
         from sys_dict
         where dictId = #{dictId}
     </select>
 
     <select id="selectByDictName" resultType="com.abc12366.admin.model.Dict">
-        select id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+        select
+        <include refid="Base_Column_List" />
         from sys_dict
         where dictName = #{dictName}
     </select>

@@ -1,5 +1,7 @@
 package com.abc12366.admin.model;
 
+import java.io.Serializable;
+
 /**
  *
  *
@@ -7,7 +9,7 @@ package com.abc12366.admin.model;
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
  */
-public class Menu {
+public class Menu implements Serializable {
 
     private String menuId;
     private String menuName;

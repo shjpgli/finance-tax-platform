@@ -316,6 +316,11 @@ public class UserServiceImpl implements UserService {
     @Transactional("db1TxManager")
     @Override
     public int addUser(UserBO userBO) {
+        UserBO bo = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
+        if(bo != null){
+            LOGGER.error("该用户已经存在");
+            throw new ServiceException(4117);
+        }
         User user = new User();
         try {
             BeanUtils.copyProperties(userBO, user);

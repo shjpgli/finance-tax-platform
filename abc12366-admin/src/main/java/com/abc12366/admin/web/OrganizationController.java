@@ -73,9 +73,9 @@ public class OrganizationController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
-        Organization organization = organizationService.selectOrganizationById(id);
-        LOGGER.info("{}", organization);
-        return ResponseEntity.ok(organization);
+        OrganizationBO organizationBO = organizationService.selectOrganizationById(id);
+        LOGGER.info("{}", organizationBO);
+        return ResponseEntity.ok(organizationBO);
     }
 
     /**
@@ -87,9 +87,9 @@ public class OrganizationController {
     @PutMapping(path = "/{id}")
     public ResponseEntity updateOrganization(@Valid @RequestBody OrganizationBO organizationBO,
                                              @PathVariable("id") String id) {
-        organizationService.updateOrganization(organizationBO);
+        OrganizationBO bo = organizationService.updateOrganization(organizationBO);
         LOGGER.info("修改组织成功");
-        return ResponseEntity.ok(200);
+        return ResponseEntity.ok(bo);
     }
 
     /**
@@ -102,6 +102,6 @@ public class OrganizationController {
     public ResponseEntity deleteOrganizationById(@PathVariable("id") String id) {
         organizationService.deleteOrganizationById(id);
         LOGGER.info("删除组织成功");
-        return ResponseEntity.ok(200);
+        return ResponseEntity.ok(null);
     }
 }

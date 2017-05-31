@@ -22,7 +22,6 @@ import java.util.List;
 /**
  * 字典控制器
  *
- * @author lijun <ljun51@outlook.com>
  * @create 2017-04-24 2:51 PM
  * @since 1.0.0
  */
@@ -37,13 +36,25 @@ public class DictController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "dictName", required = false) String dictName,
+                                     @RequestParam(value = "status", required = false) Boolean status) {
+        Dict dict = new Dict();
+        dict.setDictName(dictName);
+        dict.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<Dict> dictList = dictService.selectList();
+        List<Dict> dictList = dictService.selectList(dict);
         LOGGER.info("{}",dictList);
-        return (dictList == null) && dictList.size() != 0 ?
+        return (dictList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dictList", (Page) dictList, "total", ((Page) dictList).getTotal()));
+    }
+
+    @GetMapping(path="/{id}")
+    public ResponseEntity selectById(@PathVariable("id") String id){
+        Dict dict = dictService.selectById(id);
+        LOGGER.info("{}",dict);
+        return ResponseEntity.ok(dict);
     }
 
     @GetMapping(path="/firstLevel")
@@ -54,19 +65,15 @@ public class DictController {
     }
 
     @GetMapping(path="/kv")
-    public ResponseEntity selectOne(@RequestParam String dictId,@RequestParam String dictName){
+    public ResponseEntity selectOne(@RequestParam(value = "dictId", required = false) String dictId){
         DictBO dictBO = null;
         boolean isNull = false;
         if(dictId != null && !"".equals(dictId)) {
             isNull = true;
         }
-        if(dictName != null && !"".equals(dictName)){
-            isNull = true;
-        }
         if(isNull){
             Dict dict = new Dict();
             dict.setDictId(dictId);
-            dict.setDictName(dictName);
             dictBO = dictService.selectOne(dict);
             LOGGER.info("{}",dictBO);
         }else {
@@ -76,15 +83,14 @@ public class DictController {
     }
 
     @DeleteMapping(path="/{id}")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity delete(@PathVariable("id") String id){
         LOGGER.info("{}",id);
-        DictBO dictBO = dictService.delete(id);
-        LOGGER.info("{}",dictBO);
-        return ResponseEntity.ok(dictBO);
+        dictService.delete(id);
+        return ResponseEntity.ok(null);
     }
 
     @PutMapping(path="/{id}")
-    public ResponseEntity update(@Valid @RequestBody DictUpdateBO dictUpdateBO, @PathVariable String id){
+    public ResponseEntity update(@Valid @RequestBody DictUpdateBO dictUpdateBO, @PathVariable("id") String id){
         LOGGER.info("{}", dictUpdateBO, id);
         dictUpdateBO.setId(id);
         DictBO dictBO = dictService.update(dictUpdateBO);

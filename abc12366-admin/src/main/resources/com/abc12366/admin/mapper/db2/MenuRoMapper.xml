@@ -43,11 +43,22 @@
         </where>
     </select>
 
-    <select id="selectByParentId" resultType="com.abc12366.admin.model.Menu">
-        select
-        <include refid="Base_Column_List" />
-        from sys_menu
-        where parentId = #{parentId}
+    <select id="selectByParentId" resultMap="menuBoResultMap" parameterType="java.lang.String">
+       select
+        m.menuId,
+        m.menuName,
+        m.menuUrl,
+        m.parentId,
+        p.menuName as parentName,
+        m.perms,
+        m.type,
+        m.icon,
+        m.sort,
+        m.status,
+        m.remark
+        from sys_menu m
+        left join sys_menu p on p.menuId = m.parentId
+        where m.parentId = #{parentId}
     </select>
 
     <select id="selectFirstLevel" resultType="com.abc12366.admin.model.Menu">

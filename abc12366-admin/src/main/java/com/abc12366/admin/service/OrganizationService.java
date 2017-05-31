@@ -30,14 +30,14 @@ public interface OrganizationService {
      * @param id
      * @return
      */
-    Organization selectOrganizationById(String id);
+    OrganizationBO selectOrganizationById(String id);
 
     /**
      * 更新组织
      *
      * @param organizationBO
      */
-    void updateOrganization(OrganizationBO organizationBO);
+    OrganizationBO updateOrganization(OrganizationBO organizationBO);
 
     /**
      * 根据id删除组织

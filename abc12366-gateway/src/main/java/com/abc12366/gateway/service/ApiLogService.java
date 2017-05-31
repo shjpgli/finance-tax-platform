@@ -16,4 +16,6 @@ public interface ApiLogService {
     List<ApiLog> selectList();
 
     List<ApiLog> selectList(ApiLog apiLog);
+
+    int selectApiLogCount(ApiLog apiLog);
 }

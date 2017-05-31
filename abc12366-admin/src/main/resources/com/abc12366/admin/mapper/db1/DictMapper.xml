@@ -86,7 +86,7 @@
         where id=#{id}
     </update>
 
-    <delete id="delete">
+    <delete id="delete" parameterType="java.lang.String">
         delete from sys_dict
         where id=#{id}
     </delete>

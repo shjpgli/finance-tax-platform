@@ -81,7 +81,7 @@ public class RoleController {
     @PutMapping(path = "/{id}")
     public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO, @PathVariable("id") String id) {
         roleBO.setId(id);
-        int upd = roleService.updateRole(roleBO);
+        RoleBO upd = roleService.updateRole(roleBO);
         LOGGER.info("{}", upd);
         return ResponseEntity.ok(upd);
     }
@@ -90,7 +90,7 @@ public class RoleController {
     public ResponseEntity deleteRoleById(@PathVariable("id") String id) {
         int del = roleService.deleteRoleById(id);
         LOGGER.info("{}", del);
-        return ResponseEntity.ok(del);
+        return ResponseEntity.ok(null);
     }
 
     /**

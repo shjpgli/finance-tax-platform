@@ -44,4 +44,9 @@ public class ApiLogServiceImpl implements ApiLogService {
     public List<ApiLog> selectList(ApiLog apiLog) {
         return apiLogRoMapper.selectListPage(apiLog);
     }
+
+    @Override
+    public int selectApiLogCount(ApiLog apiLog) {
+        return apiLogRoMapper.selectApiLogCount(apiLog);
+    }
 }

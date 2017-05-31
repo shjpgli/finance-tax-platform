@@ -20,7 +20,7 @@ public interface OrganizationRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	Organization  selectOrganizationById(@Param("id") String id);
+    OrganizationBO  selectOrganizationById(@Param("id") String id);
 
     List<OrganizationBO> selectList(Organization organization);
 }

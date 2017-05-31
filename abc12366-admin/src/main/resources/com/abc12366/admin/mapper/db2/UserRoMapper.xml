@@ -51,13 +51,9 @@
         e.phone,
         e.address,
         e.orgId,
-        s.name AS orgName,
-        o.id AS roleId,
-        o.roleName AS roleName
+        s.name AS orgName
         FROM
         sys_user t
-        LEFT JOIN sys_user_role r ON t.id = r.userId
-        LEFT JOIN sys_role o ON r.roleId = o.id
         LEFT JOIN sys_user_extend e ON e.userId = t.id
         LEFT JOIN sys_organization s ON s.id = e.orgId
         <where>

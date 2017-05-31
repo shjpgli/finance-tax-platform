@@ -1,6 +1,7 @@
 package com.abc12366.admin.config;
 
 import com.abc12366.gateway.component.AppInterceptor;
+import com.abc12366.gateway.component.IpInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,9 +34,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new AppInterceptor();
     }
 
+    @Bean
+    public IpInterceptor ipInterceptor() {
+        return new IpInterceptor();
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        //IP地址拦截
+        registry.addInterceptor(ipInterceptor()).excludePathPatterns("/druid/**");
+
         // 前置日志、黑名单、后置日志、接口计数拦截
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**");

@@ -4,6 +4,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.awt.*;
+import java.io.Serializable;
+import java.util.*;
+import java.util.List;
 
 /**
  *
@@ -11,7 +15,7 @@ import javax.validation.constraints.Size;
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
  */
-public class MenuBO {
+public class MenuBO implements Serializable {
 
     private String menuId;
     @NotEmpty
@@ -31,6 +35,8 @@ public class MenuBO {
     private boolean status;
     @Size(min = 0, max = 100)
     private String remark;
+
+    private List<MenuBO> nodes = new ArrayList<MenuBO>();
 
     public MenuBO() {
     }
@@ -150,5 +156,13 @@ public class MenuBO {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+
+    public List<MenuBO> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(List<MenuBO> nodes) {
+        this.nodes = nodes;
     }
 }

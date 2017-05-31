@@ -3,7 +3,6 @@ package com.abc12366.admin.service;
 import com.abc12366.admin.mapper.db1.MenuMapper;
 import com.abc12366.admin.mapper.db2.MenuRoMapper;
 import com.abc12366.admin.model.Menu;
-import com.abc12366.admin.model.Organization;
 import com.abc12366.admin.model.bo.MenuBO;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,50 +33,33 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<MenuBO> selectList(Menu menu) {
         List<MenuBO> menus = menuRoMapper.selectList(menu);
-        /*if(menus == null||menus.size()==0){
-            return null;
-        }
-        List<MenuBO> menuBOs = new ArrayList<>();
-        for(Menu menu:menus){
-            MenuBO menuBO = new MenuBO();
-            BeanUtils.copyProperties(menu,menuBO);
-            menuBOs.add(menuBO);
-        }*/
         return menus;
     }
 
     @Override
-    public List<MenuBO> selectByParentId(String parentId) {
-        List<Menu> menus = menuRoMapper.selectByParentId(parentId);
-        List<Menu> childrenTemp = new ArrayList<>();
-        childrenTemp.addAll(menus);
-        if(menus==null||menus.size()==0){
-            return null;
+    public MenuBO selectByParentId(String parentId) {
+        MenuBO menuBO = recursiveTree(parentId);
+        return menuBO;
+    }
+    /**
+     * 递归算法解析成树形结构
+     *
+     * @param id
+     */
+    public MenuBO recursiveTree(String id) {
+        MenuBO node = menuRoMapper.selectByMenuId(id);
+        List<MenuBO> treeNodes = menuRoMapper.selectByParentId(id);
+        //遍历子节点
+        for(MenuBO child : treeNodes){
+            MenuBO n = recursiveTree(child.getMenuId()); //递归
+            node.getNodes().add(n);
         }
-        for(Menu menu : childrenTemp){
-            boolean hasChildren = hasChildren(menu.getMenuId());
-            if(hasChildren){
-                getChildren(menus, menu);
-            }
-        }
-        List<MenuBO> menuBOs = new ArrayList<>();
-        for(Menu menu : menus){
-            MenuBO menuBO = new MenuBO();
-            BeanUtils.copyProperties(menu ,menuBO);
-            menuBOs.add(menuBO);
-        }
-        return menuBOs;
+        return node;
     }
 
     @Override
     public MenuBO selectByMenuId(String menuId) {
         return menuRoMapper.selectByMenuId(menuId);
-        /*if(menu == null){
-            return null;
-        }
-        MenuBO menuBO = new MenuBO();
-        BeanUtils.copyProperties(menu, menuBO);
-        return menuBO;*/
     }
 
     @Transactional("db1TxManager")
@@ -97,19 +78,23 @@ public class MenuServiceImpl implements MenuService {
 
     @Transactional("db1TxManager")
     @Override
-    public MenuBO delete(String menuId) {
-        MenuBO menu = menuRoMapper.selectByMenuId(menuId);
-        if(menu == null){
-            return null;
+    public void delete(String menuId) {
+        deleteTree(menuId);
+    }
+
+    /**
+     * 递归算法删除树节点
+     *
+     * @param id
+     */
+    public void deleteTree(String id) {
+        List<MenuBO> treeNodes = new ArrayList<MenuBO>();
+        treeNodes = menuRoMapper.selectByParentId(id);
+        //遍历子节点
+        for(MenuBO child : treeNodes){
+            deleteTree(child.getMenuId()); //递归
         }
-        boolean hasChildren = hasChildren(menuId);
-        if(hasChildren){
-            deleteChildren(menuRoMapper.selectByParentId(menu.getMenuId()));
-        }
-        menuMapper.delete(menu.getMenuId());
-        MenuBO menuBO = new MenuBO();
-        BeanUtils.copyProperties(menu, menuBO);
-        return menuBO;
+        menuMapper.delete(id);
     }
 
     @Transactional("db1TxManager")
@@ -138,38 +123,6 @@ public class MenuServiceImpl implements MenuService {
             menuBOs.add(menuBO);
         }
         return menuBOs;
-    }
-
-    @Override
-    public boolean hasChildren(String menuId) {
-        List<Menu> menus = menuRoMapper.selectByParentId(menuId);
-        if(menus != null && menus.size()!=0){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void deleteChildren(List<Menu> children) {
-        if(children!=null && children.size()!=0){
-            for(Menu menu : children){
-                if(hasChildren(menu.getMenuId())){
-                    deleteChildren(menuRoMapper.selectByParentId(menu.getMenuId()));
-                }
-                menuMapper.delete(menu.getMenuId());
-            }
-        }
-    }
-
-    @Override
-    public void getChildren(List<Menu> menus,Menu menu) {
-        List<Menu> children = menuRoMapper.selectByParentId(menu.getMenuId());
-        menus.addAll(children);
-        for(Menu m:children){
-            if(hasChildren(m.getMenuId())){
-                getChildren(menus,m);
-            }
-        }
     }
 
 }

@@ -33,11 +33,30 @@
 
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectOrganizationById" resultType="com.abc12366.admin.model.Organization" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM sys_organization
-		 WHERE id = #{id}
+	<select id="selectOrganizationById" resultMap="orgBoResultMap" parameterType="java.lang.String">
+		 select
+        o.id,
+        o.parentId,
+        p.name as parentName,
+        o.name,
+        o.code,
+        o.areaId,
+        o.type,
+        o.contact,
+        o.phone,
+        o.address,
+        o.remark,
+        o.status,
+        o.createUser,
+        o.createTime,
+        o.lastUser,
+        o.lastUpdate,
+        o.province,
+        o.city,
+        o.area
+        from sys_organization o
+        left JOIN sys_organization p on o.parentId = p.id
+		 WHERE o.id = #{id}
 	</select>
 
     <select id="selectList" resultMap="orgBoResultMap" parameterType="com.abc12366.admin.model.Organization">

@@ -86,7 +86,7 @@ public class RoleServiceImpl implements RoleService {
         int del = roleMapper.deleteRoleById(id);
         if (del != 1) {
             logger.warn("删除失败，id：{}", id);
-            throw new ServiceException(4003);
+            throw new ServiceException(4103);
         }
         return del;
     }
@@ -98,14 +98,14 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional("db1TxManager")
     @Override
-    public int updateRole(RoleBO roleBO) {
+    public RoleBO updateRole(RoleBO roleBO) {
         Role role = new Role();
         BeanUtils.copyProperties(roleBO, role);
         role.setUpdateTime(new Date());
         int update = roleMapper.updateRole(role);
         if (update != 1) {
             logger.warn("更新失败，参数：{}", roleBO.toString());
-            throw new ServiceException(4002);
+            throw new ServiceException(4102);
         }
 
         String roleId = role.getId();
@@ -125,7 +125,10 @@ public class RoleServiceImpl implements RoleService {
             roleMenu.setId(Utils.uuid());
             roleMenuMapper.insert(roleMenu);
         }
-        return update;
+        RoleBO bo = new RoleBO();
+        BeanUtils.copyProperties(role,bo);
+        bo.setMenuIds(roleBO.getMenuIds());
+        return bo;
     }
 
     @Override

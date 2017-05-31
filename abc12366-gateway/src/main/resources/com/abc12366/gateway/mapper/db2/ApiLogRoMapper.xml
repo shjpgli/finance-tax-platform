@@ -16,4 +16,21 @@
             </if>
         </where>
     </select>
+
+    <select id="selectApiLogCount" resultType="java.lang.Integer" parameterType="com.abc12366.gateway.model.ApiLog">
+        select count(*)
+        from gw_api_log_${yyyyMMdd}
+        <where>
+            <if test="startTime != null">
+                <![CDATA[
+            and inTime >= #{startTime}
+            ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+            and inTime <= #{endTime}
+              ]]>
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -11,13 +11,15 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface DictRoMapper {
-    List<Dict> selectList();
+    List<Dict> selectList(Dict dict);
 
     List<Dict> selectFirstLevel();
 
     Dict selectOne(Dict dict);
 
     Dict selectByDictId(String dictId);
+
+    Dict selectById(String id);
 
     Dict selectByDictName(String dictName);
 }

@@ -10,61 +10,61 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class IpSetting implements Serializable {
 
-	/**PK**/
-	private String id;
+    /**PK**/
+    private String id;
 
-	/**时间间隔设置**/
-	private java.util.Date setTime;
+    /**时间间隔设置值（秒）**/
+    private Integer setTime;
 
-	/**相同地址阀值**/
-	private Integer sameThreshold;
+    /**相同地址阀值**/
+    private Integer sameThreshold;
 
-	/**不同地址阀值**/
-	private Integer distinctThreshold;
+    /**不同地址阀值**/
+    private Integer distinctThreshold;
 
-	/**禁用时间**/
-	private java.util.Date disableTime;
+    /**禁用时间设置值（秒）**/
+    private Integer disableTime;
 
 
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setId(String id){
+        this.id = id;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public String getId(){
+        return this.id;
+    }
 
-	public void setSetTime(java.util.Date setTime){
-		this.setTime = setTime;
-	}
+    public void setSetTime(Integer setTime){
+        this.setTime = setTime;
+    }
 
-	public java.util.Date getSetTime(){
-		return this.setTime;
-	}
+    public Integer getSetTime(){
+        return this.setTime;
+    }
 
-	public void setSameThreshold(Integer sameThreshold){
-		this.sameThreshold = sameThreshold;
-	}
+    public void setSameThreshold(Integer sameThreshold){
+        this.sameThreshold = sameThreshold;
+    }
 
-	public Integer getSameThreshold(){
-		return this.sameThreshold;
-	}
+    public Integer getSameThreshold(){
+        return this.sameThreshold;
+    }
 
-	public void setDistinctThreshold(Integer distinctThreshold){
-		this.distinctThreshold = distinctThreshold;
-	}
+    public void setDistinctThreshold(Integer distinctThreshold){
+        this.distinctThreshold = distinctThreshold;
+    }
 
-	public Integer getDistinctThreshold(){
-		return this.distinctThreshold;
-	}
+    public Integer getDistinctThreshold(){
+        return this.distinctThreshold;
+    }
 
-	public void setDisableTime(java.util.Date disableTime){
-		this.disableTime = disableTime;
-	}
+    public void setDisableTime(Integer disableTime){
+        this.disableTime = disableTime;
+    }
 
-	public java.util.Date getDisableTime(){
-		return this.disableTime;
-	}
+    public Integer getDisableTime(){
+        return this.disableTime;
+    }
 
 }

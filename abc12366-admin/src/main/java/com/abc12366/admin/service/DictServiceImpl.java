@@ -5,18 +5,17 @@ import com.abc12366.admin.mapper.db2.DictRoMapper;
 import com.abc12366.admin.model.Dict;
 import com.abc12366.admin.model.bo.DictBO;
 import com.abc12366.admin.model.bo.DictUpdateBO;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @author lijun <ljun51@outlook.com>
  * @create 2017-04-26 5:01 PM
  * @since 1.0.0
  */
@@ -30,17 +29,8 @@ public class DictServiceImpl implements DictService {
     private DictMapper dictMapper;
 
     @Override
-    public List<Dict> selectList() {
-        List<Dict> dicts = dictRoMapper.selectList();
-        /*if(dicts == null || dicts.size()==0){
-            return null;
-        }
-        List<DictBO> dictBOs = new ArrayList<>();
-        for (Dict dict:dicts){
-            DictBO dictBO = new DictBO();
-            BeanUtils.copyProperties(dict,dictBO);
-            dictBOs.add(dictBO);
-        }*/
+    public List<Dict> selectList(Dict dict) {
+        List<Dict> dicts = dictRoMapper.selectList(dict);
         return dicts;
     }
 
@@ -90,31 +80,31 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public DictBO update(DictUpdateBO dictUpdateBO) {
-        Dict dict = dictRoMapper.selectByDictId(dictUpdateBO.getId());
-        if(dict == null){
-            return null;
-        }
-        dict.setDictId(dictUpdateBO.getDictId());
-        dict.setDictName(dictUpdateBO.getDictName());
-        dict.setFieldKey(dictUpdateBO.getFieldKey());
-        dict.setFieldValue(dictUpdateBO.getFieldValue());
-        dict.setStatus(dictUpdateBO.isStatus());
+        Dict dict = new Dict();
         dict.setLastUpdate(new Date());
+        BeanUtils.copyProperties(dictUpdateBO, dict);
+        int upd = dictMapper.update(dict);
+        if(upd != 1){
+            throw new ServiceException(4102);
+        }
         DictBO dictBO = new DictBO();
-        dictMapper.update(dict);
         BeanUtils.copyProperties(dict, dictBO);
         return dictBO;
     }
 
     @Override
-    public DictBO delete(String id) {
-        Dict dict = dictRoMapper.selectByDictId(id);
-        DictBO dictBO = new DictBO();
-        if(dict != null){
-            BeanUtils.copyProperties(dict,dictBO);
-            dictMapper.delete(id);
+    public int delete(String id) {
+
+        int del = dictMapper.delete(id);
+        if(del != 1){
+            throw new ServiceException(4103);
         }
-        return dictBO;
+        return del;
+    }
+
+    @Override
+    public Dict selectById(String id) {
+        return dictRoMapper.selectById(id);
     }
 
 }

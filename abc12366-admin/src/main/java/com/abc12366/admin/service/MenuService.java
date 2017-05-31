@@ -14,7 +14,7 @@ import java.util.List;
 public interface MenuService {
     List<MenuBO> selectList(Menu menu);
 
-    List<MenuBO> selectByParentId(String parentId);
+    MenuBO selectByParentId(String parentId);
 
     MenuBO selectByMenuId(String menuId);
 
@@ -22,15 +22,9 @@ public interface MenuService {
 
     MenuBO insert(MenuBO menuBO);
 
-    MenuBO delete(String menuId);
+    void delete(String menuId);
 
     MenuBO update(MenuBO menuBO);
 
     List<MenuBO> selectFirstLevel();
-
-    boolean hasChildren(String menuId);
-
-    public void deleteChildren(List<Menu> children);
-
-    public void getChildren(List<Menu> menus,Menu menu);
 }

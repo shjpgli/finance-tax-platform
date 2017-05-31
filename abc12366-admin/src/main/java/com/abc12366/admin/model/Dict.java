@@ -1,29 +1,31 @@
 package com.abc12366.admin.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-04-24 3:10 PM
  * @since 1.0.0
  */
-public class Dict {
+public class Dict implements Serializable {
 
     private String id;
     private String dictId;
     private String dictName;
     private String fieldKey;
     private String fieldValue;
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private String createUser;
     private Date lastUpdate;
     private String lastUser;
-
     public Dict() {
     }
 
-    public Dict(String id, String dictId, String dictName, String fieldKey, String fieldValue, boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser) {
+    public Dict(String id, String dictId, String dictName, String fieldKey, String fieldValue, Boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser) {
         this.id = id;
         this.dictId = dictId;
         this.dictName = dictName;
@@ -76,11 +78,11 @@ public class Dict {
         this.fieldValue = fieldValue;
     }
 
-    public boolean isStatus() {
+    public Boolean isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -131,4 +133,5 @@ public class Dict {
                 ", lastUser='" + lastUser + '\'' +
                 '}';
     }
+
 }

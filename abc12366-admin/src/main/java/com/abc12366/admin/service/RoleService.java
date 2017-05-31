@@ -47,7 +47,7 @@ public interface RoleService {
      *
      * @param roleBO
      */
-    int updateRole(RoleBO roleBO);
+    RoleBO updateRole(RoleBO roleBO);
 
     /**
      * 根据权限id查询资源集合

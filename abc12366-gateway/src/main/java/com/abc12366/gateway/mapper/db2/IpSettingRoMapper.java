@@ -19,39 +19,6 @@ public interface IpSettingRoMapper {
 	 **/
 	IpSetting selectByPrimaryKey(@Param("id") String id);
 
-	/**
-	 * 
-	 * 删除（根据主键ID删除）
-	 * 
-	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
 
-	/**
-	 * 
-	 * 添加
-	 * 
-	 **/
-	int insert(IpSetting record);
-
-	/**
-	 * 
-	 * 添加 （匹配有值的字段）
-	 * 
-	 **/
-	int insertSelective(IpSetting record);
-
-	/**
-	 * 
-	 * 修改 （匹配有值的字段）
-	 * 
-	 **/
-	int updateByPrimaryKeySelective(IpSetting record);
-
-	/**
-	 * 
-	 * 修改（根据主键ID修改）
-	 * 
-	 **/
-	int updateByPrimaryKey(IpSetting record);
-
+    IpSetting selectOne();
 }

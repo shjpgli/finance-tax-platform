@@ -3,6 +3,7 @@ package com.abc12366.admin.model.bo;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.lang.String;
 import java.util.Date;
 
@@ -12,7 +13,7 @@ import java.util.Date;
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
  */
-public class DictBO{
+public class DictBO implements Serializable {
     private String id;
     @NotEmpty
     private String dictId;

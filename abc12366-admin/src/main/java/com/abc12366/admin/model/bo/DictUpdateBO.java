@@ -2,13 +2,14 @@ package com.abc12366.admin.model.bo;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.io.Serializable;
+
 /**
  *
- * @author liuguiyao
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
  */
-public class DictUpdateBO {
+public class DictUpdateBO implements Serializable {
     private String id;
     private String dictId;
     private String dictName;

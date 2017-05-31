@@ -51,21 +51,26 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Organization selectOrganizationById(String id) {
+    public OrganizationBO selectOrganizationById(String id) {
         return organizationRoMapper.selectOrganizationById(id);
     }
 
     @Transactional("db1TxManager")
     @Override
-    public void updateOrganization(OrganizationBO organizationBO) {
+    public OrganizationBO updateOrganization(OrganizationBO organizationBO) {
         Organization organization = new Organization();
         BeanUtils.copyProperties(organizationBO, organization);
-        organization.setLastUpdate(new Date());
+        Date date = new Date();
+        organization.setLastUpdate(date);
         int update = organizationMapper.update(organization);
         if (update != 1) {
             LOGGER.warn("更新失败，参数：{}", organization.toString());
-            throw new ServiceException(4002);
+            throw new ServiceException(4102);
         }
+        OrganizationBO bo = new OrganizationBO();
+        BeanUtils.copyProperties(organizationBO,bo);
+        bo.setLastUpdate(date);
+        return bo;
     }
 
     @Transactional("db1TxManager")
@@ -74,7 +79,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         int del = organizationMapper.deleteByPrimaryKey(id);
         if (del != 1) {
             LOGGER.warn("删除失败，id：{}", id);
-            throw new ServiceException(4003);
+            throw new ServiceException(4103);
         }
     }
 }

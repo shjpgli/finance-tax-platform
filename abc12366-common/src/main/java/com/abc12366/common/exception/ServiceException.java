@@ -12,10 +12,7 @@ import com.abc12366.common.util.Utils;
  */
 public class ServiceException extends RuntimeException {
 
-    // 代码
-    private int code;
-    // 代码解释
-    private String message;
+    private BodyStatus bodyStatus;
 
     private static final long serialVersionUID = 1401593546385403720L;
 
@@ -24,25 +21,14 @@ public class ServiceException extends RuntimeException {
     }
 
     public ServiceException(int code) {
-        BodyStatus bodyStatus =  Utils.bodyStatus(code);
-        this.code = code;
-        this.message = bodyStatus.getMessage();
+        this.bodyStatus=  Utils.bodyStatus(code);
     }
 
-    public int getCode() {
-        return code;
+    public BodyStatus getBodyStatus() {
+        return bodyStatus;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setBodyStatus(BodyStatus bodyStatus) {
+        this.bodyStatus = bodyStatus;
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface DictService {
-    List<Dict> selectList();
+    List<Dict> selectList(Dict dict);
 
     DictBO selectOne(Dict dict);
 
@@ -22,5 +22,7 @@ public interface DictService {
 
     DictBO update(DictUpdateBO dictUpdateBO);
 
-    DictBO delete(String id);
+    int delete(String id);
+
+    Dict selectById(String id);
 }

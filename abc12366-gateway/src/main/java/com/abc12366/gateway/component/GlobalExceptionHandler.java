@@ -1,5 +1,6 @@
 package com.abc12366.gateway.component;
 
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.model.BodyValidStatus;
 import com.abc12366.common.util.Utils;
@@ -32,7 +33,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity handle(Exception e) {
         e.printStackTrace();
         BodyStatus bodyStatus;
+        if (e instanceof ServiceException) {
+            bodyStatus = ((ServiceException) e).getBodyStatus();
+            LOGGER.warn(bodyStatus.getMessage() + e);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
 
+        }
         if (e instanceof HttpRequestMethodNotSupportedException) {
             bodyStatus = Utils.bodyStatus(4005);
             LOGGER.warn(bodyStatus.getMessage() + e);

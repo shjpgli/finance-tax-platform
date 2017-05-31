@@ -14,7 +14,7 @@ import java.util.List;
 public interface MenuRoMapper {
     List<MenuBO> selectList(Menu menu);
 
-    List<Menu> selectByParentId(String parentId);
+    List<MenuBO> selectByParentId(String parentId);
 
     MenuBO selectByMenuId(String id);
 

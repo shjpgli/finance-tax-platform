@@ -13,4 +13,8 @@ public interface ApiLogRoMapper {
     List<ApiLog> selectList();
 
     List<ApiLog> selectListPage(ApiLog apiLog);
+
+    Integer selectApiLogCount(ApiLog apiLog);
+
+
 }
