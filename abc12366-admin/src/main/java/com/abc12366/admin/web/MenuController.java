@@ -47,8 +47,8 @@ public class MenuController {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<MenuBO> menuList = menuService.selectList(menu);
         LOGGER.info("{}", menuList);
-        return (menuList == null) && menuList.size() != 0 ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+        return menuList == null ?
+                ResponseEntity.ok(null) :
                 ResponseEntity.ok(Utils.kv("menuList", (Page) menuList, "total", ((Page) menuList).getTotal()));
     }
 

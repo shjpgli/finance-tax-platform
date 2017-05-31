@@ -106,7 +106,7 @@ public class AreaController {
         List<Area> areaList = areaService.selectAreaList("");
         LOGGER.info("{}", provinceList,cityList,areaList);
         return (provinceList == null) && (cityList == null) && (areaList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(null) :
                 ResponseEntity.ok(Utils.kv("provinceList", provinceList, "cityList", cityList, "areaList",  areaList));
     }
 

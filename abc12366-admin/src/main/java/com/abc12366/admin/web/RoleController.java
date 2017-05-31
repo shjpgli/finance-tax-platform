@@ -47,8 +47,8 @@ public class RoleController {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<RoleBO> roleList = roleService.selectList(role);
         LOGGER.info("{}", roleList);
-        return (roleList == null) && roleList.size() != 0 ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+        return roleList == null ?
+                ResponseEntity.ok(null) :
                 ResponseEntity.ok(Utils.kv("roleList", (Page) roleList, "total", ((Page) roleList).getTotal()));
     }
 

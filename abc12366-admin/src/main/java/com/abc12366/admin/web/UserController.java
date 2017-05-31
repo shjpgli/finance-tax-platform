@@ -48,8 +48,8 @@ public class UserController {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<UserBO> userList = userService.selectList(user);
         LOGGER.info("{}", userList);
-        return (userList == null) && userList.size() != 0 ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+        return userList == null ?
+                ResponseEntity.ok(null):
                 ResponseEntity.ok(Utils.kv("userList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 

@@ -47,8 +47,8 @@ public class OrganizationController {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<OrganizationBO> organizationList = organizationService.selectList(organization);
         LOGGER.info("{}", organizationList);
-        return (organizationList == null) && organizationList.size() != 0 ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+        return organizationList == null ?
+                ResponseEntity.ok(null) :
                 ResponseEntity.ok(Utils.kv("organizationList", (Page) organizationList, "total", ((Page) organizationList).getTotal()));
     }
 

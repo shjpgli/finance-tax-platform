@@ -46,7 +46,7 @@ public class DictController {
         List<Dict> dictList = dictService.selectList(dict);
         LOGGER.info("{}",dictList);
         return (dictList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(null) :
                 ResponseEntity.ok(Utils.kv("dictList", (Page) dictList, "total", ((Page) dictList).getTotal()));
     }
 
