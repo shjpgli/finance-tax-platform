@@ -63,7 +63,6 @@
             <if test="roleName != null and roleName!=''"> and r.roleName LIKE CONCAT('%',#{roleName},'%') </if>
             <if test="status != null and status!=''"> AND r.status = #{status}</if>
         </where>
-        group by r.id
 	</select>
 
 	<select id="selectRoleById" resultMap="roleBoResultMap" parameterType="java.lang.String">

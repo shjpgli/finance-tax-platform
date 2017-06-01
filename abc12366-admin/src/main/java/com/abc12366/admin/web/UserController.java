@@ -61,6 +61,11 @@ public class UserController {
     }
 
 
+    /**
+     * 新增用户
+     * @param userBO
+     * @return
+     */
     @PostMapping
     public ResponseEntity addUser(@Valid @RequestBody UserBO userBO) {
         int upd = userService.addUser(userBO);
@@ -68,13 +73,34 @@ public class UserController {
         return ResponseEntity.ok(upd);
     }
 
+    /**
+     * 修改用户信息
+     * @param userUpdateBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(@Valid @RequestBody UserUpdateBO userUpdateBO, @PathVariable("id") String id) {
         userUpdateBO.setId(id);
-        int upd = userService.updateUser(userUpdateBO);
-        LOGGER.info("{}", upd);
-        return ResponseEntity.ok(upd);
+        userService.updateUser(userUpdateBO);
+        return ResponseEntity.ok(null);
     }
+
+    /**
+     * 启用、禁用
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/enable/{id}/{status}")
+    public ResponseEntity enable(@PathVariable("id") String id,@PathVariable("status") Boolean status) {
+        User user = new User();
+        user.setId(id);
+        user.setStatus(status);
+        userService.enable(user);
+        return ResponseEntity.ok(null);
+    }
+
+
 
     /**
      * 修改用户密码

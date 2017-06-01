@@ -82,4 +82,13 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new ServiceException(4103);
         }
     }
+
+    @Override
+    public void enable(Organization organization) {
+        int update = organizationMapper.update(organization);
+        if (update != 1) {
+            LOGGER.warn("修改失败，id：{}", organization.toString());
+            throw new ServiceException(4103);
+        }
+    }
 }

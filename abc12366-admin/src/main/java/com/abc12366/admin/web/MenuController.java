@@ -1,7 +1,6 @@
 package com.abc12366.admin.web;
 
 import com.abc12366.admin.model.Menu;
-import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.bo.MenuBO;
 import com.abc12366.admin.service.MenuService;
 import com.abc12366.common.util.Constant;
@@ -11,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,5 +95,19 @@ public class MenuController {
         MenuBO menuBO1 = menuService.update(menuBO);
         LOGGER.info("{}", menuBO1);
         return ResponseEntity.ok(menuBO1);
+    }
+
+    /**
+     * 启用、禁用
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/enable/{id}/{status}")
+    public ResponseEntity enable(@PathVariable("id") String id,@PathVariable("status") Boolean status) {
+        Menu menu = new Menu();
+        menu.setMenuId(id);
+        menu.setStatus(status);
+        menuService.enable(menu);
+        return ResponseEntity.ok(null);
     }
 }

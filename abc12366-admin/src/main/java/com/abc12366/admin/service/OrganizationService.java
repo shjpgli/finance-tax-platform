@@ -46,4 +46,5 @@ public interface OrganizationService {
      */
     void deleteOrganizationById(String id);
 
+    void enable(Organization organization);
 }

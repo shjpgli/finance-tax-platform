@@ -426,7 +426,20 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4106);
         }
         int update = userMapper.updateUserPwdById(id,newPassword);
+        if(update != 1){
+            throw new ServiceException(4102);
+        }
         return update;
+    }
+
+    @Override
+    public void enable(User user) {
+        user.setLastUpdate(new Date());
+        int update = userMapper.updateUser(user);
+        if(update != 1){
+            LOGGER.warn("修改失败，id：{}", user.toString());
+            throw new ServiceException(4102);
+        }
     }
 
     private LoginInfo getLoginInfo(UserBO user, String userToken, App app) {

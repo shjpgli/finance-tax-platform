@@ -125,4 +125,13 @@ public class MenuServiceImpl implements MenuService {
         return menuBOs;
     }
 
+    @Override
+    public void enable(Menu menu) {
+        int enable = menuMapper.update(menu);
+        if(enable != 1){
+            LOGGER.warn("修改失败，id：{}", menu.toString());
+            throw new ServiceException(4102);
+        }
+    }
+
 }
