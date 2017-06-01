@@ -119,4 +119,6 @@ public interface UserService {
      * @return
      */
     int resetUserPwd(String id);
+
+    void enable(User user);
 }

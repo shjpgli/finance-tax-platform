@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +101,20 @@ public class OrganizationController {
     public ResponseEntity deleteOrganizationById(@PathVariable("id") String id) {
         organizationService.deleteOrganizationById(id);
         LOGGER.info("删除组织成功");
+        return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 启用、禁用
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/enable/{id}/{status}")
+    public ResponseEntity enable(@PathVariable("id") String id,@PathVariable("status") Boolean status) {
+        Organization organization = new Organization();
+        organization.setId(id);
+        organization.setStatus(status);
+        organizationService.enable(organization);
         return ResponseEntity.ok(null);
     }
 }

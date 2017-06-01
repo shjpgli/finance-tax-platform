@@ -27,4 +27,6 @@ public interface MenuService {
     MenuBO update(MenuBO menuBO);
 
     List<MenuBO> selectFirstLevel();
+
+    void enable(Menu menu);
 }
