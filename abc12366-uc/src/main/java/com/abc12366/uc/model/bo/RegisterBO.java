@@ -39,15 +39,17 @@ public class RegisterBO implements Serializable {
     private String maxUserPicturePath;
     private String midUserPicturePath;
     private String minUserPicturePath;
+    @NotEmpty
+    private String verifyingCode;
 
     public RegisterBO() {
     }
 
-    public RegisterBO(String username, String phone, String password, String regMail, String regIP, String salt, String nickname, boolean status, String userPicturePath, String maxUserPicturePath, String midUserPicturePath, String minUserPicturePath) {
-        this.username = username;
+    public RegisterBO(String phone, String password, String regMail, String username, String regIP, String salt, String nickname, boolean status, String userPicturePath, String maxUserPicturePath, String midUserPicturePath, String minUserPicturePath, String verifyingCode) {
         this.phone = phone;
         this.password = password;
         this.regMail = regMail;
+        this.username = username;
         this.regIP = regIP;
         this.salt = salt;
         this.nickname = nickname;
@@ -56,6 +58,7 @@ public class RegisterBO implements Serializable {
         this.maxUserPicturePath = maxUserPicturePath;
         this.midUserPicturePath = midUserPicturePath;
         this.minUserPicturePath = minUserPicturePath;
+        this.verifyingCode = verifyingCode;
     }
 
     public String getUsername() {
@@ -152,6 +155,14 @@ public class RegisterBO implements Serializable {
 
     public void setMinUserPicturePath(String minUserPicturePath) {
         this.minUserPicturePath = minUserPicturePath;
+    }
+
+    public String getVerifyingCode() {
+        return verifyingCode;
+    }
+
+    public void setVerifyingCode(String verifyingCode) {
+        this.verifyingCode = verifyingCode;
     }
 
     @Override
