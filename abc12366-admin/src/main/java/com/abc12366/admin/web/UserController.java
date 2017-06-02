@@ -88,18 +88,14 @@ public class UserController {
 
     /**
      * 启用、禁用
-     * @param id
      * @return
      */
-    @PutMapping(path = "/enable/{id}/{status}")
-    public ResponseEntity enable(@PathVariable("id") String id,@PathVariable("status") Boolean status) {
-        User user = new User();
-        user.setId(id);
-        user.setStatus(status);
-        userService.enable(user);
+    @PutMapping(path = "/enable")
+    public ResponseEntity enable(@Valid @RequestBody UserUpdateBO userUpdateBO) {
+        LOGGER.info("{}", userUpdateBO);
+        userService.enable(userUpdateBO);
         return ResponseEntity.ok(null);
     }
-
 
 
     /**

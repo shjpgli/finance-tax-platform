@@ -2,6 +2,7 @@ package com.abc12366.admin.service;
 
 import com.abc12366.admin.model.Menu;
 import com.abc12366.admin.model.bo.MenuBO;
+import com.abc12366.admin.model.bo.MenuUpdateBO;
 
 import java.util.List;
 
@@ -28,5 +29,7 @@ public interface MenuService {
 
     List<MenuBO> selectFirstLevel();
 
-    void enable(Menu menu);
+    void disableAll();
+
+    void enable(MenuUpdateBO updateBO);
 }

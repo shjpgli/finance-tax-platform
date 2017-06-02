@@ -3,7 +3,10 @@ package com.abc12366.admin.service.impl;
 import com.abc12366.admin.mapper.db1.OrganizationMapper;
 import com.abc12366.admin.mapper.db2.OrganizationRoMapper;
 import com.abc12366.admin.model.Organization;
+import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.bo.OrganizationBO;
+import com.abc12366.admin.model.bo.OrganizationUpdateBO;
+import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.service.OrganizationService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -84,11 +87,33 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public void enable(Organization organization) {
-        int update = organizationMapper.update(organization);
-        if (update != 1) {
-            LOGGER.warn("修改失败，id：{}", organization.toString());
-            throw new ServiceException(4103);
+    public void enable(OrganizationUpdateBO updateBO) {
+        String[] idArray = updateBO.getId().split(",");
+        Organization organization = new Organization();
+        organization.setLastUpdate(new Date());
+        for(String orgId : idArray){
+            organization.setId(orgId);
+            organization.setStatus(updateBO.getStatus());
+            int update = organizationMapper.update(organization);
+            if (update != 1) {
+                LOGGER.warn("修改失败，id：{}", organization.toString());
+                throw new ServiceException(4103);
+            }
+        }
+    }
+
+    @Override
+    public void disableAll() {
+        Organization organization = new Organization();
+        List<OrganizationBO> organizationBOs = organizationRoMapper.selectList(organization);
+        for (OrganizationBO temp:organizationBOs){
+            organization.setId(temp.getId());
+            organization.setStatus(false);
+            int enable = organizationMapper.update(organization);
+            if(enable != 1){
+                LOGGER.warn("修改失败，id：{}", organization.toString());
+                throw new ServiceException(4102);
+            }
         }
     }
 }

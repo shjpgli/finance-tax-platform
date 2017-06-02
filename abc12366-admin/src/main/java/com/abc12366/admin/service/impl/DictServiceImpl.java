@@ -1,10 +1,11 @@
-package com.abc12366.admin.service;
+package com.abc12366.admin.service.impl;
 
 import com.abc12366.admin.mapper.db1.DictMapper;
 import com.abc12366.admin.mapper.db2.DictRoMapper;
 import com.abc12366.admin.model.Dict;
 import com.abc12366.admin.model.bo.DictBO;
 import com.abc12366.admin.model.bo.DictUpdateBO;
+import com.abc12366.admin.service.DictService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
 import org.springframework.beans.BeanUtils;

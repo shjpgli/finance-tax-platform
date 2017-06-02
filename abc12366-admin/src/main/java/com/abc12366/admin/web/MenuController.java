@@ -2,6 +2,7 @@ package com.abc12366.admin.web;
 
 import com.abc12366.admin.model.Menu;
 import com.abc12366.admin.model.bo.MenuBO;
+import com.abc12366.admin.model.bo.MenuUpdateBO;
 import com.abc12366.admin.service.MenuService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -99,15 +100,22 @@ public class MenuController {
 
     /**
      * 启用、禁用
-     * @param id
      * @return
      */
-    @PutMapping(path = "/enable/{id}/{status}")
-    public ResponseEntity enable(@PathVariable("id") String id,@PathVariable("status") Boolean status) {
-        Menu menu = new Menu();
-        menu.setMenuId(id);
-        menu.setStatus(status);
-        menuService.enable(menu);
+    @PutMapping(path = "/enable")
+    public ResponseEntity enable(@Valid @RequestBody MenuUpdateBO updateBO) {
+        LOGGER.info("{}",updateBO);
+        menuService.enable(updateBO);
+        return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 启用、禁用
+     * @return
+     */
+    @PutMapping(path = "/disableAll")
+    public ResponseEntity disableAll() {
+        menuService.disableAll();
         return ResponseEntity.ok(null);
     }
 }

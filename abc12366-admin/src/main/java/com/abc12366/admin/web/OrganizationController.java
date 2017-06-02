@@ -2,6 +2,7 @@ package com.abc12366.admin.web;
 
 import com.abc12366.admin.model.Organization;
 import com.abc12366.admin.model.bo.OrganizationBO;
+import com.abc12366.admin.model.bo.OrganizationUpdateBO;
 import com.abc12366.admin.service.OrganizationService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -106,15 +107,22 @@ public class OrganizationController {
 
     /**
      * 启用、禁用
-     * @param id
      * @return
      */
-    @PutMapping(path = "/enable/{id}/{status}")
-    public ResponseEntity enable(@PathVariable("id") String id,@PathVariable("status") Boolean status) {
-        Organization organization = new Organization();
-        organization.setId(id);
-        organization.setStatus(status);
-        organizationService.enable(organization);
+    @PutMapping(path = "/enable")
+    public ResponseEntity enable(@Valid @RequestBody OrganizationUpdateBO updateBO) {
+        LOGGER.info("{}", updateBO);
+        organizationService.enable(updateBO);
+        return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 启用、禁用
+     * @return
+     */
+    @PutMapping(path = "/disableAll")
+    public ResponseEntity disableAll() {
+        organizationService.disableAll();
         return ResponseEntity.ok(null);
     }
 }

@@ -43,7 +43,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
 
         //IP地址拦截
-        registry.addInterceptor(ipInterceptor()).excludePathPatterns("/druid/**");
+//        registry.addInterceptor(ipInterceptor()).excludePathPatterns("/druid/**");
 
         // 前置日志、黑名单、后置日志、接口计数拦截
         registry.addInterceptor(logInterceptor())

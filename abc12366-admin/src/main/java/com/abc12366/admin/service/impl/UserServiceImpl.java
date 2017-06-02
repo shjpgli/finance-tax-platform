@@ -263,7 +263,7 @@ public class UserServiceImpl implements UserService {
             }
             userBO.setMenuMap(menuMap);
             return userBO;
-        }else{
+        } else {
             throw new ServiceException(4102);
         }
     }
@@ -317,7 +317,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int addUser(UserBO userBO) {
         UserBO bo = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
-        if(bo != null){
+        if (bo != null) {
             LOGGER.error("该用户已经存在");
             throw new ServiceException(4117);
         }
@@ -400,8 +400,8 @@ public class UserServiceImpl implements UserService {
 
         int update = 0;
         UserBO user = userRoMapper.selectUserBOByLoginName(userPasswordBO.getUsername());
-        String newPassword ;
-        String oldPassword ;
+        String newPassword;
+        String oldPassword;
         try {
             newPassword = Utils.md5(userPasswordBO.getNewPassword());
             oldPassword = Utils.md5(userPasswordBO.getPassword());
@@ -410,7 +410,7 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4106);
         }
         if (user != null && oldPassword.equals(user.getPassword())) {
-            update = userMapper.updateUserPwdById(user.getId(),newPassword);
+            update = userMapper.updateUserPwdById(user.getId(), newPassword);
         }
 
         return update;
@@ -418,27 +418,48 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int resetUserPwd(String id) {
-        String newPassword ;
+        String newPassword;
         try {
             newPassword = Utils.md5(Constant.defaultPwd);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException(4106);
         }
-        int update = userMapper.updateUserPwdById(id,newPassword);
-        if(update != 1){
+        int update = userMapper.updateUserPwdById(id, newPassword);
+        if (update != 1) {
             throw new ServiceException(4102);
         }
         return update;
     }
 
     @Override
-    public void enable(User user) {
+    public void enable(UserUpdateBO userUpdateBO) {
+        String[] idArray = userUpdateBO.getId().split(",");
+        User user = new User();
         user.setLastUpdate(new Date());
-        int update = userMapper.updateUser(user);
-        if(update != 1){
-            LOGGER.warn("修改失败，id：{}", user.toString());
-            throw new ServiceException(4102);
+        for (String userId : idArray) {
+            user.setId(userId);
+            user.setStatus(userUpdateBO.getStatus());
+            int update = userMapper.updateUser(user);
+            if (update != 1) {
+                LOGGER.warn("修改失败，id：{}", user.toString());
+                throw new ServiceException(4102);
+            }
+        }
+    }
+
+    @Override
+    public void disableAll() {
+        User user = new User();
+        List<UserBO> userBOs = userRoMapper.selectList(user);
+        for (UserBO temp : userBOs) {
+            user.setId(temp.getId());
+            user.setStatus(false);
+            int enable = userMapper.updateUser(user);
+            if (enable != 1) {
+                LOGGER.warn("修改失败，id：{}", user.toString());
+                throw new ServiceException(4102);
+            }
         }
     }
 

@@ -120,5 +120,7 @@ public interface UserService {
      */
     int resetUserPwd(String id);
 
-    void enable(User user);
+    void disableAll();
+
+    void enable(UserUpdateBO userUpdateBO);
 }

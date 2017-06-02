@@ -2,6 +2,7 @@ package com.abc12366.admin.service;
 
 import com.abc12366.admin.model.Organization;
 import com.abc12366.admin.model.bo.OrganizationBO;
+import com.abc12366.admin.model.bo.OrganizationUpdateBO;
 
 import java.util.List;
 
@@ -46,5 +47,7 @@ public interface OrganizationService {
      */
     void deleteOrganizationById(String id);
 
-    void enable(Organization organization);
+    void disableAll();
+
+    void enable(OrganizationUpdateBO updateBO);
 }

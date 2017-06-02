@@ -1,9 +1,11 @@
-package com.abc12366.admin.service;
+package com.abc12366.admin.service.impl;
 
 import com.abc12366.admin.mapper.db1.MenuMapper;
 import com.abc12366.admin.mapper.db2.MenuRoMapper;
 import com.abc12366.admin.model.Menu;
 import com.abc12366.admin.model.bo.MenuBO;
+import com.abc12366.admin.model.bo.MenuUpdateBO;
+import com.abc12366.admin.service.MenuService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
 import org.slf4j.Logger;
@@ -126,11 +128,32 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void enable(Menu menu) {
-        int enable = menuMapper.update(menu);
-        if(enable != 1){
-            LOGGER.warn("修改失败，id：{}", menu.toString());
-            throw new ServiceException(4102);
+    public void enable(MenuUpdateBO updateBO) {
+        String[] idArray = updateBO.getMenuId().split(",");
+        Menu menu = new Menu();
+        for (String menuId : idArray){
+            menu.setMenuId(menuId);
+            menu.setStatus(updateBO.getStatus());
+            int enable = menuMapper.update(menu);
+            if(enable != 1){
+                LOGGER.warn("修改失败，id：{}", menu.toString());
+                throw new ServiceException(4102);
+            }
+        }
+    }
+
+    @Override
+    public void disableAll() {
+        Menu menu = new Menu();
+        List<MenuBO> menus = menuRoMapper.selectList(menu);
+        for (MenuBO temp:menus){
+            menu.setMenuId(temp.getMenuId());
+            menu.setStatus(false);
+            int enable = menuMapper.update(menu);
+            if(enable != 1){
+                LOGGER.warn("修改失败，id：{}", menu.toString());
+                throw new ServiceException(4102);
+            }
         }
     }
 

@@ -22,7 +22,7 @@ public class MenuUpdateBO implements Serializable {
     private String type;
     private String icon;
     private int sort;
-    private boolean status;
+    private Boolean status;
     private String remark;
 
     private List<MenuUpdateBO> nodes = new ArrayList<MenuUpdateBO>();
@@ -30,7 +30,7 @@ public class MenuUpdateBO implements Serializable {
     public MenuUpdateBO() {
     }
 
-    public MenuUpdateBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort, boolean status, String remark) {
+    public MenuUpdateBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort, Boolean status, String remark) {
         this.menuId = menuId;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
@@ -107,11 +107,11 @@ public class MenuUpdateBO implements Serializable {
         this.sort = sort;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

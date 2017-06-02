@@ -19,13 +19,13 @@ public class Menu implements Serializable {
     private String type;
     private String icon;
     private int sort;
-    private boolean status;
+    private Boolean status;
     private String remark;
 
     public Menu() {
     }
 
-    public Menu(String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort, boolean status, String remark) {
+    public Menu(String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort, Boolean status, String remark) {
         this.menuName = menuName;
         this.menuUrl = menuUrl;
         this.parentId = parentId;
@@ -101,11 +101,11 @@ public class Menu implements Serializable {
         this.sort = sort;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
