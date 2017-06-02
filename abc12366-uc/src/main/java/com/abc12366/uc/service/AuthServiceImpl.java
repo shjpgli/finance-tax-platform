@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Properties;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
@@ -11,18 +12,25 @@ import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserReturnBO;
+import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.CheckSumBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +44,11 @@ import java.util.Map;
 public class AuthServiceImpl implements AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    Properties properties = new Properties("application.properties");
 
     @Autowired
     private UserMapper userMapper;
@@ -228,5 +241,141 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Map loginByVerifyingCode(LoginVerifyingCodeBO loginBO, String appToken) throws Exception {
+
+        //判断apptoken是否为空，为空则不允许登录
+        if (appToken == null || appToken.equals("")) {
+            return null;
+        }
+        Map<String, String> map = new HashMap<>();
+        if (!StringUtils.isEmpty(loginBO.getPhone())) {
+            map.put("phone", loginBO.getPhone());
+        }
+        User user = userRoMapper.selectByUsernameOrPhone(map);
+        if (user == null) {
+            LOGGER.warn("登录失败，该用户不存在，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4104);
+        }
+
+        String userToken = Utils.token(Utils.uuid());
+        user.setLastUpdate(new Date());
+        int result = userMapper.update(user);
+        if (result != 1) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4102);
+        }
+        //更新用户主表后再更新uc_token表
+        App appTemp = new App();
+        appTemp.setAccessToken(appToken);
+        appTemp.setStatus(true);
+        App app = appRoMapper.selectOne(appTemp);
+        //如果不存在有效的注册应用，则不允许登录
+        if (app == null) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4104);
+        }
+
+        Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
+        int result02;
+        //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
+        if (queryToken != null) {
+            queryToken.setLastTokenResetTime(new Date());
+            result02 = tokenMapper.update(queryToken);
+        } else {
+            Token token = new Token();
+            token.setId(Utils.uuid());
+            if (app.getId() != null) {
+                token.setAppId(app.getId());
+            }
+            if (user.getId() != null) {
+                token.setUserId(user.getId());
+            }
+            token.setToken(userToken);
+            token.setLastTokenResetTime(new Date());
+            result02 = tokenMapper.insert(token);
+        }
+        if (result02 != 1) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4101);
+        }
+        UserBO userBO = new UserBO();
+        BeanUtils.copyProperties(user, userBO);
+        return Utils.kv("User-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_HOURS, "user", userBO);
+    }
+
+    @Override
+    public ResponseEntity verifyCode(String phone, String code) throws IOException {
+        //String url = properties.getValue("message.netease.url.verifycode");
+        //不变参数
+        //String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
+        //String appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
+        //String contentType = properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
+        //String charset = properties.getValue("message.netease.charset");//"utf-8";
+        //可变参数
+        //String nonce = Utils.uuid();
+        //String curTime = String.valueOf((new Date()).getTime() / 1000L);
+        //请求头设置
+        //HttpHeaders httpHeaders = new HttpHeaders();
+        //httpHeaders.add("appKey", appKey);
+        //httpHeaders.add("appSecret", appSecret);
+        //httpHeaders.add("Content-Type", "application/json");
+        //httpHeaders.add(Constant.VERSION_HEAD, Constant.VERSION_1);
+        //httpHeaders.add("Nonce", nonce);
+        //httpHeaders.add("CurTime", curTime);
+
+        //MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        //requestBody.add("mobile", phone);
+        //requestBody.add("code", code);
+
+        //String reqJsonStr = "{\"mobile\":"+ phone +",\"code\":" + code + "}";
+
+        //HttpEntity requestEntity = new HttpEntity(reqJsonStr, httpHeaders);
+
+        //ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+
+
+
+
+
+        //------------------------------------------
+        //不变参数
+        String url = properties.getValue("message.netease.url.verifycode");
+        String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
+        String appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
+        String contentType = properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
+        String charset = properties.getValue("message.netease.charset");//"utf-8";
+        //可变参数
+        String nonce = Utils.uuid();
+        String curTime = String.valueOf((new Date()).getTime() / 1000L);
+        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
+        //请求头设置
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("appKey", appKey);
+        httpHeaders.add("appSecret", appSecret);
+        httpHeaders.add("Content-Type", contentType);
+        httpHeaders.add("charset", charset);
+        httpHeaders.add("Nonce", nonce);
+        httpHeaders.add("CurTime", curTime);
+        httpHeaders.add("CheckSum", checkSum);
+
+
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("mobile", phone);
+        requestBody.add("code", code);
+
+        HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
+
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class, new HashMap());
+        //------------------------------------------
+        if (responseEntity == null) {
+            throw new ServiceException(4201);
+        }
+        if(!responseEntity.hasBody()){
+            throw new ServiceException(4201);
+        }
+        return responseEntity;
     }
 }
