@@ -1,5 +1,6 @@
 package com.abc12366.message.web;
 
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.SmsService;
@@ -35,8 +36,11 @@ public class SmsController {
         LOGGER.info("{}", sendCodeParam);
 
         ResponseEntity response = smsService.sendCode(sendCodeParam);
-        if (response == null || !response.hasBody()) {
+        if (response == null || !response.getStatusCode().is2xxSuccessful()) {
             return (ResponseEntity) ResponseEntity.badRequest();
+        }
+        if (!response.hasBody()) {
+            throw new ServiceException(4201);
         }
         SendCodeResponseBO sendCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(), SendCodeResponseBO.class);
         LOGGER.info("{}", sendCodeResponseBO);
@@ -44,11 +48,14 @@ public class SmsController {
     }
 
     @PostMapping(path = "/verifycode")
-    ResponseEntity verifyCode(@Valid @RequestBody VerifyCodeParam verifyCodeParam) throws IOException {
+    public ResponseEntity verifyCode(@Valid @RequestBody VerifyCodeParam verifyCodeParam) throws IOException {
         LOGGER.info("{}", verifyCodeParam);
         ResponseEntity response = smsService.verify(verifyCodeParam);
-        if (response == null || !response.hasBody()) {
+        if (response == null || !response.getStatusCode().is2xxSuccessful()) {
             return (ResponseEntity) ResponseEntity.badRequest();
+        }
+        if (!response.hasBody()) {
+            throw new ServiceException(4201);
         }
         VerifyCodeResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponseBO.class);
         LOGGER.info("{}", verifyCodeResponseBO);
@@ -56,12 +63,15 @@ public class SmsController {
     }
 
     @PostMapping(path = "/sendtemplate")
-    ResponseEntity sendTemplate(@Valid @RequestBody SendTemplateParam sendTemplateParam) throws IOException {
+    public ResponseEntity sendTemplate(@Valid @RequestBody SendTemplateParam sendTemplateParam) throws IOException {
         LOGGER.info("{}", sendTemplateParam);
 
         ResponseEntity response = smsService.sendTemplate(sendTemplateParam);
-        if (response == null || !response.hasBody()) {
+        if (response == null || !response.getStatusCode().is2xxSuccessful()) {
             return (ResponseEntity) ResponseEntity.badRequest();
+        }
+        if (!response.hasBody()) {
+            throw new ServiceException(4201);
         }
         SendTemplateResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(), SendTemplateResponseBO.class);
         LOGGER.info("{}", verifyCodeResponseBO);
@@ -69,12 +79,15 @@ public class SmsController {
     }
 
     @PostMapping(path = "/querystatus")
-    ResponseEntity queryStatus(@Valid @RequestBody QueryStatusParam queryStatusParam) throws IOException {
+    public ResponseEntity queryStatus(@Valid @RequestBody QueryStatusParam queryStatusParam) throws IOException {
         LOGGER.info("{}", queryStatusParam);
 
         ResponseEntity response = smsService.queryStatus(queryStatusParam);
-        if (response == null || !response.hasBody()) {
+        if (response == null || !response.getStatusCode().is2xxSuccessful()) {
             return (ResponseEntity) ResponseEntity.badRequest();
+        }
+        if (!response.hasBody()) {
+            throw new ServiceException(4201);
         }
         QueryStatusResponseBO queryStatusResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(), QueryStatusResponseBO.class);
         LOGGER.info("{}", queryStatusResponseBO);

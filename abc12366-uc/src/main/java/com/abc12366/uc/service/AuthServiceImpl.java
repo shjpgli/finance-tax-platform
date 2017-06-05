@@ -19,10 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,8 +45,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    Properties properties = new Properties("application.properties");
 
     @Autowired
     private UserMapper userMapper;
@@ -204,7 +200,7 @@ public class AuthServiceImpl implements AuthService {
         }
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
-        return Utils.kv("User-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_HOURS, "user", userBO);
+        return Utils.kv("User-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
     }
 
     @Override
@@ -220,7 +216,7 @@ public class AuthServiceImpl implements AuthService {
         }
         long lastTokenResetTime = token.getLastTokenResetTime().getTime();
         long currentTime = new Date().getTime();
-        if (currentTime > (lastTokenResetTime + 1000 * Constant.APP_TOKEN_VALID_SECONDS)) {
+        if (currentTime > (lastTokenResetTime + 1000 * Constant.USER_TOKEN_VALID_SECONDS)) {
             return false;
         }
         return true;
@@ -303,11 +299,11 @@ public class AuthServiceImpl implements AuthService {
         }
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
-        return Utils.kv("User-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_HOURS, "user", userBO);
+        return Utils.kv("User-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
     }
 
     @Override
-    public ResponseEntity verifyCode(String phone, String code) throws IOException {
+    public ResponseEntity verifyCode(String phone, String code, HttpServletRequest request) throws IOException {
         //String url = properties.getValue("message.netease.url.verifycode");
         //不变参数
         //String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
@@ -337,45 +333,47 @@ public class AuthServiceImpl implements AuthService {
         //ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
 
-
-
-
         //------------------------------------------
         //不变参数
-        String url = properties.getValue("message.netease.url.verifycode");
-        String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
-        String appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
-        String contentType = properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
-        String charset = properties.getValue("message.netease.charset");//"utf-8";
+        //String url = properties.getValue("message.netease.url.verifycode");
+        String url = "http://localhost:9200/message/sms/verifycode";
+        //String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
+        //String appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
+        String contentType = "application/json";//properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
+        //String charset = "utf-8";//properties.getValue("message.netease.charset");//"utf-8";
         //可变参数
-        String nonce = Utils.uuid();
-        String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
+        //String nonce = Utils.uuid();
+        //String curTime = String.valueOf((new Date()).getTime() / 1000L);
+        //String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("appKey", appKey);
-        httpHeaders.add("appSecret", appSecret);
-        httpHeaders.add("Content-Type", contentType);
-        httpHeaders.add("charset", charset);
-        httpHeaders.add("Nonce", nonce);
-        httpHeaders.add("CurTime", curTime);
-        httpHeaders.add("CheckSum", checkSum);
+        //httpHeaders.add("appKey", appKey);
+        //httpHeaders.add("appSecret", appSecret);
+//        httpHeaders.add("Content-Type", contentType);
+        //httpHeaders.add("charset", charset);
+        //httpHeaders.add("Nonce", nonce);
+        //httpHeaders.add("CurTime", curTime);
+        //httpHeaders.add("CheckSum", checkSum);
+        httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
 
 
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("mobile", phone);
-        requestBody.add("code", code);
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("mobile", phone);
+        requestBody.put("code", code);
 
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
 
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class, new HashMap());
-        //------------------------------------------
-        if (responseEntity == null) {
-            throw new ServiceException(4201);
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+
+        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful()) {
+            if (responseEntity.hasBody()) {
+                return responseEntity;
+            } else {
+                throw new ServiceException(4201);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        if(!responseEntity.hasBody()){
-            throw new ServiceException(4201);
-        }
-        return responseEntity;
     }
 }

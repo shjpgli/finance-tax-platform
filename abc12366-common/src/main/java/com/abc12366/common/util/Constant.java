@@ -32,6 +32,9 @@ public class Constant {
     // 用户token有效期：168小时
     public final static int USER_TOKEN_VALID_HOURS = 7 * 24;
 
+    // 用户token有效期：3600*2秒
+    public final static int USER_TOKEN_VALID_SECONDS = 3600 * 2;
+
     // 分页-当前页
     public final static String pageNum = "1";
     // 分页-每页大小

@@ -61,10 +61,10 @@ public class AuthController extends BaseController {
     }*/
 
     @PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO) throws IOException {
+    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws IOException {
         LOGGER.info("{}", registerBO);
         //进行手机验证码验证
-        ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode());
+        ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(), request);
         if (response == null) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -100,7 +100,7 @@ public class AuthController extends BaseController {
     public ResponseEntity loginByVerifyingCode(@Valid @RequestBody LoginVerifyingCodeBO loginBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", loginBO);
         //进行手机验证码验证
-        ResponseEntity response = authService.verifyCode(loginBO.getPhone(), loginBO.getCode());
+        ResponseEntity response = authService.verifyCode(loginBO.getPhone(), loginBO.getCode(), request);
         if (response == null) {
             return ResponseEntity.badRequest().body(null);
         }
