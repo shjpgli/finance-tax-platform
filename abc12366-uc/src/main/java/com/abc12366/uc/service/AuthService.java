@@ -6,6 +6,7 @@ import com.abc12366.uc.model.bo.RegisterBO;
 import com.abc12366.uc.model.bo.UserReturnBO;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Map;
 
@@ -28,5 +29,5 @@ public interface AuthService {
 
     Map loginByVerifyingCode(LoginVerifyingCodeBO loginBO, String header) throws Exception;
 
-    ResponseEntity verifyCode(String phone, String code) throws IOException;
+    ResponseEntity verifyCode(String phone, String code, HttpServletRequest request) throws IOException;
 }
