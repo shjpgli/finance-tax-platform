@@ -23,35 +23,19 @@ import java.net.URLEncoder;
 public class DownLoadController {
 
     @ResponseBody
-    @RequestMapping(value = "/fj/{downId}", method = RequestMethod.GET)
-    public void getFj(@PathVariable("downId") String downId,
+    @RequestMapping(value = "/fj/{downfile}", method = RequestMethod.GET)
+    public void getFj(@PathVariable("downfile") String downfile,
                       final HttpServletResponse response) {
-//        DownLoadVo downLoadVo = downLoadService.selectOne(downId);
+        if (downfile != null && !"".equals(downfile)) {
+            String type = "";
+            String directory = "";
+            String filename = "";
 
-//        if (downLoadVo != null && downLoadVo.getDownContent() != null) {
-        if (true) {
-//            downLoadVo.setDownCount(downLoadVo.getDownCount() + 1);
-//            downLoadService.update(downLoadVo);
-//            String filename = downLoadVo.getDownName();
-//            final String downfile = downLoadVo.getWjmc();
-//            String type;
-//            //判断后缀
-//            if(downfile != null){
-//                int s = downfile.lastIndexOf(".");
-//                type = downfile.substring(s + 1, downfile.length());
-//            }else{
-//                int s = filename.lastIndexOf(".");
-//                type = filename.substring(s + 1, filename.length());
-//            }
-//            //组装文件名
-//            if (type != null && !"".equals(type) && !filename.endsWith("."+type)) {
-//                filename = filename + "." + type;
-//            }
-
-
-            String filename = "aaaaa.png";
-            int s = filename.lastIndexOf(".");
-            String type = filename.substring(s + 1, filename.length());
+            int a = downfile.lastIndexOf("/");
+            int s = downfile.lastIndexOf(".");
+            type = downfile.substring(s + 1, downfile.length());
+            directory = downfile.substring(0, a);
+            filename = downfile.substring(a + 1, downfile.length());
 
             String restype = "application/octet-stream";
             if (type != null && !"".equals(type)) {
@@ -81,11 +65,14 @@ public class DownLoadController {
             }
             final String finalRestype = restype;
             final String finalFileName = filename;
+            final String finalDirectory = directory;
             Thread thread = new Thread() {
                 public void run() {
                     String fileName = null;
+                    String filepath = null;
                     try {
                         fileName = URLEncoder.encode(finalFileName, "utf-8");
+                        filepath = URLEncoder.encode(finalDirectory, "utf-8");
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -102,14 +89,10 @@ public class DownLoadController {
                         int port = 22;
                         String username = "root";
                         String password = "hngs_123";
-                        String directory = "/root";
-                        String uploadFile = "D:/upload/2_201083103325.png";
-                        String downloadFile = "123.png";
-                        String saveFile = "D:/upload/2_201083103325_download.png";
-                        String deleteFile = "123.png";
+
                         ChannelSftp sftp=sf.connect(host, port, username, password);
 
-                        InputStream in = sf.getInputStream("root",fileName,sftp);
+                        InputStream in = sf.getInputStream(filepath,fileName,sftp);
 
                         int byteCount = 0;
                         byte[] buffer = new byte[4096];
