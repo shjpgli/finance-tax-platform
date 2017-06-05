@@ -53,12 +53,7 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public ResponseEntity sendCode(SendCodeParam sendCodeParam) throws IOException {
-//不变参数
         String url = properties.getValue("message.netease.url.sendcode");//"https://api.netease.im/sms/sendcode.action";
-        /*String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
-        String appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
-        String contentType = properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
-        String charset = properties.getValue("message.netease.charset");//"utf-8";*/
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
@@ -146,9 +141,7 @@ public class SmsServiceImpl implements SmsService {
         if (params != null) {
             requestBody.add("params", params);
         }
-
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
-
         return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
     }
 
@@ -173,9 +166,7 @@ public class SmsServiceImpl implements SmsService {
         Long sendid = queryStatusParam.getSendid();
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("sendid", sendid.toString());
-
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
-
         return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
     }
 }
