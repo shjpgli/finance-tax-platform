@@ -18,11 +18,11 @@ public class UserPasswordBO extends UserExtendBO implements Serializable {
 	private String id;
 
 	/**用户名**/
-    @NotEmpty
-    @Size(min = 8, max = 32)
 	private String username;
 
     /**密码**/
+    @NotEmpty
+    @Size(min = 8, max = 32)
     private String password;
 
     @NotEmpty

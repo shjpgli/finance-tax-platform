@@ -6,6 +6,7 @@ import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.GoodsCategory;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.GoodsCategoryBO;
+import com.abc12366.uc.model.bo.GoodsCheckBO;
 import com.abc12366.uc.service.GoodsCategoryService;
 import com.abc12366.uc.service.GoodsService;
 import com.github.pagehelper.Page;
@@ -21,7 +22,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @create 2017-05-20 3:18 PM
  * @since 2.0.0
  */
 @RestController
@@ -48,7 +48,7 @@ public class GoodsController {
         goods.setCategoryId(categoryId);
         goods.setRecommendType(recommendType);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<Goods> goodsList = goodsService.selectList(goods);
+        List<GoodsBO> goodsList = goodsService.selectList(goods);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
@@ -56,24 +56,72 @@ public class GoodsController {
     }
 
     /**
+     * 新增商品
+     * @param goodsBO
+     * @return
+     */
+    @PostMapping
+    public ResponseEntity addGoods(@Valid @RequestBody GoodsBO goodsBO) {
+        LOGGER.info("{}", goodsBO);
+        GoodsBO bo = goodsService.add(goodsBO);
+        LOGGER.info("{}", bo);
+        return new ResponseEntity<>(bo, HttpStatus.OK);
+    }
+
+    /**
+     * 查询单个商品
+     * @param id
+     * @return
+     */
+    @PostMapping(path = "/{id}")
+    public ResponseEntity selectGoods(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        GoodsBO goodsBO = goodsService.selectGoods(id);
+        LOGGER.info("{}", goodsBO);
+        return new ResponseEntity<>(goodsBO, HttpStatus.OK);
+    }
+
+    /**
+     * 修改商品信息
+     * @param goodsBO
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/{id}")
+    public ResponseEntity updateGoods(@Valid @RequestBody GoodsBO goodsBO, @PathVariable("id") String id) {
+        LOGGER.info("{}", goodsBO);
+        goodsBO.setId(id);
+        GoodsBO bo = goodsService.update(goodsBO);
+        LOGGER.info("{}", bo);
+        return new ResponseEntity<>(bo, HttpStatus.OK);
+    }
+
+    /**
+     * 审核商品信息
+     * @return
+     */
+    @PutMapping(path = "/check/{id}/{status}")
+    public ResponseEntity checkGoods(@Valid @RequestBody GoodsCheckBO goodsCheckBO) {
+        LOGGER.info("{}", goodsCheckBO);
+        goodsService.checkGoods(goodsCheckBO);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+
+    /**
      * 产品分类列表
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @GetMapping(path = "/category")
-    public ResponseEntity selectGategoryList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectGategoryList(
                                      @RequestParam(value = "category", required = false) String category) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
         GoodsCategory goodsCategory = new GoodsCategory();
         goodsCategory.setCategory(category);
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<GoodsCategoryBO> categoryList = goodsCategoryService.selectList(goodsCategory);
         LOGGER.info("{}", categoryList);
         return (categoryList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("categoryList", (Page) categoryList, "total", ((Page) categoryList).getTotal()));
+                ResponseEntity.ok(categoryList);
     }
 
 
@@ -116,7 +164,7 @@ public class GoodsController {
     public ResponseEntity deleteGategory(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         goodsCategoryService.delete(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return ResponseEntity.ok(null);
     }
 
 

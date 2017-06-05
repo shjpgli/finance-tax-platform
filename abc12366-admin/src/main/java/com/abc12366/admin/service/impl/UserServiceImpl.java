@@ -399,7 +399,7 @@ public class UserServiceImpl implements UserService {
     public int updateUserPwd(UserPasswordBO userPasswordBO) {
 
         int update = 0;
-        UserBO user = userRoMapper.selectUserBOByLoginName(userPasswordBO.getUsername());
+        UserBO user = userRoMapper.selectUserBoById(userPasswordBO.getId());
         String newPassword;
         String oldPassword;
         try {

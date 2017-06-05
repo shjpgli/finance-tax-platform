@@ -8,6 +8,39 @@
 		 id,	name,	imageUrl,	introduction,	details,	categoryId,	status,	createTime,	lastUpdate,	giftPoints,	sort,	unit,	recommendType
 	</sql>
 
+    <resultMap id="goodsBoResultMap" type="com.abc12366.uc.model.bo.GoodsBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
+        <result column="details" property="details" jdbcType="VARCHAR"/>
+        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
+        <result column="categoryName" property="categoryName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="recommendType" property="recommendType" jdbcType="VARCHAR"/>
+        <result column="totalStock" property="totalStock" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO">
+            <id column="goodsId" property="goodsId" jdbcType="VARCHAR" />
+            <result column="dictId" property="dictId" jdbcType="VARCHAR"/>
+            <result column="stock" property="stock" jdbcType="INTEGER"/>
+            <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
+            <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+            <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
+            <result column="finalPrice" property="finalPrice" jdbcType="DOUBLE"/>
+            <result column="discount" property="discount" jdbcType="DOUBLE"/>
+            <result column="uvipLevel" property="uvipLevel" jdbcType="VARCHAR"/>
+            <result column="weight" property="weight" jdbcType="DOUBLE"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
 		 SELECT
@@ -15,6 +48,82 @@
 		 FROM uc_goods
 		 WHERE id = #{id}
 	</select>
+    <!-- 产品列表查询 -->
+    <!--<select id="selectList" resultType="com.abc12366.uc.model.Goods" parameterType="com.abc12366.uc.model.Goods">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_goods
+    </select>-->
+    <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
+        SELECT
+        g.id,
+        g.name,
+        g.imageUrl,
+        g.introduction,
+        g.details,
+        g.categoryId,
+        gc.category as categoryName,
+        g.status,
+        g.createTime,
+        g.lastUpdate,
+        g.giftPoints,
+        g.sort,
+        g.unit,
+        g.recommendType,
+        p.goodsId,
+        p.dictId,
+        sum(p.stock) as totalStock,
+        MIN(p.sellingPrice) as totalPrice
+        FROM uc_goods g
+        left JOIN uc_product p on g.id = p.goodsId
+        left JOIN uc_goods_category gc on gc.id = g.categoryId
+        <where>
+            1=1
+            <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="categoryId != null  and categoryId!=''"> AND g.categoryId = #{categoryId}</if>
+            <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
+        </where>
+    </select>
 
+    <!--     单个产品查询 -->
+    <!--<select id="selectGoods" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_goods
+        WHERE id = #{id}
+    </select>-->
+    <!--<select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
+        SELECT
+        g.id,
+        g.name,
+        g.imageUrl,
+        g.introduction,
+        g.details,
+        g.categoryId,
+        gc.category as categoryName,
+        g.status,
+        g.createTime,
+        g.lastUpdate,
+        g.giftPoints,
+        g.sort,
+        g.unit,
+        g.recommendType,
+        p.goodsId,
+         p.dictId,
+         p.stock,
+         p.marketPrice,
+         p.sellingPrice,
+         p.costPrice,
+         p.finalPrice,
+         p.discount,
+         p.uvipLevel,
+         p.weight,
+         p.createTime,
+         p.lastUpdate
+        FROM uc_goods g
+        left JOIN uc_product p on g.id = p.goodsId
+        left JOIN uc_goods_category gc on gc.id = g.categoryId
+        WHERE g.id = #{id}
+    </select>-->
 
 </mapper>

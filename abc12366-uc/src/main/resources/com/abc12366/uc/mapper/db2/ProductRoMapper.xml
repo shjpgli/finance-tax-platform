@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	name,	introduction,	amount,	points,	category,	vipLevel,	details,	total,	status,	createTime,	lastUpdate,	imageUrl
+		 goodsId,	dictId,	stock,	marketPrice,	sellingPrice,	costPrice,	finalPrice,	discount,	uvipLevel,	weight,	createTime,	lastUpdate
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

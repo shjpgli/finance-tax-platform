@@ -107,7 +107,7 @@ public class UserController {
     public ResponseEntity updateUserPwd(@Valid @RequestBody UserPasswordBO userPasswordBO) {
         int upd = userService.updateUserPwd(userPasswordBO);
         LOGGER.info("{}", upd);
-        return ResponseEntity.ok(upd);
+        return ResponseEntity.ok(null);
     }
 
     /**

@@ -14,11 +14,12 @@ public interface ProductMapper{
 
 	/**
 	 * 
-	 * 删除（根据主键ID删除）
+	 * 修改（根据主键ID修改）
 	 * 
 	 **/
-	int updateStatus(@Param("id") String id);
+	int updateStatus(@Param("goodsId") String goodsId);
 
+    int deleteByGoodsId(@Param("goodsId") String goodsId);
 	/**
 	 * 
 	 * 添加
@@ -33,6 +34,8 @@ public interface ProductMapper{
 	 * 
 	 **/
 	int update(Product record);
+
+
 
 
 }

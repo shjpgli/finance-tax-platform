@@ -1,7 +1,10 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.Goods;
+import com.abc12366.uc.model.bo.GoodsBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -19,4 +22,7 @@ public interface GoodsRoMapper {
 	 **/
 	Goods  selectByPrimaryKey(@Param("id") String id);
 
+    List<GoodsBO> selectList(Goods goods);
+
+    GoodsBO selectGoods(String id);
 }

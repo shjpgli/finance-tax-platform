@@ -11,11 +11,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @create 2017-05-15 10:17 AM
  * @since 1.0.0
  */
 @Service
@@ -33,18 +33,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductBO selectOne(String id) {
-        Product product = productRoMapper.selectById(id);
-        ProductBO productBO = new ProductBO();
-        BeanUtils.copyProperties(product, productBO);
-        return productBO;
+    public List<ProductBO> selectProductBOList(String id) {
+        List<Product> productList = productRoMapper.selectById(id);
+        ProductBO productBO = null;
+        List<ProductBO> bo = new ArrayList<ProductBO>();
+        for(Product p:productList){
+            productBO = new ProductBO();
+            BeanUtils.copyProperties(p, productBO);
+            bo.add(productBO);
+
+        }
+        return bo;
     }
 
     @Override
     public ProductBO add(ProductBO productBO) {
         Product product = new Product();
         BeanUtils.copyProperties(productBO, product);
-        product.setId(Utils.uuid());
+//        product.setId(Utils.uuid());
         Date date = new Date();
         product.setCreateTime(date);
         product.setLastUpdate(date);
