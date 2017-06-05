@@ -29,7 +29,7 @@ public class Goods implements Serializable {
 	private String categoryId;
 
 	/**是否上架：boolean**/
-	private String status;
+	private Boolean status;
 
 	/****/
 	private java.util.Date createTime;
@@ -99,11 +99,11 @@ public class Goods implements Serializable {
 		return this.categoryId;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(Boolean status){
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public Boolean getStatus(){
 		return this.status;
 	}
 

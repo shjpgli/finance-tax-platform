@@ -66,8 +66,8 @@ public class OrderController {
         order.setUser(user);
 
         Product product = new Product();
-        product.setName(name);
-        product.setCategory(category);
+//        product.setName(name);
+//        product.setCategory(category);
         order.setProduct(product);
 
         order.setOrderId(orderId);
@@ -105,7 +105,7 @@ public class OrderController {
         order.setUser(user);
 
         Product product = new Product();
-        product.setName(name);
+//        product.setName(name);
         order.setProduct(product);
         order.setStatus("1");
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);

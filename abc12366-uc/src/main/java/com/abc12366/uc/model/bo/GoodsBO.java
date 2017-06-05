@@ -1,5 +1,8 @@
 package com.abc12366.uc.model.bo;
+import com.abc12366.uc.model.Product;
+
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -16,13 +19,18 @@ public class GoodsBO implements Serializable {
 	private String introduction;
 	private String details;
 	private String categoryId;
-	private String status;
+    private String categoryName;
+	private Boolean status;
 	private java.util.Date createTime;
 	private java.util.Date lastUpdate;
 	private Integer giftPoints;
 	private Integer sort;
 	private String unit;
 	private String recommendType;
+    private List<ProductBO> productBOList;
+    private double totalStock;
+    private double totalPrice;
+
 
 
 
@@ -74,11 +82,11 @@ public class GoodsBO implements Serializable {
 		return this.categoryId;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(Boolean status){
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public Boolean getStatus(){
 		return this.status;
 	}
 
@@ -130,4 +138,35 @@ public class GoodsBO implements Serializable {
 		return this.recommendType;
 	}
 
+    public List<ProductBO> getProductBOList() {
+        return productBOList;
+    }
+
+    public void setProductBOList(List<ProductBO> productBOList) {
+        this.productBOList = productBOList;
+    }
+
+    public double getTotalStock() {
+        return totalStock;
+    }
+
+    public void setTotalStock(double totalStock) {
+        this.totalStock = totalStock;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

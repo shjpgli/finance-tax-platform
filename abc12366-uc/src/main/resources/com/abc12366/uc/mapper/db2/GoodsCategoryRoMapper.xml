@@ -3,80 +3,51 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.GoodsCategoryRoMapper">
 
-	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		 DELETE FROM uc_goods_category
-		 WHERE id = #{id}
-	</delete>
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,	category,	parentId,	sort,	createTime,	lastUpdate
+    </sql>
+    <resultMap id="categoryBoResultMap" type="com.abc12366.uc.model.bo.GoodsCategoryBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.GoodsCategory" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_goods_category
+        WHERE id = #{id}
+    </select>
 
-	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insert" parameterType="com.abc12366.uc.model.GoodsCategory">
-		 INSERT INTO uc_goods_category
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="id != null">
-				 id,
-			</if>
-			<if test="category != null">
-				 category,
-			</if>
-			<if test="parentId != null">
-				 parentId,
-			</if>
-			<if test="sort != null">
-				 sort,
-			</if>
-			<if test="createTime != null">
-				 createTime,
-			</if>
-			<if test="lastUpdate != null">
-				 lastUpdate,
-			</if>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectById" resultMap="categoryBoResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_goods_category
+        WHERE id = #{id}
+    </select>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="id!=null">
-				 #{id},
-			</if>
-			<if test="category!=null">
-				 #{category},
-			</if>
-			<if test="parentId!=null">
-				 #{parentId},
-			</if>
-			<if test="sort!=null">
-				 #{sort},
-			</if>
-			<if test="createTime!=null">
-				 #{createTime},
-			</if>
-			<if test="lastUpdate!=null">
-				 #{lastUpdate},
-			</if>
-		 </trim>
-	</insert>
+    <!-- 查询（根据父ID查询） -->
+    <select id="selectByParentId" resultMap="categoryBoResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_goods_category
+        WHERE parentId = #{parentId}
+    </select>
 
-	<!-- 修 改-->
-	<update id="update" parameterType="com.abc12366.uc.model.GoodsCategory">
-		 UPDATE uc_goods_category
- 		 <set> 
-			<if test="category != null">
-				 category = #{category},
-			</if>
-			<if test="parentId != null">
-				 parentId = #{parentId},
-			</if>
-			<if test="sort != null">
-				 sort = #{sort},
-			</if>
-			<if test="createTime != null">
-				 createTime = #{createTime},
-			</if>
-			<if test="lastUpdate != null">
-				 lastUpdate = #{lastUpdate},
-			</if>
-
- 		 </set>
-		 WHERE id = #{id}
-	</update>
+    <!-- 查询（根据条件查询） -->
+    <select id="selectList" resultMap="categoryBoResultMap" parameterType="com.abc12366.uc.model.GoodsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_goods_category
+        <where>
+            1=1
+            <if test="category != null  and category!=''"> AND category LIKE CONCAT('%',#{category},'%')</if>
+        </where>
+    </select>
 
 </mapper>

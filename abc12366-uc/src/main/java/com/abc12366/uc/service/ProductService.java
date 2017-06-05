@@ -13,7 +13,7 @@ public interface ProductService {
 
     List<Product> selectList(Product product);
 
-    ProductBO selectOne(String id);
+    List<ProductBO> selectProductBOList(String id);
 
     ProductBO add(ProductBO productBO);
 

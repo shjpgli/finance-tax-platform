@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="com.abc12366.uc.model.GoodsCategory">
+	<insert id="insert" parameterType="com.abc12366.uc.model.GoodsCategory">
 		 INSERT INTO uc_goods_category
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">

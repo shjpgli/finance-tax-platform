@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void isValidate(OrderBO orderBO) {
-        Product product = orderBO.getProduct();
+       /* Product product = orderBO.getProduct();
         if(product == null){
             throw new ServiceException(4134);
         }
@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
         }
         if(!isValue){
             throw new ServiceException(4133);
-        }
+        }*/
     }
 
     /**

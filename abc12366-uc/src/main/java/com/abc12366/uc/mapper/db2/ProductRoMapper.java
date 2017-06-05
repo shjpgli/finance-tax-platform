@@ -20,7 +20,7 @@ public interface ProductRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	Product selectById(@Param("id") String id);
+    List<Product> selectById(@Param("id") String id);
 
 
     List<Product> selectList(Product product);

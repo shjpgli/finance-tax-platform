@@ -4,41 +4,41 @@ import java.io.Serializable;
 
 /**
  *
- *
+ * 产品参数
  *
  **/
 @SuppressWarnings("serial")
 public class Product implements Serializable {
 
-    /****/
-    private String id;
+    /**产品ID**/
+    private String goodsId;
 
-    /**产品名称**/
-    private String name;
+    /**字典ID主键**/
+    private String dictId;
 
-    /**产品介绍**/
-    private String introduction;
+    /**库存**/
+    private Integer stock;
 
-    /**金额**/
-    private double amount;
+    /**市场价**/
+    private double marketPrice;
 
-    /**所需积分**/
-    private Integer points;
+    /**销售价**/
+    private double sellingPrice;
 
-    /**产品分类**/
-    private String category;
+    /**成本价**/
+    private double costPrice;
 
-    /**所需会员等级**/
-    private String vipLevel;
+    /**最终价格**/
+    private double finalPrice;
 
-    /**产品详情**/
-    private String details;
+    /**会员折扣**/
+    private double discount;
 
-    /**产品总量**/
-    private Integer total;
+    /**会员等级**/
+    private String uvipLevel;
 
-    /**产品状态**/
-    private String status;
+    /**重量：克**/
+    private double weight;
 
     /****/
     private java.util.Date createTime;
@@ -46,89 +46,86 @@ public class Product implements Serializable {
     /****/
     private java.util.Date lastUpdate;
 
-    /**展示图片URL**/
-    private String imageUrl;
 
 
-
-    public void setId(String id){
-        this.id = id;
+    public void setGoodsId(String goodsId){
+        this.goodsId = goodsId;
     }
 
-    public String getId(){
-        return this.id;
+    public String getGoodsId(){
+        return this.goodsId;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setDictId(String dictId){
+        this.dictId = dictId;
     }
 
-    public String getName(){
-        return this.name;
+    public String getDictId(){
+        return this.dictId;
     }
 
-    public void setIntroduction(String introduction){
-        this.introduction = introduction;
+    public void setStock(Integer stock){
+        this.stock = stock;
     }
 
-    public String getIntroduction(){
-        return this.introduction;
+    public Integer getStock(){
+        return this.stock;
     }
 
-    public void setAmount(double amount){
-        this.amount = amount;
+    public void setMarketPrice(double marketPrice){
+        this.marketPrice = marketPrice;
     }
 
-    public double getAmount(){
-        return this.amount;
+    public double getMarketPrice(){
+        return this.marketPrice;
     }
 
-    public void setPoints(Integer points){
-        this.points = points;
+    public void setSellingPrice(double sellingPrice){
+        this.sellingPrice = sellingPrice;
     }
 
-    public Integer getPoints(){
-        return this.points;
+    public double getSellingPrice(){
+        return this.sellingPrice;
     }
 
-    public void setCategory(String category){
-        this.category = category;
+    public void setCostPrice(double costPrice){
+        this.costPrice = costPrice;
     }
 
-    public String getCategory(){
-        return this.category;
+    public double getCostPrice(){
+        return this.costPrice;
     }
 
-    public void setVipLevel(String vipLevel){
-        this.vipLevel = vipLevel;
+    public void setFinalPrice(double finalPrice){
+        this.finalPrice = finalPrice;
     }
 
-    public String getVipLevel(){
-        return this.vipLevel;
+    public double getFinalPrice(){
+        return this.finalPrice;
     }
 
-    public void setDetails(String details){
-        this.details = details;
+    public void setDiscount(double discount){
+        this.discount = discount;
     }
 
-    public String getDetails(){
-        return this.details;
+    public double getDiscount(){
+        return this.discount;
     }
 
-    public void setTotal(Integer total){
-        this.total = total;
+    public void setUvipLevel(String uvipLevel){
+        this.uvipLevel = uvipLevel;
     }
 
-    public Integer getTotal(){
-        return this.total;
+    public String getUvipLevel(){
+        return this.uvipLevel;
     }
 
-    public void setStatus(String status){
-        this.status = status;
+    public void setWeight(double weight){
+        this.weight = weight;
     }
 
-    public String getStatus(){
-        return this.status;
+    public double getWeight(){
+        return this.weight;
     }
 
     public void setCreateTime(java.util.Date createTime){
@@ -145,14 +142,6 @@ public class Product implements Serializable {
 
     public java.util.Date getLastUpdate(){
         return this.lastUpdate;
-    }
-
-    public void setImageUrl(String imageUrl){
-        this.imageUrl = imageUrl;
-    }
-
-    public String getImageUrl(){
-        return this.imageUrl;
     }
 
 }

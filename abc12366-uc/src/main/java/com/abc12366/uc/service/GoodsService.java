@@ -2,15 +2,18 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.bo.GoodsBO;
+import com.abc12366.uc.model.bo.GoodsCheckBO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by MY on 2017-05-15.
  */
+@Service
 public interface GoodsService {
 
-    List<Goods> selectList(Goods goods);
+    List<GoodsBO> selectList(Goods goods);
 
     GoodsBO selectOne(String id);
 
@@ -23,5 +26,5 @@ public interface GoodsService {
 
     GoodsBO selectGoods(String id);
 
-    void updateStatus(String id);
+    void checkGoods(GoodsCheckBO goodsCheckBO);
 }
