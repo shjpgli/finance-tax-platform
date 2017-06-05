@@ -1,13 +1,9 @@
 package com.abc12366.cms.service;
 
 
-import com.abc12366.cms.model.Channel;
 import com.abc12366.cms.model.bo.ChannelBo;
-import com.abc12366.cms.model.bo.ChannelQueryBo;
 import com.abc12366.cms.model.bo.ChannelSaveBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
-import com.abc12366.cms.vo.ChannelVO;
-import com.abc12366.cms.vo.SiteVO;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +16,7 @@ public interface ChannelService {
 
     ChannelSaveBo save(ChannelSaveBo channelSaveBo);
 
-    ChannelQueryBo selectChannel(String channelId);
+    ChannelSaveBo selectChannel(String channelId);
 
     ChannelSaveBo update(ChannelSaveBo channelSaveBo);
 

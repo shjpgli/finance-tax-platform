@@ -48,15 +48,15 @@ public class ChannelController {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("modelId",modelId);
         dataMap.put("isChannel",1);
-        List<ModelItemBo> contents = channelService.selectModeList(dataMap);
-        LOGGER.info("{}", contents);
-        return ResponseEntity.ok(contents);
+        List<ModelItemBo> dataList = channelService.selectModeList(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
     @PostMapping
     public ResponseEntity save(@RequestBody ChannelSaveBo channelSaveBo) {
         LOGGER.info("{}", channelSaveBo);
-        //新增内容信息
+        //新增栏目信息
         channelSaveBo = channelService.save(channelSaveBo);
         LOGGER.info("{}", channelSaveBo);
         return ResponseEntity.ok(channelSaveBo);
@@ -65,10 +65,10 @@ public class ChannelController {
     @GetMapping(path = "/{channelId}")
     public ResponseEntity selectOne(@PathVariable String channelId) {
         LOGGER.info("{}", channelId);
-        //根据内容ID查询内容信息
-        ChannelQueryBo channelQueryBo = channelService.selectChannel(channelId);
-        LOGGER.info("{}", channelQueryBo);
-        return ResponseEntity.ok(channelQueryBo);
+        //根据栏目ID查询内容信息
+        ChannelSaveBo channelSaveBo = channelService.selectChannel(channelId);
+        LOGGER.info("{}", channelSaveBo);
+        return ResponseEntity.ok(channelSaveBo);
     }
 
     @PutMapping(path = "/{channelId}")
@@ -76,7 +76,7 @@ public class ChannelController {
                                  @Valid @RequestBody ChannelSaveBo channelSaveBo) {
 
         LOGGER.info("{}", channelSaveBo);
-        //更新内容信息
+        //更新栏目信息
         channelSaveBo = channelService.update(channelSaveBo);
         LOGGER.info("{}", channelSaveBo);
         return ResponseEntity.ok(channelSaveBo);
@@ -85,7 +85,7 @@ public class ChannelController {
     @DeleteMapping(path = "/{channelId}")
     public ResponseEntity delete(@PathVariable String channelId) {
         LOGGER.info("{}", channelId);
-        //删除内容信息
+        //删除栏目信息
         String rtn = channelService.delete(channelId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);

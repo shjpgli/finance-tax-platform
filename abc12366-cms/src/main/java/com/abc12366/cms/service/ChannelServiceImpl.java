@@ -3,7 +3,6 @@ package com.abc12366.cms.service;
 import com.abc12366.cms.mapper.db1.ChannelAttrMapper;
 import com.abc12366.cms.mapper.db1.ChannelExtMapper;
 import com.abc12366.cms.mapper.db1.ChannelMapper;
-import com.abc12366.cms.mapper.db1.ContentMapper;
 import com.abc12366.cms.mapper.db2.ChannelAttrRoMapper;
 import com.abc12366.cms.mapper.db2.ChannelExtRoMapper;
 import com.abc12366.cms.mapper.db2.ChannelRoMapper;
@@ -11,7 +10,6 @@ import com.abc12366.cms.mapper.db2.ModelItemRoMapper;
 import com.abc12366.cms.model.Channel;
 import com.abc12366.cms.model.ChannelAttr;
 import com.abc12366.cms.model.ChannelExt;
-import com.abc12366.cms.model.ModelItem;
 import com.abc12366.cms.model.bo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,8 +130,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public ChannelQueryBo selectChannel(String channelId) {
-        ChannelQueryBo channelQueryBo = new ChannelQueryBo();
+    public ChannelSaveBo selectChannel(String channelId) {
+        ChannelSaveBo channelQueryBo = new ChannelSaveBo();
         //查询栏目信息
         Channel channel = channelRoMapper.selectByPrimaryKey(channelId);
         ChannelBo channelBo = new ChannelBo();
