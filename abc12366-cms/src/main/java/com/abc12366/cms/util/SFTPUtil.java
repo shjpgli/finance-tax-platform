@@ -69,9 +69,17 @@ public class SFTPUtil {
     public Map<String, String> uploadByByte(String directory, List<Byte> content,String fileName, ChannelSftp sftp) {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            sftp.cd(directory);
+            sftp.cd("/images");
+            if (isDirExist(directory,sftp)) {
+                sftp.cd(directory);
+            } else {
+                // 建立目录
+                sftp.mkdir(directory);
+                // 进入并设置为当前目录
+                sftp.cd(directory);
+            }
             String storeName = rename(fileName);
-            String filePath = directory + storeName;
+            String filePath = "/images/" + directory +"/"+ storeName;
             OutputStream outputStream = sftp.put(filePath);
             byte[] buffer = null;
             List<Byte> content1 = (List<Byte>) content;
@@ -147,6 +155,23 @@ public class SFTPUtil {
      */
     public Vector listFiles(String directory, ChannelSftp sftp) throws SftpException {
         return sftp.ls(directory);
+    }
+
+    /**
+     * 判断目录是否存在
+     */
+    public boolean isDirExist(String directory, ChannelSftp sftp) {
+        boolean isDirExistFlag = false;
+        try {
+            SftpATTRS sftpATTRS = sftp.lstat(directory);
+            isDirExistFlag = true;
+            return sftpATTRS.isDir();
+        } catch (Exception e) {
+            if (e.getMessage().toLowerCase().equals("no such file")) {
+                isDirExistFlag = false;
+            }
+        }
+        return isDirExistFlag;
     }
 
     /**
