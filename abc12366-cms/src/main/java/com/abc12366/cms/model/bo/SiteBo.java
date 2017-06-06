@@ -3,6 +3,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -44,6 +45,9 @@ public class SiteBo implements Serializable {
 	/**站点Logo**varchar(255)**/
 	@Size(min = 0, max = 255)
 	private String siteLogo;
+
+	/**站点Logo图片**List**/
+	List<Byte> content;
 
 	/**版权说明**varchar(100)**/
 	@Size(min = 0, max = 100)
@@ -131,6 +135,14 @@ public class SiteBo implements Serializable {
 
 	public void setSiteLogo(String siteLogo) {
 		this.siteLogo = siteLogo;
+	}
+
+	public List<Byte> getContent() {
+		return content;
+	}
+
+	public void setContent(List<Byte> content) {
+		this.content = content;
 	}
 
 	public String getCopyrightExplain() {
