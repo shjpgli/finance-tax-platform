@@ -98,7 +98,8 @@ public class SmsLogServiceImpl implements SmsLogService {
     public int smsOpsUpdate(String sendid, QueryStatusResponseBO queryStatusResponseBO) {
         SmsOps smsOps = new SmsOps();
         List<QueryStatusBody> queryStatusBodyList = queryStatusResponseBO.getObj();
-        for (QueryStatusBody queryStatusBody : queryStatusBodyList) {
+        for (int i=0; i<queryStatusBodyList.size(); i++) {
+            QueryStatusBody queryStatusBody = queryStatusBodyList.get(i);
             smsOps.setStatus(queryStatusBody.getStatus());
             smsOps.setUpdatetime(queryStatusBody.getUpdatetime());
             smsOps.setLastUpdate(new Date());
