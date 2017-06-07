@@ -7,8 +7,10 @@ import com.abc12366.message.service.SmsLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -96,9 +98,22 @@ public class SmsLogServiceImpl implements SmsLogService {
 
     @Override
     public int smsOpsUpdate(String sendid, QueryStatusResponseBO queryStatusResponseBO) {
+        List<QueryStatusBody> obj = new ArrayList<>();
+        for (int i = 0; i < queryStatusResponseBO.getObj().size(); i++) {
+            QueryStatusBody queryStatusBody = new QueryStatusBody();
+            String updatetime = ((Map) queryStatusResponseBO.getObj().get(i)).get("updatetime").toString();
+            String status = ((Map) queryStatusResponseBO.getObj().get(i)).get("status").toString();
+            String mobile = ((Map) queryStatusResponseBO.getObj().get(i)).get("mobile").toString();
+            queryStatusBody.setUpdatetime(updatetime);
+            queryStatusBody.setStatus(status);
+            queryStatusBody.setMobile(mobile);
+            obj.add(queryStatusBody);
+        }
+        queryStatusResponseBO.setObj(obj);
+
         SmsOps smsOps = new SmsOps();
         List<QueryStatusBody> queryStatusBodyList = queryStatusResponseBO.getObj();
-        for (int i=0; i<queryStatusBodyList.size(); i++) {
+        for (int i = 0; i < queryStatusBodyList.size(); i++) {
             QueryStatusBody queryStatusBody = queryStatusBodyList.get(i);
             smsOps.setStatus(queryStatusBody.getStatus());
             smsOps.setUpdatetime(queryStatusBody.getUpdatetime());
