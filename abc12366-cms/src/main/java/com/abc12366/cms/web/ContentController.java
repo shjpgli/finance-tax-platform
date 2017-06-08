@@ -1,9 +1,8 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.ModelItem;
+import com.abc12366.cms.model.bo.ContentListBo;
 import com.abc12366.cms.model.bo.ContentQueryBo;
 import com.abc12366.cms.model.bo.ContentSaveBo;
-import com.abc12366.cms.model.bo.ContentListBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.common.util.Constant;
@@ -75,7 +74,7 @@ public class ContentController {
         dataMap.put("isChannel",0);
         List<ModelItemBo> contents = contentService.selectModeList(dataMap);
         LOGGER.info("{}", contents);
-        return ResponseEntity.ok(contents);
+        return ResponseEntity.ok(Utils.kv("dataList", contents));
     }
 
     @PostMapping

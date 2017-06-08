@@ -45,9 +45,6 @@ public class ContentListBo implements Serializable {
 	/**状态(0:草稿;1:审核中;2:审核通过;3:回收站;4:投稿;5:归档)**/
 	private Integer status;
 
-	/**需要重新生成静态页**/
-	private Integer need_regenerate;
-
 	/**推荐级别**/
 	private Integer recommendLevel;
 
@@ -140,11 +137,4 @@ public class ContentListBo implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getNeed_regenerate() {
-		return need_regenerate;
-	}
-
-	public void setNeed_regenerate(Integer need_regenerate) {
-		this.need_regenerate = need_regenerate;
-	}
 }
