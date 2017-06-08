@@ -2,8 +2,8 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.uc.model.Product;
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
 import com.github.pagehelper.Page;
@@ -39,9 +39,9 @@ public class OrderController {
      * 订单列表管理
      * @param pageNum
      * @param pageSize
-     * @param orderId
+     * @param orderNo
      * @param name
-     * @param category
+     * @param categoryId
      * @param username
      * @param phone
      * @param startTime
@@ -51,9 +51,9 @@ public class OrderController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value = "orderId", required = false) String orderId,
+                                     @RequestParam(value = "orderNo", required = false) String orderNo,
                                      @RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "category", required = false) String category,
+                                     @RequestParam(value = "categoryId", required = false) String categoryId,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "phone", required = false) String phone,
                                      @RequestParam(value = "startTime", defaultValue = "") String startTime,
@@ -65,12 +65,12 @@ public class OrderController {
         user.setPhone(phone);
         order.setUser(user);
 
-        Product product = new Product();
-//        product.setName(name);
-//        product.setCategory(category);
-        order.setProduct(product);
+        GoodsBO goodsBO = new GoodsBO();
+        goodsBO.setName(name);
+        goodsBO.setCategoryId(categoryId);
+        order.setGoodsBO(goodsBO);
 
-        order.setOrderId(orderId);
+        order.setOrderNo(orderNo);
         if(startTime == null || "".equals(startTime)){
             order.setStartTime(Constant.getToday(new Date()));
         }
@@ -104,10 +104,10 @@ public class OrderController {
         user.setId(userId);
         order.setUser(user);
 
-        Product product = new Product();
-//        product.setName(name);
-        order.setProduct(product);
-        order.setStatus("1");
+        GoodsBO goodsBO = new GoodsBO();
+        goodsBO.setName(name);
+        order.setGoodsBO(goodsBO);
+        order.setOrderStatus("1");
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<OrderBO> orderBOs = orderService.selectOrderList(order);
         LOGGER.info("{}", orderBOs);
@@ -134,23 +134,23 @@ public class OrderController {
      * @param userId
      * @return
      */
-    @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity submitOrder(@PathVariable("userId") String userId, @PathVariable("id") String id) {
-        OrderBO orderBO = new OrderBO();
-        orderBO.setId(id);
+    @PostMapping(path = "/submit/{userId}")
+    public ResponseEntity submitOrder(@Valid @RequestBody OrderBO orderBO,@PathVariable("userId") String userId) {
+        LOGGER.info("{}", orderBO);
         orderBO.setUserId(userId);
         OrderBO bo = orderService.submitOrder(orderBO);
         LOGGER.info("{}", bo);
         return new ResponseEntity<>(bo, HttpStatus.OK);
     }
 
-   /* *//**
+    /**
      * 修改订单
      * @param orderBO
      * @param userId
      * @param id
      * @return
-     *//*
+     */
+    /*
     @PutMapping(path = "/{userId}/{id}")
     public ResponseEntity update(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId, @PathVariable("id") String id) {
         LOGGER.info("{}", orderBO);
@@ -170,11 +170,10 @@ public class OrderController {
     @DeleteMapping(path = "/{userId}/{id}")
     public ResponseEntity update(@PathVariable("userId") String userId, @PathVariable("id") String id) {
         OrderBO orderBO = new OrderBO();
-        orderBO.setId(id);
+        orderBO.setOrderNo(id);
         orderBO.setUserId(userId);
-        int bo= orderService.deleteByIdAndUserId(orderBO);
-        LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        orderService.deleteCart(orderBO);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     /**
@@ -187,9 +186,9 @@ public class OrderController {
     @PutMapping(path = "/feedback/{userId}/{id}")
     public ResponseEntity feedback(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId, @PathVariable("id") String id) {
         LOGGER.info("{}", orderBO);
-        orderBO.setId(id);
+        orderBO.setOrderNo(id);
         orderBO.setUserId(userId);
-        OrderBO bo = orderService.updateCart(orderBO);
+        OrderBO bo = orderService.feedback(orderBO);
         LOGGER.info("{}", bo);
         return new ResponseEntity<>(bo, HttpStatus.OK);
     }

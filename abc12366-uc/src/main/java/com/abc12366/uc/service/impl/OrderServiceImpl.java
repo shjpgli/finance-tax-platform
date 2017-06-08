@@ -1,19 +1,22 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.OrderMapper;
+import com.abc12366.uc.mapper.db2.GoodsRoMapper;
 import com.abc12366.uc.mapper.db2.OrderRoMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.Product;
+import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
-import com.abc12366.uc.util.StringUtils;
-import org.apache.ibatis.annotations.Param;
+import com.abc12366.uc.util.DataUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +28,8 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
+
     @Autowired
     private OrderRoMapper orderRoMapper;
 
@@ -32,18 +37,18 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     @Autowired
+    private GoodsRoMapper goodsRoMapper;
+
+    @Autowired
     private ProductRoMapper productRoMapper;
 
+
+
     @Override
-    public List<OrderBO> selectList(OrderBO order) {
-        return orderRoMapper.selectList(order);
+    public List<OrderBO> selectList(OrderBO orderBO) {
+        return orderRoMapper.selectList(orderBO);
     }
 
-    /**
-     * 查询单个订单
-     * @param id
-     * @return
-     */
     @Override
     public OrderBO selectOne(String id) {
         Order order = orderRoMapper.selectById(id);
@@ -52,26 +57,23 @@ public class OrderServiceImpl implements OrderService {
         return orderBO;
     }
 
-    /**
-     * 加入购物车
-     * @param orderBO
-     * @return
-     */
+
+    @Transactional("db1TxManager")
     @Override
     public OrderBO joinCart(OrderBO orderBO) {
         //判断产品数量
         isValidate(orderBO);
         Order order = new Order();
         BeanUtils.copyProperties(orderBO, order);
-        order.setId(Utils.uuid());
-        order.setOrderId(StringUtils.getOrderIdString());
+        order.setOrderNo(DataUtils.getDateToString());
         Date date = new Date();
         order.setCreateTime(date);
         order.setLastUpdate(date);
-        order.setStatus("1");
+        order.setOrderStatus("0");
         int insert = orderMapper.insert(order);
         if (insert != 1) {
-            throw new ServiceException(4101);
+            LOGGER.info("{加入购物车失败}", orderBO);
+            throw new ServiceException(4138);
         } else {
             OrderBO temp = new OrderBO();
             BeanUtils.copyProperties(order, temp);
@@ -84,35 +86,24 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void isValidate(OrderBO orderBO) {
-       /* Product product = orderBO.getProduct();
-        if(product == null){
-            throw new ServiceException(4134);
-        }
-        Product pd = productRoMapper.selectById(product.getId());
-        if(pd == null){
+        GoodsBO goods = goodsRoMapper.selectGoods(orderBO.getGoodsId());
+        //goodsId、字典Id、会员等级，确定一条数据。
+        Product product = new Product();
+        product.setGoodsId(orderBO.getGoodsId());
+        product.setDictId(orderBO.getDictId());
+        product.setUvipLevel(orderBO.getUvipLevel());
+        Product pro = productRoMapper.selectProduct(product);
+        if(pro == null){
+            LOGGER.info("{产品不存在}", orderBO);
             throw new ServiceException(4135);
         }
-        if(pd.getTotal() < orderBO.getNum()){
+        if(pro.getStock() < orderBO.getNum()){
+            LOGGER.info("{产品数量不足}", orderBO);
             throw new ServiceException(4136);
         }
-        boolean isValue = false;
-        //判断积分和金额，必须有一个有值
-        if(orderBO.getAmount() != 0){
-            isValue = true;
-        }
-        if(orderBO.getPoints() != 0 && !"".equals(orderBO.getPoints())){
-            isValue = true;
-        }
-        if(!isValue){
-            throw new ServiceException(4133);
-        }*/
     }
 
-    /**
-     * 修改购物车
-     * @param orderBO
-     * @return
-     */
+    @Transactional("db1TxManager")
     @Override
     public OrderBO updateCart(OrderBO orderBO) {
         isValidate(orderBO);
@@ -123,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
         order.setLastUpdate(date);
         int update = orderMapper.update(order);
         if (update != 1) {
+            LOGGER.info("{修改购物车信息失败}", orderBO);
             throw new ServiceException(4102);
         } else {
             OrderBO temp = new OrderBO();
@@ -136,41 +128,38 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectOrderList(order);
     }
 
-    /**
-     * 根据订单ID和用户ID删除购物车
-     * @param orderBO
-     * @return
-     */
+    @Transactional("db1TxManager")
     @Override
-    public int deleteByIdAndUserId(OrderBO orderBO) {
+    public void deleteCart(OrderBO orderBO) {
         Order order = new Order();
         BeanUtils.copyProperties(orderBO,order);
         int del = orderMapper.deleteByIdAndUserId(order);
         if(del != 1){
+            LOGGER.info("{删除购物车信息失败}", orderBO);
             throw new ServiceException(4103);
         }
-        return del;
     }
 
-    /**
-     *提交订单
-     * @param orderBO
-     * @return
-     */
+    @Transactional("db1TxManager")
     @Override
     public OrderBO submitOrder(OrderBO orderBO) {
+        isValidate(orderBO);
         Order order = new Order();
-        BeanUtils.copyProperties(orderBO,order);
-        Order temp = orderRoMapper.selectOrder(order);
-        //判断支付方式
-        if(temp != null){
-            if(temp.getAmount() != 0){
-                //跳转支付界面
-            }else if(temp.getPoints() != 0){
-                //去查询用户计分表，减掉积分
-            }
+        BeanUtils.copyProperties(orderBO, order);
+        order.setOrderNo(DataUtils.getDateToString());
+        Date date = new Date();
+        order.setCreateTime(date);
+        order.setLastUpdate(date);
+        order.setOrderStatus("1");
+        int insert = orderMapper.insert(order);
+        if (insert != 1) {
+            LOGGER.info("{提交产品订单失败}", orderBO);
+            throw new ServiceException(4139);
+        } else {
+            OrderBO temp = new OrderBO();
+            BeanUtils.copyProperties(order, temp);
+            return temp;
         }
-        return null;
     }
 
     @Override
@@ -178,12 +167,50 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectCartList(order);
     }
 
-    public Order selectByPrimaryKey(@Param("id") String id) {
-        return orderRoMapper.selectByPrimaryKey(id);
+    @Override
+    public void submitCart(Order order) {
+        OrderBO temp = orderRoMapper.selectOrder(order);
+        //验证产品信息
+        isValidate(temp);
+        //将购物车状态修改为新订单状态
+        order.setOrderStatus("1");
+        orderMapper.update(order);
     }
 
-    public Order selectById(String id) {
-        return orderRoMapper.selectById(id);
+    @Transactional("db1TxManager")
+    @Override
+    public void deleteOrder(OrderBO orderBO) {
+        Order order = new Order();
+        BeanUtils.copyProperties(orderBO,order);
+        //查询订单状态
+        OrderBO bo = orderRoMapper.selectOrder(order);
+        if(bo == null){
+            LOGGER.info("{订单信息不存在}", orderBO);
+            throw new ServiceException(4134);
+        }
+        //订单状态是确认状态，不能删除
+        if("1".equals(bo.getOrderStatus())){
+            LOGGER.info("{订单状态是确认状态，不能删除}", orderBO);
+            throw new ServiceException(4140);
+        }
+        int del = orderMapper.deleteByIdAndUserId(order);
+        if(del != 1){
+            LOGGER.info("{删除订单信息信息失败}", orderBO);
+            throw new ServiceException(4103);
+        }
     }
 
+    @Override
+    public OrderBO feedback(OrderBO orderBO) {
+        Order order = new Order();
+        order.setUserId(orderBO.getUserId());
+        order.setOrderNo(orderBO.getOrderNo());
+        order.setFeedback(orderBO.getFeedback());
+        int upd = orderMapper.update(order);
+        if(upd != 1){
+            LOGGER.info("{反馈信息失败}", orderBO);
+            throw new ServiceException(4141);
+        }
+        return orderRoMapper.selectOrder(order);
+    }
 }

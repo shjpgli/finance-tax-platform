@@ -43,10 +43,23 @@
         <include refid="Base_Column_List" />
         FROM uc_product
         <where>
-            status='1'
+            1 = 1
             <if test="name != null and name!=''"> and name = #{name}</if>
             <if test="category != null and category!=''"> and category = #{category}</if>
-            <if test="vipLevel != null and vipLevel!=''"> AND vipLevel = #{vipLevel}</if>
+            <if test="uvipLevel != null and uvipLevel!=''"> AND uvipLevel = #{uvipLevel}</if>
+        </where>
+    </select>
+
+    <!-- 查询条件根据） -->
+    <select id="selectProduct" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_product
+        <where>
+            1=1
+            <if test="uvipLevel != null and uvipLevel!=''"> AND uvipLevel = #{uvipLevel}</if>
+            <if test="dictId != null and dictId!=''"> AND dictId = #{dictId}</if>
+            <if test="goodsId != null and goodsId!=''"> AND goodsId = #{goodsId}</if>
         </where>
     </select>
 

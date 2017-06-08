@@ -28,7 +28,8 @@ public interface OrderRoMapper {
 
     List<OrderBO> selectOrderList(OrderBO order);
 
-    Order selectOrder(Order order);
+    OrderBO selectOrder(Order order);
 
     List<OrderBO> selectCartList(OrderBO order);
+
 }

@@ -12,116 +12,185 @@
 	<!--删除：根据主键ID和UserID删除-->
 	<delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.Order">
 		 DELETE FROM uc_order
-		 WHERE id = #{id} and userId=#{userId} and status = '1'
+		 WHERE orderNo = #{orderNo} and userId=#{userId} and status = '1'
 	</delete>
 
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.uc.model.Order">
-		 INSERT INTO uc_order
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="id != null">
-				 id,
-			</if>
-			<if test="userId != null">
-				 userId,
-			</if>
-			<if test="orderId != null">
-				 orderId,
-			</if>
-			<if test="productId != null">
-				 productId,
-			</if>
-			<if test="amount != null">
-				 amount,
-			</if>
-			<if test="points != null">
-				 points,
-			</if>
-			<if test="num != null">
-				 num,
-			</if>
-			<if test="status != null">
-				 status,
-			</if>
-			<if test="createTime != null">
-				 createTime,
-			</if>
-			<if test="lastUpdate != null">
-				 lastUpdate,
-			</if>
-			<if test="feedback != null">
-				 feedback,
-			</if>
+        INSERT INTO uc_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="orderNo != null">
+                orderNo,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="goodsId != null">
+                goodsId,
+            </if>
+            <if test="dealPrice != null">
+                dealPrice,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="orderStatus != null">
+                orderStatus,
+            </if>
+            <if test="payStatus != null">
+                payStatus,
+            </if>
+            <if test="deliveryMethod != null">
+                deliveryMethod,
+            </if>
+            <if test="payMethod != null">
+                payMethod,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate,
+            </if>
+            <if test="feedback != null">
+                feedback,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="dictId != null">
+                dictId,
+            </if>
+            <if test="uvipLevel != null">
+                uvipLevel,
+            </if>
+            <if test="unit != null">
+                unit,
+            </if>
+            <if test="categoryId != null">
+                categoryId,
+            </if>
+            <if test="category != null">
+                category,
+            </if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="id!=null">
-				 #{id},
-			</if>
-			<if test="userId!=null">
-				 #{userId},
-			</if>
-			<if test="orderId!=null">
-				 #{orderId},
-			</if>
-			<if test="productId!=null">
-				 #{productId},
-			</if>
-			<if test="amount!=null">
-				 #{amount},
-			</if>
-			<if test="points!=null">
-				 #{points},
-			</if>
-			<if test="num!=null">
-				 #{num},
-			</if>
-			<if test="status!=null">
-				 #{status},
-			</if>
-			<if test="createTime!=null">
-				 #{createTime},
-			</if>
-			<if test="lastUpdate!=null">
-				 #{lastUpdate},
-			</if>
-			<if test="feedback!=null">
-				 #{feedback},
-			</if>
-		 </trim>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="orderNo!=null">
+                #{orderNo},
+            </if>
+            <if test="userId!=null">
+                #{userId},
+            </if>
+            <if test="goodsId!=null">
+                #{goodsId},
+            </if>
+            <if test="dealPrice!=null">
+                #{dealPrice},
+            </if>
+            <if test="num!=null">
+                #{num},
+            </if>
+            <if test="orderStatus!=null">
+                #{orderStatus},
+            </if>
+            <if test="payStatus!=null">
+                #{payStatus},
+            </if>
+            <if test="deliveryMethod!=null">
+                #{deliveryMethod},
+            </if>
+            <if test="payMethod!=null">
+                #{payMethod},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="lastUpdate!=null">
+                #{lastUpdate},
+            </if>
+            <if test="feedback!=null">
+                #{feedback},
+            </if>
+            <if test="name!=null">
+                #{name},
+            </if>
+            <if test="dictId!=null">
+                #{dictId},
+            </if>
+            <if test="uvipLevel!=null">
+                #{uvipLevel},
+            </if>
+            <if test="unit!=null">
+                #{unit},
+            </if>
+            <if test="categoryId!=null">
+                #{categoryId},
+            </if>
+            <if test="category!=null">
+                #{category},
+            </if>
+        </trim>
 	</insert>
 
 	<!-- 修 改-->
 	<update id="update" parameterType="com.abc12366.uc.model.Order">
-		 UPDATE uc_order
- 		 <set>
-			<if test="productId != null">
-				 productId = #{productId},
-			</if>
-			<if test="amount != null">
-				 amount = #{amount},
-			</if>
-			<if test="points != null">
-				 points = #{points},
-			</if>
-			<if test="num != null">
-				 num = #{num},
-			</if>
-			<if test="status != null">
-				 status = #{status},
-			</if>
-			<if test="createTime != null">
-				 createTime = #{createTime},
-			</if>
-			<if test="lastUpdate != null">
-				 lastUpdate = #{lastUpdate},
-			</if>
-			<if test="feedback != null">
-				 feedback = #{feedback},
-			</if>
+        UPDATE uc_order
+        <set>
+            <if test="userId != null">
+                userId = #{userId},
+            </if>
+            <if test="goodsId != null">
+                goodsId = #{goodsId},
+            </if>
+            <if test="dealPrice != null">
+                dealPrice = #{dealPrice},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="orderStatus != null">
+                orderStatus = #{orderStatus},
+            </if>
+            <if test="payStatus != null">
+                payStatus = #{payStatus},
+            </if>
+            <if test="deliveryMethod != null">
+                deliveryMethod = #{deliveryMethod},
+            </if>
+            <if test="payMethod != null">
+                payMethod = #{payMethod},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate = #{lastUpdate},
+            </if>
+            <if test="feedback != null">
+                feedback = #{feedback},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="dictId != null">
+                dictId = #{dictId},
+            </if>
+            <if test="uvipLevel != null">
+                uvipLevel = #{uvipLevel},
+            </if>
+            <if test="unit != null">
+                unit = #{unit},
+            </if>
+            <if test="categoryId != null">
+                categoryId = #{categoryId},
+            </if>
+            <if test="category != null">
+                category = #{category},
+            </if>
 
- 		 </set>
-		 WHERE id = #{id} and userId = #{userId}
+        </set>
+        WHERE orderNo = #{orderNo} and userId = #{userId}
 	</update>
 
 </mapper>

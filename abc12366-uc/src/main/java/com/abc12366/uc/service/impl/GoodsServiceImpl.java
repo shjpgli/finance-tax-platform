@@ -67,7 +67,7 @@ public class GoodsServiceImpl implements GoodsService {
         goods.setLastUpdate(date);
         int gInsert = goodsMapper.insert(goods);
         if(gInsert != 1){
-            LOGGER.info("{新增产品失败}", gInsert);
+            LOGGER.info("{新增产品失败}", goods);
             throw new ServiceException(4101);
         }
         GoodsBO bo = new GoodsBO();
@@ -86,7 +86,7 @@ public class GoodsServiceImpl implements GoodsService {
             product.setLastUpdate(date);
             pInsert = productMapper.insert(product);
             if(pInsert != 1){
-                LOGGER.info("{新增产品参数失败}", gInsert);
+                LOGGER.info("{新增产品参数失败}", product);
                 throw new ServiceException(4101);
             }
             productBO = new ProductBO();

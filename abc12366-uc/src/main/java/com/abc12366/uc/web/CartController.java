@@ -2,7 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
 import com.github.pagehelper.Page;
@@ -47,7 +47,7 @@ public class CartController {
                                      @PathVariable("userId") String userId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
-        order.setStatus("1");
+        order.setOrderStatus("0");
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<OrderBO> orderBOs = orderService.selectCartList(order);
         LOGGER.info("{}", orderBOs);
@@ -80,7 +80,7 @@ public class CartController {
     @PutMapping(path = "/{userId}/{id}")
     public ResponseEntity updateCart(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId, @PathVariable("id") String id) {
         LOGGER.info("{}", orderBO);
-        orderBO.setId(id);
+        orderBO.setOrderNo(id);
         orderBO.setUserId(userId);
         OrderBO bo = orderService.updateCart(orderBO);
         LOGGER.info("{}", bo);
@@ -88,18 +88,37 @@ public class CartController {
     }
 
     /**
-     * 取消订单
+     * 提交购物车订单
+     * @param userId
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/submit/{userId}/{id}")
+    public ResponseEntity submitCart(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+        LOGGER.info("{}", userId,id);
+        Order order = new Order();
+        order.setOrderNo(id);
+        order.setUserId(userId);
+        orderService.submitCart(order);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+
+    /**
+     * 删除购物车
      * @param userId
      * @param id
      * @return
      */
     @DeleteMapping(path = "/{userId}/{id}")
     public ResponseEntity deleteCart(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+        LOGGER.info("{}", userId,id);
         OrderBO orderBO = new OrderBO();
-        orderBO.setId(id);
+        orderBO.setOrderNo(id);
         orderBO.setUserId(userId);
-        int bo= orderService.deleteByIdAndUserId(orderBO);
-        LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        orderService.deleteCart(orderBO);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
+
+
 }

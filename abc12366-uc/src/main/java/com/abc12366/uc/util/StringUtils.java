@@ -20,7 +20,7 @@ public class StringUtils {
 
     public static String getOrderIdString(){
         StringBuffer buffer = new StringBuffer();
-        buffer.append("DDBH");
+        //buffer.append("DDBH");
         buffer.append(getDateString());
         buffer.append(getRandomNumber(3));
         return buffer.toString();

@@ -10,19 +10,72 @@ import java.util.List;
  */
 public interface OrderService {
 
-    List<OrderBO> selectList(OrderBO product);
+    /**
+     * 查询订单列表信息
+     * @param orderBO
+     * @return
+     */
+    List<OrderBO> selectList(OrderBO orderBO);
 
+    /**
+     * 查询订单信息
+     * @param id
+     * @return
+     */
     OrderBO selectOne(String id);
 
-    OrderBO joinCart(OrderBO productBO);
+    /**
+     * 加入购物车
+     * @param orderBO
+     * @return
+     */
+    OrderBO joinCart(OrderBO orderBO);
 
-    OrderBO updateCart(OrderBO productBO);
+    /**
+     * 修改购物车
+     * @param orderBO
+     * @return
+     */
+    OrderBO updateCart(OrderBO orderBO);
 
+    /**
+     * 查询列表
+     * @param order
+     * @return
+     */
     List<OrderBO> selectOrderList(OrderBO order);
 
-    int deleteByIdAndUserId(OrderBO orderBO);
+    /**
+     * 删除购物车
+     * @param orderBO
+     */
+    void deleteCart(OrderBO orderBO);
 
+    /**
+     * 用户直接提交订单
+     * @param orderBO
+     * @return
+     */
     OrderBO submitOrder(OrderBO orderBO);
 
+    /**
+     * 查询购物车列表
+     * @param order
+     * @return
+     */
     List<OrderBO> selectCartList(OrderBO order);
+
+    /**
+     * 购物车中提交订单
+     * @param order
+     */
+    void submitCart(Order order);
+
+    /**
+     * 删除订单
+     * @param orderBO
+     */
+    void deleteOrder(OrderBO orderBO);
+
+    OrderBO feedback(OrderBO orderBO);
 }

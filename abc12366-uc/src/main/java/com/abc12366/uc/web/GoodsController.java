@@ -55,6 +55,27 @@ public class GoodsController {
                 ResponseEntity.ok(Utils.kv("goodsList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
+
+    @GetMapping(path = "/user")
+    public ResponseEntity selectGoodsList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "categoryId", required = false) String categoryId,
+                                     @RequestParam(value = "recommendType", required = false) String recommendType) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        Goods goods = new Goods();
+        goods.setName(name);
+        goods.setCategoryId(categoryId);
+        goods.setRecommendType(recommendType);
+        //已发布状态
+        goods.setStatus(true);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<GoodsBO> goodsList = goodsService.selectList(goods);
+        LOGGER.info("{}", goodsList);
+        return (goodsList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("goodsList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
+    }
     /**
      * 新增商品
      * @param goodsBO
@@ -166,44 +187,4 @@ public class GoodsController {
         goodsCategoryService.delete(id);
         return ResponseEntity.ok(null);
     }
-
-
-/*
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<?> selectOne(@PathVariable String id) {
-        LOGGER.info("{}", id);
-        GoodsBO goodsBO = goodsService.selectOne(id);
-        LOGGER.info("{}", goodsBO);
-        return ResponseEntity.ok(goodsBO);
-    }
-
-    @PostMapping()
-    public ResponseEntity add(@Valid @RequestBody GoodsBO goodsBO) {
-        LOGGER.info("{}", goodsBO);
-        GoodsBO bo = goodsService.add(goodsBO);
-        LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
-    }
-
-    @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody GoodsBO goodsBO, @PathVariable String id) {
-        LOGGER.info("{}", goodsBO);
-        goodsBO.setId(id);
-        GoodsBO bo = goodsService.update(goodsBO);
-        LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
-    }
-
-    *//**
-     * 删除产品信息，逻辑删除
-     *
-     * @param id
-     * @return
-     *//*
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity updateStatus(@PathVariable String id) {
-        LOGGER.info("{}", id);
-        goodsService.updateStatus(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
-    }*/
 }

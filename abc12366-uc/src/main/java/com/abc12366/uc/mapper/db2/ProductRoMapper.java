@@ -28,4 +28,6 @@ public interface ProductRoMapper {
     List<Product> selectProductList(Product product);
 
     Product selectByIdAndStatus(String id);
+
+    Product selectProduct(Product product);
 }

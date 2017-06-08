@@ -3,134 +3,211 @@ import java.io.Serializable;
 
 
 /**
- * 
+ *
  * 用户订单
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class Order implements Serializable {
 
-	/****/
-	private String id;
+    /**订单编号**/
+    private String orderNo;
 
-	/**用户ID**/
-	private String userId;
+    /**用户ID**/
+    private String userId;
 
-	/**订单编号**/
-	private String orderId;
+    /**产品编号**/
+    private String goodsId;
 
-	/**产品ID**/
-	private String productId;
+    /**成交价格**/
+    private double dealPrice;
 
-	/**金额**/
-	private double amount;
+    /**产品数量**/
+    private Integer num;
 
-	/**消费积分**/
-	private Integer points;
+    /**订单状态：1.新订单 2.确认订单 3.取消订单 4.作废订单 5.完成订单 6.退款 7.部分退款**/
+    private String orderStatus;
 
-	/**产品数量**/
-	private Integer num;
+    /**支付状态：0.未支付 1.已支付**/
+    private String payStatus;
 
-	/**订单状态**/
-	private String status;
+    /**配送方式**/
+    private String deliveryMethod;
 
-	/****/
-	private java.util.Date createTime;
+    /**支付方式：WEIXIN、ALIPAY**/
+    private String payMethod;
 
-	/****/
-	private java.util.Date lastUpdate;
+    /****/
+    private java.util.Date createTime;
 
-	/**反馈信息**/
-	private String feedback;
+    /****/
+    private java.util.Date lastUpdate;
+
+    /**反馈信息**/
+    private String feedback;
+
+    /**产品名称**/
+    private String name;
+
+    /**字典ID主键**/
+    private String dictId;
+
+    /**会员等级**/
+    private String uvipLevel;
+
+    /**计件单位显示**/
+    private String unit;
+
+    /**产品分类ID**/
+    private String categoryId;
+
+    /**产品分类名称**/
+    private String category;
 
 
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setOrderNo(String orderNo){
+        this.orderNo = orderNo;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public String getOrderNo(){
+        return this.orderNo;
+    }
 
-	public void setUserId(String userId){
-		this.userId = userId;
-	}
+    public void setUserId(String userId){
+        this.userId = userId;
+    }
 
-	public String getUserId(){
-		return this.userId;
-	}
+    public String getUserId(){
+        return this.userId;
+    }
 
-	public void setOrderId(String orderId){
-		this.orderId = orderId;
-	}
+    public void setGoodsId(String goodsId){
+        this.goodsId = goodsId;
+    }
 
-	public String getOrderId(){
-		return this.orderId;
-	}
+    public String getGoodsId(){
+        return this.goodsId;
+    }
 
-	public void setProductId(String productId){
-		this.productId = productId;
-	}
+    public void setDealPrice(double dealPrice){
+        this.dealPrice = dealPrice;
+    }
 
-	public String getProductId(){
-		return this.productId;
-	}
+    public double getDealPrice(){
+        return this.dealPrice;
+    }
 
-	public void setAmount(double amount){
-		this.amount = amount;
-	}
+    public void setNum(Integer num){
+        this.num = num;
+    }
 
-	public double getAmount(){
-		return this.amount;
-	}
+    public Integer getNum(){
+        return this.num;
+    }
 
-	public void setPoints(Integer points){
-		this.points = points;
-	}
+    public void setOrderStatus(String orderStatus){
+        this.orderStatus = orderStatus;
+    }
 
-	public Integer getPoints(){
-		return this.points;
-	}
+    public String getOrderStatus(){
+        return this.orderStatus;
+    }
 
-	public void setNum(Integer num){
-		this.num = num;
-	}
+    public void setPayStatus(String payStatus){
+        this.payStatus = payStatus;
+    }
 
-	public Integer getNum(){
-		return this.num;
-	}
+    public String getPayStatus(){
+        return this.payStatus;
+    }
 
-	public void setStatus(String status){
-		this.status = status;
-	}
+    public void setDeliveryMethod(String deliveryMethod){
+        this.deliveryMethod = deliveryMethod;
+    }
 
-	public String getStatus(){
-		return this.status;
-	}
+    public String getDeliveryMethod(){
+        return this.deliveryMethod;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public void setPayMethod(String payMethod){
+        this.payMethod = payMethod;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
+    public String getPayMethod(){
+        return this.payMethod;
+    }
 
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
+    public void setCreateTime(java.util.Date createTime){
+        this.createTime = createTime;
+    }
 
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
+    public java.util.Date getCreateTime(){
+        return this.createTime;
+    }
 
-	public void setFeedback(String feedback){
-		this.feedback = feedback;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate){
+        this.lastUpdate = lastUpdate;
+    }
 
-	public String getFeedback(){
-		return this.feedback;
-	}
+    public java.util.Date getLastUpdate(){
+        return this.lastUpdate;
+    }
+
+    public void setFeedback(String feedback){
+        this.feedback = feedback;
+    }
+
+    public String getFeedback(){
+        return this.feedback;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void setDictId(String dictId){
+        this.dictId = dictId;
+    }
+
+    public String getDictId(){
+        return this.dictId;
+    }
+
+    public void setUvipLevel(String uvipLevel){
+        this.uvipLevel = uvipLevel;
+    }
+
+    public String getUvipLevel(){
+        return this.uvipLevel;
+    }
+
+    public void setUnit(String unit){
+        this.unit = unit;
+    }
+
+    public String getUnit(){
+        return this.unit;
+    }
+
+    public void setCategoryId(String categoryId){
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryId(){
+        return this.categoryId;
+    }
+
+    public void setCategory(String category){
+        this.category = category;
+    }
+
+    public String getCategory(){
+        return this.category;
+    }
 
 }

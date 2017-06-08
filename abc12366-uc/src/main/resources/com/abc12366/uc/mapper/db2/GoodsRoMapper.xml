@@ -70,18 +70,20 @@
         g.sort,
         g.unit,
         g.recommendType,
-        p.goodsId,
-        p.dictId,
-        sum(p.stock) as totalStock,
-        MIN(p.sellingPrice) as totalPrice
+        up.goodsId,
+        up.totalStock,
+        up.totalPrice
         FROM uc_goods g
-        left JOIN uc_product p on g.id = p.goodsId
         left JOIN uc_goods_category gc on gc.id = g.categoryId
+        left join (
+        select p.goodsId as goodsId,min(sellingPrice) as totalPrice,sum(p.stock) as totalStock from uc_product p group by p.goodsId
+        ) up on g.id = up.goodsId
         <where>
             1=1
             <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
             <if test="categoryId != null  and categoryId!=''"> AND g.categoryId = #{categoryId}</if>
             <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
+            <if test="status != null  and status!=''"> AND g.status = #{status}</if>
         </where>
     </select>
 
@@ -92,7 +94,7 @@
         FROM uc_goods
         WHERE id = #{id}
     </select>-->
-    <!--<select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
+    <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
         SELECT
         g.id,
         g.name,
@@ -124,6 +126,6 @@
         left JOIN uc_product p on g.id = p.goodsId
         left JOIN uc_goods_category gc on gc.id = g.categoryId
         WHERE g.id = #{id}
-    </select>-->
+    </select>
 
 </mapper>
