@@ -69,6 +69,8 @@ public class ModelItemServiceImpl implements ModelItemService {
         List<ModelItemBo> list = modelItemListBo.getModelItemBoList();
         for(ModelItemBo modelItemBo:list){
             ModelItem modelItem = new ModelItem();
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            modelItemBo.setModelitemId(uuid);
             try {
                 BeanUtils.copyProperties(modelItemBo, modelItem);
             } catch (Exception e) {
