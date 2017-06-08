@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.InvoiceRoMapper">
 
     <resultMap id="invoiceBOResultMap" type="com.abc12366.uc.model.bo.OrderBO">
@@ -28,18 +28,18 @@
         </association>
     </resultMap>
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	userId,	invoiceId,	name,	content,	amount,	type,	property,	status,	createTime,	lastUpdate,	nsrsbh,	nsrmc,	address,	phone,	bank,	addressId,	orderNum,	compName
-	</sql>
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,	userId,	invoiceId,	name,	content,	amount,	type,	property,	status,	createTime,	lastUpdate,	nsrsbh,	nsrmc,	address,	phone,	bank,	addressId,	orderNum,	compName
+    </sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectById" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_invoice
-		 WHERE id = #{id}
-	</select>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectById" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice
+        WHERE id = #{id}
+    </select>
 
 
     <!-- 后台查询（根据条件查询） -->
