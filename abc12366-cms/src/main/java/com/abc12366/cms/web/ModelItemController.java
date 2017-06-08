@@ -1,10 +1,8 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 import com.abc12366.cms.service.ModelItemService;
-import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.github.pagehelper.Page;
@@ -78,6 +76,16 @@ public class ModelItemController {
         modelItemBo = modelItemService.update(modelItemBo);
         LOGGER.info("{}", modelItemBo);
         return ResponseEntity.ok(modelItemBo);
+    }
+
+    @PostMapping(path = "/saveList")
+    public ResponseEntity saveList(@Valid @RequestBody ModelItemListBo modelItemListBo) {
+
+        LOGGER.info("{}", modelItemListBo);
+        //更新评论信息
+        modelItemListBo = modelItemService.saveList(modelItemListBo);
+        LOGGER.info("{}", modelItemListBo);
+        return ResponseEntity.ok(modelItemListBo);
     }
 
     @PutMapping(path = "/updateList")

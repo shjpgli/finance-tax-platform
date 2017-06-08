@@ -1,6 +1,5 @@
 package com.abc12366.cms.service;
 
-import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 
@@ -11,6 +10,8 @@ public interface ModelItemService {
     List<ModelItemBo> selectList(Map<String,Object> map);
 
     ModelItemListBo updateList(ModelItemListBo modelItemListBo);
+
+    ModelItemListBo saveList(ModelItemListBo modelItemListBo);
 
     ModelItemBo save(ModelItemBo modelItemBo);
 
