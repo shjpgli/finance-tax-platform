@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class QueryStatusResponseBO {
     private String code;
-    private List<QueryStatusBody> obj;
+    private List obj;
 
     public QueryStatusResponseBO() {
     }

@@ -8,32 +8,32 @@ import java.util.Date;
  * Time: 17:42
  */
 public class QueryStatusBody {
-    private Date updatetime;
-    private boolean status;
+    private String updatetime;
+    private String status;
     private String mobile;
 
     public QueryStatusBody() {
     }
 
-    public QueryStatusBody(Date updatetime, boolean status, String mobile) {
+    public QueryStatusBody(String updatetime, String status, String mobile) {
         this.updatetime = updatetime;
         this.status = status;
         this.mobile = mobile;
     }
 
-    public Date getUpdatetime() {
+    public String getUpdatetime() {
         return updatetime;
     }
 
-    public void setUpdatetime(Date updatetime) {
+    public void setUpdatetime(String updatetime) {
         this.updatetime = updatetime;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

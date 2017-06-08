@@ -25,13 +25,13 @@ public class Friendlink implements Serializable {
 	/**网站地址**varchar(255)**/
 	private String domain;
 
-	/**图标**varchar(150)**/
+	/**友情链接logo**varchar(150)**/
 	private String logo;
 
 	/**站长邮箱**varchar(100)**/
 	private String email;
 
-	/**描述**varchar(255)**/
+	/**网站简介**varchar(255)**/
 	private String description;
 
 	/**点击次数**int(11)**/
