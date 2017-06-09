@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.ChannelExt">
 		 INSERT INTO cms_channel_ext
- 		(channelId,channelName,isStaticChannel,isStaticContent,pageSize,link,tplChannel,tplContent,titleImg,contentImg,hasTitleImg,hasContentImg,titleImgWidth,titleImgHeight,contentImgWidth,contentImgHeight,commentControl,allowUpdown,isBlank,allowShare) 
+ 		(channelId,channelName,isStaticChannel,isStaticContent,pageSize,link,tplChannel,tplContent,titleImg,contentImg,hasTitleImg,hasContentImg,titleImgWidth,titleImgHeight,contentImgWidth,contentImgHeight,commentControl,allowUpdown,isBlank,title,keywords,description,allowShare)
 		 VALUES 
- 		(#{channelId},#{channelName},#{isStaticChannel},#{isStaticContent},#{pageSize},#{link},#{tplChannel},#{tplContent},#{titleImg},#{contentImg},#{hasTitleImg},#{hasContentImg},#{titleImgWidth},#{titleImgHeight},#{contentImgWidth},#{contentImgHeight},#{commentControl},#{allowUpdown},#{isBlank},#{allowShare}) 
+ 		(#{channelId},#{channelName},#{isStaticChannel},#{isStaticContent},#{pageSize},#{link},#{tplChannel},#{tplContent},#{titleImg},#{contentImg},#{hasTitleImg},#{hasContentImg},#{titleImgWidth},#{titleImgHeight},#{contentImgWidth},#{contentImgHeight},#{commentControl},#{allowUpdown},#{isBlank},#{title},#{keywords},#{description},#{allowShare})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -78,6 +78,15 @@
 			<if test="isBlank != null">
 				 isBlank,
 			</if>
+			 <if test="title != null">
+				 title,
+			 </if>
+			 <if test="keywords != null">
+				 keywords,
+			 </if>
+			 <if test="description != null">
+				 description,
+			 </if>
 			<if test="allowShare != null">
 				 allowShare,
 			</if>
@@ -141,6 +150,15 @@
 			<if test="isBlank!=null">
 				 #{isBlank},
 			</if>
+			 <if test="title!=null">
+				 #{title},
+			 </if>
+			 <if test="keywords!=null">
+				 #{keywords},
+			 </if>
+			 <if test="description!=null">
+				 #{description},
+			 </if>
 			<if test="allowShare!=null">
 				 #{allowShare},
 			</if>
@@ -205,6 +223,15 @@
 			<if test="isBlank != null">
 				 isBlank = #{isBlank},
 			</if>
+			 <if test="title != null">
+				 title = #{title},
+			 </if>
+			 <if test="keywords != null">
+				 keywords = #{keywords},
+			 </if>
+			 <if test="description != null">
+				 description = #{description},
+			 </if>
 			<if test="allowShare != null">
 				 allowShare = #{allowShare},
 			</if>
@@ -235,6 +262,9 @@
 			 commentControl = #{commentControl},
 			 allowUpdown = #{allowUpdown},
 			 isBlank = #{isBlank},
+			 title = #{title},
+			 keywords = #{keywords},
+			 description = #{description},
 			 allowShare = #{allowShare}
 		 WHERE channelId = #{channelId}
 	</update>

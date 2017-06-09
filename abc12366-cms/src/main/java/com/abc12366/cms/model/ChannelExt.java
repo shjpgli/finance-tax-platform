@@ -70,6 +70,15 @@ public class ChannelExt implements Serializable {
 	/**分享(true:开放;false:关闭)**tinyint(1)**/
 	private Integer allowShare;
 
+	/**title**varchar(255)**/
+	private String title;
+
+	/**keywords**varchar(255)**/
+	private String keywords;
+
+	/**description**varchar(255)**/
+	private String description;
+
 
 
 	public void setChannelId(String channelId){
@@ -232,4 +241,27 @@ public class ChannelExt implements Serializable {
 		return this.allowShare;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

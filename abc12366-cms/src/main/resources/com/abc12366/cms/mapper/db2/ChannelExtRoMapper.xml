@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		channelId,	channelName,	isStaticChannel,	isStaticContent,	pageSize,	link,	tplChannel,	tplContent,	titleImg,	contentImg,	hasTitleImg,	hasContentImg,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	commentControl,	allowUpdown,	isBlank,	allowShare
+		channelId,	channelName,	isStaticChannel,	isStaticContent,	pageSize,	link,	tplChannel,	tplContent,	titleImg,	contentImg,	hasTitleImg,	hasContentImg,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	commentControl,	allowUpdown,	isBlank, title,keywords,description,	allowShare
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
