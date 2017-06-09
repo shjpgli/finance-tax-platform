@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		commentId,	commentUserId,	replyUserId,	contentId,	siteId,	createTime,	replyTime,	ups,	downs,	isRecommend,	isChecked,	score,	parentId,	replyCount
+		commentId,	commentUserId,	replyUserId,	contentId,title,siteId,	createTime,	replyTime,	ups,	downs,	isRecommend,	isChecked,	score,	parentId,	replyCount
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -21,7 +21,7 @@
 		SELECT a.commentId commentId,
 		b.text TEXT,
 		b.reply reply,
-		c.title title,
+		a.title title,
 		b.ip ip,
 		a.createTime createTime,
 		a.commentUserId commentUserId
