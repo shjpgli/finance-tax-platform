@@ -82,6 +82,9 @@ public class Site implements Serializable {
 	/**站点Logo**varchar(255)**/
 	private String siteLogo;
 
+	/**站点Logo图片地址**List**/
+	private String siteLogoPath;
+
 	/**版权说明**varchar(100)**/
 	private String copyrightExplain;
 
@@ -292,6 +295,14 @@ public class Site implements Serializable {
 
 	public String getSiteLogo(){
 		return this.siteLogo;
+	}
+
+	public String getSiteLogoPath() {
+		return siteLogoPath;
+	}
+
+	public void setSiteLogoPath(String siteLogoPath) {
+		this.siteLogoPath = siteLogoPath;
 	}
 
 	public void setCopyrightExplain(String copyrightExplain){

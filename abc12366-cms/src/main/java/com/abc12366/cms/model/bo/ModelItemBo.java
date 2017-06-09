@@ -1,7 +1,4 @@
 package com.abc12366.cms.model.bo;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -13,51 +10,43 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ModelItemBo implements Serializable {
 
-	/**模型项Id**varchar(64)**/
+	/**modelitemId**varchar(64)**/
 	private String modelitemId;
 
-	/**模型Id**varchar(64)**/
+	/**modelId**varchar(64)**/
 	private String modelId;
 
 	/**字段**varchar(50)**/
-	@NotEmpty(message = "field不能为空！")
-	@Size(min = 0, max = 50)
 	private String field;
 
 	/**名称**varchar(100)**/
-	@NotEmpty(message = "itemLabel不能为空！")
-	@Size(min = 0, max = 100)
 	private String itemLabel;
 
 	/**排列顺序**int(11)**/
 	private Integer priority;
 
+	/**默认值**varchar(255)**/
+	private String defValue;
+
 	/**可选项**varchar(255)**/
-	@Size(min = 0, max = 255)
 	private String optValue;
 
 	/**长度**varchar(20)**/
-	@Size(min = 0, max = 20)
 	private String textSize;
 
 	/**文本行数**varchar(3)**/
-	@Size(min = 0, max = 3)
 	private String areaRows;
 
 	/**文本列数**varchar(3)**/
-	@Size(min = 0, max = 3)
 	private String areaCols;
 
 	/**帮助信息**varchar(255)**/
-	@Size(min = 0, max = 255)
 	private String help;
 
 	/**帮助位置**varchar(1)**/
-	@Size(min = 0, max = 1)
 	private String helpPosition;
 
 	/**数据类型**int(11)**/
-	@NotEmpty(message = "dataType不能为空！")
 	private String dataType;
 
 	/**是否独占一行**tinyint(1)**/
@@ -74,6 +63,12 @@ public class ModelItemBo implements Serializable {
 
 	/**是否必填项**tinyint(1)**/
 	private Integer isRequired;
+
+	/**图片宽度**int(11)**/
+	private Integer imageWidth;
+
+	/**图片宽度**int(11)**/
+	private Integer imageHeight;
 
 	public String getModelitemId() {
 		return modelitemId;
@@ -113,6 +108,14 @@ public class ModelItemBo implements Serializable {
 
 	public void setPriority(Integer priority) {
 		this.priority = priority;
+	}
+
+	public String getDefValue() {
+		return defValue;
+	}
+
+	public void setDefValue(String defValue) {
+		this.defValue = defValue;
 	}
 
 	public String getOptValue() {
@@ -209,5 +212,21 @@ public class ModelItemBo implements Serializable {
 
 	public void setIsRequired(Integer isRequired) {
 		this.isRequired = isRequired;
+	}
+
+	public Integer getImageWidth() {
+		return imageWidth;
+	}
+
+	public void setImageWidth(Integer imageWidth) {
+		this.imageWidth = imageWidth;
+	}
+
+	public Integer getImageHeight() {
+		return imageHeight;
+	}
+
+	public void setImageHeight(Integer imageHeight) {
+		this.imageHeight = imageHeight;
 	}
 }

@@ -1,6 +1,5 @@
 package com.abc12366.cms.model.bo;
 import java.io.Serializable;
-import java.util.List;
 
 
 /**
@@ -29,8 +28,8 @@ public class FriendlinkBo implements Serializable {
 	/**友情链接logo文件名**varchar(150)**/
 	private String logo;
 
-	/**友情链接logo图片**站点Logo**/
-	List<Byte> content;
+	/**友情链接logo图片地址**varchar(250)**/
+	private String logoPath;
 
 	/**站长邮箱**varchar(100)**/
 	private String email;
@@ -97,12 +96,12 @@ public class FriendlinkBo implements Serializable {
 		return this.logo;
 	}
 
-	public List<Byte> getContent() {
-		return content;
+	public String getLogoPath() {
+		return logoPath;
 	}
 
-	public void setContent(List<Byte> content) {
-		this.content = content;
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
 	}
 
 	public void setEmail(String email){

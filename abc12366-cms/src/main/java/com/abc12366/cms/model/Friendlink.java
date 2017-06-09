@@ -28,6 +28,9 @@ public class Friendlink implements Serializable {
 	/**友情链接logo**varchar(150)**/
 	private String logo;
 
+	/**友情链接logo图片地址**varchar(150)**/
+	private String logoPath;
+
 	/**站长邮箱**varchar(100)**/
 	private String email;
 
@@ -91,6 +94,14 @@ public class Friendlink implements Serializable {
 
 	public String getLogo(){
 		return this.logo;
+	}
+
+	public String getLogoPath() {
+		return logoPath;
+	}
+
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
 	}
 
 	public void setEmail(String email){
