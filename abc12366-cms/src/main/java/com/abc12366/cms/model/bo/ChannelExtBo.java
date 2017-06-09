@@ -28,13 +28,13 @@ public class ChannelExtBo implements Serializable {
 	/**评论(0:匿名;1:会员一次;2:关闭,3会员多次)**int(11)**/
 	private Integer commentControl;
 
-	/**title**varchar(255)**/
+	/**meta标题**varchar(255)**/
 	private String title;
 
-	/**keywords**varchar(255)**/
+	/**meta关键字**varchar(255)**/
 	private String keywords;
 
-	/**description**varchar(255)**/
+	/**meta描述**varchar(255)**/
 	private String description;
 
 	public String getChannelId() {
