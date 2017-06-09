@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cms.mapper.db2.VoteRoMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		id, name, startTime, endTime, isLogin, status, createTime, lastUpdate
+	</sql>
+
+	<select id="selectList" resultType="com.abc12366.cms.model.Vote" parameterType="com.abc12366.cms.model.Vote">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM cms_vote
+		 <where>
+			 <if test="name != null">name like CONCAT('%',#{name},'%')</if>
+		 </where>
+	</select>
+
+    <select id="selectOne" resultType="com.abc12366.cms.model.Vote" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_vote
+        WHERE id = #{id}
+    </select>
+
+	<select id="selectResultCount" parameterType="com.abc12366.cms.model.VoteResult" resultType="java.lang.Integer">
+        SELECT count(DISTINCT ip) FROM cms_vote_result
+        <where>
+            <if test="voteId != null">voteId = #{voteId}</if>
+            <if test="subjectId != null">and subjectId = #{subjectId}</if>
+            <if test="itemId != null">and itemId = #{itemId}</if>
+        </where>
+    </select>
+</mapper>
