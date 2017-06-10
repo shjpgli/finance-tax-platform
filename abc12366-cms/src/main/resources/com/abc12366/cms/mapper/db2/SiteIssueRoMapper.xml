@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.cms.mapper.db2.SiteIssueMapper">
+<mapper namespace="com.abc12366.cms.mapper.db2.SiteIssueRoMapper">
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
@@ -17,7 +17,7 @@
 	</select>
 
 	<!-- 查询 -->
-	<select id="selectList" resultType="com.abc12366.cms.model.SiteIssueBo" parameterType="java.lang.Integer">
+	<select id="selectList" resultType="com.abc12366.cms.model.bo.SiteIssueBo" parameterType="java.lang.Integer">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_site_issue
