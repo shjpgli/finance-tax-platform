@@ -123,8 +123,8 @@ public class CommentServiceImpl implements CommentService {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        commentMapper.updateByPrimaryKey(comment);
-        commentExtMapper.updateByPrimaryKey(commentExt);
+        commentMapper.updateByPrimaryKeySelective(comment);
+        commentExtMapper.updateByPrimaryKeySelective(commentExt);
         LOGGER.info("{}", commentSaveBo);
         return commentSaveBo;
     }

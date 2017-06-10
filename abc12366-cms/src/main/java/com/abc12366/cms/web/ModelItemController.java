@@ -99,10 +99,19 @@ public class ModelItemController {
     }
 
     @DeleteMapping(path = "/{modelItemId}")
-    public ResponseEntity delete(@PathVariable String modelItemId) {
+     public ResponseEntity delete(@PathVariable String modelItemId) {
         LOGGER.info("{}", modelItemId);
         //删除评论信息
         String rtn = modelItemService.delete(modelItemId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(rtn);
+    }
+
+    @DeleteMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestParam(value = "modelItemIds", required = true) String[] modelItemIds) {
+        LOGGER.info("{}", modelItemIds);
+        //删除评论信息
+        String rtn = modelItemService.deleteList(modelItemIds);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);
     }

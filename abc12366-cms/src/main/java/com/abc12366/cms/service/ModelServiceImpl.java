@@ -1,16 +1,17 @@
 package com.abc12366.cms.service;
 
+import com.abc12366.cms.mapper.db1.ModelItemMapper;
 import com.abc12366.cms.mapper.db1.ModelMapper;
 import com.abc12366.cms.mapper.db2.ModelRoMapper;
 import com.abc12366.cms.model.Model;
 import com.abc12366.cms.model.bo.ModelBo;
+import com.abc12366.cms.model.bo.ModelListBo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +24,9 @@ public class ModelServiceImpl implements ModelService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ModelItemMapper modelItemMapper;
 
     @Autowired
     private ModelRoMapper modelRoMapper;
@@ -85,13 +89,39 @@ public class ModelServiceImpl implements ModelService {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        modelMapper.updateByPrimaryKey(model);
+        modelMapper.updateByPrimaryKeySelective(model);
         return modelBo;
     }
 
     @Override
+    public ModelListBo updateList(ModelListBo modelListBo) {
+        //保存模型项列表
+        List<ModelBo> list = modelListBo.getModelBoList();
+        for(ModelBo modelBo:list){
+            Model model = new Model();
+            try {
+                BeanUtils.copyProperties(modelBo, model);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+            modelMapper.updateByPrimaryKeySelective(model);
+        }
+        return modelListBo;
+    }
+
+    @Override
     public String delete(String modelId) {
+        modelItemMapper.deleteListBymodelId(modelId);
         int r = modelMapper.deleteByPrimaryKey(modelId);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
+    @Override
+    public String deleteList(String[] modelIds) {
+        modelItemMapper.deleteListBymodelIds(modelIds);
+        int r = modelMapper.deleteList(modelIds);
         LOGGER.info("{}", r);
         return "";
     }

@@ -180,7 +180,7 @@ public class ChannelServiceImpl implements ChannelService {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        channelMapper.updateByPrimaryKey(channel);
+        channelMapper.updateByPrimaryKeySelective(channel);
         //栏目扩展信息
         ChannelExtBo channelExtBo = channelSaveBo.getChannelExt();
         ChannelExt channelExt = new ChannelExt();
@@ -190,7 +190,7 @@ public class ChannelServiceImpl implements ChannelService {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        channelExtMapper.updateByPrimaryKey(channelExt);
+        channelExtMapper.updateByPrimaryKeySelective(channelExt);
         //栏目扩展项信息
         List<ChannelAttrBo> channelAttrBoList = channelSaveBo.getChannelAttrList();
         for(ChannelAttrBo channelAttrBo:channelAttrBoList){
@@ -201,7 +201,7 @@ public class ChannelServiceImpl implements ChannelService {
                 LOGGER.error("类转换异常：{}", e);
                 throw new RuntimeException("类型转换异常：{}", e);
             }
-            channelAttrMapper.updateByPrimaryKey(channelAttr);
+            channelAttrMapper.updateByPrimaryKeySelective(channelAttr);
         }
         LOGGER.info("{}", channelSaveBo);
         return channelSaveBo;

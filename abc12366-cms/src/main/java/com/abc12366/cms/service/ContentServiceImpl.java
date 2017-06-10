@@ -292,9 +292,9 @@ public class ContentServiceImpl implements ContentService{
         List<ContentPictureBo> contentPictureList = contentSaveBo.getContentPictureList();
         //内容附件
         List<FileBo> fileList = contentSaveBo.getFileList();
-        contentMapper.updateByPrimaryKey(content);
-        contentExtMapper.updateByPrimaryKey(contentExt);
-        contentTxtMapper.updateByPrimaryKey(contentTxt);
+        contentMapper.updateByPrimaryKeySelective(content);
+        contentExtMapper.updateByPrimaryKeySelective(contentExt);
+        contentTxtMapper.updateByPrimaryKeySelective(contentTxt);
         for(ContentAttrBo contentAttrBo:contentAttrList){
             ContentAttr contentAttr = new ContentAttr();
             try {
@@ -303,7 +303,7 @@ public class ContentServiceImpl implements ContentService{
                 LOGGER.error("类转换异常：{}", e);
                 throw new RuntimeException("类型转换异常：{}", e);
             }
-            contentAttrMapper.updateByPrimaryKey(contentAttr);
+            contentAttrMapper.updateByPrimaryKeySelective(contentAttr);
         }
         int priority = 0;//排序
         //根据内容ID删除内容图片，然后再新增

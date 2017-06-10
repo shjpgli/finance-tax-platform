@@ -21,4 +21,6 @@ public interface ModelItemService {
 
     String delete(String modelItemId);
 
+    String deleteList(String[] modelIds);
+
 }

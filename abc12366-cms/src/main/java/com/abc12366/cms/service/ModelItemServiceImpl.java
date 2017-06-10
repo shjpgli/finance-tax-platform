@@ -58,7 +58,7 @@ public class ModelItemServiceImpl implements ModelItemService {
                 LOGGER.error("类转换异常：{}", e);
                 throw new RuntimeException("类型转换异常：{}", e);
             }
-            modelItemMapper.updateByPrimaryKey(modelItem);
+            modelItemMapper.updateByPrimaryKeySelective(modelItem);
         }
         return modelItemListBo;
     }
@@ -121,7 +121,7 @@ public class ModelItemServiceImpl implements ModelItemService {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        modelItemMapper.updateByPrimaryKey(modelItem);
+        modelItemMapper.updateByPrimaryKeySelective(modelItem);
         return modelItemBo;
     }
 
@@ -131,4 +131,13 @@ public class ModelItemServiceImpl implements ModelItemService {
         LOGGER.info("{}", r);
         return "";
     }
+
+    @Override
+    public String deleteList(String[] modelItemIds) {
+        int r = modelItemMapper.deleteList(modelItemIds);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
+
 }

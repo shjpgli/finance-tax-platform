@@ -92,7 +92,7 @@ public class SiteServiceImpl implements SiteService {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        int count = siteMapper.updateByPrimaryKey(site);
+        int count = siteMapper.updateByPrimaryKeySelective(site);
         LOGGER.info("{}", count);
         return siteBo;
     }
