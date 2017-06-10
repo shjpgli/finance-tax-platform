@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.cms.mapper.db1.SiteIssueMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		 DELETE FROM cms_site_issue
 		 WHERE issueId = #{issueId}
 	</delete>
@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.SiteIssue">
 		 INSERT INTO cms_site_issue
- 		(issueId,templateName,userId,userName,issueState,issueDate,updateDate) 
+ 		(issueId,templateName,userId,userName,issueState,issueDate,updateDate)
 		 VALUES 
- 		(#{issueId},#{templateName},#{userId},#{userName},#{issueState},#{issueDate},#{updateDate}) 
+ 		(#{issueId},#{templateName},#{userId},#{userName},#{issueState},#{issueDate},#{updateDate})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
