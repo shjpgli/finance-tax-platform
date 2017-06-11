@@ -3,6 +3,7 @@ package com.abc12366.cms.mapper.db2;
 import com.abc12366.cms.model.Comment;
 import com.abc12366.cms.model.bo.CommentBo;
 import com.abc12366.cms.model.bo.CommentListBo;
+import com.abc12366.cms.model.bo.CommentTjBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,6 +38,39 @@ public interface CommentRoMapper {
 	 *
 	 **/
 	List<CommentBo> selectBycontentId(@Param("contentId") String contentId);
+
+	/**
+	 *
+	 * 查询(按天统计)
+	 *
+	 **/
+	List<CommentTjBo> selectByday();
+
+	List<CommentTjBo> selectByday0();
+
+	List<CommentTjBo> selectByday1();
+
+	/**
+	 *
+	 * 查询(按月统计)
+	 *
+	 **/
+	List<CommentTjBo> selectBymonth();
+
+	List<CommentTjBo> selectBymonth0();
+
+	List<CommentTjBo> selectBymonth1();
+
+	/**
+	 *
+	 * 查询(按年统计)
+	 *
+	 **/
+	List<CommentTjBo> selectByyear();
+
+	List<CommentTjBo> selectByyear0();
+
+	List<CommentTjBo> selectByyear1();
 
 
 }
