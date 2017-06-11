@@ -48,11 +48,11 @@ public class CommentServiceImpl implements CommentService {
     public CommentTjListBo selectTj() {
         CommentTjListBo CommentTjListBo = new CommentTjListBo();
 
-        CommentTjListBo.setDays(3);
-        CommentTjListBo.setWeeks(4);
-        CommentTjListBo.setMonths(5);
-        CommentTjListBo.setYears(6);
-        CommentTjListBo.setCnts(20);
+        CommentTjListBo.setDays(commentRoMapper.selectday().intValue());
+        CommentTjListBo.setWeeks(commentRoMapper.selectweek().intValue());
+        CommentTjListBo.setMonths(commentRoMapper.selectmonth().intValue());
+        CommentTjListBo.setYears(commentRoMapper.selectyear().intValue());
+        CommentTjListBo.setCnts(commentRoMapper.selectall().intValue());
 
         //查询评论统计
         List<CommentTjBo> tjday = commentRoMapper.selectByday();
