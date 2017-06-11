@@ -120,7 +120,9 @@ public class ContentServiceImpl implements ContentService{
         contentTxtBo.setContentId(uuid);
         ContentTxt contentTxt = new ContentTxt();
         try {
-            BeanUtils.copyProperties(contentTxtBo, contentTxt);
+            if(contentTxtBo != null){
+                BeanUtils.copyProperties(contentTxtBo, contentTxt);
+            }
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
@@ -133,7 +135,9 @@ public class ContentServiceImpl implements ContentService{
         List<FileBo> fileList = contentSaveBo.getFileList();
         contentMapper.insert(content);
         contentExtMapper.insert(contentExt);
-        contentTxtMapper.insert(contentTxt);
+        if(contentTxt != null){
+            contentTxtMapper.insert(contentTxt);
+        }
         for(ContentAttrBo contentAttrBo:contentAttrList){
             contentAttrBo.setContentId(uuid);
             ContentAttr contentAttr = new ContentAttr();
@@ -208,7 +212,9 @@ public class ContentServiceImpl implements ContentService{
 
         ContentTxtBo contentTxtBo = new ContentTxtBo();
         try {
-            BeanUtils.copyProperties(contentTxt, contentTxtBo);
+            if(contentTxt != null){
+                BeanUtils.copyProperties(contentTxt, contentTxtBo);
+            }
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
@@ -281,7 +287,9 @@ public class ContentServiceImpl implements ContentService{
         ContentTxtBo contentTxtBo = contentSaveBo.getContentTxt();
         ContentTxt contentTxt = new ContentTxt();
         try {
-            BeanUtils.copyProperties(contentTxtBo, contentTxt);
+            if(contentTxtBo != null){
+                BeanUtils.copyProperties(contentTxtBo, contentTxt);
+            }
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
@@ -294,7 +302,10 @@ public class ContentServiceImpl implements ContentService{
         List<FileBo> fileList = contentSaveBo.getFileList();
         contentMapper.updateByPrimaryKeySelective(content);
         contentExtMapper.updateByPrimaryKeySelective(contentExt);
-        contentTxtMapper.updateByPrimaryKeySelective(contentTxt);
+        if(contentTxt != null){
+            contentTxtMapper.updateByPrimaryKeySelective(contentTxt);
+        }
+
         for(ContentAttrBo contentAttrBo:contentAttrList){
             ContentAttr contentAttr = new ContentAttr();
             try {

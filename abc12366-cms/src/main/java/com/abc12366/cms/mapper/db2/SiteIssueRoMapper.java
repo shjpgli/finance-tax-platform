@@ -20,7 +20,7 @@ public interface SiteIssueRoMapper{
 	 * 查询(根据主键ID查询)
 	 * 
 	 **/
-	SiteIssue selectByPrimaryKey(@Param("issueId") Long issueId);
+	SiteIssue selectByPrimaryKey(@Param("issueId") String issueId);
 
 	/**
 	 * 查询所有

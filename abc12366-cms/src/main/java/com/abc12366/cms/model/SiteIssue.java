@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class SiteIssue implements Serializable {
 
 	/****int(11)**/
-	private Integer issueId;
+	private String issueId;
 
 	/**模板名称**varchar(100)**/
 	private String templateName;
@@ -32,13 +32,12 @@ public class SiteIssue implements Serializable {
 	private java.util.Date updateDate;
 
 
-
-	public void setIssueId(Integer issueId){
-		this.issueId = issueId;
+	public String getIssueId() {
+		return issueId;
 	}
 
-	public Integer getIssueId(){
-		return this.issueId;
+	public void setIssueId(String issueId) {
+		this.issueId = issueId;
 	}
 
 	public void setTemplateName(String templateName){

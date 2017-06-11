@@ -1,9 +1,6 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.ContentListBo;
-import com.abc12366.cms.model.bo.ContentQueryBo;
-import com.abc12366.cms.model.bo.ContentSaveBo;
-import com.abc12366.cms.model.bo.ModelItemBo;
+import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -16,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +91,21 @@ public class ContentController {
         ContentQueryBo contentQueryBo = contentService.selectContent(contentId);
         LOGGER.info("{}", contentQueryBo);
         return ResponseEntity.ok(contentQueryBo);
+    }
+
+    @GetMapping(path = "/contentList")
+    public ResponseEntity contentList(@RequestParam(value = "startTime", required = false) String startTime,
+                                      @RequestParam(value = "endTime", required = false) String endTime) {
+        //查询模型项
+        Map<String, Object> dataMap = new HashMap<>();
+        List<ContentListBo> contentBoList = contentService.selectList(dataMap);
+        List<ContentQueryBo> dataList = new ArrayList<ContentQueryBo>();
+        for(ContentListBo contentBo : contentBoList){
+            ContentQueryBo contentQueryBo = contentService.selectContent(contentBo.getContentId());
+            dataList.add(contentQueryBo);
+        }
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
     @PutMapping(path = "/{contentId}")

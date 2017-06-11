@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.cms.mapper.db1.SiteIssueMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_site_issue
 		 WHERE issueId = #{issueId}
 	</delete>

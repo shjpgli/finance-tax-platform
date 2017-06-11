@@ -12,5 +12,5 @@ public interface SiteIssueService {
 
     SiteIssueBo update(SiteIssueBo siteIssueBo);
 
-    SiteIssueBo selectOneById(Long issueId);
+    SiteIssueBo selectOneById(String issueId);
 }

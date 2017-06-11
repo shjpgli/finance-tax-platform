@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author xieyanmao
@@ -36,7 +37,7 @@ public class SiteIssueServiceImpl implements SiteIssueService {
     }
 
     @Override
-    public SiteIssueBo selectOneById(Long issueId) {
+    public SiteIssueBo selectOneById(String issueId) {
         SiteIssue siteIssue = siteIssueRoMapper.selectByPrimaryKey(issueId);
         SiteIssueBo siteIssueBo = new SiteIssueBo();
         try {
@@ -56,6 +57,8 @@ public class SiteIssueServiceImpl implements SiteIssueService {
 
     @Override
     public SiteIssueBo save(SiteIssueBo siteIssueBo) {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        siteIssueBo.setIssueId(uuid);
         SiteIssue siteIssue = new SiteIssue();
         try {
             BeanUtils.copyProperties(siteIssueBo, siteIssue);

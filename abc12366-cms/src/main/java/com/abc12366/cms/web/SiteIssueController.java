@@ -34,7 +34,7 @@ public class SiteIssueController {
 	}
 	
 	@GetMapping(path = "/{issueId}")
-	public ResponseEntity<?> selectOneById(@PathVariable("issueId") Long issueId) {
+	public ResponseEntity<?> selectOneById(@PathVariable("issueId") String issueId) {
 		LOGGER.info("{}", issueId);
 		SiteIssueBo siteIssueBo = siteIssueService.selectOneById(issueId);
 		LOGGER.info("{}", siteIssueBo);

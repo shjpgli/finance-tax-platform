@@ -16,7 +16,7 @@ public interface SiteIssueMapper{
 	 * 删除(根据主键ID删除)
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("issueId") Long issueId);
+	int deleteByPrimaryKey(@Param("issueId") String issueId);
 
 	/**
 	 * 
