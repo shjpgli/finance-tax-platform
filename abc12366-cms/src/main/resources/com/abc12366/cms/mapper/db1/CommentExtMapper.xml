@@ -9,6 +9,14 @@
 		 WHERE commentId = #{commentId}
 	</delete>
 
+	<!--删除：根据主键ID批量删除-->
+	<delete id="deleteList" >
+		DELETE FROM cms_comment_ext
+		WHERE commentId in <foreach item="item" index="index" collection="commentIds" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+	</delete>
+
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.CommentExt">
 		 INSERT INTO cms_comment_ext

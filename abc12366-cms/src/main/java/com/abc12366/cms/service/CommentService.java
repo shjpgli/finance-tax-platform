@@ -26,6 +26,10 @@ public interface CommentService {
 
     String delete(String commentId);
 
+    String deleteList(String[] commentIds);
+
+    String spList(String[] commentIds);
+
     CommentTjListBo selectTj();
 
 }

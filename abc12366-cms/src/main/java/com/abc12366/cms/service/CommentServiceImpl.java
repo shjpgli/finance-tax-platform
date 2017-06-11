@@ -171,4 +171,22 @@ public class CommentServiceImpl implements CommentService {
         LOGGER.info("{}", r);
         return "";
     }
+
+    @Override
+     public String deleteList(String[] commentIds) {
+        //删除评论信息
+        commentExtMapper.deleteList(commentIds);
+        //删除评论扩展信息
+        int r = commentMapper.deleteList(commentIds);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
+    @Override
+    public String spList(String[] commentIds) {
+        //评论信息
+        int r = commentMapper.spList(commentIds);
+        LOGGER.info("{}", r);
+        return "";
+    }
 }
