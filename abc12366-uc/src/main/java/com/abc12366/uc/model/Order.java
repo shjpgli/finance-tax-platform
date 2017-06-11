@@ -20,7 +20,7 @@ public class Order implements Serializable {
     private String goodsId;
 
     /**成交价格**/
-    private double dealPrice;
+    private Double dealPrice;
 
     /**产品数量**/
     private Integer num;
@@ -90,11 +90,11 @@ public class Order implements Serializable {
         return this.goodsId;
     }
 
-    public void setDealPrice(double dealPrice){
+    public void setDealPrice(Double dealPrice){
         this.dealPrice = dealPrice;
     }
 
-    public double getDealPrice(){
+    public Double getDealPrice(){
         return this.dealPrice;
     }
 

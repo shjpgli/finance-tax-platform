@@ -20,25 +20,25 @@ public class Product implements Serializable {
     private Integer stock;
 
     /**市场价**/
-    private double marketPrice;
+    private Double marketPrice;
 
     /**销售价**/
-    private double sellingPrice;
+    private Double sellingPrice;
 
     /**成本价**/
-    private double costPrice;
+    private Double costPrice;
 
     /**最终价格**/
-    private double finalPrice;
+    private Double finalPrice;
 
     /**会员折扣**/
-    private double discount;
+    private Double discount;
 
     /**会员等级**/
     private String uvipLevel;
 
     /**重量：克**/
-    private double weight;
+    private Double weight;
 
     /****/
     private java.util.Date createTime;
@@ -72,43 +72,43 @@ public class Product implements Serializable {
         return this.stock;
     }
 
-    public void setMarketPrice(double marketPrice){
+    public void setMarketPrice(Double marketPrice){
         this.marketPrice = marketPrice;
     }
 
-    public double getMarketPrice(){
+    public Double getMarketPrice(){
         return this.marketPrice;
     }
 
-    public void setSellingPrice(double sellingPrice){
+    public void setSellingPrice(Double sellingPrice){
         this.sellingPrice = sellingPrice;
     }
 
-    public double getSellingPrice(){
+    public Double getSellingPrice(){
         return this.sellingPrice;
     }
 
-    public void setCostPrice(double costPrice){
+    public void setCostPrice(Double costPrice){
         this.costPrice = costPrice;
     }
 
-    public double getCostPrice(){
+    public Double getCostPrice(){
         return this.costPrice;
     }
 
-    public void setFinalPrice(double finalPrice){
+    public void setFinalPrice(Double finalPrice){
         this.finalPrice = finalPrice;
     }
 
-    public double getFinalPrice(){
+    public Double getFinalPrice(){
         return this.finalPrice;
     }
 
-    public void setDiscount(double discount){
+    public void setDiscount(Double discount){
         this.discount = discount;
     }
 
-    public double getDiscount(){
+    public Double getDiscount(){
         return this.discount;
     }
 
@@ -120,11 +120,11 @@ public class Product implements Serializable {
         return this.uvipLevel;
     }
 
-    public void setWeight(double weight){
+    public void setWeight(Double weight){
         this.weight = weight;
     }
 
-    public double getWeight(){
+    public Double getWeight(){
         return this.weight;
     }
 

@@ -48,6 +48,7 @@ public class Constant {
     public final static String endTime = getTodaySting();
 
 
+    public final static String defaultFolder = "E:/abc12306";
 
 
     /**

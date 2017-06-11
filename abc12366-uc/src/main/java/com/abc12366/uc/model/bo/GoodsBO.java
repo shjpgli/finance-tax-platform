@@ -28,8 +28,8 @@ public class GoodsBO implements Serializable {
 	private String unit;
 	private String recommendType;
     private List<ProductBO> productBOList;
-    private double totalStock;
-    private double totalPrice;
+    private Double totalStock;
+    private Double totalPrice;
 
 
 
@@ -146,19 +146,19 @@ public class GoodsBO implements Serializable {
         this.productBOList = productBOList;
     }
 
-    public double getTotalStock() {
+    public Double getTotalStock() {
         return totalStock;
     }
 
-    public void setTotalStock(double totalStock) {
+    public void setTotalStock(Double totalStock) {
         this.totalStock = totalStock;
     }
 
-    public double getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

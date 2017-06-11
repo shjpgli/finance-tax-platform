@@ -17,7 +17,7 @@ public class TradeLog implements Serializable {
 	private String orderNo;
 
 	/**交易金额**/
-	private double amount;
+	private Double amount;
 
 	/**交易状态：1.交易中 2.交易成功 3.交易失败 4.取消交易**/
 	private String tradeStatus;
@@ -58,11 +58,11 @@ public class TradeLog implements Serializable {
 		return this.orderNo;
 	}
 
-	public void setAmount(double amount){
+	public void setAmount(Double amount){
 		this.amount = amount;
 	}
 
-	public double getAmount(){
+	public Double getAmount(){
 		return this.amount;
 	}
 

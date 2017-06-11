@@ -3,222 +3,233 @@ import java.io.Serializable;
 
 
 /**
- * 
+ *
  * 发票信息
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class Invoice implements Serializable {
 
-	/**PK**/
-	private String id;
+    /**PK**/
+    private String id;
 
-	/**用户ID**/
-	private String userId;
+    /**用户ID**/
+    private String userId;
 
-	/**发票编号**/
-	private String invoiceId;
+    /**发票号码**/
+    private String invoiceNo;
 
-	/**发票抬头：1.个人 2.公司**/
-	private String name;
+    /**发票代码**/
+    private String invoiceCode;
 
-	/**发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费**/
-	private String content;
+    /**发票抬头：1.个人 2.公司**/
+    private String name;
 
-	/**发票金额**/
-	private double amount;
+    /**发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费**/
+    private String content;
 
-	/**发票类型：1.增值税普通发票 2.增值税专用发票**/
-	private String type;
+    /**开票公司名称**/
+    private String compName;
 
-	/**发票性质：1.纸质发票 2.电子发票**/
-	private String property;
+    /**发票金额**/
+    private Double amount;
 
-	/**发票状态**/
-	private String status;
+    /**发票类型：1.增值税普通发票 2.增值税专用发票**/
+    private String type;
 
-	/**创建时间**/
-	private java.util.Date createTime;
+    /**发票性质：1.纸质发票 2.电子发票**/
+    private String property;
 
-	/**修改时间**/
-	private java.util.Date lastUpdate;
+    /**发票状态**/
+    private String status;
 
-	/**纳税人识别号**/
-	private String nsrsbh;
+    /**创建时间**/
+    private java.util.Date createTime;
 
-	/**公司名称**/
-	private String nsrmc;
+    /**修改时间**/
+    private java.util.Date lastUpdate;
 
-	/**注册地址**/
-	private String address;
+    /**纳税人识别号**/
+    private String nsrsbh;
 
-	/**注册电话**/
-	private String phone;
+    /**公司名称**/
+    private String nsrmc;
 
-	/**开户银行**/
-	private String bank;
+    /**注册地址**/
+    private String address;
 
-	/**用户快递地址ID**/
-	private String addressId;
+    /**注册电话**/
+    private String phone;
 
-	/**用户订单号，自动生成，唯一**/
-	private String orderNum;
+    /**开户银行**/
+    private String bank;
 
-	/**公司名称**/
-	private String compName;
+    /**用户快递地址ID**/
+    private String addressId;
+
+    /**用户订单号**/
+    private String userOrderNo;
 
 
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setId(String id){
+        this.id = id;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public String getId(){
+        return this.id;
+    }
 
-	public void setUserId(String userId){
-		this.userId = userId;
-	}
+    public void setUserId(String userId){
+        this.userId = userId;
+    }
 
-	public String getUserId(){
-		return this.userId;
-	}
+    public String getUserId(){
+        return this.userId;
+    }
 
-	public void setInvoiceId(String invoiceId){
-		this.invoiceId = invoiceId;
-	}
+    public void setInvoiceNo(String invoiceNo){
+        this.invoiceNo = invoiceNo;
+    }
 
-	public String getInvoiceId(){
-		return this.invoiceId;
-	}
+    public String getInvoiceNo(){
+        return this.invoiceNo;
+    }
 
-	public void setName(String name){
-		this.name = name;
-	}
+    public void setInvoiceCode(String invoiceCode){
+        this.invoiceCode = invoiceCode;
+    }
 
-	public String getName(){
-		return this.name;
-	}
+    public String getInvoiceCode(){
+        return this.invoiceCode;
+    }
 
-	public void setContent(String content){
-		this.content = content;
-	}
+    public void setName(String name){
+        this.name = name;
+    }
 
-	public String getContent(){
-		return this.content;
-	}
+    public String getName(){
+        return this.name;
+    }
 
-	public void setAmount(double amount){
-		this.amount = amount;
-	}
+    public void setContent(String content){
+        this.content = content;
+    }
 
-	public double getAmount(){
-		return this.amount;
-	}
+    public String getContent(){
+        return this.content;
+    }
 
-	public void setType(String type){
-		this.type = type;
-	}
+    public void setCompName(String compName){
+        this.compName = compName;
+    }
 
-	public String getType(){
-		return this.type;
-	}
+    public String getCompName(){
+        return this.compName;
+    }
 
-	public void setProperty(String property){
-		this.property = property;
-	}
+    public void setAmount(Double amount){
+        this.amount = amount;
+    }
 
-	public String getProperty(){
-		return this.property;
-	}
+    public Double getAmount(){
+        return this.amount;
+    }
 
-	public void setStatus(String status){
-		this.status = status;
-	}
+    public void setType(String type){
+        this.type = type;
+    }
 
-	public String getStatus(){
-		return this.status;
-	}
+    public String getType(){
+        return this.type;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public void setProperty(String property){
+        this.property = property;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
+    public String getProperty(){
+        return this.property;
+    }
 
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
+    public void setStatus(String status){
+        this.status = status;
+    }
 
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
+    public String getStatus(){
+        return this.status;
+    }
 
-	public void setNsrsbh(String nsrsbh){
-		this.nsrsbh = nsrsbh;
-	}
+    public void setCreateTime(java.util.Date createTime){
+        this.createTime = createTime;
+    }
 
-	public String getNsrsbh(){
-		return this.nsrsbh;
-	}
+    public java.util.Date getCreateTime(){
+        return this.createTime;
+    }
 
-	public void setNsrmc(String nsrmc){
-		this.nsrmc = nsrmc;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate){
+        this.lastUpdate = lastUpdate;
+    }
 
-	public String getNsrmc(){
-		return this.nsrmc;
-	}
+    public java.util.Date getLastUpdate(){
+        return this.lastUpdate;
+    }
 
-	public void setAddress(String address){
-		this.address = address;
-	}
+    public void setNsrsbh(String nsrsbh){
+        this.nsrsbh = nsrsbh;
+    }
 
-	public String getAddress(){
-		return this.address;
-	}
+    public String getNsrsbh(){
+        return this.nsrsbh;
+    }
 
-	public void setPhone(String phone){
-		this.phone = phone;
-	}
+    public void setNsrmc(String nsrmc){
+        this.nsrmc = nsrmc;
+    }
 
-	public String getPhone(){
-		return this.phone;
-	}
+    public String getNsrmc(){
+        return this.nsrmc;
+    }
 
-	public void setBank(String bank){
-		this.bank = bank;
-	}
+    public void setAddress(String address){
+        this.address = address;
+    }
 
-	public String getBank(){
-		return this.bank;
-	}
+    public String getAddress(){
+        return this.address;
+    }
 
-	public void setAddressId(String addressId){
-		this.addressId = addressId;
-	}
+    public void setPhone(String phone){
+        this.phone = phone;
+    }
 
-	public String getAddressId(){
-		return this.addressId;
-	}
+    public String getPhone(){
+        return this.phone;
+    }
 
-	public void setOrderNum(String orderNum){
-		this.orderNum = orderNum;
-	}
+    public void setBank(String bank){
+        this.bank = bank;
+    }
 
-	public String getOrderNum(){
-		return this.orderNum;
-	}
+    public String getBank(){
+        return this.bank;
+    }
 
-	public void setCompName(String compName){
-		this.compName = compName;
-	}
+    public void setAddressId(String addressId){
+        this.addressId = addressId;
+    }
 
-	public String getCompName(){
-		return this.compName;
-	}
+    public String getAddressId(){
+        return this.addressId;
+    }
+
+    public void setUserOrderNo(String userOrderNo){
+        this.userOrderNo = userOrderNo;
+    }
+
+    public String getUserOrderNo(){
+        return this.userOrderNo;
+    }
 
 }

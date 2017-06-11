@@ -25,14 +25,20 @@
             <if test="userId != null">
                 userId,
             </if>
-            <if test="invoiceId != null">
-                invoiceId,
+            <if test="invoiceNo != null">
+                invoiceNo,
+            </if>
+            <if test="invoiceCode != null">
+                invoiceCode,
             </if>
             <if test="name != null">
                 name,
             </if>
             <if test="content != null">
                 content,
+            </if>
+            <if test="compName != null">
+                compName,
             </if>
             <if test="amount != null">
                 amount,
@@ -70,11 +76,8 @@
             <if test="addressId != null">
                 addressId,
             </if>
-            <if test="orderNum != null">
-                orderNum,
-            </if>
-            <if test="compName != null">
-                compName,
+            <if test="userOrderNo != null">
+                userOrderNo,
             </if>
 
         </trim>
@@ -85,14 +88,20 @@
             <if test="userId!=null">
                 #{userId},
             </if>
-            <if test="invoiceId!=null">
-                #{invoiceId},
+            <if test="invoiceNo!=null">
+                #{invoiceNo},
+            </if>
+            <if test="invoiceCode!=null">
+                #{invoiceCode},
             </if>
             <if test="name!=null">
                 #{name},
             </if>
             <if test="content!=null">
                 #{content},
+            </if>
+            <if test="compName!=null">
+                #{compName},
             </if>
             <if test="amount!=null">
                 #{amount},
@@ -130,11 +139,8 @@
             <if test="addressId!=null">
                 #{addressId},
             </if>
-            <if test="orderNum!=null">
-                #{orderNum},
-            </if>
-            <if test="compName!=null">
-                #{compName},
+            <if test="userOrderNo!=null">
+                #{userOrderNo},
             </if>
         </trim>
     </insert>
@@ -146,11 +152,20 @@
             <if test="userId != null">
                 userId = #{userId},
             </if>
+            <if test="invoiceNo != null">
+                invoiceNo = #{invoiceNo},
+            </if>
+            <if test="invoiceCode != null">
+                invoiceCode = #{invoiceCode},
+            </if>
             <if test="name != null">
                 name = #{name},
             </if>
             <if test="content != null">
                 content = #{content},
+            </if>
+            <if test="compName != null">
+                compName = #{compName},
             </if>
             <if test="amount != null">
                 amount = #{amount},
@@ -188,11 +203,8 @@
             <if test="addressId != null">
                 addressId = #{addressId},
             </if>
-            <if test="orderNum != null">
-                orderNum = #{orderNum},
-            </if>
-            <if test="compName != null">
-                compName = #{compName},
+            <if test="userOrderNo != null">
+                userOrderNo = #{userOrderNo},
             </if>
 
         </set>

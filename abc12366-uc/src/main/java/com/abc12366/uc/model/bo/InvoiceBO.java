@@ -13,25 +13,26 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class InvoiceBO implements Serializable {
 
-	private String id;
-	private String userId;
-	private String invoiceId;
-	private String name;
-	private String content;
-	private double amount;
-	private String type;
-	private String property;
-	private String status;
-	private java.util.Date createTime;
-	private java.util.Date lastUpdate;
-	private String nsrsbh;
-	private String nsrmc;
-	private String address;
-	private String phone;
-	private String bank;
-	private String addressId;
-	private String orderNum;
-	private String compName;
+    private String id;
+    private String userId;
+    private String invoiceNo;
+    private String invoiceCode;
+    private String name;
+    private String content;
+    private String compName;
+    private Double amount;
+    private String type;
+    private String property;
+    private String status;
+    private java.util.Date createTime;
+    private java.util.Date lastUpdate;
+    private String nsrsbh;
+    private String nsrmc;
+    private String address;
+    private String phone;
+    private String bank;
+    private String addressId;
+    private String userOrderNo;
 
     private List<Order> orderList;
 
@@ -59,14 +60,6 @@ public class InvoiceBO implements Serializable {
 
 	public String getUserId(){
 		return this.userId;
-	}
-
-	public void setInvoiceId(String invoiceId){
-		this.invoiceId = invoiceId;
-	}
-
-	public String getInvoiceId(){
-		return this.invoiceId;
 	}
 
 	public void setName(String name){
@@ -181,14 +174,6 @@ public class InvoiceBO implements Serializable {
 		return this.addressId;
 	}
 
-	public void setOrderNum(String orderNum){
-		this.orderNum = orderNum;
-	}
-
-	public String getOrderNum(){
-		return this.orderNum;
-	}
-
 	public void setCompName(String compName){
 		this.compName = compName;
 	}
@@ -227,5 +212,29 @@ public class InvoiceBO implements Serializable {
 
     public void setEndTime(java.util.Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getUserOrderNo() {
+        return userOrderNo;
+    }
+
+    public void setUserOrderNo(String userOrderNo) {
+        this.userOrderNo = userOrderNo;
+    }
+
+    public String getInvoiceNo() {
+        return invoiceNo;
+    }
+
+    public void setInvoiceNo(String invoiceNo) {
+        this.invoiceNo = invoiceNo;
+    }
+
+    public String getInvoiceCode() {
+        return invoiceCode;
+    }
+
+    public void setInvoiceCode(String invoiceCode) {
+        this.invoiceCode = invoiceCode;
     }
 }

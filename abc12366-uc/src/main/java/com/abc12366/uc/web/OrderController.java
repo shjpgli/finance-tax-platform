@@ -64,12 +64,10 @@ public class OrderController {
         user.setUsername(username);
         user.setPhone(phone);
         order.setUser(user);
-
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
         goodsBO.setCategoryId(categoryId);
         order.setGoodsBO(goodsBO);
-
         order.setOrderNo(orderNo);
         if(startTime == null || "".equals(startTime)){
             order.setStartTime(Constant.getToday(new Date()));

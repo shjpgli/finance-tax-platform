@@ -3,11 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.InvoiceRoMapper">
 
-    <resultMap id="invoiceBOResultMap" type="com.abc12366.uc.model.bo.OrderBO">
+    <resultMap id="invoiceBOResultMap" type="com.abc12366.uc.model.bo.InvoiceBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
-        <result column="invoiceId" property="invoiceId" jdbcType="VARCHAR"/>
+        <result column="invoiceNo" property="invoiceNo" jdbcType="VARCHAR"/>
+        <result column="invoiceCode" property="invoiceCode" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="compName" property="compName" jdbcType="VARCHAR"/>
         <result column="amount" property="amount" jdbcType="DOUBLE"/>
         <result column="type" property="type" jdbcType="VARCHAR"/>
         <result column="property" property="property" jdbcType="VARCHAR"/>
@@ -20,8 +23,7 @@
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="bank" property="bank" jdbcType="VARCHAR"/>
         <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
-        <result column="orderNum" property="orderNum" jdbcType="VARCHAR"/>
-        <result column="compName" property="compName" jdbcType="VARCHAR"/>
+        <result column="userOrderNo" property="userOrderNo" jdbcType="VARCHAR"/>
         <association property="order" javaType="com.abc12366.uc.model.Order">
             <id column="id" property="id"/>
             <result column="orderId" property="orderId"/>
@@ -30,7 +32,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	userId,	invoiceId,	name,	content,	amount,	type,	property,	status,	createTime,	lastUpdate,	nsrsbh,	nsrmc,	address,	phone,	bank,	addressId,	orderNum,	compName
+        id,	userId,	invoiceNo,	invoiceCode,	name,	content,	compName,	amount,	type,	property,	status,	createTime,	lastUpdate,	nsrsbh,	nsrmc,	address,	phone,	bank,	addressId,	userOrderNo
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -39,6 +41,14 @@
         <include refid="Base_Column_List" />
         FROM uc_invoice
         WHERE id = #{id}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByUserOrderNo" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice
+        WHERE userOrderNo = #{userOrderNo}
     </select>
 
 
@@ -62,7 +72,7 @@
         i.phone,
         i.bank,
         i.addressId,
-        i.orderNum,
+        i.userOrderNo,
         i.compName
         FROM uc_invoice i
         <where>

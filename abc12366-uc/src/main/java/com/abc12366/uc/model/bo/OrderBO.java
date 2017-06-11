@@ -17,7 +17,7 @@ public class OrderBO implements Serializable {
     private String orderNo;
     private String userId;
     private String goodsId;
-    private double dealPrice;
+    private Double dealPrice;
     private Integer num;
     private String orderStatus;
     private String payStatus;
@@ -63,11 +63,11 @@ public class OrderBO implements Serializable {
         return this.goodsId;
     }
 
-    public void setDealPrice(double dealPrice){
+    public void setDealPrice(Double dealPrice){
         this.dealPrice = dealPrice;
     }
 
-    public double getDealPrice(){
+    public Double getDealPrice(){
         return this.dealPrice;
     }
 

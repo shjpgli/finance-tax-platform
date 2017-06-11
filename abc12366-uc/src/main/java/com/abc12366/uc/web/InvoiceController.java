@@ -2,7 +2,13 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.InvoiceBack;
+import com.abc12366.uc.model.InvoiceRepo;
 import com.abc12366.uc.model.bo.InvoiceBO;
+import com.abc12366.uc.model.bo.InvoiceBackBO;
+import com.abc12366.uc.model.bo.InvoiceExcel;
+import com.abc12366.uc.model.bo.InvoiceRepoBO;
+import com.abc12366.uc.service.InvoiceRepoService;
 import com.abc12366.uc.service.InvoiceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -31,10 +37,12 @@ public class InvoiceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
 
     @Autowired
-    private InvoiceService invoiceService;
+    private InvoiceRepoService invoiceRepoService;
 
+    @Autowired
+    private InvoiceService invoiceService;
     /**
-     * 订单列表管理
+     * 发票列表管理
      *
      * @param pageNum
      * @param pageSize
@@ -114,4 +122,117 @@ public class InvoiceController {
         return new ResponseEntity<>(bo, HttpStatus.OK);
     }
 
+
+    /**
+     * 发票仓库列表
+     * @param pageNum
+     * @param pageSize
+     * @param invoiceNo
+     * @param invoiceCode
+     * @param property
+     * @param status
+     * @return
+     */
+    @GetMapping(path = "/repo")
+    public ResponseEntity selectInvoiceRepoList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
+                                                @RequestParam(value = "invoiceCode", required = false) String invoiceCode,
+                                                @RequestParam(value = "property", required = false) String property,
+                                                @RequestParam(value = "status", required = false) String status) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        InvoiceRepo invoiceRepo = new InvoiceRepo();
+        invoiceRepo.setInvoiceNo(invoiceNo);
+        invoiceRepo.setInvoiceCode(invoiceCode);
+        invoiceRepo.setProperty(property);
+        invoiceRepo.setStatus(status);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<InvoiceRepo> invoiceList = invoiceRepoService.selectInvoiceRepoList(invoiceRepo);
+        LOGGER.info("{}", invoiceList);
+        return (invoiceList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("invoiceRepoList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
+    }
+
+    /**
+     * 发票仓库新增
+     *
+     * @return
+     */
+    @PostMapping(path = "/repo")
+    public ResponseEntity addInvoiceRepo(@Valid @RequestBody InvoiceRepoBO invoiceRepoBO) {
+        LOGGER.info("{}", invoiceRepoBO);
+        InvoiceRepoBO bo = invoiceRepoService.addInvoiceRepo(invoiceRepoBO);
+        LOGGER.info("{}", bo);
+        return new ResponseEntity<>(bo, HttpStatus.OK);
+    }
+
+    /**
+     * 发票仓库删除
+     *
+     * @return
+     */
+    @PostMapping(path = "/repo/{id}")
+    public ResponseEntity deleteInvoiceRepo( @PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        invoiceRepoService.deleteInvoiceRepo(id);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+
+    /**
+     * 发票列表管理
+     *
+     * @return
+     */
+    @GetMapping(path = "/export")
+    public ResponseEntity exportInvoice(@RequestParam(value = "startTime", defaultValue = "") String startTime,
+                                        @RequestParam(value = "endTime", defaultValue = "") String endTime,
+                                        @RequestParam(value = "status", required = false) String status) {
+        InvoiceBO invoice = new InvoiceBO();
+        invoice.setStatus(status);
+        Date date = new Date();
+        if (startTime == null || "".equals(startTime)) {
+            invoice.setStartTime(Constant.getToday(date));
+        }
+        if (endTime == null || "".equals(endTime)) {
+            invoice.setEndTime(Constant.getToday(date));
+        }
+        List<InvoiceExcel> invoiceList = invoiceService.selectInvoiceExcelList(invoice);
+        LOGGER.info("{}", invoiceList);
+        return (invoiceList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("invoiceList"));
+    }
+
+    /**
+     * 退票
+     *
+     * @param expressId
+     * @return
+     */
+    @PostMapping(path = "/back/{expressId}")
+    public ResponseEntity refund(@PathVariable("expressId") String expressId, @Valid @RequestBody InvoiceBackBO invoiceBackBO) {
+        invoiceBackBO.setExpressId(expressId);
+        InvoiceBackBO bo = invoiceService.refund(invoiceBackBO);
+
+        LOGGER.info("{}", bo);
+        return new ResponseEntity<>(bo, HttpStatus.OK);
+    }
+
+    /**
+     * 退票
+     *
+     * @param expressId
+     * @return
+     */
+    @PutMapping(path = "/back/{expressId}/{id}")
+    public ResponseEntity refundCheck(@PathVariable("expressId") String expressId,@PathVariable("id") String id, @Valid @RequestBody InvoiceBackBO invoiceBackBO) {
+        invoiceBackBO.setId(id);
+        invoiceBackBO.setExpressId(expressId);
+        InvoiceBackBO bo = invoiceService.refundCheck(invoiceBackBO);
+
+        LOGGER.info("{}", bo);
+        return new ResponseEntity<>(bo, HttpStatus.OK);
+    }
 }

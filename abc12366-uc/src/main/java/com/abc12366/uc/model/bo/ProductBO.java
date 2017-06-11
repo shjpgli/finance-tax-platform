@@ -13,13 +13,13 @@ public class ProductBO implements Serializable {
     private String goodsId;
     private String dictId;
     private Integer stock;
-    private double marketPrice;
-    private double sellingPrice;
-    private double costPrice;
-    private double finalPrice;
-    private double discount;
+    private Double marketPrice;
+    private Double sellingPrice;
+    private Double costPrice;
+    private Double finalPrice;
+    private Double discount;
     private String uvipLevel;
-    private double weight;
+    private Double weight;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
 
@@ -49,43 +49,43 @@ public class ProductBO implements Serializable {
         return this.stock;
     }
 
-    public void setMarketPrice(double marketPrice){
+    public void setMarketPrice(Double marketPrice){
         this.marketPrice = marketPrice;
     }
 
-    public double getMarketPrice(){
+    public Double getMarketPrice(){
         return this.marketPrice;
     }
 
-    public void setSellingPrice(double sellingPrice){
+    public void setSellingPrice(Double sellingPrice){
         this.sellingPrice = sellingPrice;
     }
 
-    public double getSellingPrice(){
+    public Double getSellingPrice(){
         return this.sellingPrice;
     }
 
-    public void setCostPrice(double costPrice){
+    public void setCostPrice(Double costPrice){
         this.costPrice = costPrice;
     }
 
-    public double getCostPrice(){
+    public Double getCostPrice(){
         return this.costPrice;
     }
 
-    public void setFinalPrice(double finalPrice){
+    public void setFinalPrice(Double finalPrice){
         this.finalPrice = finalPrice;
     }
 
-    public double getFinalPrice(){
+    public Double getFinalPrice(){
         return this.finalPrice;
     }
 
-    public void setDiscount(double discount){
+    public void setDiscount(Double discount){
         this.discount = discount;
     }
 
-    public double getDiscount(){
+    public Double getDiscount(){
         return this.discount;
     }
 
@@ -97,11 +97,11 @@ public class ProductBO implements Serializable {
         return this.uvipLevel;
     }
 
-    public void setWeight(double weight){
+    public void setWeight(Double weight){
         this.weight = weight;
     }
 
-    public double getWeight(){
+    public Double getWeight(){
         return this.weight;
     }
 

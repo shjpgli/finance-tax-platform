@@ -45,6 +45,19 @@ public class DataUtils {
     }
 
     /**
+     * 获取用户订单号
+     * @return
+     */
+    public static String getUserOrderString(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");//设置日期格式
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("YHDDH");
+        buffer.append(df.format(new Date()));
+        buffer.append(getRandom());
+        return buffer.toString();
+    }
+
+    /**
      * 返回一个三位随机数的字符串
      * @return
      */
