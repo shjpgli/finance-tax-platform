@@ -20,6 +20,27 @@ public interface ModelItemMapper{
 	int deleteByPrimaryKey(@Param("modelitemId") String modelitemId);
 
 	/**
+	 *
+	 * 批量删除（根据主键ID删除）
+	 *
+	 **/
+	int deleteList(@Param("modelitemIds") String[] modelitemIds);
+
+	/**
+	 *
+	 * 批量删除（根据modelIds删除）
+	 *
+	 **/
+	int deleteListBymodelIds(@Param("modelIds") String[] modelIds);
+
+	/**
+	 *
+	 * 删除（根据modelId删除）
+	 *
+	 **/
+	int deleteListBymodelId(@Param("modelId") String modelId);
+
+	/**
 	 * 
 	 * 添加
 	 * 

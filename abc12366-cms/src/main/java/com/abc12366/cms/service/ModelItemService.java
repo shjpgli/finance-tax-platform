@@ -1,6 +1,5 @@
 package com.abc12366.cms.service;
 
-import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 
@@ -12,6 +11,8 @@ public interface ModelItemService {
 
     ModelItemListBo updateList(ModelItemListBo modelItemListBo);
 
+    ModelItemListBo saveList(ModelItemListBo modelItemListBo);
+
     ModelItemBo save(ModelItemBo modelItemBo);
 
     ModelItemBo selectModel(String modelItemId);
@@ -19,5 +20,7 @@ public interface ModelItemService {
     ModelItemBo update(ModelItemBo modelItemBo);
 
     String delete(String modelItemId);
+
+    String deleteList(String[] modelIds);
 
 }

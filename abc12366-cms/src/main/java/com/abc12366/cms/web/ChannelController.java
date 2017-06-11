@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,21 @@ public class ChannelController {
         ChannelSaveBo channelSaveBo = channelService.selectChannel(channelId);
         LOGGER.info("{}", channelSaveBo);
         return ResponseEntity.ok(channelSaveBo);
+    }
+
+    @GetMapping(path = "/channelList")
+    public ResponseEntity channelList(@RequestParam(value = "startTime", required = false) String startTime,
+                                      @RequestParam(value = "endTime", required = false) String endTime) {
+        //查询模型项
+        Map<String, Object> dataMap = new HashMap<>();
+        List<ChannelBo> ChannelBoList = channelService.selectList();
+        List<ChannelSaveBo> dataList = new ArrayList<ChannelSaveBo>();
+        for(ChannelBo channelBo : ChannelBoList){
+            ChannelSaveBo channelSaveBo = channelService.selectChannel(channelBo.getChannelId());
+            dataList.add(channelSaveBo);
+        }
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
     @PutMapping(path = "/{channelId}")

@@ -3,6 +3,7 @@ package com.abc12366.cms.service;
 
 import com.abc12366.cms.model.bo.CommentListBo;
 import com.abc12366.cms.model.bo.CommentSaveBo;
+import com.abc12366.cms.model.bo.CommentTjListBo;
 
 import java.util.List;
 import java.util.Map;
@@ -24,5 +25,7 @@ public interface CommentService {
     CommentSaveBo update(CommentSaveBo commentBo);
 
     String delete(String commentId);
+
+    CommentTjListBo selectTj();
 
 }

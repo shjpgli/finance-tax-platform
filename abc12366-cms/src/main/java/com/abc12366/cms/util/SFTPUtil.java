@@ -69,7 +69,7 @@ public class SFTPUtil {
     public Map<String, String> uploadByByte(String directory, List<Byte> content,String fileName, ChannelSftp sftp) {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            sftp.cd("/images");
+            sftp.cd("/abc12366/images");
             if (isDirExist(directory,sftp)) {
                 sftp.cd(directory);
             } else {
@@ -79,7 +79,7 @@ public class SFTPUtil {
                 sftp.cd(directory);
             }
             String storeName = rename(fileName);
-            String filePath = "/images/" + directory +"/"+ storeName;
+            String filePath = "/abc12366/images/" + directory +"/"+ storeName;
             OutputStream outputStream = sftp.put(filePath);
             byte[] buffer = null;
             List<Byte> content1 = (List<Byte>) content;
@@ -87,6 +87,11 @@ public class SFTPUtil {
                 buffer = SFTPUtil.listToByteArray(content1);
             }
             outputStream.write(buffer);
+//            com.abc12366.cms.model.File file = new com.abc12366.cms.model.File();
+//            file.setContentId("");
+//            file.setFileName(fileName);
+//            file.setFilePath(filePath);
+//            file.setFileIsvalid(0);
             map.put("fileName",fileName);
             map.put("storeName",storeName);
             map.put("filePath",filePath);

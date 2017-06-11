@@ -20,6 +20,13 @@ public interface ModelMapper{
 	int deleteByPrimaryKey(@Param("modelId") String modelId);
 
 	/**
+	 *
+	 * 批量删除（根据主键ID删除）
+	 *
+	 **/
+	int deleteList(@Param("modelIds") String[] modelIds);
+
+	/**
 	 * 
 	 * 添加
 	 * 

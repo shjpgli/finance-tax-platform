@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Comment">
 		 INSERT INTO cms_comment
- 		(commentId,commentUserId,replyUserId,contentId,siteId,createTime,replyTime,ups,downs,isRecommend,isChecked,score,parentId,replyCount) 
+ 		(commentId,commentUserId,replyUserId,contentId,title,siteId,createTime,replyTime,ups,downs,isRecommend,isChecked,score,parentId,replyCount)
 		 VALUES 
- 		(#{commentId},#{commentUserId},#{replyUserId},#{contentId},#{siteId},#{createTime},#{replyTime},#{ups},#{downs},#{isRecommend},#{isChecked},#{score},#{parentId},#{replyCount}) 
+ 		(#{commentId},#{commentUserId},#{replyUserId},#{contentId},#{title},#{siteId},#{createTime},#{replyTime},#{ups},#{downs},#{isRecommend},#{isChecked},#{score},#{parentId},#{replyCount})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -33,6 +33,9 @@
 			<if test="contentId != null">
 				 contentId,
 			</if>
+			 <if test="title != null">
+				 title,
+			 </if>
 			<if test="siteId != null">
 				 siteId,
 			</if>
@@ -78,6 +81,9 @@
 			<if test="contentId!=null">
 				 #{contentId},
 			</if>
+			 <if test="title!=null">
+				 #{title},
+			 </if>
 			<if test="siteId!=null">
 				 #{siteId},
 			</if>
@@ -124,6 +130,9 @@
 			<if test="contentId != null">
 				 contentId = #{contentId},
 			</if>
+			 <if test="title != null">
+				 title = #{title},
+			 </if>
 			<if test="siteId != null">
 				 siteId = #{siteId},
 			</if>
@@ -166,6 +175,7 @@
 			 commentUserId = #{commentUserId},
 			 replyUserId = #{replyUserId},
 			 contentId = #{contentId},
+			 title = #{title},
 			 siteId = #{siteId},
 			 createTime = #{createTime},
 			 replyTime = #{replyTime},

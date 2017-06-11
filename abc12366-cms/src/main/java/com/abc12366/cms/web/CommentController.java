@@ -1,7 +1,8 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.CommentSaveBo;
 import com.abc12366.cms.model.bo.CommentListBo;
+import com.abc12366.cms.model.bo.CommentSaveBo;
+import com.abc12366.cms.model.bo.CommentTjListBo;
 import com.abc12366.cms.service.CommentService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -67,6 +68,14 @@ public class CommentController {
         CommentSaveBo commentSaveBo = commentService.selectComment(commentId);
         LOGGER.info("{}", commentSaveBo);
         return ResponseEntity.ok(commentSaveBo);
+    }
+
+    @GetMapping(path = "/tj")
+    public ResponseEntity selectTj() {
+        //查询评论统计信息
+        CommentTjListBo commentTjListBo = commentService.selectTj();
+        LOGGER.info("{}", commentTjListBo);
+        return ResponseEntity.ok(commentTjListBo);
     }
 
     @PutMapping(path = "/{commentId}")

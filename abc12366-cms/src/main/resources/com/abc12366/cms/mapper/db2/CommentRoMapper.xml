@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		commentId,	commentUserId,	replyUserId,	contentId,	siteId,	createTime,	replyTime,	ups,	downs,	isRecommend,	isChecked,	score,	parentId,	replyCount
+		commentId,	commentUserId,	replyUserId,	contentId,title,siteId,	createTime,	replyTime,	ups,	downs,	isRecommend,	isChecked,	score,	parentId,	replyCount
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -21,7 +21,7 @@
 		SELECT a.commentId commentId,
 		b.text TEXT,
 		b.reply reply,
-		c.title title,
+		a.title title,
 		b.ip ip,
 		a.createTime createTime,
 		a.commentUserId commentUserId
@@ -51,6 +51,69 @@
 		FROM cms_comment a,cms_comment_ext b
 		WHERE a.commentId = b.commentId
 		AND a.contentId = #{contentId}
+	</select>
+
+	<!-- 查询（按天统计） -->
+	<select id="selectByday" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT HOUR(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE TO_DAYS(createTime) = TO_DAYS(NOW())
+		GROUP BY HOUR(createTime)
+	</select>
+
+	<!-- 查询（按天统计未回复） -->
+	<select id="selectByday0" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT HOUR(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE TO_DAYS(createTime) = TO_DAYS(NOW()) and replyCount = 0
+		GROUP BY HOUR(createTime)
+	</select>
+
+	<!-- 查询（按天统计已回复） -->
+	<select id="selectByday1" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT HOUR(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE TO_DAYS(createTime) = TO_DAYS(NOW()) and replyCount > 0
+		GROUP BY HOUR(createTime)
+	</select>
+
+	<!-- 查询（按月统计） -->
+	<select id="selectBymonth" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT day(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+		GROUP BY DAY(createTime)
+	</select>
+
+	<!-- 查询（按月统计未回复） -->
+	<select id="selectBymonth0" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT day(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and replyCount = 0
+		GROUP BY DAY(createTime)
+	</select>
+
+	<!-- 查询（按月统计已回复） -->
+	<select id="selectBymonth1" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT day(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and replyCount > 0
+		GROUP BY DAY(createTime)
+	</select>
+
+	<!-- 查询（按年统计） -->
+	<select id="selectByyear" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT MONTH(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+		GROUP BY MONTH(createTime)
+	</select>
+
+	<!-- 查询（按年统计未回复） -->
+	<select id="selectByyear0" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT MONTH(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and replyCount = 0
+		GROUP BY MONTH(createTime)
+	</select>
+
+	<!-- 查询（按年统计已回复） -->
+	<select id="selectByyear1" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
+		SELECT MONTH(createTime) tj,COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and replyCount > 0
+		GROUP BY MONTH(createTime)
 	</select>
 
 

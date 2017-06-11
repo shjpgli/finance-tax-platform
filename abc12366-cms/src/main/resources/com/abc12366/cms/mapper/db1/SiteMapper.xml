@@ -3,11 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db1.SiteMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-	siteId,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description,	siteLogo,	copyrightExplain,	recordNum,	resourceSync,	staticSync,	staticIssue,	siteStatus
-	</sql>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_site
@@ -17,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Site">
 		 INSERT INTO cms_site
- 		(siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description,siteLogo,copyrightExplain,recordNum,resourceSync,staticSync,staticIssue,siteStatus) 
+ 		(siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description,siteLogo,siteLogoPath,copyrightExplain,recordNum,resourceSync,staticSync,staticIssue,siteStatus)
 		 VALUES 
- 		(#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description},#{siteLogo},#{copyrightExplain},#{recordNum},#{resourceSync},#{staticSync},#{staticIssue},#{siteStatus}) 
+ 		(#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description},#{siteLogo},#{siteLogoPath},#{copyrightExplain},#{recordNum},#{resourceSync},#{staticSync},#{staticIssue},#{siteStatus})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -98,6 +93,9 @@
 			<if test="siteLogo != null">
 				 siteLogo,
 			</if>
+			 <if test="siteLogoPath != null">
+				 siteLogoPath,
+			 </if>
 			<if test="copyrightExplain != null">
 				 copyrightExplain,
 			</if>
@@ -191,6 +189,9 @@
 			<if test="siteLogo!=null">
 				 #{siteLogo},
 			</if>
+			 <if test="siteLogoPath!=null">
+				 #{siteLogoPath},
+			 </if>
 			<if test="copyrightExplain!=null">
 				 #{copyrightExplain},
 			</if>
@@ -285,6 +286,9 @@
 			<if test="siteLogo != null">
 				 siteLogo = #{siteLogo},
 			</if>
+			 <if test="siteLogoPath != null">
+				 siteLogoPath = #{siteLogoPath},
+			 </if>
 			<if test="copyrightExplain != null">
 				 copyrightExplain = #{copyrightExplain},
 			</if>
@@ -335,6 +339,7 @@
 			 keywords = #{keywords},
 			 description = #{description},
 			 siteLogo = #{siteLogo},
+			 siteLogoPath = #{siteLogoPath},
 			 copyrightExplain = #{copyrightExplain},
 			 recordNum = #{recordNum},
 			 resourceSync = #{resourceSync},

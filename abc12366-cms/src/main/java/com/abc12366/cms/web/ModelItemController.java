@@ -1,10 +1,8 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 import com.abc12366.cms.service.ModelItemService;
-import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.github.pagehelper.Page;
@@ -80,6 +78,16 @@ public class ModelItemController {
         return ResponseEntity.ok(modelItemBo);
     }
 
+    @PostMapping(path = "/saveList")
+    public ResponseEntity saveList(@Valid @RequestBody ModelItemListBo modelItemListBo) {
+
+        LOGGER.info("{}", modelItemListBo);
+        //更新评论信息
+        modelItemListBo = modelItemService.saveList(modelItemListBo);
+        LOGGER.info("{}", modelItemListBo);
+        return ResponseEntity.ok(modelItemListBo);
+    }
+
     @PutMapping(path = "/updateList")
     public ResponseEntity updateList(@Valid @RequestBody ModelItemListBo modelItemListBo) {
 
@@ -91,10 +99,19 @@ public class ModelItemController {
     }
 
     @DeleteMapping(path = "/{modelItemId}")
-    public ResponseEntity delete(@PathVariable String modelItemId) {
+     public ResponseEntity delete(@PathVariable String modelItemId) {
         LOGGER.info("{}", modelItemId);
         //删除评论信息
         String rtn = modelItemService.delete(modelItemId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(rtn);
+    }
+
+    @DeleteMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestParam(value = "modelItemIds", required = true) String[] modelItemIds) {
+        LOGGER.info("{}", modelItemIds);
+        //删除评论信息
+        String rtn = modelItemService.deleteList(modelItemIds);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);
     }

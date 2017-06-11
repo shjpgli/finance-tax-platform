@@ -53,7 +53,7 @@ public class ContentTypeServiceImpl implements ContentTypeService {
     @Override
     public String update(ContentType contentType) {
         //更新内容类型
-        contentTypeMapper.updateByPrimaryKey(contentType);
+        contentTypeMapper.updateByPrimaryKeySelective(contentType);
         return "333333";
     }
 

@@ -80,7 +80,7 @@ public class FriendlinkServiceImpl implements FriendlinkService{
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        int count = friendlinkMapper.updateByPrimaryKey(friendlink);
+        int count = friendlinkMapper.updateByPrimaryKeySelective(friendlink);
         LOGGER.info("{}", count);
         return friendlinkBo;
     }

@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		friendlinkId,	siteId,	friendlinkctgId,	siteName,	domain,	logo,	email,	description,	views,	isEnabled,	priority
+		friendlinkId,	siteId,	friendlinkctgId,	siteName,	domain,	logo,logoPath,	email,	description,	views,	isEnabled,	priority
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

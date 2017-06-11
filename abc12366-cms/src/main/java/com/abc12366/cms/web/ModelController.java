@@ -1,6 +1,7 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.ModelBo;
+import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -69,11 +70,31 @@ public class ModelController {
         return ResponseEntity.ok(modelBo);
     }
 
+    @PutMapping(path = "/updateList")
+    public ResponseEntity updateList(@Valid @RequestBody ModelListBo modelListBo) {
+
+        LOGGER.info("{}", modelListBo);
+        //更新评论信息
+        modelListBo = modelService.updateList(modelListBo);
+        LOGGER.info("{}", modelListBo);
+        return ResponseEntity.ok(modelListBo);
+    }
+
     @DeleteMapping(path = "/{modelId}")
     public ResponseEntity delete(@PathVariable String modelId) {
         LOGGER.info("{}", modelId);
         //删除评论信息
         String rtn = modelService.delete(modelId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(rtn);
+    }
+
+    @DeleteMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestParam(value = "modelIds", required = true) String[] modelIds) {
+//        modelIds = "'d8fe3b0064ce439eb091c99394ab72b6','d9ed4c8fe2044887ab74db105b57df4f'";
+        LOGGER.info("{}", modelIds);
+        //删除评论信息
+        String rtn = modelService.deleteList(modelIds);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);
     }

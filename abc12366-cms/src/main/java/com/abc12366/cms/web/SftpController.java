@@ -4,10 +4,10 @@ import com.abc12366.cms.model.bo.FjBo;
 import com.abc12366.cms.model.bo.FjListBo;
 import com.abc12366.cms.util.SFTPUtil;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
 import com.jcraft.jsch.ChannelSftp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,7 +46,7 @@ public class SftpController {
 			dataList.add(map);
 		}
 		LOGGER.info("{}", dataList);
-		return new ResponseEntity<>(dataList, HttpStatus.OK);
+		return ResponseEntity.ok(Utils.kv("dataList", dataList));
 	}
 
 

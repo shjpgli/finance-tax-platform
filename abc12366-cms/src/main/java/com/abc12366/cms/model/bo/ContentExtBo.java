@@ -1,5 +1,6 @@
 package com.abc12366.cms.model.bo;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -26,9 +27,6 @@ public class ContentExtBo implements Serializable {
 	/**来源**varchar(100)**/
 	private String origin;
 
-	/**来源链接**varchar(255)**/
-	private String originUrl;
-
 	/**描述**varchar(255)**/
 	private String description;
 
@@ -41,17 +39,11 @@ public class ContentExtBo implements Serializable {
 	/**媒体类型**varchar(20)**/
 	private String mediaType;
 
-	/**是否加粗**tinyint(1)**/
-	private Integer isBold;
-
 	/**标题图片**varchar(100)**/
 	private String titleImg;
 
 	/**内容图片**varchar(100)**/
 	private String contentImg;
-
-	/**类型图片**varchar(100)**/
-	private String typeImg;
 
 	/**外部链接**varchar(255)**/
 	private String link;
@@ -59,167 +51,107 @@ public class ContentExtBo implements Serializable {
 	/**指定模板**varchar(100)**/
 	private String tplContent;
 
-	/**需要重新生成静态页**tinyint(1)**/
-	private Integer needRegenerate;
+	public String getContentId() {
+		return contentId;
+	}
 
-	/**固顶到期日期**datetime**/
-	private java.util.Date toplevelDate;
-
-	/**归档日期**datetime**/
-	private java.util.Date pigeonholeDate;
-
-
-
-	public void setContentId(String contentId){
+	public void setContentId(String contentId) {
 		this.contentId = contentId;
 	}
 
-	public String getContentId(){
-		return this.contentId;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setTitle(String title){
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getTitle(){
-		return this.title;
+	public String getShortTitle() {
+		return shortTitle;
 	}
 
-	public void setShortTitle(String shortTitle){
+	public void setShortTitle(String shortTitle) {
 		this.shortTitle = shortTitle;
 	}
 
-	public String getShortTitle(){
-		return this.shortTitle;
+	public String getAuthor() {
+		return author;
 	}
 
-	public void setAuthor(String author){
+	public void setAuthor(String author) {
 		this.author = author;
 	}
 
-	public String getAuthor(){
-		return this.author;
+	public String getOrigin() {
+		return origin;
 	}
 
-	public void setOrigin(String origin){
+	public void setOrigin(String origin) {
 		this.origin = origin;
 	}
 
-	public String getOrigin(){
-		return this.origin;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setOriginUrl(String originUrl){
-		this.originUrl = originUrl;
-	}
-
-	public String getOriginUrl(){
-		return this.originUrl;
-	}
-
-	public void setDescription(String description){
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getDescription(){
-		return this.description;
+	public Date getReleaseDate() {
+		return releaseDate;
 	}
 
-	public void setReleaseDate(java.util.Date releaseDate){
+	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 
-	public java.util.Date getReleaseDate(){
-		return this.releaseDate;
+	public String getMediaPath() {
+		return mediaPath;
 	}
 
-	public void setMediaPath(String mediaPath){
+	public void setMediaPath(String mediaPath) {
 		this.mediaPath = mediaPath;
 	}
 
-	public String getMediaPath(){
-		return this.mediaPath;
+	public String getMediaType() {
+		return mediaType;
 	}
 
-	public void setMediaType(String mediaType){
+	public void setMediaType(String mediaType) {
 		this.mediaType = mediaType;
 	}
 
-	public String getMediaType(){
-		return this.mediaType;
+	public String getTitleImg() {
+		return titleImg;
 	}
 
-	public void setIsBold(Integer isBold){
-		this.isBold = isBold;
-	}
-
-	public Integer getIsBold(){
-		return this.isBold;
-	}
-
-	public void setTitleImg(String titleImg){
+	public void setTitleImg(String titleImg) {
 		this.titleImg = titleImg;
 	}
 
-	public String getTitleImg(){
-		return this.titleImg;
+	public String getContentImg() {
+		return contentImg;
 	}
 
-	public void setContentImg(String contentImg){
+	public void setContentImg(String contentImg) {
 		this.contentImg = contentImg;
 	}
 
-	public String getContentImg(){
-		return this.contentImg;
+	public String getLink() {
+		return link;
 	}
 
-	public void setTypeImg(String typeImg){
-		this.typeImg = typeImg;
-	}
-
-	public String getTypeImg(){
-		return this.typeImg;
-	}
-
-	public void setLink(String link){
+	public void setLink(String link) {
 		this.link = link;
 	}
 
-	public String getLink(){
-		return this.link;
+	public String getTplContent() {
+		return tplContent;
 	}
 
-	public void setTplContent(String tplContent){
+	public void setTplContent(String tplContent) {
 		this.tplContent = tplContent;
 	}
-
-	public String getTplContent(){
-		return this.tplContent;
-	}
-
-	public void setNeedRegenerate(Integer needRegenerate){
-		this.needRegenerate = needRegenerate;
-	}
-
-	public Integer getNeedRegenerate(){
-		return this.needRegenerate;
-	}
-
-	public void setToplevelDate(java.util.Date toplevelDate){
-		this.toplevelDate = toplevelDate;
-	}
-
-	public java.util.Date getToplevelDate(){
-		return this.toplevelDate;
-	}
-
-	public void setPigeonholeDate(java.util.Date pigeonholeDate){
-		this.pigeonholeDate = pigeonholeDate;
-	}
-
-	public java.util.Date getPigeonholeDate(){
-		return this.pigeonholeDate;
-	}
-
 }

@@ -22,7 +22,7 @@
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_model_item
-		WHERE modelId = #{modelId} and isChannel = #{isChannel}
+		WHERE modelId = #{modelId} and isChannel = #{isChannel} ORDER BY priority ASC
 	</select>
 
 

@@ -1,5 +1,6 @@
 package com.abc12366.cms.model;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -14,13 +15,16 @@ public class Comment implements Serializable {
 	private String commentId;
 
 	/**评论用户ID**int(11)**/
-	private Integer commentUserId;
+	private String commentUserId;
 
 	/**回复用户ID**int(11)**/
-	private Integer replyUserId;
+	private String replyUserId;
 
 	/**内容ID**varchar(64)**/
 	private String contentId;
+
+	/**标题**/
+	private String title;
 
 	/**站点ID**varchar(64)**/
 	private String siteId;
@@ -47,123 +51,128 @@ public class Comment implements Serializable {
 	private Integer score;
 
 	/**父级评论**int(11)**/
-	private Integer parentId;
+	private String parentId;
 
 	/**回复数**int(11)**/
 	private Integer replyCount;
 
+	public String getCommentId() {
+		return commentId;
+	}
 
-
-	public void setCommentId(String commentId){
+	public void setCommentId(String commentId) {
 		this.commentId = commentId;
 	}
 
-	public String getCommentId(){
-		return this.commentId;
+	public String getCommentUserId() {
+		return commentUserId;
 	}
 
-	public void setCommentUserId(Integer commentUserId){
+	public void setCommentUserId(String commentUserId) {
 		this.commentUserId = commentUserId;
 	}
 
-	public Integer getCommentUserId(){
-		return this.commentUserId;
+	public String getReplyUserId() {
+		return replyUserId;
 	}
 
-	public void setReplyUserId(Integer replyUserId){
+	public void setReplyUserId(String replyUserId) {
 		this.replyUserId = replyUserId;
 	}
 
-	public Integer getReplyUserId(){
-		return this.replyUserId;
+	public String getContentId() {
+		return contentId;
 	}
 
-	public void setContentId(String contentId){
+	public void setContentId(String contentId) {
 		this.contentId = contentId;
 	}
 
-	public String getContentId(){
-		return this.contentId;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setSiteId(String siteId){
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(String siteId) {
 		this.siteId = siteId;
 	}
 
-	public String getSiteId(){
-		return this.siteId;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreateTime(java.util.Date createTime){
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
+	public Date getReplyTime() {
+		return replyTime;
 	}
 
-	public void setReplyTime(java.util.Date replyTime){
+	public void setReplyTime(Date replyTime) {
 		this.replyTime = replyTime;
 	}
 
-	public java.util.Date getReplyTime(){
-		return this.replyTime;
+	public Integer getUps() {
+		return ups;
 	}
 
-	public void setUps(Integer ups){
+	public void setUps(Integer ups) {
 		this.ups = ups;
 	}
 
-	public Integer getUps(){
-		return this.ups;
+	public Integer getDowns() {
+		return downs;
 	}
 
-	public void setDowns(Integer downs){
+	public void setDowns(Integer downs) {
 		this.downs = downs;
 	}
 
-	public Integer getDowns(){
-		return this.downs;
+	public Integer getIsRecommend() {
+		return isRecommend;
 	}
 
-	public void setIsRecommend(Integer isRecommend){
+	public void setIsRecommend(Integer isRecommend) {
 		this.isRecommend = isRecommend;
 	}
 
-	public Integer getIsRecommend(){
-		return this.isRecommend;
+	public Integer getIsChecked() {
+		return isChecked;
 	}
 
-	public void setIsChecked(Integer isChecked){
+	public void setIsChecked(Integer isChecked) {
 		this.isChecked = isChecked;
 	}
 
-	public Integer getIsChecked(){
-		return this.isChecked;
+	public Integer getScore() {
+		return score;
 	}
 
-	public void setScore(Integer score){
+	public void setScore(Integer score) {
 		this.score = score;
 	}
 
-	public Integer getScore(){
-		return this.score;
+	public String getParentId() {
+		return parentId;
 	}
 
-	public void setParentId(Integer parentId){
+	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
 
-	public Integer getParentId(){
-		return this.parentId;
+	public Integer getReplyCount() {
+		return replyCount;
 	}
 
-	public void setReplyCount(Integer replyCount){
+	public void setReplyCount(Integer replyCount) {
 		this.replyCount = replyCount;
 	}
-
-	public Integer getReplyCount(){
-		return this.replyCount;
-	}
-
 }
