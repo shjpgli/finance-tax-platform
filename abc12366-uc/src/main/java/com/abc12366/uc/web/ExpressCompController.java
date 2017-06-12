@@ -142,8 +142,8 @@ public class ExpressCompController {
                     file.transferTo(new File(path));
                 }
             }
-            String keyValue ="订单号:userOrderNo,运单号:expressNo,收件状态:status";
-            List<Express> list = null;
+            String keyValue ="订单号:userOrderNo,运单号:expressNo";
+            List<ExpressBO> list = null;
             try {
                 list = ExcelUtil.readXls(FileUtils.getDefaultFolder()+"//"+fileName, ExcelUtil.getMap(keyValue), "com.abc12366.uc.model.Express");
             } catch (Exception e) {
@@ -151,8 +151,9 @@ public class ExpressCompController {
             }
             if(list != null){
                 System.out.println(list.size());
-                for (Express express : list) {
-                    System.out.println("订单号:" + express.getUserOrderNo() + "  运单号:" + express.getExpressNo() + "  打印次数:" + express.getStatus());
+                for (ExpressBO expressBO : list) {
+                    System.out.println("订单号:" + expressBO.getUserOrderNo() + "  运单号:" + expressBO.getExpressNo());
+                    expressService.update(expressBO);
                 }
             }
 

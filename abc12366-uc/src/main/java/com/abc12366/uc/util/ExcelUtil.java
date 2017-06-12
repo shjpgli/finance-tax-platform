@@ -322,7 +322,7 @@ public class ExcelUtil implements Serializable{
                     }
 
                     // 读取到列后，检查表头是否完全一致--start
-                    for (int i = 0; i < headlist.size(); i++) {
+                    /*for (int i = 0; i < headlist.size(); i++) {
                         boolean boo = false;
                         Iterator itor = keySet.iterator();
                         while (itor.hasNext()) {
@@ -348,7 +348,7 @@ public class ExcelUtil implements Serializable{
                         if (boo == false) {
                             throw new Exception("表头字段和定义的属性字段不匹配，请检查");
                         }
-                    }
+                    }*/
                     // 读取到列后，检查表头是否完全一致--end
 
                 } else {
