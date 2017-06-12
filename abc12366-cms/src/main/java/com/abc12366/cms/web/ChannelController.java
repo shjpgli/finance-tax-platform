@@ -1,9 +1,8 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.ChannelBo;
-import com.abc12366.cms.model.bo.ChannelSaveBo;
-import com.abc12366.cms.model.bo.ModelItemBo;
+import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ChannelService;
+import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import org.slf4j.Logger;
@@ -33,6 +32,9 @@ public class ChannelController {
     @Autowired
     private ChannelService channelService;
 
+    @Autowired
+    private ModelService modelService;
+
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -50,9 +52,13 @@ public class ChannelController {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("modelId",modelId);
         dataMap.put("isChannel",1);
-        List<ModelItemBo> dataList = channelService.selectModeList(dataMap);
+        ChannelInitBo dataList = new ChannelInitBo();
+        List<ModelItemBo> modelItems = channelService.selectModeList(dataMap);
+        ModelBo modelBo = modelService.selectModel(modelId);
+        dataList.setModelItems(modelItems);
+        dataList.setTplPrefix(modelBo.getTplChannelPrefix());
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+        return ResponseEntity.ok(dataList);
     }
 
     @PostMapping

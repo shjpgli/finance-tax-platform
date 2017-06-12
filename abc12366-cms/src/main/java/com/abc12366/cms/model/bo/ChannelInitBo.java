@@ -10,10 +10,9 @@ import java.util.List;
  *
  **/
 @SuppressWarnings("serial")
-public class ContentInitBo implements Serializable {
+public class ChannelInitBo implements Serializable {
 	private List<ModelItemBo> modelItems;
-	private List<ChannelBo> channels;
-	//内容模板前缀
+	//栏目模板前缀
 	private String tplPrefix;
 
 	public List<ModelItemBo> getModelItems() {
@@ -22,14 +21,6 @@ public class ContentInitBo implements Serializable {
 
 	public void setModelItems(List<ModelItemBo> modelItems) {
 		this.modelItems = modelItems;
-	}
-
-	public List<ChannelBo> getChannels() {
-		return channels;
-	}
-
-	public void setChannels(List<ChannelBo> channels) {
-		this.channels = channels;
 	}
 
 	public String getTplPrefix() {
