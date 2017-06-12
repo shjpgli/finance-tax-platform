@@ -80,7 +80,7 @@ public class ContentController {
         dataList.setChannels(channels);
         dataList.setModelItems(modelItems);
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+        return ResponseEntity.ok(dataList);
     }
 
     @PostMapping
