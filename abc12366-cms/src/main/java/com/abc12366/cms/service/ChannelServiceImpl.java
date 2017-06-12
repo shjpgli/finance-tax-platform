@@ -114,17 +114,20 @@ public class ChannelServiceImpl implements ChannelService {
         channelExtMapper.insert(channelExt);
         //栏目扩展项信息
         List<ChannelAttrBo> channelAttrBoList = channelSaveBo.getChannelAttrList();
-        for(ChannelAttrBo channelAttrBo:channelAttrBoList){
-            channelAttrBo.setChannelId(uuid);
-            ChannelAttr channelAttr = new ChannelAttr();
-            try {
-                BeanUtils.copyProperties(channelAttrBo, channelAttr);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(channelAttrBoList != null){
+            for(ChannelAttrBo channelAttrBo:channelAttrBoList){
+                channelAttrBo.setChannelId(uuid);
+                ChannelAttr channelAttr = new ChannelAttr();
+                try {
+                    BeanUtils.copyProperties(channelAttrBo, channelAttr);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                channelAttrMapper.insert(channelAttr);
             }
-            channelAttrMapper.insert(channelAttr);
         }
+
         LOGGER.info("{}", channelSaveBo);
         return channelSaveBo;
     }
@@ -152,7 +155,7 @@ public class ChannelServiceImpl implements ChannelService {
         }
         //查询栏目扩展项信息
         List<ChannelAttr> channelAttrList = channelAttrRoMapper.selectByChannelId(channelId);
-        List<ChannelAttrBo> channelAttrBoList = new ArrayList<>();
+        List<ChannelAttrBo> channelAttrBoList = new ArrayList<ChannelAttrBo>();
         for(ChannelAttr channelAttr:channelAttrList){
             ChannelAttrBo channelAttrBo = new ChannelAttrBo();
             try {
@@ -193,15 +196,17 @@ public class ChannelServiceImpl implements ChannelService {
         channelExtMapper.updateByPrimaryKeySelective(channelExt);
         //栏目扩展项信息
         List<ChannelAttrBo> channelAttrBoList = channelSaveBo.getChannelAttrList();
-        for(ChannelAttrBo channelAttrBo:channelAttrBoList){
-            ChannelAttr channelAttr = new ChannelAttr();
-            try {
-                BeanUtils.copyProperties(channelAttrBo, channelAttr);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(channelAttrBoList != null){
+            for(ChannelAttrBo channelAttrBo:channelAttrBoList){
+                ChannelAttr channelAttr = new ChannelAttr();
+                try {
+                    BeanUtils.copyProperties(channelAttrBo, channelAttr);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                channelAttrMapper.updateByPrimaryKeySelective(channelAttr);
             }
-            channelAttrMapper.updateByPrimaryKeySelective(channelAttr);
         }
         LOGGER.info("{}", channelSaveBo);
         return channelSaveBo;

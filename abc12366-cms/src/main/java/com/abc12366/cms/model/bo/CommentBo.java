@@ -15,10 +15,10 @@ public class CommentBo implements Serializable {
 	/**commentId**varchar(64)**/
 	private String commentId;
 
-	/**评论用户ID**int(11)**/
+	/**评论用户ID**varchar(64)**/
 	private String commentUserId;
 
-	/**回复用户ID**int(11)**/
+	/**回复用户ID**varchar(64)**/
 	private String replyUserId;
 
 	/**内容ID**varchar(64)**/

@@ -1,6 +1,4 @@
 package com.abc12366.cms.model.bo;
-import com.abc12366.cms.model.ModelItem;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,5 +11,22 @@ import java.util.List;
  **/
 @SuppressWarnings("serial")
 public class ContentInitBo implements Serializable {
-	private List<ModelItemBo> contentModelItemBo;
+	private List<ModelItemBo> modelItems;
+	private List<ChannelBo> channels;
+
+	public List<ModelItemBo> getModelItems() {
+		return modelItems;
+	}
+
+	public void setModelItems(List<ModelItemBo> modelItems) {
+		this.modelItems = modelItems;
+	}
+
+	public List<ChannelBo> getChannels() {
+		return channels;
+	}
+
+	public void setChannels(List<ChannelBo> channels) {
+		this.channels = channels;
+	}
 }
