@@ -1,10 +1,10 @@
 # RESTful API 规范 v1.0
 
-本规范适用于艾博克`财税平台`SOA系统。需要访问SOA系统的第二方、第三方App需要在系统中注册、登录之后会返回一个Access-Token，
-App以后的每次访问都需要在请求头中携带Access-Token，才能访问本系统API。
-用户使用本系统API同样需要用户登录之后返回的Token,Token可以作为用户唯一身份标识。
+本规范适用于艾博克`财税平台`SOA系统。需要访问SOA系统的第二方、第三方App需要在系统中注册、登录之后会返回一个Access-Token和过期时间
+App以后的每次访问都需要在请求头中携带Access-Token，才能访问本系统API；Access-Token会在过期时间后过期，App需要在过期之前刷新Access-Token。
 
-Access-Token包含App信息、加密算法、加密密钥；Token包含创建时间、过期时间、用户信息、加密算法、加密密钥。
+用户使用本系统API同样需要用户登录之后返回的User-Token，User-Token可以作为用户唯一身份标识。User-Token也会有过期时间，如果用户在
+过期时间之内不调用接口，User-Token也会过期；如果在过期时间之内调用了接口，系统会自动刷新User-Token，直到下一个过期时间周期。
 
 ### 完整URI
 
@@ -26,7 +26,7 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 
 ### 版本控制
 在请求头中加入：
-> Accept Header：Version: v1.0
+> Accept Header：Version: 1
 
 ---
 
@@ -71,22 +71,12 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 
 #### 过滤
 * ?type=1&state=closed
-* ?limit=10：指定返回记录的数量
-* ?offset=10：指定返回记录的开始位置。
 * ?page=2&size=100：指定第几页，以及每页的记录数。
-* ?sort=name&order=asc：指定返回结果按照哪个属性排序，以及排序顺序。
-* ?animal_type_id=1：指定筛选条件
 
 #### 分页
 * ?page=2&size=100
-* page：指定第几页
-* size：每页的记录数
-
-#### 单参数多字段
-使用`,` 分隔，如
-```javascript
-	/users/1?fields=name,age,city
-```
+* page：指定第几页，为0表示所以记录
+* size：每页的记录数，为0表示所以记录
 
 ---
 
@@ -115,10 +105,17 @@ Access-Token包含App信息、加密算法、加密密钥；Token包含创建时
 
 ---
 
-### 错误处理
-如果状态码是4xx，就应该向用户返回出错信息。一般来说，返回的信息中将error作为键名，出错信息作为键值即可。
+### 正常处理
+请求头的状态码是200，表示网络正常。正常业务请求体的返回：
+```json
+{
+	code: 2000,
+    message: "操作成功"
+}
+```
 
-常规错误时的错误处理：
+### 错误处理
+请求头的状态码也是200，表示网络正常。常规错误时的错误处理：
 ```json
 {
 	code: 4000,
@@ -141,7 +138,7 @@ POST /animal HTTP/1.1
 Host: api.example.org
 Accept: application/json
 Content-Type: application/json
-Version: v1.0
+Version: 1
 Content-Length: 24
  
 {
