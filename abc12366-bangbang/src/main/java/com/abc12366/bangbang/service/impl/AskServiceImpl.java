@@ -1,0 +1,123 @@
+package com.abc12366.bangbang.service.impl;
+
+import com.abc12366.bangbang.mapper.db1.AskMapper;
+import com.abc12366.bangbang.mapper.db2.AskRoMapper;
+import com.abc12366.bangbang.model.Ask;
+import com.abc12366.bangbang.model.bo.*;
+import com.abc12366.bangbang.service.AskService;
+import com.abc12366.common.exception.ServiceException;
+import com.abc12366.common.util.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-06-08
+ * Time: 16:23
+ */
+@Service
+public class AskServiceImpl implements AskService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AskServiceImpl.class);
+
+    @Autowired
+    private AskMapper askMapper;
+
+    @Autowired
+    private AskRoMapper askRoMapper;
+
+    @Override
+    public List<AskBO> selectListForAdmin(AsksQueryParamBO asksQueryParamBO) {
+        LOGGER.info("{}", asksQueryParamBO);
+        return askRoMapper.selectListForAdmin();
+    }
+
+    @Override
+    public List<AskBO> selectListForUser(AskQueryParamBO askQueryParamBO) {
+        LOGGER.info("{}", askQueryParamBO);
+        return askRoMapper.selectListForUser();
+    }
+
+    @Override
+    public AskBO insert(AskInsertBO askInsertBO) {
+        Ask ask = new Ask();
+        BeanUtils.copyProperties(askInsertBO, ask);
+        Date date = new Date();
+        ask.setId(Utils.uuid());
+        ask.setCreateTime(date);
+        ask.setLastUpdate(date);
+        int result = askMapper.insert(ask);
+        if (result != 1) {
+            LOGGER.warn("新增失败，参数：{}", askInsertBO);
+            throw new ServiceException(4101);
+        }
+        AskBO askBO = new AskBO();
+        BeanUtils.copyProperties(ask, askBO);
+        return askBO;
+    }
+
+    @Override
+    public AskBO selectOne(String id) {
+        return askRoMapper.selectOne(id);
+    }
+
+    @Override
+    public AskBO update(String id, AskUpdateBO askUpdateBO) {
+        AskBO askBO = askRoMapper.selectOne(id);
+        if (askBO == null) {
+            LOGGER.warn("更新失败，不存在可被更新的数据，参数:ID=", id);
+            throw new ServiceException(4102);
+        }
+        Ask ask = new Ask();
+        BeanUtils.copyProperties(askUpdateBO, ask);
+        ask.setId(id);
+        ask.setLastUpdate(new Date());
+        int result = askMapper.update(ask);
+        if (result != 1) {
+            LOGGER.warn("更新失败，参数：{}", ask);
+            throw new ServiceException(4102);
+        }
+        BeanUtils.copyProperties(ask, askBO);
+        return askBO;
+    }
+
+    @Override
+    public int delete(String id) {
+        AskBO askBO = askRoMapper.selectOne(id);
+        if (askBO == null) {
+            LOGGER.warn("删除失败，不存在可被删除的数据，参数:ID=", id);
+            throw new ServiceException(4103);
+        }
+        Ask ask = new Ask();
+        int result = askMapper.delete(id);
+        if (result != 1) {
+            LOGGER.warn("删除失败，参数：{}", ask);
+            throw new ServiceException(4103);
+        }
+        return 1;
+    }
+
+    @Override
+    public int block(String id) {
+        AskBO askBO = askRoMapper.selectOne(id);
+        if (askBO == null) {
+            LOGGER.warn("更新失败，不存在可被更新的数据，参数:ID=", id);
+            throw new ServiceException(4102);
+        }
+        Ask ask = new Ask();
+        BeanUtils.copyProperties(askBO, ask);
+        ask.setLastUpdate(new Date());
+        ask.setStatus("2");
+        int result = askMapper.update(ask);
+        if (result != 1) {
+            LOGGER.warn("更新失败，参数：{}", ask);
+            throw new ServiceException(4102);
+        }
+        return 1;
+    }
+}
