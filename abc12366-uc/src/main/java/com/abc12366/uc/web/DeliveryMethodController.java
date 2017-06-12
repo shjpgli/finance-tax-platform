@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * @author lizhongwei
  * @since 2.0.0
  */
 @RestController
@@ -42,7 +43,7 @@ public class DeliveryMethodController {
         LOGGER.info("{}", deliveryList);
         return (deliveryList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("deliveryList", (Page) deliveryList, "total", ((Page) deliveryList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) deliveryList, "total", ((Page) deliveryList).getTotal()));
     }
 
     /**
@@ -55,7 +56,7 @@ public class DeliveryMethodController {
         LOGGER.info("{}", deliveryMethodBO);
         DeliveryMethodBO bo = deliveryMethodService.add(deliveryMethodBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -68,7 +69,7 @@ public class DeliveryMethodController {
         LOGGER.info("{}", id);
         DeliveryMethodBO deliveryMethodBO = deliveryMethodService.selectDeliveryMethod(id);
         LOGGER.info("{}", deliveryMethodBO);
-        return new ResponseEntity<>(deliveryMethodBO, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", deliveryMethodBO));
     }
 
     /**
@@ -83,7 +84,7 @@ public class DeliveryMethodController {
         deliveryMethodBO.setId(id);
         DeliveryMethodBO bo = deliveryMethodService.update(deliveryMethodBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -95,7 +96,7 @@ public class DeliveryMethodController {
     public ResponseEntity enable(@Valid @RequestBody DeliveryMethodUpdateBO deliveryMethodUpdateBO) {
         LOGGER.info("{}", deliveryMethodUpdateBO);
         deliveryMethodService.enable(deliveryMethodUpdateBO);
-        return new ResponseEntity<>(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -106,7 +107,7 @@ public class DeliveryMethodController {
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         deliveryMethodService.delete(id);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 

@@ -3,6 +3,7 @@ package com.abc12366.admin.web;
 import com.abc12366.admin.model.bo.UserBO;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class LoginController {
         String appId = (String) request.getAttribute(Constant.APP_ID);
         UserBO user = userService.login(userBO, appId);
         LOGGER.info("{}", user);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(Utils.kv("data", user));
     }
 
     /**
@@ -49,7 +50,7 @@ public class LoginController {
     public ResponseEntity logout(@PathVariable("token") String token,HttpServletRequest request) {
         LOGGER.info("登出");
         userService.logout(token);
-        return ResponseEntity.ok(200);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /*@PostMapping(path = "/register")

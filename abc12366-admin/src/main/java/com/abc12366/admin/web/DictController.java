@@ -46,22 +46,22 @@ public class DictController {
         List<Dict> dictList = dictService.selectList(dict);
         LOGGER.info("{}",dictList);
         return (dictList == null) ?
-                ResponseEntity.ok(null) :
-                ResponseEntity.ok(Utils.kv("dictList", (Page) dictList, "total", ((Page) dictList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dictList, "total", ((Page) dictList).getTotal()));
     }
 
     @GetMapping(path="/{id}")
     public ResponseEntity selectById(@PathVariable("id") String id){
         Dict dict = dictService.selectById(id);
         LOGGER.info("{}",dict);
-        return ResponseEntity.ok(dict);
+        return ResponseEntity.ok(Utils.kv("data",dict));
     }
 
     @GetMapping(path="/firstLevel")
     public ResponseEntity selectFirstLevel(){
         List<DictBO> dictBOs = dictService.selectFirstLevel();
         LOGGER.info("{}",dictBOs);
-        return ResponseEntity.ok(dictBOs);
+        return ResponseEntity.ok(Utils.kv("dataList",dictBOs));
     }
 
     @GetMapping(path="/kv")
@@ -79,14 +79,14 @@ public class DictController {
         }else {
             throw new ServiceException(4124);
         }
-        return ResponseEntity.ok(dictBO);
+        return ResponseEntity.ok(Utils.kv("data",dictBO));
     }
 
     @DeleteMapping(path="/{id}")
     public ResponseEntity delete(@PathVariable("id") String id){
         LOGGER.info("{}",id);
         dictService.delete(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     @PutMapping(path="/{id}")
@@ -95,14 +95,14 @@ public class DictController {
         dictUpdateBO.setId(id);
         DictBO dictBO = dictService.update(dictUpdateBO);
         LOGGER.info("{}",dictBO);
-        return ResponseEntity.ok(dictBO);
+        return ResponseEntity.ok(Utils.kv("data",dictBO));
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid@RequestBody DictBO dictBO){
+    public ResponseEntity insert(@Valid@RequestBody DictBO bo){
+        LOGGER.info("{}",bo);
+        DictBO dictBO = dictService.insert(bo);
         LOGGER.info("{}",dictBO);
-        DictBO dictBO1 = dictService.insert(dictBO);
-        LOGGER.info("{}",dictBO1);
-        return ResponseEntity.ok(dictBO1);
+        return ResponseEntity.ok(Utils.kv("data",dictBO));
     }
 }

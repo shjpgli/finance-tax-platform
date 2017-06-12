@@ -73,7 +73,7 @@ public interface UserService {
      *
      * @param userUpdateBO
      */
-    int updateUser(UserUpdateBO userUpdateBO);
+    UserUpdateBO updateUser(UserUpdateBO userUpdateBO);
 
     /**
      * 删除用户
@@ -98,7 +98,7 @@ public interface UserService {
      */
     boolean isAuthentication(String userToken);
 
-    int addUser(UserBO userBO);
+    UserBO addUser(UserBO userBO);
 
     /**
      * 登出

@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         if (e instanceof ServiceException) {
             bodyStatus = ((ServiceException) e).getBodyStatus();
             LOGGER.warn(bodyStatus.getMessage() + e);
-            return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         }
         if (e instanceof HttpRequestMethodNotSupportedException) {

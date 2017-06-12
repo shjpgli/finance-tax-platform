@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * @author lizhongwei
  * 物流公司控制类
  * @since 2.0.0
  */
@@ -75,7 +76,7 @@ public class ExpressCompController {
         LOGGER.info("{}", expressList);
         return (expressList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("expressList", (Page) expressList, "total", ((Page) expressList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) expressList, "total", ((Page) expressList).getTotal()));
     }
 
     /**
@@ -88,7 +89,7 @@ public class ExpressCompController {
         LOGGER.info("{}", express);
         ExpressBO bo = expressService.send(express);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /*
@@ -170,7 +171,7 @@ public class ExpressCompController {
         LOGGER.info("{}", compList);
         return (compList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("compList", (Page) compList, "total", ((Page) compList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) compList, "total", ((Page) compList).getTotal()));
     }
 
     /**
@@ -183,7 +184,7 @@ public class ExpressCompController {
         LOGGER.info("{}", expressCompBO);
         ExpressCompBO bo = expressCompService.add(expressCompBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -196,7 +197,7 @@ public class ExpressCompController {
         LOGGER.info("{}", id);
         ExpressComp expressComp = expressCompService.selectExpressComp(id);
         LOGGER.info("{}", expressComp);
-        return new ResponseEntity<>(expressComp, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", expressComp));
     }
 
     /**
@@ -211,7 +212,7 @@ public class ExpressCompController {
         expressCompBO.setId(id);
         ExpressCompBO bo = expressCompService.update(expressCompBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", expressCompBO));
     }
 
     /**
@@ -222,7 +223,7 @@ public class ExpressCompController {
     public ResponseEntity deleteExpressComp(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         expressCompService.delete(id);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 

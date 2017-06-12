@@ -70,7 +70,7 @@ public class InvoiceController {
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("invoiceList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
     }
 
     /**
@@ -85,7 +85,7 @@ public class InvoiceController {
         InvoiceBO bo = invoiceService.addInvoice(invoiceBO);
 
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -102,7 +102,7 @@ public class InvoiceController {
         InvoiceBO bo = invoiceService.updateInvoice(invoiceBO);
 
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -119,7 +119,7 @@ public class InvoiceController {
         invoiceBO.setUserId(userId);
         int bo = invoiceService.deleteByIdAndUserId(invoiceBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
 
@@ -151,7 +151,7 @@ public class InvoiceController {
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("invoiceRepoList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
     }
 
     /**
@@ -164,7 +164,7 @@ public class InvoiceController {
         LOGGER.info("{}", invoiceRepoBO);
         InvoiceRepoBO bo = invoiceRepoService.addInvoiceRepo(invoiceRepoBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -176,7 +176,7 @@ public class InvoiceController {
     public ResponseEntity deleteInvoiceRepo( @PathVariable("id") String id) {
         LOGGER.info("{}", id);
         invoiceRepoService.deleteInvoiceRepo(id);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 
@@ -202,7 +202,7 @@ public class InvoiceController {
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("invoiceList"));
+          ResponseEntity.ok(Utils.kv("dataList", invoiceList));
     }
 
     /**
@@ -217,7 +217,7 @@ public class InvoiceController {
         InvoiceBackBO bo = invoiceService.refund(invoiceBackBO);
 
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -233,6 +233,6 @@ public class InvoiceController {
         InvoiceBackBO bo = invoiceService.refundCheck(invoiceBackBO);
 
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 }

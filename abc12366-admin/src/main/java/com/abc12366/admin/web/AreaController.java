@@ -43,7 +43,7 @@ public class AreaController {
     public ResponseEntity selectProvinceList(@RequestParam(value = "provinceId", required = false) String provinceId) {
         List<Province> provinceList = areaService.selectProvinceList(provinceId);
         LOGGER.info("{}", provinceList);
-        return ResponseEntity.ok(provinceList);
+        return ResponseEntity.ok(Utils.kv("dataList",provinceList));
     }
 
     /**
@@ -55,7 +55,7 @@ public class AreaController {
     public ResponseEntity selectCityList(@RequestParam(value = "cityId", required = false) String cityId) {
         List<City> cityList = areaService.selectCityList(cityId);
         LOGGER.info("{}", cityList);
-        return ResponseEntity.ok(cityList);
+        return ResponseEntity.ok(Utils.kv("dataList",cityList));
     }
 
     /**
@@ -67,7 +67,7 @@ public class AreaController {
     public ResponseEntity selectCityByProId(@PathVariable("provinceId") String provinceId) {
         List<City> cityList = areaService.selectCityByProId(provinceId);
         LOGGER.info("{}", cityList);
-        return ResponseEntity.ok(cityList);
+        return ResponseEntity.ok(Utils.kv("dataList",cityList));
     }
 
     /**
@@ -79,7 +79,7 @@ public class AreaController {
     public ResponseEntity selectAreaList(@RequestParam(value = "areaId", required = false) String areaId) {
         List<Area> areaList = areaService.selectAreaList(areaId);
         LOGGER.info("{}", areaList);
-        return ResponseEntity.ok(areaList);
+        return ResponseEntity.ok(Utils.kv("dataList",areaList));
     }
 
     /**
@@ -90,7 +90,7 @@ public class AreaController {
     public ResponseEntity selectAreaByCityId(@PathVariable("cityId") String cityId) {
         List<Area> areaList = areaService.selectAreaByCityId(cityId);
         LOGGER.info("{}", areaList);
-        return ResponseEntity.ok(areaList);
+        return ResponseEntity.ok(Utils.kv("dataList",areaList));
     }
 
 

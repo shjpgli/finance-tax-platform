@@ -49,15 +49,15 @@ public class UserController {
         List<UserBO> userList = userService.selectList(user);
         LOGGER.info("{}", userList);
         return userList == null ?
-                ResponseEntity.ok(null):
-                ResponseEntity.ok(Utils.kv("userList", (Page) userList, "total", ((Page) userList).getTotal()));
+                ResponseEntity.ok(Utils.kv()):
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         UserBO temp = userService.selectOne(id);
         LOGGER.info("{}", temp);
-        return ResponseEntity.ok(temp);
+        return ResponseEntity.ok(Utils.kv("data", temp));
     }
 
 
@@ -68,9 +68,9 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity addUser(@Valid @RequestBody UserBO userBO) {
-        int upd = userService.addUser(userBO);
-        LOGGER.info("{}", upd);
-        return ResponseEntity.ok(upd);
+        UserBO bo = userService.addUser(userBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -81,9 +81,10 @@ public class UserController {
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(@Valid @RequestBody UserUpdateBO userUpdateBO, @PathVariable("id") String id) {
+        LOGGER.info("{id}", id);
         userUpdateBO.setId(id);
-        userService.updateUser(userUpdateBO);
-        return ResponseEntity.ok(null);
+        UserUpdateBO bo = userService.updateUser(userUpdateBO);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -94,7 +95,7 @@ public class UserController {
     public ResponseEntity enable(@Valid @RequestBody UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
         userService.enable(userUpdateBO);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 
@@ -105,9 +106,10 @@ public class UserController {
      */
     @PutMapping(path = "/password")
     public ResponseEntity updateUserPwd(@Valid @RequestBody UserPasswordBO userPasswordBO) {
+        LOGGER.info("{userPasswordBO}", userPasswordBO);
         int upd = userService.updateUserPwd(userPasswordBO);
-        LOGGER.info("{}", upd);
-        return ResponseEntity.ok(null);
+        LOGGER.info("{upd}", upd);
+        return ResponseEntity.ok(Utils.kv("data", upd));
     }
 
     /**
@@ -117,16 +119,18 @@ public class UserController {
      */
     @PutMapping(path = "/password/{id}")
     public ResponseEntity resetUserPwd( @PathVariable("id") String id) {
+        LOGGER.info("{id}", id);
         int upd = userService.resetUserPwd(id);
         LOGGER.info("{}", upd);
-        return ResponseEntity.ok(upd);
+        return ResponseEntity.ok(Utils.kv("data", upd));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteUserById(@PathVariable("id") String id) {
+        LOGGER.info("{id }", id);
         int del = userService.deleteUserById(id);
         LOGGER.info("{}", del);
-        return ResponseEntity.ok(del);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 
@@ -137,9 +141,10 @@ public class UserController {
      */
     @GetMapping(path = "/extend/{id}")
     public ResponseEntity selectUserExtend(@PathVariable("id") String id) {
-        UserExtend temp = userService.selectUserExtendByUserId(id);
-        LOGGER.info("{}", temp);
-        return ResponseEntity.ok(temp);
+        LOGGER.info("{id }", id);
+        UserExtend userExtend = userService.selectUserExtendByUserId(id);
+        LOGGER.info("{userExtend }", userExtend);
+        return ResponseEntity.ok(Utils.kv("data", userExtend));
     }
 
     /**
@@ -149,10 +154,11 @@ public class UserController {
      */
     @PutMapping(path = "/extend/{id}")
     public ResponseEntity updateUserExtend(@Valid @RequestBody UserExtendBO userExtendBO,@PathVariable("id") String id) {
+        LOGGER.info("{userExtendBO}", userExtendBO);
         userExtendBO.setUserId(id);
         UserExtend userExtend = userService.updateUserExtend(userExtendBO);
-        LOGGER.info("{}", userExtend);
-        return ResponseEntity.ok(userExtend);
+        LOGGER.info("{userExtend }", userExtend);
+        return ResponseEntity.ok(Utils.kv("data", userExtend));
     }
 
 }

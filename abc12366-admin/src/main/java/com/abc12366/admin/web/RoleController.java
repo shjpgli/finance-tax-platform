@@ -48,8 +48,8 @@ public class RoleController {
         List<RoleBO> roleList = roleService.selectList(role);
         LOGGER.info("{}", roleList);
         return roleList == null ?
-                ResponseEntity.ok(null) :
-                ResponseEntity.ok(Utils.kv("roleList", (Page) roleList, "total", ((Page) roleList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) roleList, "total", ((Page) roleList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
@@ -58,7 +58,7 @@ public class RoleController {
         roleBO.setId(id);
         RoleBO temp = roleService.selectRoleById(id);
         LOGGER.info("{}", temp);
-        return ResponseEntity.ok(temp);
+        return ResponseEntity.ok(Utils.kv("data", temp));
     }
 
     @GetMapping(path = "/selectRoleByName/{roleName}")
@@ -67,15 +67,16 @@ public class RoleController {
         roleBO.setRoleName(roleName);
         Role temp = roleService.selectRoleByName(roleBO);
         LOGGER.info("{}", temp);
-        return ResponseEntity.ok(temp);
+        return ResponseEntity.ok(Utils.kv("data", temp));
     }
 
 
     @PostMapping
     public ResponseEntity addRole(@Valid @RequestBody RoleBO roleBO) {
+        LOGGER.info("{roleBO}", roleBO);
         Role role = roleService.addRole(roleBO);
-        LOGGER.info("{}", role);
-        return ResponseEntity.ok(role);
+        LOGGER.info("{role}", role);
+        return ResponseEntity.ok(Utils.kv("data", role));
     }
 
     @PutMapping(path = "/{id}")
@@ -83,14 +84,14 @@ public class RoleController {
         roleBO.setId(id);
         RoleBO upd = roleService.updateRole(roleBO);
         LOGGER.info("{}", upd);
-        return ResponseEntity.ok(upd);
+        return ResponseEntity.ok(Utils.kv("data", upd));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteRoleById(@PathVariable("id") String id) {
         int del = roleService.deleteRoleById(id);
         LOGGER.info("{}", del);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -104,7 +105,7 @@ public class RoleController {
         try {
             roleService.updateRoleMenu(roleMenuBO.getRoleId(), roleMenuBO.getMenuId());
             LOGGER.info("{}", roleMenuBO.toString());
-            return ResponseEntity.ok(200);
+            return ResponseEntity.ok(Utils.kv());
         } catch (RuntimeException e) {
             throw new ServiceException(4107);
         }

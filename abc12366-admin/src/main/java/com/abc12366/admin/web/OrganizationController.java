@@ -41,6 +41,7 @@ public class OrganizationController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) Boolean status) {
+        LOGGER.info("{}", name,status);
         Organization organization = new Organization();
         organization.setName(name);
         organization.setStatus(status);
@@ -48,8 +49,8 @@ public class OrganizationController {
         List<OrganizationBO> organizationList = organizationService.selectList(organization);
         LOGGER.info("{}", organizationList);
         return organizationList == null ?
-                ResponseEntity.ok(null) :
-                ResponseEntity.ok(Utils.kv("organizationList", (Page) organizationList, "total", ((Page) organizationList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) organizationList, "total", ((Page) organizationList).getTotal()));
     }
 
     /**
@@ -60,9 +61,10 @@ public class OrganizationController {
      */
     @PostMapping
     public ResponseEntity addOrganization(@Valid @RequestBody OrganizationBO organizationBO) {
+        LOGGER.info("{}", organizationBO);
         Organization organization = organizationService.addOrganization(organizationBO);
         LOGGER.info("{}", organization);
-        return ResponseEntity.ok(organization);
+        return ResponseEntity.ok(Utils.kv("data", organization));
     }
 
     /**
@@ -73,9 +75,10 @@ public class OrganizationController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
+        LOGGER.info("{id}", id);
         OrganizationBO organizationBO = organizationService.selectOrganizationById(id);
-        LOGGER.info("{}", organizationBO);
-        return ResponseEntity.ok(organizationBO);
+        LOGGER.info("{organizationBO}", organizationBO);
+        return ResponseEntity.ok(Utils.kv("data", organizationBO));
     }
 
     /**
@@ -87,9 +90,10 @@ public class OrganizationController {
     @PutMapping(path = "/{id}")
     public ResponseEntity updateOrganization(@Valid @RequestBody OrganizationBO organizationBO,
                                              @PathVariable("id") String id) {
+        LOGGER.info("id",id);
         OrganizationBO bo = organizationService.updateOrganization(organizationBO);
-        LOGGER.info("修改组织成功");
-        return ResponseEntity.ok(bo);
+        LOGGER.info("修改组织成功",organizationBO);
+        return ResponseEntity.ok(Utils.kv("data", organizationBO));
     }
 
     /**
@@ -100,9 +104,10 @@ public class OrganizationController {
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteOrganizationById(@PathVariable("id") String id) {
+        LOGGER.info("id",id);
         organizationService.deleteOrganizationById(id);
         LOGGER.info("删除组织成功");
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -113,7 +118,7 @@ public class OrganizationController {
     public ResponseEntity enable(@Valid @RequestBody OrganizationUpdateBO updateBO) {
         LOGGER.info("{}", updateBO);
         organizationService.enable(updateBO);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -123,6 +128,6 @@ public class OrganizationController {
     @PutMapping(path = "/disableAll")
     public ResponseEntity disableAll() {
         organizationService.disableAll();
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

@@ -134,7 +134,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional("db1TxManager")
     @Override
-    public int updateUser(UserUpdateBO userUpdateBO) {
+    public UserUpdateBO updateUser(UserUpdateBO userUpdateBO) {
+        UserUpdateBO uBO = new UserUpdateBO();
         User user = new User();
         try {
             BeanUtils.copyProperties(userUpdateBO, user);
@@ -166,7 +167,7 @@ public class UserServiceImpl implements UserService {
         if (updExtend != 1) {
             throw new ServiceException(4114);
         }
-
+        BeanUtils.copyProperties(user,uBO);
         String id = userUpdateBO.getId();
         List<UserRole> userRoles = userRoleRoMapper.selectUserRoleByUserId(id);
         if (userRoles != null && (!userRoles.isEmpty())) {
@@ -183,7 +184,7 @@ public class UserServiceImpl implements UserService {
             userRole.setRoleId(roleId);
             userRoleMapper.insert(userRole);
         }
-        return upd;
+        return uBO;
     }
 
     @Transactional("db1TxManager")
@@ -315,7 +316,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional("db1TxManager")
     @Override
-    public int addUser(UserBO userBO) {
+    public UserBO addUser(UserBO userBO) {
         UserBO bo = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
         if (bo != null) {
             LOGGER.error("该用户已经存在");
@@ -374,7 +375,9 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4113);
             }
         }
-        return ins;
+        UserBO temp = new UserBO();
+        BeanUtils.copyProperties(user,temp);
+        return temp;
     }
 
     @Override

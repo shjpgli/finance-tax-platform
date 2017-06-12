@@ -30,6 +30,9 @@ public class Utils {
         return UUID.randomUUID().toString();
     }
 
+    public static void main(String[] args) {
+        kv();
+    }
     /**
      * 返回Map形式的对象，参数必须为偶数个
      *
@@ -37,15 +40,25 @@ public class Utils {
      * @return Map
      */
     public static Map kv(Object... kvs) {
+
+        Map<Object, Object> map = new HashMap<>();
+        map.put("code",2000);
+        try {
+            map.put("message",Message.getValue(2000));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (kvs.length % 2 != 0) {
             throw new RuntimeException("Params must be key, value pairs.");
         }
-        Map<Object, Object> map = new HashMap<>();
         for (int i = 0; i < kvs.length; i += 2) {
             map.put(kvs[i], kvs[i + 1]);
         }
         return map;
     }
+
+
 
     /**
      * 返回枚举类型代码

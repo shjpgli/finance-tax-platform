@@ -50,7 +50,7 @@ public class UserAddressController {
         LOGGER.info("{}", userAddressList);
         return (userAddressList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("userAddressList", (Page) userAddressList, "total", ((Page) userAddressList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userAddressList, "total", ((Page) userAddressList).getTotal()));
     }
 
     @GetMapping(path = "/{userId}/{id}")
@@ -60,7 +60,7 @@ public class UserAddressController {
         userAddress.setUserId(userId);
         UserAddressBO userAddressBO = userAddressService.selectOne(userAddress);
         LOGGER.info("{}", userAddressBO);
-        return new ResponseEntity<>(userAddressBO, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", userAddressBO));
     }
 
     /**
@@ -75,7 +75,7 @@ public class UserAddressController {
         UserAddressBO bo = userAddressService.addUserAddress(userAddressBO);
 
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -92,7 +92,7 @@ public class UserAddressController {
         UserAddressBO bo = userAddressService.updateUserAddress(userAddressBO);
 
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -109,7 +109,7 @@ public class UserAddressController {
         userAddressBO.setUserId(userId);
         int bo = userAddressService.deleteByIdAndUserId(userAddressBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
 }

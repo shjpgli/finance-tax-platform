@@ -47,23 +47,23 @@ public class MenuController {
         List<MenuBO> menuList = menuService.selectList(menu);
         LOGGER.info("{}", menuList);
         return menuList == null ?
-                ResponseEntity.ok(null) :
-                ResponseEntity.ok(Utils.kv("menuList", (Page) menuList, "total", ((Page) menuList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) menuList, "total", ((Page) menuList).getTotal()));
     }
 
     @GetMapping(path = "/parent/{parentId}")
     public ResponseEntity selectFirstLevel(@PathVariable String parentId) {
         List<MenuBO> menuBOs = menuService.selectFirstLevel();
         LOGGER.info("{}", menuBOs);
-        return ResponseEntity.ok(menuBOs);
+        return ResponseEntity.ok(Utils.kv("dataList",menuBOs));
     }
 
     @GetMapping(path = "/project/{parentId}")
     public ResponseEntity selectByParentId(@PathVariable String parentId) {
         LOGGER.info("{}", parentId);
-        MenuBO menuBOs = menuService.selectByParentId(parentId);
-        LOGGER.info("{}", menuBOs);
-        return ResponseEntity.ok(menuBOs);
+        MenuBO menuBO = menuService.selectByParentId(parentId);
+        LOGGER.info("{}", menuBO);
+        return ResponseEntity.ok(Utils.kv("data",menuBO));
     }
 
     @GetMapping(path = "/{menuId}")
@@ -71,31 +71,31 @@ public class MenuController {
         LOGGER.info("{}", menuId);
         MenuBO menuBO = menuService.selectByMenuId(menuId);
         LOGGER.info("{}", menuBO);
-        return ResponseEntity.ok(menuBO);
+        return ResponseEntity.ok(Utils.kv("data",menuBO));
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody MenuBO menuBO) {
+    public ResponseEntity insert(@Valid @RequestBody MenuBO mBO) {
+        LOGGER.info("{}", mBO);
+        MenuBO menuBO = menuService.insert(mBO);
         LOGGER.info("{}", menuBO);
-        MenuBO menuBO1 = menuService.insert(menuBO);
-        LOGGER.info("{}", menuBO1);
-        return ResponseEntity.ok(menuBO1);
+        return ResponseEntity.ok(Utils.kv("data",menuBO));
     }
 
     @DeleteMapping(path = "/{menuId}")
     public ResponseEntity delete(@PathVariable String menuId) {
         LOGGER.info("{}", menuId);
         menuService.delete(menuId);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     @PutMapping(path = "/{menuId}")
-    public ResponseEntity update(@Valid @RequestBody MenuBO menuBO, @PathVariable String menuId) {
-        LOGGER.info("{}", menuBO, menuId);
-        menuBO.setMenuId(menuId);
-        MenuBO menuBO1 = menuService.update(menuBO);
-        LOGGER.info("{}", menuBO1);
-        return ResponseEntity.ok(menuBO1);
+    public ResponseEntity update(@Valid @RequestBody MenuBO bo, @PathVariable String menuId) {
+        LOGGER.info("{}", bo, menuId);
+        bo.setMenuId(menuId);
+        MenuBO menuBO = menuService.update(bo);
+        LOGGER.info("{}", menuBO);
+        return ResponseEntity.ok(Utils.kv("data",menuBO));
     }
 
     /**
@@ -106,7 +106,7 @@ public class MenuController {
     public ResponseEntity enable(@Valid @RequestBody MenuUpdateBO updateBO) {
         LOGGER.info("{}",updateBO);
         menuService.enable(updateBO);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -116,6 +116,6 @@ public class MenuController {
     @PutMapping(path = "/disableAll")
     public ResponseEntity disableAll() {
         menuService.disableAll();
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

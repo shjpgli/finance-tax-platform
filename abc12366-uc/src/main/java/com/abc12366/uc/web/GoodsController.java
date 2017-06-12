@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * @author lizhongwei
  * @since 2.0.0
  */
 @RestController
@@ -52,7 +53,7 @@ public class GoodsController {
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("goodsList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
 
@@ -74,7 +75,7 @@ public class GoodsController {
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("goodsList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
     /**
      * 新增商品
@@ -86,7 +87,7 @@ public class GoodsController {
         LOGGER.info("{}", goodsBO);
         GoodsBO bo = goodsService.add(goodsBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -99,7 +100,7 @@ public class GoodsController {
         LOGGER.info("{}", id);
         GoodsBO goodsBO = goodsService.selectGoods(id);
         LOGGER.info("{}", goodsBO);
-        return new ResponseEntity<>(goodsBO, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", goodsBO));
     }
 
     /**
@@ -114,7 +115,7 @@ public class GoodsController {
         goodsBO.setId(id);
         GoodsBO bo = goodsService.update(goodsBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -125,7 +126,7 @@ public class GoodsController {
     public ResponseEntity checkGoods(@Valid @RequestBody GoodsCheckBO goodsCheckBO) {
         LOGGER.info("{}", goodsCheckBO);
         goodsService.checkGoods(goodsCheckBO);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 
@@ -142,7 +143,7 @@ public class GoodsController {
         LOGGER.info("{}", categoryList);
         return (categoryList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(categoryList);
+                 ResponseEntity.ok(Utils.kv("dataList", categoryList));
     }
 
 
@@ -156,7 +157,7 @@ public class GoodsController {
         LOGGER.info("{}", id);
         GoodsCategory goodsCategory = goodsCategoryService.selectGategory(id);
         LOGGER.info("{}", goodsCategory);
-        return new ResponseEntity<>(goodsCategory, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", goodsCategory));
     }
 
     /**
@@ -169,7 +170,7 @@ public class GoodsController {
         LOGGER.info("{}", goodsCategoryBO);
         GoodsCategory bo = goodsCategoryService.add(goodsCategoryBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     @PutMapping(path = "/category/{id}")
@@ -178,13 +179,13 @@ public class GoodsController {
         goodsCategoryBO.setId(id);
         GoodsCategoryBO bo = goodsCategoryService.update(goodsCategoryBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     @DeleteMapping(path = "/category/{id}")
     public ResponseEntity deleteGategory(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         goodsCategoryService.delete(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

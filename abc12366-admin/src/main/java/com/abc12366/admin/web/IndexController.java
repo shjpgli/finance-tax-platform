@@ -24,6 +24,6 @@ public class IndexController {
 
     @GetMapping("/test")
     public ResponseEntity test() {
-        return ResponseEntity.ok(Utils.kv("message", "OK"));
+        return ResponseEntity.ok(Utils.kv());
     }
 }
