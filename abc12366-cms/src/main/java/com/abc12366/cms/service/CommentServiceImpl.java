@@ -48,11 +48,11 @@ public class CommentServiceImpl implements CommentService {
     public CommentTjListBo selectTj() {
         CommentTjListBo CommentTjListBo = new CommentTjListBo();
 
-        CommentTjListBo.setDays(3);
-        CommentTjListBo.setWeeks(4);
-        CommentTjListBo.setMonths(5);
-        CommentTjListBo.setYears(6);
-        CommentTjListBo.setCnts(20);
+        CommentTjListBo.setDays(commentRoMapper.selectday().intValue());
+        CommentTjListBo.setWeeks(commentRoMapper.selectweek().intValue());
+        CommentTjListBo.setMonths(commentRoMapper.selectmonth().intValue());
+        CommentTjListBo.setYears(commentRoMapper.selectyear().intValue());
+        CommentTjListBo.setCnts(commentRoMapper.selectall().intValue());
 
         //查询评论统计
         List<CommentTjBo> tjday = commentRoMapper.selectByday();
@@ -168,6 +168,24 @@ public class CommentServiceImpl implements CommentService {
         commentExtMapper.deleteByPrimaryKey(commentId);
         //删除评论扩展信息
         int r = commentMapper.deleteByPrimaryKey(commentId);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
+    @Override
+     public String deleteList(String[] commentIds) {
+        //删除评论信息
+        commentExtMapper.deleteList(commentIds);
+        //删除评论扩展信息
+        int r = commentMapper.deleteList(commentIds);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
+    @Override
+    public String spList(String[] commentIds) {
+        //评论信息
+        int r = commentMapper.spList(commentIds);
         LOGGER.info("{}", r);
         return "";
     }

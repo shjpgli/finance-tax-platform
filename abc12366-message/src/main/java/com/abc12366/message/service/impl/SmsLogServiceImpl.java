@@ -6,6 +6,7 @@ import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.SmsLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,6 +62,7 @@ public class SmsLogServiceImpl implements SmsLogService {
 
     }
 
+    @Transactional("db1TxManager")
     @Override
     public int smsOpsLogInsert(SendTemplateParam sendTemplateParam, SendTemplateResponseBO verifyCodeResponseBO) {
         SmsOpsLog smsOpsLog = new SmsOpsLog();

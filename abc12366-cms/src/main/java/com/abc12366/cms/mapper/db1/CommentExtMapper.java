@@ -20,6 +20,13 @@ public interface CommentExtMapper{
 	int deleteByPrimaryKey(@Param("commentId") String commentId);
 
 	/**
+	 *
+	 * 删除(根据主键ID批量删除)
+	 *
+	 **/
+	int deleteList(@Param("commentIds") String[] commentIds);
+
+	/**
 	 * 
 	 * 添加
 	 * 

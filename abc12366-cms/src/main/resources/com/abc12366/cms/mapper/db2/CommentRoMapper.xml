@@ -31,7 +31,7 @@
 			AND c.contentId like CONCAT('%',#{contentId},'%')
 		</if>
 		<if test="isChecked != null and isChecked != ''">
-			AND a.isChecked like CONCAT('%',#{isChecked},'%')
+			AND a.isChecked = #{isChecked}
 		</if>
 		<if test="isRecommend != null and isRecommend != ''">
 			AND a.isRecommend = #{isRecommend}
@@ -54,6 +54,17 @@
 	</select>
 
 	<!-- 查询（按天统计） -->
+	<select id="selectall" resultType="java.lang.Long" parameterType="java.lang.String">
+		SELECT COUNT(*) cnt
+		FROM cms_comment
+	</select>
+
+	<!-- 查询（按天统计） -->
+	<select id="selectday" resultType="java.lang.Long" parameterType="java.lang.String">
+		SELECT COUNT(*) cnt
+		FROM cms_comment WHERE TO_DAYS(createTime) = TO_DAYS(NOW())
+	</select>
+
 	<select id="selectByday" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
 		SELECT HOUR(createTime) tj,COUNT(*) cnt
 		FROM cms_comment WHERE TO_DAYS(createTime) = TO_DAYS(NOW())
@@ -74,7 +85,18 @@
 		GROUP BY HOUR(createTime)
 	</select>
 
+	<!-- 查询（按周统计） -->
+	<select id="selectweek" resultType="java.lang.Long" parameterType="java.lang.String">
+		SELECT COUNT(*) cnt
+		FROM cms_comment WHERE YEARWEEK(date_format(createTime,'%Y-%m-%d')) = YEARWEEK(now())
+	</select>
+
 	<!-- 查询（按月统计） -->
+	<select id="selectmonth" resultType="java.lang.Long" parameterType="java.lang.String">
+		SELECT COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+	</select>
+
 	<select id="selectBymonth" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
 		SELECT day(createTime) tj,COUNT(*) cnt
 		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
@@ -96,6 +118,11 @@
 	</select>
 
 	<!-- 查询（按年统计） -->
+	<select id="selectyear" resultType="java.lang.Long" parameterType="java.lang.String">
+		SELECT COUNT(*) cnt
+		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+	</select>
+
 	<select id="selectByyear" resultType="com.abc12366.cms.model.bo.CommentTjBo" parameterType="java.lang.String">
 		SELECT MONTH(createTime) tj,COUNT(*) cnt
 		FROM cms_comment WHERE DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )

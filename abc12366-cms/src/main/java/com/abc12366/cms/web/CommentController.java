@@ -98,6 +98,24 @@ public class CommentController {
         return ResponseEntity.ok(rtn);
     }
 
+    @DeleteMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestParam(value = "commentIds", required = true) String[] commentIds) {
+        LOGGER.info("{}", commentIds);
+        //删除评论信息
+        String rtn = commentService.deleteList(commentIds);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(rtn);
+    }
+
+    @PutMapping(path = "/spList")
+    public ResponseEntity spList(@RequestParam(value = "commentIds", required = true) String[] commentIds) {
+        LOGGER.info("{}", commentIds);
+        //删除评论信息
+        String rtn = commentService.deleteList(commentIds);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(rtn);
+    }
+
 
 
 
