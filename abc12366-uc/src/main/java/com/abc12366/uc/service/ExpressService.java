@@ -18,4 +18,6 @@ public interface ExpressService {
     Express selectExpress(String id);
 
     void delete(String id);
+
+    ExpressBO importExpress(ExpressBO expressBO);
 }
