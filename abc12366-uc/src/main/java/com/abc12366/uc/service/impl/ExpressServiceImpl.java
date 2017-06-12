@@ -80,4 +80,19 @@ public class ExpressServiceImpl implements ExpressService {
             throw new ServiceException(4103);
         }
     }
+
+    @Override
+    public ExpressBO importExpress(ExpressBO expressBO) {
+        Express express = new Express();
+        BeanUtils.copyProperties(expressBO,express);
+        Date date = new Date();
+        express.setLastUpdate(date);
+        int update = expressMapper.update(express);
+        if(update != 1){
+            return null;
+        }
+        ExpressBO bo = new ExpressBO();
+        BeanUtils.copyProperties(express,bo);
+        return bo;
+    }
 }

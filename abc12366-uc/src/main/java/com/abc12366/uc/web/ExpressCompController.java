@@ -91,24 +91,6 @@ public class ExpressCompController {
         return new ResponseEntity<>(bo, HttpStatus.OK);
     }
 
-
-    /*
-     * 采用file.Transto 来保存上传的文件
-     */
-    @PostMapping(path = "/fileUpload2")
-    public String  fileUpload2(@RequestParam("file") CommonsMultipartFile file) throws IOException {
-        long  startTime=System.currentTimeMillis();
-        System.out.println("fileName："+file.getOriginalFilename());
-        String path="E:/"+new Date().getTime()+file.getOriginalFilename();
-
-        File newFile=new File(path);
-        //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
-        file.transferTo(newFile);
-        long  endTime=System.currentTimeMillis();
-        System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
-        return "/success";
-    }
-
     /*
      *采用spring提供的上传文件的方法
      */
@@ -122,6 +104,8 @@ public class ExpressCompController {
         multipartResolver.setDefaultEncoding("UTF-8");
         //检查form中是否有enctype="multipart/form-data"
         String path=null;
+        List<ExpressBO> expressBOList = null;
+        List<ExpressBO> orderNumList = null;
         if(multipartResolver.isMultipart(request))
         {
             //将request变成多部分request
@@ -143,22 +127,27 @@ public class ExpressCompController {
                 }
             }
             String keyValue ="订单号:userOrderNo,运单号:expressNo";
-            List<ExpressBO> list = null;
+
             try {
-                list = ExcelUtil.readXls(FileUtils.getDefaultFolder()+"//"+fileName, ExcelUtil.getMap(keyValue), "com.abc12366.uc.model.Express");
+                expressBOList = ExcelUtil.readXls(FileUtils.getDefaultFolder() + "//" + fileName, ExcelUtil.getMap(keyValue), "com.abc12366.uc.model.Express");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(list != null){
-                System.out.println(list.size());
-                for (ExpressBO expressBO : list) {
+            if(expressBOList != null){
+                ExpressBO bo = null;
+                System.out.println(expressBOList.size());
+                for (ExpressBO expressBO : expressBOList) {
+                    bo = new ExpressBO();
                     System.out.println("订单号:" + expressBO.getUserOrderNo() + "  运单号:" + expressBO.getExpressNo());
-                    expressService.update(expressBO);
+                    bo = expressService.importExpress(expressBO);
+                    if(bo == null){
+                        orderNumList.add(expressBO);
+                    }
                 }
             }
 
         }
-        return new ResponseEntity<>(fileName, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("orderNumList", orderNumList, "num", expressBOList.size()));
     }
 
 
