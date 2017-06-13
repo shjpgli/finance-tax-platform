@@ -25,4 +25,6 @@ public interface DictService {
     int delete(String id);
 
     Dict selectById(String id);
+
+    List<DictBO> selectDictList(Dict dict);
 }

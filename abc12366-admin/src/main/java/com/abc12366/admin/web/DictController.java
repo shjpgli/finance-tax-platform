@@ -64,22 +64,14 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("dataList",dictBOs));
     }
 
-    @GetMapping(path="/kv")
-    public ResponseEntity selectOne(@RequestParam(value = "dictId", required = false) String dictId){
-        DictBO dictBO = null;
-        boolean isNull = false;
-        if(dictId != null && !"".equals(dictId)) {
-            isNull = true;
-        }
-        if(isNull){
-            Dict dict = new Dict();
-            dict.setDictId(dictId);
-            dictBO = dictService.selectOne(dict);
-            LOGGER.info("{}",dictBO);
-        }else {
-            throw new ServiceException(4124);
-        }
-        return ResponseEntity.ok(Utils.kv("data",dictBO));
+    @GetMapping(path="/kv/{dictId}")
+    public ResponseEntity selectDictList(@PathVariable("dictId") String dictId){
+        List<DictBO> dictBOList = null;
+        Dict dict = new Dict();
+        dict.setDictId(dictId);
+        dictBOList = dictService.selectDictList(dict);
+        LOGGER.info("{}",dictBOList);
+        return ResponseEntity.ok(Utils.kv("data",dictBOList));
     }
 
     @DeleteMapping(path="/{id}")

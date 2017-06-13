@@ -108,4 +108,9 @@ public class DictServiceImpl implements DictService {
         return dictRoMapper.selectById(id);
     }
 
+    @Override
+    public List<DictBO> selectDictList(Dict dict) {
+        return dictRoMapper.selectDictList(dict);
+    }
+
 }

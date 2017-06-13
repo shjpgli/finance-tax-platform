@@ -22,4 +22,6 @@ public interface DictRoMapper {
     Dict selectById(String id);
 
     Dict selectByDictName(String dictName);
+
+    List<DictBO> selectDictList(Dict dict);
 }

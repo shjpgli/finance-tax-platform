@@ -53,4 +53,14 @@
         from sys_dict
         where dictName = #{dictName}
     </select>
+
+    <select id="selectDictList" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
+        select
+        <include refid="Base_Column_List" />
+        from sys_dict
+        <where>
+            1=1
+            <if test="dictId != null and dictId!='' "> and dictId = #{dictId}</if>
+        </where>
+    </select>
 </mapper>
