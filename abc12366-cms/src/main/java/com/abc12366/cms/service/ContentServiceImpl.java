@@ -138,39 +138,46 @@ public class ContentServiceImpl implements ContentService{
         if(contentTxt != null){
             contentTxtMapper.insert(contentTxt);
         }
-        for(ContentAttrBo contentAttrBo:contentAttrList){
-            contentAttrBo.setContentId(uuid);
-            ContentAttr contentAttr = new ContentAttr();
-            try {
-                BeanUtils.copyProperties(contentAttrBo, contentAttr);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(contentAttrList != null){
+            for(ContentAttrBo contentAttrBo:contentAttrList){
+                contentAttrBo.setContentId(uuid);
+                ContentAttr contentAttr = new ContentAttr();
+                try {
+                    BeanUtils.copyProperties(contentAttrBo, contentAttr);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                contentAttrMapper.insert(contentAttr);
             }
-            contentAttrMapper.insert(contentAttr);
         }
-        for(ContentPictureBo contentPictureBo:contentPictureList){
-            contentPictureBo.setContentId(uuid);
-            ContentPicture contentPicture = new ContentPicture();
-            try {
-                BeanUtils.copyProperties(contentPictureBo, contentPicture);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(contentPictureList != null){
+            for(ContentPictureBo contentPictureBo:contentPictureList){
+                contentPictureBo.setContentId(uuid);
+                ContentPicture contentPicture = new ContentPicture();
+                try {
+                    BeanUtils.copyProperties(contentPictureBo, contentPicture);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                contentPictureMapper.insert(contentPicture);
             }
-            contentPictureMapper.insert(contentPicture);
         }
-        for(FileBo fileBo:fileList){
-            fileBo.setContentId(uuid);
-            File file = new File();
-            try {
-                BeanUtils.copyProperties(fileBo, file);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(fileList != null){
+            for(FileBo fileBo:fileList){
+                fileBo.setContentId(uuid);
+                File file = new File();
+                try {
+                    BeanUtils.copyProperties(fileBo, file);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                fileMapper.insert(file);
             }
-            fileMapper.insert(file);
         }
+
 
         LOGGER.info("{}", contentSaveBo);
         return contentSaveBo;
@@ -221,7 +228,7 @@ public class ContentServiceImpl implements ContentService{
         }
         contentQueryBo.setContentTxt(contentTxtBo);
 
-        List<ContentAttrBo> contentAttrBoList = new ArrayList<>();
+        List<ContentAttrBo> contentAttrBoList = new ArrayList<ContentAttrBo>();
         for(ContentAttr contentAttr : contentAttrList){
             ContentAttrBo contentAttrBo = new ContentAttrBo();
             try {
@@ -234,7 +241,7 @@ public class ContentServiceImpl implements ContentService{
         }
         contentQueryBo.setContentAttrList(contentAttrBoList);
 
-        List<ContentPictureBo> contentPictureBoList = new ArrayList<>();
+        List<ContentPictureBo> contentPictureBoList = new ArrayList<ContentPictureBo>();
         for(ContentPicture contentPicture : contentPictureList){
             ContentPictureBo contentPictureBo = new ContentPictureBo();
             try {
@@ -247,7 +254,7 @@ public class ContentServiceImpl implements ContentService{
         }
         contentQueryBo.setContentPictureList(contentPictureBoList);
 
-        List<FileBo> fileBoList = new ArrayList<>();
+        List<FileBo> fileBoList = new ArrayList<FileBo>();
         for(File file : fileList){
             FileBo fileBo = new FileBo();
             try {
@@ -305,34 +312,42 @@ public class ContentServiceImpl implements ContentService{
         if(contentTxt != null){
             contentTxtMapper.updateByPrimaryKeySelective(contentTxt);
         }
-
-        for(ContentAttrBo contentAttrBo:contentAttrList){
-            ContentAttr contentAttr = new ContentAttr();
-            try {
-                BeanUtils.copyProperties(contentAttrBo, contentAttr);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(contentAttrList != null){
+            for(ContentAttrBo contentAttrBo:contentAttrList){
+                ContentAttr contentAttr = new ContentAttr();
+                try {
+                    BeanUtils.copyProperties(contentAttrBo, contentAttr);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                contentAttrMapper.updateByPrimaryKeySelective(contentAttr);
             }
-            contentAttrMapper.updateByPrimaryKeySelective(contentAttr);
         }
+
         int priority = 0;//排序
         //根据内容ID删除内容图片，然后再新增
         contentPictureMapper.deleteByContentId(content.getContentId());
-        for(ContentPictureBo contentPictureBo:contentPictureList){
-            contentPictureBo.setPriority(priority);
-            ContentPicture contentPicture = new ContentPicture();
-            try {
-                BeanUtils.copyProperties(contentPictureBo, contentPicture);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(contentPictureList != null){
+            for(ContentPictureBo contentPictureBo:contentPictureList){
+                contentPictureBo.setPriority(priority);
+                ContentPicture contentPicture = new ContentPicture();
+                try {
+                    BeanUtils.copyProperties(contentPictureBo, contentPicture);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                contentPictureMapper.insert(contentPicture);
+                priority++;
             }
-            contentPictureMapper.insert(contentPicture);
-            priority++;
         }
+
         //根据内容ID删除附件信息，然后再新增
         fileMapper.deleteByContentId(content.getContentId());
+        if(fileList != null){
+
+        }
         for(FileBo fileBo:fileList){
             File file = new File();
             try {

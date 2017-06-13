@@ -10,7 +10,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class SiteIssueBo implements Serializable {
 
-	/****int(11)**/
+	/****varchar(64)**/
 	private String issueId;
 
 	/**模板名称**varchar(100)**/

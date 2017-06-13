@@ -1,7 +1,9 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.*;
+import com.abc12366.cms.service.ChannelService;
 import com.abc12366.cms.service.ContentService;
+import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.github.pagehelper.Page;
@@ -32,6 +34,12 @@ public class ContentController {
 
     @Autowired
     private ContentService contentService;
+
+    @Autowired
+    private ChannelService channelService;
+
+    @Autowired
+    private ModelService modelService;
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -70,9 +78,15 @@ public class ContentController {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("modelId",modelId);
         dataMap.put("isChannel",0);
-        List<ModelItemBo> contents = contentService.selectModeList(dataMap);
-        LOGGER.info("{}", contents);
-        return ResponseEntity.ok(Utils.kv("dataList", contents));
+        ContentInitBo dataList = new ContentInitBo();
+        List<ModelItemBo> modelItems = contentService.selectModeList(dataMap);
+        List<ChannelBo> channels = channelService.selectList();
+        ModelBo modelBo = modelService.selectModel(modelId);
+        dataList.setChannels(channels);
+        dataList.setModelItems(modelItems);
+        dataList.setTplPrefix(modelBo.getTplContentPrefix());
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(dataList);
     }
 
     @PostMapping
