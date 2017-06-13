@@ -18,6 +18,9 @@ public class ContentListBo implements Serializable {
 	/**标题**/
 	private String title;
 
+	/**标题颜色**varchar(10)**/
+	private String titleColor;
+
 	/**栏目ID**/
 	private String channelId;
 
@@ -63,6 +66,22 @@ public class ContentListBo implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getTitleColor() {
+		return titleColor;
+	}
+
+	public void setTitleColor(String titleColor) {
+		this.titleColor = titleColor;
+	}
+
+	public Integer getRecommendLevel() {
+		return recommendLevel;
+	}
+
+	public void setRecommendLevel(Integer recommendLevel) {
+		this.recommendLevel = recommendLevel;
 	}
 
 	public String getChannelId() {

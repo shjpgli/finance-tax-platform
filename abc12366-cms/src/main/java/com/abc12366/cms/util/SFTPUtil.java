@@ -87,6 +87,7 @@ public class SFTPUtil {
                 buffer = SFTPUtil.listToByteArray(content1);
             }
             outputStream.write(buffer);
+            String filePath1 = "/"+directory +"/"+ storeName;
 //            com.abc12366.cms.model.File file = new com.abc12366.cms.model.File();
 //            file.setContentId("");
 //            file.setFileName(fileName);
@@ -94,7 +95,7 @@ public class SFTPUtil {
 //            file.setFileIsvalid(0);
             map.put("fileName",fileName);
             map.put("storeName",storeName);
-            map.put("filePath",filePath);
+            map.put("filePath",filePath1);
             return map;
         } catch (Exception e) {
             e.printStackTrace();

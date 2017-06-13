@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -87,6 +88,7 @@ public class CommentServiceImpl implements CommentService {
         CommentBo commentBo = commentSaveBo.getComment();
         Comment comment = new Comment();
         commentBo.setCommentId(uuid);
+        commentBo.setCreateTime(new Date());
         try {
             BeanUtils.copyProperties(commentBo, comment);
         } catch (Exception e) {
@@ -140,6 +142,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentSaveBo update(CommentSaveBo commentSaveBo) {
         //评论信息
         CommentBo commentBo = commentSaveBo.getComment();
+        commentBo.setReplyTime(new Date());
         Comment comment = new Comment();
         try {
             BeanUtils.copyProperties(commentBo, comment);

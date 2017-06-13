@@ -86,10 +86,11 @@ public class SFTPUtil {
             if (content1 != null) {
                 buffer = SFTPUtil.listToByteArray(content1);
             }
+            String filePath1 = "/"+directory +"/"+ storeName;
             outputStream.write(buffer);
             map.put("fileName",fileName);
             map.put("storeName",storeName);
-            map.put("filePath",filePath);
+            map.put("filePath",filePath1);
             return map;
         } catch (Exception e) {
             e.printStackTrace();

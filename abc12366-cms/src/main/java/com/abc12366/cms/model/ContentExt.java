@@ -43,6 +43,9 @@ public class ContentExt implements Serializable {
 	/**是否加粗**tinyint(1)**/
 	private Integer isBold;
 
+	/**标题颜色**varchar(10)**/
+	private String titleColor;
+
 	/**标题图片**varchar(100)**/
 	private String titleImg;
 
@@ -155,6 +158,14 @@ public class ContentExt implements Serializable {
 
 	public Integer getIsBold(){
 		return this.isBold;
+	}
+
+	public String getTitleColor() {
+		return titleColor;
+	}
+
+	public void setTitleColor(String titleColor) {
+		this.titleColor = titleColor;
 	}
 
 	public void setTitleImg(String titleImg){

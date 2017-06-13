@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,7 @@ public class SiteIssueServiceImpl implements SiteIssueService {
     public SiteIssueBo save(SiteIssueBo siteIssueBo) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         siteIssueBo.setIssueId(uuid);
+        siteIssueBo.setIssueDate(new Date());
         SiteIssue siteIssue = new SiteIssue();
         try {
             BeanUtils.copyProperties(siteIssueBo, siteIssue);
@@ -73,6 +75,7 @@ public class SiteIssueServiceImpl implements SiteIssueService {
 
     @Override
     public SiteIssueBo update(SiteIssueBo siteIssueBo) {
+        siteIssueBo.setUpdateDate(new Date());
         SiteIssue siteIssue = new SiteIssue();
         try {
             BeanUtils.copyProperties(siteIssueBo, siteIssue);

@@ -39,6 +39,9 @@ public class ContentExtBo implements Serializable {
 	/**媒体类型**varchar(20)**/
 	private String mediaType;
 
+	/**标题颜色**varchar(10)**/
+	private String titleColor;
+
 	/**标题图片**varchar(100)**/
 	private String titleImg;
 
@@ -121,6 +124,14 @@ public class ContentExtBo implements Serializable {
 
 	public void setMediaType(String mediaType) {
 		this.mediaType = mediaType;
+	}
+
+	public String getTitleColor() {
+		return titleColor;
+	}
+
+	public void setTitleColor(String titleColor) {
+		this.titleColor = titleColor;
 	}
 
 	public String getTitleImg() {

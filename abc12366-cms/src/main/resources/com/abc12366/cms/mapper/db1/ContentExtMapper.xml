@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.ContentExt">
 		 INSERT INTO cms_content_ext
- 		(contentId,title,shortTitle,author,origin,originUrl,description,releaseDate,mediaPath,mediaType,isBold,titleImg,contentImg,typeImg,link,tplContent,needRegenerate,toplevelDate,pigeonholeDate) 
+ 		(contentId,title,shortTitle,author,origin,originUrl,description,releaseDate,mediaPath,mediaType,isBold,titleColor,titleImg,contentImg,typeImg,link,tplContent,needRegenerate,toplevelDate,pigeonholeDate)
 		 VALUES 
- 		(#{contentId},#{title},#{shortTitle},#{author},#{origin},#{originUrl},#{description},#{releaseDate},#{mediaPath},#{mediaType},#{isBold},#{titleImg},#{contentImg},#{typeImg},#{link},#{tplContent},#{needRegenerate},#{toplevelDate},#{pigeonholeDate}) 
+ 		(#{contentId},#{title},#{shortTitle},#{author},#{origin},#{originUrl},#{description},#{releaseDate},#{mediaPath},#{mediaType},#{isBold},#{titleColor},#{titleImg},#{contentImg},#{typeImg},#{link},#{tplContent},#{needRegenerate},#{toplevelDate},#{pigeonholeDate})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -54,6 +54,9 @@
 			<if test="isBold != null">
 				 isBold,
 			</if>
+			 <if test="titleColor != null">
+				 titleColor,
+			 </if>
 			<if test="titleImg != null">
 				 titleImg,
 			</if>
@@ -114,6 +117,9 @@
 			<if test="isBold!=null">
 				 #{isBold},
 			</if>
+			 <if test="titleColor!=null">
+				 #{titleColor},
+			 </if>
 			<if test="titleImg!=null">
 				 #{titleImg},
 			</if>
@@ -175,6 +181,9 @@
 			<if test="isBold != null">
 				 isBold = #{isBold},
 			</if>
+			 <if test="titleColor != null">
+				 titleColor = #{titleColor},
+			 </if>
 			<if test="titleImg != null">
 				 titleImg = #{titleImg},
 			</if>
@@ -218,6 +227,7 @@
 			 mediaPath = #{mediaPath},
 			 mediaType = #{mediaType},
 			 isBold = #{isBold},
+			 titleColor = #{titleColor},
 			 titleImg = #{titleImg},
 			 contentImg = #{contentImg},
 			 typeImg = #{typeImg},

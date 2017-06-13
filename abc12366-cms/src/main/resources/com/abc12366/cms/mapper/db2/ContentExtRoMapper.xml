@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		contentId,	title,	shortTitle,	author,	origin,	originUrl,	description,	releaseDate,	mediaPath,	mediaType,	isBold,	titleImg,	contentImg,	typeImg,	link,	tplContent,	needRegenerate,	toplevelDate,	pigeonholeDate
+		contentId,	title,	shortTitle,	author,	origin,	originUrl,	description,	releaseDate,	mediaPath,	mediaType,titleColor,isBold,	titleImg,	contentImg,	typeImg,	link,	tplContent,	needRegenerate,	toplevelDate,	pigeonholeDate
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
