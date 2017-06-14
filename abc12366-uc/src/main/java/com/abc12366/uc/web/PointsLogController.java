@@ -61,8 +61,8 @@ public class PointsLogController {
         List<PointsLogBO> logList = pointsLogService.selectList(map);
         LOGGER.info("{}", logList);
         return (logList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4004), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("logList", (Page) logList, "total", ((Page) logList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
     }
 
     @PostMapping
@@ -70,6 +70,6 @@ public class PointsLogController {
         LOGGER.info("{}", pointsLogBO);
         PointsLogBO points_log = pointsLogService.insert(pointsLogBO);
         LOGGER.info("{}", points_log);
-        return (points_log != null) ? ResponseEntity.ok(points_log) : new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", points_log));
     }
 }

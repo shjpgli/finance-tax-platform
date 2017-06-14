@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +42,7 @@ public class PointsRuleController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
     ) {
         LOGGER.info("{}:{}:{}:{}:{}", name, code, type, page, size);
-        Map map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         if (name != null && StringUtils.isEmpty(name)) {
             name = null;
         }
@@ -60,8 +59,8 @@ public class PointsRuleController {
         List<PointsRuleBO> ruleList = pointsRuleService.selectList(map);
         LOGGER.info("{}", ruleList);
         return (ruleList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4004), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("userList", (Page) ruleList, "total", ((Page) ruleList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) ruleList, "total", ((Page) ruleList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
@@ -69,7 +68,7 @@ public class PointsRuleController {
         LOGGER.info("{}", id);
         PointsRuleBO points_rule = pointsRuleService.selectOne(id);
         LOGGER.info("{}", points_rule);
-        return (points_rule != null) ? ResponseEntity.ok(points_rule) : new ResponseEntity(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", points_rule));
     }
 
     @PostMapping
@@ -77,7 +76,7 @@ public class PointsRuleController {
         LOGGER.info("{}", pointsRuleBO);
         PointsRuleBO rule = pointsRuleService.insert(pointsRuleBO);
         LOGGER.info("{}", rule);
-        return (rule != null) ? ResponseEntity.ok(rule) : new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", rule));
     }
 
     @PutMapping(path = "/{id}")
@@ -85,6 +84,6 @@ public class PointsRuleController {
         LOGGER.info("{}", pointsRuleUpdateBO);
         PointsRuleBO rule = pointsRuleService.update(pointsRuleUpdateBO, id);
         LOGGER.info("{}", rule);
-        return (rule != null) ? ResponseEntity.ok(rule) : new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", rule));
     }
 }

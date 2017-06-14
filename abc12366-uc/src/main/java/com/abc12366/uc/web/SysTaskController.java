@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +49,9 @@ public class SysTaskController {
         map.put("type", type);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<SysTaskBO> taskList = sysTaskService.selectList(map);
-        return ResponseEntity.ok(Utils.kv("taskList", taskList, "total", ((Page) taskList).getTotal()));
+        return (taskList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
     }
 
     @GetMapping(path = "/tasks")
@@ -70,7 +71,9 @@ public class SysTaskController {
         map.put("type", type);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<SysTaskBO> taskList = sysTaskService.selectDeployedList(map);
-        return ResponseEntity.ok(Utils.kv("taskList", taskList, "total", ((Page) taskList).getTotal()));
+        return (taskList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
     }
 
     @GetMapping(path = "/task/{id}")
@@ -78,7 +81,7 @@ public class SysTaskController {
         LOGGER.info("{}", id);
         SysTaskBO sysTaskBO = sysTaskService.selectOne(id);
         LOGGER.info("{}", sysTaskBO);
-        return ResponseEntity.ok(sysTaskBO);
+        return ResponseEntity.ok(Utils.kv("data", sysTaskBO));
     }
 
     @PostMapping(path = "/task")
@@ -86,7 +89,7 @@ public class SysTaskController {
         LOGGER.info("{}", sysTaskInsertBO);
         SysTaskBO sysTaskBO = sysTaskService.insert(sysTaskInsertBO);
         LOGGER.info("{}", sysTaskBO);
-        return ResponseEntity.ok(sysTaskBO);
+        return ResponseEntity.ok(Utils.kv("data", sysTaskBO));
     }
 
     @PutMapping(path = "/task/{id}")
@@ -94,13 +97,13 @@ public class SysTaskController {
         LOGGER.info("{}:{}", sysTaskUpdateBO, id);
         SysTaskBO sysTaskBO = sysTaskService.update(sysTaskUpdateBO, id);
         LOGGER.info("{}", sysTaskBO);
-        return ResponseEntity.ok(sysTaskBO);
+        return ResponseEntity.ok(Utils.kv("data", sysTaskBO));
     }
 
     @DeleteMapping(path = "/task/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
-        boolean result = sysTaskService.delete(id);
-        return result ? ResponseEntity.ok(null) : new ResponseEntity(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
+        sysTaskService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
     }
 }
