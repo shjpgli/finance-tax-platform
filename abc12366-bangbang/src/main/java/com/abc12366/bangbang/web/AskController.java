@@ -69,8 +69,8 @@ public class AskController {
         List<AskBO> askList = askService.selectListForAdmin(asksQueryParamBO);
         LOGGER.info("{}", askList);
         return (askList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("askList", (Page) askList, "total", ((Page) askList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) askList, "total", ((Page) askList).getTotal()));
     }
 
     @GetMapping(path = "/ask")
@@ -106,8 +106,8 @@ public class AskController {
         List<AskBO> askList = askService.selectListForUser(askQueryParamBO);
         LOGGER.info("{}", askList);
         return (askList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("askList", (Page) askList, "total", ((Page) askList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) askList, "total", ((Page) askList).getTotal()));
     }
 
     @PostMapping(path = "/ask")
@@ -115,7 +115,7 @@ public class AskController {
         LOGGER.info("{}", askInsertBO);
         AskBO askBO = askService.insert(askInsertBO);
         LOGGER.info("{}", (askBO == null) ? null : askBO);
-        return (askBO == null) ? new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(askBO);
+        return ResponseEntity.ok(Utils.kv("data", askBO));
     }
 
     @GetMapping(path = "/ask/{id}")
@@ -123,7 +123,7 @@ public class AskController {
         LOGGER.info("{}", id);
         AskBO askBO = askService.selectOne(id);
         LOGGER.info("{}", (askBO == null) ? null : askBO);
-        return (askBO == null) ? new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(askBO);
+        return ResponseEntity.ok(Utils.kv("data", askBO));
     }
 
     @PutMapping(path = "/ask/{id}")
@@ -132,22 +132,22 @@ public class AskController {
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         AskBO askBO = askService.update(id, askUpdateBO, userId);
         LOGGER.info("{}", (askBO == null) ? null : askBO);
-        return (askBO == null) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(askBO);
+        return ResponseEntity.ok(Utils.kv("data", askBO));
     }
 
     @DeleteMapping(path = "/ask/{id}")
     public ResponseEntity delete(@PathVariable("id") String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
-        int result = askService.delete(id, userId);
-        return (result != 1) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(null);
+        askService.delete(id, userId);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     @PutMapping(path = "/block/ask/{id}")
     public ResponseEntity block(@PathVariable("id") String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
-        int result = askService.block(id, userId);
-        return (result != 1) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(null);
+        askService.block(id, userId);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

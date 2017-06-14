@@ -2,6 +2,7 @@ package com.abc12366.message.web;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.SmsLogService;
 import com.abc12366.message.service.SmsService;
@@ -50,7 +51,7 @@ public class SmsController {
         //记日志
         smsLogService.smsVerifyCodeInsert(sendCodeParam, sendCodeResponseBO);
         LOGGER.info("{}", sendCodeResponseBO);
-        return ResponseEntity.ok(sendCodeResponseBO);
+        return ResponseEntity.ok(Utils.kv("data", sendCodeResponseBO));
     }
 
     @PostMapping(path = "/verifycode")
@@ -67,7 +68,7 @@ public class SmsController {
         //记日志
         smsLogService.smsVerifyCodeInsert(verifyCodeParam, verifyCodeResponseBO);
         LOGGER.info("{}", verifyCodeResponseBO);
-        return ResponseEntity.ok(verifyCodeResponseBO);
+        return ResponseEntity.ok(Utils.kv("data", verifyCodeResponseBO));
     }
 
     @PostMapping(path = "/sendtemplate")
@@ -85,7 +86,7 @@ public class SmsController {
         //记日志
         smsLogService.smsOpsLogInsert(sendTemplateParam, verifyCodeResponseBO);
         LOGGER.info("{}", verifyCodeResponseBO);
-        return ResponseEntity.ok(verifyCodeResponseBO);
+        return ResponseEntity.ok(Utils.kv("data", verifyCodeResponseBO));
     }
 
     @PostMapping(path = "/querystatus")
@@ -103,6 +104,6 @@ public class SmsController {
         //记日志
         smsLogService.smsOpsUpdate(queryStatusParam.getSendid().toString(), queryStatusResponseBO);
         LOGGER.info("{}", queryStatusResponseBO);
-        return ResponseEntity.ok(queryStatusResponseBO);
+        return ResponseEntity.ok(Utils.kv("data", queryStatusResponseBO));
     }
 }

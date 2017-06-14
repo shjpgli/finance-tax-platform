@@ -9,7 +9,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +36,7 @@ public class AnswerController {
         LOGGER.info("{}:{}", askId, answerInsertBO);
         answerInsertBO.setAskId(askId);
         AnswerBO answerBO = answerService.insert(answerInsertBO);
-        return (answerBO == null) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(answerBO);
+        return ResponseEntity.ok(Utils.kv("data", answerBO));
     }
 
     @GetMapping(path = "/answers")
@@ -67,8 +66,8 @@ public class AnswerController {
         List<AnswerBO> answerList = answerService.selectListForAdmin(answersQueryParamBO);
         LOGGER.info("{}", answerList);
         return (answerList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("askList", (Page) answerList, "total", ((Page) answerList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) answerList, "total", ((Page) answerList).getTotal()));
     }
 
     @GetMapping(path = "/answer")
@@ -94,15 +93,15 @@ public class AnswerController {
         List<AnswerBO> answerList = answerService.selectListForUser(answerQueryParamBO);
         LOGGER.info("{}", answerList);
         return (answerList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("askList", (Page) answerList, "total", ((Page) answerList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) answerList, "total", ((Page) answerList).getTotal()));
     }
 
     @GetMapping(path = "/answer/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
         AnswerBO answerBO = answerService.selectOne(id);
-        return ResponseEntity.ok(answerBO);
+        return ResponseEntity.ok(Utils.kv("data", answerBO));
     }
 
     @PutMapping(path = "/answer/{id}")
@@ -110,30 +109,30 @@ public class AnswerController {
         LOGGER.info("{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         AnswerBO answerBO = answerService.update(id, answerUpdateBO, userId);
-        return (answerBO == null) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(answerBO);
+        return ResponseEntity.ok(Utils.kv("data", answerBO));
     }
 
     @DeleteMapping(path = "/answer/{id}")
     public ResponseEntity delete(@PathVariable("id") String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
-        int result = answerService.delete(id, userId);
-        return (result != 1) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(null);
+        answerService.delete(id, userId);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     @PutMapping(path = "/block/answer/{id}")
     public ResponseEntity block(@PathVariable("id") String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
-        int result = answerService.block(id, userId);
-        return (result != 1) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(null);
+        answerService.block(id, userId);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     @PutMapping(path = "/accepted/answer/{id}")
     public ResponseEntity accept(@PathVariable("id") String id, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
-        int result = answerService.accept(id, userId);
-        return (result != 1) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(null);
+        answerService.accept(id, userId);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

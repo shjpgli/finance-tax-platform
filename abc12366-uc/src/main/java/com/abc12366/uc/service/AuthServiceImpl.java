@@ -2,7 +2,6 @@ package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Properties;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
@@ -13,8 +12,6 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.util.CheckSumBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -22,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -217,7 +212,7 @@ public class AuthServiceImpl implements AuthService {
         long lastTokenResetTime = token.getLastTokenResetTime().getTime();
         long currentTime = new Date().getTime();
         if (currentTime > (lastTokenResetTime + 1000 * Constant.USER_TOKEN_VALID_SECONDS)) {
-            return false;
+            throw new ServiceException(4015);
         }
         return true;
     }
