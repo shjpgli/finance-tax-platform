@@ -71,6 +71,9 @@ public class ContentServiceImpl implements ContentService{
     @Autowired
     private ContentGroupViewRoMapper groupRoMapper;
 
+    @Autowired
+    private ContentCountMapper contentCountMapper;
+
     @Override
     public List<ContentListBo> selectList(Map<String,Object> map) {
         //查询内容列表
@@ -200,6 +203,9 @@ public class ContentServiceImpl implements ContentService{
                 groupMapper.insert(group);
             }
         }
+        ContentCount cons = new ContentCount();
+        cons.setContentId(uuid);
+        contentCountMapper.insert(cons);
 
 
         LOGGER.info("{}", contentSaveBo);
