@@ -36,7 +36,7 @@ public class ExperienceLogController {
         LOGGER.info("{}", experienceLogBO);
         ExperienceLogQueryBO experienceLogBOReturn = experienceLogService.insert(experienceLogBO);
         LOGGER.info("{}", experienceLogBOReturn);
-        return ResponseEntity.ok(experienceLogBOReturn);
+        return ResponseEntity.ok(Utils.kv("data", experienceLogBOReturn));
     }
 
     @GetMapping
@@ -68,6 +68,8 @@ public class ExperienceLogController {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ExperienceLogQueryBO> logList = experienceLogService.selectList(map);
         LOGGER.info("{}", logList);
-        return ResponseEntity.ok(Utils.kv("logList", logList, "total", ((Page) logList).getTotal()));
+        return (logList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
     }
 }

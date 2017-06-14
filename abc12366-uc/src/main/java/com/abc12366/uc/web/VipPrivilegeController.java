@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +55,9 @@ public class VipPrivilegeController {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<VipPrivilegeBO> privilegeList = vipPrivilegeService.selectList(map);
         LOGGER.info("{}", privilegeList);
-        return ResponseEntity.ok(Utils.kv("privilegeList", privilegeList, "total", ((Page) privilegeList).getTotal()));
+        return (privilegeList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) privilegeList, "total", ((Page) privilegeList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
@@ -64,7 +65,7 @@ public class VipPrivilegeController {
         LOGGER.info("{}", id);
         VipPrivilegeBO vipPrivilegeBO = vipPrivilegeService.selectOne(id);
         LOGGER.info("{}", vipPrivilegeBO);
-        return ResponseEntity.ok(vipPrivilegeBO);
+        return ResponseEntity.ok(Utils.kv("data",vipPrivilegeBO));
     }
 
     @PostMapping
@@ -72,7 +73,7 @@ public class VipPrivilegeController {
         LOGGER.info("{}", vipPrivilegeInsertBO);
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.insert(vipPrivilegeInsertBO);
         LOGGER.info("{}", vipPrivilegeBOReturn);
-        return ResponseEntity.ok(vipPrivilegeBOReturn);
+        return ResponseEntity.ok(Utils.kv("data",vipPrivilegeBOReturn));
     }
 
     @PutMapping(path = "/{id}")
@@ -80,13 +81,13 @@ public class VipPrivilegeController {
         LOGGER.info("{}", vipPrivilegeUpdateBO);
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.update(vipPrivilegeUpdateBO, id);
         LOGGER.info("{}", vipPrivilegeBOReturn);
-        return ResponseEntity.ok(vipPrivilegeBOReturn);
+        return ResponseEntity.ok(Utils.kv("data",vipPrivilegeBOReturn));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
-        boolean result = vipPrivilegeService.delete(id);
-        return result ? ResponseEntity.ok(null) : new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST);
+        vipPrivilegeService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

@@ -12,6 +12,8 @@ public interface ChannelService {
 
     List<ChannelBo> selectList();
 
+    List<ChannelBo> selectListByparentId(String parentId);
+
     List<ModelItemBo> selectModeList(Map<String,Object> map);
 
     ChannelSaveBo save(ChannelSaveBo channelSaveBo);
@@ -19,6 +21,8 @@ public interface ChannelService {
     ChannelSaveBo selectChannel(String channelId);
 
     ChannelSaveBo update(ChannelSaveBo channelSaveBo);
+
+    ChannelBo updateChannelByparentId(ChannelBo channelBo);
 
     String delete(String channelId);
 }

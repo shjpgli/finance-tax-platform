@@ -35,7 +35,7 @@ public class UserExtendController {
         LOGGER.info("{}", id);
         UserExtendBO user_extend = userExtendService.selectOne(id);
         LOGGER.info("{}", user_extend);
-        return (user_extend != null) ? ResponseEntity.ok(user_extend) : new ResponseEntity(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", user_extend));
     }
 
     @PostMapping
@@ -43,15 +43,14 @@ public class UserExtendController {
         LOGGER.info("{}", userExtendBO);
         UserExtendBO user_extend = userExtendService.insert(userExtendBO);
         LOGGER.info("{}", user_extend);
-        return (user_extend != null) ? ResponseEntity.ok(user_extend) : new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", user_extend));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
-        UserExtendBO user_extend = userExtendService.delete(id);
-        LOGGER.info("{}", user_extend);
-        return (user_extend != null) ? ResponseEntity.ok(user_extend) : new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST);
+        userExtendService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     @PutMapping(path = "/{id}")
@@ -60,6 +59,6 @@ public class UserExtendController {
         userExtendUpdateBO.setUserId(id);
         UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO);
         LOGGER.info("{}", user_extend);
-        return (user_extend != null) ? ResponseEntity.ok(user_extend) : new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", user_extend));
     }
 }

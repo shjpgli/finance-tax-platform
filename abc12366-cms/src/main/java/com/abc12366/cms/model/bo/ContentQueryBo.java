@@ -1,6 +1,4 @@
 package com.abc12366.cms.model.bo;
-import com.abc12366.cms.model.*;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,6 +17,7 @@ public class ContentQueryBo implements Serializable {
 	private List<ContentAttrBo> contentAttrList;//内容扩展属性
 	private List<ContentPictureBo> contentPictureList;//内容图片
 	private List<FileBo> fileList;//内容附件
+	private List<ContentGroupViewBo> groupList;//用户组
 
 	/**专题ID**/
 	private String topicId;
@@ -77,5 +76,13 @@ public class ContentQueryBo implements Serializable {
 
 	public void setTopicId(String topicId) {
 		this.topicId = topicId;
+	}
+
+	public List<ContentGroupViewBo> getGroupList() {
+		return groupList;
+	}
+
+	public void setGroupList(List<ContentGroupViewBo> groupList) {
+		this.groupList = groupList;
 	}
 }

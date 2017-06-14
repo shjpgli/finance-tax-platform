@@ -1,40 +1,33 @@
-package com.abc12366.uc.model.bo;
+package com.abc12366.bangbang.model.bo;
 
-import org.hibernate.validator.constraints.Email;
-
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
- * @author lijun <ljun51@outlook.com>
- * @create 2017-03-28 4:34 PM
- * @since 1.0.0
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-06-13
+ * Time: 15:46
  */
-public class UserUpdateBO {
-
+public class UCUserBO {
     private String id;
-    @Size(min = 6, max = 32)
     private String username;
-    @Pattern(regexp = "^\\d{11}$")
-    @Size(min = 11, max = 11)
     private String phone;
-    @Email
+    private String password;
     private String regMail;
     private String regIP;
+    private String salt;
     private String nickname;
+    private boolean status;
+    private Date createTime;
+    private Date lastUpdate;
     private String userPicturePath;
     private String maxUserPicturePath;
     private String midUserPicturePath;
     private String minUserPicturePath;
     private int points;
     private int exp;
-    private int vipLevel;
-    private Boolean status;
-    private Date createTime;
-    private Date lastUpdate;
+    private String vipLevel;
 
-    public UserUpdateBO() {
+    public UCUserBO() {
     }
 
     public String getId() {
@@ -61,6 +54,14 @@ public class UserUpdateBO {
         this.phone = phone;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getRegMail() {
         return regMail;
     }
@@ -77,12 +78,44 @@ public class UserUpdateBO {
         this.regIP = regIP;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String getUserPicturePath() {
@@ -133,57 +166,11 @@ public class UserUpdateBO {
         this.exp = exp;
     }
 
-    public int getVipLevel() {
+    public String getVipLevel() {
         return vipLevel;
     }
 
-    public void setVipLevel(int vipLevel) {
+    public void setVipLevel(String vipLevel) {
         this.vipLevel = vipLevel;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return "UserUpdateBO{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", phone='" + phone + '\'' +
-                ", regMail='" + regMail + '\'' +
-                ", regIP='" + regIP + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", userPicturePath='" + userPicturePath + '\'' +
-                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
-                ", midUserPicturePath='" + midUserPicturePath + '\'' +
-                ", minUserPicturePath='" + minUserPicturePath + '\'' +
-                ", points=" + points +
-                ", exp=" + exp +
-                ", vipLevel=" + vipLevel +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
     }
 }

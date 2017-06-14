@@ -1,6 +1,7 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.bo.UserTaskBO;
 import com.abc12366.uc.model.bo.UserTaskInsertBO;
 import com.abc12366.uc.model.bo.UserTaskUpdateBO;
@@ -33,7 +34,7 @@ public class UserTaskController {
         LOGGER.info("{}:{}", userTaskInsertBO, userId);
         UserTaskBO userTaskBO = userTaskService.insert(userTaskInsertBO, userId);
         LOGGER.info("{}", userTaskBO);
-        return ResponseEntity.ok(userTaskBO);
+        return ResponseEntity.ok(Utils.kv("data",userTaskBO));
     }
 
     @PutMapping(path = "/{userId}/{id}")
@@ -41,7 +42,7 @@ public class UserTaskController {
         LOGGER.info("{}:{}:{}", userTaskUpdateBO, userId, id);
         UserTaskBO userTaskBO = userTaskService.update(userTaskUpdateBO, userId, id);
         LOGGER.info("{}", userTaskBO);
-        return ResponseEntity.ok(userTaskBO);
+        return ResponseEntity.ok(Utils.kv("data", userTaskBO));
     }
 
     @DeleteMapping(path = "/{userId}/{id}")
@@ -50,7 +51,7 @@ public class UserTaskController {
         Map<String, String> map = new HashMap<>();
         map.put("userId", userId);
         map.put("id", id);
-        boolean result = userTaskService.delete(map);
-        return result ? ResponseEntity.ok(null) : null;
+        userTaskService.delete(map);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

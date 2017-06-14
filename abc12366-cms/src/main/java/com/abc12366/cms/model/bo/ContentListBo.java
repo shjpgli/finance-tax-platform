@@ -33,9 +33,6 @@ public class ContentListBo implements Serializable {
 	/**属性ID**/
 	private String typeId;
 
-	/**类型名称**/
-	private String typeName;
-
 	/**作者**/
 	private String author;
 
@@ -114,14 +111,6 @@ public class ContentListBo implements Serializable {
 
 	public void setTypeId(String typeId) {
 		this.typeId = typeId;
-	}
-
-	public String getTypeName() {
-		return typeName;
-	}
-
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
 	}
 
 	public String getAuthor() {

@@ -105,6 +105,15 @@ public class ChannelController {
         return ResponseEntity.ok(channelSaveBo);
     }
 
+    @PutMapping(path = "/updateByparentId")
+    public ResponseEntity update(@RequestBody ChannelBo channelBo) {
+        LOGGER.info("{}", channelBo);
+        //更新栏目信息
+        channelBo = channelService.updateChannelByparentId(channelBo);
+        LOGGER.info("{}", channelBo);
+        return ResponseEntity.ok(channelBo);
+    }
+
     @DeleteMapping(path = "/{channelId}")
     public ResponseEntity delete(@PathVariable String channelId) {
         LOGGER.info("{}", channelId);

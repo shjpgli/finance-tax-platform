@@ -3,13 +3,12 @@ package com.abc12366.cms.service;
 import com.abc12366.cms.mapper.db1.ChannelAttrMapper;
 import com.abc12366.cms.mapper.db1.ChannelExtMapper;
 import com.abc12366.cms.mapper.db1.ChannelMapper;
-import com.abc12366.cms.mapper.db2.ChannelAttrRoMapper;
-import com.abc12366.cms.mapper.db2.ChannelExtRoMapper;
-import com.abc12366.cms.mapper.db2.ChannelRoMapper;
-import com.abc12366.cms.mapper.db2.ModelItemRoMapper;
+import com.abc12366.cms.mapper.db1.ChnlGroupViewMapper;
+import com.abc12366.cms.mapper.db2.*;
 import com.abc12366.cms.model.Channel;
 import com.abc12366.cms.model.ChannelAttr;
 import com.abc12366.cms.model.ChannelExt;
+import com.abc12366.cms.model.ChnlGroupView;
 import com.abc12366.cms.model.bo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +48,14 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Autowired
     private ModelItemRoMapper modelItemRoMapper;
+
+    @Autowired
+    private ChnlGroupViewRoMapper groupRoMapper;
+
+    @Autowired
+    private ChnlGroupViewMapper groupMapper;
+
+
 
     @Override
     public List<ChannelBo> selectList() {
@@ -128,13 +135,29 @@ public class ChannelServiceImpl implements ChannelService {
             }
         }
 
+        //用户组
+        List<ChnlGroupViewBo> groupBoList = channelSaveBo.getGroupList();
+        if(groupBoList != null){
+            for(ChnlGroupViewBo groupBo:groupBoList){
+                ChnlGroupView group = new ChnlGroupView();
+                groupBo.setChannelId(uuid);
+                try {
+                    BeanUtils.copyProperties(groupBo, group);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                groupMapper.insert(group);
+            }
+        }
+
         LOGGER.info("{}", channelSaveBo);
         return channelSaveBo;
     }
 
     @Override
     public ChannelSaveBo selectChannel(String channelId) {
-        ChannelSaveBo channelQueryBo = new ChannelSaveBo();
+        ChannelSaveBo channelSaveBo = new ChannelSaveBo();
         //查询栏目信息
         Channel channel = channelRoMapper.selectByPrimaryKey(channelId);
         ChannelBo channelBo = new ChannelBo();
@@ -166,10 +189,26 @@ public class ChannelServiceImpl implements ChannelService {
                 throw new RuntimeException("类型转换异常：{}", e);
             }
         }
-        channelQueryBo.setChannel(channelBo);
-        channelQueryBo.setChannelExt(channelExtBo);
-        channelQueryBo.setChannelAttrList(channelAttrBoList);
-        return channelQueryBo;
+        List<ChnlGroupView> groupList = groupRoMapper.selectList(channelId);
+        List<ChnlGroupViewBo> groupBoList = new ArrayList<ChnlGroupViewBo>();
+        if(groupBoList != null){
+            for(ChnlGroupView group:groupList){
+                ChnlGroupViewBo groupBo = new ChnlGroupViewBo();
+                try {
+                    BeanUtils.copyProperties(group, groupBo);
+                    groupBoList.add(groupBo);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+            }
+        }
+
+        channelSaveBo.setChannel(channelBo);
+        channelSaveBo.setChannelExt(channelExtBo);
+        channelSaveBo.setChannelAttrList(channelAttrBoList);
+        channelSaveBo.setGroupList(groupBoList);
+        return channelSaveBo;
     }
 
     @Override
@@ -208,8 +247,69 @@ public class ChannelServiceImpl implements ChannelService {
                 channelAttrMapper.updateByPrimaryKeySelective(channelAttr);
             }
         }
+
+        //用户组
+        groupMapper.deleteByPrimaryKey(channelBo.getChannelId());
+        List<ChnlGroupViewBo> groupBoList = channelSaveBo.getGroupList();
+        if(groupBoList != null){
+            for(ChnlGroupViewBo groupBo:groupBoList){
+                ChnlGroupView group = new ChnlGroupView();
+                try {
+                    BeanUtils.copyProperties(groupBo, group);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                groupMapper.insert(group);
+            }
+        }
+
         LOGGER.info("{}", channelSaveBo);
         return channelSaveBo;
+    }
+
+    @Override
+    public ChannelBo updateChannelByparentId(ChannelBo channelBo) {
+        Channel channel = new Channel();
+        try {
+            BeanUtils.copyProperties(channelBo, channel);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        channelMapper.updateByPrimaryKeySelective(channel);
+
+        List<Channel> channelList = channelRoMapper.selectListByparentId(channelBo.getChannelId());
+        for(Channel channel1 : channelList){
+            ChannelBo channelBo1 = new ChannelBo();
+            try {
+                BeanUtils.copyProperties(channel1,channelBo1);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+            channelBo1.setIsDisplay(channelBo.getIsDisplay());
+            this.updateChannelByparentId(channelBo1);
+        }
+        return channelBo;
+    }
+
+    @Override
+    public List<ChannelBo> selectListByparentId(String parentId) {
+        List<Channel> channelList = channelRoMapper.selectListByparentId(parentId);
+        List<ChannelBo> channelBoList = new ArrayList<>();
+        for(Channel channel : channelList){
+            try {
+                ChannelBo channelBo = new ChannelBo();
+                BeanUtils.copyProperties(channel,channelBo);
+                channelBoList.add(channelBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        LOGGER.info("{}", channelBoList);
+        return channelBoList;
     }
 
     @Override
@@ -218,6 +318,8 @@ public class ChannelServiceImpl implements ChannelService {
         channelExtMapper.deleteByPrimaryKey(channelId);
         //删除栏目扩展项信息
         channelAttrMapper.deleteByPrimaryKey(channelId);
+        //删除用户组
+        groupMapper.deleteByPrimaryKey(channelId);
         //删除栏目信息
         int r = channelMapper.deleteByPrimaryKey(channelId);
         LOGGER.info("{}", r);

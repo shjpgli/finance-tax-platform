@@ -14,55 +14,55 @@ public class ContentCount implements Serializable {
 	private String contentId;
 
 	/**总访问数**int(11)**/
-	private Integer views;
+	private Integer views =0;
 
 	/**月访问数**int(11)**/
-	private Integer viewsMonth;
+	private Integer viewsMonth =0;
 
 	/**周访问数**int(11)**/
-	private Integer viewsWeek;
+	private Integer viewsWeek =0;
 
 	/**日访问数**int(11)**/
-	private Integer viewsDay;
+	private Integer viewsDay =0;
 
 	/**总评论数**int(11)**/
-	private Integer comments;
+	private Integer comments =0;
 
 	/**月评论数**int(11)**/
-	private Integer commentsMonth;
+	private Integer commentsMonth =0;
 
 	/**周评论数**smallint(6)**/
-	private Integer commentsWeek;
+	private Integer commentsWeek =0;
 
 	/**日评论数**smallint(6)**/
-	private Integer commentsDay;
+	private Integer commentsDay =0;
 
 	/**总下载数**int(11)**/
-	private Integer downloads;
+	private Integer downloads =0;
 
 	/**月下载数**int(11)**/
-	private Integer downloadsMonth;
+	private Integer downloadsMonth =0;
 
 	/**周下载数**smallint(6)**/
-	private Integer downloadsWeek;
+	private Integer downloadsWeek =0;
 
 	/**日下载数**smallint(6)**/
-	private Integer downloadsDay;
+	private Integer downloadsDay =0;
 
 	/**总顶数**int(11)**/
-	private Integer ups;
+	private Integer ups =0;
 
 	/**月顶数**int(11)**/
-	private Integer upsMonth;
+	private Integer upsMonth =0;
 
 	/**周顶数**smallint(6)**/
-	private Integer upsWeek;
+	private Integer upsWeek =0;
 
 	/**日顶数**smallint(6)**/
-	private Integer upsDay;
+	private Integer upsDay =0;
 
 	/**总踩数**int(11)**/
-	private Integer downs;
+	private Integer downs =0;
 
 
 

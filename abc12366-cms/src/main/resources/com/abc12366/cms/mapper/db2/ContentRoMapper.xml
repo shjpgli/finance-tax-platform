@@ -26,23 +26,22 @@
 			c.channelName channelName,
 			a.topLevel topLevel,
 			a.typeId typeId,
-			d.typeName typeName,
 			b.author author,
 			e.views views,
 			b.releaseDate releaseDate,
 			a.status STATUS,
 			b.needRegenerate needRegenerate,
 			a.recommendLevel recommendLevel
-		FROM cms_content a,cms_content_ext b,cms_channel_ext c,cms_content_type d,cms_content_count e
-		WHERE a.contentId = b.contentId AND a.channelId = c.channelId AND a.typeId = d.typeId AND a.contentId = e.contentId
+		FROM cms_content a,cms_content_ext b,cms_channel c,cms_content_count e
+		WHERE a.contentId = b.contentId AND a.channelId = c.channelId AND a.contentId = e.contentId
 		<if test="title != null and title != ''">
-			AND title like CONCAT('%',#{title},'%')
+			AND b.title like CONCAT('%',#{title},'%')
 		</if>
 		<if test="author != null and author != ''">
-			AND author like CONCAT('%',#{author},'%')
+			AND b.author like CONCAT('%',#{author},'%')
 		</if>
 		<if test="typeId != null and typeId != ''">
-			AND typeId = #{typeId}
+			AND a.typeId = #{typeId}
 		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 

@@ -56,7 +56,9 @@ public class ExperienceRuleController {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ExperienceRuleBO> ruleList = experienceRuleService.selectList(map);
         LOGGER.info("{}", ruleList);
-        return ResponseEntity.ok(Utils.kv("ruleList", ruleList, "total", ((Page) ruleList).getTotal()));
+        return (ruleList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) ruleList, "total", ((Page) ruleList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
@@ -64,7 +66,7 @@ public class ExperienceRuleController {
         LOGGER.info("{}", id);
         ExperienceRuleBO experienceRuleReturnBO = experienceRuleService.selectOne(id);
         LOGGER.info("{}", experienceRuleReturnBO);
-        return ResponseEntity.ok(experienceRuleReturnBO);
+        return ResponseEntity.ok(Utils.kv("data", experienceRuleReturnBO));
     }
 
     @PostMapping
@@ -72,7 +74,7 @@ public class ExperienceRuleController {
         LOGGER.info("{}", experienceRuleInsertBO);
         ExperienceRuleBO experienceRuleReturn = experienceRuleService.insert(experienceRuleInsertBO);
         LOGGER.info("{}", experienceRuleReturn);
-        return ResponseEntity.ok(experienceRuleReturn);
+        return ResponseEntity.ok(Utils.kv("data", experienceRuleReturn));
     }
 
     @PutMapping(path = "/{id}")
@@ -80,6 +82,6 @@ public class ExperienceRuleController {
         LOGGER.info("{}:{}", experienceRuleUpdateBO, id);
         ExperienceRuleBO experienceRuleReturn = experienceRuleService.update(experienceRuleUpdateBO, id);
         LOGGER.info("{}", experienceRuleReturn);
-        return ResponseEntity.ok(experienceRuleReturn);
+        return ResponseEntity.ok(Utils.kv("data", experienceRuleReturn));
     }
 }
