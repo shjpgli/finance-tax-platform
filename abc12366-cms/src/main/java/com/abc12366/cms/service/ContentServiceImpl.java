@@ -65,6 +65,15 @@ public class ContentServiceImpl implements ContentService{
     @Autowired
     private FileRoMapper fileRoMapper;
 
+    @Autowired
+    private ContentGroupViewMapper groupMapper;
+
+    @Autowired
+    private ContentGroupViewRoMapper groupRoMapper;
+
+    @Autowired
+    private ContentCountMapper contentCountMapper;
+
     @Override
     public List<ContentListBo> selectList(Map<String,Object> map) {
         //查询内容列表
@@ -133,6 +142,7 @@ public class ContentServiceImpl implements ContentService{
         List<ContentPictureBo> contentPictureList = contentSaveBo.getContentPictureList();
         //内容附件
         List<FileBo> fileList = contentSaveBo.getFileList();
+
         contentMapper.insert(content);
         contentExtMapper.insert(contentExt);
         if(contentTxt != null){
@@ -177,6 +187,25 @@ public class ContentServiceImpl implements ContentService{
                 fileMapper.insert(file);
             }
         }
+
+        //用户组
+        List<ContentGroupViewBo> groupList = contentSaveBo.getGroupList();
+        if(groupList != null){
+            for(ContentGroupViewBo groupBo:groupList){
+                ContentGroupView group = new ContentGroupView();
+                groupBo.setContentId(uuid);
+                try {
+                    BeanUtils.copyProperties(groupBo, group);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                groupMapper.insert(group);
+            }
+        }
+        ContentCount cons = new ContentCount();
+        cons.setContentId(uuid);
+        contentCountMapper.insert(cons);
 
 
         LOGGER.info("{}", contentSaveBo);
@@ -266,6 +295,23 @@ public class ContentServiceImpl implements ContentService{
             }
         }
         contentQueryBo.setFileList(fileBoList);
+
+        //获取用户组
+        List<ContentGroupView> groupList = groupRoMapper.selectList(contentId);
+        List<ContentGroupViewBo> groupBoList = new ArrayList<ContentGroupViewBo>();
+        if(groupList != null){
+            for(ContentGroupView group:groupList){
+                ContentGroupViewBo groupBo = new ContentGroupViewBo();
+                try {
+                    BeanUtils.copyProperties(group, groupBo);
+                    groupBoList.add(groupBo);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+            }
+        }
+        contentQueryBo.setGroupList(groupBoList);
         LOGGER.info("{}", contentQueryBo);
         return contentQueryBo;
     }
@@ -346,17 +392,33 @@ public class ContentServiceImpl implements ContentService{
         //根据内容ID删除附件信息，然后再新增
         fileMapper.deleteByContentId(content.getContentId());
         if(fileList != null){
-
-        }
-        for(FileBo fileBo:fileList){
-            File file = new File();
-            try {
-                BeanUtils.copyProperties(fileBo, file);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+            for(FileBo fileBo:fileList){
+                File file = new File();
+                try {
+                    BeanUtils.copyProperties(fileBo, file);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                fileMapper.insert(file);
             }
-            fileMapper.insert(file);
+        }
+
+
+        //用户组
+        groupMapper.deleteByPrimaryKey(content.getContentId());
+        List<ContentGroupViewBo> groupList = contentSaveBo.getGroupList();
+        if(groupList != null){
+            for(ContentGroupViewBo groupBo:groupList){
+                ContentGroupView group = new ContentGroupView();
+                try {
+                    BeanUtils.copyProperties(groupBo, group);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                groupMapper.insert(group);
+            }
         }
 
         LOGGER.info("{}", contentSaveBo);
@@ -375,6 +437,8 @@ public class ContentServiceImpl implements ContentService{
         contentPictureMapper.deleteByPrimaryKey(contentId);
         //删除内容附件信息
         fileMapper.updateByContentId(contentId);
+        //用户组
+        groupMapper.deleteByPrimaryKey(contentId);
         //删除内容信息
         int r = contentMapper.deleteByPrimaryKey(contentId);
         LOGGER.info("{}", r);
