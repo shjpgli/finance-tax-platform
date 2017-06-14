@@ -265,7 +265,7 @@ public class UserServiceImpl implements UserService {
             userBO.setMenuMap(menuMap);
             return userBO;
         } else {
-            throw new ServiceException(4102);
+            throw new ServiceException(4125);
         }
     }
 
