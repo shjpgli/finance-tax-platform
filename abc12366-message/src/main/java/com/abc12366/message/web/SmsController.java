@@ -5,7 +5,6 @@ import com.abc12366.common.util.Constant;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.SmsLogService;
 import com.abc12366.message.service.SmsService;
-import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-05-27

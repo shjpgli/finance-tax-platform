@@ -51,6 +51,7 @@ public class AskServiceImpl implements AskService {
         ask.setId(Utils.uuid());
         ask.setCreateTime(date);
         ask.setLastUpdate(date);
+        ask.setIsSolve(false);
         int result = askMapper.insert(ask);
         if (result != 1) {
             LOGGER.warn("新增失败，参数：{}", askInsertBO);
@@ -67,12 +68,15 @@ public class AskServiceImpl implements AskService {
     }
 
     @Override
-    public AskBO update(String id, AskUpdateBO askUpdateBO) {
+    public AskBO update(String id, AskUpdateBO askUpdateBO, String userId) {
         AskBO askBO = askRoMapper.selectOne(id);
         if (askBO == null) {
             LOGGER.warn("更新失败，不存在可被更新的数据，参数:ID=", id);
             throw new ServiceException(4102);
         }
+        //问题修改权限控制，只有问题拥有者才可以修改
+        //TODO
+
         Ask ask = new Ask();
         BeanUtils.copyProperties(askUpdateBO, ask);
         ask.setId(id);
@@ -87,12 +91,21 @@ public class AskServiceImpl implements AskService {
     }
 
     @Override
-    public int delete(String id) {
+    public int delete(String id, String userId) {
         AskBO askBO = askRoMapper.selectOne(id);
         if (askBO == null) {
             LOGGER.warn("删除失败，不存在可被删除的数据，参数:ID=", id);
             throw new ServiceException(4103);
         }
+        //1.问题删除权限控制，用户和管理员都可以删除问题
+        //TODO
+
+        //2.但是用户在提问超过某一阈值（24小时）之后不能删除
+        if (System.currentTimeMillis() > (askBO.getCreateTime().getTime() + (24 * 3600 * 1000))) {
+            LOGGER.warn("用户在提问超过某一阈值（24小时）之后不能删除!");
+            return 0;
+        }
+
         Ask ask = new Ask();
         int result = askMapper.delete(id);
         if (result != 1) {
@@ -103,12 +116,15 @@ public class AskServiceImpl implements AskService {
     }
 
     @Override
-    public int block(String id) {
+    public int block(String id, String userId) {
         AskBO askBO = askRoMapper.selectOne(id);
         if (askBO == null) {
             LOGGER.warn("更新失败，不存在可被更新的数据，参数:ID=", id);
             throw new ServiceException(4102);
         }
+        //屏蔽问题权限控制，只有后台用户可以做屏蔽问题操作
+        //TODO
+
         Ask ask = new Ask();
         BeanUtils.copyProperties(askBO, ask);
         ask.setLastUpdate(new Date());

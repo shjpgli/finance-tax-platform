@@ -18,9 +18,9 @@ public interface AskService {
 
     AskBO selectOne(String id);
 
-    AskBO update(String id, AskUpdateBO askUpdateBO);
+    AskBO update(String id, AskUpdateBO askUpdateBO, String userId);
 
-    int delete(String id);
+    int delete(String id, String userId);
 
-    int block(String id);
+    int block(String id, String userId);
 }
