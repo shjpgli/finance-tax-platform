@@ -10,10 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 内容管理模块
@@ -117,6 +114,7 @@ public class ContentServiceImpl implements ContentService{
         //内容扩展项
         ContentExtBo contentExtBo = contentSaveBo.getContentExt();
         contentExtBo.setContentId(uuid);
+        contentExtBo.setReleaseDate(new Date());
         ContentExt contentExt = new ContentExt();
         try {
             BeanUtils.copyProperties(contentExtBo, contentExt);
