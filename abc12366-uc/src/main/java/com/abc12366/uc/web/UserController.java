@@ -9,7 +9,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -74,7 +73,9 @@ public class UserController {
         LOGGER.info("{}", id);
         Map map = userService.selectOne(id);
         LOGGER.info("{}", map);
-        return ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
+        return (map == null) ?
+                ResponseEntity.ok(Utils.kv("user", null, "user_extend", null)) :
+                ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
 
     @GetMapping(path = "/u/{usernameOrPhone}")
