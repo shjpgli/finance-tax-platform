@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -126,24 +127,27 @@ public class AskController {
     }
 
     @PutMapping(path = "/ask/{id}")
-    public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody AskUpdateBO askUpdateBO) {
+    public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody AskUpdateBO askUpdateBO, HttpServletRequest request) {
         LOGGER.info("{}", id);
-        AskBO askBO = askService.update(id, askUpdateBO);
+        String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
+        AskBO askBO = askService.update(id, askUpdateBO, userId);
         LOGGER.info("{}", (askBO == null) ? null : askBO);
         return (askBO == null) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(askBO);
     }
 
     @DeleteMapping(path = "/ask/{id}")
-    public ResponseEntity delete(@PathVariable("id") String id) {
+    public ResponseEntity delete(@PathVariable("id") String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
-        int result = askService.delete(id);
+        String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
+        int result = askService.delete(id, userId);
         return (result != 1) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(null);
     }
 
     @PutMapping(path = "/block/ask/{id}")
-    public ResponseEntity block(@PathVariable("id") String id) {
+    public ResponseEntity block(@PathVariable("id") String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id);
-        int result = askService.block(id);
+        String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
+        int result = askService.block(id, userId);
         return (result != 1) ? new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST) : ResponseEntity.ok(null);
     }
 }

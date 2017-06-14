@@ -1,7 +1,5 @@
 package com.abc12366.message.model.bo;
 
-import java.util.Date;
-
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-06-02
