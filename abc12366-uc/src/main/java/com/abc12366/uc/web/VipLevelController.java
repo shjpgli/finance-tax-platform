@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -52,14 +51,16 @@ public class VipLevelController {
         map.put("level", level);
         map.put("status", status);
         List<VipLevelBO> vipLevelBOList = vipLevelService.selectList(map);
-        return ResponseEntity.ok(Utils.kv("levelList", (Page) vipLevelBOList, "total", ((Page) vipLevelBOList).getTotal()));
+        return (vipLevelBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) vipLevelBOList, "total", ((Page) vipLevelBOList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
         VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
-        return ResponseEntity.ok(vipLevelBO);
+        return ResponseEntity.ok(Utils.kv("data",vipLevelBO));
     }
 
     @PostMapping
@@ -67,7 +68,7 @@ public class VipLevelController {
         LOGGER.info("{}", vipLevelBO);
         VipLevelBO vipLevelBOReturn = vipLevelService.insert(vipLevelBO);
         LOGGER.info("{}", vipLevelBOReturn);
-        return (vipLevelBOReturn != null) ? ResponseEntity.ok(vipLevelBOReturn) : new ResponseEntity(Utils.bodyStatus(4101), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data",vipLevelBOReturn));
     }
 
     @PutMapping
@@ -75,7 +76,7 @@ public class VipLevelController {
         LOGGER.info("{}", vipLevelUpdateBO);
         VipLevelBO vipLevelBOReturn = vipLevelService.update(vipLevelUpdateBO);
         LOGGER.info("{}", vipLevelBOReturn);
-        return (vipLevelBOReturn != null) ? ResponseEntity.ok(vipLevelBOReturn) : new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data",vipLevelBOReturn));
     }
 }
 

@@ -50,7 +50,9 @@ public class ExperienceLevelController {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ExperienceLevelBO> levelList = experienceLevelService.selectList(map);
         LOGGER.info("{}", levelList);
-        return ResponseEntity.ok(Utils.kv("levelList", levelList, "total", ((Page) levelList).getTotal()));
+        return (levelList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) levelList, "total", ((Page) levelList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
@@ -58,7 +60,7 @@ public class ExperienceLevelController {
         LOGGER.info("{}", id);
         ExperienceLevelBO experienceLevelQueryBO = experienceLevelService.selectOne(id);
         LOGGER.info("{}", experienceLevelQueryBO);
-        return ResponseEntity.ok(experienceLevelQueryBO);
+        return ResponseEntity.ok(Utils.kv("data", experienceLevelQueryBO));
     }
 
     @PostMapping
@@ -66,7 +68,7 @@ public class ExperienceLevelController {
         LOGGER.info("{}", experienceLevelInsertBO);
         ExperienceLevelBO experienceLevelBOReturn = experienceLevelService.insert(experienceLevelInsertBO);
         LOGGER.info("{}", experienceLevelBOReturn);
-        return ResponseEntity.ok(experienceLevelBOReturn);
+        return ResponseEntity.ok(Utils.kv("data", experienceLevelBOReturn));
     }
 
     @PutMapping(path = "/{id}")
@@ -74,6 +76,6 @@ public class ExperienceLevelController {
         LOGGER.info("{}:{}", experienceLevelUpdateBO, id);
         ExperienceLevelBO experienceLevelReturn = experienceLevelService.update(experienceLevelUpdateBO, id);
         LOGGER.info("{}", experienceLevelReturn);
-        return ResponseEntity.ok(experienceLevelReturn);
+        return ResponseEntity.ok(Utils.kv("data", experienceLevelReturn));
     }
 }

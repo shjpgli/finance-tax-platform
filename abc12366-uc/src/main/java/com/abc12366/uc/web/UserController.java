@@ -65,8 +65,8 @@ public class UserController {
         List<UserBO> userList = userService.selectList(map);
         LOGGER.info("{}", userList);
         return (userList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("userList", (Page) userList, "total", ((Page) userList).getTotal()));
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
     @GetMapping(path = "/{id}")
@@ -74,7 +74,7 @@ public class UserController {
         LOGGER.info("{}", id);
         Map map = userService.selectOne(id);
         LOGGER.info("{}", map);
-        return ResponseEntity.ok(map);
+        return ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
 
     @GetMapping(path = "/u/{usernameOrPhone}")
@@ -82,7 +82,7 @@ public class UserController {
         LOGGER.info("{}", usernameOrPhone);
         UserBO user = userService.selectByUsernameOrPhone(usernameOrPhone);
         LOGGER.info("{}", user);
-        return (user != null) ? ResponseEntity.ok(user) : new ResponseEntity(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", user));
     }
 
     @PutMapping(path = "/{id}")
@@ -91,14 +91,13 @@ public class UserController {
         userUpdateDTO.setId(id);
         UserBO user = userService.update(userUpdateDTO);
         LOGGER.info("{}", user);
-        return (user != null) ? ResponseEntity.ok(user) : new ResponseEntity(Utils.bodyStatus(4102), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", user));
     }
 
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity delete(@PathVariable String userId) {
         LOGGER.info("{}", userId);
-        UserBO user = userService.delete(userId);
-        LOGGER.info("{}", user);
-        return (user != null) ? ResponseEntity.ok(user) : new ResponseEntity(Utils.bodyStatus(4103), HttpStatus.BAD_REQUEST);
+        userService.delete(userId);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

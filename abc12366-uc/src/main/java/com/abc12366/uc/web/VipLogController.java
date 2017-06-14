@@ -35,7 +35,9 @@ public class VipLogController {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<VipLogBO> logList = vipLogService.selectList();
         LOGGER.info("{}", logList);
-        return ResponseEntity.ok(Utils.kv("logList", logList, "total", ((Page) logList).getTotal()));
+        return (logList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
     }
 
 /*    @PostMapping
