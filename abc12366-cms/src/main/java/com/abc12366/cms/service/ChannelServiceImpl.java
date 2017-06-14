@@ -269,6 +269,50 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public ChannelBo updateChannelByparentId(ChannelBo channelBo) {
+        Channel channel = new Channel();
+        try {
+            BeanUtils.copyProperties(channelBo, channel);
+        } catch (Exception e) {
+            LOGGER.error("类转换异常：{}", e);
+            throw new RuntimeException("类型转换异常：{}", e);
+        }
+        channelMapper.updateByPrimaryKeySelective(channel);
+
+        List<Channel> channelList = channelRoMapper.selectListByparentId(channelBo.getChannelId());
+        for(Channel channel1 : channelList){
+            ChannelBo channelBo1 = new ChannelBo();
+            try {
+                BeanUtils.copyProperties(channel1,channelBo1);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+            channelBo1.setIsDisplay(channelBo.getIsDisplay());
+            this.updateChannelByparentId(channelBo1);
+        }
+        return channelBo;
+    }
+
+    @Override
+    public List<ChannelBo> selectListByparentId(String parentId) {
+        List<Channel> channelList = channelRoMapper.selectListByparentId(parentId);
+        List<ChannelBo> channelBoList = new ArrayList<>();
+        for(Channel channel : channelList){
+            try {
+                ChannelBo channelBo = new ChannelBo();
+                BeanUtils.copyProperties(channel,channelBo);
+                channelBoList.add(channelBo);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        LOGGER.info("{}", channelBoList);
+        return channelBoList;
+    }
+
+    @Override
     public String delete(String channelId) {
         //删除栏目扩展信息
         channelExtMapper.deleteByPrimaryKey(channelId);
