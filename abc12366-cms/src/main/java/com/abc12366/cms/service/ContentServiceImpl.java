@@ -453,8 +453,14 @@ public class ContentServiceImpl implements ContentService{
     }
 
     @Override
-    public String thList(String[] contentIds) {
+    public String updateStatusList(String[] contentIds) {
         contentMapper.updateStatusList(contentIds);
+        return "";
+    }
+
+    @Override
+    public String updatRegenerateList(String[] contentIds) {
+        contentExtMapper.updatRegenerateList(contentIds);
         return "";
     }
 

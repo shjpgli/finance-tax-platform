@@ -27,8 +27,10 @@ public interface ContentService {
 
     String deleteList(String[] contentIds);
 
-    String thList(String[] contentIds);
+    String updateStatusList(String[] contentIds);
 
     ContentUpdateListBo updateList(ContentUpdateListBo contentUpdateListBo);
+
+    String updatRegenerateList(String[] contentIds);
 
 }

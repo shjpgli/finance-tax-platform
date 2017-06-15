@@ -155,7 +155,16 @@ public class ContentController {
     public ResponseEntity thList(@RequestParam(value = "contentIds", required = true) String[] contentIds) {
         LOGGER.info("{}", contentIds);
         //批量退回内容信息
-        String rtn = contentService.thList(contentIds);
+        String rtn = contentService.updateStatusList(contentIds);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    @DeleteMapping(path = "/updatRegenerateList")
+    public ResponseEntity updatRegenerateList(@RequestParam(value = "contentIds", required = true) String[] contentIds) {
+        LOGGER.info("{}", contentIds);
+        //批量更新内容已生成静态页字段
+        String rtn = contentService.updatRegenerateList(contentIds);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

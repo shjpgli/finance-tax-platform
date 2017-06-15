@@ -48,7 +48,7 @@ public interface ContentMapper{
 
 	/**
 	 *
-	 * 修改(根据主键ID修改)
+	 * 修改状态(根据主键ID修改)
 	 *
 	 **/
 	int updateStatusList(String[] contentIds);

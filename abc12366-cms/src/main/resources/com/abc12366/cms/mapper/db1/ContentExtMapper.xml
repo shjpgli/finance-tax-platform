@@ -239,4 +239,12 @@
 		 WHERE contentId = #{contentId}
 	</update>
 
+	<!--更新：根据主键ID批量更新-->
+	<update id="updatRegenerateList" >
+		update cms_content_ext SET needRegenerate = 1
+		WHERE contentId in <foreach item="item" index="index" collection="contentIds" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+	</update>
+
 </mapper>
