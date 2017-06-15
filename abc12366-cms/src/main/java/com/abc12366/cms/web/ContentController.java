@@ -86,7 +86,7 @@ public class ContentController {
         dataList.setModelItems(modelItems);
         dataList.setTplPrefix(modelBo.getTplContentPrefix());
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(dataList);
+        return ResponseEntity.ok(Utils.kv("data", dataList));
     }
 
     @PostMapping
@@ -95,7 +95,7 @@ public class ContentController {
         //新增内容信息
         contentSaveBo = contentService.save(contentSaveBo);
         LOGGER.info("{}", contentSaveBo);
-        return ResponseEntity.ok(contentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
     @GetMapping(path = "/{contentId}")
@@ -104,7 +104,7 @@ public class ContentController {
         //根据内容ID查询内容信息
         ContentQueryBo contentQueryBo = contentService.selectContent(contentId);
         LOGGER.info("{}", contentQueryBo);
-        return ResponseEntity.ok(contentQueryBo);
+        return ResponseEntity.ok(Utils.kv("data", contentQueryBo));
     }
 
     @GetMapping(path = "/contentList")
@@ -130,7 +130,7 @@ public class ContentController {
         //更新内容信息
         contentSaveBo = contentService.update(contentSaveBo);
         LOGGER.info("{}", contentSaveBo);
-        return ResponseEntity.ok(contentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
     @DeleteMapping(path = "/{contentId}")
@@ -139,7 +139,7 @@ public class ContentController {
         //删除内容信息
         String rtn = contentService.delete(contentId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
 

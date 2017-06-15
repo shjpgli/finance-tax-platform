@@ -47,7 +47,7 @@ public class ModelController {
         //新增评论信息
         modelBo = modelService.save(modelBo);
         LOGGER.info("{}", modelBo);
-        return ResponseEntity.ok(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
     @GetMapping(path = "/{modelId}")
@@ -56,7 +56,7 @@ public class ModelController {
         //查询评论信息
         ModelBo modelBo = modelService.selectModel(modelId);
         LOGGER.info("{}", modelBo);
-        return ResponseEntity.ok(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
     @PutMapping(path = "/{modelId}")
@@ -67,7 +67,7 @@ public class ModelController {
         //更新评论信息
         modelBo = modelService.update(modelBo);
         LOGGER.info("{}", modelBo);
-        return ResponseEntity.ok(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
     @PutMapping(path = "/updateList")
@@ -77,7 +77,7 @@ public class ModelController {
         //更新评论信息
         modelListBo = modelService.updateList(modelListBo);
         LOGGER.info("{}", modelListBo);
-        return ResponseEntity.ok(modelListBo);
+        return ResponseEntity.ok(Utils.kv("data", modelListBo));
     }
 
     @DeleteMapping(path = "/{modelId}")
@@ -86,7 +86,7 @@ public class ModelController {
         //删除评论信息
         String rtn = modelService.delete(modelId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
     @DeleteMapping(path = "/deleteList")
@@ -96,7 +96,7 @@ public class ModelController {
         //删除评论信息
         String rtn = modelService.deleteList(modelIds);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
 

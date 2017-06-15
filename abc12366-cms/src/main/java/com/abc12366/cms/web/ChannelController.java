@@ -58,7 +58,7 @@ public class ChannelController {
         dataList.setModelItems(modelItems);
         dataList.setTplPrefix(modelBo.getTplChannelPrefix());
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(dataList);
+        return ResponseEntity.ok(Utils.kv("data", dataList));
     }
 
     @PostMapping
@@ -67,7 +67,7 @@ public class ChannelController {
         //新增栏目信息
         channelSaveBo = channelService.save(channelSaveBo);
         LOGGER.info("{}", channelSaveBo);
-        return ResponseEntity.ok(channelSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
     @GetMapping(path = "/{channelId}")
@@ -76,7 +76,7 @@ public class ChannelController {
         //根据栏目ID查询内容信息
         ChannelSaveBo channelSaveBo = channelService.selectChannel(channelId);
         LOGGER.info("{}", channelSaveBo);
-        return ResponseEntity.ok(channelSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
     @GetMapping(path = "/channelList")
@@ -102,7 +102,7 @@ public class ChannelController {
         //更新栏目信息
         channelSaveBo = channelService.update(channelSaveBo);
         LOGGER.info("{}", channelSaveBo);
-        return ResponseEntity.ok(channelSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
     @PutMapping(path = "/updateByparentId")
@@ -111,7 +111,7 @@ public class ChannelController {
         //更新栏目信息
         channelBo = channelService.updateChannelByparentId(channelBo);
         LOGGER.info("{}", channelBo);
-        return ResponseEntity.ok(channelBo);
+        return ResponseEntity.ok(Utils.kv("data", channelBo));
     }
 
     @DeleteMapping(path = "/{channelId}")
@@ -120,7 +120,7 @@ public class ChannelController {
         //删除栏目信息
         String rtn = channelService.delete(channelId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
 

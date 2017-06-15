@@ -58,7 +58,7 @@ public class CommentController {
         //新增评论信息
         commentSaveBo = commentService.save(commentSaveBo);
         LOGGER.info("{}", commentSaveBo);
-        return ResponseEntity.ok(commentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
     @GetMapping(path = "/{commentId}")
@@ -67,7 +67,7 @@ public class CommentController {
         //查询评论信息
         CommentSaveBo commentSaveBo = commentService.selectComment(commentId);
         LOGGER.info("{}", commentSaveBo);
-        return ResponseEntity.ok(commentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
     @GetMapping(path = "/tj")
@@ -75,7 +75,7 @@ public class CommentController {
         //查询评论统计信息
         CommentTjListBo commentTjListBo = commentService.selectTj();
         LOGGER.info("{}", commentTjListBo);
-        return ResponseEntity.ok(commentTjListBo);
+        return ResponseEntity.ok(Utils.kv("data", commentTjListBo));
     }
 
     @PutMapping(path = "/{commentId}")
@@ -86,7 +86,7 @@ public class CommentController {
         //更新评论信息
         commentSaveBo = commentService.update(commentSaveBo);
         LOGGER.info("{}", commentSaveBo);
-        return ResponseEntity.ok(commentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
     @DeleteMapping(path = "/{commentId}")
@@ -95,7 +95,7 @@ public class CommentController {
         //删除评论信息
         String rtn = commentService.delete(commentId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
     @DeleteMapping(path = "/deleteList")
@@ -104,16 +104,16 @@ public class CommentController {
         //删除评论信息
         String rtn = commentService.deleteList(commentIds);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
     @PutMapping(path = "/spList")
     public ResponseEntity spList(@RequestParam(value = "commentIds", required = true) String[] commentIds) {
         LOGGER.info("{}", commentIds);
-        //删除评论信息
-        String rtn = commentService.deleteList(commentIds);
+        //审批评论信息
+        String rtn = commentService.spList(commentIds);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
 

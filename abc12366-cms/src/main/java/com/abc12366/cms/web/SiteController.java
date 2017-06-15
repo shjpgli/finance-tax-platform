@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +38,7 @@ public class SiteController {
 		LOGGER.info("{}", siteId);
 		SiteBo siteBo = siteService.selectOneById(siteId);
 		LOGGER.info("{}", siteBo);
-		return ResponseEntity.ok(siteBo);
+		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 
 	@PostMapping
@@ -47,7 +46,7 @@ public class SiteController {
 		LOGGER.info("{}", siteBo);
 		siteBo = siteService.save(siteBo);
 		LOGGER.info("{}", siteBo);
-		return new ResponseEntity<>(siteBo, HttpStatus.OK);
+		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 
 	@PutMapping(path = "/{siteId}")
@@ -55,7 +54,7 @@ public class SiteController {
 		LOGGER.info("{}", siteBo);
 		siteBo = siteService.update(siteBo);
 		LOGGER.info("{}", siteBo);
-		return new ResponseEntity<>(siteBo, HttpStatus.OK);
+		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 
 
