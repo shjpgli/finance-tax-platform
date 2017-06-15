@@ -1,9 +1,8 @@
 package com.abc12366.cms.service;
 
-import com.abc12366.cms.model.ModelItem;
+import com.abc12366.cms.model.bo.ContentListBo;
 import com.abc12366.cms.model.bo.ContentQueryBo;
 import com.abc12366.cms.model.bo.ContentSaveBo;
-import com.abc12366.cms.model.bo.ContentListBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 
 import java.util.List;
@@ -28,5 +27,9 @@ public interface ContentService {
     ContentSaveBo update(ContentSaveBo contentSaveBo);
 
     String delete(String contentId);
+
+    String deleteList(String[] contentIds);
+
+    String thList(String[] contentIds);
 
 }

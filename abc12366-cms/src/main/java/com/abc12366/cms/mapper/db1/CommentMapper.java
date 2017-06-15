@@ -31,7 +31,7 @@ public interface CommentMapper{
 	 * 批量审批
 	 *
 	 **/
-	int spList(@Param("commentIds") String[] commentIds);
+	int updateIsCheckedList(@Param("commentIds") String[] commentIds);
 
 	/**
 	 * 

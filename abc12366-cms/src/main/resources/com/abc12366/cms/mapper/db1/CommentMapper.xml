@@ -18,7 +18,7 @@
 	</delete>
 
 	<!--更新：根据主键ID批量更新-->
-	<update id="spList" >
+	<update id="updateIsCheckedList" >
 		update cms_comment SET isChecked = 1
 		WHERE commentId in <foreach item="item" index="index" collection="commentIds" open="(" separator="," close=")">
 		#{item}

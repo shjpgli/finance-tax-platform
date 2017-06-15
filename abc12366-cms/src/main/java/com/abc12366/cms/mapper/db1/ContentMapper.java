@@ -46,4 +46,11 @@ public interface ContentMapper{
 	 **/
 	int updateByPrimaryKey(Content record);
 
+	/**
+	 *
+	 * 修改(根据主键ID修改)
+	 *
+	 **/
+	int updateStatusList(String[] contentIds);
+
 }

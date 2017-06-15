@@ -103,6 +103,7 @@ public class ContentServiceImpl implements ContentService{
         String uuid = UUID.randomUUID().toString().replace("-", "");
         //内容
         ContentBo contentBo = contentSaveBo.getContent();
+        contentBo.setStatus(2);
         contentBo.setContentId(uuid);
         Content content = new Content();
         try {
@@ -440,6 +441,20 @@ public class ContentServiceImpl implements ContentService{
         //删除内容信息
         int r = contentMapper.deleteByPrimaryKey(contentId);
         LOGGER.info("{}", r);
+        return "";
+    }
+
+    @Override
+    public String deleteList(String[] contentIds) {
+        for(int i=0;i<contentIds.length;i++){
+            this.delete(contentIds[i]);
+        }
+        return "";
+    }
+
+    @Override
+    public String thList(String[] contentIds) {
+        contentMapper.updateStatusList(contentIds);
         return "";
     }
 

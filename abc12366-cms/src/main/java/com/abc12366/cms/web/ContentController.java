@@ -142,6 +142,24 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    @DeleteMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestParam(value = "contentIds", required = true) String[] contentIds) {
+        LOGGER.info("{}", contentIds);
+        //批量删除内容信息
+        String rtn = contentService.deleteList(contentIds);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    @DeleteMapping(path = "/thList")
+    public ResponseEntity thList(@RequestParam(value = "contentIds", required = true) String[] contentIds) {
+        LOGGER.info("{}", contentIds);
+        //批量退回内容信息
+        String rtn = contentService.thList(contentIds);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
 
 
 
