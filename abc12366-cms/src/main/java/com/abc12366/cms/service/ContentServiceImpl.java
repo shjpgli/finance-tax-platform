@@ -458,5 +458,21 @@ public class ContentServiceImpl implements ContentService{
         return "";
     }
 
+    @Override
+    public ContentUpdateListBo updateList(ContentUpdateListBo contentUpdateListBo) {
+        List<ContentBo> contentBoList = contentUpdateListBo.getContentBoList();
+        for(ContentBo contentBo : contentBoList){
+            Content content = new Content();
+            try {
+                BeanUtils.copyProperties(contentBo, content);
+                contentMapper.updateByPrimaryKeySelective(content);
+            } catch (Exception e) {
+                LOGGER.error("类转换异常：{}", e);
+                throw new RuntimeException("类型转换异常：{}", e);
+            }
+        }
+        return contentUpdateListBo;
+    }
+
 
 }

@@ -160,6 +160,17 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    @PutMapping(path = "/{updateList}")
+    public ResponseEntity updateList(@RequestBody ContentUpdateListBo contentUpdateListBo) {
+
+        LOGGER.info("{}", contentUpdateListBo);
+        //更新内容信息
+        contentUpdateListBo = contentService.updateList(contentUpdateListBo);
+        LOGGER.info("{}", contentUpdateListBo);
+        return ResponseEntity.ok(Utils.kv("data", contentUpdateListBo));
+    }
+
+
 
 
 
