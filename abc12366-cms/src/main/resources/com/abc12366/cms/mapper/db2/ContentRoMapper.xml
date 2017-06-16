@@ -43,8 +43,58 @@
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
 		</if>
+		<if test="topLevel != null and topLevel != ''">
+			AND a.topLevel = #{topLevel}
+		</if>
+		<if test="status != null and status != ''">
+			AND a.status = #{status}
+		</if>
+		<if test="recommendLevel != null and recommendLevel != ''">
+			AND a.recommendLevel = #{recommendLevel}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND a.channelId = #{channelId}
+		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+	</select>
 
+	<!-- 查询（根据查询条件查询） -->
+	<select id="selectListByChannelId" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+		SELECT
+		a.contentId contentId,
+		b.title title,
+		b.titleColor titleColor,
+		a.channelId channelId,
+		c.channelName channelName,
+		a.topLevel topLevel,
+		a.typeId typeId,
+		b.author author,
+		e.views views,
+		b.releaseDate releaseDate,
+		a.status STATUS,
+		b.needRegenerate needRegenerate,
+		a.recommendLevel recommendLevel
+		FROM cms_content a,cms_content_ext b,cms_channel c,cms_content_count e
+		WHERE a.contentId = b.contentId AND a.channelId = c.channelId AND a.contentId = e.contentId
+		<if test="typeId != null and typeId != ''">
+			AND a.typeId = #{typeId}
+		</if>
+		<if test="status != null and status != ''">
+			AND a.status = #{status}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND a.channelId = #{channelId}
+		</if>
+		<if test="tplContent != null and tplContent != ''">
+			AND b.tplContent = #{tplContent}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			　　AND b.needRegenerate &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			　　AND b.needRegenerate &lt;= #{endTime}
+		</if>
+		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>
 
 

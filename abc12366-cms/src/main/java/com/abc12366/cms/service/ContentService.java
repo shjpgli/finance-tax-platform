@@ -15,6 +15,8 @@ import java.util.Map;
 public interface ContentService {
     List<ContentListBo> selectList(Map<String,Object> map);
 
+    List<ContentsListBo> selectListByChannelId(Map<String,Object> map);
+
     List<ModelItemBo> selectModeList(Map<String,Object> map);
 
     ContentSaveBo save(ContentSaveBo contentSaveBo);

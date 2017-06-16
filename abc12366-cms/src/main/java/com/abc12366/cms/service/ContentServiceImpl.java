@@ -80,6 +80,14 @@ public class ContentServiceImpl implements ContentService{
     }
 
     @Override
+    public List<ContentsListBo> selectListByChannelId(Map<String,Object> map) {
+        //查询内容列表
+        List<ContentsListBo> contents = contentRoMapper.selectListByChannelId(map);
+        LOGGER.info("{}", contents);
+        return contents;
+    }
+
+    @Override
     public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         //查询模型项
         List<ModelItemBo> modelItemBos = modelItemRoMapper.selectList(map);

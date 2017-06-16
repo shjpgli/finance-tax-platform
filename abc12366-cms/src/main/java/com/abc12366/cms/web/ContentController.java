@@ -49,6 +49,7 @@ public class ContentController {
                                      @RequestParam(value = "typeId", required = false) String typeId,
                                      @RequestParam(value = "author", required = false) String author,
                                      @RequestParam(value = "status", required = false) String status,
+                                     @RequestParam(value = "channelId", required = false) String channelId,
                                      @RequestParam(value = "recommendLevel", required = false) String recommendLevel) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//标题
@@ -56,6 +57,7 @@ public class ContentController {
         dataMap.put("typeId", typeId);//内容类型
         dataMap.put("author", author);//作者
         dataMap.put("status", status);//状态
+        dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("recommendLevel", recommendLevel);
 
         // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.
@@ -70,6 +72,44 @@ public class ContentController {
         List<ContentListBo> dataList = contentService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
+
+    @GetMapping(path = "/selectListByChannelId")
+    public ResponseEntity selectListByChannelId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "typeId", required = false) String typeId,
+                                     @RequestParam(value = "status", required = false) String status,
+                                     @RequestParam(value = "channelId", required = false) String channelId,
+                                     @RequestParam(value = "startTime", required = false) String startTime,
+                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                     @RequestParam(value = "tplContent", required = false) String tplContent) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("typeId", typeId);//内容类型
+        dataMap.put("status", status);//状态
+        dataMap.put("channelId", channelId);//栏目ID
+//        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        try {
+//            Date startTime1 = sdf.parse(startTime);
+//            dataMap.put("startTime", startTime1.getTime());
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+//        dataMap.put("endTime", endTime);
+        dataMap.put("tplContent", tplContent);
+
+        // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.
+        // 当Service中有多条select语句时，建议放在Service中，这时需要将Page对象传递到Service实现方法，返回对象也是Page对象。
+        // 将List对象强制转成Page可以获取Page的相关属性。如：((Page)dataList).getTotal()，总记录数统一使用total返回。
+        // 代码解释：
+        // count=true(第一个),默认值为false，是查询总记录数
+        // pageSizeZero=true,默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 pageNum = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是 Page 类型）
+        // reasonable=true,分页合理化参数，默认值为false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
+//        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        //查询内容列表
+        List<ContentsListBo> dataList = contentService.selectListByChannelId(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
     @GetMapping(path = "/init")
