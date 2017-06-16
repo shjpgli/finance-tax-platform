@@ -51,6 +51,6 @@ public interface ContentExtMapper{
 	 * 修改是否已生成静态页(根据主键ID修改)
 	 *
 	 **/
-	int updatRegenerateList(String[] contentIds);
+	int updatRegenerateList(@Param("contentIds") String[] contentIds);
 
 }
