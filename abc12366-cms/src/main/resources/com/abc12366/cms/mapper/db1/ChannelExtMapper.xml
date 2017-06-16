@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.ChannelExt">
 		 INSERT INTO cms_channel_ext
- 		(channelId,channelName,isStaticChannel,isStaticContent,pageSize,link,tplChannel,tplContent,titleImg,contentImg,hasTitleImg,hasContentImg,titleImgWidth,titleImgHeight,contentImgWidth,contentImgHeight,commentControl,allowUpdown,isBlank,title,keywords,description,allowShare)
+ 		(channelId,channelName,isStaticChannel,isStaticContent,pageSize,link,tplChannel,tplContent,titleImg,contentImg,hasTitleImg,hasContentImg,titleImgWidth,titleImgHeight,contentImgWidth,contentImgHeight,commentControl,allowUpdown,isBlank,title,keywords,description,txt,allowShare)
 		 VALUES 
- 		(#{channelId},#{channelName},#{isStaticChannel},#{isStaticContent},#{pageSize},#{link},#{tplChannel},#{tplContent},#{titleImg},#{contentImg},#{hasTitleImg},#{hasContentImg},#{titleImgWidth},#{titleImgHeight},#{contentImgWidth},#{contentImgHeight},#{commentControl},#{allowUpdown},#{isBlank},#{title},#{keywords},#{description},#{allowShare})
+ 		(#{channelId},#{channelName},#{isStaticChannel},#{isStaticContent},#{pageSize},#{link},#{tplChannel},#{tplContent},#{titleImg},#{contentImg},#{hasTitleImg},#{hasContentImg},#{titleImgWidth},#{titleImgHeight},#{contentImgWidth},#{contentImgHeight},#{commentControl},#{allowUpdown},#{isBlank},#{title},#{keywords},#{description},#{txt},#{allowShare})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -87,6 +87,9 @@
 			 <if test="description != null">
 				 description,
 			 </if>
+			 <if test="txt != null">
+				 txt,
+			 </if>
 			<if test="allowShare != null">
 				 allowShare,
 			</if>
@@ -158,6 +161,9 @@
 			 </if>
 			 <if test="description!=null">
 				 #{description},
+			 </if>
+			 <if test="txt!=null">
+				 #{txt},
 			 </if>
 			<if test="allowShare!=null">
 				 #{allowShare},
@@ -232,6 +238,9 @@
 			 <if test="description != null">
 				 description = #{description},
 			 </if>
+			 <if test="txt != null">
+				 txt = #{txt},
+			 </if>
 			<if test="allowShare != null">
 				 allowShare = #{allowShare},
 			</if>
@@ -265,6 +274,7 @@
 			 title = #{title},
 			 keywords = #{keywords},
 			 description = #{description},
+			 txt = #{txt},
 			 allowShare = #{allowShare}
 		 WHERE channelId = #{channelId}
 	</update>

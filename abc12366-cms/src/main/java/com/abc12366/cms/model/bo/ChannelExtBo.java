@@ -37,6 +37,9 @@ public class ChannelExtBo implements Serializable {
 	/**meta描述**varchar(255)**/
 	private String description;
 
+	/**内容**longtext**/
+	private String txt;
+
 	public String getChannelId() {
 		return channelId;
 	}
@@ -107,5 +110,13 @@ public class ChannelExtBo implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getTxt() {
+		return txt;
+	}
+
+	public void setTxt(String txt) {
+		this.txt = txt;
 	}
 }
