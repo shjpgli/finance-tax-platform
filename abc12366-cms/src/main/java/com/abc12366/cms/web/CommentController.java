@@ -3,6 +3,7 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.bo.CommentListBo;
 import com.abc12366.cms.model.bo.CommentSaveBo;
 import com.abc12366.cms.model.bo.CommentTjListBo;
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.service.CommentService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -98,22 +99,22 @@ public class CommentController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
-    @DeleteMapping(path = "/deleteList")
-    public ResponseEntity deleteList(@RequestParam(value = "commentIds", required = true) String[] commentIds) {
-        LOGGER.info("{}", commentIds);
+    @PostMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
         //删除评论信息
-        String rtn = commentService.deleteList(commentIds);
+        String rtn = commentService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(Utils.kv("data", rtn));
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
     @PutMapping(path = "/spList")
-    public ResponseEntity spList(@RequestParam(value = "commentIds", required = true) String[] commentIds) {
-        LOGGER.info("{}", commentIds);
+    public ResponseEntity spList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
         //审批评论信息
-        String rtn = commentService.spList(commentIds);
+        String rtn = commentService.spList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(Utils.kv("data", rtn));
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
 

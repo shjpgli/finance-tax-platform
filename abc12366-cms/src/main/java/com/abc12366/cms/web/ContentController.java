@@ -183,31 +183,32 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
-    @DeleteMapping(path = "/deleteList")
-    public ResponseEntity deleteList(@RequestParam(value = "contentIds", required = true) String[] contentIds) {
-        LOGGER.info("{}", contentIds);
+    @PostMapping(path = "/deletelist")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
+//        String[] contentIdStr = contentIds.split(",");
         //批量删除内容信息
-        String rtn = contentService.deleteList(contentIds);
+        String rtn = contentService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(Utils.kv("data", rtn));
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
-    @DeleteMapping(path = "/thList")
-    public ResponseEntity thList(@RequestParam(value = "contentIds", required = true) String[] contentIds) {
-        LOGGER.info("{}", contentIds);
+    @PostMapping(path = "/thlist")
+    public ResponseEntity thList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
         //批量退回内容信息
-        String rtn = contentService.updateStatusList(contentIds);
+        String rtn = contentService.updateStatusList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(Utils.kv("data", rtn));
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
-    @DeleteMapping(path = "/updatRegenerateList")
-    public ResponseEntity updatRegenerateList(@RequestParam(value = "contentIds", required = true) String[] contentIds) {
-        LOGGER.info("{}", contentIds);
+    @PostMapping(path = "/updatRegenerateList")
+    public ResponseEntity updatRegenerateList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
         //批量更新内容已生成静态页字段
-        String rtn = contentService.updatRegenerateList(contentIds);
+        String rtn = contentService.updatRegenerateList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(Utils.kv("data", rtn));
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
     @PutMapping(path = "/{updateList}")

@@ -1,5 +1,6 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 import com.abc12366.cms.service.ModelItemService;
@@ -107,13 +108,13 @@ public class ModelItemController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
-    @DeleteMapping(path = "/deleteList")
-    public ResponseEntity deleteList(@RequestParam(value = "modelItemIds", required = true) String[] modelItemIds) {
-        LOGGER.info("{}", modelItemIds);
+    @PostMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
         //删除评论信息
-        String rtn = modelItemService.deleteList(modelItemIds);
+        String rtn = modelItemService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(Utils.kv("data", rtn));
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
 
