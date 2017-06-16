@@ -81,7 +81,8 @@ public class ChannelController {
 
     @GetMapping(path = "/channelList")
     public ResponseEntity channelList(@RequestParam(value = "startTime", required = false) String startTime,
-                                      @RequestParam(value = "endTime", required = false) String endTime) {
+                                      @RequestParam(value = "endTime", required = false) String endTime,
+                                      @RequestParam(value = "tplContent", required = false) String tplContent) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
         List<ChannelBo> ChannelBoList = channelService.selectList();
