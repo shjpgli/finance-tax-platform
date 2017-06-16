@@ -211,7 +211,7 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
-    @PutMapping(path = "/{updateList}")
+    @PutMapping(path = "/updateList")
     public ResponseEntity updateList(@RequestBody ContentUpdateListBo contentUpdateListBo) {
 
         LOGGER.info("{}", contentUpdateListBo);
