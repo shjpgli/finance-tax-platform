@@ -16,6 +16,13 @@
 		 WHERE contentId = #{contentId}
 	</select>
 
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByChannelId" resultType="java.lang.Long" parameterType="java.lang.String">
+		SELECT count(contentId) cnt
+		FROM cms_content
+		WHERE channelId = #{channelId}
+	</select>
+
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectList" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
 		SELECT

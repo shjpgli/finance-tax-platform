@@ -28,10 +28,10 @@ public class TopicBo implements Serializable {
 	/**描述**varchar(255)**/
 	private String description;
 
-	/**标题图**varchar(100)**/
+	/**标题图**varchar(150)**/
 	private String titleImg;
 
-	/**内容图**varchar(100)**/
+	/**内容图**varchar(150)**/
 	private String contentImg;
 
 	/**专题模板**varchar(100)**/

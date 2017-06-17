@@ -10,6 +10,7 @@ import com.abc12366.cms.model.ChannelAttr;
 import com.abc12366.cms.model.ChannelExt;
 import com.abc12366.cms.model.ChnlGroupView;
 import com.abc12366.cms.model.bo.*;
+import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -55,6 +56,8 @@ public class ChannelServiceImpl implements ChannelService {
     @Autowired
     private ChnlGroupViewMapper groupMapper;
 
+    @Autowired
+    private ContentRoMapper contentRoMapper;
 
 
     @Override
@@ -314,6 +317,14 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public String delete(String channelId) {
+
+        int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
+
+        if(cnt != 0){
+//            LOGGER.warn("改栏目下存在内容信息,不能删除：{}", menu.toString());
+            throw new ServiceException(4301);
+        }
+
         //删除栏目扩展信息
         channelExtMapper.deleteByPrimaryKey(channelId);
         //删除栏目扩展项信息
@@ -322,7 +333,11 @@ public class ChannelServiceImpl implements ChannelService {
         groupMapper.deleteByPrimaryKey(channelId);
         //删除栏目信息
         int r = channelMapper.deleteByPrimaryKey(channelId);
-        LOGGER.info("{}", r);
+
+        List<Channel> channelList = channelRoMapper.selectListByparentId(channelId);
+        for(Channel channel : channelList){
+            this.delete(channel.getChannelId());
+        }
         return "";
     }
 }

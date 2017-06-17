@@ -26,6 +26,13 @@ public interface ContentRoMapper {
 
 	/**
 	 *
+	 * 查询(根据主键ID查询)
+	 *
+	 **/
+	Long selectByChannelId(@Param("channelId") String channelId);
+
+	/**
+	 *
 	 * 查询(根据查询条件查询)
 	 *
 	 **/
@@ -43,6 +50,6 @@ public interface ContentRoMapper {
 	 * 查询(根据contentId查询)
 	 *
 	 **/
-	Content selectByContentId(String contentId);
+	Content selectByContentId(@Param("contentId") String contentId);
 
 }
