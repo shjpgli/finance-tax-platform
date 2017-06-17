@@ -17,6 +17,8 @@ public interface ContentService {
 
     List<ContentsListBo> selectListByChannelId(Map<String,Object> map);
 
+    List<ContentsListBo> selectListByTplContent(Map<String,Object> map);
+
     List<ModelItemBo> selectModeList(Map<String,Object> map);
 
     ContentSaveBo save(ContentSaveBo contentSaveBo);

@@ -66,6 +66,31 @@
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
+	<select id="selectListByTplContent" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+		SELECT
+		a.contentId contentId,
+		a.typeId typeId
+		FROM cms_content a,cms_content_ext b
+		WHERE a.contentId = b.contentId
+		<if test="typeId != null and typeId != ''">
+			AND a.typeId = #{typeId}
+		</if>
+		<if test="status != null and status != ''">
+			AND a.status = #{status}
+		</if>
+		<if test="tplContent != null and tplContent != ''">
+			AND b.tplContent = #{tplContent}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			　　AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			　　AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
+		</if>
+		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+	</select>
+
+	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListByChannelId" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT
 		a.contentId contentId,
@@ -96,10 +121,10 @@
 			AND b.tplContent = #{tplContent}
 		</if>
 		<if test="startTime!=null and startTime!=''">
-			　　AND b.needRegenerate &gt;= #{startTime}
+			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
 		</if>
 		<if test="endTime!=null and endTime!=''">
-			　　AND b.needRegenerate &lt;= #{endTime}
+			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
 		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>

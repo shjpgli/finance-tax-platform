@@ -47,6 +47,14 @@ public interface ContentRoMapper {
 
 	/**
 	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	List<ContentsListBo> selectListByTplContent(Map<String,Object> map);
+
+
+	/**
+	 *
 	 * 查询(根据contentId查询)
 	 *
 	 **/
