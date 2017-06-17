@@ -29,14 +29,6 @@ public class Answer implements Serializable {
 		return this.answerLogId;
 	}
 
-	public void setSubjectId(String subjectsId){
-		this.subjectsId = subjectsId;
-	}
-
-	public String getSubjectId(){
-		return this.subjectsId;
-	}
-
 	public void setContent(String content){
 		this.content = content;
 	}
@@ -45,4 +37,11 @@ public class Answer implements Serializable {
 		return this.content;
 	}
 
+    public String getSubjectsId() {
+        return subjectsId;
+    }
+
+    public void setSubjectsId(String subjectsId) {
+        this.subjectsId = subjectsId;
+    }
 }

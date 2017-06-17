@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	isDisplayNumber,	isBackspace,	isDisplayResults,	recoveryEndTime,	isLoginAuth,	isAnswerOnce,	isUserRange,	isAnswerRemind,	isPrize
+		 questionId,	isDisplayNumber,	isBackspace,	isDisplayResults,	recoveryEndTime,	isLoginAuth,	isAnswerOnce,	isUserRange,	isAnswerRemind,	isPrize
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

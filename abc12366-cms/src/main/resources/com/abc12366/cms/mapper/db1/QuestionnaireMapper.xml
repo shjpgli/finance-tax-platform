@@ -10,6 +10,12 @@
 		 WHERE id = #{id}
 	</delete>
 
+    <!--删除：根据主键ID删除-->
+    <delete id="delete" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
+        DELETE FROM cms_paper_questionnaire
+        WHERE id = #{id}
+    </delete>
+
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
 		 INSERT INTO cms_paper_questionnaire
@@ -134,4 +140,21 @@
 		 WHERE id = #{id}
 	</update>
 
+    <!-- 修 改 访问量-->
+    <update id="updateAccessRate" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
+        UPDATE cms_paper_questionnaire
+        <set>
+            accessRate = accessRate + 1,
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 修 改 回收量-->
+    <update id="updateRecoveryRate" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
+        UPDATE cms_paper_questionnaire
+        <set>
+            recoveryRate = recoveryRate + 1,
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

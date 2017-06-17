@@ -34,4 +34,5 @@ public interface AnswerLogMapper{
 	 **/
 	int update(AnswerLog record);
 
+    int delete(AnswerLog answerLog);
 }

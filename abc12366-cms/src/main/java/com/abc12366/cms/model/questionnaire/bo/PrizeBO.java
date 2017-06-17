@@ -1,4 +1,6 @@
 package com.abc12366.cms.model.questionnaire.bo;
+import com.abc12366.cms.model.questionnaire.Prize;
+
 import java.io.Serializable;
 
 
@@ -24,7 +26,6 @@ public class PrizeBO implements Serializable {
 
 	/**价格**/
 	private double price;
-
 
 
 	public void setId(String id){

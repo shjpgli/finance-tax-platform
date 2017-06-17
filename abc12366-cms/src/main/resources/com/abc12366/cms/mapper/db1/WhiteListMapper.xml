@@ -7,13 +7,16 @@
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM cms_paper_white_list
-		 WHERE userId = #{userId}
+		 WHERE id = #{id}
 	</delete>
 
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.cms.model.questionnaire.WhiteList">
 		 INSERT INTO cms_paper_white_list
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
+             <if test="id != null">
+                 id,
+             </if>
 			<if test="userId != null">
 				 userId,
 			</if>
@@ -29,6 +32,9 @@
 
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
 			<if test="userId!=null">
 				 #{userId},
 			</if>
@@ -48,6 +54,9 @@
 	<update id="update" parameterType="com.abc12366.cms.model.questionnaire.WhiteList">
 		 UPDATE cms_paper_white_list
  		 <set> 
+			<if test="userId != null">
+                userId = #{userId},
+			</if>
 			<if test="questionId != null">
 				 questionId = #{questionId},
 			</if>
@@ -59,7 +68,7 @@
 			</if>
 
  		 </set>
-		 WHERE userId = #{userId}
+		 WHERE id = #{id}
 	</update>
 
 </mapper>

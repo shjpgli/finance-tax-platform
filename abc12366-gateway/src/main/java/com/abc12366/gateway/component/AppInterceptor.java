@@ -37,7 +37,7 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
         response.setContentType("application/json;charset=UTF-8");
         if (StringUtils.isEmpty(accessToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4000);
-            response.setStatus(400);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();
@@ -46,7 +46,7 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
         }
         if (!appService.isAuthentication(accessToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4001);
-            response.setStatus(401);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();
@@ -56,7 +56,7 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
         // 4.App授权
         if (!appService.isAuthentization(request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
-            response.setStatus(403);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();

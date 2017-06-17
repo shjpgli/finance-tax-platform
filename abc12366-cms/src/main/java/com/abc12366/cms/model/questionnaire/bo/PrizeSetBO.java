@@ -1,5 +1,9 @@
 package com.abc12366.cms.model.questionnaire.bo;
+import com.abc12366.cms.model.questionnaire.Prize;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,6 +32,7 @@ public class PrizeSetBO implements Serializable {
 	/**中奖概率**/
 	private double prizeRate;
 
+    private List<Prize> prizeList = new ArrayList<Prize>();
 
 
 	public void setQuestionId(String questionId){
@@ -78,4 +83,11 @@ public class PrizeSetBO implements Serializable {
 		return this.prizeRate;
 	}
 
+    public List<Prize> getPrizeList() {
+        return prizeList;
+    }
+
+    public void setPrizeList(List<Prize> prizeList) {
+        this.prizeList = prizeList;
+    }
 }

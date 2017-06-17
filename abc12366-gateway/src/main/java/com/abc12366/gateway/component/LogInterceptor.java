@@ -50,7 +50,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         // 版本头检查
         if (StringUtils.isEmpty(version)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4009);
-            response.setStatus(400);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();
@@ -59,7 +59,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         }
         if (!(Constant.VERSION_1.equals(version) || Constant.VERSION_2.equals(version))) {
             BodyStatus bodyStatus = Utils.bodyStatus(4010);
-            response.setStatus(400);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();
@@ -70,7 +70,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         // 2.黑名单服务
         if (blacklistService.isBlacklist(addr)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4003);
-            response.setStatus(403);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();

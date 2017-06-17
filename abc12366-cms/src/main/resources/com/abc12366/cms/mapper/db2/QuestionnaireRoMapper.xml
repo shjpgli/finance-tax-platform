@@ -8,6 +8,33 @@
 		 id,	title,	simpleDesc,	status,	createUser,	createTime,	updateTime,	updateUser,	recoveryRate,	accessRate,	sceneCode,	tradeCode
 	</sql>
 
+    <resultMap id="questionBOResultMap" type="com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="simpleDesc" property="simpleDesc" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="createUser" property="createUser" jdbcType="VARCHAR"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="updateUser" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="recoveryRate" property="recoveryRate" jdbcType="INTEGER"/>
+        <result column="accessRate" property="accessRate" jdbcType="INTEGER"/>
+        <result column="sceneCode" property="sceneCode" jdbcType="VARCHAR"/>
+        <result column="tradeCode" property="tradeCode" jdbcType="VARCHAR"/>
+        <association property="questionnaireParam" javaType="com.abc12366.cms.model.questionnaire.QuestionnaireParam">
+            <id column="questionId" property="questionId" jdbcType="VARCHAR"/>
+            <result column="isDisplayNumber" property="isDisplayNumber" jdbcType="INTEGER"/>
+            <result column="isBackspace" property="isBackspace" jdbcType="INTEGER"/>
+            <result column="isDisplayResults" property="isDisplayResults" jdbcType="INTEGER"/>
+            <result column="recoveryEndTime" property="recoveryEndTime" jdbcType="TIMESTAMP"/>
+            <result column="isLoginAuth" property="isLoginAuth" jdbcType="INTEGER"/>
+            <result column="isAnswerOnce" property="isAnswerOnce" jdbcType="INTEGER"/>
+            <result column="isUserRange" property="isUserRange" jdbcType="INTEGER"/>
+            <result column="isAnswerRemind" property="isAnswerRemind" jdbcType="INTEGER"/>
+            <result column="isPrize" property="isPrize" jdbcType="INTEGER"/>
+        </association>
+    </resultMap>
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.questionnaire.Questionnaire" parameterType="java.lang.String">
 		 SELECT
@@ -15,5 +42,26 @@
 		 FROM cms_paper_questionnaire
 		 WHERE id = #{id}
 	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectOne" resultMap="questionBOResultMap" parameterType="java.lang.String">
+        SELECT
+        q.id,	q.title,	q.simpleDesc,	q.status,	q.createUser,	q.createTime,	q.updateTime,	q.updateUser,	q.recoveryRate,	q.accessRate,	q.sceneCode,	q.tradeCode,
+        p.questionId,	p.isDisplayNumber,	p.isBackspace,	p.isDisplayResults,	p.recoveryEndTime,	p.isLoginAuth,	p.isAnswerOnce,	p.isUserRange,	p.isAnswerRemind,	p.isPrize
+        FROM cms_paper_questionnaire q
+        LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultMap="questionBOResultMap" parameterType="java.lang.String">
+        SELECT
+        q.id,	q.title,	q.simpleDesc,	q.status,	q.createUser,	q.createTime,	q.updateTime,	q.updateUser,	q.recoveryRate,	q.accessRate,	q.sceneCode,	q.tradeCode,
+        p.questionId,	p.isDisplayNumber,	p.isBackspace,	p.isDisplayResults,	p.recoveryEndTime,	p.isLoginAuth,	p.isAnswerOnce,	p.isUserRange,	p.isAnswerRemind,	p.isPrize
+        FROM cms_paper_questionnaire q
+        LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId
+        order by q.updateTime desc
+    </select>
+
 
 </mapper>

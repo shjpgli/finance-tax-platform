@@ -42,22 +42,22 @@ public class GlobalExceptionHandler {
         if (e instanceof HttpRequestMethodNotSupportedException) {
             bodyStatus = Utils.bodyStatus(4005);
             LOGGER.warn(bodyStatus.getMessage() + e);
-            return new ResponseEntity<>(bodyStatus, HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof HttpMediaTypeNotSupportedException) {
             bodyStatus = Utils.bodyStatus(4011);
             LOGGER.error(bodyStatus.getMessage() + e);
-            return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof HttpMessageNotReadableException) {
             bodyStatus = Utils.bodyStatus(4004);
             LOGGER.error(bodyStatus.getMessage() + e);
-            return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof NumberFormatException) {
             bodyStatus = Utils.bodyStatus(4008);
             LOGGER.error(bodyStatus.getMessage() + e);
-            return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof MethodArgumentNotValidException) {
             BindingResult bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
@@ -69,17 +69,17 @@ public class GlobalExceptionHandler {
                         .field(fieldError.getField())
                         .build();
                 LOGGER.warn(bodyValidStatus.getMessage() + e);
-                return new ResponseEntity<>(bodyValidStatus, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(bodyValidStatus, HttpStatus.OK);
             } else {
                 bodyStatus = Utils.bodyStatus(4006);
                 LOGGER.error(bodyStatus.getMessage() + e);
-                return new ResponseEntity<>(bodyStatus, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
             }
 
         } else {
             bodyStatus = Utils.bodyStatus(5000);
             LOGGER.error(bodyStatus.getMessage() + e);
-            return new ResponseEntity<>(bodyStatus, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         }
     }
 }

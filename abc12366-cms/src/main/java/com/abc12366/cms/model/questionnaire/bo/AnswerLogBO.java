@@ -1,5 +1,9 @@
 package com.abc12366.cms.model.questionnaire.bo;
+import com.abc12366.cms.model.questionnaire.Answer;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -31,9 +35,17 @@ public class AnswerLogBO implements Serializable {
 	/**答题结束时间**/
 	private java.util.Date endTime;
 
+    private Answer answer;
+
+    private List<Answer> answerList = new ArrayList<Answer>();
+
+    /**平均用时**/
+    private java.util.Date avgTime;
+
+    private String subjectsId;
 
 
-	public void setId(String id){
+    public void setId(String id){
 		this.id = id;
 	}
 
@@ -89,4 +101,35 @@ public class AnswerLogBO implements Serializable {
 		return this.endTime;
 	}
 
+    public Answer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
+
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
+    }
+
+    public java.util.Date getAvgTime() {
+        return avgTime;
+    }
+
+    public void setAvgTime(java.util.Date avgTime) {
+        this.avgTime = avgTime;
+    }
+
+    public String getSubjectsId() {
+        return subjectsId;
+    }
+
+    public void setSubjectsId(String subjectsId) {
+        this.subjectsId = subjectsId;
+    }
 }

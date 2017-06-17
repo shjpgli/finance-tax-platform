@@ -76,7 +76,7 @@ public class SubjectsServiceImpl implements SubjectsService {
         int oInsert = 0;
         for (Option option : optionList){
             option.setId(Utils.uuid());
-            option.setSubjectId(subjectsId);
+            option.setSubjectsId(subjectsId);
             oInsert = optionMapper.insert(option);
             if (oInsert != 1){
                 LOGGER.info("{新增选项失败}", option);
@@ -108,7 +108,7 @@ public class SubjectsServiceImpl implements SubjectsService {
             Option temp = optionRoMapper.selectByPrimaryKey(option.getId());
             if(temp == null){
                 option.setId(Utils.uuid());
-                option.setSubjectId(subjects.getId());
+                option.setSubjectsId(subjects.getId());
                 oUpdate = optionMapper.insert(option);
                 if (oUpdate != 1){
                     LOGGER.info("{新增选项失败}", option);

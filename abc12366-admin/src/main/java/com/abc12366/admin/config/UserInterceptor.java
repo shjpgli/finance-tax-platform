@@ -36,7 +36,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         response.setContentType("application/json;charset=UTF-8");
         if (StringUtils.isEmpty(userToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4199);
-            response.setStatus(400);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();
@@ -45,7 +45,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         }
         if (!userService.isAuthentication(userToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4198);
-            response.setStatus(401);
+            response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
             response.getWriter().close();

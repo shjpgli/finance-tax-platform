@@ -17,7 +17,7 @@ public interface QuestionnaireParamMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") String id);
+	int deleteByPrimaryKey(@Param("id") String questionId);
 
 	/**
 	 * 
@@ -25,7 +25,6 @@ public interface QuestionnaireParamMapper{
 	 * 
 	 **/
 	int insert(QuestionnaireParam record);
-
 
 	/**
 	 * 

@@ -1,7 +1,10 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.questionnaire.Questionnaire;
+import com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -20,4 +23,7 @@ public interface QuestionnaireRoMapper {
 	Questionnaire  selectByPrimaryKey(@Param("id") String id);
 
 
+    QuestionnaireBO selectOne(String id);
+
+    List<QuestionnaireBO> selectList(Questionnaire questionnaire);
 }

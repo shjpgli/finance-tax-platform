@@ -10,6 +10,11 @@
 		 WHERE id = #{id}
 	</delete>
 
+	<delete id="delete" parameterType="com.abc12366.cms.model.questionnaire.AnswerLog">
+		 DELETE FROM cms_paper_answer_log
+		 WHERE id = #{id}
+	</delete>
+
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.cms.model.questionnaire.AnswerLog">
 		 INSERT INTO cms_paper_answer_log

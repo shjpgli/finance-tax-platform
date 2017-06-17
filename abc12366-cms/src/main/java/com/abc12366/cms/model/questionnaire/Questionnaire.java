@@ -20,7 +20,7 @@ public class Questionnaire implements Serializable {
 	private String simpleDesc;
 
 	/**状态，true：正在回收；false：暂停回收**/
-	private String status;
+	private Boolean status;
 
 	/**创建人**/
 	private String createUser;
@@ -72,11 +72,11 @@ public class Questionnaire implements Serializable {
 		return this.simpleDesc;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(Boolean status){
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public Boolean getStatus(){
 		return this.status;
 	}
 

@@ -10,6 +10,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class WhiteList implements Serializable {
 
+    private String id;
 	/**用户ID**/
 	private String userId;
 
@@ -56,4 +57,11 @@ public class WhiteList implements Serializable {
 		return this.validSign;
 	}
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

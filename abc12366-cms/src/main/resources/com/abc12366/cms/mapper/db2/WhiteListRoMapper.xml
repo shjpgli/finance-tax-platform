@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	questionId,	inputTime,	validSign
+		 id,  userId,	questionId,	inputTime,	validSign
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -13,8 +13,15 @@
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_paper_white_list
-		 WHERE userId = #{userId}
+		 WHERE id = #{id}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.cms.model.questionnaire.WhiteList" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_paper_white_list
+        WHERE questionId = #{questionId}
+    </select>
 
 </mapper>

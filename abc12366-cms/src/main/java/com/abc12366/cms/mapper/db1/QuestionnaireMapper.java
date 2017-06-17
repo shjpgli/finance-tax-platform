@@ -34,4 +34,9 @@ public interface QuestionnaireMapper{
 	 **/
 	int update(Questionnaire record);
 
+    int delete(Questionnaire questionnaire);
+
+    int updateAccessRate(Questionnaire questionnaire);
+
+    int updateRecoveryRate(Questionnaire questionnaire);
 }

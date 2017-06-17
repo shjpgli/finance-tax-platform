@@ -1,4 +1,8 @@
 package com.abc12366.cms.model.questionnaire.bo;
+import com.abc12366.cms.model.questionnaire.QuestionnaireParam;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -10,41 +14,29 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class QuestionnaireBO implements Serializable {
 
-	/****/
 	private String id;
-
-	/**标题**/
+    @NotEmpty
+    @Size(min = 2, max = 100)
 	private String title;
-
-	/**简单描述**/
+    @NotEmpty
+    @Size(min = 0, max = 255)
 	private String simpleDesc;
 
-	/**状态，true：正在回收；false：暂停回收**/
+    @NotEmpty
+    @Size(min = 0, max = 1)
 	private String status;
 
-	/**创建人**/
 	private String createUser;
-
-	/**创建时间**/
 	private java.util.Date createTime;
-
-	/**修改时间**/
 	private java.util.Date updateTime;
-
-	/**修改人**/
 	private String updateUser;
-
-	/**回收量**/
 	private Integer recoveryRate;
-
-	/**访问量**/
 	private Integer accessRate;
-
-	/**所属场景类别代码**/
 	private String sceneCode;
-
-	/**所属行业类别代码**/
 	private String tradeCode;
+
+    private QuestionnaireParam questionnaireParam;
+
 
 
 
@@ -144,4 +136,11 @@ public class QuestionnaireBO implements Serializable {
 		return this.tradeCode;
 	}
 
+    public QuestionnaireParam getQuestionnaireParam() {
+        return questionnaireParam;
+    }
+
+    public void setQuestionnaireParam(QuestionnaireParam questionnaireParam) {
+        this.questionnaireParam = questionnaireParam;
+    }
 }

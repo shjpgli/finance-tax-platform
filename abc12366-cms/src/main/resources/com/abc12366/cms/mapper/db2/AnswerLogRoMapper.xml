@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db2.AnswerLogRoMapper">
 
@@ -7,6 +7,25 @@
 	<sql id="Base_Column_List">
 		 id,	questionId,	userId,	accessTerminal,	ipAddress,	startTime,	endTime
 	</sql>
+
+    <resultMap id="answerLogBOResultMap" type="com.abc12366.cms.model.questionnaire.bo.AnswerLogBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="questionId" property="questionId" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="accessTerminal" property="accessTerminal" jdbcType="VARCHAR"/>
+        <result column="ipAddress" property="ipAddress" jdbcType="VARCHAR"/>
+        <result column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="avgTime" property="avgTime" jdbcType="TIMESTAMP"/>
+        <collection property="answerList" ofType="com.abc12366.cms.model.questionnaire.Answer" column="id" select="getAnswer"></collection>
+    </resultMap>
+
+    <resultMap type="com.abc12366.cms.model.questionnaire.Answer" id="getAnswer" >
+        <result property="answerLogId" column="answerLogId"  />
+        <result property="subjectsId" column="subjectsId"  />
+        <result property="content" column="content" />
+    </resultMap>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.questionnaire.AnswerLog" parameterType="java.lang.String">
@@ -16,4 +35,50 @@
 		 WHERE id = #{id}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectOne" resultMap="answerLogBOResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_paper_answer_log
+        WHERE id = #{id}
+    </select>
+
+
+    <!-- 查询所有 -->
+    <select id="selectList" resultMap="answerLogBOResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_paper_answer_log
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询问卷答题平均时间 -->
+    <select id="selectAvgTime" resultMap="answerLogBOResultMap" parameterType="java.lang.String">
+        SELECT
+            cl.questionId,
+            avg(total) AS avgTime
+        FROM
+        (
+            SELECT
+            *, UNIX_TIMESTAMP(endTime) - UNIX_TIMESTAMP(startTime) AS total
+            FROM
+            cms_paper_answer_log
+        ) AS cl where questionId = #{questionId}
+        GROUP BY
+        cl.questionId
+    </select>
+    <!--SELECT
+    cl.questionId,
+    count(cl.userId),
+    count(cl.total),
+    avg(total) AS avgTime
+    FROM
+    (
+    SELECT
+    *, UNIX_TIMESTAMP(endTime) - UNIX_TIMESTAMP(startTime) AS total
+    FROM
+    cms_paper_answer_log
+    ) AS cl where questionId = #{questionId}
+    GROUP BY
+    cl.questionId-->
 </mapper>

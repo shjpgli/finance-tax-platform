@@ -10,7 +10,7 @@
 	</delete>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="com.abc12366.cms.model.questionnaire.PrizeSet">
+	<insert id="insert" parameterType="com.abc12366.cms.model.questionnaire.PrizeSet">
 		 INSERT INTO cms_paper_prize_set
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="questionId != null">

@@ -31,14 +31,6 @@ public class OptionBO implements Serializable {
 		return this.id;
 	}
 
-	public void setSubjectId(String subjectsId){
-		this.subjectsId = subjectsId;
-	}
-
-	public String getSubjectId(){
-		return this.subjectsId;
-	}
-
 	public void setOptionString(String optionString){
 		this.optionString = optionString;
 	}
@@ -53,5 +45,13 @@ public class OptionBO implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getSubjectsId() {
+        return subjectsId;
+    }
+
+    public void setSubjectsId(String subjectsId) {
+        this.subjectsId = subjectsId;
     }
 }
