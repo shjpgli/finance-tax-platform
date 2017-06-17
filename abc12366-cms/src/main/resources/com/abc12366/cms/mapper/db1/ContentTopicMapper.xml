@@ -4,9 +4,16 @@
 <mapper namespace="com.abc12366.cms.mapper.db1.ContentTopicMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+	<delete id="deleteByContentId" parameterType="java.lang.String">
 		 DELETE FROM cms_content_topic
 		 WHERE contentId = #{contentId}
+	</delete>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="com.abc12366.cms.model.ContentTopic">
+		DELETE FROM cms_content_topic
+		WHERE contentId = #{contentId}
+			and	topicId = #{topicId}
 	</delete>
 
 	<!-- 添加 -->

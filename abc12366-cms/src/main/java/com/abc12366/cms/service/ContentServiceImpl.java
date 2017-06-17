@@ -63,6 +63,12 @@ public class ContentServiceImpl implements ContentService{
     private FileRoMapper fileRoMapper;
 
     @Autowired
+    private ContentTopicMapper topicMapper;
+
+    @Autowired
+    private ContentTopicRoMapper topicRoMapper;
+
+    @Autowired
     private ContentGroupViewMapper groupMapper;
 
     @Autowired
@@ -99,17 +105,6 @@ public class ContentServiceImpl implements ContentService{
     public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         //查询模型项
         List<ModelItemBo> modelItemBos = modelItemRoMapper.selectList(map);
-//        List<ModelItemBo> modelItemBos = new ArrayList<>();
-//        for(ModelItem modelItem : modelItems){
-//            ModelItemBo modelItemBo = new ModelItemBo();
-//            try {
-//                BeanUtils.copyProperties(modelItem, modelItemBo);
-//                modelItemBos.add(modelItemBo);
-//            } catch (Exception e) {
-//                LOGGER.error("类转换异常：{}", e);
-//                throw new RuntimeException("类型转换异常：{}", e);
-//            }
-//        }
         LOGGER.info("{}", modelItemBos);
         return modelItemBos;
     }
@@ -119,7 +114,7 @@ public class ContentServiceImpl implements ContentService{
         String uuid = UUID.randomUUID().toString().replace("-", "");
         //内容
         ContentBo contentBo = contentSaveBo.getContent();
-        contentBo.setStatus(2);
+        contentBo.setStatus(2);//审核通过
         contentBo.setContentId(uuid);
         Content content = new Content();
         try {
@@ -218,6 +213,23 @@ public class ContentServiceImpl implements ContentService{
                 groupMapper.insert(group);
             }
         }
+
+        //专题组
+        List<ContentTopicBo> topicList = contentSaveBo.getTopicList();
+        if(topicList != null){
+            for(ContentTopicBo topicBo:topicList){
+                ContentTopic topic = new ContentTopic();
+                topicBo.setContentId(uuid);
+                try {
+                    BeanUtils.copyProperties(topicBo, topic);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                topicMapper.insert(topic);
+            }
+        }
+
         ContentCount cons = new ContentCount();
         cons.setContentId(uuid);
         contentCountMapper.insert(cons);
@@ -228,10 +240,14 @@ public class ContentServiceImpl implements ContentService{
     }
 
     @Override
-    public ContentQueryBo selectContent(String contentId) {
-        ContentQueryBo contentQueryBo = new ContentQueryBo();
+    public ContentSaveBo selectContent(String contentId) {
+        ContentSaveBo contentSaveBo = new ContentSaveBo();
         //内容
         Content content = contentRoMapper.selectByContentId(contentId);
+        if(content == null){
+            return contentSaveBo;
+        }
+
         //内容扩展项
         ContentExt contentExt = contentExtRoMapper.selectByContentId(contentId);
         //内容文本
@@ -250,7 +266,7 @@ public class ContentServiceImpl implements ContentService{
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        contentQueryBo.setContent(contentBo);
+        contentSaveBo.setContent(contentBo);
 
         ContentExtBo contentExtBo = new ContentExtBo();
         try {
@@ -259,7 +275,7 @@ public class ContentServiceImpl implements ContentService{
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        contentQueryBo.setContentExt(contentExtBo);
+        contentSaveBo.setContentExt(contentExtBo);
 
         ContentTxtBo contentTxtBo = new ContentTxtBo();
         try {
@@ -270,7 +286,7 @@ public class ContentServiceImpl implements ContentService{
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        contentQueryBo.setContentTxt(contentTxtBo);
+        contentSaveBo.setContentTxt(contentTxtBo);
 
         List<ContentAttrBo> contentAttrBoList = new ArrayList<ContentAttrBo>();
         for(ContentAttr contentAttr : contentAttrList){
@@ -283,7 +299,7 @@ public class ContentServiceImpl implements ContentService{
                 throw new RuntimeException("类型转换异常：{}", e);
             }
         }
-        contentQueryBo.setContentAttrList(contentAttrBoList);
+        contentSaveBo.setContentAttrList(contentAttrBoList);
 
         List<ContentPictureBo> contentPictureBoList = new ArrayList<ContentPictureBo>();
         for(ContentPicture contentPicture : contentPictureList){
@@ -296,7 +312,7 @@ public class ContentServiceImpl implements ContentService{
                 throw new RuntimeException("类型转换异常：{}", e);
             }
         }
-        contentQueryBo.setContentPictureList(contentPictureBoList);
+        contentSaveBo.setContentPictureList(contentPictureBoList);
 
         List<FileBo> fileBoList = new ArrayList<FileBo>();
         for(File file : fileList){
@@ -309,7 +325,7 @@ public class ContentServiceImpl implements ContentService{
                 throw new RuntimeException("类型转换异常：{}", e);
             }
         }
-        contentQueryBo.setFileList(fileBoList);
+        contentSaveBo.setFileList(fileBoList);
 
         //获取用户组
         List<ContentGroupView> groupList = groupRoMapper.selectList(contentId);
@@ -326,9 +342,27 @@ public class ContentServiceImpl implements ContentService{
                 }
             }
         }
-        contentQueryBo.setGroupList(groupBoList);
-        LOGGER.info("{}", contentQueryBo);
-        return contentQueryBo;
+        contentSaveBo.setGroupList(groupBoList);
+
+        //获取专题组
+        List<ContentTopic> topicList = topicRoMapper.selectByPrimaryKey(contentId);
+        List<ContentTopicBo> topicBoList = new ArrayList<ContentTopicBo>();
+        if(topicList != null){
+            for(ContentTopic topic:topicList){
+                ContentTopicBo topicBo = new ContentTopicBo();
+                try {
+                    BeanUtils.copyProperties(topic, topicBo);
+                    topicBoList.add(topicBo);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+            }
+        }
+        contentSaveBo.setTopicList(topicBoList);
+
+        LOGGER.info("{}", contentSaveBo);
+        return contentSaveBo;
     }
 
     @Override
@@ -436,6 +470,22 @@ public class ContentServiceImpl implements ContentService{
             }
         }
 
+        //专题组
+        topicMapper.deleteByContentId(content.getContentId());
+        List<ContentTopicBo> topicList = contentSaveBo.getTopicList();
+        if(topicList != null){
+            for(ContentTopicBo topicBo:topicList){
+                ContentTopic topic = new ContentTopic();
+                try {
+                    BeanUtils.copyProperties(topicBo, topic);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                topicMapper.insert(topic);
+            }
+        }
+
         LOGGER.info("{}", contentSaveBo);
         return contentSaveBo;
     }
@@ -454,6 +504,8 @@ public class ContentServiceImpl implements ContentService{
         fileMapper.updateByContentId(contentId);
         //用户组
         groupMapper.deleteByPrimaryKey(contentId);
+        //专题组
+        topicMapper.deleteByContentId(contentId);
         //删除内容信息
         int r = contentMapper.deleteByPrimaryKey(contentId);
         LOGGER.info("{}", r);
@@ -494,6 +546,24 @@ public class ContentServiceImpl implements ContentService{
             }
         }
         return contentUpdateListBo;
+    }
+
+    @Override
+    public ContentTopicListBo updatetopicList(ContentTopicListBo topicListBo) {
+        if(topicListBo != null){
+            for(ContentTopicBo topicBo:topicListBo.getTopicBoList()){
+                ContentTopic topic = new ContentTopic();
+                try {
+                    BeanUtils.copyProperties(topicBo, topic);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                topicMapper.deleteByPrimaryKey(topic);
+                topicMapper.insert(topic);
+            }
+        }
+        return topicListBo;
     }
 
 

@@ -23,7 +23,7 @@ public interface ContentService {
 
     ContentSaveBo save(ContentSaveBo contentSaveBo);
 
-    ContentQueryBo selectContent(String contentId);
+    ContentSaveBo selectContent(String contentId);
 
     ContentSaveBo update(ContentSaveBo contentSaveBo);
 
@@ -36,5 +36,7 @@ public interface ContentService {
     ContentUpdateListBo updateList(ContentUpdateListBo contentUpdateListBo);
 
     String updatRegenerateList(String[] contentIds);
+
+    ContentTopicListBo updatetopicList(ContentTopicListBo topicListBo);
 
 }

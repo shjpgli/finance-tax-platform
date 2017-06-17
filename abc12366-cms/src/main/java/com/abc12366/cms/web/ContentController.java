@@ -136,9 +136,9 @@ public class ContentController {
     public ResponseEntity selectOne(@PathVariable String contentId) {
         LOGGER.info("{}", contentId);
         //根据内容ID查询内容信息
-        ContentQueryBo contentQueryBo = contentService.selectContent(contentId);
-        LOGGER.info("{}", contentQueryBo);
-        return ResponseEntity.ok(Utils.kv("data", contentQueryBo));
+        ContentSaveBo contentSaveBo = contentService.selectContent(contentId);
+        LOGGER.info("{}", contentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
     @GetMapping(path = "/contentList")
@@ -159,10 +159,10 @@ public class ContentController {
             throw new RuntimeException("时间类型转换异常：{}", e);
         }
         List<ContentsListBo> contentBoList = contentService.selectListByTplContent(dataMap);
-        List<ContentQueryBo> dataList = new ArrayList<ContentQueryBo>();
+        List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
         for(ContentsListBo contentBo : contentBoList){
-            ContentQueryBo contentQueryBo = contentService.selectContent(contentBo.getContentId());
-            dataList.add(contentQueryBo);
+            ContentSaveBo contentSaveBo = contentService.selectContent(contentBo.getContentId());
+            dataList.add(contentSaveBo);
         }
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
@@ -224,6 +224,16 @@ public class ContentController {
         contentUpdateListBo = contentService.updateList(contentUpdateListBo);
         LOGGER.info("{}", contentUpdateListBo);
         return ResponseEntity.ok(Utils.kv("data", contentUpdateListBo));
+    }
+
+    @PutMapping(path = "/updatetopicList")
+    public ResponseEntity updatetopicList(@RequestBody ContentTopicListBo topicListBo) {
+
+        LOGGER.info("{}", topicListBo);
+        //更新内容信息
+        topicListBo = contentService.updatetopicList(topicListBo);
+        LOGGER.info("{}", topicListBo);
+        return ResponseEntity.ok(Utils.kv("data", topicListBo));
     }
 
 
