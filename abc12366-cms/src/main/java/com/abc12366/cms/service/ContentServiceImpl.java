@@ -130,6 +130,7 @@ public class ContentServiceImpl implements ContentService{
         ContentExt contentExt = new ContentExt();
         try {
             BeanUtils.copyProperties(contentExtBo, contentExt);
+            contentExt.setNeedRegenerate(0);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);

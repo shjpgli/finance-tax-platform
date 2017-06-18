@@ -91,6 +91,8 @@ public class ContentController {
             if(startTime != null && !"".equals(startTime)){
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime() / 1000);
+            }else{
+                dataMap.put("needRegenerate", 0);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
@@ -153,6 +155,8 @@ public class ContentController {
             if(startTime != null && !"".equals(startTime)){
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime()/1000);
+            }else{
+                dataMap.put("needRegenerate", 0);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
@@ -163,6 +167,21 @@ public class ContentController {
         for(ContentsListBo contentBo : contentBoList){
             ContentSaveBo contentSaveBo = contentService.selectContent(contentBo.getContentId());
             dataList.add(contentSaveBo);
+        }
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
+    @GetMapping(path = "/contentListByContentids")
+    public ResponseEntity contentListByContentids(
+                                      @RequestParam(value = "contentIds", required = false) String contentIds) {
+        List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
+        if(contentIds != null && !"".equals(contentIds)){
+            String[] contentIdstr = contentIds.split(",");
+            for(int i=0;i<contentIdstr.length;i++){
+                ContentSaveBo contentSaveBo = contentService.selectContent(contentIdstr[i]);
+                dataList.add(contentSaveBo);
+            }
         }
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));

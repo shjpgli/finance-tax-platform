@@ -81,6 +81,9 @@
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}
 		</if>
+		<if test="needRegenerate != null and needRegenerate != ''">
+			AND b.needRegenerate = #{needRegenerate}
+		</if>
 		<if test="startTime!=null and startTime!=''">
 			　　AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
 		</if>
@@ -119,6 +122,9 @@
 		</if>
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}
+		</if>
+		<if test="needRegenerate != null and needRegenerate != ''">
+			AND b.needRegenerate = #{needRegenerate}
 		</if>
 		<if test="startTime!=null and startTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
