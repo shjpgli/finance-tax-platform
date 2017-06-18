@@ -156,7 +156,7 @@ public class ContentController {
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime()/1000);
             }else{
-                dataMap.put("needRegenerate", 0);
+                dataMap.put("needRegenerate", "0");
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
@@ -187,7 +187,7 @@ public class ContentController {
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime()/1000);
             }else{
-                dataMap.put("needRegenerate", 0);
+                dataMap.put("needRegenerate", "0");
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
