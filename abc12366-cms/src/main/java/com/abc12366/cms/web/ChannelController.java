@@ -82,14 +82,16 @@ public class ChannelController {
     @GetMapping(path = "/channelList")
     public ResponseEntity channelList(@RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime,
-                                      @RequestParam(value = "tplContent", required = false) String tplContent) {
+                                      @RequestParam(value = "tplChannel", required = false) String tplChannel) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
-        List<ChannelBo> ChannelBoList = channelService.selectList();
+        List<ChannelExtBo> channelExtBoList = channelService.selectListBytplChannel(tplChannel);
         List<ChannelSaveBo> dataList = new ArrayList<ChannelSaveBo>();
-        for(ChannelBo channelBo : ChannelBoList){
-            ChannelSaveBo channelSaveBo = channelService.selectChannel(channelBo.getChannelId());
-            dataList.add(channelSaveBo);
+        if(channelExtBoList != null){
+            for(ChannelExtBo channelExtBo : channelExtBoList){
+                ChannelSaveBo channelSaveBo = channelService.selectChannel(channelExtBo.getChannelId());
+                dataList.add(channelSaveBo);
+            }
         }
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));

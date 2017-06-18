@@ -165,7 +165,10 @@ public class ChannelServiceImpl implements ChannelService {
         Channel channel = channelRoMapper.selectByPrimaryKey(channelId);
         ChannelBo channelBo = new ChannelBo();
         try {
-            BeanUtils.copyProperties(channel, channelBo);
+            if(channel != null){
+                BeanUtils.copyProperties(channel, channelBo);
+            }
+
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
@@ -174,7 +177,9 @@ public class ChannelServiceImpl implements ChannelService {
         ChannelExt channelExt = channelExtRoMapper.selectByPrimaryKey(channelId);
         ChannelExtBo channelExtBo = new ChannelExtBo();
         try {
-            BeanUtils.copyProperties(channelExt, channelExtBo);
+            if(channelExt != null){
+                BeanUtils.copyProperties(channelExt, channelExtBo);
+            }
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
@@ -182,16 +187,19 @@ public class ChannelServiceImpl implements ChannelService {
         //查询栏目扩展项信息
         List<ChannelAttr> channelAttrList = channelAttrRoMapper.selectByChannelId(channelId);
         List<ChannelAttrBo> channelAttrBoList = new ArrayList<ChannelAttrBo>();
-        for(ChannelAttr channelAttr:channelAttrList){
-            ChannelAttrBo channelAttrBo = new ChannelAttrBo();
-            try {
-                BeanUtils.copyProperties(channelAttr, channelAttrBo);
-                channelAttrBoList.add(channelAttrBo);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(channelAttrList != null){
+            for(ChannelAttr channelAttr:channelAttrList){
+                ChannelAttrBo channelAttrBo = new ChannelAttrBo();
+                try {
+                    BeanUtils.copyProperties(channelAttr, channelAttrBo);
+                    channelAttrBoList.add(channelAttrBo);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
             }
         }
+
         List<ChnlGroupView> groupList = groupRoMapper.selectList(channelId);
         List<ChnlGroupViewBo> groupBoList = new ArrayList<ChnlGroupViewBo>();
         if(groupBoList != null){
@@ -283,17 +291,20 @@ public class ChannelServiceImpl implements ChannelService {
         channelMapper.updateByPrimaryKeySelective(channel);
 
         List<Channel> channelList = channelRoMapper.selectListByparentId(channelBo.getChannelId());
-        for(Channel channel1 : channelList){
-            ChannelBo channelBo1 = new ChannelBo();
-            try {
-                BeanUtils.copyProperties(channel1,channelBo1);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(channelList != null){
+            for(Channel channel1 : channelList){
+                ChannelBo channelBo1 = new ChannelBo();
+                try {
+                    BeanUtils.copyProperties(channel1,channelBo1);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                channelBo1.setIsDisplay(channelBo.getIsDisplay());
+                this.updateChannelByparentId(channelBo1);
             }
-            channelBo1.setIsDisplay(channelBo.getIsDisplay());
-            this.updateChannelByparentId(channelBo1);
         }
+
         return channelBo;
     }
 
@@ -301,18 +312,42 @@ public class ChannelServiceImpl implements ChannelService {
     public List<ChannelBo> selectListByparentId(String parentId) {
         List<Channel> channelList = channelRoMapper.selectListByparentId(parentId);
         List<ChannelBo> channelBoList = new ArrayList<>();
-        for(Channel channel : channelList){
-            try {
-                ChannelBo channelBo = new ChannelBo();
-                BeanUtils.copyProperties(channel,channelBo);
-                channelBoList.add(channelBo);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+        if(channelList != null){
+            for(Channel channel : channelList){
+                try {
+                    ChannelBo channelBo = new ChannelBo();
+                    BeanUtils.copyProperties(channel,channelBo);
+                    channelBoList.add(channelBo);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
             }
         }
+
         LOGGER.info("{}", channelBoList);
         return channelBoList;
+    }
+
+    @Override
+    public List<ChannelExtBo> selectListBytplChannel(String tplChannel) {
+        List<ChannelExt> channelExtList = channelExtRoMapper.selectListBytplChannel(tplChannel);
+        List<ChannelExtBo> channelExtBoList = new ArrayList<>();
+        if(channelExtList != null){
+            for(ChannelExt channelExt : channelExtList){
+                try {
+                    ChannelExtBo channelExtBo = new ChannelExtBo();
+                    BeanUtils.copyProperties(channelExt,channelExtBo);
+                    channelExtBoList.add(channelExtBo);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+            }
+        }
+
+        LOGGER.info("{}", channelExtBoList);
+        return channelExtBoList;
     }
 
     @Override

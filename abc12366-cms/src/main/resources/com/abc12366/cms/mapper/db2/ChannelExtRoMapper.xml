@@ -16,5 +16,13 @@
 		 WHERE channelId = #{channelId}
 	</select>
 
+	<!-- 查询（根据查询条件查询） -->
+	<select id="selectListBytplChannel" resultType="com.abc12366.cms.model.ChannelExt" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cms_channel_ext
+		WHERE tplChannel = #{tplChannel}
+	</select>
+
 
 </mapper>

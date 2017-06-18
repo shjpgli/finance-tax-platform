@@ -2,6 +2,7 @@ package com.abc12366.cms.service;
 
 
 import com.abc12366.cms.model.bo.ChannelBo;
+import com.abc12366.cms.model.bo.ChannelExtBo;
 import com.abc12366.cms.model.bo.ChannelSaveBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 
@@ -13,6 +14,8 @@ public interface ChannelService {
     List<ChannelBo> selectList();
 
     List<ChannelBo> selectListByparentId(String parentId);
+
+    List<ChannelExtBo> selectListBytplChannel(String tplChannel);
 
     List<ModelItemBo> selectModeList(Map<String,Object> map);
 
