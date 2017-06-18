@@ -29,4 +29,11 @@ public interface TopicRoMapper{
 	 **/
 	List<TopicBo> selectList();
 
+	/**
+	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	List<TopicBo> selectListBytplContent(@Param("tplContent") String tplContent);
+
 }

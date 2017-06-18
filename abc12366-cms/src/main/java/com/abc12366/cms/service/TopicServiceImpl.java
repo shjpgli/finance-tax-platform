@@ -35,6 +35,14 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public List<TopicBo> selectListBytplContent(String tplContent) {
+        //查询模型列表
+        List<TopicBo> topicBoList =  topicRoMapper.selectListBytplContent(tplContent);
+        return topicBoList;
+    }
+
+
+    @Override
     public TopicBo save(TopicBo topicBo) {
         //保存模型信息
         String uuid = UUID.randomUUID().toString().replace("-", "");

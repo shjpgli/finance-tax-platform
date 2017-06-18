@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 模型管理模块
@@ -39,7 +41,17 @@ public class TopicController {
         List<TopicBo> dataList = topicService.selectList();
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
 
+    @GetMapping(path = "/selectListBytplContent")
+    public ResponseEntity selectListBytplContent(@RequestParam(value = "startTime", required = false) String startTime,
+                                      @RequestParam(value = "endTime", required = false) String endTime,
+                                      @RequestParam(value = "tplContent", required = false) String tplContent) {
+        //查询模型项
+        Map<String, Object> dataMap = new HashMap<>();
+        List<TopicBo> dataList = topicService.selectListBytplContent(tplContent);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
     @PostMapping

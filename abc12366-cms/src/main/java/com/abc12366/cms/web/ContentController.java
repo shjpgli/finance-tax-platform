@@ -172,6 +172,37 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    @GetMapping(path = "/selectListBytopicId")
+    public ResponseEntity selectListBytopicId(@RequestParam(value = "startTime", required = false) String startTime,
+                                      @RequestParam(value = "endTime", required = false) String endTime,
+                                      @RequestParam(value = "tplContent", required = false) String tplContent,
+                                      @RequestParam(value = "topicId", required = false) String topicId) {
+        //查询模型项
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("tplContent", tplContent);
+        dataMap.put("topicId", topicId);
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startTime != null && !"".equals(startTime)){
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime()/1000);
+            }else{
+                dataMap.put("needRegenerate", 0);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+        List<ContentsListBo> contentBoList = contentService.selectListBytopicId(dataMap);
+        List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
+        for(ContentsListBo contentBo : contentBoList){
+            ContentSaveBo contentSaveBo = contentService.selectContent(contentBo.getContentId());
+            dataList.add(contentSaveBo);
+        }
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
     @GetMapping(path = "/contentListByContentids")
     public ResponseEntity contentListByContentids(
                                       @RequestParam(value = "contentIds", required = false) String contentIds) {

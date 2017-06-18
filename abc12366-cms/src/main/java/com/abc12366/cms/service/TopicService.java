@@ -10,6 +10,8 @@ public interface TopicService {
 
     List<TopicBo> selectList();
 
+    List<TopicBo> selectListBytplContent(String tplContent);
+
     TopicBo save(TopicBo topicBo);
 
     TopicBo selectTopic(String topicId);

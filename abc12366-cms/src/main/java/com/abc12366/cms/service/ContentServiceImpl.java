@@ -94,6 +94,14 @@ public class ContentServiceImpl implements ContentService{
     }
 
     @Override
+    public List<ContentsListBo> selectListBytopicId(Map<String,Object> map) {
+        //查询内容列表
+        List<ContentsListBo> contents = contentRoMapper.selectListBytopicId(map);
+        LOGGER.info("{}", contents);
+        return contents;
+    }
+
+    @Override
     public List<ContentsListBo> selectListByTplContent(Map<String,Object> map) {
         //查询内容列表
         List<ContentsListBo> contents = contentRoMapper.selectListByTplContent(map);
