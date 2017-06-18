@@ -85,10 +85,10 @@
 			AND b.needRegenerate = #{needRegenerate}
 		</if>
 		<if test="startTime!=null and startTime!=''">
-			　　AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
+			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
 		</if>
 		<if test="endTime!=null and endTime!=''">
-			　　AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
+			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
 		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>
