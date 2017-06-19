@@ -10,5 +10,5 @@ import java.util.List;
  * Time: 15:40
  */
 public interface VipLogRoMapper {
-    List<VipLogBO> selectList();
+    List<VipLogBO> selectList(String userId);
 }

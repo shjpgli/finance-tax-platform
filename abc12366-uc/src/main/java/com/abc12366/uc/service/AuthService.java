@@ -23,7 +23,7 @@ public interface AuthService {
 
     String refresh(String oldToken);
 
-    boolean isAuthentication(String userToken);
+    boolean isAuthentication(String userToken, HttpServletRequest request);
 
     boolean refreshToken(String token);
 

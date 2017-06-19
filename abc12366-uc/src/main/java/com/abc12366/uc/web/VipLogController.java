@@ -29,11 +29,12 @@ public class VipLogController {
     private VipLogService vipLogService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+    public ResponseEntity selectList(@RequestParam String userId,
+                                     @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}", page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<VipLogBO> logList = vipLogService.selectList();
+        List<VipLogBO> logList = vipLogService.selectList(userId);
         LOGGER.info("{}", logList);
         return (logList == null) ?
                 ResponseEntity.ok(Utils.kv()) :

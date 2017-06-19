@@ -3,17 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.VipLogRoMapper">
 
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLogListBO" parameterType="java.util.Map">
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLogListBO" parameterType="java.lang.String">
         SELECT  uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level, uulo.createTime
         from uc_uvip_log uulo, uc_uvip_level uule
         <where>
-            uulo.levelId = uule.Id
-            <if test="level!=mull">
-                and level=#{level}
-            </if>
-            <if test="status!=null">
-                and status=#{status}
-            </if>
+            uulo.userId = #{userId}
+            and uulo.levelId = uule.Id
         </where>
         ORDER BY createTime DESC
     </select>
