@@ -31,7 +31,7 @@ public class Constant {
     public final static String USER_TOKEN_HEAD = "User-Token";
     // 用户token有效期：168小时
     public final static int USER_TOKEN_VALID_HOURS = 7 * 24;
-
+    public final static String USER_ID = "User-Id";
     // 用户token有效期：3600*2秒
     public final static int USER_TOKEN_VALID_SECONDS = 3600 * 2;
 
@@ -53,6 +53,7 @@ public class Constant {
 
     /**
      * 获取当前系统当天日期String
+     *
      * @return
      */
     public static String getTodaySting() {
@@ -63,6 +64,7 @@ public class Constant {
 
     /**
      * 获取当前系统当天日期
+     *
      * @param date
      * @return
      */
@@ -76,6 +78,7 @@ public class Constant {
 
     /**
      * 获取当前系统前一天日期
+     *
      * @param date
      * @return
      */
@@ -89,6 +92,7 @@ public class Constant {
 
     /**
      * 获取当前系统下一天日期
+     *
      * @param date
      * @return
      */

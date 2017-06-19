@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.NsrBindQueryRoMapper">
+
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
+        SELECT a.username,a.nickname,a.nsrsbh,a.nsrmc,a.swjgmc,a.status,a.createTime from (
+        SELECT uu.username,uu.nickname,uud.nsrsbh,uud.nsrmc,uud.swjgmc,uud.status,uud.createTime
+        FROM uc_user uu, uc_user_dzsb uud
+        <where>
+            uu.id = uud.userId
+            <if test="username!=null">
+                and uu.username=#{username}
+            </if>
+            <if test="nsrsbh!=null">
+                and uud.nsrsbh=#{nsrsbh}
+            </if>
+        </where>
+        UNION ALL
+        SELECT uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime
+        FROM uc_user uu, uc_user_hnds uuh
+        <where>
+            uu.id = uuh.userId
+            <if test="username!=null">
+                and uu.username=#{username}
+            </if>
+            <if test="nsrsbh!=null">
+                and uuh.nsrsbh=#{nsrsbh}
+            </if>
+        </where>
+        UNION ALL
+        SELECT uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime
+        FROM uc_user uu, uc_user_hngs uuh
+        <where>
+            uu.id = uuh.userId
+            <if test="username!=null">
+                and uu.username=#{username}
+            </if>
+            <if test="nsrsbh!=null">
+                and uuh.nsrsbh=#{nsrsbh}
+            </if>
+        </where>
+        ) a
+    </select>
+
+    <select id="selectDzsbBindList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
+        SELECT  uu.username,uu.nickname,uud.nsrsbh,uud.nsrmc,uud.swjgmc,uud.status,uud.createTime
+        from uc_user uu, uc_user_dzsb uud
+        <where>
+            uu.id = uud.userId
+            <if test="username!=null">
+                and uu.username=#{username}
+            </if>
+            <if test="nsrsbh!=null">
+                and uud.nsrsbh=#{nsrsbh}
+            </if>
+        </where>
+    </select>
+    <select id="selectHndsBindList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
+        SELECT  uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime
+        from uc_user uu, uc_user_hnds uuh
+        <where>
+            uu.id = uuh.userId
+            <if test="username!=null">
+                and uu.username=#{username}
+            </if>
+            <if test="nsrsbh!=null">
+                and uuh.nsrsbh=#{nsrsbh}
+            </if>
+        </where>
+    </select>
+    <select id="selectHngsBindList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
+        SELECT  uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime
+        from uc_user uu, uc_user_hngs uuh
+        <where>
+            uu.id = uuh.userId
+            <if test="username!=null">
+                and uu.username=#{username}
+            </if>
+            <if test="nsrsbh!=null">
+                and uuh.nsrsbh=#{nsrsbh}
+            </if>
+        </where>
+    </select>
+</mapper>
