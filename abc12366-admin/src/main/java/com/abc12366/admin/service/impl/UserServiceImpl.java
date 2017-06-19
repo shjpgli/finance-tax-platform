@@ -212,6 +212,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO login(UserBO userBO, String appId) {
         UserBO user = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
+        //判断用户是否被禁用
+        if(user != null){
+            Boolean status = user.getStatus();
+            if(!status){
+                LOGGER.error("用户为禁用状态，不能登录", user);
+                throw new ServiceException(4126);
+            }
+        }
         String password = "";
         try {
             password = Utils.md5(userBO.getPassword());
@@ -235,6 +243,7 @@ public class UserServiceImpl implements UserService {
             Date date = new Date();
             loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
             LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
+
             //判断该用户是否存在此应用的登录信息
             loginInfo.setToken(userToken);
             if (info != null) {
@@ -414,6 +423,8 @@ public class UserServiceImpl implements UserService {
         }
         if (user != null && oldPassword.equals(user.getPassword())) {
             update = userMapper.updateUserPwdById(user.getId(), newPassword);
+        }else{
+            throw new ServiceException(4120);
         }
 
         return update;

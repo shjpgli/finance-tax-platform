@@ -41,6 +41,7 @@
             <if test="parentId != null and parentId!=''"> AND m.parentId = #{parentId}</if>
             <if test="type != null and type!=''"> AND m.type = #{type}</if>
         </where>
+        ORDER BY m.sort ASC
     </select>
 
     <select id="selectByParentId" resultMap="menuBoResultMap" parameterType="java.lang.String">
