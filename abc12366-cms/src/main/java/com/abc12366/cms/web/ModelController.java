@@ -1,5 +1,6 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.service.ModelService;
@@ -47,7 +48,7 @@ public class ModelController {
         //新增评论信息
         modelBo = modelService.save(modelBo);
         LOGGER.info("{}", modelBo);
-        return ResponseEntity.ok(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
     @GetMapping(path = "/{modelId}")
@@ -56,7 +57,7 @@ public class ModelController {
         //查询评论信息
         ModelBo modelBo = modelService.selectModel(modelId);
         LOGGER.info("{}", modelBo);
-        return ResponseEntity.ok(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
     @PutMapping(path = "/{modelId}")
@@ -67,7 +68,7 @@ public class ModelController {
         //更新评论信息
         modelBo = modelService.update(modelBo);
         LOGGER.info("{}", modelBo);
-        return ResponseEntity.ok(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
     @PutMapping(path = "/updateList")
@@ -77,7 +78,7 @@ public class ModelController {
         //更新评论信息
         modelListBo = modelService.updateList(modelListBo);
         LOGGER.info("{}", modelListBo);
-        return ResponseEntity.ok(modelListBo);
+        return ResponseEntity.ok(Utils.kv("data", modelListBo));
     }
 
     @DeleteMapping(path = "/{modelId}")
@@ -86,17 +87,17 @@ public class ModelController {
         //删除评论信息
         String rtn = modelService.delete(modelId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
-    @DeleteMapping(path = "/deleteList")
-    public ResponseEntity deleteList(@RequestParam(value = "modelIds", required = true) String[] modelIds) {
+    @PostMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
 //        modelIds = "'d8fe3b0064ce439eb091c99394ab72b6','d9ed4c8fe2044887ab74db105b57df4f'";
-        LOGGER.info("{}", modelIds);
+        LOGGER.info("{}", idsBo);
         //删除评论信息
-        String rtn = modelService.deleteList(modelIds);
+        String rtn = modelService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
 

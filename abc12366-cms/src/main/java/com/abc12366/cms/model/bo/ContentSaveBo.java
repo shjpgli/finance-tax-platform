@@ -18,9 +18,7 @@ public class ContentSaveBo implements Serializable {
 	private List<ContentPictureBo> contentPictureList;//内容图片
 	private List<FileBo> fileList;//内容附件
 	private List<ContentGroupViewBo> groupList;//用户组
-
-	/**专题ID**/
-	private String topicId;
+	private List<ContentTopicBo> topicList;//专题组
 
 	/**0 新增 1修改 2审核 3退回 4移动 5生成静态页 6删除到回收站 7归档 8出档 9推送共享**/
 	private Integer operateType;
@@ -73,14 +71,6 @@ public class ContentSaveBo implements Serializable {
 		this.fileList = fileList;
 	}
 
-	public String getTopicId() {
-		return topicId;
-	}
-
-	public void setTopicId(String topicId) {
-		this.topicId = topicId;
-	}
-
 	public Integer getOperateType() {
 		return operateType;
 	}
@@ -95,5 +85,13 @@ public class ContentSaveBo implements Serializable {
 
 	public void setGroupList(List<ContentGroupViewBo> groupList) {
 		this.groupList = groupList;
+	}
+
+	public List<ContentTopicBo> getTopicList() {
+		return topicList;
+	}
+
+	public void setTopicList(List<ContentTopicBo> topicList) {
+		this.topicList = topicList;
 	}
 }

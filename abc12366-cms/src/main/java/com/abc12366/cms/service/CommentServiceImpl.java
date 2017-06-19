@@ -187,8 +187,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public String spList(String[] commentIds) {
-        //评论信息
-        int r = commentMapper.spList(commentIds);
+        //批量审批评论信息
+        int r = commentMapper.updateIsCheckedList(commentIds);
         LOGGER.info("{}", r);
         return "";
     }

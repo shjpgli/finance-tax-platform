@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		channelId,	channelName,	isStaticChannel,	isStaticContent,	pageSize,	link,	tplChannel,	tplContent,	titleImg,	contentImg,	hasTitleImg,	hasContentImg,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	commentControl,	allowUpdown,	isBlank, title,keywords,description,	allowShare
+		channelId,	channelName,	isStaticChannel,	isStaticContent,	pageSize,	link,	tplChannel,	tplContent,	titleImg,	contentImg,	hasTitleImg,	hasContentImg,	titleImgWidth,	titleImgHeight,	contentImgWidth,	contentImgHeight,	commentControl,	allowUpdown,	isBlank, title,keywords,description,txt,allowShare
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -14,6 +14,14 @@
 		 <include refid="Base_Column_List" />
 		 FROM cms_channel_ext
 		 WHERE channelId = #{channelId}
+	</select>
+
+	<!-- 查询（根据查询条件查询） -->
+	<select id="selectListBytplChannel" resultType="com.abc12366.cms.model.ChannelExt" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cms_channel_ext
+		WHERE tplChannel = #{tplChannel}
 	</select>
 
 

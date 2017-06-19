@@ -1,5 +1,6 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 import com.abc12366.cms.service.ModelItemService;
@@ -55,7 +56,7 @@ public class ModelItemController {
         //新增评论信息
         modelItemBo = modelItemService.save(modelItemBo);
         LOGGER.info("{}", modelItemBo);
-        return ResponseEntity.ok(modelItemBo);
+        return ResponseEntity.ok(Utils.kv("data", modelItemBo));
     }
 
     @GetMapping(path = "/{modelItemId}")
@@ -64,7 +65,7 @@ public class ModelItemController {
         //查询评论信息
         ModelItemBo modelBo = modelItemService.selectModel(modelItemId);
         LOGGER.info("{}", modelBo);
-        return ResponseEntity.ok(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
     @PutMapping(path = "/{modelItemId}")
@@ -75,7 +76,7 @@ public class ModelItemController {
         //更新评论信息
         modelItemBo = modelItemService.update(modelItemBo);
         LOGGER.info("{}", modelItemBo);
-        return ResponseEntity.ok(modelItemBo);
+        return ResponseEntity.ok(Utils.kv("data", modelItemBo));
     }
 
     @PostMapping(path = "/saveList")
@@ -85,7 +86,7 @@ public class ModelItemController {
         //更新评论信息
         modelItemListBo = modelItemService.saveList(modelItemListBo);
         LOGGER.info("{}", modelItemListBo);
-        return ResponseEntity.ok(modelItemListBo);
+        return ResponseEntity.ok(Utils.kv("data", modelItemListBo));
     }
 
     @PutMapping(path = "/updateList")
@@ -95,7 +96,7 @@ public class ModelItemController {
         //更新评论信息
         modelItemListBo = modelItemService.updateList(modelItemListBo);
         LOGGER.info("{}", modelItemListBo);
-        return ResponseEntity.ok(modelItemListBo);
+        return ResponseEntity.ok(Utils.kv("data", modelItemListBo));
     }
 
     @DeleteMapping(path = "/{modelItemId}")
@@ -104,16 +105,16 @@ public class ModelItemController {
         //删除评论信息
         String rtn = modelItemService.delete(modelItemId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
-    @DeleteMapping(path = "/deleteList")
-    public ResponseEntity deleteList(@RequestParam(value = "modelItemIds", required = true) String[] modelItemIds) {
-        LOGGER.info("{}", modelItemIds);
+    @PostMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
         //删除评论信息
-        String rtn = modelItemService.deleteList(modelItemIds);
+        String rtn = modelItemService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
 

@@ -79,6 +79,9 @@ public class ChannelExt implements Serializable {
 	/**description**varchar(255)**/
 	private String description;
 
+	/**内容**longtext**/
+	private String txt;
+
 
 
 	public void setChannelId(String channelId){
@@ -263,5 +266,13 @@ public class ChannelExt implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getTxt() {
+		return txt;
+	}
+
+	public void setTxt(String txt) {
+		this.txt = txt;
 	}
 }

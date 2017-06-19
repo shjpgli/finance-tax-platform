@@ -1,10 +1,6 @@
 package com.abc12366.cms.service;
 
-import com.abc12366.cms.model.ModelItem;
-import com.abc12366.cms.model.bo.ContentQueryBo;
-import com.abc12366.cms.model.bo.ContentSaveBo;
-import com.abc12366.cms.model.bo.ContentListBo;
-import com.abc12366.cms.model.bo.ModelItemBo;
+import com.abc12366.cms.model.bo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -19,14 +15,30 @@ import java.util.Map;
 public interface ContentService {
     List<ContentListBo> selectList(Map<String,Object> map);
 
+    List<ContentsListBo> selectListByChannelId(Map<String,Object> map);
+
+    List<ContentsListBo> selectListBytopicId(Map<String,Object> map);
+
+    List<ContentsListBo> selectListByTplContent(Map<String,Object> map);
+
     List<ModelItemBo> selectModeList(Map<String,Object> map);
 
     ContentSaveBo save(ContentSaveBo contentSaveBo);
 
-    ContentQueryBo selectContent(String contentId);
+    ContentSaveBo selectContent(String contentId);
 
     ContentSaveBo update(ContentSaveBo contentSaveBo);
 
     String delete(String contentId);
+
+    String deleteList(String[] contentIds);
+
+    String updateStatusList(String[] contentIds);
+
+    ContentUpdateListBo updateList(ContentUpdateListBo contentUpdateListBo);
+
+    String updatRegenerateList(String[] contentIds);
+
+    ContentTopicListBo updatetopicList(ContentTopicListBo topicListBo);
 
 }

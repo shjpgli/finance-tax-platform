@@ -1,7 +1,10 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.Topic;
+import com.abc12366.cms.model.bo.TopicBo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -17,6 +20,20 @@ public interface TopicRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	Topic selectByPrimaryKey(@Param("id") Long id);
+	Topic selectByPrimaryKey(@Param("topicId") String topicId);
+
+	/**
+	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	List<TopicBo> selectList();
+
+	/**
+	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	List<TopicBo> selectListBytplContent(@Param("tplContent") String tplContent);
 
 }

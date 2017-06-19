@@ -3,6 +3,7 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.bo.CommentListBo;
 import com.abc12366.cms.model.bo.CommentSaveBo;
 import com.abc12366.cms.model.bo.CommentTjListBo;
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.service.CommentService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -58,7 +59,7 @@ public class CommentController {
         //新增评论信息
         commentSaveBo = commentService.save(commentSaveBo);
         LOGGER.info("{}", commentSaveBo);
-        return ResponseEntity.ok(commentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
     @GetMapping(path = "/{commentId}")
@@ -67,7 +68,7 @@ public class CommentController {
         //查询评论信息
         CommentSaveBo commentSaveBo = commentService.selectComment(commentId);
         LOGGER.info("{}", commentSaveBo);
-        return ResponseEntity.ok(commentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
     @GetMapping(path = "/tj")
@@ -75,7 +76,7 @@ public class CommentController {
         //查询评论统计信息
         CommentTjListBo commentTjListBo = commentService.selectTj();
         LOGGER.info("{}", commentTjListBo);
-        return ResponseEntity.ok(commentTjListBo);
+        return ResponseEntity.ok(Utils.kv("data", commentTjListBo));
     }
 
     @PutMapping(path = "/{commentId}")
@@ -86,7 +87,7 @@ public class CommentController {
         //更新评论信息
         commentSaveBo = commentService.update(commentSaveBo);
         LOGGER.info("{}", commentSaveBo);
-        return ResponseEntity.ok(commentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
     @DeleteMapping(path = "/{commentId}")
@@ -95,25 +96,25 @@ public class CommentController {
         //删除评论信息
         String rtn = commentService.delete(commentId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
-    @DeleteMapping(path = "/deleteList")
-    public ResponseEntity deleteList(@RequestParam(value = "commentIds", required = true) String[] commentIds) {
-        LOGGER.info("{}", commentIds);
+    @PostMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
         //删除评论信息
-        String rtn = commentService.deleteList(commentIds);
+        String rtn = commentService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
     @PutMapping(path = "/spList")
-    public ResponseEntity spList(@RequestParam(value = "commentIds", required = true) String[] commentIds) {
-        LOGGER.info("{}", commentIds);
-        //删除评论信息
-        String rtn = commentService.deleteList(commentIds);
+    public ResponseEntity spList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
+        //审批评论信息
+        String rtn = commentService.spList(idsBo.getIds());
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
 

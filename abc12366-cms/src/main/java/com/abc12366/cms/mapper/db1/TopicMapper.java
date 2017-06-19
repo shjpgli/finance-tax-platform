@@ -17,7 +17,14 @@ public interface TopicMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("topicId") String topicId);
+
+	/**
+	 *
+	 * 批量删除（根据主键ID删除）
+	 *
+	 **/
+	int deleteList(@Param("topicIds") String[] topicIds);
 
 	/**
 	 * 

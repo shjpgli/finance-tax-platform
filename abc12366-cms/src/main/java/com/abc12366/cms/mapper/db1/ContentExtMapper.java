@@ -46,4 +46,11 @@ public interface ContentExtMapper{
 	 **/
 	int updateByPrimaryKey(ContentExt record);
 
+	/**
+	 *
+	 * 修改是否已生成静态页(根据主键ID修改)
+	 *
+	 **/
+	int updatRegenerateList(@Param("contentIds") String[] contentIds);
+
 }

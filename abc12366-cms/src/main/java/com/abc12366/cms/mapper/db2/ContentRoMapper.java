@@ -1,8 +1,8 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.Content;
-import com.abc12366.cms.model.bo.ContentBo;
 import com.abc12366.cms.model.bo.ContentListBo;
+import com.abc12366.cms.model.bo.ContentsListBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -26,6 +26,13 @@ public interface ContentRoMapper {
 
 	/**
 	 *
+	 * 查询(根据主键ID查询)
+	 *
+	 **/
+	Long selectByChannelId(@Param("channelId") String channelId);
+
+	/**
+	 *
 	 * 查询(根据查询条件查询)
 	 *
 	 **/
@@ -33,9 +40,31 @@ public interface ContentRoMapper {
 
 	/**
 	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	List<ContentsListBo> selectListByChannelId(Map<String,Object> map);
+
+	/**
+	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	List<ContentsListBo> selectListBytopicId(Map<String,Object> map);
+
+	/**
+	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	List<ContentsListBo> selectListByTplContent(Map<String,Object> map);
+
+
+	/**
+	 *
 	 * 查询(根据contentId查询)
 	 *
 	 **/
-	Content selectByContentId(String contentId);
+	Content selectByContentId(@Param("contentId") String contentId);
 
 }

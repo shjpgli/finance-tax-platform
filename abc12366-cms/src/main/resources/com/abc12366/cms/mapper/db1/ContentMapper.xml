@@ -190,4 +190,13 @@
 		 WHERE contentId = #{contentId}
 	</update>
 
+
+	<!--更新：根据主键ID批量更新-->
+	<update id="updateStatusList" >
+		update cms_content SET status = 0
+		WHERE contentId in <foreach item="item" index="index" collection="contentIds" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+	</update>
+
 </mapper>

@@ -9,7 +9,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +37,7 @@ public class FriendlinkController {
 		LOGGER.info("{}", friendlinkId);
 		FriendlinkBo friendlinkBo = friendlinkService.selectOneById(friendlinkId);
 		LOGGER.info("{}", friendlinkBo);
-		return ResponseEntity.ok(friendlinkBo);
+		return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
 	}
 
 	@PostMapping
@@ -46,7 +45,7 @@ public class FriendlinkController {
 		LOGGER.info("{}", friendlinkBo);
 		friendlinkBo = friendlinkService.save(friendlinkBo);
 		LOGGER.info("{}", friendlinkBo);
-		return new ResponseEntity<>(friendlinkBo, HttpStatus.OK);
+		return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
 	}
 
 	@PutMapping(path = "/{friendlinkId}")
@@ -54,7 +53,7 @@ public class FriendlinkController {
 		LOGGER.info("{}", friendlinkBo);
 		friendlinkBo = friendlinkService.update(friendlinkBo);
 		LOGGER.info("{}", friendlinkBo);
-		return new ResponseEntity<>(friendlinkBo, HttpStatus.OK);
+		return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
 	}
 
 	@DeleteMapping(path = "/{friendlinkId}")
@@ -63,7 +62,7 @@ public class FriendlinkController {
 		//删除评论信息
 		String rtn = friendlinkService.delete(friendlinkId);
 		LOGGER.info("{}", rtn);
-		return ResponseEntity.ok(rtn);
+		return ResponseEntity.ok(Utils.kv("data", rtn));
 	}
 
 

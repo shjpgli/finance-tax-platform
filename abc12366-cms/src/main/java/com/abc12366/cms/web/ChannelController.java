@@ -58,7 +58,7 @@ public class ChannelController {
         dataList.setModelItems(modelItems);
         dataList.setTplPrefix(modelBo.getTplChannelPrefix());
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(dataList);
+        return ResponseEntity.ok(Utils.kv("data", dataList));
     }
 
     @PostMapping
@@ -67,7 +67,7 @@ public class ChannelController {
         //新增栏目信息
         channelSaveBo = channelService.save(channelSaveBo);
         LOGGER.info("{}", channelSaveBo);
-        return ResponseEntity.ok(channelSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
     @GetMapping(path = "/{channelId}")
@@ -76,19 +76,22 @@ public class ChannelController {
         //根据栏目ID查询内容信息
         ChannelSaveBo channelSaveBo = channelService.selectChannel(channelId);
         LOGGER.info("{}", channelSaveBo);
-        return ResponseEntity.ok(channelSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
     @GetMapping(path = "/channelList")
     public ResponseEntity channelList(@RequestParam(value = "startTime", required = false) String startTime,
-                                      @RequestParam(value = "endTime", required = false) String endTime) {
+                                      @RequestParam(value = "endTime", required = false) String endTime,
+                                      @RequestParam(value = "tplChannel", required = false) String tplChannel) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
-        List<ChannelBo> ChannelBoList = channelService.selectList();
+        List<ChannelExtBo> channelExtBoList = channelService.selectListBytplChannel(tplChannel);
         List<ChannelSaveBo> dataList = new ArrayList<ChannelSaveBo>();
-        for(ChannelBo channelBo : ChannelBoList){
-            ChannelSaveBo channelSaveBo = channelService.selectChannel(channelBo.getChannelId());
-            dataList.add(channelSaveBo);
+        if(channelExtBoList != null){
+            for(ChannelExtBo channelExtBo : channelExtBoList){
+                ChannelSaveBo channelSaveBo = channelService.selectChannel(channelExtBo.getChannelId());
+                dataList.add(channelSaveBo);
+            }
         }
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
@@ -102,7 +105,7 @@ public class ChannelController {
         //更新栏目信息
         channelSaveBo = channelService.update(channelSaveBo);
         LOGGER.info("{}", channelSaveBo);
-        return ResponseEntity.ok(channelSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
     @PutMapping(path = "/updateByparentId")
@@ -111,7 +114,7 @@ public class ChannelController {
         //更新栏目信息
         channelBo = channelService.updateChannelByparentId(channelBo);
         LOGGER.info("{}", channelBo);
-        return ResponseEntity.ok(channelBo);
+        return ResponseEntity.ok(Utils.kv("data", channelBo));
     }
 
     @DeleteMapping(path = "/{channelId}")
@@ -120,7 +123,7 @@ public class ChannelController {
         //删除栏目信息
         String rtn = channelService.delete(channelId);
         LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
 
