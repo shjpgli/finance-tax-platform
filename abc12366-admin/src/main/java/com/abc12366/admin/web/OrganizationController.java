@@ -40,11 +40,13 @@ public class OrganizationController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "type", required = false) String type,
                                      @RequestParam(value = "status", required = false) Boolean status) {
         LOGGER.info("{}", name,status);
         Organization organization = new Organization();
         organization.setName(name);
         organization.setStatus(status);
+        organization.setType(type);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<OrganizationBO> organizationList = organizationService.selectList(organization);
         LOGGER.info("{}", organizationList);

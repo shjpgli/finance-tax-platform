@@ -48,6 +48,9 @@ public class ContentListBo implements Serializable {
 	/**推荐级别**/
 	private Integer recommendLevel;
 
+	/**是否已生成静态页**/
+	private Integer needRegenerate;
+
 
 	public String getContentId() {
 		return contentId;
@@ -145,4 +148,11 @@ public class ContentListBo implements Serializable {
 		this.status = status;
 	}
 
+	public Integer getNeedRegenerate() {
+		return needRegenerate;
+	}
+
+	public void setNeedRegenerate(Integer needRegenerate) {
+		this.needRegenerate = needRegenerate;
+	}
 }
