@@ -36,15 +36,14 @@ public class PointsRuleServiceImpl implements PointsRuleService {
 
     @Override
     public List<PointsRuleBO> selectList(Map map) {
-        List<PointsRuleBO> pointsRuleBOs = uPointRuleRoMapper.selectList(map);
-        return pointsRuleBOs;
+        return uPointRuleRoMapper.selectList(map);
     }
 
     @Override
     public PointsRuleBO selectOne(String id) {
         PointsRuleBO pointsRuleBO = uPointRuleRoMapper.selectOne(id);
         if (pointsRuleBO == null) {
-            LOGGER.warn("查询失败，参数：{}" + pointsRuleBO.toString());
+            LOGGER.warn("查询失败，参数：null");
             throw new ServiceException(4104);
         }
         return pointsRuleBO;
@@ -54,7 +53,7 @@ public class PointsRuleServiceImpl implements PointsRuleService {
     @Override
     public PointsRuleBO insert(PointsRuleBO pointsRuleBO) {
         if (pointsRuleBO == null) {
-            LOGGER.warn("新增失败，参数：{}" + pointsRuleBO.toString());
+            LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
         PointsRule pointsRuleQuery = uPointRuleRoMapper.selectByCode(pointsRuleBO.getCode());
@@ -90,11 +89,7 @@ public class PointsRuleServiceImpl implements PointsRuleService {
             LOGGER.warn("更新失败，参数：{}：{}" + pointsRuleUpdateBO.toString(), id);
             throw new ServiceException(4102);
         }
-        PointsRule pointsRuleQuery = uPointRuleRoMapper.selectByCode(pointsRuleUpdateBO.getCode());
-        if (pointsRuleQuery != null) {
-            LOGGER.warn("更新失败，参数：{}" + pointsRuleUpdateBO.getCode());
-            throw new ServiceException(4102);
-        }
+
         PointsRule pointsRule = new PointsRule();
         BeanUtils.copyProperties(pointsRuleUpdateBO, pointsRule);
         pointsRule.setId(id);

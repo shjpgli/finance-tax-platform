@@ -32,8 +32,8 @@ public class VipLogServiceImpl implements VipLogService {
     private VipLogMapper vipLogMapper;
 
     @Override
-    public List<VipLogBO> selectList() {
-        return vipLogRoMapper.selectList();
+    public List<VipLogBO> selectList(String userId) {
+        return vipLogRoMapper.selectList(userId);
     }
 
     @Override

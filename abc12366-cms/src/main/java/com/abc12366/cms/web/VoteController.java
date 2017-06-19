@@ -55,7 +55,7 @@ public class VoteController {
 
         Vote v = voteService.insert(vote);
 
-        ResponseEntity responseEntity = ResponseEntity.ok(v);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
@@ -65,7 +65,7 @@ public class VoteController {
         LOGGER.info("{}", id);
 
         Vote vote = voteService.selectOne(id);
-        ResponseEntity responseEntity = ResponseEntity.ok(vote);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", vote));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;
@@ -77,7 +77,7 @@ public class VoteController {
 
         vote.setId(id);
         Vote v = voteService.update(vote);
-        ResponseEntity responseEntity = ResponseEntity.ok(v);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;
@@ -88,7 +88,7 @@ public class VoteController {
         LOGGER.info("{}", id);
 
         voteService.delete(id);
-        ResponseEntity responseEntity = ResponseEntity.ok().build();
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;
@@ -111,7 +111,7 @@ public class VoteController {
         result.setItemId(itemId);
 
         VoteResult voteResult = voteService.vote(result, request);
-        ResponseEntity responseEntity = ResponseEntity.ok(voteResult);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", voteResult));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;
@@ -123,7 +123,7 @@ public class VoteController {
                                HttpServletRequest request) {
         LOGGER.info("{},{}", voteId, resultList);
         List<VoteResult> dataList = voteService.vote(voteId, resultList, request);
-        ResponseEntity responseEntity = ResponseEntity.ok(dataList);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", dataList));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;

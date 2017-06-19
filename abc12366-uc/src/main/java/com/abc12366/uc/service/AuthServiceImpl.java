@@ -204,7 +204,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean isAuthentication(String userToken) {
+    public boolean isAuthentication(String userToken, HttpServletRequest request) {
         Token token = tokenRoMapper.isAuthentication(userToken);
         if (token == null) {
             return false;
@@ -213,6 +213,13 @@ public class AuthServiceImpl implements AuthService {
         long currentTime = new Date().getTime();
         if (currentTime > (lastTokenResetTime + 1000 * Constant.USER_TOKEN_VALID_SECONDS)) {
             throw new ServiceException(4015);
+        }
+        //把用户Id设置到request
+        if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
+            request.removeAttribute(Constant.USER_ID);
+            request.setAttribute(Constant.USER_ID, token.getUserId());
+        } else {
+            request.setAttribute(Constant.USER_ID, token.getUserId());
         }
         return true;
     }

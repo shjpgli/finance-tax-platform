@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.SubjectTagMapper">
+    <insert id="insert" parameterType="com.abc12366.uc.model.SubjectTag">
+        insert into uc_subject_tag(id,userId,subjectId,tagId,type,createTime)
+        values(#{id},#{userId},#{subjectId},#{tagId},#{type},#{createTime})
+    </insert>
+
+    <delete id="delete" parameterType="java.util.HashMap">
+        delete from uc_subject_tag
+        where type=#{subject}
+        and subjectId=#{id}
+        and tagId=#{tagId}
+    </delete>
+    <delete id="deleteByTagId" parameterType="java.lang.String">
+        delete from uc_subject_tag
+        and tagId=#{id}
+    </delete>
+</mapper>

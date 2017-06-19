@@ -10,7 +10,7 @@ import java.util.List;
  * Time: 15:37
  */
 public interface VipLogService {
-    List<VipLogBO> selectList();
+    List<VipLogBO> selectList(String userId);
 
     VipLogBO insert(VipLogBO vipLogBO);
 }
