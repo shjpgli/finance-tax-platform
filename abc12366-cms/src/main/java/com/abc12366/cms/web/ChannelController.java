@@ -40,7 +40,7 @@ public class ChannelController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         //查询栏目列表
 //        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<ChannelBo> dataList = channelService.selectList();
+        List<ChannelBo> dataList = channelService.selectLists();
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
 //        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
