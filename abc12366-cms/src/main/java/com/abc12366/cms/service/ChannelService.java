@@ -13,6 +13,8 @@ public interface ChannelService {
 
     List<ChannelBo> selectList();
 
+    List<ChannelBo> selectLists();
+
     List<ChannelBo> selectListByparentId(String parentId);
 
     List<ChannelExtBo> selectListBytplChannel(String tplChannel);

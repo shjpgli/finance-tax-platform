@@ -34,6 +34,9 @@ public class ChannelBo implements Serializable {
 	/**栏目名称**varchar(100)**/
 	private String channelName;
 
+	/**文章总数**int(11)**/
+	private Integer cnt;
+
 
 
 	public void setChannelId(String channelId){
@@ -100,4 +103,11 @@ public class ChannelBo implements Serializable {
 		return this.channelName;
 	}
 
+	public Integer getCnt() {
+		return cnt;
+	}
+
+	public void setCnt(Integer cnt) {
+		this.cnt = cnt;
+	}
 }

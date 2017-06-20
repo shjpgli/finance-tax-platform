@@ -18,26 +18,38 @@ import java.util.List;
 public class Vote {
 
     private String id;
+
     // 投票名称
     @NotEmpty
     @Length(min = 2, max = 50)
     private String name;
+
     // 开始时间
-    @NotEmpty
+    @NotNull
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp startTime;
+
     // 截止时间
-    @NotEmpty
+    @NotNull
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp endTime;
+
     // 是否只有登录用户可以投票
     @NotNull
     private Boolean isLogin;
+
+    // 投票通道
+    @NotEmpty
+    @Length(min = 1, max=10)
+    private String channel;
+
     // 发布状态
     @NotNull
     private Boolean status;
+
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createTime;
+
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp lastUpdate;
 
@@ -50,12 +62,13 @@ public class Vote {
     }
 
     public Vote(String id, String name, Timestamp startTime, Timestamp endTime, Boolean isLogin, Boolean status,
-                Timestamp createTime, Timestamp lastUpdate) {
+                String channel, Timestamp createTime, Timestamp lastUpdate) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.isLogin = isLogin;
+        this.channel = channel;
         this.status = status;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
@@ -70,6 +83,7 @@ public class Vote {
         setStatus(builder.status);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
+        setChannel(builder.channel);
     }
 
     public List<Subject> getSubjectList() {
@@ -152,6 +166,14 @@ public class Vote {
         this.nop = nop;
     }
 
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
     @Override
     public String toString() {
         return "Vote{" +
@@ -161,6 +183,7 @@ public class Vote {
                 ", endTime=" + endTime +
                 ", isLogin=" + isLogin +
                 ", status=" + status +
+                ", channel=" + channel +
                 ", nop=" + nop +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
@@ -174,6 +197,7 @@ public class Vote {
         private Timestamp endTime;
         private Boolean isLogin;
         private Boolean status;
+        private String channel;
         private Timestamp createTime;
         private Timestamp lastUpdate;
 
@@ -217,6 +241,11 @@ public class Vote {
 
         public Builder lastUpdate(Timestamp val) {
             lastUpdate = val;
+            return this;
+        }
+
+        public Builder channel(String val) {
+            channel = val;
             return this;
         }
 

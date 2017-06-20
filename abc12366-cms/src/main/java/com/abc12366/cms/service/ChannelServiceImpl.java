@@ -79,6 +79,13 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public List<ChannelBo> selectLists() {
+        List<ChannelBo> channelBoList = channelRoMapper.selectLists();
+        LOGGER.info("{}", channelBoList);
+        return channelBoList;
+    }
+
+    @Override
     public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         //查询模型项
         List<ModelItemBo> modelItemBos = modelItemRoMapper.selectList(map);

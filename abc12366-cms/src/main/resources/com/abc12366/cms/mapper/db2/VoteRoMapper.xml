@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		id, name, startTime, endTime, isLogin, status, createTime, lastUpdate
+		id, name, startTime, endTime, isLogin, channel, status, createTime, lastUpdate
 	</sql>
 
 	<select id="selectList" resultType="com.abc12366.cms.model.Vote" parameterType="com.abc12366.cms.model.Vote">
