@@ -20,8 +20,8 @@ import java.util.List;
  * 订单控制类
  *
  * @author lizhongwei
- * @create 2017-05-16
- * @since 2.0.0
+ * @create 2017-06-19
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping(path = "/wikis", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)

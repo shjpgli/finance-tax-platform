@@ -1,4 +1,8 @@
 package com.abc12366.bangbang.model.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -10,19 +14,21 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class WikiBO implements Serializable {
 
-	/**PK**/
 	private String id;
 
-	/**主题名称**/
+    @NotEmpty
+    @Size(min = 6, max = 400)
 	private String subject;
 
-	/**分类**/
+    @NotEmpty
+    @Size(min = 1, max = 2)
 	private String type;
 
-	/**内容**/
+    @NotEmpty
+    @Size(min = 10, max = 4000)
 	private String content;
 
-	/**状态**/
+    @NotNull
 	private Boolean status;
 
 	/****/

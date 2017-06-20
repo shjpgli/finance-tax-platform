@@ -5,7 +5,9 @@ import java.io.Serializable;
 /**
  * 
  * 敏感词配置
- * 
+ * @author lizhongwei
+ * @create 2017-06-20
+ * @since 1.0.0
  **/
 @SuppressWarnings("serial")
 public class SensitiveWords implements Serializable {

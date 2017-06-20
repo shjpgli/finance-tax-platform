@@ -8,6 +8,16 @@
 		 id,	subject,	type,	content,	status,	createTime,	lastUpdate
 	</sql>
 
+    <resultMap id="wikiBOResultMap" type="com.abc12366.bangbang.model.bo.WikiBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="subject" property="subject" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="DOUBLE"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.Wiki" parameterType="java.lang.String">
 		 SELECT
@@ -16,4 +26,24 @@
 		 WHERE id = #{id}
 	</select>
 
+    <select id="selectList" resultMap="wikiBOResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_wiki
+        <where>
+            1=1
+            <if test="subject != null and subject!=''"> and subject LIKE CONCAT('%',#{subject},'%')</if>
+            <if test="type != null and type!=''"> AND type = #{type}</if>
+            <if test="content != null and content!=''"> and content LIKE CONCAT('%',#{content},'%') </if>
+            <if test="pin != null and pin!=''"> AND pin = #{pin}</if>
+            <if test="status != null and status!=''"> AND o.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectOne" resultMap="wikiBOResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_wiki
+        WHERE id = #{id}
+    </select>
 </mapper>

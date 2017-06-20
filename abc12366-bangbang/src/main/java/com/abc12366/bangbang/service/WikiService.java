@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.Wiki;
+import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 import com.abc12366.bangbang.model.bo.WikiBO;
 
 import java.util.List;
@@ -50,8 +51,7 @@ public interface WikiService {
 
     /**
      * 新增百科主题日志
-     * @param wikiBO
      */
 
-    void addWikiLog(WikiBO wikiBO);
+    WikiAccesslogBO addWikiLog(WikiAccesslogBO accesslogBO);
 }

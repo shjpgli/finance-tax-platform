@@ -1,5 +1,7 @@
 package com.abc12366.bangbang.web;
 
+import com.abc12366.bangbang.model.WikiAccesslog;
+import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 import com.abc12366.bangbang.model.bo.WikiBO;
 import com.abc12366.bangbang.service.WikiService;
 import com.abc12366.common.util.Constant;
@@ -21,8 +23,8 @@ import java.util.List;
  * 百科主题控制类
  *
  * @author lizhongwei
- * @create 2017-05-16
- * @since 2.0.0
+ * @create 2017-06-19
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping(path = "/wiki", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -110,19 +112,18 @@ public class WikiController {
         WikiBO wikiBO = new WikiBO();
         wikiBO.setId(id);
         wikiService.deleteWiki(wikiBO);
-        return ResponseEntity.ok(Utils.kv("data", wikiBO));
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
-     * 查看百科主题日志
-     * @param id
+     * 新增百科主题日志
      * @return
      */
-    @GetMapping(path = "/log/{id}")
-    public ResponseEntity addWikiLog(@PathVariable("id") String id) {
-        WikiBO wikiBO = new WikiBO();
-        wikiBO.setId(id);
-        wikiService.addWikiLog(wikiBO);
-        return ResponseEntity.ok(Utils.kv("data", wikiBO));
+    @PostMapping(path = "/log/{wikiId}")
+    public ResponseEntity addWikiLog(@Valid @RequestBody WikiAccesslogBO accesslogBO,@PathVariable("wikiId") String wikiId) {
+        LOGGER.info("{}", accesslogBO);
+        accesslogBO.setWikiId(wikiId);
+        WikiAccesslogBO bo = wikiService.addWikiLog(accesslogBO);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 }

@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db2;
 import com.abc12366.bangbang.model.SensitiveWords;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * SensitiveWordsMapper数据库操作接口类
@@ -20,4 +22,5 @@ public interface SensitiveWordsRoMapper {
 	SensitiveWords  selectByPrimaryKey(@Param("id") String id);
 
 
+    List<SensitiveWords> selectList(SensitiveWords sensitiveWords);
 }

@@ -20,7 +20,7 @@ public class WikiAccesslog implements Serializable {
 	private String userId;
 
 	/**是否有帮助**/
-	private Integer helpful;
+	private Boolean helpful;
 
 	/****/
 	private java.util.Date createTime;
@@ -51,11 +51,11 @@ public class WikiAccesslog implements Serializable {
 		return this.userId;
 	}
 
-	public void setHelpful(Integer helpful){
+	public void setHelpful(Boolean helpful){
 		this.helpful = helpful;
 	}
 
-	public Integer getHelpful(){
+	public Boolean getHelpful(){
 		return this.helpful;
 	}
 

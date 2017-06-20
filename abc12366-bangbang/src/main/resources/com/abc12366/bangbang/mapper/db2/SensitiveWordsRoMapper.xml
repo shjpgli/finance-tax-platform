@@ -16,4 +16,13 @@
 		 WHERE id = #{id}
 	</select>
 
+    <select id="selectList" resultType="com.abc12366.bangbang.model.SensitiveWords" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_sensitive_words
+        <where>
+            1=1
+            <if test="keywords != null and keywords!=''"> and subject LIKE CONCAT('%',#{keywords},'%')</if>
+        </where>
+    </select>
 </mapper>
