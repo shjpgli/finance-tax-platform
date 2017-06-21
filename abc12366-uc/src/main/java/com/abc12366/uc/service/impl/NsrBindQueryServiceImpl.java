@@ -28,4 +28,9 @@ public class NsrBindQueryServiceImpl implements NsrBindQueryService {
         List<NsrBindQueryBO> list = nsrBindQueryRoMapper.selectList(nsrBindQueryParamBO);
         return list;
     }
+
+    @Override
+    public List<NsrBindQueryBO> selectDzsb() {
+        return null;
+    }
 }

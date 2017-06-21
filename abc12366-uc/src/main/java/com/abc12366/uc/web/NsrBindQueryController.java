@@ -48,7 +48,7 @@ public class NsrBindQueryController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
     }
-/*    @GetMapping()
+    @GetMapping()
     public ResponseEntity selectDzsb(
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -58,6 +58,6 @@ public class NsrBindQueryController {
         return (nsrBindQueryBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
-    }*/
+    }
 
 }

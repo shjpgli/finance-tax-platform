@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface NsrBindQueryService {
     List<NsrBindQueryBO> selectList(NsrBindQueryParamBO nsrBindQueryParamBO);
+
+    List<NsrBindQueryBO> selectDzsb();
 }
