@@ -11,4 +11,6 @@ public interface VipLevelMapper {
     int insert(VipLevel vipLevel);
 
     int update(VipLevel vipLevel);
+
+    int delete(String id);
 }

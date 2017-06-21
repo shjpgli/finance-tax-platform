@@ -86,4 +86,10 @@ public class PointsRuleController {
         LOGGER.info("{}", rule);
         return ResponseEntity.ok(Utils.kv("data", rule));
     }
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        pointsRuleService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

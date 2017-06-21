@@ -19,4 +19,6 @@ public interface PointsRuleService {
     PointsRuleBO insert(PointsRuleBO pointsRuleBO);
 
     PointsRuleBO update(PointsRuleUpdateBO pointsRuleUpdateBO, String id);
+
+    int delete(String id);
 }

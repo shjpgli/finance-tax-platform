@@ -104,4 +104,15 @@ public class PointsRuleServiceImpl implements PointsRuleService {
         BeanUtils.copyProperties(pointsRule, pointsRuleBOReturn);
         return pointsRuleBOReturn;
     }
+
+    @Override
+    public int delete(String id) {
+        LOGGER.info("{}", id);
+        int result = uPointRuleMapper.delete(id);
+        if (result != 1) {
+            LOGGER.warn("删除失败，参数为：id=" + id);
+            throw new ServiceException(4103);
+        }
+        return 1;
+    }
 }

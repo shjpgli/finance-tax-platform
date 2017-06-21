@@ -17,5 +17,9 @@
         </set>
         where id=#{id}
     </update>
+    <delete id="delete" parameterType="java.lang.String">
+        delete from uc_uvip_level
+        where id=#{id}
+    </delete>
 
 </mapper>

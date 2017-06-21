@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/nsrbindquery", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class NsrBindQueryController {
-/*    private static final Logger LOGGER = LoggerFactory.getLogger(SubjectTagController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubjectTagController.class);
 
     @Autowired
     private NsrBindQueryService nsrBindQueryService;
@@ -48,7 +48,7 @@ public class NsrBindQueryController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
     }
-    @GetMapping()
+/*    @GetMapping()
     public ResponseEntity selectDzsb(
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
