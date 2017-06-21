@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import java.util.Date;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-06-15
@@ -9,12 +11,21 @@ public class TagBO {
     private String id;
     private String tagName;
     private boolean status;
-    private String createTime;
-    private String lastUpdate;
+    private Date createTime;
+    private Date lastUpdate;
     private String category;
     private String description;
     private String rule;
     private String tagedCount;
+    private int weight;
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
 
     public TagBO() {
     }
@@ -43,19 +54,19 @@ public class TagBO {
         this.status = status;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public String getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(String lastUpdate) {
+    public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -97,12 +108,13 @@ public class TagBO {
                 "id='" + id + '\'' +
                 ", tagName='" + tagName + '\'' +
                 ", status=" + status +
-                ", createTime='" + createTime + '\'' +
-                ", lastUpdate='" + lastUpdate + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
                 ", category='" + category + '\'' +
                 ", description='" + description + '\'' +
                 ", rule='" + rule + '\'' +
                 ", tagedCount='" + tagedCount + '\'' +
+                ", weight=" + weight +
                 '}';
     }
 }

@@ -4,8 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.NsrBindQueryRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
-        SELECT a.username,a.nickname,a.nsrsbh,a.nsrmc,a.swjgmc,a.status,a.createTime,a.expireDate, a.bindType from (
-        SELECT uu.username,uu.nickname,uud.nsrsbh,uud.nsrmc,uud.swjgmc,uud.status,uud.createTime,uud.expireDate,'dzsb' bindType
+        SELECT a.username,a.nickname,a.nsrsbh,a.nsrmc,a.swjgmc,a.status,a.createTime,a.lastUpdate, a.bindType from (
+        SELECT uu.username,uu.nickname,uud.nsrsbh,uud.nsrmc,uud.swjgmc,uud.status,uud.createTime,uud.lastUpdate,'dzsb' bindType
         FROM uc_user uu, uc_user_dzsb uud
         <where>
             uu.id = uud.userId
@@ -17,7 +17,7 @@
             </if>
         </where>
         UNION ALL
-        SELECT uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.expireDate,'hnds' bindType
+        SELECT uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.lastUpdate,'hnds' bindType
         FROM uc_user uu, uc_user_hnds uuh
         <where>
             uu.id = uuh.userId
@@ -29,7 +29,7 @@
             </if>
         </where>
         UNION ALL
-        SELECT uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.expireDate,'hngs' bindType
+        SELECT uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.lastUpdate,'hngs' bindType
         FROM uc_user uu, uc_user_hngs uuh
         <where>
             uu.id = uuh.userId
@@ -44,7 +44,7 @@
     </select>
 
     <select id="selectDzsbBindList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
-        SELECT  uu.username,uu.nickname,uud.nsrsbh,uud.nsrmc,uud.swjgmc,uud.status,uud.createTime
+        SELECT  uu.username,uu.nickname,uud.nsrsbh,uud.nsrmc,uud.swjgmc,uud.status,uud.createTime,uud.lastUpdate
         from uc_user uu, uc_user_dzsb uud
         <where>
             uu.id = uud.userId
@@ -57,7 +57,7 @@
         </where>
     </select>
     <select id="selectHndsBindList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
-        SELECT  uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime
+        SELECT  uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.lastUpdate
         from uc_user uu, uc_user_hnds uuh
         <where>
             uu.id = uuh.userId
@@ -70,7 +70,7 @@
         </where>
     </select>
     <select id="selectHngsBindList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO" parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
-        SELECT  uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime
+        SELECT  uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.lastUpdate
         from uc_user uu, uc_user_hngs uuh
         <where>
             uu.id = uuh.userId

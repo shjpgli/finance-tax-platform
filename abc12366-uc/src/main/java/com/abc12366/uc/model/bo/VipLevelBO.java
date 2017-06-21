@@ -19,6 +19,7 @@ public class VipLevelBO {
     private Boolean status;
     private Date lastUpdate;
     private Date createTime;
+    private String levelCode;
 
     public VipLevelBO() {
     }
@@ -80,6 +81,14 @@ public class VipLevelBO {
         this.createTime = createTime;
     }
 
+    public String getLevelCode() {
+        return levelCode;
+    }
+
+    public void setLevelCode(String levelCode) {
+        this.levelCode = levelCode;
+    }
+
     @Override
     public String toString() {
         return "VipLevelBO{" +
@@ -89,6 +98,7 @@ public class VipLevelBO {
                 ", status=" + status +
                 ", lastUpdate=" + lastUpdate +
                 ", createTime=" + createTime +
+                ", levelCode='" + levelCode + '\'' +
                 '}';
     }
 }

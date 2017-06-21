@@ -14,7 +14,7 @@ public class NsrBindQueryBO {
     private String nsrmc;
     private String swjgmc;
     private boolean status;
-    private Date expireDate;
+    private Date lastUpdate;
     private String bindType;
 
     public NsrBindQueryBO() {
@@ -68,20 +68,20 @@ public class NsrBindQueryBO {
         this.status = status;
     }
 
-    public Date getExpireDate() {
-        return expireDate;
-    }
-
-    public void setExpireDate(Date expireDate) {
-        this.expireDate = expireDate;
-    }
-
     public String getBindType() {
         return bindType;
     }
 
     public void setBindType(String bindType) {
         this.bindType = bindType;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class NsrBindQueryBO {
                 ", nsrmc='" + nsrmc + '\'' +
                 ", swjgmc='" + swjgmc + '\'' +
                 ", status=" + status +
-                ", expireDate=" + expireDate +
+                ", lastUpdate=" + lastUpdate +
                 ", bindType='" + bindType + '\'' +
                 '}';
     }
