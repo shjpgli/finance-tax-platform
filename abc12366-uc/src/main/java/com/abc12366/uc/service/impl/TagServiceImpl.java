@@ -39,6 +39,7 @@ public class TagServiceImpl implements TagService {
     @Autowired
     private TagRoMapper tagRoMapper;
 
+    @Autowired
     private SubjectTagService subjectTagService;
 
 
