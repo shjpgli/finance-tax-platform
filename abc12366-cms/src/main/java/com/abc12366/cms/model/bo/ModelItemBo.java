@@ -70,6 +70,9 @@ public class ModelItemBo implements Serializable {
 	/**图片宽度**int(11)**/
 	private Integer imageHeight;
 
+	/**校验规则**varchar(500)**/
+	private String checkRule;
+
 	public String getModelitemId() {
 		return modelitemId;
 	}
@@ -228,5 +231,13 @@ public class ModelItemBo implements Serializable {
 
 	public void setImageHeight(Integer imageHeight) {
 		this.imageHeight = imageHeight;
+	}
+
+	public String getCheckRule() {
+		return checkRule;
+	}
+
+	public void setCheckRule(String checkRule) {
+		this.checkRule = checkRule;
 	}
 }
