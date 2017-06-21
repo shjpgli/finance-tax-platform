@@ -71,7 +71,7 @@ public class DictController {
         dict.setDictId(dictId);
         dictBOList = dictService.selectDictList(dict);
         LOGGER.info("{}",dictBOList);
-        return ResponseEntity.ok(Utils.kv("data",dictBOList));
+        return ResponseEntity.ok(Utils.kv("dataList",dictBOList));
     }
 
     @DeleteMapping(path="/{id}")
