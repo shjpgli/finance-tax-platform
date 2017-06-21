@@ -7,7 +7,7 @@
         SELECT id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl
         from uc_sys_task
         <where>
-            <if test="name!=mull">
+            <if test="name!=null">
                 name=#{name}
             </if>
             <if test="type!=null">
@@ -22,7 +22,7 @@
         from uc_sys_task
         <where>
             status=1
-            <if test="name!=mull">
+            <if test="name!=null">
                 and name=#{name}
             </if>
             <if test="type!=null">

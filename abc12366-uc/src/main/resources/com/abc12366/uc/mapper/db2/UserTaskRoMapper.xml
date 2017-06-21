@@ -7,7 +7,7 @@
         SELECT id,userId,taskId,status,createTime,lastUpdate
         from uc_user_task
         <where>
-            <if test="id!=mull">
+            <if test="id!=null">
                 id=#{id}
             </if>
             <if test="id!=null">

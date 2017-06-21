@@ -7,10 +7,10 @@
         SELECT  id,name,code,exp,description,type,status,createTime,lastUpdate
         from uc_uexp_rule
         <where>
-            <if test="name!=mull">
+            <if test="name!=null">
                 name=#{name}
             </if>
-            <if test="code!=mull">
+            <if test="code!=null">
                 and code=#{code}
             </if>
             <if test="type!=null">

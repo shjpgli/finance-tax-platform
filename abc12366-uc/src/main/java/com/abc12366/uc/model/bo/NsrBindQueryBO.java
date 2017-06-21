@@ -14,7 +14,8 @@ public class NsrBindQueryBO {
     private String nsrmc;
     private String swjgmc;
     private boolean status;
-    private Date createTime;
+    private Date expireDate;
+    private String bindType;
 
     public NsrBindQueryBO() {
     }
@@ -67,11 +68,33 @@ public class NsrBindQueryBO {
         this.status = status;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getExpireDate() {
+        return expireDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public String getBindType() {
+        return bindType;
+    }
+
+    public void setBindType(String bindType) {
+        this.bindType = bindType;
+    }
+
+    @Override
+    public String toString() {
+        return "NsrBindQueryBO{" +
+                "username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
+                ", nsrmc='" + nsrmc + '\'' +
+                ", swjgmc='" + swjgmc + '\'' +
+                ", status=" + status +
+                ", expireDate=" + expireDate +
+                ", bindType='" + bindType + '\'' +
+                '}';
     }
 }

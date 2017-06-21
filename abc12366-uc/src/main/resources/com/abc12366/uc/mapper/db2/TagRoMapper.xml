@@ -4,13 +4,13 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.TagRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="com.abc12366.uc.model.bo.TagSelectParamBO">
-        SELECT  id,tagName,status,createTime,lastUpdate,category,description,rule
-        from uc_tag
+        SELECT  id,tagName,status,createTime,lastUpdate,category,description,rule,(SELECT COUNT(1) FROM uc_subject_tag us WHERE us.tagId=ut.id) tagedCount
+        from uc_tag ut
         <where>
-            <if test="tagName!=mull">
+            <if test="tagName!=null">
                 tagName=#{tagName}
             </if>
-            <if test="category!=mull">
+            <if test="category!=null">
                 and category=#{category}
             </if>
         </where>
@@ -18,7 +18,7 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="java.lang.String">
-        SELECT  id,tagName,status,createTime,lastUpdate,category,description,rule
+        SELECT  id,tagName,status,createTime,lastUpdate,category,description,rule,(SELECT COUNT(1) FROM uc_subject_tag us WHERE us.tagId=ut.id) tagedCount
         from uc_tag
         where id=#{id}
     </select>

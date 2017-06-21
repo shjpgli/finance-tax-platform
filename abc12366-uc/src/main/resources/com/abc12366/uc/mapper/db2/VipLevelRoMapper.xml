@@ -7,7 +7,7 @@
         SELECT  id,level,factor,status,lastUpdate,createTime
         from uc_uvip_level
         <where>
-            <if test="level!=mull">
+            <if test="level!=null">
                 level=#{level}
             </if>
             <if test="status!=null">

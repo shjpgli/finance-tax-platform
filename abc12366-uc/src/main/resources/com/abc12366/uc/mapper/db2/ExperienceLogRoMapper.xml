@@ -8,10 +8,10 @@
         from uc_uexp_log uul, uc_uexp_rule uur
         <where>
             uul.ruleId = uur.id
-            <if test="name!=mull">
+            <if test="name!=null">
                 and name=#{name}
             </if>
-            <if test="code!=mull">
+            <if test="code!=null">
                 and code=#{code}
             </if>
             <if test="type!=null">

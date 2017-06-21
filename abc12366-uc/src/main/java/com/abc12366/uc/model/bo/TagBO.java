@@ -14,6 +14,7 @@ public class TagBO {
     private String category;
     private String description;
     private String rule;
+    private String tagedCount;
 
     public TagBO() {
     }
@@ -80,5 +81,28 @@ public class TagBO {
 
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public String getTagedCount() {
+        return tagedCount;
+    }
+
+    public void setTagedCount(String tagedCount) {
+        this.tagedCount = tagedCount;
+    }
+
+    @Override
+    public String toString() {
+        return "TagBO{" +
+                "id='" + id + '\'' +
+                ", tagName='" + tagName + '\'' +
+                ", status=" + status +
+                ", createTime='" + createTime + '\'' +
+                ", lastUpdate='" + lastUpdate + '\'' +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", rule='" + rule + '\'' +
+                ", tagedCount='" + tagedCount + '\'' +
+                '}';
     }
 }

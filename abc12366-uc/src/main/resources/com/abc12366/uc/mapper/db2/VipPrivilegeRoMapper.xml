@@ -7,10 +7,10 @@
         SELECT  id,name,level,remark,status,lastUpdate,createTime
         from uc_uvip_privilege
         <where>
-            <if test="name!=mull">
+            <if test="name!=null">
                 name=#{name}
             </if>
-            <if test="level!=mull">
+            <if test="level!=null">
                 and level=#{level}
             </if>
             <if test="status!=null">
