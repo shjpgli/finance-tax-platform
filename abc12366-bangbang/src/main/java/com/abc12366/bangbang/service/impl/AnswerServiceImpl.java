@@ -226,7 +226,8 @@ public class AnswerServiceImpl implements AnswerService {
         }
         int askUpdateResult = askMapper.update(ask);
         if (askUpdateResult != 1) {
-            return 0;
+            LOGGER.warn("更新失败，参数：{}", answer);
+            throw new ServiceException(4102);
         }
         return 0;
     }

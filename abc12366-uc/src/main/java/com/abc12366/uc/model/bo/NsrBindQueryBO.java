@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import java.util.Date;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-06-16
@@ -11,8 +13,8 @@ public class NsrBindQueryBO {
     private String nsrsbh;
     private String nsrmc;
     private String swjgmc;
-    private int status;
-    private String createTime;
+    private boolean status;
+    private Date createTime;
 
     public NsrBindQueryBO() {
     }
@@ -57,19 +59,19 @@ public class NsrBindQueryBO {
         this.swjgmc = swjgmc;
     }
 
-    public int getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 }
