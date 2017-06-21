@@ -10,6 +10,7 @@ import com.abc12366.uc.model.bo.TagBO;
 import com.abc12366.uc.model.bo.TagInsertBO;
 import com.abc12366.uc.model.bo.TagSelectParamBO;
 import com.abc12366.uc.model.bo.TagUpdateBO;
+import com.abc12366.uc.service.SubjectTagService;
 import com.abc12366.uc.service.TagService;
 import com.abc12366.uc.web.SubjectTagController;
 import org.slf4j.Logger;
@@ -38,8 +39,7 @@ public class TagServiceImpl implements TagService {
     @Autowired
     private TagRoMapper tagRoMapper;
 
-    @Autowired
-    private SubjectTagMapper subjectTagMapper;
+    private SubjectTagService subjectTagService;
 
 
     @Override
@@ -99,11 +99,7 @@ public class TagServiceImpl implements TagService {
             LOGGER.warn("删除失败，参数：" + id);
             throw new ServiceException(4103);
         }
-        int result2 = subjectTagMapper.deleteByTagId(id);
-        if (result2 < 1) {
-            LOGGER.warn("删除失败，参数：" + id);
-            throw new ServiceException(4103);
-        }
+        subjectTagService.deleteByTagId(id);
         return 1;
     }
 }

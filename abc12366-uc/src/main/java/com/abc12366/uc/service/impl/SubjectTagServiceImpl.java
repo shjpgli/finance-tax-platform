@@ -121,4 +121,15 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         }
         return result;
     }
+
+    @Override
+    public int deleteByTagId(String id) {
+        LOGGER.info("{}:{}:{}", id);
+        int result = subjectTagMapper.deleteByTagId(id);
+        if (result < 1) {
+            LOGGER.warn("删除失败，参数：" + id);
+            throw new ServiceException(4103);
+        }
+        return 1;
+    }
 }
