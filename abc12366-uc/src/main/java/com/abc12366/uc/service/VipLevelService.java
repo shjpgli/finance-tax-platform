@@ -19,4 +19,6 @@ public interface VipLevelService {
     VipLevelBO insert(VipLevelBO vipLevelBO);
 
     VipLevelBO update(VipLevelUpdateBO vipLevelUpdateBO);
+
+    int delete(String id);
 }

@@ -11,4 +11,6 @@ public interface PointsRuleMapper {
     int insert(PointsRule pointsRule);
 
     int update(PointsRule pointsRule);
+
+    int delete(String id);
 }

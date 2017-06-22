@@ -2,6 +2,7 @@ package com.abc12366.uc.config;
 
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
+import com.abc12366.gateway.component.UcUserInterceptor;
 import com.abc12366.uc.component.UserInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,9 +35,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new AppInterceptor();
     }
 
-    @Bean
+    /*@Bean
     public UserInterceptor userInterceptor(){
         return new UserInterceptor();
+    }*/
+
+    @Bean
+    public UcUserInterceptor ucUserInterceptor(){
+        return new UcUserInterceptor();
     }
 
     @Override
@@ -53,11 +59,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
                 .excludePathPatterns("/login", "/refresh", "/register", "/test");
 
-        //用户访问拦截
+        /*//用户访问拦截
         registry.addInterceptor(userInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app/**")
-                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/app*//**")
+                .excludePathPatterns("/druid*//**")
+                .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin");*/
+
+        //前台用户访问拦截器迁移到网关后的
+        registry.addInterceptor(ucUserInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/app*//**")
+                .excludePathPatterns("/druid*//**")
                 .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin");
     }
 }

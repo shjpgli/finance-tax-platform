@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import java.util.Date;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-06-16
@@ -11,8 +13,9 @@ public class NsrBindQueryBO {
     private String nsrsbh;
     private String nsrmc;
     private String swjgmc;
-    private int status;
-    private String createTime;
+    private boolean status;
+    private Date lastUpdate;
+    private String bindType;
 
     public NsrBindQueryBO() {
     }
@@ -57,19 +60,41 @@ public class NsrBindQueryBO {
         this.swjgmc = swjgmc;
     }
 
-    public int getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getBindType() {
+        return bindType;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setBindType(String bindType) {
+        this.bindType = bindType;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return "NsrBindQueryBO{" +
+                "username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
+                ", nsrmc='" + nsrmc + '\'' +
+                ", swjgmc='" + swjgmc + '\'' +
+                ", status=" + status +
+                ", lastUpdate=" + lastUpdate +
+                ", bindType='" + bindType + '\'' +
+                '}';
     }
 }

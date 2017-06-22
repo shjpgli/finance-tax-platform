@@ -26,11 +26,11 @@ public class NsrBindQueryServiceImpl implements NsrBindQueryService {
     public List<NsrBindQueryBO> selectList(NsrBindQueryParamBO nsrBindQueryParamBO) {
         LOGGER.info("{}", nsrBindQueryParamBO);
         List<NsrBindQueryBO> list = nsrBindQueryRoMapper.selectList(nsrBindQueryParamBO);
-        /*List<NsrBindQueryBO> list = nsrBindQueryRoMapper.selectDzsbBindList(nsrBindQueryParamBO);
-        List<NsrBindQueryBO> list2 = nsrBindQueryRoMapper.selectHndsBindList(nsrBindQueryParamBO);
-        List<NsrBindQueryBO> list3 = nsrBindQueryRoMapper.selectHngsBindList(nsrBindQueryParamBO);
-        list.addAll(list2);
-        list.addAll(list3);*/
         return list;
+    }
+
+    @Override
+    public List<NsrBindQueryBO> selectDzsb() {
+        return null;
     }
 }

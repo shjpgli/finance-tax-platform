@@ -20,4 +20,6 @@ public interface ExperienceRuleService {
     ExperienceRuleBO insert(ExperienceRuleInsertBO experienceRuleInsertBO);
 
     ExperienceRuleBO update(ExperienceRuleUpdateBO experienceRuleUpdateBO, String id);
+
+    int delete(String id);
 }

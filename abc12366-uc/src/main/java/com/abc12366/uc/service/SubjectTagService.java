@@ -20,4 +20,6 @@ public interface SubjectTagService {
     List<SubjectTagBO> selectList(@RequestParam("subject")String subject, @RequestParam("id")String id);
 
     int delete(@RequestParam("subject")String subject, @RequestParam("id")String id, @RequestParam("tagId")String tagId);
+
+    int deleteByTagId(String id);
 }

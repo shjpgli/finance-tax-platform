@@ -4,10 +4,10 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.VipLevelRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLevelBO" parameterType="java.util.Map">
-        SELECT  id,level,factor,status,lastUpdate,createTime
+        SELECT  id,level,factor,status,lastUpdate,createTime,levelCode
         from uc_uvip_level
         <where>
-            <if test="level!=mull">
+            <if test="level!=null">
                 level=#{level}
             </if>
             <if test="status!=null">
@@ -18,13 +18,13 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.VipLevelBO" parameterType="java.lang.String">
-        SELECT id,level,factor,status,lastUpdate,createTime
+        SELECT id,level,factor,status,lastUpdate,createTime,levelCode
         from uc_uvip_level
         where id = #{id}
     </select>
 
     <select id="selectByLevel" resultType="com.abc12366.uc.model.bo.VipLevelBO" parameterType="java.lang.String">
-        SELECT id,level,factor,status,lastUpdate,createTime
+        SELECT id,level,factor,status,lastUpdate,createTime,levelCode
         from uc_uvip_level
         where level = #{level}
     </select>

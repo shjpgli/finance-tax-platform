@@ -78,6 +78,12 @@ public class VipLevelController {
         LOGGER.info("{}", vipLevelBOReturn);
         return ResponseEntity.ok(Utils.kv("data",vipLevelBOReturn));
     }
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        vipLevelService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }
 
 

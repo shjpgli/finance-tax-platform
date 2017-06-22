@@ -38,11 +38,13 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
 
     @Override
     public List<ExperienceRuleBO> selectList(Map<String, Object> map) {
+        LOGGER.info("{}", map);
         return experienceRuleRoMapper.selectList(map);
     }
 
     @Override
     public ExperienceRuleBO selectOne(String id) {
+        LOGGER.info("{}", id);
         return experienceRuleRoMapper.selectOne(id);
     }
 
@@ -90,5 +92,16 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
         ExperienceRuleBO experienceRuleReturn = new ExperienceRuleBO();
         BeanUtils.copyProperties(experienceRule, experienceRuleReturn);
         return experienceRuleReturn;
+    }
+
+    @Override
+    public int delete(String id) {
+        LOGGER.info("{}", id);
+        int result = experienceRuleMapper.delete(id);
+        if (result != 1) {
+            LOGGER.warn("删除失败，参数为：id=" + id);
+            throw new ServiceException(4103);
+        }
+        return 1;
     }
 }

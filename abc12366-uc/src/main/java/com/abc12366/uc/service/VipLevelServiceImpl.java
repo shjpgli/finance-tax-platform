@@ -92,4 +92,15 @@ public class VipLevelServiceImpl implements VipLevelService {
         BeanUtils.copyProperties(vipLevel, vipLevelBOReturn);
         return vipLevelBOReturn;
     }
+
+    @Override
+    public int delete(String id) {
+        LOGGER.info("{}", id);
+        int result = vipLevelMapper.delete(id);
+        if (result != 1) {
+            LOGGER.warn("删除失败，参数为：id=" + id);
+            throw new ServiceException(4103);
+        }
+        return 1;
+    }
 }

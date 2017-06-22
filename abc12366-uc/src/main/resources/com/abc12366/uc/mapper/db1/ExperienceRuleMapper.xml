@@ -21,7 +21,7 @@
     </update>
 
     <delete id="delete" parameterType="java.lang.String">
-        delete from uc_uvip_privilege
+        delete from uc_uexp_rule
         where id=#{id}
     </delete>
 </mapper>

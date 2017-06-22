@@ -121,4 +121,11 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         }
         return result;
     }
+
+    @Override
+    public int deleteByTagId(String id) {
+        LOGGER.info("{}:{}:{}", id);
+        int result = subjectTagMapper.deleteByTagId(id);
+        return result;
+    }
 }

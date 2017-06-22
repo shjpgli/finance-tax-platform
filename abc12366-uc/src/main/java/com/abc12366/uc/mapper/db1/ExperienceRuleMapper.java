@@ -11,4 +11,6 @@ public interface ExperienceRuleMapper {
     int insert(ExperienceRule experienceRule);
 
     int update(ExperienceRule experienceRule);
+
+    int delete(String id);
 }

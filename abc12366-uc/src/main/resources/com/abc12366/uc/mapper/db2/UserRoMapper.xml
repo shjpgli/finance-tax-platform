@@ -8,7 +8,7 @@
         userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
         <where>
-            <if test="username!=mull">
+            <if test="username!=null">
                 username=#{username}
             </if>
             <if test="phone!=null">

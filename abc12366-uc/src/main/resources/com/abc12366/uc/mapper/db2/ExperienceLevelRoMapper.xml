@@ -7,10 +7,10 @@
         SELECT  id,name,value,topPerDay,status,lastUpdate,createTime
         from uc_uexp_level
         <where>
-            <if test="name!=mull">
+            <if test="name!=null">
                 name=#{name}
             </if>
-            <if test="status!=mull">
+            <if test="status!=null">
                 and status=#{status}
             </if>
         </where>

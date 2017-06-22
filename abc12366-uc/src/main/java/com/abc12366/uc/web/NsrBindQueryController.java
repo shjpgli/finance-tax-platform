@@ -44,9 +44,20 @@ public class NsrBindQueryController {
         NsrBindQueryParamBO nsrBindQueryParamBO = new NsrBindQueryParamBO(username, nsrsbh);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<NsrBindQueryBO> nsrBindQueryBOList = nsrBindQueryService.selectList(nsrBindQueryParamBO);
-        //return ResponseEntity.ok(Utils.kv("dataList", nsrBindQueryBOList, "total", nsrBindQueryBOList.size()));
         return (nsrBindQueryBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
     }
+/*    @GetMapping()
+    public ResponseEntity selectDzsb(
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}", page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<NsrBindQueryBO> nsrBindQueryBOList = nsrBindQueryService.selectDzsb();
+        return (nsrBindQueryBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
+    }*/
+
 }
