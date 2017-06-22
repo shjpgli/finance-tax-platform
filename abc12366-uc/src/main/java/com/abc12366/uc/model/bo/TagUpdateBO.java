@@ -1,8 +1,7 @@
 package com.abc12366.uc.model.bo;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 
 /**
@@ -20,6 +19,8 @@ public class TagUpdateBO {
     private String description;
     @Size(max = 100)
     private String rule;
+    @Max(9999)
+    private Integer weight;
 
     public TagUpdateBO() {
     }
@@ -62,5 +63,25 @@ public class TagUpdateBO {
 
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "TagUpdateBO{" +
+                "tagName='" + tagName + '\'' +
+                ", status=" + status +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", rule='" + rule + '\'' +
+                ", weight=" + weight +
+                '}';
     }
 }

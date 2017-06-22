@@ -1,22 +1,26 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
- * Date: 2017-05-19
- * Time: 15:24
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-06-22
+ * Time: 16:51
  */
-public class VipLevelUpdateBO {
+public class VipLevelInsertBO {
+    @NotEmpty
     @Size(max = 10)
     private String level;
     private Double factor;
+    @NotNull
     private Boolean status;
     @Size(max = 10)
     private String levelCode;
 
-    public VipLevelUpdateBO() {
+    public VipLevelInsertBO() {
     }
 
     public String getLevel() {

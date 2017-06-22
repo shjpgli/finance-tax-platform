@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.VipLevelBO;
+import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
 
 import java.util.List;
@@ -16,9 +17,9 @@ public interface VipLevelService {
 
     VipLevelBO selectOne(String id);
 
-    VipLevelBO insert(VipLevelBO vipLevelBO);
+    VipLevelBO insert(VipLevelInsertBO vipLevelInsertBO);
 
-    VipLevelBO update(VipLevelUpdateBO vipLevelUpdateBO);
+    VipLevelBO update(VipLevelUpdateBO vipLevelUpdateBO, String id);
 
     int delete(String id);
 }

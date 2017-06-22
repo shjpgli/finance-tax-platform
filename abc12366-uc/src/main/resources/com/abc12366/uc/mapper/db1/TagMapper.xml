@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.TagMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.Tag">
-        insert into uc_tag(id,tagName,status,createTime,lastUpdate,category,description,rule)
-        values(#{id},#{tagName},#{status},#{createTime},#{lastUpdate},#{category},#{description},#{rule})
+        insert into uc_tag(id,tagName,status,createTime,lastUpdate,category,description,rule,weight)
+        values(#{id},#{tagName},#{status},#{createTime},#{lastUpdate},#{category},#{description},#{rule},#{weight})
     </insert>
     <update id="update" parameterType="com.abc12366.uc.model.Tag">
         update uc_tag
@@ -16,7 +16,8 @@
             <if test="lastUpdate!=null">lastUpdate=#{lastUpdate},</if>
             <if test="category!=null">category=#{category},</if>
             <if test="description!=null">description=#{description},</if>
-            <if test="rule!=null">rule=#{rule}</if>
+            <if test="rule!=null">rule=#{rule},</if>
+            <if test="weight!=null">weight=#{weight}</if>
         </set>
         where id=#{id}
     </update>

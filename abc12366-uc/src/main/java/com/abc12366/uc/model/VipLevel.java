@@ -10,21 +10,13 @@ import java.util.Date;
 public class VipLevel {
     private String id;
     private String level;
-    private double factor;
+    private Double factor;
     private Boolean status;
     private Date lastUpdate;
     private Date createTime;
+    private String levelCode;
 
     public VipLevel() {
-    }
-
-    public VipLevel(String id, String level, double factor, Boolean status, Date lastUpdate, Date createTime) {
-        this.id = id;
-        this.level = level;
-        this.factor = factor;
-        this.status = status;
-        this.lastUpdate = lastUpdate;
-        this.createTime = createTime;
     }
 
     public String getId() {
@@ -43,11 +35,11 @@ public class VipLevel {
         this.level = level;
     }
 
-    public double getFactor() {
+    public Double getFactor() {
         return factor;
     }
 
-    public void setFactor(double factor) {
+    public void setFactor(Double factor) {
         this.factor = factor;
     }
 
@@ -75,15 +67,12 @@ public class VipLevel {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "VipLevel{" +
-                "id='" + id + '\'' +
-                ", level='" + level + '\'' +
-                ", factor=" + factor +
-                ", status=" + status +
-                ", lastUpdate=" + lastUpdate +
-                ", createTime=" + createTime +
-                '}';
+    public String getLevelCode() {
+        return levelCode;
     }
+
+    public void setLevelCode(String levelCode) {
+        this.levelCode = levelCode;
+    }
+
 }
