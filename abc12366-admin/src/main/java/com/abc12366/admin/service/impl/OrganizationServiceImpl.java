@@ -103,6 +103,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public List<OrganizationBO> selectChildOrg(String id) {
+        return organizationRoMapper.selectChildOrg(id);
+    }
+
+    @Override
     public void disableAll() {
         Organization organization = new Organization();
         List<OrganizationBO> organizationBOs = organizationRoMapper.selectList(organization);

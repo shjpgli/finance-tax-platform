@@ -84,6 +84,20 @@ public class OrganizationController {
     }
 
     /**
+     * 查询单个组织
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "/child/{id}")
+    public ResponseEntity selectChildOrg(@PathVariable("id") String id) {
+        LOGGER.info("{id}", id);
+        List<OrganizationBO> list = organizationService.selectChildOrg(id);
+        LOGGER.info("{organizationBO}", list);
+        return ResponseEntity.ok(Utils.kv("dataList", list));
+    }
+
+    /**
      * 修改组织
      *
      * @param organizationBO

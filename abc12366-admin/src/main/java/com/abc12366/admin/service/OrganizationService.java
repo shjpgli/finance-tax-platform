@@ -50,4 +50,6 @@ public interface OrganizationService {
     void disableAll();
 
     void enable(OrganizationUpdateBO updateBO);
+
+    List<OrganizationBO> selectChildOrg(String id);
 }

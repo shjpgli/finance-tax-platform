@@ -31,15 +31,14 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public List<Dict> selectList(Dict dict) {
-        List<Dict> dicts = dictRoMapper.selectList(dict);
-        return dicts;
+        return dictRoMapper.selectList(dict);
     }
 
     @Override
     public List<DictBO> selectFirstLevel(){
         List<Dict> dicts = dictRoMapper.selectFirstLevel();
         if(dicts == null || dicts.size()==0){
-            return null;
+            throw new ServiceException(4104);
         }
         List<DictBO> dictBOs = new ArrayList<>();
         for(Dict dict : dicts){
@@ -63,11 +62,11 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public DictBO insert(DictBO dictBO) {
-        Dict dict = dictRoMapper.selectByDictName(dictBO.getDictName());
+        /*Dict dict = dictRoMapper.selectByDictName(dictBO.getDictName());
         if(dict != null){
-            return null;
-        }
-        dict = new Dict();
+            throw new ServiceException(4104);
+        }*/
+        Dict dict = new Dict();
         BeanUtils.copyProperties(dictBO, dict);
 
         dict.setId(Utils.uuid());
