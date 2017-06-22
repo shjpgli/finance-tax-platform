@@ -86,7 +86,7 @@ public class SubjectTagServiceImpl implements SubjectTagService {
     @Override
     public List<SubjectTagBO> selectList(String subject, String id) {
         LOGGER.info("{}:{}", subject, id);
-        Map map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         if (subject != null && "".equals(subject)) {
             subject = null;
         }
@@ -101,7 +101,7 @@ public class SubjectTagServiceImpl implements SubjectTagService {
     @Override
     public int delete(String subject, String id, String tagId) {
         LOGGER.info("{}:{}:{}", subject, id, tagId);
-        Map map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         if (subject != null && "".equals(subject)) {
             subject = null;
         }
@@ -125,7 +125,6 @@ public class SubjectTagServiceImpl implements SubjectTagService {
     @Override
     public int deleteByTagId(String id) {
         LOGGER.info("{}:{}:{}", id);
-        int result = subjectTagMapper.deleteByTagId(id);
-        return result;
+        return subjectTagMapper.deleteByTagId(id);
     }
 }

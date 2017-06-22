@@ -19,8 +19,8 @@
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="java.lang.String">
         SELECT  id,tagName,status,createTime,lastUpdate,category,description,rule,(SELECT COUNT(1) FROM uc_subject_tag us WHERE us.tagId=ut.id) tagedCount
-        from uc_tag
-        where id=#{id}
+        from uc_tag ut
+        where ut.id=#{id}
     </select>
 
 </mapper>

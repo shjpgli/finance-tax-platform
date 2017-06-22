@@ -1,7 +1,6 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.bo.NsrBindQueryBO;
-import com.abc12366.uc.model.bo.NsrBindQueryParamBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
@@ -13,5 +12,9 @@ import java.util.List;
 public interface NsrBindQueryService {
     List<NsrBindQueryBO> selectList(NsrBindQueryParamBO nsrBindQueryParamBO);
 
-    List<NsrBindQueryBO> selectDzsb();
+    UserDzsbBO selectDzsb(String id);
+
+    UserHndsBO selectHnds(String id);
+
+    UserHngsBO selectHngs(String id);
 }
