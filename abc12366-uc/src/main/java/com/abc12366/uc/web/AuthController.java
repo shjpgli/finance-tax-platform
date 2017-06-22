@@ -5,11 +5,13 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.common.web.BaseController;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
+import com.abc12366.uc.service.IpService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,6 +36,9 @@ public class AuthController extends BaseController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private IpService ipService;
 
     public AuthController(RestTemplate restTemplate) {
         super(restTemplate);
@@ -71,8 +76,10 @@ public class AuthController extends BaseController {
 
         //注册
         UserReturnBO userReturnBO = authService.register(registerBO);
-        if (userReturnBO == null) {
-            return ResponseEntity.ok(Utils.kv("data", null));
+
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         return ResponseEntity.ok(Utils.kv("data", userReturnBO));
     }
@@ -85,6 +92,12 @@ public class AuthController extends BaseController {
     public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", loginBO);
         Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+        }
+
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
     }
@@ -105,6 +118,11 @@ public class AuthController extends BaseController {
             return ResponseEntity.ok(Utils.kv("data", null));
         }
         Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+        }
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
     }
