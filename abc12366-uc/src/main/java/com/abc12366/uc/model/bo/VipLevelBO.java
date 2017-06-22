@@ -1,8 +1,6 @@
 package com.abc12366.uc.model.bo;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -12,25 +10,14 @@ import java.util.Date;
  */
 public class VipLevelBO {
     private String id;
-    @NotEmpty
     private String level;
-    private double factor;
-    @NotNull
+    private Double factor;
     private Boolean status;
     private Date lastUpdate;
     private Date createTime;
     private String levelCode;
 
     public VipLevelBO() {
-    }
-
-    public VipLevelBO(String id, String level, double factor, Boolean status, Date lastUpdate, Date createTime) {
-        this.id = id;
-        this.level = level;
-        this.factor = factor;
-        this.status = status;
-        this.lastUpdate = lastUpdate;
-        this.createTime = createTime;
     }
 
     public String getId() {
@@ -49,11 +36,11 @@ public class VipLevelBO {
         this.level = level;
     }
 
-    public double getFactor() {
+    public Double getFactor() {
         return factor;
     }
 
-    public void setFactor(double factor) {
+    public void setFactor(Double factor) {
         this.factor = factor;
     }
 
@@ -87,18 +74,5 @@ public class VipLevelBO {
 
     public void setLevelCode(String levelCode) {
         this.levelCode = levelCode;
-    }
-
-    @Override
-    public String toString() {
-        return "VipLevelBO{" +
-                "id='" + id + '\'' +
-                ", level='" + level + '\'' +
-                ", factor=" + factor +
-                ", status=" + status +
-                ", lastUpdate=" + lastUpdate +
-                ", createTime=" + createTime +
-                ", levelCode='" + levelCode + '\'' +
-                '}';
     }
 }

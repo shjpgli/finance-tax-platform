@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.bo.VipLevelBO;
+import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
 import com.abc12366.uc.service.VipLevelService;
 import com.github.pagehelper.Page;
@@ -60,24 +61,25 @@ public class VipLevelController {
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
         VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
-        return ResponseEntity.ok(Utils.kv("data",vipLevelBO));
+        return ResponseEntity.ok(Utils.kv("data", vipLevelBO));
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody VipLevelBO vipLevelBO) {
-        LOGGER.info("{}", vipLevelBO);
-        VipLevelBO vipLevelBOReturn = vipLevelService.insert(vipLevelBO);
+    public ResponseEntity insert(@Valid @RequestBody VipLevelInsertBO vipLevelInsertBO) {
+        LOGGER.info("{}", vipLevelInsertBO);
+        VipLevelBO vipLevelBOReturn = vipLevelService.insert(vipLevelInsertBO);
         LOGGER.info("{}", vipLevelBOReturn);
-        return ResponseEntity.ok(Utils.kv("data",vipLevelBOReturn));
+        return ResponseEntity.ok(Utils.kv("data", vipLevelBOReturn));
     }
 
-    @PutMapping
-    public ResponseEntity update(@Valid @RequestBody VipLevelUpdateBO vipLevelUpdateBO) {
-        LOGGER.info("{}", vipLevelUpdateBO);
-        VipLevelBO vipLevelBOReturn = vipLevelService.update(vipLevelUpdateBO);
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@Valid @RequestBody VipLevelUpdateBO vipLevelUpdateBO, @PathVariable String id) {
+        LOGGER.info("{}:{}", vipLevelUpdateBO, id);
+        VipLevelBO vipLevelBOReturn = vipLevelService.update(vipLevelUpdateBO, id);
         LOGGER.info("{}", vipLevelBOReturn);
-        return ResponseEntity.ok(Utils.kv("data",vipLevelBOReturn));
+        return ResponseEntity.ok(Utils.kv("data", vipLevelBOReturn));
     }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);

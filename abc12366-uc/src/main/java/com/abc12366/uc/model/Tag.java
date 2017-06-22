@@ -10,12 +10,13 @@ import java.util.Date;
 public class Tag {
     private String id;
     private String tagName;
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
     private String category;
     private String description;
     private String rule;
+    private int weight;
 
     public Tag() {
     }
@@ -36,11 +37,11 @@ public class Tag {
         this.tagName = tagName;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -82,5 +83,28 @@ public class Tag {
 
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id='" + id + '\'' +
+                ", tagName='" + tagName + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", rule='" + rule + '\'' +
+                ", weight=" + weight +
+                '}';
     }
 }
