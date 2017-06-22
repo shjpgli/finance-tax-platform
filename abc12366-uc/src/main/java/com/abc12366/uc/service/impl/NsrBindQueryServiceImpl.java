@@ -1,8 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.uc.mapper.db2.NsrBindQueryRoMapper;
-import com.abc12366.uc.model.bo.NsrBindQueryBO;
-import com.abc12366.uc.model.bo.NsrBindQueryParamBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.NsrBindQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +29,20 @@ public class NsrBindQueryServiceImpl implements NsrBindQueryService {
     }
 
     @Override
-    public List<NsrBindQueryBO> selectDzsb() {
-        return null;
+    public UserDzsbBO selectDzsb(String id) {
+        LOGGER.info("{}", id);
+        return nsrBindQueryRoMapper.selectDzsb(id);
+    }
+
+    @Override
+    public UserHndsBO selectHnds(String id) {
+        LOGGER.info("{}", id);
+        return nsrBindQueryRoMapper.selectHnds(id);
+    }
+
+    @Override
+    public UserHngsBO selectHngs(String id) {
+        LOGGER.info("{}", id);
+        return nsrBindQueryRoMapper.selectHngs(id);
     }
 }
