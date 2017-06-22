@@ -14,7 +14,7 @@ public class TagUpdateBO {
     @Size(max = 20)
     private String tagName;
     private Boolean status;
-    @Size(max = 1)
+    @Size(max = 2)
     private String category;
     @Size(max = 100)
     private String description;
