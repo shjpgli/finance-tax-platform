@@ -95,4 +95,8 @@ public class WikiBO implements Serializable {
 		return this.lastUpdate;
 	}
 
+    @Override
+    public String toString() {
+        return "subject:"+this.getSubject()+",content:"+this.getContent();
+    }
 }

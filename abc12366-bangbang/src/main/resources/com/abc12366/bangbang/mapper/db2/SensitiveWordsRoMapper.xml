@@ -25,4 +25,10 @@
             <if test="keywords != null and keywords!=''"> and subject LIKE CONCAT('%',#{keywords},'%')</if>
         </where>
     </select>
+
+    <select id="selectListKeywords" resultType="java.lang.String">
+        SELECT
+        keywords
+        FROM bb_sensitive_words
+    </select>
 </mapper>

@@ -4,6 +4,7 @@ import com.abc12366.bangbang.model.SensitiveWords;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 
@@ -23,4 +24,6 @@ public interface SensitiveWordsRoMapper {
 
 
     List<SensitiveWords> selectList(SensitiveWords sensitiveWords);
+
+    Set<String> selectListKeywords();
 }

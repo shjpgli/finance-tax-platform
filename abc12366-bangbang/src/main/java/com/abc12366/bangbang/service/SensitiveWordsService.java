@@ -5,6 +5,8 @@ import com.abc12366.bangbang.model.SensitiveWords;
 import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by MY on 2017-05-20.
@@ -48,4 +50,7 @@ public interface SensitiveWordsService {
      */
     void delete(SensitiveWords sensitiveWords);
 
+    boolean isAuthentication(Map<String, String> parmMap);
+
+    Set<String> selectListKeywords(SensitiveWords sensitiveWords);
 }

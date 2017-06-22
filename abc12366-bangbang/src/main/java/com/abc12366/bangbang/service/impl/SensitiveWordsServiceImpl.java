@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -84,4 +86,15 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
             throw new ServiceException(4507);
         }
     }
+
+    @Override
+    public boolean isAuthentication(Map<String, String> parmMap) {
+        return false;
+    }
+
+    @Override
+    public Set<String> selectListKeywords(SensitiveWords sensitiveWords) {
+        return sensitiveWordsRoMapper.selectListKeywords();
+    }
+
 }

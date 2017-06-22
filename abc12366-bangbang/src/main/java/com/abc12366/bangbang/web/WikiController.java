@@ -3,7 +3,9 @@ package com.abc12366.bangbang.web;
 import com.abc12366.bangbang.model.WikiAccesslog;
 import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 import com.abc12366.bangbang.model.bo.WikiBO;
+import com.abc12366.bangbang.service.SensitiveWordFilter;
 import com.abc12366.bangbang.service.WikiService;
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.github.pagehelper.Page;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 百科主题控制类
@@ -34,6 +37,9 @@ public class WikiController {
 
     @Autowired
     private WikiService wikiService;
+
+    @Autowired
+    private SensitiveWordFilter sensitiveWordFilter;
 
     /**
      * 百科主题列表管理
@@ -75,12 +81,19 @@ public class WikiController {
     }
 
     /**
-     * 用户下单
+     * 敏感词新增
      * @return
      */
     @PostMapping
     public ResponseEntity addWiki(@Valid @RequestBody WikiBO wikiBO) {
         LOGGER.info("{}", wikiBO);
+        if (wikiBO != null){
+            Set<String> set = sensitiveWordFilter.getSensitiveWord(wikiBO.toString(), 1);
+            if(set != null && set.size()!=0){
+                LOGGER.info("请求存在敏感词，请求失败", set);
+                throw new ServiceException(4508);
+            }
+        }
         WikiBO bo = wikiService.addWiki(wikiBO);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));

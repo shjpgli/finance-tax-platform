@@ -23,4 +23,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new RestTemplate();
     }
 
+    @Bean
+    public SensitiveWordsInterceptor getSensitiveWordsInterceptor() {
+        return new SensitiveWordsInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+
+
+        // 敏感词拦截
+        registry.addInterceptor(getSensitiveWordsInterceptor())
+                .excludePathPatterns("/druid/**");
+
+    }
 }
