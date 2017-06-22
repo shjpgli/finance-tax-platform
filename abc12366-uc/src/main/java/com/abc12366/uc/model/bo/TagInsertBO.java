@@ -17,7 +17,7 @@ public class TagInsertBO {
     @NotNull
     private Boolean status;
     @NotEmpty
-    @Size(max = 1)
+    @Size(max = 2)
     private String category;
     @Size(max = 100)
     private String description;
