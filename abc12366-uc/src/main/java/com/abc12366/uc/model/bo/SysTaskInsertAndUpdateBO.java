@@ -29,19 +29,12 @@ public class SysTaskInsertAndUpdateBO {
     private Boolean status;
     @Size(max = 200)
     private String imageUrl;
+    @Size(max = 20)
+    private String ruleName;
+    @Size(max = 20)
+    private String ruleCode;
 
     public SysTaskInsertAndUpdateBO() {
-    }
-
-    public SysTaskInsertAndUpdateBO(String name, Date startTime, Date endTime, String rule, int points, String type, Boolean status, String imageUrl) {
-        this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.rule = rule;
-        this.points = points;
-        this.type = type;
-        this.status = status;
-        this.imageUrl = imageUrl;
     }
 
     public String getName() {
@@ -108,17 +101,19 @@ public class SysTaskInsertAndUpdateBO {
         this.imageUrl = imageUrl;
     }
 
-    @Override
-    public String toString() {
-        return "SysTaskInsertBO{" +
-                "name='" + name + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", rule='" + rule + '\'' +
-                ", points=" + points +
-                ", type='" + type + '\'' +
-                ", status=" + status +
-                ", imageUrl='" + imageUrl + '\'' +
-                '}';
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
     }
 }

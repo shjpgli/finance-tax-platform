@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.SysTaskRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.util.Map">
-        SELECT id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl
+        SELECT id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode
         from uc_sys_task
         <where>
             <if test="name!=null">
@@ -18,7 +18,7 @@
     </select>
 
     <select id="selectDeployedList" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.util.Map">
-        SELECT id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl
+        SELECT id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode
         from uc_sys_task
         <where>
             status=1
@@ -33,7 +33,7 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">
-        SELECT id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl
+        SELECT id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode
         from uc_sys_task
         where id = #{id}
     </select>
