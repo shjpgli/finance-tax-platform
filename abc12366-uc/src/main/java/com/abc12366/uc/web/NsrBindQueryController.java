@@ -2,9 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.uc.model.bo.NsrBindQueryBO;
-import com.abc12366.uc.model.bo.NsrBindQueryParamBO;
-import com.abc12366.uc.model.bo.TagBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.NsrBindQueryService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -47,17 +45,26 @@ public class NsrBindQueryController {
         return (nsrBindQueryBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
-    }
-/*    @GetMapping()
-    public ResponseEntity selectDzsb(
-                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}", page, size);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<NsrBindQueryBO> nsrBindQueryBOList = nsrBindQueryService.selectDzsb();
-        return (nsrBindQueryBOList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
-    }*/
 
+    }
+    @GetMapping(path = "/dzsb/{id}")
+    public ResponseEntity selectDzsb(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        UserDzsbBO userDzsbBO = nsrBindQueryService.selectDzsb(id);
+        return ResponseEntity.ok(Utils.kv("data", userDzsbBO));
+    }
+
+    @GetMapping(path = "/hnds/{id}")
+    public ResponseEntity selectHnds(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        UserHndsBO userHndsBO = nsrBindQueryService.selectHnds(id);
+        return ResponseEntity.ok(Utils.kv("data", userHndsBO));
+    }
+
+    @GetMapping(path = "/hngs/{id}")
+    public ResponseEntity selectHngs(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        UserHngsBO userHngsBO = nsrBindQueryService.selectHngs(id);
+        return ResponseEntity.ok(Utils.kv("data", userHngsBO));
+    }
 }

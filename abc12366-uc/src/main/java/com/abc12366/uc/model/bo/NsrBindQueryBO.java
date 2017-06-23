@@ -8,6 +8,7 @@ import java.util.Date;
  * Time: 11:47
  */
 public class NsrBindQueryBO {
+    private String id;
     private String username;
     private String nickname;
     private String nsrsbh;
@@ -84,10 +85,19 @@ public class NsrBindQueryBO {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "NsrBindQueryBO{" +
-                "username='" + username + '\'' +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", nsrsbh='" + nsrsbh + '\'' +
                 ", nsrmc='" + nsrmc + '\'' +

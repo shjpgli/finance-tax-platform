@@ -1,15 +1,17 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
 import com.abc12366.common.web.BaseController;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
+import com.abc12366.uc.service.IpService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,6 +37,9 @@ public class AuthController extends BaseController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private IpService ipService;
+
     public AuthController(RestTemplate restTemplate) {
         super(restTemplate);
     }
@@ -42,11 +47,7 @@ public class AuthController extends BaseController {
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refresh(@RequestHeader(Constant.USER_TOKEN_HEAD) String token) {
         String refreshedToken = authService.refresh(token);
-        if (refreshedToken == null) {
-            return ResponseEntity.badRequest().body(null);
-        } else {
-            return ResponseEntity.ok(new TokenBO(refreshedToken));
-        }
+        return ResponseEntity.ok(Utils.kv("data", refreshedToken));
     }
 
     //老的注册接口暂时注释保留
@@ -63,22 +64,24 @@ public class AuthController extends BaseController {
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws IOException {
         LOGGER.info("{}", registerBO);
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+        }
         //进行手机验证码验证
         ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(), request);
         if (response == null) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.ok(Utils.kv("data", null));
         }
         VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.ok(Utils.kv("data", null));
         }
 
         //注册
         UserReturnBO userReturnBO = authService.register(registerBO);
-        if (userReturnBO == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        return ResponseEntity.ok(userReturnBO);
+
+        return ResponseEntity.ok(Utils.kv("data", userReturnBO));
     }
 
     /*
@@ -88,9 +91,15 @@ public class AuthController extends BaseController {
     @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", loginBO);
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+        }
         Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+
+
         LOGGER.info("{}", token);
-        return token != null ? ResponseEntity.ok(token) : new ResponseEntity<>(HttpStatus.CONFLICT);
+        return ResponseEntity.ok(Utils.kv("data", token));
     }
 
     /*
@@ -99,17 +108,22 @@ public class AuthController extends BaseController {
     @PostMapping(path = "/verifylogin")
     public ResponseEntity loginByVerifyingCode(@Valid @RequestBody LoginVerifyingCodeBO loginBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", loginBO);
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+        }
         //进行手机验证码验证
         ResponseEntity response = authService.verifyCode(loginBO.getPhone(), loginBO.getCode(), request);
         if (response == null) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.ok(Utils.kv("data", null));
         }
         VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.ok(Utils.kv("data", null));
         }
         Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+
         LOGGER.info("{}", token);
-        return token != null ? ResponseEntity.ok(token) : new ResponseEntity<>(HttpStatus.CONFLICT);
+        return ResponseEntity.ok(Utils.kv("data", token));
     }
 }

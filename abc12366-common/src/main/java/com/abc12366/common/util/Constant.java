@@ -57,6 +57,15 @@ public class Constant {
 
     public final static String defaultFolder = "E:/abc12306";
 
+    // 客户端每次接口访问，在请求头中传入用户IP、用户代理类型，以便服务端记录
+    // 客户端IP
+    public final static String CLIENT_IP = "Client-Ip";
+    // 客户端用户代理
+    public final static String CLIENT_USER_AGENT = "Client-User-Agent";
+
+    // 淘宝IP地址库（http://ip.taobao.com）查询接口，每个用户的访问频率需小于10qps
+    public final static String IP_QUERY_URL = "http://ip.taobao.com/service/getIpInfo.php?ip={ip}";
+
 
     /**
      * 获取当前系统当天日期String

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cms.mapper.db2.EventRoMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 eventId,	category,	shape,	title,	province,	city,	address,	picture,	createtime,	updatetime,	begintime,	endtime,	tag,	summary,	description,	peoppleNum,	isCheck,	isUserGrade,	userGrade,	sponsorId,	status
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Event" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM cms_event
+		 WHERE eventId = #{eventId}
+	</select>
+
+	<!-- 查询（根据条件查询） -->
+	<select id="selectList" resultType="com.abc12366.cms.model.bo.EventListBo" parameterType="java.util.Map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM cms_event
+		WHERE 1=1
+		<if test="title != null and title != ''">
+			AND b.title like CONCAT('%',#{title},'%')
+		</if>
+		<if test="status != null and status != ''">
+			AND a.status = #{status}
+		</if>
+		<if test="category != null and category != ''">
+			AND a.category = #{category}
+		</if>
+		<if test="begintime!=null and begintime!=''">
+			AND UNIX_TIMESTAMP(b.begintime) &gt;= #{begintime}
+		</if>
+		<if test="endtime!=null and endtime!=''">
+			AND UNIX_TIMESTAMP(b.endtime) &lt;= #{endtime}
+		</if>
+	</select>
+
+</mapper>

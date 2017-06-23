@@ -1,7 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.bo.NsrBindQueryBO;
-import com.abc12366.uc.model.bo.NsrBindQueryParamBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
@@ -13,9 +12,9 @@ import java.util.List;
 public interface NsrBindQueryRoMapper {
     List<NsrBindQueryBO> selectList(NsrBindQueryParamBO nsrBindQueryParamBO);
 
-    List<NsrBindQueryBO> selectDzsbBindList(NsrBindQueryParamBO nsrBindQueryParamBO);
+    UserDzsbBO selectDzsb(String id);
 
-    List<NsrBindQueryBO> selectHndsBindList(NsrBindQueryParamBO nsrBindQueryParamBO);
+    UserHndsBO selectHnds(String id);
 
-    List<NsrBindQueryBO> selectHngsBindList(NsrBindQueryParamBO nsrBindQueryParamBO);
+    UserHngsBO selectHngs(String id);
 }

@@ -6,14 +6,13 @@ import com.abc12366.uc.mapper.db1.VipLevelMapper;
 import com.abc12366.uc.mapper.db2.VipLevelRoMapper;
 import com.abc12366.uc.model.VipLevel;
 import com.abc12366.uc.model.bo.VipLevelBO;
+import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,18 +43,18 @@ public class VipLevelServiceImpl implements VipLevelService {
     }
 
     @Override
-    public VipLevelBO insert(VipLevelBO vipLevelBO) {
-        if (vipLevelBO == null) {
-            LOGGER.warn("新增失败，参数：" + null);
+    public VipLevelBO insert(VipLevelInsertBO vipLevelInsertBO) {
+        if (vipLevelInsertBO == null) {
+            LOGGER.warn("新增失败，已存在等级为" + vipLevelInsertBO.getLevel() + "的会员等级！");
             throw new ServiceException(4101);
         }
-        VipLevel vipLevelQuery = vipLevelRoMapper.selectByLevel(vipLevelBO.getLevel());
+        VipLevelBO vipLevelQuery = vipLevelRoMapper.selectByLevel(vipLevelInsertBO.getLevel());
         if (vipLevelQuery != null) {
-            LOGGER.warn("新增失败，参数：level=" + vipLevelBO.getLevel());
+            LOGGER.warn("新增失败，参数：level=" + vipLevelInsertBO.getLevel());
             throw new ServiceException(4101);
         }
         VipLevel vipLevel = new VipLevel();
-        BeanUtils.copyProperties(vipLevelBO, vipLevel);
+        BeanUtils.copyProperties(vipLevelInsertBO, vipLevel);
         Date date = new Date();
         vipLevel.setId(Utils.uuid());
         vipLevel.setLastUpdate(date);
@@ -71,18 +70,15 @@ public class VipLevelServiceImpl implements VipLevelService {
     }
 
     @Override
-    public VipLevelBO update(VipLevelUpdateBO vipLevelUpdateBO) {
+    public VipLevelBO update(VipLevelUpdateBO vipLevelUpdateBO, String id) {
         if (vipLevelUpdateBO == null) {
             LOGGER.warn("修改失败，参数：" + null);
             throw new ServiceException(4102);
         }
-        VipLevelBO vipLevelQuery = vipLevelRoMapper.selectOne(vipLevelUpdateBO.getId());
-        if (vipLevelQuery == null) {
-            LOGGER.warn("修改失败，可更新对象为：" + null);
-            throw new ServiceException(4102);
-        }
         VipLevel vipLevel = new VipLevel();
         BeanUtils.copyProperties(vipLevelUpdateBO, vipLevel);
+        vipLevel.setId(id);
+        vipLevel.setLastUpdate(new Date());
         int result = vipLevelMapper.update(vipLevel);
         if (result != 1) {
             LOGGER.warn("修改失败，参数为：" + vipLevel);

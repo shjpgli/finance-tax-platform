@@ -10,7 +10,7 @@ import java.util.Date;
 public class TagBO {
     private String id;
     private String tagName;
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
     private String category;
@@ -46,11 +46,11 @@ public class TagBO {
         this.tagName = tagName;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

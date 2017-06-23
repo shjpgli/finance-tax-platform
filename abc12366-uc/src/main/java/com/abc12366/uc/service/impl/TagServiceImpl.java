@@ -2,7 +2,6 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
-import com.abc12366.uc.mapper.db1.SubjectTagMapper;
 import com.abc12366.uc.mapper.db1.TagMapper;
 import com.abc12366.uc.mapper.db2.TagRoMapper;
 import com.abc12366.uc.model.Tag;
