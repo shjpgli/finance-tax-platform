@@ -12,6 +12,7 @@ import com.abc12366.admin.model.bo.UserExtendBO;
 import com.abc12366.admin.model.bo.UserPasswordBO;
 import com.abc12366.admin.model.bo.UserUpdateBO;
 import com.abc12366.admin.service.UserService;
+import com.abc12366.admin.util.TimeUtil;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.DateUtils;
@@ -241,7 +242,8 @@ public class UserServiceImpl implements UserService {
             loginInfo.setUserId(user.getId());
             loginInfo.setAppId(appId);
             Date date = new Date();
-            loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
+            long lastLong = TimeUtil.getDateStringToLong(new Date())+Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+            loginInfo.setLastResetTokenTime(TimeUtil.getLongToDate(lastLong));
             LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
 
             //判断该用户是否存在此应用的登录信息
@@ -460,6 +462,47 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4102);
             }
         }
+    }
+
+    @Override
+    public Boolean checkToken(String token) {
+
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setToken(token);
+        //验证Token是否存在
+        LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
+        if (info == null) {
+            LOGGER.warn("Admin-Token不存在", loginInfo);
+            throw new ServiceException(4128);
+        }
+        //严重Token是否过期
+        long datelong = System.currentTimeMillis();
+        long lastTime = TimeUtil.getDateStringToLong(info.getLastResetTokenTime());
+        if(datelong > lastTime){
+            LOGGER.warn("Admin-Token过期，请重新登录", info);
+            throw new ServiceException(4127);
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean refreshToken(String token) {
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setToken(token);
+        //验证Token是否存在
+        LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
+        if (info == null) {
+            LOGGER.warn("Admin-Token不存在", info);
+            throw new ServiceException(4128);
+        }
+        long datelong = System.currentTimeMillis()+Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+        info.setLastResetTokenTime(TimeUtil.getLongToDate(datelong));
+        int upd = loginInfoMapper.update(info);
+        if(upd != 1){
+            LOGGER.warn("修改Admin-token有效时间失败", info);
+            throw new ServiceException(4129);
+        }
+        return true;
     }
 
     @Override

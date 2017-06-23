@@ -123,4 +123,8 @@ public interface UserService {
     void disableAll();
 
     void enable(UserUpdateBO userUpdateBO);
+
+    Boolean checkToken(String token);
+
+    Boolean refreshToken(String token);
 }

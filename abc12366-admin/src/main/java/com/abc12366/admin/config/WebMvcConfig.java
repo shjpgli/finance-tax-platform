@@ -1,5 +1,6 @@
 package com.abc12366.admin.config;
 
+import com.abc12366.gateway.component.AdminUserInterceptor;
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.IpInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
@@ -35,6 +36,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public AdminUserInterceptor getAdminUserInterceptor() {
+        return new AdminUserInterceptor();
+    }
+
+    @Bean
     public IpInterceptor ipInterceptor() {
         return new IpInterceptor();
     }
@@ -53,14 +59,22 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
-
+                .excludePathPatterns("/admintoken/**")
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
         // UserToken验证、授权拦截
-        registry.addInterceptor(userInterceptor())
+        /*registry.addInterceptor(userInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/druid*//**")
                 .excludePathPatterns("/app/login", "/app/register", "/test")
+                .excludePathPatterns("/login", "/register");
+*/
+        // 用户Token拦截
+        registry.addInterceptor(getAdminUserInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/druid*//**")
+                .excludePathPatterns("/app/login", "/app/register", "/test")
+                .excludePathPatterns("/admintoken/**")
                 .excludePathPatterns("/login", "/register");
     }
 }

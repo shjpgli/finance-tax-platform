@@ -1,13 +1,14 @@
-package com.abc12366.admin.config;
+package com.abc12366.gateway.component;
 
-import com.abc12366.admin.service.UserService;
 import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.config.ApplicationGatewayConfig;
+import com.abc12366.gateway.util.HttpRequestUtil;
+import com.abc12366.gateway.util.PropertiesUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -20,21 +21,19 @@ import javax.servlet.http.HttpServletResponse;
  * @create 2017-02-23 9:31 AM
  * @since 1.0.0
  */
-public class UserInterceptor extends HandlerInterceptorAdapter {
+public class AdminUserInterceptor extends HandlerInterceptorAdapter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserInterceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminUserInterceptor.class);
 
-    @Autowired
-    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // 用户验证
-        String userToken = request.getHeader(Constant.ADMIN_TOKEN_HEAD);
+        String adminToken = request.getHeader(Constant.ADMIN_TOKEN_HEAD);
         response.setContentType("application/json;charset=UTF-8");
-        if (StringUtils.isEmpty(userToken)) {
-            BodyStatus bodyStatus = Utils.bodyStatus(4199);
+        if (StringUtils.isEmpty(adminToken)) {
+            BodyStatus bodyStatus = Utils.bodyStatus(4197);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
@@ -42,8 +41,20 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        if (!userService.isAuthentication(userToken)) {
-            BodyStatus bodyStatus = Utils.bodyStatus(4198);
+        //发送 POST 请求
+        String result = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.check.url") + adminToken,"");
+        if (!result.equals("true")){
+            BodyStatus bodyStatus = Utils.bodyStatus(4196);
+            response.setStatus(200);
+            response.getWriter().write(JSON.toJSONString(bodyStatus));
+            response.getWriter().flush();
+            response.getWriter().close();
+            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
+            return false;
+        }
+        result = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + adminToken,"");
+        if (!result.equals("true")){
+            BodyStatus bodyStatus = Utils.bodyStatus(4129);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
