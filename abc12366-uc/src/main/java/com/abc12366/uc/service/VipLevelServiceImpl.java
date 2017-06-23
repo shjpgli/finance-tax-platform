@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +45,10 @@ public class VipLevelServiceImpl implements VipLevelService {
     @Override
     public VipLevelBO insert(VipLevelInsertBO vipLevelInsertBO) {
         if (vipLevelInsertBO == null) {
-            LOGGER.warn("新增失败，参数：" + null);
+            LOGGER.warn("新增失败，已存在等级为" + vipLevelInsertBO.getLevel() + "的会员等级！");
             throw new ServiceException(4101);
         }
-        VipLevel vipLevelQuery = vipLevelRoMapper.selectByLevel(vipLevelInsertBO.getLevel());
+        VipLevelBO vipLevelQuery = vipLevelRoMapper.selectByLevel(vipLevelInsertBO.getLevel());
         if (vipLevelQuery != null) {
             LOGGER.warn("新增失败，参数：level=" + vipLevelInsertBO.getLevel());
             throw new ServiceException(4101);
