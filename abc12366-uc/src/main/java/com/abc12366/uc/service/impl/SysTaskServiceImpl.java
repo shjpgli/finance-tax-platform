@@ -76,17 +76,17 @@ public class SysTaskServiceImpl implements SysTaskService {
     public SysTaskBO update(SysTaskInsertAndUpdateBO sysTaskUpdateBO, String id) {
         if (sysTaskUpdateBO == null) {
             LOGGER.warn("修改失败，参数为：" + null);
-            throw new ServiceException(4101);
+            throw new ServiceException(4102);
         }
         SysTaskBO sysTaskQuery = sysTaskRoMapper.selectOne(id);
         if (sysTaskQuery == null) {
             LOGGER.warn("修改失败，不存在要被修改的数据，参数为：id=" + id);
-            throw new ServiceException(4101);
+            throw new ServiceException(4102);
         }
         //若系统任务已发布则不允许修改，修改前必须先撤销发布
         if (sysTaskQuery.isStatus()) {
             LOGGER.warn("修改失败，该任务已发布，撤销发布后才允许修改，参数为：id=" + id);
-            throw new ServiceException(4101);
+            throw new ServiceException(4102);
         }
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskUpdateBO, sysTask);

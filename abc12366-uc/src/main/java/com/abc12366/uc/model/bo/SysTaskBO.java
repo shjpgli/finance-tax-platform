@@ -19,22 +19,10 @@ public class SysTaskBO {
     private Date createTime;
     private Date lastUpdate;
     private String imageUrl;
+    private String ruleName;
+    private String ruleCode;
 
     public SysTaskBO() {
-    }
-
-    public SysTaskBO(String id, String name, Date startTime, Date endTime, String rule, int points, String type, boolean status, Date createTime, Date lastUpdate, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.rule = rule;
-        this.points = points;
-        this.type = type;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-        this.imageUrl = imageUrl;
     }
 
     public String getId() {
@@ -125,20 +113,19 @@ public class SysTaskBO {
         this.imageUrl = imageUrl;
     }
 
-    @Override
-    public String toString() {
-        return "SysTaskBO{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", rule='" + rule + '\'' +
-                ", points=" + points +
-                ", type='" + type + '\'' +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                ", imageUrl='" + imageUrl + '\'' +
-                '}';
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 }
