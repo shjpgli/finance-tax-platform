@@ -1,5 +1,6 @@
 package com.abc12366.cms.model;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -27,6 +28,12 @@ public class SiteIssue implements Serializable {
 
 	/**发布时间**date**/
 	private java.util.Date issueDate;
+
+	/**开始时间**date**/
+	private java.util.Date startDate;
+
+	/**版本号**varchar(50)**/
+	private String versions;
 
 	/**修改时间**date**/
 	private java.util.Date updateDate;
@@ -78,6 +85,22 @@ public class SiteIssue implements Serializable {
 
 	public java.util.Date getIssueDate(){
 		return this.issueDate;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getVersions() {
+		return versions;
+	}
+
+	public void setVersions(String versions) {
+		this.versions = versions;
 	}
 
 	public void setUpdateDate(java.util.Date updateDate){

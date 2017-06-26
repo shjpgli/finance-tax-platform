@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/siteIssue",headers = Constant.VERSION_HEAD + "=1")
@@ -25,9 +27,14 @@ public class SiteIssueController {
 
 	@GetMapping
 	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+									 @RequestParam(value = "templateName", required = false) String templateName,
+									 @RequestParam(value = "issueState", required = false) String issueState) {
 		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-		List<SiteIssueBo> dataList = siteIssueService.selectList();
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put("templateName", templateName);
+		dataMap.put("issueState", issueState);
+		List<SiteIssueBo> dataList = siteIssueService.selectList(dataMap);
 		LOGGER.info("{}", dataList);
 		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 	}

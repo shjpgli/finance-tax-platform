@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-	issueId,	templateName,	userId,	userName,	issueState,	issueDate,	updateDate
+	issueId,	templateName,	userId,	userName,	issueState,	issueDate,versions,startDate,	updateDate
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -17,10 +17,17 @@
 	</select>
 
 	<!-- 查询 -->
-	<select id="selectList" resultType="com.abc12366.cms.model.bo.SiteIssueBo" parameterType="java.lang.String">
+	<select id="selectList" resultType="com.abc12366.cms.model.bo.SiteIssueBo" parameterType="java.util.Map">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_site_issue
+		WHERE 1=1
+		<if test="templateName != null and templateName != ''">
+			AND b.templateName like CONCAT('%',#{templateName},'%')
+		</if>
+		<if test="issueState != null and issueState != ''">
+			AND a.issueState = #{issueState}
+		</if>
 	</select>
 
 </mapper>

@@ -5,6 +5,7 @@ import com.abc12366.cms.model.bo.SiteIssueBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -25,6 +26,6 @@ public interface SiteIssueRoMapper{
 	/**
 	 * 查询所有
 	 **/
-	List<SiteIssueBo> selectList();
+	List<SiteIssueBo> selectList(Map<String,Object> map);
 
 }
