@@ -126,4 +126,14 @@ public class AuthController extends BaseController {
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
     }
+
+    /*
+    用户token校验
+    */
+    @PostMapping(path = "/auth/{token}")
+    public ResponseEntity userTokenAuth(@PathVariable String token, HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", token);
+        boolean isAuth = authService.isAuthentication(token, request);
+        return ResponseEntity.ok(Utils.kv("data", isAuth));
+    }
 }

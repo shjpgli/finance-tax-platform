@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class VipPrivilegeInsertAndUpdateBO {
     @Size(max = 100)
     private String name;
-    @Size(max = 2)
+    @Size(min = 2, max = 5)
     private String level;
     @Size(max = 1000)
     private String remark;

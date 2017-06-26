@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.abc12366.gateway.service.UcUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -32,17 +33,18 @@ public class UcUserServiceImpl implements UcUserService {
         //1.调用admin的token校验接口，如果校验通过直接返回true
         //TODO
         //2.调用uc的token校验接口，如果校验通过刷新token并返回true
-        String url = "http://api.abc12366.com/uc";
+        String url = "http://localhost:9100/uc/auth/" + userToken;
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(Constant.VERSION_HEAD, Constant.VERSION_1);
         httpHeaders.add("Content-Type", "application/json");
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+        httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
+        HttpEntity requestEntity = new HttpEntity(null, httpHeaders);
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
         if (responseEntity == null || !responseEntity.getStatusCode().is2xxSuccessful() || !responseEntity.hasBody()) {
             throw new ServiceException(4104);
         }
-        //UCUserBO ucUserBO = objectMapper.readValue(((String) responseEntity.getBody()).getBytes(), UCUserBO.class);
-
         return true;
     }
 }

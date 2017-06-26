@@ -31,7 +31,7 @@ public class UcUserInterceptor extends HandlerInterceptorAdapter{
 
         String userToken = request.getHeader(Constant.USER_TOKEN_HEAD);
         response.setContentType("application/json;charset=UTF-8");
-        /*
+
         if(StringUtils.isEmpty(userToken)){
             BodyStatus bodyStatus = Utils.bodyStatus(4199);
             response.setStatus(200);
@@ -49,7 +49,7 @@ public class UcUserInterceptor extends HandlerInterceptorAdapter{
             response.getWriter().close();
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
-        }*/
+        }
         return true;
     }
 }
