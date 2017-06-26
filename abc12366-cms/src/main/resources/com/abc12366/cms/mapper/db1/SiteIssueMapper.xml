@@ -9,6 +9,14 @@
 		 WHERE issueId = #{issueId}
 	</delete>
 
+	<!--删除：根据主键ID批量删除-->
+	<delete id="deleteList" >
+		DELETE FROM cms_site_issue
+		WHERE issueId in <foreach item="item" index="index" collection="issueIds" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+	</delete>
+
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.SiteIssue">
 		 INSERT INTO cms_site_issue

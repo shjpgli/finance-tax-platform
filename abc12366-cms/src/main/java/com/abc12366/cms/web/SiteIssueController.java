@@ -1,5 +1,6 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.SiteIssueBo;
 import com.abc12366.cms.service.SiteIssueService;
 import com.abc12366.common.util.Constant;
@@ -61,6 +62,15 @@ public class SiteIssueController {
 		siteIssueBo = siteIssueService.update(siteIssueBo);
 		LOGGER.info("{}", siteIssueBo);
 		return ResponseEntity.ok(Utils.kv("data", siteIssueBo));
+	}
+
+	@PostMapping(path = "/deleteList")
+	public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+		LOGGER.info("{}", idsBo);
+		//删除评论信息
+		String rtn = siteIssueService.deleteList(idsBo.getIds());
+		LOGGER.info("{}", rtn);
+		return ResponseEntity.ok(Utils.kv("data", idsBo));
 	}
 
 

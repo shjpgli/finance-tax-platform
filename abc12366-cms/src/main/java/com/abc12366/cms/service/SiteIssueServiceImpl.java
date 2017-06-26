@@ -89,5 +89,12 @@ public class SiteIssueServiceImpl implements SiteIssueService {
         return siteIssueBo;
     }
 
+    @Override
+    public String deleteList(String[] issueIds) {
+        int r = siteIssueMapper.deleteList(issueIds);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
 
 }

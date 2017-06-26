@@ -13,5 +13,7 @@ public interface SiteIssueService {
 
     SiteIssueBo update(SiteIssueBo siteIssueBo);
 
+    String deleteList(String[] issueIds);
+
     SiteIssueBo selectOneById(String issueId);
 }
