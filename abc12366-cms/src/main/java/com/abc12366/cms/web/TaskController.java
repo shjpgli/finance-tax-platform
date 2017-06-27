@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 模型管理模块
+ * 定时任务模块
  *
  * @author xieyanmao
  * @create 2017-06-27
@@ -46,7 +46,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity save(@RequestBody TaskBo taskBo) {
         LOGGER.info("{}", taskBo);
-        //新增评论信息
+        //新增定时任务信息
         taskBo = taskService.save(taskBo);
         LOGGER.info("{}", taskBo);
         return ResponseEntity.ok(Utils.kv("data", taskBo));
@@ -55,7 +55,7 @@ public class TaskController {
     @GetMapping(path = "/{taskId}")
     public ResponseEntity selectOne(@PathVariable String taskId) {
         LOGGER.info("{}", taskId);
-        //查询评论信息
+        //查询定时任务信息
         TaskBo taskBo = taskService.selectTask(taskId);
         LOGGER.info("{}", taskBo);
         return ResponseEntity.ok(Utils.kv("data", taskBo));
@@ -66,7 +66,7 @@ public class TaskController {
                                  @Valid @RequestBody TaskBo taskBo) {
 
         LOGGER.info("{}", taskBo);
-        //更新评论信息
+        //更新定时任务信息
         taskBo = taskService.update(taskBo);
         LOGGER.info("{}", taskBo);
         return ResponseEntity.ok(Utils.kv("data", taskBo));
@@ -75,7 +75,7 @@ public class TaskController {
     @DeleteMapping(path = "/{taskId}")
     public ResponseEntity delete(@PathVariable String taskId) {
         LOGGER.info("{}", taskId);
-        //删除评论信息
+        //删除定时任务信息
         String rtn = taskService.delete(taskId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
@@ -84,7 +84,7 @@ public class TaskController {
     @PostMapping(path = "/deleteList")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
-        //删除评论信息
+        //删除定时任务信息
         String rtn = taskService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
