@@ -14,8 +14,8 @@
             <if test="topPerDay!=null">topPerDay=#{topPerDay},</if>
             <if test="status!=null">status=#{status},</if>
             <if test="lastUpdate!=null">lastUpdate=#{lastUpdate},</if>
-            <if test="metal!=null">metal=#{medal},</if>
-            <if test="metalIcon!=null">metalIcon=#{medalIcon}</if>
+            <if test="medal!=null">medal=#{medal},</if>
+            <if test="medalIcon!=null">medalIcon=#{medalIcon}</if>
         </set>
         where id=#{id}
     </update>
