@@ -10,24 +10,31 @@
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <collection property="menuList" ofType="com.abc12366.admin.model.Menu">
-            <id column="menuId" property="menuId" jdbcType="VARCHAR" />
-            <result column="menuName" property="menuName" jdbcType="VARCHAR"/>
-            <result column="menuUrl" property="menuUrl" jdbcType="VARCHAR"/>
-            <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
-            <result column="perms" property="perms" jdbcType="VARCHAR"/>
-            <result column="type" property="type" jdbcType="VARCHAR"/>
-            <result column="icon" property="icon" jdbcType="VARCHAR"/>
-            <result column="sort" property="sort" jdbcType="INTEGER"/>
-            <result column="status" property="status" jdbcType="TINYINT"/>
-            <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        </collection>
+        <collection property="menuList" ofType="com.abc12366.admin.model.Menu" column="id" select="getMenu"></collection>
     </resultMap>
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
 		 id,	roleName,	remark,	createTime,	updateTime,	status
 	</sql>
+
+    <!-- 查询菜单-->
+    <select id="getMenu" resultType="com.abc12366.admin.model.Menu" parameterType="java.lang.String">
+        select
+        m.menuId,
+        m.menuName,
+        m.menuUrl,
+        m.parentId,
+        m.perms,
+        m.type,
+        m.icon,
+        m.sort,
+        m.STATUS,
+        m.remark
+        from sys_menu m
+        LEFT JOIN sys_role_menu rm ON rm.menuId = m.menuId
+        WHERE rm.roleId = #{id}
+    </select>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.admin.model.Role" parameterType="java.lang.String">
@@ -37,7 +44,18 @@
 		 WHERE id = #{id}
 	</select>
 
-	<select id="selectList" resultMap="roleBoResultMap" parameterType="com.abc12366.admin.model.Role">
+    <select id="selectList" resultMap="roleBoResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_role
+        <where>
+            1=1
+            <if test="roleName != null and roleName!=''"> and roleName LIKE CONCAT('%',#{roleName},'%') </if>
+            <if test="status != null and status!=''"> AND status = #{status}</if>
+        </where>
+    </select>
+
+	<!--<select id="selectList" resultMap="roleBoResultMap" parameterType="com.abc12366.admin.model.Role">
         select
         r.id,
         r.roleName,
@@ -63,40 +81,23 @@
             <if test="roleName != null and roleName!=''"> and r.roleName LIKE CONCAT('%',#{roleName},'%') </if>
             <if test="status != null and status!=''"> AND r.status = #{status}</if>
         </where>
-	</select>
+	</select>-->
 
 	<select id="selectRoleById" resultMap="roleBoResultMap" parameterType="java.lang.String">
         select
-        r.id,
-        r.roleName,
-        r.remark,
-        r.createTime,
-        r.updateTime,
-        r.status,
-        m.menuId,
-        m.menuName,
-        m.menuUrl,
-        m.parentId,
-        m.perms,
-        m.type,
-        m.icon,
-        m.sort,
-        m.STATUS,
-        m.remark
-        from sys_role r
-        LEFT JOIN sys_role_menu rm ON r.id = rm.roleId
-        LEFT JOIN sys_menu m ON rm.menuId = m.menuId
-		where r.id = #{id,jdbcType=BIGINT}
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where id = #{id}
 	</select>
 
-    <select id="selectOne" resultType="com.abc12366.admin.model.Role" parameterType="com.abc12366.admin.model.Role">
+    <!--<select id="selectOne" resultType="com.abc12366.admin.model.Role" parameterType="com.abc12366.admin.model.Role">
         select
         <include refid="Base_Column_List"/>
         from sys_role
         <where>
             <if test="id != null and id!=''">AND id = #{id}</if>
         </where>
-    </select>
+    </select>-->
 
     <select id="selectRoleByName" resultType="com.abc12366.admin.model.Role" parameterType="com.abc12366.admin.model.Role">
         select
