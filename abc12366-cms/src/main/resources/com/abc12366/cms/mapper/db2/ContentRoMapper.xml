@@ -75,6 +75,9 @@
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
 		</if>
+		<if test="channelId != null and channelId != ''">
+			AND a.channelId = #{channelId}
+		</if>
 		<if test="status != null and status != ''">
 			AND a.status = #{status}
 		</if>

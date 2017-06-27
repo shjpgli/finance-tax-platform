@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -31,8 +32,8 @@ public class SiteIssueServiceImpl implements SiteIssueService {
     private SiteIssueRoMapper siteIssueRoMapper;
 
     @Override
-    public List<SiteIssueBo> selectList() {
-        List<SiteIssueBo> siteIssueListBo = siteIssueRoMapper.selectList();
+    public List<SiteIssueBo> selectList(Map<String,Object> map) {
+        List<SiteIssueBo> siteIssueListBo = siteIssueRoMapper.selectList(map);
         LOGGER.info("{}", siteIssueListBo);
         return siteIssueListBo;
     }
@@ -86,6 +87,13 @@ public class SiteIssueServiceImpl implements SiteIssueService {
         int count = siteIssueMapper.updateByPrimaryKeySelective(siteIssue);
         LOGGER.info("{}", count);
         return siteIssueBo;
+    }
+
+    @Override
+    public String deleteList(String[] issueIds) {
+        int r = siteIssueMapper.deleteList(issueIds);
+        LOGGER.info("{}", r);
+        return "";
     }
 
 

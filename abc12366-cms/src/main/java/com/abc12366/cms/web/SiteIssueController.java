@@ -1,5 +1,6 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.SiteIssueBo;
 import com.abc12366.cms.service.SiteIssueService;
 import com.abc12366.common.util.Constant;
@@ -13,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/siteIssue",headers = Constant.VERSION_HEAD + "=1")
@@ -25,9 +28,14 @@ public class SiteIssueController {
 
 	@GetMapping
 	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+									 @RequestParam(value = "templateName", required = false) String templateName,
+									 @RequestParam(value = "issueState", required = false) String issueState) {
 		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-		List<SiteIssueBo> dataList = siteIssueService.selectList();
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put("templateName", templateName);
+		dataMap.put("issueState", issueState);
+		List<SiteIssueBo> dataList = siteIssueService.selectList(dataMap);
 		LOGGER.info("{}", dataList);
 		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 	}
@@ -54,6 +62,15 @@ public class SiteIssueController {
 		siteIssueBo = siteIssueService.update(siteIssueBo);
 		LOGGER.info("{}", siteIssueBo);
 		return ResponseEntity.ok(Utils.kv("data", siteIssueBo));
+	}
+
+	@PostMapping(path = "/deleteList")
+	public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+		LOGGER.info("{}", idsBo);
+		//删除评论信息
+		String rtn = siteIssueService.deleteList(idsBo.getIds());
+		LOGGER.info("{}", rtn);
+		return ResponseEntity.ok(Utils.kv("data", idsBo));
 	}
 
 

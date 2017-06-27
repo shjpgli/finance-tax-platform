@@ -9,12 +9,20 @@
 		 WHERE issueId = #{issueId}
 	</delete>
 
+	<!--删除：根据主键ID批量删除-->
+	<delete id="deleteList" >
+		DELETE FROM cms_site_issue
+		WHERE issueId in <foreach item="item" index="index" collection="issueIds" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+	</delete>
+
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.SiteIssue">
 		 INSERT INTO cms_site_issue
- 		(issueId,templateName,userId,userName,issueState,issueDate,updateDate)
+ 		(issueId,templateName,userId,userName,issueState,issueDate,versions,startDate,updateDate)
 		 VALUES 
- 		(#{issueId},#{templateName},#{userId},#{userName},#{issueState},#{issueDate},#{updateDate})
+ 		(#{issueId},#{templateName},#{userId},#{userName},#{issueState},#{issueDate},#{versions},#{startDate},#{updateDate})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -39,6 +47,12 @@
 			<if test="issueDate != null">
 				 issueDate,
 			</if>
+			 <if test="versions != null">
+				 versions,
+			 </if>
+			 <if test="startDate != null">
+				 startDate,
+			 </if>
 			<if test="updateDate != null">
 				 updateDate,
 			</if>
@@ -63,6 +77,12 @@
 			<if test="issueDate!=null">
 				 #{issueDate},
 			</if>
+			 <if test="versions!=null">
+				 #{versions},
+			 </if>
+			 <if test="startDate!=null">
+				 #{startDate},
+			 </if>
 			<if test="updateDate!=null">
 				 #{updateDate},
 			</if>
@@ -88,6 +108,12 @@
 			<if test="issueDate != null">
 				 issueDate = #{issueDate},
 			</if>
+			 <if test="versions != null">
+				 versions = #{versions},
+			 </if>
+			 <if test="startDate != null">
+				 startDate = #{startDate},
+			 </if>
 			<if test="updateDate != null">
 				 updateDate = #{updateDate},
 			</if>
@@ -105,6 +131,8 @@
 			 userName = #{userName},
 			 issueState = #{issueState},
 			 issueDate = #{issueDate},
+			 versions = #{versions},
+			 startDate = #{startDate},
 			 updateDate = #{updateDate}
 		 WHERE issueId = #{issueId}
 	</update>

@@ -6,16 +6,16 @@ import java.util.List;
 
 /**
  * 
- * CMS活动信息
+ * CMS报名信息
  * 
  **/
 @SuppressWarnings("serial")
 public class EventApplySaveBo implements Serializable {
 
-	/**活动信息**/
+	/**报名信息**/
 	private EventApplyBo eventApply;
 
-	/**活动模型项信息**/
+	/**报名扩展项信息**/
 	private List<EventApplyAttrBo> applyAttrList;
 
 	public EventApplyBo getEventApply() {

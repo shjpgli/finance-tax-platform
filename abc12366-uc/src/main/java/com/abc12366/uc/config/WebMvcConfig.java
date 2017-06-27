@@ -3,7 +3,6 @@ package com.abc12366.uc.config;
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
 import com.abc12366.gateway.component.UcUserInterceptor;
-import com.abc12366.uc.component.UserInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -71,6 +70,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app*//**")
                 .excludePathPatterns("/druid*//**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin");
+                .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin","/auth/*");
     }
 }

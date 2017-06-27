@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Properties;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
@@ -55,6 +56,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private TokenMapper tokenMapper;
+
+    private static Properties properties = new Properties("application.properties");
 
     @Transactional("db1TxManager")
     @Override
@@ -207,7 +210,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean isAuthentication(String userToken, HttpServletRequest request) {
         Token token = tokenRoMapper.isAuthentication(userToken);
         if (token == null) {
-            return false;
+            throw new ServiceException(4016);
         }
         long lastTokenResetTime = token.getLastTokenResetTime().getTime();
         long currentTime = new Date().getTime();
@@ -221,6 +224,8 @@ public class AuthServiceImpl implements AuthService {
         } else {
             request.setAttribute(Constant.USER_ID, token.getUserId());
         }
+        //刷新token
+        refreshToken(userToken);
         return true;
     }
 
@@ -235,8 +240,8 @@ public class AuthServiceImpl implements AuthService {
         }
         token.setLastTokenResetTime(new Date());
         int result = tokenMapper.update(token);
-        if (result != 1) {
-            return false;
+        if (result < 1) {
+            throw new ServiceException(4017);
         }
         return true;
     }
@@ -306,59 +311,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity verifyCode(String phone, String code, HttpServletRequest request) throws IOException {
-        //String url = properties.getValue("message.netease.url.verifycode");
         //不变参数
-        //String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
-        //String appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
-        //String contentType = properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
-        //String charset = properties.getValue("message.netease.charset");//"utf-8";
-        //可变参数
-        //String nonce = Utils.uuid();
-        //String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        //请求头设置
-        //HttpHeaders httpHeaders = new HttpHeaders();
-        //httpHeaders.add("appKey", appKey);
-        //httpHeaders.add("appSecret", appSecret);
-        //httpHeaders.add("Content-Type", "application/json");
-        //httpHeaders.add(Constant.VERSION_HEAD, Constant.VERSION_1);
-        //httpHeaders.add("Nonce", nonce);
-        //httpHeaders.add("CurTime", curTime);
+        //String url = "http://localhost:9200/message/sms/verifycode";
+        String url = properties.getValue("message.message.url.verifycode");
 
-        //MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        //requestBody.add("mobile", phone);
-        //requestBody.add("code", code);
-
-        //String reqJsonStr = "{\"mobile\":"+ phone +",\"code\":" + code + "}";
-
-        //HttpEntity requestEntity = new HttpEntity(reqJsonStr, httpHeaders);
-
-        //ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-
-        //------------------------------------------
-        //不变参数
-        //String url = properties.getValue("message.netease.url.verifycode");
-        String url = "http://localhost:9200/message/sms/verifycode";
-        //String appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
-        //String appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
-        String contentType = "application/json";//properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
-        //String charset = "utf-8";//properties.getValue("message.netease.charset");//"utf-8";
-        //可变参数
-        //String nonce = Utils.uuid();
-        //String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        //String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        //httpHeaders.add("appKey", appKey);
-        //httpHeaders.add("appSecret", appSecret);
-//        httpHeaders.add("Content-Type", contentType);
-        //httpHeaders.add("charset", charset);
-        //httpHeaders.add("Nonce", nonce);
-        //httpHeaders.add("CurTime", curTime);
-        //httpHeaders.add("CheckSum", checkSum);
         httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
         httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("mobile", phone);
