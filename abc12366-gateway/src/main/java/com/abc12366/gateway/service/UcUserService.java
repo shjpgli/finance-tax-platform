@@ -1,6 +1,7 @@
 package com.abc12366.gateway.service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -9,5 +10,5 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface UcUserService {
 
-    boolean isAuthentication(String userToken, HttpServletRequest request);
+    boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request) throws IOException;
 }

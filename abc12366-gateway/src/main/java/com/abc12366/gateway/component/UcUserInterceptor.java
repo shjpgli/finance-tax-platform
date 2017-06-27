@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * Date: 2017-05-25
  * Time: 11:34
  */
-public class UcUserInterceptor extends HandlerInterceptorAdapter{
+public class UcUserInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UcUserInterceptor.class);
 
@@ -29,11 +29,13 @@ public class UcUserInterceptor extends HandlerInterceptorAdapter{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        String adminToken = request.getHeader(Constant.ADMIN_TOKEN_HEAD);
         String userToken = request.getHeader(Constant.USER_TOKEN_HEAD);
+
         response.setContentType("application/json;charset=UTF-8");
 
-        if(StringUtils.isEmpty(userToken)){
-            BodyStatus bodyStatus = Utils.bodyStatus(4199);
+        if (StringUtils.isEmpty(adminToken) && StringUtils.isEmpty(userToken)) {
+            BodyStatus bodyStatus = Utils.bodyStatus(4195);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
@@ -41,7 +43,7 @@ public class UcUserInterceptor extends HandlerInterceptorAdapter{
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        if(!ucUserService.isAuthentication(userToken, request)){
+        if (!ucUserService.isAuthentication(adminToken, userToken, request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
