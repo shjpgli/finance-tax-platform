@@ -278,7 +278,7 @@ public class Vote {
     }
 
     public void setAccess(Boolean access) {
-        access = access;
+        this.access = access;
     }
 
     public String getHeader() {
