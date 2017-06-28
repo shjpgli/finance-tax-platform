@@ -92,4 +92,14 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
         BeanUtils.copyProperties(experienceLevel, experienceLevelReturn);
         return experienceLevelReturn;
     }
+
+    @Override
+    public int delete(String id) {
+        int result = experienceLevelMapper.delete(id);
+        if(result<1){
+            LOGGER.warn("删除失败！");
+            throw new ServiceException(4103);
+        }
+        return 1;
+    }
 }

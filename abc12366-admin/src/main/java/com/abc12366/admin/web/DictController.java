@@ -97,4 +97,11 @@ public class DictController {
         LOGGER.info("{}",dictBO);
         return ResponseEntity.ok(Utils.kv("data",dictBO));
     }
+
+    @PostMapping(path = "/delete")
+    public ResponseEntity batchDelete(@Valid@RequestBody Dict bo){
+        LOGGER.info("{}",bo);
+        dictService.batchDelete(bo);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

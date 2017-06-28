@@ -10,23 +10,15 @@ import java.util.Date;
 public class ExperienceLevel {
     private String id;
     private String name;
-    private int value;
+    private String value;
     private int topPerDay;
     private Boolean status;
     private Date lastUpdate;
     private Date createTime;
+    private String medal;
+    private String medalIcon;
 
     public ExperienceLevel() {
-    }
-
-    public ExperienceLevel(String id, String name, int value, int topPerDay, Boolean status, Date lastUpdate, Date createTime) {
-        this.id = id;
-        this.name = name;
-        this.value = value;
-        this.topPerDay = topPerDay;
-        this.status = status;
-        this.lastUpdate = lastUpdate;
-        this.createTime = createTime;
     }
 
     public String getId() {
@@ -45,11 +37,11 @@ public class ExperienceLevel {
         this.name = name;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -85,16 +77,19 @@ public class ExperienceLevel {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "ExperienceLevel{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", value=" + value +
-                ", topPerDay=" + topPerDay +
-                ", status=" + status +
-                ", lastUpdate=" + lastUpdate +
-                ", createTime=" + createTime +
-                '}';
+    public String getMedal() {
+        return medal;
+    }
+
+    public void setMedal(String medal) {
+        this.medal = medal;
+    }
+
+    public String getMedalIcon() {
+        return medalIcon;
+    }
+
+    public void setMedalIcon(String medalIcon) {
+        this.medalIcon = medalIcon;
     }
 }

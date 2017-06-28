@@ -52,24 +52,25 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
         // App验证、授权拦截
         registry.addInterceptor(appInterceptor())
-                .excludePathPatterns("/")
-                .excludePathPatterns("/app/**")
                 .excludePathPatterns("/druid/**")
-
-                .excludePathPatterns("/login", "/refresh", "/register", "/test");
-
-        /*//用户访问拦截
-        registry.addInterceptor(userInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app*//**")
-                .excludePathPatterns("/druid*//**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin");*/
+                .excludePathPatterns("/test")
+                .excludePathPatterns("/app/**");
+
+        //用户访问拦截
+//        registry.addInterceptor(userInterceptor())
+//                .excludePathPatterns("/")
+//                .excludePathPatterns("/app/**")
+//                .excludePathPatterns("/druid/**")
+//                .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(ucUserInterceptor())
+                .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app*//**")
-                .excludePathPatterns("/druid*//**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin","/auth/*");
+                .excludePathPatterns("/test")
+                .excludePathPatterns("/app/**")
+                .excludePathPatterns("/auth/*")
+                .excludePathPatterns("/login", "/refresh", "/register", "/verifylogin");
     }
 }

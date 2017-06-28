@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id, name, startTime, endTime, isLogin, channel, status, createTime, lastUpdate,
+		id, name, startTime, endTime, login, channel, status, createTime, lastUpdate,
         quickVote,
         privacyVote,
         privacyPassword,
@@ -27,7 +27,7 @@
 
     <insert id="insert" parameterType="com.abc12366.cms.model.Vote">
         INSERT INTO cms_vote (<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{name}, #{startTime}, #{endTime}, #{isLogin}, #{channel}, #{status}, #{createTime}, #{lastUpdate},
+        VALUES (#{id}, #{name}, #{startTime}, #{endTime}, #{login}, #{channel}, #{status}, #{createTime}, #{lastUpdate},
         #{quickVote},
         #{privacyVote},
         #{privacyPassword},
@@ -49,7 +49,7 @@
             <if test="name != null">name = #{name},</if>
             <if test="startTime != null">startTime = #{startTime},</if>
             <if test="endTime != null">endTime = #{endTime},</if>
-            <if test="isLogin != null">isLogin = #{isLogin},</if>
+            <if test="login != null">login = #{login},</if>
             <if test="status != null">status = #{status},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
             <if test="channel != null">channel = #{channel},</if>

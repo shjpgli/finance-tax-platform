@@ -12,19 +12,18 @@ import javax.validation.constraints.Size;
  */
 public class ExperienceLevelInsertAndUpdateBO {
     @NotEmpty
+    @Size(max = 10)
     private String name;
-    private int value;
+    @Size(max = 32)
+    private String value;
     private int topPerDay;
     private Boolean status;
+    @Size(max = 50)
+    private String medal;
+    @Size(max = 50)
+    private String medalIcon;
 
     public ExperienceLevelInsertAndUpdateBO() {
-    }
-
-    public ExperienceLevelInsertAndUpdateBO(String name, int value, int topPerDay, Boolean status) {
-        this.name = name;
-        this.value = value;
-        this.topPerDay = topPerDay;
-        this.status = status;
     }
 
     public String getName() {
@@ -35,11 +34,11 @@ public class ExperienceLevelInsertAndUpdateBO {
         this.name = name;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -59,13 +58,19 @@ public class ExperienceLevelInsertAndUpdateBO {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "ExperienceLevelInsertAndUpdateBO{" +
-                "name='" + name + '\'' +
-                ", value=" + value +
-                ", topPerDay=" + topPerDay +
-                ", status=" + status +
-                '}';
+    public String getMedal() {
+        return medal;
+    }
+
+    public void setMedal(String medal) {
+        this.medal = medal;
+    }
+
+    public String getMedalIcon() {
+        return medalIcon;
+    }
+
+    public void setMedalIcon(String medalIcon) {
+        this.medalIcon = medalIcon;
     }
 }

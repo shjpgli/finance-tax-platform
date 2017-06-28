@@ -206,7 +206,7 @@ public class Vote {
     }
 
     public void setLogin(Boolean login) {
-        login = login;
+        this.login = login;
     }
 
     public String getChannel() {

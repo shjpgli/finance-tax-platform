@@ -61,7 +61,9 @@
             <if test="username != null and username!=''"> and t.username = #{username}</if>
             <if test="nickname != null and nickname!=''"> and t.nickname = #{nickname}</if>
             <if test="status != null and status!=''"> AND t.status = #{status}</if>
+            <if test="organizationId != null and organizationId!=''"> AND e.orgId = #{organizationId}</if>
         </where>
+        order by t.lastUpdate DESC
 	</select>
 
     <!--查询单个用户及权限-->

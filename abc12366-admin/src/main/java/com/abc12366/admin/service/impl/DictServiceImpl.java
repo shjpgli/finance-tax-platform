@@ -8,6 +8,8 @@ import com.abc12366.admin.model.bo.DictUpdateBO;
 import com.abc12366.admin.service.DictService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.List;
 @Service
 public class DictServiceImpl implements DictService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DictServiceImpl.class);
     @Autowired
     private DictRoMapper dictRoMapper;
 
@@ -110,6 +113,22 @@ public class DictServiceImpl implements DictService {
     @Override
     public List<DictBO> selectDictList(Dict dict) {
         return dictRoMapper.selectDictList(dict);
+    }
+
+    @Override
+    public void batchDelete(Dict bo) {
+        String id = bo.getId();
+        if(id == null || "".equals(id)){
+            LOGGER.info("{id不能为空}",bo);
+            throw new ServiceException(4150);
+        }
+        String[] ids = id.split(",");
+        for (String dId : ids){
+            int del = dictMapper.delete(dId);
+            if(del != 1){
+                throw new ServiceException(4103);
+            }
+        }
     }
 
 }

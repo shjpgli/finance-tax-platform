@@ -4,11 +4,11 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.ExperienceLevelBO" parameterType="java.util.Map">
-        SELECT  id,name,value,topPerDay,status,lastUpdate,createTime
+        SELECT  id,name,value,topPerDay,status,lastUpdate,createTime,medal,medalIcon
         from uc_uexp_level
         <where>
             <if test="name!=null">
-                name=#{name}
+                name like CONCAT('%',#{name},'%')
             </if>
             <if test="status!=null">
                 and status=#{status}
@@ -18,7 +18,7 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExperienceLevelBO" parameterType="java.lang.String">
-        SELECT  id,name,value,topPerDay,status,lastUpdate,createTime
+        SELECT  id,name,value,topPerDay,status,lastUpdate,createTime,medal,medalIcon
         from uc_uexp_level
         where id=#{id}
     </select>

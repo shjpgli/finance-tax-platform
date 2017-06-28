@@ -41,11 +41,13 @@ public class UserController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "nickname", required = false) String nickname,
+                                     @RequestParam(value = "orgId", required = false) String orgId,
                                      @RequestParam(value = "status", required = false) Boolean status) {
         User user = new User();
         user.setUsername(username);
         user.setNickname(nickname);
         user.setStatus(status);
+        user.setOrganizationId(orgId);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<UserBO> userList = userService.selectList(user);
         LOGGER.info("{}", userList);

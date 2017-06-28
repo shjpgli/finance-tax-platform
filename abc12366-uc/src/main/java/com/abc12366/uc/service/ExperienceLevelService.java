@@ -19,4 +19,6 @@ public interface ExperienceLevelService {
     ExperienceLevelBO insert(ExperienceLevelInsertAndUpdateBO experienceLevelInsertBO);
 
     ExperienceLevelBO update(ExperienceLevelInsertAndUpdateBO experienceLevelUpdateBO, String id);
+
+    int delete(String id);
 }
