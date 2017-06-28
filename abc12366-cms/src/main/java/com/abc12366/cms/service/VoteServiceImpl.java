@@ -1,13 +1,12 @@
 package com.abc12366.cms.service;
 
 import com.abc12366.cms.mapper.db1.SubjectMapper;
+import com.abc12366.cms.mapper.db1.VoteAdditionMapper;
 import com.abc12366.cms.mapper.db1.VoteMapper;
 import com.abc12366.cms.mapper.db2.SubjectRoMapper;
+import com.abc12366.cms.mapper.db2.VoteAdditionRoMapper;
 import com.abc12366.cms.mapper.db2.VoteRoMapper;
-import com.abc12366.cms.model.Subject;
-import com.abc12366.cms.model.SubjectItem;
-import com.abc12366.cms.model.Vote;
-import com.abc12366.cms.model.VoteResult;
+import com.abc12366.cms.model.*;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -47,6 +46,12 @@ public class VoteServiceImpl implements VoteService {
     @Autowired
     private SubjectMapper subjectMapper;
 
+    @Autowired
+    private VoteAdditionMapper voteAdditionMapper;
+
+    @Autowired
+    private VoteAdditionRoMapper voteAdditionRoMapper;
+
     @Override
     public List<Vote> selectList(Vote vote, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -70,6 +75,19 @@ public class VoteServiceImpl implements VoteService {
         vote.setCreateTime(now);
         vote.setLastUpdate(now);
         voteMapper.insert(vote);
+
+        // 投票附加信息
+        if (vote.getAdditionList() != null && vote.getAdditionList().size() > 0) {
+            for (VoteAddition va : vote.getAdditionList()) {
+                VoteAddition voteAddition = new VoteAddition.Builder()
+                        .id(Utils.uuid())
+                        .voteId(vote.getId())
+                        .dictId(va.getDictId())
+                        .required(va.getRequired())
+                        .build();
+                voteAdditionMapper.insert(voteAddition);
+            }
+        }
 
         // 题目
         if (vote.getSubjectList() != null && vote.getSubjectList().size() > 0) {
@@ -109,6 +127,9 @@ public class VoteServiceImpl implements VoteService {
         Vote vote = voteRoMapper.selectOne(id);
 
         if (vote != null) {
+            // 查询附加信息
+            vote.setAdditionList(voteAdditionRoMapper.selectList(vote.getId()));
+
             // 如果为已发布状态，统计参与总人数
             if (vote.getStatus()) {
                 VoteResult vr = new VoteResult.Builder().voteId(vote.getId()).build();
@@ -147,12 +168,33 @@ public class VoteServiceImpl implements VoteService {
         if (v != null) {
             v.setName(vote.getName());
             v.setEndTime(vote.getEndTime());
-            v.setIsLogin(vote.getIsLogin());
+            v.setLogin(vote.getLogin());
             v.setStatus(vote.getStatus());
             v.setLastUpdate(now);
             voteMapper.update(v);
 
-            // 先删除
+            // 先删除附加信息
+            List<VoteAddition> additionList = voteAdditionRoMapper.selectList(v.getId());
+            if (additionList != null && additionList.size() > 0) {
+                for (VoteAddition va : additionList) {
+                    voteAdditionMapper.delete(va.getVoteId());
+                }
+            }
+
+            // 再新增附加信息
+            if (vote.getAdditionList() != null && vote.getAdditionList().size() > 0) {
+                for (VoteAddition va : vote.getAdditionList()) {
+                    VoteAddition voteAddition = new VoteAddition.Builder()
+                            .id(Utils.uuid())
+                            .voteId(vote.getId())
+                            .dictId(va.getDictId())
+                            .required(va.getRequired())
+                            .build();
+                    voteAdditionMapper.insert(voteAddition);
+                }
+            }
+
+            // 先删除题目
             List<Subject> subjectList = subjectRoMapper.selectSubjectList(v.getId());
             if (subjectList != null && subjectList.size() > 0) {
                 for (Subject subject : subjectList) {
@@ -160,8 +202,7 @@ public class VoteServiceImpl implements VoteService {
                 }
                 subjectMapper.deleteSubject(v.getId());
             }
-            // 再新增
-            // 题目
+            // 再新增题目
             if (vote.getSubjectList() != null && vote.getSubjectList().size() > 0) {
                 for (Subject s : vote.getSubjectList()) {
                     Subject subject = new Subject.Builder()
@@ -205,10 +246,20 @@ public class VoteServiceImpl implements VoteService {
             List<Subject> subjectList = subjectRoMapper.selectSubjectList(v.getId());
             if (subjectList != null && subjectList.size() > 0) {
                 for (Subject subject : subjectList) {
+                    // 删除选项
                     subjectMapper.deleteItem(subject.getId());
                 }
+                // 删除题目
                 subjectMapper.deleteSubject(v.getId());
             }
+            // 删除附加信息
+            List<VoteAddition> additionList = voteAdditionRoMapper.selectList(v.getId());
+            if (additionList != null && additionList.size() > 0) {
+                for (VoteAddition va : additionList) {
+                    voteAdditionMapper.delete(va.getVoteId());
+                }
+            }
+            // 删除投票信息
             voteMapper.delete(id);
         } else {
             throw new ServiceException(4012);
@@ -226,7 +277,7 @@ public class VoteServiceImpl implements VoteService {
             }
             // TODO: 需要保存userId
             String userToken = (String) request.getAttribute(Constant.USER_TOKEN_HEAD);
-            if (v.getIsLogin() && StringUtils.isEmpty(userToken)) {
+            if (v.getLogin() && StringUtils.isEmpty(userToken)) {
                 throw new ServiceException(4013);
             }
             if (resultList.size() > 0) {
@@ -259,7 +310,7 @@ public class VoteServiceImpl implements VoteService {
             }
             // TODO: 需要保存userId
             String userToken = (String) request.getAttribute(Constant.USER_TOKEN_HEAD);
-            if (v.getIsLogin() && StringUtils.isEmpty(userToken)) {
+            if (v.getLogin() && StringUtils.isEmpty(userToken)) {
                 throw new ServiceException(4013);
             }
             result.setId(Utils.uuid());

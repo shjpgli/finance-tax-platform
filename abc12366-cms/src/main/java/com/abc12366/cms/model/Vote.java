@@ -36,12 +36,52 @@ public class Vote {
 
     // 是否只有登录用户可以投票
     @NotNull
-    private Boolean isLogin;
+    private Boolean login;
 
-    // 投票通道
+    // 投票类型
     @NotEmpty
-    @Length(min = 1, max=10)
+    @Length(min = 1, max = 10)
     private String channel;
+
+    // 快速投票
+    private Boolean quickVote;
+
+    // 隐私投票
+    @Length(max = 10)
+    private String privacyVote;
+
+    // 隐私投票密码
+    @Length(min = 4, max = 16)
+    private String privacyPassword;
+
+    // 每天投票
+    private Boolean dayVote;
+
+    // 投票后查看结果
+    private Boolean showResult;
+
+    // 活动介绍
+    @Length(max = 200)
+    private String startIntro;
+
+    // 投票后显示的内容
+    @Length(max = 200)
+    private String endIntro;
+
+    // 是否可以访问
+    private Boolean access;
+
+    // 页眉
+    @Length(max = 128)
+    private String header;
+
+    // 页脚
+    @Length(max = 200)
+    private String footer;
+
+    // 生成地址
+    @Length(max = 128)
+    private String url;
 
     // 发布状态
     @NotNull
@@ -53,25 +93,53 @@ public class Vote {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp lastUpdate;
 
+    // 显示验证码
+    private Boolean validateCode;
+
+    // 隐藏投票结果
+    private Boolean hiddenResult;
+
     private List<Subject> subjectList;
+
+    private List<VoteAddition> additionList;
 
     // 参与人数（number of participants）
     private Integer nop;
+    // 访问次数 (Number of visits)
+    private Integer nov;
 
     public Vote() {
     }
 
-    public Vote(String id, String name, Timestamp startTime, Timestamp endTime, Boolean isLogin, Boolean status,
-                String channel, Timestamp createTime, Timestamp lastUpdate) {
+    public Vote(String id, String name, Timestamp startTime, Timestamp endTime, Boolean login, String channel,
+                Boolean quickVote, String privacyVote, String privacyPassword, Boolean dayVote, Boolean showResult,
+                String startIntro, String endIntro, Boolean access, String header, String footer, String url,
+                Boolean status, Timestamp createTime, Timestamp lastUpdate, Boolean validateCode, Boolean hiddenResult,
+                Integer nop, Integer nov) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.isLogin = isLogin;
+        this.login = login;
         this.channel = channel;
+        this.quickVote = quickVote;
+        this.privacyVote = privacyVote;
+        this.privacyPassword = privacyPassword;
+        this.dayVote = dayVote;
+        this.showResult = showResult;
+        this.startIntro = startIntro;
+        this.endIntro = endIntro;
+        this.access = access;
+        this.header = header;
+        this.footer = footer;
+        this.url = url;
         this.status = status;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
+        this.validateCode = validateCode;
+        this.hiddenResult = hiddenResult;
+        this.nop = nop;
+        this.nov = nov;
     }
 
     private Vote(Builder builder) {
@@ -79,19 +147,26 @@ public class Vote {
         setName(builder.name);
         setStartTime(builder.startTime);
         setEndTime(builder.endTime);
-        setIsLogin(builder.isLogin);
+        setLogin(builder.login);
+        setChannel(builder.channel);
+        setQuickVote(builder.quickVote);
+        setprivacyVote(builder.privacyVote);
+        setprivacyPassword(builder.privacyPassword);
+        setDayVote(builder.dayVote);
+        setShowResult(builder.showResult);
+        setStartIntro(builder.startIntro);
+        setEndIntro(builder.endIntro);
+        setAccess(builder.access);
+        setHeader(builder.header);
+        setFooter(builder.footer);
+        setUrl(builder.url);
         setStatus(builder.status);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
-        setChannel(builder.channel);
-    }
-
-    public List<Subject> getSubjectList() {
-        return subjectList;
-    }
-
-    public void setSubjectList(List<Subject> subjectList) {
-        this.subjectList = subjectList;
+        setValidateCode(builder.validateCode);
+        setHiddenResult(builder.hiddenResult);
+        setNop(builder.nop);
+        setNov(builder.nov);
     }
 
     public String getId() {
@@ -126,12 +201,108 @@ public class Vote {
         this.endTime = endTime;
     }
 
-    public Boolean getIsLogin() {
-        return isLogin;
+    public Boolean getLogin() {
+        return login;
     }
 
-    public void setIsLogin(Boolean isLogin) {
-        this.isLogin = isLogin;
+    public void setLogin(Boolean login) {
+        login = login;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public Boolean getQuickVote() {
+        return quickVote;
+    }
+
+    public void setQuickVote(Boolean quickVote) {
+        this.quickVote = quickVote;
+    }
+
+    public String getprivacyVote() {
+        return privacyVote;
+    }
+
+    public void setprivacyVote(String privacyVote) {
+        this.privacyVote = privacyVote;
+    }
+
+    public String getprivacyPassword() {
+        return privacyPassword;
+    }
+
+    public void setprivacyPassword(String privacyPassword) {
+        this.privacyPassword = privacyPassword;
+    }
+
+    public Boolean getDayVote() {
+        return dayVote;
+    }
+
+    public void setDayVote(Boolean dayVote) {
+        this.dayVote = dayVote;
+    }
+
+    public Boolean getShowResult() {
+        return showResult;
+    }
+
+    public void setShowResult(Boolean showResult) {
+        this.showResult = showResult;
+    }
+
+    public String getStartIntro() {
+        return startIntro;
+    }
+
+    public void setStartIntro(String startIntro) {
+        this.startIntro = startIntro;
+    }
+
+    public String getEndIntro() {
+        return endIntro;
+    }
+
+    public void setEndIntro(String endIntro) {
+        this.endIntro = endIntro;
+    }
+
+    public Boolean getAccess() {
+        return access;
+    }
+
+    public void setAccess(Boolean access) {
+        access = access;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public String getFooter() {
+        return footer;
+    }
+
+    public void setFooter(String footer) {
+        this.footer = footer;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Boolean getStatus() {
@@ -158,6 +329,38 @@ public class Vote {
         this.lastUpdate = lastUpdate;
     }
 
+    public Boolean getValidateCode() {
+        return validateCode;
+    }
+
+    public void setValidateCode(Boolean validateCode) {
+        this.validateCode = validateCode;
+    }
+
+    public Boolean getHiddenResult() {
+        return hiddenResult;
+    }
+
+    public void setHiddenResult(Boolean hiddenResult) {
+        this.hiddenResult = hiddenResult;
+    }
+
+    public List<Subject> getSubjectList() {
+        return subjectList;
+    }
+
+    public void setSubjectList(List<Subject> subjectList) {
+        this.subjectList = subjectList;
+    }
+
+    public List<VoteAddition> getAdditionList() {
+        return additionList;
+    }
+
+    public void setAdditionList(List<VoteAddition> additionList) {
+        this.additionList = additionList;
+    }
+
     public Integer getNop() {
         return nop;
     }
@@ -166,12 +369,12 @@ public class Vote {
         this.nop = nop;
     }
 
-    public String getChannel() {
-        return channel;
+    public Integer getNov() {
+        return nov;
     }
 
-    public void setChannel(String channel) {
-        this.channel = channel;
+    public void setNov(Integer nov) {
+        this.nov = nov;
     }
 
     @Override
@@ -181,25 +384,56 @@ public class Vote {
                 ", name='" + name + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", isLogin=" + isLogin +
+                ", login=" + login +
+                ", channel='" + channel + '\'' +
+                ", quickVote=" + quickVote +
+                ", privacyVote='" + privacyVote + '\'' +
+                ", privacyPassword='" + privacyPassword + '\'' +
+                ", dayVote='" + dayVote + '\'' +
+                ", showResult=" + showResult +
+                ", startIntro='" + startIntro + '\'' +
+                ", endIntro='" + endIntro + '\'' +
+                ", access=" + access +
+                ", header='" + header + '\'' +
+                ", footer='" + footer + '\'' +
+                ", url='" + url + '\'' +
                 ", status=" + status +
-                ", channel=" + channel +
-                ", nop=" + nop +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", validateCode=" + validateCode +
+                ", hiddenResult=" + hiddenResult +
+                ", subjectList=" + subjectList +
+                ", nop=" + nop +
+                ", nov=" + nov +
                 '}';
     }
+
 
     public static final class Builder {
         private String id;
         private String name;
         private Timestamp startTime;
         private Timestamp endTime;
-        private Boolean isLogin;
-        private Boolean status;
+        private Boolean login;
         private String channel;
+        private Boolean quickVote;
+        private String privacyVote;
+        private String privacyPassword;
+        private Boolean dayVote;
+        private Boolean showResult;
+        private String startIntro;
+        private String endIntro;
+        private Boolean access;
+        private String header;
+        private String footer;
+        private String url;
+        private Boolean status;
         private Timestamp createTime;
         private Timestamp lastUpdate;
+        private Boolean validateCode;
+        private Boolean hiddenResult;
+        private Integer nop;
+        private Integer nov;
 
         public Builder() {
         }
@@ -224,8 +458,68 @@ public class Vote {
             return this;
         }
 
-        public Builder isLogin(Boolean val) {
-            isLogin = val;
+        public Builder login(Boolean val) {
+            login = val;
+            return this;
+        }
+
+        public Builder channel(String val) {
+            channel = val;
+            return this;
+        }
+
+        public Builder quickVote(Boolean val) {
+            quickVote = val;
+            return this;
+        }
+
+        public Builder privacyVote(String val) {
+            privacyVote = val;
+            return this;
+        }
+
+        public Builder privacyPassword(String val) {
+            privacyPassword = val;
+            return this;
+        }
+
+        public Builder dayVote(Boolean val) {
+            dayVote = val;
+            return this;
+        }
+
+        public Builder showResult(Boolean val) {
+            showResult = val;
+            return this;
+        }
+
+        public Builder startIntro(String val) {
+            startIntro = val;
+            return this;
+        }
+
+        public Builder endIntro(String val) {
+            endIntro = val;
+            return this;
+        }
+
+        public Builder access(Boolean val) {
+            access = val;
+            return this;
+        }
+
+        public Builder header(String val) {
+            header = val;
+            return this;
+        }
+
+        public Builder footer(String val) {
+            footer = val;
+            return this;
+        }
+
+        public Builder url(String val) {
+            url = val;
             return this;
         }
 
@@ -244,8 +538,23 @@ public class Vote {
             return this;
         }
 
-        public Builder channel(String val) {
-            channel = val;
+        public Builder validateCode(Boolean val) {
+            validateCode = val;
+            return this;
+        }
+
+        public Builder hiddenResult(Boolean val) {
+            hiddenResult = val;
+            return this;
+        }
+
+        public Builder nop(Integer val) {
+            nop = val;
+            return this;
+        }
+
+        public Builder nov(Integer val) {
+            nov = val;
             return this;
         }
 

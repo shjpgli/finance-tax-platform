@@ -5,7 +5,20 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id, name, startTime, endTime, isLogin, channel, status, createTime, lastUpdate
+		id, name, startTime, endTime, isLogin, channel, status, createTime, lastUpdate,
+        quickVote,
+        privacyVote,
+        privacyPassword,
+        dayVote,
+        showResult,
+        startIntro,
+        endIntro,
+        access,
+        header,
+        footer,
+        url,
+        validateCode,
+        hiddenResult
 	</sql>
 
     <sql id="Result_Column_List">
@@ -14,7 +27,20 @@
 
     <insert id="insert" parameterType="com.abc12366.cms.model.Vote">
         INSERT INTO cms_vote (<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{name}, #{startTime}, #{endTime}, #{isLogin}, #{channel}, #{status}, #{createTime}, #{lastUpdate})
+        VALUES (#{id}, #{name}, #{startTime}, #{endTime}, #{isLogin}, #{channel}, #{status}, #{createTime}, #{lastUpdate},
+        #{quickVote},
+        #{privacyVote},
+        #{privacyPassword},
+        #{dayVote},
+        #{showResult},
+        #{startIntro},
+        #{endIntro},
+        #{access},
+        #{header},
+        #{footer},
+        #{url},
+        #{validateCode},
+        #{hiddenResult})
     </insert>
 
     <update id="update" parameterType="com.abc12366.cms.model.Vote">
@@ -27,6 +53,19 @@
             <if test="status != null">status = #{status},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
             <if test="channel != null">channel = #{channel},</if>
+            <if test="quickVote != null">quickVote = #{quickVote},</if>
+            <if test="privacyVote != null">privacyVote = #{privacyVote},</if>
+            <if test="privacyPassword != null">privacyPassword = #{privacyPassword},</if>
+            <if test="dayVote != null">dayVote = #{dayVote},</if>
+            <if test="showResult != null">showResult = #{showResult},</if>
+            <if test="startIntro != null">startIntro = #{startIntro},</if>
+            <if test="endIntro != null">endIntro = #{endIntro},</if>
+            <if test="access != null">access = #{access},</if>
+            <if test="header != null">header = #{header},</if>
+            <if test="footer != null">footer = #{footer},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="validateCode != null">validateCode = #{validateCode},</if>
+            <if test="hiddenResult != null">hiddenResult = #{hiddenResult},</if>
         </set>
         WHERE id = #{id}
     </update>
