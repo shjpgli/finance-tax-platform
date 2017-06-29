@@ -85,12 +85,14 @@ public class EventServiceImpl implements EventService {
         Event event = eventRoMapper.selectByPrimaryKey(eventId);
         EventBo eventBo = new EventBo();
         try {
-            BeanUtils.copyProperties(event, eventBo);
+            if(event != null){
+                BeanUtils.copyProperties(event, eventBo);
+                eventSaveBo.setEvent(eventBo);
+            }
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        eventSaveBo.setEvent(eventBo);
         List<EventModelItemBo> eventModelItemBoList = new ArrayList<EventModelItemBo>();
         List<EventModelItem> eventModelItemList = eventModelItemRoMapper.selectByEventId(eventId);
         if(eventModelItemList != null){

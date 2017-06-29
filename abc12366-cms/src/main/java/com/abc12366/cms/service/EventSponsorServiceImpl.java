@@ -55,7 +55,10 @@ public class EventSponsorServiceImpl implements EventSponsorService {
         EventSponsor eventSponsor = eventSponsorRoMapper.selectByPrimaryKey(topicId);
         EventSponsorBo eventSponsorBo = new EventSponsorBo();
         try {
-            BeanUtils.copyProperties(eventSponsor, eventSponsorBo);
+            if(eventSponsor != null){
+                BeanUtils.copyProperties(eventSponsor, eventSponsorBo);
+            }
+
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);

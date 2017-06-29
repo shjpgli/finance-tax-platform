@@ -1,5 +1,7 @@
 package com.abc12366.cms.model;
+
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -29,7 +31,7 @@ public class EventApply implements Serializable {
 	private String email;
 
 	/**报名时间**varchar(200)**/
-	private String applytime;
+	private Date applytime;
 
 	/**报名状态**varchar(50)**/
 	private String status;
@@ -84,12 +86,12 @@ public class EventApply implements Serializable {
 		return this.email;
 	}
 
-	public void setApplytime(String applytime){
-		this.applytime = applytime;
+	public Date getApplytime() {
+		return applytime;
 	}
 
-	public String getApplytime(){
-		return this.applytime;
+	public void setApplytime(Date applytime) {
+		this.applytime = applytime;
 	}
 
 	public void setStatus(String status){
