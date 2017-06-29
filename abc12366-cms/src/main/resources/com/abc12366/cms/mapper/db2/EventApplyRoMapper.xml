@@ -22,6 +22,12 @@
 		<include refid="Base_Column_List" />
 		FROM cms_event_apply
 		WHERE 1=1
+		<if test="name != null and name != ''">
+			AND (name like CONCAT('%',#{name},'%') or tel like CONCAT('%',#{name},'%') or email like CONCAT('%',#{name},'%') )
+		</if>
+		<if test="status != null and status != ''">
+			AND status = #{status}
+		</if>
 	</select>
 
 </mapper>
