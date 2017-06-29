@@ -104,7 +104,6 @@ public class VoteController {
      * @param voteId 投票ID
      * @param subjectId 题目ID
      * @param itemId 选项ID
-     * @param result 结果对象
      * @param request HttpServletRequest
      * @return VoteResult
      */
@@ -155,7 +154,7 @@ public class VoteController {
      * @param request HttpServletRequest
      * @return VoteHistory
      */
-    @PostMapping("/history/{voteId}")
+    @PostMapping("/views/{voteId}")
     public ResponseEntity history(@PathVariable("voteId") String voteId, HttpServletRequest request) {
         LOGGER.info("{}", voteId);
         VoteHistory vh = voteService.insertHistory(voteId, request);

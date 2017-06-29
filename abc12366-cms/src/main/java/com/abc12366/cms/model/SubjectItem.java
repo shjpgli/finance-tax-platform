@@ -18,9 +18,14 @@ public class SubjectItem {
     @Length(min = 1, max = 10)
     private String type;
 
-    @NotEmpty
-    @Length(min = 1, max = 200)
+    @Length(max = 200)
     private String item;
+
+    @Length(max = 256)
+    private String image;
+
+    @Length(max = 4000)
+    private String detail;
 
     @Length(min = 1, max = 999)
     private Integer sort;
@@ -31,12 +36,15 @@ public class SubjectItem {
     public SubjectItem() {
     }
 
-    public SubjectItem(String id, String subjectId, String type, String item, Integer sort) {
+    public SubjectItem(String id, String subjectId, String type, String item, String image, String detail, Integer sort, Integer nop) {
         this.id = id;
         this.subjectId = subjectId;
         this.type = type;
         this.item = item;
+        this.image = image;
+        this.detail = detail;
         this.sort = sort;
+        this.nop = nop;
     }
 
     private SubjectItem(Builder builder) {
@@ -44,7 +52,10 @@ public class SubjectItem {
         setSubjectId(builder.subjectId);
         setType(builder.type);
         setItem(builder.item);
+        setImage(builder.image);
+        setDetail(builder.detail);
         setSort(builder.sort);
+        setNop(builder.nop);
     }
 
     public String getId() {
@@ -79,6 +90,22 @@ public class SubjectItem {
         this.item = item;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
     public Integer getSort() {
         return sort;
     }
@@ -102,6 +129,8 @@ public class SubjectItem {
                 ", subjectId='" + subjectId + '\'' +
                 ", type='" + type + '\'' +
                 ", item='" + item + '\'' +
+                ", image='" + image + '\'' +
+                ", detail='" + detail + '\'' +
                 ", sort=" + sort +
                 ", nop=" + nop +
                 '}';
@@ -112,7 +141,10 @@ public class SubjectItem {
         private String subjectId;
         private String type;
         private String item;
+        private String image;
+        private String detail;
         private Integer sort;
+        private Integer nop;
 
         public Builder() {
         }
@@ -137,8 +169,23 @@ public class SubjectItem {
             return this;
         }
 
+        public Builder image(String val) {
+            image = val;
+            return this;
+        }
+
+        public Builder detail(String val) {
+            detail = val;
+            return this;
+        }
+
         public Builder sort(Integer val) {
             sort = val;
+            return this;
+        }
+
+        public Builder nop(Integer val) {
+            nop = val;
             return this;
         }
 

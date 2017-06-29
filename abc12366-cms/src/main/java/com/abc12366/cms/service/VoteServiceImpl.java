@@ -113,6 +113,8 @@ public class VoteServiceImpl implements VoteService {
                                 .subjectId(subject.getId())
                                 .type(si.getType())
                                 .item(si.getItem())
+                                .image(si.getImage())
+                                .detail(si.getDetail())
                                 .sort(si.getSort())
                                 .build();
                         subjectMapper.insertItem(item);
@@ -135,6 +137,7 @@ public class VoteServiceImpl implements VoteService {
             if (vote.getStatus()) {
                 VoteResult vr = new VoteResult.Builder().voteId(vote.getId()).build();
                 vote.setNop(voteRoMapper.selectResultCount(vr));
+                vote.setNov(voteRoMapper.selectHistoryCount(vote.getId()));
             }
             List<Subject> subjectList = subjectRoMapper.selectSubjectList(vote.getId());
             if (subjectList != null && subjectList.size() > 0) {
@@ -226,6 +229,8 @@ public class VoteServiceImpl implements VoteService {
                                     .subjectId(subject.getId())
                                     .type(si.getType())
                                     .item(si.getItem())
+                                    .image(si.getImage())
+                                    .detail(si.getDetail())
                                     .sort(si.getSort())
                                     .build();
                             subjectMapper.insertItem(item);
@@ -360,7 +365,7 @@ public class VoteServiceImpl implements VoteService {
     public Map<String, Integer> statViews(String voteId) {
         Map<String, Integer> map = new HashMap<>();
         map.put("nop", voteRoMapper.selectResultCount(new VoteResult.Builder().voteId(voteId).build()));
-        map.put("vop", voteRoMapper.selectHistoryCount(voteId));
+        map.put("nov", voteRoMapper.selectHistoryCount(voteId));
         return map;
     }
 }

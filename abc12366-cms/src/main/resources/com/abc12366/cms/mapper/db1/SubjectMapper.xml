@@ -10,7 +10,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Item_Column_List">
-        id, subjectId, type, item, sort
+        id, subjectId, type, item, image, detail, sort
     </sql>
 
     <insert id="insertSubject" parameterType="com.abc12366.cms.model.Subject">
@@ -24,7 +24,7 @@
 
     <insert id="insertItem" parameterType="com.abc12366.cms.model.SubjectItem">
         INSERT INTO cms_subject_item (<include refid="Item_Column_List"/>)
-        VALUES (#{id}, #{subjectId}, #{type}, #{item}, #{sort})
+        VALUES (#{id}, #{subjectId}, #{type}, #{item}, #{image}, #{detail}, #{sort})
     </insert>
 
     <delete id="deleteItem" parameterType="java.lang.String">

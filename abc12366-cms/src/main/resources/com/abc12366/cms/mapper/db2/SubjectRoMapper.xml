@@ -10,7 +10,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Item_Column_List">
-        id, subjectId, type, item, sort
+        id, subjectId, type, item, image, detail, sort
     </sql>
 
     <select id="selectSubjectList" parameterType="java.lang.String" resultType="com.abc12366.cms.model.Subject">
