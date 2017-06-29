@@ -10,26 +10,17 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Order implements Serializable {
 
+    /**PK**/
+    private String id;
+
     /**订单编号**/
     private String orderNo;
 
     /**用户ID**/
     private String userId;
 
-    /**产品编号**/
-    private String goodsId;
-
-    /**成交价格**/
-    private Double dealPrice;
-
-    /**产品数量**/
-    private Integer num;
-
     /**订单状态：1.新订单 2.确认订单 3.取消订单 4.作废订单 5.完成订单 6.退款 7.部分退款**/
     private String orderStatus;
-
-    /**支付状态：0.未支付 1.已支付**/
-    private String payStatus;
 
     /**配送方式**/
     private String deliveryMethod;
@@ -37,34 +28,54 @@ public class Order implements Serializable {
     /**支付方式：WEIXIN、ALIPAY**/
     private String payMethod;
 
+    /**会员等级**/
+    private String vipLevel;
+
     /****/
     private java.util.Date createTime;
 
     /****/
     private java.util.Date lastUpdate;
 
-    /**反馈信息**/
-    private String feedback;
+    /**用户名**/
+    private String username;
 
-    /**产品名称**/
-    private String name;
+    /**是否需要寄送**/
+    private Integer isShipping;
 
-    /**字典ID主键**/
-    private String dictId;
+    /**是否免运费**/
+    private Integer isFreeShipping;
 
-    /**会员等级**/
-    private String uvipLevel;
+    /**配送费**/
+    private Double deliveryFee;
 
-    /**计件单位显示**/
-    private String unit;
+    /**是否保价**/
+    private Integer isInsured;
 
-    /**产品分类ID**/
-    private String categoryId;
+    /**保价费用**/
+    private Double insuredFee;
 
-    /**产品分类名称**/
-    private String category;
+    /**成交总金额**/
+    private Double totalPrice;
+
+    /**配送地址ID**/
+    private String addressId;
+
+    /**运单号**/
+    private String expressNo;
+
+    /**备注**/
+    private String remark;
 
 
+
+    public void setId(String id){
+        this.id = id;
+    }
+
+    public String getId(){
+        return this.id;
+    }
 
     public void setOrderNo(String orderNo){
         this.orderNo = orderNo;
@@ -82,44 +93,12 @@ public class Order implements Serializable {
         return this.userId;
     }
 
-    public void setGoodsId(String goodsId){
-        this.goodsId = goodsId;
-    }
-
-    public String getGoodsId(){
-        return this.goodsId;
-    }
-
-    public void setDealPrice(Double dealPrice){
-        this.dealPrice = dealPrice;
-    }
-
-    public Double getDealPrice(){
-        return this.dealPrice;
-    }
-
-    public void setNum(Integer num){
-        this.num = num;
-    }
-
-    public Integer getNum(){
-        return this.num;
-    }
-
     public void setOrderStatus(String orderStatus){
         this.orderStatus = orderStatus;
     }
 
     public String getOrderStatus(){
         return this.orderStatus;
-    }
-
-    public void setPayStatus(String payStatus){
-        this.payStatus = payStatus;
-    }
-
-    public String getPayStatus(){
-        return this.payStatus;
     }
 
     public void setDeliveryMethod(String deliveryMethod){
@@ -138,6 +117,14 @@ public class Order implements Serializable {
         return this.payMethod;
     }
 
+    public void setVipLevel(String vipLevel){
+        this.vipLevel = vipLevel;
+    }
+
+    public String getVipLevel(){
+        return this.vipLevel;
+    }
+
     public void setCreateTime(java.util.Date createTime){
         this.createTime = createTime;
     }
@@ -154,60 +141,84 @@ public class Order implements Serializable {
         return this.lastUpdate;
     }
 
-    public void setFeedback(String feedback){
-        this.feedback = feedback;
+    public void setUsername(String username){
+        this.username = username;
     }
 
-    public String getFeedback(){
-        return this.feedback;
+    public String getUsername(){
+        return this.username;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setIsShipping(Integer isShipping){
+        this.isShipping = isShipping;
     }
 
-    public String getName(){
-        return this.name;
+    public Integer getIsShipping(){
+        return this.isShipping;
     }
 
-    public void setDictId(String dictId){
-        this.dictId = dictId;
+    public void setIsFreeShipping(Integer isFreeShipping){
+        this.isFreeShipping = isFreeShipping;
     }
 
-    public String getDictId(){
-        return this.dictId;
+    public Integer getIsFreeShipping(){
+        return this.isFreeShipping;
     }
 
-    public void setUvipLevel(String uvipLevel){
-        this.uvipLevel = uvipLevel;
+    public void setDeliveryFee(Double deliveryFee){
+        this.deliveryFee = deliveryFee;
     }
 
-    public String getUvipLevel(){
-        return this.uvipLevel;
+    public Double getDeliveryFee(){
+        return this.deliveryFee;
     }
 
-    public void setUnit(String unit){
-        this.unit = unit;
+    public void setIsInsured(Integer isInsured){
+        this.isInsured = isInsured;
     }
 
-    public String getUnit(){
-        return this.unit;
+    public Integer getIsInsured(){
+        return this.isInsured;
     }
 
-    public void setCategoryId(String categoryId){
-        this.categoryId = categoryId;
+    public void setInsuredFee(Double insuredFee){
+        this.insuredFee = insuredFee;
     }
 
-    public String getCategoryId(){
-        return this.categoryId;
+    public Double getInsuredFee(){
+        return this.insuredFee;
     }
 
-    public void setCategory(String category){
-        this.category = category;
+    public void setTotalPrice(Double totalPrice){
+        this.totalPrice = totalPrice;
     }
 
-    public String getCategory(){
-        return this.category;
+    public Double getTotalPrice(){
+        return this.totalPrice;
+    }
+
+    public void setAddressId(String addressId){
+        this.addressId = addressId;
+    }
+
+    public String getAddressId(){
+        return this.addressId;
+    }
+
+    public void setExpressNo(String expressNo){
+        this.expressNo = expressNo;
+    }
+
+    public String getExpressNo(){
+        return this.expressNo;
+    }
+
+    public void setRemark(String remark){
+        this.remark = remark;
+    }
+
+    public String getRemark(){
+        return this.remark;
     }
 
 }

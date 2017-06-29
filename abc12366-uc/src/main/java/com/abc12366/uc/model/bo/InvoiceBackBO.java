@@ -3,41 +3,22 @@ import java.io.Serializable;
 
 
 /**
- * 
+ *
  * 发票退票
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class InvoiceBackBO implements Serializable {
 
-	/****/
 	private String id;
-
-	/**用户ID**/
 	private String userId;
-
-	/**快递ID**/
 	private String expressId;
-
-	/**退货原因**/
 	private String reason;
-
-	/**备注**/
 	private String remark;
-
-	/**快递单号**/
-	private String expressNum;
-
-	/**快递公司**/
+	private String expressNo;
 	private String expressComp;
-
-	/**快递状态**/
 	private String status;
-
-	/****/
 	private java.util.Date createTime;
-
-	/****/
 	private java.util.Date lastUpdate;
 
 
@@ -82,14 +63,6 @@ public class InvoiceBackBO implements Serializable {
 		return this.remark;
 	}
 
-	public void setExpressNum(String expressNum){
-		this.expressNum = expressNum;
-	}
-
-	public String getExpressNum(){
-		return this.expressNum;
-	}
-
 	public void setExpressComp(String expressComp){
 		this.expressComp = expressComp;
 	}
@@ -122,4 +95,11 @@ public class InvoiceBackBO implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getExpressNo() {
+		return expressNo;
+	}
+
+	public void setExpressNo(String expressNo) {
+		this.expressNo = expressNo;
+	}
 }

@@ -49,6 +49,14 @@ public class Goods implements Serializable {
 	/**推荐类型：1.最新产品 2.特价产品 3.热卖产品 4.推荐产品**/
 	private String recommendType;
 
+	/**是否需要寄送**/
+	private Integer isShipping;
+
+	/**是否免运费**/
+	private Integer isFreeShipping;
+
+	/**交易方式：RMB、POINTS**/
+	private String tradeMethod;
 
 
 	public void setId(String id){
@@ -155,4 +163,27 @@ public class Goods implements Serializable {
 		return this.recommendType;
 	}
 
+	public Integer getIsShipping() {
+		return isShipping;
+	}
+
+	public void setIsShipping(Integer isShipping) {
+		this.isShipping = isShipping;
+	}
+
+	public Integer getIsFreeShipping() {
+		return isFreeShipping;
+	}
+
+	public void setIsFreeShipping(Integer isFreeShipping) {
+		this.isFreeShipping = isFreeShipping;
+	}
+
+	public String getTradeMethod() {
+		return tradeMethod;
+	}
+
+	public void setTradeMethod(String tradeMethod) {
+		this.tradeMethod = tradeMethod;
+	}
 }

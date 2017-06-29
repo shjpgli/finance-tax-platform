@@ -14,8 +14,8 @@
         <result column="simpleDesc" property="simpleDesc" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="createUser" property="createUser" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="updateUser" property="updateUser" jdbcType="VARCHAR"/>
         <result column="recoveryRate" property="recoveryRate" jdbcType="INTEGER"/>
         <result column="accessRate" property="accessRate" jdbcType="INTEGER"/>

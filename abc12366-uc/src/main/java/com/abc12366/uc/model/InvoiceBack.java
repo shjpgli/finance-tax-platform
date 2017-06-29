@@ -26,7 +26,7 @@ public class InvoiceBack implements Serializable {
 	private String remark;
 
 	/**快递单号**/
-	private String expressNum;
+	private String expressNo;
 
 	/**快递公司**/
 	private String expressComp;
@@ -82,14 +82,6 @@ public class InvoiceBack implements Serializable {
 		return this.remark;
 	}
 
-	public void setExpressNum(String expressNum){
-		this.expressNum = expressNum;
-	}
-
-	public String getExpressNum(){
-		return this.expressNum;
-	}
-
 	public void setExpressComp(String expressComp){
 		this.expressComp = expressComp;
 	}
@@ -122,4 +114,11 @@ public class InvoiceBack implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getExpressNo() {
+		return expressNo;
+	}
+
+	public void setExpressNo(String expressNo) {
+		this.expressNo = expressNo;
+	}
 }

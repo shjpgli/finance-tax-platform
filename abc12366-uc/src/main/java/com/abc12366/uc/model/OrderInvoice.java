@@ -3,9 +3,9 @@ import java.io.Serializable;
 
 
 /**
- * 
+ *
  * 订单与发票关联表
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class OrderInvoice implements Serializable {
@@ -13,10 +13,10 @@ public class OrderInvoice implements Serializable {
 	/**PK**/
 	private String id;
 
-	/**订单ID**/
-	private String orderId;
+	/**订单号**/
+	private String orderNo;
 
-	/**发票ID PK**/
+	/**发票ID**/
 	private String invoiceId;
 
 	/****/
@@ -35,12 +35,12 @@ public class OrderInvoice implements Serializable {
 		return this.id;
 	}
 
-	public void setOrderId(String orderId){
-		this.orderId = orderId;
+	public void setOrderNo(String orderNo){
+		this.orderNo = orderNo;
 	}
 
-	public String getOrderId(){
-		return this.orderId;
+	public String getOrderNo(){
+		return this.orderNo;
 	}
 
 	public void setInvoiceId(String invoiceId){

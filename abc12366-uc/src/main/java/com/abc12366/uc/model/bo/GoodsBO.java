@@ -1,14 +1,12 @@
 package com.abc12366.uc.model.bo;
-import com.abc12366.uc.model.Product;
-
 import java.io.Serializable;
 import java.util.List;
 
 
 /**
- * 
+ *
  * 产品表
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class GoodsBO implements Serializable {
@@ -19,7 +17,6 @@ public class GoodsBO implements Serializable {
 	private String introduction;
 	private String details;
 	private String categoryId;
-    private String categoryName;
 	private Boolean status;
 	private java.util.Date createTime;
 	private java.util.Date lastUpdate;
@@ -27,11 +24,12 @@ public class GoodsBO implements Serializable {
 	private Integer sort;
 	private String unit;
 	private String recommendType;
-    private List<ProductBO> productBOList;
-    private Double totalStock;
-    private Double totalPrice;
-
-
+	private Integer isShipping;
+	private Integer isFreeShipping;
+	private String tradeMethod;
+	private List<ProductBO> productBOList;
+	private Double totalStock;
+	private Double totalPrice;
 
 
 	public void setId(String id){
@@ -138,35 +136,51 @@ public class GoodsBO implements Serializable {
 		return this.recommendType;
 	}
 
-    public List<ProductBO> getProductBOList() {
-        return productBOList;
-    }
+	public Integer getIsShipping() {
+		return isShipping;
+	}
 
-    public void setProductBOList(List<ProductBO> productBOList) {
-        this.productBOList = productBOList;
-    }
+	public void setIsShipping(Integer isShipping) {
+		this.isShipping = isShipping;
+	}
 
-    public Double getTotalStock() {
-        return totalStock;
-    }
+	public Integer getIsFreeShipping() {
+		return isFreeShipping;
+	}
 
-    public void setTotalStock(Double totalStock) {
-        this.totalStock = totalStock;
-    }
+	public void setIsFreeShipping(Integer isFreeShipping) {
+		this.isFreeShipping = isFreeShipping;
+	}
 
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
+	public String getTradeMethod() {
+		return tradeMethod;
+	}
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
+	public void setTradeMethod(String tradeMethod) {
+		this.tradeMethod = tradeMethod;
+	}
 
-    public String getCategoryName() {
-        return categoryName;
-    }
+	public List<ProductBO> getProductBOList() {
+		return productBOList;
+	}
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
+	public void setProductBOList(List<ProductBO> productBOList) {
+		this.productBOList = productBOList;
+	}
+
+	public Double getTotalStock() {
+		return totalStock;
+	}
+
+	public void setTotalStock(Double totalStock) {
+		this.totalStock = totalStock;
+	}
+
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 }

@@ -16,6 +16,9 @@ public class Invoice implements Serializable {
     /**用户ID**/
     private String userId;
 
+    /**用户名**/
+    private String username;
+
     /**发票号码**/
     private String invoiceNo;
 
@@ -70,6 +73,26 @@ public class Invoice implements Serializable {
     /**用户订单号**/
     private String userOrderNo;
 
+    /**配送方式**/
+    private String deliveryMethod;
+
+    /**是否需要寄送**/
+    private Integer isShipping;
+
+    /**是否免运费**/
+    private Integer isFreeShipping;
+
+    /**配送费**/
+    private Double deliveryFee;
+
+    /**是否保价**/
+    private Integer isInsured;
+
+    /**保价费**/
+    private Double insuredFee;
+
+    /**支付方式：WEIXIN、ALIPAY**/
+    private String payMethod;
 
 
     public void setId(String id){
@@ -232,4 +255,68 @@ public class Invoice implements Serializable {
         return this.userOrderNo;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public Integer getIsShipping() {
+        return isShipping;
+    }
+
+    public void setIsShipping(Integer isShipping) {
+        this.isShipping = isShipping;
+    }
+
+    public Integer getIsFreeShipping() {
+        return isFreeShipping;
+    }
+
+    public void setIsFreeShipping(Integer isFreeShipping) {
+        this.isFreeShipping = isFreeShipping;
+    }
+
+    public Double getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(Double deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public Integer getIsInsured() {
+        return isInsured;
+    }
+
+    public void setIsInsured(Integer isInsured) {
+        this.isInsured = isInsured;
+    }
+
+
+    public String getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(String payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public Double getInsuredFee() {
+        return insuredFee;
+    }
+
+    public void setInsuredFee(Double insuredFee) {
+        this.insuredFee = insuredFee;
+    }
 }

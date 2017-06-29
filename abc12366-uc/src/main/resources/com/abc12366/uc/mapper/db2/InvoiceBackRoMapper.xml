@@ -5,9 +5,8 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	userId,	expressId,	reason,	remark,	expressNum,	expressComp,	status,	createTime,	lastUpdate
-    </sql>
-
+		 id,	userId,	expressId,	reason,	remark,	expressNo,	expressComp,	status,	createTime,	lastUpdate
+	</sql>
     <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultType="com.abc12366.uc.model.InvoiceBack" parameterType="java.lang.String">
         SELECT

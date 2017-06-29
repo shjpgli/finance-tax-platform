@@ -10,20 +10,23 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ProductBO implements Serializable {
 
+    private String id;
     private String goodsId;
-    private String dictId;
-    private Integer stock;
     private Double marketPrice;
     private Double sellingPrice;
     private Double costPrice;
-    private Double finalPrice;
-    private Double discount;
-    private String uvipLevel;
-    private Double weight;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
 
 
+
+    public void setId(String id){
+        this.id = id;
+    }
+
+    public String getId(){
+        return this.id;
+    }
 
     public void setGoodsId(String goodsId){
         this.goodsId = goodsId;
@@ -31,22 +34,6 @@ public class ProductBO implements Serializable {
 
     public String getGoodsId(){
         return this.goodsId;
-    }
-
-    public void setDictId(String dictId){
-        this.dictId = dictId;
-    }
-
-    public String getDictId(){
-        return this.dictId;
-    }
-
-    public void setStock(Integer stock){
-        this.stock = stock;
-    }
-
-    public Integer getStock(){
-        return this.stock;
     }
 
     public void setMarketPrice(Double marketPrice){
@@ -71,38 +58,6 @@ public class ProductBO implements Serializable {
 
     public Double getCostPrice(){
         return this.costPrice;
-    }
-
-    public void setFinalPrice(Double finalPrice){
-        this.finalPrice = finalPrice;
-    }
-
-    public Double getFinalPrice(){
-        return this.finalPrice;
-    }
-
-    public void setDiscount(Double discount){
-        this.discount = discount;
-    }
-
-    public Double getDiscount(){
-        return this.discount;
-    }
-
-    public void setUvipLevel(String uvipLevel){
-        this.uvipLevel = uvipLevel;
-    }
-
-    public String getUvipLevel(){
-        return this.uvipLevel;
-    }
-
-    public void setWeight(Double weight){
-        this.weight = weight;
-    }
-
-    public Double getWeight(){
-        return this.weight;
     }
 
     public void setCreateTime(java.util.Date createTime){

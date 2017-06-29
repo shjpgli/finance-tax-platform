@@ -25,6 +25,9 @@
             <if test="userId != null">
                 userId,
             </if>
+            <if test="username != null">
+                username,
+            </if>
             <if test="invoiceNo != null">
                 invoiceNo,
             </if>
@@ -76,8 +79,26 @@
             <if test="addressId != null">
                 addressId,
             </if>
-            <if test="userOrderNo != null">
-                userOrderNo,
+            <if test="deliveryMethod != null">
+                deliveryMethod,
+            </if>
+            <if test="isShipping != null">
+                isShipping,
+            </if>
+            <if test="isFreeShipping != null">
+                isFreeShipping,
+            </if>
+            <if test="deliveryFee != null">
+                deliveryFee,
+            </if>
+            <if test="isInsured != null">
+                isInsured,
+            </if>
+            <if test="insuredFee != null">
+                insuredFee,
+            </if>
+            <if test="payMethod != null">
+                payMethod,
             </if>
 
         </trim>
@@ -87,6 +108,9 @@
             </if>
             <if test="userId!=null">
                 #{userId},
+            </if>
+            <if test="username!=null">
+                #{username},
             </if>
             <if test="invoiceNo!=null">
                 #{invoiceNo},
@@ -139,8 +163,26 @@
             <if test="addressId!=null">
                 #{addressId},
             </if>
-            <if test="userOrderNo!=null">
-                #{userOrderNo},
+            <if test="deliveryMethod!=null">
+                #{deliveryMethod},
+            </if>
+            <if test="isShipping!=null">
+                #{isShipping},
+            </if>
+            <if test="isFreeShipping!=null">
+                #{isFreeShipping},
+            </if>
+            <if test="deliveryFee!=null">
+                #{deliveryFee},
+            </if>
+            <if test="isInsured!=null">
+                #{isInsured},
+            </if>
+            <if test="insuredFee!=null">
+                #{insuredFee},
+            </if>
+            <if test="payMethod!=null">
+                #{payMethod},
             </if>
         </trim>
     </insert>
@@ -151,6 +193,9 @@
         <set>
             <if test="userId != null">
                 userId = #{userId},
+            </if>
+            <if test="username != null">
+                username = #{username},
             </if>
             <if test="invoiceNo != null">
                 invoiceNo = #{invoiceNo},
@@ -203,8 +248,26 @@
             <if test="addressId != null">
                 addressId = #{addressId},
             </if>
-            <if test="userOrderNo != null">
-                userOrderNo = #{userOrderNo},
+            <if test="deliveryMethod != null">
+                deliveryMethod = #{deliveryMethod},
+            </if>
+            <if test="isShipping != null">
+                isShipping = #{isShipping},
+            </if>
+            <if test="isFreeShipping != null">
+                isFreeShipping = #{isFreeShipping},
+            </if>
+            <if test="deliveryFee != null">
+                deliveryFee = #{deliveryFee},
+            </if>
+            <if test="isInsured != null">
+                isInsured = #{isInsured},
+            </if>
+            <if test="insuredFee != null">
+                insuredFee = #{insuredFee},
+            </if>
+            <if test="payMethod != null">
+                payMethod = #{payMethod},
             </if>
 
         </set>
