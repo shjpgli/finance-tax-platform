@@ -22,7 +22,11 @@
 	</sql>
 
     <sql id="Result_Column_List">
-        id, voteId, subjectId, itemId, userId, openId, ip, createTime
+        id, voteId, subjectId, itemId, userId, openId, ip, userAgent, createTime
+    </sql>
+
+    <sql id="History_Column_List">
+        id, voteId, ip, userAgent, createTime
     </sql>
 
     <insert id="insert" parameterType="com.abc12366.cms.model.Vote">
@@ -76,6 +80,11 @@
 
     <insert id="insertResult" parameterType="com.abc12366.cms.model.VoteResult">
         INSERT INTO cms_vote_result (<include refid="Result_Column_List"/>)
-        VALUES (#{id}, #{voteId}, #{subjectId}, #{itemId}, #{userId}, #{openId}, #{ip}, #{createTime})
+        VALUES (#{id}, #{voteId}, #{subjectId}, #{itemId}, #{userId}, #{openId}, #{ip}, #{userAgent}, #{createTime})
+    </insert>
+
+    <insert id="insertHistory" parameterType="com.abc12366.cms.model.VoteHistory">
+        INSERT INTO cms_vote_history (<include refid="History_Column_List"/>)
+        VALUES (#{id}, #{voteId}, #{ip}, #{userAgent}, #{createTime})
     </insert>
 </mapper>

@@ -28,8 +28,8 @@ public class Subject {
     private String subject;
 
     // 题目形式：radio、checkbox
-    @NotEmpty
-    @Length(min = 1, max = 10)
+//    @NotEmpty
+    @Length(max = 10)
     private String form;
 
     // 是否必填
