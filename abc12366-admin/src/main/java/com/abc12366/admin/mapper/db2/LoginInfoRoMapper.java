@@ -24,4 +24,5 @@ public interface LoginInfoRoMapper {
 
     LoginInfo selectInfoByToken(LoginInfo loginInfo);
 
+    LoginInfo selectLoginInfoByToken(String token);
 }

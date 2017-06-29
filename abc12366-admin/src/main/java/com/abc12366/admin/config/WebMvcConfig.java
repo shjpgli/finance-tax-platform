@@ -72,7 +72,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         // 用户Token拦截
         registry.addInterceptor(getAdminUserInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/druid*//**")
+                .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/app/login", "/app/register", "/test")
                 .excludePathPatterns("/admintoken/**")
                 .excludePathPatterns("/login", "/register");

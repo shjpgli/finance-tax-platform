@@ -1,5 +1,6 @@
 package com.abc12366.admin.web;
 
+import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.UserBO;
@@ -164,4 +165,16 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv("data", userExtend));
     }
 
+    /**
+     * 查看User详情
+     * @param token
+     * @return
+     */
+    @GetMapping(path = "/token/{token}")
+    public ResponseEntity selectUser(@PathVariable("token") String token) {
+        LOGGER.info("{id }", token);
+        LoginInfo loginInfo = userService.selectLoginInfoByToken(token);
+        LOGGER.info("{userExtend }", loginInfo);
+        return ResponseEntity.ok(Utils.kv("data", loginInfo));
+    }
 }

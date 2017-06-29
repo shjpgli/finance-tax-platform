@@ -1,5 +1,6 @@
 package com.abc12366.admin.service;
 
+import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.UserBO;
@@ -127,4 +128,6 @@ public interface UserService {
     Boolean checkToken(String token);
 
     Boolean refreshToken(String token);
+
+    LoginInfo selectLoginInfoByToken(String token);
 }

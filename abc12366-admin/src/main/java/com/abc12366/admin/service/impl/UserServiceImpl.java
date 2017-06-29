@@ -506,6 +506,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public LoginInfo selectLoginInfoByToken(String token) {
+        return loginInfoRoMapper.selectLoginInfoByToken(token);
+    }
+
+    @Override
     public void disableAll() {
         User user = new User();
         List<UserBO> userBOs = userRoMapper.selectList(user);

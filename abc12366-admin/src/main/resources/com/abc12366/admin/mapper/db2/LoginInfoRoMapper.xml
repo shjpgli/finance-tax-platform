@@ -16,6 +16,14 @@
 		 WHERE id = #{id}
 	</select>
 
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectLoginInfoByToken" resultType="com.abc12366.admin.model.LoginInfo" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM sys_login_info
+		 WHERE token = #{token}
+	</select>
+
     <!-- 查询（根据userId和appId查询） -->
     <select id="selectOne" resultType="com.abc12366.admin.model.LoginInfo" parameterType="com.abc12366.admin.model.LoginInfo">
         SELECT
