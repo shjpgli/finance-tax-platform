@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db1;
 
 import com.abc12366.cms.model.Vote;
+import com.abc12366.cms.model.VoteHistory;
 import com.abc12366.cms.model.VoteResult;
 
 /**
@@ -16,4 +17,6 @@ public interface VoteMapper {
     void delete(String id);
 
     void insertResult(VoteResult result);
+
+    void insertHistory(VoteHistory history);
 }

@@ -46,4 +46,21 @@
             <if test="itemId != null">and itemId = #{itemId}</if>
         </where>
     </select>
+
+    <select id="selectHistoryCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(DISTINCT ip) FROM cms_vote_history
+        where voteId = #{voteId}
+    </select>
+
+    <select id="statBrowser" parameterType="java.lang.String" resultType="com.abc12366.cms.model.bo.VoteStatBrowserBO">
+        SELECT userAgent, count(id) as num FROM cms_vote_result
+        WHERE voteId = #{voteId}
+        GROUP BY userAgent
+    </select>
+
+    <select id="statIpArea" parameterType="java.lang.String" resultType="com.abc12366.cms.model.bo.VoteStatAreaBO">
+        SELECT city, cityId, count(ip) as num FROM cms_vote_ip_area
+        WHERE voteId = #{voteId}
+        AND countryId = 'CN'
+    </select>
 </mapper>

@@ -1,63 +1,37 @@
 package com.abc12366.cms.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.sql.Timestamp;
 
 /**
- * 投票结果表
- *
  * @author lijun <ljun51@outlook.com>
- * @create 2017-06-08 5:41 PM
+ * @create 2017-06-29 10:27 AM
  * @since 1.0.0
  */
-public class VoteResult {
+public class VoteHistory {
 
     private String id;
-
     private String voteId;
-
-    @NotEmpty
-    private String subjectId;
-
-    @NotEmpty
-    private String itemId;
-
-    private String userId;
-
-    private String openId;
-
     private String ip;
-
     private String userAgent;
-
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createTime;
 
-    public VoteResult() {
+    public VoteHistory() {
     }
 
-    public VoteResult(String id, String voteId, String subjectId, String itemId, String userId, String openId,
-                      String ip, String userAgent, Timestamp createTime) {
+    public VoteHistory(String id, String voteId, String ip, String userAgent, Timestamp createTime) {
         this.id = id;
         this.voteId = voteId;
-        this.subjectId = subjectId;
-        this.itemId = itemId;
-        this.userId = userId;
-        this.openId = openId;
         this.ip = ip;
         this.userAgent = userAgent;
         this.createTime = createTime;
     }
 
-    private VoteResult(Builder builder) {
+    private VoteHistory(Builder builder) {
         setId(builder.id);
         setVoteId(builder.voteId);
-        setSubjectId(builder.subjectId);
-        setItemId(builder.itemId);
-        setUserId(builder.userId);
-        setOpenId(builder.openId);
         setIp(builder.ip);
         setUserAgent(builder.userAgent);
         setCreateTime(builder.createTime);
@@ -77,38 +51,6 @@ public class VoteResult {
 
     public void setVoteId(String voteId) {
         this.voteId = voteId;
-    }
-
-    public String getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
-    }
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
     }
 
     public String getIp() {
@@ -137,13 +79,9 @@ public class VoteResult {
 
     @Override
     public String toString() {
-        return "VoteResult{" +
+        return "VoteHistory{" +
                 "id='" + id + '\'' +
                 ", voteId='" + voteId + '\'' +
-                ", subjectId='" + subjectId + '\'' +
-                ", itemId='" + itemId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", openId='" + openId + '\'' +
                 ", ip='" + ip + '\'' +
                 ", userAgent='" + userAgent + '\'' +
                 ", createTime=" + createTime +
@@ -153,10 +91,6 @@ public class VoteResult {
     public static final class Builder {
         private String id;
         private String voteId;
-        private String subjectId;
-        private String itemId;
-        private String userId;
-        private String openId;
         private String ip;
         private String userAgent;
         private Timestamp createTime;
@@ -174,23 +108,8 @@ public class VoteResult {
             return this;
         }
 
-        public Builder subjectId(String val) {
-            subjectId = val;
-            return this;
-        }
-
-        public Builder itemId(String val) {
-            itemId = val;
-            return this;
-        }
-
-        public Builder userId(String val) {
-            userId = val;
-            return this;
-        }
-
-        public Builder openId(String val) {
-            openId = val;
+        public Builder ip(String val) {
+            ip = val;
             return this;
         }
 
@@ -199,18 +118,13 @@ public class VoteResult {
             return this;
         }
 
-        public Builder ip(String val) {
-            ip = val;
-            return this;
-        }
-
         public Builder createTime(Timestamp val) {
             createTime = val;
             return this;
         }
 
-        public VoteResult build() {
-            return new VoteResult(this);
+        public VoteHistory build() {
+            return new VoteHistory(this);
         }
     }
 }

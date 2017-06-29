@@ -7,6 +7,8 @@ import com.abc12366.cms.mapper.db2.SubjectRoMapper;
 import com.abc12366.cms.mapper.db2.VoteAdditionRoMapper;
 import com.abc12366.cms.mapper.db2.VoteRoMapper;
 import com.abc12366.cms.model.*;
+import com.abc12366.cms.model.bo.VoteStatAreaBO;
+import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -18,9 +20,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 投票功能实现类
@@ -61,6 +61,7 @@ public class VoteServiceImpl implements VoteService {
             voteList.stream().filter(v -> v.getStatus()).forEach(v -> {
                 VoteResult vr = new VoteResult.Builder().voteId(v.getId()).build();
                 v.setNop(voteRoMapper.selectResultCount(vr));
+                v.setNov(voteRoMapper.selectHistoryCount(v.getId()));
             });
         }
         return voteList;
@@ -275,21 +276,24 @@ public class VoteServiceImpl implements VoteService {
             if (now.before(v.getCreateTime()) || now.after(v.getEndTime())) {
                 throw new ServiceException(4014);
             }
-            // TODO: 需要保存userId
-            String userToken = (String) request.getAttribute(Constant.USER_TOKEN_HEAD);
-            if (v.getLogin() && StringUtils.isEmpty(userToken)) {
+
+            String userId = (String) request.getAttribute(Constant.USER_ID);
+            if (v.getLogin() && StringUtils.isEmpty(userId)) {
                 throw new ServiceException(4013);
             }
             if (resultList.size() > 0) {
                 List<VoteResult> dataList = new ArrayList<>();
+                String addr = Utils.getAddr(request);
+                String userAgent = Utils.getUserAgent(request);
                 for (VoteResult result : resultList) {
                     result.setId(Utils.uuid());
                     result.setVoteId(voteId);
-                    result.setUserId(userToken);
+                    result.setSubjectId(result.getSubjectId());
+                    result.setItemId(result.getItemId());
+                    result.setUserId(userId);
+                    result.setIp(addr);
+                    result.setUserAgent(userAgent);
                     result.setCreateTime(now);
-                    if (StringUtils.isEmpty(result.getIp())) {
-                        result.setIp(request.getRemoteAddr());
-                    }
                     voteMapper.insertResult(result);
                     dataList.add(result);
                 }
@@ -308,20 +312,55 @@ public class VoteServiceImpl implements VoteService {
             if (now.before(v.getCreateTime()) || now.after(v.getEndTime())) {
                 throw new ServiceException(4014);
             }
-            // TODO: 需要保存userId
-            String userToken = (String) request.getAttribute(Constant.USER_TOKEN_HEAD);
-            if (v.getLogin() && StringUtils.isEmpty(userToken)) {
+
+            String userId = (String) request.getAttribute(Constant.USER_ID);
+            if (v.getLogin() && StringUtils.isEmpty(userId)) {
                 throw new ServiceException(4013);
             }
+            String addr = Utils.getAddr(request);
+            String userAgent = Utils.getUserAgent(request);
             result.setId(Utils.uuid());
-            result.setUserId(userToken);
+            result.setUserId(userId);
+            result.setIp(addr);
+            result.setUserAgent(userAgent);
             result.setCreateTime(now);
-            if (StringUtils.isEmpty(result.getIp())) {
-                result.setIp(request.getRemoteAddr());
-            }
+            result.setCreateTime(now);
             voteMapper.insertResult(result);
             return result;
         }
         throw new ServiceException(4012);
+    }
+
+    @Override
+    public VoteHistory insertHistory(String voteId, HttpServletRequest request) {
+        String addr = Utils.getAddr(request);
+        String userAgent = Utils.getUserAgent(request);
+        VoteHistory vh = new VoteHistory.Builder()
+                .id(Utils.uuid())
+                .voteId(voteId)
+                .ip(addr)
+                .userAgent(userAgent)
+                .createTime(new Timestamp(new Date().getTime()))
+                .build();
+                voteMapper.insertHistory(vh);
+        return vh;
+    }
+
+    @Override
+    public List<VoteStatBrowserBO> statBrowser(String voteId) {
+        return voteRoMapper.statBrowser(voteId);
+    }
+
+    @Override
+    public List<VoteStatAreaBO> statIpArea(String voteId) {
+        return voteRoMapper.statIpArea(voteId);
+    }
+
+    @Override
+    public Map<String, Integer> statViews(String voteId) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("nop", voteRoMapper.selectResultCount(new VoteResult.Builder().voteId(voteId).build()));
+        map.put("vop", voteRoMapper.selectHistoryCount(voteId));
+        return map;
     }
 }
