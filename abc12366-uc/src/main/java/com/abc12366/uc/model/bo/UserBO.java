@@ -29,29 +29,9 @@ public class UserBO {
     private int points;
     private int exp;
     private String vipLevel;
+    private String realName;
 
     public UserBO() {
-    }
-
-    public UserBO(String id, String username, String phone, String password, String regMail, String regIP, String salt, String nickname, boolean status, Date createTime, Date lastUpdate, String userPicturePath, String maxUserPicturePath, String midUserPicturePath, String minUserPicturePath, int points, int exp, String vipLevel) {
-        this.id = id;
-        this.username = username;
-        this.phone = phone;
-        this.password = password;
-        this.regMail = regMail;
-        this.regIP = regIP;
-        this.salt = salt;
-        this.nickname = nickname;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-        this.userPicturePath = userPicturePath;
-        this.maxUserPicturePath = maxUserPicturePath;
-        this.midUserPicturePath = midUserPicturePath;
-        this.minUserPicturePath = minUserPicturePath;
-        this.points = points;
-        this.exp = exp;
-        this.vipLevel = vipLevel;
     }
 
     public String getId() {
@@ -198,27 +178,11 @@ public class UserBO {
         this.vipLevel = vipLevel;
     }
 
-    @Override
-    public String toString() {
-        return "UserBO{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                ", regMail='" + regMail + '\'' +
-                ", regIP='" + regIP + '\'' +
-                ", salt='" + salt + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                ", userPicturePath='" + userPicturePath + '\'' +
-                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
-                ", midUserPicturePath='" + midUserPicturePath + '\'' +
-                ", minUserPicturePath='" + minUserPicturePath + '\'' +
-                ", points=" + points +
-                ", exp=" + exp +
-                ", vipLevel='" + vipLevel + '\'' +
-                '}';
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 }

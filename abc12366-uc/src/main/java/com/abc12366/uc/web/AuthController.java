@@ -96,8 +96,6 @@ public class AuthController extends BaseController {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
-
-
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
     }
