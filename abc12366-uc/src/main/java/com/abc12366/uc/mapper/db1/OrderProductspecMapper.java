@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
  * 
  **/
 
-public interface OrderProductSpecMapper {
+public interface OrderProductspecMapper {
 
 
 
