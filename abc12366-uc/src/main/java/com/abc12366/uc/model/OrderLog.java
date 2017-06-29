@@ -25,7 +25,8 @@ public class OrderLog implements Serializable {
 	/**创建用户**/
 	private String createUser;
 
-
+	/**备注**/
+	private String remark;
 
 	public void setId(String id){
 		this.id = id;
@@ -67,4 +68,11 @@ public class OrderLog implements Serializable {
 		return this.createUser;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

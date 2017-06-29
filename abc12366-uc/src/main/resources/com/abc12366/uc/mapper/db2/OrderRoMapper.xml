@@ -34,9 +34,8 @@
     </resultMap>
 
 	<!-- 通用查询结果列-->
-    <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		 orderNo,	userId,	goodsId,	dealPrice,	num,	orderStatus,	payStatus,	deliveryMethod,	payMethod,	createTime,	lastUpdate,	feedback,	name,	dictId,	uvipLevel,	unit,	categoryId,	category
+		 id,	orderNo,	userId,	orderStatus,	deliveryMethod,	payMethod,	vipLevel,	createTime,	lastUpdate,	username,	isShipping,	isFreeShipping,	deliveryFee,	isInsured,	insuredFee,	totalPrice,	addressId,	expressNo,	remark
 	</sql>
 
 

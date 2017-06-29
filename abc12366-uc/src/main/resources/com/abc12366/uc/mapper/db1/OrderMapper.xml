@@ -19,26 +19,17 @@
 	<insert id="insert" parameterType="com.abc12366.uc.model.Order">
         INSERT INTO uc_order
         <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
             <if test="orderNo != null">
                 orderNo,
             </if>
             <if test="userId != null">
                 userId,
             </if>
-            <if test="goodsId != null">
-                goodsId,
-            </if>
-            <if test="dealPrice != null">
-                dealPrice,
-            </if>
-            <if test="num != null">
-                num,
-            </if>
             <if test="orderStatus != null">
                 orderStatus,
-            </if>
-            <if test="payStatus != null">
-                payStatus,
             </if>
             <if test="deliveryMethod != null">
                 deliveryMethod,
@@ -46,56 +37,59 @@
             <if test="payMethod != null">
                 payMethod,
             </if>
+            <if test="vipLevel != null">
+                vipLevel,
+            </if>
             <if test="createTime != null">
                 createTime,
             </if>
             <if test="lastUpdate != null">
                 lastUpdate,
             </if>
-            <if test="feedback != null">
-                feedback,
+            <if test="username != null">
+                username,
             </if>
-            <if test="name != null">
-                name,
+            <if test="isShipping != null">
+                isShipping,
             </if>
-            <if test="dictId != null">
-                dictId,
+            <if test="isFreeShipping != null">
+                isFreeShipping,
             </if>
-            <if test="uvipLevel != null">
-                uvipLevel,
+            <if test="deliveryFee != null">
+                deliveryFee,
             </if>
-            <if test="unit != null">
-                unit,
+            <if test="isInsured != null">
+                isInsured,
             </if>
-            <if test="categoryId != null">
-                categoryId,
+            <if test="insuredFee != null">
+                insuredFee,
             </if>
-            <if test="category != null">
-                category,
+            <if test="totalPrice != null">
+                totalPrice,
+            </if>
+            <if test="addressId != null">
+                addressId,
+            </if>
+            <if test="expressNo != null">
+                expressNo,
+            </if>
+            <if test="remark != null">
+                remark,
             </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id!=null">
+                #{id},
+            </if>
             <if test="orderNo!=null">
                 #{orderNo},
             </if>
             <if test="userId!=null">
                 #{userId},
             </if>
-            <if test="goodsId!=null">
-                #{goodsId},
-            </if>
-            <if test="dealPrice!=null">
-                #{dealPrice},
-            </if>
-            <if test="num!=null">
-                #{num},
-            </if>
             <if test="orderStatus!=null">
                 #{orderStatus},
-            </if>
-            <if test="payStatus!=null">
-                #{payStatus},
             </if>
             <if test="deliveryMethod!=null">
                 #{deliveryMethod},
@@ -103,32 +97,44 @@
             <if test="payMethod!=null">
                 #{payMethod},
             </if>
+            <if test="vipLevel!=null">
+                #{vipLevel},
+            </if>
             <if test="createTime!=null">
                 #{createTime},
             </if>
             <if test="lastUpdate!=null">
                 #{lastUpdate},
             </if>
-            <if test="feedback!=null">
-                #{feedback},
+            <if test="username!=null">
+                #{username},
             </if>
-            <if test="name!=null">
-                #{name},
+            <if test="isShipping!=null">
+                #{isShipping},
             </if>
-            <if test="dictId!=null">
-                #{dictId},
+            <if test="isFreeShipping!=null">
+                #{isFreeShipping},
             </if>
-            <if test="uvipLevel!=null">
-                #{uvipLevel},
+            <if test="deliveryFee!=null">
+                #{deliveryFee},
             </if>
-            <if test="unit!=null">
-                #{unit},
+            <if test="isInsured!=null">
+                #{isInsured},
             </if>
-            <if test="categoryId!=null">
-                #{categoryId},
+            <if test="insuredFee!=null">
+                #{insuredFee},
             </if>
-            <if test="category!=null">
-                #{category},
+            <if test="totalPrice!=null">
+                #{totalPrice},
+            </if>
+            <if test="addressId!=null">
+                #{addressId},
+            </if>
+            <if test="expressNo!=null">
+                #{expressNo},
+            </if>
+            <if test="remark!=null">
+                #{remark},
             </if>
         </trim>
 	</insert>
@@ -137,23 +143,14 @@
 	<update id="update" parameterType="com.abc12366.uc.model.Order">
         UPDATE uc_order
         <set>
+            <if test="orderNo != null">
+                orderNo = #{orderNo},
+            </if>
             <if test="userId != null">
                 userId = #{userId},
             </if>
-            <if test="goodsId != null">
-                goodsId = #{goodsId},
-            </if>
-            <if test="dealPrice != null">
-                dealPrice = #{dealPrice},
-            </if>
-            <if test="num != null">
-                num = #{num},
-            </if>
             <if test="orderStatus != null">
                 orderStatus = #{orderStatus},
-            </if>
-            <if test="payStatus != null">
-                payStatus = #{payStatus},
             </if>
             <if test="deliveryMethod != null">
                 deliveryMethod = #{deliveryMethod},
@@ -161,32 +158,44 @@
             <if test="payMethod != null">
                 payMethod = #{payMethod},
             </if>
+            <if test="vipLevel != null">
+                vipLevel = #{vipLevel},
+            </if>
             <if test="createTime != null">
                 createTime = #{createTime},
             </if>
             <if test="lastUpdate != null">
                 lastUpdate = #{lastUpdate},
             </if>
-            <if test="feedback != null">
-                feedback = #{feedback},
+            <if test="username != null">
+                username = #{username},
             </if>
-            <if test="name != null">
-                name = #{name},
+            <if test="isShipping != null">
+                isShipping = #{isShipping},
             </if>
-            <if test="dictId != null">
-                dictId = #{dictId},
+            <if test="isFreeShipping != null">
+                isFreeShipping = #{isFreeShipping},
             </if>
-            <if test="uvipLevel != null">
-                uvipLevel = #{uvipLevel},
+            <if test="deliveryFee != null">
+                deliveryFee = #{deliveryFee},
             </if>
-            <if test="unit != null">
-                unit = #{unit},
+            <if test="isInsured != null">
+                isInsured = #{isInsured},
             </if>
-            <if test="categoryId != null">
-                categoryId = #{categoryId},
+            <if test="insuredFee != null">
+                insuredFee = #{insuredFee},
             </if>
-            <if test="category != null">
-                category = #{category},
+            <if test="totalPrice != null">
+                totalPrice = #{totalPrice},
+            </if>
+            <if test="addressId != null">
+                addressId = #{addressId},
+            </if>
+            <if test="expressNo != null">
+                expressNo = #{expressNo},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
             </if>
 
         </set>

@@ -37,10 +37,10 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         GoodsCategoryBO categoryBO = null;
         for (GoodsCategoryBO bo:boList){
             categoryBO = new GoodsCategoryBO();
-            if(bo.getParentId() == null){
+             //if(bo.getParentId() == null){
                 categoryBO = recursiveTree(bo.getId());
                 list.add(categoryBO);
-            }
+            //}
         }
         return list;
     }

@@ -5,8 +5,9 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	name,	sort,	status,	description,	createTime,	lastUpdate
+		 id,	name,	type,	sort,	status,	description,	createTime,	lastUpdate,	firstWeight,	firstWeightFee,	addedWeight,	addedWeightFee,	isInsured,	rate,	minInsuredFee,	areaFeeType
 	</sql>
+
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.DeliveryMethod" parameterType="java.lang.String">

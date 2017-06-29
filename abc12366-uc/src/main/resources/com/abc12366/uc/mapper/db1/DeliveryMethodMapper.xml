@@ -12,81 +12,162 @@
 	<!-- 添加 -->
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.uc.model.DeliveryMethod">
-		 INSERT INTO uc_delivery_method
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
+		INSERT INTO uc_delivery_method
+		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
-				 id,
+				id,
 			</if>
 			<if test="name != null">
-				 name,
+				name,
+			</if>
+			<if test="type != null">
+				type,
 			</if>
 			<if test="sort != null">
-				 sort,
+				sort,
 			</if>
 			<if test="status != null">
-				 status,
+				status,
 			</if>
 			<if test="description != null">
-				 description,
+				description,
 			</if>
 			<if test="createTime != null">
-				 createTime,
+				createTime,
 			</if>
 			<if test="lastUpdate != null">
-				 lastUpdate,
+				lastUpdate,
+			</if>
+			<if test="firstWeight != null">
+				firstWeight,
+			</if>
+			<if test="firstWeightFee != null">
+				firstWeightFee,
+			</if>
+			<if test="addedWeight != null">
+				addedWeight,
+			</if>
+			<if test="addedWeightFee != null">
+				addedWeightFee,
+			</if>
+			<if test="isInsured != null">
+				isInsured,
+			</if>
+			<if test="rate != null">
+				rate,
+			</if>
+			<if test="minInsuredFee != null">
+				minInsuredFee,
+			</if>
+			<if test="areaFeeType != null">
+				areaFeeType,
 			</if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
-				 #{id},
+				#{id},
 			</if>
 			<if test="name!=null">
-				 #{name},
+				#{name},
+			</if>
+			<if test="type!=null">
+				#{type},
 			</if>
 			<if test="sort!=null">
-				 #{sort},
+				#{sort},
 			</if>
 			<if test="status!=null">
-				 #{status},
+				#{status},
 			</if>
 			<if test="description!=null">
-				 #{description},
+				#{description},
 			</if>
 			<if test="createTime!=null">
-				 #{createTime},
+				#{createTime},
 			</if>
 			<if test="lastUpdate!=null">
-				 #{lastUpdate},
+				#{lastUpdate},
 			</if>
-		 </trim>
+			<if test="firstWeight!=null">
+				#{firstWeight},
+			</if>
+			<if test="firstWeightFee!=null">
+				#{firstWeightFee},
+			</if>
+			<if test="addedWeight!=null">
+				#{addedWeight},
+			</if>
+			<if test="addedWeightFee!=null">
+				#{addedWeightFee},
+			</if>
+			<if test="isInsured!=null">
+				#{isInsured},
+			</if>
+			<if test="rate!=null">
+				#{rate},
+			</if>
+			<if test="minInsuredFee!=null">
+				#{minInsuredFee},
+			</if>
+			<if test="areaFeeType!=null">
+				#{areaFeeType},
+			</if>
+		</trim>
 	</insert>
 
 	<!-- 修 改-->
 	<update id="update" parameterType="com.abc12366.uc.model.DeliveryMethod">
-		 UPDATE uc_delivery_method
- 		 <set> 
+		UPDATE uc_delivery_method
+		<set>
 			<if test="name != null">
-				 name = #{name},
+				name = #{name},
+			</if>
+			<if test="type != null">
+				type = #{type},
 			</if>
 			<if test="sort != null">
-				 sort = #{sort},
+				sort = #{sort},
 			</if>
 			<if test="status != null">
-				 status = #{status},
+				status = #{status},
 			</if>
 			<if test="description != null">
-				 description = #{description},
+				description = #{description},
 			</if>
 			<if test="createTime != null">
-				 createTime = #{createTime},
+				createTime = #{createTime},
 			</if>
 			<if test="lastUpdate != null">
-				 lastUpdate = #{lastUpdate},
+				lastUpdate = #{lastUpdate},
+			</if>
+			<if test="firstWeight != null">
+				firstWeight = #{firstWeight},
+			</if>
+			<if test="firstWeightFee != null">
+				firstWeightFee = #{firstWeightFee},
+			</if>
+			<if test="addedWeight != null">
+				addedWeight = #{addedWeight},
+			</if>
+			<if test="addedWeightFee != null">
+				addedWeightFee = #{addedWeightFee},
+			</if>
+			<if test="isInsured != null">
+				isInsured = #{isInsured},
+			</if>
+			<if test="rate != null">
+				rate = #{rate},
+			</if>
+			<if test="minInsuredFee != null">
+				minInsuredFee = #{minInsuredFee},
+			</if>
+			<if test="areaFeeType != null">
+				areaFeeType = #{areaFeeType},
 			</if>
 
- 		 </set>
-		 WHERE id = #{id}
+		</set>
+		WHERE id = #{id}
 	</update>
 
 </mapper>

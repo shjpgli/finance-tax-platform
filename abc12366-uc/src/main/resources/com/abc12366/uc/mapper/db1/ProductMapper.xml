@@ -19,14 +19,11 @@
     <insert id="insert" parameterType="com.abc12366.uc.model.Product">
         INSERT INTO uc_product
         <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
             <if test="goodsId != null">
                 goodsId,
-            </if>
-            <if test="dictId != null">
-                dictId,
-            </if>
-            <if test="stock != null">
-                stock,
             </if>
             <if test="marketPrice != null">
                 marketPrice,
@@ -37,18 +34,6 @@
             <if test="costPrice != null">
                 costPrice,
             </if>
-            <if test="finalPrice != null">
-                finalPrice,
-            </if>
-            <if test="discount != null">
-                discount,
-            </if>
-            <if test="uvipLevel != null">
-                uvipLevel,
-            </if>
-            <if test="weight != null">
-                weight,
-            </if>
             <if test="createTime != null">
                 createTime,
             </if>
@@ -58,14 +43,11 @@
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id!=null">
+                #{id},
+            </if>
             <if test="goodsId!=null">
                 #{goodsId},
-            </if>
-            <if test="dictId!=null">
-                #{dictId},
-            </if>
-            <if test="stock!=null">
-                #{stock},
             </if>
             <if test="marketPrice!=null">
                 #{marketPrice},
@@ -75,18 +57,6 @@
             </if>
             <if test="costPrice!=null">
                 #{costPrice},
-            </if>
-            <if test="finalPrice!=null">
-                #{finalPrice},
-            </if>
-            <if test="discount!=null">
-                #{discount},
-            </if>
-            <if test="uvipLevel!=null">
-                #{uvipLevel},
-            </if>
-            <if test="weight!=null">
-                #{weight},
             </if>
             <if test="createTime!=null">
                 #{createTime},
@@ -101,11 +71,8 @@
     <update id="update" parameterType="com.abc12366.uc.model.Product">
         UPDATE uc_product
         <set>
-            <if test="dictId != null">
-                dictId = #{dictId},
-            </if>
-            <if test="stock != null">
-                stock = #{stock},
+            <if test="goodsId != null">
+                goodsId = #{goodsId},
             </if>
             <if test="marketPrice != null">
                 marketPrice = #{marketPrice},
@@ -115,18 +82,6 @@
             </if>
             <if test="costPrice != null">
                 costPrice = #{costPrice},
-            </if>
-            <if test="finalPrice != null">
-                finalPrice = #{finalPrice},
-            </if>
-            <if test="discount != null">
-                discount = #{discount},
-            </if>
-            <if test="uvipLevel != null">
-                uvipLevel = #{uvipLevel},
-            </if>
-            <if test="weight != null">
-                weight = #{weight},
             </if>
             <if test="createTime != null">
                 createTime = #{createTime},

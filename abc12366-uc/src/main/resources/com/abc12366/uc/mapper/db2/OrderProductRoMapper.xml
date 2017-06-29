@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.OrderProductRoMapper">
+
+	<sql id="Base_Column_List">
+		 id,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
+	</sql>
+
+	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.OrderProduct" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM uc_order_product
+		 WHERE orderId = #{orderId}
+	</select>
+
+</mapper>

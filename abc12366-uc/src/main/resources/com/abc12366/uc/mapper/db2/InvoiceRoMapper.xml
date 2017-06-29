@@ -32,8 +32,8 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	userId,	invoiceNo,	invoiceCode,	name,	content,	compName,	amount,	type,	property,	status,	createTime,	lastUpdate,	nsrsbh,	nsrmc,	address,	phone,	bank,	addressId,	userOrderNo
-    </sql>
+		 id,	userId,	username,	invoiceNo,	invoiceCode,	name,	content,	compName,	amount,	type,	property,	status,	createTime,	lastUpdate,	nsrsbh,	nsrmc,	address,	phone,	bank,	addressId,	deliveryMethod,	isShipping,	isFreeShipping,	deliveryFee,	isInsured,	insuredFee,	payMethod
+	</sql>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">

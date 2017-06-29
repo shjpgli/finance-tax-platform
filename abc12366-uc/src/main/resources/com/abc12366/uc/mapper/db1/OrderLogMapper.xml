@@ -11,63 +11,72 @@
 
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.uc.model.OrderLog">
-		 INSERT INTO uc_order_log
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
+		INSERT INTO uc_order_log
+		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
-				 id,
+				id,
 			</if>
 			<if test="orderNo != null">
-				 orderNo,
+				orderNo,
 			</if>
 			<if test="action != null">
-				 action,
+				action,
 			</if>
 			<if test="createTime != null">
-				 createTime,
+				createTime,
 			</if>
 			<if test="createUser != null">
-				 createUser,
+				createUser,
+			</if>
+			<if test="remark != null">
+				remark,
 			</if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
-				 #{id},
+				#{id},
 			</if>
 			<if test="orderNo!=null">
-				 #{orderNo},
+				#{orderNo},
 			</if>
 			<if test="action!=null">
-				 #{action},
+				#{action},
 			</if>
 			<if test="createTime!=null">
-				 #{createTime},
+				#{createTime},
 			</if>
 			<if test="createUser!=null">
-				 #{createUser},
+				#{createUser},
 			</if>
-		 </trim>
+			<if test="remark!=null">
+				#{remark},
+			</if>
+		</trim>
 	</insert>
 
 	<!-- 修 改-->
 	<update id="update" parameterType="com.abc12366.uc.model.OrderLog">
-		 UPDATE uc_order_log
- 		 <set> 
+		UPDATE uc_order_log
+		<set>
 			<if test="orderNo != null">
-				 orderNo = #{orderNo},
+				orderNo = #{orderNo},
 			</if>
 			<if test="action != null">
-				 action = #{action},
+				action = #{action},
 			</if>
 			<if test="createTime != null">
-				 createTime = #{createTime},
+				createTime = #{createTime},
 			</if>
 			<if test="createUser != null">
-				 createUser = #{createUser},
+				createUser = #{createUser},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
 			</if>
 
- 		 </set>
-		 WHERE id = #{id}
+		</set>
+		WHERE id = #{id}
 	</update>
 
 </mapper>

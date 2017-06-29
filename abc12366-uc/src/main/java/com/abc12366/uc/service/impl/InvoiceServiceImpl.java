@@ -114,7 +114,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         for (String orderId : orderIds) {
             orderInvoice.setId(Utils.uuid());
             orderInvoice.setInvoiceId(id);
-            orderInvoice.setOrderId(orderId);
+            orderInvoice.setOrderNo(orderId);
             orderInvoice.setLastUpdate(date);
             orderInvoiceMapper.insert(orderInvoice);
         }
@@ -173,7 +173,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         for (String orderId : orderIds) {
             orderInvoice.setId(Utils.uuid());
             orderInvoice.setInvoiceId(id);
-            orderInvoice.setOrderId(orderId);
+            orderInvoice.setOrderNo(orderId);
             orderInvoice.setCreateTime(date);
             orderInvoice.setLastUpdate(date);
             orderInvoiceMapper.insert(orderInvoice);
@@ -293,7 +293,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         Order order = null;
         for (OrderInvoice orderInvoice:orderInvoiceList){
             order = new Order();
-            order.setOrderNo(orderInvoice.getOrderId());
+            order.setOrderNo(orderInvoice.getOrderNo());
             order.setOrderStatus("3");
             order.setLastUpdate(new Date());
             int oUpdate = orderMapper.update(order);

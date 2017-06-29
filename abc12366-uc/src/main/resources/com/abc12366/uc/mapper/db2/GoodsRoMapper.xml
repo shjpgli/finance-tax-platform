@@ -4,8 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.GoodsRoMapper">
 
 	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	name,	imageUrl,	introduction,	details,	categoryId,	status,	createTime,	lastUpdate,	giftPoints,	sort,	unit,	recommendType
+    <sql id="Base_Column_List">
+		 id,	name,	imageUrl,	introduction,	details,	categoryId,	status,	createTime,	lastUpdate,	giftPoints,	sort,	unit,	recommendType,	isShipping,	isFreeShipping,	tradeMethod
 	</sql>
 
     <resultMap id="goodsBoResultMap" type="com.abc12366.uc.model.bo.GoodsBO">

@@ -11,63 +11,63 @@
 
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.uc.model.OrderInvoice">
-		 INSERT INTO uc_order_invoice
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
+		INSERT INTO uc_order_invoice
+		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
-				 id,
+				id,
 			</if>
-			<if test="orderId != null">
-				 orderId,
+			<if test="orderNo != null">
+				orderNo,
 			</if>
 			<if test="invoiceId != null">
-				 invoiceId,
+				invoiceId,
 			</if>
 			<if test="createTime != null">
-				 createTime,
+				createTime,
 			</if>
 			<if test="lastUpdate != null">
-				 lastUpdate,
+				lastUpdate,
 			</if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
-				 #{id},
+				#{id},
 			</if>
-			<if test="orderId!=null">
-				 #{orderId},
+			<if test="orderNo!=null">
+				#{orderNo},
 			</if>
 			<if test="invoiceId!=null">
-				 #{invoiceId},
+				#{invoiceId},
 			</if>
 			<if test="createTime!=null">
-				 #{createTime},
+				#{createTime},
 			</if>
 			<if test="lastUpdate!=null">
-				 #{lastUpdate},
+				#{lastUpdate},
 			</if>
-		 </trim>
+		</trim>
 	</insert>
 
 	<!-- 修 改-->
 	<update id="update" parameterType="com.abc12366.uc.model.OrderInvoice">
-		 UPDATE uc_order_invoice
- 		 <set> 
-			<if test="orderId != null">
-				 orderId = #{orderId},
+		UPDATE uc_order_invoice
+		<set>
+			<if test="orderNo != null">
+				orderNo = #{orderNo},
 			</if>
 			<if test="invoiceId != null">
-				 invoiceId = #{invoiceId},
+				invoiceId = #{invoiceId},
 			</if>
 			<if test="createTime != null">
-				 createTime = #{createTime},
+				createTime = #{createTime},
 			</if>
 			<if test="lastUpdate != null">
-				 lastUpdate = #{lastUpdate},
+				lastUpdate = #{lastUpdate},
 			</if>
 
- 		 </set>
-		 WHERE id = #{id}
+		</set>
+		WHERE id = #{id}
 	</update>
 
 </mapper>

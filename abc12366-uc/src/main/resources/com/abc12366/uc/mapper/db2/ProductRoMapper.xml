@@ -4,9 +4,9 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.ProductRoMapper">
 
 	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 goodsId,	dictId,	stock,	marketPrice,	sellingPrice,	costPrice,	finalPrice,	discount,	uvipLevel,	weight,	createTime,	lastUpdate
-	</sql>
+    <sql id="Base_Column_List">
+        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate
+    </sql>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectById" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">

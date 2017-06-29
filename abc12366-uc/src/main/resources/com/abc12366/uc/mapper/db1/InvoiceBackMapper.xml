@@ -12,108 +12,108 @@
 
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.uc.model.InvoiceBack">
-		 INSERT INTO uc_invoice_back
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
+		INSERT INTO uc_invoice_back
+		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
-				 id,
+				id,
 			</if>
 			<if test="userId != null">
-				 userId,
+				userId,
 			</if>
 			<if test="expressId != null">
-				 expressId,
+				expressId,
 			</if>
 			<if test="reason != null">
-				 reason,
+				reason,
 			</if>
 			<if test="remark != null">
-				 remark,
+				remark,
 			</if>
-			<if test="expressNum != null">
-				 expressNum,
+			<if test="expressNo != null">
+				expressNo,
 			</if>
 			<if test="expressComp != null">
-				 expressComp,
+				expressComp,
 			</if>
 			<if test="status != null">
-				 status,
+				status,
 			</if>
 			<if test="createTime != null">
-				 createTime,
+				createTime,
 			</if>
 			<if test="lastUpdate != null">
-				 lastUpdate,
+				lastUpdate,
 			</if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
-				 #{id},
+				#{id},
 			</if>
 			<if test="userId!=null">
-				 #{userId},
+				#{userId},
 			</if>
 			<if test="expressId!=null">
-				 #{expressId},
+				#{expressId},
 			</if>
 			<if test="reason!=null">
-				 #{reason},
+				#{reason},
 			</if>
 			<if test="remark!=null">
-				 #{remark},
+				#{remark},
 			</if>
-			<if test="expressNum!=null">
-				 #{expressNum},
+			<if test="expressNo!=null">
+				#{expressNo},
 			</if>
 			<if test="expressComp!=null">
-				 #{expressComp},
+				#{expressComp},
 			</if>
 			<if test="status!=null">
-				 #{status},
+				#{status},
 			</if>
 			<if test="createTime!=null">
-				 #{createTime},
+				#{createTime},
 			</if>
 			<if test="lastUpdate!=null">
-				 #{lastUpdate},
+				#{lastUpdate},
 			</if>
-		 </trim>
+		</trim>
 	</insert>
 
 	<!-- 修 改-->
 	<update id="update" parameterType="com.abc12366.uc.model.InvoiceBack">
-		 UPDATE uc_invoice_back
- 		 <set> 
+		UPDATE uc_invoice_back
+		<set>
 			<if test="userId != null">
-				 userId = #{userId},
+				userId = #{userId},
 			</if>
 			<if test="expressId != null">
-				 expressId = #{expressId},
+				expressId = #{expressId},
 			</if>
 			<if test="reason != null">
-				 reason = #{reason},
+				reason = #{reason},
 			</if>
 			<if test="remark != null">
-				 remark = #{remark},
+				remark = #{remark},
 			</if>
-			<if test="expressNum != null">
-				 expressNum = #{expressNum},
+			<if test="expressNo != null">
+				expressNo = #{expressNo},
 			</if>
 			<if test="expressComp != null">
-				 expressComp = #{expressComp},
+				expressComp = #{expressComp},
 			</if>
 			<if test="status != null">
-				 status = #{status},
+				status = #{status},
 			</if>
 			<if test="createTime != null">
-				 createTime = #{createTime},
+				createTime = #{createTime},
 			</if>
 			<if test="lastUpdate != null">
-				 lastUpdate = #{lastUpdate},
+				lastUpdate = #{lastUpdate},
 			</if>
 
- 		 </set>
-		 WHERE id = #{id}
+		</set>
+		WHERE id = #{id}
 	</update>
 
 </mapper>

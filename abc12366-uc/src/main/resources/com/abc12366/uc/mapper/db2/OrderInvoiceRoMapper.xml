@@ -3,9 +3,8 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderInvoiceRoMapper">
 
-	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	orderId,	invoiceId,	createTime,	lastUpdate
+		id,	orderNo,	invoiceId,	createTime,	lastUpdate
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

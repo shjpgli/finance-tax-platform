@@ -1,6 +1,5 @@
 package com.abc12366.uc.model.bo;
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.GoodsBO;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,30 +13,41 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class OrderBO implements Serializable {
 
+    private String id;
     private String orderNo;
     private String userId;
-    private String goodsId;
-    private Double dealPrice;
-    private Integer num;
     private String orderStatus;
-    private String payStatus;
     private String deliveryMethod;
     private String payMethod;
+    private String vipLevel;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
-    private String feedback;
-    private String name;
-    private String dictId;
-    private String uvipLevel;
-    private String unit;
-    private String categoryId;
-    private String category;
+    private String username;
+    private Integer isShipping;
+    private Integer isFreeShipping;
+    private Double deliveryFee;
+    private Integer isInsured;
+    private Double insuredFee;
+    private Double totalPrice;
+    private String addressId;
+    private String expressNo;
+    private String remark;
 
     private GoodsBO goodsBO;
     private User user;
 
     private Date startTime;
     private Date endTime;
+
+
+
+    public void setId(String id){
+        this.id = id;
+    }
+
+    public String getId(){
+        return this.id;
+    }
 
     public void setOrderNo(String orderNo){
         this.orderNo = orderNo;
@@ -55,44 +65,12 @@ public class OrderBO implements Serializable {
         return this.userId;
     }
 
-    public void setGoodsId(String goodsId){
-        this.goodsId = goodsId;
-    }
-
-    public String getGoodsId(){
-        return this.goodsId;
-    }
-
-    public void setDealPrice(Double dealPrice){
-        this.dealPrice = dealPrice;
-    }
-
-    public Double getDealPrice(){
-        return this.dealPrice;
-    }
-
-    public void setNum(Integer num){
-        this.num = num;
-    }
-
-    public Integer getNum(){
-        return this.num;
-    }
-
     public void setOrderStatus(String orderStatus){
         this.orderStatus = orderStatus;
     }
 
     public String getOrderStatus(){
         return this.orderStatus;
-    }
-
-    public void setPayStatus(String payStatus){
-        this.payStatus = payStatus;
-    }
-
-    public String getPayStatus(){
-        return this.payStatus;
     }
 
     public void setDeliveryMethod(String deliveryMethod){
@@ -111,6 +89,14 @@ public class OrderBO implements Serializable {
         return this.payMethod;
     }
 
+    public void setVipLevel(String vipLevel){
+        this.vipLevel = vipLevel;
+    }
+
+    public String getVipLevel(){
+        return this.vipLevel;
+    }
+
     public void setCreateTime(java.util.Date createTime){
         this.createTime = createTime;
     }
@@ -127,60 +113,84 @@ public class OrderBO implements Serializable {
         return this.lastUpdate;
     }
 
-    public void setFeedback(String feedback){
-        this.feedback = feedback;
+    public void setUsername(String username){
+        this.username = username;
     }
 
-    public String getFeedback(){
-        return this.feedback;
+    public String getUsername(){
+        return this.username;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setIsShipping(Integer isShipping){
+        this.isShipping = isShipping;
     }
 
-    public String getName(){
-        return this.name;
+    public Integer getIsShipping(){
+        return this.isShipping;
     }
 
-    public void setDictId(String dictId){
-        this.dictId = dictId;
+    public void setIsFreeShipping(Integer isFreeShipping){
+        this.isFreeShipping = isFreeShipping;
     }
 
-    public String getDictId(){
-        return this.dictId;
+    public Integer getIsFreeShipping(){
+        return this.isFreeShipping;
     }
 
-    public void setUvipLevel(String uvipLevel){
-        this.uvipLevel = uvipLevel;
+    public void setDeliveryFee(Double deliveryFee){
+        this.deliveryFee = deliveryFee;
     }
 
-    public String getUvipLevel(){
-        return this.uvipLevel;
+    public Double getDeliveryFee(){
+        return this.deliveryFee;
     }
 
-    public void setUnit(String unit){
-        this.unit = unit;
+    public void setIsInsured(Integer isInsured){
+        this.isInsured = isInsured;
     }
 
-    public String getUnit(){
-        return this.unit;
+    public Integer getIsInsured(){
+        return this.isInsured;
     }
 
-    public void setCategoryId(String categoryId){
-        this.categoryId = categoryId;
+    public void setInsuredFee(Double insuredFee){
+        this.insuredFee = insuredFee;
     }
 
-    public String getCategoryId(){
-        return this.categoryId;
+    public Double getInsuredFee(){
+        return this.insuredFee;
     }
 
-    public void setCategory(String category){
-        this.category = category;
+    public void setTotalPrice(Double totalPrice){
+        this.totalPrice = totalPrice;
     }
 
-    public String getCategory(){
-        return this.category;
+    public Double getTotalPrice(){
+        return this.totalPrice;
+    }
+
+    public void setAddressId(String addressId){
+        this.addressId = addressId;
+    }
+
+    public String getAddressId(){
+        return this.addressId;
+    }
+
+    public void setExpressNo(String expressNo){
+        this.expressNo = expressNo;
+    }
+
+    public String getExpressNo(){
+        return this.expressNo;
+    }
+
+    public void setRemark(String remark){
+        this.remark = remark;
+    }
+
+    public String getRemark(){
+        return this.remark;
     }
 
     public GoodsBO getGoodsBO() {

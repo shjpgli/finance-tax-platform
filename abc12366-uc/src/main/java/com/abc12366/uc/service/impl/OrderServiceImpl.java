@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void isValidate(OrderBO orderBO) {
-        GoodsBO goods = goodsRoMapper.selectGoods(orderBO.getGoodsId());
+       /* GoodsBO goods = goodsRoMapper.selectGoods(orderBO.getGoods());
         //goodsId、字典Id、会员等级，确定一条数据。
         Product product = new Product();
         product.setGoodsId(orderBO.getGoodsId());
@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
         if(pro.getStock() < orderBO.getNum()){
             LOGGER.info("{产品数量不足}", orderBO);
             throw new ServiceException(4136);
-        }
+        }*/
     }
 
     @Transactional("db1TxManager")
@@ -205,7 +205,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUserId(orderBO.getUserId());
         order.setOrderNo(orderBO.getOrderNo());
-        order.setFeedback(orderBO.getFeedback());
+        //order.setFeedback(orderBO.getFeedback());
         int upd = orderMapper.update(order);
         if(upd != 1){
             LOGGER.info("{反馈信息失败}", orderBO);
