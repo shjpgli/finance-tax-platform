@@ -146,4 +146,22 @@ public class EventApplyServiceImpl implements EventApplyService {
         return "";
     }
 
+    @Override
+    public String deleteList(String[] applyIds) {
+        //删除评论信息
+        eventApplyAttrMapper.deleteList(applyIds);
+        //删除评论扩展信息
+        int r = eventApplyMapper.deleteList(applyIds);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
+    @Override
+    public String updateStatusList(String[] applyIds) {
+        //批量审批评论信息
+        int r = eventApplyMapper.updateStatusList(applyIds);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
 }

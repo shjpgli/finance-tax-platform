@@ -19,4 +19,8 @@ public interface EventApplyService {
 
     String delete(String applyId);
 
+    String deleteList(String[] applyIds);
+
+    String updateStatusList(String[] applyIds);
+
 }

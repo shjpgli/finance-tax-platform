@@ -19,6 +19,20 @@ public interface EventApplyMapper{
 	int deleteByPrimaryKey(@Param("applyId") String applyId);
 
 	/**
+	 *
+	 * 删除(根据主键ID批量删除)
+	 *
+	 **/
+	int deleteList(@Param("applyIds") String[] applyIds);
+
+	/**
+	 *
+	 * 批量审批
+	 *
+	 **/
+	int updateStatusList(@Param("applyIds") String[] applyIds);
+
+	/**
 	 * 
 	 * 添加
 	 * 

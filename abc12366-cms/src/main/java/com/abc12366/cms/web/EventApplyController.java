@@ -2,6 +2,7 @@ package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.EventApplyBo;
 import com.abc12366.cms.model.bo.EventApplySaveBo;
+import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.service.EventApplyService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -83,6 +84,24 @@ public class EventApplyController {
         String rtn = eventApplyService.delete(applyId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    @PostMapping(path = "/deleteList")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
+        //删除评论信息
+        String rtn = eventApplyService.deleteList(idsBo.getIds());
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
+    }
+
+    @PutMapping(path = "/updateStatusList")
+    public ResponseEntity updateStatusList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
+        //审批评论信息
+        String rtn = eventApplyService.updateStatusList(idsBo.getIds());
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
 }
