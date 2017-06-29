@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.TeamRoMapper">
+    <select id="selectList"  resultType="com.abc12366.bangbang.model.bo.TeamBO">
+        select id,teamName,introduction,status,members,createTime,lastUpdate,teamPicturePath,maxPicturePath,midPicturePath,minPicturePath
+        from bb_team
+        ORDER BY lastUpdate DESC
+    </select>
+    <select id="selectOne" resultType="com.abc12366.bangbang.model.bo.TeamBO" parameterType="java.lang.String">
+                select id,teamName,introduction,status,members,createTime,lastUpdate,teamPicturePath,maxPicturePath,midPicturePath,minPicturePath
+                from bb_team
+                where id=#{id}
+    </select>
+</mapper>

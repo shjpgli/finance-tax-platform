@@ -13,7 +13,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -89,12 +88,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO selectByUsernameOrPhone(String usernameOrPhone) {
         LOGGER.info("{}", usernameOrPhone);
-        Map<String, String> map = new HashMap<>();
-        if (StringUtils.isEmpty(usernameOrPhone)) {
-            map.put("username", usernameOrPhone);
-            map.put("phone", usernameOrPhone);
-        }
-        User user = userRoMapper.selectByUsernameOrPhone(map);
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(usernameOrPhone);
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);

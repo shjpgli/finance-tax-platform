@@ -67,15 +67,15 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("新增失败，参数:{}" + null);
             throw new ServiceException(4101);
         }
-        Map<String, String> map = new HashMap<>();
-        map.put("username", "username" + registerBO.getPhone());
+
+        LoginBO loginBO = new LoginBO();
         if (!StringUtils.isEmpty(registerBO.getPhone())) {
-            map.put("phone", registerBO.getPhone());
+            loginBO.setUsernameOrPhone(registerBO.getPhone());
         }
-        User user = userRoMapper.selectByUsernameOrPhone(map);
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (user != null) {
             LOGGER.warn("新增失败，参数:{}" + registerBO.toString());
-            throw new ServiceException(4101);
+            throw new ServiceException(4117);
         }
         String password;
         String encodePassword;
@@ -87,13 +87,13 @@ public class AuthServiceImpl implements AuthService {
             encodePassword = Utils.md5(password + salt);
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
-            throw new ServiceException(4101);
+            throw new ServiceException(4106);
         }
         user = new User();
         BeanUtils.copyProperties(registerBO, user);
 
         user.setId(Utils.uuid());
-        user.setUsername(map.get("username"));
+        user.setUsername("username" + registerBO.getPhone());
         user.setSalt(salt);
         user.setPassword(encodePassword);
         if (!StringUtils.isEmpty(registerBO.getRegMail())) {
@@ -116,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
         int result = userMapper.insert(user);
         if (result != 1) {
             LOGGER.warn("新增失败，参数:{}" + registerBO.toString());
-            throw new ServiceException(4101);
+            throw new ServiceException(4020);
         }
         UserReturnBO userReturnBO = new UserReturnBO();
         BeanUtils.copyProperties(user, userReturnBO);
@@ -128,34 +128,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Map login(LoginBO loginBO, String appToken) throws Exception {
         LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
-        //判断apptoken是否为空，为空则不允许登录
-        if (appToken == null || appToken.equals("")) {
-            return null;
-        }
-        Map<String, String> map = new HashMap<>();
-        if (!StringUtils.isEmpty(loginBO.getUsernameOrPhone())) {
-            map.put("username", loginBO.getUsernameOrPhone());
-            map.put("phone", loginBO.getUsernameOrPhone());
-        }
-        User user = userRoMapper.selectByUsernameOrPhone(map);
+
+        //根据用户名查看用户是否存在
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (user == null) {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4104);
+            throw new ServiceException(4018);
         }
         String password;
-        //根据用户名查看用户是否存在
         try {
             //登录密码进行处理，与表中的加密密码进行比对
             password = Utils.md5(Utils.md5(loginBO.getPassword()) + user.getSalt());
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
-            throw new ServiceException(4104);
+            throw new ServiceException(4106);
         }
         if (!user.getPassword().equals(password)) {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4104);
+            throw new ServiceException(4120);
         }
-        String userToken = Utils.token(Utils.uuid());
+
         user.setLastUpdate(new Date());
         int result = userMapper.update(user);
         if (result != 1) {
@@ -170,12 +162,13 @@ public class AuthServiceImpl implements AuthService {
         //如果不存在有效的注册应用，则不允许登录
         if (app == null) {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4104);
+            throw new ServiceException(4019);
         }
 
         Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
         int result02;
         //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
+        String userToken = Utils.token(Utils.uuid());
         if (queryToken != null) {
             queryToken.setLastTokenResetTime(new Date());
             result02 = tokenMapper.update(queryToken);
@@ -194,7 +187,7 @@ public class AuthServiceImpl implements AuthService {
         }
         if (result02 != 1) {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4101);
+            throw new ServiceException(4021);
         }
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
@@ -253,11 +246,11 @@ public class AuthServiceImpl implements AuthService {
         if (appToken == null || appToken.equals("")) {
             return null;
         }
-        Map<String, String> map = new HashMap<>();
+        LoginBO loginBOQery = new LoginBO();
         if (!StringUtils.isEmpty(loginBO.getPhone())) {
-            map.put("phone", loginBO.getPhone());
+            loginBOQery.setUsernameOrPhone(loginBO.getPhone());
         }
-        User user = userRoMapper.selectByUsernameOrPhone(map);
+        User user = userRoMapper.selectByUsernameOrPhone(loginBOQery);
         if (user == null) {
             LOGGER.warn("登录失败，该用户不存在，参数:{}:{}", loginBO.toString(), appToken);
             throw new ServiceException(4104);

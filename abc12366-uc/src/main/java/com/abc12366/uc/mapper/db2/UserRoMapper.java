@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserBO;
 
 import java.util.List;
@@ -17,6 +18,6 @@ public interface UserRoMapper {
 
     User selectOne(String id);
 
-    User selectByUsernameOrPhone(Map map);
+    User selectByUsernameOrPhone(LoginBO loginBO);
 
 }

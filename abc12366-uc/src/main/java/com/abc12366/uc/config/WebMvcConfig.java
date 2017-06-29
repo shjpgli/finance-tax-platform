@@ -55,22 +55,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/auth/*")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test");
-
-        /*//用户访问拦截
-        registry.addInterceptor(userInterceptor())
-                .excludePathPatterns("/")
-                .excludePathPatterns("/app*//**")
-                .excludePathPatterns("/druid*//**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test","/verifylogin");*/
+                .excludePathPatterns("/auth/**")
+                .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(ucUserInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app*//**")
-                .excludePathPatterns("/druid*//**")
-                .excludePathPatterns("/auth/*")
+                .excludePathPatterns("/app*/**")
+                .excludePathPatterns("/druid*/**")
+                .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/login", "/refresh", "/register", "/test", "/verifylogin");
     }
 }

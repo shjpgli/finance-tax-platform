@@ -3,6 +3,7 @@ package com.abc12366.uc.model.bo;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -21,44 +22,35 @@ public class RegisterBO implements Serializable {
     private String phone;
 
     @NotEmpty
-    @Size(min = 8, max = 32)
+    @Size(min = 8, max = 64)
     private String password;
 
     @Email
     private String regMail;
     private String username;
+    @Size(max = 50)
     @Pattern(regexp = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
             + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
             + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
             + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$")
     private String regIP;
     private String salt;
+    @Size(max = 32)
     private String nickname;
-    private boolean status;
+    @NotNull
+    private Boolean status;
+    @Size(max = 100)
     private String userPicturePath;
+    @Size(max = 100)
     private String maxUserPicturePath;
+    @Size(max = 100)
     private String midUserPicturePath;
+    @Size(max = 100)
     private String minUserPicturePath;
     @NotEmpty
     private String verifyingCode;
 
     public RegisterBO() {
-    }
-
-    public RegisterBO(String phone, String password, String regMail, String username, String regIP, String salt, String nickname, boolean status, String userPicturePath, String maxUserPicturePath, String midUserPicturePath, String minUserPicturePath, String verifyingCode) {
-        this.phone = phone;
-        this.password = password;
-        this.regMail = regMail;
-        this.username = username;
-        this.regIP = regIP;
-        this.salt = salt;
-        this.nickname = nickname;
-        this.status = status;
-        this.userPicturePath = userPicturePath;
-        this.maxUserPicturePath = maxUserPicturePath;
-        this.midUserPicturePath = midUserPicturePath;
-        this.minUserPicturePath = minUserPicturePath;
-        this.verifyingCode = verifyingCode;
     }
 
     public String getUsername() {
@@ -117,14 +109,6 @@ public class RegisterBO implements Serializable {
         this.nickname = nickname;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public String getUserPicturePath() {
         return userPicturePath;
     }
@@ -165,21 +149,11 @@ public class RegisterBO implements Serializable {
         this.verifyingCode = verifyingCode;
     }
 
-    @Override
-    public String toString() {
-        return "RegisterBO{" +
-                "username='" + username + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                ", regMail='" + regMail + '\'' +
-                ", regIP='" + regIP + '\'' +
-                ", salt='" + salt + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", status=" + status +
-                ", userPicturePath='" + userPicturePath + '\'' +
-                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
-                ", midUserPicturePath='" + midUserPicturePath + '\'' +
-                ", minUserPicturePath='" + minUserPicturePath + '\'' +
-                '}';
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

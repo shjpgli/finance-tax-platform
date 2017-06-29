@@ -40,9 +40,10 @@ public class UserController {
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) String nickname,
             @RequestParam(required = false) Boolean status,
+            @RequestParam(required = false) String tagName,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}:{}:{}:{}", username, phone, nickname, status, page, size);
+        LOGGER.info("{}:{}:{}:{}:{}:{}:{}", username, phone, nickname, status, tagName, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         Map<String, Object> map = new HashMap<>();
         if (username != null && StringUtils.isEmpty(username)) {
@@ -57,10 +58,14 @@ public class UserController {
         if (status != null && StringUtils.isEmpty(status)) {
             status = null;
         }
+        if (tagName != null && StringUtils.isEmpty(tagName)) {
+            tagName = null;
+        }
         map.put("username", username);
         map.put("phone", phone);
         map.put("nickname", nickname);
         map.put("status", status);
+        map.put("tagName", tagName);
         List<UserBO> userList = userService.selectList(map);
         LOGGER.info("{}", userList);
         return (userList == null) ?
