@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,10 +67,9 @@ public class DictController {
 
     @GetMapping(path="/kv/{dictId}")
     public ResponseEntity selectDictList(@PathVariable("dictId") String dictId){
-        List<DictBO> dictBOList = null;
         Dict dict = new Dict();
         dict.setDictId(dictId);
-        dictBOList = dictService.selectDictList(dict);
+        List<DictBO> dictBOList = dictService.selectDictList(dict);
         LOGGER.info("{}",dictBOList);
         return ResponseEntity.ok(Utils.kv("dataList",dictBOList));
     }

@@ -100,7 +100,7 @@ public class SubjectsController {
         subjectsBO.setQuestionId(questionId);
         SubjectsBO bo = subjectsService.update(subjectsBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**

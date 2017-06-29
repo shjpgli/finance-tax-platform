@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.admin.mapper.db2.DictRoMapper">
 
     <sql id="Base_Column_List">
-        id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser
+        id, dictId, dictName, fieldKey, fieldValue, status, createTime, createUser, lastUpdate, lastUser,sort
     </sql>
 
     <select id="selectList" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
@@ -62,5 +62,6 @@
             1=1
             <if test="dictId != null and dictId!='' "> and dictId = #{dictId}</if>
         </where>
+        ORDER BY sort ASC
     </select>
 </mapper>

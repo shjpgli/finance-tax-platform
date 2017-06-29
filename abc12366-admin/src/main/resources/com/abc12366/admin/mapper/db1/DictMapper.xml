@@ -36,6 +36,9 @@
             <if test="lastUser != null">
                 lastUser,
             </if>
+            <if test="sort != null">
+                lastUser,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -69,6 +72,9 @@
             <if test="lastUser!=null">
                 #{lastUser},
             </if>
+            <if test="sort!=null">
+                #{lastUser},
+            </if>
         </trim>
     </insert>
 
@@ -82,6 +88,7 @@
             <if test="status != null">status = #{status},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
             <if test="lastUser != null">lastUser = #{lastUser}</if>
+            <if test="sort != null">sort = #{sort}</if>
         </set>
         where id=#{id}
     </update>

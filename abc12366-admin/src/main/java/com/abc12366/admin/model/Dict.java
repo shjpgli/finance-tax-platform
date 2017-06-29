@@ -22,10 +22,11 @@ public class Dict implements Serializable {
     private String createUser;
     private Date lastUpdate;
     private String lastUser;
+    private String sort;
     public Dict() {
     }
 
-    public Dict(String id, String dictId, String dictName, String fieldKey, String fieldValue, Boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser) {
+    public Dict(String id, String dictId, String dictName, String fieldKey, String fieldValue, Boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser,String sort) {
         this.id = id;
         this.dictId = dictId;
         this.dictName = dictName;
@@ -36,6 +37,7 @@ public class Dict implements Serializable {
         this.createUser = createUser;
         this.lastUpdate = lastUpdate;
         this.lastUser = lastUser;
+        this.sort = sort;
     }
 
     public String getId() {
@@ -134,4 +136,11 @@ public class Dict implements Serializable {
                 '}';
     }
 
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 }
