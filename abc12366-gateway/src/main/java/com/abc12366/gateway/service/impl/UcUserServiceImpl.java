@@ -37,7 +37,16 @@ public class UcUserServiceImpl implements UcUserService {
         //1.调用admin的token校验接口，如果校验通过直接返回true
         String adminTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.check.url") + adminToken, "");
         if (!StringUtils.isEmpty(adminTokenVerifyResult) && adminTokenVerifyResult.equals("true")) {
-            HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + userToken, "");
+            //刷新token时间
+            HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + adminToken, "");
+            //根据token获取admin的userId，并将userId设置到request中
+            String adminUserId = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.userid.url") + adminToken, "");
+            if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
+                request.removeAttribute(Constant.USER_ID);
+                request.setAttribute(Constant.USER_ID, adminUserId);
+            } else {
+                request.setAttribute(Constant.USER_ID, adminUserId);
+            }
             return true;
         }
         //2.调用uc的token校验接口，如果校验通过刷新token并返回true

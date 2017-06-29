@@ -3,13 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserBO">
-        select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
-        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
-        from uc_user
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.util.Map">
+        select uu.id, uu.username, uu.phone, uu.password, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime, uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp, uu.vipLevel,
+        (select uue.realName from uc_user_extend uue where uue.userId=uu.id) realName
+        from uc_user uu, uc_tag ut, uc_subject_tag ust
         <where>
             <if test="username!=null">
-                username=#{username}
+               username=#{username}
             </if>
             <if test="phone!=null">
                 and phone=#{phone}
@@ -20,27 +21,32 @@
             <if test="status!=null">
                 and status=#{status}
             </if>
+            <if test="tagName!=null">
+                and uu.id = ust.userId
+                and ust.tagId=ut.id
+                and ut.tagName=#{tagName}
+            </if>
         </where>
         ORDER BY lastUpdate DESC
     </select>
 
-    <select id="selectOne" resultType="com.abc12366.uc.model.User">
+    <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
         select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
         userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
         where id = #{id}
     </select>
 
-    <select id="selectByUsernameOrPhone" resultType="com.abc12366.uc.model.User" parameterType="java.util.Map">
+    <select id="selectByUsernameOrPhone" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.bo.LoginBO">
         select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
         userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
         <where>
-            <if test="username != null">
-                username = #{username}
+            <if test="usernameOrPhone != null">
+                username = #{usernameOrPhone}
             </if>
-            <if test="phone != null">
-                OR phone = #{phone}
+            <if test="usernameOrPhone != null">
+                OR phone = #{usernameOrPhone}
             </if>
         </where>
     </select>
