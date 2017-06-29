@@ -78,4 +78,10 @@ public class ExperienceLevelController {
         LOGGER.info("{}", experienceLevelReturn);
         return ResponseEntity.ok(Utils.kv("data", experienceLevelReturn));
     }
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        experienceLevelService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

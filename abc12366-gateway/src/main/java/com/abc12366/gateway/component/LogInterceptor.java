@@ -5,9 +5,8 @@ import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.DateUtils;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.ApiLog;
-import com.abc12366.gateway.model.bo.TokenBO;
-import com.abc12366.gateway.service.BlacklistService;
 import com.abc12366.gateway.service.ApiLogService;
+import com.abc12366.gateway.service.BlacklistService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,10 +41,12 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
             throws Exception {
         response.setContentType("application/json;charset=UTF-8");
         // 1.前置日志
-        String addr = request.getRemoteAddr();
+        String addr = Utils.getAddr(request);
+        String userAgent = Utils.getUserAgent(request);
         String uri = request.getRequestURI();
         String version = request.getHeader(Constant.VERSION_HEAD);
-        LOGGER.info("URI:{}, Version:{}, IP:{}, User-Agent:{}", uri, version, addr, request.getHeader("User-Agent"));
+
+        LOGGER.info("URI:{}, Version:{}, IP:{}, User-Agent:{}", uri, version, addr, userAgent);
 
         // 版本头检查
         if (StringUtils.isEmpty(version)) {
@@ -94,9 +95,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     public void afterCompletion(
             HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
+        String addr = Utils.getAddr(request);
+        String userAgent = Utils.getUserAgent(request);
         String uri = request.getRequestURI();
-        String userAgent = request.getHeader("User-Agent");
-        String ip = request.getRemoteAddr();
         long inTime = (long) request.getAttribute("inTime");
         request.removeAttribute("inTime");
 
@@ -113,7 +114,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
                 .id(Utils.uuid())
                 .uri(uri)
                 .userAgent(userAgent)
-                .ip(ip)
+                .ip(addr)
                 .inTime(inTime)
                 .outTime(outTime)
                 .status(status)

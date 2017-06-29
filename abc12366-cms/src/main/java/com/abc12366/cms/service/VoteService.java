@@ -1,10 +1,14 @@
 package com.abc12366.cms.service;
 
 import com.abc12366.cms.model.Vote;
+import com.abc12366.cms.model.VoteHistory;
 import com.abc12366.cms.model.VoteResult;
+import com.abc12366.cms.model.bo.VoteStatAreaBO;
+import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 投票功能服务类
@@ -27,4 +31,12 @@ public interface VoteService {
     List<VoteResult> vote(String voteId, List<VoteResult> resultList, HttpServletRequest request);
 
     VoteResult vote(VoteResult result, HttpServletRequest request);
+
+    VoteHistory insertHistory(String voteId, HttpServletRequest request);
+
+    List<VoteStatBrowserBO> statBrowser(String voteId);
+
+    List<VoteStatAreaBO> statIpArea(String voteId);
+
+    Map<String, Integer> statViews(String voteId);
 }

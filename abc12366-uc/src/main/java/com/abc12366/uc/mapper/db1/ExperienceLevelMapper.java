@@ -11,4 +11,6 @@ public interface ExperienceLevelMapper {
     int insert(ExperienceLevel experienceLevel);
 
     int update(ExperienceLevel experienceLevel);
+
+    int delete(String id);
 }

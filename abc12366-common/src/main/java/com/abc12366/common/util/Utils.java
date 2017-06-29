@@ -2,7 +2,9 @@ package com.abc12366.common.util;
 
 import com.abc12366.common.model.BodyStatus;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -133,5 +135,21 @@ public class Utils {
         double salt = Math.random();
         String saltValue = salt + "";
         return saltValue.substring(saltValue.indexOf("0.") + 2, 8);
+    }
+
+    public static String getAddr(HttpServletRequest request) {
+        String addr = request.getRemoteAddr();
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            addr = request.getHeader(Constant.CLIENT_IP);
+        }
+        return addr;
+    }
+
+    public static String getUserAgent(HttpServletRequest request) {
+        String userAgent = request.getHeader("User-Agent");
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_USER_AGENT))) {
+            userAgent = request.getHeader(Constant.CLIENT_USER_AGENT);
+        }
+        return userAgent;
     }
 }

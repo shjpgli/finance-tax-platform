@@ -1,7 +1,10 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.Vote;
+import com.abc12366.cms.model.VoteHistory;
 import com.abc12366.cms.model.VoteResult;
+import com.abc12366.cms.model.bo.VoteStatAreaBO;
+import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 import com.abc12366.cms.service.VoteService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 投票管理控制器
@@ -94,18 +98,24 @@ public class VoteController {
         return responseEntity;
     }
 
+    /**
+     * 单个题目投票
+     *
+     * @param voteId 投票ID
+     * @param subjectId 题目ID
+     * @param itemId 选项ID
+     * @param request HttpServletRequest
+     * @return VoteResult
+     */
     @PostMapping("/result/{voteId}/{subjectId}/{itemId}")
     public ResponseEntity vote(@PathVariable("voteId") String voteId,
                                @PathVariable("subjectId") String subjectId,
                                @PathVariable("itemId") String itemId,
-                               @RequestBody VoteResult result,
                                HttpServletRequest request) {
 
-        LOGGER.info("{},{},{},{}", voteId, subjectId, itemId, result);
+        LOGGER.info("{},{},{}", voteId, subjectId, itemId);
 
-        if (result == null) {
-            result = new VoteResult();
-        }
+        VoteResult result = new VoteResult();
         result.setVoteId(voteId);
         result.setSubjectId(subjectId);
         result.setItemId(itemId);
@@ -117,6 +127,14 @@ public class VoteController {
         return responseEntity;
     }
 
+    /**
+     * 多个题目投票
+     *
+     * @param voteId 投票ID
+     * @param resultList 投票结果列表
+     * @param request HttpServletRequest
+     * @return VoteResult集合
+     */
     @PostMapping("/result/{voteId}")
     public ResponseEntity vote(@PathVariable("voteId") String voteId,
                                @Valid @RequestBody List<VoteResult> resultList,
@@ -125,6 +143,67 @@ public class VoteController {
         List<VoteResult> dataList = voteService.vote(voteId, resultList, request);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", dataList));
 
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 投票浏览记录
+     *
+     * @param voteId 投票ID
+     * @param request HttpServletRequest
+     * @return VoteHistory
+     */
+    @PostMapping("/views/{voteId}")
+    public ResponseEntity history(@PathVariable("voteId") String voteId, HttpServletRequest request) {
+        LOGGER.info("{}", voteId);
+        VoteHistory vh = voteService.insertHistory(voteId, request);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", vh));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 统计访问量
+     *
+     * @param voteId 投票ID
+     * @return Map
+     */
+    @GetMapping("/stat/views/{voteId}")
+    public ResponseEntity statViews(@PathVariable("voteId") String voteId) {
+        LOGGER.info("{}", voteId);
+        Map<String, Integer> map = voteService.statViews(voteId);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", map));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 统计用户代理
+     *
+     * @param voteId 投票ID
+     * @return VoteStatBrowserBO
+     */
+    @GetMapping("/stat/browser/{voteId}")
+    public ResponseEntity statBrowser(@PathVariable("voteId") String voteId) {
+        LOGGER.info("{}", voteId);
+        List<VoteStatBrowserBO> list = voteService.statBrowser(voteId);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", list));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 统计IP归属区域
+     *
+     * @param voteId 投票ID
+     * @return VoteStatAreaBO
+     */
+    @GetMapping("/stat/area/{voteId}")
+    public ResponseEntity statIpArea(@PathVariable("voteId") String voteId) {
+        LOGGER.info("{}", voteId);
+        List<VoteStatAreaBO> list = voteService.statIpArea(voteId);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", list));
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }

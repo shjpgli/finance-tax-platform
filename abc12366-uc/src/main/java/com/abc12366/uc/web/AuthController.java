@@ -134,6 +134,6 @@ public class AuthController extends BaseController {
     public ResponseEntity userTokenAuth(@PathVariable String token, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", token);
         boolean isAuth = authService.isAuthentication(token, request);
-        return ResponseEntity.ok(Utils.kv("data", isAuth));
+        return ResponseEntity.ok(isAuth);
     }
 }

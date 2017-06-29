@@ -16,10 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/5/8.
@@ -53,7 +50,8 @@ public class EventServiceImpl implements EventService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         EventBo eventBo = eventSaveBo.getEvent();
         Event event= new Event();
-        eventBo.setSponsorId(uuid);
+        eventBo.setEventId(uuid);
+        eventBo.setCreatetime(new Date());
         try {
             BeanUtils.copyProperties(eventBo, event);
         } catch (Exception e) {
@@ -87,12 +85,14 @@ public class EventServiceImpl implements EventService {
         Event event = eventRoMapper.selectByPrimaryKey(eventId);
         EventBo eventBo = new EventBo();
         try {
-            BeanUtils.copyProperties(event, eventBo);
+            if(event != null){
+                BeanUtils.copyProperties(event, eventBo);
+                eventSaveBo.setEvent(eventBo);
+            }
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        eventSaveBo.setEvent(eventBo);
         List<EventModelItemBo> eventModelItemBoList = new ArrayList<EventModelItemBo>();
         List<EventModelItem> eventModelItemList = eventModelItemRoMapper.selectByEventId(eventId);
         if(eventModelItemList != null){
@@ -116,6 +116,7 @@ public class EventServiceImpl implements EventService {
         //更新活动信息
         EventBo eventBo = eventSaveBo.getEvent();
         Event event= new Event();
+        eventBo.setUpdatetime(new Date());
         try {
             BeanUtils.copyProperties(eventBo, event);
         } catch (Exception e) {
