@@ -16,10 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/5/8.
@@ -53,7 +50,8 @@ public class EventServiceImpl implements EventService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         EventBo eventBo = eventSaveBo.getEvent();
         Event event= new Event();
-        eventBo.setSponsorId(uuid);
+        eventBo.setEventId(uuid);
+        eventBo.setCreatetime(new Date());
         try {
             BeanUtils.copyProperties(eventBo, event);
         } catch (Exception e) {
@@ -116,6 +114,7 @@ public class EventServiceImpl implements EventService {
         //更新活动信息
         EventBo eventBo = eventSaveBo.getEvent();
         Event event= new Event();
+        eventBo.setUpdatetime(new Date());
         try {
             BeanUtils.copyProperties(eventBo, event);
         } catch (Exception e) {
