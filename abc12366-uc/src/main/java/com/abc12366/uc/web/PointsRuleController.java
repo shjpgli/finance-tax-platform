@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.model.bo.PointsRuleInsertBO;
 import com.abc12366.uc.model.bo.PointsRuleUpdateBO;
 import com.abc12366.uc.service.PointsRuleService;
 import com.github.pagehelper.Page;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,9 +74,9 @@ public class PointsRuleController {
     }
 
     @PostMapping
-    public ResponseEntity insert(@RequestBody PointsRuleBO pointsRuleBO) {
-        LOGGER.info("{}", pointsRuleBO);
-        PointsRuleBO rule = pointsRuleService.insert(pointsRuleBO);
+    public ResponseEntity insert(@Valid @RequestBody PointsRuleInsertBO pointsRuleInsertBO) {
+        LOGGER.info("{}", pointsRuleInsertBO);
+        PointsRuleBO rule = pointsRuleService.insert(pointsRuleInsertBO);
         LOGGER.info("{}", rule);
         return ResponseEntity.ok(Utils.kv("data", rule));
     }

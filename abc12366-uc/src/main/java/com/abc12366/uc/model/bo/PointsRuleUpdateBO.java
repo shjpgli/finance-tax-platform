@@ -1,9 +1,6 @@
 package com.abc12366.uc.model.bo;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import java.util.Date;
-
+import javax.validation.constraints.Size;
 /**
  *
  * @author liuguiyao<435720953@qq.com.com>
@@ -11,41 +8,17 @@ import java.util.Date;
  * @since 2.0.0
  */
 public class PointsRuleUpdateBO {
-    private String id;
-    @NotEmpty(message = "name不能为空")
+    @Size(max = 32)
     private String name;
-    @NotEmpty(message = "code不能为空")
+    @Size(max = 10)
     private String code;
-    @NotEmpty(message = "points不能为空")
     private int points;
     private String description;
+    @Size(max = 1)
     private String type;
-    @NotEmpty(message = "status不能为空")
-    private boolean status;
-    private Date createTime;
-    private Date lastUpdate;
+    private Boolean status;
 
     public PointsRuleUpdateBO() {
-    }
-
-    public PointsRuleUpdateBO(String id, String name, String code, int points, String description, String type, boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.points = points;
-        this.description = description;
-        this.type = type;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -88,42 +61,11 @@ public class PointsRuleUpdateBO {
         this.type = type;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return "UPointsRuleBO{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", points=" + points +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
     }
 }

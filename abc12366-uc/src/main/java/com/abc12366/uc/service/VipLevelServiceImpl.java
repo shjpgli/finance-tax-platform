@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,21 @@ public class VipLevelServiceImpl implements VipLevelService {
             LOGGER.warn("新增失败，已存在等级为" + vipLevelInsertBO.getLevel() + "的会员等级！");
             throw new ServiceException(4101);
         }
+        //特权名称唯一性校验
+        List<VipLevelBO> vipLevelBOList = vipLevelRoMapper.selectList(null);
+        for (VipLevelBO vipLevelBO : vipLevelBOList) {
+            if (vipLevelBO.getLevel().equals(vipLevelInsertBO.getLevel())) {
+                LOGGER.warn("新增失败，参数：{}", vipLevelInsertBO);
+                throw new ServiceException(4606);
+            }
+            if (vipLevelInsertBO.getLevelCode() != null) {
+                if (vipLevelBO.getLevelCode().equals(vipLevelInsertBO.getLevelCode())) {
+                    LOGGER.warn("新增失败，参数：{}", vipLevelInsertBO);
+                    throw new ServiceException(4607);
+                }
+            }
+        }
+
         VipLevelBO vipLevelQuery = vipLevelRoMapper.selectByLevel(vipLevelInsertBO.getLevel());
         if (vipLevelQuery != null) {
             LOGGER.warn("新增失败，参数：level=" + vipLevelInsertBO.getLevel());
@@ -75,6 +91,27 @@ public class VipLevelServiceImpl implements VipLevelService {
             LOGGER.warn("修改失败，参数：" + null);
             throw new ServiceException(4102);
         }
+
+        //特权名称唯一性校验
+        List<VipLevelBO> vipLevelBOList = vipLevelRoMapper.selectList(null);
+        for(int i=0; i<vipLevelBOList.size(); i++){
+            if((vipLevelBOList.get(i)).getId().equals(id)){
+                vipLevelBOList.remove(i);
+            }
+        }
+        for (VipLevelBO vipLevelBO : vipLevelBOList) {
+            if (vipLevelBO.getLevel().equals(vipLevelUpdateBO.getLevel())) {
+                LOGGER.warn("新增失败，参数：{}", vipLevelUpdateBO);
+                throw new ServiceException(4606);
+            }
+            if (vipLevelUpdateBO.getLevelCode() != null) {
+                if (vipLevelBO.getLevelCode().equals(vipLevelUpdateBO.getLevelCode())) {
+                    LOGGER.warn("新增失败，参数：{}", vipLevelUpdateBO);
+                    throw new ServiceException(4607);
+                }
+            }
+        }
+
         VipLevel vipLevel = new VipLevel();
         BeanUtils.copyProperties(vipLevelUpdateBO, vipLevel);
         vipLevel.setId(id);

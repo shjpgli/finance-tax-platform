@@ -50,6 +50,15 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagBO insert(TagInsertBO tagInsertBO) {
+        LOGGER.info("{}", tagInsertBO);
+        //标签名称唯一性校验
+        List<TagBO> tagBOList = tagRoMapper.selectList(null);
+        for(TagBO tagBO:tagBOList){
+            if(tagBO.getTagName().equals(tagInsertBO.getTagName())){
+                LOGGER.warn("新增失败，参数是：{}", tagInsertBO);
+                throw new ServiceException(4604);
+            }
+        }
         Tag tag = new Tag();
         BeanUtils.copyProperties(tagInsertBO, tag);
         Date date = new Date();
@@ -75,6 +84,23 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagBO update(TagUpdateBO tagUpdateBO, String id) {
         LOGGER.info("{}:{}", tagUpdateBO, id);
+        //标签名称唯一性校验
+        if(tagUpdateBO.getTagName()!=null){
+            List<TagBO> tagBOList = tagRoMapper.selectList(null);
+            //这条数据本身不做校验
+            for(int i=0; i<tagBOList.size(); i++){
+                if((tagBOList.get(i)).getId().equals(id)){
+                    tagBOList.remove(i);
+                }
+            }
+            for(TagBO tagBO:tagBOList){
+                if(tagBO.getTagName().equals(tagUpdateBO.getTagName())){
+                    LOGGER.warn("修改失败，参数是：{}", tagUpdateBO);
+                    throw new ServiceException(4604);
+                }
+            }
+        }
+
         Tag tag = new Tag();
         BeanUtils.copyProperties(tagUpdateBO, tag);
         Date date = new Date();

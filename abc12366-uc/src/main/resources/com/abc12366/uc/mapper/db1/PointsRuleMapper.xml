@@ -8,7 +8,7 @@
         values (#{id}, #{name}, #{code}, #{points}, #{description}, #{type}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.bo.PointsRuleUpdateBO">
+    <update id="update" parameterType="com.abc12366.uc.model.PointsRule">
         update uc_upoints_rule
         <set>
             <if test="name!=null">name=#{name},</if>
@@ -18,7 +18,7 @@
             <if test="type!=null">type=#{type},</if>
             <if test="status!=null">status=#{status},</if>
             <if test="createTime!=null">createTime=#{createTime},</if>
-            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate},</if>
+            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate}</if>
         </set>
         where id=#{id}
     </update>
