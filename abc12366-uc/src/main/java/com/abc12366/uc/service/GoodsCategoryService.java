@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public interface GoodsCategoryService {
 
-    List<GoodsCategoryBO> selectList(GoodsCategory goodsCategory);
+    GoodsCategoryBO selectList(GoodsCategory goodsCategory);
 
     GoodsCategory add(GoodsCategoryBO goodsCategoryBO);
 

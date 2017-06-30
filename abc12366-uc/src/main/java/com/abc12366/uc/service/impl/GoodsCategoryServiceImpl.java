@@ -7,6 +7,8 @@ import com.abc12366.uc.mapper.db2.GoodsCategoryRoMapper;
 import com.abc12366.uc.model.GoodsCategory;
 import com.abc12366.uc.model.bo.GoodsCategoryBO;
 import com.abc12366.uc.service.GoodsCategoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ import java.util.List;
 @Service
 public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoodsCategoryServiceImpl.class);
+
     @Autowired
     private GoodsCategoryRoMapper goodsCategoryRoMapper;
 
@@ -30,19 +34,19 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     private GoodsCategoryMapper goodsCategoryMapper;
 
     @Override
-    public List<GoodsCategoryBO> selectList(GoodsCategory goodsCategory) {
+    public GoodsCategoryBO selectList(GoodsCategory goodsCategory) {
         //查询所有父节点
-        List<GoodsCategoryBO> boList = goodsCategoryRoMapper.selectList(goodsCategory);
-        List<GoodsCategoryBO> list = new ArrayList<>();
-        GoodsCategoryBO categoryBO = null;
-        for (GoodsCategoryBO bo:boList){
-            categoryBO = new GoodsCategoryBO();
-             //if(bo.getParentId() == null){
-                categoryBO = recursiveTree(bo.getId());
-                list.add(categoryBO);
-            //}
+        GoodsCategoryBO bo;
+        if(goodsCategory != null && goodsCategory.getCategory() != null && !"".equals(goodsCategory.getCategory())){
+            bo = goodsCategoryRoMapper.selectByName(goodsCategory.getCategory());
+        }else{
+            bo = goodsCategoryRoMapper.selectParentCategory();
         }
-        return list;
+        GoodsCategoryBO  categoryBO = new GoodsCategoryBO();
+        if(bo != null){
+            categoryBO = recursiveTree(bo.getId());
+        }
+        return categoryBO;
     }
 
     /**
@@ -79,8 +83,19 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         Date date = new Date();
         goodsCategory.setCreateTime(date);
         goodsCategory.setLastUpdate(date);
+        if (goodsCategoryBO.getParentId() == null || "".equals(goodsCategory.getParentId())){
+            LOGGER.info("{请选择分类的父节点}", goodsCategoryBO);
+            throw new ServiceException(4153);
+        }
+        //不能加入名称相同的分类
+        GoodsCategoryBO bo = goodsCategoryRoMapper.selectByName(goodsCategoryBO.getCategory());
+        if(bo != null){
+            LOGGER.info("{不能加入名称相同的分类}", goodsCategoryBO);
+            throw new ServiceException(4152);
+        }
         int insert = goodsCategoryMapper.insert(goodsCategory);
         if(insert != 1){
+            LOGGER.info("{新增失败}", goodsCategory);
             throw new ServiceException(4101);
         }
         return goodsCategory;
@@ -95,6 +110,9 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
             if(id.equals(parentId)){
                 throw new ServiceException(4118);
             }
+        }else{
+            LOGGER.info("{请选择分类的父节点}", goodsCategoryBO);
+            throw new ServiceException(4153);
         }
         GoodsCategory category = new GoodsCategory();
         BeanUtils.copyProperties(goodsCategoryBO,category);

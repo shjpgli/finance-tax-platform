@@ -139,11 +139,11 @@ public class GoodsController {
                                      @RequestParam(value = "category", required = false) String category) {
         GoodsCategory goodsCategory = new GoodsCategory();
         goodsCategory.setCategory(category);
-        List<GoodsCategoryBO> categoryList = goodsCategoryService.selectList(goodsCategory);
-        LOGGER.info("{}", categoryList);
-        return (categoryList == null) ?
+        GoodsCategoryBO categoryBO = goodsCategoryService.selectList(goodsCategory);
+        LOGGER.info("{}", categoryBO);
+        return (categoryBO == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                 ResponseEntity.ok(Utils.kv("dataList", categoryList));
+                 ResponseEntity.ok(Utils.kv("data", categoryBO));
     }
 
 

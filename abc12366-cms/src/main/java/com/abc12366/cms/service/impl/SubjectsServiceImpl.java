@@ -77,6 +77,7 @@ public class SubjectsServiceImpl implements SubjectsService {
         for (Option option : optionList){
             option.setId(Utils.uuid());
             option.setSubjectsId(subjectsId);
+            option.setStatus(true);
             oInsert = optionMapper.insert(option);
             if (oInsert != 1){
                 LOGGER.info("{新增选项失败}", option);
@@ -103,24 +104,27 @@ public class SubjectsServiceImpl implements SubjectsService {
         List<Option> options = new ArrayList<>();
         List<Option> optionList = subjectsBO.getOptionList();
         int oUpdate = 0;
+        //先删除所有的选项，再新增
+        optionMapper.deleteBySubjectsId(subjectsBO.getId());
         for (Option option : optionList){
             //查询选项是否已存在
-            Option temp = optionRoMapper.selectByPrimaryKey(option.getId());
-            if(temp == null){
+//            Option temp = optionRoMapper.selectByPrimaryKey(option.getId());
+//            if(temp == null){
                 option.setId(Utils.uuid());
                 option.setSubjectsId(subjects.getId());
+                option.setStatus(true);
                 oUpdate = optionMapper.insert(option);
                 if (oUpdate != 1){
                     LOGGER.info("{新增选项失败}", option);
                     throw new ServiceException(4396);
                 }
-            }else {
-                oUpdate = optionMapper.update(option);
-                if (oUpdate != 1){
-                    LOGGER.info("{修改选项失败}", option);
-                    throw new ServiceException(4395);
-                }
-            }
+//            }else {
+//                oUpdate = optionMapper.update(option);
+//                if (oUpdate != 1){
+//                    LOGGER.info("{修改选项失败}", option);
+//                    throw new ServiceException(4395);
+//                }
+//            }
             options.add(option);
         }
         SubjectsBO bo = new SubjectsBO();

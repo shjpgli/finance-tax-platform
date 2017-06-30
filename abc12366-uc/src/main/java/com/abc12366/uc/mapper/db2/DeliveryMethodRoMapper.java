@@ -22,4 +22,6 @@ public interface DeliveryMethodRoMapper{
 	DeliveryMethod  selectByPrimaryKey(@Param("id") String id);
 
     List<DeliveryMethod> selectList(DeliveryMethod deliveryMethod);
+
+	DeliveryMethod selectByName(String name);
 }

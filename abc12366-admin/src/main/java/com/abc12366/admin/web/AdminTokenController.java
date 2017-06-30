@@ -35,13 +35,13 @@ public class AdminTokenController {
     }
 
     /**
-     * 验证token
+     * 刷新token
      * @param token
      * @return
      */
     @PostMapping(value = "/refresh/{token}")
     public ResponseEntity refreshToken(@PathVariable("token") String token) {
-        LOGGER.info("验证token"+token);
+        LOGGER.info("刷新token"+token);
         Boolean isToken = userService.refreshToken(token);
         return ResponseEntity.ok(isToken);
     }

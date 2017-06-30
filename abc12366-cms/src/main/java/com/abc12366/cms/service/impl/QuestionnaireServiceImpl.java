@@ -3,13 +3,15 @@ package com.abc12366.cms.service.impl;
 import com.abc12366.cms.mapper.db1.OptionMapper;
 import com.abc12366.cms.mapper.db1.QuestionnaireMapper;
 import com.abc12366.cms.mapper.db1.QuestionnaireParamMapper;
-import com.abc12366.cms.mapper.db2.OptionRoMapper;
+import com.abc12366.cms.mapper.db1.SubjectsMapper;
 import com.abc12366.cms.mapper.db2.QuestionnaireParamRoMapper;
 import com.abc12366.cms.mapper.db2.QuestionnaireRoMapper;
 import com.abc12366.cms.model.questionnaire.Option;
 import com.abc12366.cms.model.questionnaire.Questionnaire;
 import com.abc12366.cms.model.questionnaire.QuestionnaireParam;
+import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO;
+import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import com.abc12366.cms.service.QuestionnaireService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -41,11 +43,13 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     private QuestionnaireMapper questionnaireMapper;
 
     @Autowired
-    private QuestionnaireParamRoMapper questionnaireParamRoRoMapper;
-
-    @Autowired
     private QuestionnaireParamMapper questionnaireParamMapper;
 
+    @Autowired
+    private SubjectsMapper subjectsMapper;
+
+    @Autowired
+    private OptionMapper optionMapper;
 
 
     @Override
@@ -170,5 +174,67 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         }
     }
 
+    @Transactional("db1TxManager")
+    @Override
+    public QuestionnaireBO copy(QuestionnaireBO questionnaireBO) {
+        Questionnaire questionnaire = new Questionnaire();
+        BeanUtils.copyProperties(questionnaireBO,questionnaire);
+        String questionnaireId = Utils.uuid();
+        questionnaire.setId(questionnaireId);
+        Date date = new Date();
+        questionnaire.setCreateTime(date);
+        questionnaire.setUpdateTime(date);
+        int insert = questionnaireMapper.insert(questionnaire);
+        if(insert != 1){
+            LOGGER.info("{复制问卷失败}", questionnaire);
+            throw new ServiceException(4154);
+        }
+        QuestionnaireParam param = questionnaireBO.getQuestionnaireParam();
+        if(param != null){
+            param.setQuestionId(questionnaireId);
+            int pInsert = questionnaireParamMapper.insert(param);
+            if(pInsert != 1){
+                LOGGER.info("{复制问卷设置失败}", questionnaire);
+                throw new ServiceException(4155);
+            }
+        }
+        List<SubjectsBO> boList = new ArrayList<SubjectsBO>();
+        List<SubjectsBO> subjectsList = questionnaireBO.getSubjectsBOList();
+        for (SubjectsBO subjectsBO:subjectsList){
+            Subjects subjects = new Subjects();
+            subjectsBO.setQuestionId(questionnaireId);
+            BeanUtils.copyProperties(subjectsBO, subjects);
 
+            String subjectsId = Utils.uuid();
+            subjects.setId(subjectsId);
+            int sInsert = subjectsMapper.insert(subjects);
+            if(sInsert != 1){
+                LOGGER.info("{复制问卷题目失败}", questionnaire);
+                throw new ServiceException(4156);
+            }
+            List<Option> options = new ArrayList<>();
+            List<Option> optionList = subjectsBO.getOptionList();
+            for (Option option : optionList){
+                option.setId(Utils.uuid());
+                option.setSubjectsId(subjectsId);
+                option.setStatus(true);
+                int oInsert = optionMapper.insert(option);
+                if (oInsert != 1){
+                    LOGGER.info("{复制问卷问题选项失败}", option);
+                    throw new ServiceException(4157);
+                }
+                options.add(option);
+            }
+            SubjectsBO sBo = new SubjectsBO();
+            BeanUtils.copyProperties(subjects,sBo);
+            sBo.setOptionList(options);
+            boList.add(subjectsBO);
+        }
+        QuestionnaireBO bo = new QuestionnaireBO();
+        BeanUtils.copyProperties(questionnaire,bo);
+        bo.setQuestionnaireParam(param);
+        bo.setSubjectsBOList(boList);
+        return bo;
+
+    }
 }

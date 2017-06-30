@@ -46,6 +46,11 @@ public class DeliveryMethodServiceImpl implements DeliveryMethodService {
         Date date = new Date();
         deliveryMethod.setCreateTime(date);
         deliveryMethod.setLastUpdate(date);
+        DeliveryMethod method = deliveryMethodRoMapper.selectByName(deliveryMethod.getName());
+        if (method != null){
+            LOGGER.info("{配送方式名称不能重复}", deliveryMethod);
+            throw new ServiceException(4151);
+        }
         int insert = deliveryMethodMapper.insert(deliveryMethod);
         if (insert != 1){
             LOGGER.info("{新增配送方式失败}", deliveryMethod);

@@ -1,9 +1,12 @@
 package com.abc12366.cms.model.questionnaire.bo;
+import com.abc12366.cms.model.Subject;
 import com.abc12366.cms.model.questionnaire.QuestionnaireParam;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -22,9 +25,8 @@ public class QuestionnaireBO implements Serializable {
     @Size(min = 0, max = 255)
 	private String simpleDesc;
 
-    @NotEmpty
-    @Size(min = 0, max = 1)
-	private String status;
+    @NotNull
+	private Boolean status;
 
 	private String createUser;
 	private java.util.Date createTime;
@@ -36,6 +38,8 @@ public class QuestionnaireBO implements Serializable {
 	private String tradeCode;
 
     private QuestionnaireParam questionnaireParam;
+
+	private List<SubjectsBO> subjectsBOList;
 
 
 
@@ -64,11 +68,11 @@ public class QuestionnaireBO implements Serializable {
 		return this.simpleDesc;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(Boolean status){
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public Boolean getStatus(){
 		return this.status;
 	}
 
@@ -142,5 +146,13 @@ public class QuestionnaireBO implements Serializable {
 
     public void setQuestionnaireParam(QuestionnaireParam questionnaireParam) {
         this.questionnaireParam = questionnaireParam;
+    }
+
+    public List<SubjectsBO> getSubjectsBOList() {
+        return subjectsBOList;
+    }
+
+    public void setSubjectsBOList(List<SubjectsBO> subjectsBOList) {
+        this.subjectsBOList = subjectsBOList;
     }
 }

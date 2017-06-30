@@ -166,4 +166,17 @@ public class QuestionnaireController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 问卷拷贝
+     *
+     * @return
+     */
+    @PostMapping(path = "/copy")
+    public ResponseEntity copy(@Valid @RequestBody QuestionnaireBO questionnaireBO) {
+        LOGGER.info("{}", questionnaireBO);
+        QuestionnaireBO bo = questionnaireService.copy(questionnaireBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
 }

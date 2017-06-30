@@ -27,4 +27,9 @@ public interface GoodsCategoryRoMapper {
     List<GoodsCategoryBO> selectByParentId(String id);
 
     List<GoodsCategoryBO> selectList(GoodsCategory goodsCategory);
+
+    GoodsCategoryBO selectByName(@Param("category") String category);
+
+    GoodsCategoryBO selectParentCategory();
+
 }
