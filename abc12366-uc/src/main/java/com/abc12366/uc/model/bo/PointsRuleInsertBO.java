@@ -4,14 +4,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
- * Date: 2017-05-23
- * Time: 11:06
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-06-30
+ * Time: 17:08
  */
-public class ExperienceRuleInsertBO {
+public class PointsRuleInsertBO {
     @NotEmpty
     @Size(max = 32)
     private String name;
@@ -19,24 +18,14 @@ public class ExperienceRuleInsertBO {
     @Size(max = 10)
     private String code;
     @NotNull
-    private Integer exp;
-    @Size(max = 1000)
+    private Integer points;
     private String description;
     @Size(max = 1)
     private String type;
     @NotNull
     private Boolean status;
 
-    public ExperienceRuleInsertBO() {
-    }
-
-    public ExperienceRuleInsertBO(String name, String code, Integer exp, String description, String type, Boolean status) {
-        this.name = name;
-        this.code = code;
-        this.exp = exp;
-        this.description = description;
-        this.type = type;
-        this.status = status;
+    public PointsRuleInsertBO() {
     }
 
     public String getName() {
@@ -55,12 +44,12 @@ public class ExperienceRuleInsertBO {
         this.code = code;
     }
 
-    public Integer getExp() {
-        return exp;
+    public int getPoints() {
+        return points;
     }
 
-    public void setExp(Integer exp) {
-        this.exp = exp;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public String getDescription() {
@@ -85,17 +74,5 @@ public class ExperienceRuleInsertBO {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ExperienceRuleInsertBO{" +
-                "name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", exp=" + exp +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                ", status=" + status +
-                '}';
     }
 }

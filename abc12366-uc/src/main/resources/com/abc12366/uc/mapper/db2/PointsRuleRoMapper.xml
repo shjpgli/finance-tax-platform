@@ -13,13 +13,13 @@
         </where>
         ORDER BY lastUpdate DESC
     </select>
-    <select id="selectOne" resultType="com.abc12366.uc.model.bo.PointsRuleBO">
+    <select id="selectOne" resultType="com.abc12366.uc.model.bo.PointsRuleBO" parameterType="java.lang.String">
         select id, name, code, points, description, type, status, createTime, lastUpdate
         from uc_upoints_rule
         where id=#{id}
     </select>
 
-    <select id="selectByCode" resultType="com.abc12366.uc.model.PointsRule">
+    <select id="selectByCode" resultType="com.abc12366.uc.model.bo.PointsRuleBO" parameterType="java.lang.String">
         select id, name, code, points, description, type, status, createTime, lastUpdate
         from uc_upoints_rule
         where code=#{code}

@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -51,6 +50,18 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
         }
+
+        //特权名称唯一性校验
+        List<VipPrivilegeBO> vipPrivilegeBOList = vipPrivilegeRoMapper.selectList(null);
+        if (vipPrivilegeInsertBO.getName() != null) {
+            for (VipPrivilegeBO vipPrivilegeBO : vipPrivilegeBOList) {
+                if (vipPrivilegeBO.getName().equals(vipPrivilegeInsertBO.getName())) {
+                    LOGGER.warn("新增失败，参数：{}", vipPrivilegeInsertBO);
+                    throw new ServiceException(4605);
+                }
+            }
+        }
+
         VipPrivilege vipPrivilege = new VipPrivilege();
         BeanUtils.copyProperties(vipPrivilegeInsertBO, vipPrivilege);
         Date date = new Date();
@@ -76,6 +87,24 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
             LOGGER.warn("修改失败，参数：" + null);
             throw new ServiceException(4102);
         }
+
+        //特权名称唯一性校验
+        List<VipPrivilegeBO> vipPrivilegeBOList = vipPrivilegeRoMapper.selectList(null);
+        //这条数据本身不计入校验数据
+        for(int i=0; i<vipPrivilegeBOList.size(); i++){
+            if((vipPrivilegeBOList.get(i)).getId().equals(id)){
+                vipPrivilegeBOList.remove(i);
+            }
+        }
+        if (vipPrivilegeUpdateBO.getName() != null) {
+            for (VipPrivilegeBO vipPrivilegeBO : vipPrivilegeBOList) {
+                if (vipPrivilegeBO.getName().equals(vipPrivilegeUpdateBO.getName())) {
+                    LOGGER.warn("修改失败，参数：{}", vipPrivilegeUpdateBO);
+                    throw new ServiceException(4605);
+                }
+            }
+        }
+
         VipPrivilegeBO vipPrivilegeQuery = vipPrivilegeRoMapper.selectOne(id);
         if (vipPrivilegeQuery == null) {
             LOGGER.warn("修改失败，不存在可被修改的数据，参数：" + null);

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -54,6 +53,19 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
         }
+        //经验值规则新增，规则名称、规则代码唯一性校验
+        List<ExperienceRuleBO> experienceRuleBOList = experienceRuleRoMapper.selectList(null);
+        for (ExperienceRuleBO experieneRuleBO : experienceRuleBOList) {
+            if (experieneRuleBO.getName().equals(experienceRuleInsertBO.getName())) {
+                LOGGER.warn("新增失败，参数：{}", experienceRuleInsertBO);
+                throw new ServiceException(4602);
+            }
+            if (experieneRuleBO.getCode().equals(experienceRuleInsertBO.getCode())) {
+                LOGGER.warn("新增失败，参数：{}", experienceRuleInsertBO);
+                throw new ServiceException(4603);
+            }
+        }
+
         ExperienceRule experienceRule = new ExperienceRule();
         Date date = new Date();
         experienceRule.setId(Utils.uuid());
@@ -77,6 +89,32 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
             LOGGER.warn("修改失败，没有可被修改的数据，参数：" + id);
             throw new ServiceException(4102);
         }
+
+        //经验值规则新增，规则名称、规则代码唯一性校验
+        List<ExperienceRuleBO> experienceRuleBOList = experienceRuleRoMapper.selectList(null);
+        //本身不计入校验数据
+        for(int i=0; i<experienceRuleBOList.size(); i++){
+            if((experienceRuleBOList.get(i)).getId().equals(id)){
+                experienceRuleBOList.remove(i);
+            }
+        }
+        if (experienceRuleUpdateBO.getName() != null) {
+            for (ExperienceRuleBO experieneRuleBO : experienceRuleBOList) {
+                if (experieneRuleBO.getName().equals(experienceRuleUpdateBO.getName())) {
+                    LOGGER.warn("修改失败，参数：{}", experienceRuleUpdateBO);
+                    throw new ServiceException(4602);
+                }
+            }
+        }
+        if(experienceRuleUpdateBO.getCode()!=null){
+            for (ExperienceRuleBO experieneRuleBO : experienceRuleBOList) {
+                if (experieneRuleBO.getCode().equals(experienceRuleUpdateBO.getCode())) {
+                    LOGGER.warn("修改失败，参数：{}", experienceRuleUpdateBO);
+                    throw new ServiceException(4603);
+                }
+            }
+        }
+
         ExperienceRule experienceRule = new ExperienceRule();
         BeanUtils.copyProperties(experienceRuleUpdateBO, experienceRule);
         experienceRule.setId(id);

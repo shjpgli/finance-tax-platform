@@ -2,6 +2,7 @@ package com.abc12366.uc.model.bo;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,8 +24,18 @@ public class TagInsertBO {
     private String description;
     @Size(max = 100)
     private String rule;
+    @Max(9999)
+    private Integer weight;
 
     public TagInsertBO() {
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public String getTagName() {

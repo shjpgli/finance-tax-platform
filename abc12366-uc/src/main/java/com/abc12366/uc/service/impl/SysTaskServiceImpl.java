@@ -56,6 +56,15 @@ public class SysTaskServiceImpl implements SysTaskService {
             LOGGER.warn("新增失败，参数为：" + null);
             throw new ServiceException(4101);
         }
+        //任务名称唯一性校验逻辑
+        List<SysTaskBO> sysTaskBOList = sysTaskRoMapper.selectList(null);
+        for(SysTaskBO sysTaskBO:sysTaskBOList){
+            if(sysTaskBO.getName().equals(sysTaskInsertBO.getName())){
+                LOGGER.info("新增失败，参数为：{}", sysTaskInsertBO);
+                throw new ServiceException(4601);
+            }
+        }
+
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskInsertBO, sysTask);
         Date date = new Date();
@@ -78,6 +87,24 @@ public class SysTaskServiceImpl implements SysTaskService {
             LOGGER.warn("修改失败，参数为：" + null);
             throw new ServiceException(4102);
         }
+
+        //任务名称唯一性校验逻辑
+        List<SysTaskBO> sysTaskBOList = sysTaskRoMapper.selectList(null);
+        //这条数据本身不做校验
+        for(int i=0; i<sysTaskBOList.size(); i++){
+            if((sysTaskBOList.get(i)).getId().equals(id)){
+                sysTaskBOList.remove(i);
+            }
+        }
+        if(sysTaskUpdateBO.getName()!=null){
+            for(SysTaskBO sysTaskBO:sysTaskBOList){
+                if(sysTaskBO.getName().equals(sysTaskUpdateBO.getName())){
+                    LOGGER.info("参数失败，参数为：{}", sysTaskUpdateBO);
+                    throw new ServiceException(4601);
+                }
+            }
+        }
+
         SysTaskBO sysTaskQuery = sysTaskRoMapper.selectOne(id);
         if (sysTaskQuery == null) {
             LOGGER.warn("修改失败，不存在要被修改的数据，参数为：id=" + id);
@@ -86,7 +113,7 @@ public class SysTaskServiceImpl implements SysTaskService {
         //若系统任务已发布则不允许修改，修改前必须先撤销发布
         if (sysTaskQuery.isStatus()) {
             LOGGER.warn("修改失败，该任务已发布，撤销发布后才允许修改，参数为：id=" + id);
-            throw new ServiceException(4102);
+            throw new ServiceException(4600);
         }
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskUpdateBO, sysTask);

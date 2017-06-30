@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.bo;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -14,6 +15,7 @@ public class VipPrivilegeInsertAndUpdateBO {
     private String level;
     @Size(max = 1000)
     private String remark;
+    @NotNull
     private Boolean status;
 
     public VipPrivilegeInsertAndUpdateBO() {

@@ -3,6 +3,7 @@ package com.abc12366.uc.model.bo;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -14,9 +15,11 @@ public class ExperienceLevelInsertAndUpdateBO {
     @NotEmpty
     @Size(max = 10)
     private String name;
-    @Size(max = 32)
-    private String value;
-    private int topPerDay;
+    @NotNull
+    private Integer minValue;
+    @NotNull
+    private Integer maxValue;
+    private Integer topPerDay;
     private Boolean status;
     @Size(max = 50)
     private String medal;
@@ -34,19 +37,27 @@ public class ExperienceLevelInsertAndUpdateBO {
         this.name = name;
     }
 
-    public String getValue() {
-        return value;
+    public Integer getMinValue() {
+        return minValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setMinValue(Integer minValue) {
+        this.minValue = minValue;
     }
 
-    public int getTopPerDay() {
+    public Integer getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Integer maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public Integer getTopPerDay() {
         return topPerDay;
     }
 
-    public void setTopPerDay(int topPerDay) {
+    public void setTopPerDay(Integer topPerDay) {
         this.topPerDay = topPerDay;
     }
 

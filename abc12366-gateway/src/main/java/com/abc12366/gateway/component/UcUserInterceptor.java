@@ -44,7 +44,7 @@ public class UcUserInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         if (!ucUserService.isAuthentication(adminToken, userToken, request)) {
-            BodyStatus bodyStatus = Utils.bodyStatus(4002);
+            BodyStatus bodyStatus = Utils.bodyStatus(4194);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
             response.getWriter().flush();
