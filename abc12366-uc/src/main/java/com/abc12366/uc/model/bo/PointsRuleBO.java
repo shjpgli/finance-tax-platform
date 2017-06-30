@@ -12,15 +12,11 @@ import java.util.Date;
  */
 public class PointsRuleBO {
     private String id;
-    @NotEmpty
     private String name;
-    @NotEmpty
     private String code;
-    @NotEmpty
     private int points;
     private String description;
     private String type;
-    @NotEmpty
     private boolean status;
     private Date createTime;
     private Date lastUpdate;

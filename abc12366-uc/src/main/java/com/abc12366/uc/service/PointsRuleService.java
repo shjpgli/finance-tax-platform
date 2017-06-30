@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.model.bo.PointsRuleInsertBO;
 import com.abc12366.uc.model.bo.PointsRuleUpdateBO;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface PointsRuleService {
 
     PointsRuleBO selectOne(String id);
 
-    PointsRuleBO insert(PointsRuleBO pointsRuleBO);
+    PointsRuleBO insert(PointsRuleInsertBO pointsRuleInsertBO);
 
     PointsRuleBO update(PointsRuleUpdateBO pointsRuleUpdateBO, String id);
 

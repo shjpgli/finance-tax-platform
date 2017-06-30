@@ -50,6 +50,24 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
             LOGGER.warn("新增失败,入参为：" + null);
             throw new ServiceException(4101);
         }
+
+        //等级名称，经验值范围唯一性校验
+        List<ExperienceLevelBO> experienceLevelBOList = experienceLevelRoMapper.selectList(null);
+        for(ExperienceLevelBO experienceLevelBO:experienceLevelBOList){
+            if(experienceLevelBO.getName().equals(experienceLevelInsertBO.getName())){
+                LOGGER.warn("新增失败，参数：{}", experienceLevelInsertBO);
+                throw new ServiceException(4610);
+            }
+            //判断经验值范围与已有经验值等级是否存在冲突
+            if(((experienceLevelInsertBO.getMinValue()>=experienceLevelBO.getMinValue())&&(experienceLevelInsertBO.getMinValue()<=experienceLevelBO.getMaxValue()))
+                    ||((experienceLevelInsertBO.getMaxValue()>=experienceLevelBO.getMinValue())&&(experienceLevelInsertBO.getMaxValue()<=experienceLevelBO.getMaxValue()))
+                    ||((experienceLevelBO.getMinValue()>=experienceLevelInsertBO.getMinValue())&&(experienceLevelBO.getMinValue()<=experienceLevelInsertBO.getMaxValue()))
+                    ||((experienceLevelBO.getMaxValue()>=experienceLevelInsertBO.getMinValue())&&(experienceLevelBO.getMaxValue()<=experienceLevelInsertBO.getMaxValue()))){
+                LOGGER.warn("新增失败，参数：{}", experienceLevelInsertBO);
+                throw new ServiceException(4611);
+            }
+        }
+
         ExperienceLevel experienceLevel = new ExperienceLevel();
         BeanUtils.copyProperties(experienceLevelInsertBO, experienceLevel);
         Date date = new Date();
@@ -75,6 +93,30 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
             LOGGER.warn("修改失败,入参为：" + null);
             throw new ServiceException(4102);
         }
+
+        //等级名称，经验值范围唯一性校验
+        List<ExperienceLevelBO> experienceLevelBOList = experienceLevelRoMapper.selectList(null);
+        //这条数据本身不做校验
+        for(int i=0; i<experienceLevelBOList.size(); i++){
+            if(experienceLevelBOList.get(i).getId().equals(id)){
+                experienceLevelBOList.remove(i);
+            }
+        }
+        for(ExperienceLevelBO experienceLevelBO:experienceLevelBOList){
+            if(experienceLevelBO.getName().equals(experienceLevelUpdateBO.getName())){
+                LOGGER.warn("修改失败，参数：{}", experienceLevelUpdateBO);
+                throw new ServiceException(4610);
+            }
+            //判断经验值范围与已有经验值等级是否存在冲突
+            if(((experienceLevelUpdateBO.getMinValue()>=experienceLevelBO.getMinValue())&&(experienceLevelUpdateBO.getMinValue()<=experienceLevelBO.getMaxValue()))
+                    ||((experienceLevelUpdateBO.getMaxValue()>=experienceLevelBO.getMinValue())&&(experienceLevelUpdateBO.getMaxValue()<=experienceLevelBO.getMaxValue()))
+                    ||((experienceLevelBO.getMinValue()>=experienceLevelUpdateBO.getMinValue())&&(experienceLevelBO.getMinValue()<=experienceLevelUpdateBO.getMaxValue()))
+                    ||((experienceLevelBO.getMaxValue()>=experienceLevelUpdateBO.getMinValue())&&(experienceLevelBO.getMaxValue()<=experienceLevelUpdateBO.getMaxValue()))){
+                LOGGER.warn("修改失败，参数：{}", experienceLevelUpdateBO);
+                throw new ServiceException(4611);
+            }
+        }
+
         ExperienceLevel experienceLevel = new ExperienceLevel();
         BeanUtils.copyProperties(experienceLevelUpdateBO, experienceLevel);
         experienceLevel.setId(id);

@@ -13,8 +13,9 @@ import java.util.Date;
 public class ExperienceLevelBO {
     private String id;
     private String name;
-    private String value;
-    private int topPerDay;
+    private Integer minValue;
+    private Integer maxValue;
+    private Integer topPerDay;
     private Boolean status;
     private Date lastUpdate;
     private Date createTime;
@@ -40,19 +41,27 @@ public class ExperienceLevelBO {
         this.name = name;
     }
 
-    public String getValue() {
-        return value;
+    public Integer getMinValue() {
+        return minValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setMinValue(Integer minValue) {
+        this.minValue = minValue;
     }
 
-    public int getTopPerDay() {
+    public Integer getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Integer maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public Integer getTopPerDay() {
         return topPerDay;
     }
 
-    public void setTopPerDay(int topPerDay) {
+    public void setTopPerDay(Integer topPerDay) {
         this.topPerDay = topPerDay;
     }
 

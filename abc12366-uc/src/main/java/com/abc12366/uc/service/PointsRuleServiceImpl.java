@@ -6,6 +6,7 @@ import com.abc12366.uc.mapper.db1.PointsRuleMapper;
 import com.abc12366.uc.mapper.db2.PointsRuleRoMapper;
 import com.abc12366.uc.model.PointsRule;
 import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.model.bo.PointsRuleInsertBO;
 import com.abc12366.uc.model.bo.PointsRuleUpdateBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,25 +52,33 @@ public class PointsRuleServiceImpl implements PointsRuleService {
 
     @Transactional("db1TxManager")
     @Override
-    public PointsRuleBO insert(PointsRuleBO pointsRuleBO) {
-        if (pointsRuleBO == null) {
+    public PointsRuleBO insert(PointsRuleInsertBO pointsRuleInsertBO) {
+        if (pointsRuleInsertBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-        PointsRule pointsRuleQuery = uPointRuleRoMapper.selectByCode(pointsRuleBO.getCode());
-        if (pointsRuleQuery != null) {
-            LOGGER.warn("新增失败，参数：{}" + pointsRuleBO.toString());
-            throw new ServiceException(4101);
+        //积分规则的规则名称和规则代码唯一性校验
+        List<PointsRuleBO> pointsRuleBOList = uPointRuleRoMapper.selectList(null);
+        for(PointsRuleBO pointsRuleBO:pointsRuleBOList){
+            if(pointsRuleBO.getName().equals(pointsRuleInsertBO.getName())){
+                LOGGER.warn("新增失败，参数：{}", pointsRuleInsertBO);
+                throw new ServiceException(4608);
+            }
+            if(pointsRuleBO.getCode().equals(pointsRuleInsertBO.getCode())){
+                LOGGER.warn("新增失败，参数：{}", pointsRuleInsertBO);
+                throw new ServiceException(4609);
+            }
         }
+
         PointsRule pointsRule = new PointsRule();
-        BeanUtils.copyProperties(pointsRuleBO, pointsRule);
+        BeanUtils.copyProperties(pointsRuleInsertBO, pointsRule);
         Date date = new Date();
         pointsRule.setId(Utils.uuid());
         pointsRule.setCreateTime(date);
         pointsRule.setLastUpdate(date);
         int result = uPointRuleMapper.insert(pointsRule);
         if (result < 1) {
-            LOGGER.warn("新增失败，参数：{}" + pointsRuleBO.toString());
+            LOGGER.warn("新增失败，参数：{}" + pointsRuleInsertBO);
             throw new ServiceException(4101);
         }
         PointsRuleBO pointsRuleBO1 = new PointsRuleBO();
@@ -81,12 +90,32 @@ public class PointsRuleServiceImpl implements PointsRuleService {
     @Override
     public PointsRuleBO update(PointsRuleUpdateBO pointsRuleUpdateBO, String id) {
         if (pointsRuleUpdateBO == null) {
-            LOGGER.warn("更新失败，参数：{}：{}" + pointsRuleUpdateBO.toString(), id);
+            LOGGER.warn("更新失败，参数：{}：{}" ,id);
             throw new ServiceException(4102);
         }
+
+        //积分规则的规则名称和规则代码唯一性校验
+        List<PointsRuleBO> pointsRuleBOList = uPointRuleRoMapper.selectList(null);
+        //这条数据本身不做校验
+        for(int i=0; i<pointsRuleBOList.size(); i++){
+            if((pointsRuleBOList.get(i)).getId().equals(id)){
+                pointsRuleBOList.remove(i);
+            }
+        }
+        for(PointsRuleBO pointsRuleBO:pointsRuleBOList){
+            if(pointsRuleBO.getName().equals(pointsRuleUpdateBO.getName())){
+                LOGGER.warn("新增失败，参数：{}", pointsRuleUpdateBO);
+                throw new ServiceException(4608);
+            }
+            if(pointsRuleBO.getCode().equals(pointsRuleUpdateBO.getCode())){
+                LOGGER.warn("新增失败，参数：{}", pointsRuleUpdateBO);
+                throw new ServiceException(4609);
+            }
+        }
+
         PointsRuleBO uPointsRuleQuery = uPointRuleRoMapper.selectOne(id);
         if (uPointsRuleQuery == null) {
-            LOGGER.warn("更新失败，参数：{}：{}" + pointsRuleUpdateBO.toString(), id);
+            LOGGER.warn("更新失败，参数：{}：{}" , pointsRuleUpdateBO.toString(), id);
             throw new ServiceException(4102);
         }
 
