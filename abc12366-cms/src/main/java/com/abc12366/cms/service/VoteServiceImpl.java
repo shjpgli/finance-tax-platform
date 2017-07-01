@@ -171,9 +171,24 @@ public class VoteServiceImpl implements VoteService {
         Vote v = selectOne(vote.getId());
         if (v != null) {
             v.setName(vote.getName());
+            v.setStartTime(vote.getStartTime());
             v.setEndTime(vote.getEndTime());
             v.setLogin(vote.getLogin());
+            v.setQuickVote(vote.getQuickVote());
+            v.setPrivacyVote(vote.getPrivacyVote());
+            v.setPrivacyPassword(vote.getPrivacyPassword());
+            v.setDayVote(vote.getDayVote());
+            v.setShowResult(vote.getShowResult());
+            v.setStartIntro(vote.getStartIntro());
+            v.setEndIntro(vote.getEndIntro());
+            v.setAccess(vote.getAccess());
+            v.setHeader(vote.getHeader());
+            v.setFooter(vote.getFooter());
+            v.setUrl(vote.getUrl());
+            v.setValidateCode(vote.getValidateCode());
+            v.setHiddenResult(vote.getHiddenResult());
             v.setStatus(vote.getStatus());
+            v.setChannel(vote.getChannel());
             v.setLastUpdate(now);
             voteMapper.update(v);
 
