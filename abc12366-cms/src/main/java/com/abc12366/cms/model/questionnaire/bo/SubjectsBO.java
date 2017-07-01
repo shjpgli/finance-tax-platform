@@ -20,21 +20,10 @@ public class SubjectsBO implements Serializable {
 	private String id;
     @NotEmpty
 	private String questionId;
-
-    @NotEmpty
-    @Size(min = 2, max = 100)
 	private String title;
-
-    @Size(min = 0, max = 255)
 	private String simpleDesc;
-
-    @NotNull
 	private Integer isRequired;
-
-    @Size(min = 0, max = 2)
 	private String optionType;
-
-    @Size(min = 0, max = 2)
 	private String isQuestion;
 	private Integer pages;
 	private String picPath;
@@ -42,6 +31,8 @@ public class SubjectsBO implements Serializable {
 	private Integer randomOrder;
 	private Integer displayMultiple;
 	private Integer mostOptional;
+    @NotNull
+	private Integer number;
 
     private List<Option> optionList = new ArrayList<Option>();
 
@@ -158,4 +149,12 @@ public class SubjectsBO implements Serializable {
     public void setOptionList(List<Option> optionList) {
         this.optionList = optionList;
     }
+
+	public Integer getNumber() {
+		return number;
+	}
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
 }

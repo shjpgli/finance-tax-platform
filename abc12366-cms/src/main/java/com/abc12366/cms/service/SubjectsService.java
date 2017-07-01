@@ -27,4 +27,10 @@ public interface SubjectsService {
     SubjectsBO update(SubjectsBO subjectsBO);
 
     void delete(SubjectsBO subjectsBO);
+
+    List<SubjectsBO> insertList(List<SubjectsBO> subjectsBOs, String questionId);
+
+    List<SubjectsBO> updateList(List<SubjectsBO> subjectsBOs, String questionId, String id);
+
+    List<SubjectsBO> deleteList(List<SubjectsBO> subjectsBOs, String questionId, String id);
 }

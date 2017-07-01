@@ -78,29 +78,26 @@ public class SubjectsController {
      * @return
      */
     @PostMapping(path = "/{questionId}")
-    public ResponseEntity submitSubjects(@Valid @RequestBody SubjectsBO subjectsBO, @PathVariable("questionId") String questionId) {
-        LOGGER.info("{}", subjectsBO);
-        subjectsBO.setQuestionId(questionId);
-        SubjectsBO bo = subjectsService.insert(subjectsBO);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
+    public ResponseEntity addSubjects(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("questionId") String questionId) {
+        LOGGER.info("{}", subjectsBOs);
+        List<SubjectsBO> bos = subjectsService.insertList(subjectsBOs,questionId);
+        LOGGER.info("{}", bos);
+        return ResponseEntity.ok(Utils.kv("dataList", bos));
     }
 
     /**
      * 题目修改
-     * @param subjectsBO
+     * @param subjectsBOs
      * @param questionId
      * @param id
      * @return
      */
     @PutMapping(path = "/{id}/{questionId}")
-    public ResponseEntity update(@Valid @RequestBody SubjectsBO subjectsBO, @PathVariable("questionId") String questionId, @PathVariable("id") String id) {
-        LOGGER.info("{}", subjectsBO);
-        subjectsBO.setId(id);
-        subjectsBO.setQuestionId(questionId);
-        SubjectsBO bo = subjectsService.update(subjectsBO);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
+    public ResponseEntity update(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("questionId") String questionId, @PathVariable("id") String id) {
+        LOGGER.info("{}", subjectsBOs);
+        List<SubjectsBO> bos = subjectsService.updateList(subjectsBOs,questionId,id);
+        LOGGER.info("{}", bos);
+        return ResponseEntity.ok(Utils.kv("dataList", bos));
     }
 
     /**
@@ -111,12 +108,11 @@ public class SubjectsController {
      * @return
      */
     @DeleteMapping(path = "/{id}/{questionId}")
-    public ResponseEntity update(@PathVariable("questionId") String questionId, @PathVariable("id") String id) {
-        SubjectsBO subjectsBO = new SubjectsBO();
-        subjectsBO.setQuestionId(questionId);
-        subjectsBO.setId(id);
-        subjectsService.delete(subjectsBO);
-        return ResponseEntity.ok(Utils.kv());
+    public ResponseEntity delete(@Valid @RequestBody List<SubjectsBO> subjectsBOs,@PathVariable("questionId") String questionId, @PathVariable("id") String id) {
+        LOGGER.info("{}", subjectsBOs);
+        List<SubjectsBO> bos = subjectsService.deleteList(subjectsBOs,questionId,id);
+        LOGGER.info("{}", bos);
+        return ResponseEntity.ok(Utils.kv("dataList", bos));
     }
 
 }

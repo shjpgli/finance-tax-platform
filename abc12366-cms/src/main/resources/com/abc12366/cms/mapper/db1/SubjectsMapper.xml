@@ -59,6 +59,9 @@
 			<if test="mostOptional != null">
 				 mostOptional,
 			</if>
+			<if test="number != null">
+				number,
+			</if>
 
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -100,6 +103,9 @@
 			</if>
 			<if test="mostOptional!=null">
 				 #{mostOptional},
+			</if>
+			<if test="number!=null">
+				 #{number},
 			</if>
 		 </trim>
 	</insert>
@@ -143,6 +149,9 @@
 			</if>
 			<if test="mostOptional != null">
 				 mostOptional = #{mostOptional},
+			</if>
+			<if test="number != null">
+				number = #{number},
 			</if>
 
  		 </set>

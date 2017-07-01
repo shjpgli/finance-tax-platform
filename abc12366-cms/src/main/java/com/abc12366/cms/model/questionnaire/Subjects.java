@@ -49,6 +49,9 @@ public class Subjects implements Serializable {
 	/**最多可选**/
 	private Integer mostOptional;
 
+	/**题目编号**/
+	private Integer number;
+
 
 
 	public void setQuestionId(String questionId){
@@ -154,4 +157,12 @@ public class Subjects implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+
+	public Integer getNumber() {
+		return number;
+	}
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
 }

@@ -4,8 +4,6 @@ import com.abc12366.cms.mapper.db1.OptionMapper;
 import com.abc12366.cms.mapper.db1.SubjectsMapper;
 import com.abc12366.cms.mapper.db2.OptionRoMapper;
 import com.abc12366.cms.mapper.db2.SubjectsRoMapper;
-import com.abc12366.cms.mapper.db2.VoteRoMapper;
-import com.abc12366.cms.model.Subject;
 import com.abc12366.cms.model.questionnaire.Option;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
@@ -144,5 +142,132 @@ public class SubjectsServiceImpl implements SubjectsService {
             throw new ServiceException(4397);
         }
         optionMapper.deleteBySubjectsId(subjectsBO.getId());
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<SubjectsBO> insertList(List<SubjectsBO> subjectsBOs, String questionId) {
+        List<SubjectsBO> boList = new ArrayList<SubjectsBO>();
+        if(subjectsBOs != null){
+            for (SubjectsBO sBO : subjectsBOs){
+                Subjects subjects = new Subjects();
+                BeanUtils.copyProperties(sBO,subjects);
+                //判断是新增还是修改，id为null就是新增
+                if(sBO.getId() != null && !"".equals(sBO.getId())){
+                    sBO.setQuestionId(questionId);
+                    //修改，只修改题目编号
+                    int update = subjectsMapper.update(subjects);
+                    if(update != 1){
+                        LOGGER.info("{修改题目失败}", subjects);
+                        throw new ServiceException(4398);
+                    }
+
+                    boList.add(subjectsRoMapper.selectOne(subjects.getId()));
+                }else{
+                    String subjectsId = Utils.uuid();
+                    subjects.setId(subjectsId);
+                    int insert = subjectsMapper.insert(subjects);
+                    if(insert != 1){
+                        LOGGER.info("{新增题目失败}", subjects);
+                        throw new ServiceException(4399);
+                    }
+                    List<Option> options = new ArrayList<>();
+                    List<Option> optionList = sBO.getOptionList();
+                    for (Option option : optionList){
+                        option.setId(Utils.uuid());
+                        option.setSubjectsId(subjectsId);
+                        option.setStatus(true);
+                        int oInsert = optionMapper.insert(option);
+                        if (oInsert != 1){
+                            LOGGER.info("{新增选项失败}", option);
+                            throw new ServiceException(4396);
+                        }
+                        options.add(option);
+                    }
+                    SubjectsBO bo = new SubjectsBO();
+                    BeanUtils.copyProperties(subjects,bo);
+                    bo.setOptionList(options);
+                    boList.add(bo);
+                }
+            }
+        }
+        return boList;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<SubjectsBO> updateList(List<SubjectsBO> subjectsBOs, String questionId, String id) {
+        List<SubjectsBO> boList = new ArrayList<SubjectsBO>();
+        if(subjectsBOs != null){
+            for (SubjectsBO sBO : subjectsBOs){
+                sBO.setQuestionId(questionId);
+                Subjects subjects = new Subjects();
+                BeanUtils.copyProperties(sBO,subjects);
+                //id 等于列表中的id时，修改里面数据，否则修改题目编号
+                if(id.equals(sBO.getId())){
+                    int update = subjectsMapper.update(subjects);
+                    if(update != 1){
+                        LOGGER.info("{修改题目失败}", subjects);
+                        throw new ServiceException(4398);
+                    }
+                    List<Option> options = new ArrayList<>();
+                    List<Option> optionList = sBO.getOptionList();
+                    for (Option option : optionList){
+                        option.setSubjectsId(subjects.getId());
+                        option.setStatus(true);
+                        int oUpdate = optionMapper.update(option);
+                        if (oUpdate != 1){
+                            LOGGER.info("{修改选项失败}", option);
+                            throw new ServiceException(4395);
+                        }
+                        options.add(option);
+                    }
+                    SubjectsBO bo = new SubjectsBO();
+                    BeanUtils.copyProperties(subjects,bo);
+                    bo.setOptionList(options);
+                    boList.add(bo);
+                }else{
+                    //修改，只修改题目编号
+                    int update = subjectsMapper.update(subjects);
+                    if(update != 1){
+                        LOGGER.info("{修改题目失败}", subjects);
+                        throw new ServiceException(4398);
+                    }
+                    boList.add(subjectsRoMapper.selectOne(subjects.getId()));
+                }
+            }
+        }
+        return boList;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<SubjectsBO> deleteList(List<SubjectsBO> subjectsBOs, String questionId, String id) {
+        Subjects subjects = new Subjects();
+        subjects.setQuestionId(questionId);
+        subjects.setId(id);
+        int del = subjectsMapper.delete(subjects);
+        if (del != 1){
+            LOGGER.info("{删除题目失败}", subjects);
+            throw new ServiceException(4397);
+        }
+        optionMapper.deleteBySubjectsId(subjects.getId());
+
+        List<SubjectsBO> boList = new ArrayList<SubjectsBO>();
+        if(subjectsBOs != null){
+            for (SubjectsBO sBO : subjectsBOs){
+                sBO.setQuestionId(questionId);
+                subjects = new Subjects();
+                BeanUtils.copyProperties(sBO,subjects);
+                //修改，只修改题目编号
+                int update = subjectsMapper.update(subjects);
+                if(update != 1){
+                    LOGGER.info("{修改题目失败}", subjects);
+                    throw new ServiceException(4398);
+                }
+                boList.add(subjectsRoMapper.selectOne(subjects.getId()));
+            }
+        }
+        return boList;
     }
 }
