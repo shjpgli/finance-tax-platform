@@ -150,8 +150,8 @@ public class Vote {
         setLogin(builder.login);
         setChannel(builder.channel);
         setQuickVote(builder.quickVote);
-        setprivacyVote(builder.privacyVote);
-        setprivacyPassword(builder.privacyPassword);
+        setPrivacyVote(builder.privacyVote);
+        setPrivacyPassword(builder.privacyPassword);
         setDayVote(builder.dayVote);
         setShowResult(builder.showResult);
         setStartIntro(builder.startIntro);
@@ -225,19 +225,19 @@ public class Vote {
         this.quickVote = quickVote;
     }
 
-    public String getprivacyVote() {
+    public String getPrivacyVote() {
         return privacyVote;
     }
 
-    public void setprivacyVote(String privacyVote) {
+    public void setPrivacyVote(String privacyVote) {
         this.privacyVote = privacyVote;
     }
 
-    public String getprivacyPassword() {
+    public String getPrivacyPassword() {
         return privacyPassword;
     }
 
-    public void setprivacyPassword(String privacyPassword) {
+    public void setPrivacyPassword(String privacyPassword) {
         this.privacyPassword = privacyPassword;
     }
 
