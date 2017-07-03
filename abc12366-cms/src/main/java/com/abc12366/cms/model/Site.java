@@ -103,6 +103,12 @@ public class Site implements Serializable {
 	/**站点状态**varchar(1)**/
 	private String siteStatus;
 
+	/**第三方分享代码**varchar(500)**/
+	private String shareCode;
+
+	/**站点统计代码**varchar(500)**/
+	private String statisticsCode;
+
 
 
 	public void setSiteId(String siteId){
@@ -351,5 +357,21 @@ public class Site implements Serializable {
 
 	public void setSiteStatus(String siteStatus) {
 		this.siteStatus = siteStatus;
+	}
+
+	public String getShareCode() {
+		return shareCode;
+	}
+
+	public void setShareCode(String shareCode) {
+		this.shareCode = shareCode;
+	}
+
+	public String getStatisticsCode() {
+		return statisticsCode;
+	}
+
+	public void setStatisticsCode(String statisticsCode) {
+		this.statisticsCode = statisticsCode;
 	}
 }
