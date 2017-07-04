@@ -58,6 +58,15 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("data",dict));
     }
 
+    @GetMapping(path="/name")
+    public ResponseEntity selectListByDictName(@RequestParam(value = "dictName", required = false) String dictName){
+        Dict dict = new Dict();
+        dict.setDictName(dictName);
+        List<Dict> dictList = dictService.selectListByDictName(dict);
+        LOGGER.info("{}",dictList);
+        return ResponseEntity.ok(Utils.kv("dataList",dictList));
+    }
+
     @GetMapping(path="/firstLevel")
     public ResponseEntity selectFirstLevel(){
         List<DictBO> dictBOs = dictService.selectFirstLevel();

@@ -18,6 +18,17 @@
         </where>
     </select>
 
+    <select id="selectListByDictName" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
+        select
+        distinct dictName
+        from sys_dict
+        <where>
+            1=1
+            <if test="dictName != null and dictName!=''"> and dictName LIKE CONCAT('%',#{dictName},'%')</if>
+        </where>
+        ORDER BY dictName
+    </select>
+
     <select id="selectOne" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
         select
         <include refid="Base_Column_List" />

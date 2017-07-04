@@ -2,6 +2,7 @@ package com.abc12366.admin.mapper.db2;
 
 import com.abc12366.admin.model.Dict;
 import com.abc12366.admin.model.bo.DictBO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface DictRoMapper {
     Dict selectByDictName(String dictName);
 
     List<DictBO> selectDictList(Dict dict);
+
+    List<Dict> selectListByDictName(Dict dict);
 }

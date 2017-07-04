@@ -131,4 +131,9 @@ public class DictServiceImpl implements DictService {
         }
     }
 
+    @Override
+    public List<Dict> selectListByDictName(Dict dict) {
+        return dictRoMapper.selectListByDictName(dict);
+    }
+
 }
