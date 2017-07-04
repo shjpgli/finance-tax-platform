@@ -120,7 +120,7 @@ public class OrderController {
      * @return
      */
     @GetMapping(path = "/selectOne/{id}")
-    public ResponseEntity<?> selectOne(@PathVariable String id) {
+    public ResponseEntity<?> selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         OrderBO orderBO = orderService.selectOne(id);
         LOGGER.info("{}", orderBO);

@@ -25,36 +25,53 @@
         <result column="recommendType" property="recommendType" jdbcType="VARCHAR"/>
         <result column="totalStock" property="totalStock" jdbcType="DOUBLE"/>
         <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
-        <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO">
-            <id column="goodsId" property="goodsId" jdbcType="VARCHAR" />
-            <result column="dictId" property="dictId" jdbcType="VARCHAR"/>
-            <result column="stock" property="stock" jdbcType="INTEGER"/>
-            <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
-            <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
-            <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
-            <result column="finalPrice" property="finalPrice" jdbcType="DOUBLE"/>
-            <result column="discount" property="discount" jdbcType="DOUBLE"/>
-            <result column="uvipLevel" property="uvipLevel" jdbcType="VARCHAR"/>
-            <result column="weight" property="weight" jdbcType="DOUBLE"/>
-            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-            <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        </collection>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
     </resultMap>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_goods
-		 WHERE id = #{id}
-	</select>
-    <!-- 产品列表查询 -->
-    <!--<select id="selectList" resultType="com.abc12366.uc.model.Goods" parameterType="com.abc12366.uc.model.Goods">
+   <!-- <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="id" select="getProductBO"></collection>
+    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="oneProductBO" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
+        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="getProductBO" parameterType="java.lang.String" resultMap="oneProductBO" >
+        SELECT
+        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate
+        FROM uc_product
+        WHERE goodsId = #{goodsId}
+    </select>-->
+
+
+    <!--根据goodsId查询产品-->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_goods
-    </select>-->
+        WHERE id = #{id}
+    </select>
+
     <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_goods
+        <where>
+            1=1
+            <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="categoryId != null  and categoryId!=''"> AND g.categoryId = #{categoryId}</if>
+            <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
+            <if test="status != null  and status!=''"> AND g.status = #{status}</if>
+        </where>
+    </select>
+
+    <!--<select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
         SELECT
         g.id,
         g.name,
@@ -85,15 +102,19 @@
             <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
             <if test="status != null  and status!=''"> AND g.status = #{status}</if>
         </where>
-    </select>
+    </select>-->
 
     <!--     单个产品查询 -->
-    <!--<select id="selectGoods" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
+    <select id="selectGoodsList" resultType="com.abc12366.uc.model.Goods" parameterType="com.abc12366.uc.model.Goods">
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_goods
-        WHERE id = #{id}
-    </select>-->
+        <where>
+            1=1
+            <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
+        </where>
+    </select>
+
     <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
         SELECT
         g.id,

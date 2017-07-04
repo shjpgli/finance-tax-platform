@@ -25,4 +25,6 @@ public interface SubjectsRoMapper {
     List<SubjectsBO> selectList(Subjects subjects);
 
     SubjectsBO selectOne(String id);
+
+    List<SubjectsBO> selectSubjectsByPages(Subjects subjects);
 }

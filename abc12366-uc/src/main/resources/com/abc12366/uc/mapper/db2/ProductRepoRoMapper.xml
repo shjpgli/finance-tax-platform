@@ -7,7 +7,54 @@
 		 id,	goodsId,	productId,	income,	outcome,	stock,	remark,	createTime,	lastUpdate
 	</sql>
 
+    <resultMap id="productRepoBOResultMap" type="com.abc12366.uc.model.bo.ProductRepoBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="VARCHAR"/>
+        <result column="income" property="income" jdbcType="INTEGER"/>
+        <result column="outcome" property="outcome" jdbcType="INTEGER"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="goods" javaType="com.abc12366.uc.model.Goods">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+		<!--<collection property="students" ofType="me.gacl.domain.Student" column="c_id" select="getStudent"></collection>-->
+    </resultMap>
+
+	<!--<select id="getStudent" parameterType="int" resultType="me.gacl.domain.Student">
+		  SELECT s_id id, s_name name FROM student WHERE class_id=#{id}
+	</select>-->
+
 	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.ProductRepo" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM uc_product_repo
+		 WHERE id = #{id}
+	</select>
+
+	<select id="selectList" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.ProductRepo">
+		 SELECT
+		 r.id,	r.goodsId,	r.productId,	r.income,	r.outcome,	r.stock,	r.remark,	r.createTime,	r.lastUpdate,
+
+		 FROM uc_product_repo r
+		 LEFT JOIN uc_goods g ON g.id = r.goodsId
+         <where>
+            1 = 1
+            <if test=" goods.name != null and goods.name != '' ">
+                AND g.name LIKE CONCAT('%',#{goods.name},'%')
+            </if>
+        </where>
+	</select>
+	<select id="selectOne" resultMap="productRepoBOResultMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM uc_product_repo
+		 WHERE id = #{id}
+	</select>
+	<select id="selectByGoodsId" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.ProductRepo">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM uc_product_repo

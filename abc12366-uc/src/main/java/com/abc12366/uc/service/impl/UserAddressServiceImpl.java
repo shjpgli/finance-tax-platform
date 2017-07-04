@@ -10,6 +10,7 @@ import com.abc12366.uc.service.UserAddressService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -43,6 +44,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public UserAddressBO updateUserAddress(UserAddressBO userAddressBO) {
         UserAddress userAddress = new UserAddress();
@@ -58,6 +60,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public int deleteByIdAndUserId(UserAddressBO userAddressBO) {
         UserAddress userAddress = new UserAddress();
@@ -65,6 +68,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         return userAddressMapper.deleteByIdAndUserId(userAddress);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public UserAddressBO addUserAddress(UserAddressBO userAddressBO) {
         UserAddress userAddress = new UserAddress();

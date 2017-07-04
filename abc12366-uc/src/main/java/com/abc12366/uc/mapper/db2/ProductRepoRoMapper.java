@@ -1,7 +1,10 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.ProductRepo;
+import com.abc12366.uc.model.bo.ProductRepoBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -19,4 +22,9 @@ public interface ProductRepoRoMapper {
 	 **/
 	ProductRepo  selectByPrimaryKey(@Param("id") String id);
 
+	List<ProductRepoBO> selectList(ProductRepoBO productRepoBO);
+
+	ProductRepoBO selectOne(String id);
+
+	ProductRepo selectByGoodsId(ProductRepoBO productRepoBO);
 }

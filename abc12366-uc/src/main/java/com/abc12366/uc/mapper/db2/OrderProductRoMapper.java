@@ -20,4 +20,5 @@ public interface OrderProductRoMapper {
 	OrderProduct  selectByPrimaryKey(@Param("id") String id);
 
 
+	OrderProduct selectByProductId(@Param("productId") String productId );
 }

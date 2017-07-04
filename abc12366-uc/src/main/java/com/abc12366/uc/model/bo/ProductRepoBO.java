@@ -1,4 +1,6 @@
 package com.abc12366.uc.model.bo;
+import com.abc12366.uc.model.Goods;
+
 import java.io.Serializable;
 
 
@@ -20,6 +22,10 @@ public class ProductRepoBO implements Serializable {
 	private java.util.Date createTime;
 	private java.util.Date lastUpdate;
 
+	private String productName;
+    private String type;
+	private Integer option;
+    private Goods goods;
 
 
 	public void setId(String id){
@@ -94,4 +100,35 @@ public class ProductRepoBO implements Serializable {
 		return this.lastUpdate;
 	}
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Goods getGoods() {
+        return goods;
+    }
+
+    public void setGoods(Goods goods) {
+        this.goods = goods;
+    }
+
+	public Integer getOption() {
+		return option;
+	}
+
+	public void setOption(Integer option) {
+		this.option = option;
+	}
 }

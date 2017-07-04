@@ -38,7 +38,6 @@ public class ProductRepo implements Serializable {
 	private java.util.Date lastUpdate;
 
 
-
 	public void setId(String id){
 		this.id = id;
 	}
@@ -110,5 +109,4 @@ public class ProductRepo implements Serializable {
 	public java.util.Date getLastUpdate(){
 		return this.lastUpdate;
 	}
-
 }

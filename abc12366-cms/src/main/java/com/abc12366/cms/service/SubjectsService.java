@@ -33,4 +33,8 @@ public interface SubjectsService {
     List<SubjectsBO> updateList(List<SubjectsBO> subjectsBOs, String questionId, String id);
 
     List<SubjectsBO> deleteList(List<SubjectsBO> subjectsBOs, String questionId, String id);
+
+    SubjectsBO copySubjects(List<SubjectsBO> subjectsBOs, String subjectsId);
+
+    void deleteSubjectsByPages(Subjects subjects);
 }

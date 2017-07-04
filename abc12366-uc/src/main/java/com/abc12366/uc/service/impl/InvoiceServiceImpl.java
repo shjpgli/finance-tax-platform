@@ -129,6 +129,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      * @param invoiceBO
      * @return
      */
+    @Transactional("db1TxManager")
     @Override
     public int deleteByIdAndUserId(InvoiceBO invoiceBO) {
         Invoice invoice = new Invoice();
@@ -249,6 +250,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return excelList;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public InvoiceBackBO refund(InvoiceBackBO invoiceBackBO) {
         InvoiceBack invoiceBack = new InvoiceBack();
@@ -267,6 +269,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public InvoiceBackBO refundCheck(InvoiceBackBO invoiceBackBO) {
         Express express = expressRoMapper.selectByPrimaryKey(invoiceBackBO.getExpressId());

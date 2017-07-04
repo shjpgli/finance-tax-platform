@@ -1,65 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.ProductRoMapper">
 
-	<!-- 通用查询结果列-->
+    <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
         id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate
     </sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectById" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_product
-		 WHERE id = #{id}
-	</select>
+    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
+        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <collection property="dictList" ofType="com.abc12366.uc.model.bo.DictBO" column="id"
+                    select="getDictBO"></collection>
+    </resultMap>
 
-	<!-- 查询（根据主键ID和状态查询） -->
-	<select id="selectByIdAndStatus" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_product
-		 WHERE id = #{id} and status='1'
-	</select>
+    <resultMap type="com.abc12366.uc.model.bo.DictBO" id="oneDictBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="dictId" property="dictId" jdbcType="VARCHAR"/>
+        <result column="dictName" property="dictName" jdbcType="VARCHAR"/>
+        <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
+        <result column="fieldValue" property="fieldValue" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="createUser" property="createUser" jdbcType="VARCHAR"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="lastUser" property="lastUser" jdbcType="VARCHAR"/>
+        <result column="sort" property="sort" jdbcType="VARCHAR"/>
+    </resultMap>
 
-	<!-- 查询条件根据） -->
-	<select id="selectList" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_product
-        <where>
-            1=1
-            <if test="name != null and name!=''"> and name = #{name}</if>
-            <if test="category != null and category!=''"> and category = #{category}</if>
-            <if test="vipLevel != null and vipLevel!=''"> AND vipLevel = #{vipLevel}</if>
-        </where>
-	</select>
+
+    <select id="getDictBO" parameterType="java.lang.String" resultMap="oneDictBO">
+        SELECT
+        d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate, d.lastUser,d.sort
+        FROM view_sys_dict d
+        LEFT JOIN uc_product_spec s ON s.specId = d.id
+        WHERE s.productId = #{productId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectById" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_product
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询（根据主键ID和状态查询） -->
+    <select id="selectByIdAndStatus" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_product
+        WHERE id = #{id} and status='1'
+    </select>
 
     <!-- 查询条件根据） -->
-    <select id="selectProductList" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
+    <select id="selectList" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
+        FROM uc_product
+        <where>
+            1=1
+            <if test="name != null and name!=''">and name = #{name}</if>
+            <if test="category != null and category!=''">and category = #{category}</if>
+            <if test="vipLevel != null and vipLevel!=''">AND vipLevel = #{vipLevel}</if>
+        </where>
+    </select>
+
+    <!-- 查询条件根据） -->
+    <select id="selectByGoodsId" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_product
+        WHERE goodsId = #{goodsId}
+    </select>
+
+    <!-- 查询条件根据） -->
+    <select id="selectBOListByGoodsId" resultMap="productResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_product
+        WHERE goodsId = #{goodsId}
+    </select>
+
+    <!-- 查询条件根据） -->
+    <select id="selectProductList" resultType="com.abc12366.uc.model.Product"
+            parameterType="com.abc12366.uc.model.Product">
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM uc_product
         <where>
             1 = 1
-            <if test="name != null and name!=''"> and name = #{name}</if>
-            <if test="category != null and category!=''"> and category = #{category}</if>
-            <if test="uvipLevel != null and uvipLevel!=''"> AND uvipLevel = #{uvipLevel}</if>
+            <if test="name != null and name!=''">and name = #{name}</if>
+            <if test="category != null and category!=''">and category = #{category}</if>
+            <if test="uvipLevel != null and uvipLevel!=''">AND uvipLevel = #{uvipLevel}</if>
         </where>
     </select>
 
     <!-- 查询条件根据） -->
     <select id="selectProduct" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_product
         <where>
             1=1
-            <if test="uvipLevel != null and uvipLevel!=''"> AND uvipLevel = #{uvipLevel}</if>
-            <if test="dictId != null and dictId!=''"> AND dictId = #{dictId}</if>
-            <if test="goodsId != null and goodsId!=''"> AND goodsId = #{goodsId}</if>
+            <if test="uvipLevel != null and uvipLevel!=''">AND uvipLevel = #{uvipLevel}</if>
+            <if test="dictId != null and dictId!=''">AND dictId = #{dictId}</if>
+            <if test="goodsId != null and goodsId!=''">AND goodsId = #{goodsId}</if>
         </where>
     </select>
 

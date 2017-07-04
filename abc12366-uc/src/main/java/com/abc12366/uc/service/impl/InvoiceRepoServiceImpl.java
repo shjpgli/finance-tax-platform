@@ -8,6 +8,7 @@ import com.abc12366.uc.model.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.InvoiceRepoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         return invoiceRepoRoMapper.selectInvoiceRepoList(invoiceRepo);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public InvoiceRepoBO addInvoiceRepo(InvoiceRepoBO invoiceRepoBO) {
         int start = Integer.valueOf(invoiceRepoBO.getStartNo());
@@ -69,6 +71,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void deleteInvoiceRepo(String id) {
         invoiceRepoMapper.deleteByPrimaryKey(id);

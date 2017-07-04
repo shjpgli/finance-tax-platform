@@ -1,0 +1,49 @@
+package com.abc12366.uc.web;
+
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.bo.ProductBO;
+import com.abc12366.uc.service.ProductService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
+/**
+ * 产品参数控制类
+ *
+ * @author lizhongwei
+ * @create 2017-07-04
+ * @since 1.0.0
+ */
+@RestController
+@RequestMapping(path = "/product", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class ProductController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+
+    @Autowired
+    private ProductService productService;
+
+    /**
+     * 产品参数列表管理
+     * @return
+     */
+    @GetMapping(path = "/select/{goodsId}")
+    public ResponseEntity selectList(@PathVariable("goodsId") String goodsId) {
+        LOGGER.info("{}:{}", goodsId);
+        ProductBO product = new ProductBO();
+        product.setGoodsId(goodsId);
+        List<ProductBO> productList = productService.selectByGoodsId(product);
+        LOGGER.info("{}", productList);
+        return ResponseEntity.ok(Utils.kv("dataList",  productList));
+    }
+
+}

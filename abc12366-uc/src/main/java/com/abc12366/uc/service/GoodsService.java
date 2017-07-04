@@ -27,4 +27,6 @@ public interface GoodsService {
     GoodsBO selectGoods(String id);
 
     void checkGoods(GoodsCheckBO goodsCheckBO);
+
+    void deleteGoods(String id);
 }

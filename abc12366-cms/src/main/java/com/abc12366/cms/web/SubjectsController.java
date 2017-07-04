@@ -86,6 +86,20 @@ public class SubjectsController {
     }
 
     /**
+     * 复制题目，并修改编号
+     *
+     * @param subjectsId
+     * @return
+     */
+    @PostMapping(path = "/copy/{subjectsId}")
+    public ResponseEntity copySubjects(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("subjectsId") String subjectsId) {
+        LOGGER.info("{}", subjectsBOs);
+        SubjectsBO bos = subjectsService.copySubjects(subjectsBOs,subjectsId);
+        LOGGER.info("{}", bos);
+        return ResponseEntity.ok(Utils.kv("data", bos));
+    }
+
+    /**
      * 题目修改，并修改编号
      * @param subjectsBOs
      * @param questionId
@@ -161,6 +175,23 @@ public class SubjectsController {
         subjectsBO.setId(id);
         LOGGER.info("{}", subjectsBO);
         subjectsService.delete(subjectsBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 根据pages，题目删除
+     *
+     * @param questionId
+     * @param pages
+     * @return
+     */
+    @DeleteMapping(path = "/{pages}/{questionId}")
+    public ResponseEntity deleteSubjectsByPages(@PathVariable("questionId") String questionId, @PathVariable("pages") Integer pages) {
+        Subjects subjects = new Subjects();
+        subjects.setQuestionId(questionId);
+        subjects.setPages(pages);
+        LOGGER.info("{}", subjects);
+        subjectsService.deleteSubjectsByPages(subjects);
         return ResponseEntity.ok(Utils.kv());
     }
 }

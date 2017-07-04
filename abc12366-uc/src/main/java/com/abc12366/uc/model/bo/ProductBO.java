@@ -1,5 +1,9 @@
 package com.abc12366.uc.model.bo;
+import com.abc12366.uc.model.UvipPrice;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,6 +22,8 @@ public class ProductBO implements Serializable {
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
 
+    private List<DictBO> dictList = new ArrayList<>();
+    private List<UvipPrice> uvipPriceList = new ArrayList<>();
 
 
     public void setId(String id){
@@ -76,4 +82,19 @@ public class ProductBO implements Serializable {
         return this.lastUpdate;
     }
 
+    public List<DictBO> getDictList() {
+        return dictList;
+    }
+
+    public void setDictList(List<DictBO> dictList) {
+        this.dictList = dictList;
+    }
+
+    public List<UvipPrice> getUvipPriceList() {
+        return uvipPriceList;
+    }
+
+    public void setUvipPriceList(List<UvipPrice> uvipPriceList) {
+        this.uvipPriceList = uvipPriceList;
+    }
 }

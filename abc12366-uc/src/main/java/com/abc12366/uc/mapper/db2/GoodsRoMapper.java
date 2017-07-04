@@ -25,4 +25,6 @@ public interface GoodsRoMapper {
     List<GoodsBO> selectList(Goods goods);
 
     GoodsBO selectGoods(String id);
+
+    List<Goods> selectGoodsList(Goods goods);
 }

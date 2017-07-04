@@ -10,6 +10,7 @@ import com.abc12366.uc.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ProductBO add(ProductBO productBO) {
         Product product = new Product();
@@ -64,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ProductBO update(ProductBO productBO) {
         Product product = new Product();
@@ -97,5 +100,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateStatus(String id) {
         productMapper.updateStatus(id);
+    }
+
+    @Override
+    public List<ProductBO> selectByGoodsId(ProductBO product) {
+        return productRoMapper.selectBOListByGoodsId(product.getGoodsId());
     }
 }

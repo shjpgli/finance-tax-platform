@@ -55,6 +55,22 @@
         WHERE id = #{id}
     </select>
 
+    <!-- 查询（根据主键Pages查询） -->
+    <select id="selectSubjectsByPages" resultMap="subjectsBOResultMap" parameterType="com.abc12366.cms.model.questionnaire.Subjects">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_paper_subjects
+        <where>
+            1 = 1
+            <if test=" questionId != null and questionId != '' ">
+                and questionId = #{questionId}
+            </if>
+            <if test=" pages != null and pages != '' ">
+                and pages = #{pages}
+            </if>
+        </where>
+    </select>
+
 
     <!-- 根据条件查询所有题目 -->
     <select id="selectList" resultMap="subjectsBOResultMap" parameterType="java.lang.String">

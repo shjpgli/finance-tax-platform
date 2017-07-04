@@ -64,16 +64,6 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         }
         return node;
     }
-   /* private List<GoodsCategoryBO> getChildren(GoodsCategoryBO bo,List<GoodsCategoryBO> listBo){
-        List<GoodsCategoryBO> children = new ArrayList<GoodsCategoryBO>();
-        String id = bo.getId();
-        for (GoodsCategoryBO child : listBo) {
-            if (id.equals(child.getParentId())) {
-                children.add(child);
-            }
-        }
-        return children;
-    }*/
 
     @Override
     public GoodsCategory add(GoodsCategoryBO goodsCategoryBO) {

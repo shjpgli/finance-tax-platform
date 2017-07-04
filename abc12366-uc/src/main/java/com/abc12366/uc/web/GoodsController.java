@@ -56,6 +56,16 @@ public class GoodsController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
+    @GetMapping(path = "/name")
+    public ResponseEntity selectListByName(@RequestParam(value = "name", required = false) String name) {
+        LOGGER.info("{}", name);
+        Goods goods = new Goods();
+        goods.setName(name);
+        List<Goods> goodsList = goodsService.selectGoodsList(goods);
+        LOGGER.info("{}", goodsList);
+        return ResponseEntity.ok(Utils.kv("dataList", goodsList));
+    }
+
 
     @GetMapping(path = "/user")
     public ResponseEntity selectGoodsList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -116,6 +126,18 @@ public class GoodsController {
         GoodsBO bo = goodsService.update(goodsBO);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 修改商品信息
+     * @param id
+     * @return
+     */
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity deleteGoods(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        goodsService.deleteGoods(id);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
