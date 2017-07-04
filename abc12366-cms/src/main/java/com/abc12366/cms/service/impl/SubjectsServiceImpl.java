@@ -289,6 +289,20 @@ public class SubjectsServiceImpl implements SubjectsService {
                 LOGGER.info("{新增题目失败}", subjects);
                 throw new ServiceException(4399);
             }
+            List<Option> options = new ArrayList<>();
+            List<Option> optionList = boList.getOptionList();
+            for (Option option : optionList) {
+                option.setId(Utils.uuid());
+                option.setSubjectsId(subjectsId);
+                option.setStatus(true);
+                int oInsert = optionMapper.insert(option);
+                if (oInsert != 1) {
+                    LOGGER.info("{新增选项失败}", option);
+                    throw new ServiceException(4396);
+                }
+                options.add(option);
+            }
+
             for (SubjectsBO sBO : subjectsBOs) {
                 subjects = new Subjects();
                 BeanUtils.copyProperties(sBO, subjects);
