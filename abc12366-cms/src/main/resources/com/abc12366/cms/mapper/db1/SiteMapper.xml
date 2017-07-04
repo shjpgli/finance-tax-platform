@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Site">
 		 INSERT INTO cms_site
- 		(siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description,siteLogo,siteLogoPath,copyrightExplain,recordNum,resourceSync,staticSync,staticIssue,siteStatus)
+ 		(siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description,siteLogo,siteLogoPath,copyrightExplain,recordNum,resourceSync,staticSync,staticIssue,shareCode,statisticsCode,siteStatus)
 		 VALUES 
- 		(#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description},#{siteLogo},#{siteLogoPath},#{copyrightExplain},#{recordNum},#{resourceSync},#{staticSync},#{staticIssue},#{siteStatus})
+ 		(#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description},#{siteLogo},#{siteLogoPath},#{copyrightExplain},#{recordNum},#{resourceSync},#{staticSync},#{staticIssue},#{shareCode},#{statisticsCode},#{siteStatus})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -111,6 +111,12 @@
 			<if test="staticIssue != null">
 				 staticIssue,
 			</if>
+			 <if test="shareCode != null">
+				 shareCode,
+			 </if>
+			 <if test="statisticsCode != null">
+				 statisticsCode,
+			 </if>
 			<if test="siteStatus != null">
 				 siteStatus,
 			</if>
@@ -207,6 +213,12 @@
 			<if test="staticIssue!=null">
 				 #{staticIssue},
 			</if>
+			 <if test="shareCode!=null">
+				 #{shareCode},
+			 </if>
+			 <if test="statisticsCode!=null">
+				 #{statisticsCode},
+			 </if>
 			<if test="siteStatus!=null">
 				 #{siteStatus},
 			</if>
@@ -304,6 +316,12 @@
 			<if test="staticIssue != null">
 				 staticIssue = #{staticIssue},
 			</if>
+			 <if test="shareCode != null">
+				 shareCode = #{shareCode},
+			 </if>
+			 <if test="statisticsCode != null">
+				 statisticsCode = #{statisticsCode},
+			 </if>
 			<if test="siteStatus != null">
 				 siteStatus = #{siteStatus},
 			</if>
@@ -345,6 +363,8 @@
 			 resourceSync = #{resourceSync},
 			 staticSync = #{staticSync},
 			 staticIssue = #{staticIssue},
+			 shareCode = #{shareCode},
+			 statisticsCode = #{statisticsCode},
 			 siteStatus = #{siteStatus}
 		 WHERE siteId = #{siteId}
 	</update>

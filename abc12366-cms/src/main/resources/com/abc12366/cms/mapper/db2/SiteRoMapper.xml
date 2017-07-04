@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		siteId,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description,	siteLogo,siteLogoPath,	copyrightExplain,	recordNum,	resourceSync,	staticSync,	staticIssue,	siteStatus
+		siteId,	domain,	sitePath,	siteName,	shortName,	protocol,	dynamicSuffix,	staticSuffix,	staticDir,	isIndexToRoot,	isStaticIndex,	localeAdmin,	localeFront,	tplSolution,	finalStep,	afterCheck,	isRelativePath,	isRecycleOn,	domainAlias,	domainRedirect,	tplIndex,	keywords,	description,	siteLogo,siteLogoPath,	copyrightExplain,	recordNum,	resourceSync,	staticSync,	staticIssue,shareCode,statisticsCode,	siteStatus
 	</sql>
 	
 	<!-- 查询（根据主键ID查询） -->

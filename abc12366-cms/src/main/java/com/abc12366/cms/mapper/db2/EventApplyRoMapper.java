@@ -2,6 +2,8 @@ package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.EventApply;
 import com.abc12366.cms.model.bo.EventApplyBo;
+import com.abc12366.cms.model.bo.EventbmtjBo;
+import com.abc12366.cms.model.bo.EventlltjBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,6 +31,20 @@ public interface EventApplyRoMapper {
 	 *
 	 **/
 	List<EventApplyBo> selectList(Map<String,Object> map);
+
+	/**
+	 *
+	 * 查询（根据主键ID查询）
+	 *
+	 **/
+	EventbmtjBo selectbmtj(Map<String,Object> map);
+
+	/**
+	 *
+	 * 查询（根据主键ID查询）
+	 *
+	 **/
+	List<EventlltjBo> selectlltj(Map<String,Object> map);
 
 
 }

@@ -73,6 +73,12 @@ public class SiteBo implements Serializable {
 	@Size(min = 0, max = 1)
 	private String siteStatus;
 
+	/**第三方分享代码**varchar(500)**/
+	private String shareCode;
+
+	/**站点统计代码**varchar(500)**/
+	private String statisticsCode;
+
 	public String getSiteId() {
 		return siteId;
 	}
@@ -191,5 +197,21 @@ public class SiteBo implements Serializable {
 
 	public void setSiteStatus(String siteStatus) {
 		this.siteStatus = siteStatus;
+	}
+
+	public String getShareCode() {
+		return shareCode;
+	}
+
+	public void setShareCode(String shareCode) {
+		this.shareCode = shareCode;
+	}
+
+	public String getStatisticsCode() {
+		return statisticsCode;
+	}
+
+	public void setStatisticsCode(String statisticsCode) {
+		this.statisticsCode = statisticsCode;
 	}
 }

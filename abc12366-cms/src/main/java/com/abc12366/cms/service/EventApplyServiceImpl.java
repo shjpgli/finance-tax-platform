@@ -6,9 +6,7 @@ import com.abc12366.cms.mapper.db2.EventApplyAttrRoMapper;
 import com.abc12366.cms.mapper.db2.EventApplyRoMapper;
 import com.abc12366.cms.model.EventApply;
 import com.abc12366.cms.model.EventApplyAttr;
-import com.abc12366.cms.model.bo.EventApplyAttrBo;
-import com.abc12366.cms.model.bo.EventApplyBo;
-import com.abc12366.cms.model.bo.EventApplySaveBo;
+import com.abc12366.cms.model.bo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +39,33 @@ public class EventApplyServiceImpl implements EventApplyService {
         //查询活动列表
         List<EventApplyBo> dataList =  eventApplyRoMapper.selectList(map);
         return dataList;
+    }
+
+    @Override
+    public EventbmtjBo selectbmtj(Map<String,Object> map) {
+        //查询活动列表
+        EventbmtjBo eventbmtjBo =  eventApplyRoMapper.selectbmtj(map);
+        return eventbmtjBo;
+    }
+
+    @Override
+    public EventlltjListBo selectlltj(Map<String,Object> map) {
+        EventlltjListBo eventlltjListBo = new EventlltjListBo();
+        //总浏览次数
+        List<EventlltjBo> list =  eventApplyRoMapper.selectlltj(map);
+        map.put("source","PC");
+        List<EventlltjBo> pclist =  eventApplyRoMapper.selectlltj(map);
+        map.put("source","MobileWeb");
+        List<EventlltjBo> mobileWeblist =  eventApplyRoMapper.selectlltj(map);
+        map.put("source","WeChat");
+        List<EventlltjBo> weChatlist =  eventApplyRoMapper.selectlltj(map);
+        Map<String,List<EventlltjBo>> lltj = new HashMap<String,List<EventlltjBo>>();
+        lltj.put("total",list);
+        lltj.put("PC",pclist);
+        lltj.put("MobileWeb",mobileWeblist);
+        lltj.put("WeChat",weChatlist);
+        eventlltjListBo.setLltj(lltj);
+        return eventlltjListBo;
     }
 
     @Override

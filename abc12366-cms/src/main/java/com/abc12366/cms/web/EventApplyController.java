@@ -1,8 +1,6 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.EventApplyBo;
-import com.abc12366.cms.model.bo.EventApplySaveBo;
-import com.abc12366.cms.model.bo.IdsBo;
+import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.EventApplyService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -15,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,38 @@ public class EventApplyController {
         List<EventApplyBo> dataList = eventApplyService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
+
+    @GetMapping(path = "/selectbmtj")
+    public ResponseEntity selectbmtj(@RequestParam(value = "eventId", required = false) String eventId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("eventId", eventId);//活动ID
+        EventbmtjBo data = eventApplyService.selectbmtj(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
+    @GetMapping(path = "/selectlltj")
+    public ResponseEntity selectlltj(@RequestParam(value = "startTime", required = false) String startTime,
+                                     @RequestParam(value = "endTime", required = false) String endTime) {
+        Map<String, Object> dataMap = new HashMap<>();
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startTime != null && !"".equals(startTime)){
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime()/1000);
+            }
+            if(endTime != null && !"".equals(endTime)){
+                Date startTime2 = sdf.parse(endTime);
+                dataMap.put("endTime", startTime2.getTime()/1000);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+        EventlltjListBo data = eventApplyService.selectlltj(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
     }
 
     @PostMapping

@@ -30,4 +30,26 @@
 		</if>
 	</select>
 
+	<!-- 查询（报名统计） -->
+	<select id="selectbmtj" resultType="com.abc12366.cms.model.bo.EventbmtjBo" parameterType="java.util.Map">
+		SELECT title,peoppleNum,cnt1,cnt2,ROUND(cnt1/peoppleNum,2) bl FROM (SELECT title,peoppleNum,(SELECT COUNT(applyId) FROM cms_event_apply a WHERE a.eventId = t.eventId) cnt1,
+		(SELECT COUNT(applyId) FROM cms_event_apply b WHERE b.eventId = t.eventId AND b.status = '1') cnt2  FROM cms_event t where t.eventId = #{eventId}) tt
+	</select>
+
+	<!-- 查询（浏览统计） -->
+	<select id="selectlltj" resultType="com.abc12366.cms.model.bo.EventlltjBo" parameterType="java.util.Map">
+		SELECT DATE_FORMAT(browsetime, '%Y%m%d') llsj,COUNT(recordId) cnt FROM cms_event_record
+		WHERE 1=1
+		<if test="source != null and source != ''">
+			AND source = #{source}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND UNIX_TIMESTAMP(browsetime) &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND UNIX_TIMESTAMP(browsetime) &lt;= #{endTime}
+		</if>
+		GROUP BY DAY(browsetime)
+	</select>
+
 </mapper>
