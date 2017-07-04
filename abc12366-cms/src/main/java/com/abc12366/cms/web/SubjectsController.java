@@ -185,7 +185,7 @@ public class SubjectsController {
      * @param pages
      * @return
      */
-    @DeleteMapping(path = "/{pages}/{questionId}")
+    @DeleteMapping(path = "/pages/{pages}/{questionId}")
     public ResponseEntity deleteSubjectsByPages(@PathVariable("questionId") String questionId, @PathVariable("pages") Integer pages) {
         Subjects subjects = new Subjects();
         subjects.setQuestionId(questionId);

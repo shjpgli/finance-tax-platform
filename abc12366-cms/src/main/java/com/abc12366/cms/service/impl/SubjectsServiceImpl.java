@@ -275,40 +275,28 @@ public class SubjectsServiceImpl implements SubjectsService {
     public SubjectsBO copySubjects(List<SubjectsBO> subjectsBOs, String subjectsId) {
         SubjectsBO boList = new SubjectsBO();
         if (subjectsBOs != null) {
+            //查询题目
+            boList = subjectsRoMapper.selectOne(subjectsId);
+            Integer number = boList.getNumber();
+            boList.setNumber(number+1);
+            String subId = Utils.uuid();
+            boList.setId(subId);
+            Subjects subjects = new Subjects();
+            BeanUtils.copyProperties(boList, subjects);
+            //复制题目
+            int insert = subjectsMapper.insert(subjects);
+            if (insert != 1) {
+                LOGGER.info("{新增题目失败}", subjects);
+                throw new ServiceException(4399);
+            }
             for (SubjectsBO sBO : subjectsBOs) {
-                Subjects subjects = new Subjects();
+                subjects = new Subjects();
                 BeanUtils.copyProperties(sBO, subjects);
-                //id 等于列表中的id时，copy里面数据，否则修改题目编号
-                if (subjectsId.equals(sBO.getId())) {
-                    String sId = Utils.uuid();
-                    subjects.setId(sId);
-                    int insert = subjectsMapper.insert(subjects);
-                    if (insert != 1) {
-                        LOGGER.info("{新增题目失败}", subjects);
-                        throw new ServiceException(4399);
-                    }
-                    List<Option> options = new ArrayList<>();
-                    List<Option> optionList = sBO.getOptionList();
-                    for (Option option : optionList) {
-                        option.setId(Utils.uuid());
-                        option.setSubjectsId(sId);
-                        option.setStatus(true);
-                        int oInsert = optionMapper.insert(option);
-                        if (oInsert != 1) {
-                            LOGGER.info("{新增选项失败}", option);
-                            throw new ServiceException(4396);
-                        }
-                        options.add(option);
-                    }
-                    BeanUtils.copyProperties(subjects, boList);
-                    boList.setOptionList(options);
-                } else {
-                    //修改，只修改题目编号
-                    int update = subjectsMapper.update(subjects);
-                    if (update != 1) {
-                        LOGGER.info("{修改题目失败}", subjects);
-                        throw new ServiceException(4398);
-                    }
+                //修改，只修改题目编号
+                int update = subjectsMapper.update(subjects);
+                if (update != 1) {
+                    LOGGER.info("{修改题目失败}", subjects);
+                    throw new ServiceException(4398);
                 }
             }
         }
