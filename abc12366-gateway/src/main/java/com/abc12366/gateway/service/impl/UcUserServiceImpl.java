@@ -1,20 +1,19 @@
 package com.abc12366.gateway.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.model.bo.AdminResponseBO;
 import com.abc12366.gateway.util.HttpRequestUtil;
 import com.abc12366.gateway.util.PropertiesUtil;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.abc12366.gateway.service.UcUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -29,7 +28,10 @@ public class UcUserServiceImpl implements UcUserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UcUserServiceImpl.class);
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request) throws IOException {
@@ -40,7 +42,10 @@ public class UcUserServiceImpl implements UcUserService {
             //刷新token时间
             HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + adminToken, "");
             //根据token获取admin的userId，并将userId设置到request中
-            String adminUserId = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.userid.url") + adminToken, "");
+            String url = PropertiesUtil.getValue("admin.token.userid.url") + adminToken;
+            ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET);
+            AdminResponseBO adminResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), AdminResponseBO.class);
+            String adminUserId = adminResponseBO.getData().getUserId();
             if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
                 request.removeAttribute(Constant.USER_ID);
                 request.setAttribute(Constant.USER_ID, adminUserId);
