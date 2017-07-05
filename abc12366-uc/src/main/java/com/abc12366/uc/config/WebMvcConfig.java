@@ -59,11 +59,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
-        //registry.addInterceptor(ucUserInterceptor())
-                //.excludePathPatterns("/")
-                //.excludePathPatterns("/app*/**")
-                //.excludePathPatterns("/druid*/**")
-                //.excludePathPatterns("/auth/**")
-                //.excludePathPatterns("/login", "/refresh", "/register", "/test", "/verifylogin");
+        registry.addInterceptor(ucUserInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/app*/**")
+                .excludePathPatterns("/druid*/**")
+                .excludePathPatterns("/auth/**")
+                .excludePathPatterns("/login", "/refresh", "/register", "/test", "/verifylogin");
     }
 }

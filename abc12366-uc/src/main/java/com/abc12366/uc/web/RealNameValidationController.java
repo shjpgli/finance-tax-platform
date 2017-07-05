@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ import java.util.List;
  * Time: 10:29
  */
 @RestController
-@RequestMapping(path = "/realnamevalidate", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/realnamevalidation", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class RealNameValidationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RealNameValidationController.class);
 
@@ -38,8 +39,18 @@ public class RealNameValidationController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) userExtendBOList, "total", ((Page) userExtendBOList).getTotal()));
     }
-    @PutMapping
-    public ResponseEntity realNameValidate(){
-        return null;
+
+    @PutMapping(path = "/{userId}")
+    public ResponseEntity realNameValidate(@PathVariable String userId) throws ParseException {
+        LOGGER.info("{}", userId);
+        UserExtendBO userExtendBO = realNameValidationService.validate(userId);
+        return ResponseEntity.ok(Utils.kv("data", userExtendBO));
+    }
+
+    @PutMapping(path = "/revalidation/{userId}")
+    public ResponseEntity realNameReValidate(@PathVariable String userId) throws ParseException {
+        LOGGER.info("{}", userId);
+        UserExtendBO userExtendBO = realNameValidationService.reValidate(userId);
+        return ResponseEntity.ok(Utils.kv("data", userExtendBO));
     }
 }
