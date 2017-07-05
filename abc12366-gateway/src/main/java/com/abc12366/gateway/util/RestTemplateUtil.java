@@ -12,6 +12,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -24,12 +25,12 @@ public class RestTemplateUtil {
     @Autowired
     private RestTemplate restTemplate;
 
-    public ResponseEntity send(String url, HttpMethod method){
+    public ResponseEntity send(String url, HttpMethod method, HttpServletRequest request){
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(Constant.APP_TOKEN_HEAD, "dee8276898b450432bc427f84a49234b");
-        httpHeaders.add(Constant.ADMIN_TOKEN_HEAD, "1a4343cc110b64f367bdc5b522fb1ad4");
-        httpHeaders.add(Constant.USER_TOKEN_HEAD, "cc0543d63003deddfd1322ecf4328910");
+        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+        httpHeaders.add(Constant.ADMIN_TOKEN_HEAD, request.getHeader(Constant.ADMIN_TOKEN_HEAD));
+        httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
         httpHeaders.add("Content-Type", "application/json");
         httpHeaders.add(Constant.VERSION_HEAD, Constant.VERSION_1);
 

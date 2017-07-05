@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.SubjectTagBO;
 import com.abc12366.uc.model.bo.TagList;
+import com.abc12366.uc.model.bo.SubjectList;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,4 +23,6 @@ public interface SubjectTagService {
     int delete(@RequestParam("subject")String subject, @RequestParam("id")String id, @RequestParam("tagId")String tagId);
 
     int deleteByTagId(String id);
+
+    List<SubjectTagBO> batchUserInsert(String subject, String tagId, String subjectIds, HttpServletRequest request);
 }

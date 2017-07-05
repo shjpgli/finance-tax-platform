@@ -22,4 +22,6 @@ public interface TagService {
     TagBO update(TagUpdateBO tagUpdateBO, String id);
 
     int delete(String id);
+
+    List<TagBO> selectListByUserId(String userId);
 }

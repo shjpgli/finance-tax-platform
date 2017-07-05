@@ -37,40 +37,58 @@ public class UcUserServiceImpl implements UcUserService {
     public boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}:{}", adminToken, userToken, request);
         //1.调用admin的token校验接口，如果校验通过直接返回true
+        if (adminTokenAuthen(adminToken, request)) {
+            return true;
+        }
+        //2.调用uc的token校验接口，如果校验通过刷新token并返回true
+        if (userTokenAuthen(userToken, request)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean adminTokenAuthen(String adminToken, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", adminToken, request);
+        if (adminToken == null || adminToken.equals("")) {
+            return false;
+        }
+        //1.调用admin的token校验接口，如果校验通过直接返回true
         String adminTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.check.url") + adminToken, "");
         if (!StringUtils.isEmpty(adminTokenVerifyResult) && adminTokenVerifyResult.equals("true")) {
             //刷新token时间
             HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + adminToken, "");
             //根据token获取admin的userId，并将userId设置到request中
             String url = PropertiesUtil.getValue("admin.token.userid.url") + adminToken;
-            ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET);
-            AdminResponseBO adminResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), AdminResponseBO.class);
-            String adminUserId = adminResponseBO.getData().getUserId();
-            if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
-                request.removeAttribute(Constant.USER_ID);
-                request.setAttribute(Constant.USER_ID, adminUserId);
-            } else {
-                request.setAttribute(Constant.USER_ID, adminUserId);
+            ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET, request);
+            if (userByTokenResponse != null && userByTokenResponse.hasBody()) {
+                AdminResponseBO adminResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), AdminResponseBO.class);
+                if (!StringUtils.isEmpty(adminResponseBO.getData().getUserId())) {
+                    String adminUserId = adminResponseBO.getData().getUserId();
+                    if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
+                        request.removeAttribute(Constant.USER_ID);
+                        request.setAttribute(Constant.USER_ID, adminUserId);
+                    } else {
+                        request.setAttribute(Constant.USER_ID, adminUserId);
+                    }
+                }
             }
             return true;
         }
-        //2.调用uc的token校验接口，如果校验通过刷新token并返回true
+        return false;
+    }
+
+    public boolean userTokenAuthen(String userToken, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", userToken, request);
+        if (userToken == null || userToken.equals("")) {
+            return false;
+        }
+        //调用uc的token校验接口，如果校验通过刷新token并返回true
         //String url = "http://localhost:9100/uc/auth/" + userToken;
         String userTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("user.token.check.url") + userToken, "");
         if (!StringUtils.isEmpty(userTokenVerifyResult) && userTokenVerifyResult.equals("true")) {
             return true;
         }
-        //请求头设置
-        /*HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(Constant.VERSION_HEAD, Constant.VERSION_1);
-        httpHeaders.add("Content-Type", "application/json");
-        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-        httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
-        HttpEntity requestEntity = new HttpEntity(null, httpHeaders);
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        if (responseEntity == null || !responseEntity.getStatusCode().is2xxSuccessful() || !responseEntity.hasBody()) {
-            throw new ServiceException(4104);
-        }*/
         return false;
     }
+
 }

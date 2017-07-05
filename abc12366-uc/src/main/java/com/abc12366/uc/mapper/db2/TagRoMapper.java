@@ -15,4 +15,6 @@ public interface TagRoMapper {
     TagBO selectOne(String id);
 
     List<TagBO> selectList(TagSelectParamBO tagSelectParamBO);
+
+    List<TagBO> selectListByUserId(String userId);
 }

@@ -6,9 +6,7 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.SubjectTagMapper;
 import com.abc12366.uc.mapper.db2.SubjectTagRoMapper;
 import com.abc12366.uc.model.SubjectTag;
-import com.abc12366.uc.model.bo.SubjectTagBO;
-import com.abc12366.uc.model.bo.TagId;
-import com.abc12366.uc.model.bo.TagList;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.SubjectTagService;
 import com.abc12366.uc.web.SubjectTagController;
 import org.slf4j.Logger;
@@ -17,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -40,6 +39,9 @@ public class SubjectTagServiceImpl implements SubjectTagService {
     @Override
     public SubjectTagBO insert(String subject, String id, String tagId, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, tagId);
+        if (StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
+            throw new ServiceException(4130);
+        }
         SubjectTag subjectTag = new SubjectTag();
         subjectTag.setId(Utils.uuid());
         subjectTag.setUserId((String) request.getAttribute(Constant.USER_ID));
@@ -63,13 +65,13 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         LOGGER.info("{}:{}:{}", subject, id, tagList);
         List<SubjectTagBO> subjectTagBOList = new ArrayList<>();
         SubjectTag subjectTag = new SubjectTag();
-        subjectTag.setId(Utils.uuid());
         subjectTag.setUserId((String) request.getAttribute(Constant.USER_ID));
         subjectTag.setSubjectId(id);
         subjectTag.setType(subject);
         subjectTag.setCreateTime(new Date());
         for (int i = 0; i < tagList.getTagIdList().size(); i++) {
             TagId tagId = tagList.getTagIdList().get(i);
+            subjectTag.setId(Utils.uuid());
             subjectTag.setTagId(tagId.getTagId());
             int result = subjectTagMapper.insert(subjectTag);
             if (result != 1) {
@@ -126,5 +128,37 @@ public class SubjectTagServiceImpl implements SubjectTagService {
     public int deleteByTagId(String id) {
         LOGGER.info("{}:{}:{}", id);
         return subjectTagMapper.deleteByTagId(id);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<SubjectTagBO> batchUserInsert(String subject, String tagId, String subjectIds, HttpServletRequest request) {
+        LOGGER.info("{}:{}:{}:{}", subject, tagId, subjectIds, request);
+        List<SubjectTagBO> subjectTagBOList = new ArrayList<>();
+        SubjectTag subjectTag = new SubjectTag();
+        subjectTag.setUserId((String) request.getAttribute(Constant.USER_ID));
+        subjectTag.setTagId(tagId);
+        //subjectTag.setSubjectId(id);
+        //subjectTag.setType(subject);
+        subjectTag.setCreateTime(new Date());
+        List<String> subjectIdList = stringToList(",", subjectIds);
+        for (int i = 0; i < subjectIdList.size(); i++) {
+            subjectTag.setId(Utils.uuid());
+            subjectTag.setSubjectId(subjectIdList.get(i));
+            subjectTag.setType(subject);
+            int result = subjectTagMapper.insert(subjectTag);
+            if (result != 1) {
+                LOGGER.warn("新增失败，参数：" + subjectTag);
+                throw new ServiceException(4101);
+            }
+            SubjectTagBO subjectTagBO = new SubjectTagBO();
+            BeanUtils.copyProperties(subjectTag, subjectTagBO);
+            subjectTagBOList.add(subjectTagBO);
+        }
+        return subjectTagBOList;
+    }
+
+    public List stringToList(String sliptor, String string) {
+        return Arrays.asList(string.split(sliptor));
     }
 }
