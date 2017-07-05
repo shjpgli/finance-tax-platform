@@ -3,8 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.TagRoMapper">
 
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="com.abc12366.uc.model.bo.TagSelectParamBO">
-        SELECT  id,tagName,status,createTime,lastUpdate,category,description,rule,(SELECT COUNT(1) FROM uc_subject_tag us WHERE us.tagId=ut.id) tagedCount,weight
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.TagBO"
+            parameterType="com.abc12366.uc.model.bo.TagSelectParamBO">
+        SELECT id,tagName,status,createTime,lastUpdate,category,description,rule,(SELECT COUNT(1) FROM uc_subject_tag us
+        WHERE us.tagId=ut.id) tagedCount,weight
         from uc_tag ut
         <where>
             <if test="tagName!=null">
@@ -14,6 +16,13 @@
                 and category=#{category}
             </if>
         </where>
+        ORDER BY lastUpdate DESC
+    </select>
+    <select id="selectListByUserId" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="java.lang.String">
+        SELECT  ut.id,ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ut.weight
+        from uc_tag ut,uc_subject_tag ust
+        where ut.id=ust.tagId
+        and ust.userId=#{userId}
         ORDER BY lastUpdate DESC
     </select>
 

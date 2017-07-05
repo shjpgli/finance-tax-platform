@@ -51,6 +51,22 @@ public class TagController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) tagBOList, "total", ((Page) tagBOList).getTotal()));
     }
 
+    @GetMapping(path = "/taglist/{userId}")
+    public ResponseEntity selectListByUserId(
+            @PathVariable String userId,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        if (userId != null && StringUtils.isEmpty(userId)) {
+            userId = null;
+        }
+        List<TagBO> tagBOList = tagService.selectListByUserId(userId);
+        return (tagBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) tagBOList, "total", ((Page) tagBOList).getTotal()));
+    }
+
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody TagInsertBO tagInsertBO) {
         LOGGER.info("{}", tagInsertBO);

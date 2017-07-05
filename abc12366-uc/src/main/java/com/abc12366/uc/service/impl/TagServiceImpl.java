@@ -53,8 +53,8 @@ public class TagServiceImpl implements TagService {
         LOGGER.info("{}", tagInsertBO);
         //标签名称唯一性校验
         List<TagBO> tagBOList = tagRoMapper.selectList(null);
-        for(TagBO tagBO:tagBOList){
-            if(tagBO.getTagName().equals(tagInsertBO.getTagName())){
+        for (TagBO tagBO : tagBOList) {
+            if (tagBO.getTagName().equals(tagInsertBO.getTagName())) {
                 LOGGER.warn("新增失败，参数是：{}", tagInsertBO);
                 throw new ServiceException(4604);
             }
@@ -85,16 +85,16 @@ public class TagServiceImpl implements TagService {
     public TagBO update(TagUpdateBO tagUpdateBO, String id) {
         LOGGER.info("{}:{}", tagUpdateBO, id);
         //标签名称唯一性校验
-        if(tagUpdateBO.getTagName()!=null){
+        if (tagUpdateBO.getTagName() != null) {
             List<TagBO> tagBOList = tagRoMapper.selectList(null);
             //这条数据本身不做校验
-            for(int i=0; i<tagBOList.size(); i++){
-                if((tagBOList.get(i)).getId().equals(id)){
+            for (int i = 0; i < tagBOList.size(); i++) {
+                if ((tagBOList.get(i)).getId().equals(id)) {
                     tagBOList.remove(i);
                 }
             }
-            for(TagBO tagBO:tagBOList){
-                if(tagBO.getTagName().equals(tagUpdateBO.getTagName())){
+            for (TagBO tagBO : tagBOList) {
+                if (tagBO.getTagName().equals(tagUpdateBO.getTagName())) {
                     LOGGER.warn("修改失败，参数是：{}", tagUpdateBO);
                     throw new ServiceException(4604);
                 }
@@ -127,5 +127,11 @@ public class TagServiceImpl implements TagService {
         }
         subjectTagService.deleteByTagId(id);
         return 1;
+    }
+
+    @Override
+    public List<TagBO> selectListByUserId(String userId) {
+        LOGGER.info("{}", userId);
+        return tagRoMapper.selectListByUserId(userId);
     }
 }
