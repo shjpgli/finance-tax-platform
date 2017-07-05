@@ -32,6 +32,17 @@ public class GoodsBO implements Serializable {
     private Double totalStock;
     private Double totalPrice;
 
+    /**销售价**/
+    private Double sellingPrice;
+
+    /**库存类型**/
+    private String repoType;
+    /**执行的查询操作**/
+    private Integer option;
+    /**库存开始值**/
+    private Integer startRepo;
+    /**库存结束值**/
+    private Integer endRepo;
 
     public void setId(String id) {
         this.id = id;
@@ -191,5 +202,45 @@ public class GoodsBO implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Double getSellingPrice() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
+    public String getRepoType() {
+        return repoType;
+    }
+
+    public void setRepoType(String repoType) {
+        this.repoType = repoType;
+    }
+
+    public Integer getOption() {
+        return option;
+    }
+
+    public void setOption(Integer option) {
+        this.option = option;
+    }
+
+    public Integer getEndRepo() {
+        return endRepo;
+    }
+
+    public void setEndRepo(Integer endRepo) {
+        this.endRepo = endRepo;
+    }
+
+    public Integer getStartRepo() {
+        return startRepo;
+    }
+
+    public void setStartRepo(Integer startRepo) {
+        this.startRepo = startRepo;
     }
 }

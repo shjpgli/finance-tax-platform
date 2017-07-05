@@ -38,7 +38,7 @@
     <select id="getDictBO" parameterType="java.lang.String" resultMap="oneDictBO">
         SELECT
         d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate, d.lastUser,d.sort
-        FROM view_sys_dict d
+        FROM uc_view_sys_dict d
         LEFT JOIN uc_product_spec s ON s.specId = d.id
         WHERE s.productId = #{productId}
     </select>

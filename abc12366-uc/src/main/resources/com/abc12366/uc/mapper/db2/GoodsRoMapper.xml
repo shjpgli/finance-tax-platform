@@ -30,8 +30,54 @@
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
     </resultMap>
 
-   <!-- <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="id" select="getProductBO"></collection>
-    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="oneProductBO" >
+    <!--根据goodsId查询产品-->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
+        SELECT
+        g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        FROM uc_goods g
+        left JOIN uc_goods_category gc on gc.id = g.categoryId
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
+        SELECT
+        g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        FROM uc_goods g
+        left JOIN uc_goods_category gc on gc.id = g.categoryId
+        <where>
+            1=1
+            <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="status != null  and status!=''"> AND g.status = #{status}</if>
+        </where>
+    </select>
+
+    <resultMap id="goodsBoMap" type="com.abc12366.uc.model.bo.GoodsBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
+        <result column="details" property="details" jdbcType="VARCHAR"/>
+        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
+        <result column="categoryName" property="categoryName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="recommendType" property="recommendType" jdbcType="VARCHAR"/>
+        <result column="totalStock" property="totalStock" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="id" select="getProductBO"></collection>
+    </resultMap>
+
+
+    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productBOMap" >
         <id column="id" property="id" jdbcType="VARCHAR" />
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
@@ -39,36 +85,48 @@
         <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <collection property="repoBOList" ofType="com.abc12366.uc.model.bo.ProductRepoBO" column="id" select="getProductRepoBO"></collection>
     </resultMap>
 
+    <resultMap id="productRepoBOMap" type="com.abc12366.uc.model.bo.ProductRepoBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="VARCHAR"/>
+        <result column="income" property="income" jdbcType="INTEGER"/>
+        <result column="outcome" property="outcome" jdbcType="INTEGER"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="dictBO" javaType="com.abc12366.uc.model.bo.DictBO">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
 
-    <select id="getProductBO" parameterType="java.lang.String" resultMap="oneProductBO" >
+    <select id="getProductBO" parameterType="java.lang.String" resultMap="productBOMap" >
         SELECT
         id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate
         FROM uc_product
         WHERE goodsId = #{goodsId}
-    </select>-->
-
-
-    <!--根据goodsId查询产品-->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM uc_goods
-        WHERE id = #{id}
     </select>
 
-    <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
+    <select id="getProductRepoBO" resultMap="productRepoBOMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM uc_goods
-        <where>
-            1=1
-            <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
-            <if test="categoryId != null  and categoryId!=''"> AND g.categoryId = #{categoryId}</if>
-            <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
-            <if test="status != null  and status!=''"> AND g.status = #{status}</if>
-        </where>
+        r.id,	r.goodsId,	r.productId,	r.income,	r.outcome,	r.stock,	r.remark,	r.createTime,	r.lastUpdate
+        FROM uc_product_repo r
+        LEFT JOIN uc_order_product_spec s ON s.productId = r.id
+        LEFT JOIN uc_view_sys_dict d ON d.id = s.specId
+        WHERE r.id = #{id}
+    </select>
+
+    <select id="selectProductRepoList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.bo.GoodsBO">
+        SELECT
+        g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        FROM uc_goods g
+        left JOIN uc_goods_category gc on gc.id = g.categoryId
+        WHERE r.id = #{id}
     </select>
 
     <!--<select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
@@ -115,7 +173,7 @@
         </where>
     </select>
 
-    <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
+   <!-- <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
         SELECT
         g.id,
         g.name,
@@ -145,6 +203,15 @@
          p.lastUpdate
         FROM uc_goods g
         left JOIN uc_product p on g.id = p.goodsId
+        left JOIN uc_goods_category gc on gc.id = g.categoryId
+        WHERE g.id = #{id}
+    </select>-->
+
+    <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
+        SELECT
+        g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
         WHERE g.id = #{id}
     </select>

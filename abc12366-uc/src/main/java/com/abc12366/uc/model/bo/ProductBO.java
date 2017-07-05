@@ -24,6 +24,7 @@ public class ProductBO implements Serializable {
 
     private List<DictBO> dictList = new ArrayList<>();
     private List<UvipPrice> uvipPriceList = new ArrayList<>();
+    private List<ProductRepoBO> repoBOList = new ArrayList<>();
 
 
     public void setId(String id){
@@ -96,5 +97,13 @@ public class ProductBO implements Serializable {
 
     public void setUvipPriceList(List<UvipPrice> uvipPriceList) {
         this.uvipPriceList = uvipPriceList;
+    }
+
+    public List<ProductRepoBO> getRepoBOList() {
+        return repoBOList;
+    }
+
+    public void setRepoBOList(List<ProductRepoBO> repoBOList) {
+        this.repoBOList = repoBOList;
     }
 }

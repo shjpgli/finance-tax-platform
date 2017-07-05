@@ -139,7 +139,7 @@ public class QuestionnaireController {
         Integer recoveryRate = questionnaireBO.getRecoveryRate();
         Integer accessRate = questionnaireBO.getAccessRate();
         String rate = accuracy(recoveryRate,accessRate,3);
-        return ResponseEntity.ok(Utils.kv("date",rate));
+        return ResponseEntity.ok(Utils.kv("data",rate));
     }
 
     public static String accuracy(double recoveryRate, double accessRate, int scale){

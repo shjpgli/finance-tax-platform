@@ -29,4 +29,6 @@ public interface GoodsService {
     void checkGoods(GoodsCheckBO goodsCheckBO);
 
     void deleteGoods(String id);
+
+    List<GoodsBO> selectProductRepoList(GoodsBO goods);
 }

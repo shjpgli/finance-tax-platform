@@ -59,7 +59,7 @@ public class AnswerLogController {
         LOGGER.info("{}", answerLogBO);
         return (answerLogBO == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", answerLogBO));
+                ResponseEntity.ok(Utils.kv("data", answerLogBO));
     }
 
 

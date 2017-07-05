@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cms.mapper.db2.AccessLogRoMapper">
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,	questionId,	userId,	accessTerminal,	ipAddress,	createTime
+    </sql>
+
+
+    <resultMap id="accessLogBOMap" type="com.abc12366.cms.model.questionnaire.bo.AccessLogBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="questionId" property="questionId" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="accessTerminal" property="accessTerminal" jdbcType="VARCHAR"/>
+        <result column="ipAddress" property="ipAddress" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="count" property="count" jdbcType="VARCHAR"/>
+        <result column="days" property="days" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.questionnaire.AccessLog" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_paper_access_log
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectList" resultMap="accessLogBOMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_paper_access_log
+    </select>
+
+    <select id="selectAccessLogStatis" resultMap="accessLogBOMap" parameterType="com.abc12366.cms.model.questionnaire.AccessLog">
+        SELECT
+        questionId,
+	    DATE_FORMAT(createTime, '%Y-%m-%d') AS days,
+	    count(id) AS count
+        FROM cms_paper_access_log
+        WHERE questionId = #{questionId}
+        group by days;
+    </select>
+
+</mapper>

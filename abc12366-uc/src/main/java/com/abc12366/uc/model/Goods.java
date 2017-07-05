@@ -3,9 +3,9 @@ import java.io.Serializable;
 
 
 /**
- * 
+ *
  * 产品表
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class Goods implements Serializable {

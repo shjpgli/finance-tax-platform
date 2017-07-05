@@ -105,7 +105,7 @@ public class GoodsController {
      * @param id
      * @return
      */
-    @PostMapping(path = "/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity selectGoods(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         GoodsBO goodsBO = goodsService.selectGoods(id);
@@ -209,5 +209,32 @@ public class GoodsController {
         LOGGER.info("{}", id);
         goodsCategoryService.delete(id);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 查询商品库存列表
+     * @param pageNum
+     * @param pageSize
+     * @param goodsName
+     * @param repoType
+     * @return
+     */
+    @GetMapping(path = "/productRepo")
+    public ResponseEntity selectProductList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                          @RequestParam(value = "goodsName", required = false) String goodsName,
+                                          @RequestParam(value = "repoType", required = false) String repoType) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        GoodsBO goods = new GoodsBO();
+        goods.setName(goodsName);
+        goods.setRepoType(repoType);
+        //已发布状态
+        goods.setStatus(true);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<GoodsBO> goodsList = goodsService.selectProductRepoList(goods);
+        LOGGER.info("{}", goodsList);
+        return (goodsList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 }
