@@ -13,9 +13,12 @@
         (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
         (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medalIcon
         from uc_user uu
-        left JOIN
-        (SELECT ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ust.userId,ust.subjectId,ust.tagId,ust.type FROM uc_subject_tag ust LEFT JOIN  uc_tag ut ON ust.tagId=ut.id) utust
-        on utust.subjectId=uu.id
+        <if test="tagName!=null">
+            left JOIN
+            (SELECT ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ust.userId,ust.subjectId,ust.tagId,ust.type FROM uc_subject_tag ust LEFT JOIN  uc_tag ut ON ust.tagId=ut.id) utust
+            on utust.subjectId=uu.id
+        </if>
+
         <where>
             <if test="username!=null">
                 username=#{username}
