@@ -46,10 +46,8 @@ public class AnswerLogServiceImpl implements AnswerLogService {
 
     @Override
     public List<AnswerLogBO> selectList(AnswerLogBO answerLogBO) {
-        AnswerLog answerLog = new AnswerLog();
-        BeanUtils.copyProperties(answerLogBO,answerLog);
 
-        return answerLogRoMapper.selectList(answerLog);
+        return answerLogRoMapper.selectList(answerLogBO);
     }
 
     @Override
@@ -115,16 +113,20 @@ public class AnswerLogServiceImpl implements AnswerLogService {
     @Transactional("db1TxManager")
     @Override
     public void delete(AnswerLogBO answerLogBO) {
-        AnswerLog answerLog = new AnswerLog();
-        BeanUtils.copyProperties(answerLogBO,answerLog);
-        int del = answerLogMapper.delete(answerLog);
-        if (del != 1){
-            LOGGER.info("{删除答题记录失败}", answerLog);
-            throw new ServiceException(4409);
+        if(answerLogBO != null && answerLogBO.getId() != null){
+            String ids[] = answerLogBO.getId().split(",");
+            for (String id: ids){
+                int del = answerLogMapper.deleteByPrimaryKey(id);
+                if (del != 1){
+                    LOGGER.info("{删除答题记录失败}", id);
+                    throw new ServiceException(4409);
+                }
+            }
+        }else{
+            LOGGER.info("{答题记录ID不能为空}", answerLogBO);
+            throw new ServiceException(4424);
         }
-        Answer answer = new Answer();
-        answer.setAnswerLogId(answerLog.getId());
-        List<Answer> answerList = answerRoMapper.selectList(answer);
+
     }
 
     @Override
@@ -167,6 +169,45 @@ public class AnswerLogServiceImpl implements AnswerLogService {
     public AnswerLogBO answerAvg(AnswerLogBO answerLogBO) {
         AnswerLog answerLog = new AnswerLog();
         BeanUtils.copyProperties(answerLogBO,answerLog);
-        return answerLogRoMapper.selectAvgTime(answerLog);
+        AnswerLogBO bo = answerLogRoMapper.selectAvgTime(answerLog);
+        if (bo != null && bo.getAvgTimeLong() != null){
+            String avg = formatTime(bo.getAvgTimeLong());
+            bo.setAvgTime(avg);
+        }
+        return bo;
+    }
+
+    /*
+ * 毫秒转化时分秒毫秒
+ */
+    public static String formatTime(Long ms) {
+        Integer ss = 1000;
+        Integer mi = ss * 60;
+        Integer hh = mi * 60;
+        Integer dd = hh * 24;
+
+        Long day = ms / dd;
+        Long hour = (ms - day * dd) / hh;
+        Long minute = (ms - day * dd - hour * hh) / mi;
+        Long second = (ms - day * dd - hour * hh - minute * mi) / ss;
+        Long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;
+
+        StringBuffer sb = new StringBuffer();
+        if(day > 0) {
+            sb.append(day+"天");
+        }
+        if(hour > 0) {
+            sb.append(hour+"小时");
+        }
+        if(minute > 0) {
+            sb.append(minute+"分");
+        }
+        if(second > 0) {
+            sb.append(second+"秒");
+        }
+        if(milliSecond > 0) {
+            sb.append(milliSecond+"毫秒");
+        }
+        return sb.toString();
     }
 }

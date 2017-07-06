@@ -17,11 +17,11 @@
         <result column="ipAddress" property="ipAddress" jdbcType="VARCHAR"/>
         <result column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
         <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
-        <result column="avgTime" property="avgTime" jdbcType="TIMESTAMP"/>
-        <collection property="answerList" ofType="com.abc12366.cms.model.questionnaire.Answer" column="id" select="getAnswer"></collection>
+        <result column="avgTimeLong" property="avgTimeLong" jdbcType="INTEGER"/>
+        <collection  property="answerList" ofType="com.abc12366.cms.model.questionnaire.Answer" column="id" select="getAnswer"></collection>
     </resultMap>
 
-    <resultMap type="com.abc12366.cms.model.questionnaire.Answer" id="getAnswer" >
+    <resultMap type="com.abc12366.cms.model.questionnaire.Answer" id="oneAnswer" >
         <result property="answerLogId" column="answerLogId"  />
         <result property="subjectsId" column="subjectsId"  />
         <result property="content" column="content" />
@@ -35,6 +35,13 @@
 		 WHERE id = #{id}
 	</select>
 
+    <select id="getAnswer" resultType="com.abc12366.cms.model.questionnaire.Answer" parameterType="java.lang.String">
+        SELECT
+        answerLogId,	subjectsId,	content
+        FROM cms_paper_answer
+        WHERE answerLogId = #{answerLogId}
+    </select>
+
     <!-- 查询（根据主键ID查询） -->
     <select id="selectOne" resultMap="answerLogBOResultMap" parameterType="java.lang.String">
         SELECT
@@ -45,18 +52,34 @@
 
 
     <!-- 查询所有 -->
-    <select id="selectList" resultMap="answerLogBOResultMap" parameterType="java.lang.String">
+    <select id="selectList" resultMap="answerLogBOResultMap" parameterType="com.abc12366.cms.model.questionnaire.bo.AnswerLogBO">
         SELECT
         <include refid="Base_Column_List" />
         FROM cms_paper_answer_log
-        WHERE id = #{id}
+        <where>
+            1 = 1
+            <if test=" questionId != null and questionId != '' ">
+                and questionId = #{questionId}
+            </if>
+            <if test="startDate != null">
+                <![CDATA[
+              and date_format(startTime, 'YYYY-MM-DD') >= date_format(#{startDate}, 'YYYY-MM-DD')
+
+                ]]>
+            </if>
+            <if test="endDate != null">
+                <![CDATA[
+              and date_format(startTime, 'YYYY-MM-DD') <= date_format(#{endDate}, 'YYYY-MM-DD')
+              ]]>
+            </if>
+        </where>
     </select>
 
     <!-- 查询问卷答题平均时间 -->
     <select id="selectAvgTime" resultMap="answerLogBOResultMap" parameterType="java.lang.String">
         SELECT
             cl.questionId,
-            avg(total) AS avgTime
+            avg(total) AS avgTimeLong
         FROM
         (
             SELECT

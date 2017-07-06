@@ -12,7 +12,7 @@
 
 	<delete id="delete" parameterType="com.abc12366.cms.model.questionnaire.AnswerLog">
 		 DELETE FROM cms_paper_answer_log
-		 WHERE id = #{id}
+		 WHERE id = #{id} AND questionId = #{questionId}
 	</delete>
 
 	<!-- 添加 （匹配有值的字段）-->

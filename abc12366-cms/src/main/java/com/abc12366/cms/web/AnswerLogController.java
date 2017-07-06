@@ -4,6 +4,7 @@ import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
 import com.abc12366.cms.service.AnswerLogService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,9 +38,21 @@ public class AnswerLogController {
      * @return
      */
     @GetMapping(path = "/list/{questionId}")
-    public ResponseEntity selectList(@PathVariable("questionId") String questionId) {
+    public ResponseEntity selectList(@PathVariable("questionId") String questionId,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "startDate", defaultValue = "") String startDate,
+                                     @RequestParam(value = "endDate", defaultValue = "") String endDate) {
         AnswerLogBO answerLog = new AnswerLogBO();
         answerLog.setQuestionId(questionId);
+        if(startDate == null || "".equals(startDate)){
+            answerLog.setStartDate(Constant.getToday(new Date()));
+        }
+        if(endDate == null || "".equals(endDate)){
+            answerLog.setEndDate(Constant.getToday(new Date()));
+        }
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+
         List<AnswerLogBO> answerLogList = answerLogService.selectList(answerLog);
         LOGGER.info("{}", answerLogList);
         return (answerLogList == null) ?
@@ -47,7 +61,7 @@ public class AnswerLogController {
     }
 
     /**
-     * 答题记录列表查询
+     * 答题记录平均答题查询
      * @param questionId
      * @return
      */
@@ -122,14 +136,11 @@ public class AnswerLogController {
      * 答题记录删除
      *
      * @param questionId
-     * @param id
      * @return
      */
-    @DeleteMapping(path = "/{id}/{questionId}")
-    public ResponseEntity update(@PathVariable("questionId") String questionId, @PathVariable("id") String id) {
-        AnswerLogBO answerLogBO = new AnswerLogBO();
+    @DeleteMapping(path = "/{questionId}")
+    public ResponseEntity delete(@PathVariable("questionId") String questionId,@Valid @RequestBody AnswerLogBO answerLogBO) {
         answerLogBO.setQuestionId(questionId);
-        answerLogBO.setId(id);
         answerLogService.delete(answerLogBO);
         return ResponseEntity.ok(Utils.kv());
     }

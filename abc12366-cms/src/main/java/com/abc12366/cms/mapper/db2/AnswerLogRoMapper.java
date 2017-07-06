@@ -22,7 +22,7 @@ public interface AnswerLogRoMapper {
 	 **/
 	AnswerLog selectByPrimaryKey(@Param("id") String id);
 
-    List<AnswerLogBO> selectList(AnswerLog answerLog);
+    List<AnswerLogBO> selectList(AnswerLogBO answerLogBO);
 
     AnswerLogBO selectOne(String id);
 
