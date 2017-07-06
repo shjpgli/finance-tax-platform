@@ -22,7 +22,7 @@
         SELECT  ut.id,ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ut.weight
         from uc_tag ut,uc_subject_tag ust
         where ut.id=ust.tagId
-        and ust.userId=#{userId}
+        and ust.subjectId=#{userId}
         ORDER BY lastUpdate DESC
     </select>
 

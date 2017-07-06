@@ -1,9 +1,11 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.UserExtendBO;
+import com.abc12366.uc.model.bo.UserExtendListBO;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -11,9 +13,8 @@ import java.util.List;
  * Time: 11:07
  */
 public interface RealNameValidationService {
-    List<UserExtendBO> selectList(String username);
+    List<UserExtendListBO> selectList(Map map);
 
-    UserExtendBO validate(String userId) throws ParseException;
+    UserExtendBO validate(String userId, String validStatus) throws ParseException;
 
-    UserExtendBO reValidate(String userId) throws ParseException;
 }
