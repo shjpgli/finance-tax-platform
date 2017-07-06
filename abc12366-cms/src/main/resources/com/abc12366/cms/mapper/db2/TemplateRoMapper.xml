@@ -28,6 +28,9 @@
 		<if test="siteId != null and siteId != ''">
 			AND siteId = #{siteId}
 		</if>
+		<if test="parentPath != null and parentPath != ''">
+			AND parentPath = #{parentPath}
+		</if>
 	</select>
 
 </mapper>
