@@ -26,4 +26,6 @@ public interface QuestionnaireRoMapper {
     QuestionnaireBO selectOne(String id);
 
     List<QuestionnaireBO> selectList(Questionnaire questionnaire);
+
+    QuestionnaireBO selectAccessNum(String id);
 }

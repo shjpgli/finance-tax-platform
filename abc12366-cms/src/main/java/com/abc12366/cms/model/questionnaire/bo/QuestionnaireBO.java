@@ -1,4 +1,5 @@
 package com.abc12366.cms.model.questionnaire.bo;
+
 import com.abc12366.cms.model.Subject;
 import com.abc12366.cms.model.questionnaire.QuestionnaireParam;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -10,135 +11,132 @@ import java.util.List;
 
 
 /**
- * 
  * 问卷表
- * 
  **/
 @SuppressWarnings("serial")
 public class QuestionnaireBO implements Serializable {
 
-	private String id;
+    private String id;
     @NotEmpty
     @Size(min = 2, max = 100)
-	private String title;
+    private String title;
 
     @Size(min = 0, max = 255)
-	private String simpleDesc;
+    private String simpleDesc;
 
     @NotNull
-	private Boolean status;
+    private Boolean status;
 
-	private String createUser;
-	private java.util.Date createTime;
-	private java.util.Date updateTime;
-	private String updateUser;
-	private Integer recoveryRate;
-	private Integer accessRate;
-	private String sceneCode;
-	private String tradeCode;
+    private String createUser;
+    private java.util.Date createTime;
+    private java.util.Date updateTime;
+    private String updateUser;
+    private Integer recoveryRate;
+    private Integer accessRate;
+    private Double accessNum;
+    private String sceneCode;
+    private String tradeCode;
 
     private QuestionnaireParam questionnaireParam;
 
-	private List<SubjectsBO> subjectsBOList;
+    private List<SubjectsBO> subjectsBOList;
 
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public String getId() {
+        return this.id;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public String getTitle() {
+        return this.title;
+    }
 
-	public void setTitle(String title){
-		this.title = title;
-	}
+    public void setSimpleDesc(String simpleDesc) {
+        this.simpleDesc = simpleDesc;
+    }
 
-	public String getTitle(){
-		return this.title;
-	}
+    public String getSimpleDesc() {
+        return this.simpleDesc;
+    }
 
-	public void setSimpleDesc(String simpleDesc){
-		this.simpleDesc = simpleDesc;
-	}
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
-	public String getSimpleDesc(){
-		return this.simpleDesc;
-	}
+    public Boolean getStatus() {
+        return this.status;
+    }
 
-	public void setStatus(Boolean status){
-		this.status = status;
-	}
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
-	public Boolean getStatus(){
-		return this.status;
-	}
+    public String getCreateUser() {
+        return this.createUser;
+    }
 
-	public void setCreateUser(String createUser){
-		this.createUser = createUser;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public String getCreateUser(){
-		return this.createUser;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public void setUpdateTime(java.util.Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
+    public java.util.Date getUpdateTime() {
+        return this.updateTime;
+    }
 
-	public void setUpdateTime(java.util.Date updateTime){
-		this.updateTime = updateTime;
-	}
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
 
-	public java.util.Date getUpdateTime(){
-		return this.updateTime;
-	}
+    public String getUpdateUser() {
+        return this.updateUser;
+    }
 
-	public void setUpdateUser(String updateUser){
-		this.updateUser = updateUser;
-	}
+    public void setRecoveryRate(Integer recoveryRate) {
+        this.recoveryRate = recoveryRate;
+    }
 
-	public String getUpdateUser(){
-		return this.updateUser;
-	}
+    public Integer getRecoveryRate() {
+        return this.recoveryRate;
+    }
 
-	public void setRecoveryRate(Integer recoveryRate){
-		this.recoveryRate = recoveryRate;
-	}
+    public void setAccessRate(Integer accessRate) {
+        this.accessRate = accessRate;
+    }
 
-	public Integer getRecoveryRate(){
-		return this.recoveryRate;
-	}
+    public Integer getAccessRate() {
+        return this.accessRate;
+    }
 
-	public void setAccessRate(Integer accessRate){
-		this.accessRate = accessRate;
-	}
+    public void setSceneCode(String sceneCode) {
+        this.sceneCode = sceneCode;
+    }
 
-	public Integer getAccessRate(){
-		return this.accessRate;
-	}
+    public String getSceneCode() {
+        return this.sceneCode;
+    }
 
-	public void setSceneCode(String sceneCode){
-		this.sceneCode = sceneCode;
-	}
+    public void setTradeCode(String tradeCode) {
+        this.tradeCode = tradeCode;
+    }
 
-	public String getSceneCode(){
-		return this.sceneCode;
-	}
-
-	public void setTradeCode(String tradeCode){
-		this.tradeCode = tradeCode;
-	}
-
-	public String getTradeCode(){
-		return this.tradeCode;
-	}
+    public String getTradeCode() {
+        return this.tradeCode;
+    }
 
     public QuestionnaireParam getQuestionnaireParam() {
         return questionnaireParam;
@@ -154,5 +152,13 @@ public class QuestionnaireBO implements Serializable {
 
     public void setSubjectsBOList(List<SubjectsBO> subjectsBOList) {
         this.subjectsBOList = subjectsBOList;
+    }
+
+    public Double getAccessNum() {
+        return accessNum;
+    }
+
+    public void setAccessNum(Double accessNum) {
+        this.accessNum = accessNum;
     }
 }

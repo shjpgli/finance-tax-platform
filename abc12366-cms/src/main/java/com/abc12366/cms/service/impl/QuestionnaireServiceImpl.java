@@ -235,4 +235,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         return bo;
 
     }
+
+    @Override
+    public QuestionnaireBO selectAccessNum(String id) {
+        return questionnaireRoMapper.selectAccessNum(id);
+    }
 }

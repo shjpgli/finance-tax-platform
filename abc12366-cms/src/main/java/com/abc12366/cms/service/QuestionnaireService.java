@@ -30,4 +30,6 @@ public interface QuestionnaireService {
     void updateRecoveryRate(String id);
 
     QuestionnaireBO copy(QuestionnaireBO questionnaireBO);
+
+    QuestionnaireBO selectAccessNum(String id);
 }
