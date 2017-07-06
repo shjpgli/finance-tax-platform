@@ -62,8 +62,10 @@ public class EventApplyController {
 
     @GetMapping(path = "/selectlltj")
     public ResponseEntity selectlltj(@RequestParam(value = "startTime", required = false) String startTime,
-                                     @RequestParam(value = "endTime", required = false) String endTime) {
+                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                     @RequestParam(value = "eventId", required = false) String eventId) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("eventId", eventId);//活动ID
         SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
         try {
             if(startTime != null && !"".equals(startTime)){

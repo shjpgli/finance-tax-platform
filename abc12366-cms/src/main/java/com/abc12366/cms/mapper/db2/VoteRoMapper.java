@@ -2,6 +2,7 @@ package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.Vote;
 import com.abc12366.cms.model.VoteResult;
+import com.abc12366.cms.model.bo.VoteRolltjBo;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 
@@ -29,4 +30,46 @@ public interface VoteRoMapper {
 
     // 统计IP区域访问情况
     List<VoteStatAreaBO> statIpArea(String voteId);
+
+    /**
+     *
+     * 查询（浏览统计）
+     *
+     **/
+    List<VoteRolltjBo> selectlltj(Map<String,Object> map);
+
+    /**
+     *
+     * 查询（浏览统计总数按时间）
+     *
+     **/
+    Integer selectlltjsbysj(Map<String,Object> map);
+
+    /**
+     *
+     * 查询（浏览统计总数）
+     *
+     **/
+    Integer selectlltjs(Map<String,Object> map);
+
+    /**
+     *
+     * 查询（投票统计按时间）
+     *
+     **/
+    List<VoteRolltjBo> selecttptjbysj(Map<String,Object> map);
+
+    /**
+     *
+     * 查询（投票统计总数）
+     *
+     **/
+    Integer selecttptjs(Map<String,Object> map);
+
+    /**
+     *
+     * 查询（投票统计）
+     *
+     **/
+    List<VoteRolltjBo> selecttptj(Map<String,Object> map);
 }

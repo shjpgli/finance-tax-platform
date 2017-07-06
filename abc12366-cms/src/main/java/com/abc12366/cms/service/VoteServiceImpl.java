@@ -7,8 +7,7 @@ import com.abc12366.cms.mapper.db2.SubjectRoMapper;
 import com.abc12366.cms.mapper.db2.VoteAdditionRoMapper;
 import com.abc12366.cms.mapper.db2.VoteRoMapper;
 import com.abc12366.cms.model.*;
-import com.abc12366.cms.model.bo.VoteStatAreaBO;
-import com.abc12366.cms.model.bo.VoteStatBrowserBO;
+import com.abc12366.cms.model.bo.*;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -383,4 +382,36 @@ public class VoteServiceImpl implements VoteService {
         map.put("nov", voteRoMapper.selectHistoryCount(voteId));
         return map;
     }
+
+    @Override
+    public VotetjListBo selecttj(Map<String,Object> map) {
+        VotetjListBo votetjListBo = new VotetjListBo();
+        //投票统计按时间
+        List<VoteRolltjBo> tptj = voteRoMapper.selecttptjbysj(map);
+        votetjListBo.setTptj(tptj);
+        //投票详细统计
+        List<VoteRolltjBo> tpxxtj = voteRoMapper.selecttptj(map);
+        votetjListBo.setTpxxtj(tpxxtj);
+        //投票统计总数
+        Integer tpcnt = voteRoMapper.selecttptjs(map);
+        votetjListBo.setTpcnt(tpcnt);
+        //浏览统计总数
+        Integer llcnt = voteRoMapper.selectlltjs(map);
+        votetjListBo.setLlcnt(llcnt);
+        //浏览统计总数按时间
+        Integer llcnts = voteRoMapper.selectlltjsbysj(map);
+        votetjListBo.setLlcnts(llcnts);
+        //pc浏览统计浏览统计
+        map.put("source","PC");
+        List<VoteRolltjBo> pclist = voteRoMapper.selectlltj(map);
+        votetjListBo.setPclist(pclist);
+        //mobileWeb浏览统计
+        map.put("source", "MobileWeb");
+        List<VoteRolltjBo> mobileWeblist = voteRoMapper.selectlltj(map);
+        votetjListBo.setMobileWeblist(mobileWeblist);
+        return votetjListBo;
+    }
+
+
+
 }

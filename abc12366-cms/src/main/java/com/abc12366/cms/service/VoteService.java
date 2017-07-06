@@ -5,6 +5,7 @@ import com.abc12366.cms.model.VoteHistory;
 import com.abc12366.cms.model.VoteResult;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
+import com.abc12366.cms.model.bo.VotetjListBo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,4 +40,6 @@ public interface VoteService {
     List<VoteStatAreaBO> statIpArea(String voteId);
 
     Map<String, Integer> statViews(String voteId);
+
+    VotetjListBo selecttj(Map<String, Object> map);
 }

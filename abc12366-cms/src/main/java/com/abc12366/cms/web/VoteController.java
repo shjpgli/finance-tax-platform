@@ -5,6 +5,7 @@ import com.abc12366.cms.model.VoteHistory;
 import com.abc12366.cms.model.VoteResult;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
+import com.abc12366.cms.model.bo.VotetjListBo;
 import com.abc12366.cms.service.VoteService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -13,11 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -207,4 +211,30 @@ public class VoteController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+
+    @GetMapping(path = "/selecttj")
+    public ResponseEntity selecttj(@RequestParam(value = "startTime", required = false) String startTime,
+                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                     @RequestParam(value = "voteId", required = false) String voteId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("voteId",voteId);
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startTime != null && !"".equals(startTime)){
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime()/1000);
+            }
+            if(endTime != null && !"".equals(endTime)){
+                Date startTime2 = sdf.parse(endTime);
+                dataMap.put("endTime", startTime2.getTime()/1000);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+        VotetjListBo data = voteService.selecttj(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
 }

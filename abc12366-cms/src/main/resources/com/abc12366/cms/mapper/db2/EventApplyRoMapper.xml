@@ -46,6 +46,9 @@
 		<if test="source != null and source != ''">
 			AND source = #{source}
 		</if>
+		<if test="eventId != null and eventId != ''">
+			AND eventId = #{eventId}
+		</if>
 		<if test="startTime!=null and startTime!=''">
 			AND UNIX_TIMESTAMP(browsetime) &gt;= #{startTime}
 		</if>
