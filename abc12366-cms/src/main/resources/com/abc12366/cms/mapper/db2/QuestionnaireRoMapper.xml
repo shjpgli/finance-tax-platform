@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db2.QuestionnaireRoMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
 		 id,	title,	simpleDesc,	status,	createUser,	createTime,	updateTime,	updateUser,	recoveryRate,	accessRate,	sceneCode,	tradeCode
 	</sql>
 
@@ -21,6 +21,7 @@
         <result column="accessRate" property="accessRate" jdbcType="INTEGER"/>
         <result column="sceneCode" property="sceneCode" jdbcType="VARCHAR"/>
         <result column="tradeCode" property="tradeCode" jdbcType="VARCHAR"/>
+        <result column="accessNum" property="accessNum" jdbcType="DOUBLE"/>
         <association property="questionnaireParam" javaType="com.abc12366.cms.model.questionnaire.QuestionnaireParam">
             <id column="questionId" property="questionId" jdbcType="VARCHAR"/>
             <result column="isDisplayNumber" property="isDisplayNumber" jdbcType="INTEGER"/>
@@ -35,13 +36,14 @@
         </association>
     </resultMap>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.questionnaire.Questionnaire" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_paper_questionnaire
-		 WHERE id = #{id}
-	</select>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.questionnaire.Questionnaire"
+            parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cms_paper_questionnaire
+        WHERE id = #{id}
+    </select>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectOne" resultMap="questionBOResultMap" parameterType="java.lang.String">
@@ -61,6 +63,31 @@
         FROM cms_paper_questionnaire q
         LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId
         order by q.updateTime desc
+    </select>
+
+    <select id="selectAccessNum" resultMap="questionBOResultMap" parameterType="java.lang.String">
+        SELECT
+            an.questionId as id,
+            an.alog as recoveryRate,
+            ac.acount as accessRate,
+            an.alog/ac.acount as accessNum
+        FROM
+            (
+                SELECT
+                    questionId,COUNT(id) as alog
+                FROM
+                    cms_paper_answer_log
+            ) AS an
+            left JOIN (
+                SELECT
+                    questionId,COUNT(id) as acount
+                FROM
+                    cms_paper_access_log
+            ) AS ac on ac.questionId = an.questionId
+        WHERE
+            an.questionId = #{questionId}
+        GROUP BY
+	an.questionId
     </select>
 
 

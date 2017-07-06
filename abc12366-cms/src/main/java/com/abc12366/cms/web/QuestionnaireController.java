@@ -128,21 +128,21 @@ public class QuestionnaireController {
     }
 
     /**
-     * 问卷状态修改
+     * 问卷回收率
      * @param id
      * @return
      */
     @GetMapping(path = "/recovery/{id}")
     public ResponseEntity recoveryRate(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
-        QuestionnaireBO questionnaireBO = questionnaireService.selectOne(id);
-        Integer recoveryRate = questionnaireBO.getRecoveryRate();
-        Integer accessRate = questionnaireBO.getAccessRate();
-        String rate = accuracy(recoveryRate,accessRate,3);
-        return ResponseEntity.ok(Utils.kv("data",rate));
+        QuestionnaireBO questionnaireBO = questionnaireService.selectAccessNum(id);
+//        Integer recoveryRate = questionnaireBO.getRecoveryRate();
+//        Integer accessRate = questionnaireBO.getAccessRate();
+//        String rate = accuracy(recoveryRate,accessRate,3);
+        return ResponseEntity.ok(Utils.kv("data",questionnaireBO));
     }
 
-    public static String accuracy(double recoveryRate, double accessRate, int scale){
+    /*public static String accuracy(double recoveryRate, double accessRate, int scale){
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
         //可以设置精确几位小数
         df.setMaximumFractionDigits(scale);
@@ -150,7 +150,7 @@ public class QuestionnaireController {
         df.setRoundingMode(RoundingMode.HALF_UP);
         double accuracy_num = recoveryRate / accessRate * 100;
         return df.format(accuracy_num)+"%";
-    }
+    }*/
 
     /**
      * 问卷删除
