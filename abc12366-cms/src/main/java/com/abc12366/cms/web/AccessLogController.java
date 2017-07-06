@@ -48,7 +48,7 @@ public class AccessLogController {
     }
 
     /**
-     * 访问记录列表查询
+     * 访问记录访问量
      * @param questionId
      * @return
      */

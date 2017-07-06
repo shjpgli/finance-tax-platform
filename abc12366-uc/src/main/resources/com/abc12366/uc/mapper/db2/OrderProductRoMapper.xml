@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderProductRoMapper">
 
     <sql id="Base_Column_List">
-		 id,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
+		 orderId,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
 	</sql>
 
     <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.OrderProduct" parameterType="java.lang.String">

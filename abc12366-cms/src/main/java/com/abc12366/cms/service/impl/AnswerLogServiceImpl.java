@@ -6,7 +6,6 @@ import com.abc12366.cms.mapper.db2.AnswerLogRoMapper;
 import com.abc12366.cms.mapper.db2.AnswerRoMapper;
 import com.abc12366.cms.model.questionnaire.Answer;
 import com.abc12366.cms.model.questionnaire.AnswerLog;
-import com.abc12366.cms.model.questionnaire.Option;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
 import com.abc12366.cms.service.AnswerLogService;
 import com.abc12366.common.exception.ServiceException;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -173,6 +171,9 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         if (bo != null && bo.getAvgTimeLong() != null){
             String avg = formatTime(bo.getAvgTimeLong());
             bo.setAvgTime(avg);
+        }else{
+            LOGGER.info("{该问卷没有答题记录}", answerLog);
+            throw new ServiceException(4425);
         }
         return bo;
     }

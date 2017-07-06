@@ -1,15 +1,9 @@
 package com.abc12366.cms.service.impl;
 
-import com.abc12366.cms.mapper.db1.OptionMapper;
-import com.abc12366.cms.mapper.db1.QuestionnaireMapper;
-import com.abc12366.cms.mapper.db1.QuestionnaireParamMapper;
-import com.abc12366.cms.mapper.db1.SubjectsMapper;
+import com.abc12366.cms.mapper.db1.*;
 import com.abc12366.cms.mapper.db2.QuestionnaireParamRoMapper;
 import com.abc12366.cms.mapper.db2.QuestionnaireRoMapper;
-import com.abc12366.cms.model.questionnaire.Option;
-import com.abc12366.cms.model.questionnaire.Questionnaire;
-import com.abc12366.cms.model.questionnaire.QuestionnaireParam;
-import com.abc12366.cms.model.questionnaire.Subjects;
+import com.abc12366.cms.model.questionnaire.*;
 import com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import com.abc12366.cms.service.QuestionnaireService;
@@ -51,6 +45,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     @Autowired
     private OptionMapper optionMapper;
 
+    @Autowired
+    private AccessLogMapper accessLogMapper;
 
     @Override
     public List<QuestionnaireBO> selectList(QuestionnaireBO questionnaireBO) {
@@ -137,6 +133,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
             LOGGER.info("{删除问卷设置失败}", questionnaire);
             throw new ServiceException(4403);
         }
+        //删除问卷同时，删除问卷访问记录
+        accessLogMapper.deleteByQuestionId(questionnaireBO.getId());
     }
 
     @Override
