@@ -15,7 +15,7 @@
         from uc_user uu
         left JOIN
         (SELECT ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ust.userId,ust.subjectId,ust.tagId,ust.type FROM uc_subject_tag ust LEFT JOIN  uc_tag ut ON ust.tagId=ut.id) utust
-        on utust.userId=uu.id
+        on utust.subjectId=uu.id
         <where>
             <if test="username!=null">
                 username=#{username}
