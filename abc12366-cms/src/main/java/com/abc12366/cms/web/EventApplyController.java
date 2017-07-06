@@ -38,11 +38,13 @@ public class EventApplyController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "eventId", required = false) String eventId,
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("name", name);//标题
-        dataMap.put("status", status);//标题
+        dataMap.put("eventId", eventId);//姓名，手机号，邮箱
+        dataMap.put("name", name);//活动名称
+        dataMap.put("status", status);//状态
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<EventApplyBo> dataList = eventApplyService.selectList(dataMap);
         LOGGER.info("{}", dataList);

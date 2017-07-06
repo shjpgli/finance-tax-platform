@@ -28,6 +28,9 @@
 		<if test="status != null and status != ''">
 			AND status = #{status}
 		</if>
+		<if test="eventId != null and eventId != ''">
+			AND eventId = #{eventId}
+		</if>
 	</select>
 
 	<!-- 查询（报名统计） -->

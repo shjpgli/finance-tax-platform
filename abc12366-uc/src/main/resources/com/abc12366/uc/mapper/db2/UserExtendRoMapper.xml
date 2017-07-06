@@ -9,14 +9,21 @@
         where userId = #{userId}
     </select>
 
-    <select id="selectList" resultType="com.abc12366.uc.model.UserExtend" parameterType="java.lang.String">
-        select uue.userId,uue.signature,uue.sex,uue.birthday,uue.bloodType,uue.weight,uue.height,uue.marital, uue.education,uue.graduate, uue.occupation,uue.income,uue.postAddress,uue.realName, uue.weixin,uue.qq,uue.safeQuestion,
-        uue.safeAnswer,uue.province,uue.city,uue.area,uue.createTime, uue.lastUpdate,uue.tags,uue.idcard,uue.frontImage,uue.backImage,uue.startTime,uue.endTime,uue.validStatus,uue.validTime
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserExtendListBO" parameterType="java.util.Map">
+        select uu.username,uu.nickname,uu.phone,uu.status,
+        uue.userId,uue.signature,uue.sex,uue.birthday,uue.bloodType,uue.weight,uue.height,uue.marital,
+        uue.education,uue.graduate, uue.occupation,uue.income,uue.postAddress,uue.realName,
+        uue.weixin,uue.qq,uue.safeQuestion,
+        uue.safeAnswer,uue.province,uue.city,uue.area,uue.createTime,
+        uue.lastUpdate,uue.tags,uue.idcard,uue.frontImage,uue.backImage,uue.startTime,uue.endTime,uue.validStatus,uue.validTime
         from uc_user_extend uue, uc_user uu
-        where uue.userId=uu.id
-        <if test="username!=null">
-            and uu.username like CONCAT('%',#{username},'%')
-        </if>
+        <where>
+            uue.userId=uu.id
+            <if test="username!=null">
+                and uu.username like CONCAT('%',#{username},'%')
+            </if>
+        </where>
+
     </select>
 
 </mapper>
