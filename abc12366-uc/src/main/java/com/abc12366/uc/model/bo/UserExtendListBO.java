@@ -10,6 +10,8 @@ import java.util.Date;
 public class UserExtendListBO {
     private String username;
     private String nickname;
+    private String phone;
+    private Boolean status;
     private String userId;
     private String signature;
     private String sex;
@@ -44,6 +46,22 @@ public class UserExtendListBO {
     private String remark;
 
     public UserExtendListBO() {
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public String getUsername() {

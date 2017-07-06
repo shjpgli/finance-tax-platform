@@ -10,8 +10,8 @@
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserExtendListBO" parameterType="java.util.Map">
-        select uu.username,
-        uu.nickname,uue.userId,uue.signature,uue.sex,uue.birthday,uue.bloodType,uue.weight,uue.height,uue.marital,
+        select uu.username,uu.nickname,uu.phone,uu.status,
+        uue.userId,uue.signature,uue.sex,uue.birthday,uue.bloodType,uue.weight,uue.height,uue.marital,
         uue.education,uue.graduate, uue.occupation,uue.income,uue.postAddress,uue.realName,
         uue.weixin,uue.qq,uue.safeQuestion,
         uue.safeAnswer,uue.province,uue.city,uue.area,uue.createTime,
