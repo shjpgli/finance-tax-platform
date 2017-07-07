@@ -10,7 +10,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Item_Column_List">
-        id, subjectId, type, item, image, detail, sort
+        id, subjectId, type, item, image, detail,status, sort
     </sql>
 
     <insert id="insertSubject" parameterType="com.abc12366.cms.model.Subject">
@@ -24,8 +24,12 @@
 
     <insert id="insertItem" parameterType="com.abc12366.cms.model.SubjectItem">
         INSERT INTO cms_subject_item (<include refid="Item_Column_List"/>)
-        VALUES (#{id}, #{subjectId}, #{type}, #{item}, #{image}, #{detail}, #{sort})
+        VALUES (#{id}, #{subjectId}, #{type}, #{item}, #{image}, #{detail},#{status}, #{sort})
     </insert>
+
+    <update id="updateStatus" parameterType="com.abc12366.cms.model.bo.SubItemBo">
+        UPDATE cms_subject_item set status = #{bz} WHERE id = #{id}
+    </update>
 
     <delete id="deleteItem" parameterType="java.lang.String">
         DELETE FROM cms_subject_item WHERE subjectId = #{subjectId}

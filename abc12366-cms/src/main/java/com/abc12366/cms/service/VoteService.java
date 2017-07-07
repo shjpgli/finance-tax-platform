@@ -3,6 +3,7 @@ package com.abc12366.cms.service;
 import com.abc12366.cms.model.Vote;
 import com.abc12366.cms.model.VoteHistory;
 import com.abc12366.cms.model.VoteResult;
+import com.abc12366.cms.model.bo.SubItemBo;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 import com.abc12366.cms.model.bo.VotetjListBo;
@@ -42,4 +43,6 @@ public interface VoteService {
     Map<String, Integer> statViews(String voteId);
 
     VotetjListBo selecttj(Map<String, Object> map);
+
+    String updateItemStatus(SubItemBo subItemBo);
 }

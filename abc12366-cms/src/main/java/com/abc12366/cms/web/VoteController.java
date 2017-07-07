@@ -3,6 +3,7 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.Vote;
 import com.abc12366.cms.model.VoteHistory;
 import com.abc12366.cms.model.VoteResult;
+import com.abc12366.cms.model.bo.SubItemBo;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 import com.abc12366.cms.model.bo.VotetjListBo;
@@ -235,6 +236,15 @@ public class VoteController {
         VotetjListBo data = voteService.selecttj(dataMap);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
+
+    @PutMapping(path = "/updateSubItemStatus")
+    public ResponseEntity updateSubItemStatus(@RequestBody SubItemBo subItemBo) {
+        LOGGER.info("{}", subItemBo);
+        String rtn = voteService.updateItemStatus(subItemBo);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", subItemBo));
     }
 
 }
