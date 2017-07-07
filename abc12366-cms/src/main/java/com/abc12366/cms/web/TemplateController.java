@@ -33,11 +33,13 @@ public class TemplateController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "templateProperty", required = false) String templateProperty,
                                      @RequestParam(value = "siteId", required = false) String siteId,
-                                     @RequestParam(value = "parentPath", required = false) String parentPath) {
+                                     @RequestParam(value = "parentPath", required = false) String parentPath,
+                                     @RequestParam(value = "state", required = false) String state) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("templateProperty",templateProperty);
         dataMap.put("siteId",siteId);
         dataMap.put("parentPath",parentPath);
+        dataMap.put("state",state);
         List<TemplateBo> dataList = templateService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
