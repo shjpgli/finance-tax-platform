@@ -189,7 +189,7 @@
 			a.viewsDay,	a.commentsDay,	a.downloadsDay,	a.upsDay,a.recommendLevel,
 			b.channelPath,c.sitePath
 		FROM cms_content a,cms_channel b,cms_site c
-		WHERE a.channelId = b.channelId AND a.siteId = c.siteId AND contentId = #{contentId}
+		WHERE a.channelId = b.channelId AND a.siteId = c.siteId AND a.contentId = #{contentId}
 	</select>
 
 

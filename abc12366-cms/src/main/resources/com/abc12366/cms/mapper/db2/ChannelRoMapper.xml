@@ -13,7 +13,7 @@
 		 SELECT
 			 a.channelId,a.channelName,	a.modelId,	a.siteId,	a.parentId,	a.channelPath,	a.priority,	a.isDisplay,b.sitePath
 		 FROM cms_channel a,cms_site b
-		 WHERE a.siteId = b.siteId and channelId = #{channelId}
+		 WHERE a.siteId = b.siteId and a.channelId = #{channelId}
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
