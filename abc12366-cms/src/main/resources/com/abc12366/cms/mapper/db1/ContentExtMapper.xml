@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.ContentExt">
 		 INSERT INTO cms_content_ext
- 		(contentId,title,shortTitle,author,origin,originUrl,description,releaseDate,mediaPath,mediaType,isBold,titleColor,titleImg,contentImg,typeImg,link,tplContent,needRegenerate,toplevelDate,pigeonholeDate)
+ 		(contentId,title,shortTitle,author,origin,originUrl,description,releaseDate,mediaPath,mediaType,isBold,titleColor,titleImg,contentImg,typeImg,link,tplContent,needRegenerate,toplevelDate,staticLink,pigeonholeDate)
 		 VALUES 
- 		(#{contentId},#{title},#{shortTitle},#{author},#{origin},#{originUrl},#{description},#{releaseDate},#{mediaPath},#{mediaType},#{isBold},#{titleColor},#{titleImg},#{contentImg},#{typeImg},#{link},#{tplContent},#{needRegenerate},#{toplevelDate},#{pigeonholeDate})
+ 		(#{contentId},#{title},#{shortTitle},#{author},#{origin},#{originUrl},#{description},#{releaseDate},#{mediaPath},#{mediaType},#{isBold},#{titleColor},#{titleImg},#{contentImg},#{typeImg},#{link},#{tplContent},#{needRegenerate},#{toplevelDate},#{staticLink},#{pigeonholeDate})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -78,6 +78,9 @@
 			<if test="toplevelDate != null">
 				 toplevelDate,
 			</if>
+			 <if test="staticLink != null">
+				 staticLink,
+			 </if>
 			<if test="pigeonholeDate != null">
 				 pigeonholeDate,
 			</if>
@@ -141,6 +144,9 @@
 			<if test="toplevelDate!=null">
 				 #{toplevelDate},
 			</if>
+			 <if test="staticLink!=null">
+				 #{staticLink},
+			 </if>
 			<if test="pigeonholeDate!=null">
 				 #{pigeonholeDate},
 			</if>
@@ -205,6 +211,9 @@
 			<if test="toplevelDate != null">
 				 toplevelDate = #{toplevelDate},
 			</if>
+			 <if test="staticLink != null">
+				 staticLink = #{staticLink},
+			 </if>
 			<if test="pigeonholeDate != null">
 				 pigeonholeDate = #{pigeonholeDate},
 			</if>
@@ -235,13 +244,15 @@
 			 tplContent = #{tplContent},
 			 needRegenerate = #{needRegenerate},
 			 toplevelDate = #{toplevelDate},
+			 staticLink = #{staticLink},
 			 pigeonholeDate = #{pigeonholeDate}
 		 WHERE contentId = #{contentId}
 	</update>
 
 	<!--更新：根据主键ID批量更新-->
 	<update id="updatRegenerateList" >
-		update cms_content_ext SET needRegenerate = 1
+		UPDATE cms_content_ext t SET t.needRegenerate = 1,
+		t.staticLink = (SELECT CONCAT(a.channelPath,'/',b.contentId,'.html') FROM cms_channel a,cms_content b WHERE a.channelId = b.channelId AND b.contentId = t.contentId)
 		WHERE contentId in <foreach item="item" index="index" collection="contentIds" open="(" separator="," close=")">
 		#{item}
 	</foreach>

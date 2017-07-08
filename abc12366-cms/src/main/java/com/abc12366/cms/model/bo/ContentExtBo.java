@@ -54,6 +54,9 @@ public class ContentExtBo implements Serializable {
 	/**指定模板**varchar(100)**/
 	private String tplContent;
 
+	/**静态页路径**varchar(500)**/
+	private String staticLink;
+
 	public String getContentId() {
 		return contentId;
 	}
@@ -164,5 +167,13 @@ public class ContentExtBo implements Serializable {
 
 	public void setTplContent(String tplContent) {
 		this.tplContent = tplContent;
+	}
+
+	public String getStaticLink() {
+		return staticLink;
+	}
+
+	public void setStaticLink(String staticLink) {
+		this.staticLink = staticLink;
 	}
 }

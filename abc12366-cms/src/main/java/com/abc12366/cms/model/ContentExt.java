@@ -70,6 +70,9 @@ public class ContentExt implements Serializable {
 	/**归档日期**datetime**/
 	private java.util.Date pigeonholeDate;
 
+	/**静态页路径**varchar(500)**/
+	private String staticLink;
+
 
 
 	public void setContentId(String contentId){
@@ -232,4 +235,11 @@ public class ContentExt implements Serializable {
 		return this.pigeonholeDate;
 	}
 
+	public String getStaticLink() {
+		return staticLink;
+	}
+
+	public void setStaticLink(String staticLink) {
+		this.staticLink = staticLink;
+	}
 }
