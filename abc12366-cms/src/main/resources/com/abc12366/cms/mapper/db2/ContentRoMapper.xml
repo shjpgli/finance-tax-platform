@@ -184,9 +184,12 @@
 	<!-- 查询（根据contentId查询） -->
 	<select id="selectByContentId" resultType="com.abc12366.cms.model.Content" parameterType="java.lang.String">
 		SELECT
-		<include refid="Base_Column_List" />
-		FROM cms_content
-		WHERE contentId = #{contentId}
+			a.contentId,	a.channelId,	a.typeId,	a.modelId,	a.siteId,
+			a.sortDate,	a.topLevel,	a.hasTitleImg,	a.isRecommend,	a.status,
+			a.viewsDay,	a.commentsDay,	a.downloadsDay,	a.upsDay,a.recommendLevel,
+			b.channelPath,c.sitePath
+		FROM cms_content a,cms_channel b,cms_site c
+		WHERE a.channelId = b.channelId AND a.siteId = c.siteId AND contentId = #{contentId}
 	</select>
 
 
