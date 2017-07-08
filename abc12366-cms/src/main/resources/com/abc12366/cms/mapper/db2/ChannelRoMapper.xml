@@ -11,9 +11,9 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Channel" parameterType="java.lang.String">
 		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_channel
-		 WHERE channelId = #{channelId}
+			 a.channelId,a.channelName,	a.modelId,	a.siteId,	a.parentId,	a.channelPath,	a.priority,	a.isDisplay,b.sitePath
+		 FROM cms_channel a,cms_site b
+		 WHERE a.siteId = b.siteId and channelId = #{channelId}
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
