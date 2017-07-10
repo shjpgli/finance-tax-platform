@@ -22,7 +22,7 @@ public class VotetjListBo implements Serializable {
 	private List<VoteRolltjBo> tptj;
 
 	//投票详细统计
-	private List<VoteRolltjBo> tpxxtj;
+	private List<VoteRotptjBo> tpxxtj;
 
 	//投票统计总数
 	private Integer tpcnt;
@@ -57,11 +57,11 @@ public class VotetjListBo implements Serializable {
 		this.tptj = tptj;
 	}
 
-	public List<VoteRolltjBo> getTpxxtj() {
+	public List<VoteRotptjBo> getTpxxtj() {
 		return tpxxtj;
 	}
 
-	public void setTpxxtj(List<VoteRolltjBo> tpxxtj) {
+	public void setTpxxtj(List<VoteRotptjBo> tpxxtj) {
 		this.tpxxtj = tpxxtj;
 	}
 

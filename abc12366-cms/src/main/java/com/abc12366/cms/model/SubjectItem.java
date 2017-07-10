@@ -33,10 +33,12 @@ public class SubjectItem {
     // 参与人数（number of participants）
     private Integer nop;
 
+    private String status;
+
     public SubjectItem() {
     }
 
-    public SubjectItem(String id, String subjectId, String type, String item, String image, String detail, Integer sort, Integer nop) {
+    public SubjectItem(String id, String subjectId, String type, String item, String image, String detail, Integer sort, Integer nop,String status) {
         this.id = id;
         this.subjectId = subjectId;
         this.type = type;
@@ -45,6 +47,7 @@ public class SubjectItem {
         this.detail = detail;
         this.sort = sort;
         this.nop = nop;
+        this.status = status;
     }
 
     private SubjectItem(Builder builder) {
@@ -56,6 +59,7 @@ public class SubjectItem {
         setDetail(builder.detail);
         setSort(builder.sort);
         setNop(builder.nop);
+        setStatus(builder.status);
     }
 
     public String getId() {
@@ -122,6 +126,14 @@ public class SubjectItem {
         this.nop = nop;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "SubjectItem{" +
@@ -131,6 +143,7 @@ public class SubjectItem {
                 ", item='" + item + '\'' +
                 ", image='" + image + '\'' +
                 ", detail='" + detail + '\'' +
+                ", status='" + status + '\'' +
                 ", sort=" + sort +
                 ", nop=" + nop +
                 '}';
@@ -145,6 +158,7 @@ public class SubjectItem {
         private String detail;
         private Integer sort;
         private Integer nop;
+        private String status;
 
         public Builder() {
         }
@@ -186,6 +200,11 @@ public class SubjectItem {
 
         public Builder nop(Integer val) {
             nop = val;
+            return this;
+        }
+
+        public Builder status(String val) {
+            status = val;
             return this;
         }
 

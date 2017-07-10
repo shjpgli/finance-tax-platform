@@ -3,6 +3,7 @@ package com.abc12366.cms.mapper.db2;
 import com.abc12366.cms.model.Vote;
 import com.abc12366.cms.model.VoteResult;
 import com.abc12366.cms.model.bo.VoteRolltjBo;
+import com.abc12366.cms.model.bo.VoteRotptjBo;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 
@@ -71,5 +72,5 @@ public interface VoteRoMapper {
      * 查询（投票统计）
      *
      **/
-    List<VoteRolltjBo> selecttptj(Map<String,Object> map);
+    List<VoteRotptjBo> selecttptj(Map<String,Object> map);
 }

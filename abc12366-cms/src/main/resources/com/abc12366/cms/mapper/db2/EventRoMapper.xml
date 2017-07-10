@@ -23,13 +23,13 @@
 		FROM cms_event
 		WHERE 1=1
 		<if test="title != null and title != ''">
-			AND b.title like CONCAT('%',#{title},'%')
+			AND title like CONCAT('%',#{title},'%')
 		</if>
 		<if test="status != null and status != ''">
-			AND a.status = #{status}
+			AND status = #{status}
 		</if>
 		<if test="category != null and category != ''">
-			AND a.category = #{category}
+			AND category = #{category}
 		</if>
 		<if test="begintime!=null and begintime!=''">
 			AND UNIX_TIMESTAMP(b.begintime) &gt;= #{begintime}
@@ -37,6 +37,7 @@
 		<if test="endtime!=null and endtime!=''">
 			AND UNIX_TIMESTAMP(b.endtime) &lt;= #{endtime}
 		</if>
+		ORDER BY createtime DESC
 	</select>
 
 </mapper>

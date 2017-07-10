@@ -19,6 +19,9 @@ public class Channel implements Serializable {
 	/**站点ID**varchar(64)**/
 	private String siteId;
 
+	/**站点路径**varchar(20)**/
+	private String sitePath;
+
 	/**父栏目ID**varchar(64)**/
 	private String parentId;
 
@@ -100,4 +103,11 @@ public class Channel implements Serializable {
 		return this.channelName;
 	}
 
+	public String getSitePath() {
+		return sitePath;
+	}
+
+	public void setSitePath(String sitePath) {
+		this.sitePath = sitePath;
+	}
 }

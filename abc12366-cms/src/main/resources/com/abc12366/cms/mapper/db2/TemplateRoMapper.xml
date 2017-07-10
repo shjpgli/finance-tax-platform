@@ -31,6 +31,9 @@
 		<if test="parentPath != null and parentPath != ''">
 			AND parentPath = #{parentPath}
 		</if>
+		<if test="state != null and state != ''">
+			AND state = #{state}
+		</if>
 	</select>
 
 </mapper>

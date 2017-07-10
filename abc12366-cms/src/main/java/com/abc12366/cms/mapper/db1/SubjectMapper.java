@@ -2,6 +2,7 @@ package com.abc12366.cms.mapper.db1;
 
 import com.abc12366.cms.model.Subject;
 import com.abc12366.cms.model.SubjectItem;
+import com.abc12366.cms.model.bo.SubItemBo;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -16,4 +17,6 @@ public interface SubjectMapper {
     void insertItem(SubjectItem item);
 
     void deleteItem(String subjectId);
+
+    void updateStatus(SubItemBo subItemBo);
 }

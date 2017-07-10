@@ -13,6 +13,9 @@ public class Topic implements Serializable {
 	/**topicId**varchar(64)**/
 	private String topicId;
 
+	/**站点ID**varchar(64)**/
+	private String siteId;
+
 	/**channelId**varchar(64)**/
 	private String channelId;
 
@@ -51,6 +54,14 @@ public class Topic implements Serializable {
 
 	public String getTopicId(){
 		return this.topicId;
+	}
+
+	public String getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
 	}
 
 	public void setChannelId(String channelId){

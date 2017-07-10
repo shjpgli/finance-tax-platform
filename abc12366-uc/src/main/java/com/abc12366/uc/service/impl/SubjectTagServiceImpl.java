@@ -42,6 +42,10 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         if (StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
             throw new ServiceException(4130);
         }
+        if (isExist(tagId, id)) {
+            LOGGER.warn("{}:{}", tagId, id);
+            throw new ServiceException(4612);
+        }
         SubjectTag subjectTag = new SubjectTag();
         subjectTag.setId(Utils.uuid());
         subjectTag.setUserId((String) request.getAttribute(Constant.USER_ID));
@@ -156,6 +160,45 @@ public class SubjectTagServiceImpl implements SubjectTagService {
             subjectTagBOList.add(subjectTagBO);
         }
         return subjectTagBOList;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<SubjectTagBO> batchInsert2(String subject, BatchTagInsertBO batchTagInsertBO, HttpServletRequest request) {
+        LOGGER.info("{}:{}:{}", subject, batchTagInsertBO, request);
+        List<String> tagIdList = stringToList(",", batchTagInsertBO.getTagIds());
+        List<String> subjectIdList = stringToList(",", batchTagInsertBO.getSubjectIds());
+        for (int i = 0; i < tagIdList.size(); i++) {
+            for (int j = 0; j < subjectIdList.size(); j++) {
+                //判断是否标签标记已存在,不存在才允许打标签
+                if (!isExist(tagIdList.get(i), subjectIdList.get(j))) {
+                    insert(subject, subjectIdList.get(j), tagIdList.get(i), request);
+                }
+            }
+        }
+        return selectListByTagIdsAndSubjectIds(batchTagInsertBO.getTagIds(), batchTagInsertBO.getSubjectIds());
+    }
+
+    private List<SubjectTagBO> selectListByTagIdsAndSubjectIds(String tagIds, String subjectIds) {
+        LOGGER.info("{}:{}", tagIds, subjectIds);
+        Map<String, String> map = new HashMap<>();
+        map.put("tagIds", tagIds);
+        map.put("subjectIds", subjectIds);
+        return subjectTagRoMapper.selectListByTagIdsAndSubjectIds(map);
+    }
+
+    public boolean isExist(String tagId, String subjectId) {
+        if (StringUtils.isEmpty(tagId) || StringUtils.isEmpty(subjectId)) {
+            throw new ServiceException(4613);
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("tagId", tagId);
+        map.put("subjectId", subjectId);
+        List<SubjectTagBO> selectExistList = subjectTagRoMapper.selectExist(map);
+        if (selectExistList == null || selectExistList.size() == 0) {
+            return false;
+        }
+        return true;
     }
 
     public List stringToList(String sliptor, String string) {

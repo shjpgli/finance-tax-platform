@@ -2,9 +2,8 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.bo.BatchTagInsertBO;
 import com.abc12366.uc.model.bo.SubjectTagBO;
-import com.abc12366.uc.model.bo.TagList;
-import com.abc12366.uc.model.bo.SubjectList;
 import com.abc12366.uc.service.SubjectTagService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -37,7 +36,7 @@ public class SubjectTagController {
         return ResponseEntity.ok(Utils.kv("data", subjectTagBO));
     }
 
-    @PostMapping(path = "/{subject}/{id}")
+    /*@PostMapping(path = "/{subject}/{id}")
     public ResponseEntity batchTagInsert(@PathVariable String subject, @PathVariable String id, @RequestBody TagList tagList, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, tagList);
         List<SubjectTagBO> subjectTagBOList = subjectTagService.batchInsert(subject, id, tagList, request);
@@ -50,6 +49,14 @@ public class SubjectTagController {
     public ResponseEntity batchUserInsert(@PathVariable String subject, @PathVariable String tagId, @RequestBody String subjectIds, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}:{}", subject, tagId, subjectIds, request);
         List<SubjectTagBO> subjectTagBOList = subjectTagService.batchUserInsert(subject, tagId, subjectIds, request);
+        return (subjectTagBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", subjectTagBOList, "total", subjectTagBOList.size()));
+    }*/
+    @PostMapping(path = "/batch/{subject}")
+    public ResponseEntity batchInsert(@PathVariable String subject, @RequestBody BatchTagInsertBO batchTagInsertBO, HttpServletRequest request) {
+        LOGGER.info("{}:{}:{}", subject, batchTagInsertBO, request);
+        List<SubjectTagBO> subjectTagBOList = subjectTagService.batchInsert2(subject, batchTagInsertBO, request);
         return (subjectTagBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", subjectTagBOList, "total", subjectTagBOList.size()));

@@ -115,6 +115,7 @@ public class VoteServiceImpl implements VoteService {
                                 .image(si.getImage())
                                 .detail(si.getDetail())
                                 .sort(si.getSort())
+                                .status(si.getStatus())
                                 .build();
                         subjectMapper.insertItem(item);
                     }
@@ -246,6 +247,7 @@ public class VoteServiceImpl implements VoteService {
                                     .image(si.getImage())
                                     .detail(si.getDetail())
                                     .sort(si.getSort())
+                                    .status(si.getStatus())
                                     .build();
                             subjectMapper.insertItem(item);
                         }
@@ -390,7 +392,7 @@ public class VoteServiceImpl implements VoteService {
         List<VoteRolltjBo> tptj = voteRoMapper.selecttptjbysj(map);
         votetjListBo.setTptj(tptj);
         //投票详细统计
-        List<VoteRolltjBo> tpxxtj = voteRoMapper.selecttptj(map);
+        List<VoteRotptjBo> tpxxtj = voteRoMapper.selecttptj(map);
         votetjListBo.setTpxxtj(tpxxtj);
         //投票统计总数
         Integer tpcnt = voteRoMapper.selecttptjs(map);
@@ -410,6 +412,13 @@ public class VoteServiceImpl implements VoteService {
         List<VoteRolltjBo> mobileWeblist = voteRoMapper.selectlltj(map);
         votetjListBo.setMobileWeblist(mobileWeblist);
         return votetjListBo;
+    }
+
+
+    @Override
+    public String updateItemStatus(SubItemBo subItemBo) {
+        subjectMapper.updateStatus(subItemBo);
+        return "";
     }
 
 

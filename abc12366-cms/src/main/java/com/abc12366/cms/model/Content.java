@@ -16,6 +16,9 @@ public class Content implements Serializable {
 	/**栏目ID**varchar(64)**/
 	private String channelId;
 
+	/**访问路径**varchar(30)**/
+	private String channelPath;
+
 	/**属性ID**varchar(64)**/
 	private String typeId;
 
@@ -24,6 +27,9 @@ public class Content implements Serializable {
 
 	/**站点ID**varchar(64)**/
 	private String siteId;
+
+	/**站点路径**varchar(20)**/
+	private String sitePath;
 
 	/**排序日期**datetime**/
 	private java.util.Date sortDate;
@@ -177,4 +183,19 @@ public class Content implements Serializable {
 		return this.recommendLevel;
 	}
 
+	public String getChannelPath() {
+		return channelPath;
+	}
+
+	public void setChannelPath(String channelPath) {
+		this.channelPath = channelPath;
+	}
+
+	public String getSitePath() {
+		return sitePath;
+	}
+
+	public void setSitePath(String sitePath) {
+		this.sitePath = sitePath;
+	}
 }

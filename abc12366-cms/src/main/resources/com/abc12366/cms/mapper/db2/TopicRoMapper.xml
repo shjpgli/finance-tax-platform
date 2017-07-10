@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		topicId,	channelId,	topicName,	shortName,	keywords,	description,	titleImg,	contentImg,	tplContent,	priority,	isRecommend
+		topicId,	channelId,	topicName,	shortName,	keywords,	description,	titleImg,	contentImg,	tplContent,	priority,siteId,	isRecommend
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

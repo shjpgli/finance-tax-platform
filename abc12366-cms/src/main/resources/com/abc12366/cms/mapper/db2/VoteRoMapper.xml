@@ -134,8 +134,9 @@
     </select>
 
     <!-- 查询（投票统计） -->
-    <select id="selecttptj" resultType="com.abc12366.cms.model.bo.VoteRolltjBo" parameterType="java.util.Map">
-        SELECT (SELECT item FROM cms_subject_item WHERE id = itemId) tj,COUNT(id) cnt FROM cms_vote_result
+    <select id="selecttptj" resultType="com.abc12366.cms.model.bo.VoteRotptjBo" parameterType="java.util.Map">
+        SELECT itemId id,(SELECT item FROM cms_subject_item WHERE id = itemId) tj,
+        (SELECT STATUS FROM cms_subject_item WHERE id = itemId) bz,COUNT(id) cnt FROM cms_vote_result
         WHERE 1=1
         <if test="voteId != null and voteId != ''">
             AND voteId = #{voteId}
