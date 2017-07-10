@@ -172,7 +172,7 @@ public class GoodsController {
      * @param id
      * @return
      */
-    @PostMapping(path = "/category/{id}")
+    @GetMapping(path = "/category/{id}")
     public ResponseEntity selectGategory(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         GoodsCategory goodsCategory = goodsCategoryService.selectGategory(id);

@@ -77,10 +77,10 @@
         FROM uc_invoice i
         <where>
             1 = 1
-            <if test=" user.username != null and user.username != '' ">
+            <if test=" username != null and username != '' ">
                 and u.username = #{user.username}
             </if>
-            <if test=" user.phone != null and user.phone != '' ">
+            <if test=" phone != null and phone != '' ">
                 and u.phone = #{user.phone}
             </if>
             <if test=" product.name != null and product.name != '' ">

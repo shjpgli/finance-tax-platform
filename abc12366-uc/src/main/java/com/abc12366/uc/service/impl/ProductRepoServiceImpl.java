@@ -8,6 +8,7 @@ import com.abc12366.uc.mapper.db1.ProductRepoMapper;
 import com.abc12366.uc.mapper.db2.ProductRepoRoMapper;
 import com.abc12366.uc.model.Product;
 import com.abc12366.uc.model.ProductRepo;
+import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.ProductRepoBO;
 import com.abc12366.uc.service.ProductRepoService;
 import org.slf4j.Logger;
@@ -88,6 +89,11 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         //出库成功后，修改产品表的库存信息
         updateProductStock(productRepoBO, stock, productRepo);
         return productRepoBO;
+    }
+
+    @Override
+    public List<ProductRepoBO> selectProductRepoDetail(ProductBO productBO) {
+        return productRepoRoMapper.selectProductRepoDetail(productBO);
     }
 
     private void updateProductStock(ProductRepoBO productRepoBO, int stock, ProductRepo productRepo) {

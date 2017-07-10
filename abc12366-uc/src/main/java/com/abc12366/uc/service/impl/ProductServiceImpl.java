@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Product;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
+import com.abc12366.uc.model.bo.ProductRepoBO;
 import com.abc12366.uc.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
