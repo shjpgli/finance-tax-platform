@@ -2,6 +2,7 @@ package com.abc12366.gateway.service.impl;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.gateway.model.bo.AdminResponseBO;
+import com.abc12366.gateway.model.bo.UserResponseBO;
 import com.abc12366.gateway.util.HttpRequestUtil;
 import com.abc12366.gateway.util.PropertiesUtil;
 import com.abc12366.gateway.util.RestTemplateUtil;
@@ -41,10 +42,7 @@ public class UcUserServiceImpl implements UcUserService {
             return true;
         }
         //2.调用uc的token校验接口，如果校验通过刷新token并返回true
-        if (userTokenAuthen(userToken, request)) {
-            return true;
-        }
-        return false;
+        return userTokenAuthen(userToken, request);
     }
 
     public boolean adminTokenAuthen(String adminToken, HttpServletRequest request) throws IOException {
@@ -86,6 +84,21 @@ public class UcUserServiceImpl implements UcUserService {
         //String url = "http://localhost:9100/uc/auth/" + userToken;
         String userTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("user.token.check.url") + userToken, "");
         if (!StringUtils.isEmpty(userTokenVerifyResult) && userTokenVerifyResult.equals("true")) {
+            //根据token获取admin的userId，并将userId设置到request中
+            String url = PropertiesUtil.getValue("user.token.userid.url") + userToken;
+            ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET, request);
+            if (userByTokenResponse != null && userByTokenResponse.hasBody()) {
+                UserResponseBO userResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), UserResponseBO.class);
+                if (!StringUtils.isEmpty(userResponseBO.getData().getId())) {
+                    String adminUserId = userResponseBO.getData().getId();
+                    if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
+                        request.removeAttribute(Constant.USER_ID);
+                        request.setAttribute(Constant.USER_ID, adminUserId);
+                    } else {
+                        request.setAttribute(Constant.USER_ID, adminUserId);
+                    }
+                }
+            }
             return true;
         }
         return false;

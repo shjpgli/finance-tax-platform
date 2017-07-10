@@ -2,6 +2,7 @@ package com.abc12366.bangbang.config;
 
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
+import com.abc12366.gateway.component.UcUserInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +29,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new SensitiveWordsInterceptor();
     }
 
+    @Bean
+    public UcUserInterceptor ucUserInterceptor(){
+        return new UcUserInterceptor();
+    }
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -35,6 +42,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         // 敏感词拦截
         registry.addInterceptor(getSensitiveWordsInterceptor())
                 .excludePathPatterns("/druid/**");
+
+        //前台用户访问拦截器迁移到网关后的
+        registry.addInterceptor(ucUserInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/app*/**")
+                .excludePathPatterns("/druid*/**")
+                .excludePathPatterns("/auth/**")
+                .excludePathPatterns("/login", "/refresh", "/register", "/test", "/verifylogin", "/user/token/**");
 
     }
 }

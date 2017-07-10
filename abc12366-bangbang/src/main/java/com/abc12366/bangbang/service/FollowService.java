@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.service;
 
-import com.abc12366.bangbang.model.FollowUser;
+import com.abc12366.bangbang.model.bo.FollowUserBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -11,13 +11,13 @@ import java.util.List;
  * Time: 16:26
  */
 public interface FollowService {
-    FollowUser insert(String followedUserId, HttpServletRequest request);
+    FollowUserBO insert(String followedUserId, HttpServletRequest request);
 
-    void delete(String followedUserId);
+    void delete(String followedUserId, HttpServletRequest request);
 
-    List<FollowUser> selectHaveFollowedList(String userId);
+    List<FollowUserBO> selectPeopleIFollow(String userId);
 
-    List<FollowUser> selectMyFollowerList(String userId);
+    List<FollowUserBO> selectMyFollowerList(String userId);
 
-    void selectFollowedCount(String followedUserId);
+    int selectFollowedCount(String followedUserId);
 }

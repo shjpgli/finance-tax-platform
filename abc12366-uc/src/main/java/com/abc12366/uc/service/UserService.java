@@ -25,5 +25,7 @@ public interface UserService {
 
     UserBO delete(String userId);
 
+    UserBO selectOneByToken(String userToken);
+
     //String login(LoginBO loginBO, String token) throws Exception;
 }

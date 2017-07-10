@@ -34,6 +34,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    //查询用户列表，支持多标签查询
     @GetMapping
     public ResponseEntity selectList(
             @RequestParam(required = false) String username,
@@ -73,6 +74,7 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
+    //根据用户ID查询用户
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -83,6 +85,7 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
 
+    //根据用户名或者电话查询用户
     @GetMapping(path = "/u/{usernameOrPhone}")
     public ResponseEntity selectByUsernameOrPhone(@PathVariable String usernameOrPhone) {
         LOGGER.info("{}", usernameOrPhone);
@@ -91,6 +94,7 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv("data", user));
     }
 
+    //更新用户信息
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody UserUpdateBO userUpdateDTO, @PathVariable String id) {
         LOGGER.info("{}", userUpdateDTO);
@@ -100,10 +104,20 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv("data", user));
     }
 
+    //删除用户
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity delete(@PathVariable String userId) {
         LOGGER.info("{}", userId);
         userService.delete(userId);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    //根据用户token获取用户
+    @GetMapping(path = "/token/{userToken}")
+    public ResponseEntity selectOneByToken(@PathVariable String userToken) {
+        LOGGER.info("{}", userToken);
+        UserBO userBO = userService.selectOneByToken(userToken);
+        LOGGER.info("{}", userBO);
+        return ResponseEntity.ok(Utils.kv("data", userBO));
     }
 }
