@@ -24,6 +24,8 @@
 		a.title title,
 		b.ip ip,
 		a.createTime createTime,
+		a.isRecommend isRecommend,
+		a.isChecked isChecked,
 		a.commentUserId commentUserId
 		FROM cms_comment a,cms_comment_ext b,cms_content_ext c
 		WHERE a.commentId = b.commentId AND a.contentId = c.contentId

@@ -32,6 +32,12 @@ public class CommentListBo implements Serializable {
 	/**评论用户ID**/
 	private Integer commentUserId;
 
+	/**是否推荐**tinyint(1)**/
+	private Integer isRecommend;
+
+	/**是否审核**tinyint(1)**/
+	private Integer isChecked;
+
 
 	public String getCommentId() {
 		return commentId;
@@ -87,5 +93,21 @@ public class CommentListBo implements Serializable {
 
 	public void setCommentUserId(Integer commentUserId) {
 		this.commentUserId = commentUserId;
+	}
+
+	public Integer getIsRecommend() {
+		return isRecommend;
+	}
+
+	public void setIsRecommend(Integer isRecommend) {
+		this.isRecommend = isRecommend;
+	}
+
+	public Integer getIsChecked() {
+		return isChecked;
+	}
+
+	public void setIsChecked(Integer isChecked) {
+		this.isChecked = isChecked;
 	}
 }
