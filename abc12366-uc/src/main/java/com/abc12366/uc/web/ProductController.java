@@ -88,16 +88,16 @@ public class ProductController {
      * 查询商品库存列表
      * @return
      */
-    @GetMapping(path = "/productRepo/{goodsId}/{productId}")
+    @GetMapping(path = "/productRepo/selectOne/{goodsId}/{productId}")
     public ResponseEntity selectProductRepoDetail(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                                   @PathVariable("goodsId") String goodsId,@PathVariable("productId") String productId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
-        ProductBO productBO = new ProductBO();
-        productBO.setGoodsId(goodsId);
-        productBO.setId(productId);
+        ProductRepo productRepo = new ProductRepo();
+        productRepo.setGoodsId(goodsId);
+        productRepo.setProductId(productId);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<ProductRepoBO> goodsList = productRepoService.selectProductRepoDetail(productBO);
+        List<ProductRepoBO> goodsList = productRepoService.selectProductRepoDetail(productRepo);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :

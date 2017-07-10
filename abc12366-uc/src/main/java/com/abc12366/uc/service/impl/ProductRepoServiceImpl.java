@@ -1,14 +1,12 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.ProductMapper;
 import com.abc12366.uc.mapper.db1.ProductRepoMapper;
 import com.abc12366.uc.mapper.db2.ProductRepoRoMapper;
 import com.abc12366.uc.model.Product;
 import com.abc12366.uc.model.ProductRepo;
-import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.ProductRepoBO;
 import com.abc12366.uc.service.ProductRepoService;
 import org.slf4j.Logger;
@@ -92,8 +90,8 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     }
 
     @Override
-    public List<ProductRepoBO> selectProductRepoDetail(ProductBO productBO) {
-        return productRepoRoMapper.selectProductRepoDetail(productBO);
+    public List<ProductRepoBO> selectProductRepoDetail(ProductRepo productRepo) {
+        return productRepoRoMapper.selectProductRepoDetail(productRepo);
     }
 
     private void updateProductStock(ProductRepoBO productRepoBO, int stock, ProductRepo productRepo) {

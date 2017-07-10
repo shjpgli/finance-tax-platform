@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.ProductRepo;
 import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.ProductRepoBO;
 
@@ -42,5 +43,5 @@ public interface ProductRepoService {
      */
     ProductRepoBO outcome(ProductRepoBO productRepoBO);
 
-    List<ProductRepoBO> selectProductRepoDetail(ProductBO productBO);
+    List<ProductRepoBO> selectProductRepoDetail(ProductRepo productRepo);
 }
