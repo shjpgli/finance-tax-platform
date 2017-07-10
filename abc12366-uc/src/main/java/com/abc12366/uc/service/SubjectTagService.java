@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.bo.BatchTagInsertBO;
 import com.abc12366.uc.model.bo.SubjectTagBO;
 import com.abc12366.uc.model.bo.TagList;
 import com.abc12366.uc.model.bo.SubjectList;
@@ -25,4 +26,6 @@ public interface SubjectTagService {
     int deleteByTagId(String id);
 
     List<SubjectTagBO> batchUserInsert(String subject, String tagId, String subjectIds, HttpServletRequest request);
+
+    List<SubjectTagBO> batchInsert2(String subject, BatchTagInsertBO batchTagInsertBO, HttpServletRequest request);
 }

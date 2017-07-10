@@ -6,6 +6,7 @@ import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
+import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,8 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     }
 
     @Override
-    public UserExtendBO validate(String userId, String validStatus) throws ParseException {
-        LOGGER.info("{}:{}", userId, validStatus);
+    public UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
+        LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
         UserExtend userExtend = userExtendRoMapper.selectOne(userId);
         if (userExtend == null) {
             throw new ServiceException(4701);
@@ -57,6 +58,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         userExtendUpdate.setEndTime(getSpecifiedDate("2099-12-30 23:59:59"));
         userExtendUpdate.setValidStatus(validStatus);
         userExtendUpdate.setValidTime(startTime);
+        userExtendUpdate.setRemark(userExtendUpdateBO.getRemark());
         int result = userExtendMapper.update(userExtendUpdate);
         if (result < 1) {
             throw new ServiceException();

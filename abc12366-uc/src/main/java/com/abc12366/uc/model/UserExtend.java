@@ -38,42 +38,9 @@ public class UserExtend {
     private Date endTime;
     private String validStatus;
     private Date validTime;
+    private String remark;
 
     public UserExtend() {
-    }
-
-    public UserExtend(String userId, String signature, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, Date createTime, Date lastUpdate, String tags, String idcard, String frontImage, String backImage, Date startTime, Date endTime, String validStatus, Date validTime) {
-        this.userId = userId;
-        this.signature = signature;
-        this.sex = sex;
-        this.birthday = birthday;
-        this.bloodType = bloodType;
-        this.weight = weight;
-        this.height = height;
-        this.marital = marital;
-        this.education = education;
-        this.graduate = graduate;
-        this.occupation = occupation;
-        this.income = income;
-        this.postAddress = postAddress;
-        this.realName = realName;
-        this.weixin = weixin;
-        this.qq = qq;
-        this.safeQuestion = safeQuestion;
-        this.safeAnswer = safeAnswer;
-        this.province = province;
-        this.city = city;
-        this.area = area;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-        this.tags = tags;
-        this.idcard = idcard;
-        this.frontImage = frontImage;
-        this.backImage = backImage;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.validStatus = validStatus;
-        this.validTime = validTime;
     }
 
     public String getUserId() {
@@ -324,40 +291,11 @@ public class UserExtend {
         this.validTime = validTime;
     }
 
-    @Override
-    public String toString() {
-        return "UserExtend{" +
-                "userId='" + userId + '\'' +
-                ", signature='" + signature + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birthday=" + birthday +
-                ", bloodType='" + bloodType + '\'' +
-                ", weight='" + weight + '\'' +
-                ", height='" + height + '\'' +
-                ", marital='" + marital + '\'' +
-                ", education='" + education + '\'' +
-                ", graduate='" + graduate + '\'' +
-                ", occupation='" + occupation + '\'' +
-                ", income='" + income + '\'' +
-                ", postAddress='" + postAddress + '\'' +
-                ", realName='" + realName + '\'' +
-                ", weixin='" + weixin + '\'' +
-                ", qq='" + qq + '\'' +
-                ", safeQuestion='" + safeQuestion + '\'' +
-                ", safeAnswer='" + safeAnswer + '\'' +
-                ", province='" + province + '\'' +
-                ", city='" + city + '\'' +
-                ", area='" + area + '\'' +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                ", tags='" + tags + '\'' +
-                ", idcard='" + idcard + '\'' +
-                ", frontImage='" + frontImage + '\'' +
-                ", backImage='" + backImage + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", validStatus='" + validStatus + '\'' +
-                ", validTime=" + validTime +
-                '}';
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

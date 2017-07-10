@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
+    <select id="selectList1" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
         select uu.id, uu.username, uu.phone, uu.password, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
@@ -35,6 +35,42 @@
 
             <if test="tagName!=null">
                 and utust.tagName=#{tagName}
+            </if>
+        </where>
+        ORDER BY uu.lastUpdate DESC
+    </select>
+
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
+        select uu.id, uu.username, uu.phone, uu.password, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
+        uu.vipLevel,
+        (select uue.realName from uc_user_extend uue where uue.userId=uu.id) realName,
+        (select uul.name from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) levelName,
+        (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
+        (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medalIcon
+        from uc_user uu
+        <where>
+            <if test="username!=null">
+                username=#{username}
+            </if>
+            <if test="phone!=null">
+                and phone=#{phone}
+            </if>
+            <if test="nickname!=null">
+                and nickname=#{nickname}
+            </if>
+            <if test="status!=null">
+                and status=#{status}
+            </if>
+
+            <if test="tagName!=null and tagName.size()>0">
+                and uu.id in
+                (SELECT a.subjectId FROM
+                <foreach item="item" collection="tagName" separator="union all" open="(" close=")" index="">
+                    SELECT subjectId FROM uc_subject_tag ust,uc_tag ut WHERE ust.tagId=ut.id AND ut.tagName=#{item}
+                </foreach>
+                a group by a.subjectId HAVING COUNT(subjectid) = #{tagNameCount})
             </if>
         </where>
         ORDER BY uu.lastUpdate DESC
