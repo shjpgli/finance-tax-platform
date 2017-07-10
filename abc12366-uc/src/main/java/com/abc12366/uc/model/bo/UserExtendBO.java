@@ -3,6 +3,7 @@ package com.abc12366.uc.model.bo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -14,70 +15,63 @@ public class UserExtendBO {
 
     @NotEmpty
     private String userId;
+    @Size(max = 200)
     private String signature;
+    @Size(max = 1)
     private String sex;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
+    @Size(max = 2)
     private String bloodType;
+    @Size(max = 10)
     private String weight;
+    @Size(max = 10)
     private String height;
+    @Size(max = 6)
     private String marital;
+    @Size(max = 32)
     private String education;
+    @Size(max = 100)
     private String graduate;
+    @Size(max = 100)
     private String occupation;
+    @Size(max = 20)
     private String income;
+    @Size(max = 200)
     private String postAddress;
+    @Size(max = 16)
     private String realName;
+    @Size(max = 50)
     private String weixin;
+    @Size(max = 50)
     private String qq;
+    @Size(max = 200)
     private String safeQuestion;
+    @Size(max = 200)
     private String safeAnswer;
+    @Size(max = 45)
     private String province;
+    @Size(max = 45)
     private String city;
+    @Size(max = 45)
     private String area;
     private String tags;
+    @Size(max = 18)
     private String idcard;
+    @Size(max = 100)
     private String frontImage;
+    @Size(max = 100)
     private String backImage;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     private Date endTime;
+    @Size(max = 1)
     private String validStatus;
     private Date validTime;
+    @Size(max = 500)
+    private String remark;
 
     public UserExtendBO() {
-    }
-
-    public UserExtendBO(String userId, String signature, String sex, Date birthday, String bloodType, String weight, String height, String marital, String education, String graduate, String occupation, String income, String postAddress, String realName, String weixin, String qq, String safeQuestion, String safeAnswer, String province, String city, String area, String tags, String idcard, String frontImage, String backImage, Date startTime, Date endTime, String validStatus, Date validTime) {
-        this.userId = userId;
-        this.signature = signature;
-        this.sex = sex;
-        this.birthday = birthday;
-        this.bloodType = bloodType;
-        this.weight = weight;
-        this.height = height;
-        this.marital = marital;
-        this.education = education;
-        this.graduate = graduate;
-        this.occupation = occupation;
-        this.income = income;
-        this.postAddress = postAddress;
-        this.realName = realName;
-        this.weixin = weixin;
-        this.qq = qq;
-        this.safeQuestion = safeQuestion;
-        this.safeAnswer = safeAnswer;
-        this.province = province;
-        this.city = city;
-        this.area = area;
-        this.tags = tags;
-        this.idcard = idcard;
-        this.frontImage = frontImage;
-        this.backImage = backImage;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.validStatus = validStatus;
-        this.validTime = validTime;
     }
 
     public String getUserId() {
@@ -312,38 +306,11 @@ public class UserExtendBO {
         this.validTime = validTime;
     }
 
-    @Override
-    public String toString() {
-        return "UserExtendBO{" +
-                "userId='" + userId + '\'' +
-                ", signature='" + signature + '\'' +
-                ", sex='" + sex + '\'' +
-                ", birthday=" + birthday +
-                ", bloodType='" + bloodType + '\'' +
-                ", weight='" + weight + '\'' +
-                ", height='" + height + '\'' +
-                ", marital='" + marital + '\'' +
-                ", education='" + education + '\'' +
-                ", graduate='" + graduate + '\'' +
-                ", occupation='" + occupation + '\'' +
-                ", income='" + income + '\'' +
-                ", postAddress='" + postAddress + '\'' +
-                ", realName='" + realName + '\'' +
-                ", weixin='" + weixin + '\'' +
-                ", qq='" + qq + '\'' +
-                ", safeQuestion='" + safeQuestion + '\'' +
-                ", safeAnswer='" + safeAnswer + '\'' +
-                ", province='" + province + '\'' +
-                ", city='" + city + '\'' +
-                ", area='" + area + '\'' +
-                ", tags='" + tags + '\'' +
-                ", idcard='" + idcard + '\'' +
-                ", frontImage='" + frontImage + '\'' +
-                ", backImage='" + backImage + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", validStatus='" + validStatus + '\'' +
-                ", validTime=" + validTime +
-                '}';
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

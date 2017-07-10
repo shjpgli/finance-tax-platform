@@ -4,6 +4,7 @@ import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
+import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -49,9 +51,9 @@ public class RealNameValidationController {
     }
 
     @PutMapping(path = "/{userId}/{validStatus}")
-    public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus) throws ParseException {
-        LOGGER.info("{}:{}", userId, validStatus);
-        UserExtendBO userExtendBO = realNameValidationService.validate(userId, validStatus);
+    public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus, @Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
+        LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
+        UserExtendBO userExtendBO = realNameValidationService.validate(userId, validStatus, userExtendUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", userExtendBO));
     }
 

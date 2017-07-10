@@ -36,7 +36,14 @@ public class UserServiceImpl implements UserService {
     private UserExtendRoMapper userExtendRoMapper;
 
     @Override
-    public List<UserBO> selectList(Map map) {
+    public List<UserBO> selectList(Map<String, Object> map) {
+        //解析多标签名称参数
+        List tagNameList = new ArrayList<>();
+        if (map.get("tagName") != null && !map.get("tagName").equals("")) {
+            tagNameList = analysisTagName((String) map.get("tagName"), ",");
+        }
+        map.put("tagName", tagNameList);
+        map.put("tagNameCount", (tagNameList == null) ? 0 : tagNameList.size());
         List<UserBO> users = userRoMapper.selectList(map);
         if (users.size() < 1) {
             return null;
@@ -115,5 +122,17 @@ public class UserServiceImpl implements UserService {
             }
         }
         return null;
+    }
+
+    public List analysisTagName(String tagName, String sliptor) {
+        String[] tags = tagName.trim().split(sliptor);
+        List list = Arrays.asList(tags);
+        //去除空的元素
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) == null || list.get(i).equals("")) {
+                list.remove(i);
+            }
+        }
+        return list;
     }
 }

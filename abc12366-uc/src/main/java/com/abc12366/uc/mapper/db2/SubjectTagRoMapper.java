@@ -12,4 +12,8 @@ import java.util.Map;
  */
 public interface SubjectTagRoMapper {
     List<SubjectTagBO> selectList(Map map);
+
+    List<SubjectTagBO> selectListByTagIdsAndSubjectIds(Map<String, String> map);
+
+    List<SubjectTagBO> selectExist(Map<String, String> map);
 }

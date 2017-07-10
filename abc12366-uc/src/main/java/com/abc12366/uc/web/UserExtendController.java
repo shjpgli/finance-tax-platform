@@ -53,10 +53,10 @@ public class UserExtendController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String id) {
-        LOGGER.info("{}:{}", userExtendUpdateBO, id);
-        userExtendUpdateBO.setUserId(id);
+    @PutMapping(path = "/{userId}")
+    public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String userId) {
+        LOGGER.info("{}:{}", userExtendUpdateBO, userId);
+        userExtendUpdateBO.setUserId(userId);
         UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO);
         LOGGER.info("{}", user_extend);
         return ResponseEntity.ok(Utils.kv("data", user_extend));
