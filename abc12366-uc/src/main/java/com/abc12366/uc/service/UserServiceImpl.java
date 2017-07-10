@@ -124,6 +124,12 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public UserBO selectOneByToken(String userToken) {
+        LOGGER.info("{}", userToken);
+        return userRoMapper.selectOneByToken(userToken);
+    }
+
     public List analysisTagName(String tagName, String sliptor) {
         String[] tags = tagName.trim().split(sliptor);
         List list = Arrays.asList(tags);
