@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate
+        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate,stock
     </sql>
 
     <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
@@ -16,6 +16,8 @@
         <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+        <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
         <collection property="dictList" ofType="com.abc12366.uc.model.bo.DictBO" column="id"
                     select="getDictBO"></collection>
     </resultMap>
@@ -81,37 +83,24 @@
     </select>
 
     <!-- 查询条件根据） -->
-    <select id="selectBOListByGoodsId" resultMap="productResultMap" parameterType="java.lang.String">
+    <select id="selectBOList" resultMap="productResultMap" parameterType="com.abc12366.uc.model.bo.ProductBO">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_product
-        WHERE goodsId = #{goodsId}
-    </select>
-
-    <!-- 查询条件根据） -->
-    <select id="selectProductList" resultType="com.abc12366.uc.model.Product"
-            parameterType="com.abc12366.uc.model.Product">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_product
-        <where>
-            1 = 1
-            <if test="name != null and name!=''">and name = #{name}</if>
-            <if test="category != null and category!=''">and category = #{category}</if>
-            <if test="uvipLevel != null and uvipLevel!=''">AND uvipLevel = #{uvipLevel}</if>
-        </where>
-    </select>
-
-    <!-- 查询条件根据） -->
-    <select id="selectProduct" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_product
+        p.id,	p.goodsId,	p.marketPrice,	p.sellingPrice,	p.costPrice,	p.createTime,	p.lastUpdate,p.stock,g.name as goodsName
+        FROM uc_product p
+        LEFT JOIN uc_goods g ON g.id = p.goodsId
         <where>
             1=1
-            <if test="uvipLevel != null and uvipLevel!=''">AND uvipLevel = #{uvipLevel}</if>
-            <if test="dictId != null and dictId!=''">AND dictId = #{dictId}</if>
-            <if test="goodsId != null and goodsId!=''">AND goodsId = #{goodsId}</if>
+            <if test="goodsName != null  and goodsName!=''"> AND g.name LIKE CONCAT('%',#{goodsName},'%')</if>
+            <if test="startRepo != null  and startRepo!=''">
+                <![CDATA[
+                  AND p.stock >= #{startRepo}
+                ]]>
+            </if>
+            <if test="endRepo != null  and endRepo!=''">
+                <![CDATA[
+                  AND p.stock <= #{endRepo}
+                ]]>
+            </if>
         </where>
     </select>
 

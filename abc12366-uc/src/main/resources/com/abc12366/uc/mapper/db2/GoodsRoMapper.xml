@@ -73,7 +73,9 @@
         <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
-        <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="id" select="getProductBO"></collection>
+        <result column="startRepo" property="startRepo" jdbcType="INTEGER"/>
+        <result column="endRepo" property="endRepo" jdbcType="INTEGER"/>
+        <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="{goodsId=id,startRepo=startRepo,endRepo=endRepo}" select="getProductBO"></collection>
     </resultMap>
 
 
@@ -85,48 +87,64 @@
         <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <collection property="repoBOList" ofType="com.abc12366.uc.model.bo.ProductRepoBO" column="id" select="getProductRepoBO"></collection>
+        <result column="startRepo" property="startRepo" jdbcType="INTEGER"/>
+        <result column="endRepo" property="endRepo" jdbcType="INTEGER"/>
+        <!--<collection property="repoBOList" ofType="com.abc12366.uc.model.bo.ProductRepoBO" column="{productId=id,startRepo=startRepo,endRepo=endRepo}" select="getProductRepoBO"></collection>-->
+        <collection property="dictBOList" ofType="com.abc12366.uc.model.bo.DictBO" column="productId" select="getDictBO"></collection>
     </resultMap>
 
-    <resultMap id="productRepoBOMap" type="com.abc12366.uc.model.bo.ProductRepoBO">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
-        <result column="productId" property="productId" jdbcType="VARCHAR"/>
-        <result column="income" property="income" jdbcType="INTEGER"/>
-        <result column="outcome" property="outcome" jdbcType="INTEGER"/>
-        <result column="stock" property="stock" jdbcType="INTEGER"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <association property="dictBO" javaType="com.abc12366.uc.model.bo.DictBO">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
-        </association>
+    <resultMap id="dictBOMap" type="com.abc12366.uc.model.bo.DictBO">
+            <id column="id" property="id" jdbcType="VARCHAR"/>
+            <result column="name" property="dictId" jdbcType="VARCHAR"/>
+            <result column="name" property="dictName" jdbcType="VARCHAR"/>
+            <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
+            <result column="fieldValue" property="fieldValue" jdbcType="VARCHAR"/>
+            <result column="status" property="status" jdbcType="TINYINT"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+            <result column="createUser" property="createUser" jdbcType="VARCHAR"/>
+            <result column="lastUser" property="lastUser" jdbcType="VARCHAR"/>
+            <result column="sort" property="sort" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="getProductBO" parameterType="java.lang.String" resultMap="productBOMap" >
+    <select id="getProductBO" parameterType="java.util.Map" resultMap="productBOMap" >
         SELECT
-        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate
+        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate,stock
         FROM uc_product
-        WHERE goodsId = #{goodsId}
+        <where>
+            1=1
+            <if test="goodsId != null  and goodsId!=''"> AND goodsId = #{goodsId}</if>
+            <if test="startRepo != null  and startRepo!=''">
+                <![CDATA[
+                  AND stock >= #{startRepo}
+                ]]>
+            </if>
+            <if test="endRepo != null  and endRepo!=''">
+                <![CDATA[
+                  AND stock <= #{endRepo}
+                ]]>
+            </if>
+        </where>
     </select>
 
-    <select id="getProductRepoBO" resultMap="productRepoBOMap" parameterType="java.lang.String">
+    <select id="getDictBO" parameterType="java.lang.String" resultMap="dictBOMap" >
         SELECT
-        r.id,	r.goodsId,	r.productId,	r.income,	r.outcome,	r.stock,	r.remark,	r.createTime,	r.lastUpdate
-        FROM uc_product_repo r
-        LEFT JOIN uc_order_product_spec s ON s.productId = r.id
-        LEFT JOIN uc_view_sys_dict d ON d.id = s.specId
-        WHERE r.id = #{id}
+        d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate, d.lastUser,d.sort
+        FROM uc_view_sys_dict d
+        LEFT JOIN uc_product_spec s ON d.id = s.specId
+        WHERE s.productId = #{productId}
     </select>
 
     <select id="selectProductRepoList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.bo.GoodsBO">
         SELECT
         g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
-        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName,#{endRepo} as endRepo,#{startRepo} as startRepo
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
-        WHERE r.id = #{id}
+        <where>
+            1=1
+            <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
+        </where>
     </select>
 
     <!--<select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">

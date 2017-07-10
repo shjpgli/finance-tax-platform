@@ -239,13 +239,11 @@ public class GoodsServiceImpl implements GoodsService {
     public void checkGoods(GoodsCheckBO goodsCheckBO) {
         String goodsIds = goodsCheckBO.getGoodsIds();
         String[] ids = goodsIds.split(",");
-        Goods goods = null;
-        int upd = 0;
         for (String goodsId : ids) {
-            goods = new Goods();
+            Goods goods = new Goods();
             goods.setId(goodsId);
             goods.setStatus(goodsCheckBO.getStatus());
-            upd = goodsMapper.update(goods);
+            int upd = goodsMapper.update(goods);
             if (upd != 1) {
                 LOGGER.info("{修改产品参数失败}", goods);
                 throw new ServiceException(4119);
@@ -274,25 +272,6 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public List<GoodsBO> selectProductRepoList(GoodsBO goodsBO) {
-        String type = goodsBO.getRepoType();
-        if(type != null && !"".equals(type)){
-            if(type.equals("0")){
-                //无货 0
-                goodsBO.setOption(0);
-            }else if(type.contains("<")){
-                //小于 1
-                goodsBO.setOption(1);
-            }else if(type.contains(">")){
-                //大于 2
-                goodsBO.setOption(2);
-            }else if(type.contains("-")){
-                //取中间值 3
-                goodsBO.setOption(3);
-                String[]  repo = type.split("-");
-                goodsBO.setStartRepo(Integer.valueOf(repo[0]));
-                goodsBO.setEndRepo(Integer.valueOf(repo[1]));
-            }
-        }
         return goodsRoMapper.selectProductRepoList(goodsBO);
     }
 }

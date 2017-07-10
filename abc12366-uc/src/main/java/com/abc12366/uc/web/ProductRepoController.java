@@ -32,29 +32,6 @@ public class ProductRepoController {
     @Autowired
     private ProductRepoService productRepoService;
 
-    /**
-     * 库存列表管理
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value = "type", required = false) String type,
-                                     @RequestParam(value = "productName", required = false) String productName) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
-        ProductRepoBO productRepo = new ProductRepoBO();
-        productRepo.setProductName(productName);
-        productRepo.setType(type);
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<ProductRepoBO> productRepoList = productRepoService.selectList(productRepo);
-        LOGGER.info("{}", productRepoList);
-        return (productRepoList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) productRepoList, "total", ((Page) productRepoList).getTotal()));
-    }
-
 
     /**
      * 查询库存详情

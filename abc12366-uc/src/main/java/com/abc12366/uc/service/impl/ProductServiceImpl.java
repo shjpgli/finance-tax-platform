@@ -5,6 +5,7 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.ProductMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Product;
+import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.service.ProductService;
 import org.springframework.beans.BeanUtils;
@@ -31,20 +32,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> selectList(Product product) {
         return productRoMapper.selectList(product);
-    }
-
-    @Override
-    public List<ProductBO> selectProductBOList(String id) {
-        List<Product> productList = productRoMapper.selectById(id);
-        ProductBO productBO = null;
-        List<ProductBO> bo = new ArrayList<ProductBO>();
-        for(Product p:productList){
-            productBO = new ProductBO();
-            BeanUtils.copyProperties(p, productBO);
-            bo.add(productBO);
-
-        }
-        return bo;
     }
 
     @Transactional("db1TxManager")
@@ -85,25 +72,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> selectProductList(Product product) {
-        return productRoMapper.selectProductList(product);
-    }
-
-    @Override
-    public ProductBO selectProduct(String id) {
-        Product product = productRoMapper.selectByIdAndStatus(id);
-        ProductBO productBO = new ProductBO();
-        BeanUtils.copyProperties(product, productBO);
-        return productBO;
-    }
-
-    @Override
-    public void updateStatus(String id) {
-        productMapper.updateStatus(id);
-    }
-
-    @Override
     public List<ProductBO> selectByGoodsId(ProductBO product) {
         return productRoMapper.selectBOListByGoodsId(product.getGoodsId());
+    }
+
+    @Override
+    public List<GoodsBO> selectBOList(ProductBO productBO) {
+        return productRoMapper.selectBOList(productBO);
     }
 }

@@ -3,6 +3,7 @@ package com.abc12366.uc.model.bo;
 import com.abc12366.uc.model.Goods;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -25,8 +26,6 @@ public class ProductRepoBO implements Serializable {
     private String type;
     private Integer option;
     private Goods goods;
-
-    private DictBO dictBO;
 
     public void setId(String id) {
         this.id = id;
@@ -130,13 +129,5 @@ public class ProductRepoBO implements Serializable {
 
     public void setOption(Integer option) {
         this.option = option;
-    }
-
-    public DictBO getDictBO() {
-        return dictBO;
-    }
-
-    public void setDictBO(DictBO dictBO) {
-        this.dictBO = dictBO;
     }
 }

@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.service.ProductService;
 import com.github.pagehelper.Page;
@@ -44,6 +45,38 @@ public class ProductController {
         List<ProductBO> productList = productService.selectByGoodsId(product);
         LOGGER.info("{}", productList);
         return ResponseEntity.ok(Utils.kv("dataList",  productList));
+    }
+
+    /**
+     * 查询商品库存列表
+     * @param pageNum
+     * @param pageSize
+     * @param goodsName
+     * @return
+     */
+    @GetMapping(path = "/productRepo")
+    public ResponseEntity selectBOList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                            @RequestParam(value = "goodsName", required = false) String goodsName,
+                                            @RequestParam(value = "startRepo", required = false) Integer startRepo,
+                                            @RequestParam(value = "endRepo", required = false) Integer endRepo) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        ProductBO productBO = new ProductBO();
+        productBO.setGoodsName(goodsName);
+        if(startRepo == null){
+            startRepo = 0;
+        }
+        if(endRepo == null){
+            endRepo = 100000000;
+        }
+        productBO.setStartRepo(startRepo);
+        productBO.setEndRepo(endRepo);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<GoodsBO> goodsList = productService.selectBOList(productBO);
+        LOGGER.info("{}", goodsList);
+        return (goodsList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
 }

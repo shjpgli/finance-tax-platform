@@ -21,10 +21,16 @@ public class ProductBO implements Serializable {
     private Double costPrice;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
+    private Integer stock;
+    private String goodsName;
 
+    private ProductRepoBO productRepoBO;
     private List<DictBO> dictList = new ArrayList<>();
     private List<UvipPrice> uvipPriceList = new ArrayList<>();
     private List<ProductRepoBO> repoBOList = new ArrayList<>();
+
+    private Integer startRepo;
+    private Integer endRepo;
 
 
     public void setId(String id){
@@ -105,5 +111,45 @@ public class ProductBO implements Serializable {
 
     public void setRepoBOList(List<ProductRepoBO> repoBOList) {
         this.repoBOList = repoBOList;
+    }
+
+    public ProductRepoBO getProductRepoBO() {
+        return productRepoBO;
+    }
+
+    public void setProductRepoBO(ProductRepoBO productRepoBO) {
+        this.productRepoBO = productRepoBO;
+    }
+
+    public Integer getStartRepo() {
+        return startRepo;
+    }
+
+    public void setStartRepo(Integer startRepo) {
+        this.startRepo = startRepo;
+    }
+
+    public Integer getEndRepo() {
+        return endRepo;
+    }
+
+    public void setEndRepo(Integer endRepo) {
+        this.endRepo = endRepo;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 }

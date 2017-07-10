@@ -4,9 +4,7 @@ import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.GoodsCategory;
-import com.abc12366.uc.model.bo.GoodsBO;
-import com.abc12366.uc.model.bo.GoodsCategoryBO;
-import com.abc12366.uc.model.bo.GoodsCheckBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.GoodsCategoryService;
 import com.abc12366.uc.service.GoodsService;
 import com.github.pagehelper.Page;
@@ -144,7 +142,7 @@ public class GoodsController {
      * 审核商品信息
      * @return
      */
-    @PutMapping(path = "/check/{id}/{status}")
+    @PutMapping(path = "/check")
     public ResponseEntity checkGoods(@Valid @RequestBody GoodsCheckBO goodsCheckBO) {
         LOGGER.info("{}", goodsCheckBO);
         goodsService.checkGoods(goodsCheckBO);
@@ -209,32 +207,5 @@ public class GoodsController {
         LOGGER.info("{}", id);
         goodsCategoryService.delete(id);
         return ResponseEntity.ok(Utils.kv());
-    }
-
-    /**
-     * 查询商品库存列表
-     * @param pageNum
-     * @param pageSize
-     * @param goodsName
-     * @param repoType
-     * @return
-     */
-    @GetMapping(path = "/productRepo")
-    public ResponseEntity selectProductList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                          @RequestParam(value = "goodsName", required = false) String goodsName,
-                                          @RequestParam(value = "repoType", required = false) String repoType) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
-        GoodsBO goods = new GoodsBO();
-        goods.setName(goodsName);
-        goods.setRepoType(repoType);
-        //已发布状态
-        goods.setStatus(true);
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<GoodsBO> goodsList = goodsService.selectProductRepoList(goods);
-        LOGGER.info("{}", goodsList);
-        return (goodsList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 }

@@ -3,8 +3,10 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.mapper.db1.ProductMapper;
 import com.abc12366.uc.mapper.db1.ProductRepoMapper;
 import com.abc12366.uc.mapper.db2.ProductRepoRoMapper;
+import com.abc12366.uc.model.Product;
 import com.abc12366.uc.model.ProductRepo;
 import com.abc12366.uc.model.bo.ProductRepoBO;
 import com.abc12366.uc.service.ProductRepoService;
@@ -33,24 +35,13 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     @Autowired
     private ProductRepoMapper productRepoMapper;
 
+    @Autowired
+    private ProductMapper productMapper;
+
+
+
     @Override
     public List<ProductRepoBO> selectList(ProductRepoBO productRepoBO) {
-        String type = productRepoBO.getType();
-        if(type != null && !"".equals(type)){
-            if(type.equals("0")){
-                //无货 0
-                productRepoBO.setOption(0);
-            }else if(type.contains("<")){
-                //小于 1
-                productRepoBO.setOption(1);
-            }else if(type.contains(">")){
-                //大于 2
-                productRepoBO.setOption(2);
-            }else if(type.contains("-")){
-                //取中间值
-                productRepoBO.setOption(3);
-            }
-        }
         return productRepoRoMapper.selectList(productRepoBO);
     }
 
@@ -73,6 +64,8 @@ public class ProductRepoServiceImpl implements ProductRepoService {
             LOGGER.info("{商品入库失败}", productRepo);
             throw new ServiceException(4158);
         }
+        //入库成功后，修改产品表的库存信息
+        updateProductStock(productRepoBO, stock, productRepo);
         return productRepoBO;
     }
 
@@ -92,6 +85,19 @@ public class ProductRepoServiceImpl implements ProductRepoService {
             LOGGER.info("{商品出库失败}", productRepo);
             throw new ServiceException(4159);
         }
+        //出库成功后，修改产品表的库存信息
+        updateProductStock(productRepoBO, stock, productRepo);
         return productRepoBO;
+    }
+
+    private void updateProductStock(ProductRepoBO productRepoBO, int stock, ProductRepo productRepo) {
+        Product product = new Product();
+        product.setId(productRepoBO.getProductId());
+        product.setStock(stock);
+        int pUpdate = productMapper.update(product);
+        if (pUpdate != 1){
+            LOGGER.info("{产品库存修改失败}", productRepo);
+            throw new ServiceException(4164);
+        }
     }
 }

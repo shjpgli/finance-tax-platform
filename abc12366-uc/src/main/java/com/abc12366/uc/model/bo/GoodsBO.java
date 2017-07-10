@@ -32,13 +32,10 @@ public class GoodsBO implements Serializable {
     private Double totalStock;
     private Double totalPrice;
 
+    private ProductBO productBO;
     /**销售价**/
     private Double sellingPrice;
 
-    /**库存类型**/
-    private String repoType;
-    /**执行的查询操作**/
-    private Integer option;
     /**库存开始值**/
     private Integer startRepo;
     /**库存结束值**/
@@ -212,22 +209,6 @@ public class GoodsBO implements Serializable {
         this.sellingPrice = sellingPrice;
     }
 
-    public String getRepoType() {
-        return repoType;
-    }
-
-    public void setRepoType(String repoType) {
-        this.repoType = repoType;
-    }
-
-    public Integer getOption() {
-        return option;
-    }
-
-    public void setOption(Integer option) {
-        this.option = option;
-    }
-
     public Integer getEndRepo() {
         return endRepo;
     }
@@ -242,5 +223,13 @@ public class GoodsBO implements Serializable {
 
     public void setStartRepo(Integer startRepo) {
         this.startRepo = startRepo;
+    }
+
+    public ProductBO getProductBO() {
+        return productBO;
+    }
+
+    public void setProductBO(ProductBO productBO) {
+        this.productBO = productBO;
     }
 }

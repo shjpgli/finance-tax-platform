@@ -31,6 +31,8 @@ public class Product implements Serializable {
     /****/
     private java.util.Date lastUpdate;
 
+    private Integer stock;
+
 
 
     public void setId(String id){
@@ -89,4 +91,11 @@ public class Product implements Serializable {
         return this.lastUpdate;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }
