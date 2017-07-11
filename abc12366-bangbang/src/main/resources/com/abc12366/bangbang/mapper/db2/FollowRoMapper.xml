@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.FollowRoMapper">
+    <select id="selectPeopleIFollow"  resultType="com.abc12366.bangbang.model.bo.FollowUserBO" parameterType="java.lang.String">
+        select id, userId, followedUserId, createTime, lastUpdate
+        from bb_follow_user
+        where userId=#{userId}
+        ORDER BY lastUpdate DESC
+    </select>
+    <select id="selectMyFollowerList" resultType="com.abc12366.bangbang.model.bo.FollowUserBO" parameterType="java.lang.String">
+        select bfu.id, bfu.userId, bfu.followedUserId, bfu.createTime, bfu.lastUpdate
+        from bb_follow_user bfu
+        where bfu.followedUserId=#{userId}
+        ORDER BY lastUpdate DESC
+    </select>
+    <select id="selectFollowedCount" resultType="java.lang.String" parameterType="java.lang.String">
+        select count(1) from bb_follow_user bfu
+        where bfu.followedUserId=#{followedUserId}
+    </select>
+    <select id="selectExist"  resultType="com.abc12366.bangbang.model.bo.FollowUserBO" parameterType="java.util.Map">
+        select id, userId, followedUserId, createTime, lastUpdate
+        from bb_follow_user
+        where userId=#{userId}
+        and followedUserId=#{followedUserId}
+    </select>
+</mapper>

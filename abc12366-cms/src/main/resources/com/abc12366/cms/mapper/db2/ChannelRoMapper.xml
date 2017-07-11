@@ -12,8 +12,8 @@
 	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Channel" parameterType="java.lang.String">
 		 SELECT
 			 a.channelId,a.channelName,	a.modelId,	a.siteId,	a.parentId,	a.channelPath,	a.priority,	a.isDisplay,b.sitePath
-		 FROM cms_channel a,cms_site b
-		 WHERE a.siteId = b.siteId and a.channelId = #{channelId}
+		 FROM cms_channel a LEFT JOIN cms_site b ON a.siteId = b.siteId
+		 WHERE a.channelId = #{channelId}
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
