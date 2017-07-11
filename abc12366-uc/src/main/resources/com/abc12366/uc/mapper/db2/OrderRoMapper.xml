@@ -4,34 +4,68 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderRoMapper">
 
     <resultMap id="orderBOResultMap" type="com.abc12366.uc.model.bo.OrderBO">
-        <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
-        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
-        <result column="dealPrice" property="dealPrice" jdbcType="DOUBLE"/>
-        <result column="num" property="num" jdbcType="INTEGER"/>
         <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
-        <result column="payStatus" property="payStatus" jdbcType="VARCHAR"/>
         <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="vipLevel" property="vipLevel" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <result column="feedback" property="feedback" jdbcType="VARCHAR"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="dictId" property="dictId" jdbcType="VARCHAR"/>
-        <result column="uvipLevel" property="uvipLevel" jdbcType="VARCHAR"/>
-        <result column="unit" property="unit" jdbcType="VARCHAR"/>
-        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
-        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
+        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
+        <result column="insuredFee" property="insuredFee" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
+        <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <association property="user" javaType="com.abc12366.uc.model.User">
-            <id column="id" property="id"/>
+            <id column="userId" property="id"/>
             <result column="username" property="username"/>
             <result column="phone" property="phone"/>
+            <result column="vipLevel" property="vipLevel"/>
         </association>
-        <association property="goodsBO" javaType="com.abc12366.uc.model.bo.GoodsBO">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
-        </association>
+
+        <collection property="orderProductList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="id" select="getOrderProduct"></collection>
     </resultMap>
+
+    <resultMap id="userBOMap" type="com.abc12366.uc.model.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="phone" property="phone"/>
+        <result column="vipLevel" property="vipLevel"/>
+    </resultMap>
+
+    <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.bo.OrderProductBO">
+        <id column="orderId" property="orderId" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="VARCHAR"/>
+        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="discount" property="discount" jdbcType="DOUBLE"/>
+        <result column="dealPrice" property="dealPrice" jdbcType="DOUBLE"/>
+        <result column="name" property="name" jdbcType="INTEGER"/>
+        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
+        SELECT
+        orderId,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
+        FROM uc_order_product
+        WHERE orderId = #{orderId}
+    </select>
+    <select id="getUser" resultMap="userBOMap" parameterType="java.lang.String">
+        select id, username, phone,vipLevel
+        from uc_user WHERE id = #{userId}
+    </select>
 
 	<!-- 通用查询结果列-->
     <sql id="Base_Column_List">
@@ -50,22 +84,21 @@
     <!-- 查询（根据主键ID和UserId查询） -->
     <select id="selectOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.Order">
         SELECT
-        o.orderNo,	o.userId,	o.goodsId,	o.dealPrice,	o.num,	o.orderStatus,	o.payStatus,	o.deliveryMethod,	o.payMethod,	o.createTime,	o.lastUpdate,	o.feedback,	o.name,
-        o.dictId,	o.uvipLevel,	o.unit,	o.categoryId,	o.category,
-        u.username,
-        u.phone
+        <include refid="Base_Column_BO_List" />
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         WHERE o.orderNo = #{orderNo} and o.userId = #{userId}
     </select>
 
+    <!-- 通用BO查询结果列-->
+    <sql id="Base_Column_BO_List">
+        o.id,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.vipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,
+        o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark,u.id as userId,u.username,u.phone,u.vipLevel
+    </sql>
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
-        o.orderNo,	o.userId,	o.goodsId,	o.dealPrice,	o.num,	o.orderStatus,	o.payStatus,	o.deliveryMethod,	o.payMethod,	o.createTime,	o.lastUpdate,	o.feedback,	o.name,
-        o.dictId,	o.uvipLevel,	o.unit,	o.categoryId,	o.category,
-        u.username,
-        u.phone
+        <include refid="Base_Column_BO_List" />
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
@@ -102,10 +135,7 @@
     <!-- 前台查询（根据条件查询） -->
     <select id="selectOrderList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
-        o.orderNo,	o.userId,	o.goodsId,	o.dealPrice,	o.num,	o.orderStatus,	o.payStatus,	o.deliveryMethod,	o.payMethod,	o.createTime,	o.lastUpdate,	o.feedback,	o.name,
-        o.dictId,	o.uvipLevel,	o.unit,	o.categoryId,	o.category,
-        u.username,
-        u.phone
+        <include refid="Base_Column_BO_List" />
         FROM uc_order o
         <where>
             1 = 1
@@ -124,10 +154,7 @@
     <!-- 前台查询（根据条件查询） -->
     <select id="selectCartList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
-        o.orderNo,	o.userId,	o.goodsId,	o.dealPrice,	o.num,	o.orderStatus,	o.payStatus,	o.deliveryMethod,	o.payMethod,	o.createTime,	o.lastUpdate,	o.feedback,	o.name,
-        o.dictId,	o.uvipLevel,	o.unit,	o.categoryId,	o.category,
-        u.username,
-        u.phone
+        <include refid="Base_Column_BO_List" />
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>

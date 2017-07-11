@@ -6,11 +6,10 @@ import com.abc12366.uc.mapper.db2.GoodsRoMapper;
 import com.abc12366.uc.mapper.db2.OrderRoMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Order;
-import com.abc12366.uc.model.Product;
-import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.util.DataUtils;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -45,7 +44,8 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public List<OrderBO> selectList(OrderBO orderBO) {
+    public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         return orderRoMapper.selectList(orderBO);
     }
 
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderBO joinCart(OrderBO orderBO) {
         //判断产品数量
-        isValidate(orderBO);
+        //isValidate(orderBO);
         Order order = new Order();
         BeanUtils.copyProperties(orderBO, order);
         order.setOrderNo(DataUtils.getDateToString());

@@ -118,7 +118,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     @Override
     public GoodsCategory selectGategory(String id) {
-        return null;
+        return goodsCategoryRoMapper.selectByPrimaryKey(id);
     }
 
     @Override

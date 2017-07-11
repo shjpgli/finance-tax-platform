@@ -2,12 +2,14 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +66,6 @@ public class OrderController {
         user.setUsername(username);
         user.setPhone(phone);
         order.setUser(user);
-        GoodsBO goodsBO = new GoodsBO();
-        goodsBO.setName(name);
-        goodsBO.setCategoryId(categoryId);
-        order.setGoodsBO(goodsBO);
         order.setOrderNo(orderNo);
         if(startTime == null || "".equals(startTime)){
             order.setStartTime(Constant.getToday(new Date()));
@@ -76,12 +74,12 @@ public class OrderController {
             order.setEndTime(Constant.getToday(new Date()));
         }
 
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> orderList = orderService.selectList(order);
+        List<OrderBO> orderList = orderService.selectList(order,pageNum,pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
         LOGGER.info("{}", orderList);
         return (orderList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) orderList, "total", ((Page) orderList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**

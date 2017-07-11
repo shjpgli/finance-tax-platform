@@ -1,8 +1,11 @@
 package com.abc12366.uc.model.bo;
+import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.OrderProduct;
 import com.abc12366.uc.model.User;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -36,6 +39,7 @@ public class OrderBO implements Serializable {
     private GoodsBO goodsBO;
     private User user;
 
+    private List<OrderProduct> orderProductList;
     private Date startTime;
     private Date endTime;
 
@@ -223,5 +227,13 @@ public class OrderBO implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public List<OrderProduct> getOrderProductList() {
+        return orderProductList;
+    }
+
+    public void setOrderProductList(List<OrderProduct> orderProductList) {
+        this.orderProductList = orderProductList;
     }
 }

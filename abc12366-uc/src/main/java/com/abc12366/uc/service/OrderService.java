@@ -13,9 +13,10 @@ public interface OrderService {
     /**
      * 查询订单列表信息
      * @param orderBO
-     * @return
+     * @param pageNum
+     *@param pageSize @return
      */
-    List<OrderBO> selectList(OrderBO orderBO);
+    List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize);
 
     /**
      * 查询订单信息

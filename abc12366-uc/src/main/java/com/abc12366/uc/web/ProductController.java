@@ -4,6 +4,7 @@ import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.ProductRepo;
 import com.abc12366.uc.model.bo.GoodsBO;
+import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.ProductRepoBO;
 import com.abc12366.uc.service.ProductRepoService;
@@ -85,13 +86,14 @@ public class ProductController {
     }
 
     /**
-     * 查询商品库存列表
+     * 查询库存详情
      * @return
      */
-    @GetMapping(path = "/productRepo/selectOne/{goodsId}/{productId}")
+    @GetMapping(path = "/productRepo/selectOne")
     public ResponseEntity selectProductRepoDetail(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                                  @PathVariable("goodsId") String goodsId,@PathVariable("productId") String productId) {
+                                                  @RequestParam(value = "goodsId", required = true) String goodsId,
+                                                  @RequestParam(value = "productId", required = true) String productId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         ProductRepo productRepo = new ProductRepo();
         productRepo.setGoodsId(goodsId);

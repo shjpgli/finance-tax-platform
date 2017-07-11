@@ -54,7 +54,11 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setId(Utils.uuid());
         int stock = 0;
         ProductRepo temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
-        stock = temp.getStock() + productRepoBO.getIncome();
+        if(temp == null){
+            stock = productRepoBO.getIncome();
+        }else{
+            stock = temp.getStock() + productRepoBO.getIncome();
+        }
         productRepoBO.setStock(stock);
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
@@ -75,7 +79,11 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setId(Utils.uuid());
         int stock = 0;
         ProductRepo temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
-        stock = temp.getStock() - productRepoBO.getOutcome();
+        if(temp == null){
+            stock = productRepoBO.getIncome();
+        }else{
+            stock = temp.getStock() - productRepoBO.getOutcome();
+        }
         productRepoBO.setStock(stock);
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
