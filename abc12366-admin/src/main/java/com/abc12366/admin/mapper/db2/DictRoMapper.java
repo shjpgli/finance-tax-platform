@@ -28,5 +28,5 @@ public interface DictRoMapper {
 
     List<Dict> selectListByDictName(Dict dict);
 
-    Dict selectByDict(DictBO dictBO);
+    Dict selectDict(DictBO dictBO);
 }

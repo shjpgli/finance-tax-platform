@@ -66,7 +66,7 @@ public class DictServiceImpl implements DictService {
     @Override
     public DictBO insert(DictBO dictBO) {
         //dictId，fieldKey确定数据唯一性
-        Dict dict = dictRoMapper.selectByDict(dictBO);
+        Dict dict = dictRoMapper.selectDict(dictBO);
         if(dict != null){
             LOGGER.info("{dictId，fieldKey确定数据唯一性}",dict);
             throw new ServiceException(4165);
