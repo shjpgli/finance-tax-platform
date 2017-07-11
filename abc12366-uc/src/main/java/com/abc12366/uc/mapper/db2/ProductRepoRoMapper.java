@@ -27,7 +27,7 @@ public interface ProductRepoRoMapper {
 
 	ProductRepoBO selectOne(String id);
 
-	ProductRepo selectByGoodsId(ProductRepoBO productRepoBO);
+	ProductRepoBO selectByGoodsId(ProductRepoBO productRepoBO);
 
 	List<ProductRepoBO> selectProductRepoDetail(ProductRepo productRepo);
 }

@@ -35,14 +35,25 @@ public class GoodsController {
     @Autowired
     private GoodsCategoryService goodsCategoryService;
 
+    /**
+     * 商品后台管理查询
+     * @param pageNum
+     * @param pageSize
+     * @param name
+     * @param categoryId
+     * @param recommendType
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "status", required = false) Boolean status,
                                      @RequestParam(value = "categoryId", required = false) String categoryId,
                                      @RequestParam(value = "recommendType", required = false) String recommendType) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
+        goods.setStatus(status);
         goods.setName(name);
         goods.setCategoryId(categoryId);
         goods.setRecommendType(recommendType);
@@ -65,6 +76,15 @@ public class GoodsController {
     }
 
 
+    /**
+     * 商品前台列表查询
+     * @param pageNum
+     * @param pageSize
+     * @param name
+     * @param categoryId
+     * @param recommendType
+     * @return
+     */
     @GetMapping(path = "/user")
     public ResponseEntity selectGoodsList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,

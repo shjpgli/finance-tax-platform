@@ -49,7 +49,9 @@
         <where>
             1=1
             <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
-            <if test="status != null  and status!=''"> AND g.status = #{status}</if>
+            <if test="status != null"> AND g.status = #{status}</if>
+            <if test="categoryId != null  and categoryId!=''"> AND g.categoryId = #{categoryId}</if>
+            <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
         </where>
     </select>
 

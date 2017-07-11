@@ -54,11 +54,12 @@
         FROM uc_product_repo
         WHERE id = #{id}
     </select>
+    <!-- 根据goodsId和productId查询最后一条数据-->
     <select id="selectByGoodsId" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.ProductRepo">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product_repo
-        WHERE id = #{id}
+        WHERE goodsId = #{goodsId} and productId=#{productId} ORDER BY createTime DESC LIMIT 1
     </select>
 
     <!-- 根据goodsId和ProductId查询库存列表信息-->

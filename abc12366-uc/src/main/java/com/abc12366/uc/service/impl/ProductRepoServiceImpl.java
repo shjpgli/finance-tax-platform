@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,12 +54,15 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     public ProductRepoBO income(ProductRepoBO productRepoBO) {
         productRepoBO.setId(Utils.uuid());
         int stock = 0;
-        ProductRepo temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
+        ProductRepoBO temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
         if(temp == null){
             stock = productRepoBO.getIncome();
         }else{
             stock = temp.getStock() + productRepoBO.getIncome();
         }
+        Date date = new Date();
+        productRepoBO.setCreateTime(date);
+        productRepoBO.setLastUpdate(date);
         productRepoBO.setStock(stock);
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
@@ -68,7 +72,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
             throw new ServiceException(4158);
         }
         //入库成功后，修改产品表的库存信息
-        updateProductStock(productRepoBO, stock, productRepo);
+        updateProductStock(productRepoBO, stock);
         return productRepoBO;
     }
 
@@ -78,12 +82,15 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     public ProductRepoBO outcome(ProductRepoBO productRepoBO) {
         productRepoBO.setId(Utils.uuid());
         int stock = 0;
-        ProductRepo temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
+        ProductRepoBO temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
         if(temp == null){
             stock = productRepoBO.getIncome();
         }else{
             stock = temp.getStock() - productRepoBO.getOutcome();
         }
+        Date date = new Date();
+        productRepoBO.setCreateTime(date);
+        productRepoBO.setLastUpdate(date);
         productRepoBO.setStock(stock);
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
@@ -93,7 +100,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
             throw new ServiceException(4159);
         }
         //出库成功后，修改产品表的库存信息
-        updateProductStock(productRepoBO, stock, productRepo);
+        updateProductStock(productRepoBO, stock);
         return productRepoBO;
     }
 
@@ -102,13 +109,14 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         return productRepoRoMapper.selectProductRepoDetail(productRepo);
     }
 
-    private void updateProductStock(ProductRepoBO productRepoBO, int stock, ProductRepo productRepo) {
+    private void updateProductStock(ProductRepoBO productRepoBO, int stock) {
         Product product = new Product();
+        product.setGoodsId(productRepoBO.getGoodsId());
         product.setId(productRepoBO.getProductId());
         product.setStock(stock);
         int pUpdate = productMapper.update(product);
         if (pUpdate != 1){
-            LOGGER.info("{产品库存修改失败}", productRepo);
+            LOGGER.info("{产品库存修改失败}", product);
             throw new ServiceException(4164);
         }
     }
