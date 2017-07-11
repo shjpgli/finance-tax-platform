@@ -65,11 +65,13 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public DictBO insert(DictBO dictBO) {
-        /*Dict dict = dictRoMapper.selectByDictName(dictBO.getDictName());
+        //dictId，fieldKey确定数据唯一性
+        Dict dict = dictRoMapper.selectByDict(dictBO);
         if(dict != null){
-            throw new ServiceException(4104);
-        }*/
-        Dict dict = new Dict();
+            LOGGER.info("{dictId，fieldKey确定数据唯一性}",dict);
+            throw new ServiceException(4165);
+        }
+        dict = new Dict();
         BeanUtils.copyProperties(dictBO, dict);
 
         dict.setId(Utils.uuid());

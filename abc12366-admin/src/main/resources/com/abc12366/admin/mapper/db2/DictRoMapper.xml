@@ -65,6 +65,14 @@
         where dictName = #{dictName}
     </select>
 
+    <!-- 根据dictId，fieldKey条件查询字典表数据-->
+    <select id="selectDict" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
+        select
+        <include refid="Base_Column_List" />
+        from sys_dict
+        where dictId = #{dictId} AND fieldKey = #{fieldKey}
+    </select>
+
     <select id="selectDictList" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">
         select
         <include refid="Base_Column_List" />
