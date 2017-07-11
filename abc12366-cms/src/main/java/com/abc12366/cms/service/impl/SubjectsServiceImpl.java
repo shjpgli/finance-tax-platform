@@ -4,7 +4,6 @@ import com.abc12366.cms.mapper.db1.OptionMapper;
 import com.abc12366.cms.mapper.db1.SubjectsMapper;
 import com.abc12366.cms.mapper.db2.OptionRoMapper;
 import com.abc12366.cms.mapper.db2.SubjectsRoMapper;
-import com.abc12366.cms.model.Subject;
 import com.abc12366.cms.model.questionnaire.Option;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
@@ -293,7 +292,7 @@ public class SubjectsServiceImpl implements SubjectsService {
             List<Option> optionList = boList.getOptionList();
             for (Option option : optionList) {
                 option.setId(Utils.uuid());
-                option.setSubjectsId(subjectsId);
+                option.setSubjectsId(subId);
                 option.setStatus(true);
                 int oInsert = optionMapper.insert(option);
                 if (oInsert != 1) {
