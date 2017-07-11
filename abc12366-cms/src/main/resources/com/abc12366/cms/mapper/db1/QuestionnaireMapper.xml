@@ -101,24 +101,6 @@
     <!-- 修 改-->
     <update id="update" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
         UPDATE cms_paper_questionnaire
-        SET
-        title = #{title},
-        simpleDesc = #{simpleDesc},
-        status = #{status},
-        createUser = #{createUser},
-        createTime = #{createTime},
-        updateTime = #{updateTime},
-        updateUser = #{updateUser},
-        recoveryRate = #{recoveryRate},
-        accessRate = #{accessRate},
-        sceneCode = #{sceneCode},
-        tradeCode = #{tradeCode}
-        WHERE id = #{id}
-    </update>
-
-    <!-- 修 改-->
-    <update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
-        UPDATE cms_paper_questionnaire
         <set>
             <if test="title != null">
                 title = #{title},
