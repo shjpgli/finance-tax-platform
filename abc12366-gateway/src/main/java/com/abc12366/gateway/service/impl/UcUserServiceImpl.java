@@ -89,7 +89,7 @@ public class UcUserServiceImpl implements UcUserService {
             ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET, request);
             if (userByTokenResponse != null && userByTokenResponse.hasBody()) {
                 UserResponseBO userResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), UserResponseBO.class);
-                if (!StringUtils.isEmpty(userResponseBO.getData().getId())) {
+                if (userResponseBO != null && userResponseBO.getData() != null && !StringUtils.isEmpty(userResponseBO.getData().getId())) {
                     String adminUserId = userResponseBO.getData().getId();
                     if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
                         request.removeAttribute(Constant.USER_ID);
@@ -97,7 +97,11 @@ public class UcUserServiceImpl implements UcUserService {
                     } else {
                         request.setAttribute(Constant.USER_ID, adminUserId);
                     }
+                } else {
+                    return false;
                 }
+            } else {
+                return false;
             }
             return true;
         }
