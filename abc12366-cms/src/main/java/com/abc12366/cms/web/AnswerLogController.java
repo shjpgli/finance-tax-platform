@@ -105,11 +105,11 @@ public class AnswerLogController {
     }
 
     /**
-     * 答题记录修改
+     * 答题记录批量新增
      * @param answerLogBO
      * @return
      */
-    @PutMapping(path = "/batch/{id}")
+    @PutMapping(path = "/batch")
     public ResponseEntity batch(@Valid @RequestBody AnswerLogBO answerLogBO) {
         LOGGER.info("{}", answerLogBO);
         AnswerLogBO bo = answerLogService.batch(answerLogBO);
