@@ -27,10 +27,11 @@
 		a.isRecommend isRecommend,
 		a.isChecked isChecked,
 		a.commentUserId commentUserId
-		FROM cms_comment a,cms_comment_ext b,cms_content_ext c
-		WHERE a.commentId = b.commentId AND a.contentId = c.contentId
+		FROM cms_comment a LEFT JOIN cms_comment_ext b
+		ON a.commentId = b.commentId
+		WHERE 1=1
 		<if test="contentId != null and contentId != ''">
-			AND c.contentId like CONCAT('%',#{contentId},'%')
+			AND a.contentId like CONCAT('%',#{contentId},'%')
 		</if>
 		<if test="isChecked != null and isChecked != ''">
 			AND a.isChecked = #{isChecked}
@@ -50,9 +51,8 @@
 			   b.ip ip,
 			   a.createTime createTime,
 			   a.commentUserId commentUserId
-		FROM cms_comment a,cms_comment_ext b
-		WHERE a.commentId = b.commentId
-		AND a.contentId = #{contentId}
+		FROM cms_comment a LEFT JOIN cms_comment_ext b ON a.commentId = b.commentId
+		WHERE a.contentId = #{contentId}
 	</select>
 
 	<!-- 查询（按天统计） -->

@@ -39,8 +39,10 @@
 			a.status STATUS,
 			b.needRegenerate needRegenerate,
 			a.recommendLevel recommendLevel
-		FROM cms_content a,cms_content_ext b,cms_channel c,cms_content_count e
-		WHERE a.contentId = b.contentId AND a.channelId = c.channelId AND a.contentId = e.contentId
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+		WHERE 1=1
 		<if test="title != null and title != ''">
 			AND b.title like CONCAT('%',#{title},'%')
 		</if>
@@ -70,8 +72,8 @@
 		SELECT
 		a.contentId contentId,
 		a.typeId typeId
-		FROM cms_content a,cms_content_ext b
-		WHERE a.contentId = b.contentId
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		WHERE 1=1
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
 		</if>
@@ -112,8 +114,10 @@
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel
-		FROM cms_content a,cms_content_ext b,cms_channel c,cms_content_count e
-		WHERE a.contentId = b.contentId AND a.channelId = c.channelId AND a.contentId = e.contentId
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+		WHERE 1=1
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
 		</if>
@@ -154,8 +158,10 @@
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel
-		FROM cms_content a,cms_content_ext b,cms_content_topic c,cms_content_count e
-		WHERE a.contentId = b.contentId AND a.contentId = c.topicId AND a.contentId = e.contentId
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		LEFT JOIN cms_content_topic c ON a.contentId = c.topicId
+		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+		WHERE 1=1
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
 		</if>
@@ -188,8 +194,9 @@
 			a.sortDate,	a.topLevel,	a.hasTitleImg,	a.isRecommend,	a.status,
 			a.viewsDay,	a.commentsDay,	a.downloadsDay,	a.upsDay,a.recommendLevel,
 			b.channelPath,c.sitePath
-		FROM cms_content a,cms_channel b,cms_site c
-		WHERE a.channelId = b.channelId AND a.siteId = c.siteId AND a.contentId = #{contentId}
+		FROM cms_content a LEFT JOIN cms_channel b ON a.channelId = b.channelId
+			LEFT JOIN cms_site c ON a.siteId = c.siteId
+		WHERE a.contentId = #{contentId}
 	</select>
 
 
