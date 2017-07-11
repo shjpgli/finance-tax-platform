@@ -44,7 +44,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
-
+                //定时任务查询不需验证
+                .excludePathPatterns("/task/list")
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
     }
