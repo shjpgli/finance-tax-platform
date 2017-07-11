@@ -130,11 +130,18 @@ public class AnswerLogServiceImpl implements AnswerLogService {
     @Override
     public AnswerLogBO batch(AnswerLogBO answerLogBO) {
         AnswerLog answerLog = new AnswerLog();
+        String answerLogId = Utils.uuid();
+        answerLogBO.setId(answerLogId);
         BeanUtils.copyProperties(answerLogBO,answerLog);
-        answerLog.setEndTime(new Date());
-        int update = answerLogMapper.update(answerLog);
-        if(update != 1){
-            LOGGER.info("{修改答题记录失败}", answerLog);
+//        answerLog.setEndTime(new Date());
+//        int update = answerLogMapper.update(answerLog);
+//        if(update != 1){
+//            LOGGER.info("{修改答题记录失败}", answerLog);
+//            throw new ServiceException(4408);
+//        }
+        int insert = answerLogMapper.insert(answerLog);
+        if(insert != 1){
+            LOGGER.info("{新增答题记录失败}", answerLog);
             throw new ServiceException(4408);
         }
         List<Answer> answerList = answerLogBO.getAnswerList();
