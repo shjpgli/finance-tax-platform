@@ -92,10 +92,8 @@
 			</if>
 			<if test="isDisplayResults != null">
 				 isDisplayResults = #{isDisplayResults},
-			</if>
-			<if test="recoveryEndTime != null">
+			 </if>
 				 recoveryEndTime = #{recoveryEndTime},
-			</if>
 			<if test="isLoginAuth != null">
 				 isLoginAuth = #{isLoginAuth},
 			</if>

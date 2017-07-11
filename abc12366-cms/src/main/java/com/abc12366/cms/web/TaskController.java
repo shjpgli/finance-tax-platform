@@ -43,6 +43,15 @@ public class TaskController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
+    @GetMapping(path = "/list")
+    public ResponseEntity list() {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("isEnable",1);
+        List<TaskBo> dataList = taskService.selectList(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
     @PostMapping
     public ResponseEntity save(@RequestBody TaskBo taskBo) {
         LOGGER.info("{}", taskBo);
