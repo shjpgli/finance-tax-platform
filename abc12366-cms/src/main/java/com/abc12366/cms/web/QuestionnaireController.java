@@ -1,7 +1,9 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.SubjectsdttjBo;
 import com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO;
 import com.abc12366.cms.service.QuestionnaireService;
+import com.abc12366.cms.service.SubjectsService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import org.slf4j.Logger;
@@ -12,10 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 问卷控制类
@@ -32,6 +36,9 @@ public class QuestionnaireController {
 
     @Autowired
     private QuestionnaireService questionnaireService;
+
+    @Autowired
+    private SubjectsService subjectsService;
 
     /**
      * 问卷列表查询
@@ -177,6 +184,37 @@ public class QuestionnaireController {
         QuestionnaireBO bo = questionnaireService.copy(questionnaireBO);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 问卷答题统计
+     *
+     * @return
+     */
+    @GetMapping(path = "/selectdttj")
+    public ResponseEntity<?> selectdttj(@RequestParam(value = "startTime", required = false) String startTime,
+                                        @RequestParam(value = "endTime", required = false) String endTime,
+                                        @RequestParam(value = "questionId", required = false) String questionId) {
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("questionId",questionId);
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startTime != null && !"".equals(startTime)){
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime()/1000);
+            }
+            if(endTime != null && !"".equals(endTime)){
+                Date startTime2 = sdf.parse(endTime);
+                dataMap.put("endTime", startTime2.getTime()/1000);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+        List<SubjectsdttjBo> subjectsList = subjectsService.selectListdttj(dataMap);
+        LOGGER.info("{}", subjectsList);
+        return ResponseEntity.ok(Utils.kv("data", subjectsList));
     }
 
 }

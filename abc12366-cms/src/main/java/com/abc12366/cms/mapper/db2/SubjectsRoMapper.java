@@ -1,10 +1,12 @@
 package com.abc12366.cms.mapper.db2;
 
+import com.abc12366.cms.model.bo.SubjectsdttjBo;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -27,4 +29,6 @@ public interface SubjectsRoMapper {
     SubjectsBO selectOne(String id);
 
     List<SubjectsBO> selectSubjectsByPages(Subjects subjects);
+
+    List<SubjectsdttjBo> selectListdttj(Map<String,Object> map);
 }
