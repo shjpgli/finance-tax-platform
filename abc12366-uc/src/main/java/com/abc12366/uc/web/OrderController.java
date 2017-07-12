@@ -7,12 +7,14 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +44,6 @@ public class OrderController {
      * @param pageNum
      * @param pageSize
      * @param orderNo
-     * @param name
-     * @param categoryId
      * @param username
      * @param phone
      * @param startTime
@@ -54,12 +54,11 @@ public class OrderController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "orderNo", required = false) String orderNo,
-                                     @RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "categoryId", required = false) String categoryId,
+                                     @RequestParam(value = "categoryId", required = false) String orderStatus,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "phone", required = false) String phone,
-                                     @RequestParam(value = "startTime", defaultValue = "") String startTime,
-                                     @RequestParam(value = "endTime", defaultValue = "") String endTime) {
+                                     @RequestParam(value ="startTime", required = false) String startTime,
+                                     @RequestParam(value ="endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
         User user = new User();
@@ -67,11 +66,14 @@ public class OrderController {
         user.setPhone(phone);
         order.setUser(user);
         order.setOrderNo(orderNo);
-        if(startTime == null || "".equals(startTime)){
-            order.setStartTime(Constant.getToday(new Date()));
+        order.setOrderStatus(orderStatus);
+//        order.setStartTime(startTime);
+//        order.setEndTime(endTime);
+        if(startTime != null && !"".equals(startTime)){
+            order.setStartTime(DataUtils.StrToDate(startTime));
         }
-        if(endTime == null || "".equals(endTime)){
-            order.setEndTime(Constant.getToday(new Date()));
+        if(endTime != null && !"".equals(endTime)){
+            order.setEndTime(DataUtils.StrToDate(endTime));
         }
 
         List<OrderBO> orderList = orderService.selectList(order,pageNum,pageSize);

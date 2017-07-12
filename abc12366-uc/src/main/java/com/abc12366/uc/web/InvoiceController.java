@@ -15,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,8 +54,8 @@ public class InvoiceController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value = "startTime", defaultValue = "") String startTime,
-                                     @RequestParam(value = "endTime", defaultValue = "") String endTime) {
+                                     @RequestParam(value ="startTime") @DateTimeFormat(pattern="yyyy-MM-dd") Date startTime,
+                                     @RequestParam(value ="endTime") @DateTimeFormat(pattern="yyyy-MM-dd") Date endTime){
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceBO invoice = new InvoiceBO();
 
@@ -65,6 +66,7 @@ public class InvoiceController {
         if (endTime == null || "".equals(endTime)) {
             invoice.setEndTime(Constant.getToday(date));
         }
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<InvoiceBO> invoiceList = invoiceService.selectList(invoice);
         LOGGER.info("{}", invoiceList);

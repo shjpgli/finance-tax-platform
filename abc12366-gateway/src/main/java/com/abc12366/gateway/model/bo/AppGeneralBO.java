@@ -16,7 +16,7 @@ public class AppGeneralBO {
     private Date startTime;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
-    private boolean status;
+    private Boolean status;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -25,7 +25,7 @@ public class AppGeneralBO {
     public AppGeneralBO() {
     }
 
-    public AppGeneralBO(String id, String name, Date startTime, Date endTime, boolean status, Date createTime, Date lastUpdate) {
+    public AppGeneralBO(String id, String name, Date startTime, Date endTime, Boolean status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;
@@ -67,11 +67,11 @@ public class AppGeneralBO {
         this.endTime = endTime;
     }
 
-    public boolean isStatus() {
+    public Boolean isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

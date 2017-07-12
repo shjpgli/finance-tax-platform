@@ -15,9 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,11 +62,35 @@ public class AppController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(required = false,value = "name") String name,
+                                     @RequestParam(required = false,value = "startTime") String startTime,
+                                     @RequestParam(required = false,value = "endTime") String endTime,
+                                     @RequestParam(required = false,value = "status") Boolean status
     ) {
         LOGGER.info("{}:{}", pageNum, pageSize);
+        if(name!=null&&StringUtils.isEmpty(name)){
+        	name=null;
+        }
+        Date start=null;
+        if(startTime!=null){
+        	try {
+				start=new SimpleDateFormat("yyyy-MM-dd").parse(startTime);
+			} catch (ParseException e) {
+				start=null;
+			}
+        }
+        Date end=null;
+        if(endTime!=null){
+        	try {
+				end=new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
+			} catch (ParseException e) {
+				end=null;
+			}
+        }
+        AppGeneralBO appGeneralBO=new AppGeneralBO(null, name, start, end, status, null, null);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<AppGeneralBO> appList = appService.selectList();
+        List<AppGeneralBO> appList = appService.selectList(appGeneralBO);
         LOGGER.info("{}", appList);
         return (appList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
@@ -73,7 +102,8 @@ public class AppController {
         LOGGER.info("{}", id);
         AppGeneralBO app = appService.selectById(id);
         LOGGER.info("{}", app);
-        return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+        //return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", app));
     }
 
     @PutMapping(path = "/{id}")
@@ -82,6 +112,7 @@ public class AppController {
         appUpdateBO.setId(id);
         AppGeneralBO app = appService.update(appUpdateBO);
         LOGGER.info("{}", app);
-        return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+        //return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(Utils.kv("data", app));
     }
 }

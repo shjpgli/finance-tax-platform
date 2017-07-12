@@ -1,12 +1,16 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.common.exception.ServiceException;
+import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.OrderMapper;
+import com.abc12366.uc.mapper.db1.OrderProductMapper;
 import com.abc12366.uc.mapper.db2.GoodsRoMapper;
 import com.abc12366.uc.mapper.db2.OrderRoMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.OrderProduct;
 import com.abc12366.uc.model.bo.OrderBO;
+import com.abc12366.uc.model.bo.OrderProductBO;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.PageHelper;
@@ -34,6 +38,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private OrderProductMapper orderProductMapper;
 
     @Autowired
     private GoodsRoMapper goodsRoMapper;
@@ -86,21 +93,17 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void isValidate(OrderBO orderBO) {
-       /* GoodsBO goods = goodsRoMapper.selectGoods(orderBO.getGoods());
-        //goodsId、字典Id、会员等级，确定一条数据。
-        Product product = new Product();
-        product.setGoodsId(orderBO.getGoodsId());
-        product.setDictId(orderBO.getDictId());
-        product.setUvipLevel(orderBO.getUvipLevel());
-        Product pro = productRoMapper.selectProduct(product);
-        if(pro == null){
-            LOGGER.info("{产品不存在}", orderBO);
-            throw new ServiceException(4135);
-        }
-        if(pro.getStock() < orderBO.getNum()){
-            LOGGER.info("{产品数量不足}", orderBO);
-            throw new ServiceException(4136);
-        }*/
+        //TODO 
+//        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
+//        if (orderProductBOs == null){
+//            LOGGER.info("{产品信息错误}", orderBO);
+//            throw new ServiceException(4166);
+//        }else{
+//            for (OrderProductBO orderProductBO : orderProductBOs){
+//                //查询产品库存信息
+//
+//            }
+//        }
     }
 
     @Transactional("db1TxManager")
@@ -144,22 +147,40 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderBO submitOrder(OrderBO orderBO) {
         isValidate(orderBO);
+        String orderId = Utils.uuid();
+        orderBO.setOrderNo(DataUtils.getDateToString());
+        Date date = new Date();
+        orderBO.setCreateTime(date);
+        orderBO.setLastUpdate(date);
+        orderBO.setOrderStatus("1");
         Order order = new Order();
         BeanUtils.copyProperties(orderBO, order);
-        order.setOrderNo(DataUtils.getDateToString());
-        Date date = new Date();
-        order.setCreateTime(date);
-        order.setLastUpdate(date);
-        order.setOrderStatus("1");
         int insert = orderMapper.insert(order);
         if (insert != 1) {
             LOGGER.info("{提交产品订单失败}", orderBO);
             throw new ServiceException(4139);
-        } else {
-            OrderBO temp = new OrderBO();
-            BeanUtils.copyProperties(order, temp);
-            return temp;
         }
+        //加入订单与产品关系信息
+        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
+        if (orderProductBOs == null){
+            LOGGER.info("{产品信息错误}", orderBO);
+            throw new ServiceException(4166);
+        }else{
+            for (OrderProductBO orderProductBO : orderProductBOs){
+                orderProductBO.setOrderId(orderId);
+                OrderProduct orderProduct = new OrderProduct();
+                BeanUtils.copyProperties(orderProductBO,orderProduct);
+                int opInsert = orderProductMapper.insert(orderProduct);
+                if (opInsert != 1){
+                    LOGGER.info("{提交订单与产品关系信息失败}", orderBO);
+                    throw new ServiceException(4167);
+                }
+            }
+        }
+        OrderBO temp = new OrderBO();
+        BeanUtils.copyProperties(order, temp);
+        return temp;
+
     }
 
     @Override
@@ -197,6 +218,21 @@ public class OrderServiceImpl implements OrderService {
         if(del != 1){
             LOGGER.info("{删除订单信息信息失败}", orderBO);
             throw new ServiceException(4103);
+        }
+        //订单删除成功之后，删除订单与产品对应关系
+
+        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
+        if (orderProductBOs == null){
+            LOGGER.info("{产品信息错误}", orderBO);
+            throw new ServiceException(4166);
+        }else{
+            for (OrderProductBO orderProductBO : orderProductBOs){
+                int opDel = orderProductMapper.delete(orderProductBO.getOrderId());
+                if (opDel != 1){
+                    LOGGER.info("{删除订单与产品关系信息失败}", orderBO);
+                    throw new ServiceException(4168);
+                }
+            }
         }
     }
 

@@ -16,6 +16,6 @@ public interface AppRoMapper {
 
     App selectById(String id);
 
-    List<AppGeneralBO> selectList();
+    List<AppGeneralBO> selectList(AppGeneralBO appGeneralBO);
 
 }

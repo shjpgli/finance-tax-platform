@@ -39,7 +39,8 @@ public class OrderBO implements Serializable {
     private GoodsBO goodsBO;
     private User user;
 
-    private List<OrderProduct> orderProductList;
+    private List<OrderProductBO> orderProductBOList;
+    private List<DictBO> dictBOList;
     private Date startTime;
     private Date endTime;
 
@@ -229,11 +230,19 @@ public class OrderBO implements Serializable {
         this.endTime = endTime;
     }
 
-    public List<OrderProduct> getOrderProductList() {
-        return orderProductList;
+    public List<OrderProductBO> getOrderProductBOList() {
+        return orderProductBOList;
     }
 
-    public void setOrderProductList(List<OrderProduct> orderProductList) {
-        this.orderProductList = orderProductList;
+    public void setOrderProductBOList(List<OrderProductBO> orderProductBOList) {
+        this.orderProductBOList = orderProductBOList;
+    }
+
+    public List<DictBO> getDictBOList() {
+        return dictBOList;
+    }
+
+    public void setDictBOList(List<DictBO> dictBOList) {
+        this.dictBOList = dictBOList;
     }
 }

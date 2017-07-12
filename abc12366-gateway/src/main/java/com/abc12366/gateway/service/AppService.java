@@ -55,7 +55,7 @@ public interface AppService {
      * @param
      * @return List<AppGeneralBO>
      */
-    List<AppGeneralBO> selectList();
+    List<AppGeneralBO> selectList(AppGeneralBO appGeneralBO);
 
     /**
      * 修改App对象

@@ -30,7 +30,7 @@
             <result column="vipLevel" property="vipLevel"/>
         </association>
 
-        <collection property="orderProductList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="id" select="getOrderProduct"></collection>
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="id" select="getOrderProduct"></collection>
     </resultMap>
 
     <resultMap id="userBOMap" type="com.abc12366.uc.model.User">
@@ -117,13 +117,13 @@
             </if>-->
            <if test="startTime != null">
                 <![CDATA[
-              and date_format(o.createTime, 'YYYY-MM-DD') >= date_format(#{startTime}, 'YYYY-MM-DD')
+              and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
 
                 ]]>
             </if>
             <if test="endTime != null">
                 <![CDATA[
-              and date_format(o.createTime, 'YYYY-MM-DD') <= date_format(#{endTime}, 'YYYY-MM-DD')
+              and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
               ]]>
             </if>
         </where>

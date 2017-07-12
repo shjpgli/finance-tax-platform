@@ -79,7 +79,7 @@ public class DataUtils {
      */
     public static Date StrToDate(String str) {
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
             date = format.parse(str);
@@ -93,7 +93,7 @@ public class DataUtils {
 
         Date date = new Date();
         System.out.println("日期转字符串：" + DateToStr(date));
-        System.out.println("字符串转日期：" + StrToDate(DateToStr(date)));
+        System.out.println("字符串转日期：" + StrToDate("2017-07-30"));
 
     }
 
