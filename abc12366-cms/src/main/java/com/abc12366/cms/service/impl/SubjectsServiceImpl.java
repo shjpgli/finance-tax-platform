@@ -6,7 +6,7 @@ import com.abc12366.cms.mapper.db2.AnswerRoMapper;
 import com.abc12366.cms.mapper.db2.OptionRoMapper;
 import com.abc12366.cms.mapper.db2.SubjectsRoMapper;
 import com.abc12366.cms.model.bo.AnswerdttjBo;
-import com.abc12366.cms.model.bo.SubjectsdttjBo;
+import com.abc12366.cms.model.bo.SubjectsdtxxtjBo;
 import com.abc12366.cms.model.questionnaire.Option;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
@@ -337,9 +337,9 @@ public class SubjectsServiceImpl implements SubjectsService {
     }
 
     @Override
-    public List<SubjectsdttjBo> selectListdttj(Map<String,Object> map) {
-        List<SubjectsdttjBo> sublist = subjectsRoMapper.selectListdttj(map);
-        for(SubjectsdttjBo subjectsdttjBo : sublist){
+    public List<SubjectsdtxxtjBo> selectListdttj(Map<String,Object> map) {
+        List<SubjectsdtxxtjBo> sublist = subjectsRoMapper.selectListdttj(map);
+        for(SubjectsdtxxtjBo subjectsdttjBo : sublist){
             String id = subjectsdttjBo.getId();
             map.put("subjectsId",id);
             List<AnswerdttjBo> anslist = answerRoMapper.selectdttj(map);

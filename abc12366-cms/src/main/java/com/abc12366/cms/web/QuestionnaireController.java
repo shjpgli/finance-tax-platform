@@ -1,6 +1,6 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.SubjectsdttjBo;
+import com.abc12366.cms.model.bo.SubjectsdtxxtjBo;
 import com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO;
 import com.abc12366.cms.service.QuestionnaireService;
 import com.abc12366.cms.service.SubjectsService;
@@ -212,7 +212,7 @@ public class QuestionnaireController {
             LOGGER.error("时间类转换异常：{}", e);
             throw new RuntimeException("时间类型转换异常：{}", e);
         }
-        List<SubjectsdttjBo> subjectsList = subjectsService.selectListdttj(dataMap);
+        List<SubjectsdtxxtjBo> subjectsList = subjectsService.selectListdttj(dataMap);
         LOGGER.info("{}", subjectsList);
         return ResponseEntity.ok(Utils.kv("data", subjectsList));
     }

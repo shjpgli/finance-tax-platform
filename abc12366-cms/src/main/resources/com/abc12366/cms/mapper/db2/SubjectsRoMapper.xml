@@ -92,7 +92,7 @@
     </select>
 
     <!-- 根据条件查询所有题目 -->
-    <select id="selectListdttj" resultType="com.abc12366.cms.model.bo.SubjectsdttjBo" parameterType="java.util.Map">
+    <select id="selectListdttj" resultType="com.abc12366.cms.model.bo.SubjectsdtxxtjBo" parameterType="java.util.Map">
         SELECT
           id,title
         FROM cms_paper_subjects
