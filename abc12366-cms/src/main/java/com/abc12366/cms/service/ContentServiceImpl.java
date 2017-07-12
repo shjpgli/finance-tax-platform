@@ -576,4 +576,18 @@ public class ContentServiceImpl implements ContentService{
     }
 
 
+    @Override
+    public List<ContentudBo> selectContentudList(Map<String,Object> map) {
+        List<ContentudBo> list = new ArrayList<ContentudBo>();
+        //下一篇
+        ContentudBo contentudBo1 = contentRoMapper.selectByReleaseDateAsc(map);
+        list.add(contentudBo1);
+        //上一篇
+        ContentudBo contentudBo2 = contentRoMapper.selectByReleaseDateDesc(map);
+        list.add(contentudBo2);
+        LOGGER.info("{}", list);
+        return list;
+    }
+
+
 }
