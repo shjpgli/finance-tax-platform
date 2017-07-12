@@ -151,20 +151,20 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         for (Answer answer : answerList){
             answer.setAnswerLogId(answerLogBO.getId());
             //查询是否存在该题回答
-            Answer temp = answerRoMapper.selectByLogId(answer);
-            if(temp != null){
-                int upd = answerMapper.update(answer);
-                if(upd != 1){
-                    LOGGER.info("{修改答题失败}", answerLog);
-                    throw new ServiceException(4411);
-                }
-            }else{
+//            Answer temp = answerRoMapper.selectByLogId(answer);
+//            if(temp != null){
+//                int upd = answerMapper.update(answer);
+//                if(upd != 1){
+//                    LOGGER.info("{修改答题失败}", answerLog);
+//                    throw new ServiceException(4411);
+//                }
+//            }else{
                 int ins = answerMapper.insert(answer);
                 if(ins != 1){
                     LOGGER.info("{新增答题失败}", answerLog);
                     throw new ServiceException(4410);
                 }
-            }
+//            }
         }
 
         AnswerLogBO bo = new AnswerLogBO();
