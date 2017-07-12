@@ -1,9 +1,11 @@
 package com.abc12366.cms.service;
 
 
+import com.abc12366.cms.model.bo.AnswerLogtjListBo;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 答题记录管理接口类
@@ -26,4 +28,6 @@ public interface AnswerLogService {
     AnswerLogBO batch(AnswerLogBO answerLogBO);
 
     AnswerLogBO answerAvg(AnswerLogBO answerLog);
+
+    AnswerLogtjListBo selecttj(Map<String, Object> map);
 }

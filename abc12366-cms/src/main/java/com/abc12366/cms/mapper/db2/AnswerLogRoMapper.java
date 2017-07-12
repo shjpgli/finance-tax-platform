@@ -1,10 +1,12 @@
 package com.abc12366.cms.mapper.db2;
 
+import com.abc12366.cms.model.bo.AnswerLogRolltjBo;
 import com.abc12366.cms.model.questionnaire.AnswerLog;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -27,4 +29,25 @@ public interface AnswerLogRoMapper {
     AnswerLogBO selectOne(String id);
 
     AnswerLogBO selectAvgTime(AnswerLog answerLog);
+
+    /**
+     *
+     * 查询（浏览统计）
+     *
+     **/
+    List<AnswerLogRolltjBo> selectlltj(Map<String,Object> map);
+
+    /**
+     *
+     * 查询（浏览统计总数按时间）
+     *
+     **/
+    Integer selectlltjsbysj(Map<String,Object> map);
+
+    /**
+     *
+     * 查询（浏览统计总数）
+     *
+     **/
+    Integer selectlltjs(Map<String,Object> map);
 }

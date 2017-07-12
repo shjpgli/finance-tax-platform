@@ -1,9 +1,11 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.AnswerLogtjListBo;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
 import com.abc12366.cms.service.AnswerLogService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 答题记录控制类
@@ -53,11 +59,11 @@ public class AnswerLogController {
         }
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
 
-        List<AnswerLogBO> answerLogList = answerLogService.selectList(answerLog);
-        LOGGER.info("{}", answerLogList);
-        return (answerLogList == null) ?
+        List<AnswerLogBO> dataList = answerLogService.selectList(answerLog);
+        LOGGER.info("{}", dataList);
+        return (dataList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", answerLogList));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
     /**
@@ -143,6 +149,31 @@ public class AnswerLogController {
         answerLogBO.setQuestionId(questionId);
         answerLogService.delete(answerLogBO);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    @GetMapping(path = "/selecttj")
+    public ResponseEntity selecttj(@RequestParam(value = "startTime", required = false) String startTime,
+                                   @RequestParam(value = "endTime", required = false) String endTime,
+                                   @RequestParam(value = "questionId", required = false) String questionId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("questionId",questionId);
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startTime != null && !"".equals(startTime)){
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime()/1000);
+            }
+            if(endTime != null && !"".equals(endTime)){
+                Date startTime2 = sdf.parse(endTime);
+                dataMap.put("endTime", startTime2.getTime()/1000);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+        AnswerLogtjListBo data = answerLogService.selecttj(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
     }
 
 }
