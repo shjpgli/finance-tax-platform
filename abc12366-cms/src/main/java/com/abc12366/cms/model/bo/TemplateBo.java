@@ -46,6 +46,12 @@ public class TemplateBo implements Serializable {
 	/**模板修改时间**datetime**/
 	private java.util.Date updateTime;
 
+	/**模板名称**varchar**/
+	private String modelName;
+
+	/**站点名称**varchar**/
+	private String siteName;
+
 
 
 	public void setTemplateId(String templateId){
@@ -144,4 +150,19 @@ public class TemplateBo implements Serializable {
 		return this.updateTime;
 	}
 
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
 }

@@ -19,20 +19,23 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectList" resultType="com.abc12366.cms.model.bo.TemplateBo" parameterType="java.util.Map">
 		SELECT
-		<include refid="Base_Column_List" />
-		FROM cms_template
+		a.templateId,	a.templateName,	a.parentPath,	a.templatePath,	a.isFolder,
+		a.templateProperty,	a.siteId,	a.priority,	a.state,	a.versions,	a.createTime,
+		a.updateTime,b.modelName,c.siteName
+		FROM cms_template a LEFT JOIN cms_model b ON a.templateProperty = b.modelId
+		LEFT JOIN cms_site c ON a.siteId = c.siteId
 		WHERE 1=1
 		<if test="templateProperty != null and templateProperty != ''">
-			AND templateProperty = #{templateProperty}
+			AND a.templateProperty = #{templateProperty}
 		</if>
 		<if test="siteId != null and siteId != ''">
-			AND siteId = #{siteId}
+			AND a.siteId = #{siteId}
 		</if>
 		<if test="parentPath != null and parentPath != ''">
-			AND parentPath = #{parentPath}
+			AND a.parentPath = #{parentPath}
 		</if>
 		<if test="state != null and state != ''">
-			AND state = #{state}
+			AND a.state = #{state}
 		</if>
 	</select>
 
