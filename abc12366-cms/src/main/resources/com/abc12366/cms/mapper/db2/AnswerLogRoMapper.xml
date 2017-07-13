@@ -63,13 +63,12 @@
             </if>
             <if test="startDate != null">
                 <![CDATA[
-              and date_format(startTime, 'YYYY-MM-DD') >= date_format(#{startDate}, 'YYYY-MM-DD')
-
+              and date_format(endTime, '%Y%m%d') >= date_format(#{startDate}, '%Y%m%d')
                 ]]>
             </if>
             <if test="endDate != null">
                 <![CDATA[
-              and date_format(startTime, 'YYYY-MM-DD') <= date_format(#{endDate}, 'YYYY-MM-DD')
+              and date_format(startTime, '%Y%m%d') <= date_format(#{endDate}, '%Y%m%d')
               ]]>
             </if>
         </where>

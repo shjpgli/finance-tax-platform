@@ -51,11 +51,19 @@ public class AnswerLogController {
                                      @RequestParam(value = "endDate", defaultValue = "") String endDate) {
         AnswerLogBO answerLog = new AnswerLogBO();
         answerLog.setQuestionId(questionId);
-        if(startDate == null || "".equals(startDate)){
-            answerLog.setStartDate(Constant.getToday(new Date()));
-        }
-        if(endDate == null || "".equals(endDate)){
-            answerLog.setEndDate(Constant.getToday(new Date()));
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startDate != null && !"".equals(startDate)){
+                Date startTime = sdf.parse(startDate);
+                answerLog.setStartDate(startTime);
+            }
+            if(endDate != null && !"".equals(endDate)){
+                Date endTime = sdf.parse(endDate);
+                answerLog.setEndDate(endTime);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
         }
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
 
