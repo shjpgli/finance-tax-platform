@@ -58,11 +58,11 @@ public class AccessLogServiceImpl implements AccessLogService {
         List<AccessLogRolltjBo> list = accessLogRoMapper.selectlltj(map);
         accessLogtjListBo.setList(list);
         //pc浏览统计浏览统计
-        map.put("source","PC");
+        map.put("accessTerminal","PC");
         List<AccessLogRolltjBo> pclist = accessLogRoMapper.selectlltj(map);
         accessLogtjListBo.setPclist(pclist);
         //mobileWeb浏览统计
-        map.put("source", "MobileWeb");
+        map.put("accessTerminal", "MobileWeb");
         List<AccessLogRolltjBo> mobileWeblist = accessLogRoMapper.selectlltj(map);
         accessLogtjListBo.setMobileWeblist(mobileWeblist);
         return accessLogtjListBo;

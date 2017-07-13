@@ -235,11 +235,11 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         List<AnswerLogRolltjBo> list = answerLogRoMapper.selectlltj(map);
         answerLogtjListBo.setList(list);
         //pc浏览统计浏览统计
-        map.put("source","PC");
+        map.put("accessTerminal","PC");
         List<AnswerLogRolltjBo> pclist = answerLogRoMapper.selectlltj(map);
         answerLogtjListBo.setPclist(pclist);
         //mobileWeb浏览统计
-        map.put("source", "MobileWeb");
+        map.put("accessTerminal", "MobileWeb");
         List<AnswerLogRolltjBo> mobileWeblist = answerLogRoMapper.selectlltj(map);
         answerLogtjListBo.setMobileWeblist(mobileWeblist);
         return answerLogtjListBo;
