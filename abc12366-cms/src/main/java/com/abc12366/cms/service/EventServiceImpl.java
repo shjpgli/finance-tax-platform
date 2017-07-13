@@ -52,6 +52,9 @@ public class EventServiceImpl implements EventService {
         Event event= new Event();
         eventBo.setEventId(uuid);
         eventBo.setCreatetime(new Date());
+        if("2".equals(eventBo.getStatus())){
+            eventBo.setUpdatetime(new Date());
+        }
         try {
             BeanUtils.copyProperties(eventBo, event);
         } catch (Exception e) {
@@ -116,7 +119,9 @@ public class EventServiceImpl implements EventService {
         //更新活动信息
         EventBo eventBo = eventSaveBo.getEvent();
         Event event= new Event();
-        eventBo.setUpdatetime(new Date());
+        if("2".equals(eventBo.getStatus())){
+            eventBo.setUpdatetime(new Date());
+        }
         try {
             BeanUtils.copyProperties(eventBo, event);
         } catch (Exception e) {
