@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,7 @@ public class ChannelServiceImpl implements ChannelService {
         return modelItemBos;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ChannelSaveBo save(ChannelSaveBo channelSaveBo) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -229,6 +231,7 @@ public class ChannelServiceImpl implements ChannelService {
         return channelSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ChannelSaveBo update(ChannelSaveBo channelSaveBo) {
         //栏目
@@ -286,6 +289,7 @@ public class ChannelServiceImpl implements ChannelService {
         return channelSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ChannelBo updateChannelByparentId(ChannelBo channelBo) {
         Channel channel = new Channel();
@@ -357,6 +361,7 @@ public class ChannelServiceImpl implements ChannelService {
         return channelExtBoList;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String delete(String channelId) {
 

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -117,6 +118,7 @@ public class ContentServiceImpl implements ContentService{
         return modelItemBos;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ContentSaveBo save(ContentSaveBo contentSaveBo) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -374,6 +376,7 @@ public class ContentServiceImpl implements ContentService{
         return contentSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ContentSaveBo update(ContentSaveBo contentSaveBo) {
         //内容
@@ -499,6 +502,7 @@ public class ContentServiceImpl implements ContentService{
         return contentSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String delete(String contentId) {
         //删除内容扩展信息
@@ -521,6 +525,7 @@ public class ContentServiceImpl implements ContentService{
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String deleteList(String[] contentIds) {
         for(int i=0;i<contentIds.length;i++){
@@ -529,18 +534,21 @@ public class ContentServiceImpl implements ContentService{
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String updateStatusList(String[] contentIds) {
         contentMapper.updateStatusList(contentIds);
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String updatRegenerateList(String[] contentIds) {
         contentExtMapper.updatRegenerateList(contentIds);
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ContentUpdateListBo updateList(ContentUpdateListBo contentUpdateListBo) {
         List<ContentBo> contentBoList = contentUpdateListBo.getContentBoList();
@@ -557,6 +565,7 @@ public class ContentServiceImpl implements ContentService{
         return contentUpdateListBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ContentTopicListBo updatetopicList(ContentTopicListBo topicListBo) {
         if(topicListBo != null){

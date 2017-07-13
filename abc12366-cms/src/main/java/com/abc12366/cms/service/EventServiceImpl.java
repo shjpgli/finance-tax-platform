@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -44,6 +45,7 @@ public class EventServiceImpl implements EventService {
         return dataList;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public EventSaveBo save(EventSaveBo eventSaveBo) {
         //保存活动信息
@@ -114,6 +116,7 @@ public class EventServiceImpl implements EventService {
         return eventSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public EventSaveBo update(EventSaveBo eventSaveBo) {
         //更新活动信息
@@ -148,6 +151,7 @@ public class EventServiceImpl implements EventService {
         return eventSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String delete(String eventId) {
         eventModelItemMapper.deleteByEventId(eventId);

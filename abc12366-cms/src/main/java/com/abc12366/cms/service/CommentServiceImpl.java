@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -81,6 +82,7 @@ public class CommentServiceImpl implements CommentService {
         return CommentTjListBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public CommentSaveBo save(CommentSaveBo commentSaveBo) {
         //评论信息
@@ -138,6 +140,7 @@ public class CommentServiceImpl implements CommentService {
         return commentSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public CommentSaveBo update(CommentSaveBo commentSaveBo) {
         //评论信息
@@ -165,6 +168,7 @@ public class CommentServiceImpl implements CommentService {
         return commentSaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String delete(String commentId) {
         //删除评论信息
@@ -175,6 +179,7 @@ public class CommentServiceImpl implements CommentService {
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
      public String deleteList(String[] commentIds) {
         //删除评论信息
@@ -185,6 +190,7 @@ public class CommentServiceImpl implements CommentService {
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String spList(String[] commentIds) {
         //批量审批评论信息
