@@ -41,4 +41,6 @@ public interface ContentService {
 
     ContentTopicListBo updatetopicList(ContentTopicListBo topicListBo);
 
+    List<ContentudBo> selectContentudList(Map<String,Object> map);
+
 }

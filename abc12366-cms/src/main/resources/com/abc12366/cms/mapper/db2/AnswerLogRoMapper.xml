@@ -104,4 +104,49 @@
     ) AS cl where questionId = #{questionId}
     GROUP BY
     cl.questionId-->
+
+    <!-- 查询（浏览统计按时间） -->
+    <select id="selectlltj" resultType="com.abc12366.cms.model.bo.AnswerLogRolltjBo" parameterType="java.util.Map">
+        SELECT DATE_FORMAT(startTime, '%Y%m%d') tj,COUNT(id) cnt FROM cms_paper_answer_log
+        WHERE 1=1
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+        <if test="accessTerminal != null and accessTerminal != ''">
+            AND accessTerminal = #{accessTerminal}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND UNIX_TIMESTAMP(startTime) &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND UNIX_TIMESTAMP(startTime) &lt;= #{endTime}
+        </if>
+        GROUP BY DAY(startTime)
+    </select>
+
+    <!-- 查询（浏览统计总数按时间） -->
+    <select id="selectlltjs" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(id) cnt FROM cms_paper_answer_log
+        WHERE 1=1
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND UNIX_TIMESTAMP(startTime) &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND UNIX_TIMESTAMP(startTime) &lt;= #{endTime}
+        </if>
+    </select>
+
+    <!-- 查询（浏览统计总数） -->
+    <select id="selectlltjsbysj" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(id) cnt FROM cms_paper_answer_log
+        WHERE 1=1
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+    </select>
+
+
 </mapper>

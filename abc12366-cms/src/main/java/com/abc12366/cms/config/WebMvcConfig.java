@@ -46,6 +46,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 //定时任务查询不需验证
                 .excludePathPatterns("/task/list")
+                //根据内容ID查找对应的上一篇以及下一篇内容想关信息
+                .excludePathPatterns("/content/selectContentudList")
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
     }

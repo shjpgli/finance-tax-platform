@@ -2,6 +2,8 @@ package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.AccessLogMapper;
 import com.abc12366.cms.mapper.db2.AccessLogRoMapper;
+import com.abc12366.cms.model.bo.AccessLogRolltjBo;
+import com.abc12366.cms.model.bo.AccessLogtjListBo;
 import com.abc12366.cms.model.questionnaire.AccessLog;
 import com.abc12366.cms.model.questionnaire.bo.AccessLogBO;
 import com.abc12366.cms.service.AccessLogService;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -40,6 +43,29 @@ public class AccessLogServiceImpl implements AccessLogService {
     @Override
     public List<AccessLogBO> selectAccessLogStatis(AccessLog accessLog) {
         return accessLogRoMapper.selectAccessLogStatis(accessLog);
+    }
+
+    @Override
+    public AccessLogtjListBo selecttj(Map<String,Object> map) {
+        AccessLogtjListBo accessLogtjListBo = new AccessLogtjListBo();
+        //浏览统计总数
+        Integer llcnt = accessLogRoMapper.selectlltjs(map);
+        accessLogtjListBo.setLlcnt(llcnt);
+        //浏览统计总数按时间
+        Integer llcnts = accessLogRoMapper.selectlltjsbysj(map);
+        accessLogtjListBo.setLlcnts(llcnts);
+        //浏览统计浏览统计
+        List<AccessLogRolltjBo> list = accessLogRoMapper.selectlltj(map);
+        accessLogtjListBo.setList(list);
+        //pc浏览统计浏览统计
+        map.put("accessTerminal","PC");
+        List<AccessLogRolltjBo> pclist = accessLogRoMapper.selectlltj(map);
+        accessLogtjListBo.setPclist(pclist);
+        //mobileWeb浏览统计
+        map.put("accessTerminal", "MobileWeb");
+        List<AccessLogRolltjBo> mobileWeblist = accessLogRoMapper.selectlltj(map);
+        accessLogtjListBo.setMobileWeblist(mobileWeblist);
+        return accessLogtjListBo;
     }
 
     @Override

@@ -2,8 +2,11 @@ package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.OptionMapper;
 import com.abc12366.cms.mapper.db1.SubjectsMapper;
+import com.abc12366.cms.mapper.db2.AnswerRoMapper;
 import com.abc12366.cms.mapper.db2.OptionRoMapper;
 import com.abc12366.cms.mapper.db2.SubjectsRoMapper;
+import com.abc12366.cms.model.bo.AnswerdttjBo;
+import com.abc12366.cms.model.bo.SubjectsdtxxtjBo;
 import com.abc12366.cms.model.questionnaire.Option;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lizhongwei
@@ -40,6 +44,9 @@ public class SubjectsServiceImpl implements SubjectsService {
 
     @Autowired
     private OptionMapper optionMapper;
+
+    @Autowired
+    private AnswerRoMapper answerRoMapper;
 
 
     @Override
@@ -327,5 +334,19 @@ public class SubjectsServiceImpl implements SubjectsService {
             }
             optionMapper.deleteBySubjectsId(sub.getId());
         }
+    }
+
+    @Override
+    public List<SubjectsdtxxtjBo> selectListdttj(Map<String,Object> map) {
+        List<SubjectsdtxxtjBo> sublist = subjectsRoMapper.selectListdttj(map);
+        for(SubjectsdtxxtjBo subjectsdttjBo : sublist){
+            String id = subjectsdttjBo.getId();
+            map.put("subjectsId",id);
+            List<AnswerdttjBo> anslist = answerRoMapper.selectdttj(map);
+            Integer cnt = answerRoMapper.selectdttjs(map);
+            subjectsdttjBo.setCnt(cnt);
+            subjectsdttjBo.setDtlist(anslist);
+        }
+        return sublist;
     }
 }

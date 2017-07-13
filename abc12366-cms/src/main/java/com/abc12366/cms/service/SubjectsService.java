@@ -1,9 +1,7 @@
 package com.abc12366.cms.service;
 
 
-import com.abc12366.cms.model.bo.CommentListBo;
-import com.abc12366.cms.model.bo.CommentSaveBo;
-import com.abc12366.cms.model.bo.CommentTjListBo;
+import com.abc12366.cms.model.bo.SubjectsdtxxtjBo;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 
@@ -37,4 +35,6 @@ public interface SubjectsService {
     SubjectsBO copySubjects(List<SubjectsBO> subjectsBOs, String subjectsId);
 
     void deleteSubjectsByPages(Subjects subjects);
+
+    List<SubjectsdtxxtjBo> selectListdttj(Map<String,Object> map);
 }

@@ -290,6 +290,20 @@ public class ContentController {
 
 
 
+    @GetMapping(path = "/selectContentudList")
+    public ResponseEntity selectContentudList(@RequestParam(value = "channelId", required = false) String channelId,
+                                                @RequestParam(value = "releaseDate", required = false) String releaseDate) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("releaseDate", releaseDate);//发布时间
+        dataMap.put("channelId", channelId);//栏目ID
+        //查询内容列表
+        List<ContentudBo> dataList = contentService.selectContentudList(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
+
+
 
 
 }

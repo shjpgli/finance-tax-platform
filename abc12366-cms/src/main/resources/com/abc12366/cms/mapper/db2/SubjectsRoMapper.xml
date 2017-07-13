@@ -91,4 +91,17 @@
         </where>
     </select>
 
+    <!-- 根据条件查询所有题目 -->
+    <select id="selectListdttj" resultType="com.abc12366.cms.model.bo.SubjectsdtxxtjBo" parameterType="java.util.Map">
+        SELECT
+          id,title
+        FROM cms_paper_subjects
+        <where>
+            optionType IN (1,2)
+            <if test=" questionId != null and questionId != '' ">
+                and questionId = #{questionId}
+            </if>
+        </where>
+    </select>
+
 </mapper>

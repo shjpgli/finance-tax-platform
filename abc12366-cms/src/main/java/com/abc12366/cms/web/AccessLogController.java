@@ -1,5 +1,6 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.AccessLogtjListBo;
 import com.abc12366.cms.model.questionnaire.AccessLog;
 import com.abc12366.cms.model.questionnaire.bo.AccessLogBO;
 import com.abc12366.cms.service.AccessLogService;
@@ -13,7 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 访问记录控制类
@@ -61,6 +67,31 @@ public class AccessLogController {
         return (logStatis == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", logStatis));
+    }
+
+    @GetMapping(path = "/selecttj")
+    public ResponseEntity selecttj(@RequestParam(value = "startTime", required = false) String startTime,
+                                   @RequestParam(value = "endTime", required = false) String endTime,
+                                   @RequestParam(value = "questionId", required = false) String questionId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("questionId",questionId);
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startTime != null && !"".equals(startTime)){
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime()/1000);
+            }
+            if(endTime != null && !"".equals(endTime)){
+                Date startTime2 = sdf.parse(endTime);
+                dataMap.put("endTime", startTime2.getTime()/1000);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+        AccessLogtjListBo data = accessLogService.selecttj(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
     }
 
 

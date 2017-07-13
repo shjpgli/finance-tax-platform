@@ -3,6 +3,7 @@ package com.abc12366.cms.mapper.db2;
 import com.abc12366.cms.model.Content;
 import com.abc12366.cms.model.bo.ContentListBo;
 import com.abc12366.cms.model.bo.ContentsListBo;
+import com.abc12366.cms.model.bo.ContentudBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -66,5 +67,19 @@ public interface ContentRoMapper {
 	 *
 	 **/
 	Content selectByContentId(@Param("contentId") String contentId);
+
+	/**
+	 *
+	 * 查询(根据ReleaseDate查询下一篇)
+	 *
+	 **/
+	ContentudBo selectByReleaseDateAsc(Map<String,Object> map);
+
+	/**
+	 *
+	 * 查询(根据ReleaseDate查询上一篇)
+	 *
+	 **/
+	ContentudBo selectByReleaseDateDesc(Map<String,Object> map);
 
 }

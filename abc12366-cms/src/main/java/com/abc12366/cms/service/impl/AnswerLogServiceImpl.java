@@ -4,6 +4,8 @@ import com.abc12366.cms.mapper.db1.AnswerLogMapper;
 import com.abc12366.cms.mapper.db1.AnswerMapper;
 import com.abc12366.cms.mapper.db2.AnswerLogRoMapper;
 import com.abc12366.cms.mapper.db2.AnswerRoMapper;
+import com.abc12366.cms.model.bo.AnswerLogRolltjBo;
+import com.abc12366.cms.model.bo.AnswerLogtjListBo;
 import com.abc12366.cms.model.questionnaire.Answer;
 import com.abc12366.cms.model.questionnaire.AnswerLog;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -148,20 +151,20 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         for (Answer answer : answerList){
             answer.setAnswerLogId(answerLogBO.getId());
             //查询是否存在该题回答
-            Answer temp = answerRoMapper.selectByLogId(answer);
-            if(temp != null){
-                int upd = answerMapper.update(answer);
-                if(upd != 1){
-                    LOGGER.info("{修改答题失败}", answerLog);
-                    throw new ServiceException(4411);
-                }
-            }else{
+//            Answer temp = answerRoMapper.selectByLogId(answer);
+//            if(temp != null){
+//                int upd = answerMapper.update(answer);
+//                if(upd != 1){
+//                    LOGGER.info("{修改答题失败}", answerLog);
+//                    throw new ServiceException(4411);
+//                }
+//            }else{
                 int ins = answerMapper.insert(answer);
                 if(ins != 1){
                     LOGGER.info("{新增答题失败}", answerLog);
                     throw new ServiceException(4410);
                 }
-            }
+//            }
         }
 
         AnswerLogBO bo = new AnswerLogBO();
@@ -217,5 +220,28 @@ public class AnswerLogServiceImpl implements AnswerLogService {
             sb.append(milliSecond+"毫秒");
         }
         return sb.toString();
+    }
+
+    @Override
+    public AnswerLogtjListBo selecttj(Map<String,Object> map) {
+        AnswerLogtjListBo answerLogtjListBo = new AnswerLogtjListBo();
+        //浏览统计总数
+        Integer llcnt = answerLogRoMapper.selectlltjs(map);
+        answerLogtjListBo.setLlcnt(llcnt);
+        //浏览统计总数按时间
+        Integer llcnts = answerLogRoMapper.selectlltjsbysj(map);
+        answerLogtjListBo.setLlcnts(llcnts);
+        //浏览统计浏览统计
+        List<AnswerLogRolltjBo> list = answerLogRoMapper.selectlltj(map);
+        answerLogtjListBo.setList(list);
+        //pc浏览统计浏览统计
+        map.put("accessTerminal","PC");
+        List<AnswerLogRolltjBo> pclist = answerLogRoMapper.selectlltj(map);
+        answerLogtjListBo.setPclist(pclist);
+        //mobileWeb浏览统计
+        map.put("accessTerminal", "MobileWeb");
+        List<AnswerLogRolltjBo> mobileWeblist = answerLogRoMapper.selectlltj(map);
+        answerLogtjListBo.setMobileWeblist(mobileWeblist);
+        return answerLogtjListBo;
     }
 }

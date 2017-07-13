@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -68,6 +69,7 @@ public class EventApplyServiceImpl implements EventApplyService {
         return eventlltjListBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public EventApplySaveBo save(EventApplySaveBo eventApplySaveBo) {
         //保存活动信息
@@ -132,6 +134,7 @@ public class EventApplyServiceImpl implements EventApplyService {
         return eventApplySaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public EventApplySaveBo update(EventApplySaveBo eventApplySaveBo) {
         //更新活动信息
@@ -163,6 +166,7 @@ public class EventApplyServiceImpl implements EventApplyService {
         return eventApplySaveBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String delete(String applyId) {
         eventApplyAttrMapper.deleteByPrimaryKey(applyId);
@@ -171,6 +175,7 @@ public class EventApplyServiceImpl implements EventApplyService {
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String deleteList(String[] applyIds) {
         //删除评论信息
@@ -181,6 +186,7 @@ public class EventApplyServiceImpl implements EventApplyService {
         return "";
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String updateStatusList(String[] applyIds) {
         //批量审批评论信息
