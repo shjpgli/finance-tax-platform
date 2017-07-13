@@ -24,7 +24,7 @@ public interface OrderRoMapper {
 
     List<OrderBO> selectList(OrderBO order);
 
-    Order selectById(String id);
+    OrderBO selectById(String orderNo);
 
     List<OrderBO> selectOrderList(OrderBO order);
 

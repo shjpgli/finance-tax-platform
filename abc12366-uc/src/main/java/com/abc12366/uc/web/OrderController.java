@@ -116,13 +116,13 @@ public class OrderController {
 
     /**
      * 查询订单详情
-     * @param id
+     * @param orderNo
      * @return
      */
-    @GetMapping(path = "/selectOne/{id}")
-    public ResponseEntity<?> selectOne(@PathVariable("id") String id) {
-        LOGGER.info("{}", id);
-        OrderBO orderBO = orderService.selectOne(id);
+    @GetMapping(path = "/selectOne/{orderNo}")
+    public ResponseEntity<?> selectOne(@PathVariable("orderNo") String orderNo) {
+        LOGGER.info("{}", orderNo);
+        OrderBO orderBO = orderService.selectOne(orderNo);
         LOGGER.info("{}", orderBO);
         return ResponseEntity.ok(Utils.kv("data", orderBO));
     }

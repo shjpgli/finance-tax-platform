@@ -35,4 +35,5 @@ public interface InvoiceDetailMapper{
 	 **/
 	int update(InvoiceDetail record);
 
+	void deleteByInvoiceRepoId(String invoiceRepoId);
 }

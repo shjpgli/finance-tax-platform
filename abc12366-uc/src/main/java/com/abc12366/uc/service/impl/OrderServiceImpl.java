@@ -5,8 +5,10 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.OrderMapper;
 import com.abc12366.uc.mapper.db1.OrderProductMapper;
 import com.abc12366.uc.mapper.db2.GoodsRoMapper;
+import com.abc12366.uc.mapper.db2.InvoiceRoMapper;
 import com.abc12366.uc.mapper.db2.OrderRoMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
+import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.OrderProduct;
 import com.abc12366.uc.model.bo.OrderBO;
@@ -43,6 +45,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderProductMapper orderProductMapper;
 
     @Autowired
+    private InvoiceRoMapper invoiceRoMapper;
+
+    @Autowired
     private GoodsRoMapper goodsRoMapper;
 
     @Autowired
@@ -57,10 +62,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderBO selectOne(String id) {
-        Order order = orderRoMapper.selectById(id);
-        OrderBO orderBO = new OrderBO();
-        BeanUtils.copyProperties(order, orderBO);
+    public OrderBO selectOne(String orderNo) {
+        OrderBO orderBO = orderRoMapper.selectById(orderNo);
         return orderBO;
     }
 

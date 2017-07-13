@@ -22,8 +22,4 @@ public interface InvoiceRepoRoMapper{
 	InvoiceRepo  selectByPrimaryKey(@Param("id") String id);
 
     List<InvoiceRepo> selectInvoiceRepoList(InvoiceRepo invoiceRepo);
-
-    InvoiceRepo selectByInvoiceNo(String InvoiceNo);
-
-    InvoiceRepo selectInvoiceRepo(String status);
 }

@@ -319,4 +319,5 @@ public class Invoice implements Serializable {
     public void setInsuredFee(Double insuredFee) {
         this.insuredFee = insuredFee;
     }
+
 }

@@ -23,7 +23,7 @@ public interface OrderService {
      * @param id
      * @return
      */
-    OrderBO selectOne(String id);
+    OrderBO selectOne(String orderNo);
 
     /**
      * 加入购物车

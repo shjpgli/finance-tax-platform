@@ -35,7 +35,6 @@ public class OrderBO implements Serializable {
     private String addressId;
     private String expressNo;
     private String remark;
-
     private GoodsBO goodsBO;
     private User user;
 

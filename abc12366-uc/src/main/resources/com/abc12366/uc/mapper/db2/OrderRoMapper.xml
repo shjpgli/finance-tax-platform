@@ -26,16 +26,17 @@
         <association property="user" javaType="com.abc12366.uc.model.User">
             <id column="userId" property="id"/>
             <result column="username" property="username"/>
+            <result column="nickname" property="nickname"/>
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
         </association>
-
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="id" select="getOrderProduct"></collection>
     </resultMap>
 
     <resultMap id="userBOMap" type="com.abc12366.uc.model.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
         <result column="phone" property="phone"/>
         <result column="vipLevel" property="vipLevel"/>
     </resultMap>
@@ -75,6 +76,14 @@
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Order" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM uc_order
+        WHERE orderNo = #{orderNo}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultMap="orderBOResultMap" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM uc_order

@@ -1,6 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 import com.abc12366.uc.model.Order;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,6 +33,7 @@ public class InvoiceBO implements Serializable {
     private String phone;
     private String bank;
     private String addressId;
+    /**用户订单号(运单号)**/
     private String userOrderNo;
     private String deliveryMethod;
     private Integer isShipping;
@@ -40,6 +42,8 @@ public class InvoiceBO implements Serializable {
     private Integer isInsured;
     private Double InsuredFee;
     private String payMethod;
+    /** 收货人**/
+    private String consignee;
 
     private List<Order> orderList;
     private String orderIds;
@@ -301,5 +305,13 @@ public class InvoiceBO implements Serializable {
 
     public void setEndTime(java.util.Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
     }
 }

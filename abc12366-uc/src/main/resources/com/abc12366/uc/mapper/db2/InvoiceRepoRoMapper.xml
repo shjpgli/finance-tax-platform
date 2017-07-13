@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	invoiceNo,	invoiceCode,	invoiceName,	property,	status,	createTime,	lastUpdate
+		 id,	invoiceCode,	invoiceName,	property,	invoiceSection,	createTime,	lastUpdate
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -16,22 +16,6 @@
 		 WHERE id = #{id}
 	</select>
 
-    <!-- 查询（根据主键ID查询） -->
-    <select id="selectByInvoiceNo" resultType="com.abc12366.uc.model.InvoiceRepo" parameterType="java.lang.String">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM uc_invoice_repo
-        WHERE invoiceNo = #{invoiceNo}
-    </select>
-
-    <!-- 查询（根据主键ID查询） -->
-    <select id="selectInvoiceRepo" resultType="com.abc12366.uc.model.InvoiceRepo" parameterType="java.lang.String">
-        SELECT
-        <include refid="Base_Column_List" />
-        FROM uc_invoice_repo
-        WHERE status = #{status} DESC invoiceNo limit 1
-    </select>
-
     <!-- 查询列表 -->
     <select id="selectInvoiceRepoList" resultType="com.abc12366.uc.model.InvoiceRepo" parameterType="com.abc12366.uc.model.InvoiceRepo">
         SELECT
@@ -39,10 +23,7 @@
         FROM uc_invoice_repo
         <where>
             1=1
-            <if test="invoiceNo != null  and invoiceNo!=''"> AND invoiceNo = #{invoiceNo}</if>
             <if test="invoiceCode != null  and invoiceCode!=''"> AND invoiceCode = #{invoiceCode}</if>
-            <if test="property != null  and property!=''"> AND property = #{property}</if>
-            <if test="status != null  and status!=''"> AND status = #{status}</if>
         </where>
     </select>
 

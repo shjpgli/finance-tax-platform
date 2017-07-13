@@ -16,9 +16,6 @@
 			<if test="id != null">
 				 id,
 			</if>
-			<if test="invoiceNo != null">
-				 invoiceNo,
-			</if>
 			<if test="invoiceCode != null">
 				 invoiceCode,
 			</if>
@@ -28,8 +25,8 @@
 			<if test="property != null">
 				 property,
 			</if>
-			<if test="status != null">
-				 status,
+			<if test="invoiceSection != null">
+				invoiceSection,
 			</if>
 			<if test="createTime != null">
 				 createTime,
@@ -43,9 +40,6 @@
 			<if test="id!=null">
 				 #{id},
 			</if>
-			<if test="invoiceNo!=null">
-				 #{invoiceNo},
-			</if>
 			<if test="invoiceCode!=null">
 				 #{invoiceCode},
 			</if>
@@ -55,8 +49,8 @@
 			<if test="property!=null">
 				 #{property},
 			</if>
-			<if test="status!=null">
-				 #{status},
+			<if test="invoiceSection!=null">
+				 #{invoiceSection},
 			</if>
 			<if test="createTime!=null">
 				 #{createTime},
@@ -71,9 +65,6 @@
 	<update id="update" parameterType="com.abc12366.uc.model.InvoiceRepo">
 		 UPDATE uc_invoice_repo
  		 <set> 
-			<if test="invoiceNo != null">
-				 invoiceNo = #{invoiceNo},
-			</if>
 			<if test="invoiceCode != null">
 				 invoiceCode = #{invoiceCode},
 			</if>
@@ -83,8 +74,8 @@
 			<if test="property != null">
 				 property = #{property},
 			</if>
-			<if test="status != null">
-				 status = #{status},
+			<if test="invoiceSection != null">
+				invoiceSection = #{invoiceSection},
 			</if>
 			<if test="createTime != null">
 				 createTime = #{createTime},

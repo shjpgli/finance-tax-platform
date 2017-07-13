@@ -46,7 +46,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private OrderInvoiceRoMapper orderInvoiceRoMapper;
 
     @Autowired
-    private InvoiceRepoRoMapper invoiceRepoRoMapper;
+    private InvoiceDetailRoMapper invoiceDetailRoMapper;
 
     @Autowired
     private InvoiceBackMapper invoiceBackPapper;
@@ -154,12 +154,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         BeanUtils.copyProperties(invoiceBO, invoice);
         invoice.setId(Utils.uuid());
         //获取发票编号，0，表示未使用
-        InvoiceRepo invoiceRepo = invoiceRepoRoMapper.selectInvoiceRepo("0");
+        InvoiceRepo invoiceRepo = invoiceDetailRoMapper.selectInvoiceRepo("0");
         if (invoiceRepo == null) {
             LOGGER.info("{发票号码获取失败}", invoiceRepo);
             throw new ServiceException(4124);
         }
-        invoice.setInvoiceNo(invoiceRepo.getInvoiceNo());
+        //invoice.setInvoiceNo(invoiceRepo.getInvoiceNo());
         invoice.setInvoiceCode(invoiceRepo.getInvoiceCode());
         Date date = new Date();
         invoice.setCreateTime(date);

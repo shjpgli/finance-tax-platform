@@ -10,6 +10,12 @@
         WHERE id = #{id}
     </delete>
 
+    <!--删除：根据主键InvoiceRepoId删除-->
+    <delete id="deleteByInvoiceRepoId" parameterType="java.lang.String">
+        DELETE FROM uc_invoice_detail
+        WHERE invoiceRepoId = #{invoiceRepoId}
+    </delete>
+
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insert" parameterType="com.abc12366.uc.model.InvoiceDetail">
         INSERT INTO uc_invoice_detail
@@ -41,6 +47,9 @@
             <if test="remark != null">
                 remark,
             </if>
+            <if test="invoiceRepoId != null">
+                invoiceRepoId,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -70,6 +79,9 @@
             </if>
             <if test="remark!=null">
                 #{remark},
+            </if>
+            <if test="invoiceRepoId!=null">
+                #{invoiceRepoId},
             </if>
         </trim>
     </insert>
@@ -101,6 +113,9 @@
             </if>
             <if test="remark != null">
                 remark = #{remark},
+            </if>
+            <if test="invoiceRepoId != null">
+                invoiceRepoId = #{invoiceRepoId},
             </if>
 
         </set>

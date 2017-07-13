@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.InvoiceBack;
+import com.abc12366.uc.model.InvoiceDetail;
 import com.abc12366.uc.model.InvoiceRepo;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
@@ -10,8 +11,10 @@ import com.abc12366.uc.model.bo.InvoiceExcel;
 import com.abc12366.uc.model.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.InvoiceRepoService;
 import com.abc12366.uc.service.InvoiceService;
+import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,17 +57,25 @@ public class InvoiceController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value ="startTime") @DateTimeFormat(pattern="yyyy-MM-dd") Date startTime,
-                                     @RequestParam(value ="endTime") @DateTimeFormat(pattern="yyyy-MM-dd") Date endTime){
+                                     @RequestParam(value ="consignee", required = false) String consignee,
+                                     @RequestParam(value ="userOrderNo", required = false) String userOrderNo,
+                                     @RequestParam(value ="username", required = false) String username,
+                                     @RequestParam(value ="invoiceNo", required = false) String invoiceNo,
+                                     @RequestParam(value ="startTime", required = false) String startTime,
+                                     @RequestParam(value ="endTime", required = false) String endTime){
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceBO invoice = new InvoiceBO();
+        invoice.setConsignee(consignee);
+        invoice.setUserOrderNo(userOrderNo);
+        invoice.setUsername(username);
+        invoice.setInvoiceNo(invoiceNo);
 
         Date date = new Date();
-        if (startTime == null || "".equals(startTime)) {
-            invoice.setStartTime(Constant.getToday(date));
+        if(startTime != null && !"".equals(startTime)){
+            invoice.setStartTime(DataUtils.StrToDate(startTime));
         }
-        if (endTime == null || "".equals(endTime)) {
-            invoice.setEndTime(Constant.getToday(date));
+        if(endTime != null && !"".equals(endTime)){
+            invoice.setEndTime(DataUtils.StrToDate(endTime));
         }
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -129,25 +140,16 @@ public class InvoiceController {
      * 发票仓库列表
      * @param pageNum
      * @param pageSize
-     * @param invoiceNo
      * @param invoiceCode
-     * @param property
-     * @param status
      * @return
      */
     @GetMapping(path = "/repo")
     public ResponseEntity selectInvoiceRepoList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                                @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
-                                                @RequestParam(value = "invoiceCode", required = false) String invoiceCode,
-                                                @RequestParam(value = "property", required = false) String property,
-                                                @RequestParam(value = "status", required = false) String status) {
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                @RequestParam(value = "invoiceCode", required = false) String invoiceCode) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceRepo invoiceRepo = new InvoiceRepo();
-        invoiceRepo.setInvoiceNo(invoiceNo);
         invoiceRepo.setInvoiceCode(invoiceCode);
-        invoiceRepo.setProperty(property);
-        invoiceRepo.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<InvoiceRepo> invoiceList = invoiceRepoService.selectInvoiceRepoList(invoiceRepo);
         LOGGER.info("{}", invoiceList);
@@ -174,7 +176,7 @@ public class InvoiceController {
      *
      * @return
      */
-    @PostMapping(path = "/repo/{id}")
+    @DeleteMapping(path = "/repo/{id}")
     public ResponseEntity deleteInvoiceRepo( @PathVariable("id") String id) {
         LOGGER.info("{}", id);
         invoiceRepoService.deleteInvoiceRepo(id);
@@ -183,7 +185,7 @@ public class InvoiceController {
 
 
     /**
-     * 发票列表管理
+     * 发票列表查询
      *
      * @return
      */
@@ -228,7 +230,7 @@ public class InvoiceController {
      * @param expressId
      * @return
      */
-    @PutMapping(path = "/back/{expressId}/{id}")
+    @PostMapping(path = "/back/{expressId}/{id}")
     public ResponseEntity refundCheck(@PathVariable("expressId") String expressId,@PathVariable("id") String id, @Valid @RequestBody InvoiceBackBO invoiceBackBO) {
         invoiceBackBO.setId(id);
         invoiceBackBO.setExpressId(expressId);
@@ -236,5 +238,60 @@ public class InvoiceController {
 
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 发票仓库详情列表
+     * @param pageNum
+     * @param pageSize
+     * @param invoiceNo
+     * @param invoiceCode
+     * @param status
+     * @return
+     */
+    @GetMapping(path = "/detail")
+    public ResponseEntity selectInvoiceDetailList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                  @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
+                                                  @RequestParam(value = "invoiceCode", required = false) String invoiceCode,
+                                                  @RequestParam(value = "status", required = false) String status,
+                                                  @RequestParam(value = "invoiceRepoId", required = true) String invoiceRepoId) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        InvoiceDetail invoiceDetail = new InvoiceDetail();
+        invoiceDetail.setInvoiceNo(invoiceNo);
+        invoiceDetail.setInvoiceCode(invoiceCode);
+        invoiceDetail.setStatus(status);
+        invoiceDetail.setInvoiceRepoId(invoiceRepoId);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<InvoiceDetail> invoiceList = invoiceRepoService.selectInvoiceDetailList(invoiceDetail);
+        PageInfo<InvoiceDetail> pageInfo = new PageInfo<>(invoiceList);
+        LOGGER.info("{}", invoiceList);
+        return (invoiceList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 发票详情信息删除
+     *
+     * @return
+     */
+    @DeleteMapping(path = "/detail/del/{id}")
+    public ResponseEntity deleteInvoiceDetail( @PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        invoiceRepoService.deleteInvoiceDetail(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 发票详情信息作废
+     *
+     * @return
+     */
+    @PutMapping(path = "/detail/invalid/{id}")
+    public ResponseEntity invalidInvoiceDetail( @PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        invoiceRepoService.invalidInvoiceDetail(id);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

@@ -3,18 +3,15 @@ import java.io.Serializable;
 
 
 /**
- * 
+ *
  * 发票仓库
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class InvoiceRepo implements Serializable {
 
 	/****/
 	private String id;
-
-	/**发票号码**/
-	private String invoiceNo;
 
 	/**发票代码**/
 	private String invoiceCode;
@@ -25,8 +22,8 @@ public class InvoiceRepo implements Serializable {
 	/**发票性质：1.纸质发票 2.电子发票**/
 	private String property;
 
-	/**发票状态：0.未使用 1.分配中 2.已使用 3.已作废**/
-	private String status;
+	/**发票段**/
+	private String invoiceSection;
 
 	/****/
 	private java.util.Date createTime;
@@ -35,21 +32,12 @@ public class InvoiceRepo implements Serializable {
 	private java.util.Date lastUpdate;
 
 
-
 	public void setId(String id){
 		this.id = id;
 	}
 
 	public String getId(){
 		return this.id;
-	}
-
-	public void setInvoiceNo(String invoiceNo){
-		this.invoiceNo = invoiceNo;
-	}
-
-	public String getInvoiceNo(){
-		return this.invoiceNo;
 	}
 
 	public void setInvoiceCode(String invoiceCode){
@@ -76,14 +64,6 @@ public class InvoiceRepo implements Serializable {
 		return this.property;
 	}
 
-	public void setStatus(String status){
-		this.status = status;
-	}
-
-	public String getStatus(){
-		return this.status;
-	}
-
 	public void setCreateTime(java.util.Date createTime){
 		this.createTime = createTime;
 	}
@@ -100,4 +80,11 @@ public class InvoiceRepo implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getInvoiceSection() {
+		return invoiceSection;
+	}
+
+	public void setInvoiceSection(String invoiceSection) {
+		this.invoiceSection = invoiceSection;
+	}
 }

@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	invoiceNo,	invoiceCode,	invoiceName,	property,	status,	createTime,	lastUpdate,	remark
+        id,	invoiceNo,	invoiceCode,	invoiceName,	property,	status,	createTime,	lastUpdate,	remark,invoiceRepoId
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -16,6 +16,53 @@
         WHERE id = #{id}
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByInvoiceNo" resultType="com.abc12366.uc.model.InvoiceDetail" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice_detail
+        WHERE invoiceNo = #{invoiceNo}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectInvoiceRepo" resultType="com.abc12366.uc.model.InvoiceDetail" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice_detail
+        WHERE status = #{status} DESC invoiceNo limit 1
+    </select>
+
+    <!-- 查询（根据条件查询） -->
+    <select id="selectInvoiceDetailList" resultType="com.abc12366.uc.model.InvoiceDetail" parameterType="com.abc12366.uc.model.InvoiceDetail">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice_detail
+        <where>
+            1 = 1
+            <if test=" invoiceRepoId != null and invoiceRepoId != '' ">
+                and invoiceRepoId = #{invoiceRepoId}
+            </if>
+            <if test=" invoiceNo != null and invoiceNo != '' ">
+                and invoiceNo = #{invoiceNo}
+            </if>
+            <if test=" invoiceCode != null and invoiceCode != '' ">
+                and invoiceCode = #{invoiceCode}
+            </if>
+            <if test=" status != null and status != '' ">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询（根据状态和invoiceRepoId条件查询） -->
+    <select id="selectByIdAndStatus" resultType="com.abc12366.uc.model.InvoiceDetail" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice_detail
+        <where>
+            (status = "1" OR status = "2") and invoiceRepoId = #{invoiceRepoId}
+        </where>
+    </select>
 
 
 </mapper>

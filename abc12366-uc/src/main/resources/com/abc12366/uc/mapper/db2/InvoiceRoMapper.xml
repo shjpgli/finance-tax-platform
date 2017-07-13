@@ -24,6 +24,14 @@
         <result column="bank" property="bank" jdbcType="VARCHAR"/>
         <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
         <result column="userOrderNo" property="userOrderNo" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="VARCHAR"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="VARCHAR"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="VARCHAR"/>
+        <result column="isInsured" property="isInsured" jdbcType="VARCHAR"/>
+        <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <association property="order" javaType="com.abc12366.uc.model.Order">
             <id column="id" property="id"/>
             <result column="orderId" property="orderId"/>
@@ -51,6 +59,13 @@
         WHERE userOrderNo = #{userOrderNo}
     </select>
 
+    <select id="selectAvailableInvoice" resultType="com.abc12366.uc.model.Invoice">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice
+        WHERE userOrderNo = #{userOrderNo}
+    </select>
+
 
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.bo.InvoiceBO">
@@ -58,6 +73,7 @@
         i.id,
         i.userId,
         i.invoiceId,
+        i.invoiceNo,
         i.name,
         i.content,
         i.amount,
@@ -65,7 +81,7 @@
         i.property,
         i.status,
         i.createTime,
-        i.lastUpdate,
+        i.lastUpdate,`
         i.nsrsbh,
         i.nsrmc,
         i.address,
@@ -73,21 +89,28 @@
         i.bank,
         i.addressId,
         i.userOrderNo,
-        i.compName
+        i.compName,
+        u.username as username,
+        a.name as consignee
         FROM uc_invoice i
+        LEFT JOIN uc_user u ON u.id = i.userId
+        LEFT JOIN uc_user_address a ON a.userId = i.userId
         <where>
             1 = 1
             <if test=" username != null and username != '' ">
-                and u.username = #{user.username}
+                and u.username = #{username}
             </if>
-            <if test=" phone != null and phone != '' ">
-                and u.phone = #{user.phone}
+            <if test=" consignee != null and consignee != '' ">
+                and a.name = #{consignee}
             </if>
-            <if test=" product.name != null and product.name != '' ">
-                and p.name = #{product.name}
+            <if test=" userOrderNo != null and userOrderNo != '' ">
+                and i.userOrderNo = #{userOrderNo}
             </if>
-            <if test=" product.category != null and product.category != '' ">
-                and p.category = #{product.category}
+            <if test=" invoiceNo != null and invoiceNo != '' ">
+                and i.invoiceNo = #{invoiceNo}
+            </if>
+            <if test=" status != null and status != '' ">
+                and i.status = #{status}
             </if>
             <if test="startTime != null">
                 <![CDATA[
