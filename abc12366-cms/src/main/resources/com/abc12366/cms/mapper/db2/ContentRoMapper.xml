@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		contentId,	channelId,	typeId,	modelId,	siteId,	sortDate,	topLevel,	hasTitleImg,	isRecommend,	status,	viewsDay,	commentsDay,	downloadsDay,	upsDay,	recommendLevel
+		contentId,	channelId,	typeId,contentType,	modelId,	siteId,	sortDate,	topLevel,	hasTitleImg,	isRecommend,	status,	viewsDay,	commentsDay,	downloadsDay,	upsDay,	recommendLevel
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

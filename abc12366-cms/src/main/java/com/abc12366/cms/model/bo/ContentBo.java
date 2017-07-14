@@ -23,6 +23,9 @@ public class ContentBo implements Serializable {
 	/**属性ID**varchar(64)**/
 	private String typeId;
 
+	/**内容类型ID**varchar(64)**/
+	private String contentType;
+
 	/**模型ID**varchar(64)**/
 	private String modelId;
 
@@ -69,6 +72,14 @@ public class ContentBo implements Serializable {
 
 	public void setTypeId(String typeId) {
 		this.typeId = typeId;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	public String getModelId() {

@@ -5,13 +5,13 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		channelId,channelName,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay
+		channelId,channelName,contentType,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Channel" parameterType="java.lang.String">
 		 SELECT
-			 a.channelId,a.channelName,	a.modelId,	a.siteId,	a.parentId,	a.channelPath,	a.priority,	a.isDisplay,b.sitePath
+			 a.channelId,a.channelName,a.contentType,	a.modelId,	a.siteId,	a.parentId,	a.channelPath,	a.priority,	a.isDisplay,b.sitePath
 		 FROM cms_channel a LEFT JOIN cms_site b ON a.siteId = b.siteId
 		 WHERE a.channelId = #{channelId}
 	</select>

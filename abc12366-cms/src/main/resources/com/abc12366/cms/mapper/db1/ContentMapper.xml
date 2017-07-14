@@ -13,9 +13,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Content">
 		 INSERT INTO cms_content
- 		(contentId,channelId,typeId,modelId,siteId,sortDate,topLevel,hasTitleImg,isRecommend,status,viewsDay,commentsDay,downloadsDay,upsDay,recommendLevel) 
+ 		(contentId,channelId,typeId,contentType,modelId,siteId,sortDate,topLevel,hasTitleImg,isRecommend,status,viewsDay,commentsDay,downloadsDay,upsDay,recommendLevel)
 		 VALUES 
- 		(#{contentId},#{channelId},#{typeId},#{modelId},#{siteId},#{sortDate},#{topLevel},#{hasTitleImg},#{isRecommend},#{status},#{viewsDay},#{commentsDay},#{downloadsDay},#{upsDay},#{recommendLevel}) 
+ 		(#{contentId},#{channelId},#{typeId},#{contentType},#{modelId},#{siteId},#{sortDate},#{topLevel},#{hasTitleImg},#{isRecommend},#{status},#{viewsDay},#{commentsDay},#{downloadsDay},#{upsDay},#{recommendLevel})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -31,6 +31,9 @@
 			<if test="typeId != null">
 				 typeId,
 			</if>
+			 <if test="contentType != null">
+				 contentType,
+			 </if>
 			<if test="modelId != null">
 				 modelId,
 			</if>
@@ -79,6 +82,9 @@
 			<if test="typeId!=null">
 				 #{typeId},
 			</if>
+			 <if test="contentType!=null">
+				 #{contentType},
+			 </if>
 			<if test="modelId!=null">
 				 #{modelId},
 			</if>
@@ -128,6 +134,9 @@
 			<if test="typeId != null">
 				 typeId = #{typeId},
 			</if>
+			 <if test="contentType != null">
+				 contentType = #{contentType},
+			 </if>
 			<if test="modelId != null">
 				 modelId = #{modelId},
 			</if>
@@ -175,6 +184,7 @@
 		 SET 
 			 channelId = #{channelId},
 			 typeId = #{typeId},
+			 contentType = #{contentType},
 			 modelId = #{modelId},
 			 siteId = #{siteId},
 			 sortDate = #{sortDate},
