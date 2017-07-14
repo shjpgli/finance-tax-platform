@@ -17,7 +17,7 @@ public interface ChannelCountMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("channelId") String channelId);
 
 	/**
 	 * 
