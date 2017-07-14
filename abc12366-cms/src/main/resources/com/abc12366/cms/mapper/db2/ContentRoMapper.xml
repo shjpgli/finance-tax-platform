@@ -99,10 +99,63 @@
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
+	<select id="selectListByContentType" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+		SELECT
+		a.contentId contentId,
+		b.title title,
+		a.contentType,
+		b.titleImg,
+		b.description,
+		b.titleColor titleColor,
+		a.channelId channelId,
+		c.channelName channelName,
+		a.topLevel topLevel,
+		a.typeId typeId,
+		b.author author,
+		e.views views,
+		b.releaseDate releaseDate,
+		a.status STATUS,
+		b.needRegenerate needRegenerate,
+		a.recommendLevel recommendLevel
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+		WHERE 1=1
+		<if test="contentType != null and contentType != ''">
+			AND a.contentType = #{contentType}
+		</if>
+		<if test="typeId != null and typeId != ''">
+			AND a.typeId = #{typeId}
+		</if>
+		<if test="status != null and status != ''">
+			AND a.status = #{status}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND a.channelId = #{channelId}
+		</if>
+		<if test="tplContent != null and tplContent != ''">
+			AND b.tplContent = #{tplContent}
+		</if>
+		<if test="needRegenerate != null and needRegenerate != ''">
+			AND b.needRegenerate = #{needRegenerate}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
+		</if>
+		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+	</select>
+
+	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListByChannelId" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT
 		a.contentId contentId,
 		b.title title,
+		a.contentType,
+		b.titleImg,
+		b.description,
 		b.titleColor titleColor,
 		a.channelId channelId,
 		c.channelName channelName,
@@ -148,6 +201,9 @@
 		SELECT
 		a.contentId contentId,
 		b.title title,
+		a.contentType,
+		b.titleImg,
+		b.description,
 		b.titleColor titleColor,
 		a.channelId channelId,
 		a.topLevel topLevel,
