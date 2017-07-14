@@ -21,8 +21,26 @@ public class SysTaskBO {
     private String imageUrl;
     private String ruleName;
     private String ruleCode;
+    private int count;
+    private String skipURL;
 
     public SysTaskBO() {
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getSkipURL() {
+        return skipURL;
+    }
+
+    public void setSkipURL(String skipURL) {
+        this.skipURL = skipURL;
     }
 
     public String getId() {

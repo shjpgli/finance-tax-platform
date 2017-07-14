@@ -22,6 +22,9 @@ public class ChannelBo implements Serializable {
 	/**站点路径**varchar(20)**/
 	private String sitePath;
 
+	/**内容类型**varchar(2000)**/
+	private String contentType;
+
 	/**父栏目ID**varchar(64)**/
 	private String parentId;
 
@@ -120,5 +123,13 @@ public class ChannelBo implements Serializable {
 
 	public void setSitePath(String sitePath) {
 		this.sitePath = sitePath;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 }

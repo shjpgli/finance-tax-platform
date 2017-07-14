@@ -33,6 +33,15 @@ public class ContentsListBo implements Serializable {
 	/**属性ID**/
 	private String typeId;
 
+	/**内容类型ID**/
+	private String contentType;
+
+	/**描述**/
+	private String description;
+
+	/**标题图片**/
+	private String titleImg;
+
 	/**作者**/
 	private String author;
 
@@ -111,6 +120,30 @@ public class ContentsListBo implements Serializable {
 
 	public void setTypeId(String typeId) {
 		this.typeId = typeId;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getTitleImg() {
+		return titleImg;
+	}
+
+	public void setTitleImg(String titleImg) {
+		this.titleImg = titleImg;
 	}
 
 	public String getAuthor() {

@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Channel">
 		 INSERT INTO cms_channel
- 		(channelId,channelName,modelId,siteId,parentId,channelPath,priority,isDisplay)
+ 		(channelId,channelName,contentType,modelId,siteId,parentId,channelPath,priority,isDisplay)
 		 VALUES 
- 		(#{channelId},#{channelName},#{modelId},#{siteId},#{parentId},#{channelPath},#{priority},#{isDisplay})
+ 		(#{channelId},#{channelName},#{contentType},#{modelId},#{siteId},#{parentId},#{channelPath},#{priority},#{isDisplay})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -26,6 +26,9 @@
 			</if>
 			 <if test="channelName != null">
 				 channelName,
+			 </if>
+			 <if test="contentType != null">
+				 contentType,
 			 </if>
 			<if test="modelId != null">
 				 modelId,
@@ -53,6 +56,9 @@
 			</if>
 			 <if test="channelName!=null">
 				 #{channelName},
+			 </if>
+			 <if test="contentType!=null">
+				 #{contentType},
 			 </if>
 			<if test="modelId!=null">
 				 #{modelId},
@@ -82,6 +88,9 @@
 			<if test="channelName != null">
 				channelName = #{channelName},
 			</if>
+			 <if test="contentType != null">
+				 contentType = #{contentType},
+			 </if>
 			 <if test="modelId != null">
 				 modelId = #{modelId},
 			 </if>
@@ -110,6 +119,7 @@
 		 UPDATE cms_channel
 		 SET
 		 	channelName = #{channelName},
+		 	contentType = #{contentType},
 			 modelId = #{modelId},
 			 siteId = #{siteId},
 			 parentId = #{parentId},

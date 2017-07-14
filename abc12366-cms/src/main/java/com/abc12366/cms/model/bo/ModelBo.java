@@ -61,7 +61,7 @@ public class ModelBo implements Serializable {
 	private Integer isGlobal;
 
 	/**非全站模型所属站点**int(11)**/
-	private Integer siteId;
+	private String siteId;
 
 	public String getModelId() {
 		return modelId;
@@ -175,11 +175,11 @@ public class ModelBo implements Serializable {
 		this.isGlobal = isGlobal;
 	}
 
-	public Integer getSiteId() {
+	public String getSiteId() {
 		return siteId;
 	}
 
-	public void setSiteId(Integer siteId) {
+	public void setSiteId(String siteId) {
 		this.siteId = siteId;
 	}
 }

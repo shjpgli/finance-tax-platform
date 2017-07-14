@@ -73,6 +73,41 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
+    @GetMapping(path = "/selectListByContentType")
+    public ResponseEntity selectListByContentType(@RequestParam(value = "typeId", required = false) String typeId,
+                                                  @RequestParam(value = "contentType", required = false) String contentType,
+                                                @RequestParam(value = "status", required = false) String status,
+                                                @RequestParam(value = "channelId", required = false) String channelId,
+                                                @RequestParam(value = "startTime", required = false) String startTime,
+                                                @RequestParam(value = "endTime", required = false) String endTime,
+                                                @RequestParam(value = "tplContent", required = false) String tplContent) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("typeId", typeId);//内容类型
+        dataMap.put("contentType", contentType);//内容类型(标签)
+        dataMap.put("status", status);//状态
+        dataMap.put("channelId", channelId);//栏目ID
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(startTime != null && !"".equals(startTime)){
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime() / 1000);
+            }else{
+                dataMap.put("needRegenerate", 0);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+
+//        dataMap.put("endTime", endTime);
+        dataMap.put("tplContent", tplContent);
+
+        //查询内容列表
+        List<ContentsListBo> dataList = contentService.selectListByContentType(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
     @GetMapping(path = "/selectListByChannelId")
     public ResponseEntity selectListByChannelId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,

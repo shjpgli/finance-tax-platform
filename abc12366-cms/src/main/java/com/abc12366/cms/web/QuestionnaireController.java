@@ -214,7 +214,7 @@ public class QuestionnaireController {
         }
         List<SubjectsdtxxtjBo> subjectsList = subjectsService.selectListdttj(dataMap);
         LOGGER.info("{}", subjectsList);
-        return ResponseEntity.ok(Utils.kv("data", subjectsList));
+        return ResponseEntity.ok(Utils.kv("dataList", subjectsList));
     }
 
 }

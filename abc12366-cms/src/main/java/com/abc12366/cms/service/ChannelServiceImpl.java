@@ -1,9 +1,6 @@
 package com.abc12366.cms.service;
 
-import com.abc12366.cms.mapper.db1.ChannelAttrMapper;
-import com.abc12366.cms.mapper.db1.ChannelExtMapper;
-import com.abc12366.cms.mapper.db1.ChannelMapper;
-import com.abc12366.cms.mapper.db1.ChnlGroupViewMapper;
+import com.abc12366.cms.mapper.db1.*;
 import com.abc12366.cms.mapper.db2.*;
 import com.abc12366.cms.model.Channel;
 import com.abc12366.cms.model.ChannelAttr;
@@ -59,6 +56,9 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Autowired
     private ContentRoMapper contentRoMapper;
+
+    @Autowired
+    private ChannelCountMapper channelCountMapper;
 
 
     @Override
@@ -378,6 +378,8 @@ public class ChannelServiceImpl implements ChannelService {
         channelAttrMapper.deleteByPrimaryKey(channelId);
         //删除用户组
         groupMapper.deleteByPrimaryKey(channelId);
+        //删除统计数
+        channelCountMapper.deleteByPrimaryKey(channelId);
         //删除栏目信息
         int r = channelMapper.deleteByPrimaryKey(channelId);
 
