@@ -10,7 +10,7 @@
     </delete>
 
     <!--删除：根据主键ID和UserId删除-->
-    <delete id="selectByInvoiceId" parameterType="java.lang.String">
+    <delete id="deleteByIdAndUserId" parameterType="java.lang.String">
         DELETE FROM uc_invoice
         WHERE id = #{id} and userId = #{userId}
     </delete>
