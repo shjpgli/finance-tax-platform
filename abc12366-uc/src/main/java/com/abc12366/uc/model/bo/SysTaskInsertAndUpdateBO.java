@@ -22,7 +22,7 @@ public class SysTaskInsertAndUpdateBO {
     private Date endTime;
     @Size(max = 4000)
     private String rule;
-    private int points;
+    private Integer points;
     @Size(max = 1)
     private String type;
     @NotNull
@@ -33,8 +33,31 @@ public class SysTaskInsertAndUpdateBO {
     private String ruleName;
     @Size(max = 20)
     private String ruleCode;
+    private Integer count;
+    @Size(max = 50)
+    private String skipURL;
 
     public SysTaskInsertAndUpdateBO() {
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public String getSkipURL() {
+        return skipURL;
+    }
+
+    public void setSkipURL(String skipURL) {
+        this.skipURL = skipURL;
     }
 
     public String getName() {

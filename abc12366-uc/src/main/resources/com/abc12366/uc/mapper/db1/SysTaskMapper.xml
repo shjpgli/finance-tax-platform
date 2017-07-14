@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.SysTaskMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.SysTask">
-        insert into uc_sys_task(id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode)
-        values(#{id},#{name},#{startTime},#{endTime},#{rule},#{points},#{type},#{status},#{createTime},#{lastUpdate},#{imageUrl},#{ruleName},#{ruleCode})
+        insert into uc_sys_task(id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL)
+        values(#{id},#{name},#{startTime},#{endTime},#{rule},#{points},#{type},#{status},#{createTime},#{lastUpdate},#{imageUrl},#{ruleName},#{ruleCode},#{count},#{skipURL})
     </insert>
     <update id="update" parameterType="com.abc12366.uc.model.SysTask">
         update uc_sys_task
@@ -20,6 +20,8 @@
             <if test="imageUrl!=null">imageUrl=#{imageUrl},</if>
             <if test="ruleName!=null">ruleName=#{ruleName},</if>
             <if test="ruleCode!=null">ruleCode=#{ruleCode},</if>
+            <if test="count!=null">count=#{count},</if>
+            <if test="skipURL!=null">skipURL=#{skipURL}</if>
         </set>
         where id=#{id}
     </update>
