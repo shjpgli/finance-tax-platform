@@ -1,124 +1,146 @@
 package com.abc12366.uc.model;
+
 import java.io.Serializable;
 
 
 /**
- * 
  * 发票退票
- * 
  **/
 @SuppressWarnings("serial")
 public class InvoiceBack implements Serializable {
 
-	/****/
-	private String id;
+    /****/
+    private String id;
 
-	/**用户ID**/
-	private String userId;
+    /**
+     * 用户ID
+     **/
+    private String userId;
 
-	/**快递ID**/
-	private String expressId;
+    /**
+     * 快递ID
+     **/
+    private String expressId;
 
-	/**退货原因**/
-	private String reason;
+    /**
+     * 退货原因
+     **/
+    private String reason;
 
-	/**备注**/
-	private String remark;
+    /**
+     * 备注
+     **/
+    private String remark;
 
-	/**快递单号**/
-	private String expressNo;
+    /**
+     * 退回快递单号
+     **/
+    private String expressNo;
 
-	/**快递公司**/
-	private String expressComp;
+    /**
+     * 退回快递公司
+     **/
+    private String expressComp;
 
-	/**快递状态**/
-	private String status;
-
-	/****/
-	private java.util.Date createTime;
-
-	/****/
-	private java.util.Date lastUpdate;
+    /**
+     * 快递状态
+     **/
+    private String status;
 
 
+    /****/
+    private java.util.Date createTime;
 
-	public void setId(String id){
-		this.id = id;
-	}
+    /****/
+    private java.util.Date lastUpdate;
 
-	public String getId(){
-		return this.id;
-	}
+    private String invoiceId;
 
-	public void setUserId(String userId){
-		this.userId = userId;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getUserId(){
-		return this.userId;
-	}
+    public String getId() {
+        return this.id;
+    }
 
-	public void setExpressId(String expressId){
-		this.expressId = expressId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public String getExpressId(){
-		return this.expressId;
-	}
+    public String getUserId() {
+        return this.userId;
+    }
 
-	public void setReason(String reason){
-		this.reason = reason;
-	}
+    public void setExpressId(String expressId) {
+        this.expressId = expressId;
+    }
 
-	public String getReason(){
-		return this.reason;
-	}
+    public String getExpressId() {
+        return this.expressId;
+    }
 
-	public void setRemark(String remark){
-		this.remark = remark;
-	}
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
-	public String getRemark(){
-		return this.remark;
-	}
+    public String getReason() {
+        return this.reason;
+    }
 
-	public void setExpressComp(String expressComp){
-		this.expressComp = expressComp;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	public String getExpressComp(){
-		return this.expressComp;
-	}
+    public String getRemark() {
+        return this.remark;
+    }
 
-	public void setStatus(String status){
-		this.status = status;
-	}
+    public void setExpressComp(String expressComp) {
+        this.expressComp = expressComp;
+    }
 
-	public String getStatus(){
-		return this.status;
-	}
+    public String getExpressComp() {
+        return this.expressComp;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
+    public String getStatus() {
+        return this.status;
+    }
 
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public String getExpressNo() {
-		return expressNo;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
-	public void setExpressNo(String expressNo) {
-		this.expressNo = expressNo;
-	}
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
+    }
+
+    public String getExpressNo() {
+        return expressNo;
+    }
+
+    public void setExpressNo(String expressNo) {
+        this.expressNo = expressNo;
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
 }

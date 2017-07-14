@@ -29,7 +29,7 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_invoice_detail
-        WHERE status = #{status} DESC invoiceNo limit 1
+        WHERE status = #{status} ORDER BY invoiceNo DESC LIMIT 1
     </select>
 
     <!-- 查询（根据条件查询） -->

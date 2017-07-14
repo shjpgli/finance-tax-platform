@@ -44,6 +44,9 @@
 			<if test="lastUpdate != null">
 				lastUpdate,
 			</if>
+			<if test="invoiceId != null">
+				invoiceId,
+			</if>
 
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -76,6 +79,9 @@
 			</if>
 			<if test="lastUpdate!=null">
 				#{lastUpdate},
+			</if>
+			<if test="invoiceId!=null">
+				#{invoiceId},
 			</if>
 		</trim>
 	</insert>
@@ -110,6 +116,9 @@
 			</if>
 			<if test="lastUpdate != null">
 				lastUpdate = #{lastUpdate},
+			</if>
+			<if test="invoiceId != null">
+				invoiceId = #{invoiceId},
 			</if>
 
 		</set>

@@ -32,11 +32,40 @@
         <result column="isInsured" property="isInsured" jdbcType="VARCHAR"/>
         <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
-        <association property="order" javaType="com.abc12366.uc.model.Order">
-            <id column="id" property="id"/>
-            <result column="orderId" property="orderId"/>
-        </association>
+
+        <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id" select="getOrderBO"></collection>
     </resultMap>
+
+    <resultMap id="oneOrderBOMap" type="com.abc12366.uc.model.bo.OrderBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="vipLevel" property="vipLevel" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
+        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
+        <result column="insuredFee" property="insuredFee" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
+        <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getOrderBO" resultMap="oneOrderBOMap" parameterType="java.lang.String">
+        SELECT
+        o.id,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.vipLevel,	o.createTime,	o.lastUpdate,
+        o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,	o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark
+        FROM uc_order o
+        LEFT JOIN uc_order_invoice uoi ON uoi.orderNo = o.orderNo
+        WHERE uoi.invoiceId = #{invoiceId}
+    </select>
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
@@ -44,14 +73,14 @@
 	</sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectById" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">
+    <select id="selectById" resultMap="invoiceBOResultMap" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_invoice
         WHERE id = #{id}
     </select>
 
-    <!-- 查询（根据主键ID查询） -->
+    <!-- 查询（根据userOrderNo查询） -->
     <select id="selectByUserOrderNo" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
@@ -72,7 +101,6 @@
         SELECT
         i.id,
         i.userId,
-        i.invoiceId,
         i.invoiceNo,
         i.name,
         i.content,
@@ -81,7 +109,7 @@
         i.property,
         i.status,
         i.createTime,
-        i.lastUpdate,`
+        i.lastUpdate,
         i.nsrsbh,
         i.nsrmc,
         i.address,
@@ -94,7 +122,7 @@
         a.name as consignee
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
-        LEFT JOIN uc_user_address a ON a.userId = i.userId
+        LEFT JOIN uc_user_address a ON a.id = i.addressId
         <where>
             1 = 1
             <if test=" username != null and username != '' ">
@@ -125,7 +153,7 @@
             </if>
         </where>
 
-        order by o.lastUpdate desc
+        order by i.lastUpdate desc
 
     </select>
 

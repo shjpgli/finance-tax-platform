@@ -27,7 +27,7 @@ public interface InvoiceDetailRoMapper {
 
 	InvoiceRepo selectByInvoiceNo(String invoiceNo);
 
-	InvoiceRepo selectInvoiceRepo(String status);
+	InvoiceDetail selectInvoiceRepo(String status);
 
 	List<InvoiceDetail> selectByIdAndStatus(String id);
 }

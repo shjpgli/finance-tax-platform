@@ -22,7 +22,7 @@ public class OrderBO implements Serializable {
     private String orderStatus;
     private String deliveryMethod;
     private String payMethod;
-    private String vipLevel;
+    private String nowVipLevel;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
     private String username;
@@ -91,14 +91,6 @@ public class OrderBO implements Serializable {
 
     public String getPayMethod(){
         return this.payMethod;
-    }
-
-    public void setVipLevel(String vipLevel){
-        this.vipLevel = vipLevel;
-    }
-
-    public String getVipLevel(){
-        return this.vipLevel;
     }
 
     public void setCreateTime(java.util.Date createTime){
@@ -243,5 +235,13 @@ public class OrderBO implements Serializable {
 
     public void setDictBOList(List<DictBO> dictBOList) {
         this.dictBOList = dictBOList;
+    }
+
+    public String getNowVipLevel() {
+        return nowVipLevel;
+    }
+
+    public void setNowVipLevel(String nowVipLevel) {
+        this.nowVipLevel = nowVipLevel;
     }
 }

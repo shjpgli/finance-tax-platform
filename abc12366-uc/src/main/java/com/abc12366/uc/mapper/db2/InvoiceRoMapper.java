@@ -20,7 +20,7 @@ public interface InvoiceRoMapper {
 	 * 查询（根据主键ID查询）
 	 *
 	 **/
-	Invoice  selectById(@Param("id") String id);
+	InvoiceBO  selectById(@Param("id") String id);
 
 
     List<InvoiceBO> selectList(InvoiceBO invoice);

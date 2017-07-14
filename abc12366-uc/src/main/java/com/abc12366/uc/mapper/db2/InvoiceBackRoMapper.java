@@ -1,7 +1,10 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.InvoiceBack;
+import com.abc12366.uc.model.bo.InvoiceBackBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -20,4 +23,7 @@ public interface InvoiceBackRoMapper {
 	InvoiceBack  selectById(@Param("id") String id);
 
 
+	List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO);
+
+	InvoiceBackBO selectBackOne(String id);
 }

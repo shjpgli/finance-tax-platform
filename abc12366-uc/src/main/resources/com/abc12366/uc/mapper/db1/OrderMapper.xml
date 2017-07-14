@@ -37,8 +37,8 @@
             <if test="payMethod != null">
                 payMethod,
             </if>
-            <if test="vipLevel != null">
-                vipLevel,
+            <if test="nowVipLevel != null">
+                nowVipLevel,
             </if>
             <if test="createTime != null">
                 createTime,
@@ -97,8 +97,8 @@
             <if test="payMethod!=null">
                 #{payMethod},
             </if>
-            <if test="vipLevel!=null">
-                #{vipLevel},
+            <if test="nowVipLevel!=null">
+                #{nowVipLevel},
             </if>
             <if test="createTime!=null">
                 #{createTime},
@@ -158,8 +158,8 @@
             <if test="payMethod != null">
                 payMethod = #{payMethod},
             </if>
-            <if test="vipLevel != null">
-                vipLevel = #{vipLevel},
+            <if test="nowVipLevel != null">
+                nowVipLevel = #{nowVipLevel},
             </if>
             <if test="createTime != null">
                 createTime = #{createTime},

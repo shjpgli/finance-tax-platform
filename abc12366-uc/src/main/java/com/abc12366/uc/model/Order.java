@@ -28,8 +28,8 @@ public class Order implements Serializable {
     /**支付方式：WEIXIN、ALIPAY**/
     private String payMethod;
 
-    /**会员等级**/
-    private String vipLevel;
+    /**当前会员等级**/
+    private String nowVipLevel;
 
     /****/
     private java.util.Date createTime;
@@ -115,14 +115,6 @@ public class Order implements Serializable {
 
     public String getPayMethod(){
         return this.payMethod;
-    }
-
-    public void setVipLevel(String vipLevel){
-        this.vipLevel = vipLevel;
-    }
-
-    public String getVipLevel(){
-        return this.vipLevel;
     }
 
     public void setCreateTime(java.util.Date createTime){
@@ -221,4 +213,11 @@ public class Order implements Serializable {
         return this.remark;
     }
 
+    public String getNowVipLevel() {
+        return nowVipLevel;
+    }
+
+    public void setNowVipLevel(String nowVipLevel) {
+        this.nowVipLevel = nowVipLevel;
+    }
 }

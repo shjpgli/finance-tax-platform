@@ -1,7 +1,6 @@
 package com.abc12366.uc.model.bo;
 
 import com.abc12366.uc.model.Order;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,8 +44,8 @@ public class InvoiceBO implements Serializable {
     /** 收货人**/
     private String consignee;
 
-    private List<Order> orderList;
-    private String orderIds;
+    private List<OrderBO> orderBOList;
+    private String orderNos;
     private java.util.Date startTime;
     private java.util.Date endTime;
 
@@ -275,22 +274,6 @@ public class InvoiceBO implements Serializable {
         this.payMethod = payMethod;
     }
 
-    public List<Order> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
-    }
-
-    public String getOrderIds() {
-        return orderIds;
-    }
-
-    public void setOrderIds(String orderIds) {
-        this.orderIds = orderIds;
-    }
-
     public java.util.Date getStartTime() {
         return startTime;
     }
@@ -313,5 +296,21 @@ public class InvoiceBO implements Serializable {
 
     public void setConsignee(String consignee) {
         this.consignee = consignee;
+    }
+
+    public String getOrderNos() {
+        return orderNos;
+    }
+
+    public void setOrderNos(String orderNos) {
+        this.orderNos = orderNos;
+    }
+
+    public List<OrderBO> getOrderBOList() {
+        return orderBOList;
+    }
+
+    public void setOrderBOList(List<OrderBO> orderBOList) {
+        this.orderBOList = orderBOList;
     }
 }

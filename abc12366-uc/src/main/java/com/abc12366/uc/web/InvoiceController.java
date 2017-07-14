@@ -2,7 +2,6 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.uc.model.InvoiceBack;
 import com.abc12366.uc.model.InvoiceDetail;
 import com.abc12366.uc.model.InvoiceRepo;
 import com.abc12366.uc.model.bo.InvoiceBO;
@@ -18,7 +17,6 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +68,6 @@ public class InvoiceController {
         invoice.setUsername(username);
         invoice.setInvoiceNo(invoiceNo);
 
-        Date date = new Date();
         if(startTime != null && !"".equals(startTime)){
             invoice.setStartTime(DataUtils.StrToDate(startTime));
         }
@@ -84,6 +81,20 @@ public class InvoiceController {
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
+    }
+
+    /**
+     * 发票详情查看
+     *
+     * @param invoiceId
+     * @return
+     */
+    @GetMapping(path = "/{invoiceId}")
+    public ResponseEntity addInvoice(@PathVariable("invoiceId") String invoiceId) {
+        LOGGER.info("{}", invoiceId);
+        InvoiceBO bo = invoiceService.selectOne(invoiceId);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -207,6 +218,50 @@ public class InvoiceController {
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
           ResponseEntity.ok(Utils.kv("dataList", invoiceList));
+    }
+
+    /**
+     * 退票管理列表
+     *
+     * @return
+     */
+    @GetMapping(path = "/back")
+    public ResponseEntity selectBackList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                   @RequestParam(value ="expressNo", required = false) String expressNo,
+                                   @RequestParam(value ="userOrderNo", required = false) String userOrderNo,
+                                   @RequestParam(value ="invoiceNo", required = false) String invoiceNo,
+                                   @RequestParam(value ="sendExpressNo", required = false) String sendExpressNo) {
+        InvoiceBackBO invoiceBackBO = new InvoiceBackBO();
+        invoiceBackBO.setExpressNo(expressNo);
+
+        InvoiceBO invoiceBO = new InvoiceBO();
+        invoiceBO.setUserOrderNo(userOrderNo);
+        invoiceBO.setInvoiceNo(invoiceNo);
+        invoiceBackBO.setInvoiceBO(invoiceBO);
+
+        invoiceBackBO.setSendExpressNo(sendExpressNo);
+
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<InvoiceBackBO> invoiceList = invoiceService.selectBOList(invoiceBackBO);
+        PageInfo<InvoiceBackBO> pageInfo = new PageInfo<>(invoiceList);
+        LOGGER.info("{}", invoiceList);
+        return (invoiceList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 退票详情查看
+     *
+     * @return
+     */
+    @GetMapping(path = "/back/{id}")
+    public ResponseEntity selectBackOne(@PathVariable("id") String id) {
+
+        InvoiceBackBO invoiceBackBO = invoiceService.selectBackOne(id);
+        LOGGER.info("{}", invoiceBackBO);
+        return ResponseEntity.ok(Utils.kv("data", invoiceBackBO));
     }
 
     /**

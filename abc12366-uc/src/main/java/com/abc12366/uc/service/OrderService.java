@@ -20,7 +20,6 @@ public interface OrderService {
 
     /**
      * 查询订单信息
-     * @param id
      * @return
      */
     OrderBO selectOne(String orderNo);

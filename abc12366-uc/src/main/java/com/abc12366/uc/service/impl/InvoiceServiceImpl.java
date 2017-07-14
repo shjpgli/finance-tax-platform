@@ -49,6 +49,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     private InvoiceDetailRoMapper invoiceDetailRoMapper;
 
     @Autowired
+    private InvoiceDetailMapper invoiceDetailMapper;
+
+    @Autowired
     private InvoiceBackMapper invoiceBackPapper;
 
     @Autowired
@@ -78,10 +81,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     @Override
     public InvoiceBO selectOne(String id) {
-        Invoice invoice = invoiceRoMapper.selectById(id);
-        InvoiceBO invoiceBO = new InvoiceBO();
-        BeanUtils.copyProperties(invoice, invoiceBO);
-        return invoiceBO;
+        return invoiceRoMapper.selectById(id);
     }
 
 
@@ -109,7 +109,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
         }
 
-        String[] orderIds = invoiceBO.getOrderIds().split(",");
+        String[] orderIds = invoiceBO.getOrderNos().split(",");
         OrderInvoice orderInvoice = new OrderInvoice();
         for (String orderId : orderIds) {
             orderInvoice.setId(Utils.uuid());
@@ -154,13 +154,21 @@ public class InvoiceServiceImpl implements InvoiceService {
         BeanUtils.copyProperties(invoiceBO, invoice);
         invoice.setId(Utils.uuid());
         //获取发票编号，0，表示未使用
-        InvoiceRepo invoiceRepo = invoiceDetailRoMapper.selectInvoiceRepo("0");
-        if (invoiceRepo == null) {
-            LOGGER.info("{发票号码获取失败}", invoiceRepo);
+        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
+        if (invoiceDetail == null) {
+            LOGGER.info("{发票号码获取失败}", invoiceDetail);
             throw new ServiceException(4124);
+        }else {
+            //将发票置为分配中，值为1
+            invoiceDetail.setStatus("1");
+            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+            if(dUpdate != 1){
+                LOGGER.info("{发票状态修改失败}", invoiceDetail);
+                throw new ServiceException(4178);
+            }
         }
-        //invoice.setInvoiceNo(invoiceRepo.getInvoiceNo());
-        invoice.setInvoiceCode(invoiceRepo.getInvoiceCode());
+        invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
+        invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
         Date date = new Date();
         invoice.setCreateTime(date);
         invoice.setLastUpdate(date);
@@ -168,13 +176,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceMapper.insert(invoice);
 
         String id = invoice.getId();
-        String[] orderIds = invoiceBO.getOrderIds().split(",");
+        String[] orderNos = invoiceBO.getOrderNos().split(",");
         OrderInvoice orderInvoice = new OrderInvoice();
 
-        for (String orderId : orderIds) {
+        for (String orderNo : orderNos) {
             orderInvoice.setId(Utils.uuid());
             orderInvoice.setInvoiceId(id);
-            orderInvoice.setOrderNo(orderId);
+            orderInvoice.setOrderNo(orderNo);
             orderInvoice.setCreateTime(date);
             orderInvoice.setLastUpdate(date);
             orderInvoiceMapper.insert(orderInvoice);
@@ -320,8 +328,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return bo;
     }
 
-    public Invoice selectById(String id) {
-        return invoiceRoMapper.selectById(id);
+    @Override
+    public List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO) {
+        return invoiceBackRoMapper.selectBOList(invoiceBackBO);
     }
 
+    @Override
+    public InvoiceBackBO selectBackOne(String id) {
+        return invoiceBackRoMapper.selectBackOne(id);
+    }
 }

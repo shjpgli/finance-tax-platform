@@ -70,7 +70,7 @@
         select
         <include refid="Base_Column_List" />
         from sys_dict
-        where dictId = #{dictId} AND fieldKey = #{fieldKey}
+        where dictId = #{dictId} AND fieldValue = #{fieldValue}
     </select>
 
     <select id="selectDictList" resultType="com.abc12366.admin.model.Dict" parameterType="com.abc12366.admin.model.Dict">

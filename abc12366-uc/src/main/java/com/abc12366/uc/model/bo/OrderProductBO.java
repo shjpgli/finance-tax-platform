@@ -1,133 +1,141 @@
 package com.abc12366.uc.model.bo;
+
 import java.io.Serializable;
 
 
 /**
- * 
- * 
- * 
+ *
+ *
+ *
  **/
 @SuppressWarnings("serial")
 public class OrderProductBO implements Serializable {
 
-	private String orderId;
-	private String productId;
-	private Double sellingPrice;
-	private Double unitPrice;
-	private Integer num;
-	private Double discount;
-	private Double dealPrice;
-	private String name;
-	private String categoryId;
-	private String category;
-	private Double weight;
-	private java.util.Date createTime;
-	private java.util.Date lastUpdate;
+    private String orderId;
+    private String productId;
+    private Double sellingPrice;
+    private Double unitPrice;
+    private Integer num;
+    private Double discount;
+    private Double dealPrice;
+    private String name;
+    private String categoryId;
+    private String category;
+    private Double weight;
+    private java.util.Date createTime;
+    private java.util.Date lastUpdate;
 
+    private ProductBO productBO;
 
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
-	public void setOrderId(String orderId){
-		this.orderId = orderId;
-	}
+    public String getOrderId() {
+        return this.orderId;
+    }
 
-	public String getOrderId(){
-		return this.orderId;
-	}
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
-	public void setProductId(String productId){
-		this.productId = productId;
-	}
+    public String getProductId() {
+        return this.productId;
+    }
 
-	public String getProductId(){
-		return this.productId;
-	}
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
 
-	public void setSellingPrice(Double sellingPrice){
-		this.sellingPrice = sellingPrice;
-	}
+    public Double getSellingPrice() {
+        return this.sellingPrice;
+    }
 
-	public Double getSellingPrice(){
-		return this.sellingPrice;
-	}
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
 
-	public void setUnitPrice(Double unitPrice){
-		this.unitPrice = unitPrice;
-	}
+    public Double getUnitPrice() {
+        return this.unitPrice;
+    }
 
-	public Double getUnitPrice(){
-		return this.unitPrice;
-	}
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
-	public void setNum(Integer num){
-		this.num = num;
-	}
+    public Integer getNum() {
+        return this.num;
+    }
 
-	public Integer getNum(){
-		return this.num;
-	}
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
 
-	public void setDiscount(Double discount){
-		this.discount = discount;
-	}
+    public Double getDiscount() {
+        return this.discount;
+    }
 
-	public Double getDiscount(){
-		return this.discount;
-	}
+    public void setDealPrice(Double dealPrice) {
+        this.dealPrice = dealPrice;
+    }
 
-	public void setDealPrice(Double dealPrice){
-		this.dealPrice = dealPrice;
-	}
+    public Double getDealPrice() {
+        return this.dealPrice;
+    }
 
-	public Double getDealPrice(){
-		return this.dealPrice;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setName(String name){
-		this.name = name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public String getName(){
-		return this.name;
-	}
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public void setCategoryId(String categoryId){
-		this.categoryId = categoryId;
-	}
+    public String getCategoryId() {
+        return this.categoryId;
+    }
 
-	public String getCategoryId(){
-		return this.categoryId;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setCategory(String category){
-		this.category = category;
-	}
+    public String getCategory() {
+        return this.category;
+    }
 
-	public String getCategory(){
-		return this.category;
-	}
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
 
-	public void setWeight(Double weight){
-		this.weight = weight;
-	}
+    public Double getWeight() {
+        return this.weight;
+    }
 
-	public Double getWeight(){
-		return this.weight;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
+    }
 
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
+    public ProductBO getProductBO() {
+        return productBO;
+    }
 
+    public void setProductBO(ProductBO productBO) {
+        this.productBO = productBO;
+    }
 }

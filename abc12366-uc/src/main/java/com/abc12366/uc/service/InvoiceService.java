@@ -1,10 +1,8 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.InvoiceRepo;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
-import com.abc12366.uc.model.bo.InvoiceRepoBO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +25,7 @@ public interface InvoiceService {
 
     /**
      * 发票信息导出
+     *
      * @param invoice
      * @return
      */
@@ -35,4 +34,8 @@ public interface InvoiceService {
     InvoiceBackBO refund(InvoiceBackBO invoiceBackBO);
 
     InvoiceBackBO refundCheck(InvoiceBackBO invoiceBackBO);
+
+    List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO);
+
+    InvoiceBackBO selectBackOne(String id);
 }
