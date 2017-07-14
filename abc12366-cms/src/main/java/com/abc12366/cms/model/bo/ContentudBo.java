@@ -23,6 +23,9 @@ public class ContentudBo implements Serializable {
 	/**站点路径**varchar(20)**/
 	private String sitePath;
 
+	/**站点域名**varchar**/
+	private String domain;
+
 	/**上下篇**tinyint(4)**/
 	private String upordown;
 
@@ -56,6 +59,14 @@ public class ContentudBo implements Serializable {
 
 	public void setSitePath(String sitePath) {
 		this.sitePath = sitePath;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	public String getUpordown() {
