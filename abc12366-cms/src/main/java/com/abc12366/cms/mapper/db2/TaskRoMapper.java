@@ -30,4 +30,11 @@ public interface TaskRoMapper{
 	 **/
 	List<TaskBo> selectList(Map<String,Object> map);
 
+	/**
+	 *
+	 * 查询（根据主键ID查询）
+	 *
+	 **/
+	Integer selectCnt(TaskBo taskBo);
+
 }

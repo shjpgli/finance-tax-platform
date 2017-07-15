@@ -28,4 +28,24 @@
 		ORDER BY createTime DESC
 	</select>
 
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectCnt" resultType="java.lang.Integer" parameterType="com.abc12366.cms.model.bo.TaskBo">
+		SELECT
+		count(taskId) cnt
+		FROM cms_task
+		WHERE 1=1
+		<if test="taskName != null and taskName != ''">
+			AND taskName = #{taskName}
+		</if>
+		<if test="taskType != null and taskType != ''">
+			AND taskType = #{taskType}
+		</if>
+		<if test="siteId != null and siteId != ''">
+			AND siteId = #{siteId}
+		</if>
+		ORDER BY createTime DESC
+	</select>
+
+
+
 </mapper>
