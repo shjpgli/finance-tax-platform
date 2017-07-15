@@ -39,6 +39,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional("db1TxManager")
     @Override
     public Organization addOrganization(OrganizationBO organizationBO) {
+        //查询父节点信息
         Organization organization = new Organization();
         BeanUtils.copyProperties(organizationBO, organization);
         organization.setId(Utils.uuid());

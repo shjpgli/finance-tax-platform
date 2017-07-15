@@ -24,4 +24,6 @@ public interface UserRoleRoMapper {
 	List<UserRole> selectUserRoleByUserId(String id);
 
 	List<String> selectRoleIdListByUserId(String userId);
+
+	List<UserRole> selectUserRoleByRoleId(String roleId);
 }

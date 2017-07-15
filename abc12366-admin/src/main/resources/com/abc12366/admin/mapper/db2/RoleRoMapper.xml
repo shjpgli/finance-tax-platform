@@ -36,6 +36,40 @@
         WHERE rm.roleId = #{id}
     </select>
 
+    <resultMap id="roleMap" type="com.abc12366.admin.model.bo.RoleBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="roleName" property="roleName" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <collection property="userList" ofType="com.abc12366.admin.model.User" column="id" select="getUser"></collection>
+    </resultMap>
+
+
+    <!-- 查询菜单-->
+    <select id="getUser" resultType="com.abc12366.admin.model.User" parameterType="java.lang.String">
+         SELECT
+        t.id,
+        t.username,
+        t.password,
+        t.nickname,
+        t.status,
+        t.createTime,
+        t.lastUpdate
+        FROM
+        sys_user t
+        LEFT JOIN sys_user_role ur ON ur.userId = t.id
+        WHERE ur.roleId = #{id}
+    </select>
+
+    <select id="selectUserByRoleId" resultMap="roleMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_role
+        WHERE id = #{id}
+    </select>
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.admin.model.Role" parameterType="java.lang.String">
 		 SELECT

@@ -37,4 +37,6 @@ public interface RoleRoMapper {
     Role selectOne(Role role);
 
     Role selectRoleByName(Role role);
+
+    RoleBO selectUserByRoleId(String id);
 }

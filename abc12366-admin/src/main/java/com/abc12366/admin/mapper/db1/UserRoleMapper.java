@@ -49,4 +49,5 @@ public interface UserRoleMapper{
 	 **/
 	int updateByPrimaryKey(UserRole record);
 
+	void deleteByRoleId(String roleId);
 }

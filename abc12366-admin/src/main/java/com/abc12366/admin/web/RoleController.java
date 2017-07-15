@@ -2,6 +2,7 @@ package com.abc12366.admin.web;
 
 import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.RoleMenu;
+import com.abc12366.admin.model.UserRole;
 import com.abc12366.admin.model.bo.RoleBO;
 import com.abc12366.admin.model.bo.RoleMenuBO;
 import com.abc12366.admin.service.RoleService;
@@ -50,6 +51,24 @@ public class RoleController {
         return roleList == null ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) roleList, "total", ((Page) roleList).getTotal()));
+    }
+
+
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity selectUserByRoleId(@PathVariable("id") String id) {
+        RoleBO roleBO = new RoleBO();
+        roleBO.setId(id);
+        RoleBO temp = roleService.selectUserByRoleId(id);
+        LOGGER.info("{}", temp);
+        return ResponseEntity.ok(Utils.kv("data", temp));
+    }
+
+
+    @PutMapping(path = "/user")
+    public ResponseEntity updateUserRole(@Valid @RequestBody UserRole userRole) {
+        LOGGER.info("{}",userRole );
+        roleService.updateUserRole(userRole);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     @GetMapping(path = "/{id}")

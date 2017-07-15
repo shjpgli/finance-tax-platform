@@ -8,6 +8,7 @@ import com.abc12366.admin.mapper.db2.RoleRoMapper;
 import com.abc12366.admin.mapper.db2.UserRoleRoMapper;
 import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.RoleMenu;
+import com.abc12366.admin.model.UserRole;
 import com.abc12366.admin.model.bo.RoleBO;
 import com.abc12366.admin.service.RoleService;
 import com.abc12366.common.exception.ServiceException;
@@ -179,5 +180,27 @@ public class RoleServiceImpl implements RoleService {
         Role role = new Role();
         BeanUtils.copyProperties(roleBO, role);
         return roleRoMapper.selectRoleByName(role);
+    }
+
+    @Override
+    public RoleBO selectUserByRoleId(String id) {
+        return roleRoMapper.selectUserByRoleId(id);
+    }
+
+    @Override
+    public void updateUserRole(UserRole roleBO) {
+        String roleId = roleBO.getRoleId();
+        List<UserRole> roleMenuIdList = userRoleRoMapper.selectUserRoleByRoleId(roleId);
+        if (roleMenuIdList != null && (!roleMenuIdList.isEmpty())) {
+            userRoleMapper.deleteByRoleId(roleId);
+        }
+        String[] resources = roleBO.getUserId().split(",");
+        UserRole roleMenu = new UserRole();
+        for (String userId : resources) {
+            roleMenu.setRoleId(roleId);
+            roleMenu.setUserId(userId);
+            roleMenu.setId(Utils.uuid());
+            userRoleMapper.insert(roleMenu);
+        }
     }
 }
