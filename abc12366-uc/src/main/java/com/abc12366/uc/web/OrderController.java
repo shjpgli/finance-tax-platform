@@ -54,7 +54,7 @@ public class OrderController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "orderNo", required = false) String orderNo,
-                                     @RequestParam(value = "categoryId", required = false) String orderStatus,
+                                     @RequestParam(value = "orderStatus", required = false) String orderStatus,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "phone", required = false) String phone,
                                      @RequestParam(value ="startTime", required = false) String startTime,
@@ -106,12 +106,13 @@ public class OrderController {
         goodsBO.setName(name);
         order.setGoodsBO(goodsBO);
         order.setOrderStatus("1");
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> orderBOs = orderService.selectOrderList(order);
+
+        List<OrderBO> orderBOs = orderService.selectOrderList(order,pageNum,pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) orderBOs, "total", ((Page) orderBOs).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**

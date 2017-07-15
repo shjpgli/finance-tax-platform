@@ -41,9 +41,10 @@ public interface OrderService {
     /**
      * 查询列表
      * @param order
-     * @return
+     * @param pageNum
+     *@param pageSize @return
      */
-    List<OrderBO> selectOrderList(OrderBO order);
+    List<OrderBO> selectOrderList(OrderBO order, int pageNum, int pageSize);
 
     /**
      * 删除购物车
@@ -78,4 +79,5 @@ public interface OrderService {
     void deleteOrder(OrderBO orderBO);
 
     OrderBO feedback(OrderBO orderBO);
+
 }

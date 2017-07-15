@@ -160,16 +160,48 @@
             <if test=" user.username != null and user.username != '' ">
                 and u.username = #{user.username}
             </if>
-            <if test=" user.phone != null and user.phone != '' ">
-                and u.phone = #{user.phone}
+            <if test=" orderStatus != null and orderStatus != '' ">
+                and o.orderStatus = #{orderStatus}
             </if>
-            <!--<if test=" product.name != null and product.name != '' ">
-                and p.name = #{product.name}
+            <if test=" orderNo != null and orderNo != '' ">
+                and o.orderNo = #{orderNo}
             </if>
-            <if test=" product.category != null and product.category != '' ">
-                and p.category = #{product.category}
-            </if>-->
-           <if test="startTime != null">
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
+            </if>
+        </where>
+
+        order by o.lastUpdate desc
+
+    </select>
+
+    <select id="selectWaitList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+        SELECT
+        <include refid="Base_Column_BO_List" />
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        <where>
+            1 = 1
+            <if test=" user.username != null and user.username != '' ">
+                and u.username = #{user.username}
+            </if>
+            <!--<if test=" orderStatus != null and orderStatus != '' ">-->
+            <!--<if test=" orderStatus != null and orderStatus != '' ">-->
+                <!--and o.orderStatus = #{orderStatus}-->
+            <!--</if>-->
+            <!--</if>-->
+            <if test=" orderNo != null and orderNo != '' ">
+                and o.orderNo = #{orderNo}
+            </if>
+            <if test="startTime != null">
                 <![CDATA[
               and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
 
