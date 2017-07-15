@@ -31,6 +31,9 @@ public class Content implements Serializable {
 	/**站点ID**varchar(64)**/
 	private String siteId;
 
+	/**域名**varchar(50)**/
+	private String domain;
+
 	/**站点路径**varchar(20)**/
 	private String sitePath;
 
@@ -112,6 +115,14 @@ public class Content implements Serializable {
 
 	public String getSiteId(){
 		return this.siteId;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	public void setSortDate(java.util.Date sortDate){
