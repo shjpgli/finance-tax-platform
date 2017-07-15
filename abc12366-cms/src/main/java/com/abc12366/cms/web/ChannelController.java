@@ -36,14 +36,17 @@ public class ChannelController {
     private ModelService modelService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        //查询栏目列表
-//        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<ChannelBo> dataList = channelService.selectLists();
+    public ResponseEntity selectList(@RequestParam(value = "channelId", required = false) String channelId,
+                                     @RequestParam(value = "parentId", required = false) String parentId,
+                                     @RequestParam(value = "channelName", required = false) String channelName
+                                     ) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("channelId", channelId);//栏目ID
+        dataMap.put("parentId", parentId);//父栏目ID
+        dataMap.put("channelName", channelName);//栏目名称
+        List<ChannelBo> dataList = channelService.selectLists(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
     @GetMapping(path = "/init")

@@ -116,9 +116,11 @@
 		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
-		a.recommendLevel recommendLevel
+		a.recommendLevel recommendLevel,
+		c.channelPath,d.sitePath,d.domain
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
 		WHERE 1=1
 		<if test="contentType != null and contentType != ''">
@@ -166,9 +168,11 @@
 		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
-		a.recommendLevel recommendLevel
+		a.recommendLevel recommendLevel,
+		c.channelPath,d.sitePath,d.domain
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
 		WHERE 1=1
 		<if test="typeId != null and typeId != ''">
@@ -216,9 +220,11 @@
 		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
-		a.recommendLevel recommendLevel
+		a.recommendLevel recommendLevel,
+		c.channelPath,d.sitePath,d.domain
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_content_topic c ON a.contentId = c.topicId
+		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
 		WHERE 1=1
 		<if test="typeId != null and typeId != ''">
