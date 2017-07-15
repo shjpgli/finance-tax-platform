@@ -2,6 +2,7 @@ package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.AnswerLogtjListBo;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
+import com.abc12366.cms.model.questionnaire.bo.AnswertjBO;
 import com.abc12366.cms.service.AnswerLogService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -182,6 +183,21 @@ public class AnswerLogController {
         AnswerLogtjListBo data = answerLogService.selecttj(dataMap);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
+
+    /**
+     * 答题记录列表查询
+     * @param subjectsId
+     * @return
+     */
+    @GetMapping(path = "/answerList/{subjectsId}")
+    public ResponseEntity selectList(@PathVariable("subjectsId") String subjectsId) {
+        List<AnswertjBO> dataList = answerLogService.selectListBysubjectsId(subjectsId);
+        LOGGER.info("{}", dataList);
+        return (dataList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList",dataList));
     }
 
 }
