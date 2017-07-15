@@ -112,6 +112,19 @@ public class QuestionnaireController {
     }
 
     /**
+     * 问卷皮肤路径修改
+     * @param skinUrl
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/skinUrl/{id}")
+    public ResponseEntity updateSkinUrl(@Valid @RequestBody String skinUrl, @PathVariable("id") String id) {
+        LOGGER.info("{}", skinUrl);
+        questionnaireService.updateSkinUrl(id, skinUrl);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
      * 问卷状态修改
      * @param id
      * @return

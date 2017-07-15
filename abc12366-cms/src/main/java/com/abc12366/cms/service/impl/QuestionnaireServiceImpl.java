@@ -1,9 +1,11 @@
 package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.*;
-import com.abc12366.cms.mapper.db2.QuestionnaireParamRoMapper;
 import com.abc12366.cms.mapper.db2.QuestionnaireRoMapper;
-import com.abc12366.cms.model.questionnaire.*;
+import com.abc12366.cms.model.questionnaire.Option;
+import com.abc12366.cms.model.questionnaire.Questionnaire;
+import com.abc12366.cms.model.questionnaire.QuestionnaireParam;
+import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import com.abc12366.cms.service.QuestionnaireService;
@@ -145,6 +147,19 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         int update = questionnaireMapper.update(questionnaire);
         if (update != 1){
             LOGGER.info("{修改问卷状态失败}", questionnaire);
+            throw new ServiceException(4404);
+        }
+
+    }
+
+    @Override
+    public void updateSkinUrl(String id, String skinUrl) {
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId(id);
+        questionnaire.setSkinUrl(skinUrl);
+        int update = questionnaireMapper.updateSkinUrl(questionnaire);
+        if (update != 1){
+            LOGGER.info("{修改问卷皮肤失败}", questionnaire);
             throw new ServiceException(4404);
         }
 

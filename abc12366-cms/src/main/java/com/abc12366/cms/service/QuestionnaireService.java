@@ -25,6 +25,8 @@ public interface QuestionnaireService {
 
     void updateStatus(String id, Boolean status);
 
+    void updateSkinUrl(String id, String skinUrl);
+
     void updateAccessRate(String id);
 
     void updateRecoveryRate(String id);

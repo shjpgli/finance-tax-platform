@@ -157,4 +157,13 @@
         </set>
         WHERE id = #{id}
     </update>
+
+    <!-- 修 改 皮肤路径-->
+    <update id="updateSkinUrl" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
+        UPDATE cms_paper_questionnaire
+        <set>
+            skinUrl = #{skinUrl},
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

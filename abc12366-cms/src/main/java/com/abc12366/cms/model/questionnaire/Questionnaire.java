@@ -46,6 +46,9 @@ public class Questionnaire implements Serializable {
 	/**所属行业类别代码**/
 	private String tradeCode;
 
+	/**皮肤路径**/
+	private String skinUrl;
+
 
 
 	public void setId(String id){
@@ -144,4 +147,11 @@ public class Questionnaire implements Serializable {
 		return this.tradeCode;
 	}
 
+	public String getSkinUrl() {
+		return skinUrl;
+	}
+
+	public void setSkinUrl(String skinUrl) {
+		this.skinUrl = skinUrl;
+	}
 }

@@ -1,6 +1,5 @@
 package com.abc12366.cms.model.questionnaire.bo;
 
-import com.abc12366.cms.model.Subject;
 import com.abc12366.cms.model.questionnaire.QuestionnaireParam;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -36,6 +35,8 @@ public class QuestionnaireBO implements Serializable {
     private Double accessNum;
     private String sceneCode;
     private String tradeCode;
+
+    private String skinUrl;
 
     private QuestionnaireParam questionnaireParam;
 
@@ -136,6 +137,14 @@ public class QuestionnaireBO implements Serializable {
 
     public String getTradeCode() {
         return this.tradeCode;
+    }
+
+    public String getSkinUrl() {
+        return skinUrl;
+    }
+
+    public void setSkinUrl(String skinUrl) {
+        this.skinUrl = skinUrl;
     }
 
     public QuestionnaireParam getQuestionnaireParam() {
