@@ -26,4 +26,5 @@ public interface OrganizationRoMapper {
 
     List<OrganizationBO> selectChildOrg(String id);
 
+    OrganizationBO selectOrganizationByName(String name);
 }

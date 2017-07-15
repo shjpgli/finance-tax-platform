@@ -52,4 +52,6 @@ public interface OrganizationService {
     void enable(OrganizationUpdateBO updateBO);
 
     List<OrganizationBO> selectChildOrg(String id);
+
+    OrganizationBO selectOrganizationByName(String name);
 }

@@ -58,6 +58,18 @@ public class OrganizationController {
     }
 
     /**
+     * 组织列表
+     *
+     * @return
+     */
+    @GetMapping(path = "/name")
+    public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name) {
+        LOGGER.info("{}", name);
+        OrganizationBO bo = organizationService.selectOrganizationByName(name);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("date",bo));
+    }
+    /**
      * 添加组织
      *
      * @param organizationBO
@@ -140,7 +152,7 @@ public class OrganizationController {
     }
 
     /**
-     * 启用、禁用
+     * 全部启用、禁用
      * @return
      */
     @PutMapping(path = "/disableAll")

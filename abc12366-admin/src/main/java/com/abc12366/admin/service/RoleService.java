@@ -3,6 +3,7 @@ package com.abc12366.admin.service;
 import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.UserRole;
 import com.abc12366.admin.model.bo.RoleBO;
+import com.abc12366.admin.model.bo.UserRoleBO;
 
 import java.util.List;
 import java.util.Map;
@@ -99,5 +100,5 @@ public interface RoleService {
 
     RoleBO selectUserByRoleId(String id);
 
-    void updateUserRole(UserRole roleBO);
+    void updateUserRole(UserRoleBO userRoleBO);
 }

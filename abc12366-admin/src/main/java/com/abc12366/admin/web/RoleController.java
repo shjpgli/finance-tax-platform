@@ -5,6 +5,7 @@ import com.abc12366.admin.model.RoleMenu;
 import com.abc12366.admin.model.UserRole;
 import com.abc12366.admin.model.bo.RoleBO;
 import com.abc12366.admin.model.bo.RoleMenuBO;
+import com.abc12366.admin.model.bo.UserRoleBO;
 import com.abc12366.admin.service.RoleService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
@@ -65,9 +66,9 @@ public class RoleController {
 
 
     @PutMapping(path = "/user")
-    public ResponseEntity updateUserRole(@Valid @RequestBody UserRole userRole) {
-        LOGGER.info("{}",userRole );
-        roleService.updateUserRole(userRole);
+    public ResponseEntity updateUserRole(@Valid @RequestBody UserRoleBO userRoleBO) {
+        LOGGER.info("{}",userRoleBO );
+        roleService.updateUserRole(userRoleBO);
         return ResponseEntity.ok(Utils.kv());
     }
 

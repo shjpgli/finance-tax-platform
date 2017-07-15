@@ -10,6 +10,7 @@ import com.abc12366.admin.model.Role;
 import com.abc12366.admin.model.RoleMenu;
 import com.abc12366.admin.model.UserRole;
 import com.abc12366.admin.model.bo.RoleBO;
+import com.abc12366.admin.model.bo.UserRoleBO;
 import com.abc12366.admin.service.RoleService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -188,13 +189,28 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void updateUserRole(UserRole roleBO) {
-        String roleId = roleBO.getRoleId();
+    public void updateUserRole(UserRoleBO userRoleBO) {
+        String roleId = userRoleBO.getRoleId();
+        if(roleId == null || "".equals(roleId)){
+            Role role = userRoleBO.getRole();
+            role.setRoleName(role.getRoleName());
+            Role temp = roleRoMapper.selectRoleByName(role);
+            if (temp != null) {
+                logger.warn("角色名称已存在，参数：{}", role.toString());
+                throw new ServiceException(4111);
+            }
+            roleId = Utils.uuid();
+            role.setId(roleId);
+            Date date = new Date();
+            role.setCreateTime(date);
+            role.setRemark(role.getRemark());
+            roleMapper.insert(role);
+        }
         List<UserRole> roleMenuIdList = userRoleRoMapper.selectUserRoleByRoleId(roleId);
         if (roleMenuIdList != null && (!roleMenuIdList.isEmpty())) {
             userRoleMapper.deleteByRoleId(roleId);
         }
-        String[] resources = roleBO.getUserId().split(",");
+        String[] resources = userRoleBO.getUserId().split(",");
         UserRole roleMenu = new UserRole();
         for (String userId : resources) {
             roleMenu.setRoleId(roleId);
