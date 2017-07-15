@@ -4,6 +4,7 @@ import com.abc12366.cms.mapper.db1.TaskMapper;
 import com.abc12366.cms.mapper.db2.TaskRoMapper;
 import com.abc12366.cms.model.Task;
 import com.abc12366.cms.model.bo.TaskBo;
+import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskBo save(TaskBo taskBo) {
+        TaskBo taskBo1 = new TaskBo();
+        taskBo1.setTaskName(taskBo1.getTaskName());
+        int cnt = taskRoMapper.selectCnt(taskBo1);
+        if(cnt >0){
+            throw new ServiceException(4302);
+        }
         //保存模型信息
         String uuid = UUID.randomUUID().toString().replace("-", "");
         Task task = new Task();
@@ -66,6 +73,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskBo update(TaskBo taskBo) {
+        TaskBo taskBo1 = new TaskBo();
+        taskBo1.setTaskName(taskBo1.getTaskName());
+        int cnt = taskRoMapper.selectCnt(taskBo1);
+        if(cnt >1){
+            throw new ServiceException(4302);
+        }
         //更新模型信息
         Task task = new Task();
         try {
