@@ -9,6 +9,7 @@ import com.abc12366.cms.model.bo.AnswerLogtjListBo;
 import com.abc12366.cms.model.questionnaire.Answer;
 import com.abc12366.cms.model.questionnaire.AnswerLog;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
+import com.abc12366.cms.model.questionnaire.bo.AnswertjBO;
 import com.abc12366.cms.service.AnswerLogService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -244,4 +245,11 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         answerLogtjListBo.setMobileWeblist(mobileWeblist);
         return answerLogtjListBo;
     }
+
+    @Override
+    public List<AnswertjBO> selectListBysubjectsId(String subjectsId) {
+
+        return answerRoMapper.selectListBysubjectsId(subjectsId);
+    }
+
 }

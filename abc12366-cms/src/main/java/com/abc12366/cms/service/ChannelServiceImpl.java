@@ -80,8 +80,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<ChannelBo> selectLists() {
-        List<ChannelBo> channelBoList = channelRoMapper.selectLists();
+    public List<ChannelBo> selectLists(Map<String,Object> map) {
+        List<ChannelBo> channelBoList = channelRoMapper.selectLists(map);
         LOGGER.info("{}", channelBoList);
         return channelBoList;
     }

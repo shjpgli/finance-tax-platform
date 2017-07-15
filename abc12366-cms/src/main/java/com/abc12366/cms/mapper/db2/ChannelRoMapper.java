@@ -5,6 +5,7 @@ import com.abc12366.cms.model.bo.ChannelBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -26,7 +27,7 @@ public interface ChannelRoMapper{
 
 	List<Channel> selectList();
 
-	List<ChannelBo> selectLists();
+	List<ChannelBo> selectLists(Map<String,Object> map);
 
 	List<Channel> selectListByparentId(@Param("parentId") String parentId);
 

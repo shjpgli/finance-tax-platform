@@ -2,6 +2,7 @@ package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.bo.AnswerdttjBo;
 import com.abc12366.cms.model.questionnaire.Answer;
+import com.abc12366.cms.model.questionnaire.bo.AnswertjBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public interface AnswerRoMapper {
     Answer selectByLogId(Answer answer);
 
     List<Answer> selectList(Answer answer);
+
+    List<AnswertjBO> selectListBysubjectsId(String subjectsId);
 
     List<AnswerdttjBo> selectdttj(Map<String,Object> map);
 

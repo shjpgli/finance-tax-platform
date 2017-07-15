@@ -13,7 +13,7 @@ public interface ChannelService {
 
     List<ChannelBo> selectList();
 
-    List<ChannelBo> selectLists();
+    List<ChannelBo> selectLists(Map<String,Object> map);
 
     List<ChannelBo> selectListByparentId(String parentId);
 

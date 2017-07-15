@@ -26,9 +26,20 @@
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectLists" resultType="com.abc12366.cms.model.bo.ChannelBo" parameterType="java.lang.String">
 		SELECT
-		channelId,channelName,	modelId,	siteId,	parentId,	channelPath,	priority,	isDisplay,
-        (select count(*) cnt from cms_content where channelId = t.channelId) cnt
-		FROM cms_channel t order by priority
+		channelId,channelName,	modelId,	t.siteId,	parentId,	channelPath,	priority,	isDisplay,
+        (select count(*) cnt from cms_content where channelId = t.channelId) cnt,sitePath,domain
+		FROM cms_channel t LEFT JOIN cms_site c ON t.siteId = c.siteId
+		WHERE 1=1
+		<if test="channelId != null and channelId != ''">
+			AND t.channelId = #{channelId}
+		</if>
+		<if test="channelName != null and channelName != ''">
+			AND t.channelName = #{channelName}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND t.parentId = #{parentId}
+		</if>
+		order by priority
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->

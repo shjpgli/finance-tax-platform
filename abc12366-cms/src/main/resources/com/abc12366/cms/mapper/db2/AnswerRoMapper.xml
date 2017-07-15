@@ -24,6 +24,14 @@
         WHERE answerLogId = #{answerLogId}
     </select>
 
+	<!-- 查询（根据answerLogId查询） -->
+	<select id="selectListBysubjectsId" resultType="com.abc12366.cms.model.questionnaire.bo.AnswertjBO" parameterType="java.lang.String">
+		SELECT
+			a.content,b.startTime,b.endTime
+		FROM cms_paper_answer a LEFT JOIN cms_paper_answer_log b ON a.answerLogId = b.id
+		WHERE subjectsId = #{subjectsId}
+	</select>
+
 	<!-- 查询（答题统计） -->
 	<select id="selectdttj" resultType="com.abc12366.cms.model.bo.AnswerdttjBo" parameterType="java.util.Map">
 		SELECT a.content,COUNT(subjectsId) cnt FROM cms_paper_answer a LEFT JOIN cms_paper_answer_log b ON a.answerLogId = b.id
