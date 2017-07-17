@@ -23,5 +23,19 @@
 		FROM cms_model
 	</select>
 
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectConByModelId" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT count(contentId) cnt
+		FROM cms_content
+		WHERE modelId = #{modelId}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectChaByModelId" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT count(channelId) cnt
+		FROM cms_channel
+		WHERE modelId = #{modelId}
+	</select>
+
 
 </mapper>

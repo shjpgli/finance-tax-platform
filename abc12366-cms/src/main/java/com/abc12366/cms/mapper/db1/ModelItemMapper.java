@@ -38,7 +38,7 @@ public interface ModelItemMapper{
 	 * 删除（根据modelId删除）
 	 *
 	 **/
-	int deleteListBymodelId(@Param("modelId") String modelId);
+	int deleteBymodelId(@Param("modelId") String modelId);
 
 	/**
 	 * 

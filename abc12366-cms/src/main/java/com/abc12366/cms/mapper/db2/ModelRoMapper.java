@@ -1,6 +1,5 @@
 package com.abc12366.cms.mapper.db2;
 
-import com.abc12366.cms.model.ContentType;
 import com.abc12366.cms.model.Model;
 import com.abc12366.cms.model.bo.ModelBo;
 import org.apache.ibatis.annotations.Param;
@@ -29,6 +28,20 @@ public interface ModelRoMapper{
 	 *
 	 **/
 	List<ModelBo> selectList();
+
+	/**
+	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	Integer selectConByModelId(@Param("modelId") String modelId);
+
+	/**
+	 *
+	 * 查询(根据查询条件查询)
+	 *
+	 **/
+	Integer selectChaByModelId(@Param("modelId") String modelId);
 
 
 }

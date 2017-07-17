@@ -6,11 +6,13 @@ import com.abc12366.cms.mapper.db2.ModelRoMapper;
 import com.abc12366.cms.model.Model;
 import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelListBo;
+import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -110,9 +112,15 @@ public class ModelServiceImpl implements ModelService {
         return modelListBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String delete(String modelId) {
-        modelItemMapper.deleteListBymodelId(modelId);
+        int con = modelRoMapper.selectConByModelId(modelId);
+        int cha = modelRoMapper.selectChaByModelId(modelId);
+        if(con != 0 || cha !=0){
+            throw new ServiceException(4303);
+        }
+        modelItemMapper.deleteBymodelId(modelId);
         int r = modelMapper.deleteByPrimaryKey(modelId);
         LOGGER.info("{}", r);
         return "";
@@ -120,9 +128,12 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public String deleteList(String[] modelIds) {
-        modelItemMapper.deleteListBymodelIds(modelIds);
-        int r = modelMapper.deleteList(modelIds);
-        LOGGER.info("{}", r);
+//        modelItemMapper.deleteListBymodelIds(modelIds);
+//        int r = modelMapper.deleteList(modelIds);
+        for(int i=0;i<modelIds.length;i++){
+            this.delete(modelIds[i]);
+        }
+        LOGGER.info("{}", "");
         return "";
     }
 }
