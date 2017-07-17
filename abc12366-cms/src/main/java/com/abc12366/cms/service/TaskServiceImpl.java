@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskBo save(TaskBo taskBo) {
         TaskBo taskBo1 = new TaskBo();
-        taskBo1.setTaskName(taskBo1.getTaskName());
+        taskBo1.setTaskName(taskBo.getTaskName());
         int cnt = taskRoMapper.selectCnt(taskBo1);
         if(cnt >0){
             throw new ServiceException(4302);
@@ -74,7 +74,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskBo update(TaskBo taskBo) {
         TaskBo taskBo1 = new TaskBo();
-        taskBo1.setTaskName(taskBo1.getTaskName());
+        taskBo1.setTaskName(taskBo.getTaskName());
         int cnt = taskRoMapper.selectCnt(taskBo1);
         if(cnt >1){
             throw new ServiceException(4302);
