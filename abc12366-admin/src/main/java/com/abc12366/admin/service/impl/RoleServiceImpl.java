@@ -65,6 +65,7 @@ public class RoleServiceImpl implements RoleService {
         Date date = new Date();
         role.setCreateTime(date);
         role.setUpdateTime(date);
+        role.setStatus(true);
         int insert = roleMapper.insert(role);
         if (insert != 1) {
             logger.warn("插入失败，参数：{}", role.toString());
@@ -204,6 +205,7 @@ public class RoleServiceImpl implements RoleService {
             Date date = new Date();
             role.setCreateTime(date);
             role.setRemark(role.getRemark());
+            role.setStatus(true);
             roleMapper.insert(role);
         }
         List<UserRole> roleMenuIdList = userRoleRoMapper.selectUserRoleByRoleId(roleId);
