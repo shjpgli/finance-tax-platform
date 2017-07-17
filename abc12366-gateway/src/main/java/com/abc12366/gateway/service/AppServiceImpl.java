@@ -146,9 +146,6 @@ public class AppServiceImpl implements AppService {
     @Override
     public List<AppGeneralBO> selectList(AppGeneralBO appGeneralBO) {
         List<AppGeneralBO> apps = appRoMapper.selectList(appGeneralBO);
-        if (apps.size() < 1) {
-            return null;
-        }
         LOGGER.info("{}", apps);
         return apps;
     }
