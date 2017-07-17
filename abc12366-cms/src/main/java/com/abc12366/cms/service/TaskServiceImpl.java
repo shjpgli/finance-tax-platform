@@ -75,8 +75,9 @@ public class TaskServiceImpl implements TaskService {
     public TaskBo update(TaskBo taskBo) {
         TaskBo taskBo1 = new TaskBo();
         taskBo1.setTaskName(taskBo.getTaskName());
+        taskBo1.setTaskId(taskBo.getTaskId());
         int cnt = taskRoMapper.selectCnt(taskBo1);
-        if(cnt >1){
+        if(cnt >0){
             throw new ServiceException(4302);
         }
         //更新模型信息
