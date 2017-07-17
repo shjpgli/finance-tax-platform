@@ -16,7 +16,7 @@
                 and category=#{category}
             </if>
         </where>
-        ORDER BY lastUpdate DESC
+        ORDER BY category ASC
     </select>
     <select id="selectListByUserId" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="java.lang.String">
         SELECT  ut.id,ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ut.weight
