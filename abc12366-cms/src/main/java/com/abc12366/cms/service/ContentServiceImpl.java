@@ -89,7 +89,7 @@ public class ContentServiceImpl implements ContentService{
     @Override
     public List<ContentsListBo> selectListByContentType(Map<String,Object> map) {
         //查询内容列表
-        List<ContentsListBo> contents = contentRoMapper.selectListByChannelId(map);
+        List<ContentsListBo> contents = contentRoMapper.selectListByContentType(map);
         LOGGER.info("{}", contents);
         return contents;
     }
