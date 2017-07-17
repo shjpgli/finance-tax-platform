@@ -37,6 +37,9 @@
 		<if test="taskName != null and taskName != ''">
 			AND taskName = #{taskName}
 		</if>
+		<if test="taskId != null and taskId != ''">
+			AND taskId != #{taskId}
+		</if>
 		<if test="taskType != null and taskType != ''">
 			AND taskType = #{taskType}
 		</if>
