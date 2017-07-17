@@ -1,7 +1,5 @@
 package com.abc12366.gateway.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
 
 /**
@@ -25,9 +23,7 @@ public class AppSettingApiBO {
     private String version;
     private boolean authentication;
     private boolean status;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
     public AppSettingApiBO() {

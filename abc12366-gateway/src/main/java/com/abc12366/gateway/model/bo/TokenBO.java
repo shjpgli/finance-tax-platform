@@ -1,7 +1,5 @@
 package com.abc12366.gateway.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +13,8 @@ public class TokenBO implements Serializable {
     private String id;
     private String name;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expireTime;
 
     public TokenBO() {
