@@ -1,5 +1,6 @@
 package com.abc12366.uc.web;
 
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.common.web.BaseController;
@@ -71,11 +72,14 @@ public class AuthController extends BaseController {
         //进行手机验证码验证
         ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(), request);
         if (response == null) {
-            return ResponseEntity.ok(Utils.kv("data", null));
+            throw new ServiceException(4201);
+        }
+        if(!response.hasBody()){
+            throw new ServiceException(4201);
         }
         VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
-            return ResponseEntity.ok(Utils.kv("data", null));
+            throw new ServiceException(4201);
         }
 
         //注册
