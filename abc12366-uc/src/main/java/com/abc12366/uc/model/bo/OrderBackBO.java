@@ -20,7 +20,8 @@ public class OrderBackBO implements Serializable {
 	private String status;
 	private java.util.Date createTime;
 	private java.util.Date lastUpdate;
-
+	/**操作人员ID**/
+	private String operatorUser;
 
 
 	public void setId(String id){
@@ -103,4 +104,11 @@ public class OrderBackBO implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getOperatorUser() {
+		return operatorUser;
+	}
+
+	public void setOperatorUser(String operatorUser) {
+		this.operatorUser = operatorUser;
+	}
 }

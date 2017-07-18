@@ -20,6 +20,9 @@ public class InvoiceBackBO implements Serializable {
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
 
+    /**操作人员ID**/
+    private String operatorUser;
+
     private String sendExpressNo;
     private String invoiceId;
     private InvoiceBO invoiceBO;
@@ -126,5 +129,13 @@ public class InvoiceBackBO implements Serializable {
 
     public void setSendExpressNo(String sendExpressNo) {
         this.sendExpressNo = sendExpressNo;
+    }
+
+    public String getOperatorUser() {
+        return operatorUser;
+    }
+
+    public void setOperatorUser(String operatorUser) {
+        this.operatorUser = operatorUser;
     }
 }

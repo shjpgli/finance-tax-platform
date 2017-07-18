@@ -28,13 +28,14 @@
         <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--根据goodsId查询产品-->
     <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
         SELECT
         g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
-        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,g.goodsType,  gc.category as categoryName
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
         WHERE id = #{id}
@@ -43,7 +44,7 @@
     <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
         SELECT
         g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
-        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,g.goodsType,  gc.category as categoryName
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
         <where>
@@ -75,6 +76,7 @@
         <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
         <result column="startRepo" property="startRepo" jdbcType="INTEGER"/>
         <result column="endRepo" property="endRepo" jdbcType="INTEGER"/>
         <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="{goodsId=id,startRepo=startRepo,endRepo=endRepo}" select="getProductBO"></collection>
@@ -140,7 +142,7 @@
     <select id="selectProductRepoList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.bo.GoodsBO">
         SELECT
         g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
-        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName,#{endRepo} as endRepo,#{startRepo} as startRepo
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,g.goodsType,  gc.category as categoryName,#{endRepo} as endRepo,#{startRepo} as startRepo
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
         <where>
@@ -230,7 +232,7 @@
     <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
         SELECT
         g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
-        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,  gc.category as categoryName
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,g.goodsType,  gc.category as categoryName
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
         WHERE g.id = #{id}

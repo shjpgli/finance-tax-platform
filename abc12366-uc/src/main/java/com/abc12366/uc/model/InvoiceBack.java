@@ -56,6 +56,9 @@ public class InvoiceBack implements Serializable {
 
     private String invoiceId;
 
+    /**操作人员ID**/
+    private String operatorUser;
+
     public void setId(String id) {
         this.id = id;
     }
@@ -142,5 +145,13 @@ public class InvoiceBack implements Serializable {
 
     public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public String getOperatorUser() {
+        return operatorUser;
+    }
+
+    public void setOperatorUser(String operatorUser) {
+        this.operatorUser = operatorUser;
     }
 }

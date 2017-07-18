@@ -44,7 +44,7 @@ public class ApiController {
         return ResponseEntity.ok(Utils.kv("dataList",pageInfo.getList() , "total", pageInfo.getTotal()));
     }
 
-    @GetMapping(path = "/api/selectOne/{id}")
+    @GetMapping(path = "/api/{id}")
     public ResponseEntity selectApi(@PathVariable("id") String id) {
         LOGGER.info(id);
         ApiBO api = apiService.selectOne(id);

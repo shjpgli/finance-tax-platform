@@ -31,6 +31,8 @@ public class GoodsBO implements Serializable {
     private List<ProductBO> productBOList;
     private Double totalStock;
     private Double totalPrice;
+    /**商品类型**/
+    private String goodsType;
 
     private ProductBO productBO;
     /**销售价**/
@@ -231,5 +233,13 @@ public class GoodsBO implements Serializable {
 
     public void setProductBO(ProductBO productBO) {
         this.productBO = productBO;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
     }
 }

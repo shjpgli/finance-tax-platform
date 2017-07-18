@@ -27,7 +27,7 @@ public class ApiBO {
 
     // 接口方法
     @NotEmpty
-    @Pattern(regexp = "[GET|POST|PUT|DELETE|ALL]", message = "必须为HttpMethod方法")
+    @Pattern(regexp = "GET|POST|PUT|DELETE|ALL", message = "必须为HttpMethod方法")
     private String method;
 
     // 版本

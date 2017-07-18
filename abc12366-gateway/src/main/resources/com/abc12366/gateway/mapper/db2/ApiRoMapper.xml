@@ -32,6 +32,6 @@
     <select id="selectOne" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api" >
         select i.id, i.name, i.uri, i.method, i.version, i.appId, i.authentication, i.status, i.createTime, i.lastUpdate,p.name as appName
         from gw_api i
-        LEFT JOIN gw_app p ON p.id = i.appId WHERE appId = #{appId}
+        LEFT JOIN gw_app p ON p.id = i.appId WHERE i.id = #{id}
     </select>
 </mapper>

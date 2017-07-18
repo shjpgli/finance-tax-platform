@@ -61,6 +61,9 @@
 			<if test="tradeMethod != null">
 				tradeMethod,
 			</if>
+			<if test="goodsType != null">
+				goodsType,
+			</if>
 
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -111,6 +114,9 @@
 			</if>
 			<if test="tradeMethod!=null">
 				#{tradeMethod},
+			</if>
+			<if test="goodsType!=null">
+				#{goodsType},
 			</if>
 		</trim>
 	</insert>
@@ -163,6 +169,9 @@
 			</if>
 			<if test="tradeMethod != null">
 				tradeMethod = #{tradeMethod},
+			</if>
+			<if test="goodsType != null">
+				goodsType = #{goodsType},
 			</if>
 
 		</set>
