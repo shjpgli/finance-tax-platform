@@ -51,6 +51,18 @@ public class ContentListBo implements Serializable {
 	/**是否已生成静态页**/
 	private Integer needRegenerate;
 
+	/**访问路径**varchar(30)**/
+	private String channelPath;
+
+	/**域名**varchar(50)**/
+	private String domain;
+
+	/**站点路径**varchar(20)**/
+	private String sitePath;
+
+	/**站点路径**varchar(500)**/
+	private String staticLink;
+
 
 	public String getContentId() {
 		return contentId;

@@ -57,6 +57,18 @@ public class ContentsListBo implements Serializable {
 	/**推荐级别**/
 	private Integer recommendLevel;
 
+	/**访问路径**varchar(30)**/
+	private String channelPath;
+
+	/**域名**varchar(50)**/
+	private String domain;
+
+	/**站点路径**varchar(20)**/
+	private String sitePath;
+
+	/**站点路径**varchar(500)**/
+	private String staticLink;
+
 
 	public String getContentId() {
 		return contentId;
@@ -178,4 +190,27 @@ public class ContentsListBo implements Serializable {
 		this.status = status;
 	}
 
+	public String getChannelPath() {
+		return channelPath;
+	}
+
+	public void setChannelPath(String channelPath) {
+		this.channelPath = channelPath;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+	public String getSitePath() {
+		return sitePath;
+	}
+
+	public void setSitePath(String sitePath) {
+		this.sitePath = sitePath;
+	}
 }
