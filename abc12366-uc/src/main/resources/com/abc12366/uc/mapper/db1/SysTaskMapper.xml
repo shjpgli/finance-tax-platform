@@ -10,8 +10,8 @@
         update uc_sys_task
         <set>
             <if test="name!=null">name=#{name},</if>
-            <if test="startTime!=null">startTime=#{startTime},</if>
-            <if test="endTime!=null">endTime=#{endTime},</if>
+            startTime=#{startTime},
+            endTime=#{endTime},
             <if test="rule!=null">rule=#{rule},</if>
             <if test="points!=null">points=#{points},</if>
             <if test="type!=null">type=#{type},</if>

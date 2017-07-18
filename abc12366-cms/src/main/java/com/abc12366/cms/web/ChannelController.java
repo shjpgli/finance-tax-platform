@@ -35,6 +35,9 @@ public class ChannelController {
     @Autowired
     private ModelService modelService;
 
+    /**
+     * 栏目列表查询
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "channelId", required = false) String channelId,
                                      @RequestParam(value = "parentId", required = false) String parentId,
@@ -49,21 +52,46 @@ public class ChannelController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 栏目列表查询无需登录
+     */
+    @GetMapping(path = "/list")
+    public ResponseEntity list(@RequestParam(value = "channelId", required = false) String channelId,
+                                     @RequestParam(value = "parentId", required = false) String parentId,
+                                     @RequestParam(value = "channelName", required = false) String channelName
+    ) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("channelId", channelId);//栏目ID
+        dataMap.put("parentId", parentId);//父栏目ID
+        dataMap.put("channelName", channelName);//栏目名称
+        List<ChannelBo> dataList = channelService.selectLists(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
+    /**
+     * 初始化栏目
+     */
     @GetMapping(path = "/init")
     public ResponseEntity init(@RequestParam(value = "modelId", required = false) String modelId) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("modelId",modelId);
-        dataMap.put("isChannel",1);
+        dataMap.put("modelId",modelId);//模型ID
+        dataMap.put("isChannel",1);//是否为栏目，1为是
         ChannelInitBo dataList = new ChannelInitBo();
         List<ModelItemBo> modelItems = channelService.selectModeList(dataMap);
         ModelBo modelBo = modelService.selectModel(modelId);
+        //模型项
         dataList.setModelItems(modelItems);
+        //栏目模板前缀
         dataList.setTplPrefix(modelBo.getTplChannelPrefix());
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("data", dataList));
     }
 
+    /**
+     * 新增栏目
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody ChannelSaveBo channelSaveBo) {
         LOGGER.info("{}", channelSaveBo);
@@ -73,20 +101,26 @@ public class ChannelController {
         return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
+    /**
+     * 查询单个栏目
+     */
     @GetMapping(path = "/{channelId}")
     public ResponseEntity selectOne(@PathVariable String channelId) {
         LOGGER.info("{}", channelId);
-        //根据栏目ID查询内容信息
+        //根据栏目ID查询栏目信息
         ChannelSaveBo channelSaveBo = channelService.selectChannel(channelId);
         LOGGER.info("{}", channelSaveBo);
         return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
+    /**
+     * 根据模板查询栏目信息(供生成静态页用)
+     */
     @GetMapping(path = "/channelList")
     public ResponseEntity channelList(@RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime,
                                       @RequestParam(value = "tplChannel", required = false) String tplChannel) {
-        //查询模型项
+        //查询栏目信息
         Map<String, Object> dataMap = new HashMap<>();
         List<ChannelExtBo> channelExtBoList = channelService.selectListBytplChannel(tplChannel);
         List<ChannelSaveBo> dataList = new ArrayList<ChannelSaveBo>();
@@ -100,6 +134,9 @@ public class ChannelController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 更新栏目
+     */
     @PutMapping(path = "/{channelId}")
     public ResponseEntity update(@PathVariable String channelId,
                                  @Valid @RequestBody ChannelSaveBo channelSaveBo) {
@@ -111,6 +148,9 @@ public class ChannelController {
         return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
+    /**
+     * 更新栏目是否启用，同时更新其下面的子栏目
+     */
     @PutMapping(path = "/updateByparentId")
     public ResponseEntity update(@RequestBody ChannelBo channelBo) {
         LOGGER.info("{}", channelBo);
@@ -120,6 +160,9 @@ public class ChannelController {
         return ResponseEntity.ok(Utils.kv("data", channelBo));
     }
 
+    /**
+     * 删除栏目
+     */
     @DeleteMapping(path = "/{channelId}")
     public ResponseEntity delete(@PathVariable String channelId) {
         LOGGER.info("{}", channelId);

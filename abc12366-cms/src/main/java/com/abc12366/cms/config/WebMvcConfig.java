@@ -48,6 +48,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/task/list")
                 //根据内容ID查找对应的上一篇以及下一篇内容想关信息
                 .excludePathPatterns("/content/selectContentudList")
+                //根据栏目ID查找内容信息
+                .excludePathPatterns("/content/selectListByChannelId")
+                //栏目列表查询
+                .excludePathPatterns("/channel/list")
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
     }
