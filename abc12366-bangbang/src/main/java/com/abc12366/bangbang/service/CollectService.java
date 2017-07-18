@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.bo.CollectBO;
+import com.abc12366.bangbang.model.bo.CollectListBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface CollectService {
 
     void delete(String askId, HttpServletRequest request);
 
-    List<CollectBO> selectList(String userId);
+    List<CollectListBO> selectList(String userId);
 
     String selectCount(String askId);
 }
