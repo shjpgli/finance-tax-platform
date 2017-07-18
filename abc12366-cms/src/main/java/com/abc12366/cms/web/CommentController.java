@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 内容管理模块
+ * 评论管理模块
  *
  * @author xieyanmao
  * @create 2017-05-02
@@ -35,6 +35,9 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 评论列表查询
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
@@ -53,6 +56,9 @@ public class CommentController {
 
     }
 
+    /**
+     * 新增评论
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody CommentSaveBo commentSaveBo) {
         LOGGER.info("{}", commentSaveBo);
@@ -62,6 +68,9 @@ public class CommentController {
         return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
+    /**
+     * 查询单个评论
+     */
     @GetMapping(path = "/{commentId}")
     public ResponseEntity selectOne(@PathVariable String commentId) {
         LOGGER.info("{}", commentId);
@@ -71,6 +80,9 @@ public class CommentController {
         return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
+    /**
+     * 查询评论统计信息
+     */
     @GetMapping(path = "/tj")
     public ResponseEntity selectTj() {
         //查询评论统计信息
@@ -79,6 +91,9 @@ public class CommentController {
         return ResponseEntity.ok(Utils.kv("data", commentTjListBo));
     }
 
+    /**
+     * 更新评论
+     */
     @PutMapping(path = "/{commentId}")
     public ResponseEntity update(@PathVariable String commentId,
                                  @Valid @RequestBody CommentSaveBo commentSaveBo) {
@@ -90,6 +105,9 @@ public class CommentController {
         return ResponseEntity.ok(Utils.kv("data", commentSaveBo));
     }
 
+    /**
+     * 删除评论
+     */
     @DeleteMapping(path = "/{commentId}")
     public ResponseEntity delete(@PathVariable String commentId) {
         LOGGER.info("{}", commentId);
@@ -99,19 +117,25 @@ public class CommentController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 批量删除评论
+     */
     @PostMapping(path = "/deleteList")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
-        //删除评论信息
+        //批量删除评论信息
         String rtn = commentService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
+    /**
+     * 批量审批评论信息
+     */
     @PutMapping(path = "/spList")
     public ResponseEntity spList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
-        //审批评论信息
+        //批量审批评论信息
         String rtn = commentService.spList(idsBo.getIds());
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));

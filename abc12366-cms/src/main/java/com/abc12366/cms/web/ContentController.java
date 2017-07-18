@@ -40,6 +40,9 @@ public class ContentController {
     @Autowired
     private ModelService modelService;
 
+    /**
+     * 查询内容列表信息
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
@@ -57,7 +60,7 @@ public class ContentController {
         dataMap.put("author", author);//作者
         dataMap.put("status", status);//状态
         dataMap.put("channelId", channelId);//栏目ID
-        dataMap.put("recommendLevel", recommendLevel);
+        dataMap.put("recommendLevel", recommendLevel);//推荐级别
 
         // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.
         // 当Service中有多条select语句时，建议放在Service中，这时需要将Page对象传递到Service实现方法，返回对象也是Page对象。
@@ -73,6 +76,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
+    /**
+     * 根据内容标签查询内容列表信息
+     */
     @GetMapping(path = "/selectListByContentType")
     public ResponseEntity selectListByContentType(@RequestParam(value = "typeId", required = false) String typeId,
                                                   @RequestParam(value = "contentType", required = false) String contentType,
@@ -106,6 +112,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 根据内容标签分组，获取内容标签列表
+     */
     @GetMapping(path = "/selectContentType")
     public ResponseEntity selectContentType(@RequestParam(value = "typeId", required = false) String typeId,
                                                   @RequestParam(value = "contentType", required = false) String contentType,
@@ -139,6 +148,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 根据栏目ID查询内容列表信息
+     */
     @GetMapping(path = "/selectListByChannelId")
     public ResponseEntity selectListByChannelId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
@@ -174,6 +186,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 内容初始化
+     */
     @GetMapping(path = "/init")
     public ResponseEntity init(@RequestParam(value = "modelId", required = false) String modelId) {
         //查询模型项
@@ -191,6 +206,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", dataList));
     }
 
+    /**
+     * 新增内容
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody ContentSaveBo contentSaveBo) {
         LOGGER.info("{}", contentSaveBo);
@@ -200,6 +218,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
+    /**
+     * 查询单个内容
+     */
     @GetMapping(path = "/{contentId}")
     public ResponseEntity selectOne(@PathVariable String contentId) {
         LOGGER.info("{}", contentId);
@@ -209,6 +230,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
+    /**
+     * 根据栏目ID查找内容信息
+     */
     @GetMapping(path = "/contentList")
     public ResponseEntity contentList(@RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime,
@@ -240,6 +264,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 根据专题ID查找内容信息
+     */
     @GetMapping(path = "/selectListBytopicId")
     public ResponseEntity selectListBytopicId(@RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime,
@@ -271,6 +298,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 根据多个内容ID查找内容信息
+     */
     @GetMapping(path = "/contentListByContentids")
     public ResponseEntity contentListByContentids(
                                       @RequestParam(value = "contentIds", required = false) String contentIds) {
@@ -286,6 +316,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 更新内容
+     */
     @PutMapping(path = "/{contentId}")
     public ResponseEntity update(@PathVariable String contentId,
                                  @Valid @RequestBody ContentSaveBo contentSaveBo) {
@@ -297,6 +330,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
+    /**
+     * 删除内容
+     */
     @DeleteMapping(path = "/{contentId}")
     public ResponseEntity delete(@PathVariable String contentId) {
         LOGGER.info("{}", contentId);
@@ -306,6 +342,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 批量删除内容
+     */
     @PostMapping(path = "/deletelist")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
@@ -316,6 +355,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
+    /**
+     * 批量退回内容
+     */
     @PostMapping(path = "/thlist")
     public ResponseEntity thList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
@@ -325,6 +367,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
+    /**
+     * 批量更新内容已生成静态页字段
+     */
     @PostMapping(path = "/updatRegenerateList")
     public ResponseEntity updatRegenerateList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
@@ -334,6 +379,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
+    /**
+     * 批量更新内容
+     */
     @PutMapping(path = "/updateList")
     public ResponseEntity updateList(@RequestBody ContentUpdateListBo contentUpdateListBo) {
 
@@ -344,6 +392,9 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", contentUpdateListBo));
     }
 
+    /**
+     * 批量更新内容(专题)
+     */
     @PutMapping(path = "/updatetopicList")
     public ResponseEntity updatetopicList(@RequestBody ContentTopicListBo topicListBo) {
 
@@ -355,7 +406,9 @@ public class ContentController {
     }
 
 
-
+    /**
+     * 查询内容的上下篇
+     */
     @GetMapping(path = "/selectContentudList")
     public ResponseEntity selectContentudList(@RequestParam(value = "channelId", required = false) String channelId,
                                                 @RequestParam(value = "releaseDate", required = false) String releaseDate) {
