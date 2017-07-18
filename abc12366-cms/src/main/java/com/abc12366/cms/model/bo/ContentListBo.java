@@ -167,4 +167,36 @@ public class ContentListBo implements Serializable {
 	public void setNeedRegenerate(Integer needRegenerate) {
 		this.needRegenerate = needRegenerate;
 	}
+
+	public String getChannelPath() {
+		return channelPath;
+	}
+
+	public void setChannelPath(String channelPath) {
+		this.channelPath = channelPath;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+	public String getSitePath() {
+		return sitePath;
+	}
+
+	public void setSitePath(String sitePath) {
+		this.sitePath = sitePath;
+	}
+
+	public String getStaticLink() {
+		return staticLink;
+	}
+
+	public void setStaticLink(String staticLink) {
+		this.staticLink = staticLink;
+	}
 }

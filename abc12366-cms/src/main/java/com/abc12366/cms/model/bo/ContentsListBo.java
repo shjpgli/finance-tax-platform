@@ -213,4 +213,12 @@ public class ContentsListBo implements Serializable {
 	public void setSitePath(String sitePath) {
 		this.sitePath = sitePath;
 	}
+
+	public String getStaticLink() {
+		return staticLink;
+	}
+
+	public void setStaticLink(String staticLink) {
+		this.staticLink = staticLink;
+	}
 }
