@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db2.CollectRoMapper">
     <select id="selectList" resultType="com.abc12366.bangbang.model.bo.CollectListBO" parameterType="java.lang.String">
-        select id,askId,userId,
+        select bc.id,bc.askId,bc.userId,
         (select ask from bb_ask ba where ba.id=bc.askId) ask,
         (select detail from bb_ask ba where ba.id=bc.askId) detail,
         (select status from bb_ask ba where ba.id=bc.askId) status,
@@ -12,7 +12,8 @@
         (select points from bb_ask ba where ba.id=bc.askId) points,
         (select isSolve from bb_ask ba where ba.id=bc.askId) isSolve,
         (select askedUserId from bb_ask ba where ba.id=bc.askId) askedUserId,
-        (select type from bb_ask ba where ba.id=bc.askId) type
+        (select type from bb_ask ba where ba.id=bc.askId) type,
+        (select count(1) from bb_answer bba where bba.askId=bc.askId) answerCount
         from bb_collect bc
         where bc.userId=#{userId}
         ORDER BY bc.lastUpdate DESC

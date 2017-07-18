@@ -42,7 +42,7 @@ public class SmsController {
 
         ResponseEntity response = smsService.sendCode(sendCodeParam);
         if (response == null || !response.getStatusCode().is2xxSuccessful()) {
-            return (ResponseEntity) ResponseEntity.badRequest();
+            throw new ServiceException(4201);
         }
         if (!response.hasBody()) {
             throw new ServiceException(4201);
