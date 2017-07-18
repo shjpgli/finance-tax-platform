@@ -7,6 +7,7 @@ import com.abc12366.message.service.SmsLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,8 +34,12 @@ public class SmsLogServiceImpl implements SmsLogService {
             SmsVerifyCode smsVerifyCode = new SmsVerifyCode();
             smsVerifyCode.setId(Utils.uuid());
             smsVerifyCode.setMobile(sendCodeParam.getMobile());
-            smsVerifyCode.setDeviceId(sendCodeParam.getDeviceId());
-            smsVerifyCode.setTemplateid(sendCodeParam.getTemplateid().toString());
+            if(!StringUtils.isEmpty(sendCodeParam.getDeviceId())){
+                smsVerifyCode.setDeviceId(sendCodeParam.getDeviceId());
+            }
+            if(!StringUtils.isEmpty(sendCodeParam.getTemplateid())){
+                smsVerifyCode.setTemplateid(sendCodeParam.getTemplateid().toString());
+            }
             smsVerifyCode.setCode(sendCodeResponseBO.getCode());
             smsVerifyCode.setMsg(sendCodeResponseBO.getMsg());
             smsVerifyCode.setObj(sendCodeResponseBO.getObj());

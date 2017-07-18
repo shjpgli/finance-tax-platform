@@ -1,5 +1,6 @@
 package com.abc12366.uc.web;
 
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.bo.*;
@@ -90,6 +91,9 @@ public class UserController {
     public ResponseEntity selectByUsernameOrPhone(@PathVariable String usernameOrPhone) {
         LOGGER.info("{}", usernameOrPhone);
         UserBO user = userService.selectByUsernameOrPhone(usernameOrPhone);
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
         LOGGER.info("{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
