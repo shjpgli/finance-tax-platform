@@ -1,9 +1,12 @@
 package com.abc12366.gateway.web;
 
 import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.Api;
 import com.abc12366.gateway.model.bo.ApiBO;
 import com.abc12366.gateway.service.ApiService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +17,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @author lijun <ljun51@outlook.com>
  * @create 2017-04-27 10:21 AM
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(name = "/api", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class ApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);
@@ -27,43 +29,51 @@ public class ApiController {
     @Autowired
     private ApiService apiService;
 
-    @GetMapping
-    public ResponseEntity selectList() {
-        List<Api> apiList = apiService.selectList();
+    @GetMapping(path = "/api")
+    public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "status", required = false) Boolean status,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+        Api api = new Api();
+        api.setName(name);
+        api.setStatus(status);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<ApiBO> apiList = apiService.selectList(api);
+        PageInfo<ApiBO> pageInfo = new PageInfo<>(apiList);
         LOGGER.info("{}", apiList);
-        return ResponseEntity.ok(apiList);
+        return ResponseEntity.ok(Utils.kv("dataList",pageInfo.getList() , "total", pageInfo.getTotal()));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity selectOne(@PathVariable("id") String id) {
+    @GetMapping(path = "/api/selectOne/{id}")
+    public ResponseEntity selectApi(@PathVariable("id") String id) {
         LOGGER.info(id);
-        Api api = apiService.selectOne(id);
+        ApiBO api = apiService.selectOne(id);
         LOGGER.info("{}", api);
-        return ResponseEntity.ok(api);
+        return ResponseEntity.ok(Utils.kv("data", api));
     }
 
-    @PostMapping
+    @PostMapping(path = "/api")
     public ResponseEntity insert(@Valid @RequestBody ApiBO apiBO) {
         LOGGER.info("{}", apiBO);
         Api api = apiService.insert(apiBO);
         LOGGER.info("{}", api);
-        return ResponseEntity.ok(api);
+        return ResponseEntity.ok(Utils.kv("data", api));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/api/{id}")
     public ResponseEntity update(@PathVariable("id") String id,
                                  @Valid @RequestBody ApiBO apiBO) {
         apiBO.setId(id);
         LOGGER.info("{}", apiBO);
         Api api = apiService.update(apiBO);
         LOGGER.info("{}", api);
-        return ResponseEntity.ok(api);
+        return ResponseEntity.ok(Utils.kv("data", api));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/api/{id}")
     public ResponseEntity delete(@PathVariable("id")String id) {
         LOGGER.info("{}", id);
         apiService.delete(id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

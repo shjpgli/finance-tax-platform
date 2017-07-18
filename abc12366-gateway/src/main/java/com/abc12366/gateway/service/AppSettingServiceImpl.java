@@ -28,7 +28,9 @@ public class AppSettingServiceImpl implements AppSettingService {
 
     @Override
     public List<AppSettingApiBO> selectList(String appId) {
-        return appSettingRoMapper.selectList(appId);
+        AppSettingApiBO bo = new AppSettingApiBO();
+        bo.setAppId(appId);
+        return appSettingRoMapper.selectList(bo);
     }
 
     @Override

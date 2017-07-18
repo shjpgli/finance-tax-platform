@@ -2,27 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db2.ApiRoMapper">
-    <select id="selectList" resultType="com.abc12366.gateway.model.Api">
-        select id, name, uri, method, version, appId, authentication, status, createTime, lastUpdate
-        from gw_api
+    <resultMap id="apiMap" type="com.abc12366.gateway.model.bo.ApiBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="uri" property="uri" jdbcType="VARCHAR"/>
+        <result column="method" property="method" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="appId" property="appId" jdbcType="VARCHAR"/>
+        <result column="authentication" property="authentication" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="appName" property="appName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="selectList" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api">
+        select i.id, i.name, i.uri, i.method, i.version, i.appId, i.authentication, i.status, i.createTime, i.lastUpdate,p.name as appName
+        from gw_api i
+        LEFT JOIN gw_app p ON p.id = i.appId
         <where>
-            <if test="appId != null">appId = #{appId}</if>
-            <if test="uri != null">AND uri = #{uri}</if>
-            <if test="method != null">AND method = #{method}</if>
-            <if test="version != null">AND version = #{version}</if>
-            <if test="status != null">AND status = #{status}</if>
+            1 = 1
+            <if test="appId != null">and i.appId = #{appId}</if>
+            <if test="uri != null">AND i.uri = #{uri}</if>
+            <if test="method != null">AND i.method = #{method}</if>
+            <if test="version != null">AND i.version = #{version}</if>
+            <if test="status != null">AND i.status = #{status}</if>
         </where>
     </select>
 
-    <select id="selectOne" resultType="com.abc12366.gateway.model.Api">
-        select id, name, uri, method, version, appId, authentication, status, createTime, lastUpdate
-        from gw_api
-        <where>
-            <if test="appId != null">appId = #{appId}</if>
-            <if test="uri != null">AND uri = #{uri}</if>
-            <if test="method != null">AND method = #{method}</if>
-            <if test="version != null">AND version = #{version}</if>
-            <if test="status != null">AND status = #{status}</if>
-        </where>
+    <select id="selectOne" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api" >
+        select i.id, i.name, i.uri, i.method, i.version, i.appId, i.authentication, i.status, i.createTime, i.lastUpdate,p.name as appName
+        from gw_api i
+        LEFT JOIN gw_app p ON p.id = i.appId WHERE appId = #{appId}
     </select>
 </mapper>

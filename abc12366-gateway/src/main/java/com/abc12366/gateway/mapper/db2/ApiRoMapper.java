@@ -2,6 +2,7 @@ package com.abc12366.gateway.mapper.db2;
 
 
 import com.abc12366.gateway.model.Api;
+import com.abc12366.gateway.model.bo.ApiBO;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface ApiRoMapper {
-    Api selectOne(Api api);
+    ApiBO selectOne(Api api);
 
-    List<Api> selectList();
+    List<ApiBO> selectList(Api api);
 }

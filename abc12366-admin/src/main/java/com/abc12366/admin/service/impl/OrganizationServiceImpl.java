@@ -61,11 +61,11 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     private void validateOrg(OrganizationBO organizationBO) {
         if(isOrgName(organizationBO.getName())){
-            LOGGER.warn("已存在该部门", organizationBO);
+            LOGGER.warn("已存在该机构名称", organizationBO);
             throw new ServiceException(4099);
         }
         if(isOrgParentId(organizationBO.getParentId())){
-            LOGGER.warn("该部门已禁用", organizationBO);
+            LOGGER.warn("该机构已禁用", organizationBO);
             throw new ServiceException(4099);
         }
 

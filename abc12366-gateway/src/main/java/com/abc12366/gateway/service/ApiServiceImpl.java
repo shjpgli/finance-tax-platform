@@ -27,15 +27,15 @@ public class ApiServiceImpl implements ApiService {
     private ApiMapper apiMapper;
 
     @Override
-    public List<Api> selectList() {
-        return apiRoMapper.selectList();
+    public List<ApiBO> selectList(Api api) {
+        return apiRoMapper.selectList(api);
     }
 
     @Override
     public Api insert(ApiBO apiBO) {
         Api api = new Api();
         BeanUtils.copyProperties(apiBO, api);
-        Api queryApi = apiRoMapper.selectOne(api);
+        ApiBO queryApi = apiRoMapper.selectOne(api);
         if (queryApi != null) {
             return null;
         }
@@ -54,7 +54,7 @@ public class ApiServiceImpl implements ApiService {
                 .id(apiBO.getId())
                 .build();
 
-        Api updateApi = apiRoMapper.selectOne(api);
+        ApiBO updateApi = apiRoMapper.selectOne(api);
         if (updateApi != null) {
             updateApi.setAppId(apiBO.getAppId());
             updateApi.setName(apiBO.getName());
@@ -65,7 +65,7 @@ public class ApiServiceImpl implements ApiService {
             updateApi.setStatus(apiBO.isStatus());
             updateApi.setLastUpdate(new Date());
             apiMapper.update(updateApi);
-            return updateApi;
+            return api;
         }
 
         return null;
@@ -75,14 +75,14 @@ public class ApiServiceImpl implements ApiService {
     public void delete(String id) {
         Api api = new Api();
         api.setId(id);
-        Api deleteApi = apiRoMapper.selectOne(api);
+        ApiBO deleteApi = apiRoMapper.selectOne(api);
         if (deleteApi != null) {
             apiMapper.delete(id);
         }
     }
 
     @Override
-    public Api selectOne(String id) {
+    public ApiBO selectOne(String id) {
         Api api = new Api.Builder()
                 .id(id)
                 .build();

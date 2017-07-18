@@ -21,17 +21,17 @@ public class Api {
     // 接口所属系统
     private String appId;
     // 是否需要验证用户身份
-    private boolean authentication;
+    private Boolean authentication;
     // 接口状态
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
 
     public Api() {
     }
 
-    public Api(String id, String name, String uri, String method, String version, String appId, boolean authentication,
-               boolean status, Date createTime, Date lastUpdate) {
+    public Api(String id, String name, String uri, String method, String version, String appId, Boolean authentication,
+               Boolean status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.uri = uri;
@@ -105,19 +105,19 @@ public class Api {
         this.appId = appId;
     }
 
-    public boolean isAuthentication() {
+    public Boolean isAuthentication() {
         return authentication;
     }
 
-    public void setAuthentication(boolean authentication) {
+    public void setAuthentication(Boolean authentication) {
         this.authentication = authentication;
     }
 
-    public boolean isStatus() {
+    public Boolean isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -160,8 +160,8 @@ public class Api {
         private String method;
         private String version;
         private String appId;
-        private boolean authentication;
-        private boolean status;
+        private Boolean authentication;
+        private Boolean status;
         private Date createTime;
         private Date lastUpdate;
 
@@ -198,12 +198,12 @@ public class Api {
             return this;
         }
 
-        public Builder authentication(boolean val) {
+        public Builder authentication(Boolean val) {
             authentication = val;
             return this;
         }
 
-        public Builder status(boolean val) {
+        public Builder status(Boolean val) {
             status = val;
             return this;
         }

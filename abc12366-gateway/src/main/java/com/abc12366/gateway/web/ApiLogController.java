@@ -6,6 +6,7 @@ import com.abc12366.gateway.model.ApiLog;
 import com.abc12366.gateway.service.ApiLogService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,16 @@ public class ApiLogController {
     private ApiLogService apiLogService;
 
     @GetMapping
-    public ResponseEntity selectList(){
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize){
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ApiLog> dataList = apiLogService.selectList();
         LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(dataList);
+        PageInfo<ApiLog> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList",pageInfo.getList() , "total", pageInfo.getTotal()));
     }
 
-    @GetMapping("/page")
+    @GetMapping(path = "/page")
     public ResponseEntity selectList(@RequestParam(value = "uri", required = false) String uri,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {

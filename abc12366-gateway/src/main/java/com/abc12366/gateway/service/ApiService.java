@@ -11,7 +11,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface ApiService {
-    List<Api> selectList();
+    List<ApiBO> selectList(Api api);
 
     Api insert(ApiBO apiBO);
 
@@ -19,5 +19,5 @@ public interface ApiService {
 
     void delete(String id);
 
-    Api selectOne(String id);
+    ApiBO selectOne(String id);
 }

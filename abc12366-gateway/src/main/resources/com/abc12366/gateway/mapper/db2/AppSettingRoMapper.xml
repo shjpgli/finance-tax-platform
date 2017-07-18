@@ -13,13 +13,30 @@
         </where>
     </select>
 
-    <select id="selectList" resultType="com.abc12366.gateway.model.bo.AppSettingApiBO">
+    <resultMap id="appSettingApiMap" type="com.abc12366.gateway.model.bo.AppSettingApiBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="appId" property="appId" jdbcType="VARCHAR"/>
+        <result column="apiId" property="apiId" jdbcType="VARCHAR"/>
+        <result column="timesPerMinute" property="timesPerMinute" jdbcType="INTEGER"/>
+        <result column="timesPerHour" property="timesPerHour" jdbcType="INTEGER"/>
+        <result column="timesPerDay" property="timesPerDay" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="method" property="method" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="authentication" property="authentication" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="appSettingApiMap" parameterType="com.abc12366.gateway.model.bo.AppSettingApiBO">
         SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
         b.name, b.uri, b.method, b.version, b.authentication,
         a.status, a.createTime, a.lastUpdate
         FROM gw_app_setting a LEFT JOIN gw_api b ON a.apiId = b.id
         <where>
-            <if test="name != null">b.name = #{name}</if>
+            1 = 1
+            <if test="name != null">and b.name = #{name}</if>
             <if test="uri != null">AND b.uri = #{uri}</if>
             <if test="method != null">AND b.method = #{method}</if>
             <if test="version != null">AND b.version = #{version}</if>
@@ -29,7 +46,7 @@
         </where>
     </select>
 
-    <select id="isAuthentization" resultType="com.abc12366.gateway.model.bo.AppSettingApiBO">
+    <select id="isAuthentization" resultType="com.abc12366.gateway.model.bo.AppSettingApiBO" parameterType="com.abc12366.gateway.model.bo.AppSettingApiBO">
         SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
         b.name, b.uri, b.method, b.version, b.authentication,
         a.status, a.createTime, a.lastUpdate

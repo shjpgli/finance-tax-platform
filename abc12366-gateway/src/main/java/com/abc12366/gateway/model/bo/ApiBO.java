@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -46,6 +47,11 @@ public class ApiBO {
     // 接口状态
     @NotNull
     private boolean status;
+
+    private String appName;
+
+    private Date createTime;
+    private Date lastUpdate;
 
     public String getId() {
         return id;
@@ -123,5 +129,29 @@ public class ApiBO {
                 ", authentication=" + authentication +
                 ", status=" + status +
                 '}';
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

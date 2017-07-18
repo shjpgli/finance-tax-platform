@@ -13,7 +13,7 @@ import java.util.List;
 public interface AppSettingRoMapper {
     AppSettingApiBO isAuthentization(AppSettingApiBO appSettingApiBO);
 
-    List<AppSettingApiBO> selectList(String appId);
+    List<AppSettingApiBO> selectList(AppSettingApiBO appId);
 
     AppSetting selectOne(AppSetting appSetting);
 }

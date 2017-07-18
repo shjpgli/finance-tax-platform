@@ -41,7 +41,7 @@ public class AppController {
     @Autowired
     private AppService appService;
 
-    @PostMapping("/register")
+    @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
         AppRespBO app = appService.register(appBO);
@@ -51,7 +51,7 @@ public class AppController {
         return responseEntity;
     }
 
-    @PostMapping("/login")
+    @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
         String token = appService.login(appBO);
