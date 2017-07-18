@@ -142,7 +142,7 @@
             <if test="name != null and name!=''"> and o.name LIKE CONCAT('%',#{name},'%')</if>
             <if test="type != null and type!=''"> AND o.type = #{type}</if>
             <if test="status != null and status!=''"> AND o.status = #{status}</if>
-            <if test="parentId != null and parentId!=''"> AND o.parentId = #{parentId}</if>
+            <if test="parentId != null"> AND o.parentId = #{parentId}</if>
         </where>
         ORDER BY o.name ASC
     </select>

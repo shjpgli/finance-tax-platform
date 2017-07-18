@@ -23,6 +23,7 @@
             1 = 1
             <if test="appId != null">and i.appId = #{appId}</if>
             <if test="uri != null">AND i.uri = #{uri}</if>
+            <if test="name != null and name!=''"> and i.name LIKE CONCAT('%',#{name},'%')</if>
             <if test="method != null">AND i.method = #{method}</if>
             <if test="version != null">AND i.version = #{version}</if>
             <if test="status != null">AND i.status = #{status}</if>
