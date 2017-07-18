@@ -6,6 +6,7 @@ import com.abc12366.bangbang.mapper.db1.CollectMapper;
 import com.abc12366.bangbang.mapper.db2.CollectRoMapper;
 import com.abc12366.bangbang.model.Collect;
 import com.abc12366.bangbang.model.bo.CollectBO;
+import com.abc12366.bangbang.model.bo.CollectListBO;
 import com.abc12366.bangbang.service.CollectService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -72,7 +73,7 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
-    public List<CollectBO> selectList(String userId) {
+    public List<CollectListBO> selectList(String userId) {
         LOGGER.info("{}", userId);
         return collectRoMapper.selectList(userId);
     }

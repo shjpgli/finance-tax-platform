@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.bo.CollectBO;
+import com.abc12366.bangbang.model.bo.CollectListBO;
 import com.abc12366.bangbang.service.CollectService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -48,7 +49,7 @@ public class CollectController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<CollectBO> collectBOList = collectService.selectList(userId);
+        List<CollectListBO> collectBOList = collectService.selectList(userId);
         return (collectBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) collectBOList, "total", ((Page) collectBOList).getTotal()));

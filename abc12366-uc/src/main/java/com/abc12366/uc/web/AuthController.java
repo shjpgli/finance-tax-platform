@@ -115,14 +115,14 @@ public class AuthController extends BaseController {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         //进行手机验证码验证
-        ResponseEntity response = authService.verifyCode(loginBO.getPhone(), loginBO.getCode(), request);
+        /*ResponseEntity response = authService.verifyCode(loginBO.getPhone(), loginBO.getCode(), request);
         if (response == null) {
             return ResponseEntity.ok(Utils.kv("data", null));
         }
         VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
             return ResponseEntity.ok(Utils.kv("data", null));
-        }
+        }*/
         Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
 
         LOGGER.info("{}", token);

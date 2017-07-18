@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.bo.CollectBO;
+import com.abc12366.bangbang.model.bo.CollectListBO;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * Time: 10:10
  */
 public interface CollectRoMapper {
-    List<CollectBO> selectList(String userId);
+    List<CollectListBO> selectList(String userId);
 
     String selectCount(String askId);
 
