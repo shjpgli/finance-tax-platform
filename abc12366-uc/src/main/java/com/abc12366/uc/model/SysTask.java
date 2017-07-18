@@ -13,34 +13,18 @@ public class SysTask {
     private Date startTime;
     private Date endTime;
     private String rule;
-    private int points;
+    private Integer points;
     private String type;
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
     private String imageUrl;
     private String ruleName;
     private String ruleCode;
-    private int count;
+    private Integer count;
     private String skipURL;
 
     public SysTask() {
-    }
-
-    public String getSkipURL() {
-        return skipURL;
-    }
-
-    public void setSkipURL(String skipURL) {
-        this.skipURL = skipURL;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public String getId() {
@@ -83,11 +67,11 @@ public class SysTask {
         this.rule = rule;
     }
 
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
@@ -99,11 +83,11 @@ public class SysTask {
         this.type = type;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -145,5 +129,21 @@ public class SysTask {
 
     public void setRuleCode(String ruleCode) {
         this.ruleCode = ruleCode;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public String getSkipURL() {
+        return skipURL;
+    }
+
+    public void setSkipURL(String skipURL) {
+        this.skipURL = skipURL;
     }
 }
