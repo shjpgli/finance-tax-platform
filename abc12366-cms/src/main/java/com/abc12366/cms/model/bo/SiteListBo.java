@@ -13,6 +13,9 @@ public class SiteListBo implements Serializable {
 	/**siteId**varchar(64)**/
 	private String siteId;
 
+	/**域名**varchar(50)**/
+	private String domain;
+
 	/**路径**varchar(20)**/
 	private String sitePath;
 
@@ -46,6 +49,14 @@ public class SiteListBo implements Serializable {
 
 	public void setSiteId(String siteId) {
 		this.siteId = siteId;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	public String getSitePath() {
