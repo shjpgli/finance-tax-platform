@@ -85,17 +85,18 @@ public class OrderController {
     }
 
     /**
-     * 订单列表查询
+     * 订单前台列表查询
      * @param pageNum
      * @param pageSize
      * @param name
      * @param userId
      * @return
      */
-    @GetMapping(path = "/{userId}")
+    @GetMapping(path = "/user")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value = "name", required = false) String name,@PathVariable("userId") String userId) {
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "userId", required = true) String userId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
         User user = new User();

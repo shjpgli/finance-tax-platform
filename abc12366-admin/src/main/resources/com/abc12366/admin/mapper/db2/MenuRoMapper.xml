@@ -38,7 +38,7 @@
         <where>
             1=1
             <if test="menuName != null  and menuName!=''"> AND m.menuName LIKE CONCAT('%',#{menuName},'%')</if>
-            <if test="parentId != null and parentId!=''"> AND m.parentId = #{parentId}</if>
+            <if test="parentId != null"> AND m.parentId = #{parentId}</if>
             <if test="type != null and type!=''"> AND m.type = #{type}</if>
         </where>
         ORDER BY m.sort ASC

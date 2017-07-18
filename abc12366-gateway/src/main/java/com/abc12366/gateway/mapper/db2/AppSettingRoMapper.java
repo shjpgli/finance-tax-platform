@@ -1,7 +1,7 @@
 package com.abc12366.gateway.mapper.db2;
 
 import com.abc12366.gateway.model.AppSetting;
-import com.abc12366.gateway.model.bo.AppSettingApiBO;
+import com.abc12366.gateway.model.bo.AppSettingBO;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface AppSettingRoMapper {
-    AppSettingApiBO isAuthentization(AppSettingApiBO appSettingApiBO);
+    AppSettingBO isAuthentization(AppSettingBO appSettingApiBO);
 
-    List<AppSettingApiBO> selectList(AppSettingApiBO appId);
+    List<AppSettingBO> selectList(AppSettingBO appId);
 
     AppSetting selectOne(AppSetting appSetting);
 }

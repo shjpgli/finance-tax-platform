@@ -1,83 +1,119 @@
 package com.abc12366.gateway.model.bo;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.io.Serializable;
+
+
 /**
- * AppSetting与Api的关联对象
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-04-27 2:46 PM
- * @since 1.0.0
- */
-public class AppSettingBO {
+ * 接入应用设置表
+ *
+ **/
+@SuppressWarnings("serial")
+public class AppSettingBO implements Serializable {
 
-    private String id;
+	/**ID**/
+	private String id;
 
+
+	/**APPID**/
     @NotEmpty
-    private String appId;
+	private String appId;
+
+	/**接口ID**/
     @NotEmpty
-    private String apiId;
-    private int timesPerMinute;
-    private int timesPerHour;
-    private int timesPerDay;
-    private boolean status;
+	private String apiId;
 
-    public AppSettingBO() {
-    }
+	/**每分钟允许访问次数**/
+	private Integer timesPerMinute;
 
-    public String getId() {
-        return id;
-    }
+	/**每小时允许访问次数**/
+	private Integer timesPerHour;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**每天允许访问次数**/
+	private Integer timesPerDay;
 
-    public String getAppId() {
-        return appId;
-    }
+	/**启停状态: 0停用，1启用**/
+	private Boolean status;
 
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
+	/**创建时间**/
+	private java.util.Date createTime;
 
-    public String getApiId() {
-        return apiId;
-    }
+	/**修改时间**/
+	private java.util.Date lastUpdate;
 
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
-    }
 
-    public int getTimesPerMinute() {
-        return timesPerMinute;
-    }
 
-    public void setTimesPerMinute(int timesPerMinute) {
-        this.timesPerMinute = timesPerMinute;
-    }
+	public void setId(String id){
+		this.id = id;
+	}
 
-    public int getTimesPerHour() {
-        return timesPerHour;
-    }
+	public String getId(){
+		return this.id;
+	}
 
-    public void setTimesPerHour(int timesPerHour) {
-        this.timesPerHour = timesPerHour;
-    }
+	public void setAppId(String appId){
+		this.appId = appId;
+	}
 
-    public int getTimesPerDay() {
-        return timesPerDay;
-    }
+	public String getAppId(){
+		return this.appId;
+	}
 
-    public void setTimesPerDay(int timesPerDay) {
-        this.timesPerDay = timesPerDay;
-    }
+	public void setApiId(String apiId){
+		this.apiId = apiId;
+	}
 
-    public boolean isStatus() {
-        return status;
-    }
+	public String getApiId(){
+		return this.apiId;
+	}
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
+	public void setTimesPerMinute(Integer timesPerMinute){
+		this.timesPerMinute = timesPerMinute;
+	}
+
+	public Integer getTimesPerMinute(){
+		return this.timesPerMinute;
+	}
+
+	public void setTimesPerHour(Integer timesPerHour){
+		this.timesPerHour = timesPerHour;
+	}
+
+	public Integer getTimesPerHour(){
+		return this.timesPerHour;
+	}
+
+	public void setTimesPerDay(Integer timesPerDay){
+		this.timesPerDay = timesPerDay;
+	}
+
+	public Integer getTimesPerDay(){
+		return this.timesPerDay;
+	}
+
+	public void setStatus(Boolean status){
+		this.status = status;
+	}
+
+	public Boolean getStatus(){
+		return this.status;
+	}
+
+	public void setCreateTime(java.util.Date createTime){
+		this.createTime = createTime;
+	}
+
+	public java.util.Date getCreateTime(){
+		return this.createTime;
+	}
+
+	public void setLastUpdate(java.util.Date lastUpdate){
+		this.lastUpdate = lastUpdate;
+	}
+
+	public java.util.Date getLastUpdate(){
+		return this.lastUpdate;
+	}
+
 }

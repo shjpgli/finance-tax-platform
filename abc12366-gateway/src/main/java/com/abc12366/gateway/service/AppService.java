@@ -1,11 +1,7 @@
 package com.abc12366.gateway.service;
 
 
-import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.model.bo.AppBO;
-import com.abc12366.gateway.model.bo.AppGeneralBO;
-import com.abc12366.gateway.model.bo.AppRespBO;
-import com.abc12366.gateway.model.bo.AppUpdateBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -23,7 +19,7 @@ public interface AppService {
      * @param appBO AppBO
      * @return AppRespBO
      */
-    AppRespBO register(AppBO appBO) throws Exception;
+    AppBO register(AppBO appBO) throws Exception;
 
     /**
      * App登录获取token
@@ -55,7 +51,7 @@ public interface AppService {
      * @param
      * @return List<AppGeneralBO>
      */
-    List<AppGeneralBO> selectList(AppGeneralBO appGeneralBO);
+    List<AppBO> selectList(AppBO appGeneralBO);
 
     /**
      * 修改App对象
@@ -63,12 +59,12 @@ public interface AppService {
      * @param
      * @return App对象
      */
-    AppGeneralBO update(AppUpdateBO appUpdateBO);
+    AppBO update(AppBO appUpdateBO);
     /**
      * 查询App对象
      *
      * @param
      * @return App对象
      */
-    AppGeneralBO selectById(String id);
+    AppBO selectById(String id);
 }

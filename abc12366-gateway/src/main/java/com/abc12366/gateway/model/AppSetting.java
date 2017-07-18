@@ -1,206 +1,114 @@
 package com.abc12366.gateway.model;
+import java.io.Serializable;
 
-import java.util.Date;
 
 /**
- * App设置对象
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-04-24 5:43 PM
- * @since 1.0.0
- */
-public class AppSetting {
+ * 接入应用设置表
+ *
+ **/
+@SuppressWarnings("serial")
+public class AppSetting implements Serializable {
 
-    private String id;
-    private String appId;
-    private String apiId;
-    // 每分钟允许访问次数
-    private int timesPerMinute;
-    // 每小时允许访问次数
-    private int timesPerHour;
-    // 每天允许访问次数
-    private int timesPerDay;
-    // 启停状态: 0停用，1启用
-    private boolean status;
-    private Date createTime;
-    private Date lastUpdate;
+	/**ID**/
+	private String id;
 
-    public AppSetting() {
-    }
+	/**APPID**/
+	private String appId;
 
-    public AppSetting(String id, String appId, String apiId, int timesPerMinute, int timesPerHour, int timesPerDay,
-                      boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.appId = appId;
-        this.apiId = apiId;
-        this.timesPerMinute = timesPerMinute;
-        this.timesPerHour = timesPerHour;
-        this.timesPerDay = timesPerDay;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-    }
+	/**接口ID**/
+	private String apiId;
 
-    private AppSetting(Builder builder) {
-        setId(builder.id);
-        setAppId(builder.appId);
-        setApiId(builder.apiId);
-        setTimesPerMinute(builder.timesPerMinute);
-        setTimesPerHour(builder.timesPerHour);
-        setTimesPerDay(builder.timesPerDay);
-        setStatus(builder.status);
-        setCreateTime(builder.createTime);
-        setLastUpdate(builder.lastUpdate);
-    }
+	/**每分钟允许访问次数**/
+	private Integer timesPerMinute;
 
-    public String getId() {
-        return id;
-    }
+	/**每小时允许访问次数**/
+	private Integer timesPerHour;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**每天允许访问次数**/
+	private Integer timesPerDay;
 
-    public String getAppId() {
-        return appId;
-    }
+	/**启停状态: 0停用，1启用**/
+	private Boolean status;
 
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
+	/**创建时间**/
+	private java.util.Date createTime;
 
-    public String getApiId() {
-        return apiId;
-    }
+	/**修改时间**/
+	private java.util.Date lastUpdate;
 
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
-    }
 
-    public int getTimesPerMinute() {
-        return timesPerMinute;
-    }
 
-    public void setTimesPerMinute(int timesPerMinute) {
-        this.timesPerMinute = timesPerMinute;
-    }
+	public void setId(String id){
+		this.id = id;
+	}
 
-    public int getTimesPerHour() {
-        return timesPerHour;
-    }
+	public String getId(){
+		return this.id;
+	}
 
-    public void setTimesPerHour(int timesPerHour) {
-        this.timesPerHour = timesPerHour;
-    }
+	public void setAppId(String appId){
+		this.appId = appId;
+	}
 
-    public int getTimesPerDay() {
-        return timesPerDay;
-    }
+	public String getAppId(){
+		return this.appId;
+	}
 
-    public void setTimesPerDay(int timesPerDay) {
-        this.timesPerDay = timesPerDay;
-    }
+	public void setApiId(String apiId){
+		this.apiId = apiId;
+	}
 
-    public boolean isStatus() {
-        return status;
-    }
+	public String getApiId(){
+		return this.apiId;
+	}
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
+	public void setTimesPerMinute(Integer timesPerMinute){
+		this.timesPerMinute = timesPerMinute;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public Integer getTimesPerMinute(){
+		return this.timesPerMinute;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setTimesPerHour(Integer timesPerHour){
+		this.timesPerHour = timesPerHour;
+	}
 
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
+	public Integer getTimesPerHour(){
+		return this.timesPerHour;
+	}
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+	public void setTimesPerDay(Integer timesPerDay){
+		this.timesPerDay = timesPerDay;
+	}
 
-    @Override
-    public String toString() {
-        return "AppSetting{" +
-                "id='" + id + '\'' +
-                ", appId='" + appId + '\'' +
-                ", apiId='" + apiId + '\'' +
-                ", timesPerMinute=" + timesPerMinute +
-                ", timesPerHour=" + timesPerHour +
-                ", timesPerDay=" + timesPerDay +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
-    }
+	public Integer getTimesPerDay(){
+		return this.timesPerDay;
+	}
 
-    public static final class Builder {
-        private String id;
-        private String appId;
-        private String apiId;
-        private int timesPerMinute;
-        private int timesPerHour;
-        private int timesPerDay;
-        private boolean status;
-        private Date createTime;
-        private Date lastUpdate;
+	public void setStatus(Boolean status){
+		this.status = status;
+	}
 
-        public Builder() {
-        }
+	public Boolean getStatus(){
+		return this.status;
+	}
 
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
+	public void setCreateTime(java.util.Date createTime){
+		this.createTime = createTime;
+	}
 
-        public Builder appId(String val) {
-            appId = val;
-            return this;
-        }
+	public java.util.Date getCreateTime(){
+		return this.createTime;
+	}
 
-        public Builder apiId(String val) {
-            apiId = val;
-            return this;
-        }
+	public void setLastUpdate(java.util.Date lastUpdate){
+		this.lastUpdate = lastUpdate;
+	}
 
-        public Builder timesPerMinute(int val) {
-            timesPerMinute = val;
-            return this;
-        }
+	public java.util.Date getLastUpdate(){
+		return this.lastUpdate;
+	}
 
-        public Builder timesPerHour(int val) {
-            timesPerHour = val;
-            return this;
-        }
-
-        public Builder timesPerDay(int val) {
-            timesPerDay = val;
-            return this;
-        }
-
-        public Builder status(boolean val) {
-            status = val;
-            return this;
-        }
-
-        public Builder createTime(Date val) {
-            createTime = val;
-            return this;
-        }
-
-        public Builder lastUpdate(Date val) {
-            lastUpdate = val;
-            return this;
-        }
-
-        public AppSetting build() {
-            return new AppSetting(this);
-        }
-    }
 }

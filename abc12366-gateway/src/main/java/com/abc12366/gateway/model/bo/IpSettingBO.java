@@ -1,4 +1,4 @@
-package com.abc12366.gateway.model;
+package com.abc12366.gateway.model.bo;
 import java.io.Serializable;
 
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  **/
 @SuppressWarnings("serial")
-public class IpSetting implements Serializable {
+public class IpSettingBO implements Serializable {
 
 	/**PK**/
 	private String id;

@@ -131,8 +131,9 @@
 	<select id="selectById" resultMap="orderBOResultMap" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_BO_List" />
-		 FROM uc_order
-        WHERE orderNo = #{orderNo}
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        WHERE o.orderNo = #{orderNo}
 	</select>
 
     <!-- 查询（根据主键ID和UserId查询） -->

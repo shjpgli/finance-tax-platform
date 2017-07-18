@@ -13,7 +13,7 @@
         </where>
     </select>
 
-    <resultMap id="appSettingApiMap" type="com.abc12366.gateway.model.bo.AppSettingApiBO">
+    <resultMap id="appSettingMap" type="com.abc12366.gateway.model.bo.AppSettingBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="appId" property="appId" jdbcType="VARCHAR"/>
         <result column="apiId" property="apiId" jdbcType="VARCHAR"/>
@@ -29,7 +29,7 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="selectList" resultMap="appSettingApiMap" parameterType="com.abc12366.gateway.model.bo.AppSettingApiBO">
+    <select id="selectList" resultMap="appSettingMap" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">
         SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
         b.name, b.uri, b.method, b.version, b.authentication,
         a.status, a.createTime, a.lastUpdate
@@ -46,7 +46,7 @@
         </where>
     </select>
 
-    <select id="isAuthentization" resultType="com.abc12366.gateway.model.bo.AppSettingApiBO" parameterType="com.abc12366.gateway.model.bo.AppSettingApiBO">
+    <select id="isAuthentization" resultType="com.abc12366.gateway.model.bo.AppSettingBO" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">
         SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
         b.name, b.uri, b.method, b.version, b.authentication,
         a.status, a.createTime, a.lastUpdate

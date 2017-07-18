@@ -1,7 +1,6 @@
 package com.abc12366.gateway.mapper.db1;
 
 import com.abc12366.gateway.model.Api;
-import com.abc12366.gateway.model.bo.ApiBO;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -9,9 +8,9 @@ import com.abc12366.gateway.model.bo.ApiBO;
  * @since 1.0.0
  */
 public interface ApiMapper {
-    void insert(Api api);
+    int insert(Api api);
 
-    void update(ApiBO api);
+    int update(Api api);
 
-    void delete(String id);
+    int delete(String id);
 }

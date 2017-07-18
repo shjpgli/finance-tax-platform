@@ -5,9 +5,65 @@
 
     <insert id="insert" parameterType="com.abc12366.gateway.model.Blacklist">
         INSERT INTO gw_blacklist
-        (id, userId, ip, startTime, endTime, remark, status, createTime, createUser)
-        VALUES
-        (#{id}, #{userId}, #{ip}, #{startTime}, #{endTime}, #{remark}, #{status}, #{createTime}, #{createUser})
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="ip != null">
+                ip,
+            </if>
+            <if test="startTime != null">
+                startTime,
+            </if>
+            <if test="endTime != null">
+                endTime,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="createUser != null">
+                createUser,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="userId!=null">
+                #{userId},
+            </if>
+            <if test="ip!=null">
+                #{ip},
+            </if>
+            <if test="startTime!=null">
+                #{startTime},
+            </if>
+            <if test="endTime!=null">
+                #{endTime},
+            </if>
+            <if test="status!=null">
+                #{status},
+            </if>
+            <if test="remark!=null">
+                #{remark},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="createUser!=null">
+                #{createUser},
+            </if>
+        </trim>
     </insert>
 
     <update id="update" parameterType="com.abc12366.gateway.model.Blacklist">

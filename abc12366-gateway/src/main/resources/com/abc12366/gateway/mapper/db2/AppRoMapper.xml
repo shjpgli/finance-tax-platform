@@ -29,7 +29,7 @@
       WHERE name = #{name}
     </select>
 
-    <select id="selectList" resultType="com.abc12366.gateway.model.bo.AppGeneralBO" parameterType="com.abc12366.gateway.model.bo.AppUpdateBO">
+    <select id="selectList" resultType="com.abc12366.gateway.model.bo.AppBO" parameterType="com.abc12366.gateway.model.bo.AppBO">
         SELECT id, name, startTime, endTime, status, createTime, lastUpdate
         FROM gw_app
         <where>

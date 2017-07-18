@@ -3,9 +3,78 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db1.AppMapper">
     <insert id="insert" parameterType="com.abc12366.gateway.model.App">
-        insert into gw_app (id, name, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status, createTime, lastUpdate)
-        values (#{id}, #{name}, #{password}, #{accessToken}, #{lastResetTokenTime}, #{startTime}, #{endTime},
-                #{remark}, #{status}, #{createTime}, #{lastUpdate})
+        INSERT INTO gw_app
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="accessToken != null">
+                accessToken,
+            </if>
+            <if test="lastResetTokenTime != null">
+                lastResetTokenTime,
+            </if>
+            <if test="startTime != null">
+                startTime,
+            </if>
+            <if test="endTime != null">
+                endTime,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="name!=null">
+                #{name},
+            </if>
+            <if test="password!=null">
+                #{password},
+            </if>
+            <if test="accessToken!=null">
+                #{accessToken},
+            </if>
+            <if test="lastResetTokenTime!=null">
+                #{lastResetTokenTime},
+            </if>
+            <if test="startTime!=null">
+                #{startTime},
+            </if>
+            <if test="endTime!=null">
+                #{endTime},
+            </if>
+            <if test="status!=null">
+                #{status},
+            </if>
+            <if test="remark!=null">
+                #{remark},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="lastUpdate!=null">
+                #{lastUpdate},
+            </if>
+        </trim>
     </insert>
 
     <update id="update" parameterType="com.abc12366.gateway.model.bo.AppBO">

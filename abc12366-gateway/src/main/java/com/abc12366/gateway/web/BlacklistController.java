@@ -3,7 +3,6 @@ package com.abc12366.gateway.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.Blacklist;
-import com.abc12366.gateway.model.bo.AppSettingApiBO;
 import com.abc12366.gateway.model.bo.BlacklistBO;
 import com.abc12366.gateway.service.BlacklistService;
 import com.github.pagehelper.PageHelper;

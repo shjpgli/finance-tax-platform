@@ -4,9 +4,71 @@
 <mapper namespace="com.abc12366.gateway.mapper.db1.ApiMapper">
     <insert id="insert" parameterType="com.abc12366.gateway.model.Api">
         INSERT INTO gw_api
-        (id, name, uri, method, version, appId, authentication, status, createTime, lastUpdate)
-        VALUES (#{id}, #{name}, #{uri}, #{method}, #{version}, #{appId}, #{authentication},
-        #{status}, #{createTime}, #{lastUpdate})
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="uri != null">
+                uri,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="appId != null">
+                appId,
+            </if>
+            <if test="authentication != null">
+                authentication,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="name!=null">
+                #{name},
+            </if>
+            <if test="uri!=null">
+                #{uri},
+            </if>
+            <if test="method!=null">
+                #{method},
+            </if>
+            <if test="version!=null">
+                #{version},
+            </if>
+            <if test="appId!=null">
+                #{appId},
+            </if>
+            <if test="authentication!=null">
+                #{authentication},
+            </if>
+            <if test="status!=null">
+                #{status},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="lastUpdate!=null">
+                #{lastUpdate},
+            </if>
+        </trim>
     </insert>
 
     <update id="update" parameterType="com.abc12366.gateway.model.Api">

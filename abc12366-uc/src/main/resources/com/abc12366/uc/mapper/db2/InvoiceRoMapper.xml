@@ -43,7 +43,7 @@
         <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
         <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
-        <result column="vipLevel" property="vipLevel" jdbcType="VARCHAR"/>
+        <result column="nowVipLevel" property="nowVipLevel" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
@@ -60,7 +60,7 @@
 
     <select id="getOrderBO" resultMap="oneOrderBOMap" parameterType="java.lang.String">
         SELECT
-        o.id,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.vipLevel,	o.createTime,	o.lastUpdate,
+        o.id,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,
         o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,	o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark
         FROM uc_order o
         LEFT JOIN uc_order_invoice uoi ON uoi.orderNo = o.orderNo

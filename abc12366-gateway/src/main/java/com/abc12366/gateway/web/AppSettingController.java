@@ -3,7 +3,6 @@ package com.abc12366.gateway.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.AppSetting;
-import com.abc12366.gateway.model.bo.AppSettingApiBO;
 import com.abc12366.gateway.model.bo.AppSettingBO;
 import com.abc12366.gateway.service.AppSettingService;
 import com.github.pagehelper.PageHelper;
@@ -23,8 +22,8 @@ import java.util.List;
  * @create 2017-04-27 3:29 PM
  * @since 1.0.0
  */
-@RestController()
-@RequestMapping(name = "/appsetting", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RestController
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AppSettingController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppController.class);
@@ -32,19 +31,31 @@ public class AppSettingController {
     @Autowired
     private AppSettingService appSettingService;
 
-    @GetMapping(path = "/{appId}")
-    public ResponseEntity selectList(@PathVariable("appId") String appId,
+    @GetMapping(path = "/appsetting")
+    public ResponseEntity selectList(@RequestParam(value = "appId", required = true) String appId,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         LOGGER.info(appId);
-        List<AppSettingApiBO> dataList = appSettingService.selectList(appId);
-        PageInfo<AppSettingApiBO> pageInfo = new PageInfo<>(dataList);
+        List<AppSettingBO> dataList = appSettingService.selectList(appId);
+        PageInfo<AppSettingBO> pageInfo = new PageInfo<>(dataList);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
-    @GetMapping(path = "/{appId}/{id}")
+    @GetMapping(path = "/appsetting/app")
+    public ResponseEntity selectAppList(@RequestParam(value = "appId", required = true) String appId,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        LOGGER.info(appId);
+        List<AppSettingBO> dataList = appSettingService.selectList(appId);
+        PageInfo<AppSettingBO> pageInfo = new PageInfo<>(dataList);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    @GetMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity selectOne(@PathVariable("appId") String appId,
                                     @PathVariable("id") String id) {
         LOGGER.info("{}/{}", appId, id);
@@ -53,7 +64,7 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("data", appSetting));
     }
 
-    @PostMapping(path = "/{appId}")
+    @PostMapping(path = "/appsetting/{appId}")
     public ResponseEntity insert(@PathVariable("appId") String appId,
                                  @Valid @RequestBody AppSettingBO appSettingBO) {
         LOGGER.info("{}: {}", appId, appSettingBO);
@@ -65,7 +76,7 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("data", appSetting));
     }
 
-    @PutMapping(path = "/{appId}/{id}")
+    @PutMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity update(@PathVariable("appId") String appId,
                                  @PathVariable("id") String id,
                                  @Valid @RequestBody AppSettingBO appSettingBO) {
@@ -81,7 +92,7 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("data", appSetting));
     }
 
-    @DeleteMapping(path = "/{appId}/{id}")
+    @DeleteMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity delete(@PathVariable("appId") String appId,
                                  @PathVariable("id") String id) {
         LOGGER.info("{}/{}", appId, id);

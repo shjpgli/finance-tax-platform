@@ -1,7 +1,6 @@
 package com.abc12366.gateway.service;
 
 import com.abc12366.gateway.model.AppSetting;
-import com.abc12366.gateway.model.bo.AppSettingApiBO;
 import com.abc12366.gateway.model.bo.AppSettingBO;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface AppSettingService {
-    List<AppSettingApiBO> selectList(String appId);
+    List<AppSettingBO> selectList(String appId);
 
     AppSetting update(AppSettingBO appSettingBO);
 
