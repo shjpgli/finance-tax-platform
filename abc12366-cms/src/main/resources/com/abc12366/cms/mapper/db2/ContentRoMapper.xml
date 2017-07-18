@@ -150,6 +150,27 @@
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>
 
+	<!-- 查询（根据channelId查询） -->
+	<select id="selectContentType" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+		SELECT
+		a.contentType
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		WHERE 1=1
+		<if test="channelId != null and channelId != ''">
+			AND a.channelId = #{channelId}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
+		</if>
+		<if test="status != null and status != ''">
+			AND a.status = #{status}
+		</if>
+		GROUP BY a.contentType
+	</select>
+
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListByChannelId" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT

@@ -1,7 +1,4 @@
 package com.abc12366.cms.model.bo;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -16,21 +13,21 @@ public class ModelBo implements Serializable {
 	/**模型Id**varchar(64)**/
 	private String modelId;
 
-	/**模型名称**varchar(100)**/
+	/**模型名称**varchar(100)
 	@NotEmpty(message = "modelName不能为空！")
-	@Size(min = 0, max = 100)
+	@Size(min = 0, max = 100)**/
 	private String modelName;
 
-	/**模型路径**varchar(100)**/
-	@Size(min = 0, max = 100)
+	/**模型路径**varchar(100)
+	@Size(min = 0, max = 100)**/
 	private String modelPath;
 
-	/**栏目模板前缀**varchar(20)**/
-	@Size(min = 0, max = 20)
+	/**栏目模板前缀**varchar(20)
+	@Size(min = 0, max = 20)**/
 	private String tplChannelPrefix;
 
-	/**内容模板前缀**varchar(20)**/
-	@Size(min = 0, max = 20)
+	/**内容模板前缀**varchar(20)
+	@Size(min = 0, max = 20)**/
 	private String tplContentPrefix;
 
 	/**栏目标题图宽度**int(11)**/
