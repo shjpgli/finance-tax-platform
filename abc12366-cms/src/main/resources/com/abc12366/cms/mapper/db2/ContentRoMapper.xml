@@ -174,6 +174,36 @@
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
+	<select id="selectCntByChannelId" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		COUNT(a.contentId) cnt
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+		LEFT JOIN cms_site d ON a.siteId = d.siteId
+		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+		WHERE a.status = 2 and b.needRegenerate = 0
+		<if test="typeId != null and typeId != ''">
+			AND a.typeId = #{typeId}
+		</if>
+		<if test="channelName != null and channelName != ''">
+			AND c.channelName = #{channelName}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND a.channelId = #{channelId}
+		</if>
+		<if test="tplContent != null and tplContent != ''">
+			AND b.tplContent = #{tplContent}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
+		</if>
+		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+	</select>
+
+	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListByChannelId" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT
 		a.contentId contentId,
@@ -198,15 +228,12 @@
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
 		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
-		WHERE 1=1
+		WHERE a.status = 2
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
 		</if>
 		<if test="channelName != null and channelName != ''">
 			AND c.channelName = #{channelName}
-		</if>
-		<if test="status != null and status != ''">
-			AND a.status = #{status}
 		</if>
 		<if test="channelId != null and channelId != ''">
 			AND a.channelId = #{channelId}

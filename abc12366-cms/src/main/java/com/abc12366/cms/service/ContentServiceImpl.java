@@ -4,6 +4,7 @@ import com.abc12366.cms.mapper.db1.*;
 import com.abc12366.cms.mapper.db2.*;
 import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
+import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -104,6 +105,10 @@ public class ContentServiceImpl implements ContentService{
 
     @Override
     public List<ContentsListBo> selectListByChannelId(Map<String,Object> map) {
+        int cnt = contentRoMapper.selectCntByChannelId(map);
+        if(cnt > 0){
+            throw new ServiceException(4304);
+        }
         //查询内容列表
         List<ContentsListBo> contents = contentRoMapper.selectListByChannelId(map);
         LOGGER.info("{}", contents);
