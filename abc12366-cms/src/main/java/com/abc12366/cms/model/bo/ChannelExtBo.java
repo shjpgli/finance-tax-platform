@@ -19,6 +19,9 @@ public class ChannelExtBo implements Serializable {
 	/**栏目页模板**varchar(100)**/
 	private String tplChannel;
 
+	/**内容页模板**varchar(100)**/
+	private String tplContent;
+
 	/**标题图**varchar(100)**/
 	private String titleImg;
 
@@ -62,6 +65,14 @@ public class ChannelExtBo implements Serializable {
 
 	public void setTplChannel(String tplChannel) {
 		this.tplChannel = tplChannel;
+	}
+
+	public String getTplContent() {
+		return tplContent;
+	}
+
+	public void setTplContent(String tplContent) {
+		this.tplContent = tplContent;
 	}
 
 	public String getTitleImg() {
