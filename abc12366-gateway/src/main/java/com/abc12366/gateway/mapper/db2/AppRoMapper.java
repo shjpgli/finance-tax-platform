@@ -1,7 +1,7 @@
 package com.abc12366.gateway.mapper.db2;
 
 import com.abc12366.gateway.model.App;
-import com.abc12366.gateway.model.bo.AppGeneralBO;
+import com.abc12366.gateway.model.bo.AppBO;
 
 import java.util.List;
 
@@ -16,6 +16,6 @@ public interface AppRoMapper {
 
     App selectById(String id);
 
-    List<AppGeneralBO> selectList(AppGeneralBO appGeneralBO);
+    List<AppBO> selectList(AppBO appGeneralBO);
 
 }

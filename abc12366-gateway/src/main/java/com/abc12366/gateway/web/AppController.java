@@ -3,9 +3,6 @@ package com.abc12366.gateway.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.bo.AppBO;
-import com.abc12366.gateway.model.bo.AppGeneralBO;
-import com.abc12366.gateway.model.bo.AppRespBO;
-import com.abc12366.gateway.model.bo.AppUpdateBO;
 import com.abc12366.gateway.service.AppService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -19,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,7 +40,7 @@ public class AppController {
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
-        AppRespBO app = appService.register(appBO);
+        AppBO app = appService.register(appBO);
         ResponseEntity responseEntity = app != null ? ResponseEntity.ok(app)
                 : new ResponseEntity<>(Utils.bodyStatus(4007), HttpStatus.CONFLICT);
         LOGGER.info("{}", responseEntity);
@@ -88,9 +84,13 @@ public class AppController {
 				end=null;
 			}
         }
-        AppGeneralBO appGeneralBO=new AppGeneralBO(null, name, start, end, status, null, null);
+        AppBO appBO=new AppBO();
+        appBO.setName(name);
+        appBO.setStartTime(start);
+        appBO.setEndTime(end);
+        appBO.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<AppGeneralBO> appList = appService.selectList(appGeneralBO);
+        List<AppBO> appList = appService.selectList(appBO);
         LOGGER.info("{}", appList);
         return (appList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
@@ -100,19 +100,17 @@ public class AppController {
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
-        AppGeneralBO app = appService.selectById(id);
+        AppBO app = appService.selectById(id);
         LOGGER.info("{}", app);
-        //return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
         return ResponseEntity.ok(Utils.kv("data", app));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody AppUpdateBO appUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@RequestBody AppBO appUpdateBO, @PathVariable String id) {
         LOGGER.info("{}", appUpdateBO);
         appUpdateBO.setId(id);
-        AppGeneralBO app = appService.update(appUpdateBO);
+        AppBO app = appService.update(appUpdateBO);
         LOGGER.info("{}", app);
-        //return (app != null) ? ResponseEntity.ok(app) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
         return ResponseEntity.ok(Utils.kv("data", app));
     }
 }

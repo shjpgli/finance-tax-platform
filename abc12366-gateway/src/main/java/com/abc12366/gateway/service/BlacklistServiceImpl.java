@@ -27,11 +27,9 @@ public class BlacklistServiceImpl implements BlacklistService {
 
     @Override
     public boolean isBlacklist(String addr) {
-        Blacklist blackList = new Blacklist.Builder()
-                .ip(addr)
-                .status(true)
-                .now(new Date())
-                .build();
+        Blacklist blackList = new Blacklist();
+        blackList.setStatus(true);
+        blackList.setNow(new Date());
         List<Blacklist> blacklists = blacklistRoMapper.isBlacklist(blackList);
         return blacklists.size() > 0;
     }
@@ -43,9 +41,8 @@ public class BlacklistServiceImpl implements BlacklistService {
 
     @Override
     public Blacklist selectOne(String id) {
-        Blacklist blacklist = new Blacklist.Builder()
-                .id(id)
-                .build();
+        Blacklist blacklist = new Blacklist();
+        blacklist.setId(id);
         return blacklistRoMapper.selectOne(blacklist);
     }
 
@@ -73,7 +70,7 @@ public class BlacklistServiceImpl implements BlacklistService {
             blacklist.setStartTime(bo.getStartTime());
             blacklist.setEndTime(bo.getEndTime());
             blacklist.setRemark(bo.getRemark());
-            blacklist.setStatus(bo.isStatus());
+            blacklist.setStatus(bo.getStatus());
             blacklistMapper.update(blacklist);
             return blacklist;
         }

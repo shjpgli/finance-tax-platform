@@ -6,129 +6,157 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.io.Serializable;
+
 
 /**
- * @author lijun <ljun51@outlook.com>
- * @create 2017-03-28 11:28 AM
- * @since 1.0.0
- */
-public class ApiBO {
+ * 服务接口表
+ **/
+@SuppressWarnings("serial")
+public class ApiBO implements Serializable {
 
+    /**
+     * ID
+     **/
     private String id;
 
+    /**
+     * 接口名称
+     **/
     @NotEmpty
     @Size(min = 4, max = 50)
     private String name;
 
+    /**
+     * 接口地址
+     **/
     @NotEmpty
     @Size(min = 1, max = 128)
     private String uri;
 
-    // 接口方法
+    /**
+     * 接口方法
+     **/
     @NotEmpty
     @Pattern(regexp = "GET|POST|PUT|DELETE|ALL", message = "必须为HttpMethod方法")
     private String method;
 
-    // 版本
+    /**
+     * 版本
+     **/
     @NotEmpty
     @Pattern(regexp = "[1-9]")
     private String version;
 
-    // 接口所属系统
+    /**
+     * 接口所属系统
+     **/
     @NotEmpty
     @Length(max = 64)
     private String appId;
 
-    // 是否需要验证用户身份
+    /**
+     * 是否需要验证用户身份: 0不需要，1需要
+     **/
     @NotNull
-    private boolean authentication;
+    private Boolean authentication;
 
-    // 接口状态
+    /**
+     * 接口状态：0停用，1启用
+     **/
     @NotNull
-    private boolean status;
+    private Boolean status;
+
+    /**
+     * 创建时间
+     **/
+    private java.util.Date createTime;
+
+    /**
+     * 最后修改时间
+     **/
+    private java.util.Date lastUpdate;
 
     private String appName;
-
-    private Date createTime;
-    private Date lastUpdate;
-
-    public String getId() {
-        return id;
-    }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return this.id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getUri() {
-        return uri;
+    public String getName() {
+        return this.name;
     }
 
     public void setUri(String uri) {
         this.uri = uri;
     }
 
-    public String getMethod() {
-        return method;
+    public String getUri() {
+        return this.uri;
     }
 
     public void setMethod(String method) {
         this.method = method;
     }
 
-    public String getVersion() {
-        return version;
+    public String getMethod() {
+        return this.method;
     }
 
     public void setVersion(String version) {
         this.version = version;
     }
 
-    public String getAppId() {
-        return appId;
+    public String getVersion() {
+        return this.version;
     }
 
     public void setAppId(String appId) {
         this.appId = appId;
     }
 
-    public boolean isAuthentication() {
-        return authentication;
+    public String getAppId() {
+        return this.appId;
     }
 
-    public void setAuthentication(boolean authentication) {
+    public void setAuthentication(Boolean authentication) {
         this.authentication = authentication;
     }
 
-    public boolean isStatus() {
-        return status;
+    public Boolean getAuthentication() {
+        return this.authentication;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "ApiBO{" +
-                ", id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", uri='" + uri + '\'' +
-                ", method='" + method + '\'' +
-                ", version='" + version + '\'' +
-                ", appId='" + appId + '\'' +
-                ", authentication=" + authentication +
-                ", status=" + status +
-                '}';
+    public Boolean getStatus() {
+        return this.status;
+    }
+
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
     }
 
     public String getAppName() {
@@ -137,21 +165,5 @@ public class ApiBO {
 
     public void setAppName(String appName) {
         this.appName = appName;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
 }

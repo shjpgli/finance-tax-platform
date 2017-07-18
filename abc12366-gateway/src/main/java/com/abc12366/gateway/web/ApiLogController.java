@@ -46,9 +46,8 @@ public class ApiLogController {
     public ResponseEntity selectList(@RequestParam(value = "uri", required = false) String uri,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
-        ApiLog apiLog = new ApiLog.Builder()
-                .uri(uri)
-                .build();
+        ApiLog apiLog = new ApiLog();
+        apiLog.setUri(uri);
         // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.
         // 当Service中有多条select语句时，建议放在Service中，这时需要将Page对象传递到Service实现方法，返回对象也是Page对象。
         // 将List对象强制转成Page可以获取Page的相关属性。如：((Page)dataList).getTotal()，总记录数统一使用total返回。

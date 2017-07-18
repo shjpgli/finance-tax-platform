@@ -1,4 +1,4 @@
-package com.abc12366.gateway.model.bo;
+ package com.abc12366.gateway.model.bo;
 
 /**
  * 分表模型

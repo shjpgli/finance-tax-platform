@@ -1,225 +1,125 @@
 package com.abc12366.gateway.model;
+import java.io.Serializable;
 
-import java.util.Date;
 
 /**
- * API信息表
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-04-05 2:55 PM
- * @since 1.0.0
- */
-public class Api {
+ * 服务接口表
+ *
+ **/
+@SuppressWarnings("serial")
+public class Api implements Serializable {
 
-    private String id;
-    private String name;
-    private String uri;
-    // 接口方法
-    private String method;
-    // 版本
-    private String version;
-    // 接口所属系统
-    private String appId;
-    // 是否需要验证用户身份
-    private Boolean authentication;
-    // 接口状态
-    private Boolean status;
-    private Date createTime;
-    private Date lastUpdate;
+	/**ID**/
+	private String id;
 
-    public Api() {
-    }
+	/**接口名称**/
+	private String name;
 
-    public Api(String id, String name, String uri, String method, String version, String appId, Boolean authentication,
-               Boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.name = name;
-        this.uri = uri;
-        this.method = method;
-        this.version = version;
-        this.appId = appId;
-        this.authentication = authentication;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-    }
+	/**接口地址**/
+	private String uri;
 
-    private Api(Builder builder) {
-        setId(builder.id);
-        setName(builder.name);
-        setUri(builder.uri);
-        setMethod(builder.method);
-        setVersion(builder.version);
-        setAppId(builder.appId);
-        setAuthentication(builder.authentication);
-        setStatus(builder.status);
-        setCreateTime(builder.createTime);
-        setLastUpdate(builder.lastUpdate);
-    }
+	/**接口方法**/
+	private String method;
 
-    public String getId() {
-        return id;
-    }
+	/**版本**/
+	private String version;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**接口所属系统**/
+	private String appId;
 
-    public String getName() {
-        return name;
-    }
+	/**是否需要验证用户身份: 0不需要，1需要**/
+	private Boolean authentication;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**接口状态：0停用，1启用**/
+	private Boolean status;
 
-    public String getUri() {
-        return uri;
-    }
+	/**创建时间**/
+	private java.util.Date createTime;
 
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
+	/**最后修改时间**/
+	private java.util.Date lastUpdate;
 
-    public String getMethod() {
-        return method;
-    }
 
-    public void setMethod(String method) {
-        this.method = method;
-    }
 
-    public String getVersion() {
-        return version;
-    }
+	public void setId(String id){
+		this.id = id;
+	}
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
+	public String getId(){
+		return this.id;
+	}
 
-    public String getAppId() {
-        return appId;
-    }
+	public void setName(String name){
+		this.name = name;
+	}
 
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
+	public String getName(){
+		return this.name;
+	}
 
-    public Boolean isAuthentication() {
-        return authentication;
-    }
+	public void setUri(String uri){
+		this.uri = uri;
+	}
 
-    public void setAuthentication(Boolean authentication) {
-        this.authentication = authentication;
-    }
+	public String getUri(){
+		return this.uri;
+	}
 
-    public Boolean isStatus() {
-        return status;
-    }
+	public void setMethod(String method){
+		this.method = method;
+	}
 
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
+	public String getMethod(){
+		return this.method;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setVersion(String version){
+		this.version = version;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public String getVersion(){
+		return this.version;
+	}
 
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
+	public void setAppId(String appId){
+		this.appId = appId;
+	}
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+	public String getAppId(){
+		return this.appId;
+	}
 
-    @Override
-    public String toString() {
-        return "Api{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", uri='" + uri + '\'' +
-                ", method='" + method + '\'' +
-                ", version='" + version + '\'' +
-                ", appId='" + appId + '\'' +
-                ", authentication=" + authentication +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
-    }
+	public void setAuthentication(Boolean authentication){
+		this.authentication = authentication;
+	}
 
-    public static final class Builder {
-        private String id;
-        private String name;
-        private String uri;
-        private String method;
-        private String version;
-        private String appId;
-        private Boolean authentication;
-        private Boolean status;
-        private Date createTime;
-        private Date lastUpdate;
+	public Boolean getAuthentication(){
+		return this.authentication;
+	}
 
-        public Builder() {
-        }
+	public void setStatus(Boolean status){
+		this.status = status;
+	}
 
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
+	public Boolean getStatus(){
+		return this.status;
+	}
 
-        public Builder name(String val) {
-            name = val;
-            return this;
-        }
+	public void setCreateTime(java.util.Date createTime){
+		this.createTime = createTime;
+	}
 
-        public Builder uri(String val) {
-            uri = val;
-            return this;
-        }
+	public java.util.Date getCreateTime(){
+		return this.createTime;
+	}
 
-        public Builder method(String val) {
-            method = val;
-            return this;
-        }
+	public void setLastUpdate(java.util.Date lastUpdate){
+		this.lastUpdate = lastUpdate;
+	}
 
-        public Builder version(String val) {
-            version = val;
-            return this;
-        }
+	public java.util.Date getLastUpdate(){
+		return this.lastUpdate;
+	}
 
-        public Builder appId(String val) {
-            appId = val;
-            return this;
-        }
-
-        public Builder authentication(Boolean val) {
-            authentication = val;
-            return this;
-        }
-
-        public Builder status(Boolean val) {
-            status = val;
-            return this;
-        }
-
-        public Builder createTime(Date val) {
-            createTime = val;
-            return this;
-        }
-
-        public Builder lastUpdate(Date val) {
-            lastUpdate = val;
-            return this;
-        }
-
-        public Api build() {
-            return new Api(this);
-        }
-    }
 }

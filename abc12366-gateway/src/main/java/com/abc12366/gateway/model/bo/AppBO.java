@@ -1,57 +1,136 @@
 package com.abc12366.gateway.model.bo;
+import java.io.Serializable;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.Size;
 
 /**
- * @author lijun <ljun51@outlook.com>
- * @create 2017-04-05 1:03 PM
- * @since 1.0.0
- */
-public class AppBO {
+ *
+ * 接入应用表
+ *
+ **/
+@SuppressWarnings("serial")
+public class AppBO implements Serializable {
 
-    @NotEmpty(message = "应用名称不能为空")
-    @Size(min = 6, max = 32, message = "应用名称必须为6-32位")
-    private String name;
+	/**appId**/
+	private String id;
 
-    @NotEmpty(message = "密码不能为空")
-    @Size(min = 8, max = 32, message = "应用密码必须为8-32位")
-    private String password;
+	/**授权应用名称**/
+	private String name;
 
-    @Size(max = 200, message = "描述信息限制在200个中文")
-    private String remark;
+	/**授权应用密码**/
+	private String password;
 
-    public String getName() {
-        return name;
-    }
+	/**访问授权码**/
+	private String accessToken;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**上次重置授权码时间**/
+	private java.util.Date lastResetTokenTime;
 
-    public String getPassword() {
-        return password;
-    }
+	/**授权时间起**/
+	private java.util.Date startTime;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	/**授权时间止**/
+	private java.util.Date endTime;
 
-    public String getRemark() {
-        return remark;
-    }
+	/**状态**/
+	private Boolean status;
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+	/**备注**/
+	private String remark;
 
-    @Override
-    public String toString() {
-        return "AppBO{" +
-                "name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", remark='" + remark + '\'' +
-                '}';
-    }
+	/**创建时间**/
+	private java.util.Date createTime;
+
+	/**修改时间**/
+	private java.util.Date lastUpdate;
+
+
+
+	public void setId(String id){
+		this.id = id;
+	}
+
+	public String getId(){
+		return this.id;
+	}
+
+	public void setName(String name){
+		this.name = name;
+	}
+
+	public String getName(){
+		return this.name;
+	}
+
+	public void setPassword(String password){
+		this.password = password;
+	}
+
+	public String getPassword(){
+		return this.password;
+	}
+
+	public void setAccessToken(String accessToken){
+		this.accessToken = accessToken;
+	}
+
+	public String getAccessToken(){
+		return this.accessToken;
+	}
+
+	public void setLastResetTokenTime(java.util.Date lastResetTokenTime){
+		this.lastResetTokenTime = lastResetTokenTime;
+	}
+
+	public java.util.Date getLastResetTokenTime(){
+		return this.lastResetTokenTime;
+	}
+
+	public void setStartTime(java.util.Date startTime){
+		this.startTime = startTime;
+	}
+
+	public java.util.Date getStartTime(){
+		return this.startTime;
+	}
+
+	public void setEndTime(java.util.Date endTime){
+		this.endTime = endTime;
+	}
+
+	public java.util.Date getEndTime(){
+		return this.endTime;
+	}
+
+	public void setStatus(Boolean status){
+		this.status = status;
+	}
+
+	public Boolean getStatus(){
+		return this.status;
+	}
+
+	public void setRemark(String remark){
+		this.remark = remark;
+	}
+
+	public String getRemark(){
+		return this.remark;
+	}
+
+	public void setCreateTime(java.util.Date createTime){
+		this.createTime = createTime;
+	}
+
+	public java.util.Date getCreateTime(){
+		return this.createTime;
+	}
+
+	public void setLastUpdate(java.util.Date lastUpdate){
+		this.lastUpdate = lastUpdate;
+	}
+
+	public java.util.Date getLastUpdate(){
+		return this.lastUpdate;
+	}
+
 }

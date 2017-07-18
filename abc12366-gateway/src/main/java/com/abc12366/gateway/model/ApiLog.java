@@ -2,165 +2,174 @@ package com.abc12366.gateway.model;
 
 import com.abc12366.gateway.model.bo.TableBO;
 
-/**
- * 日志信息对象
- *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-04-05 9:36 AM
- * @since 1.0.0
- */
-public class ApiLog extends TableBO {
+import java.io.Serializable;
 
-    // 主键UUID
+
+/**
+ * 接口调用日志表
+ **/
+@SuppressWarnings("serial")
+public class ApiLog extends TableBO implements Serializable {
+
+    /**
+     * ID
+     **/
     private String id;
-    // 访问路径
+
+    /**
+     * 访问接口地址
+     **/
     private String uri;
-    // 用户代理
+
+    /**
+     * 用户代理
+     **/
     private String userAgent;
-    // 访问的应用主键
-    private String appId;
-    // 访问用户ID
+
+    /**
+     * 接入userId
+     **/
     private String userId;
-    // IP地址
+
+    /**
+     * 接入AppId
+     **/
+    private String appId;
+
+    /**
+     * 接入IP地址
+     **/
     private String ip;
-    // 访问开始时间
+
+    /**
+     * 访问时间
+     **/
     private long inTime;
-    // 访问结束时间
+
+    /**
+     * 响应时间
+     **/
     private long outTime;
-    // 结果状态
-    private int status;
-    // 版本
+
+    /**
+     * 结果代码
+     **/
+    private String status;
+
+    /**
+     * 附言
+     **/
     private String version;
+
+    /**
+     * 返回代码
+     **/
+    private String code;
+
+    /**
+     * 返回消息
+     **/
+    private String message;
 
     private long startTime;
 
     private long endTime;
 
-    public ApiLog() {
-    }
-
-    public ApiLog(String yyyyMMdd, String id, String uri, String userAgent, String appId, String userId, String ip,
-                  long inTime, long outTime, int status, String version) {
-        super(yyyyMMdd);
-        this.id = id;
-        this.uri = uri;
-        this.userAgent = userAgent;
-        this.appId = appId;
-        this.userId = userId;
-        this.ip = ip;
-        this.inTime = inTime;
-        this.outTime = outTime;
-        this.status = status;
-        this.version = version;
-    }
-
-    private ApiLog(Builder builder) {
-        setId(builder.id);
-        setUri(builder.uri);
-        setUserAgent(builder.userAgent);
-        setAppId(builder.appId);
-        setUserId(builder.userId);
-        setIp(builder.ip);
-        setInTime(builder.inTime);
-        setOutTime(builder.outTime);
-        setStatus(builder.status);
-        setVersion(builder.version);
-    }
-
-    public String getId() {
-        return id;
-    }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getUri() {
-        return uri;
+    public String getId() {
+        return this.id;
     }
 
     public void setUri(String uri) {
         this.uri = uri;
     }
 
-    public String getUserAgent() {
-        return userAgent;
+    public String getUri() {
+        return this.uri;
     }
 
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
     }
 
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public String getUserId() {
-        return userId;
+    public String getUserAgent() {
+        return this.userAgent;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public String getIp() {
-        return ip;
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getAppId() {
+        return this.appId;
     }
 
     public void setIp(String ip) {
         this.ip = ip;
     }
 
-    public long getInTime() {
-        return inTime;
+    public String getIp() {
+        return this.ip;
     }
 
     public void setInTime(long inTime) {
         this.inTime = inTime;
     }
 
-    public long getOutTime() {
-        return outTime;
+    public long getInTime() {
+        return this.inTime;
     }
 
     public void setOutTime(long outTime) {
         this.outTime = outTime;
     }
 
-    public int getStatus() {
-        return status;
+    public long getOutTime() {
+        return this.outTime;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getVersion() {
-        return version;
+    public String getStatus() {
+        return this.status;
     }
 
     public void setVersion(String version) {
         this.version = version;
     }
 
-    @Override
-    public String toString() {
-        return "ApiLog{" +
-                "id='" + id + '\'' +
-                ", uri='" + uri + '\'' +
-                ", userAgent='" + userAgent + '\'' +
-                ", appId='" + appId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", ip='" + ip + '\'' +
-                ", inTime=" + inTime +
-                ", outTime=" + outTime +
-                ", status=" + status +
-                ", version='" + version + '\'' +
-                "} " + super.toString();
+    public String getVersion() {
+        return this.version;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getCode() {
+        return this.code;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return this.message;
     }
 
     public long getStartTime() {
@@ -177,75 +186,5 @@ public class ApiLog extends TableBO {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
-    }
-
-    public static final class Builder {
-        private String id;
-        private String uri;
-        private String userAgent;
-        private String appId;
-        private String userId;
-        private String ip;
-        private long inTime;
-        private long outTime;
-        private int status;
-        private String version;
-
-        public Builder() {
-        }
-
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
-
-        public Builder uri(String val) {
-            uri = val;
-            return this;
-        }
-
-        public Builder userAgent(String val) {
-            userAgent = val;
-            return this;
-        }
-
-        public Builder appId(String val) {
-            appId = val;
-            return this;
-        }
-
-        public Builder userId(String val) {
-            userId = val;
-            return this;
-        }
-
-        public Builder ip(String val) {
-            ip = val;
-            return this;
-        }
-
-        public Builder inTime(long val) {
-            inTime = val;
-            return this;
-        }
-
-        public Builder outTime(long val) {
-            outTime = val;
-            return this;
-        }
-
-        public Builder status(int val) {
-            status = val;
-            return this;
-        }
-
-        public Builder version(String val) {
-            version = val;
-            return this;
-        }
-
-        public ApiLog build() {
-            return new ApiLog(this);
-        }
     }
 }

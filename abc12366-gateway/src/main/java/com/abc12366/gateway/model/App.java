@@ -1,249 +1,136 @@
 package com.abc12366.gateway.model;
+import java.io.Serializable;
 
-import java.util.Date;
 
 /**
- * 应用信息-每个访问应用需要注册才能访问
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-04-05 9:39 AM
- * @since 1.0.0
- */
-public class App {
+ * 接入应用表
+ *
+ **/
+@SuppressWarnings("serial")
+public class App implements Serializable {
 
-    // 主键UUID
-    private String id;
-    // 应用名称
-    private String name;
-    // 密码
-    private String password;
-    // 访问授权码
-    private String accessToken;
-    // 上次重置Token时间
-    private Date lastResetTokenTime;
-    // 授权时间起
-    private Date startTime;
-    // 授权时间止
-    private Date endTime;
-    // 描述信息
-    private String remark;
-    // 状态
-    private boolean status;
-    // 创建时间
-    private Date createTime;
-    // 修改时间
-    private Date lastUpdate;
+	/**appId**/
+	private String id;
 
-    public App() {
-    }
+	/**授权应用名称**/
+	private String name;
 
-    public App(String id, String name, String password, String accessToken, Date lastResetTokenTime, Date startTime,
-               Date endTime, String remark, boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.accessToken = accessToken;
-        this.lastResetTokenTime = lastResetTokenTime;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.remark = remark;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-    }
+	/**授权应用密码**/
+	private String password;
 
-    private App(Builder builder) {
-        setId(builder.id);
-        setName(builder.name);
-        setPassword(builder.password);
-        setAccessToken(builder.accessToken);
-        setLastResetTokenTime(builder.lastResetTokenTime);
-        setStartTime(builder.startTime);
-        setEndTime(builder.endTime);
-        setRemark(builder.remark);
-        setStatus(builder.status);
-        setCreateTime(builder.createTime);
-        setLastUpdate(builder.lastUpdate);
-    }
+	/**访问授权码**/
+	private String accessToken;
 
-    public String getId() {
-        return id;
-    }
+	/**上次重置授权码时间**/
+	private java.util.Date lastResetTokenTime;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**授权时间起**/
+	private java.util.Date startTime;
 
-    public String getName() {
-        return name;
-    }
+	/**授权时间止**/
+	private java.util.Date endTime;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**状态**/
+	private Boolean status;
 
-    public String getPassword() {
-        return password;
-    }
+	/**备注**/
+	private String remark;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	/**创建时间**/
+	private java.util.Date createTime;
 
-    public String getAccessToken() {
-        return accessToken;
-    }
+	/**修改时间**/
+	private java.util.Date lastUpdate;
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 
-    public Date getLastResetTokenTime() {
-        return lastResetTokenTime;
-    }
 
-    public void setLastResetTokenTime(Date lastResetTokenTime) {
-        this.lastResetTokenTime = lastResetTokenTime;
-    }
+	public void setId(String id){
+		this.id = id;
+	}
 
-    public Date getStartTime() {
-        return startTime;
-    }
+	public String getId(){
+		return this.id;
+	}
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
+	public void setName(String name){
+		this.name = name;
+	}
 
-    public Date getEndTime() {
-        return endTime;
-    }
+	public String getName(){
+		return this.name;
+	}
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
+	public void setPassword(String password){
+		this.password = password;
+	}
 
-    public String getRemark() {
-        return remark;
-    }
+	public String getPassword(){
+		return this.password;
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+	public void setAccessToken(String accessToken){
+		this.accessToken = accessToken;
+	}
 
-    public boolean isStatus() {
-        return status;
-    }
+	public String getAccessToken(){
+		return this.accessToken;
+	}
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
+	public void setLastResetTokenTime(java.util.Date lastResetTokenTime){
+		this.lastResetTokenTime = lastResetTokenTime;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public java.util.Date getLastResetTokenTime(){
+		return this.lastResetTokenTime;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setStartTime(java.util.Date startTime){
+		this.startTime = startTime;
+	}
 
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
+	public java.util.Date getStartTime(){
+		return this.startTime;
+	}
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+	public void setEndTime(java.util.Date endTime){
+		this.endTime = endTime;
+	}
 
-    @Override
-    public String toString() {
-        return "App{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", accessToken='" + accessToken + '\'' +
-                ", lastResetTokenTime='" + lastResetTokenTime + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", remark='" + remark + '\'' +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
-    }
+	public java.util.Date getEndTime(){
+		return this.endTime;
+	}
 
-    public static final class Builder {
-        private String id;
-        private String name;
-        private String password;
-        private String accessToken;
-        private Date lastResetTokenTime;
-        private Date startTime;
-        private Date endTime;
-        private String remark;
-        private boolean status;
-        private Date createTime;
-        private Date lastUpdate;
+	public void setStatus(Boolean status){
+		this.status = status;
+	}
 
-        public Builder() {
-        }
+	public Boolean getStatus(){
+		return this.status;
+	}
 
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
+	public void setRemark(String remark){
+		this.remark = remark;
+	}
 
-        public Builder name(String val) {
-            name = val;
-            return this;
-        }
+	public String getRemark(){
+		return this.remark;
+	}
 
-        public Builder password(String val) {
-            password = val;
-            return this;
-        }
+	public void setCreateTime(java.util.Date createTime){
+		this.createTime = createTime;
+	}
 
-        public Builder accessToken(String val) {
-            accessToken = val;
-            return this;
-        }
+	public java.util.Date getCreateTime(){
+		return this.createTime;
+	}
 
-        public Builder lastResetTokenTime(Date val) {
-            lastResetTokenTime = val;
-            return this;
-        }
+	public void setLastUpdate(java.util.Date lastUpdate){
+		this.lastUpdate = lastUpdate;
+	}
 
-        public Builder startTime(Date val) {
-            startTime = val;
-            return this;
-        }
+	public java.util.Date getLastUpdate(){
+		return this.lastUpdate;
+	}
 
-        public Builder endTime(Date val) {
-            endTime = val;
-            return this;
-        }
-
-        public Builder remark(String val) {
-            remark = val;
-            return this;
-        }
-
-        public Builder status(boolean val) {
-            status = val;
-            return this;
-        }
-
-        public Builder createTime(Date val) {
-            createTime = val;
-            return this;
-        }
-
-        public Builder lastUpdate(Date val) {
-            lastUpdate = val;
-            return this;
-        }
-
-        public App build() {
-            return new App(this);
-        }
-    }
 }

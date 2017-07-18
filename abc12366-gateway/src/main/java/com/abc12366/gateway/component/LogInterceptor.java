@@ -22,9 +22,9 @@ import java.util.Date;
 /**
  * IO拦截器
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-02-23 9:31 AM
- * @since 1.0.0
+ * @author lizhongwei
+ * @create 2017-07-18
+ * @since 2.0.0
  */
 public class LogInterceptor extends HandlerInterceptorAdapter {
 
@@ -110,18 +110,17 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         String version = request.getHeader(Constant.VERSION_HEAD);
 
 
-        ApiLog log = new ApiLog.Builder()
-                .id(Utils.uuid())
-                .uri(uri)
-                .userAgent(userAgent)
-                .ip(addr)
-                .inTime(inTime)
-                .outTime(outTime)
-                .status(status)
-                .appId(appId)
-                .userId(userId)
-                .version(version)
-                .build();
+        ApiLog log = new ApiLog();
+        log.setId(Utils.uuid());
+        log.setUri(uri);
+        log.setUserAgent(userAgent);
+        log.setIp(addr);
+        log.setInTime(inTime);
+        log.setOutTime(outTime);
+        log.setStatus(String.valueOf(response.getStatus()));
+        log.setAppId(appId);
+        log.setUserId(userId);
+        log.setVersion(version);
         log.setYyyyMMdd(DateUtils.getDateFormat(new Date(), "yyyyMMdd"));
 
         // 5.访问计数

@@ -16,9 +16,65 @@
 
     <insert id="insert" parameterType="com.abc12366.gateway.model.AppSetting">
         INSERT INTO gw_app_setting
-        (id, appId, apiId, timesPerMinute, timesPerHour, timesPerDay, status, createTime, lastUpdate)
-        VALUES (#{id}, #{appId}, #{apiId}, #{timesPerMinute}, #{timesPerHour}, #{timesPerDay},
-                #{status}, #{createTime}, #{lastUpdate})
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                id,
+            </if>
+            <if test="appId != null">
+                appId,
+            </if>
+            <if test="apiId != null">
+                apiId,
+            </if>
+            <if test="timesPerMinute != null">
+                timesPerMinute,
+            </if>
+            <if test="timesPerHour != null">
+                timesPerHour,
+            </if>
+            <if test="timesPerDay != null">
+                timesPerDay,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="appId!=null">
+                #{appId},
+            </if>
+            <if test="apiId!=null">
+                #{apiId},
+            </if>
+            <if test="timesPerMinute!=null">
+                #{timesPerMinute},
+            </if>
+            <if test="timesPerHour!=null">
+                #{timesPerHour},
+            </if>
+            <if test="timesPerDay!=null">
+                #{timesPerDay},
+            </if>
+            <if test="status!=null">
+                #{status},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="lastUpdate!=null">
+                #{lastUpdate},
+            </if>
+        </trim>
     </insert>
 
     <delete id="delete" parameterType="String">
