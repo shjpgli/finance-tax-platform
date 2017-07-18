@@ -70,7 +70,7 @@ public class AuthController extends BaseController {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         //进行手机验证码验证
-        ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(), request);
+        /*ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(), request);
         if (response == null) {
             throw new ServiceException(4201);
         }
@@ -80,7 +80,7 @@ public class AuthController extends BaseController {
         VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
             throw new ServiceException(4201);
-        }
+        }*/
 
         //注册
         UserReturnBO userReturnBO = authService.register(registerBO);
