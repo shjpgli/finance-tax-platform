@@ -73,8 +73,8 @@ public class RoleController {
     @PutMapping(path = "/user")
     public ResponseEntity updateUserRole(@Valid @RequestBody UserRoleBO userRoleBO) {
         LOGGER.info("{}",userRoleBO );
-        roleService.updateUserRole(userRoleBO);
-        return ResponseEntity.ok(Utils.kv());
+        UserRoleBO bo = roleService.updateUserRole(userRoleBO);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     @GetMapping(path = "/{id}")
