@@ -18,6 +18,7 @@
         <module>abc12366-common</module>
         <module>abc12366-admin</module>
         <module>abc12366-cms</module>
+        <module>abc12366-cszj</module>
     </modules>
 
     <parent>
