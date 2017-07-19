@@ -124,4 +124,13 @@ public class UserController {
         LOGGER.info("{}", userBO);
         return ResponseEntity.ok(Utils.kv("data", userBO));
     }
+
+    //用户修改密码
+    @PutMapping(path = "/password")
+    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO) {
+        LOGGER.info("{}", passwordUpdateBO);
+        Boolean message = userService.updatePassword(passwordUpdateBO);
+        LOGGER.info("{}", message);
+        return ResponseEntity.ok(Utils.kv("data", message));
+    }
 }

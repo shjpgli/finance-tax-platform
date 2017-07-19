@@ -10,4 +10,6 @@ public interface TokenMapper {
     int insert(Token token);
 
     int update(Token token);
+
+    int delete(String token);
 }

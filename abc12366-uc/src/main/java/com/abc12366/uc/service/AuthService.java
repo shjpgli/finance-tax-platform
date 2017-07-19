@@ -30,4 +30,6 @@ public interface AuthService {
     Map loginByVerifyingCode(LoginVerifyingCodeBO loginBO, String header) throws Exception;
 
     ResponseEntity verifyCode(String phone, String code, HttpServletRequest request) throws IOException;
+
+    void logout(String token);
 }

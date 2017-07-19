@@ -27,5 +27,7 @@ public interface UserService {
 
     UserBO selectOneByToken(String userToken);
 
+    Boolean updatePassword(PasswordUpdateBO passwordUpdateBO);
+
     //String login(LoginBO loginBO, String token) throws Exception;
 }
