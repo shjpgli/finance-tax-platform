@@ -11,7 +11,7 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Channel" parameterType="java.lang.String">
 		 SELECT
-			 a.channelId,a.channelName,a.contentType,	a.modelId,	a.siteId,	a.parentId,	a.channelPath,	a.priority,	a.isDisplay,b.sitePath
+			 a.channelId,a.channelName,a.contentType,	a.modelId,	a.siteId,	a.parentId,	a.channelPath,	a.priority,	a.isDisplay,b.sitePath,b.domain
 		 FROM cms_channel a LEFT JOIN cms_site b ON a.siteId = b.siteId
 		 WHERE a.channelId = #{channelId}
 	</select>
