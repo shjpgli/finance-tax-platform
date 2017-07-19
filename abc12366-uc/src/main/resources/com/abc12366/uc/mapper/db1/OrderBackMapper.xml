@@ -23,8 +23,11 @@
 			<if test="reason != null">
 				 reason,
 			</if>
-			<if test="remark != null">
-				 remark,
+			<if test="userRemark != null">
+				userRemark,
+			</if>
+			<if test="adminRemark != null">
+				adminRemark,
 			</if>
 			<if test="expressNo != null">
 				 expressNo,
@@ -56,8 +59,11 @@
 			<if test="reason!=null">
 				 #{reason},
 			</if>
-			<if test="remark!=null">
-				 #{remark},
+			<if test="userRemark!=null">
+				 #{userRemark},
+			</if>
+			<if test="adminRemark!=null">
+				 #{adminRemark},
 			</if>
 			<if test="expressNo!=null">
 				 #{expressNo},
@@ -89,8 +95,11 @@
 			<if test="reason != null">
 				 reason = #{reason},
 			</if>
-			<if test="remark != null">
-				 remark = #{remark},
+			<if test="userRemark != null">
+				userRemark = #{userRemark},
+			</if>
+			<if test="adminRemark != null">
+				adminRemark = #{adminRemark},
 			</if>
 			<if test="expressNo != null">
 				 expressNo = #{expressNo},
@@ -112,19 +121,5 @@
 		 WHERE id = #{id}
 	</update>
 
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.uc.model.OrderBack">
-		 UPDATE uc_order_back
-		 SET 
-			 userId = #{userId},
-			 orderNo = #{orderNo},
-			 reason = #{reason},
-			 remark = #{remark},
-			 expressNo = #{expressNo},
-			 expressComp = #{expressComp},
-			 status = #{status},
-			 createTime = #{createTime},
-			 lastUpdate = #{lastUpdate}
-		 WHERE id = #{id}
-	</update>
 
 </mapper>

@@ -67,9 +67,6 @@ public class MenuServiceImpl implements MenuService {
     @Transactional("db1TxManager")
     @Override
     public MenuBO insert(MenuBO menuBO) {
-        if(menuBO.getParentId()==null||menuBO.getParentId().trim().equals("")){
-            menuBO.setParentId(null);
-        }
         Menu menu = new Menu();
         BeanUtils.copyProperties(menuBO, menu);
         menu.setMenuId(Utils.uuid());
@@ -90,8 +87,7 @@ public class MenuServiceImpl implements MenuService {
      * @param id
      */
     public void deleteTree(String id) {
-        List<MenuBO> treeNodes = new ArrayList<MenuBO>();
-        treeNodes = menuRoMapper.selectByParentId(id);
+        List<MenuBO> treeNodes = menuRoMapper.selectByParentId(id);
         //遍历子节点
         for(MenuBO child : treeNodes){
             deleteTree(child.getMenuId()); //递归
