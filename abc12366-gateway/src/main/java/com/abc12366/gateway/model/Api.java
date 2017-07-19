@@ -25,8 +25,8 @@ public class Api implements Serializable {
 	/**版本**/
 	private String version;
 
-	/**接口所属系统**/
-	private String appId;
+	/**接口所属系统，字典ID**/
+	private String dictId;
 
 	/**是否需要验证用户身份: 0不需要，1需要**/
 	private Boolean authentication;
@@ -82,14 +82,6 @@ public class Api implements Serializable {
 		return this.version;
 	}
 
-	public void setAppId(String appId){
-		this.appId = appId;
-	}
-
-	public String getAppId(){
-		return this.appId;
-	}
-
 	public void setAuthentication(Boolean authentication){
 		this.authentication = authentication;
 	}
@@ -122,4 +114,11 @@ public class Api implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getDictId() {
+		return dictId;
+	}
+
+	public void setDictId(String dictId) {
+		this.dictId = dictId;
+	}
 }

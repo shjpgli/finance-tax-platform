@@ -160,4 +160,9 @@ public class AppServiceImpl implements AppService {
         BeanUtils.copyProperties(app, appGeneralBO);
         return appGeneralBO;
     }
+
+    @Override
+    public List<AppBO> selectBySettingIdList(String id) {
+        return appRoMapper.selectBySettingIdList(id);
+    }
 }

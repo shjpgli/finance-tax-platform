@@ -10,8 +10,6 @@
 package com.abc12366.uc.util;
 /**
  * ClassName:StringUtil
- * Function: TODO ADD FUNCTION.
- * Reason: TODO ADD REASON.
  * Date:     2017年6月7日 上午9:47:06
  * @author   likaixuan
  * @version  V1.0

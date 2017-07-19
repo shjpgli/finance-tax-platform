@@ -49,12 +49,13 @@ public class ApiBO implements Serializable {
     private String version;
 
     /**
-     * 接口所属系统
+     * 接口所属系统，字典ID
      **/
     @NotEmpty
     @Length(max = 64)
-    private String appId;
+    private String dictId;
 
+    private String dictName;
     /**
      * 是否需要验证用户身份: 0不需要，1需要
      **/
@@ -78,6 +79,8 @@ public class ApiBO implements Serializable {
     private java.util.Date lastUpdate;
 
     private String appName;
+
+    private String appId;
 
     public void setId(String id) {
         this.id = id;
@@ -119,14 +122,6 @@ public class ApiBO implements Serializable {
         return this.version;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public String getAppId() {
-        return this.appId;
-    }
-
     public void setAuthentication(Boolean authentication) {
         this.authentication = authentication;
     }
@@ -165,5 +160,29 @@ public class ApiBO implements Serializable {
 
     public void setAppName(String appName) {
         this.appName = appName;
+    }
+
+    public String getDictId() {
+        return dictId;
+    }
+
+    public void setDictId(String dictId) {
+        this.dictId = dictId;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getDictName() {
+        return dictName;
+    }
+
+    public void setDictName(String dictName) {
+        this.dictName = dictName;
     }
 }

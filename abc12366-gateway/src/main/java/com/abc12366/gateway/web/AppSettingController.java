@@ -43,18 +43,6 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
-    @GetMapping(path = "/appsetting/app")
-    public ResponseEntity selectAppList(@RequestParam(value = "appId", required = true) String appId,
-                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        LOGGER.info(appId);
-        List<AppSettingBO> dataList = appSettingService.selectList(appId);
-        PageInfo<AppSettingBO> pageInfo = new PageInfo<>(dataList);
-        LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    }
-
     @GetMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity selectOne(@PathVariable("appId") String appId,
                                     @PathVariable("id") String id) {

@@ -67,4 +67,6 @@ public interface AppService {
      * @return App对象
      */
     AppBO selectById(String id);
+
+    List<AppBO> selectBySettingIdList(String id);
 }

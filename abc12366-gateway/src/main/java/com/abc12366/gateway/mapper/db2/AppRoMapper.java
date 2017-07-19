@@ -18,4 +18,5 @@ public interface AppRoMapper {
 
     List<AppBO> selectList(AppBO appGeneralBO);
 
+    List<AppBO> selectBySettingIdList(String id);
 }

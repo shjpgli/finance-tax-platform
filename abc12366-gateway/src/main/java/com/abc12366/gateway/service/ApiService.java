@@ -20,4 +20,6 @@ public interface ApiService {
     void delete(String id);
 
     ApiBO selectOne(String id);
+
+    List<ApiBO> selectBySettingList(String appId);
 }

@@ -15,4 +15,6 @@ public interface ApiRoMapper {
     ApiBO selectOne(Api api);
 
     List<ApiBO> selectList(Api api);
+
+    List<ApiBO> selectBySettingList(String appId);
 }

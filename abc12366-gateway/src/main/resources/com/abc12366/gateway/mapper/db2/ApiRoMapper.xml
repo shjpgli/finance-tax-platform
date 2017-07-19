@@ -8,31 +8,39 @@
         <result column="uri" property="uri" jdbcType="VARCHAR"/>
         <result column="method" property="method" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="VARCHAR"/>
-        <result column="appId" property="appId" jdbcType="VARCHAR"/>
+        <result column="dictId" property="dictId" jdbcType="VARCHAR"/>
+        <result column="dictName" property="dictName" jdbcType="VARCHAR"/>
         <result column="authentication" property="authentication" jdbcType="TINYINT"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="appName" property="appName" jdbcType="VARCHAR"/>
+        <result column="appId" property="appId" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="selectList" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api">
-        select i.id, i.name, i.uri, i.method, i.version, i.appId, i.authentication, i.status, i.createTime, i.lastUpdate,p.name as appName
+        select i.id, i.name, i.uri, i.method, i.version, i.dictId, i.authentication, i.status, i.createTime,
+        i.lastUpdate,d.dictName as dictName
         from gw_api i
-        LEFT JOIN gw_app p ON p.id = i.appId
+        LEFT JOIN gateway_view_sys_dict d ON d.id = i.dictId
         <where>
             1 = 1
-            <if test="appId != null">and i.appId = #{appId}</if>
-            <if test="uri != null">AND i.uri = #{uri}</if>
-            <if test="name != null and name!=''"> and i.name LIKE CONCAT('%',#{name},'%')</if>
-            <if test="method != null">AND i.method = #{method}</if>
-            <if test="version != null">AND i.version = #{version}</if>
+            <if test="name != null">and i.name LIKE CONCAT('%',#{name},'%')</if>
             <if test="status != null">AND i.status = #{status}</if>
         </where>
     </select>
 
-    <select id="selectOne" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api" >
-        select i.id, i.name, i.uri, i.method, i.version, i.appId, i.authentication, i.status, i.createTime, i.lastUpdate,p.name as appName
+    <select id="selectBySettingList" resultMap="apiMap" parameterType="java.lang.String">
+        select i.id, i.name, i.uri, i.method, i.version, i.dictId, i.authentication, i.status, i.createTime, i.lastUpdate,d.dictName as dictName
+          FROM
+          gw_api i
+          LEFT JOIN gw_app_setting sp ON i.id != sp.apiId
+          LEFT JOIN gateway_view_sys_dict d ON d.id = i.dictId
+        WHERE sp.appId = #{appId}
+    </select>
+
+    <select id="selectOne" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api">
+        select i.id, i.name, i.uri, i.method, i.version, i.dictId, i.authentication, i.status, i.createTime, i.lastUpdate,d.dictName as dictName
         from gw_api i
-        LEFT JOIN gw_app p ON p.id = i.appId WHERE i.id = #{id}
+        LEFT JOIN gateway_view_sys_dict d ON d.id = i.dictId WHERE i.id = #{id}
     </select>
 </mapper>
