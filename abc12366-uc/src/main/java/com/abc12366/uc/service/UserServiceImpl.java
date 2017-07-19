@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
+import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
@@ -128,6 +129,41 @@ public class UserServiceImpl implements UserService {
     public UserBO selectOneByToken(String userToken) {
         LOGGER.info("{}", userToken);
         return userRoMapper.selectOneByToken(userToken);
+    }
+
+    @Override
+    public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO) {
+        LOGGER.info("{}", passwordUpdateBO);
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(passwordUpdateBO.getPhone());
+        User userExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        if (userExist == null) {
+            throw new ServiceException(4018);
+        }
+
+        //密码加密
+        String password;
+        String encodePassword;
+        String salt;
+        try {
+            //密码生产规则：前台传密码md5之后的值，后台用该值加上salt再md5 ，salt是随机生成的六位整数
+            password = Utils.md5(passwordUpdateBO.getPassword());
+            salt = Utils.salt();
+            encodePassword = Utils.md5(password + salt);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage() + e);
+            throw new ServiceException(4106);
+        }
+
+        User user = new User();
+        user.setId(userExist.getId());
+        user.setPhone(passwordUpdateBO.getPhone());
+        user.setPassword(encodePassword);
+        int result = userMapper.update(user);
+        if (result != 1) {
+            throw new ServiceException(4023);
+        }
+        return true;
     }
 
     public List analysisTagName(String tagName, String sliptor) {

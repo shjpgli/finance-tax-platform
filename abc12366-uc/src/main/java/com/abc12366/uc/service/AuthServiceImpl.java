@@ -331,4 +331,13 @@ public class AuthServiceImpl implements AuthService {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public void logout(String token) {
+        LOGGER.info("{}", token);
+        int result = tokenMapper.delete(token);
+        if (result < 1) {
+            throw new ServiceException(4022);
+        }
+    }
 }

@@ -1,13 +1,11 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.common.web.BaseController;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IpService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +29,6 @@ import java.util.Map;
 public class AuthController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Autowired
     private AuthService authService;
@@ -138,4 +133,15 @@ public class AuthController extends BaseController {
         boolean isAuth = authService.isAuthentication(token, request);
         return ResponseEntity.ok(isAuth);
     }
+
+    /**
+     * 用户登出
+     */
+    @DeleteMapping(path = "/logout/{token}")
+    public ResponseEntity logout(@PathVariable String token, HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", token);
+        authService.logout(token);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
 }
