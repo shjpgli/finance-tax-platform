@@ -19,7 +19,7 @@
     </resultMap>
     <select id="selectList" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api">
         select i.id, i.name, i.uri, i.method, i.version, i.dictId, i.authentication, i.status, i.createTime,
-        i.lastUpdate,d.dictName as dictName
+        i.lastUpdate,d.fieldKey as dictName
         from gw_api i
         LEFT JOIN gateway_view_sys_dict d ON d.id = i.dictId
         <where>

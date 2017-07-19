@@ -30,9 +30,12 @@ public class OrderBack implements Serializable {
     private String reason;
 
     /**
-     * 备注
+     * 用户备注
      **/
-    private String remark;
+    private String userRemark;
+
+    /**管理员备注**/
+    private String adminRemark;
 
     /**
      * 快递单号
@@ -90,14 +93,6 @@ public class OrderBack implements Serializable {
         return this.reason;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getRemark() {
-        return this.remark;
-    }
-
     public void setExpressNo(String expressNo) {
         this.expressNo = expressNo;
     }
@@ -144,5 +139,21 @@ public class OrderBack implements Serializable {
 
     public void setOperatorUser(String operatorUser) {
         this.operatorUser = operatorUser;
+    }
+
+    public String getUserRemark() {
+        return userRemark;
+    }
+
+    public void setUserRemark(String userRemark) {
+        this.userRemark = userRemark;
+    }
+
+    public String getAdminRemark() {
+        return adminRemark;
+    }
+
+    public void setAdminRemark(String adminRemark) {
+        this.adminRemark = adminRemark;
     }
 }
