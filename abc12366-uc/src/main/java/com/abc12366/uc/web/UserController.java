@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -127,9 +128,9 @@ public class UserController {
 
     //用户修改密码
     @PutMapping(path = "/password")
-    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO) {
-        LOGGER.info("{}", passwordUpdateBO);
-        Boolean message = userService.updatePassword(passwordUpdateBO);
+    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
+        LOGGER.info("{}:{}", passwordUpdateBO, request);
+        Boolean message = userService.updatePassword(passwordUpdateBO, request);
         LOGGER.info("{}", message);
         return ResponseEntity.ok(Utils.kv("data", message));
     }

@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public interface UserService {
 
     UserBO selectOneByToken(String userToken);
 
-    Boolean updatePassword(PasswordUpdateBO passwordUpdateBO);
+    Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request);
 
     //String login(LoginBO loginBO, String token) throws Exception;
 }

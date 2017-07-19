@@ -1,13 +1,18 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
+import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
+import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -35,6 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserExtendRoMapper userExtendRoMapper;
+
+    @Autowired
+    private TokenMapper tokenMapper;
+
+    @Autowired
+    private TokenRoMapper tokenRoMapper;
 
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
@@ -131,30 +143,34 @@ public class UserServiceImpl implements UserService {
         return userRoMapper.selectOneByToken(userToken);
     }
 
+    @Transactional("db1TxManager")
     @Override
-    public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO) {
+    public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
         LOGGER.info("{}", passwordUpdateBO);
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(passwordUpdateBO.getPhone());
+        //判断用户是否存在
         User userExist = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (userExist == null) {
             throw new ServiceException(4018);
         }
 
-        //密码加密
-        String password;
-        String encodePassword;
-        String salt;
-        try {
-            //密码生产规则：前台传密码md5之后的值，后台用该值加上salt再md5 ，salt是随机生成的六位整数
-            password = Utils.md5(passwordUpdateBO.getPassword());
-            salt = Utils.salt();
-            encodePassword = Utils.md5(password + salt);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage() + e);
-            throw new ServiceException(4106);
+        //判断是否有用户token请求头
+        String token = (String) request.getAttribute(Constant.USER_TOKEN_HEAD);
+        if (token == null || token.equals("")) {
+            throw new ServiceException(4199);
         }
 
+        //判断库表是否存在该token
+        Token tokenExist = tokenRoMapper.isAuthentication(token);
+        if (tokenExist == null) {
+            throw new ServiceException(4179);
+        }
+
+        //密码加密
+        String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword());
+
+        //改库..
         User user = new User();
         user.setId(userExist.getId());
         user.setPhone(passwordUpdateBO.getPhone());
@@ -163,6 +179,8 @@ public class UserServiceImpl implements UserService {
         if (result != 1) {
             throw new ServiceException(4023);
         }
+        //删除token
+        tokenMapper.delete(token);
         return true;
     }
 
