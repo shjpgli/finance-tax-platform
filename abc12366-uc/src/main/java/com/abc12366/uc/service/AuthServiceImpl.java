@@ -191,8 +191,9 @@ public class AuthServiceImpl implements AuthService {
         }
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
+        userBO.setPassword(null);
 
-        Map map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("token", userToken);
         map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
         map.put("user", userBO);

@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
         if (userTemp != null) {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
+            user.setPassword(null);
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
             map.put("user_extend", user_extend);
@@ -101,6 +102,7 @@ public class UserServiceImpl implements UserService {
         }
         UserBO userDTO = new UserBO();
         BeanUtils.copyProperties(user, userDTO);
+        userDTO.setPassword(null);
         LOGGER.info("{}", userDTO);
         return userDTO;
     }
@@ -114,6 +116,7 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);
+            userDTO.setPassword(null);
             LOGGER.info("{}", userDTO);
             return userDTO;
         }
