@@ -134,4 +134,24 @@ public class TagServiceImpl implements TagService {
         LOGGER.info("{}", userId);
         return tagRoMapper.selectListByUserId(userId);
     }
+
+    @Override
+    public void enableOrDisable(String id, String status) {
+        LOGGER.info("{}:{}", id, status);
+        if ((!status.equals("true")) && (!status.equals("false"))) {
+            throw new ServiceException(4614);
+        }
+        boolean modifyStatus = status.equals("true");
+        Tag tag = new Tag();
+        tag.setId(id);
+        tag.setStatus(modifyStatus);
+        tag.setLastUpdate(new Date());
+        int result = tagMapper.update(tag);
+        if (result < 1) {
+            if (modifyStatus) {
+                throw new ServiceException(4625);
+            }
+            throw new ServiceException(4626);
+        }
+    }
 }

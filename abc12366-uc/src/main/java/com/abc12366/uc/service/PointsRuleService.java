@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-16 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com.com>
+ * Date: 2017-05-22
+ * Time: 9:13
  */
 public interface PointsRuleService {
     List<PointsRuleBO> selectList(Map map);
@@ -22,4 +22,6 @@ public interface PointsRuleService {
     PointsRuleBO update(PointsRuleUpdateBO pointsRuleUpdateBO, String id);
 
     int delete(String id);
+
+    void enableOrDisable(String id, String status);
 }

@@ -65,7 +65,7 @@ public class VipPrivilegeController {
         LOGGER.info("{}", id);
         VipPrivilegeBO vipPrivilegeBO = vipPrivilegeService.selectOne(id);
         LOGGER.info("{}", vipPrivilegeBO);
-        return ResponseEntity.ok(Utils.kv("data",vipPrivilegeBO));
+        return ResponseEntity.ok(Utils.kv("data", vipPrivilegeBO));
     }
 
     @PostMapping
@@ -73,7 +73,7 @@ public class VipPrivilegeController {
         LOGGER.info("{}", vipPrivilegeInsertBO);
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.insert(vipPrivilegeInsertBO);
         LOGGER.info("{}", vipPrivilegeBOReturn);
-        return ResponseEntity.ok(Utils.kv("data",vipPrivilegeBOReturn));
+        return ResponseEntity.ok(Utils.kv("data", vipPrivilegeBOReturn));
     }
 
     @PutMapping(path = "/{id}")
@@ -81,13 +81,21 @@ public class VipPrivilegeController {
         LOGGER.info("{}", vipPrivilegeUpdateBO);
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.update(vipPrivilegeUpdateBO, id);
         LOGGER.info("{}", vipPrivilegeBOReturn);
-        return ResponseEntity.ok(Utils.kv("data",vipPrivilegeBOReturn));
+        return ResponseEntity.ok(Utils.kv("data", vipPrivilegeBOReturn));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         vipPrivilegeService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //启用、禁用会员特权接口
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
+        LOGGER.info("{}:{}", id, status);
+        vipPrivilegeService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
 }

@@ -21,11 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户等级接口
- *
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-19 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com.com>
+ * Date: 2017-05-22
+ * Time: 9:13
  */
 @RestController
 @RequestMapping(path = "/uvip/level", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -84,6 +82,14 @@ public class VipLevelController {
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         vipLevelService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //启用、禁用会员等级接口
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
+        LOGGER.info("{}:{}", id, status);
+        vipLevelService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
 }

@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-19 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com.com>
+ * Date: 2017-05-22
+ * Time: 11:24
  */
 @Service
 public class VipLevelServiceImpl implements VipLevelService {
@@ -46,7 +46,6 @@ public class VipLevelServiceImpl implements VipLevelService {
     @Override
     public VipLevelBO insert(VipLevelInsertBO vipLevelInsertBO) {
         if (vipLevelInsertBO == null) {
-            LOGGER.warn("新增失败，已存在等级为" + vipLevelInsertBO.getLevel() + "的会员等级！");
             throw new ServiceException(4101);
         }
         //特权名称唯一性校验
@@ -94,8 +93,8 @@ public class VipLevelServiceImpl implements VipLevelService {
 
         //特权名称唯一性校验
         List<VipLevelBO> vipLevelBOList = vipLevelRoMapper.selectList(null);
-        for(int i=0; i<vipLevelBOList.size(); i++){
-            if((vipLevelBOList.get(i)).getId().equals(id)){
+        for (int i = 0; i < vipLevelBOList.size(); i++) {
+            if ((vipLevelBOList.get(i)).getId().equals(id)) {
                 vipLevelBOList.remove(i);
             }
         }
@@ -135,5 +134,25 @@ public class VipLevelServiceImpl implements VipLevelService {
             throw new ServiceException(4103);
         }
         return 1;
+    }
+
+    @Override
+    public void enableOrDisable(String id, String status) {
+        LOGGER.info("{}:{}", id, status);
+        if ((!status.equals("true")) && (!status.equals("false"))) {
+            throw new ServiceException(4614);
+        }
+        boolean modifyStatus = status.equals("true");
+        VipLevel vipLevel = new VipLevel();
+        vipLevel.setId(id);
+        vipLevel.setStatus(modifyStatus);
+        vipLevel.setLastUpdate(new Date());
+        int result = vipLevelMapper.update(vipLevel);
+        if (result < 1) {
+            if (modifyStatus) {
+                throw new ServiceException(4617);
+            }
+            throw new ServiceException(4618);
+        }
     }
 }

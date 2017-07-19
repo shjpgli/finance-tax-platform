@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-16 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com.com>
+ * Date: 2017-05-22
+ * Time: 9:13
  */
 @Service
 public class PointsRuleServiceImpl implements PointsRuleService {
@@ -59,12 +59,12 @@ public class PointsRuleServiceImpl implements PointsRuleService {
         }
         //积分规则的规则名称和规则代码唯一性校验
         List<PointsRuleBO> pointsRuleBOList = uPointRuleRoMapper.selectList(null);
-        for(PointsRuleBO pointsRuleBO:pointsRuleBOList){
-            if(pointsRuleBO.getName().equals(pointsRuleInsertBO.getName())){
+        for (PointsRuleBO pointsRuleBO : pointsRuleBOList) {
+            if (pointsRuleBO.getName().equals(pointsRuleInsertBO.getName())) {
                 LOGGER.warn("新增失败，参数：{}", pointsRuleInsertBO);
                 throw new ServiceException(4608);
             }
-            if(pointsRuleBO.getCode().equals(pointsRuleInsertBO.getCode())){
+            if (pointsRuleBO.getCode().equals(pointsRuleInsertBO.getCode())) {
                 LOGGER.warn("新增失败，参数：{}", pointsRuleInsertBO);
                 throw new ServiceException(4609);
             }
@@ -90,24 +90,24 @@ public class PointsRuleServiceImpl implements PointsRuleService {
     @Override
     public PointsRuleBO update(PointsRuleUpdateBO pointsRuleUpdateBO, String id) {
         if (pointsRuleUpdateBO == null) {
-            LOGGER.warn("更新失败，参数：{}：{}" ,id);
+            LOGGER.warn("更新失败，参数：{}：{}", id);
             throw new ServiceException(4102);
         }
 
         //积分规则的规则名称和规则代码唯一性校验
         List<PointsRuleBO> pointsRuleBOList = uPointRuleRoMapper.selectList(null);
         //这条数据本身不做校验
-        for(int i=0; i<pointsRuleBOList.size(); i++){
-            if((pointsRuleBOList.get(i)).getId().equals(id)){
+        for (int i = 0; i < pointsRuleBOList.size(); i++) {
+            if ((pointsRuleBOList.get(i)).getId().equals(id)) {
                 pointsRuleBOList.remove(i);
             }
         }
-        for(PointsRuleBO pointsRuleBO:pointsRuleBOList){
-            if(pointsRuleBO.getName().equals(pointsRuleUpdateBO.getName())){
+        for (PointsRuleBO pointsRuleBO : pointsRuleBOList) {
+            if (pointsRuleBO.getName().equals(pointsRuleUpdateBO.getName())) {
                 LOGGER.warn("新增失败，参数：{}", pointsRuleUpdateBO);
                 throw new ServiceException(4608);
             }
-            if(pointsRuleBO.getCode().equals(pointsRuleUpdateBO.getCode())){
+            if (pointsRuleBO.getCode().equals(pointsRuleUpdateBO.getCode())) {
                 LOGGER.warn("新增失败，参数：{}", pointsRuleUpdateBO);
                 throw new ServiceException(4609);
             }
@@ -115,7 +115,7 @@ public class PointsRuleServiceImpl implements PointsRuleService {
 
         PointsRuleBO uPointsRuleQuery = uPointRuleRoMapper.selectOne(id);
         if (uPointsRuleQuery == null) {
-            LOGGER.warn("更新失败，参数：{}：{}" , pointsRuleUpdateBO.toString(), id);
+            LOGGER.warn("更新失败，参数：{}：{}", pointsRuleUpdateBO.toString(), id);
             throw new ServiceException(4102);
         }
 
@@ -143,5 +143,25 @@ public class PointsRuleServiceImpl implements PointsRuleService {
             throw new ServiceException(4103);
         }
         return 1;
+    }
+
+    @Override
+    public void enableOrDisable(String id, String status) {
+        LOGGER.info("{}:{}", id, status);
+        if ((!status.equals("true")) && (!status.equals("false"))) {
+            throw new ServiceException(4614);
+        }
+        boolean modifyStatus = status.equals("true");
+        PointsRule pointsRule = new PointsRule();
+        pointsRule.setId(id);
+        pointsRule.setStatus(modifyStatus);
+        pointsRule.setLastUpdate(new Date());
+        int result = uPointRuleMapper.update(pointsRule);
+        if (result < 1) {
+            if (modifyStatus) {
+                throw new ServiceException(4621);
+            }
+            throw new ServiceException(4622);
+        }
     }
 }

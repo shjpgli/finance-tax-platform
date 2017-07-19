@@ -22,4 +22,6 @@ public interface ExperienceRuleService {
     ExperienceRuleBO update(ExperienceRuleUpdateBO experienceRuleUpdateBO, String id);
 
     int delete(String id);
+
+    void enableOrDisable(String id, String status);
 }

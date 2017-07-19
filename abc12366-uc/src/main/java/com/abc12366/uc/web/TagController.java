@@ -97,4 +97,12 @@ public class TagController {
         tagService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    //启用、禁用等级标签接口
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
+        LOGGER.info("{}:{}", id, status);
+        tagService.enableOrDisable(id, status);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

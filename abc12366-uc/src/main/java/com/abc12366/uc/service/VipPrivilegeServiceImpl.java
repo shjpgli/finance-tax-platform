@@ -91,8 +91,8 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
         //特权名称唯一性校验
         List<VipPrivilegeBO> vipPrivilegeBOList = vipPrivilegeRoMapper.selectList(null);
         //这条数据本身不计入校验数据
-        for(int i=0; i<vipPrivilegeBOList.size(); i++){
-            if((vipPrivilegeBOList.get(i)).getId().equals(id)){
+        for (int i = 0; i < vipPrivilegeBOList.size(); i++) {
+            if ((vipPrivilegeBOList.get(i)).getId().equals(id)) {
                 vipPrivilegeBOList.remove(i);
             }
         }
@@ -141,5 +141,25 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
             throw new ServiceException(4103);
         }
         return true;
+    }
+
+    @Override
+    public void enableOrDisable(String id, String status) {
+        LOGGER.info("{}:{}", id, status);
+        if ((!status.equals("true")) && (!status.equals("false"))) {
+            throw new ServiceException(4614);
+        }
+        boolean modifyStatus = status.equals("true");
+        VipPrivilege vipPrivilege = new VipPrivilege();
+        vipPrivilege.setId(id);
+        vipPrivilege.setStatus(modifyStatus);
+        vipPrivilege.setLastUpdate(new Date());
+        int result = vipPrivilegeMapper.update(vipPrivilege);
+        if (result < 1) {
+            if (modifyStatus) {
+                throw new ServiceException(4623);
+            }
+            throw new ServiceException(4624);
+        }
     }
 }

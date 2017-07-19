@@ -21,4 +21,6 @@ public interface VipPrivilegeService {
     VipPrivilegeBO update(VipPrivilegeInsertAndUpdateBO vipPrivilegeUpdateBO, String id);
 
     boolean delete(String id);
+
+    void enableOrDisable(String id, String status);
 }

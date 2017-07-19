@@ -21,11 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 积分规则接口
- *
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com.com>
+ * Date: 2017-05-22
+ * Time: 9:13
  */
 @RestController
 @RequestMapping(path = "/upoints/rule", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -88,10 +86,19 @@ public class PointsRuleController {
         LOGGER.info("{}", rule);
         return ResponseEntity.ok(Utils.kv("data", rule));
     }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         pointsRuleService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //启用、禁用积分规则接口
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
+        LOGGER.info("{}:{}", id, status);
+        pointsRuleService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
 }
