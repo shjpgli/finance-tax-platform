@@ -1,10 +1,11 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.TopicMapper;
 import com.abc12366.cms.mapper.db2.TopicRoMapper;
 import com.abc12366.cms.model.Topic;
 import com.abc12366.cms.model.bo.TopicBo;
 import com.abc12366.cms.model.bo.TopicListBo;
+import com.abc12366.cms.service.TopicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

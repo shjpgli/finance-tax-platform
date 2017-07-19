@@ -1,4 +1,4 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.EventMapper;
 import com.abc12366.cms.mapper.db1.EventModelItemMapper;
@@ -10,6 +10,7 @@ import com.abc12366.cms.model.bo.EventBo;
 import com.abc12366.cms.model.bo.EventListBo;
 import com.abc12366.cms.model.bo.EventModelItemBo;
 import com.abc12366.cms.model.bo.EventSaveBo;
+import com.abc12366.cms.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

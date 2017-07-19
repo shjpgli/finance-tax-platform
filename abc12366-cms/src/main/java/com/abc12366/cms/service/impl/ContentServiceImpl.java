@@ -1,9 +1,10 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.*;
 import com.abc12366.cms.mapper.db2.*;
 import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
+import com.abc12366.cms.service.ContentService;
 import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ import java.util.*;
  * @since 1.0.0
  */
 @Service
-public class ContentServiceImpl implements ContentService{
+public class ContentServiceImpl implements ContentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentServiceImpl.class);
 
     @Autowired

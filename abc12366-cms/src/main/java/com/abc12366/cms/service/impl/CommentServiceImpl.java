@@ -1,4 +1,4 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.CommentExtMapper;
 import com.abc12366.cms.mapper.db1.CommentMapper;
@@ -7,6 +7,7 @@ import com.abc12366.cms.mapper.db2.CommentRoMapper;
 import com.abc12366.cms.model.Comment;
 import com.abc12366.cms.model.CommentExt;
 import com.abc12366.cms.model.bo.*;
+import com.abc12366.cms.service.CommentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

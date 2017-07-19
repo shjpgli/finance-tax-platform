@@ -1,8 +1,9 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.ContentTypeMapper;
 import com.abc12366.cms.mapper.db2.ContentTypeRoMapper;
 import com.abc12366.cms.model.ContentType;
+import com.abc12366.cms.service.ContentTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.SubjectMapper;
 import com.abc12366.cms.mapper.db1.VoteAdditionMapper;
@@ -8,6 +8,7 @@ import com.abc12366.cms.mapper.db2.VoteAdditionRoMapper;
 import com.abc12366.cms.mapper.db2.VoteRoMapper;
 import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
+import com.abc12366.cms.service.VoteService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;

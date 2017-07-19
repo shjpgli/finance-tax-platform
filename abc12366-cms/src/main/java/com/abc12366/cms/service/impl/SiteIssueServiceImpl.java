@@ -1,9 +1,10 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.SiteIssueMapper;
 import com.abc12366.cms.mapper.db2.SiteIssueRoMapper;
 import com.abc12366.cms.model.SiteIssue;
 import com.abc12366.cms.model.bo.SiteIssueBo;
+import com.abc12366.cms.service.SiteIssueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
