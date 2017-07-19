@@ -171,6 +171,7 @@ public class AuthServiceImpl implements AuthService {
         String userToken = Utils.token(Utils.uuid());
         if (queryToken != null) {
             queryToken.setLastTokenResetTime(new Date());
+            userToken = queryToken.getToken();
             result02 = tokenMapper.update(queryToken);
         } else {
             Token token = new Token();
