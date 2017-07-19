@@ -224,6 +224,7 @@
         SELECT
         <include refid="Base_Column_BO_List" />
         FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
         <where>
             1 = 1
             <if test=" user.id != null and user.id != '' ">

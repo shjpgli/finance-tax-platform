@@ -20,8 +20,8 @@
             <if test="version != null">
                 version,
             </if>
-            <if test="appId != null">
-                appId,
+            <if test="dictId != null">
+                dictId,
             </if>
             <if test="authentication != null">
                 authentication,
@@ -53,8 +53,8 @@
             <if test="version!=null">
                 #{version},
             </if>
-            <if test="appId!=null">
-                #{appId},
+            <if test="dictId!=null">
+                #{dictId},
             </if>
             <if test="authentication!=null">
                 #{authentication},
@@ -78,7 +78,7 @@
             <if test="uri != null">uri = #{uri},</if>
             <if test="method != null">method = #{method},</if>
             <if test="version != null">version = #{version},</if>
-            <if test="appId != null">appId = #{appId},</if>
+            <if test="dictId != null">dictId = #{dictId},</if>
             <if test="authentication != null">authentication = #{authentication},</if>
             <if test="status != null">status = #{status},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate}</if>
