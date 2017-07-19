@@ -171,6 +171,7 @@ public class AuthServiceImpl implements AuthService {
         String userToken = Utils.token(Utils.uuid());
         if (queryToken != null) {
             queryToken.setLastTokenResetTime(new Date());
+            userToken = queryToken.getToken();
             result02 = tokenMapper.update(queryToken);
         } else {
             Token token = new Token();
@@ -191,7 +192,13 @@ public class AuthServiceImpl implements AuthService {
         }
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
-        return Utils.kv("User-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
+        userBO.setPassword(null);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", userToken);
+        map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
+        map.put("user", userBO);
+        return map;
     }
 
     @Override
@@ -329,6 +336,15 @@ public class AuthServiceImpl implements AuthService {
             }
         } else {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public void logout(String token) {
+        LOGGER.info("{}", token);
+        int result = tokenMapper.delete(token);
+        if (result < 1) {
+            throw new ServiceException(4022);
         }
     }
 }

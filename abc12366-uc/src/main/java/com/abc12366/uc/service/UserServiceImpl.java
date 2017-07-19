@@ -1,12 +1,18 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
+import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -34,6 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserExtendRoMapper userExtendRoMapper;
+
+    @Autowired
+    private TokenMapper tokenMapper;
+
+    @Autowired
+    private TokenRoMapper tokenRoMapper;
 
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
@@ -60,6 +73,7 @@ public class UserServiceImpl implements UserService {
         if (userTemp != null) {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
+            user.setPassword(null);
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
             map.put("user_extend", user_extend);
@@ -88,6 +102,7 @@ public class UserServiceImpl implements UserService {
         }
         UserBO userDTO = new UserBO();
         BeanUtils.copyProperties(user, userDTO);
+        userDTO.setPassword(null);
         LOGGER.info("{}", userDTO);
         return userDTO;
     }
@@ -101,6 +116,7 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);
+            userDTO.setPassword(null);
             LOGGER.info("{}", userDTO);
             return userDTO;
         }
@@ -128,6 +144,47 @@ public class UserServiceImpl implements UserService {
     public UserBO selectOneByToken(String userToken) {
         LOGGER.info("{}", userToken);
         return userRoMapper.selectOneByToken(userToken);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
+        LOGGER.info("{}", passwordUpdateBO);
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(passwordUpdateBO.getPhone());
+        //判断用户是否存在
+        User userExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        if (userExist == null) {
+            throw new ServiceException(4018);
+        }
+
+        //判断是否有用户token请求头
+        String token = (String) request.getAttribute(Constant.USER_TOKEN_HEAD);
+        if (token == null || token.equals("")) {
+            throw new ServiceException(4199);
+        }
+
+        //判断库表是否存在该token
+        Token tokenExist = tokenRoMapper.isAuthentication(token);
+        if (tokenExist == null) {
+            throw new ServiceException(4179);
+        }
+
+        //密码加密
+        String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword());
+
+        //改库..
+        User user = new User();
+        user.setId(userExist.getId());
+        user.setPhone(passwordUpdateBO.getPhone());
+        user.setPassword(encodePassword);
+        int result = userMapper.update(user);
+        if (result != 1) {
+            throw new ServiceException(4023);
+        }
+        //删除token
+        tokenMapper.delete(token);
+        return true;
     }
 
     public List analysisTagName(String tagName, String sliptor) {

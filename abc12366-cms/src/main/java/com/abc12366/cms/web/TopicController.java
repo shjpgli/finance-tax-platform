@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 模型管理模块
+ * 专题管理模块
  *
  * @author xieyanmao
  * @create 2017-05-08
@@ -34,6 +34,9 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
+    /**
+     * 查询专题列表信息
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -43,46 +46,61 @@ public class TopicController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
+    /**
+     * 根据模板查询专题信息
+     */
     @GetMapping(path = "/selectListBytplContent")
     public ResponseEntity selectListBytplContent(@RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime,
                                       @RequestParam(value = "tplContent", required = false) String tplContent) {
-        //查询模型项
+        //查询专题信息
         Map<String, Object> dataMap = new HashMap<>();
         List<TopicBo> dataList = topicService.selectListBytplContent(tplContent);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 新增专题信息
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody TopicBo topicBo) {
         LOGGER.info("{}", topicBo);
-        //新增评论信息
+        //新增专题信息
         topicBo = topicService.save(topicBo);
         LOGGER.info("{}", topicBo);
         return ResponseEntity.ok(Utils.kv("data", topicBo));
     }
 
+    /**
+     * 查询单个专题信息
+     */
     @GetMapping(path = "/{topicId}")
     public ResponseEntity selectOne(@PathVariable String topicId) {
         LOGGER.info("{}", topicId);
-        //查询评论信息
+        //查询专题信息
         TopicBo topicBo = topicService.selectTopic(topicId);
         LOGGER.info("{}", topicBo);
         return ResponseEntity.ok(Utils.kv("data", topicBo));
     }
 
+    /**
+     * 更新专题信息
+     */
     @PutMapping(path = "/{topicId}")
     public ResponseEntity update(@PathVariable String topicId,
                                  @Valid @RequestBody TopicBo topicBo) {
 
         LOGGER.info("{}", topicBo);
-        //更新评论信息
+        //更新专题信息
         topicBo = topicService.update(topicBo);
         LOGGER.info("{}", topicBo);
         return ResponseEntity.ok(Utils.kv("data", topicBo));
     }
 
+    /**
+     * 批量更新专题信息
+     */
     @PutMapping(path = "/updateList")
     public ResponseEntity updateList(@Valid @RequestBody TopicListBo topicListBo) {
 
@@ -93,19 +111,25 @@ public class TopicController {
         return ResponseEntity.ok(Utils.kv("data", topicListBo));
     }
 
+    /**
+     * 删除专题信息
+     */
     @DeleteMapping(path = "/{topicId}")
     public ResponseEntity delete(@PathVariable String topicId) {
         LOGGER.info("{}", topicId);
-        //删除评论信息
+        //删除专题信息
         String rtn = topicService.delete(topicId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 批量删除专题信息
+     */
     @PostMapping(path = "/deleteList")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
-        //删除评论信息
+        //批量删除专题信息
         String rtn = topicService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));

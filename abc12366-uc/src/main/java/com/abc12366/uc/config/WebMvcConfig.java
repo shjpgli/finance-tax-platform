@@ -64,6 +64,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/app*/**")
                 .excludePathPatterns("/druid*/**")
                 .excludePathPatterns("/auth/**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test", "/verifylogin", "/user/token/**", "/user/u/**");
+                .excludePathPatterns("/login", "/logout/**", "/refresh", "/register", "/test", "/verifylogin", "/user/token/**", "/user/u/**");
     }
 }

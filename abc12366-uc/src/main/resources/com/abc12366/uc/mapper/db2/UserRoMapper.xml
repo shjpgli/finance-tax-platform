@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
     <select id="selectList1" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
-        select uu.id, uu.username, uu.phone, uu.password, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,
@@ -41,7 +41,7 @@
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
-        select uu.id, uu.username, uu.phone, uu.password, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,
@@ -77,7 +77,7 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-        select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
+        select id, username, password, phone, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
         userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
         where id = #{id}
@@ -85,7 +85,7 @@
 
     <select id="selectByUsernameOrPhone" resultType="com.abc12366.uc.model.User"
             parameterType="com.abc12366.uc.model.bo.LoginBO">
-        select id, username, phone, password, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
+        select id, username, password, phone, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
         userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
         from uc_user
         <where>
@@ -98,7 +98,7 @@
         </where>
     </select>
     <select id="selectOneByToken" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
-        select uu.id, uu.username, uu.phone, uu.password, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime, uu.lastUpdate,
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp, uu.vipLevel
         from uc_user uu, uc_token ut
         where uu.id=ut.userId

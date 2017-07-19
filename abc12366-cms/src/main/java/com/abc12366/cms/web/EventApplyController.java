@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 模型管理模块
+ * 活动报名管理模块
  *
  * @author xieyanmao
  * @create 2017-05-08
@@ -35,6 +35,9 @@ public class EventApplyController {
     @Autowired
     private EventApplyService eventApplyService;
 
+    /**
+     * 活动报名列表查询
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
@@ -42,8 +45,8 @@ public class EventApplyController {
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("eventId", eventId);//姓名，手机号，邮箱
-        dataMap.put("name", name);//活动名称
+        dataMap.put("eventId", eventId);//活动ID
+        dataMap.put("name", name);//姓名，手机号，邮箱
         dataMap.put("status", status);//状态
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<EventApplyBo> dataList = eventApplyService.selectList(dataMap);
@@ -51,6 +54,9 @@ public class EventApplyController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
+    /**
+     * 活动报名统计
+     */
     @GetMapping(path = "/selectbmtj")
     public ResponseEntity selectbmtj(@RequestParam(value = "eventId", required = false) String eventId) {
         Map<String, Object> dataMap = new HashMap<>();
@@ -60,6 +66,9 @@ public class EventApplyController {
         return ResponseEntity.ok(Utils.kv("data", data));
     }
 
+    /**
+     * 活动浏览统计
+     */
     @GetMapping(path = "/selectlltj")
     public ResponseEntity selectlltj(@RequestParam(value = "startTime", required = false) String startTime,
                                      @RequestParam(value = "endTime", required = false) String endTime,
@@ -85,57 +94,75 @@ public class EventApplyController {
         return ResponseEntity.ok(Utils.kv("data", data));
     }
 
+    /**
+     * 活动报名新增
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody EventApplySaveBo eventApplySaveBo) {
         LOGGER.info("{}", eventApplySaveBo);
-        //新增评论信息
+        //新增活动报名信息
         eventApplySaveBo = eventApplyService.save(eventApplySaveBo);
         LOGGER.info("{}", eventApplySaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventApplySaveBo));
     }
 
+    /**
+     * 查询单个活动报名信息
+     */
     @GetMapping(path = "/{applyId}")
     public ResponseEntity selectOne(@PathVariable String applyId) {
         LOGGER.info("{}", applyId);
-        //查询评论信息
+        //查询活动报名信息
         EventApplySaveBo eventApplySaveBo = eventApplyService.selectEventApply(applyId);
         LOGGER.info("{}", eventApplySaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventApplySaveBo));
     }
 
+    /**
+     * 更新活动报名信息
+     */
     @PutMapping(path = "/{applyId}")
     public ResponseEntity update(@PathVariable String applyId,
                                  @Valid @RequestBody EventApplySaveBo eventApplySaveBo) {
 
         LOGGER.info("{}", eventApplySaveBo);
-        //更新评论信息
+        //更新活动报名信息
         eventApplySaveBo = eventApplyService.update(eventApplySaveBo);
         LOGGER.info("{}", eventApplySaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventApplySaveBo));
     }
 
+    /**
+     * 删除活动报名信息
+     */
     @DeleteMapping(path = "/{applyId}")
     public ResponseEntity delete(@PathVariable String applyId) {
         LOGGER.info("{}", applyId);
-        //删除评论信息
+        //删除活动报名信息
         String rtn = eventApplyService.delete(applyId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 批量删除活动报名信息
+     */
     @PostMapping(path = "/deleteList")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
-        //删除评论信息
+        //删除活动报名信息
         String rtn = eventApplyService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
+    /**
+     * 批量审批活动报名信息
+     */
     @PutMapping(path = "/updateStatusList")
     public ResponseEntity updateStatusList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);
-        //审批评论信息
+        //审批活动报名信息
         String rtn = eventApplyService.updateStatusList(idsBo.getIds());
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
