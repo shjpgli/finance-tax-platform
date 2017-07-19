@@ -36,8 +36,7 @@ public class UserExtendServiceImpl implements UserExtendService {
         LOGGER.info("{}", userId);
         UserExtend userExtend = userExtendRoMapper.selectOne(userId);
         if (userExtend == null) {
-            LOGGER.warn("查询失败，参数：{}" + userId);
-            throw new ServiceException(4104);
+            return null;
         }
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);
