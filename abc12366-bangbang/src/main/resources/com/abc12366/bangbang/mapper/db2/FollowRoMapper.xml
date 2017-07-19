@@ -3,10 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db2.FollowRoMapper">
     <select id="selectPeopleIFollow"  resultType="com.abc12366.bangbang.model.bo.FollowUserBO" parameterType="java.lang.String">
-        select id, userId, followedUserId, createTime, lastUpdate
-        from bb_follow_user
-        where userId=#{userId}
-        ORDER BY lastUpdate DESC
+        select bfu.id, bfu.userId, bfu.followedUserId, bfu.createTime, bfu.lastUpdate,
+        (select count(1) from bb_answer ba where ba.userId=bfu.followedUserId) answerCount,
+        (select count(1) from bb_ask bak where bak.userId=bfu.followedUserId) askCount,
+        (select count(1) from bb_follow_user bfuu where bfuu.followedUserId=bfu.followedUserId) followedCount
+        from bb_follow_user bfu
+        where bfu.userId=#{userId}
+        ORDER BY bfu.lastUpdate DESC
     </select>
     <select id="selectMyFollowerList" resultType="com.abc12366.bangbang.model.bo.FollowUserBO" parameterType="java.lang.String">
         select bfu.id, bfu.userId, bfu.followedUserId, bfu.createTime, bfu.lastUpdate
