@@ -1,4 +1,4 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.ModelItemMapper;
 import com.abc12366.cms.mapper.db1.ModelMapper;
@@ -6,6 +6,7 @@ import com.abc12366.cms.mapper.db2.ModelRoMapper;
 import com.abc12366.cms.model.Model;
 import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelListBo;
+import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

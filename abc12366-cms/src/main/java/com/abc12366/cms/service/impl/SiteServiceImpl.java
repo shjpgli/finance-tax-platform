@@ -1,10 +1,11 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.SiteMapper;
 import com.abc12366.cms.mapper.db2.SiteRoMapper;
 import com.abc12366.cms.model.Site;
 import com.abc12366.cms.model.bo.SiteBo;
 import com.abc12366.cms.model.bo.SiteListBo;
+import com.abc12366.cms.service.SiteService;
 import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

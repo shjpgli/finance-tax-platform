@@ -1,9 +1,10 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.TemplateMapper;
 import com.abc12366.cms.mapper.db2.TemplateRoMapper;
 import com.abc12366.cms.model.Template;
 import com.abc12366.cms.model.bo.TemplateBo;
+import com.abc12366.cms.service.TemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

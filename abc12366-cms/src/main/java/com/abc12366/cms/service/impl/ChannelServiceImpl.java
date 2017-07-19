@@ -1,4 +1,4 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.*;
 import com.abc12366.cms.mapper.db2.*;
@@ -7,6 +7,7 @@ import com.abc12366.cms.model.ChannelAttr;
 import com.abc12366.cms.model.ChannelExt;
 import com.abc12366.cms.model.ChnlGroupView;
 import com.abc12366.cms.model.bo.*;
+import com.abc12366.cms.service.ChannelService;
 import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

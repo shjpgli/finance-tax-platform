@@ -1,9 +1,10 @@
-package com.abc12366.cms.service;
+package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.FriendlinkMapper;
 import com.abc12366.cms.mapper.db2.FriendlinkRoMapper;
 import com.abc12366.cms.model.Friendlink;
 import com.abc12366.cms.model.bo.FriendlinkBo;
+import com.abc12366.cms.service.FriendlinkService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +20,7 @@ import java.util.UUID;
  * @since 1.0.0
  */
 @Service
-public class FriendlinkServiceImpl implements FriendlinkService{
+public class FriendlinkServiceImpl implements FriendlinkService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FriendlinkServiceImpl.class);
 
