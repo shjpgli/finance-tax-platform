@@ -100,5 +100,5 @@ public interface RoleService {
 
     RoleBO selectUserByRoleId(String id);
 
-    void updateUserRole(UserRoleBO userRoleBO);
+    UserRoleBO updateUserRole(UserRoleBO userRoleBO);
 }

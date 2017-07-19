@@ -65,6 +65,11 @@ public class RoleController {
     }
 
 
+    /**
+     * 角色-用户关联修改和新增
+     * @param userRoleBO
+     * @return
+     */
     @PutMapping(path = "/user")
     public ResponseEntity updateUserRole(@Valid @RequestBody UserRoleBO userRoleBO) {
         LOGGER.info("{}",userRoleBO );

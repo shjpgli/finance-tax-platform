@@ -190,7 +190,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void updateUserRole(UserRoleBO userRoleBO) {
+    public UserRoleBO updateUserRole(UserRoleBO userRoleBO) {
+        UserRoleBO bo = new UserRoleBO();
         String roleId = userRoleBO.getRoleId();
         if(roleId == null || "".equals(roleId)){
             Role role = userRoleBO.getRole();
@@ -206,7 +207,13 @@ public class RoleServiceImpl implements RoleService {
             role.setCreateTime(date);
             role.setRemark(role.getRemark());
             role.setStatus(true);
-            roleMapper.insert(role);
+            int ins = roleMapper.insert(role);
+            if(ins != 1){
+                logger.warn("新增用户角色异常，参数：{}", role);
+                throw new ServiceException(4113);
+            }
+            bo.setRoleId(roleId);
+            bo.setRole(role);
         }
         List<UserRole> roleMenuIdList = userRoleRoMapper.selectUserRoleByRoleId(roleId);
         if (roleMenuIdList != null && (!roleMenuIdList.isEmpty())) {
@@ -218,7 +225,12 @@ public class RoleServiceImpl implements RoleService {
             roleMenu.setRoleId(roleId);
             roleMenu.setUserId(userId);
             roleMenu.setId(Utils.uuid());
-            userRoleMapper.insert(roleMenu);
+            int urInsert = userRoleMapper.insert(roleMenu);
+            if(urInsert != 1){
+                logger.warn("新增用户角色和菜单对应关系异常，参数：{}", roleMenu);
+                throw new ServiceException(4096);
+            }
         }
+        return bo;
     }
 }
