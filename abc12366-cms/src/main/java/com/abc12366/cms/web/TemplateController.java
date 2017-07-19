@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 定时任务模块
+ * 模板模块
  *
  * @author xieyanmao
  * @create 2017-06-27
@@ -30,54 +30,69 @@ public class TemplateController {
     @Autowired
     private TemplateService templateService;
 
+    /**
+     * 查询模板列表信息
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "templateProperty", required = false) String templateProperty,
                                      @RequestParam(value = "siteId", required = false) String siteId,
                                      @RequestParam(value = "parentPath", required = false) String parentPath,
                                      @RequestParam(value = "state", required = false) String state) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("templateProperty",templateProperty);
-        dataMap.put("siteId",siteId);
-        dataMap.put("parentPath",parentPath);
-        dataMap.put("state",state);
+        dataMap.put("templateProperty",templateProperty);//模板属性
+        dataMap.put("siteId",siteId);//站点ID
+        dataMap.put("parentPath",parentPath);//父节点路径
+        dataMap.put("state",state);//启停标志位
         List<TemplateBo> dataList = templateService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 新增模板信息
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody TemplateBo templateBo) {
         LOGGER.info("{}", templateBo);
-        //新增定时任务信息
+        //新增模板信息
         templateBo = templateService.save(templateBo);
         LOGGER.info("{}", templateBo);
         return ResponseEntity.ok(Utils.kv("data", templateBo));
     }
 
+    /**
+     * 查询单个模板信息
+     */
     @GetMapping(path = "/{templateId}")
     public ResponseEntity selectOne(@PathVariable String templateId) {
         LOGGER.info("{}", templateId);
-        //查询定时任务信息
+        //查询模板信息
         TemplateBo templateBo = templateService.selectTemplate(templateId);
         LOGGER.info("{}", templateBo);
         return ResponseEntity.ok(Utils.kv("data", templateBo));
     }
 
+    /**
+     * 更新模板信息
+     */
     @PutMapping(path = "/{templateId}")
     public ResponseEntity update(@PathVariable String templateId,
                                  @Valid @RequestBody TemplateBo templateBo) {
 
         LOGGER.info("{}", templateBo);
-        //更新定时任务信息
+        //更新模板信息
         templateBo = templateService.update(templateBo);
         LOGGER.info("{}", templateBo);
         return ResponseEntity.ok(Utils.kv("data", templateBo));
     }
 
+    /**
+     * 删除模板信息
+     */
     @DeleteMapping(path = "/{templateId}")
     public ResponseEntity delete(@PathVariable String templateId) {
         LOGGER.info("{}", templateId);
-        //删除定时任务信息
+        //删除模板信息
         String rtn = templateService.delete(templateId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));

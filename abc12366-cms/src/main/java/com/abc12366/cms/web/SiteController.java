@@ -16,6 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 站点管理模块
+ *
+ * @author xieyanmao
+ * @create 2017-04-27
+ * @since 1.0.0
+ */
 @RestController
 @RequestMapping(path = "/site",headers = Constant.VERSION_HEAD + "=1")
 public class SiteController {
@@ -24,6 +31,9 @@ public class SiteController {
 	@Autowired
     private SiteService siteService;
 
+	/**
+	 * 查询站点列表信息
+	 */
 	@GetMapping
 	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
 									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -32,15 +42,21 @@ public class SiteController {
 		LOGGER.info("{}", dataList);
 		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 	}
-	
+
+	/**
+	 * 查询单个站点
+	 */
 	@GetMapping(path = "/{siteId}")
-	public ResponseEntity<?> selectOneById(@PathVariable("siteId") String siteId) {
+	public ResponseEntity selectOneById(@PathVariable("siteId") String siteId) {
 		LOGGER.info("{}", siteId);
 		SiteBo siteBo = siteService.selectOneById(siteId);
 		LOGGER.info("{}", siteBo);
 		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 
+	/**
+	 * 新增站点
+	 */
 	@PostMapping
 	public ResponseEntity save(@Valid @RequestBody SiteBo siteBo) {
 		LOGGER.info("{}", siteBo);
@@ -49,6 +65,9 @@ public class SiteController {
 		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 
+	/**
+	 * 更新站点
+	 */
 	@PutMapping(path = "/{siteId}")
 	public ResponseEntity update(@Valid @RequestBody SiteBo siteBo, @PathVariable("siteId") String siteId) {
 		LOGGER.info("{}", siteBo);

@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 模型管理模块
+ * 活动主办方管理模块
  *
  * @author xieyanmao
  * @create 2017-05-08
@@ -30,6 +30,9 @@ public class EventSponsorController {
     @Autowired
     private EventSponsorService eventSponsorService;
 
+    /**
+     * 查询活动主办方列表信息
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -39,39 +42,51 @@ public class EventSponsorController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
+    /**
+     * 新增活动主办方信息
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody EventSponsorBo eventSponsorBo) {
         LOGGER.info("{}", eventSponsorBo);
-        //新增评论信息
+        //新增活动主办方信息
         eventSponsorBo = eventSponsorService.save(eventSponsorBo);
         LOGGER.info("{}", eventSponsorBo);
         return ResponseEntity.ok(Utils.kv("data", eventSponsorBo));
     }
 
+    /**
+     * 查询单个活动主办方信息
+     */
     @GetMapping(path = "/{sponsorId}")
     public ResponseEntity selectOne(@PathVariable String sponsorId) {
         LOGGER.info("{}", sponsorId);
-        //查询评论信息
+        //查询活动主办方信息
         EventSponsorBo eventSponsorBo = eventSponsorService.selectEventSponsor(sponsorId);
         LOGGER.info("{}", eventSponsorBo);
         return ResponseEntity.ok(Utils.kv("data", eventSponsorBo));
     }
 
+    /**
+     * 更新活动主办方信息
+     */
     @PutMapping(path = "/{sponsorId}")
     public ResponseEntity update(@PathVariable String sponsorId,
                                  @Valid @RequestBody EventSponsorBo eventSponsorBo) {
 
         LOGGER.info("{}", eventSponsorBo);
-        //更新评论信息
+        //更新活动主办方信息
         eventSponsorBo = eventSponsorService.update(eventSponsorBo);
         LOGGER.info("{}", eventSponsorBo);
         return ResponseEntity.ok(Utils.kv("data", eventSponsorBo));
     }
 
+    /**
+     * 删除活动主办方信息
+     */
     @DeleteMapping(path = "/{sponsorId}")
     public ResponseEntity delete(@PathVariable String sponsorId) {
         LOGGER.info("{}", sponsorId);
-        //删除评论信息
+        //删除活动主办方信息
         String rtn = eventSponsorService.delete(sponsorId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));

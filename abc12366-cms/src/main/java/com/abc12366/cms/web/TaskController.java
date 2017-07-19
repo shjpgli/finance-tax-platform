@@ -33,6 +33,9 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    /**
+     * 查询定时任务列表信息
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -43,6 +46,9 @@ public class TaskController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
+    /**
+     * 查询定时任务列表信息(无需登录)
+     */
     @GetMapping(path = "/list")
     public ResponseEntity list() {
         Map<String, Object> dataMap = new HashMap<>();
@@ -52,6 +58,9 @@ public class TaskController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 新增定时任务信息
+     */
     @PostMapping
     public ResponseEntity save(@RequestBody TaskBo taskBo) {
         LOGGER.info("{}", taskBo);
@@ -61,6 +70,9 @@ public class TaskController {
         return ResponseEntity.ok(Utils.kv("data", taskBo));
     }
 
+    /**
+     * 查询单个定时任务详细
+     */
     @GetMapping(path = "/{taskId}")
     public ResponseEntity selectOne(@PathVariable String taskId) {
         LOGGER.info("{}", taskId);
@@ -70,6 +82,9 @@ public class TaskController {
         return ResponseEntity.ok(Utils.kv("data", taskBo));
     }
 
+    /**
+     * 更新定时任务信息
+     */
     @PutMapping(path = "/{taskId}")
     public ResponseEntity update(@PathVariable String taskId,
                                  @Valid @RequestBody TaskBo taskBo) {
@@ -81,6 +96,9 @@ public class TaskController {
         return ResponseEntity.ok(Utils.kv("data", taskBo));
     }
 
+    /**
+     * 删除定时任务信息
+     */
     @DeleteMapping(path = "/{taskId}")
     public ResponseEntity delete(@PathVariable String taskId) {
         LOGGER.info("{}", taskId);
@@ -90,6 +108,9 @@ public class TaskController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 批量删除定时任务信息
+     */
     @PostMapping(path = "/deleteList")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
         LOGGER.info("{}", idsBo);

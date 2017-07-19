@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 内容管理模块
+ * 内容类型管理模块
  *
  * @author xieyanmao
  * @create 2017-05-03

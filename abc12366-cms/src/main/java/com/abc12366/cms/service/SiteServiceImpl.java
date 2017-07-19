@@ -5,6 +5,7 @@ import com.abc12366.cms.mapper.db2.SiteRoMapper;
 import com.abc12366.cms.model.Site;
 import com.abc12366.cms.model.bo.SiteBo;
 import com.abc12366.cms.model.bo.SiteListBo;
+import com.abc12366.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -65,10 +66,14 @@ public class SiteServiceImpl implements SiteService {
             BeanUtils.copyProperties(siteBo, site);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            throw new ServiceException(4210);
         }
-        int count = siteMapper.insert(site);
-        LOGGER.info("{}", count);
+        int rnt = siteMapper.insert(site);
+        if(rnt != 1){
+            LOGGER.error("新增站点失败：{}", site);
+            throw new ServiceException(4210);
+        }
+        LOGGER.info("{}", rnt);
         return siteBo;
     }
 
@@ -79,10 +84,14 @@ public class SiteServiceImpl implements SiteService {
             BeanUtils.copyProperties(siteBo, site);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            throw new ServiceException(4211);
         }
-        int count = siteMapper.updateByPrimaryKeySelective(site);
-        LOGGER.info("{}", count);
+        int rnt = siteMapper.updateByPrimaryKeySelective(site);
+        if(rnt != 1){
+            LOGGER.error("修改站点失败：{}", site);
+            throw new ServiceException(4211);
+        }
+        LOGGER.info("{}", rnt);
         return siteBo;
     }
 
