@@ -1,5 +1,6 @@
 package com.abc12366.cms.model;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -69,6 +70,9 @@ public class Event implements Serializable {
 
 	/**活动主办方ID**varchar(200)**/
 	private String sponsorId;
+
+    /**报名截止时间**datetime**/
+    private java.util.Date bmendtime;
 
 	/**活动状态**varchar(64)**/
 	private String status;
@@ -235,7 +239,15 @@ public class Event implements Serializable {
 		return this.sponsorId;
 	}
 
-	public void setStatus(String status){
+    public Date getBmendtime() {
+        return bmendtime;
+    }
+
+    public void setBmendtime(Date bmendtime) {
+        this.bmendtime = bmendtime;
+    }
+
+    public void setStatus(String status){
 		this.status = status;
 	}
 
