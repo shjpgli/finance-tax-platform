@@ -53,4 +53,11 @@ public interface ContentMapper{
 	 **/
 	int updateStatusList(@Param("contentIds") String[] contentIds);
 
+    /**
+     *
+     * 修改浏览量(根据主键ID)
+     *
+     **/
+    int updateViewsDay(@Param("contentId") String contentId);
+
 }

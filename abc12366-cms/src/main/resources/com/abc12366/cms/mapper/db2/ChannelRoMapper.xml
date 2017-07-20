@@ -39,6 +39,9 @@
 		<if test="parentId != null and parentId != ''">
 			AND t.parentId = #{parentId}
 		</if>
+        <if test="siteId != null and siteId != ''">
+            AND t.siteId = #{siteId}
+        </if>
 		order by priority
 	</select>
 
