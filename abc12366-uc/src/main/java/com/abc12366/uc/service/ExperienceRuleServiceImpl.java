@@ -93,8 +93,8 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
         //经验值规则新增，规则名称、规则代码唯一性校验
         List<ExperienceRuleBO> experienceRuleBOList = experienceRuleRoMapper.selectList(null);
         //本身不计入校验数据
-        for(int i=0; i<experienceRuleBOList.size(); i++){
-            if((experienceRuleBOList.get(i)).getId().equals(id)){
+        for (int i = 0; i < experienceRuleBOList.size(); i++) {
+            if ((experienceRuleBOList.get(i)).getId().equals(id)) {
                 experienceRuleBOList.remove(i);
             }
         }
@@ -106,7 +106,7 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
                 }
             }
         }
-        if(experienceRuleUpdateBO.getCode()!=null){
+        if (experienceRuleUpdateBO.getCode() != null) {
             for (ExperienceRuleBO experieneRuleBO : experienceRuleBOList) {
                 if (experieneRuleBO.getCode().equals(experienceRuleUpdateBO.getCode())) {
                     LOGGER.warn("修改失败，参数：{}", experienceRuleUpdateBO);
@@ -141,5 +141,25 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
             throw new ServiceException(4103);
         }
         return 1;
+    }
+
+    @Override
+    public void enableOrDisable(String id, String status) {
+        LOGGER.info("{}:{}", id, status);
+        if ((!status.equals("true")) && (!status.equals("false"))) {
+            throw new ServiceException(4614);
+        }
+        boolean modifyStatus = status.equals("true");
+        ExperienceRule experienceRule = new ExperienceRule();
+        experienceRule.setId(id);
+        experienceRule.setStatus(modifyStatus);
+        experienceRule.setLastUpdate(new Date());
+        int result = experienceRuleMapper.update(experienceRule);
+        if (result < 1) {
+            if (modifyStatus) {
+                throw new ServiceException(4615);
+            }
+            throw new ServiceException(4616);
+        }
     }
 }

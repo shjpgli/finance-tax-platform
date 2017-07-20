@@ -53,16 +53,16 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
 
         //等级名称，经验值范围唯一性校验
         List<ExperienceLevelBO> experienceLevelBOList = experienceLevelRoMapper.selectList(null);
-        for(ExperienceLevelBO experienceLevelBO:experienceLevelBOList){
-            if(experienceLevelBO.getName().equals(experienceLevelInsertBO.getName())){
+        for (ExperienceLevelBO experienceLevelBO : experienceLevelBOList) {
+            if (experienceLevelBO.getName().equals(experienceLevelInsertBO.getName())) {
                 LOGGER.warn("新增失败，参数：{}", experienceLevelInsertBO);
                 throw new ServiceException(4610);
             }
             //判断经验值范围与已有经验值等级是否存在冲突
-            if(((experienceLevelInsertBO.getMinValue()>=experienceLevelBO.getMinValue())&&(experienceLevelInsertBO.getMinValue()<=experienceLevelBO.getMaxValue()))
-                    ||((experienceLevelInsertBO.getMaxValue()>=experienceLevelBO.getMinValue())&&(experienceLevelInsertBO.getMaxValue()<=experienceLevelBO.getMaxValue()))
-                    ||((experienceLevelBO.getMinValue()>=experienceLevelInsertBO.getMinValue())&&(experienceLevelBO.getMinValue()<=experienceLevelInsertBO.getMaxValue()))
-                    ||((experienceLevelBO.getMaxValue()>=experienceLevelInsertBO.getMinValue())&&(experienceLevelBO.getMaxValue()<=experienceLevelInsertBO.getMaxValue()))){
+            if (((experienceLevelInsertBO.getMinValue() >= experienceLevelBO.getMinValue()) && (experienceLevelInsertBO.getMinValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelInsertBO.getMaxValue() >= experienceLevelBO.getMinValue()) && (experienceLevelInsertBO.getMaxValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelBO.getMinValue() >= experienceLevelInsertBO.getMinValue()) && (experienceLevelBO.getMinValue() <= experienceLevelInsertBO.getMaxValue()))
+                    || ((experienceLevelBO.getMaxValue() >= experienceLevelInsertBO.getMinValue()) && (experienceLevelBO.getMaxValue() <= experienceLevelInsertBO.getMaxValue()))) {
                 LOGGER.warn("新增失败，参数：{}", experienceLevelInsertBO);
                 throw new ServiceException(4611);
             }
@@ -97,21 +97,21 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
         //等级名称，经验值范围唯一性校验
         List<ExperienceLevelBO> experienceLevelBOList = experienceLevelRoMapper.selectList(null);
         //这条数据本身不做校验
-        for(int i=0; i<experienceLevelBOList.size(); i++){
-            if(experienceLevelBOList.get(i).getId().equals(id)){
+        for (int i = 0; i < experienceLevelBOList.size(); i++) {
+            if (experienceLevelBOList.get(i).getId().equals(id)) {
                 experienceLevelBOList.remove(i);
             }
         }
-        for(ExperienceLevelBO experienceLevelBO:experienceLevelBOList){
-            if(experienceLevelBO.getName().equals(experienceLevelUpdateBO.getName())){
+        for (ExperienceLevelBO experienceLevelBO : experienceLevelBOList) {
+            if (experienceLevelBO.getName().equals(experienceLevelUpdateBO.getName())) {
                 LOGGER.warn("修改失败，参数：{}", experienceLevelUpdateBO);
                 throw new ServiceException(4610);
             }
             //判断经验值范围与已有经验值等级是否存在冲突
-            if(((experienceLevelUpdateBO.getMinValue()>=experienceLevelBO.getMinValue())&&(experienceLevelUpdateBO.getMinValue()<=experienceLevelBO.getMaxValue()))
-                    ||((experienceLevelUpdateBO.getMaxValue()>=experienceLevelBO.getMinValue())&&(experienceLevelUpdateBO.getMaxValue()<=experienceLevelBO.getMaxValue()))
-                    ||((experienceLevelBO.getMinValue()>=experienceLevelUpdateBO.getMinValue())&&(experienceLevelBO.getMinValue()<=experienceLevelUpdateBO.getMaxValue()))
-                    ||((experienceLevelBO.getMaxValue()>=experienceLevelUpdateBO.getMinValue())&&(experienceLevelBO.getMaxValue()<=experienceLevelUpdateBO.getMaxValue()))){
+            if (((experienceLevelUpdateBO.getMinValue() >= experienceLevelBO.getMinValue()) && (experienceLevelUpdateBO.getMinValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelUpdateBO.getMaxValue() >= experienceLevelBO.getMinValue()) && (experienceLevelUpdateBO.getMaxValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelBO.getMinValue() >= experienceLevelUpdateBO.getMinValue()) && (experienceLevelBO.getMinValue() <= experienceLevelUpdateBO.getMaxValue()))
+                    || ((experienceLevelBO.getMaxValue() >= experienceLevelUpdateBO.getMinValue()) && (experienceLevelBO.getMaxValue() <= experienceLevelUpdateBO.getMaxValue()))) {
                 LOGGER.warn("修改失败，参数：{}", experienceLevelUpdateBO);
                 throw new ServiceException(4611);
             }
@@ -138,10 +138,30 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
     @Override
     public int delete(String id) {
         int result = experienceLevelMapper.delete(id);
-        if(result<1){
+        if (result < 1) {
             LOGGER.warn("删除失败！");
             throw new ServiceException(4103);
         }
         return 1;
+    }
+
+    @Override
+    public void enableOrDisable(String id, String status) {
+        LOGGER.info("{}:{}", id, status);
+        if ((!status.equals("true")) && (!status.equals("false"))) {
+            throw new ServiceException(4614);
+        }
+        boolean modifyStatus = status.equals("true");
+        ExperienceLevel experienceLevel = new ExperienceLevel();
+        experienceLevel.setId(id);
+        experienceLevel.setStatus(modifyStatus);
+        experienceLevel.setLastUpdate(new Date());
+        int result = experienceLevelMapper.update(experienceLevel);
+        if (result < 1) {
+            if (modifyStatus) {
+                throw new ServiceException(4619);
+            }
+            throw new ServiceException(4620);
+        }
     }
 }

@@ -78,10 +78,19 @@ public class ExperienceLevelController {
         LOGGER.info("{}", experienceLevelReturn);
         return ResponseEntity.ok(Utils.kv("data", experienceLevelReturn));
     }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         experienceLevelService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //启用、禁用等级勋章接口
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
+        LOGGER.info("{}:{}", id, status);
+        experienceLevelService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
 }

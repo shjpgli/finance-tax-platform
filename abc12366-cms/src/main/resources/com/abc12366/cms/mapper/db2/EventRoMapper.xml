@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 eventId,	category,	shape,	title,	province,	city,	address,	picture,	createtime,	updatetime,	begintime,	endtime,	tag,	summary,	description,	peoppleNum,	isCheck,	isUserGrade,	userGrade,	sponsorId,	status
+		 eventId,	category,	shape,	title,	province,	city,	address,	picture,	createtime,	updatetime,	begintime,	endtime,	tag,	summary,	description,	peoppleNum,	isCheck,	isUserGrade,	userGrade,	sponsorId,bmendtime,	status
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

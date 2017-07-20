@@ -21,4 +21,6 @@ public interface ExperienceLevelService {
     ExperienceLevelBO update(ExperienceLevelInsertAndUpdateBO experienceLevelUpdateBO, String id);
 
     int delete(String id);
+
+    void enableOrDisable(String id, String status);
 }

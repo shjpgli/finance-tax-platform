@@ -84,10 +84,18 @@ public class ExperienceRuleController {
         LOGGER.info("{}", experienceRuleReturn);
         return ResponseEntity.ok(Utils.kv("data", experienceRuleReturn));
     }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         experienceRuleService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
+        LOGGER.info("{}:{}", id, status);
+        experienceRuleService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
 }

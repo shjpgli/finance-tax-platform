@@ -22,4 +22,6 @@ public interface VipLevelService {
     VipLevelBO update(VipLevelUpdateBO vipLevelUpdateBO, String id);
 
     int delete(String id);
+
+    void enableOrDisable(String id, String status);
 }

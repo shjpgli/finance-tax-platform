@@ -24,4 +24,6 @@ public interface TagService {
     int delete(String id);
 
     List<TagBO> selectListByUserId(String userId);
+
+    void enableOrDisable(String id, String status);
 }

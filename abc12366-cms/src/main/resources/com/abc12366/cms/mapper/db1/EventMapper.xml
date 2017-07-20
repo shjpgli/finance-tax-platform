@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Event">
 		 INSERT INTO cms_event
- 		(eventId,category,shape,title,province,city,address,picture,createtime,updatetime,begintime,endtime,tag,summary,description,peoppleNum,isCheck,isUserGrade,userGrade,sponsorId,status) 
+ 		(eventId,category,shape,title,province,city,address,picture,createtime,updatetime,begintime,endtime,tag,summary,description,peoppleNum,isCheck,isUserGrade,userGrade,sponsorId,bmendtime,status)
 		 VALUES 
- 		(#{eventId},#{category},#{shape},#{title},#{province},#{city},#{address},#{picture},#{createtime},#{updatetime},#{begintime},#{endtime},#{tag},#{summary},#{description},#{peoppleNum},#{isCheck},#{isUserGrade},#{userGrade},#{sponsorId},#{status}) 
+ 		(#{eventId},#{category},#{shape},#{title},#{province},#{city},#{address},#{picture},#{createtime},#{updatetime},#{begintime},#{endtime},#{tag},#{summary},#{description},#{peoppleNum},#{isCheck},#{isUserGrade},#{userGrade},#{sponsorId},#{bmendtime},#{status})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -81,6 +81,9 @@
 			<if test="sponsorId != null">
 				 sponsorId,
 			</if>
+             <if test="bmendtime != null">
+                 bmendtime,
+             </if>
 			<if test="status != null">
 				 status,
 			</if>
@@ -147,6 +150,9 @@
 			<if test="sponsorId!=null">
 				 #{sponsorId},
 			</if>
+             <if test="bmendtime!=null">
+                 #{bmendtime},
+             </if>
 			<if test="status!=null">
 				 #{status},
 			</if>
@@ -214,6 +220,9 @@
 			<if test="sponsorId != null">
 				 sponsorId = #{sponsorId},
 			</if>
+             <if test="bmendtime != null">
+                 bmendtime = #{bmendtime},
+             </if>
 			<if test="status != null">
 				 status = #{status},
 			</if>
@@ -245,6 +254,7 @@
 			 isUserGrade = #{isUserGrade},
 			 userGrade = #{userGrade},
 			 sponsorId = #{sponsorId},
+			 bmendtime = #{bmendtime},
 			 status = #{status}
 		 WHERE eventId = #{eventId}
 	</update>

@@ -1,5 +1,6 @@
 package com.abc12366.cms.model.bo;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -72,6 +73,9 @@ public class EventListBo implements Serializable {
 
 	/**活动状态**varchar(64)**/
 	private String status;
+
+    /**报名截止时间**datetime**/
+    private java.util.Date bmendtime;
 
 
 
@@ -243,4 +247,11 @@ public class EventListBo implements Serializable {
 		return this.status;
 	}
 
+    public Date getBmendtime() {
+        return bmendtime;
+    }
+
+    public void setBmendtime(Date bmendtime) {
+        this.bmendtime = bmendtime;
+    }
 }

@@ -34,65 +34,59 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public List<SiteListBo> selectList() {
-        List<SiteListBo> siteListBo = siteRoMapper.selectList();
-        LOGGER.info("{}", siteListBo);
+        List<SiteListBo> siteListBo;
+        try {
+            siteListBo = siteRoMapper.selectList();
+        } catch (Exception e) {
+            LOGGER.error("查询站点信息异常：{}", e);
+            throw new ServiceException(4210);
+        }
+        LOGGER.info("查询站点信息结果:{}", siteListBo);
         return siteListBo;
     }
 
     @Override
     public SiteBo selectOneById(String siteId) {
-        Site site = siteRoMapper.selectByPrimaryKey(siteId);
+        LOGGER.info("查询单个站点信息:{}", siteId);
         SiteBo siteBo = new SiteBo();
         try {
-            try {
-                BeanUtils.copyProperties(site, siteBo);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
-            }
+            Site site = siteRoMapper.selectByPrimaryKey(siteId);
+            BeanUtils.copyProperties(site, siteBo);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("查询单个站点信息异常：{}", e);
+            throw new ServiceException(4211);
         }
-        LOGGER.info("{}", siteBo);
+        LOGGER.info("查询单个站点信息结果:{}", siteBo);
         return siteBo;
     }
 
     @Override
     public SiteBo save(SiteBo siteBo) {
-        String uuid = UUID.randomUUID().toString().replace("-", "");
-        siteBo.setSiteId(uuid);
+        LOGGER.info("新增站点信息:{}", siteBo);
         Site site = new Site();
         try {
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            siteBo.setSiteId(uuid);
             BeanUtils.copyProperties(siteBo, site);
+            siteMapper.insert(site);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new ServiceException(4210);
+            LOGGER.error("新增站点信息异常：{}", e);
+            throw new ServiceException(4212);
         }
-        int rnt = siteMapper.insert(site);
-        if(rnt != 1){
-            LOGGER.error("新增站点失败：{}", site);
-            throw new ServiceException(4210);
-        }
-        LOGGER.info("{}", rnt);
         return siteBo;
     }
 
     @Override
     public SiteBo update(SiteBo siteBo) {
+        LOGGER.info("更新站点信息:{}", siteBo);
         Site site = new Site();
         try {
             BeanUtils.copyProperties(siteBo, site);
+            siteMapper.updateByPrimaryKeySelective(site);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new ServiceException(4211);
+            LOGGER.error("更新站点信息异常：{}", e);
+            throw new ServiceException(4213);
         }
-        int rnt = siteMapper.updateByPrimaryKeySelective(site);
-        if(rnt != 1){
-            LOGGER.error("修改站点失败：{}", site);
-            throw new ServiceException(4211);
-        }
-        LOGGER.info("{}", rnt);
         return siteBo;
     }
 

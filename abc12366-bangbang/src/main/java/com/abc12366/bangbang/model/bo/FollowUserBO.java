@@ -13,8 +13,35 @@ public class FollowUserBO {
     private String followedUserId;
     private Date createTime;
     private Date lastUpdate;
+    private String answerCount;
+    private String askCount;
+    private String followedCount;
 
     public FollowUserBO() {
+    }
+
+    public String getAnswerCount() {
+        return answerCount;
+    }
+
+    public void setAnswerCount(String answerCount) {
+        this.answerCount = answerCount;
+    }
+
+    public String getAskCount() {
+        return askCount;
+    }
+
+    public void setAskCount(String askCount) {
+        this.askCount = askCount;
+    }
+
+    public String getFollowedCount() {
+        return followedCount;
+    }
+
+    public void setFollowedCount(String followedCount) {
+        this.followedCount = followedCount;
     }
 
     public String getId() {
