@@ -37,10 +37,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new AdminUserInterceptor();
     }
 
-    /*@Bean
+    @Bean
     public IpInterceptor ipInterceptor() {
         return new IpInterceptor();
-    }*/
+    }
 
     @Bean
     public UcUserInterceptor getUcUserInterceptor() {
@@ -73,7 +73,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/login", "/register");
 */
         // 用户Token拦截
-        registry.addInterceptor(getUcUserInterceptor())
+        registry.addInterceptor(getAdminUserInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/app/login", "/app/register", "/test")
