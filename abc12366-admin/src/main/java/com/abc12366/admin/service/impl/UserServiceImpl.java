@@ -7,10 +7,7 @@ import com.abc12366.admin.mapper.db1.UserMapper;
 import com.abc12366.admin.mapper.db1.UserRoleMapper;
 import com.abc12366.admin.mapper.db2.*;
 import com.abc12366.admin.model.*;
-import com.abc12366.admin.model.bo.UserBO;
-import com.abc12366.admin.model.bo.UserExtendBO;
-import com.abc12366.admin.model.bo.UserPasswordBO;
-import com.abc12366.admin.model.bo.UserUpdateBO;
+import com.abc12366.admin.model.bo.*;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.admin.util.TimeUtil;
 import com.abc12366.common.exception.ServiceException;
@@ -506,7 +503,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginInfo selectLoginInfoByToken(String token) {
+    public LoginInfoBO selectLoginInfoByToken(String token) {
         return loginInfoRoMapper.selectLoginInfoByToken(token);
     }
 

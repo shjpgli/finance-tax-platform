@@ -3,6 +3,22 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.admin.mapper.db2.LoginInfoRoMapper">
 
+    <resultMap id="loginInfoMap" type="com.abc12366.admin.model.bo.LoginInfoBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="appId" property="appId" jdbcType="VARCHAR"/>
+        <result column="token" property="token" jdbcType="VARCHAR"/>
+        <result column="lastResetTokenTime" property="lastResetTokenTime" jdbcType="TIMESTAMP"/>
+        <association property="user" javaType="com.abc12366.admin.model.User">
+            <id column="uId" property="id" jdbcType="VARCHAR"/>
+            <result column="username" property="username" jdbcType="VARCHAR"/>
+            <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+            <result column="status" property="status" jdbcType="TINYINT"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        </association>
+    </resultMap>
+
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
 		 id,	userId,	appId,	token,	lastResetTokenTime
@@ -17,11 +33,13 @@
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectLoginInfoByToken" resultType="com.abc12366.admin.model.LoginInfo" parameterType="java.lang.String">
+	<select id="selectLoginInfoByToken" resultMap="loginInfoMap" parameterType="java.lang.String">
 		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM sys_login_info
-		 WHERE token = #{token}
+		 i.id,	i.userId,	i.appId,	i.token,	i.lastResetTokenTime,
+		 u.id as uId,	u.username,	u.password,	u.nickname,	u.status,	u.createTime,	u.lastUpdate
+		 FROM sys_login_info i
+		 LEFT JOIN sys_user u ON u.id = i.userId
+		 WHERE i.token = #{token}
 	</select>
 
     <!-- 查询（根据userId和appId查询） -->

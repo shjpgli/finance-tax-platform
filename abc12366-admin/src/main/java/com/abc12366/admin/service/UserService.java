@@ -3,10 +3,7 @@ package com.abc12366.admin.service;
 import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
-import com.abc12366.admin.model.bo.UserBO;
-import com.abc12366.admin.model.bo.UserExtendBO;
-import com.abc12366.admin.model.bo.UserPasswordBO;
-import com.abc12366.admin.model.bo.UserUpdateBO;
+import com.abc12366.admin.model.bo.*;
 
 import java.util.List;
 
@@ -129,5 +126,5 @@ public interface UserService {
 
     Boolean refreshToken(String token);
 
-    LoginInfo selectLoginInfoByToken(String token);
+    LoginInfoBO selectLoginInfoByToken(String token);
 }

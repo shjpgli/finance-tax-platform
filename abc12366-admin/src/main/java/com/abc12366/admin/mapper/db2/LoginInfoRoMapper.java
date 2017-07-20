@@ -1,6 +1,7 @@
 package com.abc12366.admin.mapper.db2;
 
 import com.abc12366.admin.model.LoginInfo;
+import com.abc12366.admin.model.bo.LoginInfoBO;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -24,5 +25,5 @@ public interface LoginInfoRoMapper {
 
     LoginInfo selectInfoByToken(LoginInfo loginInfo);
 
-    LoginInfo selectLoginInfoByToken(String token);
+    LoginInfoBO selectLoginInfoByToken(String token);
 }

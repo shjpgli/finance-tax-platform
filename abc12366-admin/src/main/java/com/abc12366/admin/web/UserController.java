@@ -3,10 +3,7 @@ package com.abc12366.admin.web;
 import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
-import com.abc12366.admin.model.bo.UserBO;
-import com.abc12366.admin.model.bo.UserExtendBO;
-import com.abc12366.admin.model.bo.UserPasswordBO;
-import com.abc12366.admin.model.bo.UserUpdateBO;
+import com.abc12366.admin.model.bo.*;
 import com.abc12366.admin.service.UserService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -166,14 +163,14 @@ public class UserController {
     }
 
     /**
-     * 查看User详情
+     * 查看LoginInfo信息
      * @param token
      * @return
      */
     @GetMapping(path = "/token/{token}")
     public ResponseEntity selectUser(@PathVariable("token") String token) {
         LOGGER.info("{id }", token);
-        LoginInfo loginInfo = userService.selectLoginInfoByToken(token);
+        LoginInfoBO loginInfo = userService.selectLoginInfoByToken(token);
         LOGGER.info("{userExtend }", loginInfo);
         return ResponseEntity.ok(Utils.kv("data", loginInfo));
     }
