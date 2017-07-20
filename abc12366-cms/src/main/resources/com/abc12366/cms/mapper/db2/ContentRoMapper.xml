@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		contentId,	channelId,	typeId,contentType,	modelId,	siteId,	sortDate,	topLevel,	hasTitleImg,	isRecommend,	status,	viewsDay,	commentsDay,	downloadsDay,	upsDay,	recommendLevel
+		contentId,	channelId,	typeId,contentType,	modelId,	siteId,	sortDate,	topLevel,	hasTitleImg,	isRecommend,	status,	viewsDay,	commentsDay,	downloadsDay,	upsDay,username,userid,	recommendLevel
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -27,6 +27,8 @@
 	<select id="selectList" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
 		SELECT
 			a.contentId contentId,
+            a.userid userid,
+            a.username username,
 			b.title title,
 			b.titleColor titleColor,
 			a.channelId channelId,
@@ -103,6 +105,8 @@
 	<select id="selectListByContentType" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT
 		a.contentId contentId,
+        a.userid userid,
+        a.username username,
 		b.title title,
 		a.contentType,
 		b.titleImg,
@@ -207,6 +211,8 @@
 	<select id="selectListByChannelId" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT
 		a.contentId contentId,
+        a.userid userid,
+        a.username username,
 		b.title title,
 		a.contentType,
 		b.titleImg,
@@ -258,6 +264,8 @@
 	<select id="selectListBytopicId" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT
 		a.contentId contentId,
+        a.userid userid,
+        a.username username,
 		b.title title,
 		a.contentType,
 		b.titleImg,
@@ -307,7 +315,8 @@
 	<!-- 查询（根据contentId查询） -->
 	<select id="selectByContentId" resultType="com.abc12366.cms.model.Content" parameterType="java.lang.String">
 		SELECT
-			a.contentId,	a.channelId,	a.typeId,a.contentType,	a.modelId,	a.siteId,
+			a.contentId,a.userid userid,
+            a.username username,	a.channelId,	a.typeId,a.contentType,	a.modelId,	a.siteId,
 			a.sortDate,	a.topLevel,	a.hasTitleImg,	a.isRecommend,	a.status,
 			a.viewsDay,	a.commentsDay,	a.downloadsDay,	a.upsDay,a.recommendLevel,
 			b.channelPath,c.sitePath,c.domain

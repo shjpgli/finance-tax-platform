@@ -10,5 +10,5 @@ import java.io.IOException;
  */
 public interface UcUserService {
 
-    boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request) throws IOException;
+    boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request);
 }

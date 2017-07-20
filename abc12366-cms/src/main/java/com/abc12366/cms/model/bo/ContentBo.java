@@ -14,6 +14,12 @@ public class ContentBo implements Serializable {
 	/**contentId**varchar(64)**/
 	private String contentId;
 
+    /**userid**varchar(64)**/
+    private String userid;
+
+    /**username**varchar(100)**/
+    private String username;
+
 	/**栏目ID**varchar(64)**/
 	private String channelId;
 
@@ -61,7 +67,23 @@ public class ContentBo implements Serializable {
 		this.contentId = contentId;
 	}
 
-	public String getChannelId() {
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getChannelId() {
 		return channelId;
 	}
 

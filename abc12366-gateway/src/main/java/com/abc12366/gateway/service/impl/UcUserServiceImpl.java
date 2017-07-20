@@ -35,7 +35,7 @@ public class UcUserServiceImpl implements UcUserService {
     private RestTemplateUtil restTemplateUtil;
 
     @Override
-    public boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request) throws IOException {
+    public boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", adminToken, userToken, request);
         //1.调用admin的token校验接口，如果校验通过直接返回true
         if (adminTokenAuthen(adminToken, request)) {
@@ -45,65 +45,57 @@ public class UcUserServiceImpl implements UcUserService {
         return userTokenAuthen(userToken, request);
     }
 
-    public boolean adminTokenAuthen(String adminToken, HttpServletRequest request) throws IOException {
+    private boolean adminTokenAuthen(String adminToken, HttpServletRequest request) {
         LOGGER.info("{}:{}", adminToken, request);
-        if (adminToken == null || adminToken.equals("")) {
-            return false;
-        }
-        //1.调用admin的token校验接口，如果校验通过直接返回true
-        String adminTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.check.url") + adminToken, "");
-        if (!StringUtils.isEmpty(adminTokenVerifyResult) && adminTokenVerifyResult.equals("true")) {
-            //刷新token时间
-            HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + adminToken, "");
-            //根据token获取admin的userId，并将userId设置到request中
-            String url = PropertiesUtil.getValue("admin.token.userid.url") + adminToken;
-            ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET, request);
-            if (userByTokenResponse != null && userByTokenResponse.hasBody()) {
-                AdminResponseBO adminResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), AdminResponseBO.class);
-                if (!StringUtils.isEmpty(adminResponseBO.getData().getUserId())) {
-                    String adminUserId = adminResponseBO.getData().getUserId();
-                    if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
-                        request.removeAttribute(Constant.USER_ID);
-                        request.setAttribute(Constant.USER_ID, adminUserId);
-                    } else {
-                        request.setAttribute(Constant.USER_ID, adminUserId);
+        try {
+            //1.调用admin的token校验接口，如果校验通过直接返回true
+            String adminTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.check.url") + adminToken, "");
+            if (!StringUtils.isEmpty(adminTokenVerifyResult) && adminTokenVerifyResult.equals("true")) {
+                //刷新token时间
+                HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + adminToken, "");
+                //根据token获取admin的userId，并将userId设置到request中
+                String url = PropertiesUtil.getValue("admin.token.userid.url") + adminToken;
+                ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET, request);
+                if (userByTokenResponse != null && userByTokenResponse.hasBody()) {
+                    AdminResponseBO adminResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), AdminResponseBO.class);
+                    LOGGER.info("{}", adminResponseBO);
+                    if (!StringUtils.isEmpty(adminResponseBO.getData().getUserId())) {
+                        request.setAttribute(Constant.USER_ID, adminResponseBO.getData().getUserId());
                     }
                 }
+                return true;
             }
-            return true;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
         }
         return false;
     }
 
-    public boolean userTokenAuthen(String userToken, HttpServletRequest request) throws IOException {
+    private boolean userTokenAuthen(String userToken, HttpServletRequest request) {
         LOGGER.info("{}:{}", userToken, request);
-        if (userToken == null || userToken.equals("")) {
-            return false;
-        }
-        //调用uc的token校验接口，如果校验通过刷新token并返回true
-        //String url = "http://localhost:9100/uc/auth/" + userToken;
-        String userTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("user.token.check.url") + userToken, "");
-        if (!StringUtils.isEmpty(userTokenVerifyResult) && userTokenVerifyResult.equals("true")) {
-            //根据token获取admin的userId，并将userId设置到request中
-            String url = PropertiesUtil.getValue("user.token.userid.url") + userToken;
-            ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET, request);
-            if (userByTokenResponse != null && userByTokenResponse.hasBody()) {
-                UserResponseBO userResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), UserResponseBO.class);
-                if (userResponseBO != null && userResponseBO.getData() != null && !StringUtils.isEmpty(userResponseBO.getData().getId())) {
-                    String adminUserId = userResponseBO.getData().getId();
-                    if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
-                        request.removeAttribute(Constant.USER_ID);
-                        request.setAttribute(Constant.USER_ID, adminUserId);
+        try {
+            //调用uc的token校验接口，如果校验通过刷新token并返回true
+            //String url = "http://localhost:9100/uc/auth/" + userToken;
+            String userTokenVerifyResult = HttpRequestUtil.sendPost(PropertiesUtil.getValue("user.token.check.url") + userToken, "");
+            if (!StringUtils.isEmpty(userTokenVerifyResult) && userTokenVerifyResult.equals("true")) {
+                //根据token获取admin的userId，并将userId设置到request中
+                String url = PropertiesUtil.getValue("user.token.userid.url") + userToken;
+                ResponseEntity userByTokenResponse = restTemplateUtil.send(url, HttpMethod.GET, request);
+                if (userByTokenResponse != null && userByTokenResponse.hasBody()) {
+                    UserResponseBO userResponseBO = objectMapper.readValue(((String) userByTokenResponse.getBody()).getBytes(), UserResponseBO.class);
+                    LOGGER.info("{}", userResponseBO);
+                    if (userResponseBO != null && userResponseBO.getData() != null && !StringUtils.isEmpty(userResponseBO.getData().getId())) {
+                        request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
                     } else {
-                        request.setAttribute(Constant.USER_ID, adminUserId);
+                        return false;
                     }
                 } else {
                     return false;
                 }
-            } else {
-                return false;
+                return true;
             }
-            return true;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
         }
         return false;
     }
