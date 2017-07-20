@@ -56,4 +56,15 @@ public class UserByTokenBO {
     public void setLastResetTokenTime(Date lastResetTokenTime) {
         this.lastResetTokenTime = lastResetTokenTime;
     }
+
+    @Override
+    public String toString() {
+        return "UserByTokenBO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", appId='" + appId + '\'' +
+                ", token='" + token + '\'' +
+                ", lastResetTokenTime=" + lastResetTokenTime +
+                '}';
+    }
 }

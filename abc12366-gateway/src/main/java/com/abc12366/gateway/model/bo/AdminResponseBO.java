@@ -36,4 +36,13 @@ public class AdminResponseBO {
     public void setData(UserByTokenBO data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "AdminResponseBO{" +
+                "code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }
