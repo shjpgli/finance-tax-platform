@@ -66,19 +66,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
         // UserToken验证、授权拦截
-        registry.addInterceptor(getUcUserInterceptor())
-                .excludePathPatterns("/")
-                .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/app/login", "/app/register", "/test")
-                .excludePathPatterns("/admintoken/**")
-                .excludePathPatterns("/login", "/register");
-
-        // 用户Token拦截
-//        registry.addInterceptor(getAdminUserInterceptor())
+//        registry.addInterceptor(getUcUserInterceptor())
 //                .excludePathPatterns("/")
 //                .excludePathPatterns("/druid/**")
 //                .excludePathPatterns("/app/login", "/app/register", "/test")
 //                .excludePathPatterns("/admintoken/**")
 //                .excludePathPatterns("/login", "/register");
+
+        // 用户Token拦截
+        registry.addInterceptor(getAdminUserInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/app/login", "/app/register", "/test")
+                .excludePathPatterns("/admintoken/**")
+                .excludePathPatterns("/login", "/register");
     }
 }
