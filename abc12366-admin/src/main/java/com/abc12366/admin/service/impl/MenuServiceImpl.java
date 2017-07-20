@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author liuguiyao
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
@@ -32,6 +31,7 @@ public class MenuServiceImpl implements MenuService {
     private MenuMapper menuMapper;
     @Autowired
     private MenuRoMapper menuRoMapper;
+
     @Override
     public List<MenuBO> selectList(Menu menu) {
         List<MenuBO> menus = menuRoMapper.selectList(menu);
@@ -43,6 +43,7 @@ public class MenuServiceImpl implements MenuService {
         MenuBO menuBO = recursiveTree(parentId);
         return menuBO;
     }
+
     /**
      * 递归算法解析成树形结构
      *
@@ -52,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
         MenuBO node = menuRoMapper.selectByMenuId(id);
         List<MenuBO> treeNodes = menuRoMapper.selectByParentId(id);
         //遍历子节点
-        for(MenuBO child : treeNodes){
+        for (MenuBO child : treeNodes) {
             MenuBO n = recursiveTree(child.getMenuId()); //递归
             node.getNodes().add(n);
         }
@@ -89,7 +90,7 @@ public class MenuServiceImpl implements MenuService {
     public void deleteTree(String id) {
         List<MenuBO> treeNodes = menuRoMapper.selectByParentId(id);
         //遍历子节点
-        for(MenuBO child : treeNodes){
+        for (MenuBO child : treeNodes) {
             deleteTree(child.getMenuId()); //递归
         }
         menuMapper.delete(id);
@@ -99,7 +100,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuBO update(MenuBO menuBO) {
         Menu menu = new Menu();
-        BeanUtils.copyProperties(menuBO,menu);
+        BeanUtils.copyProperties(menuBO, menu);
         int update = menuMapper.update(menu);
         if (update != 1) {
             LOGGER.warn("更新失败，参数：{}", menu.toString());
@@ -111,11 +112,11 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<MenuBO> selectFirstLevel() {
         List<Menu> menus = menuRoMapper.selectFirstLevel();
-        if(menus==null||menus.size()==0){
+        if (menus == null || menus.size() == 0) {
             return null;
         }
         List<MenuBO> menuBOs = new ArrayList<>();
-        for(Menu menu : menus){
+        for (Menu menu : menus) {
             MenuBO menuBO = new MenuBO();
             BeanUtils.copyProperties(menu, menuBO);
             menuBOs.add(menuBO);
@@ -127,13 +128,25 @@ public class MenuServiceImpl implements MenuService {
     public void enable(MenuUpdateBO updateBO) {
         String[] idArray = updateBO.getMenuId().split(",");
         Menu menu = new Menu();
-        for (String menuId : idArray){
+        for (String menuId : idArray) {
             menu.setMenuId(menuId);
             menu.setStatus(updateBO.getStatus());
             int enable = menuMapper.update(menu);
-            if(enable != 1){
+            if (enable != 1) {
                 LOGGER.warn("修改失败，id：{}", menu.toString());
                 throw new ServiceException(4102);
+            }
+            //查找子节点
+            List<MenuBO> boList = menuRoMapper.selectByParentId(menuId);
+            for (MenuBO menuBO : boList){
+                menuBO.setStatus(updateBO.getStatus());
+                Menu me = new Menu();
+                BeanUtils.copyProperties(menuBO,me);
+                int upd = menuMapper.update(me);
+                if (upd != 1) {
+                    LOGGER.warn("修改子节点状态失败，id：{}", me);
+                    throw new ServiceException(4097);
+                }
             }
         }
     }
@@ -142,11 +155,11 @@ public class MenuServiceImpl implements MenuService {
     public void disableAll() {
         Menu menu = new Menu();
         List<MenuBO> menus = menuRoMapper.selectList(menu);
-        for (MenuBO temp:menus){
+        for (MenuBO temp : menus) {
             menu.setMenuId(temp.getMenuId());
             menu.setStatus(false);
             int enable = menuMapper.update(menu);
-            if(enable != 1){
+            if (enable != 1) {
                 LOGGER.warn("修改失败，id：{}", menu.toString());
                 throw new ServiceException(4102);
             }

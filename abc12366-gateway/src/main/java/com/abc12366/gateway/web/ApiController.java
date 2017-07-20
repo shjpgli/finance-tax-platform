@@ -46,9 +46,10 @@ public class ApiController {
 
     @GetMapping(path = "/api/apisetting/{appId}")
     public ResponseEntity selectBySettingList(@PathVariable("appId") String appId) {
+        LOGGER.info("{appId}", appId);
         List<ApiBO> apiList = apiService.selectBySettingList(appId);
         LOGGER.info("{}", apiList);
-        return ResponseEntity.ok(Utils.kv("data",apiList));
+        return ResponseEntity.ok(Utils.kv("dataList",apiList));
     }
 
     @GetMapping(path = "/api/{id}")

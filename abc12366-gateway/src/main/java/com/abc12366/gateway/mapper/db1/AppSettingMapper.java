@@ -8,9 +8,9 @@ import com.abc12366.gateway.model.AppSetting;
  * @since 1.0.0
  */
 public interface AppSettingMapper {
-    void update(AppSetting appSetting);
+    int update(AppSetting appSetting);
 
-    void insert(AppSetting appSetting);
+    int insert(AppSetting appSetting);
 
     void delete(String id);
 }

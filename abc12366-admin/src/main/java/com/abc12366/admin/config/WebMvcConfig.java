@@ -1,9 +1,6 @@
 package com.abc12366.admin.config;
 
-import com.abc12366.gateway.component.AdminUserInterceptor;
-import com.abc12366.gateway.component.AppInterceptor;
-import com.abc12366.gateway.component.IpInterceptor;
-import com.abc12366.gateway.component.LogInterceptor;
+import com.abc12366.gateway.component.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -40,10 +37,16 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new AdminUserInterceptor();
     }
 
-    @Bean
+    /*@Bean
     public IpInterceptor ipInterceptor() {
         return new IpInterceptor();
+    }*/
+
+    @Bean
+    public UcUserInterceptor getUcUserInterceptor() {
+        return new UcUserInterceptor();
     }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -70,7 +73,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/login", "/register");
 */
         // 用户Token拦截
-        registry.addInterceptor(getAdminUserInterceptor())
+        registry.addInterceptor(getUcUserInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/app/login", "/app/register", "/test")

@@ -69,12 +69,8 @@ public class AppSettingController {
                                  @PathVariable("id") String id,
                                  @Valid @RequestBody AppSettingBO appSettingBO) {
         LOGGER.info("{}/{}", appId, id);
-        if (StringUtils.isEmpty(appSettingBO.getAppId())) {
-            appSettingBO.setAppId(appId);
-        }
-        if (StringUtils.isEmpty(appSettingBO.getId())) {
-            appSettingBO.setId(id);
-        }
+        appSettingBO.setAppId(appId);
+        appSettingBO.setId(id);
         AppSetting appSetting = appSettingService.update(appSettingBO);
         LOGGER.info("{}", appSetting);
         return ResponseEntity.ok(Utils.kv("data", appSetting));

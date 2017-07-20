@@ -6,17 +6,38 @@
     <update id="update" parameterType="com.abc12366.gateway.model.AppSetting">
         UPDATE gw_app_setting
         <set>
-            <if test="timesPerMinute ! = null">timesPerMinute = #{timesPerMinute},</if>
-            <if test="timesPerHour ! = null">timesPerHour = #{timesPerHour},</if>
-            <if test="timesPerDay ! = null">timesPerDay = #{timesPerDay},</if>
-            <if test="status ! = null">status = #{status},</if>
-            <if test="lastUpdate ! = null">lastUpdate = #{lastUpdate}</if>
+            <if test="appId != null">
+                appId = #{appId},
+            </if>
+            <if test="apiId != null">
+                apiId = #{apiId},
+            </if>
+            <if test="timesPerMinute != null">
+                timesPerMinute = #{timesPerMinute},
+            </if>
+            <if test="timesPerHour != null">
+                timesPerHour = #{timesPerHour},
+            </if>
+            <if test="timesPerDay != null">
+                timesPerDay = #{timesPerDay},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate = #{lastUpdate},
+            </if>
+
         </set>
+        WHERE id = #{id}
     </update>
 
     <insert id="insert" parameterType="com.abc12366.gateway.model.AppSetting">
         INSERT INTO gw_app_setting
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
@@ -46,7 +67,7 @@
             </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 #{id},
             </if>

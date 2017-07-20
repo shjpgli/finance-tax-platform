@@ -1,10 +1,13 @@
 package com.abc12366.gateway.service;
 
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.db1.AppSettingMapper;
 import com.abc12366.gateway.mapper.db2.AppSettingRoMapper;
 import com.abc12366.gateway.model.AppSetting;
 import com.abc12366.gateway.model.bo.AppSettingBO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ import java.util.List;
  */
 @Service
 public class AppSettingServiceImpl implements AppSettingService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppSettingServiceImpl.class);
 
     @Autowired
     private AppSettingRoMapper appSettingRoMapper;
@@ -35,21 +40,14 @@ public class AppSettingServiceImpl implements AppSettingService {
 
     @Override
     public AppSetting update(AppSettingBO bo) {
-
-        AppSetting updateBO = new AppSetting();
-        updateBO.setId(bo.getId());
-
-        updateBO = appSettingRoMapper.selectOne(updateBO);
-        if (updateBO != null) {
-            updateBO.setLastUpdate(new Date());
-            updateBO.setStatus(bo.getStatus());
-            updateBO.setTimesPerMinute(bo.getTimesPerMinute());
-            updateBO.setTimesPerHour(bo.getTimesPerHour());
-            updateBO.setTimesPerDay(bo.getTimesPerDay());
-            appSettingMapper.update(updateBO);
-            return updateBO;
+        AppSetting appSetting = new AppSetting();
+        BeanUtils.copyProperties(bo,appSetting);
+        int update = appSettingMapper.update(appSetting);
+        if(update != 1){
+            LOGGER.warn("修改失败，参数：{}", appSetting);
+            throw new ServiceException(4102);
         }
-        return null;
+        return appSetting;
     }
 
     @Override
@@ -60,7 +58,11 @@ public class AppSettingServiceImpl implements AppSettingService {
         bo.setLastUpdate(now);
         AppSetting appSetting = new AppSetting();
         BeanUtils.copyProperties(bo,appSetting);
-        appSettingMapper.insert(appSetting);
+        int insert = appSettingMapper.insert(appSetting);
+        if(insert != 1){
+            LOGGER.warn("插入失败，参数：{}", appSetting);
+            throw new ServiceException(4101);
+        }
         return appSetting;
     }
 

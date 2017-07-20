@@ -3,14 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db2.AppSettingRoMapper">
 
-    <select id="selectOne" resultType="com.abc12366.gateway.model.AppSetting">
+    <select id="selectOne" resultType="com.abc12366.gateway.model.AppSetting" parameterType="com.abc12366.gateway.model.AppSetting">
         select id, appId, apiId, timesPerMinute, timesPerHour, timesPerDay, status, createTime, lastUpdate
-        from gw_app_setting
-        <where>
-            <if test="appId != null">appId = #{appId}</if>
-            <if test="apiId != null">AND apiId = #{apiId}</if>
-            <if test="id != null">AND id = #{apiId}</if>
-        </where>
+        from gw_app_setting WHERE  appId = #{appId}
+            AND id = #{id}
     </select>
 
     <resultMap id="appSettingMap" type="com.abc12366.gateway.model.bo.AppSettingBO">
