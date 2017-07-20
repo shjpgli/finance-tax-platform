@@ -15,6 +15,12 @@ public class ContentsListBo implements Serializable {
 	/**内容ID**/
 	private String contentId;
 
+    /**userid**varchar(64)**/
+    private String userid;
+
+    /**username**varchar(100)**/
+    private String username;
+
 	/**标题**/
 	private String title;
 
@@ -78,7 +84,23 @@ public class ContentsListBo implements Serializable {
 		this.contentId = contentId;
 	}
 
-	public String getTitle() {
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getTitle() {
 		return title;
 	}
 

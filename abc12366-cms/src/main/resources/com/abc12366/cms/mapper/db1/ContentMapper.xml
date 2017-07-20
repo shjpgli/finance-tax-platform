@@ -13,9 +13,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Content">
 		 INSERT INTO cms_content
- 		(contentId,channelId,typeId,contentType,modelId,siteId,sortDate,topLevel,hasTitleImg,isRecommend,status,viewsDay,commentsDay,downloadsDay,upsDay,recommendLevel)
+ 		(contentId,channelId,typeId,contentType,modelId,siteId,sortDate,topLevel,hasTitleImg,isRecommend,status,viewsDay,commentsDay,downloadsDay,upsDay,username,userid,recommendLevel)
 		 VALUES 
- 		(#{contentId},#{channelId},#{typeId},#{contentType},#{modelId},#{siteId},#{sortDate},#{topLevel},#{hasTitleImg},#{isRecommend},#{status},#{viewsDay},#{commentsDay},#{downloadsDay},#{upsDay},#{recommendLevel})
+ 		(#{contentId},#{channelId},#{typeId},#{contentType},#{modelId},#{siteId},#{sortDate},#{topLevel},#{hasTitleImg},#{isRecommend},#{status},#{viewsDay},#{commentsDay},#{downloadsDay},#{upsDay},#{username},#{userid},#{recommendLevel})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -67,6 +67,12 @@
 			<if test="upsDay != null">
 				 upsDay,
 			</if>
+             <if test="username != null">
+                 username,
+             </if>
+             <if test="userid != null">
+                 userid,
+             </if>
 			<if test="recommendLevel != null">
 				 recommendLevel,
 			</if>
@@ -118,6 +124,12 @@
 			<if test="upsDay!=null">
 				 #{upsDay},
 			</if>
+             <if test="username!=null">
+                 #{username},
+             </if>
+             <if test="userid!=null">
+                 #{userid},
+             </if>
 			<if test="recommendLevel!=null">
 				 #{recommendLevel},
 			</if>
@@ -170,6 +182,12 @@
 			<if test="upsDay != null">
 				 upsDay = #{upsDay},
 			</if>
+             <if test="username != null">
+                 username = #{username},
+             </if>
+             <if test="userid != null">
+                 userid = #{userid},
+             </if>
 			<if test="recommendLevel != null">
 				 recommendLevel = #{recommendLevel},
 			</if>
@@ -195,6 +213,8 @@
 			 viewsDay = #{viewsDay},
 			 commentsDay = #{commentsDay},
 			 downloadsDay = #{downloadsDay},
+			 username = #{username},
+			 userid = #{userid},
 			 upsDay = #{upsDay},
 			 recommendLevel = #{recommendLevel}
 		 WHERE contentId = #{contentId}

@@ -13,6 +13,12 @@ public class Content implements Serializable {
 	/**contentId**varchar(64)**/
 	private String contentId;
 
+    /**userid**varchar(64)**/
+    private String userid;
+
+    /**username**varchar(100)**/
+    private String username;
+
 	/**栏目ID**varchar(64)**/
 	private String channelId;
 
@@ -77,7 +83,23 @@ public class Content implements Serializable {
 		return this.contentId;
 	}
 
-	public void setChannelId(String channelId){
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setChannelId(String channelId){
 		this.channelId = channelId;
 	}
 
