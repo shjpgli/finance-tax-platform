@@ -41,11 +41,13 @@ public class ChannelController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "channelId", required = false) String channelId,
                                      @RequestParam(value = "parentId", required = false) String parentId,
+                                     @RequestParam(value = "siteId", required = false) String siteId,
                                      @RequestParam(value = "channelName", required = false) String channelName
                                      ) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("parentId", parentId);//父栏目ID
+        dataMap.put("siteId", siteId);//站点ID
         dataMap.put("channelName", channelName);//栏目名称
         List<ChannelBo> dataList = channelService.selectLists(dataMap);
         LOGGER.info("{}", dataList);

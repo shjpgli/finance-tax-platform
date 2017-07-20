@@ -621,4 +621,11 @@ public class ContentServiceImpl implements ContentService {
     }
 
 
+    @Override
+    public String updateViewsDay(String contentId) {
+        contentMapper.updateViewsDay(contentId);
+        return "";
+    }
+
+
 }

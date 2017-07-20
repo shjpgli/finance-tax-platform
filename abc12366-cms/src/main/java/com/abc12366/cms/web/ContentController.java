@@ -421,6 +421,18 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * 更新浏览量
+     */
+    @PutMapping(path = "/updateViewsDay/{contentId}")
+    public ResponseEntity updateViewsDay(@PathVariable String contentId) {
+        LOGGER.info("{}", contentId);
+        //更新浏览量信息
+        String rtn = contentService.updateViewsDay(contentId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
 
 
 

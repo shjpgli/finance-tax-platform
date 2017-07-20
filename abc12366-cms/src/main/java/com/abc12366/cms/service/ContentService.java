@@ -47,4 +47,6 @@ public interface ContentService {
 
     List<ContentudBo> selectContentudList(Map<String,Object> map);
 
+    String updateViewsDay(String contentId);
+
 }
