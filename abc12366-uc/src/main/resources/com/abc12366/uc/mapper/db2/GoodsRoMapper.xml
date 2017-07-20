@@ -29,6 +29,7 @@
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
         <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
+        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
     </resultMap>
 
     <!--根据goodsId查询产品-->
@@ -44,9 +45,13 @@
     <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
         SELECT
         g.id,	g.name,	g.imageUrl,	g.introduction,	g.details,	g.categoryId,	g.status,	g.createTime,	g.lastUpdate,	g.giftPoints,
-        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,g.goodsType,  gc.category as categoryName
+        g.sort,	g.unit,	g.recommendType,	g.isShipping,	g.isFreeShipping,	g.tradeMethod,g.goodsType,  gc.category as categoryName,
+        up.sellingPrice,up.totalStock
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
+        left join (
+        select p.goodsId as goodsId,min(sellingPrice) as sellingPrice,sum(p.stock) as totalStock from uc_product p group by p.goodsId
+        ) up on g.id = up.goodsId
         <where>
             1=1
             <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>

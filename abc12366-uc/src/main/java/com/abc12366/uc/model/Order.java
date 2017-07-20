@@ -67,6 +67,10 @@ public class Order implements Serializable {
     /**备注**/
     private String remark;
 
+    /**
+     * 赠送积分
+     **/
+    private Integer giftPoints;
 
 
     public void setId(String id){
@@ -219,5 +223,13 @@ public class Order implements Serializable {
 
     public void setNowVipLevel(String nowVipLevel) {
         this.nowVipLevel = nowVipLevel;
+    }
+
+    public Integer getGiftPoints() {
+        return giftPoints;
+    }
+
+    public void setGiftPoints(Integer giftPoints) {
+        this.giftPoints = giftPoints;
     }
 }

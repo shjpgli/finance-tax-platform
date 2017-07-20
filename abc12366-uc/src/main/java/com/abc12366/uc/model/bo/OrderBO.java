@@ -35,6 +35,7 @@ public class OrderBO implements Serializable {
     private String addressId;
     private String expressNo;
     private String remark;
+    private Integer giftPoints;
     private GoodsBO goodsBO;
     private User user;
 
@@ -43,7 +44,9 @@ public class OrderBO implements Serializable {
     private Date startTime;
     private Date endTime;
 
+    private OrderLogBO orderLogBO;
 
+    private InvoiceBO invoiceBO;
 
     public void setId(String id){
         this.id = id;
@@ -243,5 +246,29 @@ public class OrderBO implements Serializable {
 
     public void setNowVipLevel(String nowVipLevel) {
         this.nowVipLevel = nowVipLevel;
+    }
+
+    public OrderLogBO getOrderLogBO() {
+        return orderLogBO;
+    }
+
+    public void setOrderLogBO(OrderLogBO orderLogBO) {
+        this.orderLogBO = orderLogBO;
+    }
+
+    public Integer getGiftPoints() {
+        return giftPoints;
+    }
+
+    public void setGiftPoints(Integer giftPoints) {
+        this.giftPoints = giftPoints;
+    }
+
+    public InvoiceBO getInvoiceBO() {
+        return invoiceBO;
+    }
+
+    public void setInvoiceBO(InvoiceBO invoiceBO) {
+        this.invoiceBO = invoiceBO;
     }
 }

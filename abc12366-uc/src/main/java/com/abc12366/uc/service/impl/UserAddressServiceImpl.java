@@ -37,8 +37,7 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public UserAddressBO selectOne(UserAddress userAddress) {
-        UserAddress address = new UserAddress();
-        address = userAddressRoMapper.selectOne(userAddress);
+        UserAddress address = userAddressRoMapper.selectOne(userAddress);
         UserAddressBO bo = new UserAddressBO();
         BeanUtils.copyProperties(address,bo);
         return bo;

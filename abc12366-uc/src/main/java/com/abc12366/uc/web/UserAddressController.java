@@ -54,7 +54,7 @@ public class UserAddressController {
     }
 
     @GetMapping(path = "/{userId}/{id}")
-    public ResponseEntity selectOne(@PathVariable("userId") String userId,@PathVariable("userId") String id) {
+    public ResponseEntity selectOne(@PathVariable("userId") String userId,@PathVariable("id") String id) {
         UserAddress userAddress = new UserAddress();
         userAddress.setId(id);
         userAddress.setUserId(userId);
