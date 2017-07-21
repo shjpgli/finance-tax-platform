@@ -79,6 +79,9 @@
             <if test="giftPoints != null">
                 giftPoints,
             </if>
+            <if test="tradeMethod != null">
+                tradeMethod,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -141,6 +144,9 @@
             </if>
             <if test="giftPoints!=null">
                 #{giftPoints},
+            </if>
+            <if test="tradeMethod!=null">
+                #{tradeMethod},
             </if>
         </trim>
 	</insert>
@@ -205,6 +211,9 @@
             </if>
             <if test="giftPoints != null">
                 giftPoints = #{giftPoints},
+            </if>
+            <if test="tradeMethod != null">
+                tradeMethod = #{tradeMethod},
             </if>
 
         </set>
