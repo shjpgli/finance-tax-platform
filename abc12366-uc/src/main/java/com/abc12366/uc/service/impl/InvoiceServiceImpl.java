@@ -154,21 +154,21 @@ public class InvoiceServiceImpl implements InvoiceService {
         BeanUtils.copyProperties(invoiceBO, invoice);
         invoice.setId(Utils.uuid());
         //获取发票编号，0，表示未使用
-        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
-        if (invoiceDetail == null) {
-            LOGGER.info("{发票号码获取失败}", invoiceDetail);
-            throw new ServiceException(4124);
-        }else {
-            //将发票置为分配中，值为1
-            invoiceDetail.setStatus("1");
-            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
-            if(dUpdate != 1){
-                LOGGER.info("{发票状态修改失败}", invoiceDetail);
-                throw new ServiceException(4178);
-            }
-        }
-        invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
-        invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
+//        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
+//        if (invoiceDetail == null) {
+//            LOGGER.info("{发票号码获取失败}", invoiceDetail);
+//            throw new ServiceException(4124);
+//        }else {
+//            //将发票置为分配中，值为1
+//            invoiceDetail.setStatus("1");
+//            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+//            if(dUpdate != 1){
+//                LOGGER.info("{发票状态修改失败}", invoiceDetail);
+//                throw new ServiceException(4178);
+//            }
+//        }
+//        invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
+//        invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
         Date date = new Date();
         invoice.setCreateTime(date);
         invoice.setLastUpdate(date);
@@ -336,5 +336,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceBackBO selectBackOne(String id) {
         return invoiceBackRoMapper.selectBackOne(id);
+    }
+
+    @Override
+    public InvoiceBO selectUserInvoice(Invoice invoice) {
+        return invoiceRoMapper.selectUserInvoice(invoice);
     }
 }

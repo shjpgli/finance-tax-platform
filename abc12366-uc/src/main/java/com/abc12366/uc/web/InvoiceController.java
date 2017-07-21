@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.InvoiceDetail;
 import com.abc12366.uc.model.InvoiceRepo;
 import com.abc12366.uc.model.bo.InvoiceBO;
@@ -84,7 +85,7 @@ public class InvoiceController {
     }
 
     /**
-     * 历史发票列表管理
+     * 前台，历史发票列表管理
      *
      * @param pageNum
      * @param pageSize
@@ -93,16 +94,35 @@ public class InvoiceController {
     @GetMapping(path = "/history")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value ="userId", required = true) String userId,
                                      @RequestParam(value ="status", required = true) String status){
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceBO invoice = new InvoiceBO();
         invoice.setStatus(status);
+        invoice.setUserId(userId);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<InvoiceBO> invoiceList = invoiceService.selectList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
+    }
+
+    /**
+     * 前台，票详情查看
+     *
+     * @param invoiceId
+     * @return
+     */
+    @GetMapping(path = "/user/{invoiceId}/{userId}")
+    public ResponseEntity userInvoice(@PathVariable("invoiceId") String invoiceId,@PathVariable("userId") String userId) {
+        LOGGER.info("{}", invoiceId);
+        Invoice invoice = new Invoice();
+        invoice.setUserId(userId);
+        invoice.setId(invoiceId);
+        InvoiceBO bo = invoiceService.selectUserInvoice(invoice);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
