@@ -4,6 +4,8 @@ import com.abc12366.bangbang.mapper.db1.FollowMapper;
 import com.abc12366.bangbang.mapper.db2.FollowRoMapper;
 import com.abc12366.bangbang.model.FollowUser;
 import com.abc12366.bangbang.model.bo.FollowUserBO;
+import com.abc12366.bangbang.model.bo.MyFollowListBO;
+import com.abc12366.bangbang.model.bo.MyFollowerListBO;
 import com.abc12366.bangbang.service.FollowService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
@@ -101,6 +103,16 @@ public class FollowServiceImpl implements FollowService {
     public int selectFollowedCount(String followedUserId) {
         LOGGER.info("{}", followedUserId);
         return Integer.parseInt(followRoMapper.selectFollowedCount(followedUserId));
+    }
+
+    @Override
+    public List<MyFollowerListBO> selectFollowerListByUserId(String userId) {
+        return followRoMapper.selectFollowerListByUserId(userId);
+    }
+
+    @Override
+    public List<MyFollowListBO> selectMyfollowtByUserId(String userId) {
+        return followRoMapper.selectMyfollowtByUserId(userId);
     }
 
     public boolean isExist(Map map) {

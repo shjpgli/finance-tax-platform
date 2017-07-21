@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.bo.FollowUserBO;
+import com.abc12366.bangbang.model.bo.MyFollowListBO;
+import com.abc12366.bangbang.model.bo.MyFollowerListBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -20,4 +22,8 @@ public interface FollowService {
     List<FollowUserBO> selectMyFollowerList(String userId);
 
     int selectFollowedCount(String followedUserId);
+
+    List<MyFollowerListBO> selectFollowerListByUserId(String userId);
+
+    List<MyFollowListBO> selectMyfollowtByUserId(String userId);
 }

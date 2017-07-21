@@ -13,4 +13,6 @@ public interface TeamRoMapper {
     List<TeamBO> selectList();
 
     TeamBO selectOne(String id);
+
+    List<TeamBO> selectListByUserId(String userId);
 }

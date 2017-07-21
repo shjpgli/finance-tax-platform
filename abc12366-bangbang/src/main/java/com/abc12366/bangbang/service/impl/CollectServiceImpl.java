@@ -7,6 +7,7 @@ import com.abc12366.bangbang.mapper.db2.CollectRoMapper;
 import com.abc12366.bangbang.model.Collect;
 import com.abc12366.bangbang.model.bo.CollectBO;
 import com.abc12366.bangbang.model.bo.CollectListBO;
+import com.abc12366.bangbang.model.bo.MyCollectListBO;
 import com.abc12366.bangbang.service.CollectService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -82,5 +83,10 @@ public class CollectServiceImpl implements CollectService {
     public String selectCount(String askId) {
         LOGGER.info("{}", askId);
         return collectRoMapper.selectCount(askId);
+    }
+
+    @Override
+    public List<MyCollectListBO> selectCollectListByUserId(String userId) {
+        return collectRoMapper.selectCollectListByUserId(userId);
     }
 }

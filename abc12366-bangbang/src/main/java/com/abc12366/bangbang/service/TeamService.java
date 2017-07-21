@@ -21,4 +21,6 @@ public interface TeamService {
     TeamBO update(TeamUpdateBO teamUpdateBO, String id);
 
     TeamBO selectOne(String id);
+
+    List<TeamBO> selectListByUserId(String userId);
 }

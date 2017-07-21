@@ -12,4 +12,13 @@
                 from bb_team
                 where id=#{id}
     </select>
+    <select id="selectListByUserId"  resultType="com.abc12366.bangbang.model.bo.TeamBO" parameterType="java.lang.String">
+        select bt.id,bt.teamName,bt.introduction,bt.status,bt.members,bt.createTime,bt.lastUpdate,bt.teamPicturePath,
+        bt.maxPicturePath,bt.midPicturePath,bt.minPicturePath
+        from bb_team bt, bb_team_member btm
+        where bt.id=btm.teamId
+        and btm.userId=#{userId}
+        ORDER BY bt.lastUpdate DESC
+    </select>
+
 </mapper>
