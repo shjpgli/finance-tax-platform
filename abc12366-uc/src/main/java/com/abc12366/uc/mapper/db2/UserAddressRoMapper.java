@@ -15,4 +15,6 @@ public interface UserAddressRoMapper {
     List<UserAddress> selectList(String userId);
 
     UserAddress selectOne(UserAddress userAddress);
+
+    List<UserAddress> selectByUserId(UserAddress userAddress);
 }

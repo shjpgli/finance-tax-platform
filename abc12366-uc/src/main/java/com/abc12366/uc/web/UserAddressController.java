@@ -4,6 +4,7 @@ import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.UserAddress;
 import com.abc12366.uc.model.bo.UserAddressBO;
+import com.abc12366.uc.model.bo.UserAddressUpdateBO;
 import com.abc12366.uc.service.UserAddressService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -79,7 +80,7 @@ public class UserAddressController {
     }
 
     /**
-     * 发票信息修改
+     * 用户地址修改
      *
      * @param userId
      * @return
@@ -108,6 +109,23 @@ public class UserAddressController {
         userAddressBO.setId(id);
         userAddressBO.setUserId(userId);
         int bo = userAddressService.deleteByIdAndUserId(userAddressBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 用户设置默认地址
+     *
+     * @param userId
+     * @return
+     */
+    @PutMapping(path = "/default/{userId}/{id}")
+    public ResponseEntity setDefaultAddrees(@PathVariable("userId") String userId, @PathVariable("id") String id,
+                                            @Valid @RequestBody UserAddressUpdateBO userAddressBO) {
+        userAddressBO.setId(id);
+        userAddressBO.setUserId(userId);
+        UserAddressUpdateBO bo = userAddressService.setDefaultAddrees(userAddressBO);
+
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }

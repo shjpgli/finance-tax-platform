@@ -84,6 +84,28 @@ public class InvoiceController {
     }
 
     /**
+     * 历史发票列表管理
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping(path = "/history")
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value ="status", required = true) String status){
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        InvoiceBO invoice = new InvoiceBO();
+        invoice.setStatus(status);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<InvoiceBO> invoiceList = invoiceService.selectList(invoice);
+        LOGGER.info("{}", invoiceList);
+        return (invoiceList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
+    }
+
+    /**
      * 发票详情查看
      *
      * @param invoiceId

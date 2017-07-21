@@ -31,4 +31,11 @@
         WHERE id = #{id} and userId = #{userId}
     </select>
 
+    <select id="selectByUserId" resultType="com.abc12366.uc.model.UserAddress" parameterType="com.abc12366.uc.model.UserAddress">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_user_address
+        WHERE id != #{id} and userId = #{userId}
+    </select>
+
 </mapper>

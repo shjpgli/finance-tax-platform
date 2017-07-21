@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.UserAddress;
 import com.abc12366.uc.model.bo.UserAddressBO;
+import com.abc12366.uc.model.bo.UserAddressUpdateBO;
 
 import java.util.List;
 
@@ -44,4 +45,6 @@ public interface UserAddressService {
      * @return
      */
     UserAddressBO addUserAddress(UserAddressBO userAddressBO);
+
+    UserAddressUpdateBO setDefaultAddrees(UserAddressUpdateBO userAddressBO);
 }
