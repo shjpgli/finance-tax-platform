@@ -43,7 +43,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public TokenInterceptor getUcUserInterceptor() {
+    public TokenInterceptor tokenInterceptor() {
         return new TokenInterceptor();
     }
 
@@ -66,11 +66,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
         // UserToken验证、授权拦截
-        registry.addInterceptor(getUcUserInterceptor())
+        registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/app/login", "/app/register", "/test")
-                .excludePathPatterns("/admintoken/**")
+                .excludePathPatterns("/admintoken/**", "/user/token/*")
                 .excludePathPatterns("/login", "/register");
 
         // 用户Token拦截
