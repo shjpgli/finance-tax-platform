@@ -1,5 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.bo.MyTaskBO;
+import com.abc12366.uc.model.bo.TaskRangeBO;
 import com.abc12366.uc.model.bo.UserTaskBO;
 
 import java.util.List;
@@ -12,4 +14,8 @@ import java.util.Map;
  */
 public interface UserTaskRoMapper {
     List<UserTaskBO> selectList(Map<String, String> map);
+
+    MyTaskBO selectMyTask(String userId);
+
+    List<TaskRangeBO> selectTaskRangeList();
 }

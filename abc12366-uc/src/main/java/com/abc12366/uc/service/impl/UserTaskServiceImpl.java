@@ -5,9 +5,7 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.UserTaskMapper;
 import com.abc12366.uc.mapper.db2.UserTaskRoMapper;
 import com.abc12366.uc.model.UserTask;
-import com.abc12366.uc.model.bo.UserTaskBO;
-import com.abc12366.uc.model.bo.UserTaskInsertBO;
-import com.abc12366.uc.model.bo.UserTaskUpdateBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserTaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,5 +91,28 @@ public class UserTaskServiceImpl implements UserTaskService {
             throw new ServiceException(4103);
         }
         return true;
+    }
+
+    @Override
+    public MyTaskBO selectMyTask(String userId) {
+        MyTaskBO myTaskBO = userTaskRoMapper.selectMyTask(userId);
+        //没有任何此用户的任务数据，则返回空
+        if (myTaskBO == null) {
+            return null;
+        }
+        //计算该用户当月完成任务获取积分的排名。-1代表没有排名
+        List<TaskRangeBO> taskRangeBOList = userTaskRoMapper.selectTaskRangeList();
+        if (taskRangeBOList == null || taskRangeBOList.size() == 0) {
+            myTaskBO.setTaskRange("-1");
+            return myTaskBO;
+        }
+        myTaskBO.setTaskRange("-1");
+        for (int i = 1; i <= taskRangeBOList.size(); i++) {
+            TaskRangeBO taskRangeBO = taskRangeBOList.get(i - 1);
+            if (taskRangeBO.getUserId().equals(userId)) {
+                myTaskBO.setTaskRange(i + "");
+            }
+        }
+        return myTaskBO;
     }
 }
