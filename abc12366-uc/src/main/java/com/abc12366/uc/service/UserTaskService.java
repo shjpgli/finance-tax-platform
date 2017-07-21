@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.bo.MyTaskBO;
 import com.abc12366.uc.model.bo.UserTaskBO;
 import com.abc12366.uc.model.bo.UserTaskInsertBO;
 import com.abc12366.uc.model.bo.UserTaskUpdateBO;
@@ -17,4 +18,6 @@ public interface UserTaskService {
     UserTaskBO update(UserTaskUpdateBO userTaskUpdateBO, String userId, String id);
 
     boolean delete(Map<String, String> map);
+
+    MyTaskBO selectMyTask(String userId);
 }
