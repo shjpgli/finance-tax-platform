@@ -13,7 +13,10 @@ public class MessageConstant {
     //public static final String NEREASE_TEMPLATE_ID = "6149";
     //public static final String NEREASE_TEMPLATE_ID = "3062409";
     //public static final String NEREASE_TEMPLATE_ID = "3033";
-    public static final String NEREASE_TEMPLATE_ID = "3051628";
+    //public static final String NEREASE_TEMPLATE_ID = "3051628";
+    public static final String NEREASE_TEMPLATE_ID = "3059771";//33333
+
+
 
     //验证码键名
     public static final String MOBILE_CODE = "mobilecode";

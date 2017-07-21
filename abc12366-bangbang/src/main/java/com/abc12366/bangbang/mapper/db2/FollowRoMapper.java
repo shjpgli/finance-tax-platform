@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.bo.FollowUserBO;
+import com.abc12366.bangbang.model.bo.MyFollowListBO;
+import com.abc12366.bangbang.model.bo.MyFollowerListBO;
 
 import java.util.List;
 import java.util.Map;
@@ -18,4 +20,8 @@ public interface FollowRoMapper {
     String selectFollowedCount(String followedUserId);
 
     List<FollowUserBO> selectExist(Map map);
+
+    List<MyFollowerListBO> selectFollowerListByUserId(String userId);
+
+    List<MyFollowListBO> selectMyfollowtByUserId(String userId);
 }

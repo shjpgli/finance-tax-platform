@@ -44,8 +44,17 @@ public class UserExtendListBO {
     private String validStatus;
     private Date validTime;
     private String remark;
+    private String careerDuration;
 
     public UserExtendListBO() {
+    }
+
+    public String getCareerDuration() {
+        return careerDuration;
+    }
+
+    public void setCareerDuration(String careerDuration) {
+        this.careerDuration = careerDuration;
     }
 
     public String getPhone() {

@@ -68,8 +68,17 @@ public class UserExtendBO {
     private Date validTime;
     @Size(max = 500)
     private String remark;
+    private String careerDuration;
 
     public UserExtendBO() {
+    }
+
+    public String getCareerDuration() {
+        return careerDuration;
+    }
+
+    public void setCareerDuration(String careerDuration) {
+        this.careerDuration = careerDuration;
     }
 
     public String getUserId() {

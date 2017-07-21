@@ -86,4 +86,9 @@ public class TeamServiceImpl implements TeamService {
     public TeamBO selectOne(String id) {
         return teamRoMapper.selectOne(id);
     }
+
+    @Override
+    public List<TeamBO> selectListByUserId(String userId) {
+        return teamRoMapper.selectListByUserId(userId);
+    }
 }

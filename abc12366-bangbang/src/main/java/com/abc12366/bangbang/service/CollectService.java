@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.bo.CollectBO;
 import com.abc12366.bangbang.model.bo.CollectListBO;
+import com.abc12366.bangbang.model.bo.MyCollectListBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -19,4 +20,6 @@ public interface CollectService {
     List<CollectListBO> selectList(String userId);
 
     String selectCount(String askId);
+
+    List<MyCollectListBO> selectCollectListByUserId(String userId);
 }

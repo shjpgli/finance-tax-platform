@@ -31,4 +31,16 @@
         where askId=#{askId}
         and userId=#{userId}
     </select>
+
+    <select id="selectCollectListByUserId" resultType="com.abc12366.bangbang.model.bo.MyCollectListBO" parameterType="java.lang.String">
+        select
+          (select ba.ask from bb_ask ba where ba.id=bc.askId) ask,
+          (select ba.detail from bb_ask ba where ba.id=bc.askId) detail,
+          bc.createTime collectTime,
+          (select count(1) from bb_answer ban where ban.askId=bc.askId) answerCount,
+          (select count(1) from bb_support bs where bs.subjectId=bc.askId) supportCount,
+          (select bu.username from bb_user bu where bu.id=bc.userId) createUserName
+        from bb_collect bc
+        where bc.userId=#{userId}
+    </select>
 </mapper>

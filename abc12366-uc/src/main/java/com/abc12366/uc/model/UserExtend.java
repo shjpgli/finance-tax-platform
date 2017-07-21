@@ -39,8 +39,17 @@ public class UserExtend {
     private String validStatus;
     private Date validTime;
     private String remark;
+    private String careerDuration;
 
     public UserExtend() {
+    }
+
+    public String getCareerDuration() {
+        return careerDuration;
+    }
+
+    public void setCareerDuration(String careerDuration) {
+        this.careerDuration = careerDuration;
     }
 
     public String getUserId() {
