@@ -13,4 +13,6 @@ public interface ExperienceLevelMapper {
     int update(ExperienceLevel experienceLevel);
 
     int delete(String id);
+
+    int enableOrDisable(ExperienceLevel experienceLevel);
 }

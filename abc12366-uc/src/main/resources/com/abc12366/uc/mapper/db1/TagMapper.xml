@@ -26,4 +26,12 @@
         delete from uc_tag
         where id=#{id}
     </delete>
+    <update id="enableOrDisable" parameterType="com.abc12366.uc.model.Tag">
+        update uc_tag
+        <set>
+            <if test="status!=null">status=#{status},</if>
+            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate}</if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

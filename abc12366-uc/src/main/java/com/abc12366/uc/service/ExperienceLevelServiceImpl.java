@@ -156,7 +156,7 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
         experienceLevel.setId(id);
         experienceLevel.setStatus(modifyStatus);
         experienceLevel.setLastUpdate(new Date());
-        int result = experienceLevelMapper.update(experienceLevel);
+        int result = experienceLevelMapper.enableOrDisable(experienceLevel);
         if (result < 1) {
             if (modifyStatus) {
                 throw new ServiceException(4619);

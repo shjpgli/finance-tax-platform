@@ -22,8 +22,18 @@
         </set>
         where id=#{id}
     </update>
+
     <delete id="delete" parameterType="java.lang.String">
         delete from uc_upoints_rule
         where id=#{id}
     </delete>
+
+    <update id="enableOrDisable" parameterType="com.abc12366.uc.model.PointsRule">
+        update uc_upoints_rule
+        <set>
+            <if test="status!=null">status=#{status},</if>
+            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate}</if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

@@ -146,7 +146,7 @@ public class TagServiceImpl implements TagService {
         tag.setId(id);
         tag.setStatus(modifyStatus);
         tag.setLastUpdate(new Date());
-        int result = tagMapper.update(tag);
+        int result = tagMapper.enableOrDisable(tag);
         if (result < 1) {
             if (modifyStatus) {
                 throw new ServiceException(4625);

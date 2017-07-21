@@ -19,7 +19,6 @@ public class UserExtendBO {
     private String signature;
     @Size(max = 1)
     private String sex;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
     @Size(max = 2)
     private String bloodType;
@@ -62,7 +61,6 @@ public class UserExtendBO {
     private String frontImage;
     @Size(max = 100)
     private String backImage;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     private Date endTime;
     @Size(max = 1)

@@ -24,4 +24,13 @@
         delete from uc_uexp_level
         where id=#{id}
     </delete>
+
+    <update id="enableOrDisable" parameterType="com.abc12366.uc.model.ExperienceLevel">
+        update uc_uexp_level
+        <set>
+            <if test="status!=null">status=#{status},</if>
+            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate}</if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

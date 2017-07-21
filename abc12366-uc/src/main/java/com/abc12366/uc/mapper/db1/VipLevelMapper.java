@@ -13,4 +13,6 @@ public interface VipLevelMapper {
     int update(VipLevel vipLevel);
 
     int delete(String id);
+
+    int enableOrDisable(VipLevel vipLevel);
 }
