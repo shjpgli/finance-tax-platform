@@ -147,7 +147,7 @@ public class VipLevelServiceImpl implements VipLevelService {
         vipLevel.setId(id);
         vipLevel.setStatus(modifyStatus);
         vipLevel.setLastUpdate(new Date());
-        int result = vipLevelMapper.update(vipLevel);
+        int result = vipLevelMapper.enableOrDisable(vipLevel);
         if (result < 1) {
             if (modifyStatus) {
                 throw new ServiceException(4617);

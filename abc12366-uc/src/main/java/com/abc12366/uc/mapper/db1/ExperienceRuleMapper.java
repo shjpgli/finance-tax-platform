@@ -13,4 +13,6 @@ public interface ExperienceRuleMapper {
     int update(ExperienceRule experienceRule);
 
     int delete(String id);
+
+    int enableOrDisable(ExperienceRule experienceRule);
 }

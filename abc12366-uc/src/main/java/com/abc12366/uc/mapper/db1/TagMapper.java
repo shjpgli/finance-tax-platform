@@ -14,4 +14,6 @@ public interface TagMapper {
     int update(Tag tag);
 
     int delete(String id);
+
+    int enableOrDisable(Tag tag);
 }

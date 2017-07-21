@@ -156,7 +156,7 @@ public class PointsRuleServiceImpl implements PointsRuleService {
         pointsRule.setId(id);
         pointsRule.setStatus(modifyStatus);
         pointsRule.setLastUpdate(new Date());
-        int result = uPointRuleMapper.update(pointsRule);
+        int result = uPointRuleMapper.enableOrDisable(pointsRule);
         if (result < 1) {
             if (modifyStatus) {
                 throw new ServiceException(4621);

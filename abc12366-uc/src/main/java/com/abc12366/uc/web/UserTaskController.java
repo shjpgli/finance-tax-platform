@@ -29,6 +29,14 @@ public class UserTaskController {
     @Autowired
     private UserTaskService userTaskService;
 
+//    @GetMapping(path = "/{userId}")
+//    public ResponseEntity select(@PathVariable String userId) {
+//        LOGGER.info("{}", userId);
+//        UserTaskBO userTaskBO = userTaskService.insert(userId);
+//        LOGGER.info("{}", userTaskBO);
+//        return ResponseEntity.ok(Utils.kv("data",userTaskBO));
+//    }
+
     @PostMapping(path = "/{userId}")
     public ResponseEntity insert(@Valid @RequestBody UserTaskInsertBO userTaskInsertBO, @PathVariable String userId) {
         LOGGER.info("{}:{}", userTaskInsertBO, userId);

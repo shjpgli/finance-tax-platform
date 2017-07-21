@@ -154,7 +154,7 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
         experienceRule.setId(id);
         experienceRule.setStatus(modifyStatus);
         experienceRule.setLastUpdate(new Date());
-        int result = experienceRuleMapper.update(experienceRule);
+        int result = experienceRuleMapper.enableOrDisable(experienceRule);
         if (result < 1) {
             if (modifyStatus) {
                 throw new ServiceException(4615);

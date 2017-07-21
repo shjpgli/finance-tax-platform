@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.PointsRoMapper">
+
+    <select id="selectOne" resultType="com.abc12366.uc.model.bo.PointsBO" parameterType="java.lang.String">
+        select uu.points myPoints,
+        (select sum(income) from uc_upoints_log up where up.userId=uu.id) income,
+        (select sum(outgo) from uc_upoints_log up where up.userId=uu.id) outgo
+        from uc_user uu
+        where uu.id = #{userId}
+    </select>
+
+
+</mapper>
