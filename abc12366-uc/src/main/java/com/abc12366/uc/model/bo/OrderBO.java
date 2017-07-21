@@ -36,6 +36,7 @@ public class OrderBO implements Serializable {
     private String expressNo;
     private String remark;
     private Integer giftPoints;
+    private String tradeMethod;
     private GoodsBO goodsBO;
     private User user;
 
@@ -270,5 +271,13 @@ public class OrderBO implements Serializable {
 
     public void setInvoiceBO(InvoiceBO invoiceBO) {
         this.invoiceBO = invoiceBO;
+    }
+
+    public String getTradeMethod() {
+        return tradeMethod;
+    }
+
+    public void setTradeMethod(String tradeMethod) {
+        this.tradeMethod = tradeMethod;
     }
 }

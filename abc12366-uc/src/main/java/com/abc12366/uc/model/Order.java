@@ -72,6 +72,8 @@ public class Order implements Serializable {
      **/
     private Integer giftPoints;
 
+    /**交易方式：RMB、POINTS**/
+    private String tradeMethod;
 
     public void setId(String id){
         this.id = id;
@@ -231,5 +233,13 @@ public class Order implements Serializable {
 
     public void setGiftPoints(Integer giftPoints) {
         this.giftPoints = giftPoints;
+    }
+
+    public String getTradeMethod() {
+        return tradeMethod;
+    }
+
+    public void setTradeMethod(String tradeMethod) {
+        this.tradeMethod = tradeMethod;
     }
 }

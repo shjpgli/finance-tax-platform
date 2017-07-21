@@ -96,6 +96,7 @@ public class OrderController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                      @RequestParam(value = "status", required = true) String status,
                                      @RequestParam(value = "userId", required = true) String userId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -108,6 +109,7 @@ public class OrderController {
         goodsBO.setName(name);
         order.setGoodsBO(goodsBO);
         order.setOrderStatus(status);
+        order.setTradeMethod(tradeMethod);
 
         List<OrderBO> orderBOs = orderService.selectOrderList(order,pageNum,pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
