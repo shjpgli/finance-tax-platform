@@ -41,16 +41,18 @@
 			a.status STATUS,
 			b.needRegenerate needRegenerate,
 			b.staticLink,
+            s.siteName,
 			a.recommendLevel recommendLevel
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+        LEFT JOIN cms_site s ON a.siteId = s.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
 		WHERE 1=1
 		<if test="title != null and title != ''">
 			AND b.title like CONCAT('%',#{title},'%')
 		</if>
-		<if test="author != null and author != ''">
-			AND b.author like CONCAT('%',#{author},'%')
+		<if test="username != null and username != ''">
+			AND a.username like CONCAT('%',#{username},'%')
 		</if>
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
@@ -123,6 +125,7 @@
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel,
 		b.staticLink,
+        d.siteName,
 		c.channelPath,d.sitePath,d.domain
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
@@ -229,6 +232,7 @@
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel,
 		b.staticLink,
+        d.siteName,
 		c.channelPath,d.sitePath,d.domain
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
@@ -281,6 +285,7 @@
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel,
 		b.staticLink,
+        d.siteName,
 		c.channelPath,d.sitePath,d.domain
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_content_topic c ON a.contentId = c.topicId

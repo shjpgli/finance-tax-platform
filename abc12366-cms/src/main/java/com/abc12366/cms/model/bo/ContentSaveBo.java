@@ -1,4 +1,8 @@
 package com.abc12366.cms.model.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,6 +15,8 @@ import java.util.List;
  **/
 @SuppressWarnings("serial")
 public class ContentSaveBo implements Serializable {
+    @Valid
+    @NotNull
 	private ContentBo content;//内容
 	private ContentExtBo contentExt;//内容扩展
 	private ContentTxtBo contentTxt;//内容文本

@@ -49,7 +49,7 @@ public class ContentController {
                                      @RequestParam(value = "title", required = false) String title,
                                      @RequestParam(value = "topLevel", required = false) String topLevel,
                                      @RequestParam(value = "typeId", required = false) String typeId,
-                                     @RequestParam(value = "author", required = false) String author,
+                                     @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "status", required = false) String status,
                                      @RequestParam(value = "channelId", required = false) String channelId,
                                      @RequestParam(value = "recommendLevel", required = false) String recommendLevel) {
@@ -57,7 +57,7 @@ public class ContentController {
         dataMap.put("title", title);//标题
         dataMap.put("topLevel", topLevel);//置顶级别
         dataMap.put("typeId", typeId);//内容类型
-        dataMap.put("author", author);//作者
+        dataMap.put("username", username);//作者
         dataMap.put("status", status);//状态
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("recommendLevel", recommendLevel);//推荐级别
@@ -210,7 +210,7 @@ public class ContentController {
      * 新增内容
      */
     @PostMapping
-    public ResponseEntity save(@RequestBody ContentSaveBo contentSaveBo) {
+    public ResponseEntity save(@Valid @RequestBody ContentSaveBo contentSaveBo) {
         LOGGER.info("{}", contentSaveBo);
         //新增内容信息
         contentSaveBo = contentService.save(contentSaveBo);

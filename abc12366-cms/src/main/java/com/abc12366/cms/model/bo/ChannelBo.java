@@ -1,4 +1,7 @@
 package com.abc12366.cms.model.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -13,9 +16,13 @@ public class ChannelBo implements Serializable {
 	/**channelId**varchar(64)**/
 	private String channelId;
 
+    @NotEmpty(message = "模型ID不能为空！")
+    @Size(min = 1, max = 64)
 	/**模型ID**varchar(64)**/
 	private String modelId;
 
+    @NotEmpty(message = "站点ID不能为空！")
+    @Size(min = 1, max = 64)
 	/**站点ID**varchar(64)**/
 	private String siteId;
 

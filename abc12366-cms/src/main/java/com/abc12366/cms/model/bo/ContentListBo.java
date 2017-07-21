@@ -66,6 +66,9 @@ public class ContentListBo implements Serializable {
 	/**站点路径**varchar(20)**/
 	private String sitePath;
 
+    /**站点名称**varchar(100)**/
+    private String siteName;
+
 	/**站点路径**varchar(500)**/
 	private String staticLink;
 
@@ -214,7 +217,15 @@ public class ContentListBo implements Serializable {
 		this.sitePath = sitePath;
 	}
 
-	public String getStaticLink() {
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
+    public String getStaticLink() {
 		return staticLink;
 	}
 
