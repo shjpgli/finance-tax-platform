@@ -2,7 +2,6 @@ package com.abc12366.cszj.config;
 
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
-import com.abc12366.gateway.component.UcUserInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;

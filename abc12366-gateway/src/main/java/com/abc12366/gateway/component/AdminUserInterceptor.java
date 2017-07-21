@@ -3,7 +3,6 @@ package com.abc12366.gateway.component;
 import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.gateway.config.ApplicationGatewayConfig;
 import com.abc12366.gateway.util.HttpRequestUtil;
 import com.abc12366.gateway.util.PropertiesUtil;
 import com.alibaba.fastjson.JSON;
@@ -42,7 +41,9 @@ public class AdminUserInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         //发送 POST 请求
-        String result = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.check.url") + adminToken,"");
+        String abc12366_admin = PropertiesUtil.getValue("abc12366.admin.url");
+        String check_url = "/admintoken/check/" + adminToken;
+        String result = HttpRequestUtil.sendPost(abc12366_admin + check_url, "");
         if (!result.equals("true")){
             BodyStatus bodyStatus = Utils.bodyStatus(4196);
             response.setStatus(200);
@@ -52,7 +53,8 @@ public class AdminUserInterceptor extends HandlerInterceptorAdapter {
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        result = HttpRequestUtil.sendPost(PropertiesUtil.getValue("admin.token.refresh.url") + adminToken,"");
+        String refresh_url = "/admintoken/refresh/" + adminToken;
+        result = HttpRequestUtil.sendPost(abc12366_admin + refresh_url, "");
         if (!result.equals("true")){
             BodyStatus bodyStatus = Utils.bodyStatus(4129);
             response.setStatus(200);

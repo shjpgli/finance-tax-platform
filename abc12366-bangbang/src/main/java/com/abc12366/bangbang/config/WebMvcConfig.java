@@ -1,8 +1,6 @@
 package com.abc12366.bangbang.config;
 
-import com.abc12366.gateway.component.AppInterceptor;
-import com.abc12366.gateway.component.LogInterceptor;
-import com.abc12366.gateway.component.UcUserInterceptor;
+import com.abc12366.gateway.component.TokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -30,8 +28,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public UcUserInterceptor ucUserInterceptor(){
-        return new UcUserInterceptor();
+    public TokenInterceptor ucUserInterceptor(){
+        return new TokenInterceptor();
     }
 
 

@@ -3,7 +3,7 @@ package com.abc12366.gateway.component;
 import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.gateway.service.UcUserService;
+import com.abc12366.gateway.service.TokenService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  * Date: 2017-05-25
  * Time: 11:34
  */
-public class UcUserInterceptor extends HandlerInterceptorAdapter {
+public class TokenInterceptor extends HandlerInterceptorAdapter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UcUserInterceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenInterceptor.class);
 
     @Autowired
-    private UcUserService ucUserService;
+    private TokenService tokenService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -43,7 +43,7 @@ public class UcUserInterceptor extends HandlerInterceptorAdapter {
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        if (!ucUserService.isAuthentication(adminToken, userToken, request)) {
+        if (!tokenService.isAuthentication(adminToken, userToken, request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4194);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
