@@ -28,4 +28,6 @@ public interface InvoiceRoMapper {
     Invoice selectByUserOrderNo(String userOrderNo);
 
     Invoice selectAvailableInvoice();
+
+    InvoiceBO selectUserInvoice(Invoice invoice);
 }

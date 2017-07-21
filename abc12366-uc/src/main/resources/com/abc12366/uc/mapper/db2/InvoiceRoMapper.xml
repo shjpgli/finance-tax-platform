@@ -32,7 +32,7 @@
         <result column="isInsured" property="isInsured" jdbcType="VARCHAR"/>
         <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
-
+        <association property="userAddress" column="addressId" select="getUserAddress"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id" select="getOrderBO"></collection>
     </resultMap>
 
@@ -58,6 +58,15 @@
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!-- 查询用户地址信息 -->
+    <select id="getUserAddress" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
+        SELECT
+          id,	userId,	name,	province,	city,	area,	detail,	phone,	isDefault,	status,	createTime,	lastUpdate
+        FROM uc_user_address
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询订单信息 -->
     <select id="getOrderBO" resultMap="oneOrderBOMap" parameterType="java.lang.String">
         SELECT
         o.id,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,
@@ -78,6 +87,14 @@
         <include refid="Base_Column_List" />
         FROM uc_invoice
         WHERE id = #{id}
+    </select>
+
+    <!-- 查询（根据主键ID和UserId查询） -->
+    <select id="selectUserInvoice" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.Invoice">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice
+        WHERE id = #{id} AND userId = #{userId}
     </select>
 
     <!-- 查询（根据userOrderNo查询） -->
@@ -139,6 +156,9 @@
             </if>
             <if test=" status != null and status != '' ">
                 and i.status = #{status}
+            </if>
+            <if test=" userId != null and userId != '' ">
+                and i.userId = #{userId}
             </if>
             <if test="startTime != null">
                 <![CDATA[

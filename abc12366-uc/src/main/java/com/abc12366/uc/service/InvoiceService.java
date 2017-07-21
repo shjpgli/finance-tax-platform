@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
@@ -38,4 +39,6 @@ public interface InvoiceService {
     List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO);
 
     InvoiceBackBO selectBackOne(String id);
+
+    InvoiceBO selectUserInvoice(Invoice invoice);
 }

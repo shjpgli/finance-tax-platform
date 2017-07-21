@@ -1,6 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.UserAddress;
 
 import java.io.Serializable;
 import java.util.List;
@@ -48,6 +49,7 @@ public class InvoiceBO implements Serializable {
     private String orderNos;
     private java.util.Date startTime;
     private java.util.Date endTime;
+    private UserAddress userAddress;
 
 
     public void setId(String id) {
@@ -312,5 +314,13 @@ public class InvoiceBO implements Serializable {
 
     public void setOrderBOList(List<OrderBO> orderBOList) {
         this.orderBOList = orderBOList;
+    }
+
+    public UserAddress getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(UserAddress userAddress) {
+        this.userAddress = userAddress;
     }
 }
