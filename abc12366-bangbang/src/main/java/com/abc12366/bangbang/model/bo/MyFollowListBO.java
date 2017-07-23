@@ -10,8 +10,17 @@ public class MyFollowListBO {
     private String answerCount;
     private String askCount;
     private String fansCount;
+    private String userPicturePath;
 
     public MyFollowListBO() {
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 
     public String getFollowName() {

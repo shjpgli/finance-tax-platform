@@ -14,8 +14,17 @@ public class MyCollectListBO {
     private String answerCount;
     private String supportCount;
     private String createUserName;
+    private String userPicturePath;
 
     public MyCollectListBO() {
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 
     public String getAsk() {
