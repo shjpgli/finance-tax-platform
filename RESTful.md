@@ -8,7 +8,8 @@ App以后的每次访问都需要在请求头中携带Access-Token，才能访�
 
 ### 完整URI
 
-	http://api.abc12366.com:9600/cszj
+	http://api.abc12366.com:9700/cszj
+	http://api.abc12366.com:9600/images
 	http://api.abc12366.com:9500/admin
 	http://api.abc12366.com:9400/cms
 	http://api.abc12366.com:9300/bangbang
