@@ -8,6 +8,7 @@ import java.util.Date;
  * Time: 14:57
  */
 public class MyCollectListBO {
+    private String askId;
     private String ask;
     private String detail;
     private Date collectTime;
@@ -17,6 +18,14 @@ public class MyCollectListBO {
     private String userPicturePath;
 
     public MyCollectListBO() {
+    }
+
+    public String getAskId() {
+        return askId;
+    }
+
+    public void setAskId(String askId) {
+        this.askId = askId;
     }
 
     public String getUserPicturePath() {

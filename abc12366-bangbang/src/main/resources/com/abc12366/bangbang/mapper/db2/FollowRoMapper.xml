@@ -39,6 +39,7 @@
     </select>
     <select id="selectMyfollowByUserId"  resultType="com.abc12366.bangbang.model.bo.MyFollowListBO" parameterType="java.lang.String">
         select
+        bfu.followedUserId followedUserId,
         (select bu.username followName from bb_user bu where bu.id=bfu.followedUserId) followName,
         (select count(1) answerCount from bb_answer ba where ba.userId=bfu.followedUserId) answerCount,
         (select count(1) askCount from bb_ask bak where bak.userId=bfu.followedUserId) askCount,
