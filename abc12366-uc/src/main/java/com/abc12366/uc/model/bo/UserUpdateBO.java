@@ -27,9 +27,9 @@ public class UserUpdateBO {
     private String maxUserPicturePath;
     private String midUserPicturePath;
     private String minUserPicturePath;
-    private int points;
-    private int exp;
-    private int vipLevel;
+    private Integer points;
+    private Integer exp;
+    private String vipLevel;
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
@@ -117,27 +117,27 @@ public class UserUpdateBO {
         this.minUserPicturePath = minUserPicturePath;
     }
 
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
-    public int getExp() {
+    public Integer getExp() {
         return exp;
     }
 
-    public void setExp(int exp) {
+    public void setExp(Integer exp) {
         this.exp = exp;
     }
 
-    public int getVipLevel() {
+    public String getVipLevel() {
         return vipLevel;
     }
 
-    public void setVipLevel(int vipLevel) {
+    public void setVipLevel(String vipLevel) {
         this.vipLevel = vipLevel;
     }
 
@@ -163,27 +163,5 @@ public class UserUpdateBO {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return "UserUpdateBO{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", phone='" + phone + '\'' +
-                ", regMail='" + regMail + '\'' +
-                ", regIP='" + regIP + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", userPicturePath='" + userPicturePath + '\'' +
-                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
-                ", midUserPicturePath='" + midUserPicturePath + '\'' +
-                ", minUserPicturePath='" + minUserPicturePath + '\'' +
-                ", points=" + points +
-                ", exp=" + exp +
-                ", vipLevel=" + vipLevel +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
     }
 }

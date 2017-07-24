@@ -2,7 +2,6 @@ package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
@@ -83,7 +82,6 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
