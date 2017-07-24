@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.Template">
 		 INSERT INTO cms_template
- 		(templateId,templateName,parentPath,templatePath,isFolder,templateProperty,siteId,priority,state,versions,createTime,updateTime) 
+ 		(templateId,templateName,parentPath,templatePath,isFolder,templateProperty,templateType,siteId,priority,state,versions,createTime,updateTime)
 		 VALUES 
- 		(#{templateId},#{templateName},#{parentPath},#{templatePath},#{isFolder},#{templateProperty},#{siteId},#{priority},#{state},#{versions},#{createTime},#{updateTime}) 
+ 		(#{templateId},#{templateName},#{parentPath},#{templatePath},#{isFolder},#{templateProperty},#{templateType},#{siteId},#{priority},#{state},#{versions},#{createTime},#{updateTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -39,6 +39,9 @@
 			<if test="templateProperty != null">
 				 templateProperty,
 			</if>
+             <if test="templateType != null">
+                 templateType,
+             </if>
 			<if test="siteId != null">
 				 siteId,
 			</if>
@@ -78,6 +81,9 @@
 			<if test="templateProperty!=null">
 				 #{templateProperty},
 			</if>
+             <if test="templateType!=null">
+                 #{templateType},
+             </if>
 			<if test="siteId!=null">
 				 #{siteId},
 			</if>
@@ -118,6 +124,9 @@
 			<if test="templateProperty != null">
 				 templateProperty = #{templateProperty},
 			</if>
+             <if test="templateType != null">
+                 templateType = #{templateType},
+             </if>
 			<if test="siteId != null">
 				 siteId = #{siteId},
 			</if>
@@ -150,6 +159,7 @@
 			 templatePath = #{templatePath},
 			 isFolder = #{isFolder},
 			 templateProperty = #{templateProperty},
+			 templateType = #{templateType},
 			 siteId = #{siteId},
 			 priority = #{priority},
 			 state = #{state},

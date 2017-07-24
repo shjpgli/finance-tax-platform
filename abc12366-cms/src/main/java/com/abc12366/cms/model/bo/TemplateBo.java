@@ -28,6 +28,9 @@ public class TemplateBo implements Serializable {
 	/**模板属性（如：栏目、内容、专题）**varchar(100)**/
 	private String templateProperty;
 
+    /**模板类型（**varchar(64)**/
+    private String templateType;
+
 	/**站点ID**varchar(64)**/
 	private String siteId;
 
@@ -102,7 +105,15 @@ public class TemplateBo implements Serializable {
 		return this.templateProperty;
 	}
 
-	public void setSiteId(String siteId){
+    public String getTemplateType() {
+        return templateType;
+    }
+
+    public void setTemplateType(String templateType) {
+        this.templateType = templateType;
+    }
+
+    public void setSiteId(String siteId){
 		this.siteId = siteId;
 	}
 
