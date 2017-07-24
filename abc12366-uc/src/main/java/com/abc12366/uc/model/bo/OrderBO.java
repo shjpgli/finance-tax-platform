@@ -49,6 +49,8 @@ public class OrderBO implements Serializable {
 
     private InvoiceBO invoiceBO;
 
+    private DeliveryMethodBO deliveryMethodBO;
+
     public void setId(String id){
         this.id = id;
     }
@@ -279,5 +281,13 @@ public class OrderBO implements Serializable {
 
     public void setTradeMethod(String tradeMethod) {
         this.tradeMethod = tradeMethod;
+    }
+
+    public DeliveryMethodBO getDeliveryMethodBO() {
+        return deliveryMethodBO;
+    }
+
+    public void setDeliveryMethodBO(DeliveryMethodBO deliveryMethodBO) {
+        this.deliveryMethodBO = deliveryMethodBO;
     }
 }

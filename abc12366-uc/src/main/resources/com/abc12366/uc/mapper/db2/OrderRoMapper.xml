@@ -3,6 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderRoMapper">
 
+    <!--订单对象-->
     <resultMap id="orderBOResultMap" type="com.abc12366.uc.model.bo.OrderBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
@@ -33,11 +34,13 @@
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
         </association>
+        <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <association property="orderLogBO" column="orderNo" select="getOrderLogBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="id" select="getOrderProduct"></collection>
     </resultMap>
 
+    <!--订单日志对象-->
     <resultMap id="orderLogMap" type="com.abc12366.uc.model.bo.OrderLogBO">
         <id column="orderLogId" property="id"/>
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
@@ -47,6 +50,7 @@
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!--发票对象-->
     <resultMap id="invoiceBOMap" type="com.abc12366.uc.model.bo.InvoiceBO">
         <id column="invoiceId" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
@@ -78,6 +82,34 @@
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!--配送方式对象-->
+    <resultMap id="deliveryMethodBOMap" type="com.abc12366.uc.model.bo.DeliveryMethodBO">
+        <id column="deliveryId" property="id"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="firstWeight" property="firstWeight" jdbcType="DOUBLE"/>
+        <result column="firstWeightFee" property="firstWeightFee" jdbcType="DOUBLE"/>
+        <result column="addedWeight" property="addedWeight" jdbcType="DOUBLE"/>
+        <result column="addedWeightFee" property="addedWeightFee" jdbcType="DOUBLE"/>
+        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
+        <result column="rate" property="rate" jdbcType="DOUBLE"/>
+        <result column="minInsuredFee" property="minInsuredFee" jdbcType="DOUBLE"/>
+        <result column="areaFeeType" property="areaFeeType" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--获取配送方式-->
+    <select id="getDeliveryMethodBO" resultMap="deliveryMethodBOMap" parameterType="java.lang.String">
+        SELECT
+        id as deliveryId,	name,	type,	sort,	status,	description,	createTime,	lastUpdate,	firstWeight,	firstWeightFee,	addedWeight,	addedWeightFee,	isInsured,	rate,	minInsuredFee,	areaFeeType
+        FROM uc_delivery_method
+        WHERE id = #{deliveryMethod}
+    </select>
+
+    <!--获取发票信息-->
     <select id="getInvoiceBO" resultMap="invoiceBOMap" parameterType="java.lang.String">
         SELECT
         iv.id as invoiceId,	iv.userId,	iv.username,	iv.invoiceNo,	iv.invoiceCode,	iv.name,	iv.content,	iv.compName,	iv.amount,	iv.type,
@@ -88,6 +120,7 @@
         WHERE uoi.orderNo = #{orderNo}
     </select>
 
+    <!--获取订单日志-->
     <select id="getOrderLogBO" resultMap="orderLogMap" parameterType="java.lang.String">
         SELECT
         l.id as orderLogId,	l.orderNo,	l.action,	l.createTime,	l.createUser,	l.remark
@@ -95,6 +128,7 @@
         WHERE l.orderNo = #{orderNo}
     </select>
 
+    <!--用户对象-->
     <resultMap id="userBOMap" type="com.abc12366.uc.model.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
@@ -103,6 +137,7 @@
         <result column="vipLevel" property="vipLevel"/>
     </resultMap>
 
+    <!--订单和产品对应关系对象-->
     <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.bo.OrderProductBO">
         <id column="orderId" property="orderId" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
@@ -121,6 +156,7 @@
                     select="getProductBO"></association >
     </resultMap>
 
+    <!--产品对象-->
     <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
@@ -135,6 +171,7 @@
                     select="getDictBO"></collection>
     </resultMap>
 
+    <!--字典对象-->
     <resultMap type="com.abc12366.uc.model.bo.DictBO" id="oneDictBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="dictId" property="dictId" jdbcType="VARCHAR"/>
@@ -149,6 +186,7 @@
         <result column="sort" property="sort" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!--获取产品信息-->
     <select id="getProductBO" parameterType="java.lang.String" resultMap="productResultMap">
         SELECT
         id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate,stock
@@ -156,6 +194,7 @@
         WHERE id = #{productId}
     </select>
 
+    <!--获取字典信息-->
     <select id="getDictBO" parameterType="java.lang.String" resultMap="oneDictBO">
         SELECT
         d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate, d.lastUser,d.sort
@@ -164,12 +203,15 @@
         WHERE s.productId = #{productId}
     </select>
 
+    <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
         orderId,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
         FROM uc_order_product
         WHERE orderId = #{orderId}
     </select>
+
+    <!--获取用户信息-->
     <select id="getUser" resultMap="userBOMap" parameterType="java.lang.String">
         select id, username, phone,vipLevel
         from uc_user WHERE id = #{userId}

@@ -50,6 +50,7 @@ public class InvoiceBO implements Serializable {
     private java.util.Date startTime;
     private java.util.Date endTime;
     private UserAddress userAddress;
+    private DeliveryMethodBO deliveryMethodBO;
 
 
     public void setId(String id) {
@@ -322,5 +323,13 @@ public class InvoiceBO implements Serializable {
 
     public void setUserAddress(UserAddress userAddress) {
         this.userAddress = userAddress;
+    }
+
+    public DeliveryMethodBO getDeliveryMethodBO() {
+        return deliveryMethodBO;
+    }
+
+    public void setDeliveryMethodBO(DeliveryMethodBO deliveryMethodBO) {
+        this.deliveryMethodBO = deliveryMethodBO;
     }
 }

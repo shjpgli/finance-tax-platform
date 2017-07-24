@@ -33,6 +33,7 @@
         <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <association property="userAddress" column="addressId" select="getUserAddress"/>
+        <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id" select="getOrderBO"></collection>
     </resultMap>
 
@@ -57,6 +58,33 @@
         <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <!--配送方式对象-->
+    <resultMap id="deliveryMethodBOMap" type="com.abc12366.uc.model.bo.DeliveryMethodBO">
+        <id column="deliveryId" property="id"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="firstWeight" property="firstWeight" jdbcType="DOUBLE"/>
+        <result column="firstWeightFee" property="firstWeightFee" jdbcType="DOUBLE"/>
+        <result column="addedWeight" property="addedWeight" jdbcType="DOUBLE"/>
+        <result column="addedWeightFee" property="addedWeightFee" jdbcType="DOUBLE"/>
+        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
+        <result column="rate" property="rate" jdbcType="DOUBLE"/>
+        <result column="minInsuredFee" property="minInsuredFee" jdbcType="DOUBLE"/>
+        <result column="areaFeeType" property="areaFeeType" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--获取配送方式-->
+    <select id="getDeliveryMethodBO" resultMap="deliveryMethodBOMap" parameterType="java.lang.String">
+        SELECT
+        id as deliveryId,	name,	type,	sort,	status,	description,	createTime,	lastUpdate,	firstWeight,	firstWeightFee,	addedWeight,	addedWeightFee,	isInsured,	rate,	minInsuredFee,	areaFeeType
+        FROM uc_delivery_method
+        WHERE id = #{deliveryMethod}
+    </select>
 
     <!-- 查询用户地址信息 -->
     <select id="getUserAddress" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
@@ -112,31 +140,17 @@
         WHERE userOrderNo = #{userOrderNo}
     </select>
 
+    <sql id="InvoiceBO_Column_List">
+        i.id,	i.userId,	i.username,	i.invoiceNo,	i.invoiceCode,	i.name,	i.content,	i.compName,	i.amount,	i.type,
+        i.property,	i.status,	i.createTime,	i.lastUpdate,	i.nsrsbh,	i.nsrmc,	i.address,	i.phone,	i.bank,	i.addressId,
+        i.deliveryMethod,	i.isShipping,	i.isFreeShipping,	i.deliveryFee,	i.isInsured,	i.insuredFee,	i.payMethod,
+        u.username as username, a.name as consignee
+    </sql>
 
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.bo.InvoiceBO">
         SELECT
-        i.id,
-        i.userId,
-        i.invoiceNo,
-        i.name,
-        i.content,
-        i.amount,
-        i.type,
-        i.property,
-        i.status,
-        i.createTime,
-        i.lastUpdate,
-        i.nsrsbh,
-        i.nsrmc,
-        i.address,
-        i.phone,
-        i.bank,
-        i.addressId,
-        i.userOrderNo,
-        i.compName,
-        u.username as username,
-        a.name as consignee
+        <include refid="InvoiceBO_Column_List" />
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
         LEFT JOIN uc_user_address a ON a.id = i.addressId
