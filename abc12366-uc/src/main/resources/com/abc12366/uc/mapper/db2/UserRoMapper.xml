@@ -3,41 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
-    <select id="selectList1" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
+    <select id="selectListExcludedId" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
         select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
-        uu.vipLevel,
-        (select uue.realName from uc_user_extend uue where uue.userId=uu.id) realName,
-        (select uul.name from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) levelName,
-        (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
-        (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medalIcon
+        uu.vipLevel
         from uc_user uu
-        <if test="tagName!=null">
-            left JOIN
-            (SELECT ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ust.userId,ust.subjectId,ust.tagId,ust.type FROM uc_subject_tag ust LEFT JOIN  uc_tag ut ON ust.tagId=ut.id) utust
-            on utust.subjectId=uu.id
-        </if>
-
-        <where>
-            <if test="username!=null">
-                username=#{username}
-            </if>
-            <if test="phone!=null">
-                and phone=#{phone}
-            </if>
-            <if test="nickname!=null">
-                and nickname=#{nickname}
-            </if>
-            <if test="status!=null">
-                and status=#{status}
-            </if>
-
-            <if test="tagName!=null">
-                and utust.tagName=#{tagName}
-            </if>
-        </where>
-        ORDER BY uu.lastUpdate DESC
+        where uu.id != #{id}
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">

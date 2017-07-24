@@ -48,9 +48,16 @@ public interface ContentExtMapper{
 
 	/**
 	 *
-	 * 修改是否已生成静态页(根据主键ID修改)
+	 * 修改是否已生成静态页为是(根据主键ID修改)
 	 *
 	 **/
 	int updatRegenerateList(@Param("contentIds") String[] contentIds);
+
+    /**
+     *
+     * 修改是否已生成静态页为否(根据主键ID修改)
+     *
+     **/
+    int updatRegenerateList0(@Param("contentIds") String[] contentIds);
 
 }

@@ -3,7 +3,10 @@ package com.abc12366.uc.service;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
+import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
+import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import org.slf4j.Logger;
@@ -11,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -31,6 +33,9 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Autowired
     private UserExtendRoMapper userExtendRoMapper;
 
+    @Autowired
+    private UserRoMapper userRoMapper;
+
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
@@ -44,7 +49,6 @@ public class UserExtendServiceImpl implements UserExtendService {
         return userExtendBO;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public UserExtendBO insert(UserExtendBO userExtendBO) {
         if (userExtendBO == null) {
@@ -53,10 +57,15 @@ public class UserExtendServiceImpl implements UserExtendService {
         }
         LOGGER.info("{}", userExtendBO);
         if (userExtendBO.getUserId() != null && !userExtendBO.getUserId().equals("")) {
+            User user = userRoMapper.selectOne(userExtendBO.getUserId());
+            if (user == null) {
+                throw new ServiceException(4180);
+            }
+
             UserExtend userExtend = userExtendRoMapper.selectOne(userExtendBO.getUserId());
-            if (userExtend == null) {
+            if (userExtend != null) {
                 LOGGER.warn("新增失败，参数：{}" + userExtendBO.toString());
-                throw new ServiceException(4101);
+                throw new ServiceException(4181);
             }
             userExtend = new UserExtend();
             BeanUtils.copyProperties(userExtendBO, userExtend);
@@ -65,7 +74,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {
                 LOGGER.warn("新增失败，参数：{}" + userExtend.toString());
-                throw new ServiceException(4101);
+                throw new ServiceException(4112);
             }
             UserExtendBO userExtendBO1 = new UserExtendBO();
             BeanUtils.copyProperties(userExtend, userExtendBO1);
@@ -75,7 +84,6 @@ public class UserExtendServiceImpl implements UserExtendService {
         return null;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public UserExtendBO delete(String userId) {
         LOGGER.info("{}", userId);
@@ -95,7 +103,6 @@ public class UserExtendServiceImpl implements UserExtendService {
         return userExtendBO;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO) {
         LOGGER.info("{}", userExtendUpdateBO);
@@ -106,8 +113,10 @@ public class UserExtendServiceImpl implements UserExtendService {
         if (!userExtendUpdateBO.getUserId().equals("")) {
             UserExtend userExtend = userExtendRoMapper.selectOne(userExtendUpdateBO.getUserId());
             if (userExtend == null) {
-                LOGGER.warn("修改失败，参数：{}" + userExtendUpdateBO);
-                throw new ServiceException(4102);
+                UserExtendBO userExtendBO = new UserExtendBO();
+                BeanUtils.copyProperties(userExtendUpdateBO, userExtendBO);
+                UserExtendBO userExtendBOReturn = insert(userExtendBO);
+                return userExtendBOReturn;
             }
             UserExtend userExtend1 = new UserExtend();
             BeanUtils.copyProperties(userExtendUpdateBO, userExtend1);

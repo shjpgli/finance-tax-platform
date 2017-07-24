@@ -1,7 +1,6 @@
 package com.abc12366.uc.model.bo;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * 用户实体类
@@ -19,15 +18,15 @@ public class UserBO {
     private String regIP;
     private String salt;
     private String nickname;
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
     private String userPicturePath;
     private String maxUserPicturePath;
     private String midUserPicturePath;
     private String minUserPicturePath;
-    private int points;
-    private int exp;
+    private Integer points;
+    private Integer exp;
     private String vipLevel;
     private String realName;
 
@@ -98,11 +97,11 @@ public class UserBO {
         this.nickname = nickname;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -154,19 +153,19 @@ public class UserBO {
         this.minUserPicturePath = minUserPicturePath;
     }
 
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
-    public int getExp() {
+    public Integer getExp() {
         return exp;
     }
 
-    public void setExp(int exp) {
+    public void setExp(Integer exp) {
         this.exp = exp;
     }
 

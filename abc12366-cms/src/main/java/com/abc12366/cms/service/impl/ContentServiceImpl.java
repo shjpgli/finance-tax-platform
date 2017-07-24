@@ -560,6 +560,7 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public String updateStatusList(String[] contentIds) {
         contentMapper.updateStatusList(contentIds);
+        contentExtMapper.updatRegenerateList0(contentIds);
         return "";
     }
 

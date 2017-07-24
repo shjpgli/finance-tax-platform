@@ -20,39 +20,18 @@ public class User {
     private String regIP;
     private String salt;
     private String nickname;
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
     private String userPicturePath;
     private String maxUserPicturePath;
     private String midUserPicturePath;
     private String minUserPicturePath;
-    private int points;
-    private int exp;
+    private Integer points;
+    private Integer exp;
     private String vipLevel;
 
     public User() {
-    }
-
-    public User(String id, String username, String phone, String password, String regMail, String regIP, String salt, String nickname, boolean status, Date createTime, Date lastUpdate, String userPicturePath, String maxUserPicturePath, String midUserPicturePath, String minUserPicturePath, int points, int exp, String vipLevel) {
-        this.id = id;
-        this.username = username;
-        this.phone = phone;
-        this.password = password;
-        this.regMail = regMail;
-        this.regIP = regIP;
-        this.salt = salt;
-        this.nickname = nickname;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-        this.userPicturePath = userPicturePath;
-        this.maxUserPicturePath = maxUserPicturePath;
-        this.midUserPicturePath = midUserPicturePath;
-        this.minUserPicturePath = minUserPicturePath;
-        this.points = points;
-        this.exp = exp;
-        this.vipLevel = vipLevel;
     }
 
     public String getId() {
@@ -119,11 +98,11 @@ public class User {
         this.nickname = nickname;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -175,19 +154,19 @@ public class User {
         this.minUserPicturePath = minUserPicturePath;
     }
 
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
-    public int getExp() {
+    public Integer getExp() {
         return exp;
     }
 
-    public void setExp(int exp) {
+    public void setExp(Integer exp) {
         this.exp = exp;
     }
 
@@ -197,136 +176,5 @@ public class User {
 
     public void setVipLevel(String vipLevel) {
         this.vipLevel = vipLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                ", regMail='" + regMail + '\'' +
-                ", regIP='" + regIP + '\'' +
-                ", salt='" + salt + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                ", userPicturePath='" + userPicturePath + '\'' +
-                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
-                ", midUserPicturePath='" + midUserPicturePath + '\'' +
-                ", minUserPicturePath='" + minUserPicturePath + '\'' +
-                ", points=" + points +
-                ", exp=" + exp +
-                ", vipLevel='" + vipLevel + '\'' +
-                '}';
-    }
-
-    public User(Builder builder) {
-    }
-
-    public static final class Builder {
-        private String id;
-        private String username;
-        private String phone;
-        private String password;
-        private String regMail;
-        private String regIP;
-        private String salt;
-        private String nickname;
-        private boolean status;
-        private Date createTime;
-        private Date lastUpdate;
-        private String userPicturePath;
-        private String maxUserPicturePath;
-        private String midUserPicturePath;
-        private String minUserPicturePath;
-        private int points;
-        private int exp;
-        private String vipLevel;
-
-        public Builder() {
-        }
-
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
-
-        public Builder username(String val) {
-            username = val;
-            return this;
-        }
-
-        public Builder phone(String val) {
-            phone = val;
-            return this;
-        }
-
-        public Builder password(String val) {
-            password = val;
-            return this;
-        }
-        public Builder regMail(String val) {
-            regMail = val;
-            return this;
-        }
-        public Builder regIP(String val) {
-            regIP = val;
-            return this;
-        }
-        public Builder salt(String val) {
-            salt = val;
-            return this;
-        }
-        public Builder nickname(String val) {
-            nickname = val;
-            return this;
-        }
-        public Builder status(boolean val) {
-            status = val;
-            return this;
-        }
-        public Builder createTime(Date val) {
-            createTime = val;
-            return this;
-        }
-        public Builder lastUpdate(Date val) {
-            lastUpdate = val;
-            return this;
-        }
-        public Builder userPicturePath(String val) {
-            userPicturePath = val;
-            return this;
-        }
-        public Builder maxUserPicturePath(String val) {
-            maxUserPicturePath = val;
-            return this;
-        }
-        public Builder midUserPicturePath(String val) {
-            midUserPicturePath = val;
-            return this;
-        }
-        public Builder minUserPicturePath(String val) {
-            minUserPicturePath = val;
-            return this;
-        }
-        public Builder points(int val) {
-            points = val;
-            return this;
-        }
-        public Builder exp(int val) {
-            exp = val;
-            return this;
-        }
-        public Builder vipLevel(String val) {
-            vipLevel = val;
-            return this;
-        }
-
-        public User build() {
-            return new User(this);
-        }
     }
 }

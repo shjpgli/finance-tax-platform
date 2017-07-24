@@ -363,8 +363,14 @@ public class ContentController {
         LOGGER.info("{}", idsBo);
         //批量退回内容信息
         String rtn = contentService.updateStatusList(idsBo.getIds());
-        LOGGER.info("{}", rtn);
-        return ResponseEntity.ok(Utils.kv("data", idsBo));
+        List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
+        String[] contentIdstr = idsBo.getIds();
+        for(int i=0;i<contentIdstr.length;i++){
+            ContentSaveBo contentSaveBo = contentService.selectContent(contentIdstr[i]);
+            dataList.add(contentSaveBo);
+        }
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
     /**
