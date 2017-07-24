@@ -90,6 +90,23 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn("修改失败");
             throw new ServiceException(4102);
         }
+        //进行用户名和电话唯一性确认
+        List<UserBO> userBOList = userRoMapper.selectListExcludedId(userUpdateBO.getId());
+        //从list移除本身
+        for (int i = 0; i < userBOList.size(); i++) {
+            if (userBOList.get(i).getId().trim().equals(userUpdateBO.getId().trim())) {
+                userBOList.remove(i);
+            }
+        }
+        for (UserBO userBO : userBOList) {
+            if (userBO.getUsername().trim().equals(userUpdateBO.getUsername().trim())) {
+                throw new ServiceException(4182);
+            }
+            if (userBO.getPhone().trim().equals(userUpdateBO.getPhone().trim())) {
+                throw new ServiceException(4183);
+            }
+        }
+
         BeanUtils.copyProperties(userUpdateBO, user);
 
         user.setLastUpdate(new Date());

@@ -19,8 +19,17 @@ public class TeamBO {
     private String maxPicturePath;
     private String midPicturePath;
     private String minPicturePath;
+    private String acceptedCount;
 
     public TeamBO() {
+    }
+
+    public String getAcceptedCount() {
+        return acceptedCount;
+    }
+
+    public void setAcceptedCount(String acceptedCount) {
+        this.acceptedCount = acceptedCount;
     }
 
     public String getId() {
