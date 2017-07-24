@@ -7,6 +7,8 @@ import com.abc12366.cms.model.bo.SiteBo;
 import com.abc12366.cms.model.bo.SiteListBo;
 import com.abc12366.cms.service.SiteService;
 import com.abc12366.common.exception.ServiceException;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -37,34 +39,35 @@ public class SiteServiceImpl implements SiteService {
         List<SiteListBo> siteListBo;
         try {
             siteListBo = siteRoMapper.selectList();
+            //JSONArray jsonArray = JSONArray.fromObject(siteListBo);
+            //LOGGER.info("查询站点信息结果:{}", jsonArray.toString());
         } catch (Exception e) {
             LOGGER.error("查询站点信息异常：{}", e);
             throw new ServiceException(4210);
         }
-        LOGGER.info("查询站点信息结果:{}", siteListBo);
         return siteListBo;
     }
 
     @Override
     public SiteBo selectOneById(String siteId) {
-        LOGGER.info("查询单个站点信息:{}", siteId);
         SiteBo siteBo = new SiteBo();
         try {
+            LOGGER.info("查询单个站点信息:{}", siteId);
             Site site = siteRoMapper.selectByPrimaryKey(siteId);
             BeanUtils.copyProperties(site, siteBo);
         } catch (Exception e) {
             LOGGER.error("查询单个站点信息异常：{}", e);
             throw new ServiceException(4211);
         }
-        LOGGER.info("查询单个站点信息结果:{}", siteBo);
         return siteBo;
     }
 
     @Override
     public SiteBo save(SiteBo siteBo) {
-        LOGGER.info("新增站点信息:{}", siteBo);
-        Site site = new Site();
         try {
+            JSONObject jsonStu = JSONObject.fromObject(siteBo);
+            LOGGER.info("新增站点信息:{}", jsonStu.toString());
+            Site site = new Site();
             String uuid = UUID.randomUUID().toString().replace("-", "");
             siteBo.setSiteId(uuid);
             BeanUtils.copyProperties(siteBo, site);
@@ -78,9 +81,10 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public SiteBo update(SiteBo siteBo) {
-        LOGGER.info("更新站点信息:{}", siteBo);
-        Site site = new Site();
         try {
+            JSONObject jsonStu = JSONObject.fromObject(siteBo);
+            LOGGER.info("更新站点信息:{}", jsonStu.toString());
+            Site site = new Site();
             BeanUtils.copyProperties(siteBo, site);
             siteMapper.updateByPrimaryKeySelective(site);
         } catch (Exception e) {

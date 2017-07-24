@@ -42,8 +42,6 @@ public class ModelServiceImpl implements ModelService {
         try {
             //查询模型列表
             modelBoList =  modelRoMapper.selectList();
-            JSONArray jsonArray = JSONArray.fromObject(modelBoList);
-            LOGGER.info("查询模型信息结果:{}", jsonArray.toString());
         } catch (Exception e) {
             LOGGER.error("查询模型信息异常：{}", e);
             throw new ServiceException(4220);
@@ -142,7 +140,8 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public String deleteList(String[] modelIds) {
         try {
-            LOGGER.info("批量删除模型信息:{}", modelIds.toString());
+            JSONArray jsonArray = JSONArray.fromObject(modelIds);
+            LOGGER.info("批量删除模型信息:{}", jsonArray.toString());
             //modelItemMapper.deleteListBymodelIds(modelIds);
             //int r = modelMapper.deleteList(modelIds);
             for(int i=0;i<modelIds.length;i++){
