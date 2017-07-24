@@ -33,7 +33,8 @@
         (select count(1) followerAnswerCount from bb_answer ba where ba.userId=bfu.userId) followerAnswerCount,
         (select count(1) followerAskCount from bb_ask bak where bak.userId=bfu.userId) followerAskCount,
         (select count(1) followerFansCount from bb_follow_user bfus where bfus.followedUserId=bfu.userId) followerFansCount,
-        (select minUserPicturePath from bb_user bu where bu.id=bfu.userId) userPicturePath
+        (select minUserPicturePath from bb_user bu where bu.id=bfu.userId) userPicturePath,
+        (select count(1) from bb_follow_user a where a.userId=bfu.followedUserId and a.followedUserId=bfu.userId) isFollowed
         from bb_follow_user bfu
         where bfu.followedUserId=#{userId}
     </select>

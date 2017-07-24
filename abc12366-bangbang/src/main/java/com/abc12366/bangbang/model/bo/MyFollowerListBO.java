@@ -11,8 +11,17 @@ public class MyFollowerListBO {
     private String followerAskCount;
     private String followerFansCount;
     private String userPicturePath;
+    private Boolean isFollowed;
 
     public MyFollowerListBO() {
+    }
+
+    public Boolean getIsFollowed() {
+        return isFollowed;
+    }
+
+    public void setIsFollowed(Boolean isFollowed) {
+        this.isFollowed = isFollowed;
     }
 
     public String getUserPicturePath() {
