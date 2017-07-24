@@ -53,6 +53,9 @@ public class ChannelBo implements Serializable {
     /**外部链接供查询列表用**varchar(100)**/
     private String link;
 
+    /**栏目标题图片**/
+    private String titleImg;
+
 	/**文章总数**int(11)**/
 	private Integer cnt;
 
@@ -152,6 +155,14 @@ public class ChannelBo implements Serializable {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getTitleImg() {
+        return titleImg;
+    }
+
+    public void setTitleImg(String titleImg) {
+        this.titleImg = titleImg;
     }
 
     public String getContentType() {

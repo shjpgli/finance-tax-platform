@@ -27,7 +27,7 @@
 	<select id="selectLists" resultType="com.abc12366.cms.model.bo.ChannelBo" parameterType="java.lang.String">
 		SELECT
 		t.channelId,t.channelName,	t.modelId,	t.siteId,	t.parentId,	t.channelPath,	t.priority,	t.isDisplay,
-        (select count(*) cnt from cms_content where channelId = t.channelId) cnt,b.link,c.sitePath,c.domain
+        (select count(*) cnt from cms_content where channelId = t.channelId) cnt,b.link,b.titleImg,c.sitePath,c.domain
 		FROM cms_channel t LEFT JOIN cms_channel_ext b ON t.channelId = b.channelId LEFT JOIN cms_site c ON t.siteId = c.siteId
 		WHERE 1=1
 		<if test="channelId != null and channelId != ''">
