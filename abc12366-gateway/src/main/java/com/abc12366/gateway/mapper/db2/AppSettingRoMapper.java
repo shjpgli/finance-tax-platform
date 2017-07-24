@@ -11,8 +11,6 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface AppSettingRoMapper {
-    AppSettingBO isAuthentization(AppSettingBO appSettingApiBO);
-
     List<AppSettingBO> selectList(AppSettingBO appId);
 
     AppSetting selectOne(AppSetting appSetting);

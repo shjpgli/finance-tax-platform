@@ -52,6 +52,15 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("data", appSetting));
     }
 
+    @PostMapping(path = "/appsetting/list/{appId}")
+    public ResponseEntity insertList(@PathVariable("appId") String appId,
+                                 @Valid @RequestBody List<AppSettingBO> appSettingBOList) {
+        LOGGER.info("{}: {}", appId, appSettingBOList);
+        List<AppSetting> appSettingList = appSettingService.insertList(appId,appSettingBOList);
+        LOGGER.info("{}", appSettingList);
+        return ResponseEntity.ok(Utils.kv("data", appSettingList));
+    }
+
     @PostMapping(path = "/appsetting/{appId}")
     public ResponseEntity insert(@PathVariable("appId") String appId,
                                  @Valid @RequestBody AppSettingBO appSettingBO) {

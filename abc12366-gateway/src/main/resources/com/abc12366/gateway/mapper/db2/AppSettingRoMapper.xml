@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.gateway.mapper.db2.AppSettingRoMapper">
 
     <select id="selectOne" resultType="com.abc12366.gateway.model.AppSetting" parameterType="com.abc12366.gateway.model.AppSetting">
-        select id, appId, apiId, timesPerMinute, timesPerHour, timesPerDay, status, createTime, lastUpdate
+        select id, appId, apiId, timesPerMinute, timesPerHour, timesPerDay, status, createTime,lastUpdate,isValidate
         from gw_app_setting WHERE  appId = #{appId}
             AND id = #{id}
     </select>
@@ -23,13 +23,16 @@
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="isValidate" property="isValidate" jdbcType="TINYINT"/>
+        <result column="appName" property="appName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="selectList" resultMap="appSettingMap" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">
-        SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
+        SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,a.isValidate,
         b.name, b.uri, b.method, b.version, b.authentication,
-        a.status, a.createTime, a.lastUpdate
+        a.status, a.createTime, a.lastUpdate,d.fieldKey as appName
         FROM gw_app_setting a LEFT JOIN gw_api b ON a.apiId = b.id
+        LEFT JOIN gw_view_sys_dict d ON d.id = b.dictId
         <where>
             1 = 1
             <if test="name != null">and b.name = #{name}</if>
@@ -42,19 +45,4 @@
         </where>
     </select>
 
-    <select id="isAuthentization" resultType="com.abc12366.gateway.model.bo.AppSettingBO" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">
-        SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,
-        b.name, b.uri, b.method, b.version, b.authentication,
-        a.status, a.createTime, a.lastUpdate
-        FROM gw_app_setting a LEFT JOIN gw_api b ON a.apiId = b.id
-        <where>
-            <if test="name != null">b.name = #{name}</if>
-            <if test="uri != null">AND b.uri = #{uri}</if>
-            <if test="method != null">AND b.method = #{method}</if>
-            <if test="version != null">AND b.version = #{version}</if>
-            <if test="appId != null">AND a.appId = #{appId}</if>
-            <if test="status != null">AND a.status = #{status}</if>
-            <if test="1 != null">AND b.status = '1'</if>
-        </where>
-    </select>
 </mapper>

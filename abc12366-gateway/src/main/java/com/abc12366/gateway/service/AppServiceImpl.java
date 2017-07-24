@@ -39,6 +39,7 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private AppSettingRoMapper appSettingRoMapper;
 
+    @Transactional("db1TxManager")
     @Override
     public AppBO register(AppBO bo) throws Exception {
         LOGGER.info("{}", bo);
@@ -59,6 +60,7 @@ public class AppServiceImpl implements AppService {
         return null;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String login(AppBO bo) throws Exception {
         LOGGER.info("{}", bo);

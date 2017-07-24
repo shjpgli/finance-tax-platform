@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,7 @@ public class ApiServiceImpl implements ApiService {
         return apiRoMapper.selectList(api);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public Api insert(ApiBO apiBO) {
         Api api = new Api();
@@ -51,6 +53,7 @@ public class ApiServiceImpl implements ApiService {
         return api;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public Api update(ApiBO apiBO) {
         Api api = new Api();
@@ -65,6 +68,7 @@ public class ApiServiceImpl implements ApiService {
 
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void delete(String id) {
         int del = apiMapper.delete(id);

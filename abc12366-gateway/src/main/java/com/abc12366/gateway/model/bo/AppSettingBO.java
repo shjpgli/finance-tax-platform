@@ -59,6 +59,9 @@ public class AppSettingBO implements Serializable {
      **/
     private java.util.Date lastUpdate;
 
+    /**是否需要身份验证**/
+    private Boolean isValidate;
+
     /**接口名称**/
     private String name;
 
@@ -73,6 +76,9 @@ public class AppSettingBO implements Serializable {
 
     /**是否需要验证用户身份: 0不需要，1需要**/
     private Boolean authentication;
+
+    /**所属系统**/
+    private String appName;
 
     public void setId(String id) {
         this.id = id;
@@ -184,5 +190,21 @@ public class AppSettingBO implements Serializable {
 
     public void setAuthentication(Boolean authentication) {
         this.authentication = authentication;
+    }
+
+    public Boolean getIsValidate() {
+        return isValidate;
+    }
+
+    public void setIsValidate(Boolean isValidate) {
+        this.isValidate = isValidate;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 }

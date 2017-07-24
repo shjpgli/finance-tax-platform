@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class AppSettingServiceImpl implements AppSettingService {
         return appSettingRoMapper.selectList(bo);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public AppSetting update(AppSettingBO bo) {
         AppSetting appSetting = new AppSetting();
@@ -50,6 +53,7 @@ public class AppSettingServiceImpl implements AppSettingService {
         return appSetting;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public AppSetting insert(AppSettingBO bo) {
         bo.setId(Utils.uuid());
@@ -66,6 +70,7 @@ public class AppSettingServiceImpl implements AppSettingService {
         return appSetting;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void delete(String appId, String id) {
         appSettingMapper.delete(id);
@@ -78,5 +83,30 @@ public class AppSettingServiceImpl implements AppSettingService {
         appSetting.setId(id);
 
         return appSettingRoMapper.selectOne(appSetting);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<AppSetting> insertList(String appId, List<AppSettingBO> appSettingBOList) {
+        List<AppSetting> list = new ArrayList<>();
+        if(appSettingBOList != null && appSettingBOList.size() !=0){
+            //根据appId删除授权信息
+            appSettingMapper.deleteByAppId(appId);
+            for (AppSettingBO bo:appSettingBOList){
+                bo.setId(Utils.uuid());
+                Date date = new Date();
+                bo.setCreateTime(date);
+                bo.setLastUpdate(date);
+                AppSetting appSetting = new AppSetting();
+                BeanUtils.copyProperties(bo,appSetting);
+                int insert = appSettingMapper.insert(appSetting);
+                if(insert != 1){
+                    LOGGER.warn("插入失败，参数：{}", appSetting);
+                    throw new ServiceException(4101);
+                }
+                list.add(appSetting);
+            }
+        }
+        return list;
     }
 }

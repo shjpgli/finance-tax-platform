@@ -13,4 +13,6 @@ public interface AppSettingMapper {
     int insert(AppSetting appSetting);
 
     void delete(String id);
+
+    int deleteByAppId(String appId);
 }

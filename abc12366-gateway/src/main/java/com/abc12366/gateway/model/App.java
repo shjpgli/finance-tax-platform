@@ -19,6 +19,8 @@ public class App implements Serializable {
 	/**授权应用密码**/
 	private String password;
 
+	/**授权应用昵称**/
+	private String nickname;
 	/**访问授权码**/
 	private String accessToken;
 
@@ -133,4 +135,11 @@ public class App implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 }

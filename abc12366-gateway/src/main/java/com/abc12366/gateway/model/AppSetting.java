@@ -37,6 +37,8 @@ public class AppSetting implements Serializable {
 	/**修改时间**/
 	private java.util.Date lastUpdate;
 
+	/**是否需要身份验证**/
+	private Boolean isValidate;
 
 
 	public void setId(String id){
@@ -111,4 +113,11 @@ public class AppSetting implements Serializable {
 		return this.lastUpdate;
 	}
 
+    public Boolean getIsValidate() {
+        return isValidate;
+    }
+
+    public void setIsValidate(Boolean isValidate) {
+        this.isValidate = isValidate;
+    }
 }

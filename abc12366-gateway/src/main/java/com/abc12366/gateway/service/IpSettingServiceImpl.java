@@ -6,6 +6,7 @@ import com.abc12366.gateway.mapper.db2.IpSettingRoMapper;
 import com.abc12366.gateway.model.IpSetting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by MY on 2017-05-26.
@@ -24,6 +25,7 @@ public class IpSettingServiceImpl implements IpSettingService {
         return ipSettingRoMapper.selectOne();
     }
 
+    @Transactional("db1TxManager")
     @Override
     public IpSetting update(IpSetting ipSetting) {
         int upd = ipSettingMapper.update(ipSetting);

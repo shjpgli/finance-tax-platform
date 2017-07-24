@@ -11,6 +11,9 @@
             <if test="name != null">
                 name,
             </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
             <if test="uri != null">
                 uri,
             </if>
@@ -44,6 +47,9 @@
             <if test="name!=null">
                 #{name},
             </if>
+            <if test="nickname!=null">
+                #{nickname},
+            </if>
             <if test="uri!=null">
                 #{uri},
             </if>
@@ -75,6 +81,7 @@
         UPDATE gw_api
         <set>
             <if test="name != null">name = #{name},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
             <if test="uri != null">uri = #{uri},</if>
             <if test="method != null">method = #{method},</if>
             <if test="version != null">version = #{version},</if>

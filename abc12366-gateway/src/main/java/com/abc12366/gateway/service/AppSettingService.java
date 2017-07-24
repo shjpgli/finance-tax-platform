@@ -20,4 +20,6 @@ public interface AppSettingService {
     void delete(String appId, String id);
 
     AppSetting selectOne(String appId, String id);
+
+    List<AppSetting> insertList(String appId, List<AppSettingBO> appSettingBOList);
 }
