@@ -8,6 +8,8 @@ import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.service.ModelService;
 import com.abc12366.common.exception.ServiceException;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,48 +38,49 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public List<ModelBo> selectList() {
-        //查询模型列表
-        List<ModelBo> modelBoList =  modelRoMapper.selectList();
-//        List<ModelBo> modelBoList = new ArrayList<>();
-//        for(Model model : modelList){
-//            ModelBo modelBo = new ModelBo();
-//            try {
-//                BeanUtils.copyProperties(model, modelBo);
-//                modelBoList.add(modelBo);
-//            } catch (Exception e) {
-//                LOGGER.error("类转换异常：{}", e);
-//                throw new RuntimeException("类型转换异常：{}", e);
-//            }
-//        }
+        List<ModelBo> modelBoList;
+        try {
+            //查询模型列表
+            modelBoList =  modelRoMapper.selectList();
+            JSONArray jsonArray = JSONArray.fromObject(modelBoList);
+            LOGGER.info("查询模型信息结果:{}", jsonArray.toString());
+        } catch (Exception e) {
+            LOGGER.error("查询模型信息异常：{}", e);
+            throw new ServiceException(4220);
+        }
         return modelBoList;
     }
 
     @Override
     public ModelBo save(ModelBo modelBo) {
-        //保存模型信息
-        String uuid = UUID.randomUUID().toString().replace("-", "");
-        Model model = new Model();
-        modelBo.setModelId(uuid);
         try {
+            JSONObject jsonStu = JSONObject.fromObject(modelBo);
+            LOGGER.info("新增模型信息:{}", jsonStu.toString());
+            //保存模型信息
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            Model model = new Model();
+            modelBo.setModelId(uuid);
             BeanUtils.copyProperties(modelBo, model);
+            modelMapper.insert(model);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("新增模型信息异常：{}", e);
+            throw new ServiceException(4222);
         }
-        modelMapper.insert(model);
+
         return modelBo;
     }
 
     @Override
     public ModelBo selectModel(String modelId) {
-        //查询模型信息
-        Model model = modelRoMapper.selectByPrimaryKey(modelId);
         ModelBo modelBo = new ModelBo();
         try {
+            LOGGER.info("查询单个模型信息:{}", modelId);
+            //查询模型信息
+            Model model = modelRoMapper.selectByPrimaryKey(modelId);
             BeanUtils.copyProperties(model, modelBo);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("查询单个模型信息异常：{}", e);
+            throw new ServiceException(4221);
         }
         return modelBo;
     }
@@ -87,10 +90,12 @@ public class ModelServiceImpl implements ModelService {
         //更新模型信息
         Model model = new Model();
         try {
+            JSONObject jsonStu = JSONObject.fromObject(modelBo);
+            LOGGER.info("更新模型信息:{}", jsonStu.toString());
             BeanUtils.copyProperties(modelBo, model);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("更新模型信息异常：{}", e);
+            throw new ServiceException(4223);
         }
         modelMapper.updateByPrimaryKeySelective(model);
         return modelBo;
@@ -98,17 +103,19 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public ModelListBo updateList(ModelListBo modelListBo) {
-        //保存模型项列表
-        List<ModelBo> list = modelListBo.getModelBoList();
-        for(ModelBo modelBo:list){
-            Model model = new Model();
-            try {
+        try {
+            JSONObject jsonStu = JSONObject.fromObject(modelListBo);
+            LOGGER.info("批量更新模型信息:{}", jsonStu.toString());
+            //保存模型项列表
+            List<ModelBo> list = modelListBo.getModelBoList();
+            for(ModelBo modelBo:list){
+                Model model = new Model();
                 BeanUtils.copyProperties(modelBo, model);
-            } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+                modelMapper.updateByPrimaryKeySelective(model);
             }
-            modelMapper.updateByPrimaryKeySelective(model);
+        } catch (Exception e) {
+            LOGGER.error("批量更新模型异常：{}", e);
+            throw new ServiceException(4224);
         }
         return modelListBo;
     }
@@ -116,25 +123,35 @@ public class ModelServiceImpl implements ModelService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String modelId) {
-        int con = modelRoMapper.selectConByModelId(modelId);
-        int cha = modelRoMapper.selectChaByModelId(modelId);
-        if(con != 0 || cha !=0){
-            throw new ServiceException(4303);
+        try {
+            LOGGER.info("删除模型信息:{}", modelId);
+            int con = modelRoMapper.selectConByModelId(modelId);
+            int cha = modelRoMapper.selectChaByModelId(modelId);
+            if(con != 0 || cha !=0){
+                throw new ServiceException(4227);
+            }
+            modelItemMapper.deleteBymodelId(modelId);
+            modelMapper.deleteByPrimaryKey(modelId);
+        } catch (Exception e) {
+            LOGGER.error("删除模型异常：{}", e);
+            throw new ServiceException(4225);
         }
-        modelItemMapper.deleteBymodelId(modelId);
-        int r = modelMapper.deleteByPrimaryKey(modelId);
-        LOGGER.info("{}", r);
         return "";
     }
 
     @Override
     public String deleteList(String[] modelIds) {
-//        modelItemMapper.deleteListBymodelIds(modelIds);
-//        int r = modelMapper.deleteList(modelIds);
-        for(int i=0;i<modelIds.length;i++){
-            this.delete(modelIds[i]);
+        try {
+            LOGGER.info("批量删除模型信息:{}", modelIds.toString());
+            //modelItemMapper.deleteListBymodelIds(modelIds);
+            //int r = modelMapper.deleteList(modelIds);
+            for(int i=0;i<modelIds.length;i++){
+                this.delete(modelIds[i]);
+            }
+        } catch (Exception e) {
+            LOGGER.error("批量删除模型异常：{}", e);
+            throw new ServiceException(4226);
         }
-        LOGGER.info("{}", "");
         return "";
     }
 }
