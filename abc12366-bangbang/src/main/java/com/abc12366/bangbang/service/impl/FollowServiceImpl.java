@@ -111,8 +111,8 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public List<MyFollowListBO> selectMyfollowtByUserId(String userId) {
-        return followRoMapper.selectMyfollowtByUserId(userId);
+    public List<MyFollowListBO> selectMyfollowByUserId(String userId) {
+        return followRoMapper.selectMyfollowByUserId(userId);
     }
 
     public boolean isExist(Map map) {

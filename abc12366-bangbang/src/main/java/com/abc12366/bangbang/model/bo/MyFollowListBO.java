@@ -6,12 +6,30 @@ package com.abc12366.bangbang.model.bo;
  * Time: 15:20
  */
 public class MyFollowListBO {
+    private String followedUserId;
     private String followName;
     private String answerCount;
     private String askCount;
     private String fansCount;
+    private String userPicturePath;
 
     public MyFollowListBO() {
+    }
+
+    public String getFollowedUserId() {
+        return followedUserId;
+    }
+
+    public void setFollowedUserId(String followedUserId) {
+        this.followedUserId = followedUserId;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 
     public String getFollowName() {

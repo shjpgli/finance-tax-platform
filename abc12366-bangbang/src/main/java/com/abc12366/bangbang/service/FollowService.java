@@ -25,5 +25,5 @@ public interface FollowService {
 
     List<MyFollowerListBO> selectFollowerListByUserId(String userId);
 
-    List<MyFollowListBO> selectMyfollowtByUserId(String userId);
+    List<MyFollowListBO> selectMyfollowByUserId(String userId);
 }

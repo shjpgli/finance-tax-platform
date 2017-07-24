@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.model.bo.MyTaskBO;
 import com.abc12366.uc.model.bo.UserTaskBO;
 import com.abc12366.uc.model.bo.UserTaskInsertBO;
 import com.abc12366.uc.model.bo.UserTaskUpdateBO;
@@ -29,20 +30,20 @@ public class UserTaskController {
     @Autowired
     private UserTaskService userTaskService;
 
-//    @GetMapping(path = "/{userId}")
-//    public ResponseEntity select(@PathVariable String userId) {
-//        LOGGER.info("{}", userId);
-//        UserTaskBO userTaskBO = userTaskService.insert(userId);
-//        LOGGER.info("{}", userTaskBO);
-//        return ResponseEntity.ok(Utils.kv("data",userTaskBO));
-//    }
+    @GetMapping(path = "/mytask/{userId}")
+    public ResponseEntity selectMyTask(@PathVariable String userId) {
+        LOGGER.info("{}", userId);
+        MyTaskBO myTaskBO = userTaskService.selectMyTask(userId);
+        LOGGER.info("{}", myTaskBO);
+        return ResponseEntity.ok(Utils.kv("data", myTaskBO));
+    }
 
     @PostMapping(path = "/{userId}")
     public ResponseEntity insert(@Valid @RequestBody UserTaskInsertBO userTaskInsertBO, @PathVariable String userId) {
         LOGGER.info("{}:{}", userTaskInsertBO, userId);
         UserTaskBO userTaskBO = userTaskService.insert(userTaskInsertBO, userId);
         LOGGER.info("{}", userTaskBO);
-        return ResponseEntity.ok(Utils.kv("data",userTaskBO));
+        return ResponseEntity.ok(Utils.kv("data", userTaskBO));
     }
 
     @PutMapping(path = "/{userId}/{id}")

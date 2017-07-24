@@ -8,14 +8,32 @@ import java.util.Date;
  * Time: 14:57
  */
 public class MyCollectListBO {
+    private String askId;
     private String ask;
     private String detail;
     private Date collectTime;
     private String answerCount;
     private String supportCount;
     private String createUserName;
+    private String userPicturePath;
 
     public MyCollectListBO() {
+    }
+
+    public String getAskId() {
+        return askId;
+    }
+
+    public void setAskId(String askId) {
+        this.askId = askId;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 
     public String getAsk() {

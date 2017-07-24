@@ -32,16 +32,19 @@
         (select bu.username followerName from bb_user bu where bu.id=bfu.userId) followerName,
         (select count(1) followerAnswerCount from bb_answer ba where ba.userId=bfu.userId) followerAnswerCount,
         (select count(1) followerAskCount from bb_ask bak where bak.userId=bfu.userId) followerAskCount,
-        (select count(1) followerFansCount from bb_follow_user bfus where bfus.followedUserId=bfu.userId) followerFansCount
+        (select count(1) followerFansCount from bb_follow_user bfus where bfus.followedUserId=bfu.userId) followerFansCount,
+        (select minUserPicturePath from bb_user bu where bu.id=bfu.userId) userPicturePath
         from bb_follow_user bfu
         where bfu.followedUserId=#{userId}
     </select>
-    <select id="selectMyfollowtByUserId"  resultType="com.abc12366.bangbang.model.bo.MyFollowListBO" parameterType="java.lang.String">
+    <select id="selectMyfollowByUserId"  resultType="com.abc12366.bangbang.model.bo.MyFollowListBO" parameterType="java.lang.String">
         select
+        bfu.followedUserId followedUserId,
         (select bu.username followName from bb_user bu where bu.id=bfu.followedUserId) followName,
         (select count(1) answerCount from bb_answer ba where ba.userId=bfu.followedUserId) answerCount,
         (select count(1) askCount from bb_ask bak where bak.userId=bfu.followedUserId) askCount,
-        (select count(1) fansCount from bb_follow_user bfus where bfus.followedUserId=bfu.followedUserId) fansCount
+        (select count(1) fansCount from bb_follow_user bfus where bfus.followedUserId=bfu.followedUserId) fansCount,
+        (select minUserPicturePath from bb_user bu where bu.id=bfu.followedUserId) userPicturePath
         from bb_follow_user bfu
         where bfu.userId=#{userId}
     </select>

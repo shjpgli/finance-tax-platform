@@ -43,8 +43,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public UcUserInterceptor getUcUserInterceptor() {
-        return new UcUserInterceptor();
+    public TokenInterceptor tokenInterceptor() {
+        return new TokenInterceptor();
     }
 
 
@@ -66,19 +66,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
         // UserToken验证、授权拦截
-//        registry.addInterceptor(getUcUserInterceptor())
+        registry.addInterceptor(tokenInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/app/login", "/app/register", "/test")
+                .excludePathPatterns("/admintoken/**", "/user/token/*")
+                .excludePathPatterns("/login", "/register");
+
+        // 用户Token拦截
+//        registry.addInterceptor(getAdminUserInterceptor())
 //                .excludePathPatterns("/")
 //                .excludePathPatterns("/druid/**")
 //                .excludePathPatterns("/app/login", "/app/register", "/test")
 //                .excludePathPatterns("/admintoken/**")
 //                .excludePathPatterns("/login", "/register");
-
-        // 用户Token拦截
-        registry.addInterceptor(getAdminUserInterceptor())
-                .excludePathPatterns("/")
-                .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/app/login", "/app/register", "/test")
-                .excludePathPatterns("/admintoken/**")
-                .excludePathPatterns("/login", "/register");
     }
 }

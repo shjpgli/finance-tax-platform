@@ -8,7 +8,7 @@ import java.io.IOException;
  * Date: 2017-06-21
  * Time: 9:49
  */
-public interface UcUserService {
+public interface TokenService {
 
     boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request);
 }

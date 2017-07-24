@@ -82,13 +82,13 @@ public class MyBangbangController {
     }
 
     @GetMapping(path = "/myfollow/{userId}")
-    public ResponseEntity selectMyfollowtByUserId(
+    public ResponseEntity selectMyfollowByUserId(
             @PathVariable String userId,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<MyFollowListBO> myFollowBOList = followService.selectMyfollowtByUserId(userId);
+        List<MyFollowListBO> myFollowBOList = followService.selectMyfollowByUserId(userId);
         LOGGER.info("{}", myFollowBOList);
         return (myFollowBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
