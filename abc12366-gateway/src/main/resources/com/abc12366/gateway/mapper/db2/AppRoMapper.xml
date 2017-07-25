@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db2.AppRoMapper">
-    <select id="selectOne" resultType="com.abc12366.gateway.model.App">
+    <select id="selectOne" resultType="com.abc12366.gateway.model.App" parameterType="com.abc12366.gateway.model.App">
         SELECT id, name,nickname, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
         createTime, lastUpdate
         FROM gw_app
@@ -22,7 +22,7 @@
         </where>
     </select>
 
-    <select id="selectByName" resultType="com.abc12366.gateway.model.App">
+    <select id="selectByName" resultType="com.abc12366.gateway.model.App" parameterType="java.lang.String">
       SELECT id, name,nickname, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
       createTime, lastUpdate
       FROM gw_app
@@ -30,7 +30,8 @@
     </select>
 
     <select id="selectList" resultType="com.abc12366.gateway.model.bo.AppBO" parameterType="com.abc12366.gateway.model.bo.AppBO">
-        SELECT id, name,nickname, startTime, endTime, status, createTime, lastUpdate
+        SELECT id, name,nickname, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
+        createTime, lastUpdate
         FROM gw_app
         <where>
             <if test="name != null">
@@ -56,7 +57,8 @@
     </select>
 
     <select id="selectById" resultType="com.abc12366.gateway.model.App">
-        SELECT id, name,nickname, startTime, endTime, status, createTime, lastUpdate
+        SELECT id, name,nickname, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
+      createTime, lastUpdate
         FROM gw_app
         WHERE id=#{id}
     </select>

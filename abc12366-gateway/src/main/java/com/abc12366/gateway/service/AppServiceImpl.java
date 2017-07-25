@@ -46,18 +46,25 @@ public class AppServiceImpl implements AppService {
         bo.setId(Utils.uuid());
         bo.setStatus(false);
         Date date = new Date();
+        bo.setPassword(Utils.md5(bo.getPassword()));
         bo.setStartTime(date);
         bo.setCreateTime(date);
         bo.setLastUpdate(date);
         bo.setEndTime(DateUtils.addYears(date, Constant.APP_VALID_YEARS));
         App app = new App();
         BeanUtils.copyProperties(bo,app);
+        //根据名称查询app
+        App temp = appRoMapper.selectByName(app.getName());
+        if(temp != null){
+            LOGGER.warn("APP应用名称已存在", app);
+            throw new ServiceException(4095);
+        }
         int insert = appMapper.insert(app);
         if(insert != 1){
             LOGGER.warn("插入失败，参数：{}", app);
             throw new ServiceException(4101);
         }
-        return null;
+        return bo;
     }
 
     @Transactional("db1TxManager")
@@ -68,6 +75,10 @@ public class AppServiceImpl implements AppService {
         app.setName(bo.getName());
         app.setStatus(true);
         app = appRoMapper.selectOne(app);
+        if(app == null){
+            LOGGER.warn("APP用户名不存在：{}", app);
+            throw new ServiceException(4094);
+        }
         String password = Utils.md5(bo.getPassword());
         if (app != null && app.getPassword().equals(password)) {
             Date now = new Date();
@@ -78,8 +89,10 @@ public class AppServiceImpl implements AppService {
             appMapper.update(app);
             LOGGER.info("{}", token);
             return token;
+        }else{
+            LOGGER.warn("APP密码错误：{}", app);
+            throw new ServiceException(4093);
         }
-        return null;
     }
 
     @Override
