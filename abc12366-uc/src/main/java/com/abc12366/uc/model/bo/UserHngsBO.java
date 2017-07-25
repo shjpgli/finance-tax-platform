@@ -1,14 +1,18 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-07-25
+ * Time: 16:22
  */
 public class UserHngsBO {
     private String id;
+    @NotEmpty
     private String userId;
     private String djxh;
     private String nsrsbh;
@@ -17,28 +21,13 @@ public class UserHngsBO {
     private String swjgMc;
     private String swjgDm;
     private String bsy;
-    private boolean smrzzt;
-    private boolean status;
+    private Boolean smrzzt;
+    @NotNull
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
 
     public UserHngsBO() {
-    }
-
-    public UserHngsBO(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc, String swjgDm, String bsy, boolean smrzzt, boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.userId = userId;
-        this.djxh = djxh;
-        this.nsrsbh = nsrsbh;
-        this.nsrmc = nsrmc;
-        this.shxydm = shxydm;
-        this.swjgMc = swjgMc;
-        this.swjgDm = swjgDm;
-        this.bsy = bsy;
-        this.smrzzt = smrzzt;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
     }
 
     public String getId() {
@@ -113,19 +102,19 @@ public class UserHngsBO {
         this.bsy = bsy;
     }
 
-    public boolean isSmrzzt() {
+    public Boolean getSmrzzt() {
         return smrzzt;
     }
 
-    public void setSmrzzt(boolean smrzzt) {
+    public void setSmrzzt(Boolean smrzzt) {
         this.smrzzt = smrzzt;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -143,24 +132,5 @@ public class UserHngsBO {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return "UserHngs{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", djxh='" + djxh + '\'' +
-                ", nsrsbh='" + nsrsbh + '\'' +
-                ", nsrmc='" + nsrmc + '\'' +
-                ", shxydm='" + shxydm + '\'' +
-                ", swjgMc='" + swjgMc + '\'' +
-                ", swjgDm='" + swjgDm + '\'' +
-                ", bsy='" + bsy + '\'' +
-                ", smrzzt=" + smrzzt +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
     }
 }

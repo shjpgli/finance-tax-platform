@@ -1,14 +1,18 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-07-25
+ * Time: 16:22
  */
 public class UserHndsBO {
     private String id;
+    @NotEmpty
     private String userId;
     private String username;
     private String subuser;
@@ -18,27 +22,12 @@ public class UserHndsBO {
     private String shxydm;
     private String swjgMc;
     private String swjgDm;
-    private boolean status;
+    @NotNull
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
 
     public UserHndsBO() {
-    }
-
-    public UserHndsBO(String id, String userId, String username, String subuser, String nsrmc, String nsrsbh, String djxh, String shxydm, String swjgMc, String swjgDm, boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.userId = userId;
-        this.username = username;
-        this.subuser = subuser;
-        this.nsrmc = nsrmc;
-        this.nsrsbh = nsrsbh;
-        this.djxh = djxh;
-        this.shxydm = shxydm;
-        this.swjgMc = swjgMc;
-        this.swjgDm = swjgDm;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
     }
 
     public String getId() {
@@ -121,11 +110,11 @@ public class UserHndsBO {
         this.swjgDm = swjgDm;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -143,24 +132,5 @@ public class UserHndsBO {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return "UserHndsBO{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", username='" + username + '\'' +
-                ", subuser='" + subuser + '\'' +
-                ", nsrmc='" + nsrmc + '\'' +
-                ", nsrsbh='" + nsrsbh + '\'' +
-                ", djxh='" + djxh + '\'' +
-                ", shxydm='" + shxydm + '\'' +
-                ", swjgMc='" + swjgMc + '\'' +
-                ", swjgDm='" + swjgDm + '\'' +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
     }
 }
