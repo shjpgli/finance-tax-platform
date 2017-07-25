@@ -26,19 +26,23 @@ public class ChannelBo implements Serializable {
 	/**站点ID**varchar(64)**/
 	private String siteId;
 
-	/**站点路径**varchar(20)**/
+	/**站点路径**/
 	private String sitePath;
 
-	/**域名**varchar(50)**/
+	/**域名**/
 	private String domain;
 
 	/**内容类型**varchar(2000)**/
 	private String contentType;
 
 	/**父栏目ID**varchar(64)**/
+    @NotEmpty(message = "父栏目ID不能为空！")
+    @Size(min = 1, max = 64)
 	private String parentId;
 
 	/**访问路径**varchar(30)**/
+    @NotEmpty(message = "channelPath不能为空！")
+    @Size(min = 1, max = 30)
 	private String channelPath;
 
 	/**排列顺序**int(11)**/
@@ -48,15 +52,17 @@ public class ChannelBo implements Serializable {
 	private Integer isDisplay;
 
 	/**栏目名称**varchar(100)**/
+    @NotEmpty(message = "栏目名称不能为空！")
+    @Size(min = 1, max = 100)
 	private String channelName;
 
-    /**外部链接供查询列表用**varchar(100)**/
+    /**外部链接供查询列表用**/
     private String link;
 
     /**栏目标题图片**/
     private String titleImg;
 
-	/**文章总数**int(11)**/
+	/**文章总数**/
 	private Integer cnt;
 
 

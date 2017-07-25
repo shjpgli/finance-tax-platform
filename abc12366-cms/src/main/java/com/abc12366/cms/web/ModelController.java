@@ -40,7 +40,6 @@ public class ModelController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ModelBo> dataList = modelService.selectList();
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -49,11 +48,9 @@ public class ModelController {
      * 模型新增
      */
     @PostMapping
-    public ResponseEntity save(@RequestBody ModelBo modelBo) {
-        LOGGER.info("{}", modelBo);
+    public ResponseEntity save(@Valid @RequestBody ModelBo modelBo) {
         //新增模型信息
         modelBo = modelService.save(modelBo);
-        LOGGER.info("{}", modelBo);
         return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
@@ -62,10 +59,8 @@ public class ModelController {
      */
     @GetMapping(path = "/{modelId}")
     public ResponseEntity selectOne(@PathVariable String modelId) {
-        LOGGER.info("{}", modelId);
         //查询模型信息
         ModelBo modelBo = modelService.selectModel(modelId);
-        LOGGER.info("{}", modelBo);
         return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
@@ -75,11 +70,8 @@ public class ModelController {
     @PutMapping(path = "/{modelId}")
     public ResponseEntity update(@PathVariable String modelId,
                                  @Valid @RequestBody ModelBo modelBo) {
-
-        LOGGER.info("{}", modelBo);
         //更新模型信息
         modelBo = modelService.update(modelBo);
-        LOGGER.info("{}", modelBo);
         return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
@@ -87,12 +79,9 @@ public class ModelController {
      * 批量更新模型信息
      */
     @PutMapping(path = "/updateList")
-    public ResponseEntity updateList(@Valid @RequestBody ModelListBo modelListBo) {
-
-        LOGGER.info("{}", modelListBo);
+    public ResponseEntity updateList(@RequestBody ModelListBo modelListBo) {
         //更新模型信息
         modelListBo = modelService.updateList(modelListBo);
-        LOGGER.info("{}", modelListBo);
         return ResponseEntity.ok(Utils.kv("data", modelListBo));
     }
 
@@ -101,10 +90,8 @@ public class ModelController {
      */
     @DeleteMapping(path = "/{modelId}")
     public ResponseEntity delete(@PathVariable String modelId) {
-        LOGGER.info("{}", modelId);
         //删除模型信息
         String rtn = modelService.delete(modelId);
-        LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
@@ -113,10 +100,8 @@ public class ModelController {
      */
     @PostMapping(path = "/deleteList")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
-        LOGGER.info("{}", idsBo);
         //批量删除模型信息
         String rtn = modelService.deleteList(idsBo.getIds());
-        LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 

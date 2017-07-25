@@ -1,4 +1,7 @@
 package com.abc12366.cms.model.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -13,51 +16,63 @@ public class ModelBo implements Serializable {
 	/**模型Id**varchar(64)**/
 	private String modelId;
 
-	/**模型名称**varchar(100)
-	@NotEmpty(message = "modelName不能为空！")
-	@Size(min = 0, max = 100)**/
+	/**模型名称**varchar(100)**/
+	@NotEmpty(message = "模型名称不能为空！")
+	@Size(min = 1, max = 100)
 	private String modelName;
 
-	/**模型路径**varchar(100)
-	@Size(min = 0, max = 100)**/
+	/**模型路径**varchar(100)**/
+	@Size(min = 0, max = 100)
 	private String modelPath;
 
-	/**栏目模板前缀**varchar(20)
-	@Size(min = 0, max = 20)**/
+	/**栏目模板前缀**varchar(20)**/
+    @NotEmpty(message = "栏目模板前缀不能为空！")
+	@Size(min = 1, max = 20)
 	private String tplChannelPrefix;
 
-	/**内容模板前缀**varchar(20)
-	@Size(min = 0, max = 20)**/
+	/**内容模板前缀**varchar(20)**/
+    @NotEmpty(message = "内容模板前缀不能为空！")
+	@Size(min = 1, max = 20)
 	private String tplContentPrefix;
 
 	/**栏目标题图宽度**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer titleImgWidth;
 
 	/**栏目标题图高度**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer titleImgHeight;
 
 	/**栏目内容图宽度**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer contentImgWidth;
 
 	/**栏目内容图高度**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer contentImgHeight;
 
 	/**排列顺序**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer priority;
 
 	/**是否有内容**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer hasContent;
 
 	/**是否禁用**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isDisabled;
 
 	/**是否默认模型**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isDef;
 
 	/**是否全站模型**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isGlobal;
 
-	/**非全站模型所属站点**int(11)**/
+	/**非全站模型所属站点**varchar(64)**/
+    @Size(min = 0, max = 64)
 	private String siteId;
 
 	public String getModelId() {

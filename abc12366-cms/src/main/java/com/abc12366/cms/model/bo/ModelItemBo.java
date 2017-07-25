@@ -1,4 +1,7 @@
 package com.abc12366.cms.model.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -14,63 +17,86 @@ public class ModelItemBo implements Serializable {
 	private String modelitemId;
 
 	/**modelId**varchar(64)**/
+    @NotEmpty(message = "modelId不能为空！")
+    @Size(min = 0, max = 64)
 	private String modelId;
 
 	/**字段**varchar(50)**/
+    @NotEmpty(message = "field不能为空！")
+    @Size(min = 0, max = 50)
 	private String field;
 
 	/**名称**varchar(100)**/
+    @NotEmpty(message = "名称不能为空！")
+    @Size(min = 0, max = 100)
 	private String itemLabel;
 
 	/**排列顺序**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer priority;
 
 	/**默认值**varchar(255)**/
+    @Size(min = 0, max = 255)
 	private String defValue;
 
 	/**可选项**varchar(255)**/
+    @Size(min = 0, max = 255)
 	private String optValue;
 
 	/**长度**varchar(20)**/
+    @Size(min = 0, max = 20)
 	private String textSize;
 
 	/**文本行数**varchar(3)**/
+    @Size(min = 0, max = 3)
 	private String areaRows;
 
 	/**文本列数**varchar(3)**/
+    @Size(min = 0, max = 3)
 	private String areaCols;
 
 	/**帮助信息**varchar(255)**/
+    @Size(min = 0, max = 255)
 	private String help;
 
 	/**帮助位置**varchar(1)**/
+    @Size(min = 0, max = 1)
 	private String helpPosition;
 
 	/**数据类型**int(11)**/
+    @Size(min = 0, max = 11)
 	private String dataType;
 
 	/**是否独占一行**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isSingle;
 
 	/**是否栏目模型项**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isChannel;
 
 	/**是否自定义**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isCustom;
 
 	/**是否显示**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isDisplay;
 
 	/**是否必填项**tinyint(1)**/
+    @Size(min = 0, max = 1)
 	private Integer isRequired;
 
 	/**图片宽度**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer imageWidth;
 
 	/**图片宽度**int(11)**/
+    @Size(min = 0, max = 11)
 	private Integer imageHeight;
 
 	/**校验规则**varchar(500)**/
+    @Size(min = 0, max = 500)
 	private String checkRule;
 
 	public String getModelitemId() {
