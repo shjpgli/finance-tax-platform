@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Invoice;
+import com.abc12366.uc.model.InvoiceBack;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
@@ -34,7 +35,7 @@ public interface InvoiceService {
 
     InvoiceBackBO refund(InvoiceBackBO invoiceBackBO);
 
-    InvoiceBackBO refundCheck(InvoiceBackBO invoiceBackBO);
+    InvoiceBackBO refundCheck(InvoiceBack invoiceBack);
 
     List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO);
 

@@ -74,7 +74,7 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         app.setName(bo.getName());
         app.setStatus(true);
-        app = appRoMapper.selectOne(app);
+        app = appRoMapper.selectByName(bo.getName());
         if(app == null){
             LOGGER.warn("APP用户名不存在：{}", app);
             throw new ServiceException(4094);
@@ -152,16 +152,15 @@ public class AppServiceImpl implements AppService {
     @Override
     public AppBO update(AppBO appBO) {
         LOGGER.info("{}", appBO);
-        App app = appRoMapper.selectById(appBO.getId());
-        if (app == null) {
-            return null;
-        }
+        App app = new App();
         BeanUtils.copyProperties(appBO, app);
         app.setLastUpdate(new Date());
-        appMapper.update(app);
-        AppBO appGeneralBO = new AppBO();
-        BeanUtils.copyProperties(app, appGeneralBO);
-        return appGeneralBO;
+        int update = appMapper.update(app);
+        if (update != 1){
+            LOGGER.warn("修改异常：{}", app);
+            throw new ServiceException(4102);
+        }
+        return appBO;
     }
 
     @Override
@@ -169,7 +168,8 @@ public class AppServiceImpl implements AppService {
         LOGGER.info("{}", id);
         App app = appRoMapper.selectById(id);
         if (app == null) {
-            return null;
+            LOGGER.warn("APP用户名不存在：{}", app);
+            throw new ServiceException(4094);
         }
         AppBO appGeneralBO = new AppBO();
         BeanUtils.copyProperties(app, appGeneralBO);

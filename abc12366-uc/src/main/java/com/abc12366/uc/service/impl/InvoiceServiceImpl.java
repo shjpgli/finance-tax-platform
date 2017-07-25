@@ -52,7 +52,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private InvoiceDetailMapper invoiceDetailMapper;
 
     @Autowired
-    private InvoiceBackMapper invoiceBackPapper;
+    private InvoiceBackMapper invoiceBackMapper;
 
     @Autowired
     private InvoiceBackRoMapper invoiceBackRoMapper;
@@ -267,7 +267,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         Date date = new Date();
         invoiceBack.setCreateTime(date);
         invoiceBack.setLastUpdate(date);
-        int insert = invoiceBackPapper.insert(invoiceBack);
+        int insert = invoiceBackMapper.insert(invoiceBack);
         if (insert != 1){
             LOGGER.info("{新增失败}", invoiceBack);
             throw new ServiceException(4101);
@@ -279,15 +279,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional("db1TxManager")
     @Override
-    public InvoiceBackBO refundCheck(InvoiceBackBO invoiceBackBO) {
-        Express express = expressRoMapper.selectByPrimaryKey(invoiceBackBO.getExpressId());
+    public InvoiceBackBO refundCheck(InvoiceBack invoiceBack) {
+        Express express = expressRoMapper.selectByPrimaryKey(invoiceBack.getExpressId());
         if(express == null){
-            LOGGER.info("{发票快递单信息查询错误}", invoiceBackBO);
+            LOGGER.info("{发票快递单信息查询错误}", invoiceBack);
             throw new ServiceException(4145);
         }
         Invoice invoice = invoiceRoMapper.selectByUserOrderNo(express.getUserOrderNo());
         if(invoice == null){
-            LOGGER.info("{发票信息查询错误}", invoiceBackBO);
+            LOGGER.info("{发票信息查询错误}", invoiceBack);
             throw new ServiceException(4146);
         }else{
             //修改发票状态
@@ -313,12 +313,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4148);
             }
         }
-        InvoiceBack invoiceBack = new InvoiceBack();
-        BeanUtils.copyProperties(invoiceBackBO,invoiceBack);
         invoiceBack.setLastUpdate(new Date());
         //TODO 需要确定状态值
         invoiceBack.setStatus("0");
-        int bUpdate = invoiceBackPapper.update(invoiceBack);
+        int bUpdate = invoiceBackMapper.update(invoiceBack);
         if (bUpdate != 1){
             LOGGER.info("{发票退订信息修改错误}", order);
             throw new ServiceException(4149);

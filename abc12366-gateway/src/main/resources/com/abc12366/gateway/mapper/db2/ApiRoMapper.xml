@@ -26,7 +26,7 @@
             1 = 1
             <if test="name != null">and i.name LIKE CONCAT('%',#{name},'%')</if>
             <if test="status != null">AND i.status = #{status}</if>
-            <if test="dictId != null">AND i.dictId = #{dictId}</if>
+            <if test="dictId != null and dictId != ''">AND i.dictId = #{dictId}</if>
         </where>
     </select>
 

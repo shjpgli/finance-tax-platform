@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.Invoice;
+import com.abc12366.uc.model.InvoiceBack;
 import com.abc12366.uc.model.InvoiceDetail;
 import com.abc12366.uc.model.InvoiceRepo;
 import com.abc12366.uc.model.bo.InvoiceBO;
@@ -238,7 +239,7 @@ public class InvoiceController {
 
 
     /**
-     * 发票列表查询
+     * 发票导出列表查询
      *
      * @return
      */
@@ -307,7 +308,7 @@ public class InvoiceController {
     }
 
     /**
-     * 退票
+     * 发票退票
      *
      * @param expressId
      * @return
@@ -322,16 +323,16 @@ public class InvoiceController {
     }
 
     /**
-     * 退票
+     * 发票退票审核
      *
      * @param expressId
      * @return
      */
-    @PostMapping(path = "/back/{expressId}/{id}")
-    public ResponseEntity refundCheck(@PathVariable("expressId") String expressId,@PathVariable("id") String id, @Valid @RequestBody InvoiceBackBO invoiceBackBO) {
-        invoiceBackBO.setId(id);
-        invoiceBackBO.setExpressId(expressId);
-        InvoiceBackBO bo = invoiceService.refundCheck(invoiceBackBO);
+    @PostMapping(path = "/back/check/{expressId}/{id}")
+    public ResponseEntity refundCheck(@PathVariable("expressId") String expressId,@PathVariable("id") String id, @Valid @RequestBody InvoiceBack invoiceBack) {
+        invoiceBack.setId(id);
+        invoiceBack.setExpressId(expressId);
+        InvoiceBackBO bo = invoiceService.refundCheck(invoiceBack);
 
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));

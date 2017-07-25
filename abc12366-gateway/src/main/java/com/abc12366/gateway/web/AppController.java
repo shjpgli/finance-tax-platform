@@ -42,10 +42,8 @@ public class AppController {
     public ResponseEntity register(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
         AppBO app = appService.register(appBO);
-        ResponseEntity responseEntity = app != null ? ResponseEntity.ok(app)
-                : new ResponseEntity<>(Utils.bodyStatus(4007), HttpStatus.CONFLICT);
-        LOGGER.info("{}", responseEntity);
-        return responseEntity;
+        LOGGER.info("{}", app);
+        return ResponseEntity.ok(Utils.kv("data", app));
     }
 
     @PostMapping(path = "/login")
