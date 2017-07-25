@@ -1,5 +1,7 @@
 package com.abc12366.cms.model.bo;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,7 +14,11 @@ import java.util.List;
  **/
 @SuppressWarnings("serial")
 public class ChannelSaveBo implements Serializable {
+    @Valid
+    @NotNull
 	private ChannelBo channel;//栏目
+    @Valid
+    @NotNull
 	private ChannelExtBo channelExt;//栏目扩展
 	private List<ChannelAttrBo> channelAttrList;//栏目扩展属性
 	private List<ChnlGroupViewBo> groupList;//用户组

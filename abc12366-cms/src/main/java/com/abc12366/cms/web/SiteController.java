@@ -39,7 +39,6 @@ public class SiteController {
 									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
 		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 		List<SiteListBo> dataList = siteService.selectList();
-		LOGGER.info("{}", dataList);
 		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 	}
 
@@ -48,9 +47,7 @@ public class SiteController {
 	 */
 	@GetMapping(path = "/{siteId}")
 	public ResponseEntity selectOneById(@PathVariable("siteId") String siteId) {
-		LOGGER.info("{}", siteId);
 		SiteBo siteBo = siteService.selectOneById(siteId);
-		LOGGER.info("{}", siteBo);
 		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 
@@ -59,9 +56,7 @@ public class SiteController {
 	 */
 	@PostMapping
 	public ResponseEntity save(@Valid @RequestBody SiteBo siteBo) {
-		LOGGER.info("{}", siteBo);
 		siteBo = siteService.save(siteBo);
-		LOGGER.info("{}", siteBo);
 		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 
@@ -70,9 +65,7 @@ public class SiteController {
 	 */
 	@PutMapping(path = "/{siteId}")
 	public ResponseEntity update(@Valid @RequestBody SiteBo siteBo, @PathVariable("siteId") String siteId) {
-		LOGGER.info("{}", siteBo);
 		siteBo = siteService.update(siteBo);
-		LOGGER.info("{}", siteBo);
 		return ResponseEntity.ok(Utils.kv("data", siteBo));
 	}
 

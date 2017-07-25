@@ -50,7 +50,6 @@ public class ChannelController {
         dataMap.put("siteId", siteId);//站点ID
         dataMap.put("channelName", channelName);//栏目名称
         List<ChannelBo> dataList = channelService.selectLists(dataMap);
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
@@ -60,14 +59,12 @@ public class ChannelController {
     @GetMapping(path = "/list")
     public ResponseEntity list(@RequestParam(value = "channelId", required = false) String channelId,
                                      @RequestParam(value = "parentId", required = false) String parentId,
-                                     @RequestParam(value = "channelName", required = false) String channelName
-    ) {
+                                     @RequestParam(value = "channelName", required = false) String channelName) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("parentId", parentId);//父栏目ID
         dataMap.put("channelName", channelName);//栏目名称
         List<ChannelBo> dataList = channelService.selectLists(dataMap);
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
@@ -87,7 +84,6 @@ public class ChannelController {
         dataList.setModelItems(modelItems);
         //栏目模板前缀
         dataList.setTplPrefix(modelBo.getTplChannelPrefix());
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("data", dataList));
     }
 
@@ -95,11 +91,9 @@ public class ChannelController {
      * 新增栏目
      */
     @PostMapping
-    public ResponseEntity save(@RequestBody ChannelSaveBo channelSaveBo) {
-        LOGGER.info("{}", channelSaveBo);
+    public ResponseEntity save(@Valid @RequestBody ChannelSaveBo channelSaveBo) {
         //新增栏目信息
         channelSaveBo = channelService.save(channelSaveBo);
-        LOGGER.info("{}", channelSaveBo);
         return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
@@ -108,10 +102,8 @@ public class ChannelController {
      */
     @GetMapping(path = "/{channelId}")
     public ResponseEntity selectOne(@PathVariable String channelId) {
-        LOGGER.info("{}", channelId);
         //根据栏目ID查询栏目信息
         ChannelSaveBo channelSaveBo = channelService.selectChannel(channelId);
-        LOGGER.info("{}", channelSaveBo);
         return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
@@ -132,7 +124,6 @@ public class ChannelController {
                 dataList.add(channelSaveBo);
             }
         }
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
@@ -142,11 +133,8 @@ public class ChannelController {
     @PutMapping(path = "/{channelId}")
     public ResponseEntity update(@PathVariable String channelId,
                                  @Valid @RequestBody ChannelSaveBo channelSaveBo) {
-
-        LOGGER.info("{}", channelSaveBo);
         //更新栏目信息
         channelSaveBo = channelService.update(channelSaveBo);
-        LOGGER.info("{}", channelSaveBo);
         return ResponseEntity.ok(Utils.kv("data", channelSaveBo));
     }
 
@@ -155,10 +143,8 @@ public class ChannelController {
      */
     @PutMapping(path = "/updateByparentId")
     public ResponseEntity update(@RequestBody ChannelBo channelBo) {
-        LOGGER.info("{}", channelBo);
         //更新栏目信息
         channelBo = channelService.updateChannelByparentId(channelBo);
-        LOGGER.info("{}", channelBo);
         return ResponseEntity.ok(Utils.kv("data", channelBo));
     }
 
@@ -167,10 +153,8 @@ public class ChannelController {
      */
     @DeleteMapping(path = "/{channelId}")
     public ResponseEntity delete(@PathVariable String channelId) {
-        LOGGER.info("{}", channelId);
         //删除栏目信息
         String rtn = channelService.delete(channelId);
-        LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 

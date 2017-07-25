@@ -1,4 +1,7 @@
 package com.abc12366.cms.model.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -14,30 +17,40 @@ public class ChannelExtBo implements Serializable {
 	private String channelId;
 
 	/**外部链接**varchar(255)**/
+    @Size(min = 0, max = 255)
 	private String link;
 
 	/**栏目页模板**varchar(100)**/
+    @NotEmpty(message = "tplChannel不能为空！")
+    @Size(min = 1, max = 100)
 	private String tplChannel;
 
 	/**内容页模板**varchar(100)**/
+    @NotEmpty(message = "tplContent不能为空！")
+    @Size(min = 1, max = 100)
 	private String tplContent;
 
 	/**标题图**varchar(100)**/
+    @Size(min = 0, max = 100)
 	private String titleImg;
 
 	/**内容图**varchar(100)**/
+    @Size(min = 0, max = 100)
 	private String contentImg;
 
 	/**评论(0:匿名;1:会员一次;2:关闭,3会员多次)**int(11)**/
 	private Integer commentControl;
 
 	/**meta标题**varchar(255)**/
+    @Size(min = 0, max = 255)
 	private String title;
 
 	/**meta关键字**varchar(255)**/
+    @Size(min = 0, max = 255)
 	private String keywords;
 
 	/**meta描述**varchar(255)**/
+    @Size(min = 0, max = 255)
 	private String description;
 
 	/**内容**longtext**/

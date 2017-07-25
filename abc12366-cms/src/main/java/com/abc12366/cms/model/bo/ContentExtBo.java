@@ -36,7 +36,7 @@ public class ContentExtBo implements Serializable {
 	/**媒体路径**varchar(255)**/
 	private String mediaPath;
 
-	/**媒体类型**varchar(20)**/
+	/**媒体类型**varchar(200)**/
 	private String mediaType;
 
 	/**标题颜色**varchar(10)**/

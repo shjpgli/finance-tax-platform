@@ -48,7 +48,6 @@ public class ModelItemController {
         dataMap.put("isChannel",isChannel);//是否为栏目
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ModelItemBo> dataList = modelItemService.selectList(dataMap);
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -57,11 +56,10 @@ public class ModelItemController {
      * 新增模型项
      */
     @PostMapping
-    public ResponseEntity save(@RequestBody ModelItemBo modelItemBo) {
+    public ResponseEntity save(@Valid @RequestBody ModelItemBo modelItemBo) {
         LOGGER.info("{}", modelItemBo);
         //新增模型项信息
         modelItemBo = modelItemService.save(modelItemBo);
-        LOGGER.info("{}", modelItemBo);
         return ResponseEntity.ok(Utils.kv("data", modelItemBo));
     }
 
@@ -70,10 +68,8 @@ public class ModelItemController {
      */
     @GetMapping(path = "/{modelItemId}")
     public ResponseEntity selectOne(@PathVariable String modelItemId) {
-        LOGGER.info("{}", modelItemId);
         //查询模型项信息
         ModelItemBo modelBo = modelItemService.selectModel(modelItemId);
-        LOGGER.info("{}", modelBo);
         return ResponseEntity.ok(Utils.kv("data", modelBo));
     }
 
@@ -83,11 +79,8 @@ public class ModelItemController {
     @PutMapping(path = "/{modelItemId}")
     public ResponseEntity update(@PathVariable String modelItemId,
                                  @Valid @RequestBody ModelItemBo modelItemBo) {
-
-        LOGGER.info("{}", modelItemBo);
         //更新模型项信息
         modelItemBo = modelItemService.update(modelItemBo);
-        LOGGER.info("{}", modelItemBo);
         return ResponseEntity.ok(Utils.kv("data", modelItemBo));
     }
 
@@ -95,12 +88,9 @@ public class ModelItemController {
      * 批量新增模型项
      */
     @PostMapping(path = "/saveList")
-    public ResponseEntity saveList(@Valid @RequestBody ModelItemListBo modelItemListBo) {
-
-        LOGGER.info("{}", modelItemListBo);
+    public ResponseEntity saveList(@RequestBody ModelItemListBo modelItemListBo) {
         //批量新增模型项信息
         modelItemListBo = modelItemService.saveList(modelItemListBo);
-        LOGGER.info("{}", modelItemListBo);
         return ResponseEntity.ok(Utils.kv("data", modelItemListBo));
     }
 
@@ -108,12 +98,9 @@ public class ModelItemController {
      * 批量更新模型项
      */
     @PutMapping(path = "/updateList")
-    public ResponseEntity updateList(@Valid @RequestBody ModelItemListBo modelItemListBo) {
-
-        LOGGER.info("{}", modelItemListBo);
+    public ResponseEntity updateList(@RequestBody ModelItemListBo modelItemListBo) {
         //批量更新模型项信息
         modelItemListBo = modelItemService.updateList(modelItemListBo);
-        LOGGER.info("{}", modelItemListBo);
         return ResponseEntity.ok(Utils.kv("data", modelItemListBo));
     }
 
@@ -122,10 +109,8 @@ public class ModelItemController {
      */
     @DeleteMapping(path = "/{modelItemId}")
      public ResponseEntity delete(@PathVariable String modelItemId) {
-        LOGGER.info("{}", modelItemId);
         //删除模型项信息
         String rtn = modelItemService.delete(modelItemId);
-        LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
@@ -134,10 +119,8 @@ public class ModelItemController {
      */
     @PostMapping(path = "/deleteList")
     public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
-        LOGGER.info("{}", idsBo);
         //批量删除模型项信息
         String rtn = modelItemService.deleteList(idsBo.getIds());
-        LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
