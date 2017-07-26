@@ -33,13 +33,13 @@ public class SftpController {
 		int port = 22;
 		String username = "root";
 		String password = "hngs_123";
-		ChannelSftp sftp=sf.connect(host, port, username, password);
 		String directory = fjListBo.getDirectory();
 		List<FjBo> fjBoList = fjListBo.getFjBo();
 		List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
 		String fileName = "";
 		List<Byte> content = null;
 		for(FjBo fjBo:fjBoList){
+            ChannelSftp sftp=sf.connect(host, port, username, password);
 			fileName = fjBo.getFileName();
 			content = fjBo.getContent();
 			Map<String, String> map = sf.uploadByByte(directory,content,fileName,sftp);
