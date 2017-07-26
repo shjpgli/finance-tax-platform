@@ -171,6 +171,7 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setCreateTime(date);
         orderBO.setLastUpdate(date);
         orderBO.setOrderStatus("1");
+        orderBO.setIsInvoice(false);
         Order order = new Order();
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);

@@ -44,7 +44,6 @@ public class AppServiceImpl implements AppService {
     public AppBO register(AppBO bo) throws Exception {
         LOGGER.info("{}", bo);
         bo.setId(Utils.uuid());
-        bo.setStatus(false);
         Date date = new Date();
         bo.setPassword(Utils.md5(bo.getPassword()));
         bo.setStartTime(date);
@@ -176,9 +175,9 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("APP用户名不存在：{}", app);
             throw new ServiceException(4094);
         }
-        AppBO appGeneralBO = new AppBO();
-        BeanUtils.copyProperties(app, appGeneralBO);
-        return appGeneralBO;
+        AppBO appBO = new AppBO();
+        BeanUtils.copyProperties(app, appBO);
+        return appBO;
     }
 
     @Override

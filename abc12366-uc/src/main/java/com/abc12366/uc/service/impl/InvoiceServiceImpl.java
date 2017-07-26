@@ -265,6 +265,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         Date date = new Date();
         invoiceBackBO.setCreateTime(date);
         invoiceBackBO.setLastUpdate(date);
+        //状态1，待审批
         invoiceBackBO.setStatus("1");
         InvoiceBack invoiceBack = new InvoiceBack();
         BeanUtils.copyProperties(invoiceBackBO, invoiceBack);
@@ -297,26 +298,27 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
 
         }
-        List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoice.getId());
-        Order order = null;
-        for (OrderInvoice orderInvoice:orderInvoiceList){
-            order = new Order();
-            order.setOrderNo(orderInvoice.getOrderNo());
-            //TODO 需要修改
-//            order.setIsInvoice();
-            order.setLastUpdate(new Date());
-            int oUpdate = orderMapper.update(order);
-            if(oUpdate != 1){
-                LOGGER.info("{订单信息修改错误}", order);
-                throw new ServiceException(4148);
+        //退票状态=4：已收货时，修改订单状态
+        if(invoiceBack.getStatus() != null && "4".equals(invoiceBack.getStatus())){
+
+            List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoice.getId());
+            Order order = null;
+            for (OrderInvoice orderInvoice:orderInvoiceList){
+                order = new Order();
+                order.setOrderNo(orderInvoice.getOrderNo());
+                order.setIsInvoice(false);
+                order.setLastUpdate(new Date());
+                int oUpdate = orderMapper.update(order);
+                if(oUpdate != 1){
+                    LOGGER.info("{订单信息修改错误}", order);
+                    throw new ServiceException(4148);
+                }
             }
         }
         invoiceBack.setLastUpdate(new Date());
-        //TODO 需要确定状态值
-        invoiceBack.setStatus("0");
         int bUpdate = invoiceBackMapper.update(invoiceBack);
         if (bUpdate != 1){
-            LOGGER.info("{发票退订信息修改错误}", order);
+            LOGGER.info("{发票退订信息修改错误}", invoiceBack);
             throw new ServiceException(4149);
         }
         InvoiceBackBO bo = new InvoiceBackBO();

@@ -97,7 +97,7 @@ public class AppController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity selectOne(@PathVariable String id) {
+    public ResponseEntity selectById(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         AppBO app = appService.selectById(id);
         LOGGER.info("{}", app);
@@ -105,7 +105,7 @@ public class AppController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody AppBO appUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@RequestBody AppBO appUpdateBO, @PathVariable("id") String id) {
         LOGGER.info("{}", appUpdateBO);
         appUpdateBO.setId(id);
         AppBO app = appService.update(appUpdateBO);
