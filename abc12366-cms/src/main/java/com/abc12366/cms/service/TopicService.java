@@ -5,10 +5,11 @@ import com.abc12366.cms.model.bo.TopicBo;
 import com.abc12366.cms.model.bo.TopicListBo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TopicService {
 
-    List<TopicBo> selectList();
+    List<TopicBo> selectList(Map<String,Object> map);
 
     List<TopicBo> selectListBytplContent(String tplContent);
 

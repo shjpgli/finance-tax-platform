@@ -89,6 +89,14 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
+    public List<ContentListBo> selectListByviews(Map<String,Object> map) {
+        //查询内容列表
+        List<ContentListBo> contents = contentRoMapper.selectListByviews(map);
+        LOGGER.info("{}", contents);
+        return contents;
+    }
+
+    @Override
     public List<ContentsListBo> selectListByContentType(Map<String,Object> map) {
         //查询内容列表
         List<ContentsListBo> contents = contentRoMapper.selectListByContentType(map);
@@ -158,7 +166,7 @@ public class ContentServiceImpl implements ContentService {
         //内容扩展项
         ContentExtBo contentExtBo = contentSaveBo.getContentExt();
         contentExtBo.setContentId(uuid);
-//        contentExtBo.setReleaseDate(new Date());
+        contentExtBo.setReleaseDate(new Date());
         ContentExt contentExt = new ContentExt();
         try {
             BeanUtils.copyProperties(contentExtBo, contentExt);

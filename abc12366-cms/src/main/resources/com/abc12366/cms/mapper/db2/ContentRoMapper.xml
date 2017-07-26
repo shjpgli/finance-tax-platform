@@ -72,6 +72,55 @@
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>
 
+    <!-- 查询（根据查询条件查询） -->
+    <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
+        SELECT
+        a.contentId contentId,
+        a.userid userid,
+        a.username username,
+        b.title title,
+        b.titleColor titleColor,
+        a.channelId channelId,
+        c.channelName channelName,
+        a.topLevel topLevel,
+        a.typeId typeId,
+        b.author author,
+        e.views views,
+        b.releaseDate releaseDate,
+        a.status STATUS,
+        b.needRegenerate needRegenerate,
+        b.staticLink,
+        s.siteName,
+        a.recommendLevel recommendLevel
+        FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+        LEFT JOIN cms_channel c ON a.channelId = c.channelId
+        LEFT JOIN cms_site s ON a.siteId = s.siteId
+        LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND b.title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="username != null and username != ''">
+            AND a.username like CONCAT('%',#{username},'%')
+        </if>
+        <if test="typeId != null and typeId != ''">
+            AND a.typeId = #{typeId}
+        </if>
+        <if test="topLevel != null and topLevel != ''">
+            AND a.topLevel = #{topLevel}
+        </if>
+        <if test="status != null and status != ''">
+            AND a.status = #{status}
+        </if>
+        <if test="recommendLevel != null and recommendLevel != ''">
+            AND a.recommendLevel = #{recommendLevel}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND a.channelId = #{channelId}
+        </if>
+        ORDER BY e.views DESC
+    </select>
+
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListByTplContent" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
 		SELECT
@@ -156,7 +205,7 @@
 		<if test="endTime!=null and endTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
 		</if>
-		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+		ORDER BY b.releaseDate DESC
 	</select>
 
 	<!-- 查询（根据channelId查询） -->
@@ -188,6 +237,7 @@
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
 		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+        LEFT JOIN cms_content_topic t ON a.contentId = t.contentId
 		WHERE a.status = 2 and b.needRegenerate = 0
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
@@ -201,6 +251,9 @@
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}
 		</if>
+        <if test="topicId != null and topicId != ''">
+            AND t.topicId = #{topicId}
+        </if>
 		<if test="startTime!=null and startTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
 		</if>
@@ -238,6 +291,7 @@
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
 		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+        LEFT JOIN cms_content_topic t ON a.contentId = t.contentId
 		WHERE a.status = 2
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
@@ -254,6 +308,9 @@
 		<if test="needRegenerate != null and needRegenerate != ''">
 			AND b.needRegenerate = #{needRegenerate}
 		</if>
+        <if test="topicId != null and topicId != ''">
+            AND t.topicId = #{topicId}
+        </if>
 		<if test="startTime!=null and startTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
 		</if>

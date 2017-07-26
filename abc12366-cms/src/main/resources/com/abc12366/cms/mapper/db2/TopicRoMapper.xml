@@ -17,10 +17,15 @@
 	</select>
 
 	<!-- 查询（查询列表） -->
-	<select id="selectList" resultType="com.abc12366.cms.model.bo.TopicBo" parameterType="java.lang.String">
+	<select id="selectList" resultType="com.abc12366.cms.model.bo.TopicBo" parameterType="java.util.Map">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM cms_topic
+        WHERE 1=1
+        <if test="siteId != null and siteId != ''">
+            AND siteId = #{siteId}
+        </if>
+        ORDER BY priority ASC
 	</select>
 
 	<!-- 查询（查询列表） -->

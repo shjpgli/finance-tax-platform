@@ -7,9 +7,7 @@ import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
-import com.abc12366.uc.model.bo.UserDzsbBO;
-import com.abc12366.uc.model.bo.UserHndsBO;
-import com.abc12366.uc.model.bo.UserHngsBO;
+import com.abc12366.uc.model.bo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -18,11 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ *
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-07-25
+ * Time: 16:22
  */
 @Service
 public class UserBindServiceImpl implements UserBindService {
@@ -38,7 +38,7 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public UserDzsbBO dzsbBind(UserDzsbBO userDzsbBO) {
         if (userDzsbBO == null) {
-            LOGGER.warn("新增失败，参数：{}" + userDzsbBO.toString());
+            LOGGER.warn("新增失败，参数：null" );
             throw new ServiceException(4101);
         }
         UserDzsb userDzsb = new UserDzsb();
@@ -63,7 +63,7 @@ public class UserBindServiceImpl implements UserBindService {
     public boolean dzsbUnbind(String id) {
         UserDzsb userDzsb = userBindRoMapper.userDzsbSelectById(id);
         if (userDzsb == null) {
-            LOGGER.warn("修改失败，参数：{}" + userDzsb.toString());
+            LOGGER.warn("修改失败，参数：null");
             throw new ServiceException(4102);
         }
         int result = userBindMapper.dzsbUnbind(id);
@@ -77,7 +77,7 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public UserHngsBO hngsBind(UserHngsBO userHngsBO) {
         if (userHngsBO == null) {
-            LOGGER.warn("新增失败，参数：{}" + userHngsBO.toString());
+            LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
         UserHngs userHngs = new UserHngs();
@@ -103,7 +103,7 @@ public class UserBindServiceImpl implements UserBindService {
     public boolean hngsUnbind(String id) {
         UserHngs userHngs = userBindRoMapper.userHngsSelectById(id);
         if (userHngs == null) {
-            LOGGER.warn("修改失败，参数：{}" + userHngs.toString());
+            LOGGER.warn("修改失败，参数：null");
             throw new ServiceException(4102);
         }
         int result = userBindMapper.hngsUnbind(id);
@@ -151,5 +151,20 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4102);
         }
         return true;
+    }
+
+    @Override
+    public List<UserDzsbListBO> getUserDzsbBind(String userId) {
+        return userBindRoMapper.getUserDzsbBind(userId);
+    }
+
+    @Override
+    public List<UserHngsListBO> getUserhngsBind(String userId) {
+        return userBindRoMapper.getUserhngsBind(userId);
+    }
+
+    @Override
+    public List<UserHndsBO> getUserhndsBind(String userId) {
+        return userBindRoMapper.getUserhndsBind(userId);
     }
 }
