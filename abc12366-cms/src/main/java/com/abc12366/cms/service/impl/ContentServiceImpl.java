@@ -282,7 +282,7 @@ public class ContentServiceImpl implements ContentService {
         if(tagList != null){
             for(ContenttagidBo tagBo:tagList){
                 Contenttagid tag = new Contenttagid();
-                tag.setContentId(uuid);
+                tagBo.setContentId(uuid);
                 try {
                     BeanUtils.copyProperties(tagBo, tag);
                 } catch (Exception e) {
