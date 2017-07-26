@@ -158,13 +158,13 @@ public class AppServiceImpl implements AppService {
         //TODO api校验暂时屏蔽
         // 设置appId，用于在业务中快速获取有效AppId，在AppInterceptor.postHandle中删除。
 
-       /* request.setAttribute(Constant.APP_ID, appId);
+        request.setAttribute(Constant.APP_ID, appId);
         String method = request.getMethod();
         String version = request.getHeader(Constant.VERSION_HEAD);
         AppSettingBO appSettingBO = new AppSettingBO();
         appSettingBO.setAppId(appId);
         appSettingBO.setUri(bestMatchingPattern);
-        AppSettingBO bo = appSettingRoMapper.selectByAppId(appSettingBO);
+        /*AppSettingBO bo = appSettingRoMapper.selectByAppId(appSettingBO);
         if(bo == null){
             LOGGER.warn("API不存在或未授权：{}", app);
             throw new ServiceException(4027);
