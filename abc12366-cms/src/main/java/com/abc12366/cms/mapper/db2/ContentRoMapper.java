@@ -39,6 +39,13 @@ public interface ContentRoMapper {
 	 **/
 	List<ContentListBo> selectList(Map<String,Object> map);
 
+    /**
+     *
+     * 查询(根据查询条件查询)按访问量排序
+     *
+     **/
+    List<ContentListBo> selectListByviews(Map<String,Object> map);
+
 	/**
 	 *
 	 * 查询(根据查询条件查询)

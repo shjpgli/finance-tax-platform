@@ -39,9 +39,12 @@ public class TopicController {
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "siteId", required = false) String siteId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("siteId",siteId);//站点ID
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<TopicBo> dataList = topicService.selectList();
+        List<TopicBo> dataList = topicService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
