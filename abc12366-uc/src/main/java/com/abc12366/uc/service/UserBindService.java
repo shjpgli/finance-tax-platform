@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -11,15 +12,15 @@ import java.util.List;
  * Time: 16:22
  */
 public interface UserBindService {
-    UserDzsbBO dzsbBind(UserDzsbBO userDzsbBO);
+    UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request);
 
     boolean dzsbUnbind(String id);
 
-    UserHngsBO hngsBind(UserHngsBO userHngsBO);
+    UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request);
 
     boolean hngsUnbind(String id);
 
-    UserHndsBO hndsBind(UserHndsBO userHndsBO);
+    UserHndsBO hndsBind(UserHndsInsertBO userHndsInsertBO, HttpServletRequest request);
 
     boolean hndsUnbind(String id);
 

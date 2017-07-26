@@ -7,8 +7,8 @@ import com.abc12366.uc.mapper.db2.SysTaskRoMapper;
 import com.abc12366.uc.model.SysTask;
 import com.abc12366.uc.model.bo.SysTaskBO;
 import com.abc12366.uc.model.bo.SysTaskInsertAndUpdateBO;
+import com.abc12366.uc.model.bo.SysTaskListBO;
 import com.abc12366.uc.service.SysTaskService;
-import com.abc12366.uc.web.VipPrivilegeController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -142,5 +142,10 @@ public class SysTaskServiceImpl implements SysTaskService {
             throw new ServiceException(4103);
         }
         return true;
+    }
+
+    @Override
+    public List<SysTaskListBO> selectDeployedListByType(Map<String, String> map) {
+        return sysTaskRoMapper.selectDeployedListByType(map);
     }
 }

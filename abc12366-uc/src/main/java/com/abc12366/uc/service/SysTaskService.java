@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.SysTaskBO;
 import com.abc12366.uc.model.bo.SysTaskInsertAndUpdateBO;
+import com.abc12366.uc.model.bo.SysTaskListBO;
 
 import java.util.List;
 import java.util.Map;
@@ -23,4 +24,6 @@ public interface SysTaskService {
     SysTaskBO update(SysTaskInsertAndUpdateBO sysTaskUpdateBO, String id);
 
     boolean delete(String id);
+
+    List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
 }
