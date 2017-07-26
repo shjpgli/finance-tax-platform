@@ -19,7 +19,7 @@ public interface ContentService {
 
     List<ContentsListBo> selectListByContentType(Map<String,Object> map);
 
-    List<ContentsListBo> selectContentType(Map<String,Object> map);
+    List<ContenttagidBo> selectContentType(Map<String,Object> map);
 
     List<ContentsListBo> selectListByChannelId(Map<String,Object> map);
 

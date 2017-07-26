@@ -111,9 +111,9 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentsListBo> selectContentType(Map<String,Object> map) {
+    public List<ContenttagidBo> selectContentType(Map<String,Object> map) {
         //查询内容列表
-        List<ContentsListBo> contents = contentRoMapper.selectContentType(map);
+        List<ContenttagidBo> contents = contentRoMapper.selectContentType(map);
         LOGGER.info("{}", contents);
         return contents;
     }

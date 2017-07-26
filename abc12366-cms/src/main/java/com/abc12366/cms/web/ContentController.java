@@ -118,18 +118,15 @@ public class ContentController {
     @GetMapping(path = "/selectListByContentType")
     public ResponseEntity selectListByContentType(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                                  @RequestParam(value = "typeId", required = false) String typeId,
-                                                  @RequestParam(value = "contentType", required = false) String contentType,
-                                                @RequestParam(value = "status", required = false) String status,
+                                                  @RequestParam(value = "siteId", required = false) String siteId,
+                                                  @RequestParam(value = "tagId", required = false) String tagId,
                                                 @RequestParam(value = "channelId", required = false) String channelId,
                                                 @RequestParam(value = "startTime", required = false) String startTime,
-                                                @RequestParam(value = "endTime", required = false) String endTime,
-                                                @RequestParam(value = "tplContent", required = false) String tplContent) {
+                                                @RequestParam(value = "endTime", required = false) String endTime) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("typeId", typeId);//内容类型
-        dataMap.put("contentType", contentType);//内容类型(标签)
-        dataMap.put("status", status);//状态
+        dataMap.put("tagId", tagId);//内容类型(标签)
         dataMap.put("channelId", channelId);//栏目ID
+        dataMap.put("siteId", siteId);//站点ID
         SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
         try {
             if(startTime != null && !"".equals(startTime)){
@@ -142,7 +139,6 @@ public class ContentController {
         }
 
 //        dataMap.put("endTime", endTime);
-        dataMap.put("tplContent", tplContent);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询内容列表
         List<ContentsListBo> dataList = contentService.selectListByContentType(dataMap);
@@ -153,34 +149,13 @@ public class ContentController {
      * 根据内容标签分组，获取内容标签列表
      */
     @GetMapping(path = "/selectContentType")
-    public ResponseEntity selectContentType(@RequestParam(value = "typeId", required = false) String typeId,
-                                                  @RequestParam(value = "contentType", required = false) String contentType,
-                                                  @RequestParam(value = "status", required = false) String status,
-                                                  @RequestParam(value = "channelId", required = false) String channelId,
-                                                  @RequestParam(value = "startTime", required = false) String startTime,
-                                                  @RequestParam(value = "endTime", required = false) String endTime,
-                                                  @RequestParam(value = "tplContent", required = false) String tplContent) {
+    public ResponseEntity selectContentType(@RequestParam(value = "siteId", required = false) String siteId,
+                                                  @RequestParam(value = "channelId", required = false) String channelId) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("typeId", typeId);//内容类型
-        dataMap.put("contentType", contentType);//内容类型(标签)
-        dataMap.put("status", status);//状态
         dataMap.put("channelId", channelId);//栏目ID
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            if(startTime != null && !"".equals(startTime)){
-                Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime() / 1000);
-            }
-        } catch (ParseException e) {
-            LOGGER.error("时间类转换异常：{}", e);
-            throw new RuntimeException("时间类型转换异常：{}", e);
-        }
-
-//        dataMap.put("endTime", endTime);
-        dataMap.put("tplContent", tplContent);
-
+        dataMap.put("siteId", siteId);//栏目ID
         //查询内容列表
-        List<ContentsListBo> dataList = contentService.selectContentType(dataMap);
+        List<ContenttagidBo> dataList = contentService.selectContentType(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
