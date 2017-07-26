@@ -64,10 +64,9 @@ public class AdPageServiceImpl implements AdPageService {
         Timestamp now = new Timestamp(new Date().getTime());
         AdPageBO v = selectOne(adPage.getId());
         if (v != null) {
-            v.setName(adPage.getName());
-            v.setLastUpdate(now);
-            adPageMapper.update(v);
-            return selectOne(v.getId());
+            adPage.setLastUpdate(now);
+            adPageMapper.update(adPage);
+            return selectOne(adPage.getId());
         } else {
             throw new ServiceException(4012);
         }

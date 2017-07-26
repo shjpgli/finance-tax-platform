@@ -26,7 +26,7 @@ public class AdPageBO {
     private Integer sort;
     @NotNull
     private Boolean showName;
-    @NotNull
+   @NotNull
     private Boolean status;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

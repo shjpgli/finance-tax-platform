@@ -10,7 +10,7 @@
 
     <insert id="insert" parameterType="com.abc12366.cszj.model.bo.AdPageBO">
         INSERT INTO cszj_adpage(<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{name}, #{url}, #{link}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate}
+        VALUES (#{id}, #{name}, #{url}, #{link}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
     <update id="update" parameterType="com.abc12366.cszj.model.bo.AdPageBO">
@@ -28,7 +28,7 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="delete" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         DELETE FROM cszj_adpage WHERE id = #{id}
     </delete>
 </mapper>

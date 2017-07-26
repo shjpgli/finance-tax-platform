@@ -15,14 +15,14 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 投票管理控制器
+ * 投票管理控制�?
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-06-07 4:02 PM
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/adPage", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/adpage", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AdPageController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdPageController.class);
@@ -36,6 +36,7 @@ public class AdPageController {
         LOGGER.info("{},{},{}", name, page, size);
 
         AdPageBO adPage = new AdPageBO();
+        adPage.setName(name);
         List<AdPageBO> dataList = adPageService.selectList(adPage, page, size);
 
         PageInfo<AdPageBO> pageInfo = new PageInfo<AdPageBO>(dataList);
