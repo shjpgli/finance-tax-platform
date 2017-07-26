@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.bo.SysTaskBO;
+import com.abc12366.uc.model.bo.SysTaskListBO;
 
 import java.util.List;
 import java.util.Map;
@@ -16,4 +17,6 @@ public interface SysTaskRoMapper {
     List<SysTaskBO> selectDeployedList(Map<String, String> map);
 
     SysTaskBO selectOne(String id);
+
+    List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
 }

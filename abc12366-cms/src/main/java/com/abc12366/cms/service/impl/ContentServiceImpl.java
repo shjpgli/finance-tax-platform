@@ -80,6 +80,12 @@ public class ContentServiceImpl implements ContentService {
     @Autowired
     private ContentCountMapper contentCountMapper;
 
+    @Autowired
+    private ContenttagidMapper tagMapper;
+
+    @Autowired
+    private ContenttagidRoMapper tagRoMapper;
+
     @Override
     public List<ContentListBo> selectList(Map<String,Object> map) {
         //查询内容列表
@@ -105,9 +111,9 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentsListBo> selectContentType(Map<String,Object> map) {
+    public List<ContenttagidBo> selectContentType(Map<String,Object> map) {
         //查询内容列表
-        List<ContentsListBo> contents = contentRoMapper.selectContentType(map);
+        List<ContenttagidBo> contents = contentRoMapper.selectContentType(map);
         LOGGER.info("{}", contents);
         return contents;
     }
@@ -271,6 +277,22 @@ public class ContentServiceImpl implements ContentService {
             }
         }
 
+        //标签组
+        List<ContenttagidBo> tagList = contentSaveBo.getTagList();
+        if(tagList != null){
+            for(ContenttagidBo tagBo:tagList){
+                Contenttagid tag = new Contenttagid();
+                tagBo.setContentId(uuid);
+                try {
+                    BeanUtils.copyProperties(tagBo, tag);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                tagMapper.insert(tag);
+            }
+        }
+
         ContentCount cons = new ContentCount();
         cons.setContentId(uuid);
         contentCountMapper.insert(cons);
@@ -402,6 +424,23 @@ public class ContentServiceImpl implements ContentService {
         }
         contentSaveBo.setTopicList(topicBoList);
 
+        //获取标签组
+        List<Contenttagid> tagList = tagRoMapper.selectList(contentId);
+        List<ContenttagidBo> tagBoList = new ArrayList<ContenttagidBo>();
+        if(tagList != null){
+            for(Contenttagid tag:tagList){
+                ContenttagidBo tagBo = new ContenttagidBo();
+                try {
+                    BeanUtils.copyProperties(tag, tagBo);
+                    tagBoList.add(tagBo);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+            }
+        }
+        contentSaveBo.setTagList(tagBoList);
+
         LOGGER.info("{}", contentSaveBo);
         return contentSaveBo;
     }
@@ -528,6 +567,22 @@ public class ContentServiceImpl implements ContentService {
             }
         }
 
+        //标签组
+        tagMapper.deleteByPrimaryKey(content.getContentId());
+        List<ContenttagidBo> tagList = contentSaveBo.getTagList();
+        if(tagList != null){
+            for(ContenttagidBo tagBo:tagList){
+                Contenttagid tag = new Contenttagid();
+                try {
+                    BeanUtils.copyProperties(tagBo, tag);
+                } catch (Exception e) {
+                    LOGGER.error("类转换异常：{}", e);
+                    throw new RuntimeException("类型转换异常：{}", e);
+                }
+                tagMapper.insert(tag);
+            }
+        }
+
         LOGGER.info("{}", contentSaveBo);
         return contentSaveBo;
     }
@@ -549,6 +604,8 @@ public class ContentServiceImpl implements ContentService {
         groupMapper.deleteByPrimaryKey(contentId);
         //专题组
         topicMapper.deleteByContentId(contentId);
+        //标签组
+        tagMapper.deleteByPrimaryKey(contentId);
         //删除内容信息
         int r = contentMapper.deleteByPrimaryKey(contentId);
         LOGGER.info("{}", r);

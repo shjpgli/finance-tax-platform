@@ -16,22 +16,22 @@ public class UserHngsListBO {
     private String nsrsbh;
     private String djxh;
     private String shxydm;
+    private String smrzzt;
     private String swjgMc;
     private String swjgDm;
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
-    private String realNameValidStatus;
 
     public UserHngsListBO() {
     }
 
-    public String getRealNameValidStatus() {
-        return realNameValidStatus;
+    public String getSmrzzt() {
+        return smrzzt;
     }
 
-    public void setRealNameValidStatus(String realNameValidStatus) {
-        this.realNameValidStatus = realNameValidStatus;
+    public void setSmrzzt(String smrzzt) {
+        this.smrzzt = smrzzt;
     }
 
     public String getId() {

@@ -8,6 +8,7 @@ import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -15,11 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
 /**
- *
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
  * Time: 16:22
@@ -36,18 +37,20 @@ public class UserBindServiceImpl implements UserBindService {
     private UserBindRoMapper userBindRoMapper;
 
     @Override
-    public UserDzsbBO dzsbBind(UserDzsbBO userDzsbBO) {
-        if (userDzsbBO == null) {
-            LOGGER.warn("新增失败，参数：null" );
+    public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) {
+        if (userDzsbInsertBO == null) {
+            LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
         UserDzsb userDzsb = new UserDzsb();
-        BeanUtils.copyProperties(userDzsbBO, userDzsb);
+        //BeanUtils.copyProperties(userDzsbBO, userDzsb);
+
         userDzsb.setId(Utils.uuid());
         Date date = new Date();
         userDzsb.setCreateTime(date);
         userDzsb.setLastUpdate(date);
         userDzsb.setStatus(true);
+        userDzsb.setUserId(UserUtil.getUserId(request));
         int result = userBindMapper.dzsbBind(userDzsb);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());
@@ -58,7 +61,6 @@ public class UserBindServiceImpl implements UserBindService {
         return userDzsbBO1;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public boolean dzsbUnbind(String id) {
         UserDzsb userDzsb = userBindRoMapper.userDzsbSelectById(id);
@@ -75,19 +77,20 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public UserHngsBO hngsBind(UserHngsBO userHngsBO) {
-        if (userHngsBO == null) {
+    public UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
+        if (userHngsInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
         UserHngs userHngs = new UserHngs();
-        BeanUtils.copyProperties(userHngsBO, userHngs);
+        //BeanUtils.copyProperties(userHngsInsertBO, userHngs);
         Date date = new Date();
         userHngs.setId(Utils.uuid());
         userHngs.setSmrzzt(false);
         userHngs.setStatus(true);
         userHngs.setCreateTime(date);
         userHngs.setLastUpdate(date);
+        userHngs.setUserId(UserUtil.getUserId(request));
         int result = userBindMapper.hngsBind(userHngs);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userHngs.toString());
@@ -98,7 +101,6 @@ public class UserBindServiceImpl implements UserBindService {
         return userHngsBO1;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public boolean hngsUnbind(String id) {
         UserHngs userHngs = userBindRoMapper.userHngsSelectById(id);
@@ -115,18 +117,19 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public UserHndsBO hndsBind(UserHndsBO userHndsBO) {
-        if (userHndsBO == null) {
+    public UserHndsBO hndsBind(UserHndsInsertBO userHndsInsertBO, HttpServletRequest request) {
+        if (userHndsInsertBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
         UserHnds userHnds = new UserHnds();
-        BeanUtils.copyProperties(userHndsBO, userHnds);
+        //BeanUtils.copyProperties(userHndsInsertBO, userHnds);
         Date date = new Date();
         userHnds.setId(Utils.uuid());
         userHnds.setStatus(true);
         userHnds.setCreateTime(date);
         userHnds.setLastUpdate(date);
+        userHnds.setUserId(UserUtil.getUserId(request));
         int result = userBindMapper.hndsBind(userHnds);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userHnds);

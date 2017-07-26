@@ -21,8 +21,7 @@
         where id=#{id}
     </select>
     <select id="getUserhngsBind" resultType="com.abc12366.uc.model.bo.UserHngsListBO" parameterType="java.lang.String">
-        select uuh.id,uuh.userId,uuh.djxh,uuh.nsrsbh,uuh.nsrmc,uuh.shxydm,uuh.swjgMc,uuh.swjgDm,uuh.bsy,uuh.smrzzt,uuh.status,uuh.createTime,uuh.lastUpdate,
-        (select uue.validStatus from uc_user_extend uue where uue.userId=uuh.userId) realNameValidStatus
+        select uuh.id,uuh.userId,uuh.djxh,uuh.nsrsbh,uuh.nsrmc,uuh.shxydm,uuh.swjgMc,uuh.swjgDm,uuh.bsy,uuh.smrzzt,uuh.status,uuh.createTime,uuh.lastUpdate
         from uc_user_hngs uuh
         where uuh.userId=#{userId}
     </select>

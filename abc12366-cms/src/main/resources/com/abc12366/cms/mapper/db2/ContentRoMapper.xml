@@ -176,28 +176,20 @@
 		b.staticLink,
         d.siteName,
 		c.channelPath,d.sitePath,d.domain
-		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		FROM cms_content a LEFT JOIN cms_contenttagid t ON t.contentId = a.contentId
+        LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
 		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
-		WHERE 1=1
-		<if test="contentType != null and contentType != ''">
-			AND a.contentType = #{contentType}
-		</if>
-		<if test="typeId != null and typeId != ''">
-			AND a.typeId = #{typeId}
-		</if>
-		<if test="status != null and status != ''">
-			AND a.status = #{status}
+		WHERE a.status = 2 AND b.needRegenerate = 1
+		<if test="tagId != null and tagId != ''">
+			AND t.tagId = #{tagId}
 		</if>
 		<if test="channelId != null and channelId != ''">
 			AND a.channelId = #{channelId}
 		</if>
-		<if test="tplContent != null and tplContent != ''">
-			AND b.tplContent = #{tplContent}
-		</if>
-		<if test="needRegenerate != null and needRegenerate != ''">
-			AND b.needRegenerate = #{needRegenerate}
+		<if test="siteId != null and siteId != ''">
+			AND a.siteId = #{siteId}
 		</if>
 		<if test="startTime!=null and startTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
@@ -209,24 +201,18 @@
 	</select>
 
 	<!-- 查询（根据channelId查询） -->
-	<select id="selectContentType" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+	<select id="selectContentType" resultType="com.abc12366.cms.model.bo.ContenttagidBo" parameterType="java.util.Map">
 		SELECT
-		a.contentType
-		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		a.tagId,COUNT(a.tagId) priority
+		FROM cms_contenttagid a LEFT JOIN cms_content b ON a.contentId = b.contentId
 		WHERE 1=1
-		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+		<if test="siteId != null and siteId != ''">
+			AND b.siteId = #{siteId}
 		</if>
-		<if test="startTime!=null and startTime!=''">
-			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
-		</if>
-		<if test="endTime!=null and endTime!=''">
-			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
-		</if>
-		<if test="status != null and status != ''">
-			AND a.status = #{status}
-		</if>
-		GROUP BY a.contentType
+        <if test="channelId != null and channelId != ''">
+            AND b.channelId = #{channelId}
+        </if>
+		GROUP BY a.tagId
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->

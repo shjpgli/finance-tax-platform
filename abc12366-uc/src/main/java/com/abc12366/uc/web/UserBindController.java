@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -31,9 +32,9 @@ public class UserBindController {
     private UserBindService userBindService;
 
     @PostMapping(path = "/bind/dzsb")
-    public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbBO userDzsbBO) {
-        LOGGER.info("{}", userDzsbBO);
-        UserDzsbBO user_dzsb = userBindService.dzsbBind(userDzsbBO);
+    public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) {
+        LOGGER.info("{}:{}", userDzsbInsertBO, request);
+        UserDzsbBO user_dzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
         LOGGER.info("{}", user_dzsb);
         return ResponseEntity.ok(Utils.kv("data", user_dzsb));
     }
@@ -85,9 +86,9 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/bind/hngs")
-    public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsBO userHngsBO) {
-        LOGGER.info("{}", userHngsBO);
-        UserHngsBO user_hngs = userBindService.hngsBind(userHngsBO);
+    public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
+        LOGGER.info("{}:{}", userHngsInsertBO, request);
+        UserHngsBO user_hngs = userBindService.hngsBind(userHngsInsertBO, request);
         return ResponseEntity.ok(Utils.kv("data", user_hngs));
     }
 
@@ -99,9 +100,9 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/bind/hnds")
-    public ResponseEntity userHndsBind(@Valid @RequestBody UserHndsBO userHndsBO) {
-        LOGGER.info("{}", userHndsBO);
-        UserHndsBO user_hnds = userBindService.hndsBind(userHndsBO);
+    public ResponseEntity userHndsBind(@Valid @RequestBody UserHndsInsertBO userHndsInsertBO, HttpServletRequest request) {
+        LOGGER.info("{}:{}", userHndsInsertBO, request);
+        UserHndsBO user_hnds = userBindService.hndsBind(userHndsInsertBO, request);
         return ResponseEntity.ok(Utils.kv("data", user_hnds));
     }
 

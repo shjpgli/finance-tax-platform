@@ -25,6 +25,7 @@ public class ContentSaveBo implements Serializable {
 	private List<FileBo> fileList;//内容附件
 	private List<ContentGroupViewBo> groupList;//用户组
 	private List<ContentTopicBo> topicList;//专题组
+    private List<ContenttagidBo> tagList;//标签组
 
 	/**0 新增 1修改 2审核 3退回 4移动 5生成静态页 6删除到回收站 7归档 8出档 9推送共享**/
 	private Integer operateType;
@@ -100,4 +101,12 @@ public class ContentSaveBo implements Serializable {
 	public void setTopicList(List<ContentTopicBo> topicList) {
 		this.topicList = topicList;
 	}
+
+    public List<ContenttagidBo> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<ContenttagidBo> tagList) {
+        this.tagList = tagList;
+    }
 }
