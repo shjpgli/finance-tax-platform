@@ -47,6 +47,7 @@ public class ContentController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "siteId", required = false) String siteId,
                                      @RequestParam(value = "topLevel", required = false) String topLevel,
                                      @RequestParam(value = "typeId", required = false) String typeId,
                                      @RequestParam(value = "username", required = false) String username,
@@ -54,6 +55,8 @@ public class ContentController {
                                      @RequestParam(value = "channelId", required = false) String channelId,
                                      @RequestParam(value = "recommendLevel", required = false) String recommendLevel) {
         Map<String, Object> dataMap = new HashMap<>();
+
+        dataMap.put("siteId", siteId);//站点ID
         dataMap.put("title", title);//标题
         dataMap.put("topLevel", topLevel);//置顶级别
         dataMap.put("typeId", typeId);//内容类型

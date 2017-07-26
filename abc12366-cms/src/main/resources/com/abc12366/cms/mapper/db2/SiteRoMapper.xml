@@ -23,6 +23,20 @@
 		FROM cms_site
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCnt" resultType="java.lang.Integer" parameterType="com.abc12366.cms.model.bo.SiteBo">
+        SELECT
+        count(siteId) cnt
+        FROM cms_site
+        WHERE 1=1
+        <if test="sitePath != null and sitePath != ''">
+            AND sitePath = #{sitePath}
+        </if>
+        <if test="siteId != null and siteId != ''">
+            AND siteId != #{siteId}
+        </if>
+    </select>
+
 
 
 </mapper>

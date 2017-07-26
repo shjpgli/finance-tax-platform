@@ -25,4 +25,6 @@ public interface SiteRoMapper {
      **/
     List<SiteListBo> selectList();
 
+    Integer selectCnt(SiteBo siteBo);
+
 }
