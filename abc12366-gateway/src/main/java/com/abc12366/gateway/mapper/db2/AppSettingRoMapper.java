@@ -14,4 +14,6 @@ public interface AppSettingRoMapper {
     List<AppSettingBO> selectList(AppSettingBO appId);
 
     AppSetting selectOne(AppSetting appSetting);
+
+    AppSettingBO selectByAppId(AppSettingBO appSettingBO);
 }

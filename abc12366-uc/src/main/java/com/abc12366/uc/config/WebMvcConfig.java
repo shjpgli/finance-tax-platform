@@ -54,6 +54,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/log/**")
+                .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/test");
@@ -62,6 +66,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(ucUserInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app*/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/log/**")
+                .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid*/**")
                 .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/login", "/logout/**", "/refresh", "/register", "/test", "/verifylogin", "/user/token/**", "/user/u/**");

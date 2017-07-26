@@ -16,4 +16,6 @@ public interface BlacklistRoMapper {
     List<Blacklist> isBlacklist(Blacklist blackList);
 
     List<Blacklist> selectList();
+
+    Blacklist selectByIp(String ip);
 }

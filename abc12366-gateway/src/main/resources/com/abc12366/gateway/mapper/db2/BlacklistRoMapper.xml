@@ -30,7 +30,12 @@
             </if>
         </where>
     </select>
-    
+    <select id="selectByIp" resultType="com.abc12366.gateway.model.Blacklist">
+        SELECT id, userId, ip, startTime, endTime, remark, status, createTime, createUser
+        FROM gw_blacklist
+        where ip = #{ip} and status = false
+    </select>
+
     <select id="selectList" resultType="com.abc12366.gateway.model.Blacklist">
         SELECT id, userId, ip, startTime, endTime, remark, status, createTime, createUser
         FROM gw_blacklist

@@ -75,6 +75,10 @@ public class ApiLog extends TableBO implements Serializable {
 
     private long endTime;
 
+    private int minuteCount;
+    private int hourCount;
+    private int dayCount;
+
 
     public void setId(String id) {
         this.id = id;
@@ -186,5 +190,29 @@ public class ApiLog extends TableBO implements Serializable {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
+    }
+
+    public int getMinuteCount() {
+        return minuteCount;
+    }
+
+    public void setMinuteCount(int minuteCount) {
+        this.minuteCount = minuteCount;
+    }
+
+    public int getHourCount() {
+        return hourCount;
+    }
+
+    public void setHourCount(int hourCount) {
+        this.hourCount = hourCount;
+    }
+
+    public int getDayCount() {
+        return dayCount;
+    }
+
+    public void setDayCount(int dayCount) {
+        this.dayCount = dayCount;
     }
 }

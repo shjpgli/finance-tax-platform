@@ -62,6 +62,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/log/**")
+                .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/admintoken/**")
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 

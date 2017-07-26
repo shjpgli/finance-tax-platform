@@ -31,4 +31,6 @@ public interface BlacklistService {
     Blacklist update(BlacklistBO bo);
 
     void delete(String id);
+
+    Blacklist selectByIp(String ip);
 }
