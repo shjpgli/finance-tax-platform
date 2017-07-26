@@ -7,20 +7,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 投票功能服务类
+ * 广告图片管理服务类
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-06-07 4:19 PM
+ * @author yuanluo <ljun51@outlook.com>
+ * @create 2017-07-26 4:19 PM
  * @since 1.0.0
  */
 public interface AdPageService {
-    List<AdPageBO> selectList(AdPageBO vote, int page, int size);
+    List<AdPageBO> selectList(AdPageBO adPage, int page, int size);
 
-    AdPageBO insert(AdPageBO vote);
+    AdPageBO insert(AdPageBO adPage);
 
     AdPageBO selectOne(String id);
 
-    AdPageBO update(AdPageBO vote);
+    AdPageBO update(AdPageBO adPage);
 
     void delete(String id);
 }

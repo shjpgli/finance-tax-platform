@@ -2,12 +2,13 @@ package com.abc12366.cszj.mapper.db1;
 
 import com.abc12366.cszj.model.bo.AdPageBO;
 import org.apache.ibatis.annotations.Param;
-
 /**
- * 
- * AnswerMapperæ•°æ®åº“æ“ä½œæ¥å£ç±»
- * 
- **/
+ * ¹ã¸æÍ¼Æ¬¹ÜÀí
+ *
+ * @author yuanluo <ljun51@outlook.com>
+ * @create 2017-07-26 4:21 PM
+ * @since 1.0.0
+ */
 
 public interface AdPageMapper {
 
@@ -15,14 +16,14 @@ public interface AdPageMapper {
 
 	/**
 	 * 
-	 * åˆ é™¤ï¼ˆæ ¹æ®ä¸»é”®IDåˆ é™¤ï¼‰
+	 * ¸ù¾İÖ÷¼üÉ¾³ı¹ã¸æÍ¼Æ¬
 	 * 
 	 **/
 	int deleteByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 
-	 * æ·»åŠ 
+	 * ĞÂÔö¹ã¸æÍ¼Æ¬
 	 * 
 	 **/
 	int insert(AdPageBO adPage);
@@ -30,7 +31,7 @@ public interface AdPageMapper {
 
 	/**
 	 * 
-	 * ä¿®æ”¹ï¼ˆæ ¹æ®ä¸»é”®IDä¿®æ”¹ï¼‰
+	 * ¸üĞÂ¹ã¸æÍ¼Æ¬
 	 * 
 	 **/
 	int update(AdPageBO adPage);

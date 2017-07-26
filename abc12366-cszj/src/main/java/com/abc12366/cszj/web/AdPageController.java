@@ -15,10 +15,10 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 鎶曠エ绠＄悊鎺у埗鍣?
+ * 广告图片管理控制类
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-06-07 4:02 PM
+ * @author yuanluo <ljun51@outlook.com>
+ * @create 2017-07-26 4:02 PM
  * @since 1.0.0
  */
 @RestController

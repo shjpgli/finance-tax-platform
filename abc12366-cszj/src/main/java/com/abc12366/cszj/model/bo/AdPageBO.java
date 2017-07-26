@@ -8,8 +8,9 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
- * Date: 2017-05-23
+ * 广告图片管理
+ * User: yuanluo<435720953@qq.com.com>
+ * Date: 2017-07-26
  * Time: 11:06
  */
 public class AdPageBO {

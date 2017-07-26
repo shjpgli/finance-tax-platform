@@ -18,10 +18,10 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * 投票功能实现类
+ * 广告图片管理实现类
  *
- * @author lijun <ljun51@outlook.com>
- * @create 2017-06-07 4:21 PM
+ * @author yuanluo <ljun51@outlook.com>
+ * @create 2017-07-26 4:21 PM
  * @since 1.0.0
  */
 @Service
