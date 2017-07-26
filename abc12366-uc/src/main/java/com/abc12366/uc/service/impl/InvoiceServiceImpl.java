@@ -261,20 +261,19 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional("db1TxManager")
     @Override
     public InvoiceBackBO refund(InvoiceBackBO invoiceBackBO) {
-        InvoiceBack invoiceBack = new InvoiceBack();
-        BeanUtils.copyProperties(invoiceBackBO,invoiceBack);
-        invoiceBack.setId(Utils.uuid());
+        invoiceBackBO.setId(Utils.uuid());
         Date date = new Date();
-        invoiceBack.setCreateTime(date);
-        invoiceBack.setLastUpdate(date);
+        invoiceBackBO.setCreateTime(date);
+        invoiceBackBO.setLastUpdate(date);
+        invoiceBackBO.setStatus("1");
+        InvoiceBack invoiceBack = new InvoiceBack();
+        BeanUtils.copyProperties(invoiceBackBO, invoiceBack);
         int insert = invoiceBackMapper.insert(invoiceBack);
         if (insert != 1){
             LOGGER.info("{新增失败}", invoiceBack);
             throw new ServiceException(4101);
         }
-        InvoiceBackBO bo = new InvoiceBackBO();
-        BeanUtils.copyProperties(invoiceBack, bo);
-        return bo;
+        return invoiceBackBO;
     }
 
     @Transactional("db1TxManager")
@@ -291,8 +290,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ServiceException(4146);
         }else{
             //修改发票状态
-            //TODO 需要确定状态值
-            invoice.setStatus("0");
             int iUpdate =  invoiceMapper.update(invoice);
             if(iUpdate != 1){
                 LOGGER.info("{发票信息修改错误}", invoice);
@@ -305,7 +302,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         for (OrderInvoice orderInvoice:orderInvoiceList){
             order = new Order();
             order.setOrderNo(orderInvoice.getOrderNo());
-            order.setOrderStatus("3");
+            //TODO 需要修改
+//            order.setIsInvoice();
             order.setLastUpdate(new Date());
             int oUpdate = orderMapper.update(order);
             if(oUpdate != 1){

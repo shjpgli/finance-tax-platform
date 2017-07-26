@@ -52,6 +52,8 @@ public class InvoiceBO implements Serializable {
     private UserAddress userAddress;
     private DeliveryMethodBO deliveryMethodBO;
 
+    /**是否已开发票，true：是，false：否**/
+    private Boolean isInvoice;
 
     public void setId(String id) {
         this.id = id;
@@ -331,5 +333,13 @@ public class InvoiceBO implements Serializable {
 
     public void setDeliveryMethodBO(DeliveryMethodBO deliveryMethodBO) {
         this.deliveryMethodBO = deliveryMethodBO;
+    }
+
+    public Boolean getIsInvoice() {
+        return isInvoice;
+    }
+
+    public void setIsInvoice(Boolean isInvoice) {
+        this.isInvoice = isInvoice;
     }
 }

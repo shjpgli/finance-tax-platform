@@ -152,6 +152,11 @@ public class AppServiceImpl implements AppService {
     @Override
     public AppBO update(AppBO appBO) {
         LOGGER.info("{}", appBO);
+        try {
+            appBO.setPassword(Utils.md5(appBO.getPassword()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         App app = new App();
         BeanUtils.copyProperties(appBO, app);
         app.setLastUpdate(new Date());

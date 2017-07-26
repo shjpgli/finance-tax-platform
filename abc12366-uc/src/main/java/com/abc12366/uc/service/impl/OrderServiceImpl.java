@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
+import com.abc12366.uc.mapper.db1.OrderLogMapper;
 import com.abc12366.uc.mapper.db1.OrderMapper;
 import com.abc12366.uc.mapper.db1.OrderProductMapper;
 import com.abc12366.uc.mapper.db2.GoodsRoMapper;
@@ -9,6 +10,7 @@ import com.abc12366.uc.mapper.db2.InvoiceRoMapper;
 import com.abc12366.uc.mapper.db2.OrderRoMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.OrderLog;
 import com.abc12366.uc.model.OrderProduct;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.model.bo.OrderProductBO;
@@ -40,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private OrderLogMapper orderLogMapper;
 
     @Autowired
     private OrderProductMapper orderProductMapper;
@@ -190,10 +195,27 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
+        insertOrderLog(orderBO.getUserId(), orderId, date,"用户新增订单");
+
         OrderBO temp = new OrderBO();
         BeanUtils.copyProperties(order, temp);
         return temp;
 
+    }
+
+    private void insertOrderLog(String userId, String orderId, Date date,String action) {
+        //加入订单日志信息
+        OrderLog orderLog = new OrderLog();
+        orderLog.setId(Utils.uuid());
+        orderLog.setAction(action);
+        orderLog.setOrderNo(orderId);
+        orderLog.setCreateTime(date);
+        orderLog.setCreateUser(userId);
+        int logInsert = orderLogMapper.insert(orderLog);
+        if(logInsert != 1){
+            LOGGER.info("{订单日志新增失败}", orderLog);
+            throw new ServiceException(4901);
+        }
     }
 
     @Override
@@ -247,6 +269,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
+        insertOrderLog(orderBO.getUserId(), orderBO.getId(), new Date(),"用户新增订单");
     }
 
     @Override

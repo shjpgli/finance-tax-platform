@@ -75,6 +75,9 @@ public class Order implements Serializable {
     /**交易方式：RMB、POINTS**/
     private String tradeMethod;
 
+    /**是否已开发票，true：是，false：否**/
+    private Boolean isInvoice;
+
     public void setId(String id){
         this.id = id;
     }
@@ -241,5 +244,13 @@ public class Order implements Serializable {
 
     public void setTradeMethod(String tradeMethod) {
         this.tradeMethod = tradeMethod;
+    }
+
+    public Boolean getIsInvoice() {
+        return isInvoice;
+    }
+
+    public void setIsInvoice(Boolean isInvoice) {
+        this.isInvoice = isInvoice;
     }
 }
