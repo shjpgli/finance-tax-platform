@@ -64,6 +64,7 @@ public class AskServiceImpl implements AskService {
 
     @Override
     public AskBO selectOne(String id) {
+        //写日志，以便统计
         return askRoMapper.selectOne(id);
     }
 

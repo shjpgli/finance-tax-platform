@@ -146,7 +146,7 @@ public class ContentServiceImpl implements ContentService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         //内容
         ContentBo contentBo = contentSaveBo.getContent();
-        contentBo.setStatus(2);//审核通过
+//        contentBo.setStatus(2);//审核通过
         contentBo.setContentId(uuid);
         Content content = new Content();
         try {
@@ -158,7 +158,7 @@ public class ContentServiceImpl implements ContentService {
         //内容扩展项
         ContentExtBo contentExtBo = contentSaveBo.getContentExt();
         contentExtBo.setContentId(uuid);
-        contentExtBo.setReleaseDate(new Date());
+//        contentExtBo.setReleaseDate(new Date());
         ContentExt contentExt = new ContentExt();
         try {
             BeanUtils.copyProperties(contentExtBo, contentExt);

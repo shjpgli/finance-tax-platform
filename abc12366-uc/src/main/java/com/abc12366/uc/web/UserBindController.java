@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * 用户绑定办税身份控制器类，以常规JSON形式返回数据
  *
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-07-25
+ * Time: 16:22
  */
 @RestController
 @RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -28,7 +30,7 @@ public class UserBindController {
     private UserBindService userBindService;
 
     @PostMapping(path = "/bind/dzsb")
-    public ResponseEntity userDzsbBind(@RequestBody UserDzsbBO userDzsbBO) {
+    public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbBO userDzsbBO) {
         LOGGER.info("{}", userDzsbBO);
         UserDzsbBO user_dzsb = userBindService.dzsbBind(userDzsbBO);
         LOGGER.info("{}", user_dzsb);
@@ -43,7 +45,7 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/bind/hngs")
-    public ResponseEntity userHngsBind(@RequestBody UserHngsBO userHngsBO) {
+    public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsBO userHngsBO) {
         LOGGER.info("{}", userHngsBO);
         UserHngsBO user_hngs = userBindService.hngsBind(userHngsBO);
         return ResponseEntity.ok(Utils.kv("data", user_hngs));
@@ -57,7 +59,7 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/bind/hnds")
-    public ResponseEntity userHndsBind(@RequestBody UserHndsBO userHndsBO) {
+    public ResponseEntity userHndsBind(@Valid @RequestBody UserHndsBO userHndsBO) {
         LOGGER.info("{}", userHndsBO);
         UserHndsBO user_hnds = userBindService.hndsBind(userHndsBO);
         return ResponseEntity.ok(Utils.kv("data", user_hnds));

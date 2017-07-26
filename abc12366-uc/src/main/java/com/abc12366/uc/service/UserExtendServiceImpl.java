@@ -6,7 +6,6 @@ import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import org.slf4j.Logger;
@@ -71,6 +70,9 @@ public class UserExtendServiceImpl implements UserExtendService {
             BeanUtils.copyProperties(userExtendBO, userExtend);
             userExtend.setCreateTime(new Date());
             userExtend.setLastUpdate(new Date());
+            if (userExtendBO.getValidStatus() == null || userExtendBO.getValidStatus().trim().equals("")) {
+                userExtend.setValidStatus("0");
+            }
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {
                 LOGGER.warn("新增失败，参数：{}" + userExtend.toString());

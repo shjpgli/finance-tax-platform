@@ -28,6 +28,9 @@
 		<if test="templateProperty != null and templateProperty != ''">
 			AND a.templateProperty = #{templateProperty}
 		</if>
+        <if test="templateType != null and templateType != ''">
+            AND a.templateType = #{templateType}
+        </if>
 		<if test="siteId != null and siteId != ''">
 			AND a.siteId = #{siteId}
 		</if>
