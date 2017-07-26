@@ -1,13 +1,14 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.bo.UserDzsbBO;
-import com.abc12366.uc.model.bo.UserHndsBO;
-import com.abc12366.uc.model.bo.UserHngsBO;
+import com.abc12366.uc.model.bo.*;
+
+import java.util.List;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ *
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-07-25
+ * Time: 16:22
  */
 public interface UserBindService {
     UserDzsbBO dzsbBind(UserDzsbBO userDzsbBO);
@@ -21,4 +22,10 @@ public interface UserBindService {
     UserHndsBO hndsBind(UserHndsBO userHndsBO);
 
     boolean hndsUnbind(String id);
+
+    List<UserDzsbListBO> getUserDzsbBind(String userId);
+
+    List<UserHngsListBO> getUserhngsBind(String userId);
+
+    List<UserHndsBO> getUserhndsBind(String userId);
 }

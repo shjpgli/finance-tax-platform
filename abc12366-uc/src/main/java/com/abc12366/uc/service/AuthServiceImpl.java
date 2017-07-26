@@ -96,6 +96,9 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername("username" + registerBO.getPhone());
         user.setSalt(salt);
         user.setPassword(encodePassword);
+        user.setPoints(0);
+        user.setExp(0);
+        user.setVipLevel("LV1");
         if (!StringUtils.isEmpty(registerBO.getRegMail())) {
             user.setRegMail(registerBO.getRegMail());
         }

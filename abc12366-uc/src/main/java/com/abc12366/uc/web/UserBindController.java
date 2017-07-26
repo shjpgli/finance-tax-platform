@@ -2,10 +2,10 @@ package com.abc12366.uc.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.uc.model.bo.UserDzsbBO;
-import com.abc12366.uc.model.bo.UserHndsBO;
-import com.abc12366.uc.model.bo.UserHngsBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserBindService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 用户绑定办税身份控制器类，以常规JSON形式返回数据
@@ -42,6 +43,45 @@ public class UserBindController {
         LOGGER.info("{}", id);
         userBindService.dzsbUnbind(id);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    @GetMapping(path = "/bind/dzsb/{userId}")
+    public ResponseEntity getUserDzsbBind(@PathVariable String userId,
+                                          @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}", userId);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<UserDzsbListBO> userDzsbBOList = userBindService.getUserDzsbBind(userId);
+        LOGGER.info("{}", userDzsbBOList);
+        return (userDzsbBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userDzsbBOList, "total", ((Page) userDzsbBOList).getTotal()));
+    }
+
+    @GetMapping(path = "/bind/hngs/{userId}")
+    public ResponseEntity getUserhngsBind(@PathVariable String userId,
+                                          @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}", userId);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<UserHngsListBO> userHngsBOList = userBindService.getUserhngsBind(userId);
+        LOGGER.info("{}", userHngsBOList);
+        return (userHngsBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList).getTotal()));
+    }
+
+    @GetMapping(path = "/bind/hnds/{userId}")
+    public ResponseEntity getUserhndsBind(@PathVariable String userId,
+                                          @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}", userId);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<UserHndsBO> userHngsBOList = userBindService.getUserhndsBind(userId);
+        LOGGER.info("{}", userHngsBOList);
+        return (userHngsBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList).getTotal()));
     }
 
     @PostMapping(path = "/bind/hngs")
