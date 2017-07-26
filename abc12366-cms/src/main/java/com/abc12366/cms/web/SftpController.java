@@ -44,6 +44,8 @@ public class SftpController {
 			content = fjBo.getContent();
 			Map<String, String> map = sf.uploadByByte(directory,content,fileName,sftp);
 			dataList.add(map);
+            sftp.disconnect();
+            sftp.exit();
 		}
 		LOGGER.info("{}", dataList);
 		return ResponseEntity.ok(Utils.kv("dataList", dataList));
