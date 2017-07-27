@@ -26,13 +26,11 @@ public class ModelBo implements Serializable {
 	private String modelPath;
 
 	/**栏目模板前缀**varchar(20)**/
-    @NotEmpty(message = "栏目模板前缀不能为空！")
-	@Size(min = 1, max = 20)
+	@Size(min = 0, max = 20)
 	private String tplChannelPrefix;
 
 	/**内容模板前缀**varchar(20)**/
-    @NotEmpty(message = "内容模板前缀不能为空！")
-	@Size(min = 1, max = 20)
+	@Size(min = 0, max = 20)
 	private String tplContentPrefix;
 
 	/**栏目标题图宽度**int(11)**/
