@@ -34,39 +34,30 @@ public class ModelBo implements Serializable {
 	private String tplContentPrefix;
 
 	/**栏目标题图宽度**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer titleImgWidth;
 
 	/**栏目标题图高度**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer titleImgHeight;
 
 	/**栏目内容图宽度**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer contentImgWidth;
 
 	/**栏目内容图高度**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer contentImgHeight;
 
 	/**排列顺序**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer priority;
 
 	/**是否有内容**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer hasContent;
 
 	/**是否禁用**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isDisabled;
 
 	/**是否默认模型**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isDef;
 
 	/**是否全站模型**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isGlobal;
 
 	/**非全站模型所属站点**varchar(64)**/
