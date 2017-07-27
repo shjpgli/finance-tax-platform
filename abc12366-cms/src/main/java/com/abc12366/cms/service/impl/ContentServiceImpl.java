@@ -96,9 +96,9 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentListBo> selectListByviews(Map<String,Object> map) {
+    public List<ContentsListBo> selectListByviews(Map<String,Object> map) {
         //查询内容列表按访问量
-        List<ContentListBo> contents = contentRoMapper.selectListByviews(map);
+        List<ContentsListBo> contents = contentRoMapper.selectListByviews(map);
         LOGGER.info("{}", contents);
         return contents;
     }
