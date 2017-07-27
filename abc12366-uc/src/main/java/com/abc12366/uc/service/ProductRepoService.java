@@ -27,7 +27,7 @@ public interface ProductRepoService {
      * @param id
      * @return
      */
-    ProductRepoBO selectOne(String id);
+    ProductRepoBO selectById(String id);
 
     /**
      * 库存入库

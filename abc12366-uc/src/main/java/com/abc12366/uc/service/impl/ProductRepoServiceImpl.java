@@ -46,8 +46,8 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     }
 
     @Override
-    public ProductRepoBO selectOne(String id) {
-        return productRepoRoMapper.selectOne(id);
+    public ProductRepoBO selectById(String id) {
+        return productRepoRoMapper.selectById(id);
     }
 
     @Override

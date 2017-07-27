@@ -22,7 +22,7 @@ public interface OrderService {
      * 查询订单信息
      * @return
      */
-    OrderBO selectOne(String orderNo);
+    OrderBO selectByOrderNo(String orderNo);
 
     /**
      * 加入购物车
@@ -80,4 +80,5 @@ public interface OrderService {
 
     OrderBO feedback(OrderBO orderBO);
 
+    OrderBO cancelOrder(Order order);
 }
