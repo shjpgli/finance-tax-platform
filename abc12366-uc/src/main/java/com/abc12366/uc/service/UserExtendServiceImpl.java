@@ -71,7 +71,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             userExtend.setCreateTime(new Date());
             userExtend.setLastUpdate(new Date());
             if (userExtendBO.getValidStatus() == null || userExtendBO.getValidStatus().trim().equals("")) {
-                userExtend.setValidStatus("2");
+                userExtend.setValidStatus("0");
             }
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {

@@ -16,4 +16,11 @@
 		and code=#{code}
 	</select>
 
+	<select id="selectListByPhone" parameterType="java.lang.String" resultType="com.abc12366.message.model.bo.PhoneCodeBO">
+		select id, phone, code, expireDate
+		from sys_phone_code
+		where phone=#{phone}
+		order by expireDate DESC
+	</select>
+
 </mapper>

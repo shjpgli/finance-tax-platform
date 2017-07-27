@@ -11,5 +11,7 @@ import java.util.List;
  * Time: 17:20
  */
 public interface PhoneCodeRoMapper {
-    List<PhoneCodeBO> selectList(PhoneCode phoneCodeParam);
+    List<PhoneCodeBO> selectList(PhoneCode phoneCode);
+
+    List<PhoneCodeBO> selectListByPhone(String phone);
 }

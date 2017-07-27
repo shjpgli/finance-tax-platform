@@ -70,17 +70,17 @@ public class MobileVerifyCodeController {
 
     //获取验证码接口
     @PostMapping(path = "/getcode/{phone}")
-    public ResponseEntity getCode(@PathVariable String phone, HttpSession session) throws IOException {
-        LOGGER.info("{}:{}", phone, session);
-        moboleVerifyCodeService.getCode(phone, "财税专家", session);
+    public ResponseEntity getCode(@PathVariable String phone) throws IOException {
+        LOGGER.info("{}", phone);
+        moboleVerifyCodeService.getCode(phone);
         return ResponseEntity.ok(Utils.kv());
     }
 
     //验证码校验接口
     @PostMapping(path = "/verify/{phone}/{code}")
-    public ResponseEntity verify(@PathVariable String phone, @PathVariable String code, HttpSession session) throws IOException {
-        LOGGER.info("{}:{}:{}", phone, code, session);
-        moboleVerifyCodeService.verify(phone, code, session);
+    public ResponseEntity verify(@PathVariable String phone, @PathVariable String code) throws IOException {
+        LOGGER.info("{}:{}", phone, code);
+        moboleVerifyCodeService.verify(phone, code);
         return ResponseEntity.ok(Utils.kv());
     }
 }
