@@ -319,13 +319,13 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String channelId) {
+        LOGGER.info("删除栏目信息:{}", channelId);
+        int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
+        if(cnt != 0){
+            //该栏目下存在内容信息,不能删除
+            throw new ServiceException(4249);
+        }
         try {
-            LOGGER.info("删除栏目信息:{}", channelId);
-            int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
-            if(cnt != 0){
-                //该栏目下存在内容信息,不能删除
-                throw new ServiceException(4249);
-            }
             //删除栏目扩展信息
             channelExtMapper.deleteByPrimaryKey(channelId);
             //删除栏目扩展项信息
