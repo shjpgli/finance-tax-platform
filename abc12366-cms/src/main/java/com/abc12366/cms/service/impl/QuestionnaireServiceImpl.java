@@ -140,7 +140,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     }
 
     @Override
-    public void updateStatus(String id, Boolean status) {
+    public void updateStatus(String id, String status) {
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setId(id);
         questionnaire.setStatus(status);

@@ -22,14 +22,14 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/adpage", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AdPageController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdPageController.class);
     @Autowired
     private AdPageService adPageService;
 
-    @GetMapping
+    @GetMapping("/adpage")
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -47,7 +47,7 @@ public class AdPageController {
         return responseEntity;
     }
 
-    @PostMapping
+    @PostMapping("/adpage")
     public ResponseEntity insert(@Valid @RequestBody AdPageBO adPage) {
         LOGGER.info("{}", adPage);
 
@@ -58,7 +58,7 @@ public class AdPageController {
         return responseEntity;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/adpage/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
 
@@ -69,7 +69,18 @@ public class AdPageController {
         return responseEntity;
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/adpages/{id}")
+    public ResponseEntity selectOneForqt(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+
+        AdPageBO adPage = adPageService.selectOne(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", adPage));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    @PutMapping("/adpage/{id}")
     public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody AdPageBO adPage) {
         LOGGER.info("{},{}", id, adPage);
 
@@ -81,7 +92,7 @@ public class AdPageController {
         return responseEntity;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/adpage/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
 

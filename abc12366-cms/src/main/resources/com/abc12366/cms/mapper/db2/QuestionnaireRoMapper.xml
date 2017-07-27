@@ -59,7 +59,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultMap="questionBOResultMap" parameterType="java.lang.String">
         SELECT
-        q.id,	q.title,	q.simpleDesc,	q.status,	q.createUser,	q.createTime,	q.updateTime,	q.updateUser,	q.recoveryRate,	q.accessRate,	q.sceneCode,	q.skinUrl,q.tradeCode,
+        q.id,	q.title,	q.simpleDesc,	q.status,	q.createUser,	q.createTime,	q.updateTime,	q.updateUser,	(SELECT COUNT(a.id) recoveryRate FROM cms_paper_answer_log a
+        WHERE q.id=a.questionId) recoveryRate,	q.accessRate,	q.sceneCode,	q.skinUrl,q.tradeCode,
         p.questionId,	p.isDisplayNumber,	p.isBackspace,	p.isDisplayResults,	p.recoveryEndTime,	p.isLoginAuth,	p.isAnswerOnce,	p.isUserRange,	p.isAnswerRemind,	p.isPrize
         FROM cms_paper_questionnaire q
         LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId

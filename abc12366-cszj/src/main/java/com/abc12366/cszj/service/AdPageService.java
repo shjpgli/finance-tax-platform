@@ -20,6 +20,8 @@ public interface AdPageService {
 
     AdPageBO selectOne(String id);
 
+    AdPageBO selectOneForqt(String id);
+
     AdPageBO update(AdPageBO adPage);
 
     void delete(String id);

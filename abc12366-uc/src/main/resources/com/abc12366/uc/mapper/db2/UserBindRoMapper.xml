@@ -13,6 +13,7 @@
         (select distinct uul.level from uc_uvip_level uul, uc_user uu where uul.levelCode=uu.vipLevel and uu.id=uud.userId) userType
         from uc_user_dzsb uud
         where userId=#{userId}
+        and status=1
     </select>
 
     <select id="userHngsSelectById" resultType="com.abc12366.uc.model.UserHngs">
@@ -24,6 +25,7 @@
         select uuh.id,uuh.userId,uuh.djxh,uuh.nsrsbh,uuh.nsrmc,uuh.shxydm,uuh.swjgMc,uuh.swjgDm,uuh.bsy,uuh.smrzzt,uuh.status,uuh.createTime,uuh.lastUpdate
         from uc_user_hngs uuh
         where uuh.userId=#{userId}
+        and status=1
     </select>
     <select id="userHndsSelectById" resultType="com.abc12366.uc.model.UserHnds">
         select id, userId, username, subuser, nsrmc, nsrsbh, djxh, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
@@ -34,5 +36,6 @@
         select id, userId, username, subuser, nsrmc, nsrsbh, djxh, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
         from uc_user_hnds
         where userId=#{userId}
+        and status=1
     </select>
 </mapper>

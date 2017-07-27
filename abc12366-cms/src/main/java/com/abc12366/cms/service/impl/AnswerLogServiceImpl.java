@@ -180,7 +180,7 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         BeanUtils.copyProperties(answerLogBO,answerLog);
         AnswerLogBO bo = answerLogRoMapper.selectAvgTime(answerLog);
         if (bo != null && bo.getAvgTimeLong() != null){
-            String avg = formatTime(bo.getAvgTimeLong());
+            String avg = formatTime(bo.getAvgTimeLong()*1000);
             bo.setAvgTime(avg);
         }else{
             LOGGER.info("{该问卷没有答题记录}", answerLog);
