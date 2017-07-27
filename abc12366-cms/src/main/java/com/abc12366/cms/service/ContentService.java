@@ -15,7 +15,7 @@ import java.util.Map;
 public interface ContentService {
     List<ContentListBo> selectList(Map<String,Object> map);
 
-    List<ContentListBo> selectListByviews(Map<String,Object> map);
+    List<ContentsListBo> selectListByviews(Map<String,Object> map);
 
     List<ContentsListBo> selectListByContentType(Map<String,Object> map);
 

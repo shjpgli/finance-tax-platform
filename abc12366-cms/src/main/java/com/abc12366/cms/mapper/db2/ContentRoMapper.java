@@ -45,7 +45,7 @@ public interface ContentRoMapper {
      * 查询(根据查询条件查询)按访问量排序
      *
      **/
-    List<ContentListBo> selectListByviews(Map<String,Object> map);
+    List<ContentsListBo> selectListByviews(Map<String,Object> map);
 
 	/**
 	 *

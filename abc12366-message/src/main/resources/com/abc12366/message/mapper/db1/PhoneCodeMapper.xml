@@ -7,7 +7,7 @@
 		values (#{id},#{phone},#{code},#{expireDate})
 	</insert>
 
-    <delete id="delete" parameterType="com.abc12366.message.model.PhoneCode">
+    <delete id="delete" parameterType="java.lang.String">
         delete from sys_phone_code
         where phone=#{phone}
     </delete>

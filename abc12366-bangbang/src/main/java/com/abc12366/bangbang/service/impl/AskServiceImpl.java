@@ -137,4 +137,14 @@ public class AskServiceImpl implements AskService {
         }
         return 1;
     }
+
+    @Override
+    public List<HotspotAskBO> selectHotspotAsks() {
+        return askRoMapper.selectHotspotAsks();
+    }
+
+    @Override
+    public List<AskBO> selectHotspotComments() {
+        return askRoMapper.selectHotspotComments();
+    }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
  * Time: 0:09
  */
 public interface MobileVerifyCodeService {
-    void getCode(String phone, String codeType, HttpSession session) throws IOException;
+    void getCode(String phone) throws IOException;
 
-    void verify(String phone, String code, HttpSession session);
+    void verify(String phone, String code);
 }
