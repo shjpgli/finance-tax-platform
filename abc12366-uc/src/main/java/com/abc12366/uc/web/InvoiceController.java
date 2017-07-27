@@ -156,6 +156,18 @@ public class InvoiceController {
     }
 
     /**
+     * 管理员开票、拒绝开票
+     * @return
+     */
+    @PostMapping(path = "/billing")
+    public ResponseEntity billing(@Valid @RequestBody InvoiceBO invoiceBO,
+                                  @RequestParam(value ="status", required = true) Boolean isBilling) {
+        InvoiceBO bo = invoiceService.billing(invoiceBO,isBilling);
+        LOGGER.info("{}", bo);
+        return  ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
      * 发票信息修改
      *
      * @param userId
@@ -370,6 +382,25 @@ public class InvoiceController {
     }
 
     /**
+     * 根据发票号码，获取发票仓库详情信息
+     * @param invoiceNo
+     * @return
+     */
+    @GetMapping(path = "/detail/invoice")
+    public ResponseEntity selectInvoiceDetailListByInvoice(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                           @RequestParam(value = "invoiceNo", required = false) String invoiceNo) {
+        InvoiceDetail invoiceDetail = new InvoiceDetail();
+        invoiceDetail.setInvoiceNo(invoiceNo);
+        invoiceDetail.setStatus("0");
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<InvoiceDetail> invoiceList = invoiceRepoService.selectInvoiceDetailListByInvoice(invoiceDetail);
+        PageInfo<InvoiceDetail> pageInfo = new PageInfo<>(invoiceList);
+        LOGGER.info("{}", invoiceList);
+        return  ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
      * 发票详情信息删除
      *
      * @return
@@ -381,6 +412,18 @@ public class InvoiceController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+
+
+    /**
+     * 获取一张发票
+     * @return
+     */
+    @GetMapping(path = "/detail/select")
+    public ResponseEntity selectInvoiceDetail() {
+        InvoiceDetail invoiceDetail = invoiceRepoService.selectInvoiceDetail();
+        LOGGER.info("{}", invoiceDetail);
+        return  ResponseEntity.ok(Utils.kv("data", invoiceDetail));
+    }
     /**
      * 发票详情信息作废
      *

@@ -176,13 +176,13 @@
             </if>
             <if test="startTime != null">
                 <![CDATA[
-              and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+              and date_format(i.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
 
                 ]]>
             </if>
             <if test="endTime != null">
                 <![CDATA[
-              and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              and date_format(i.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
               ]]>
             </if>
         </where>
