@@ -7,6 +7,8 @@ import com.abc12366.cszj.mapper.db2.NoticeRoMapper;
 import com.abc12366.cszj.model.bo.NoticeBO;
 import com.abc12366.cszj.service.NoticeService;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,7 @@ import java.util.List;
  */
 @Service
 public class NoticeServiceImpl implements NoticeService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(NoticeServiceImpl.class);
     // 通知公告
     @Autowired
     private NoticeRoMapper noticeRoMapper;
@@ -39,6 +41,13 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeList;
     }
 
+    @Override
+    public List<NoticeBO> selectListForqt(NoticeBO notice, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<NoticeBO> noticeList = noticeRoMapper.selectListForqt(notice);
+        return noticeList;
+    }
+
     @Transactional("db1TxManager")
     @Override
     public NoticeBO insert(NoticeBO notice) {
@@ -47,12 +56,17 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setCreateTime(now);
         notice.setLastUpdate(now);
         notice.setCount(0);
+        String status = notice.getStatus();
+        if(status == null){
+            //默认草稿状态
+            notice.setStatus("1");
+        }
         noticeMapper.insert(notice);
         return notice;
     }
 
     @Override
-    public NoticeBO selectOne(String id) {
+    public NoticeBO selectOneForqt(String id) {
         NoticeBO notice = noticeRoMapper.selectOne(id);
         NoticeBO n = new NoticeBO();
         if (notice != null) {
@@ -63,9 +77,24 @@ public class NoticeServiceImpl implements NoticeService {
             updateCount(n);
         return  notice;
         } else {
+            LOGGER.error("查询单个通知公告异常：{}", id);
             throw new ServiceException(4012);
         }
     }
+
+    @Override
+    public NoticeBO selectOne(String id) {
+        NoticeBO notice = new NoticeBO();
+        try {
+            LOGGER.info("查询单个通知公告信息:{}", id);
+            notice = noticeRoMapper.selectOne(id);
+        } catch (Exception e) {
+            LOGGER.error("查询单个通知公告异常：{}", e);
+            throw new ServiceException(4234);
+        }
+        return notice;
+    }
+
     public void updateCount(NoticeBO notice) {
         noticeMapper.updatecount(notice);
     }
@@ -73,14 +102,15 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public NoticeBO update(NoticeBO notice) {
         Timestamp now = new Timestamp(new Date().getTime());
-        NoticeBO v = selectOne(notice.getId());
-        if (v != null) {
-            notice.setLastUpdate(now);
-            noticeMapper.update(notice);
-            return selectOne(notice.getId());
-        } else {
-            throw new ServiceException(4012);
+        notice.setLastUpdate(now);
+        int update = noticeMapper.update(notice);
+        if(update != 1){
+            if (update != 1){
+                LOGGER.info("{修改通知公告失败}", update);
+                throw new ServiceException(4421);
+            }
         }
+        return noticeRoMapper.selectOne(notice.getId());
     }
 
     @Transactional("db1TxManager")
@@ -91,6 +121,7 @@ public class NoticeServiceImpl implements NoticeService {
             // 删除投票信息
             noticeMapper.deleteByPrimaryKey(id);
         } else {
+            LOGGER.info("{删除通知公告失败}", id);
             throw new ServiceException(4012);
         }
     }
