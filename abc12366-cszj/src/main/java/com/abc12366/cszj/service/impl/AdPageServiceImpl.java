@@ -8,6 +8,8 @@ import com.abc12366.cszj.mapper.db2.AdPageRoMapper;
 import com.abc12366.cszj.model.bo.AdPageBO;
 import com.abc12366.cszj.service.AdPageService;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,7 @@ import java.util.*;
  */
 @Service
 public class AdPageServiceImpl implements AdPageService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdPageServiceImpl.class);
     // 投票
     @Autowired
     private AdPageRoMapper adPageRoMapper;
@@ -48,13 +50,34 @@ public class AdPageServiceImpl implements AdPageService {
         adPage.setId(Utils.uuid());
         adPage.setCreateTime(now);
         adPage.setLastUpdate(now);
+
         adPageMapper.insert(adPage);
         return adPage;
     }
 
     @Override
     public AdPageBO selectOne(String id) {
-        AdPageBO adPage = adPageRoMapper.selectOne(id);
+        AdPageBO adPage = new AdPageBO();
+        try {
+            LOGGER.info("查询单个广告图片管理信息:{}", id);
+            adPage = adPageRoMapper.selectOne(id);
+        } catch (Exception e) {
+            LOGGER.error("查询单个广告图片管理异常：{}", e);
+            throw new ServiceException(4234);
+        }
+        return  adPage;
+    }
+
+    @Override
+    public AdPageBO selectOneForqt(String id) {
+        AdPageBO adPage = new AdPageBO();
+        try {
+            LOGGER.info("查询单个广告管理信息:{}", id);
+            adPage = adPageRoMapper.selectOne(id);
+        } catch (Exception e) {
+            LOGGER.error("查询单个广告管理异常：{}", e);
+            throw new ServiceException(4234);
+        }
         return  adPage;
     }
 
@@ -62,14 +85,15 @@ public class AdPageServiceImpl implements AdPageService {
     @Override
     public AdPageBO update(AdPageBO adPage) {
         Timestamp now = new Timestamp(new Date().getTime());
-        AdPageBO v = selectOne(adPage.getId());
-        if (v != null) {
-            adPage.setLastUpdate(now);
-            adPageMapper.update(adPage);
-            return selectOne(adPage.getId());
-        } else {
-            throw new ServiceException(4012);
+        adPage.setLastUpdate(now);
+        int update = adPageMapper.update(adPage);
+        if(update != 1){
+            if (update != 1){
+                LOGGER.info("{修改广告图片失败}", update);
+                throw new ServiceException(4421);
+            }
         }
+        return adPageRoMapper.selectOne(adPage.getId());
     }
 
     @Transactional("db1TxManager")

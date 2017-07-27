@@ -13,5 +13,7 @@ public interface NoticeRoMapper {
 
     List<NoticeBO> selectList(NoticeBO notice);
 
+    List<NoticeBO> selectListForqt(NoticeBO notice);
+
     NoticeBO selectOne(String id);
 }
