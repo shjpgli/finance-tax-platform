@@ -686,15 +686,15 @@ public class ContentServiceImpl implements ContentService {
                     LOGGER.error("类转换异常：{}", e);
                     throw new RuntimeException("类型转换异常：{}", e);
                 }
-                Topic tp = tpRoMapper.selectByPrimaryKey(topic.getTopicId());
-                Content ct = contentRoMapper.selectByContentId(topic.getContentId());
-                if(tp != null && ct != null && tp.getSiteId() != null){
-                    if(!tp.getSiteId().equals(ct.getSiteId())){
-                        throw new ServiceException(4256);
-                    }
-                }else{
-                    throw new ServiceException(4257);
-                }
+//                Topic tp = tpRoMapper.selectByPrimaryKey(topic.getTopicId());
+//                Content ct = contentRoMapper.selectByContentId(topic.getContentId());
+//                if(tp != null && ct != null && tp.getSiteId() != null){
+//                    if(!tp.getSiteId().equals(ct.getSiteId())){
+//                        throw new ServiceException(4256);
+//                    }
+//                }else{
+//                    throw new ServiceException(4257);
+//                }
                 topicMapper.deleteByPrimaryKey(topic);
                 topicMapper.insert(topic);
             }
