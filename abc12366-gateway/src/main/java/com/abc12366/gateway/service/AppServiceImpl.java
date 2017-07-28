@@ -138,7 +138,7 @@ public class AppServiceImpl implements AppService {
         //判断app是否正常
         if(app == null){
             LOGGER.warn("APP不存在或APP未启用：{}", app);
-            throw new ServiceException(4024);
+            throw new ServiceException(4035);
         }
         //判断app登录是否已过期
         long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
