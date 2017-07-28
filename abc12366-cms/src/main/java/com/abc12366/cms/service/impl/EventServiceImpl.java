@@ -42,6 +42,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventListBo> selectList(Map<String,Object> map) {
         //查询活动列表
+        eventMapper.updateStatus();
         List<EventListBo> dataList =  eventRoMapper.selectList(map);
         return dataList;
     }
