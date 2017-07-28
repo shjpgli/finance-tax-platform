@@ -7,7 +7,11 @@ import com.abc12366.message.mapper.db2.UserMsgRoMapper;
 import com.abc12366.message.model.UserMessage;
 import com.abc12366.message.service.UserMsgService;
 import com.github.pagehelper.PageHelper;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -22,7 +26,9 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
-public class UserMsgServiceImpl implements UserMsgService{
+public class UserMsgServiceImpl implements UserMsgService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserMsgServiceImpl.class);
 
     @Autowired
     private UserMsgMapper userMsgMapper;
@@ -46,6 +52,15 @@ public class UserMsgServiceImpl implements UserMsgService{
             userMsgMapper.insert(data);
         }
         return data;
+    }
+
+    @KafkaListener(topics = "user-message-topic")
+    public void handle(ConsumerRecord<String, String> record) {
+
+        LOGGER.info("user: " + record.value());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("record: " + record.value());
+        }
     }
 
     @Override

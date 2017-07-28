@@ -76,7 +76,7 @@ public class KafkaConfig {
      */
 //    public Map<String, Object> producerConfigs() {
 //        Map<String, Object> props = new HashMap<>();
-//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, config.BOOTSTRAP_SERVERS);
+//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootstrap_servers());
 //        props.put(ProducerConfig.RETRIES_CONFIG, 0);
 //        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
 //        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
@@ -85,7 +85,7 @@ public class KafkaConfig {
 //        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 //        return props;
 //    }
-//
+
 //    @Bean
 //    public ProducerFactory<String, Object> producerFactory() {
 //        return new DefaultKafkaProducerFactory<>(producerConfigs());

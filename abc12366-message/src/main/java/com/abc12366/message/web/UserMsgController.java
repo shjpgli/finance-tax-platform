@@ -49,7 +49,7 @@ public class UserMsgController {
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
         String userId = (String) request.getAttribute(Constant.USER_ID);
 
-        if (StringUtils.isEmpty(userId)) {
+        if (!StringUtils.isEmpty(userId)) {
             UserMessage um = new UserMessage.Builder().toUserId(userId).build();
             List<UserMessage> dataList = userMsgService.selectList(um, page, size);
 

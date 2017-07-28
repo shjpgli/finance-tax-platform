@@ -9,7 +9,7 @@
 
     <insert id="insert">
         INSERT INTO msg_user_message (<include refid="Base_Column"/>) VALUES
-        (#{id}, #{fromUserId}, #{toUserId}, #{content}, #{status}, #{type}, #{createTime, #{lastUpdate})
+        (#{id}, #{fromUserId}, #{toUserId}, #{content}, #{status}, #{type}, #{createTime}, #{lastUpdate})
     </insert>
 
     <update id="update">

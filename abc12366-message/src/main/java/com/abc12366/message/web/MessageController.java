@@ -1,52 +1,63 @@
 package com.abc12366.message.web;
 
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.abc12366.message.model.UserMessage;
 import com.abc12366.message.model.bo.ApiLogBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
- * 测试控制器
+ * 消息控制器
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-02-20 4:25 PM
  * @since 1.0.0
  */
 @RestController
-public class LogController {
+@RequestMapping(path = "/queue", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class MessageController {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(LogController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
-     * Kafka apilog生产者测试接口
+     * Kafka 用户消息生产者
      *
-     * @param bo
+     * @param data UserMessage
      */
-    @PostMapping("/kafka")
-    public void insertApiLog(@RequestBody ApiLogBO bo){
+    @PostMapping(path = "/usermsg")
+    public ResponseEntity insert(@Valid @RequestBody UserMessage data) {
+        LOGGER.info("{}", data);
 
-        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("gateway_apilog_topic", bo);
+        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("user-message-topic", data);
         future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
 
             @Override
             public void onFailure(Throwable throwable) {
-                LOGGER.info("Failed to send event:" + bo);
+                LOGGER.info("Failed user-message-topic: " + data);
             }
 
             @Override
             public void onSuccess(SendResult<String, Object> result) {
-                LOGGER.info("Success to send event:" + result.getProducerRecord().value());
+                LOGGER.info("Success user-message-topic: " + result.getProducerRecord().value());
             }
         });
+
+        return ResponseEntity.ok(Utils.kv());
     }
 }
