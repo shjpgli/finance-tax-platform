@@ -51,7 +51,7 @@ public class AppController {
         LOGGER.info("{}", appBO);
         String token = appService.login(appBO);
         return token != null ? ResponseEntity.ok(
-                Utils.kv(Constant.APP_TOKEN_HEAD, token, "expires_in", Constant.APP_TOKEN_VALID_SECONDS))
+                Utils.kv("token", token, "expires_in", Constant.APP_TOKEN_VALID_SECONDS))
                 : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
     }
 

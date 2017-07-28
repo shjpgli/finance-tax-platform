@@ -166,4 +166,11 @@
         </set>
         WHERE id = #{id}
     </update>
+
+    <!-- 修 改 皮肤路径-->
+    <update id="updateStatus">
+        update cms_paper_questionnaire q set q.status = 2 where  q.status = 0 and q.id in (select p.questionId from cms_paper_questionnaire_param p
+        where q.id = p.questionId and <![CDATA[ p.recoveryEndTime < now()]]>)
+    </update>
+
 </mapper>

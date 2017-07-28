@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderBO selectOne(String orderNo) {
+    public OrderBO selectByOrderNo(String orderNo) {
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
         return orderBO;
     }
@@ -196,7 +196,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-        insertOrderLog(orderBO.getUserId(), orderId, date,"用户新增订单");
+        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), date,"用户新增订单");
 
         OrderBO temp = new OrderBO();
         BeanUtils.copyProperties(order, temp);
@@ -250,14 +250,15 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("{订单状态是确认状态，不能删除}", orderBO);
             throw new ServiceException(4140);
         }
-        int del = orderMapper.deleteByIdAndUserId(order);
-        if(del != 1){
-            LOGGER.info("{删除订单信息信息失败}", orderBO);
-            throw new ServiceException(4103);
+        order.setOrderStatus("9");
+        int update = orderMapper.update(order);
+        if(update != 1){
+            LOGGER.info("{修改失败}", orderBO);
+            throw new ServiceException(4102);
         }
         //订单删除成功之后，删除订单与产品对应关系
 
-        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
+        /*List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
         if (orderProductBOs == null){
             LOGGER.info("{产品信息错误}", orderBO);
             throw new ServiceException(4166);
@@ -269,8 +270,8 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4168);
                 }
             }
-        }
-        insertOrderLog(orderBO.getUserId(), orderBO.getId(), new Date(),"用户新增订单");
+        }*/
+        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), new Date(),"用户删除订单");
     }
 
     @Override
@@ -285,5 +286,26 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4141);
         }
         return orderRoMapper.selectOrder(order);
+    }
+
+    @Override
+    public OrderBO cancelOrder(Order order) {
+        OrderBO bo = orderRoMapper.selectById(order.getOrderNo());
+        if(bo == null){
+            LOGGER.info("{订单信息不存在}", order);
+            throw new ServiceException(4134);
+        }
+        if(bo.getIsInvoice()){
+            LOGGER.info("{该订单已开发票，请先取消发票订单}", order);
+            throw new ServiceException(4188);
+        }
+        order.setOrderStatus("3");
+        int update = orderMapper.update(order);
+        if (update != 1){
+            LOGGER.info("{修改失败}", order);
+            throw new ServiceException(4102);
+        }
+        insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(),"用户删除订单");
+        return bo;
     }
 }

@@ -9,9 +9,9 @@ import com.abc12366.gateway.model.Blacklist;
  * @since 1.0.0
  */
 public interface BlacklistMapper {
-    void insert(Blacklist blacklist);
+    int insert(Blacklist blacklist);
 
-    void update(Blacklist blacklist);
+    int update(Blacklist blacklist);
 
-    void delete(String id);
+    int delete(String id);
 }

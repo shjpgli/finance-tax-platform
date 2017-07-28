@@ -42,4 +42,6 @@ public interface InvoiceService {
     InvoiceBackBO selectBackOne(String id);
 
     InvoiceBO selectUserInvoice(Invoice invoice);
+
+    InvoiceBO billing(InvoiceBO invoiceBO, Boolean isBilling);
 }

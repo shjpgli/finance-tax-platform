@@ -25,4 +25,8 @@ public interface InvoiceRepoService {
     void deleteInvoiceDetail(String id);
 
     void invalidInvoiceDetail(String id);
+
+    InvoiceDetail selectInvoiceDetail();
+
+    List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail);
 }

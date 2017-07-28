@@ -22,14 +22,14 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/notice", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class NoticeController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NoticeController.class);
     @Autowired
     private NoticeService noticeService;
 
-    @GetMapping
+    @GetMapping("/notice")
     public ResponseEntity selectList(@RequestParam(value = "title", required = false) String title,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -47,7 +47,25 @@ public class NoticeController {
         return responseEntity;
     }
 
-    @PostMapping
+    @GetMapping("/notices")
+    public ResponseEntity selectListForqt(@RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{},{},{}", title, page, size);
+
+        NoticeBO notice = new NoticeBO();
+        notice.setTitle(title);
+        List<NoticeBO> dataList = noticeService.selectListForqt(notice, page, size);
+
+        PageInfo<NoticeBO> pageInfo = new PageInfo<NoticeBO>(dataList);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                "total", pageInfo.getTotal()));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    @PostMapping("/notice")
     public ResponseEntity insert(@Valid @RequestBody NoticeBO notice) {
         LOGGER.info("{}", notice);
 
@@ -58,7 +76,7 @@ public class NoticeController {
         return responseEntity;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/notice/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
 
@@ -69,7 +87,18 @@ public class NoticeController {
         return responseEntity;
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/notices/{id}")
+    public ResponseEntity selectOneForqt(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+
+        NoticeBO notice = noticeService.selectOneForqt(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", notice));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    @PutMapping("/notice/{id}")
     public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody NoticeBO notice) {
         LOGGER.info("{},{}", id, notice);
 
@@ -81,7 +110,7 @@ public class NoticeController {
         return responseEntity;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/notice/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
 

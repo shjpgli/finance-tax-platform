@@ -32,7 +32,6 @@ public class ModelItemBo implements Serializable {
 	private String itemLabel;
 
 	/**排列顺序**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer priority;
 
 	/**默认值**varchar(255)**/
@@ -64,35 +63,27 @@ public class ModelItemBo implements Serializable {
 	private String helpPosition;
 
 	/**数据类型**int(11)**/
-    @Size(min = 0, max = 11)
 	private String dataType;
 
 	/**是否独占一行**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isSingle;
 
 	/**是否栏目模型项**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isChannel;
 
 	/**是否自定义**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isCustom;
 
 	/**是否显示**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isDisplay;
 
 	/**是否必填项**tinyint(1)**/
-    @Size(min = 0, max = 1)
 	private Integer isRequired;
 
 	/**图片宽度**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer imageWidth;
 
 	/**图片宽度**int(11)**/
-    @Size(min = 0, max = 11)
 	private Integer imageHeight;
 
 	/**校验规则**varchar(500)**/

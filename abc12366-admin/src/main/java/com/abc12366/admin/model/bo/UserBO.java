@@ -23,11 +23,11 @@ public class UserBO extends UserExtendBO implements Serializable {
 
 	/**用户名**/
     @NotEmpty
-    @Size(min = 8, max = 32)
+    @Size(min = 6, max = 32)
 	private String username;
 
     @NotEmpty
-    @Size(min = 8, max = 32)
+    @Size(min = 6, max = 32)
 	/**密码**/
 	private String password;
 

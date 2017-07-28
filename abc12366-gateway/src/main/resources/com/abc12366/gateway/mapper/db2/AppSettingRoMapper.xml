@@ -27,10 +27,15 @@
         <result column="appName" property="appName" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="selectList" resultMap="appSettingMap" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">
-        SELECT  a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,a.isValidate,
+    <sql id="Base_BO_Column_List">
+        a.id, a.appId, a.apiId, a.timesPerMinute, a.timesPerHour, a.timesPerDay,a.isValidate,
         b.name, b.uri, b.method, b.version, b.authentication,
         a.status, a.createTime, a.lastUpdate,d.fieldKey as appName
+    </sql>
+
+    <select id="selectList" resultMap="appSettingMap" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">
+        SELECT
+        <include refid="Base_BO_Column_List" />
         FROM gw_app_setting a LEFT JOIN gw_api b ON a.apiId = b.id
         LEFT JOIN gw_view_sys_dict d ON d.id = b.dictId
         <where>
@@ -40,9 +45,18 @@
             <if test="method != null">AND b.method = #{method}</if>
             <if test="version != null">AND b.version = #{version}</if>
             <if test="appId != null">AND a.appId = #{appId}</if>
-            <if test="status != null">AND a.status = #{status}</if>
             <if test="1 != null">AND b.status = '1'</if>
         </where>
     </select>
-
+    <select id="selectByAppId" resultMap="appSettingMap" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">
+        SELECT
+        <include refid="Base_BO_Column_List" />
+        FROM gw_app_setting a LEFT JOIN gw_api b ON a.apiId = b.id
+        LEFT JOIN gw_view_sys_dict d ON d.id = b.dictId
+        <where>
+            1 = 1
+            <if test="uri != null">AND b.uri = #{uri}</if>
+            <if test="appId != null">AND a.appId = #{appId}</if>
+        </where>
+    </select>
 </mapper>

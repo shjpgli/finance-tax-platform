@@ -15,6 +15,18 @@
         <where>
             <if test="title != null">title like CONCAT('%',#{title},'%')</if>
         </where>
+        ORDER BY lastUpdate DESC
+    </select>
+
+    <select id="selectListForqt" resultType="com.abc12366.cszj.model.bo.NoticeBO" parameterType="com.abc12366.cszj.model.bo.NoticeBO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cszj_notice
+        <where>
+            status  = '1'
+            <if test="title != null"> and title like CONCAT('%',#{title},'%')</if>
+        </where>
+        ORDER BY lastUpdate DESC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.cszj.model.bo.NoticeBO" parameterType="java.lang.String">

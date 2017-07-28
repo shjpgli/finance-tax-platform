@@ -8,6 +8,7 @@ import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
 import com.abc12366.uc.model.InvoiceDetail;
 import com.abc12366.uc.model.InvoiceRepo;
+import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.InvoiceRepoService;
 import org.slf4j.Logger;
@@ -156,6 +157,16 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             LOGGER.info("{发票详情信息作废失败}", id);
             throw new ServiceException(4176);
         }
+    }
+
+    @Override
+    public InvoiceDetail selectInvoiceDetail() {
+        return invoiceDetailRoMapper.selectInvoiceDetail();
+    }
+
+    @Override
+    public List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail) {
+        return invoiceDetailRoMapper.selectInvoiceDetailListByInvoice(invoiceDetail);
     }
 
 }

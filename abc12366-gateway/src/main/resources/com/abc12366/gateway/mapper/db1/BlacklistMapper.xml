@@ -69,13 +69,33 @@
     <update id="update" parameterType="com.abc12366.gateway.model.Blacklist">
         UPDATE gw_blacklist
         <set>
-            <if test="userId != null">userId = #{userId},</if>
-            <if test="ip != null">ip = #{ip},</if>
-            <if test="startTime != null">startTime = #{startTime},</if>
-            <if test="endTime != null">endTime = #{endTime},</if>
-            <if test="remark != null">remark = #{remark},</if>
-            <if test="status != null">status = #{status}</if>
+            <if test="userId != null">
+                userId = #{userId},
+            </if>
+            <if test="ip != null">
+                ip = #{ip},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="createUser != null">
+                createUser = #{createUser},
+            </if>
+
         </set>
+        WHERE id = #{id}
     </update>
 
     <delete id="delete" parameterType="com.abc12366.gateway.model.Blacklist">

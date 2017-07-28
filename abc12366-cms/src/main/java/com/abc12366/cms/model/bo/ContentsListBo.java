@@ -78,6 +78,9 @@ public class ContentsListBo implements Serializable {
 	/**站点路径**varchar(500)**/
 	private String staticLink;
 
+    /**来源**varchar(100)**/
+    private String origin;
+
 
 	public String getContentId() {
 		return contentId;
@@ -254,4 +257,12 @@ public class ContentsListBo implements Serializable {
 	public void setStaticLink(String staticLink) {
 		this.staticLink = staticLink;
 	}
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
 }

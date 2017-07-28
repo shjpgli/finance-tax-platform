@@ -20,7 +20,7 @@
 	<select id="selectByChannelId" resultType="java.lang.Long" parameterType="java.lang.String">
 		SELECT count(contentId) cnt
 		FROM cms_content
-		WHERE channelId = #{channelId}
+		WHERE channelId like CONCAT(#{channelId},'%')
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
@@ -67,18 +67,22 @@
 			AND a.recommendLevel = #{recommendLevel}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>
 
     <!-- 查询（根据查询条件查询） -->
-    <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
+    <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
         SELECT
         a.contentId contentId,
         a.userid userid,
         a.username username,
         b.title title,
+        a.contentType,
+        b.titleImg,
+        b.origin,
+        b.description,
         b.titleColor titleColor,
         a.channelId channelId,
         c.channelName channelName,
@@ -89,34 +93,24 @@
         b.releaseDate releaseDate,
         a.status STATUS,
         b.needRegenerate needRegenerate,
+        a.recommendLevel recommendLevel,
         b.staticLink,
-        s.siteName,
-        a.recommendLevel recommendLevel
-        FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+        d.siteName,
+        c.channelPath,d.sitePath,d.domain
+        FROM cms_content a LEFT JOIN cms_contenttagid t ON t.contentId = a.contentId
+        LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
         LEFT JOIN cms_channel c ON a.channelId = c.channelId
-        LEFT JOIN cms_site s ON a.siteId = s.siteId
+        LEFT JOIN cms_site d ON a.siteId = d.siteId
         LEFT JOIN cms_content_count e ON a.contentId = e.contentId
-        WHERE 1=1
-        <if test="title != null and title != ''">
-            AND b.title like CONCAT('%',#{title},'%')
-        </if>
-        <if test="username != null and username != ''">
-            AND a.username like CONCAT('%',#{username},'%')
-        </if>
-        <if test="typeId != null and typeId != ''">
-            AND a.typeId = #{typeId}
-        </if>
-        <if test="topLevel != null and topLevel != ''">
-            AND a.topLevel = #{topLevel}
-        </if>
-        <if test="status != null and status != ''">
-            AND a.status = #{status}
-        </if>
-        <if test="recommendLevel != null and recommendLevel != ''">
-            AND a.recommendLevel = #{recommendLevel}
+        WHERE a.status = 2 AND b.needRegenerate = 1
+        <if test="tagId != null and tagId != ''">
+            AND t.tagId = #{tagId}
         </if>
         <if test="channelId != null and channelId != ''">
-            AND a.channelId = #{channelId}
+            AND a.channelId like CONCAT(#{channelId},'%')
+        </if>
+        <if test="siteId != null and siteId != ''">
+            AND a.siteId = #{siteId}
         </if>
         ORDER BY e.views DESC
     </select>
@@ -132,7 +126,7 @@
 			AND a.typeId = #{typeId}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="status != null and status != ''">
 			AND a.status = #{status}
@@ -161,6 +155,7 @@
 		b.title title,
 		a.contentType,
 		b.titleImg,
+        b.origin,
 		b.description,
 		b.titleColor titleColor,
 		a.channelId channelId,
@@ -186,7 +181,7 @@
 			AND t.tagId = #{tagId}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="siteId != null and siteId != ''">
 			AND a.siteId = #{siteId}
@@ -210,7 +205,7 @@
 			AND b.siteId = #{siteId}
 		</if>
         <if test="channelId != null and channelId != ''">
-            AND b.channelId = #{channelId}
+            AND b.channelId like CONCAT(#{channelId},'%')
         </if>
 		GROUP BY a.tagId
 	</select>
@@ -232,7 +227,7 @@
 			AND c.channelName = #{channelName}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}
@@ -258,6 +253,7 @@
 		b.title title,
 		a.contentType,
 		b.titleImg,
+        b.origin,
 		b.description,
 		b.titleColor titleColor,
 		a.channelId channelId,
@@ -286,7 +282,7 @@
 			AND c.channelName = #{channelName}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}
@@ -316,6 +312,7 @@
 		b.title title,
 		a.contentType,
 		b.titleImg,
+        b.origin,
 		b.description,
 		b.titleColor titleColor,
 		a.channelId channelId,

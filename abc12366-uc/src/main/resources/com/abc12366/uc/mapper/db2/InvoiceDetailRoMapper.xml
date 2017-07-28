@@ -54,6 +54,22 @@
         </where>
     </select>
 
+    <!-- 查询（根据InvoiceNo，status条件查询） -->
+    <select id="selectInvoiceDetailListByInvoice" resultType="com.abc12366.uc.model.InvoiceDetail" parameterType="com.abc12366.uc.model.InvoiceDetail">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice_detail
+        <where>
+            1 = 1
+            <if test=" invoiceNo != null and invoiceNo != '' ">
+                AND invoiceNo LIKE CONCAT('%',#{invoiceNo},'%')
+            </if>
+            <if test=" status != null and status != '' ">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
     <!-- 查询（根据状态和invoiceRepoId条件查询） -->
     <select id="selectByIdAndStatus" resultType="com.abc12366.uc.model.InvoiceDetail" parameterType="java.lang.String">
         SELECT
@@ -62,6 +78,13 @@
         <where>
             (status = "1" OR status = "2") and invoiceRepoId = #{invoiceRepoId}
         </where>
+    </select>
+
+    <select id="selectInvoiceDetail" resultType="com.abc12366.uc.model.InvoiceDetail">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_invoice_detail
+        where status = 0 order by (invoiceNo+0),createTime LIMIT 1
     </select>
 
 

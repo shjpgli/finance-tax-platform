@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cszj.mapper.db2.WxPersonRoMapper">
+
+     <sql id="Base_Column_List">
+         subscribe, openid, nickname, sex, language, city, province, country, headimgurl,subscribe_time,remark,groupid,unionid
+     </sql>
+     
+     <select id="countPersonNum" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson" resultType="long">
+        SELECT count(openid) FROM cszj_wxuser
+        <where>
+            <if test="openid!=null">openid=#{openid}</if>
+        </where>
+        
+     </select>
+     
+     
+     <select id="selectList" resultType="com.abc12366.cszj.model.weixin.bo.person.WxPerson" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cszj_wxuser
+        <where>
+            <if test="nickname != null">name like CONCAT('%',#{nickname},'%')</if>
+            <if test="sex != null">sex=#{sex}</if>
+            <if test="province != null">province=#{province}</if>
+            <if test="city != null">city=#{city}</if>
+            <if test="groupid != null">groupid=#{groupid}</if>
+        </where>
+        ORDER BY subscribe_time DESC
+    </select>
+    
+    <select id="selectOne" resultType="com.abc12366.cszj.model.weixin.bo.person.WxPerson" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cszj_wxuser
+        where openid=#{openid}
+    </select>
+    
+</mapper>
