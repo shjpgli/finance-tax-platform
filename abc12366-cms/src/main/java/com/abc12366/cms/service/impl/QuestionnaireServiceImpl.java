@@ -54,7 +54,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     public List<QuestionnaireBO> selectList(QuestionnaireBO questionnaireBO) {
         Questionnaire questionnaire = new Questionnaire();
         BeanUtils.copyProperties(questionnaireBO,questionnaire);
-
+        questionnaireMapper.updateStatus();
         return questionnaireRoMapper.selectList(questionnaire);
     }
 
