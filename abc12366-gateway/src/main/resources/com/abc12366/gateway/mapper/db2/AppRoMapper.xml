@@ -37,6 +37,9 @@
             <if test="name != null">
                 name=#{name}
             </if>
+            <if test="accessToken != null">
+                accessToken=#{accessToken}
+            </if>
             <if test="status != null">
                 and status=#{status}
             </if>

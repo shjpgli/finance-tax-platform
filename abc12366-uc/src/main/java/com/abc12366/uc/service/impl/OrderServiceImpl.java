@@ -308,4 +308,11 @@ public class OrderServiceImpl implements OrderService {
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(),"用户删除订单");
         return bo;
     }
+
+    @Override
+    public List<OrderBO> selectUserAllOrderList(OrderBO order, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+        return oList;
+    }
 }

@@ -38,6 +38,12 @@ public class AppController {
     @Autowired
     private AppService appService;
 
+    /**
+     * APP注册
+     * @param appBO
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
@@ -46,6 +52,12 @@ public class AppController {
         return ResponseEntity.ok(Utils.kv("data", app));
     }
 
+    /**
+     * APP登录
+     * @param appBO
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
@@ -55,10 +67,22 @@ public class AppController {
                 : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * APP列表查询
+     * @param pageNum
+     * @param pageSize
+     * @param name
+     * @param accessToken
+     * @param startTime
+     * @param endTime
+     * @param status
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(required = false,value = "name") String name,
+                                     @RequestParam(required = false,value = "accessToken") String accessToken,
                                      @RequestParam(required = false,value = "startTime") String startTime,
                                      @RequestParam(required = false,value = "endTime") String endTime,
                                      @RequestParam(required = false,value = "status") Boolean status
@@ -85,6 +109,7 @@ public class AppController {
         }
         AppBO appBO=new AppBO();
         appBO.setName(name);
+        appBO.setAccessToken(accessToken);
         appBO.setStartTime(start);
         appBO.setEndTime(end);
         appBO.setStatus(status);
@@ -96,6 +121,11 @@ public class AppController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) appList, "total", ((Page) appList).getTotal()));
     }
 
+    /**
+     * APP详情查询
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectById(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
@@ -104,6 +134,12 @@ public class AppController {
         return ResponseEntity.ok(Utils.kv("data", app));
     }
 
+    /**
+     * APP修改
+     * @param appUpdateBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@RequestBody AppBO appUpdateBO, @PathVariable("id") String id) {
         LOGGER.info("{}", appUpdateBO);

@@ -332,7 +332,7 @@
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
-            o.isInvoice = false
+            1 = 1
             <if test=" user.id != null and user.id != '' ">
                 and u.id = #{user.id}
             </if>
@@ -341,6 +341,9 @@
             </if>
             <if test=" tradeMethod != null and tradeMethod != '' ">
                 and o.tradeMethod = #{tradeMethod}
+            </if>
+            <if test=" isInvoice != null and isInvoice != '' ">
+                and o.isInvoice = #{isInvoice}
             </if>
         </where>
 

@@ -161,7 +161,7 @@ public class InvoiceController {
      */
     @PostMapping(path = "/billing")
     public ResponseEntity billing(@Valid @RequestBody InvoiceBO invoiceBO,
-                                  @RequestParam(value ="status", required = true) Boolean isBilling) {
+                                  @RequestParam(value ="isBilling", required = true) Boolean isBilling) {
         InvoiceBO bo = invoiceService.billing(invoiceBO,isBilling);
         LOGGER.info("{}", bo);
         return  ResponseEntity.ok(Utils.kv("data", bo));

@@ -85,7 +85,7 @@ public class OrderController {
     }
 
     /**
-     * 订单前台列表查询
+     * 已完成订单列表查询
      * @param pageNum
      * @param pageSize
      * @param name
@@ -93,7 +93,7 @@ public class OrderController {
      * @return
      */
     @GetMapping(path = "/user")
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+    public ResponseEntity selectUserOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
@@ -110,8 +110,39 @@ public class OrderController {
         order.setGoodsBO(goodsBO);
         order.setOrderStatus(status);
         order.setTradeMethod(tradeMethod);
-
+        order.setIsInvoice(false);
         List<OrderBO> orderBOs = orderService.selectOrderList(order,pageNum,pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
+        LOGGER.info("{}", orderBOs);
+        return (orderBOs == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户所有订单查询
+     * @param pageNum
+     * @param pageSize
+     * @param name
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/user/all")
+    public ResponseEntity selectUserAllOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "userId", required = true) String userId) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        OrderBO order = new OrderBO();
+        User user = new User();
+        user.setId(userId);
+        order.setUser(user);
+
+        GoodsBO goodsBO = new GoodsBO();
+        goodsBO.setName(name);
+        order.setGoodsBO(goodsBO);
+        order.setIsInvoice(false);
+        List<OrderBO> orderBOs = orderService.selectUserAllOrderList(order, pageNum,pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
@@ -180,7 +211,7 @@ public class OrderController {
     }*/
 
     /**
-     * 取消订单
+     * 删除购物车订单
      * @param userId
      * @param id
      * @return

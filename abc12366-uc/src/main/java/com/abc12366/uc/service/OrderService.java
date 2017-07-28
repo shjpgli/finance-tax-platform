@@ -81,4 +81,6 @@ public interface OrderService {
     OrderBO feedback(OrderBO orderBO);
 
     OrderBO cancelOrder(Order order);
+
+    List<OrderBO> selectUserAllOrderList(OrderBO order, int pageNum, int pageSize);
 }

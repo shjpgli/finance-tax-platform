@@ -213,6 +213,12 @@ public class GoodsController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 查找商品分类详情
+     * @param goodsCategoryBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/category/{id}")
     public ResponseEntity updateGategory(@Valid @RequestBody GoodsCategoryBO goodsCategoryBO, @PathVariable("id") String id) {
         LOGGER.info("{}", goodsCategoryBO);
@@ -222,6 +228,11 @@ public class GoodsController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 删除商品分类
+     * @param id
+     * @return
+     */
     @DeleteMapping(path = "/category/{id}")
     public ResponseEntity deleteGategory(@PathVariable("id") String id) {
         LOGGER.info("{}", id);

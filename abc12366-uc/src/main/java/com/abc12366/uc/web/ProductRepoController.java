@@ -55,7 +55,7 @@ public class ProductRepoController {
     }
 
     /**
-     * 库存入库
+     * 库存出库
      * @return
      */
     @PostMapping(path = "/outcome")
