@@ -331,12 +331,9 @@
 		LEFT JOIN cms_content_topic c ON a.contentId = c.topicId
 		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
-		WHERE 1=1
+		WHERE a.status = 2
 		<if test="typeId != null and typeId != ''">
 			AND a.typeId = #{typeId}
-		</if>
-		<if test="status != null and status != ''">
-			AND a.status = #{status}
 		</if>
 		<if test="topicId != null and topicId != ''">
 			AND c.topicId = #{topicId}
