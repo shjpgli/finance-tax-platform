@@ -2,12 +2,17 @@ package com.abc12366.cszj.model.weixin.bo.menu;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Button implements Serializable{
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@NotEmpty
 	private String type;
+	@NotEmpty
     private String name;
     private String key;
     private String url;

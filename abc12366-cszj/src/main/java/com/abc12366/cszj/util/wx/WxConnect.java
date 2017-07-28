@@ -12,12 +12,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.abc12366.cszj.config.SpringCtxHolder;
 import com.abc12366.cszj.model.weixin.BaseWxRespon;
+import com.alibaba.fastjson.JSON;
 
 
 
@@ -30,7 +29,7 @@ import com.abc12366.cszj.model.weixin.BaseWxRespon;
  * @param <T>
  */
 public class WxConnect<T> {
-	public final static ObjectMapper mapper = new ObjectMapper();
+	//public final static ObjectMapper mapper = new ObjectMapper();
 	private static final Logger LOGGER = LoggerFactory.getLogger(WxConnect.class);
 	
 	protected Class<T> _class;
@@ -49,8 +48,8 @@ public class WxConnect<T> {
 		this.bodyparamters=bodyparamters;
 		this._class=_class;
 		this.requestUrl=SpringCtxHolder.getProperty("abc.wx-url")+wechatUrl.uri;
-		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
+		//mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		//mapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
 	}
 	
 	public void initJson(){
@@ -67,7 +66,8 @@ public class WxConnect<T> {
 				requestUrl=url.toString();
 			}
 			if (bodyparamters!=null){
-				this.outputStr=mapper.writeValueAsString(bodyparamters);	
+				//this.outputStr=mapper.writeValueAsString(bodyparamters);
+				this.outputStr=JSON.toJSONString(bodyparamters);
 			}
 		} catch (Exception e) {
 			this.setJsonStr("{\"errcode\":\"-999\",\"errmsg\":\"组装微信请求参数异常，请联系管理员\"}");
@@ -144,7 +144,8 @@ public class WxConnect<T> {
 	@SuppressWarnings("unchecked")
 	T parseObject() {
 		try {
-			T res = mapper.readValue(this.getJsonStr(), _class);
+			T res = JSON.parseObject(this.getJsonStr(), _class);
+			//T res = mapper.readValue(this.getJsonStr(), _class);
 			return res;
 		} catch (Exception e) {
 			LOGGER.error("微信服务器返回json格式异常", e);
