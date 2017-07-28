@@ -36,38 +36,37 @@ public class KafkaConfig {
      *
      * @return Map
      */
-//    @Bean
-//    public Map<String, Object> consumerConfigs() {
-//        Map<String, Object> props = new HashMap<>();
-//        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootstrap_servers());
-//        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-//        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
-//        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
-//        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-//        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-//        props.put(ConsumerConfig.GROUP_ID_CONFIG, config.getConsumer_group_id());
-//        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-//        return props;
-//    }
+    @Bean
+    public Map<String, Object> consumerConfigs() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootstrap_servers());
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
+        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, config.getConsumer_group_id());
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        return props;
+    }
 
-//    @Bean
-//    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Object, Object>>
-//            kafkaListenerContainerFactory() {
-//
-//        ConcurrentKafkaListenerContainerFactory<Object, Object> factory
-//                = new ConcurrentKafkaListenerContainerFactory<>();
-//        factory.setConsumerFactory(consumerFactory());
-//        factory.setConcurrency(6);
-//        factory.getContainerProperties().setPollTimeout(3000);
-//        return factory;
-//    }
+    @Bean
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Object, Object>>
+            kafkaListenerContainerFactory() {
 
-//    @Bean
-//    public ConsumerFactory<Object, Object> consumerFactory() {
-//        DefaultKafkaConsumerFactory<Object, Object> factory = new DefaultKafkaConsumerFactory<>(consumerConfigs());
-//        factory.setValueDeserializer(new JsonDeserializer<>(UserRequestEvent.class));
-//        return factory;
-//    }
+        ConcurrentKafkaListenerContainerFactory<Object, Object> factory
+                = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(6);
+        factory.getContainerProperties().setPollTimeout(3000);
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<Object, Object> consumerFactory() {
+        DefaultKafkaConsumerFactory<Object, Object> factory = new DefaultKafkaConsumerFactory<>(consumerConfigs());
+        return factory;
+    }
 
     /**
      * Kafka作为生产者的配置

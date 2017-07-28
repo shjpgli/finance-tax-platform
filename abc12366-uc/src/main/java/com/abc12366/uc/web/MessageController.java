@@ -43,17 +43,17 @@ public class MessageController {
     public ResponseEntity insert(@Valid @RequestBody UserMessage data) {
         LOGGER.info("{}", data);
 
-        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("user-message-topic", data);
+        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("user_message_topic", data);
         future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
 
             @Override
             public void onFailure(Throwable throwable) {
-                LOGGER.info("Failed user-message-topic: " + data);
+                LOGGER.info("Failed user_message_topic: " + data);
             }
 
             @Override
             public void onSuccess(SendResult<String, Object> result) {
-                LOGGER.info("Success user-message-topic: " + result.getProducerRecord().value());
+                LOGGER.info("Success user_message_topic: " + result.getProducerRecord().value());
             }
         });
 
