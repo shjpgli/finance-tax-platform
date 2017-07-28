@@ -53,5 +53,13 @@
 		WHERE parentId = #{parentId}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectChannelIdCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(channelId) cnt
+        FROM cms_channel
+        WHERE channelId = #{channelId}
+    </select>
+
 
 </mapper>
