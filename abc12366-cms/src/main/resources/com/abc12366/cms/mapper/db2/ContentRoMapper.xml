@@ -20,7 +20,7 @@
 	<select id="selectByChannelId" resultType="java.lang.Long" parameterType="java.lang.String">
 		SELECT count(contentId) cnt
 		FROM cms_content
-		WHERE channelId = #{channelId}
+		WHERE channelId like CONCAT(#{channelId},'%')
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
@@ -67,7 +67,7 @@
 			AND a.recommendLevel = #{recommendLevel}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>
@@ -107,7 +107,7 @@
             AND t.tagId = #{tagId}
         </if>
         <if test="channelId != null and channelId != ''">
-            AND a.channelId = #{channelId}
+            AND a.channelId like CONCAT(#{channelId},'%')
         </if>
         <if test="siteId != null and siteId != ''">
             AND a.siteId = #{siteId}
@@ -126,7 +126,7 @@
 			AND a.typeId = #{typeId}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="status != null and status != ''">
 			AND a.status = #{status}
@@ -181,7 +181,7 @@
 			AND t.tagId = #{tagId}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="siteId != null and siteId != ''">
 			AND a.siteId = #{siteId}
@@ -205,7 +205,7 @@
 			AND b.siteId = #{siteId}
 		</if>
         <if test="channelId != null and channelId != ''">
-            AND b.channelId = #{channelId}
+            AND b.channelId like CONCAT(#{channelId},'%')
         </if>
 		GROUP BY a.tagId
 	</select>
@@ -227,7 +227,7 @@
 			AND c.channelName = #{channelName}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}
@@ -282,7 +282,7 @@
 			AND c.channelName = #{channelName}
 		</if>
 		<if test="channelId != null and channelId != ''">
-			AND a.channelId = #{channelId}
+			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}

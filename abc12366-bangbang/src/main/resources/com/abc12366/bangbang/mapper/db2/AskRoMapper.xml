@@ -40,6 +40,7 @@
       select id,userId,ask,detail,status,createTime,lastUpdate,points,isSolve,askedUserId,
       (select count(1) from bb_ask_log bal where bal.askId = ba.id) pageviews
         from bb_ask ba
+        where ba.status='1'
         order by pageviews desc
     </select>
 
@@ -47,6 +48,7 @@
         select id,userId,ask,detail,status,createTime,lastUpdate,points,isSolve,askedUserId,
         (select count(bc.id) from bb_comment bc, bb_answer ban where bc.answerId=ban.id and ban.askId=ba.id) commentsCount
         from bb_ask ba
+        where ba.status='1'
         order by commentsCount desc
     </select>
 </mapper>

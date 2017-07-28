@@ -118,6 +118,7 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         if(answerLogBO != null && answerLogBO.getId() != null){
             String ids[] = answerLogBO.getId().split(",");
             for (String id: ids){
+                answerMapper.deleteByPrimaryKey(id);
                 int del = answerLogMapper.deleteByPrimaryKey(id);
                 if (del != 1){
                     LOGGER.info("{删除答题记录失败}", id);

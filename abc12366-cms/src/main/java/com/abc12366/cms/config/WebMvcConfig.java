@@ -2,6 +2,7 @@ package com.abc12366.cms.config;
 
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
+import com.abc12366.gateway.component.TokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +34,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new AppInterceptor();
     }
 
+    @Bean
+    public TokenInterceptor tokenInterceptor() {
+        return new TokenInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -40,16 +46,30 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**");
 
+        // UserToken验证、授权拦截
+        registry.addInterceptor(tokenInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/app/login", "/app/register", "/test")
+                .excludePathPatterns("/admintoken/**", "/user/token/*")
+                        //定时任务查询不需验证
+                .excludePathPatterns("/task/list")
+                        //修改内容浏览量
+                .excludePathPatterns("/content/updateViewsDay")
+                //获取标签
+                .excludePathPatterns("/content/selectContentType")
+                .excludePathPatterns("/login", "/register");
+
         // App验证、授权拦截
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/druid/**")
-                //定时任务查询不需验证
+                        //定时任务查询不需验证
                 .excludePathPatterns("/task/list")
-                //根据内容ID查找对应的上一篇以及下一篇内容想关信息
-                .excludePathPatterns("/content/selectContentudList")
                 //修改内容浏览量
-                .excludePathPatterns("/content/updateViewsDay/**")
+                .excludePathPatterns("/content/updateViewsDay")
+                        //获取标签
+                .excludePathPatterns("/content/selectContentType")
                 .excludePathPatterns("/app/login", "/app/register", "/test");
 
     }

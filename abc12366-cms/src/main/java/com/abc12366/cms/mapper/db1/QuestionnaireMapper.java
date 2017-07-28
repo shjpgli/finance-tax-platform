@@ -41,4 +41,6 @@ public interface QuestionnaireMapper{
     int updateRecoveryRate(Questionnaire questionnaire);
 
 	int updateSkinUrl(Questionnaire questionnaire);
+
+    void updateStatus();
 }
