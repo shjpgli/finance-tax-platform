@@ -42,6 +42,9 @@
         <if test="siteId != null and siteId != ''">
             AND t.siteId = #{siteId}
         </if>
+        <if test="isDisplay != null and isDisplay != ''">
+            AND t.isDisplay = #{isDisplay}
+        </if>
 		order by priority
 	</select>
 
