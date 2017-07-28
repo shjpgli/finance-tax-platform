@@ -24,7 +24,7 @@ public class QuestionnaireBO implements Serializable {
     private String simpleDesc;
 
     @NotNull
-    private Boolean status;
+    private String status;
 
     private String createUser;
     private java.util.Date createTime;
@@ -67,12 +67,13 @@ public class QuestionnaireBO implements Serializable {
         return this.simpleDesc;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+
+    public String getStatus() {
+        return status;
     }
 
-    public Boolean getStatus() {
-        return this.status;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setCreateUser(String createUser) {

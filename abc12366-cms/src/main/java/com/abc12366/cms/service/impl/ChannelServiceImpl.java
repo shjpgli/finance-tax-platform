@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/5/9.
@@ -115,9 +112,23 @@ public class ChannelServiceImpl implements ChannelService {
         try {
             JSONObject jsonStu = JSONObject.fromObject(channelSaveBo);
             LOGGER.info("新增栏目信息:{}", jsonStu.toString());
-            String uuid = UUID.randomUUID().toString().replace("-", "");
+//            String uuid = UUID.randomUUID().toString().replace("-", "");
+            String uuid = "";
+            String code = "";
             //栏目
             ChannelBo channelBo = channelSaveBo.getChannel();
+            String parentId = channelBo.getParentId();
+
+            for(int i=0;i<20;i++){
+                code = this.genCodes(6);
+                uuid = parentId + code;
+                int cnt = channelRoMapper.selectChannelIdCnt(uuid);
+                if(cnt ==0){
+                    break;
+                }
+            }
+
+
             channelBo.setChannelId(uuid);
             Channel channel = new Channel();
             BeanUtils.copyProperties(channelBo, channel);
@@ -319,13 +330,13 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String channelId) {
+        LOGGER.info("删除栏目信息:{}", channelId);
+        int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
+        if(cnt != 0){
+            //该栏目下存在内容信息,不能删除
+            throw new ServiceException(4249);
+        }
         try {
-            LOGGER.info("删除栏目信息:{}", channelId);
-            int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
-            if(cnt != 0){
-                //该栏目下存在内容信息,不能删除
-                throw new ServiceException(4249);
-            }
             //删除栏目扩展信息
             channelExtMapper.deleteByPrimaryKey(channelId);
             //删除栏目扩展项信息
@@ -346,5 +357,28 @@ public class ChannelServiceImpl implements ChannelService {
             throw new ServiceException(4248);
         }
         return "";
+    }
+
+    public String genCodes(int length){
+
+            String val = "";
+            Random random = new Random();
+            for(int i = 0; i < length; i++)
+            {
+                String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; // 输出字母还是数字
+
+                if("char".equalsIgnoreCase(charOrNum)) // 字符串
+                {
+                    int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; //取得大写字母还是小写字母
+                    val += (char) (choice + random.nextInt(26));
+                }
+                else if("num".equalsIgnoreCase(charOrNum)) // 数字
+                {
+                    val += String.valueOf(random.nextInt(10));
+                }
+            }
+            val=val.toLowerCase();
+
+        return val;
     }
 }

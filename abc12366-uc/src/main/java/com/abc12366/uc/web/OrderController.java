@@ -124,10 +124,10 @@ public class OrderController {
      * @param orderNo
      * @return
      */
-    @GetMapping(path = "/selectOne/{orderNo}")
-    public ResponseEntity<?> selectOne(@PathVariable("orderNo") String orderNo) {
+    @GetMapping(path = "/select/{orderNo}")
+    public ResponseEntity<?> selectByOrderNo(@PathVariable("orderNo") String orderNo) {
         LOGGER.info("{}", orderNo);
-        OrderBO orderBO = orderService.selectOne(orderNo);
+        OrderBO orderBO = orderService.selectByOrderNo(orderNo);
         LOGGER.info("{}", orderBO);
         return ResponseEntity.ok(Utils.kv("data", orderBO));
     }
@@ -142,6 +142,21 @@ public class OrderController {
         LOGGER.info("{}", orderBO);
         orderBO.setUserId(userId);
         OrderBO bo = orderService.submitOrder(orderBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 用户取消订单
+     * @param userId
+     * @return
+     */
+    @PostMapping(path = "/cancel/{userId}/{orderNo}")
+    public ResponseEntity cancelOrder(@Valid @RequestBody Order order,@PathVariable("userId") String userId,@PathVariable("orderNo") String orderNo) {
+        LOGGER.info("{}", order);
+        order.setUserId(userId);
+        order.setOrderNo(orderNo);
+        OrderBO bo = orderService.cancelOrder(order);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }

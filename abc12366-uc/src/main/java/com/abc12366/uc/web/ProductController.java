@@ -66,7 +66,7 @@ public class ProductController {
      * @param goodsName
      * @return
      */
-    @GetMapping(path = "/productRepo")
+    @GetMapping(path = "/productrepo")
     public ResponseEntity selectBOList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                             @RequestParam(value = "goodsName", required = false) String goodsName,
@@ -89,7 +89,7 @@ public class ProductController {
      * 查询库存详情
      * @return
      */
-    @GetMapping(path = "/productRepo/selectOne")
+    @GetMapping(path = "/productrepo/select")
     public ResponseEntity selectProductRepoDetail(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                                   @RequestParam(value = "goodsId", required = true) String goodsId,

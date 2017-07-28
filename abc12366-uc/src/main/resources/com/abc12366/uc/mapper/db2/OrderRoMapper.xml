@@ -332,7 +332,7 @@
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
-            1 = 1
+            o.isInvoice = false
             <if test=" user.id != null and user.id != '' ">
                 and u.id = #{user.id}
             </if>

@@ -17,4 +17,5 @@ public interface ApiLogRoMapper {
     Integer selectApiLogCount(ApiLog apiLog);
 
 
+    int selectByUri(ApiLog apiLog);
 }

@@ -54,7 +54,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     public List<QuestionnaireBO> selectList(QuestionnaireBO questionnaireBO) {
         Questionnaire questionnaire = new Questionnaire();
         BeanUtils.copyProperties(questionnaireBO,questionnaire);
-
+        questionnaireMapper.updateStatus();
         return questionnaireRoMapper.selectList(questionnaire);
     }
 
@@ -140,7 +140,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     }
 
     @Override
-    public void updateStatus(String id, Boolean status) {
+    public void updateStatus(String id, String status) {
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setId(id);
         questionnaire.setStatus(status);

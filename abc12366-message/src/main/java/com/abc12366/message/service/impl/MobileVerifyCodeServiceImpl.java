@@ -3,13 +3,14 @@ package com.abc12366.message.service.impl;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Properties;
 import com.abc12366.common.util.Utils;
+import com.abc12366.message.mapper.db1.PhoneCodeMapper;
+import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
 import com.abc12366.message.model.PhoneCode;
 import com.abc12366.message.model.bo.NeteaseQueryStatusResponseBO;
 import com.abc12366.message.model.bo.NeteaseTemplateResponseBO;
 import com.abc12366.message.model.bo.PhoneCodeBO;
 import com.abc12366.message.model.bo.SmsOpsLog;
 import com.abc12366.message.service.MobileVerifyCodeService;
-import com.abc12366.message.service.PhoneCodeService;
 import com.abc12366.message.util.CheckSumBuilder;
 import com.abc12366.message.util.MessageConstant;
 import com.abc12366.message.util.RandomNumber;
@@ -27,7 +28,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +48,10 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private PhoneCodeService phoneCodeService;
+    private PhoneCodeMapper phoneCodeMapper;
+
+    @Autowired
+    private PhoneCodeRoMapper phoneCodeRoMapper;
 
     private static Properties properties = new Properties("application.properties");
     private static String appKey;
@@ -71,28 +74,29 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     //获取验证码
     @Transactional("db1TxManager")
     @Override
-    public void getCode(String phone, String codeType, HttpSession session) throws IOException {
+    public void getCode(String phone) throws IOException {
         LOGGER.info("{}", phone);
         //手机号码不是11为抛出异常
         if (!(phone.trim().length() == 11)) {
             throw new ServiceException(4801);
         }
-        String code = RandomNumber.getRandomNumber(MessageConstant.VERIFY_CODE_LENGTH);
 
-        //将验证码信息写入表
-        PhoneCode phoneCodeParam = new PhoneCode();
-        phoneCodeParam.setPhone(phone);
-        phoneCodeParam.setCode(code);
-        phoneCodeService.delete(phoneCodeParam);
+        //五分钟之内重复获取验证码，就发送之前的那个
+        String code = getPriviousCode(phone);
+        if (code == null || code.trim().equals("")) {
+            code = RandomNumber.getRandomNumber(MessageConstant.VERIFY_CODE_LENGTH);
+            //将验证码信息写入表
+            phoneCodeMapper.delete(phone);
 
-        PhoneCode phoneCode = new PhoneCode();
-        phoneCode.setId(Utils.uuid());
-        phoneCode.setPhone(phone);
-        phoneCode.setCode(code);
-        phoneCode.setExpireDate(new Date(System.currentTimeMillis() + 1000 * 60 * 5));
-        phoneCodeService.insert(phoneCode);
+            PhoneCode phoneCode = new PhoneCode();
+            phoneCode.setId(Utils.uuid());
+            phoneCode.setPhone(phone);
+            phoneCode.setCode(code);
+            phoneCode.setExpireDate(new Date(System.currentTimeMillis() + 1000 * MessageConstant.VERIFY_CODE_VALID_SECONDS));
+            phoneCodeMapper.insert(phoneCode);
+        }
 
-        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, codeType, code);
+        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, MessageConstant.VERIFY_CODE_FILL_CONTENT, code);
         //调用网易短信接口不成功，则换调用阿里云短信接口
 //        if (!sendCodeThroghNetease) {
 //            sendAliyunTemplate(phone, code);
@@ -101,12 +105,12 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     }
 
     @Override
-    public void verify(String phone, String code, HttpSession session) {
-        LOGGER.info("{}:{}:{}", phone, code, session);
+    public void verify(String phone, String code) {
+        LOGGER.info("{}:{}:{}", phone, code);
         PhoneCode phoneCodeParam = new PhoneCode();
         phoneCodeParam.setPhone(phone);
         phoneCodeParam.setCode(code);
-        List<PhoneCodeBO> phoneCodeBOList = phoneCodeService.selectList(phoneCodeParam);
+        List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectList(phoneCodeParam);
         if (phoneCodeBOList == null) {
             throw new ServiceException(4202);
         }
@@ -118,9 +122,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
         long now = System.currentTimeMillis();
         long exp = phoneCodeBO.getExpireDate().getTime();
-        boolean b3 = exp > now;
+        boolean isValid = exp > now;
 
-        if (!b3) {
+        if (!isValid) {
             throw new ServiceException(4203);
         }
 
@@ -184,6 +188,19 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             }
         }
         return false;
+    }
+
+    private String getPriviousCode(String phone) {
+        //五分钟之内重复获取验证码，就发送之前的那个
+        List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectListByPhone(phone);
+        String privCode = "";
+        if (phoneCodeBOList != null && phoneCodeBOList.size() > 0) {
+            PhoneCodeBO phoneCodeBO = phoneCodeBOList.get(0);
+            if (phoneCodeBO.getExpireDate().getTime() > System.currentTimeMillis()) {
+                privCode = phoneCodeBOList.get(0).getCode();
+            }
+        }
+        return privCode;
     }
 
 //    private boolean sendAliyunTemplate(String phone, String code) throws IOException {

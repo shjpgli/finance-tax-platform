@@ -23,7 +23,7 @@ public interface QuestionnaireService {
 
     void delete(QuestionnaireBO questionnaireBO);
 
-    void updateStatus(String id, Boolean status);
+    void updateStatus(String id, String status);
 
     void updateSkinUrl(String id, String skinUrl);
 

@@ -64,6 +64,12 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public SiteBo save(SiteBo siteBo) {
+        SiteBo siteBo1 = new SiteBo();
+        siteBo1.setSitePath(siteBo.getSitePath());
+        int cnt = siteRoMapper.selectCnt(siteBo1);
+        if(cnt >0){
+            throw new ServiceException(4214);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(siteBo);
             LOGGER.info("新增站点信息:{}", jsonStu.toString());
@@ -81,6 +87,13 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public SiteBo update(SiteBo siteBo) {
+        SiteBo siteBo1 = new SiteBo();
+        siteBo1.setSitePath(siteBo.getSitePath());
+        siteBo1.setSiteId(siteBo.getSiteId());
+        int cnt = siteRoMapper.selectCnt(siteBo1);
+        if(cnt >0){
+            throw new ServiceException(4214);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(siteBo);
             LOGGER.info("更新站点信息:{}", jsonStu.toString());

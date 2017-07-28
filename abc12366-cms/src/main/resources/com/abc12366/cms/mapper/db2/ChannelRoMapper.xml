@@ -27,14 +27,14 @@
 	<select id="selectLists" resultType="com.abc12366.cms.model.bo.ChannelBo" parameterType="java.lang.String">
 		SELECT
 		t.channelId,t.channelName,	t.modelId,	t.siteId,	t.parentId,	t.channelPath,	t.priority,	t.isDisplay,
-        (select count(*) cnt from cms_content where channelId = t.channelId) cnt,b.link,b.titleImg,c.sitePath,c.domain
+        (select count(*) cnt from cms_content where channelId like CONCAT(t.channelId,'%')) cnt,b.link,b.titleImg,c.sitePath,c.domain
 		FROM cms_channel t LEFT JOIN cms_channel_ext b ON t.channelId = b.channelId LEFT JOIN cms_site c ON t.siteId = c.siteId
 		WHERE 1=1
 		<if test="channelId != null and channelId != ''">
-			AND t.channelId = #{channelId}
+			AND t.channelId like CONCAT(#{channelId},'%')
 		</if>
 		<if test="channelName != null and channelName != ''">
-			AND t.channelName = #{channelName}
+			AND t.channelName like CONCAT('%',#{channelName},'%')
 		</if>
 		<if test="parentId != null and parentId != ''">
 			AND t.parentId = #{parentId}
@@ -52,6 +52,14 @@
 		FROM cms_channel
 		WHERE parentId = #{parentId}
 	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectChannelIdCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(channelId) cnt
+        FROM cms_channel
+        WHERE channelId = #{channelId}
+    </select>
 
 
 </mapper>

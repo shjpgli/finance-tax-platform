@@ -97,7 +97,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
             throws Exception {
         String addr = Utils.getAddr(request);
         String userAgent = Utils.getUserAgent(request);
-        String uri = request.getRequestURI();
+        String uri = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping.bestMatchingPattern");
         long inTime = (long) request.getAttribute("inTime");
         request.removeAttribute("inTime");
 

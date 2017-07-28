@@ -22,6 +22,7 @@ public class NoticeBO {
     private String author;
     @Size(max = 1000)
     private String content;
+    /*0ÒÑ·¢²¼£¬1²Ý¸å*/
     @NotNull
     private String status;
 

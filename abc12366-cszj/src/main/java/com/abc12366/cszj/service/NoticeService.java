@@ -15,9 +15,13 @@ import java.util.List;
 public interface NoticeService {
     List<NoticeBO> selectList(NoticeBO notice, int page, int size);
 
+    List<NoticeBO> selectListForqt(NoticeBO notice, int page, int size);
+
     NoticeBO insert(NoticeBO notice);
 
     NoticeBO selectOne(String id);
+
+    NoticeBO selectOneForqt(String id);
 
     NoticeBO update(NoticeBO notice);
 

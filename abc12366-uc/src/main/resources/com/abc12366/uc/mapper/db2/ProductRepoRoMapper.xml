@@ -49,7 +49,7 @@
            </if>
        </where>-->
     </select>
-    <select id="selectOne" resultMap="productRepoBOResultMap" parameterType="java.lang.String">
+    <select id="selectById" resultMap="productRepoBOResultMap" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product_repo

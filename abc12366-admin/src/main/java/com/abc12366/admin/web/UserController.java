@@ -1,6 +1,5 @@
 package com.abc12366.admin.web;
 
-import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.*;
@@ -12,11 +11,9 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 

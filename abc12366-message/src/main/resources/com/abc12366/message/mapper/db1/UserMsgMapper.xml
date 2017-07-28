@@ -18,6 +18,7 @@
             <if test="status != null">status = #{status},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
         </set>
+        WHERE id = #{id}
     </update>
 
     <delete id="delete">

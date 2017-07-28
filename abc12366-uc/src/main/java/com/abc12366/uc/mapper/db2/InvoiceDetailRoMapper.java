@@ -7,27 +7,27 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * InvoiceDetailMapper数据库操作接口类
- * 
  **/
 
 public interface InvoiceDetailRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	InvoiceDetail  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    InvoiceDetail selectByPrimaryKey(@Param("id") String id);
 
 
-	List<InvoiceDetail> selectInvoiceDetailList(InvoiceDetail invoiceDetail);
+    List<InvoiceDetail> selectInvoiceDetailList(InvoiceDetail invoiceDetail);
 
-	InvoiceRepo selectByInvoiceNo(String invoiceNo);
+    InvoiceRepo selectByInvoiceNo(String invoiceNo);
 
-	InvoiceDetail selectInvoiceRepo(String status);
+    InvoiceDetail selectInvoiceRepo(String status);
 
-	List<InvoiceDetail> selectByIdAndStatus(String id);
+    List<InvoiceDetail> selectByIdAndStatus(String id);
+
+    InvoiceDetail selectInvoiceDetail();
+
+    List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail);
 }

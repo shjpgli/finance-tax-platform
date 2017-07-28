@@ -15,4 +15,5 @@ public interface SiteService {
     SiteBo update(SiteBo siteBo);
 
     SiteBo selectOneById(String id);
+
 }
