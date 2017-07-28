@@ -3,8 +3,8 @@ package com.abc12366.message.web;
 import com.abc12366.common.model.BodyStatus;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
-import com.abc12366.message.model.UserMessage;
-import com.abc12366.message.service.UserMsgService;
+import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.service.BusinessMsgService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +25,12 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
-public class UserMsgController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserMsgController.class);
+@RequestMapping(path = "/business", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class BusinessMsgController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BusinessMsgController.class);
 
     @Autowired
-    private UserMsgService userMsgService;
+    private BusinessMsgService businessMsgService;
 
     /**
      * 获取当前用户消息列表
@@ -50,10 +50,10 @@ public class UserMsgController {
         String userId = (String) request.getAttribute(Constant.USER_ID);
 
         if (!StringUtils.isEmpty(userId)) {
-            UserMessage um = new UserMessage.Builder().toUserId(userId).build();
-            List<UserMessage> dataList = userMsgService.selectList(um, page, size);
+            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).build();
+            List<BusinessMessage> dataList = businessMsgService.selectList(bm, page, size);
 
-            PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
+            PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
             responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
         }
 
@@ -68,10 +68,10 @@ public class UserMsgController {
      * @return ResponseEntity
      */
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody UserMessage data) {
+    public ResponseEntity insert(@Valid @RequestBody BusinessMessage data) {
         LOGGER.info("{}", data);
 
-        data = userMsgService.insert(data);
+        data = businessMsgService.insert(data);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
@@ -88,7 +88,7 @@ public class UserMsgController {
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
 
-        UserMessage data = userMsgService.selectOne(id);
+        BusinessMessage data = businessMsgService.selectOne(id);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
@@ -105,7 +105,7 @@ public class UserMsgController {
     public ResponseEntity update(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
 
-        UserMessage data = userMsgService.update(new UserMessage.Builder().id(id).status("2").build());
+        BusinessMessage data = businessMsgService.update(new BusinessMessage.Builder().id(id).status("2").build());
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
@@ -128,8 +128,8 @@ public class UserMsgController {
         String userId = (String) request.getAttribute(Constant.USER_ID);
 
         if (!StringUtils.isEmpty(userId)) {
-            UserMessage data = new UserMessage.Builder().id(id).toUserId(userId).build();
-            BodyStatus body = userMsgService.delete(data);
+            BusinessMessage data = new BusinessMessage.Builder().id(id).userId(userId).build();
+            BodyStatus body = businessMsgService.delete(data);
             responseEntity = ResponseEntity.ok(body);
         }
 

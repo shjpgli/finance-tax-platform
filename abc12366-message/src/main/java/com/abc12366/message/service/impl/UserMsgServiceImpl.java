@@ -6,6 +6,7 @@ import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
 import com.abc12366.message.model.UserMessage;
 import com.abc12366.message.service.UserMsgService;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -54,18 +55,16 @@ public class UserMsgServiceImpl implements UserMsgService {
         return data;
     }
 
-    @KafkaListener(topics = "user-message-topic")
-    public void handle(ConsumerRecord<String, String> record) {
-
-        LOGGER.info("user: " + record.value());
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("record: " + record.value());
-        }
+    @KafkaListener(topics = "user_message_topic")
+    public void handleUserMessage(ConsumerRecord<String, String> record) {
+        LOGGER.info("user_message_topic: " + record.value());
+        UserMessage data = JSON.parseObject(record.value(), UserMessage.class);
+        this.insert(data);
     }
 
     @Override
     public UserMessage update(UserMessage data) {
-        UserMessage um = this.selectOne(data.getId());
+        UserMessage um = userMsgRoMapper.selectOne(data.getId());
         if (um != null) {
             um.setStatus(data.getStatus());
             um.setLastUpdate(new Timestamp(new Date().getTime()));
@@ -87,9 +86,9 @@ public class UserMsgServiceImpl implements UserMsgService {
     @Override
     public BodyStatus delete(UserMessage data) {
         UserMessage um = this.selectOne(data.getId());
-        if (data.getToUserId().equals(um.getToUserId())) { // 是否未本人操作
+        if (data.getToUserId().equals(um.getToUserId())) { // 是否为本人操作
             um.setStatus("0");
-            userMsgMapper.update(um);
+            this.update(um);
             return Utils.bodyStatus(2000);
         } else {
             return Utils.bodyStatus(4024);

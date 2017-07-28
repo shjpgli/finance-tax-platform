@@ -36,4 +36,13 @@ public class UserResponseBO {
     public void setData(UCUserBO data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "UserResponseBO{" +
+                "code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }
