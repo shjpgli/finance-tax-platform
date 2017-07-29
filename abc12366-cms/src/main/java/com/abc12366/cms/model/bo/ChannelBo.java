@@ -17,12 +17,12 @@ public class ChannelBo implements Serializable {
 	private String channelId;
 
     @NotEmpty(message = "模型ID不能为空！")
-    @Size(min = 1, max = 64)
+    @Size(min = 0, max = 64)
 	/**模型ID**varchar(64)**/
 	private String modelId;
 
     @NotEmpty(message = "站点ID不能为空！")
-    @Size(min = 1, max = 64)
+    @Size(min = 0, max = 64)
 	/**站点ID**varchar(64)**/
 	private String siteId;
 
@@ -37,12 +37,12 @@ public class ChannelBo implements Serializable {
 
 	/**父栏目ID**varchar(64)**/
     @NotEmpty(message = "父栏目ID不能为空！")
-    @Size(min = 1, max = 64)
+    @Size(min = 0, max = 64)
 	private String parentId;
 
 	/**访问路径**varchar(30)**/
     @NotEmpty(message = "channelPath不能为空！")
-    @Size(min = 1, max = 30)
+    @Size(min = 0, max = 30)
 	private String channelPath;
 
 	/**排列顺序**int(11)**/
@@ -53,7 +53,7 @@ public class ChannelBo implements Serializable {
 
 	/**栏目名称**varchar(100)**/
     @NotEmpty(message = "栏目名称不能为空！")
-    @Size(min = 1, max = 100)
+    @Size(min = 0, max = 100)
 	private String channelName;
 
     /**外部链接供查询列表用**/
