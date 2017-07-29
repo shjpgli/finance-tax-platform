@@ -60,6 +60,9 @@
 		<if test="topLevel != null and topLevel != ''">
 			AND a.topLevel = #{topLevel}
 		</if>
+        <if test="siteId != null and siteId != ''">
+            AND a.siteId = #{siteId}
+        </if>
 		<if test="status != null and status != ''">
 			AND a.status = #{status}
 		</if>
