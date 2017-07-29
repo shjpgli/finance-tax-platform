@@ -1,6 +1,8 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.common.exception.ServiceException;
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Properties;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
@@ -9,16 +11,28 @@ import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.UserUtil;
+import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
+import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
+import com.abc12366.uc.wsbssoa.service.MainService;
+import com.abc12366.uc.wsbssoa.utils.MD5;
+import com.abc12366.uc.wsbssoa.utils.soaUtil;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -36,14 +50,25 @@ public class UserBindServiceImpl implements UserBindService {
     @Autowired
     private UserBindRoMapper userBindRoMapper;
 
+    private static Properties properties = new Properties("application.properties");
+
+//    @Autowired
+//    private RestTemplate restTemplate;
+
+    @Autowired
+    private MainService mainService;
+
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) {
         if (userDzsbInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
+
+
         UserDzsb userDzsb = new UserDzsb();
         //BeanUtils.copyProperties(userDzsbBO, userDzsb);
+
 
         userDzsb.setId(Utils.uuid());
         Date date = new Date();
@@ -59,6 +84,69 @@ public class UserBindServiceImpl implements UserBindService {
         UserDzsbBO userDzsbBO1 = new UserDzsbBO();
         BeanUtils.copyProperties(userDzsb, userDzsbBO1);
         return userDzsbBO1;
+    }
+
+    //登录网上报税接口
+    private HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception {
+        HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
+        if (hngsAppLoginResponse != null) {
+            String url = properties.getValue("wsbssoa.hngs.url") + "/login";
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("accessToken", (String) request.getAttribute("accessToken"));
+            headers.add("Content-Type", "application/json");
+
+            Map<String, Object> requestBody = new HashMap<>();
+
+            requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
+            Timestamp timestamp = new Timestamp(new Date().getTime());
+            requestBody.put("timestamp", Long.toString(timestamp.getTime()));
+            requestBody.put("roleId", userHngsInsertBO.getRole());
+            String pw = Utils.md5(userHngsInsertBO.getPassword());
+            try {
+                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
+            } catch (Exception e) {
+                String msg = "获取公钥并加密时异常。";
+                LOGGER.error(msg, e);
+                throw new ServiceException(4192);
+            }
+            requestBody.put("djm", pw);
+
+            //生成伪密码
+            Random rd = new Random();
+            int randomInt = rd.nextInt(10000);
+            requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
+
+            HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+                return JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+            }
+        }
+        return null;
+    }
+
+    private HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
+        String url = properties.getValue("wsbssoa.hngs.app.login.url");
+        HttpHeaders headers = new HttpHeaders();
+
+        Map<String, Object> requestBody = new HashMap<>();
+        String appId = properties.getValue("APPID");
+        String secret = properties.getValue("SECRET");
+        requestBody.put("appId", appId);
+        requestBody.put("secret", secret);
+
+//        String requestBody = "{\"appId\":\"ETAX_PC\",\"secret\":\"3A6ABF6B62EA0190E053550C483DD05A\"}";
+
+        HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+            HngsAppLoginResponse hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsAppLoginResponse.class);
+            request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
+            return hngsAppLoginResponse;
+        }
+        return null;
     }
 
     @Override
@@ -77,13 +165,23 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
+    public UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception {
         if (userHngsInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
+
+        //访问网上报税系统
+        HngsNsrLoginResponse hngsNsrLoginResponse = loginWsbsHngs(userHngsInsertBO, request);
+
         UserHngs userHngs = new UserHngs();
-        //BeanUtils.copyProperties(userHngsInsertBO, userHngs);
+        userHngs.setDjxh(hngsNsrLoginResponse.getDjxh());
+        userHngs.setNsrsbh(hngsNsrLoginResponse.getNsrsbh());
+        userHngs.setBsy(userHngsInsertBO.getBsy());
+        userHngs.setNsrmc(hngsNsrLoginResponse.getNsrmc());
+        userHngs.setShxydm(hngsNsrLoginResponse.getNsrsbh());
+        userHngs.setSwjgMc("网上报税接口暂时不返回这个字段。");
+        userHngs.setSwjgDm(hngsNsrLoginResponse.getZgswjDm());
         Date date = new Date();
         userHngs.setId(Utils.uuid());
         userHngs.setSmrzzt(false);
@@ -169,5 +267,41 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public List<UserHndsBO> getUserhndsBind(String userId) {
         return userBindRoMapper.getUserhndsBind(userId);
+    }
+
+
+    public static void main(String[] args) {
+//        new UserBindServiceImpl().testPost();
+//        try {
+//            new UserBindServiceImpl().appLoginWsbs();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    private void testPost() {
+        String url = "http://localhost:9100/uc/app/register";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(Constant.VERSION_HEAD, Constant.VERSION_1);
+        headers.add("Content-Type", "application/json");
+
+        Map<String, Object> requestBody = new HashMap<>();
+        String name = "abc_test";
+        String password = "12345678";
+        requestBody.put("name", name);
+        requestBody.put("password", password);
+        requestBody.put("status", true);
+//        String requestBody = "{\"name\":\"abc-test\",\"password\":\"12345678\",\"status\":\"true\"}";
+
+//        String requestBody = "{\"appId\":\"ETAX_PC\",\"secret\":\"3A6ABF6B62EA0190E053550C483DD05A\"}";
+
+        HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+//        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+//            return JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsAppLoginResponse.class);
+//        }
+//        return null;
+        System.out.println("" + responseEntity);
     }
 }

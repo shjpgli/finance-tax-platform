@@ -42,8 +42,9 @@ public class TokenServiceImpl implements TokenService {
 
     /**
      * 调用admin的token校验接口，如果校验通过刷新token
+     *
      * @param adminToken 用户token
-     * @param request HttpServletRequest
+     * @param request    HttpServletRequest
      * @return true: 通过校验
      */
     private boolean adminTokenAuth(String adminToken, HttpServletRequest request) {
@@ -85,8 +86,9 @@ public class TokenServiceImpl implements TokenService {
 
     /**
      * 调用uc的token校验接口，如果校验通过刷新token
+     *
      * @param userToken 用户token
-     * @param request HttpServletRequest
+     * @param request   HttpServletRequest
      * @return true: 通过校验
      */
     private boolean userTokenAuth(String userToken, HttpServletRequest request) {
@@ -105,7 +107,7 @@ public class TokenServiceImpl implements TokenService {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-        LOGGER.info("校验admin的token状态为: {}", isAuth);
+        LOGGER.info("校验uc的token状态为: {}", isAuth);
         return isAuth;
     }
 
