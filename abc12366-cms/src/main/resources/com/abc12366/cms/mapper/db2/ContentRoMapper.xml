@@ -42,6 +42,7 @@
 			b.needRegenerate needRegenerate,
 			b.staticLink,
             s.siteName,
+            s.sitePath,s.domain,
 			a.recommendLevel recommendLevel
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
