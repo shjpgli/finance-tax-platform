@@ -37,6 +37,9 @@
 		<if test="parentPath != null and parentPath != ''">
 			AND a.parentPath = #{parentPath}
 		</if>
+        <if test="isFolder != null and isFolder != ''">
+            AND a.isFolder = #{isFolder}
+        </if>
 		<if test="state != null and state != ''">
 			AND a.state = #{state}
 		</if>

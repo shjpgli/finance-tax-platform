@@ -37,12 +37,15 @@ public class TemplateController {
     public ResponseEntity selectList(@RequestParam(value = "templateProperty", required = false) String templateProperty,
                                      @RequestParam(value = "templateType", required = false) String templateType,
                                      @RequestParam(value = "siteId", required = false) String siteId,
+                                     @RequestParam(value = "isFolder", required = false) String isFolder,
                                      @RequestParam(value = "parentPath", required = false) String parentPath,
                                      @RequestParam(value = "state", required = false) String state) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("templateProperty",templateProperty);//模板属性
         dataMap.put("templateType",templateType);//模板类型
         dataMap.put("siteId",siteId);//站点ID
+        dataMap.put("isFolder",isFolder);//是否文件夹
+
         dataMap.put("parentPath",parentPath);//父节点路径
         dataMap.put("state",state);//启停标志位
         List<TemplateBo> dataList = templateService.selectList(dataMap);
