@@ -64,5 +64,22 @@
         WHERE channelId = #{channelId}
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectChannelPathCnt" resultType="java.lang.Integer" parameterType="com.abc12366.cms.model.bo.ChannelBo">
+        SELECT
+        count(channelId) cnt
+        FROM cms_channel
+        WHERE 1=1
+        <if test="channelPath != null and channelPath != ''">
+            AND channelPath = #{channelPath}
+        </if>
+        <if test="siteId != null and siteId != ''">
+            AND siteId = #{siteId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND channelId != #{channelId}
+        </if>
+    </select>
+
 
 </mapper>

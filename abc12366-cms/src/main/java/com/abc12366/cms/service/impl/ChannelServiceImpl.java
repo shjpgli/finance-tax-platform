@@ -109,14 +109,22 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional("db1TxManager")
     @Override
     public ChannelSaveBo save(ChannelSaveBo channelSaveBo) {
+        //栏目
+        ChannelBo channelBo = channelSaveBo.getChannel();
+        ChannelBo channelBo1 = new ChannelBo();
+        channelBo1.setSiteId(channelBo.getSiteId());
+        channelBo1.setChannelPath(channelBo.getChannelPath());
+        int cnt1 = channelRoMapper.selectChannelPathCnt(channelBo1);
+        if(cnt1 >0){
+            throw new ServiceException(4239);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(channelSaveBo);
             LOGGER.info("新增栏目信息:{}", jsonStu.toString());
 //            String uuid = UUID.randomUUID().toString().replace("-", "");
             String uuid = "";
             String code = "";
-            //栏目
-            ChannelBo channelBo = channelSaveBo.getChannel();
+
             String parentId = channelBo.getParentId();
 
             for(int i=0;i<20;i++){
@@ -219,11 +227,20 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional("db1TxManager")
     @Override
     public ChannelSaveBo update(ChannelSaveBo channelSaveBo) {
+        //栏目
+        ChannelBo channelBo = channelSaveBo.getChannel();
+        ChannelBo channelBo1 = new ChannelBo();
+        channelBo1.setSiteId(channelBo.getSiteId());
+        channelBo1.setChannelPath(channelBo.getChannelPath());
+        channelBo1.setChannelId(channelBo.getChannelId());
+        int cnt1 = channelRoMapper.selectChannelPathCnt(channelBo1);
+        if(cnt1 >0){
+            throw new ServiceException(4239);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(channelSaveBo);
             LOGGER.info("更新栏目信息:{}", jsonStu.toString());
-            //栏目
-            ChannelBo channelBo = channelSaveBo.getChannel();
+
             Channel channel = new Channel();
             BeanUtils.copyProperties(channelBo, channel);
             channelMapper.updateByPrimaryKeySelective(channel);

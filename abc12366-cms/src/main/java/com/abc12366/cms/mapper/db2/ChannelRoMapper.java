@@ -33,4 +33,6 @@ public interface ChannelRoMapper{
 
     Integer selectChannelIdCnt(@Param("channelId") String channelId);
 
+    Integer selectChannelPathCnt(ChannelBo channelBo);
+
 }
