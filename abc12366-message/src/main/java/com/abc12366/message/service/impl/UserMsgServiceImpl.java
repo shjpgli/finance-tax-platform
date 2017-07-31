@@ -47,6 +47,7 @@ public class UserMsgServiceImpl implements UserMsgService {
     public UserMessage insert(UserMessage data) {
         if (data != null) {
             data.setId(Utils.uuid());
+            data.setStatus("1");
             Timestamp now = new Timestamp(new Date().getTime());
             data.setCreateTime(now);
             data.setLastUpdate(now);
