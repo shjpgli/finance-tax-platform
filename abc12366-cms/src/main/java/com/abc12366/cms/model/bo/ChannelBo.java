@@ -16,12 +16,12 @@ public class ChannelBo implements Serializable {
 	/**channelId**varchar(64)**/
 	private String channelId;
 
-    @NotEmpty(message = "模型ID不能为空！")
+    @NotEmpty(message = "模型ID不能为空,如未配置该字段，请先前往模型管理配置！")
     @Size(min = 0, max = 64)
 	/**模型ID**varchar(64)**/
 	private String modelId;
 
-    @NotEmpty(message = "站点ID不能为空！")
+    @NotEmpty(message = "站点ID不能为空,如未配置该字段，请先前往模型管理配置！")
     @Size(min = 0, max = 64)
 	/**站点ID**varchar(64)**/
 	private String siteId;
@@ -36,12 +36,12 @@ public class ChannelBo implements Serializable {
 	private String contentType;
 
 	/**父栏目ID**varchar(64)**/
-    @NotEmpty(message = "父栏目ID不能为空！")
+    @NotEmpty(message = "父栏目ID不能为空,如未配置该字段，请先前往模型管理配置！")
     @Size(min = 0, max = 64)
 	private String parentId;
 
 	/**访问路径**varchar(30)**/
-    @NotEmpty(message = "channelPath不能为空！")
+    @NotEmpty(message = "栏目路径不能为空,如未配置该字段，请先前往模型管理配置！")
     @Size(min = 0, max = 30)
 	private String channelPath;
 
@@ -52,7 +52,7 @@ public class ChannelBo implements Serializable {
 	private Integer isDisplay;
 
 	/**栏目名称**varchar(100)**/
-    @NotEmpty(message = "栏目名称不能为空！")
+    @NotEmpty(message = "栏目名称不能为空,如未配置该字段，请先前往模型管理配置！")
     @Size(min = 0, max = 100)
 	private String channelName;
 

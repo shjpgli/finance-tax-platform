@@ -21,12 +21,12 @@ public class ChannelExtBo implements Serializable {
 	private String link;
 
 	/**栏目页模板**varchar(100)**/
-    @NotEmpty(message = "tplChannel不能为空！")
+    @NotEmpty(message = "栏目首页模板不能为空,如未配置该字段，请先前往模型管理配置！")
     @Size(min = 1, max = 100)
 	private String tplChannel;
 
 	/**内容页模板**varchar(100)**/
-    @NotEmpty(message = "tplContent不能为空！")
+    @NotEmpty(message = "栏目列表模板不能为空,如未配置该字段，请先前往模型管理配置！")
     @Size(min = 1, max = 100)
 	private String tplContent;
 
