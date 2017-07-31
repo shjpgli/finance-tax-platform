@@ -29,6 +29,7 @@
         <where>
             <if test="name != null">name like CONCAT('%',#{name},'%')</if>
         </where>
+        ORDER by lastUpdate DESC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.cms.model.Vote" parameterType="java.lang.String">
