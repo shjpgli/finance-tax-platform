@@ -64,7 +64,7 @@ public class AppController {
         String token = appService.login(appBO);
         return token != null ? ResponseEntity.ok(
                 Utils.kv("token", token, "expires_in", Constant.APP_TOKEN_VALID_SECONDS))
-                : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+                : new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -117,7 +117,7 @@ public class AppController {
         List<AppBO> appList = appService.selectList(appBO);
         LOGGER.info("{}", appList);
         return (appList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) appList, "total", ((Page) appList).getTotal()));
     }
 

@@ -44,7 +44,7 @@ public class OrderLogController {
         List<OrderLog> orderLogList = orderLogService.selectList(orderLog);
         LOGGER.info("{}", orderLogList);
         return (orderLogList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", orderLogList));
     }
 

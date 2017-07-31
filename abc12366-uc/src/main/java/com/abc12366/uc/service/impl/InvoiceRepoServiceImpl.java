@@ -59,7 +59,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
         int rInsert = invoiceRepoMapper.insert(invoiceRepo);
         if (rInsert != 1){
-            LOGGER.info("{发票仓库新增信息失败}", invoiceRepo);
+            LOGGER.info("发票仓库新增信息失败：{}", invoiceRepo);
             throw new ServiceException(4169);
         }
         //拆分发票段
@@ -111,12 +111,12 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         //查找发票详情信息，是否有已使用或分配中的发票
         List<InvoiceDetail> invoiceDetails = invoiceDetailRoMapper.selectByIdAndStatus(id);
         if (invoiceDetails != null && invoiceDetails.size() != 0){
-            LOGGER.info("{该发票仓库信息中有已使用或分配中的发票}", id);
+            LOGGER.info("{该发票仓库信息中有已使用或分配中的发票}：{}", id);
             throw new ServiceException(4177);
         }
         int rDel = invoiceRepoMapper.deleteByPrimaryKey(id);
         if (rDel != 1){
-            LOGGER.info("{发票仓库信息删除失败}", id);
+            LOGGER.info("{发票仓库信息删除失败}：{}", id);
             throw new ServiceException(4171);
         }
         //同时删除发票详情信息
@@ -133,16 +133,16 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(id);
         if (invoiceDetail != null){
             if ("1".equals(invoiceDetail.getStatus()) || "2".equals(invoiceDetail.getStatus())){
-                LOGGER.info("{发票在分配中或已使用，不能删除}", id);
+                LOGGER.info("{发票在分配中或已使用，不能删除}：{}", id);
                 throw new ServiceException(4174);
             }
             int rDel = invoiceDetailMapper.delete(id);
             if (rDel != 1){
-                LOGGER.info("{发票详情信息删除失败}", id);
+                LOGGER.info("{发票详情信息删除失败}：{}", id);
                 throw new ServiceException(4172);
             }
         }else {
-            LOGGER.info("{发票信息不存在}", id);
+            LOGGER.info("{发票信息不存在}：{}", id);
             throw new ServiceException(4175);
         }
     }
@@ -154,7 +154,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         invoiceDetail.setStatus("3");
         int update = invoiceDetailMapper.update(invoiceDetail);
         if (update != 1){
-            LOGGER.info("{发票详情信息作废失败}", id);
+            LOGGER.info("{发票详情信息作废失败}：{}", id);
             throw new ServiceException(4176);
         }
     }

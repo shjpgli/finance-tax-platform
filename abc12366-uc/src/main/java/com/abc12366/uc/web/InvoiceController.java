@@ -81,7 +81,7 @@ public class InvoiceController {
         List<InvoiceBO> invoiceList = invoiceService.selectList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
     }
 
@@ -105,7 +105,7 @@ public class InvoiceController {
         List<InvoiceBO> invoiceList = invoiceService.selectList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
     }
 
@@ -220,7 +220,7 @@ public class InvoiceController {
         List<InvoiceRepo> invoiceList = invoiceRepoService.selectInvoiceRepoList(invoiceRepo);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
     }
 
@@ -271,7 +271,7 @@ public class InvoiceController {
         List<InvoiceExcel> invoiceList = invoiceService.selectInvoiceExcelList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
           ResponseEntity.ok(Utils.kv("dataList", invoiceList));
     }
 
@@ -302,7 +302,7 @@ public class InvoiceController {
         PageInfo<InvoiceBackBO> pageInfo = new PageInfo<>(invoiceList);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
@@ -377,7 +377,7 @@ public class InvoiceController {
         PageInfo<InvoiceDetail> pageInfo = new PageInfo<>(invoiceList);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 

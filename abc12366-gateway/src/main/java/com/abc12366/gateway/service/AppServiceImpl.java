@@ -64,7 +64,7 @@ public class AppServiceImpl implements AppService {
         //根据名称查询app
         App temp = appRoMapper.selectByName(app.getName());
         if(temp != null){
-            LOGGER.warn("APP应用名称已存在", app);
+            LOGGER.warn("APP应用名称已存在{}", app);
             throw new ServiceException(4095);
         }
         int insert = appMapper.insert(app);
@@ -118,9 +118,13 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         app.setAccessToken(accessToken);
         app.setStatus(true);
-        boolean isAuthen = appRoMapper.selectOne(app) != null;
-        LOGGER.info("{}", isAuthen);
-        return isAuthen;
+        app = appRoMapper.selectOne(app);
+        //判断app是否正常
+        if(app == null){
+            LOGGER.warn("APP不存在或APP未启用：{}", app);
+            throw new ServiceException(4035);
+        }
+        return true;
     }
 
     @Override

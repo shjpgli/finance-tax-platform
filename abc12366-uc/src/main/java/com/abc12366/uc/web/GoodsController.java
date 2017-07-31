@@ -61,7 +61,7 @@ public class GoodsController {
         List<GoodsBO> goodsList = goodsService.selectList(goods);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
@@ -102,7 +102,7 @@ public class GoodsController {
         List<GoodsBO> goodsList = goodsService.selectList(goods);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
     /**
@@ -182,7 +182,7 @@ public class GoodsController {
         GoodsCategoryBO categoryBO = goodsCategoryService.selectList(goodsCategory);
         LOGGER.info("{}", categoryBO);
         return (categoryBO == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                  ResponseEntity.ok(Utils.kv("data", categoryBO));
     }
 

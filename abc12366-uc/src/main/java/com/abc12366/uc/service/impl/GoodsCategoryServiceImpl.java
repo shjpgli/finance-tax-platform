@@ -74,18 +74,18 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         goodsCategory.setCreateTime(date);
         goodsCategory.setLastUpdate(date);
         if (goodsCategoryBO.getParentId() == null || "".equals(goodsCategory.getParentId())){
-            LOGGER.info("{请选择分类的父节点}", goodsCategoryBO);
+            LOGGER.info("请选择分类的父节点：{}", goodsCategoryBO);
             throw new ServiceException(4153);
         }
         //不能加入名称相同的分类
         GoodsCategoryBO bo = goodsCategoryRoMapper.selectByName(goodsCategoryBO.getCategory());
         if(bo != null){
-            LOGGER.info("{不能加入名称相同的分类}", goodsCategoryBO);
+            LOGGER.info("不能加入名称相同的分类：{}", goodsCategoryBO);
             throw new ServiceException(4152);
         }
         int insert = goodsCategoryMapper.insert(goodsCategory);
         if(insert != 1){
-            LOGGER.info("{新增失败}", goodsCategory);
+            LOGGER.info("新增失败：{}", goodsCategory);
             throw new ServiceException(4101);
         }
         return goodsCategory;
@@ -101,7 +101,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
                 throw new ServiceException(4118);
             }
         }else{
-            LOGGER.info("{请选择分类的父节点}", goodsCategoryBO);
+            LOGGER.info("请选择分类的父节点：{}", goodsCategoryBO);
             throw new ServiceException(4153);
         }
         GoodsCategory category = new GoodsCategory();

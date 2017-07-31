@@ -68,7 +68,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);
         if(insert != 1){
-            LOGGER.info("{商品入库失败}", productRepo);
+            LOGGER.info("商品入库失败:{}", productRepo);
             throw new ServiceException(4158);
         }
         //入库成功后，修改产品表的库存信息
@@ -96,7 +96,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);
         if(insert != 1){
-            LOGGER.info("{商品出库失败}", productRepo);
+            LOGGER.info("商品出库失败:{}", productRepo);
             throw new ServiceException(4159);
         }
         //出库成功后，修改产品表的库存信息
@@ -116,7 +116,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         product.setStock(stock);
         int pUpdate = productMapper.update(product);
         if (pUpdate != 1){
-            LOGGER.info("{产品库存修改失败}", product);
+            LOGGER.info("产品库存修改失败:{}", product);
             throw new ServiceException(4164);
         }
     }
