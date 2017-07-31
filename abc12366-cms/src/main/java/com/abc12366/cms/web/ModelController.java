@@ -76,6 +76,16 @@ public class ModelController {
     }
 
     /**
+     * 更新模型启用禁用
+     */
+    @PutMapping(path = "/updateIsDisabled")
+    public ResponseEntity updateIsDisabled(@RequestBody ModelBo modelBo) {
+        //更新模型信息
+        modelBo = modelService.update(modelBo);
+        return ResponseEntity.ok(Utils.kv("data", modelBo));
+    }
+
+    /**
      * 批量更新模型信息
      */
     @PutMapping(path = "/updateList")
