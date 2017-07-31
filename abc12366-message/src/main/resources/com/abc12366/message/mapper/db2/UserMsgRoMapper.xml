@@ -14,6 +14,7 @@
 		WHERE id=#{id}
 	</select>
 
+    <!-- 只查询半年内的记录 -->
     <select id="selectList" parameterType="com.abc12366.message.model.UserMessage"
             resultType="com.abc12366.message.model.UserMessage">
         SELECT
@@ -21,6 +22,7 @@
         FROM msg_user_message
         WHERE toUserId = #{toUserId}
         AND status != '0'
+        AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
         ORDER BY createTime DESC
     </select>
 
