@@ -89,13 +89,24 @@ public class AppServiceImpl implements AppService {
         }
         String password = Utils.md5(bo.getPassword());
         if (app != null && app.getPassword().equals(password)) {
+            //判断app登录是否已过期
+            long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
+            long currentTime = System.currentTimeMillis();
+            String token = app.getAccessToken();
             Date now = new Date();
-            String token = Utils.token();
-            app.setAccessToken(token);
-            //设置有效时间
+            if(currentTime > lastTime){
+                LOGGER.warn("APP登录已过期，返回新的token：{}", app);
+                token = Utils.token();
+                app.setAccessToken(token);
+                //设置有效时间
+            }
             app.setLastResetTokenTime(getLongToDate(System.currentTimeMillis()+Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
             app.setLastUpdate(now);
-            appMapper.update(app);
+            int upd = appMapper.update(app);
+            if(upd != 1){
+                LOGGER.warn("APP修改异常：{}", app);
+                throw new ServiceException(4102);
+            }
             LOGGER.info("{}", token);
             return token;
         }else{
