@@ -80,7 +80,7 @@ public class OrderController {
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
         LOGGER.info("{}", orderList);
         return (orderList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
@@ -115,7 +115,7 @@ public class OrderController {
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
@@ -146,7 +146,7 @@ public class OrderController {
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 

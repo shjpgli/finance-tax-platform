@@ -42,7 +42,7 @@ public class DeliveryMethodController {
         List<DeliveryMethod> deliveryList = deliveryMethodService.selectList(deliveryMethod);
         LOGGER.info("{}", deliveryList);
         return (deliveryList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) deliveryList, "total", ((Page) deliveryList).getTotal()));
     }
 

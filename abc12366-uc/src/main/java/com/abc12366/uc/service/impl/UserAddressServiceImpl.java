@@ -54,8 +54,9 @@ public class UserAddressServiceImpl implements UserAddressService {
         BeanUtils.copyProperties(userAddressBO,userAddress);
         Date date = new Date();
         userAddress.setLastUpdate(date);
-        int insert = userAddressMapper.update(userAddress);
-        if(insert != 1){
+        int update = userAddressMapper.update(userAddress);
+        if(update != 1){
+            LOGGER.info("修改失败{}", userAddress);
             throw new ServiceException(4102);
         }
         UserAddressBO bo = new UserAddressBO();
@@ -82,6 +83,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         userAddress.setLastUpdate(date);
         int insert = userAddressMapper.insert(userAddress);
         if(insert != 1){
+            LOGGER.info("新增失败{}", userAddress);
             throw new ServiceException(4101);
         }
         UserAddressBO bo = new UserAddressBO();
@@ -97,7 +99,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         userAddress.setIsDefault(userAddressBO.getIsDefault());
         int update = userAddressMapper.update(userAddress);
         if(update != 1){
-            LOGGER.info("{修改状态失败}", userAddress);
+            LOGGER.info("修改失败{}", userAddress);
             throw new ServiceException(4102);
         }
 
@@ -106,7 +108,7 @@ public class UserAddressServiceImpl implements UserAddressService {
             address.setIsDefault(false);
             int upd = userAddressMapper.update(address);
             if(upd != 1){
-                LOGGER.info("{修改状态失败!!!!}", address);
+                LOGGER.info("修改失败!!!!{}", address);
                 throw new ServiceException(4102);
             }
         }

@@ -1,6 +1,11 @@
 package com.abc12366.gateway.util;
 
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
+import com.alibaba.fastjson.JSON;
+import org.apache.poi.ss.formula.functions.T;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpRequestUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestUtil.class);
+    protected Class<T> _class;
+    private String jsonStr;
     /**
      * 向指定URL发送GET方法的请求
      *
@@ -132,5 +141,27 @@ public class HttpRequestUtil {
         //发送 POST 请求
         //String sr = HttpRequestUtil.sendPost("http://118.118.116.52:9500/admins/user/check/" + "ce9e746f7aac0a20edff7482d830e033", "","4872aafb54a58d7bfcf8aa16fb8f945f","ce9e746f7aac0a20edff7482d830e033");
 //        System.out.println(sr);
+    }
+
+    @SuppressWarnings("unchecked")
+    T parseObject() {
+        T res = null;
+        try {
+            res = JSON.parseObject(this.getJsonStr(), _class);
+            //T res = mapper.readValue(this.getJsonStr(), _class);
+            return res;
+        } catch (Exception e) {
+            LOGGER.error("微信服务器返回json格式异常", e);
+            //new ServiceException(4001);
+            e.printStackTrace();
+        }
+        return res;
+    }
+    public String getJsonStr() {
+        return jsonStr;
+    }
+
+    public void setJsonStr(String jsonStr) {
+        this.jsonStr = jsonStr;
     }
 }

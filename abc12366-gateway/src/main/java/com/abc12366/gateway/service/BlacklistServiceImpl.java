@@ -60,7 +60,7 @@ public class BlacklistServiceImpl implements BlacklistService {
 
         int insert = blacklistMapper.insert(blacklist);
         if(insert != 1){
-            LOGGER.warn("新增异常", blacklist);
+            LOGGER.warn("新增异常{}", blacklist);
             throw new ServiceException(4101);
         }
         return blacklist;
@@ -74,7 +74,7 @@ public class BlacklistServiceImpl implements BlacklistService {
 
         int update = blacklistMapper.update(blacklist);
         if(update != 1){
-            LOGGER.warn("修改异常", blacklist);
+            LOGGER.warn("修改异常{}", blacklist);
             throw new ServiceException(4102);
         }
         return blacklist;
@@ -85,7 +85,7 @@ public class BlacklistServiceImpl implements BlacklistService {
     public void delete(String id) {
         int del = blacklistMapper.delete(id);
         if(del != 1){
-            LOGGER.warn("删除异常", del);
+            LOGGER.warn("删除异常{}", del);
             throw new ServiceException(4103);
         }
     }

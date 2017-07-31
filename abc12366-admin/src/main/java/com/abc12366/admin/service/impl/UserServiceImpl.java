@@ -214,7 +214,7 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             Boolean status = user.getStatus();
             if(!status){
-                LOGGER.error("用户为禁用状态，不能登录", user);
+                LOGGER.error("用户为禁用状态，不能登录{}", user);
                 throw new ServiceException(4126);
             }
         }
@@ -327,7 +327,7 @@ public class UserServiceImpl implements UserService {
     public UserBO addUser(UserBO userBO) {
         UserBO bo = userRoMapper.selectUserBOByLoginName(userBO.getUsername());
         if (bo != null) {
-            LOGGER.error("该用户已经存在");
+            LOGGER.error("该用户已经存在{}:",userBO);
             throw new ServiceException(4117);
         }
         User user = new User();
@@ -469,14 +469,14 @@ public class UserServiceImpl implements UserService {
         //验证Token是否存在
         LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
         if (info == null) {
-            LOGGER.warn("Admin-Token不存在", loginInfo);
+            LOGGER.warn("Admin-Token不存在{}", loginInfo);
             throw new ServiceException(4128);
         }
         //严重Token是否过期
         long datelong = System.currentTimeMillis();
         long lastTime = TimeUtil.getDateStringToLong(info.getLastResetTokenTime());
         if(datelong > lastTime){
-            LOGGER.warn("Admin-Token过期，请重新登录", info);
+            LOGGER.warn("Admin-Token过期，请重新登录{}", info);
             throw new ServiceException(4127);
         }
         return true;
@@ -489,14 +489,14 @@ public class UserServiceImpl implements UserService {
         //验证Token是否存在
         LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
         if (info == null) {
-            LOGGER.warn("Admin-Token不存在", info);
+            LOGGER.warn("Admin-Token不存在{}", info);
             throw new ServiceException(4128);
         }
         long datelong = System.currentTimeMillis()+Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
         info.setLastResetTokenTime(TimeUtil.getLongToDate(datelong));
         int upd = loginInfoMapper.update(info);
         if(upd != 1){
-            LOGGER.warn("修改Admin-token有效时间失败", info);
+            LOGGER.warn("修改Admin-token有效时间失败{}", info);
             throw new ServiceException(4129);
         }
         return true;
@@ -504,6 +504,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginInfoBO selectLoginInfoByToken(String token) {
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setToken(token);
+        //验证Token是否存在
+        LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
+        if (info == null) {
+            LOGGER.warn("Admin-Token不存在{}", loginInfo);
+            throw new ServiceException(4128);
+        }
+        //严重Token是否过期
+        long dateLong = System.currentTimeMillis();
+        long lastTime = TimeUtil.getDateStringToLong(info.getLastResetTokenTime());
+        if(dateLong > lastTime){
+            LOGGER.warn("Admin-Token过期，请重新登录{}", info);
+            throw new ServiceException(4127);
+        }
+
+        long refLong = dateLong+Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+        info.setLastResetTokenTime(TimeUtil.getLongToDate(refLong));
+        int upd = loginInfoMapper.update(info);
+        if(upd != 1){
+            LOGGER.warn("修改Admin-token有效时间失败{}", info);
+            throw new ServiceException(4129);
+        }
         return loginInfoRoMapper.selectLoginInfoByToken(token);
     }
 

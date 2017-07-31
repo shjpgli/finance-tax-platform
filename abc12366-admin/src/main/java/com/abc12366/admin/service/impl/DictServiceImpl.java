@@ -68,7 +68,7 @@ public class DictServiceImpl implements DictService {
         //dictId，fieldKey确定数据唯一性
         Dict dict = dictRoMapper.selectDict(dictBO);
         if(dict != null){
-            LOGGER.info("{dictId，fieldKey确定数据唯一性}",dict);
+            LOGGER.info("dictId，fieldKey确定数据唯一性{}",dict);
             throw new ServiceException(4165);
         }
         dict = new Dict();
@@ -121,7 +121,7 @@ public class DictServiceImpl implements DictService {
     public void batchDelete(Dict bo) {
         String id = bo.getId();
         if(id == null || "".equals(id)){
-            LOGGER.info("{id不能为空}",bo);
+            LOGGER.info("id不能为空{}",bo);
             throw new ServiceException(4150);
         }
         String[] ids = id.split(",");

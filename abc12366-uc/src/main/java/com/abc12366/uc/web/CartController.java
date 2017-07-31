@@ -52,7 +52,7 @@ public class CartController {
         List<OrderBO> orderBOs = orderService.selectCartList(order);
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) orderBOs, "total", ((Page) orderBOs).getTotal()));
     }
 

@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus("0");
         int insert = orderMapper.insert(order);
         if (insert != 1) {
-            LOGGER.info("{加入购物车失败}", orderBO);
+            LOGGER.info("加入购物车失败：{}", orderBO);
             throw new ServiceException(4138);
         } else {
             OrderBO temp = new OrderBO();
@@ -104,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
         //TODO 
 //        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
 //        if (orderProductBOs == null){
-//            LOGGER.info("{产品信息错误}", orderBO);
+//            LOGGER.info("产品信息错误：{}", orderBO);
 //            throw new ServiceException(4166);
 //        }else{
 //            for (OrderProductBO orderProductBO : orderProductBOs){
@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
         order.setLastUpdate(date);
         int update = orderMapper.update(order);
         if (update != 1) {
-            LOGGER.info("{修改购物车信息失败}", orderBO);
+            LOGGER.info("修改购物车信息失败：{}", orderBO);
             throw new ServiceException(4102);
         } else {
             OrderBO temp = new OrderBO();
@@ -156,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(orderBO,order);
         int del = orderMapper.deleteByIdAndUserId(order);
         if(del != 1){
-            LOGGER.info("{删除购物车信息失败}", orderBO);
+            LOGGER.info("删除购物车信息失败：{}", orderBO);
             throw new ServiceException(4103);
         }
     }
@@ -176,13 +176,13 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {
-            LOGGER.info("{提交产品订单失败}", orderBO);
+            LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
         //加入订单与产品关系信息
         List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
         if (orderProductBOs == null){
-            LOGGER.info("{产品信息错误}", orderBO);
+            LOGGER.info("产品信息错误：{}", orderBO);
             throw new ServiceException(4166);
         }else{
             for (OrderProductBO orderProductBO : orderProductBOs){
@@ -191,7 +191,7 @@ public class OrderServiceImpl implements OrderService {
                 BeanUtils.copyProperties(orderProductBO,orderProduct);
                 int opInsert = orderProductMapper.insert(orderProduct);
                 if (opInsert != 1){
-                    LOGGER.info("{提交订单与产品关系信息失败}", orderBO);
+                    LOGGER.info("提交订单与产品关系信息失败：{}", orderBO);
                     throw new ServiceException(4167);
                 }
             }
@@ -214,7 +214,7 @@ public class OrderServiceImpl implements OrderService {
         orderLog.setCreateUser(userId);
         int logInsert = orderLogMapper.insert(orderLog);
         if(logInsert != 1){
-            LOGGER.info("{订单日志新增失败}", orderLog);
+            LOGGER.info("订单日志新增失败：{}", orderLog);
             throw new ServiceException(4901);
         }
     }
@@ -242,31 +242,31 @@ public class OrderServiceImpl implements OrderService {
         //查询订单状态
         OrderBO bo = orderRoMapper.selectOrder(order);
         if(bo == null){
-            LOGGER.info("{订单信息不存在}", orderBO);
+            LOGGER.info("订单信息不存在：{}", orderBO);
             throw new ServiceException(4134);
         }
         //订单状态是确认状态，不能删除
         if("1".equals(bo.getOrderStatus())){
-            LOGGER.info("{订单状态是确认状态，不能删除}", orderBO);
+            LOGGER.info("订单状态是确认状态，不能删除：{}", orderBO);
             throw new ServiceException(4140);
         }
         order.setOrderStatus("9");
         int update = orderMapper.update(order);
         if(update != 1){
-            LOGGER.info("{修改失败}", orderBO);
+            LOGGER.info("修改失败：{}", orderBO);
             throw new ServiceException(4102);
         }
         //订单删除成功之后，删除订单与产品对应关系
 
         /*List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
         if (orderProductBOs == null){
-            LOGGER.info("{产品信息错误}", orderBO);
+            LOGGER.info("产品信息错误：{}", orderBO);
             throw new ServiceException(4166);
         }else{
             for (OrderProductBO orderProductBO : orderProductBOs){
                 int opDel = orderProductMapper.delete(orderProductBO.getOrderId());
                 if (opDel != 1){
-                    LOGGER.info("{删除订单与产品关系信息失败}", orderBO);
+                    LOGGER.info("删除订单与产品关系信息失败：{}", orderBO);
                     throw new ServiceException(4168);
                 }
             }
@@ -282,7 +282,7 @@ public class OrderServiceImpl implements OrderService {
         //order.setFeedback(orderBO.getFeedback());
         int upd = orderMapper.update(order);
         if(upd != 1){
-            LOGGER.info("{反馈信息失败}", orderBO);
+            LOGGER.info("反馈信息失败：{}", orderBO);
             throw new ServiceException(4141);
         }
         return orderRoMapper.selectOrder(order);
@@ -292,17 +292,17 @@ public class OrderServiceImpl implements OrderService {
     public OrderBO cancelOrder(Order order) {
         OrderBO bo = orderRoMapper.selectById(order.getOrderNo());
         if(bo == null){
-            LOGGER.info("{订单信息不存在}", order);
+            LOGGER.info("订单信息不存在：{}", order);
             throw new ServiceException(4134);
         }
         if(bo.getIsInvoice()){
-            LOGGER.info("{该订单已开发票，请先取消发票订单}", order);
+            LOGGER.info("该订单已开发票，请先取消发票订单：{}", order);
             throw new ServiceException(4188);
         }
         order.setOrderStatus("3");
         int update = orderMapper.update(order);
         if (update != 1){
-            LOGGER.info("{修改失败}", order);
+            LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(),"用户删除订单");

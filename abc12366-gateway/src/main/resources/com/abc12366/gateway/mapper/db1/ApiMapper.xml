@@ -86,8 +86,8 @@
             <if test="version != null">
                 version = #{version},
             </if>
-            <if test="appId != null">
-                appId = #{appId},
+            <if test="dictId != null">
+                dictId = #{dictId},
             </if>
             <if test="authentication != null">
                 authentication = #{authentication},

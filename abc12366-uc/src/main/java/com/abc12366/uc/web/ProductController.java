@@ -81,7 +81,7 @@ public class ProductController {
         List<GoodsBO> goodsList = productService.selectBOList(productBO);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
@@ -102,7 +102,7 @@ public class ProductController {
         List<ProductRepoBO> goodsList = productRepoService.selectProductRepoDetail(productRepo);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 

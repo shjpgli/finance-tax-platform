@@ -44,7 +44,7 @@ public class TradeLogController {
         List<TradeLog> orderLogList = tradeLogService.selectList(tradeLog);
         LOGGER.info("{}", orderLogList);
         return (orderLogList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("orderLogList", orderLogList));
     }
 

@@ -50,7 +50,7 @@ public class UserAddressController {
         List<UserAddress> userAddressList = userAddressService.selectList(userId);
         LOGGER.info("{}", userAddressList);
         return (userAddressList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) userAddressList, "total", ((Page) userAddressList).getTotal()));
     }
 
