@@ -3,6 +3,7 @@ package com.abc12366.uc.model.bo;
 import java.io.Serializable;
 
 
+
 /**
  * 发票退票
  **/

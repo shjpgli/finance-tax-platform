@@ -19,11 +19,12 @@
 	<!-- 查询（查询列表） -->
 	<select id="selectList" resultType="com.abc12366.cms.model.bo.TopicBo" parameterType="java.util.Map">
 		SELECT
-		<include refid="Base_Column_List" />
-		FROM cms_topic
+        a.topicId,	a.channelId,	a.topicName,	a.shortName,	a.keywords,	a.description,
+        a.titleImg,	a.contentImg,	a.tplContent,	a.priority,a.siteId,b.domain,	b.sitePath,	b.siteName,a.isRecommend
+		FROM cms_topic a LEFT JOIN cms_site b ON a.siteId = b.siteId
         WHERE 1=1
         <if test="siteId != null and siteId != ''">
-            AND siteId = #{siteId}
+            AND a.siteId = #{siteId}
         </if>
         ORDER BY priority ASC
 	</select>

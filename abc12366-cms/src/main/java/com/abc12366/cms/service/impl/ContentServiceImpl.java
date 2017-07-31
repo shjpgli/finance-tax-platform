@@ -645,8 +645,13 @@ public class ContentServiceImpl implements ContentService {
     @Transactional("db1TxManager")
     @Override
     public String updateStatusList(String[] contentIds) {
-        contentMapper.updateStatusList(contentIds);
-        contentExtMapper.updatRegenerateList0(contentIds);
+        try {
+            contentMapper.updateStatusList(contentIds);
+            contentExtMapper.updatRegenerateList0(contentIds);
+        } catch (Exception e) {
+            LOGGER.error("撤销文章信息异常：{}", e);
+            throw new ServiceException(4258);
+        }
         return "";
     }
 

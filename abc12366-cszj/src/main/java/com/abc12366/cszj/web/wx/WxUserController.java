@@ -36,7 +36,8 @@ public class WxUserController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WxUserController.class);
 	@Autowired
 	private IWxPersonService iWxPersonService;
-     
+    
+	//同步微信用户到本地数据库
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/wxuser/synchro")
 	public ResponseEntity synchroUser(HttpServletRequest request){
@@ -47,7 +48,7 @@ public class WxUserController {
 		}	
 	}
 	
-	
+	 //数据库获取微信用户列表
 	 @SuppressWarnings("rawtypes")
 	 @GetMapping("/wxuser/list")
 	 public ResponseEntity selectList(WxPerson person,
@@ -64,6 +65,7 @@ public class WxUserController {
 	        return responseEntity;
 	 }
 	 
+	 //查看单个用户详细信息
 	 @SuppressWarnings("rawtypes")
 	 @GetMapping("/wxuser/{openid}")
 	 public ResponseEntity select(@PathVariable("openid") String openid){
@@ -76,6 +78,7 @@ public class WxUserController {
 	        return responseEntity;
 	 }
 	 
+	 //从微信服务器同步单个用户信息
 	 @SuppressWarnings("rawtypes")
 	 @PutMapping("/wxuser/synchro/{openid}")
 	 public ResponseEntity synchroOne(@PathVariable("openid") String openid){

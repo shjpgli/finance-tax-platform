@@ -378,7 +378,6 @@ public class ContentController {
             ContentSaveBo contentSaveBo = contentService.selectContent(contentIdstr[i]);
             dataList.add(contentSaveBo);
         }
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 

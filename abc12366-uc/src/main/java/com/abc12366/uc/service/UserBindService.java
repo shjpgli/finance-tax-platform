@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- *
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
  * Time: 16:22
@@ -16,7 +15,7 @@ public interface UserBindService {
 
     boolean dzsbUnbind(String id);
 
-    UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request);
+    UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception;
 
     boolean hngsUnbind(String id);
 

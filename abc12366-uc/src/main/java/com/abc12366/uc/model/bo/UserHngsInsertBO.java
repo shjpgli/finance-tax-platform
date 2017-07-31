@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class UserHngsInsertBO {
     @NotEmpty
-    private String bsh;
+    private String bsy;
     @NotEmpty
     private String password;
     @NotEmpty
@@ -18,12 +18,12 @@ public class UserHngsInsertBO {
     public UserHngsInsertBO() {
     }
 
-    public String getBsh() {
-        return bsh;
+    public String getBsy() {
+        return bsy;
     }
 
-    public void setBsh(String bsh) {
-        this.bsh = bsh;
+    public void setBsy(String bsy) {
+        this.bsy = bsy;
     }
 
     public String getPassword() {

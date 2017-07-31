@@ -25,7 +25,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/usermsg", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class UserMsgController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserMsgController.class);
 
@@ -79,7 +79,7 @@ public class UserMsgController {
     }
 
     /**
-     * 用户查看消息，如果消息状态为'未读'，则将消息状态置为'未读'
+     * 用户查看消息，如果消息状态为'未读'，则将消息状态置为'已读'
      *
      * @param id 消息ID
      * @return ResponseEntity
@@ -95,11 +95,17 @@ public class UserMsgController {
         return responseEntity;
     }
 
+    /**
+     * 直接将'未读'消息置为'已读'，不需要进入消息
+     *
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
 
-        UserMessage data = userMsgService.update(new UserMessage.Builder().id(id).build());
+        UserMessage data = userMsgService.update(new UserMessage.Builder().id(id).status("2").build());
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);

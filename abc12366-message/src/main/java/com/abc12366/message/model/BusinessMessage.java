@@ -1,4 +1,4 @@
-package com.abc12366.uc.model;
+package com.abc12366.message.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
@@ -13,17 +13,17 @@ import java.sql.Timestamp;
  * @create 2017-07-27 11:21 AM
  * @since 1.0.0
  */
-public class UserMessage {
+public class BusinessMessage {
 
     private String id;
 
     @NotEmpty
     @Length(min = 1, max = 64)
-    private String fromUserId;
+    private String userId;
 
     @NotEmpty
     @Length(min = 1, max = 64)
-    private String toUserId;
+    private String businessId;
 
     @NotEmpty
     @Length(min = 1, max = 500)
@@ -41,14 +41,14 @@ public class UserMessage {
     @Length(min = 1, max = 1)
     private String type;
 
-    public UserMessage() {
+    public BusinessMessage() {
     }
 
-    public UserMessage(String id, String fromUserId, String toUserId, String content, String status, Timestamp
+    public BusinessMessage(String id, String userId, String businessId, String content, String status, Timestamp
             createTime, Timestamp lastUpdate, String type) {
         this.id = id;
-        this.fromUserId = fromUserId;
-        this.toUserId = toUserId;
+        this.userId = userId;
+        this.businessId = businessId;
         this.content = content;
         this.status = status;
         this.createTime = createTime;
@@ -56,10 +56,10 @@ public class UserMessage {
         this.type = type;
     }
 
-    private UserMessage(Builder builder) {
+    private BusinessMessage(Builder builder) {
         setId(builder.id);
-        setFromUserId(builder.fromUserId);
-        setToUserId(builder.toUserId);
+        setUserId(builder.userId);
+        setBusinessId(builder.businessId);
         setContent(builder.content);
         setStatus(builder.status);
         setCreateTime(builder.createTime);
@@ -75,20 +75,20 @@ public class UserMessage {
         this.id = id;
     }
 
-    public String getFromUserId() {
-        return fromUserId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setFromUserId(String fromUserId) {
-        this.fromUserId = fromUserId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getToUserId() {
-        return toUserId;
+    public String getBusinessId() {
+        return businessId;
     }
 
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
     }
 
     public String getContent() {
@@ -133,12 +133,12 @@ public class UserMessage {
 
     @Override
     public String toString() {
-        return "UserMessage{" +
+        return "BusinessMessage{" +
                 "id='" + id + '\'' +
-                ", fromUserId='" + fromUserId + '\'' +
-                ", toUserId='" + toUserId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", businessId='" + businessId + '\'' +
                 ", content='" + content + '\'' +
-                ", status=" + status +
+                ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", type='" + type + '\'' +
@@ -147,8 +147,8 @@ public class UserMessage {
 
     public static final class Builder {
         private String id;
-        private String fromUserId;
-        private String toUserId;
+        private String userId;
+        private String businessId;
         private String content;
         private String status;
         private Timestamp createTime;
@@ -163,13 +163,13 @@ public class UserMessage {
             return this;
         }
 
-        public Builder fromUserId(String val) {
-            fromUserId = val;
+        public Builder userId(String val) {
+            userId = val;
             return this;
         }
 
-        public Builder toUserId(String val) {
-            toUserId = val;
+        public Builder businessId(String val) {
+            businessId = val;
             return this;
         }
 
@@ -198,8 +198,8 @@ public class UserMessage {
             return this;
         }
 
-        public UserMessage build() {
-            return new UserMessage(this);
+        public BusinessMessage build() {
+            return new BusinessMessage(this);
         }
     }
 }

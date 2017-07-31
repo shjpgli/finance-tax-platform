@@ -4,18 +4,18 @@
 <mapper namespace="com.abc12366.cszj.mapper.db1.WxPersonMapper">
        
        <sql id="Base_Column_List">
-         subscribe, openid, nickname, sex, language, city, province, country, headimgurl,subscribe_time,remark,groupid,unionid
+         subscribe, openid, nickname, sex, language, city, province, country, headimgurl,subscribe_time,remark,groupid,unionid,lastupdate
        </sql>
 
        <insert id="savePerson" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson">
          INSERT INTO cszj_wxuser(<include refid="Base_Column_List"/>)
-         VALUES (#{subscribe}, #{openid}, #{nickname}, #{sex}, #{language}, #{city}, #{province}, #{country}, #{headimgurl}, #{subscribe_time}, #{remark}, #{groupid}, #{unionid})
+         VALUES (#{subscribe}, #{openid}, #{nickname}, #{sex}, #{language}, #{city}, #{province}, #{country}, #{headimgurl}, #{subscribe_time}, #{remark}, #{groupid}, #{unionid},#{lastupdate})
        </insert>
        
        <update id="updatePerson" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson">
          UPDATE cszj_wxuser
          set subscribe=#{subscribe},nickname=#{nickname},sex=#{sex},language=#{language},city=#{city},
-         province=#{province},country=#{country},headimgurl=#{headimgurl},subscribe_time=#{subscribe_time},remark=#{remark},groupid=#{groupid} 
+         province=#{province},country=#{country},headimgurl=#{headimgurl},subscribe_time=#{subscribe_time},remark=#{remark},groupid=#{groupid},lastupdate=#{lastupdate} 
          where openid=#{openid}
        </update>
 

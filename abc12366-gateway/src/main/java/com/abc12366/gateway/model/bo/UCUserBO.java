@@ -182,4 +182,29 @@ public class UCUserBO {
     public void setRealName(String realName) {
         this.realName = realName;
     }
+
+    @Override
+    public String toString() {
+        return "UCUserBO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", regMail='" + regMail + '\'' +
+                ", regIP='" + regIP + '\'' +
+                ", salt='" + salt + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
+                ", midUserPicturePath='" + midUserPicturePath + '\'' +
+                ", minUserPicturePath='" + minUserPicturePath + '\'' +
+                ", points=" + points +
+                ", exp=" + exp +
+                ", vipLevel='" + vipLevel + '\'' +
+                ", realName='" + realName + '\'' +
+                '}';
+    }
 }

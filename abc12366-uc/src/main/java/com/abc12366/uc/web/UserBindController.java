@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * 用户绑定办税身份控制器类，以常规JSON形式返回数据
- *
+ * <p>
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
  * Time: 16:22
@@ -86,7 +86,7 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/bind/hngs")
-    public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
+    public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception {
         LOGGER.info("{}:{}", userHngsInsertBO, request);
         UserHngsBO user_hngs = userBindService.hngsBind(userHngsInsertBO, request);
         return ResponseEntity.ok(Utils.kv("data", user_hngs));

@@ -1,5 +1,7 @@
 package com.abc12366.cszj.service.impl;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.cszj.config.Scheduler;
@@ -43,7 +46,7 @@ public class WxPersonServiceImpl implements IWxPersonService{
 		}
 	}
 	
-	
+	@Transactional("db1TxManager")
 	private class Usersynchro implements Runnable{
 
 		@Override
@@ -62,9 +65,12 @@ public class WxPersonServiceImpl implements IWxPersonService{
 		     		 tks1.put("access_token", Scheduler.token.getAccess_token());
 		     		 tks1.put("openid", ids[i]);
 		     		 WxPerson person=WxConnectFactory.get(WechatUrl.WXUSEINFO,tks1,null,WxPerson.class);
-		     		 if("0".equals(person.getErrcode()) && (isFirst ||
+		     		 if(0==person.getErrcode() && (isFirst ||
 		     				 (!isFirst && personRoMapper.countPersonNum(person)==0))){
+		     			person.setLastupdate(new Timestamp(new Date().getTime()));
 		     			personMapper.savePerson(person);
+		     		 }else{
+		     			LOGGER.error("获取微信用户({})数据异常.......",ids[i]);
 		     		 }
 		     	}
 		     	headparamters.put("next_openid", listRs.getNext_openid());
@@ -102,14 +108,16 @@ public class WxPersonServiceImpl implements IWxPersonService{
 
 
 	@Override
+	@Transactional("db1TxManager")
 	public WxPerson synchroOne(String openid) {
 		Map<String,String> tks1=new HashMap<String, String>();
 		 tks1.put("access_token", Scheduler.token.getAccess_token());
 		 tks1.put("openid", openid);
 		 WxPerson person=WxConnectFactory.get(WechatUrl.WXUSEINFO,tks1,null,WxPerson.class);
-		 if(!"0".equals(person.getErrcode())){
+		 person.setLastupdate(new Timestamp(new Date().getTime()));
+		 if(0!=person.getErrcode()){
 			 LOGGER.error("同步单个微信用户异常：{}", person.getErrmsg());
-	         throw new ServiceException(4234);
+	         throw new ServiceException(person.getErrcode());
 		 }else{
 			 personMapper.updatePerson(person);
 		 }

@@ -24,8 +24,8 @@ public class ContentBo implements Serializable {
     private String username;
 
 	/**栏目ID**varchar(64)**/
-    @NotEmpty(message = "栏目ID不能为空！")
-    @Size(min = 1, max = 64)
+    @NotEmpty(message = "栏目ID不能为空,如未配置该字段，请先前往模型管理配置！")
+    @Size(min = 0, max = 64)
 	private String channelId;
 
 	/**访问路径**varchar(30)**/
@@ -38,13 +38,13 @@ public class ContentBo implements Serializable {
 	private String contentType;
 
 	/**模型ID**varchar(64)**/
-    @NotEmpty(message = "模型ID不能为空！")
-    @Size(min = 1, max = 64)
+    @NotEmpty(message = "模型ID不能为空,如未配置该字段，请先前往模型管理配置！")
+    @Size(min = 0, max = 64)
 	private String modelId;
 
 	/**站点ID**varchar(64)**/
-    @NotEmpty(message = "站点ID不能为空！")
-    @Size(min = 1, max = 64)
+    @NotEmpty(message = "站点ID不能为空,如未配置该字段，请先前往模型管理配置！")
+    @Size(min = 0, max = 64)
 	private String siteId;
 
 	/**域名**varchar(50)**/

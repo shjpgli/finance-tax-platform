@@ -41,7 +41,9 @@
 			a.status STATUS,
 			b.needRegenerate needRegenerate,
 			b.staticLink,
+            s.siteId,
             s.siteName,
+            s.sitePath,s.domain,
 			a.recommendLevel recommendLevel
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
@@ -60,6 +62,9 @@
 		<if test="topLevel != null and topLevel != ''">
 			AND a.topLevel = #{topLevel}
 		</if>
+        <if test="siteId != null and siteId != ''">
+            AND a.siteId = #{siteId}
+        </if>
 		<if test="status != null and status != ''">
 			AND a.status = #{status}
 		</if>

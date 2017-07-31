@@ -3,7 +3,11 @@ package com.abc12366.cszj.model.weixin.bo.menu;
 
 import com.abc12366.cszj.model.weixin.BaseWxRespon;
 
-
+/**
+ * 微信菜单
+ * @author zhushuai 2017-7-31
+ *
+ */
 public class Menu extends BaseWxRespon{
 	/**
 	 * 

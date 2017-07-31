@@ -24,12 +24,12 @@ import java.util.Map;
  * @create 2017-07-27 10:52 AM
  * @since 1.0.0
  */
-@Configuration
-@EnableKafka
+//@Configuration
+//@EnableKafka
 public class KafkaConfig {
 
-    @Autowired
-    private ApplicationConfig config;
+//    @Autowired
+//    private ApplicationConfig config;
 
     /**
      * Kafka作为消费者的配置
@@ -49,7 +49,7 @@ public class KafkaConfig {
 //        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 //        return props;
 //    }
-
+//
 //    @Bean
 //    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Object, Object>>
 //            kafkaListenerContainerFactory() {
@@ -61,11 +61,10 @@ public class KafkaConfig {
 //        factory.getContainerProperties().setPollTimeout(3000);
 //        return factory;
 //    }
-
+//
 //    @Bean
 //    public ConsumerFactory<Object, Object> consumerFactory() {
 //        DefaultKafkaConsumerFactory<Object, Object> factory = new DefaultKafkaConsumerFactory<>(consumerConfigs());
-//        factory.setValueDeserializer(new JsonDeserializer<>(UserRequestEvent.class));
 //        return factory;
 //    }
 
@@ -74,25 +73,25 @@ public class KafkaConfig {
      *
      * @return Map
      */
-    public Map<String, Object> producerConfigs() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootstrap_servers());
-        props.put(ProducerConfig.RETRIES_CONFIG, 0);
-        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return props;
-    }
-
-    @Bean
-    public ProducerFactory<String, Object> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
-    }
-
-    @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
+//    public Map<String, Object> producerConfigs() {
+//        Map<String, Object> props = new HashMap<>();
+//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootstrap_servers());
+//        props.put(ProducerConfig.RETRIES_CONFIG, 0);
+//        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+//        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+//        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+//        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+//        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+//        return props;
+//    }
+//
+//    @Bean
+//    public ProducerFactory<String, Object> producerFactory() {
+//        return new DefaultKafkaProducerFactory<>(producerConfigs());
+//    }
+//
+//    @Bean
+//    public KafkaTemplate<String, Object> kafkaTemplate() {
+//        return new KafkaTemplate<>(producerFactory());
+//    }
 }

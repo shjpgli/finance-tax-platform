@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.message.mapper.db1.BusinessMsgMapper">
+
+    <sql id="Base_Column">
+		id, userId, businessId, content, status, type, createTime, lastUpdate
+	</sql>
+
+    <insert id="insert">
+        INSERT INTO msg_business_message (<include refid="Base_Column"/>) VALUES
+        (#{id}, #{userId}, #{businessId}, #{content}, #{status}, #{type}, #{createTime}, #{lastUpdate})
+    </insert>
+
+    <update id="update">
+        UPDATE msg_business_message
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM msg_business_message WHERE id = #{id}
+    </delete>
+</mapper>
