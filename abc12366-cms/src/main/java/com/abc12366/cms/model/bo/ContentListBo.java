@@ -75,6 +75,12 @@ public class ContentListBo implements Serializable {
 	/**站点路径**varchar(500)**/
 	private String staticLink;
 
+    /**栏目是否显示**/
+    private String isDisplay;
+
+    /**站点状态**/
+    private String siteStatus;
+
 
 	public String getContentId() {
 		return contentId;
@@ -243,4 +249,20 @@ public class ContentListBo implements Serializable {
 	public void setStaticLink(String staticLink) {
 		this.staticLink = staticLink;
 	}
+
+    public String getIsDisplay() {
+        return isDisplay;
+    }
+
+    public void setIsDisplay(String isDisplay) {
+        this.isDisplay = isDisplay;
+    }
+
+    public String getSiteStatus() {
+        return siteStatus;
+    }
+
+    public void setSiteStatus(String siteStatus) {
+        this.siteStatus = siteStatus;
+    }
 }
