@@ -60,4 +60,11 @@ public interface ContentExtMapper{
      **/
     int updatRegenerateList0(@Param("contentIds") String[] contentIds);
 
+    /**
+     *
+     * 清空发布日期(根据主键ID修改)
+     *
+     **/
+    int updateReleaseDate(@Param("contentIds") String[] contentIds);
+
 }

@@ -46,6 +46,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**");
 
+        // App验证、授权拦截
+        registry.addInterceptor(appInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/druid/**")
+                        //定时任务查询不需验证
+                .excludePathPatterns("/task/list")
+                //修改内容浏览量
+                .excludePathPatterns("/content/updateViewsDay")
+                        //获取标签
+                .excludePathPatterns("/content/selectContentType")
+                .excludePathPatterns("/app/login", "/app/register", "/test");
+
         // UserToken验证、授权拦截
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
@@ -59,18 +71,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //获取标签
                 .excludePathPatterns("/content/selectContentType")
                 .excludePathPatterns("/login", "/register");
-
-        // App验证、授权拦截
-        registry.addInterceptor(appInterceptor())
-                .excludePathPatterns("/")
-                .excludePathPatterns("/druid/**")
-                        //定时任务查询不需验证
-                .excludePathPatterns("/task/list")
-                //修改内容浏览量
-                .excludePathPatterns("/content/updateViewsDay")
-                        //获取标签
-                .excludePathPatterns("/content/selectContentType")
-                .excludePathPatterns("/app/login", "/app/register", "/test");
 
     }
 }

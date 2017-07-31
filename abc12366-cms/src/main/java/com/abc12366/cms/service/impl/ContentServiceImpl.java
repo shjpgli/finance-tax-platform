@@ -648,6 +648,7 @@ public class ContentServiceImpl implements ContentService {
         try {
             contentMapper.updateStatusList(contentIds);
             contentExtMapper.updatRegenerateList0(contentIds);
+            contentExtMapper.updateReleaseDate(contentIds);
         } catch (Exception e) {
             LOGGER.error("撤销文章信息异常：{}", e);
             throw new ServiceException(4258);
