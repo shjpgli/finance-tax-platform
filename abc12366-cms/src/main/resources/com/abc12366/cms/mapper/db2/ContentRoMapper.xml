@@ -41,6 +41,7 @@
 			a.status STATUS,
 			b.needRegenerate needRegenerate,
 			b.staticLink,
+            s.siteId,
             s.siteName,
             s.sitePath,s.domain,
 			a.recommendLevel recommendLevel
