@@ -42,7 +42,7 @@ public class AdminUserInterceptor extends HandlerInterceptorAdapter {
         }
         //发送 POST 请求
         String abc12366_admin = PropertiesUtil.getValue("abc12366.admin.url");
-        String check_url = "/admintoken/check/" + adminToken;
+        /*String check_url = "/admintoken/check/" + adminToken;
         String result = HttpRequestUtil.sendPost(abc12366_admin + check_url, "");
         if (!result.equals("true")){
             BodyStatus bodyStatus = Utils.bodyStatus(4196);
@@ -53,8 +53,9 @@ public class AdminUserInterceptor extends HandlerInterceptorAdapter {
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        String refresh_url = "/admintoken/refresh/" + adminToken;
-        result = HttpRequestUtil.sendPost(abc12366_admin + refresh_url, "");
+        String refresh_url = "/user/token/" + adminToken;
+        String result = HttpRequestUtil.sendPost(abc12366_admin + refresh_url, "");
+        System.out.println(result);
         if (!result.equals("true")){
             BodyStatus bodyStatus = Utils.bodyStatus(4129);
             response.setStatus(200);
@@ -63,7 +64,7 @@ public class AdminUserInterceptor extends HandlerInterceptorAdapter {
             response.getWriter().close();
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
-        }
+        }*/
 
         return true;
     }

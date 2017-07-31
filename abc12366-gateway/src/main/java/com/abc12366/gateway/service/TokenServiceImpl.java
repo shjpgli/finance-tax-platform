@@ -1,7 +1,10 @@
 package com.abc12366.gateway.service;
 
+import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
 import com.abc12366.gateway.model.bo.AdminResponseBO;
+import com.abc12366.gateway.model.bo.LoginInfoBO;
+import com.abc12366.gateway.model.bo.ResultLoginInfo;
 import com.abc12366.gateway.model.bo.UserResponseBO;
 import com.abc12366.gateway.util.PropertiesUtil;
 import com.abc12366.gateway.util.RestTemplateUtil;
@@ -34,10 +37,39 @@ public class TokenServiceImpl implements TokenService {
         if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
             return userTokenAuth(userToken, request);
         }
-        if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
+        /*if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
             return adminTokenAuth(adminToken, request);
+        }*/
+        if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
+            return authAdminToken(adminToken, request);
         }
         return false;
+    }
+
+    private boolean authAdminToken(String adminToken, HttpServletRequest request) {
+        LOGGER.info("{}:{}", adminToken, request);
+        boolean isAuth = false;
+        try {
+            String abcAdmin = PropertiesUtil.getValue("abc12366.admin.url");
+            String checkUrl = "/user/token/" + adminToken;
+            // 1.调用admin的token校验接口，如果校验通过直接返回true
+            String result = restTemplateUtil.send(abcAdmin + checkUrl, HttpMethod.GET, request);
+            ResultLoginInfo resultLoginInfo=JSON.parseObject(result,ResultLoginInfo.class);
+
+            LoginInfoBO bo = resultLoginInfo.getData();
+            if(bo == null){
+                LOGGER.info("查询失败: {}", isAuth);
+                isAuth = false;
+            }else{
+                request.setAttribute(Constant.ADMIN_ID, bo.getUserId());
+                request.setAttribute(Constant.ADMIN_USER, bo.getUser());
+                isAuth = true;
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        LOGGER.info("校验admin的token状态为: {}", isAuth);
+        return isAuth;
     }
 
     /**
