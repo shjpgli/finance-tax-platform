@@ -6,7 +6,7 @@ public class BaseWxRespon implements java.io.Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String errcode="0";
+	private Integer errcode=0;
     private String errmsg="ok";
     
     
@@ -19,11 +19,11 @@ public class BaseWxRespon implements java.io.Serializable{
     	this.errmsg=message;
     }
 
-	public String getErrcode() {
+	public Integer getErrcode() {
 		return errcode;
 	}
 
-	public void setErrcode(String errcode) {
+	public void setErrcode(Integer errcode) {
 		this.errcode = errcode;
 	}
 

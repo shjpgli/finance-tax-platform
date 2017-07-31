@@ -1,20 +1,13 @@
 package com.abc12366.cszj.util.wx;
 
 
-import java.util.HashMap;
+
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
-import com.abc12366.cszj.model.weixin.BaseWxRespon;
-import com.abc12366.cszj.model.weixin.OpenIdRs;
-import com.abc12366.cszj.model.weixin.bo.WxUseToken;
 import com.abc12366.cszj.model.weixin.bo.menu.Button;
 import com.abc12366.cszj.model.weixin.bo.menu.Menu;
-import com.abc12366.cszj.model.weixin.bo.person.WxPerson;
-import com.abc12366.cszj.model.weixin.bo.templateMsg.TemplateMsg;
+import com.alibaba.fastjson.JSON;
+
 
 
 /**
@@ -56,7 +49,7 @@ public class WxConnectFactory {
     	 WxUseToken useToken= get("https://api.weixin.qq.com/cgi-bin/token",tks,null,WxUseToken.class);
     	 System.out.println(useToken.getAccess_token());*/
     	 
-    	 String token="h9jqMNQCcdpccfb_mudt1ZyRqgFjUxZuOyfpO8z2XVWERyd4Hdt8wLsIZYAQ2vZaDG3Sw6TZHPJzwOJ0S5dYCRnNfmhoCDb6RvtM6GL7Buw3SeXfLy0aiMVqTwGys2OKNIBjAFARMF";
+    	 //String token="h9jqMNQCcdpccfb_mudt1ZyRqgFjUxZuOyfpO8z2XVWERyd4Hdt8wLsIZYAQ2vZaDG3Sw6TZHPJzwOJ0S5dYCRnNfmhoCDb6RvtM6GL7Buw3SeXfLy0aiMVqTwGys2OKNIBjAFARMF";
     	 //WxUseToken useToken=  get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxcc69b5b49f2f232e&secret=b2fe7d55be613ffee9242869d538daa6",null,WxUseToken.class);
     	 //System.out.println(useToken.getAccess_token());
     	/* Map<String,String> tks=new HashMap<String, String>();
@@ -78,7 +71,7 @@ public class WxConnectFactory {
      		 System.out.println(person.getNickname());
      	 }*/
      	 
-    	 /*Menu menu=new Menu();
+    	 Menu menu=new Menu();
     	 
     	 Button btn11 = new Button();
          btn11.setName("天气预报");
@@ -111,7 +104,9 @@ public class WxConnectFactory {
     	 
     	 menu.setButton(new Button[]{bt1,bt2});
     	 
-     	 Map<String,String> tks=new HashMap<String, String>();
+    	 System.out.println(JSON.toJSONString(menu));
+    	 
+     	/* Map<String,String> tks=new HashMap<String, String>();
    	     tks.put("access_token", token);
      	 BaseWxRespon respon=post("https://api.weixin.qq.com/cgi-bin/menu/create",tks,menu,BaseWxRespon.class);
     	 System.out.println(respon.getErrcode());*/

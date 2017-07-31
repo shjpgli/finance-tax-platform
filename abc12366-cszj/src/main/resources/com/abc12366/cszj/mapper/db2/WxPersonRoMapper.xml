@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.cszj.mapper.db2.WxPersonRoMapper">
 
      <sql id="Base_Column_List">
-         subscribe, openid, nickname, sex, language, city, province, country, headimgurl,subscribe_time,remark,groupid,unionid
+         subscribe, openid, nickname, sex, language, city, province, country, headimgurl,subscribe_time,remark,groupid,unionid,lastupdate
      </sql>
      
      <select id="countPersonNum" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson" resultType="long">
@@ -21,11 +21,19 @@
         <include refid="Base_Column_List"/>
         FROM cszj_wxuser
         <where>
-            <if test="nickname != null">name like CONCAT('%',#{nickname},'%')</if>
-            <if test="sex != null">sex=#{sex}</if>
-            <if test="province != null">province=#{province}</if>
-            <if test="city != null">city=#{city}</if>
-            <if test="groupid != null">groupid=#{groupid}</if>
+            1 = 1
+            <if test="nickname != null">and name like CONCAT('%',#{nickname},'%')</if>
+            <if test="sex != null">and sex=#{sex}</if>
+            <if test="province != null">and province=#{province}</if>
+            <if test="city != null">and city=#{city}</if>
+            <if test="groupid != null">and groupid=#{groupid}</if>
+            <if test="openid!=null">and openid=#{openid}</if>
+            <if test="startTime != null">
+                <![CDATA[and date_format(subscribe_time, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[and date_format(subscribe_time, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')]]>
+            </if>
         </where>
         ORDER BY subscribe_time DESC
     </select>

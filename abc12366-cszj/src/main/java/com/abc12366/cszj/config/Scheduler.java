@@ -23,7 +23,7 @@ public class Scheduler {
 	// token获取失败，重复获取次数
 	private Integer regetTime = 10;
 
-	@Scheduled(fixedRate = 6900000)
+	@Scheduled(fixedRate = 3600000)
 	public void getUserToken() {
 		int time = 0;
 		while (true) {
@@ -33,7 +33,7 @@ public class Scheduler {
 			tks.put("secret", SpringCtxHolder.getProperty("abc.wx-secret"));
 			token = WxConnectFactory.get(WechatUrl.WXUSETOKEN, tks, null,
 					WxUseToken.class);
-			if ("0".equals(token.getErrcode())) {
+			if (0==token.getErrcode()) {
 				break;
 			} else {
 				if (time >= regetTime) {

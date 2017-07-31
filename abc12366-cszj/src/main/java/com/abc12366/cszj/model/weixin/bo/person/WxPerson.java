@@ -4,6 +4,11 @@ import java.util.Date;
 
 import com.abc12366.cszj.model.weixin.BaseWxRespon;
 
+/**
+ * 微信用户信息
+ * @author zhushuai 2017-7-31
+ *
+ */
 public class WxPerson extends BaseWxRespon{
 
 	/**
@@ -25,6 +30,12 @@ public class WxPerson extends BaseWxRespon{
     private String unionid;
     
     private String[] tagid_list;
+    private Date lastupdate;
+    
+    //查询条件
+    private Date startTime;
+    private Date endTime;
+    
 	public String getSubscribe() {
 		return subscribe;
 	}
@@ -108,6 +119,24 @@ public class WxPerson extends BaseWxRespon{
 	}
 	public void setUnionid(String unionid) {
 		this.unionid = unionid;
+	}
+	public Date getLastupdate() {
+		return lastupdate;
+	}
+	public void setLastupdate(Date lastupdate) {
+		this.lastupdate = lastupdate;
+	}
+	public Date getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+	public Date getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
     
     
