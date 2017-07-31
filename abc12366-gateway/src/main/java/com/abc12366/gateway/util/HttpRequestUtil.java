@@ -1,9 +1,6 @@
 package com.abc12366.gateway.util;
 
-import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Constant;
-import com.alibaba.fastjson.JSON;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +16,6 @@ import java.util.Map;
 public class HttpRequestUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestUtil.class);
-    protected Class<T> _class;
     private String jsonStr;
     /**
      * 向指定URL发送GET方法的请求
@@ -143,20 +139,6 @@ public class HttpRequestUtil {
 //        System.out.println(sr);
     }
 
-    @SuppressWarnings("unchecked")
-    T parseObject() {
-        T res = null;
-        try {
-            res = JSON.parseObject(this.getJsonStr(), _class);
-            //T res = mapper.readValue(this.getJsonStr(), _class);
-            return res;
-        } catch (Exception e) {
-            LOGGER.error("微信服务器返回json格式异常", e);
-            //new ServiceException(4001);
-            e.printStackTrace();
-        }
-        return res;
-    }
     public String getJsonStr() {
         return jsonStr;
     }
