@@ -15,24 +15,24 @@ public class WxPerson extends BaseWxRespon{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-    private String subscribe;
-    private String openid;
-    private String nickname;
-    private String sex;
-    private String language;
-    private String city;
-    private String province;
-    private String country;
-    private String headimgurl;
-    private Date subscribe_time;
-    private String remark;
-    private String groupid;
-    private String unionid;
+    private String subscribe;//订阅状态 0未关注 1已关注
+    private String openid;//用户的标识，对当前公众号唯一
+    private String nickname;//昵称
+    private String sex;//性别  1时是男性，值为2时是女性，值为0时是未知
+    private String language;//语言
+    private String city;//城市
+    private String province;//省份
+    private String country;//国家
+    private String headimgurl;//头像地址
+    private Date subscribe_time;//关注时间
+    private String remark;//备注
+    private String groupid;//用户所在的分组ID
+    private String unionid;//只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
     
-    private String[] tagid_list;
+    private String[] tagid_list;//用户被打上的标签ID列表
     private Date lastupdate;
-    private String userid;
-    private User user;
+    private String userid;//UC用户ID
+    private User user;//UC用户信息
     
     
     

@@ -15,25 +15,25 @@ public class User implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String id;
-	private String username;
-	private String phone;
-	private String regMail;
-	private String regIP;
-	private String nickname;
-	private String userPicturePath;
-	private String maxUserPicturePath;
-	private String midUserPicturePath;
-	private String minUserPicturePath;
-	private String points;
-	private String exp;
-	private String vipLevel;
-	private boolean status;
-	private Date createTime;
-	private Date lastUpdate;	
-	private String realName;
-    private String levelName;
-    private String medal;
-    private String medalIcon;
+	private String username; //用户名
+	private String phone;//手机号码
+	private String regMail; //注册邮箱
+	private String regIP; //注册IP
+	private String nickname; //昵称
+	private String userPicturePath; //用户头像地址
+	private String maxUserPicturePath;//大尺寸用户头像地址
+	private String midUserPicturePath;//中尺寸头像地址
+	private String minUserPicturePath;//小尺寸头像地址
+	private String points;//可用积分
+	private String exp;//可用经验值
+	private String vipLevel;//会员等级
+	private boolean status;//用户状态
+	private Date createTime;//
+	private Date lastUpdate;	//
+	private String realName;//
+    private String levelName;//
+    private String medal;//
+    private String medalIcon;//
 
     
     
