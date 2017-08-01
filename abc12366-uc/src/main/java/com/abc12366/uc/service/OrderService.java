@@ -1,7 +1,9 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.OrderBack;
 import com.abc12366.uc.model.bo.OrderBO;
+import com.abc12366.uc.model.bo.OrderBackBO;
 
 import java.util.List;
 
@@ -83,4 +85,12 @@ public interface OrderService {
     OrderBO cancelOrder(Order order);
 
     List<OrderBO> selectUserAllOrderList(OrderBO order, int pageNum, int pageSize);
+
+    OrderBack applyBackOrder(OrderBack orderBack);
+
+    OrderBack submitBackOrder(OrderBack orderBack);
+
+    OrderBack backCheckOrder(OrderBack orderBack);
+
+    List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO);
 }

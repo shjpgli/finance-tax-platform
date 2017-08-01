@@ -50,13 +50,16 @@ public class GoodsController {
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) Boolean status,
                                      @RequestParam(value = "categoryId", required = false) String categoryId,
-                                     @RequestParam(value = "recommendType", required = false) String recommendType) {
+                                     @RequestParam(value = "recommendType", required = false) String recommendType,
+                                     @RequestParam(value = "goodsType", required = false) String goodsType
+                                     ) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
         goods.setStatus(status);
         goods.setName(name);
         goods.setCategoryId(categoryId);
         goods.setRecommendType(recommendType);
+        goods.setGoodsType(goodsType);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<GoodsBO> goodsList = goodsService.selectList(goods);
         LOGGER.info("{}", goodsList);
@@ -147,7 +150,7 @@ public class GoodsController {
     }
 
     /**
-     * 修改商品信息
+     * 删除商品信息
      * @param id
      * @return
      */

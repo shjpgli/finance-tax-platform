@@ -1,7 +1,10 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.OrderBack;
+import com.abc12366.uc.model.bo.OrderBackBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -19,4 +22,5 @@ public interface OrderBackRoMapper {
 	 **/
 	OrderBack  selectByPrimaryKey(@Param("id") String id);
 
+	List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO);
 }

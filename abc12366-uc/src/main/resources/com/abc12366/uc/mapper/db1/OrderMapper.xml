@@ -85,6 +85,9 @@
             <if test="isInvoice != null">
                 isInvoice,
             </if>
+            <if test="cancelId != null">
+                cancelId,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -153,6 +156,9 @@
             </if>
             <if test="isInvoice!=null">
                 #{isInvoice},
+            </if>
+            <if test="cancelId!=null">
+                #{cancelId},
             </if>
         </trim>
 	</insert>
@@ -223,6 +229,9 @@
             </if>
             <if test="isInvoice != null">
                 isInvoice = #{isInvoice},
+            </if>
+            <if test="cancelId != null">
+                cancelId = #{cancelId},
             </if>
 
         </set>

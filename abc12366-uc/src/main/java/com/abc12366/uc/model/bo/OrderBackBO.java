@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import com.abc12366.uc.model.User;
+
 import java.io.Serializable;
 
 
@@ -24,6 +26,8 @@ public class OrderBackBO implements Serializable {
      * 操作人员ID
      **/
     private String operatorUser;
+
+    private User user;
 
 
     public void setId(String id) {
@@ -120,5 +124,13 @@ public class OrderBackBO implements Serializable {
 
     public void setAdminRemark(String adminRemark) {
         this.adminRemark = adminRemark;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

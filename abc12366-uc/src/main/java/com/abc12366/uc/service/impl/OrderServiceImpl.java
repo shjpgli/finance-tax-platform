@@ -2,18 +2,13 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
-import com.abc12366.uc.mapper.db1.OrderLogMapper;
-import com.abc12366.uc.mapper.db1.OrderMapper;
-import com.abc12366.uc.mapper.db1.OrderProductMapper;
-import com.abc12366.uc.mapper.db2.GoodsRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceRoMapper;
-import com.abc12366.uc.mapper.db2.OrderRoMapper;
-import com.abc12366.uc.mapper.db2.ProductRoMapper;
-import com.abc12366.uc.model.Order;
-import com.abc12366.uc.model.OrderLog;
-import com.abc12366.uc.model.OrderProduct;
+import com.abc12366.uc.mapper.db1.*;
+import com.abc12366.uc.mapper.db2.*;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.OrderBO;
+import com.abc12366.uc.model.bo.OrderBackBO;
 import com.abc12366.uc.model.bo.OrderProductBO;
+import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.PageHelper;
@@ -50,6 +45,12 @@ public class OrderServiceImpl implements OrderService {
     private OrderProductMapper orderProductMapper;
 
     @Autowired
+    private OrderBackMapper orderBackMap;
+
+    @Autowired
+    private OrderBackRoMapper orderBackRoMap;
+
+    @Autowired
     private InvoiceRoMapper invoiceRoMapper;
 
     @Autowired
@@ -58,6 +59,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductRoMapper productRoMapper;
 
+    @Autowired
+    private ProductMapper productMapper;
+
+    @Autowired
+    private ProductRepoMapper productRepoMapper;
 
 
     @Override
@@ -194,6 +200,23 @@ public class OrderServiceImpl implements OrderService {
                     LOGGER.info("提交订单与产品关系信息失败：{}", orderBO);
                     throw new ServiceException(4167);
                 }
+                //减去Product库存数量
+                ProductBO productBO = orderProductBO.getProductBO();
+                int stock = productBO.getStock() - orderProduct.getNum();
+                productBO.setStock(stock);
+                Product product = new Product();
+                BeanUtils.copyProperties(productBO,product);
+                productMapper.update(product);
+                //库存表数据处理
+                ProductRepo repo = new ProductRepo();
+                repo.setId(Utils.uuid());
+                repo.setGoodsId(productBO.getGoodsId());
+                repo.setProductId(productBO.getId());
+                repo.setOutcome(orderProduct.getNum());
+                repo.setStock(stock);
+                repo.setCreateTime(date);
+                repo.setLastUpdate(date);
+                productRepoMapper.insert(repo);
             }
         }
         insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), date,"用户新增订单");
@@ -246,19 +269,19 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4134);
         }
         //订单状态是确认状态，不能删除
-        if("1".equals(bo.getOrderStatus())){
-            LOGGER.info("订单状态是确认状态，不能删除：{}", orderBO);
+        if(!"4".equals(bo.getOrderStatus()) || !"2".equals(bo.getOrderStatus())){
+            LOGGER.info("订单只有在未付款或作废订单可以删除：{}", orderBO);
             throw new ServiceException(4140);
         }
-        order.setOrderStatus("9");
-        int update = orderMapper.update(order);
-        if(update != 1){
-            LOGGER.info("修改失败：{}", orderBO);
-            throw new ServiceException(4102);
+        //order.setOrderStatus("9");
+        int del = orderMapper.deleteByIdAndUserId(order);
+        if(del != 1){
+            LOGGER.info("删除失败：{}", orderBO);
+            throw new ServiceException(4103);
         }
         //订单删除成功之后，删除订单与产品对应关系
 
-        /*List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
+        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
         if (orderProductBOs == null){
             LOGGER.info("产品信息错误：{}", orderBO);
             throw new ServiceException(4166);
@@ -270,7 +293,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4168);
                 }
             }
-        }*/
+        }
         insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), new Date(),"用户删除订单");
     }
 
@@ -295,11 +318,11 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("订单信息不存在：{}", order);
             throw new ServiceException(4134);
         }
-        if(bo.getIsInvoice()){
-            LOGGER.info("该订单已开发票，请先取消发票订单：{}", order);
-            throw new ServiceException(4188);
+        if(!bo.getOrderStatus().equals("2")){
+            LOGGER.info("只有待支付可以取消订单：{}", order);
+            throw new ServiceException(4189);
         }
-        order.setOrderStatus("3");
+        order.setOrderStatus("4");
         int update = orderMapper.update(order);
         if (update != 1){
             LOGGER.info("修改失败：{}", order);
@@ -315,4 +338,53 @@ public class OrderServiceImpl implements OrderService {
         List<OrderBO> oList = orderRoMapper.selectOrderList(order);
         return oList;
     }
+
+    @Override
+    public OrderBack applyBackOrder(OrderBack orderBack) {
+        OrderBO bo = orderRoMapper.selectById(orderBack.getOrderNo());
+        if(bo == null){
+            LOGGER.info("订单信息不存在：{}", orderBack);
+            throw new ServiceException(4134);
+        }
+        if(bo.getIsInvoice()){
+            LOGGER.info("该订单已开发票，请先发起发票退单：{}", bo);
+            throw new ServiceException(4188);
+        }
+        orderBack.setId(Utils.uuid());
+        Date date = new Date();
+        orderBack.setCreateTime(date);
+        orderBack.setLastUpdate(date);
+        orderBackMap.insert(orderBack);
+        insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(), "用户申请退单");
+        return orderBack;
+    }
+
+    @Override
+    public OrderBack submitBackOrder(OrderBack orderBack) {
+        orderBack.setLastUpdate(new Date());
+        int upd = orderBackMap.update(orderBack);
+        if(upd != 1){
+            LOGGER.info("修改失败：{}", orderBack);
+            throw new ServiceException(4102);
+        }
+        return orderBack;
+    }
+
+    @Override
+    public OrderBack backCheckOrder(OrderBack orderBack) {
+        orderBack.setLastUpdate(new Date());
+        int upd = orderBackMap.update(orderBack);
+        if(upd != 1){
+            LOGGER.info("修改失败：{}", orderBack);
+            throw new ServiceException(4102);
+        }
+        return orderBack;
+    }
+
+    @Override
+    public List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO) {
+        return orderBackRoMap.selectOrderBackList(orderBackBO);
+    }
+
+
 }

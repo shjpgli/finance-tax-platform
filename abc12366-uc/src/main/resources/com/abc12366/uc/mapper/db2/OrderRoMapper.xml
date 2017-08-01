@@ -27,6 +27,7 @@
         <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
         <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
+        <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.User">
             <id column="userId" property="id"/>
@@ -221,7 +222,7 @@
 	<!-- 通用查询结果列-->
     <sql id="Base_Column_List">
 		 id,	orderNo,	userId,	orderStatus,	deliveryMethod,	payMethod,	nowVipLevel,	createTime,	lastUpdate,	username,	isShipping,	isFreeShipping,	deliveryFee,
-		 isInsured,	insuredFee,	totalPrice,	addressId,	expressNo,	remark,giftPoints,tradeMethod,isInvoice
+		 isInsured,	insuredFee,	totalPrice,	addressId,	expressNo,	remark,giftPoints,tradeMethod,isInvoice,cancelId
 	</sql>
 
 
@@ -254,7 +255,7 @@
     <!-- 通用BO查询结果列-->
     <sql id="Base_Column_BO_List">
         o.id,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,
-        o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,u.id as userId,u.username,u.phone,u.vipLevel,u.nickname
+        o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,u.id as userId,u.username,u.phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
