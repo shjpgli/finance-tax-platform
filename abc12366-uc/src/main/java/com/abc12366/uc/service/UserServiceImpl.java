@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //判断是否有用户token请求头
-        String token = (String) request.getAttribute(Constant.USER_TOKEN_HEAD);
+        String token = (String) request.getHeader(Constant.USER_TOKEN_HEAD);
         if (token == null || token.equals("")) {
             throw new ServiceException(4199);
         }
@@ -194,6 +194,11 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4179);
         }
 
+        //判断user-token是否与被修改用户是同一个
+        if (!userExist.getId().equals(tokenExist.getUserId())) {
+            throw new ServiceException(4191);
+        }
+
         //密码加密
         String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword());
 
@@ -202,6 +207,7 @@ public class UserServiceImpl implements UserService {
         user.setId(userExist.getId());
         user.setPhone(passwordUpdateBO.getPhone());
         user.setPassword(encodePassword);
+        user.setLastUpdate(new Date());
         int result = userMapper.update(user);
         if (result != 1) {
             throw new ServiceException(4023);

@@ -1,21 +1,25 @@
-package com.abc12366.message.model;
+package com.abc12366.message.model.bo;
 
-
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * User: liuguiyao<435720953@qq.com>
- * Date: 2017-07-20
- * Time: 17:11
+ * Date: 2017-08-01
+ * Time: 16:05
  */
-public class PhoneCode {
-    private String id;
-    private String phone;
-    private String code;
-    private Date expireDate;
+public class VerifyParam {
+    @NotNull
     private String type;
+    @NotNull
+    @Pattern(regexp = "^\\d{11}$")
+    @Size(min = 11, max = 11)
+    private String phone;
+    @NotNull
+    private String code;
 
-    public PhoneCode() {
+    public VerifyParam() {
     }
 
     public String getType() {
@@ -24,14 +28,6 @@ public class PhoneCode {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getPhone() {
@@ -48,13 +44,5 @@ public class PhoneCode {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public Date getExpireDate() {
-        return expireDate;
-    }
-
-    public void setExpireDate(Date expireDate) {
-        this.expireDate = expireDate;
     }
 }

@@ -25,5 +25,7 @@ public interface MainService {
      */
     Map<String, String> authorizationObj2Map(List<AuthorizationDto> authorList);
 
+    Object getRSAPublicKey(HttpServletRequest request) throws Exception;
+
 
 }
