@@ -9,17 +9,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.abc12366.common.util.Utils;
 import com.abc12366.cszj.model.weixin.bo.message.News;
+import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
+import com.abc12366.cszj.model.weixin.bo.message.WxNews;
 import com.abc12366.cszj.model.weixin.bo.template.FileContent;
-import com.abc12366.cszj.model.weixin.bo.template.ImgMaterial;
 import com.abc12366.cszj.service.IWxMsgService;
 
 
@@ -35,15 +37,42 @@ public class WxMsgController {
 	@Autowired
 	private IWxMsgService iWxMsgService;
     
-	//微信图片素材接口
-	@PostMapping("/uploadWxImag")
-	public @ResponseBody ImgMaterial uploadWxImag(@Valid @RequestBody FileContent fileContent){
-		return iWxMsgService.uploadWxImag(fileContent);
+	//微信图片永久图片素材接口
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/wximage/add")
+	public ResponseEntity wximageCreat(@Valid @RequestBody FileContent fileContent){
+		ResponseEntity responseEntity = ResponseEntity.ok(Utils
+				.kv("data", iWxMsgService.add_img(fileContent)));
+		LOGGER.info("{}", responseEntity);
+		return responseEntity;
 	}
+	
+	//微信上传图文消息内的图片
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/wxnews/imgupload")
+	public ResponseEntity imgupload(@Valid @RequestBody FileContent fileContent){
+		ResponseEntity responseEntity = ResponseEntity.ok(Utils
+				.kv("data", iWxMsgService.uploadWxImag(fileContent)));
+		LOGGER.info("{}", responseEntity);
+		return responseEntity;
+	}
+	
+	//微信永久图文消息
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/wxnews/add")
+	public ResponseEntity wxnewsCreat(@Valid @RequestBody WxNews news){
+		 LOGGER.info("{}", news);
+         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", iWxMsgService.add_news(news)));
+	     LOGGER.info("{}", responseEntity);
+	     return responseEntity;
+	}
+	
+	
+	
 	
 	//图文消息创建
 	@SuppressWarnings("rawtypes")
-	@PostMapping("/wxnews/creat")
+	@PostMapping("/wxnews/db/creat")
 	public ResponseEntity wxnewsCreat(@Valid @RequestBody News news){
 		 LOGGER.info("{}", news);
 
@@ -56,7 +85,7 @@ public class WxMsgController {
 	
 	//图文消息修改
 	@SuppressWarnings("rawtypes")
-	@PutMapping("/wxnews/{id}")
+	@PutMapping("/wxnews/db/{id}")
 	public ResponseEntity  wxnewsEdit(@PathVariable("id")String id,@Valid @RequestBody News news ){
 		LOGGER.info("{},{}", id, news);
 
@@ -68,9 +97,9 @@ public class WxMsgController {
         return responseEntity;
 	}
 	
-	//图文消息
+	//图文消息查看
 	@SuppressWarnings("rawtypes")
-	@GetMapping("/wxnews/get")
+	@GetMapping("/wxnews/db/get")
 	public ResponseEntity getWxnews(News news){
 		List<News> selectNews = iWxMsgService.getWxnews(news);
 		ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", selectNews));
@@ -78,4 +107,59 @@ public class WxMsgController {
 		return responseEntity;
 	}
 	
+	
+	    //删除图文消息
+		@SuppressWarnings("rawtypes")
+		@DeleteMapping("/wxnews/db/{id}")
+		public ResponseEntity wxmenuDel(@PathVariable("id")String id) {
+			LOGGER.info("{}", id);
+
+			iWxMsgService.deleteNews(id);
+	        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+
+	        LOGGER.info("{}", responseEntity);
+	        return responseEntity;
+		}
+	
+	    //--------------自动回复消息设置----------
+	    //自动回复消息创建
+		@SuppressWarnings("rawtypes")
+		@PostMapping("/wxremsg/db/creat")
+		public ResponseEntity wxrenewsCreat(@Valid @RequestBody ReturnMsg returnMsg){
+			 LOGGER.info("{}", returnMsg);
+
+			 ReturnMsg v = iWxMsgService.insertReNews(returnMsg);
+
+		     ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
+		     LOGGER.info("{}", responseEntity);
+		     return responseEntity;
+		}
+		
+		//自动回复消息修改
+		@SuppressWarnings("rawtypes")
+		@PutMapping("/wxremsg/db/{id}")
+		public ResponseEntity  wxremsgEdit(@PathVariable("id")String id,@Valid @RequestBody ReturnMsg returnMsg){
+			LOGGER.info("{},{}", id, returnMsg);
+
+			returnMsg.setId(id);
+			ReturnMsg v = iWxMsgService.updateReMsg(returnMsg);
+	        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
+
+	        LOGGER.info("{}", responseEntity);
+	        return responseEntity;
+		}
+		
+		//自动回复消息查询
+		@SuppressWarnings("rawtypes")
+		@GetMapping("/wxremsg/db/get")
+		public ResponseEntity  wxremsgGet(@RequestParam("setting") String setting){
+			ReturnMsg v=null;
+			if("0".equals(setting)||"1".equals(setting)){
+				v = iWxMsgService.getReMsgOneBysetting(setting);
+			}
+	        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
+	        LOGGER.info("{}", responseEntity);
+	        return responseEntity;
+		}
+		
 }

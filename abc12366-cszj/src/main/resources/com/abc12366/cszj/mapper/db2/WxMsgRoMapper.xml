@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cszj.mapper.db2.WxMsgRoMapper">
 
-     <resultMap id="newsResultMap" type="com.abc12366.cszj.model.weixin.bo.message.News">
+    <resultMap id="newsResultMap" type="com.abc12366.cszj.model.weixin.bo.message.News">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="ArticleCount" property="articleCount" jdbcType="INTEGER"/>
         <result column="creatDate" property="creatDate" jdbcType="TIMESTAMP"/>
@@ -18,6 +18,30 @@
         <result column="PicUrl" property="picUrl" jdbcType="VARCHAR"/>
         <result column="Url" property="url" jdbcType="VARCHAR"/>
      </resultMap>
+     
+     <resultMap id="reMsgMap" type="com.abc12366.cszj.model.weixin.bo.message.ReturnMsg">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="setting" property="setting" jdbcType="INTEGER"/>
+        <result column="keyString" property="keyString" jdbcType="TIMESTAMP"/>
+        <result column="msgType" property="msgType" jdbcType="TIMESTAMP"/>
+        <result column="content" property="content" jdbcType="TIMESTAMP"/>
+        <result column="mediaId" property="mediaId" jdbcType="TIMESTAMP"/>
+        <result column="imgurl" property="imgurl" jdbcType="TIMESTAMP"/>
+        <result column="newsId" property="newsId" jdbcType="TIMESTAMP"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="news" column="newsId" select="getNewsById"/>
+     </resultMap>
+     
+     <select id="getReMsgOneBysetting" resultMap="reMsgMap" parameterType="java.lang.String">
+         SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+         from cszj_remsg where setting= #{keyString}
+     </select>
+     
+     <select id="getNewsById" resultMap="newsResultMap" parameterType="java.lang.String">
+         SELECT id,ArticleCount,creatDate,lastUpdate 
+         from cszj_news where id= #{id}
+     </select>
      
      <select id="getNews" resultMap="newsResultMap" parameterType="com.abc12366.cszj.model.weixin.bo.message.News">
          SELECT id,ArticleCount,creatDate,lastUpdate 
@@ -35,5 +59,4 @@
         FROM cszj_article
         WHERE  newsId = #{id}
     </select>
-     
 </mapper>

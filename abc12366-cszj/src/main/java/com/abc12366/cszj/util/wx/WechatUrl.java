@@ -23,7 +23,7 @@ public enum WechatUrl {
 	MATERIAL_LIST("素材列表","/cgi-bin/material/batchget_material"),
 	MATERIAL_ADDNEWS("添加图文素材","/cgi-bin/material/add_news"),
 	MATERIAL_ADDMATE("添加素材","/cgi-bin/material/add_material"),
-	
+	MATERIAL_NEWSIMG("添加图文素材图片","/cgi-bin/media/uploadimg")
 	
 	;
 	

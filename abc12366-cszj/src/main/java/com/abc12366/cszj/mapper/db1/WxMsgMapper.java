@@ -3,6 +3,7 @@ package com.abc12366.cszj.mapper.db1;
 
 import com.abc12366.cszj.model.weixin.bo.message.Article;
 import com.abc12366.cszj.model.weixin.bo.message.News;
+import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
 
 public interface WxMsgMapper {
 
@@ -13,5 +14,11 @@ public interface WxMsgMapper {
 	int updateNews(News news);
 
 	void deleteArticle(String id);
+
+	void insertRemsg(ReturnMsg returnMsg);
+
+	void deleteNews(String id);
+
+	int updateRemsg(ReturnMsg returnMsg);
    
 }
