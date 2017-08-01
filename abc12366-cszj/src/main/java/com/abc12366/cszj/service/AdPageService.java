@@ -16,6 +16,8 @@ import java.util.Map;
 public interface AdPageService {
     List<AdPageBO> selectList(AdPageBO adPage, int page, int size);
 
+    List<AdPageBO> selectListForqt(AdPageBO adPage, int page, int size);
+
     AdPageBO insert(AdPageBO adPage);
 
     AdPageBO selectOne(String id);

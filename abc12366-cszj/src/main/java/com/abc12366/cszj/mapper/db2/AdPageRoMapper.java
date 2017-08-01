@@ -13,5 +13,7 @@ public interface AdPageRoMapper {
 
     List<AdPageBO> selectList(AdPageBO adPageBO);
 
+    List<AdPageBO> selectListForqt(AdPageBO adPageBO);
+
     AdPageBO selectOne(String id);
 }
