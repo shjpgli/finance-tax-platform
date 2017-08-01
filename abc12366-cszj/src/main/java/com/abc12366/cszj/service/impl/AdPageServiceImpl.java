@@ -43,6 +43,14 @@ public class AdPageServiceImpl implements AdPageService {
         return adPageList;
     }
 
+    @Override
+    public List<AdPageBO> selectListForqt(AdPageBO adPage, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<AdPageBO> adPageList = adPageRoMapper.selectListForqt(adPage);
+        return adPageList;
+    }
+
+
     @Transactional("db1TxManager")
     @Override
     public AdPageBO insert(AdPageBO adPage) {
