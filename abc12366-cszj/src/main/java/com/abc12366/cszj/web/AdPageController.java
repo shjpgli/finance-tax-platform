@@ -47,6 +47,24 @@ public class AdPageController {
         return responseEntity;
     }
 
+    @GetMapping("/adpages")
+    public ResponseEntity selectListForqt(@RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{},{},{}", name, page, size);
+
+        AdPageBO adPage = new AdPageBO();
+        adPage.setName(name);
+        List<AdPageBO> dataList = adPageService.selectListForqt(adPage, page, size);
+
+        PageInfo<AdPageBO> pageInfo = new PageInfo<AdPageBO>(dataList);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                "total", pageInfo.getTotal()));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
     @PostMapping("/adpage")
     public ResponseEntity insert(@Valid @RequestBody AdPageBO adPage) {
         LOGGER.info("{}", adPage);

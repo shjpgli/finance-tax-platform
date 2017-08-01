@@ -13,6 +13,7 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.RandomNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -93,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
         BeanUtils.copyProperties(registerBO, user);
 
         user.setId(Utils.uuid());
-        user.setUsername("username" + registerBO.getPhone());
+        user.setUsername("UC" + RandomNumber.getRandomNumber(8));
         user.setSalt(salt);
         user.setPassword(encodePassword);
         user.setPoints(0);

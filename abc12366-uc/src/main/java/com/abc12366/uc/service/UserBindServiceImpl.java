@@ -65,6 +65,8 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4101);
         }
 
+        //调外系统接口获取电子申报绑定信息
+
 
         UserDzsb userDzsb = new UserDzsb();
         //BeanUtils.copyProperties(userDzsbBO, userDzsb);
@@ -238,7 +240,6 @@ public class UserBindServiceImpl implements UserBindService {
         return userHndsBO1;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public boolean hndsUnbind(String id) {
         UserHnds userHnds = userBindRoMapper.userHndsSelectById(id);

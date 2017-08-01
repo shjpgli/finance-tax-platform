@@ -25,4 +25,14 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectListForqt" resultType="com.abc12366.cszj.model.bo.AdPageBO" parameterType="com.abc12366.cszj.model.bo.AdPageBO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cszj_adpage
+        <where>
+            status  is true
+            <if test="name != null"> and name like CONCAT('%',#{name},'%')</if>
+        </where>
+        ORDER BY lastUpdate DESC
+    </select>
 </mapper>
