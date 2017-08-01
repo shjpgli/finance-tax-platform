@@ -30,7 +30,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -201,6 +203,25 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             }
         }
         return privCode;
+    }
+
+    private boolean sendYoupaiTemplate(String phone, String code){
+        //发送通知类短信接口地址
+        String url = "https://sms-api.upyun.com/api/messages";
+        //调用网易接口请求头设置
+        HttpHeaders httpHeaders = getHeader();
+        //调用网易接口请求体设置
+        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("mobile", phone);
+        requestBody.add("template_id", "789");
+        requestBody.add("vars", code);
+        HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
+        ResponseEntity responseEntity = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
+        return true;
+    }
+
+    public static void main(String[] args) {
+        new MobileVerifyCodeServiceImpl().sendYoupaiTemplate("13278849423", "123546");
     }
 
 //    private boolean sendAliyunTemplate(String phone, String code) throws IOException {
