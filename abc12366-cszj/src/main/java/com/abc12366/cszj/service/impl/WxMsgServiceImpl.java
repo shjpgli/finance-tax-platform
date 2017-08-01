@@ -1,7 +1,6 @@
 package com.abc12366.cszj.service.impl;
 
 import java.io.InputStream;
-import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.cszj.config.Scheduler;
 import com.abc12366.cszj.mapper.db1.WxMsgMapper;
 import com.abc12366.cszj.mapper.db2.WxMsgRoMapper;
-import com.abc12366.cszj.model.weixin.bo.menu.Button;
 import com.abc12366.cszj.model.weixin.bo.message.Article;
 import com.abc12366.cszj.model.weixin.bo.message.News;
 import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
@@ -35,11 +33,7 @@ import com.abc12366.cszj.service.IWxMsgService;
 import com.abc12366.cszj.util.wx.MsgMap;
 import com.abc12366.cszj.util.wx.WechatUrl;
 import com.abc12366.cszj.util.wx.WxConnectFactory;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.util.QuickWriter;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.XppDriver;
+
 
 /**
  * 
@@ -70,6 +64,10 @@ public class WxMsgServiceImpl implements IWxMsgService {
 			int msgCode = MsgMap.getMsgType(map.get("MsgType"));
 			switch (msgCode) {
 			case 0://文本
+				ReturnMsg keymsg =getReMsgOneBykeyString(map.get("Content"));
+				if(keymsg!=null){
+					return keymsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System.currentTimeMillis()); 
+				}
 			case 1://图片消息
 			case 2://语音
 			case 3://视频
@@ -99,6 +97,15 @@ public class WxMsgServiceImpl implements IWxMsgService {
 			LOGGER.error("解析微信消息失败:", e);
 		}
 		return null;
+	}
+
+	private ReturnMsg getReMsgOneBykeyString(String key) {
+		try {
+            return msgRoMapper.getReMsgOneBysetting(key);
+        } catch (Exception e) {
+            LOGGER.error("查询单个关键字类型信息失败：{}", e);
+            throw null;
+        }
 	}
 
 	@SuppressWarnings("unchecked")

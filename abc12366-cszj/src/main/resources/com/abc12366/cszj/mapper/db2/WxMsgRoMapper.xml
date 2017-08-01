@@ -35,7 +35,12 @@
      
      <select id="getReMsgOneBysetting" resultMap="reMsgMap" parameterType="java.lang.String">
          SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
-         from cszj_remsg where setting= #{keyString}
+         from cszj_remsg where setting= #{setting}
+     </select>
+     
+     <select id="getReMsgOneBykeyString" resultMap="reMsgMap" parameterType="java.lang.String">
+         SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+         from cszj_remsg where keyString= #{keyString} limit 1
      </select>
      
      <select id="getNewsById" resultMap="newsResultMap" parameterType="java.lang.String">
