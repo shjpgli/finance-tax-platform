@@ -107,7 +107,7 @@ public class WxPersonServiceImpl implements IWxPersonService{
 	}
 
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public WxPerson synchroOne(String openid) {
 		Map<String,String> tks1=new HashMap<String, String>();

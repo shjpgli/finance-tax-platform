@@ -163,7 +163,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		return news;
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public News updateNews(News news) {
 		Timestamp now = new Timestamp(new Date().getTime());
@@ -187,7 +187,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		return msgRoMapper.getNews(news);
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public ReturnMsg insertReNews(ReturnMsg returnMsg) {
 		if(!"2".equals(returnMsg.getSetting())){
@@ -205,14 +205,14 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		return returnMsg;
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public void deleteNews(String id) {
 		msgMapper.deleteArticle(id);
 		msgMapper.deleteNews(id);
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public ReturnMsg updateReMsg(ReturnMsg returnMsg) {
 		Timestamp now = new Timestamp(new Date().getTime());
@@ -245,7 +245,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 	     return returnMsgs;
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public void deleteWxremsg(String id) {
 		ReturnMsg newmsg = selectOneWxremsg(id);

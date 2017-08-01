@@ -2,10 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cszj.mapper.db2.WxPersonRoMapper">
+     
+     <resultMap id="userMap" type="com.abc12366.cszj.model.weixin.bo.person.WxPerson">
+        <result column="openid" property="openid" jdbcType="VARCHAR"/>
+        <result column="subscribe" property="subscribe" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="language" property="language" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="country" property="country" jdbcType="VARCHAR"/>
+        <result column="headimgurl" property="headimgurl" jdbcType="VARCHAR"/>
+        <result column="subscribe_time" property="subscribe_time" jdbcType="TIMESTAMP"/>
+        <result column="groupid" property="groupid" jdbcType="VARCHAR"/>
+        <result column="unionid" property="unionid" jdbcType="VARCHAR"/>
+        <result column="lastupdate" property="lastupdate" jdbcType="TIMESTAMP"/>
+        <result column="userid" property="userid" jdbcType="VARCHAR"/>
+        <association property="user" column="userid" select="getUserById"/>
+     </resultMap>
+ 
 
      <sql id="Base_Column_List">
-         subscribe, openid, nickname, sex, language, city, province, country, headimgurl,subscribe_time,remark,groupid,unionid,lastupdate
+         subscribe, openid, nickname, sex, language, city, province, country, headimgurl,subscribe_time,remark,groupid,unionid,lastupdate,userid
      </sql>
+     
+     <select id="getUserById" resultType="com.abc12366.cszj.model.weixin.bo.person.User" parameterType="java.lang.String">
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
+        uu.vipLevel
+        from abc12366_uc.uc_user uu
+        where uu.id = #{id}
+     </select>
+     
      
      <select id="countPersonNum" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson" resultType="long">
         SELECT count(openid) FROM cszj_wxuser
@@ -16,7 +45,7 @@
      </select>
      
      
-     <select id="selectList" resultType="com.abc12366.cszj.model.weixin.bo.person.WxPerson" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson">
+     <select id="selectList" resultMap="userMap" parameterType="com.abc12366.cszj.model.weixin.bo.person.WxPerson">
         SELECT
         <include refid="Base_Column_List"/>
         FROM cszj_wxuser
@@ -38,7 +67,7 @@
         ORDER BY subscribe_time DESC
     </select>
     
-    <select id="selectOne" resultType="com.abc12366.cszj.model.weixin.bo.person.WxPerson" parameterType="java.lang.String">
+    <select id="selectOne" resultMap="userMap" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM cszj_wxuser

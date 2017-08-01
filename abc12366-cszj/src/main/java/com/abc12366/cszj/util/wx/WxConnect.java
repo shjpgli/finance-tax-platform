@@ -1,10 +1,7 @@
 package com.abc12366.cszj.util.wx;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -131,6 +128,7 @@ public class WxConnect<T> {
 	           out.write(bufferOut, 0, bytes);  
 	        }  
 	        in.close();*/
+	        
 	        byte[] buff = listToByteArray(this.file.getFileContent());
 	        out.write(buff); 
 	        // 结尾部分  

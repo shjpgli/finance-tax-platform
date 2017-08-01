@@ -31,8 +31,24 @@ public class WxPerson extends BaseWxRespon{
     
     private String[] tagid_list;
     private Date lastupdate;
+    private String userid;
+    private User user;
     
-    //查询条件
+    
+    
+    public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	//查询条件
     private Date startTime;
     private Date endTime;
     
