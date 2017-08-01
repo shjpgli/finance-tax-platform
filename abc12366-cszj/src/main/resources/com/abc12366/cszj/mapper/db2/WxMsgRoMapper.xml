@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cszj.mapper.db2.WxMsgRoMapper">
+
+     <resultMap id="newsResultMap" type="com.abc12366.cszj.model.weixin.bo.message.News">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="ArticleCount" property="articleCount" jdbcType="INTEGER"/>
+        <result column="creatDate" property="creatDate" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <collection property="articles" ofType="newsArticle" column="id" select="getArticleList"></collection>
+     </resultMap>
+     
+     <resultMap id="newsArticle" type="com.abc12366.cszj.model.weixin.bo.message.Article">
+        <result column="newsId" property="newsId" jdbcType="VARCHAR"/>
+        <result column="Title" property="title" jdbcType="VARCHAR"/>
+        <result column="Description" property="description" jdbcType="VARCHAR"/>
+        <result column="PicUrl" property="picUrl" jdbcType="VARCHAR"/>
+        <result column="Url" property="url" jdbcType="VARCHAR"/>
+     </resultMap>
+     
+     <select id="getNews" resultMap="newsResultMap" parameterType="com.abc12366.cszj.model.weixin.bo.message.News">
+         SELECT id,ArticleCount,creatDate,lastUpdate 
+         from cszj_news
+         <where>
+            1 = 1
+            <if test="id != null">and id= #{id}</if>
+        </where>
+     </select>
+     
+     
+     <select id="getArticleList" resultMap="newsArticle" parameterType="java.lang.String">
+        SELECT
+        newsId,Title,Description,PicUrl,Url
+        FROM cszj_article
+        WHERE  newsId = #{id}
+    </select>
+     
+</mapper>

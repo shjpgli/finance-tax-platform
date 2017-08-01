@@ -87,6 +87,15 @@ public class WxMenuServiceImpl implements IWxMenuService{
         try {
             LOGGER.info("查询单个微信菜单信息:{}", id);
             button = wxMenuRoMapper.selectOne(id);
+            List<Button> secbuttons=wxMenuRoMapper.seletSec(button.getId());
+            if(secbuttons!=null&&secbuttons.size()>0){
+				Button[] sec=new  Button[secbuttons.size()];
+				for(int j=0;j<secbuttons.size();j++){
+					sec[j]=secbuttons.get(j);
+				}
+				button.setSub_button(sec);
+			}
+            
         } catch (Exception e) {
             LOGGER.error("查询单个微信菜单信息异常：{}", e);
             throw new ServiceException(4234);

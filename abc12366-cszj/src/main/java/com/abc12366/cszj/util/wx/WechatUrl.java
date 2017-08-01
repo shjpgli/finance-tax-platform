@@ -17,7 +17,18 @@ public enum WechatUrl {
 	WXINDUSTRY_GET("获取设置的行业信息","/cgi-bin/template/get_industry"),
 	TEMPLATEMSG_LIST("获取模板列表","/cgi-bin/template/get_all_private_template"),
 	TEMPLATEMSG_DEL("删除模板","/cgi-bin/template/del_private_template"),
-	TEMPLATEMSG_SEND("发送模板","/cgi-bin/message/template/send");
+	TEMPLATEMSG_SEND("发送模板","/cgi-bin/message/template/send"),
+	
+	MATERIAL_COUNT("素材总数","/cgi-bin/get_materialcount"),
+	MATERIAL_LIST("素材列表","/cgi-bin/material/batchget_material"),
+	MATERIAL_ADDNEWS("添加图文素材","/cgi-bin/material/add_news"),
+	MATERIAL_ADDMATE("添加素材","/cgi-bin/material/add_material"),
+	
+	
+	;
+	
+	
+	
 	public String describe;
 
     public String uri;
