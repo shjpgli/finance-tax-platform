@@ -39,7 +39,7 @@
          where id=#{id}
        </update>
        
-       <delete id="deleteRemsg" parameterType="java.lang.String">
+       <delete id="deleteWxremsg" parameterType="java.lang.String">
           DELETE FROM cszj_remsg WHERE id = #{id}
        </delete> 
        

@@ -11,4 +11,8 @@ public interface WxMsgRoMapper {
 
 	ReturnMsg getReMsgOneBysetting(String setting);
 
+	List<ReturnMsg> selectList(ReturnMsg returnMsg);
+
+	ReturnMsg selectOneWxremsg(String id);
+
 }
