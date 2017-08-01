@@ -20,5 +20,7 @@ public interface WxMsgMapper {
 	void deleteNews(String id);
 
 	int updateRemsg(ReturnMsg returnMsg);
+
+	void deleteWxremsg(String id);
    
 }

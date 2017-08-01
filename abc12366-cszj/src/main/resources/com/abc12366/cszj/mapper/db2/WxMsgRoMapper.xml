@@ -33,6 +33,20 @@
         <association property="news" column="newsId" select="getNewsById"/>
      </resultMap>
      
+     <select id="selectList" resultMap="reMsgMap" parameterType="com.abc12366.cszj.model.weixin.bo.message.ReturnMsg">
+         SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+         from cszj_remsg
+         <where>
+            setting= #{setting}
+            <if test="keyString != null">keyString id= #{keyString}</if>
+         </where>
+     </select>
+     
+     <select id="selectOneWxremsg" resultMap="reMsgMap" parameterType="java.lang.String">
+         SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+         from cszj_remsg where id= #{id}
+     </select>
+     
      <select id="getReMsgOneBysetting" resultMap="reMsgMap" parameterType="java.lang.String">
          SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
          from cszj_remsg where setting= #{setting}
@@ -54,7 +68,7 @@
          <where>
             1 = 1
             <if test="id != null">and id= #{id}</if>
-        </where>
+         </where>
      </select>
      
      
