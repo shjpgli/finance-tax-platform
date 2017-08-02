@@ -3,12 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.message.mapper.db1.PhoneCodeMapper">
     <insert id="insert" parameterType="com.abc12366.message.model.PhoneCode">
-		insert into sys_phone_code(id, phone, code, expireDate)
-		values (#{id},#{phone},#{code},#{expireDate})
+		insert into msg_phone_code(id, phone, code, expireDate, type)
+		values (#{id},#{phone},#{code},#{expireDate},#{type})
 	</insert>
 
-    <delete id="delete" parameterType="java.lang.String">
-        delete from sys_phone_code
-        where phone=#{phone}
+    <delete id="delete" parameterType="com.abc12366.message.model.PhoneCode">
+        delete from msg_phone_code
+        where type=#{type}
+        and phone=#{phone}
     </delete>
 </mapper>

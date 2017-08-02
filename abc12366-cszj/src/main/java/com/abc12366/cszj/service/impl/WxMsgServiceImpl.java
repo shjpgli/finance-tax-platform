@@ -33,6 +33,7 @@ import com.abc12366.cszj.service.IWxMsgService;
 import com.abc12366.cszj.util.wx.MsgMap;
 import com.abc12366.cszj.util.wx.WechatUrl;
 import com.abc12366.cszj.util.wx.WxConnectFactory;
+import com.github.pagehelper.PageHelper;
 
 
 /**
@@ -75,13 +76,17 @@ public class WxMsgServiceImpl implements IWxMsgService {
 			case 5://位置	
 			case 6://链接
 				ReturnMsg remsg =getReMsgOneBysetting("1");
-				return remsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System.currentTimeMillis());
+				if(remsg!=null){
+				  return remsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System.currentTimeMillis());
+				}
 			case 7:
 				int eventCode = MsgMap.getEventType(map.get("Event"));
 				switch (eventCode) {
 				case 0://关注
 					ReturnMsg newmsg =getReMsgOneBysetting("0");
-					return newmsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System.currentTimeMillis());
+					if(newmsg!=null){
+					  return newmsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System.currentTimeMillis());
+					}
 				case 1://取消关注
 					
 				case 2:
@@ -91,7 +96,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 				case 5:
 					break;
 				}
-				break;
+				return null;
 			}
 		} catch (Exception e) {
 			LOGGER.error("解析微信消息失败:", e);
@@ -158,7 +163,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		return news;
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public News updateNews(News news) {
 		Timestamp now = new Timestamp(new Date().getTime());
@@ -182,7 +187,8 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		return msgRoMapper.getNews(news);
 	}
 
-	@Override
+
+	@Transactional("db1TxManager")
 	public ReturnMsg insertReNews(ReturnMsg returnMsg) {
 		if(!"2".equals(returnMsg.getSetting())){
 			ReturnMsg	newmsg = msgRoMapper.getReMsgOneBysetting(returnMsg.getSetting());
@@ -199,14 +205,14 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		return returnMsg;
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public void deleteNews(String id) {
 		msgMapper.deleteArticle(id);
 		msgMapper.deleteNews(id);
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public ReturnMsg updateReMsg(ReturnMsg returnMsg) {
 		Timestamp now = new Timestamp(new Date().getTime());
@@ -227,6 +233,36 @@ public class WxMsgServiceImpl implements IWxMsgService {
             newmsg = msgRoMapper.getReMsgOneBysetting(setting);
         } catch (Exception e) {
             LOGGER.error("查询单个类型自动回复信息：{}", e);
+            throw new ServiceException(4234);
+        }
+        return newmsg;
+	}
+
+	@Override
+	public List<ReturnMsg> selectkeyList(ReturnMsg returnMsg, int page, int size) {
+		 PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+	     List<ReturnMsg> returnMsgs = msgRoMapper.selectList(returnMsg);
+	     return returnMsgs;
+	}
+
+
+	@Transactional("db1TxManager")
+	public void deleteWxremsg(String id) {
+		ReturnMsg newmsg = selectOneWxremsg(id);
+        if (newmsg != null) {
+        	msgMapper.deleteWxremsg(id);
+        } else {
+            throw new ServiceException(4012);
+        }
+	}
+
+	@Override
+	public ReturnMsg selectOneWxremsg(String id) {
+		ReturnMsg newmsg = new ReturnMsg();
+        try {
+        	newmsg = msgRoMapper.selectOneWxremsg(id);
+        } catch (Exception e) {
+            LOGGER.error("查询单个自动回复信息信息异常：{}", e);
             throw new ServiceException(4234);
         }
         return newmsg;

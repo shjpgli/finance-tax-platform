@@ -21,17 +21,31 @@
      
      <resultMap id="reMsgMap" type="com.abc12366.cszj.model.weixin.bo.message.ReturnMsg">
         <result column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="setting" property="setting" jdbcType="INTEGER"/>
-        <result column="keyString" property="keyString" jdbcType="TIMESTAMP"/>
-        <result column="msgType" property="msgType" jdbcType="TIMESTAMP"/>
-        <result column="content" property="content" jdbcType="TIMESTAMP"/>
-        <result column="mediaId" property="mediaId" jdbcType="TIMESTAMP"/>
-        <result column="imgurl" property="imgurl" jdbcType="TIMESTAMP"/>
-        <result column="newsId" property="newsId" jdbcType="TIMESTAMP"/>
+        <result column="setting" property="setting" jdbcType="VARCHAR"/>
+        <result column="keyString" property="keyString" jdbcType="VARCHAR"/>
+        <result column="msgType" property="msgType" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="mediaId" property="mediaId" jdbcType="VARCHAR"/>
+        <result column="imgurl" property="imgurl" jdbcType="VARCHAR"/>
+        <result column="newsId" property="newsId" jdbcType="VARCHAR"/>
         <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <association property="news" column="newsId" select="getNewsById"/>
      </resultMap>
+     
+     <select id="selectList" resultMap="reMsgMap" parameterType="com.abc12366.cszj.model.weixin.bo.message.ReturnMsg">
+         SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+         from cszj_remsg
+         <where>
+            setting= #{setting}
+            <if test="keyString != null">keyString id= #{keyString}</if>
+         </where>
+     </select>
+     
+     <select id="selectOneWxremsg" resultMap="reMsgMap" parameterType="java.lang.String">
+         SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+         from cszj_remsg where id= #{id}
+     </select>
      
      <select id="getReMsgOneBysetting" resultMap="reMsgMap" parameterType="java.lang.String">
          SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
@@ -54,7 +68,7 @@
          <where>
             1 = 1
             <if test="id != null">and id= #{id}</if>
-        </where>
+         </where>
      </select>
      
      

@@ -15,7 +15,7 @@
         <where>
             <if test="name != null">name like CONCAT('%',#{name},'%')</if>
         </where>
-        ORDER BY sort DESC
+        ORDER BY sort ASC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.cszj.model.bo.AdPageBO" parameterType="java.lang.String">
@@ -33,6 +33,6 @@
             status  is true
             <if test="name != null"> and name like CONCAT('%',#{name},'%')</if>
         </where>
-        ORDER BY lastUpdate DESC
+        ORDER BY sort ASC
     </select>
 </mapper>

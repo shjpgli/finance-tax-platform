@@ -39,6 +39,12 @@ public interface IWxMsgService {
 	ReturnMsg updateReMsg(ReturnMsg returnMsg);
 
 	ReturnMsg getReMsgOneBysetting(String setting);
+
+	List<ReturnMsg> selectkeyList(ReturnMsg returnMsg, int page, int size);
+
+	void deleteWxremsg(String id);
+
+	ReturnMsg selectOneWxremsg(String id);
 	
 	
 	

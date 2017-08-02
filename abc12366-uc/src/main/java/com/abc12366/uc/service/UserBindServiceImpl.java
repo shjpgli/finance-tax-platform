@@ -15,6 +15,7 @@ import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.MD5;
+import com.abc12366.uc.wsbssoa.utils.RSAUtil;
 import com.abc12366.uc.wsbssoa.utils.soaUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -26,11 +27,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.interfaces.RSAPublicKey;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -52,8 +53,8 @@ public class UserBindServiceImpl implements UserBindService {
 
     private static Properties properties = new Properties("application.properties");
 
-//    @Autowired
-//    private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Autowired
     private MainService mainService;
@@ -103,23 +104,28 @@ public class UserBindServiceImpl implements UserBindService {
             Timestamp timestamp = new Timestamp(new Date().getTime());
             requestBody.put("timestamp", Long.toString(timestamp.getTime()));
             requestBody.put("roleId", userHngsInsertBO.getRole());
+            String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
             String pw = Utils.md5(userHngsInsertBO.getPassword());
+
             try {
-                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
+                RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
+                pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes("iso-8859-1")), "iso-8859-1");
+                nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")), "iso-8859-1");
+//                nsrsbh = mainService.RSAEncrypt(request, new MD5(nsrsbh + timestamp.getTime()).compute());
+//                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
             } catch (Exception e) {
                 String msg = "获取公钥并加密时异常。";
                 LOGGER.error(msg, e);
                 throw new ServiceException(4192);
             }
             requestBody.put("djm", pw);
-
+            requestBody.put("nsrsbh", nsrsbh);
             //生成伪密码
             Random rd = new Random();
             int randomInt = rd.nextInt(10000);
             requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
 
             HttpEntity requestEntity = new HttpEntity(requestBody, headers);
-            RestTemplate restTemplate = new RestTemplate();
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
             if (soaUtil.isExchangeSuccessful(responseEntity)) {
                 return JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
@@ -175,6 +181,9 @@ public class UserBindServiceImpl implements UserBindService {
 
         //访问网上报税系统
         HngsNsrLoginResponse hngsNsrLoginResponse = loginWsbsHngs(userHngsInsertBO, request);
+        if (hngsNsrLoginResponse == null || !hngsNsrLoginResponse.isSuccess()) {
+            throw new ServiceException(4840);
+        }
 
         UserHngs userHngs = new UserHngs();
         userHngs.setDjxh(hngsNsrLoginResponse.getDjxh());

@@ -103,7 +103,7 @@ public class WxMenuServiceImpl implements IWxMenuService{
         return button;
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public Button insert(Button button) {
 		Timestamp now = new Timestamp(new Date().getTime());
@@ -115,7 +115,7 @@ public class WxMenuServiceImpl implements IWxMenuService{
         return button;
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public Button update(Button button) {
 		Timestamp now = new Timestamp(new Date().getTime());
@@ -130,7 +130,7 @@ public class WxMenuServiceImpl implements IWxMenuService{
         return wxMenuRoMapper.selectOne(button.getId());
 	}
 
-	@Override
+
 	@Transactional("db1TxManager")
 	public void delete(String id) {
 		Button v = selectOne(id);
