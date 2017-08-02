@@ -10,7 +10,7 @@
 
     <insert id="insert" parameterType="com.abc12366.cszj.model.bo.AdPageBO">
         INSERT INTO cszj_adpage(<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{name}, #{url}, #{link}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate}),#{startTime}),#{endTime})
+        VALUES (#{id}, #{name}, #{url}, #{link}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate},#{startTime},#{endTime})
     </insert>
 
     <update id="update" parameterType="com.abc12366.cszj.model.bo.AdPageBO">
