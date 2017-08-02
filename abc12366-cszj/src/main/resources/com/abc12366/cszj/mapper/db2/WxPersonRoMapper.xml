@@ -51,7 +51,7 @@
         FROM cszj_wxuser
         <where>
             1 = 1
-            <if test="nickname != null">and name like CONCAT('%',#{nickname},'%')</if>
+            <if test="nickname != null">and nickname like CONCAT('%',#{nickname},'%')</if>
             <if test="sex != null">and sex=#{sex}</if>
             <if test="province != null">and province=#{province}</if>
             <if test="city != null">and city=#{city}</if>

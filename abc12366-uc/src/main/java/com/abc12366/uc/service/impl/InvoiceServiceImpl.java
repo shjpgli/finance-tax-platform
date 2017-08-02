@@ -387,8 +387,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional("db1TxManager")
     @Override
-    public InvoiceBO billing(InvoiceBO invoiceBO, Boolean isBilling) {
-        if(isBilling){
+    public InvoiceBO billing(InvoiceBO invoiceBO) {
+        if(invoiceBO.getIsBilling()){
             InvoiceDetail detail = invoiceBO.getInvoiceDetail();
             if(detail == null){
                 LOGGER.info("发票详情信息不能为空：{}", detail);

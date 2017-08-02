@@ -2,6 +2,7 @@ package com.abc12366.gateway.web;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.mapper.util.DataUtils;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.github.pagehelper.Page;
@@ -91,27 +92,33 @@ public class AppController {
         if(name!=null&&StringUtils.isEmpty(name)){
         	name=null;
         }
-        Date start=null;
-        if(startTime!=null){
-        	try {
-				start=new SimpleDateFormat("yyyy-MM-dd").parse(startTime);
-			} catch (ParseException e) {
-				start=null;
-			}
-        }
-        Date end=null;
-        if(endTime!=null){
-        	try {
-				end=new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
-			} catch (ParseException e) {
-				end=null;
-			}
-        }
+//        Date start=null;
+//        if(startTime!=null){
+//        	try {
+//				start=new SimpleDateFormat("yyyy-MM-dd").parse(startTime);
+//			} catch (ParseException e) {
+//				start=null;
+//			}
+//        }
+//        Date end=null;
+//        if(endTime!=null){
+//        	try {
+//				end=new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
+//			} catch (ParseException e) {
+//				end=null;
+//			}
+//        }
         AppBO appBO=new AppBO();
         appBO.setName(name);
+        if(startTime != null && !"".equals(startTime)){
+            appBO.setStartTime(DataUtils.StrToDate(startTime));
+        }
+        if(endTime != null && !"".equals(endTime)){
+            appBO.setEndTime(DataUtils.StrToDate(endTime));
+        }
         appBO.setAccessToken(accessToken);
-        appBO.setStartTime(start);
-        appBO.setEndTime(end);
+//        appBO.setStartTime(start);
+//        appBO.setEndTime(end);
         appBO.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<AppBO> appList = appService.selectList(appBO);

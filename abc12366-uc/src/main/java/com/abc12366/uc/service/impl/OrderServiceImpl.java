@@ -45,6 +45,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderProductMapper orderProductMapper;
 
     @Autowired
+    private OrderProductRoMapper orderProductRoMapper;
+
+    @Autowired
     private OrderBackMapper orderBackMap;
 
     @Autowired
@@ -197,7 +200,7 @@ public class OrderServiceImpl implements OrderService {
                 BeanUtils.copyProperties(orderProductBO,orderProduct);
                 int opInsert = orderProductMapper.insert(orderProduct);
                 if (opInsert != 1){
-                    LOGGER.info("提交订单与产品关系信息失败：{}", orderBO);
+                    LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
                     throw new ServiceException(4167);
                 }
                 //减去Product库存数量
@@ -355,7 +358,7 @@ public class OrderServiceImpl implements OrderService {
         orderBack.setCreateTime(date);
         orderBack.setLastUpdate(date);
         orderBackMap.insert(orderBack);
-        insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(), "用户申请退单");
+        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), new Date(), "用户申请退单");
         return orderBack;
     }
 
@@ -367,16 +370,68 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("修改失败：{}", orderBack);
             throw new ServiceException(4102);
         }
+        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), new Date(), "用户填写快递号");
         return orderBack;
     }
 
     @Override
     public OrderBack backCheckOrder(OrderBack orderBack) {
-        orderBack.setLastUpdate(new Date());
+        Date date = new Date();
+        orderBack.setLastUpdate(date);
         int upd = orderBackMap.update(orderBack);
         if(upd != 1){
             LOGGER.info("修改失败：{}", orderBack);
             throw new ServiceException(4102);
+        }
+        //0：允许，1：不允许，
+        if("0".equals(orderBack.getStatus())){
+            //修改订单状态，6：退款
+            Order order = new Order();
+            String orderNo = orderBack.getOrderNo();
+            order.setOrderNo(orderNo);
+            order.setOrderStatus("6");
+            orderMapper.update(order);
+            insertOrderLog(orderBack.getUserId(), orderNo, new Date(), "管理员允许退单");
+
+            //获取订单和产品关系信息
+            OrderProductBO pBO = new OrderProductBO();
+            pBO.setOrderId(orderBack.getOrderNo());
+            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+            for (OrderProductBO orderProductBO : orderProductBOs){
+                orderProductBO.setOrderId(orderNo);
+                OrderProduct orderProduct = new OrderProduct();
+                BeanUtils.copyProperties(orderProductBO,orderProduct);
+                int opInsert = orderProductMapper.insert(orderProduct);
+                if (opInsert != 1){
+                    LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
+                    throw new ServiceException(4167);
+                }
+                //增加Product库存数量
+                ProductBO productBO = orderProductBO.getProductBO();
+                int stock = productBO.getStock() + orderProduct.getNum();
+                productBO.setStock(stock);
+                Product product = new Product();
+                BeanUtils.copyProperties(productBO,product);
+                productMapper.update(product);
+                //库存表数据处理
+                ProductRepo repo = new ProductRepo();
+                repo.setId(Utils.uuid());
+                repo.setGoodsId(productBO.getGoodsId());
+                repo.setProductId(productBO.getId());
+                repo.setIncome(orderProduct.getNum());
+                repo.setStock(stock);
+                repo.setCreateTime(date);
+                repo.setLastUpdate(date);
+                productRepoMapper.insert(repo);
+            }
+
+        }else if("1".equals(orderBack.getStatus())){
+            //TODO 需要确定状态
+            Order order = new Order();
+            order.setOrderNo(orderBack.getOrderNo());
+            order.setOrderStatus("6");
+            orderMapper.update(order);
+            insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), new Date(), "管理员不允许退单");
         }
         return orderBack;
     }
@@ -385,6 +440,5 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO) {
         return orderBackRoMap.selectOrderBackList(orderBackBO);
     }
-
 
 }

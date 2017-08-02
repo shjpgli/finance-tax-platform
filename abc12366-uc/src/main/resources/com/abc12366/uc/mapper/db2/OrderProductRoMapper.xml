@@ -7,6 +7,31 @@
 		 orderId,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
 	</sql>
 
+    <resultMap type="com.abc12366.uc.model.bo.OrderProductBO" id="orderProductRoMap">
+        <id column="orderId" property="orderId" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="VARCHAR"/>
+        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="discount" property="discount" jdbcType="DOUBLE"/>
+        <result column="dealPrice" property="dealPrice" jdbcType="DOUBLE"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO">
+            <id column="id" property="id" jdbcType="VARCHAR"/>
+            <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+            <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
+            <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+            <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+            <result column="stock" property="stock" jdbcType="INTEGER"/>
+        </association>
+    </resultMap>
     <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.OrderProduct" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
@@ -21,4 +46,12 @@
         WHERE productId = #{productId}
     </select>
 
+    <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.bo.OrderProductBO">
+        SELECT
+        op.orderId,	op.productId,	op.sellingPrice,	op.unitPrice,	op.num,	op.discount,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,
+        p.id,	p.goodsId,	p.marketPrice,	p.sellingPrice,	p.costPrice,	p.createTime,	p.lastUpdate,p.stock
+        FROM uc_order_product op
+        LEFT JOIN uc_product p ON p.id = op.productId
+        WHERE op.orderNo = #{orderNo}
+    </select>
 </mapper>

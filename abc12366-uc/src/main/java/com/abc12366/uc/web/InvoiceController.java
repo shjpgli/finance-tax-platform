@@ -61,6 +61,7 @@ public class InvoiceController {
                                      @RequestParam(value ="userOrderNo", required = false) String userOrderNo,
                                      @RequestParam(value ="username", required = false) String username,
                                      @RequestParam(value ="invoiceNo", required = false) String invoiceNo,
+                                     @RequestParam(value ="property", required = false) String property,
                                      @RequestParam(value ="startTime", required = false) String startTime,
                                      @RequestParam(value ="endTime", required = false) String endTime){
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -69,7 +70,7 @@ public class InvoiceController {
         invoice.setUserOrderNo(userOrderNo);
         invoice.setUsername(username);
         invoice.setInvoiceNo(invoiceNo);
-
+        invoice.setProperty(property);
         if(startTime != null && !"".equals(startTime)){
             invoice.setStartTime(DataUtils.StrToDate(startTime));
         }
@@ -160,9 +161,8 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/billing")
-    public ResponseEntity billing(@Valid @RequestBody InvoiceBO invoiceBO,
-                                  @RequestParam(value ="isBilling", required = true) Boolean isBilling) {
-        InvoiceBO bo = invoiceService.billing(invoiceBO,isBilling);
+    public ResponseEntity billing(@Valid @RequestBody InvoiceBO invoiceBO) {
+        InvoiceBO bo = invoiceService.billing(invoiceBO);
         LOGGER.info("{}", bo);
         return  ResponseEntity.ok(Utils.kv("data", bo));
     }

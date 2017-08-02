@@ -60,6 +60,9 @@ public class InvoiceBO implements Serializable {
 
     private InvoiceLog invoiceLog;
 
+    /**是否同意开票**/
+    private Boolean isBilling;
+
     public void setId(String id) {
         this.id = id;
     }
@@ -362,5 +365,13 @@ public class InvoiceBO implements Serializable {
 
     public void setInvoiceLog(InvoiceLog invoiceLog) {
         this.invoiceLog = invoiceLog;
+    }
+
+    public Boolean getIsBilling() {
+        return isBilling;
+    }
+
+    public void setIsBilling(Boolean isBilling) {
+        this.isBilling = isBilling;
     }
 }
