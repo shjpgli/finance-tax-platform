@@ -28,4 +28,9 @@
         from uc_uvip_level
         where level = #{level}
     </select>
+    <select id="selectByLevelCode" resultType="com.abc12366.uc.model.bo.VipLevelBO" parameterType="java.lang.String">
+        SELECT id,level,factor,status,lastUpdate,createTime,levelCode
+        from uc_uvip_level
+        where levelCode = #{levelCode}
+    </select>
 </mapper>

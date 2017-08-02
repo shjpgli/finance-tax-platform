@@ -94,7 +94,6 @@ public class AuthServiceImpl implements AuthService {
         BeanUtils.copyProperties(registerBO, user);
 
         user.setId(Utils.uuid());
-        user.setUsername("UC" + RandomNumber.getRandomNumber(8));
         user.setSalt(salt);
         user.setPassword(encodePassword);
         user.setPoints(0);

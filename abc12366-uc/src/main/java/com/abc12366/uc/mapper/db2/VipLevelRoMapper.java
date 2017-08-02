@@ -17,4 +17,6 @@ public interface VipLevelRoMapper {
     VipLevelBO selectOne(String id);
 
     VipLevelBO selectByLevel(String level);
+
+    VipLevelBO selectByLevelCode(String levelCode);
 }

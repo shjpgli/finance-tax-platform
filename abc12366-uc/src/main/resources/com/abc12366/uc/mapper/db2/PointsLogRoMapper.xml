@@ -16,4 +16,20 @@
         ORDER BY createTime DESC
     </select>
 
+    <select id="selectListByUser" resultType="com.abc12366.uc.model.bo.PointsLogUcBO" parameterType="java.util.Map">
+        SELECT  uul.id id,
+        (SELECT uur.name FROM uc_upoints_rule uur WHERE uur.id = uul.ruleId) channel,
+        (SELECT uur.points FROM uc_upoints_rule uur WHERE uur.id = uul.ruleId) points,
+        (SELECT SUM(uu.income)-SUM(uu.outgo) sums FROM uc_upoints_log uu WHERE uu.userId=uul.userId) sums,
+        uul.createTime createTime,
+        (SELECT uur.description FROM uc_upoints_rule uur WHERE uur.id = uul.ruleId) remark
+        FROM uc_upoints_log uul
+        <where>
+            and uul.userId=#{userId}
+            <if test="start!=null">and uul.createTime &gt;= #{start}</if>
+            <if test="end!=null">and uul.createTime &lt; #{end}</if>
+        </where>
+        ORDER BY uul.createTime DESC
+    </select>
+
 </mapper>

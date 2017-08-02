@@ -155,4 +155,9 @@ public class VipLevelServiceImpl implements VipLevelService {
             throw new ServiceException(4618);
         }
     }
+
+    @Override
+    public VipLevelBO selectByLevelCode(String levelCode) {
+        return vipLevelRoMapper.selectByLevelCode(levelCode);
+    }
 }

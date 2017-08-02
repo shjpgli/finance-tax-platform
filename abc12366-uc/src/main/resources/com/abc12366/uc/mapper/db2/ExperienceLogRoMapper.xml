@@ -30,5 +30,21 @@
         where uul.ruleId = uur.id
         ORDER BY createTime DESC
     </select>
+    <select id="selectListByUser" resultType="com.abc12366.uc.model.bo.ExpLogUcBO" parameterType="java.util.Map">
+        SELECT  uul.id id,
+        (SELECT uur.name FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId) channel,
+        (SELECT uur.exp FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId) EXP,
+        (SELECT SUM(uu.income)-SUM(uu.outgo) sums FROM uc_uexp_log uu WHERE uu.userId=uul.userId) sums,
+        uul.createTime createTime,
+        (SELECT uur.description FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId) remark
+        FROM uc_uexp_log uul
+        <where>
+            and uul.userId=#{userId}
+            <if test="start!=null">and uul.createTime &gt;= #{start}</if>
+            <if test="end!=null">and uul.createTime &lt; #{end}</if>
+        </where>
+        ORDER BY uul.createTime DESC
+    </select>
+
 
 </mapper>

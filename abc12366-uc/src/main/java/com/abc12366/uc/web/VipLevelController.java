@@ -92,6 +92,13 @@ public class VipLevelController {
         vipLevelService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    @GetMapping(path = "/bo/{levelCode}")
+    public ResponseEntity selectByLevelCode(@PathVariable String levelCode) {
+        LOGGER.info("{}", levelCode);
+        VipLevelBO vipLevelBO = vipLevelService.selectByLevelCode(levelCode);
+        return ResponseEntity.ok(Utils.kv("data", vipLevelBO));
+    }
 }
 
 

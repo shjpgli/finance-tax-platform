@@ -9,6 +9,7 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.PointsLog;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointsLogBO;
+import com.abc12366.uc.model.bo.PointsLogUcBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -21,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-07-25
+ * Time: 16:22
  */
 @Service
 public class PointsLogServiceImpl implements PointsLogService{
@@ -43,8 +44,7 @@ public class PointsLogServiceImpl implements PointsLogService{
 
     @Override
     public List<PointsLogBO> selectList(Map map) {
-        List<PointsLogBO> pointsLogBOList = pointsLogRoMapper.selectList(map);
-        return pointsLogBOList;
+        return pointsLogRoMapper.selectList(map);
     }
 
     @Transactional("db1TxManager")
@@ -83,5 +83,10 @@ public class PointsLogServiceImpl implements PointsLogService{
         PointsLogBO pointsLogBOReturn = new PointsLogBO();
         BeanUtils.copyProperties(pointsLog, pointsLogBOReturn);
         return pointsLogBOReturn;
+    }
+
+    @Override
+    public List<PointsLogUcBO> selectListByUser(Map<String, Object> map) {
+        return pointsLogRoMapper.selectListByUser(map);
     }
 }
