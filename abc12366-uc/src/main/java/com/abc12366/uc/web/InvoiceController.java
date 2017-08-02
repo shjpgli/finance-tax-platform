@@ -134,7 +134,7 @@ public class InvoiceController {
      * @return
      */
     @GetMapping(path = "/{invoiceId}")
-    public ResponseEntity addInvoice(@PathVariable("invoiceId") String invoiceId) {
+    public ResponseEntity selectInvoice(@PathVariable("invoiceId") String invoiceId) {
         LOGGER.info("{}", invoiceId);
         InvoiceBO bo = invoiceService.selectOne(invoiceId);
         LOGGER.info("{}", bo);

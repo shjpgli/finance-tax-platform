@@ -78,6 +78,8 @@ public class Order implements Serializable {
     /**是否已开发票，true：是，false：否**/
     private Boolean isInvoice;
 
+    private String cancelId;
+
     public void setId(String id){
         this.id = id;
     }
@@ -252,5 +254,13 @@ public class Order implements Serializable {
 
     public void setIsInvoice(Boolean isInvoice) {
         this.isInvoice = isInvoice;
+    }
+
+    public String getCancelId() {
+        return cancelId;
+    }
+
+    public void setCancelId(String cancelId) {
+        this.cancelId = cancelId;
     }
 }

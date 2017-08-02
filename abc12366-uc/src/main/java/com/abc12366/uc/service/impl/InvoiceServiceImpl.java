@@ -159,22 +159,25 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         String invoiceId = Utils.uuid();
         invoiceBO.setId(invoiceId);
-        //获取发票编号，0，表示未使用
-//        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
-//        if (invoiceDetail == null) {
-//            LOGGER.info("发票号码获取失败}", invoiceDetail);
-//            throw new ServiceException(4124);
-//        }else {
-//            //将发票置为分配中，值为1
-//            invoiceDetail.setStatus("1");
-//            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
-//            if(dUpdate != 1){
-//                LOGGER.info("发票状态修改失败}", invoiceDetail);
-//                throw new ServiceException(4178);
-//            }
-//        }
-//        invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
-//        invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
+        //电子发票直接把发票信息插入
+        if(invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())){
+            //获取发票编号，0，表示未使用
+            InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
+            if (invoiceDetail == null) {
+                LOGGER.info("发票号码获取失败}", invoiceDetail);
+                throw new ServiceException(4124);
+            }else {
+                //将发票置为已使用值为2
+                invoiceDetail.setStatus("2");
+                int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+                if(dUpdate != 1){
+                    LOGGER.info("发票状态修改失败}", invoiceDetail);
+                    throw new ServiceException(4178);
+                }
+            }
+            invoiceBO.setInvoiceNo(invoiceDetail.getInvoiceNo());
+            invoiceBO.setInvoiceCode(invoiceDetail.getInvoiceCode());
+        }
         Date date = new Date();
         invoiceBO.setCreateTime(date);
         invoiceBO.setLastUpdate(date);
@@ -410,7 +413,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ServiceException(4102);
         }
         //加入发票日志
-        insertInvoiceLog(invoiceBO.getId(),invoiceBO.getInvoiceLog().getCreateUser(),invoiceBO.getInvoiceDetail().getRemark());
+        insertInvoiceLog(invoiceBO.getId(), invoiceBO.getInvoiceLog().getCreateUser(), invoiceBO.getInvoiceDetail().getRemark());
         return invoiceBO;
     }
 }

@@ -190,7 +190,7 @@
             </if>
         </where>
 
-        order by i.property desc,i.status ASC , i.lastUpdate desc
+        order by i.status ASC
 
     </select>
 
