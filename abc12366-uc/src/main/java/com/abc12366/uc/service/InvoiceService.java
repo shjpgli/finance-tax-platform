@@ -43,5 +43,5 @@ public interface InvoiceService {
 
     InvoiceBO selectUserInvoice(Invoice invoice);
 
-    InvoiceBO billing(InvoiceBO invoiceBO, Boolean isBilling);
+    InvoiceBO billing(InvoiceBO invoiceBO);
 }

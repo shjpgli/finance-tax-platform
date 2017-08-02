@@ -1,5 +1,6 @@
 package com.abc12366.gateway.mapper.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,4 +28,20 @@ public class DataUtils {
         return format.format(time);
     }
 
+    /**
+     * 字符串转换成日期
+     * @param str
+     * @return date
+     */
+    public static Date StrToDate(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 }

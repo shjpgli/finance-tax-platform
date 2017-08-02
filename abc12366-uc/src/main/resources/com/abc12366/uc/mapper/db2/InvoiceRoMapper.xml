@@ -171,6 +171,9 @@
             <if test=" status != null and status != '' ">
                 and i.status = #{status}
             </if>
+            <if test=" property != null and property != '' ">
+                and i.property = #{property}
+            </if>
             <if test=" userId != null and userId != '' ">
                 and i.userId = #{userId}
             </if>
@@ -187,7 +190,7 @@
             </if>
         </where>
 
-        order by i.lastUpdate desc
+        order by i.property desc,i.status desc, i.lastUpdate desc
 
     </select>
 
