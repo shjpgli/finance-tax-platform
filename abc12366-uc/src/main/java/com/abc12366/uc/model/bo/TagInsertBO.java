@@ -26,8 +26,19 @@ public class TagInsertBO {
     private String rule;
     @Max(9999)
     private Integer weight;
+    @NotEmpty
+    @Size(max = 20)
+    private String type;
 
     public TagInsertBO() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Integer getWeight() {

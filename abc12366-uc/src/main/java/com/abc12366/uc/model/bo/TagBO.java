@@ -18,9 +18,18 @@ public class TagBO {
     private String rule;
     private String tagedCount;
     private int weight;
+    private String type;
 
     public int getWeight() {
         return weight;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setWeight(int weight) {
