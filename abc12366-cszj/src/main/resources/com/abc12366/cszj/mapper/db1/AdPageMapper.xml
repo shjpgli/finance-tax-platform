@@ -5,12 +5,12 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id, name, url, link, sort, showName, status, createTime, lastUpdate
+		id, name, url, link, sort, showName, status, createTime, lastUpdate,startTime,endTime
 	</sql>
 
     <insert id="insert" parameterType="com.abc12366.cszj.model.bo.AdPageBO">
         INSERT INTO cszj_adpage(<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{name}, #{url}, #{link}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate})
+        VALUES (#{id}, #{name}, #{url}, #{link}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate}),#{startTime}),#{endTime})
     </insert>
 
     <update id="update" parameterType="com.abc12366.cszj.model.bo.AdPageBO">
@@ -23,7 +23,9 @@
             <if test="status != null">status = #{status},</if>
             <if test="showName != null">showName = #{showName},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
-            <if test="createTime != null">createTime = #{createTime}</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
+            <if test="startTime != null">startTime = #{startTime},</if>
+            <if test="endTime != null">endTime = #{endTime}</if>
         </set>
         WHERE id = #{id}
     </update>
