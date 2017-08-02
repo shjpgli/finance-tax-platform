@@ -410,7 +410,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ServiceException(4102);
         }
         //加入发票日志
-        insertInvoiceLog(invoiceBO.getId(),invoiceBO.getUserId(),invoiceBO.getInvoiceLog().getRemark());
+        insertInvoiceLog(invoiceBO.getId(),invoiceBO.getInvoiceLog().getCreateUser(),invoiceBO.getInvoiceDetail().getRemark());
         return invoiceBO;
     }
 }
