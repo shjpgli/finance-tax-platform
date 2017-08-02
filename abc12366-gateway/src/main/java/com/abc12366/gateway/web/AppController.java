@@ -38,6 +38,12 @@ public class AppController {
     @Autowired
     private AppService appService;
 
+    /**
+     * APP注册
+     * @param appBO
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
@@ -46,19 +52,37 @@ public class AppController {
         return ResponseEntity.ok(Utils.kv("data", app));
     }
 
+    /**
+     * APP登录
+     * @param appBO
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody AppBO appBO) throws Exception {
         LOGGER.info("{}", appBO);
         String token = appService.login(appBO);
         return token != null ? ResponseEntity.ok(
-                Utils.kv(Constant.APP_TOKEN_HEAD, token, "expires_in", Constant.APP_TOKEN_VALID_SECONDS))
-                : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+                Utils.kv("token", token, "expires_in", Constant.APP_TOKEN_VALID_SECONDS))
+                : new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * APP列表查询
+     * @param pageNum
+     * @param pageSize
+     * @param name
+     * @param accessToken
+     * @param startTime
+     * @param endTime
+     * @param status
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(required = false,value = "name") String name,
+                                     @RequestParam(required = false,value = "accessToken") String accessToken,
                                      @RequestParam(required = false,value = "startTime") String startTime,
                                      @RequestParam(required = false,value = "endTime") String endTime,
                                      @RequestParam(required = false,value = "status") Boolean status
@@ -85,6 +109,7 @@ public class AppController {
         }
         AppBO appBO=new AppBO();
         appBO.setName(name);
+        appBO.setAccessToken(accessToken);
         appBO.setStartTime(start);
         appBO.setEndTime(end);
         appBO.setStatus(status);
@@ -92,20 +117,31 @@ public class AppController {
         List<AppBO> appList = appService.selectList(appBO);
         LOGGER.info("{}", appList);
         return (appList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) appList, "total", ((Page) appList).getTotal()));
     }
 
+    /**
+     * APP详情查询
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/{id}")
-    public ResponseEntity selectOne(@PathVariable String id) {
+    public ResponseEntity selectById(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         AppBO app = appService.selectById(id);
         LOGGER.info("{}", app);
         return ResponseEntity.ok(Utils.kv("data", app));
     }
 
+    /**
+     * APP修改
+     * @param appUpdateBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody AppBO appUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@RequestBody AppBO appUpdateBO, @PathVariable("id") String id) {
         LOGGER.info("{}", appUpdateBO);
         appUpdateBO.setId(id);
         AppBO app = appService.update(appUpdateBO);

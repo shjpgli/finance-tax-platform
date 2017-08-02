@@ -68,6 +68,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private UserAddressRoMapper userAddressRoMapper;
 
+    @Autowired
+    private InvoiceLogRoMapper invoiceLogRoMapper;
+
+    @Autowired
+    private InvoiceLogMapper invoiceLogMapper;
+
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
         return invoiceRoMapper.selectList(invoice);
@@ -142,7 +148,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     /**
-     * 提交订单
+     * 索要发票
      *
      * @param invoiceBO
      * @return
@@ -150,31 +156,37 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional("db1TxManager")
     @Override
     public InvoiceBO addInvoice(InvoiceBO invoiceBO) {
-        Invoice invoice = new Invoice();
-        BeanUtils.copyProperties(invoiceBO, invoice);
-        invoice.setId(Utils.uuid());
+
+        String invoiceId = Utils.uuid();
+        invoiceBO.setId(invoiceId);
         //获取发票编号，0，表示未使用
 //        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
 //        if (invoiceDetail == null) {
-//            LOGGER.info("{发票号码获取失败}", invoiceDetail);
+//            LOGGER.info("发票号码获取失败}", invoiceDetail);
 //            throw new ServiceException(4124);
 //        }else {
 //            //将发票置为分配中，值为1
 //            invoiceDetail.setStatus("1");
 //            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
 //            if(dUpdate != 1){
-//                LOGGER.info("{发票状态修改失败}", invoiceDetail);
+//                LOGGER.info("发票状态修改失败}", invoiceDetail);
 //                throw new ServiceException(4178);
 //            }
 //        }
 //        invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
 //        invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
         Date date = new Date();
-        invoice.setCreateTime(date);
-        invoice.setLastUpdate(date);
-        invoice.setUserOrderNo(DataUtils.getUserOrderString());
-        invoiceMapper.insert(invoice);
+        invoiceBO.setCreateTime(date);
+        invoiceBO.setLastUpdate(date);
+        invoiceBO.setUserOrderNo(DataUtils.getUserOrderString());
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(invoiceBO, invoice);
+        int ins = invoiceMapper.insert(invoice);
 
+        if (ins != 1) {
+            LOGGER.info("新增失败：{}", invoice);
+            throw new ServiceException(4101);
+        }
         String id = invoice.getId();
         String[] orderNos = invoiceBO.getOrderNos().split(",");
         OrderInvoice orderInvoice = new OrderInvoice();
@@ -185,11 +197,40 @@ public class InvoiceServiceImpl implements InvoiceService {
             orderInvoice.setOrderNo(orderNo);
             orderInvoice.setCreateTime(date);
             orderInvoice.setLastUpdate(date);
-            orderInvoiceMapper.insert(orderInvoice);
+            int oInsert = orderInvoiceMapper.insert(orderInvoice);
+            if(oInsert != 1){
+                LOGGER.info("新增失败：{}", invoice);
+                throw new ServiceException(4101);
+            }
+            //修改订单是否已开发票状态
+            Order order = new Order();
+            order.setIsInvoice(true);
+            order.setUserId(invoiceBO.getUserId());
+            order.setOrderNo(orderNo);
+            int oUpd = orderMapper.update(order);
+            if(oUpd != 1){
+                LOGGER.info("修改失败：{}", order);
+                throw new ServiceException(4102);
+            }
         }
-        InvoiceBO temp = new InvoiceBO();
-        BeanUtils.copyProperties(invoice, temp);
-        return temp;
+        insertInvoiceLog(invoiceId,invoiceBO.getUserId(),"索要发票");
+
+        return invoiceBO;
+    }
+
+    private void insertInvoiceLog(String invoiceId,String userId,String opertion) {
+        //加入发票操作日志
+        InvoiceLog invoiceLog = new InvoiceLog();
+        invoiceLog.setId(Utils.uuid());
+        invoiceLog.setCreateTime(new Date());
+        invoiceLog.setAction(opertion);
+        invoiceLog.setInvoiceId(invoiceId);
+        invoiceLog.setCreateUser(userId);
+        int logInsert = invoiceLogMapper.insert(invoiceLog);
+        if (logInsert != 1){
+            LOGGER.info("新增发票操作日志失败：{}", invoiceLog);
+            throw new ServiceException(4185);
+        }
     }
 
     @Transactional("db1TxManager")
@@ -207,7 +248,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 //获取联系人
                 UserAddress userAddress = userAddressRoMapper.selectByPrimaryKey(invoice.getAddressId());
                 if (userAddress == null) {
-                    LOGGER.info("{地址信息获取失败}", express);
+                    LOGGER.info("地址信息获取失败：{}", express);
                     throw new ServiceException(4143);
                 }
                 StringBuffer address = new StringBuffer();
@@ -225,7 +266,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
                     int insertExpress = expressMapper.insert(express);
                     if (insertExpress != 1) {
-                        LOGGER.info("{生成订单表数据失败}", express);
+                        LOGGER.info("生成订单表数据失败：{}", express);
                         throw new ServiceException(4142);
                     }
                     excel.setUserOrderNo(userOrderNo);
@@ -261,20 +302,22 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional("db1TxManager")
     @Override
     public InvoiceBackBO refund(InvoiceBackBO invoiceBackBO) {
-        InvoiceBack invoiceBack = new InvoiceBack();
-        BeanUtils.copyProperties(invoiceBackBO,invoiceBack);
-        invoiceBack.setId(Utils.uuid());
+        invoiceBackBO.setId(Utils.uuid());
         Date date = new Date();
-        invoiceBack.setCreateTime(date);
-        invoiceBack.setLastUpdate(date);
+        invoiceBackBO.setCreateTime(date);
+        invoiceBackBO.setLastUpdate(date);
+        //状态1，待审批
+        invoiceBackBO.setStatus("1");
+        InvoiceBack invoiceBack = new InvoiceBack();
+        BeanUtils.copyProperties(invoiceBackBO, invoiceBack);
         int insert = invoiceBackMapper.insert(invoiceBack);
         if (insert != 1){
-            LOGGER.info("{新增失败}", invoiceBack);
+            LOGGER.info("新增失败：{}", invoiceBack);
             throw new ServiceException(4101);
         }
-        InvoiceBackBO bo = new InvoiceBackBO();
-        BeanUtils.copyProperties(invoiceBack, bo);
-        return bo;
+
+        insertInvoiceLog(invoiceBackBO.getInvoiceId(),invoiceBackBO.getUserId(),"发票退票");
+        return invoiceBackBO;
     }
 
     @Transactional("db1TxManager")
@@ -282,47 +325,48 @@ public class InvoiceServiceImpl implements InvoiceService {
     public InvoiceBackBO refundCheck(InvoiceBack invoiceBack) {
         Express express = expressRoMapper.selectByPrimaryKey(invoiceBack.getExpressId());
         if(express == null){
-            LOGGER.info("{发票快递单信息查询错误}", invoiceBack);
+            LOGGER.info("发票快递单信息查询错误：{}", invoiceBack);
             throw new ServiceException(4145);
         }
         Invoice invoice = invoiceRoMapper.selectByUserOrderNo(express.getUserOrderNo());
         if(invoice == null){
-            LOGGER.info("{发票信息查询错误}", invoiceBack);
+            LOGGER.info("发票信息查询错误：{}", invoiceBack);
             throw new ServiceException(4146);
         }else{
             //修改发票状态
-            //TODO 需要确定状态值
-            invoice.setStatus("0");
             int iUpdate =  invoiceMapper.update(invoice);
             if(iUpdate != 1){
-                LOGGER.info("{发票信息修改错误}", invoice);
+                LOGGER.info("发票信息修改错误：{}", invoice);
                 throw new ServiceException(4147);
             }
 
         }
-        List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoice.getId());
-        Order order = null;
-        for (OrderInvoice orderInvoice:orderInvoiceList){
-            order = new Order();
-            order.setOrderNo(orderInvoice.getOrderNo());
-            order.setOrderStatus("3");
-            order.setLastUpdate(new Date());
-            int oUpdate = orderMapper.update(order);
-            if(oUpdate != 1){
-                LOGGER.info("{订单信息修改错误}", order);
-                throw new ServiceException(4148);
+        //退票状态=4：已收货时，修改订单状态
+        if(invoiceBack.getStatus() != null && "4".equals(invoiceBack.getStatus())){
+
+            List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoice.getId());
+            Order order = null;
+            for (OrderInvoice orderInvoice:orderInvoiceList){
+                order = new Order();
+                order.setOrderNo(orderInvoice.getOrderNo());
+                order.setIsInvoice(false);
+                order.setLastUpdate(new Date());
+                int oUpdate = orderMapper.update(order);
+                if(oUpdate != 1){
+                    LOGGER.info("订单信息修改错误：{}", order);
+                    throw new ServiceException(4148);
+                }
             }
         }
         invoiceBack.setLastUpdate(new Date());
-        //TODO 需要确定状态值
-        invoiceBack.setStatus("0");
         int bUpdate = invoiceBackMapper.update(invoiceBack);
         if (bUpdate != 1){
-            LOGGER.info("{发票退订信息修改错误}", order);
+            LOGGER.info("发票退订信息修改错误：{}", invoiceBack);
             throw new ServiceException(4149);
         }
         InvoiceBackBO bo = new InvoiceBackBO();
         BeanUtils.copyProperties(invoice,bo);
+        insertInvoiceLog(invoiceBack.getInvoiceId(),invoiceBack.getUserId(),"发票审核");
         return bo;
     }
 
@@ -339,5 +383,34 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceBO selectUserInvoice(Invoice invoice) {
         return invoiceRoMapper.selectUserInvoice(invoice);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public InvoiceBO billing(InvoiceBO invoiceBO, Boolean isBilling) {
+        if(isBilling){
+            InvoiceDetail detail = invoiceBO.getInvoiceDetail();
+            if(detail == null){
+                LOGGER.info("发票详情信息不能为空：{}", detail);
+                throw new ServiceException(4186);
+            }
+            detail.setStatus("2");
+            int dUpdate = invoiceDetailMapper.update(detail);
+            if(dUpdate != 1){
+                LOGGER.info("发票详情信息修改失败：{}", detail);
+                throw new ServiceException(4187);
+            }
+        }
+        invoiceBO.setLastUpdate(new Date());
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(invoiceBO,invoice);
+        int update = invoiceMapper.update(invoice);
+        if(update != 1){
+            LOGGER.info("修改失败：{}", invoice);
+            throw new ServiceException(4102);
+        }
+        //加入发票日志
+        insertInvoiceLog(invoiceBO.getId(),invoiceBO.getUserId(),invoiceBO.getInvoiceLog().getRemark());
+        return invoiceBO;
     }
 }

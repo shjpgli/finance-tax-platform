@@ -58,6 +58,7 @@
             <if test="status != null"> AND g.status = #{status}</if>
             <if test="categoryId != null  and categoryId!=''"> AND g.categoryId = #{categoryId}</if>
             <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
+            <if test="goodsType != null  and goodsType!=''"> AND g.goodsType = #{goodsType}</if>
         </where>
     </select>
 

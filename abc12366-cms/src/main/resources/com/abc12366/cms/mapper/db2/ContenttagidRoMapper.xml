@@ -16,4 +16,12 @@
 		 WHERE contentId = #{contentId}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.cms.model.Contenttagid" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_contenttagid
+        WHERE contentId = #{contentId}
+    </select>
+
 </mapper>

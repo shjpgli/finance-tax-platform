@@ -31,4 +31,8 @@ public interface ChannelRoMapper{
 
 	List<Channel> selectListByparentId(@Param("parentId") String parentId);
 
+    Integer selectChannelIdCnt(@Param("channelId") String channelId);
+
+    Integer selectChannelPathCnt(ChannelBo channelBo);
+
 }

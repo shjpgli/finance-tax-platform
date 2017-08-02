@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import com.abc12366.uc.model.InvoiceDetail;
+import com.abc12366.uc.model.InvoiceLog;
 import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.UserAddress;
 
@@ -52,6 +54,11 @@ public class InvoiceBO implements Serializable {
     private UserAddress userAddress;
     private DeliveryMethodBO deliveryMethodBO;
 
+    private InvoiceDetail invoiceDetail;
+    /**是否已开发票，true：是，false：否**/
+    private Boolean isInvoice;
+
+    private InvoiceLog invoiceLog;
 
     public void setId(String id) {
         this.id = id;
@@ -331,5 +338,29 @@ public class InvoiceBO implements Serializable {
 
     public void setDeliveryMethodBO(DeliveryMethodBO deliveryMethodBO) {
         this.deliveryMethodBO = deliveryMethodBO;
+    }
+
+    public Boolean getIsInvoice() {
+        return isInvoice;
+    }
+
+    public void setIsInvoice(Boolean isInvoice) {
+        this.isInvoice = isInvoice;
+    }
+
+    public InvoiceDetail getInvoiceDetail() {
+        return invoiceDetail;
+    }
+
+    public void setInvoiceDetail(InvoiceDetail invoiceDetail) {
+        this.invoiceDetail = invoiceDetail;
+    }
+
+    public InvoiceLog getInvoiceLog() {
+        return invoiceLog;
+    }
+
+    public void setInvoiceLog(InvoiceLog invoiceLog) {
+        this.invoiceLog = invoiceLog;
     }
 }

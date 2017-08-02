@@ -41,7 +41,8 @@ public class Constant {
 
     // Admin用户token有效期：3600*2*1000毫秒
     public final static long ADMIN_USER_TOKEN_VALID_SECONDS = 3600 * 2 * 1000;
-
+    public final static String ADMIN_ID = "Admin_Id";
+    public final static String ADMIN_USER = "Admin_User";
     // 分页-当前页
     public final static String pageNum = "1";
     // 分页-每页大小

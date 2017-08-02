@@ -31,6 +31,14 @@
             and inTime <= #{endTime}
               ]]>
             </if>
+
+            <if test="uri != null">
+              and uri = #{uri}
+            </if>
+            <if test="ip != null">
+              and ip = #{ip}
+            </if>
         </where>
     </select>
+
 </mapper>

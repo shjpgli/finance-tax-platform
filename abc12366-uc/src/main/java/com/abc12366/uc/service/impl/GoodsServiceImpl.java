@@ -79,7 +79,7 @@ public class GoodsServiceImpl implements GoodsService {
         goods.setLastUpdate(date);
         int gInsert = goodsMapper.insert(goods);
         if (gInsert != 1) {
-            LOGGER.info("{新增产品失败}", goods);
+            LOGGER.info("新增产品失败：{}", goods);
             throw new ServiceException(4101);
         }
         GoodsBO bo = new GoodsBO();
@@ -100,7 +100,7 @@ public class GoodsServiceImpl implements GoodsService {
             //新增产品参数
             pInsert = productMapper.insert(product);
             if (pInsert != 1) {
-                LOGGER.info("{新增产品参数失败}", product);
+                LOGGER.info("新增产品参数失败：{}", product);
                 throw new ServiceException(4101);
             }
             BeanUtils.copyProperties(product, productBO);
@@ -113,7 +113,7 @@ public class GoodsServiceImpl implements GoodsService {
                 productSpec.setSpecId(dictBO.getId());
                 int sInsert = productSpecMapper.insert(productSpec);
                 if (sInsert != 1) {
-                    LOGGER.info("{新增产品规格信息失败}", productSpec);
+                    LOGGER.info("新增产品规格信息失败：{}", productSpec);
                     throw new ServiceException(4160);
                 }
             }
@@ -128,7 +128,7 @@ public class GoodsServiceImpl implements GoodsService {
                 uvipPrice.setLastUpdate(date);
                 int sInsert = uvipPriceMapper.insert(uvipPrice);
                 if (sInsert != 1) {
-                    LOGGER.info("{新增产品单个规格会员价格失败}", uvipPrice);
+                    LOGGER.info("新增产品单个规格会员价格失败：{}", uvipPrice);
                     throw new ServiceException(4161);
                 }
                 uvipList.add(uvipPrice);
@@ -151,7 +151,7 @@ public class GoodsServiceImpl implements GoodsService {
         for (Product product:pBOList){
             OrderProduct orderProduct = orderProductRoMapper.selectByProductId(product.getId());
             if(orderProduct != null){
-                LOGGER.info("{商品有被卖出，被卖出不能修改}", product);
+                LOGGER.info("商品有被卖出，被卖出不能修改：{}", product);
                 throw new ServiceException(4162);
             }
         }
@@ -160,7 +160,7 @@ public class GoodsServiceImpl implements GoodsService {
         goods.setLastUpdate(date);
         int gUpdate = goodsMapper.update(goods);
         if (gUpdate != 1) {
-            LOGGER.info("{修改产品失败}", goods);
+            LOGGER.info("修改产品失败：{}", goods);
             throw new ServiceException(4102);
         }
         GoodsBO bo = new GoodsBO();
@@ -184,7 +184,7 @@ public class GoodsServiceImpl implements GoodsService {
             //新增产品参数
             pInsert = productMapper.insert(product);
             if (pInsert != 1) {
-                LOGGER.info("{新增产品参数失败}", product);
+                LOGGER.info("新增产品参数失败：{}", product);
                 throw new ServiceException(4101);
             }
             BeanUtils.copyProperties(product, productBO);
@@ -197,7 +197,7 @@ public class GoodsServiceImpl implements GoodsService {
                 productSpec.setSpecId(dictBO.getId());
                 int sInsert = productSpecMapper.insert(productSpec);
                 if (sInsert != 1) {
-                    LOGGER.info("{新增产品规格信息失败}", productSpec);
+                    LOGGER.info("新增产品规格信息失败：{}", productSpec);
                     throw new ServiceException(4160);
                 }
             }
@@ -212,7 +212,7 @@ public class GoodsServiceImpl implements GoodsService {
                 uvipPrice.setLastUpdate(date);
                 int sInsert = uvipPriceMapper.insert(uvipPrice);
                 if (sInsert != 1) {
-                    LOGGER.info("{新增产品单个规格会员价格失败}", uvipPrice);
+                    LOGGER.info("新增产品单个规格会员价格失败：{}", uvipPrice);
                     throw new ServiceException(4161);
                 }
                 uvipList.add(uvipPrice);
@@ -245,7 +245,7 @@ public class GoodsServiceImpl implements GoodsService {
             goods.setStatus(goodsCheckBO.getStatus());
             int upd = goodsMapper.update(goods);
             if (upd != 1) {
-                LOGGER.info("{修改产品参数失败}", goods);
+                LOGGER.info("修改产品参数失败：{}", goods);
                 throw new ServiceException(4119);
             }
         }
@@ -258,14 +258,14 @@ public class GoodsServiceImpl implements GoodsService {
         for (Product prod:pBOList){
             OrderProduct orderProduct = orderProductRoMapper.selectByProductId(id);
             if(orderProduct != null){
-                LOGGER.info("{商品有被卖出，被卖出不能修改}", prod);
+                LOGGER.info("商品有被卖出，被卖出不能修改：{}", prod);
                 throw new ServiceException(4163);
             }
         }
         //删除产品信息
         int gDelete = goodsMapper.deleteByPrimaryKey(id);
         if (gDelete != 1) {
-            LOGGER.info("{删除产品失败}", id);
+            LOGGER.info("删除产品失败：{}", id);
             throw new ServiceException(4103);
         }
     }

@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/5/9.
@@ -112,12 +109,34 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional("db1TxManager")
     @Override
     public ChannelSaveBo save(ChannelSaveBo channelSaveBo) {
+        //栏目
+        ChannelBo channelBo = channelSaveBo.getChannel();
+        ChannelBo channelBo1 = new ChannelBo();
+        channelBo1.setSiteId(channelBo.getSiteId());
+        channelBo1.setChannelPath(channelBo.getChannelPath());
+        int cnt1 = channelRoMapper.selectChannelPathCnt(channelBo1);
+        if(cnt1 >0){
+            throw new ServiceException(4239);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(channelSaveBo);
             LOGGER.info("新增栏目信息:{}", jsonStu.toString());
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            //栏目
-            ChannelBo channelBo = channelSaveBo.getChannel();
+//            String uuid = UUID.randomUUID().toString().replace("-", "");
+            String uuid = "";
+            String code = "";
+
+            String parentId = channelBo.getParentId();
+
+            for(int i=0;i<20;i++){
+                code = this.genCodes(6);
+                uuid = parentId + code;
+                int cnt = channelRoMapper.selectChannelIdCnt(uuid);
+                if(cnt ==0){
+                    break;
+                }
+            }
+
+
             channelBo.setChannelId(uuid);
             Channel channel = new Channel();
             BeanUtils.copyProperties(channelBo, channel);
@@ -208,11 +227,20 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional("db1TxManager")
     @Override
     public ChannelSaveBo update(ChannelSaveBo channelSaveBo) {
+        //栏目
+        ChannelBo channelBo = channelSaveBo.getChannel();
+        ChannelBo channelBo1 = new ChannelBo();
+        channelBo1.setSiteId(channelBo.getSiteId());
+        channelBo1.setChannelPath(channelBo.getChannelPath());
+        channelBo1.setChannelId(channelBo.getChannelId());
+        int cnt1 = channelRoMapper.selectChannelPathCnt(channelBo1);
+        if(cnt1 >0){
+            throw new ServiceException(4239);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(channelSaveBo);
             LOGGER.info("更新栏目信息:{}", jsonStu.toString());
-            //栏目
-            ChannelBo channelBo = channelSaveBo.getChannel();
+
             Channel channel = new Channel();
             BeanUtils.copyProperties(channelBo, channel);
             channelMapper.updateByPrimaryKeySelective(channel);
@@ -319,13 +347,13 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String channelId) {
+        LOGGER.info("删除栏目信息:{}", channelId);
+        int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
+        if(cnt != 0){
+            //该栏目下存在内容信息,不能删除
+            throw new ServiceException(4249);
+        }
         try {
-            LOGGER.info("删除栏目信息:{}", channelId);
-            int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
-            if(cnt != 0){
-                //该栏目下存在内容信息,不能删除
-                throw new ServiceException(4249);
-            }
             //删除栏目扩展信息
             channelExtMapper.deleteByPrimaryKey(channelId);
             //删除栏目扩展项信息
@@ -346,5 +374,28 @@ public class ChannelServiceImpl implements ChannelService {
             throw new ServiceException(4248);
         }
         return "";
+    }
+
+    public String genCodes(int length){
+
+            String val = "";
+            Random random = new Random();
+            for(int i = 0; i < length; i++)
+            {
+                String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; // 输出字母还是数字
+
+                if("char".equalsIgnoreCase(charOrNum)) // 字符串
+                {
+                    int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; //取得大写字母还是小写字母
+                    val += (char) (choice + random.nextInt(26));
+                }
+                else if("num".equalsIgnoreCase(charOrNum)) // 数字
+                {
+                    val += String.valueOf(random.nextInt(10));
+                }
+            }
+            val=val.toLowerCase();
+
+        return val;
     }
 }

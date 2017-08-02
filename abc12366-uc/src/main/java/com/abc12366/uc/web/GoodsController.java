@@ -50,18 +50,21 @@ public class GoodsController {
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) Boolean status,
                                      @RequestParam(value = "categoryId", required = false) String categoryId,
-                                     @RequestParam(value = "recommendType", required = false) String recommendType) {
+                                     @RequestParam(value = "recommendType", required = false) String recommendType,
+                                     @RequestParam(value = "goodsType", required = false) String goodsType
+                                     ) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
         goods.setStatus(status);
         goods.setName(name);
         goods.setCategoryId(categoryId);
         goods.setRecommendType(recommendType);
+        goods.setGoodsType(goodsType);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<GoodsBO> goodsList = goodsService.selectList(goods);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
@@ -102,7 +105,7 @@ public class GoodsController {
         List<GoodsBO> goodsList = goodsService.selectList(goods);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
     /**
@@ -147,7 +150,7 @@ public class GoodsController {
     }
 
     /**
-     * 修改商品信息
+     * 删除商品信息
      * @param id
      * @return
      */
@@ -182,7 +185,7 @@ public class GoodsController {
         GoodsCategoryBO categoryBO = goodsCategoryService.selectList(goodsCategory);
         LOGGER.info("{}", categoryBO);
         return (categoryBO == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                  ResponseEntity.ok(Utils.kv("data", categoryBO));
     }
 
@@ -213,6 +216,12 @@ public class GoodsController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 查找商品分类详情
+     * @param goodsCategoryBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/category/{id}")
     public ResponseEntity updateGategory(@Valid @RequestBody GoodsCategoryBO goodsCategoryBO, @PathVariable("id") String id) {
         LOGGER.info("{}", goodsCategoryBO);
@@ -222,6 +231,11 @@ public class GoodsController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 删除商品分类
+     * @param id
+     * @return
+     */
     @DeleteMapping(path = "/category/{id}")
     public ResponseEntity deleteGategory(@PathVariable("id") String id) {
         LOGGER.info("{}", id);

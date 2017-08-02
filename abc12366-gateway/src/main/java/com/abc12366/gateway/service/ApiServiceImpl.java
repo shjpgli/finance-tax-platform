@@ -39,12 +39,14 @@ public class ApiServiceImpl implements ApiService {
     @Transactional("db1TxManager")
     @Override
     public Api insert(ApiBO apiBO) {
+        isSameInvoice(apiBO);
+
+        apiBO.setId(Utils.uuid());
+        Date now = new Date();
+        apiBO.setCreateTime(now);
+        apiBO.setLastUpdate(now);
         Api api = new Api();
         BeanUtils.copyProperties(apiBO, api);
-        api.setId(Utils.uuid());
-        Date now = new Date();
-        api.setCreateTime(now);
-        api.setLastUpdate(now);
         int insert = apiMapper.insert(api);
         if(insert != 1){
             LOGGER.warn("插入失败，参数：{}", api);
@@ -53,9 +55,23 @@ public class ApiServiceImpl implements ApiService {
         return api;
     }
 
+    private void isSameInvoice(ApiBO apiBO) {
+        //uri，version，method，确定数据的唯一性
+        Api temp = new Api();
+        temp.setUri(apiBO.getUri());
+        temp.setVersion(apiBO.getVersion());
+        temp.setMethod(apiBO.getMethod());
+        ApiBO bo = apiRoMapper.selectByUriAndVersion(temp);
+        if(bo != null && !apiBO.getId().equals(bo.getId())){
+            LOGGER.warn("uri，version，method，确定数据的唯一性：{}", bo);
+            throw new ServiceException(4030);
+        }
+    }
+
     @Transactional("db1TxManager")
     @Override
     public Api update(ApiBO apiBO) {
+         isSameInvoice(apiBO);
         Api api = new Api();
         BeanUtils.copyProperties(apiBO, api);
         api.setLastUpdate(new Date());

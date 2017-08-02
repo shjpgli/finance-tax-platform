@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -29,9 +30,9 @@ public class TopicServiceImpl implements TopicService {
     private TopicRoMapper topicRoMapper;
 
     @Override
-    public List<TopicBo> selectList() {
+    public List<TopicBo> selectList(Map<String,Object> map) {
         //查询模型列表
-        List<TopicBo> topicBoList =  topicRoMapper.selectList();
+        List<TopicBo> topicBoList =  topicRoMapper.selectList(map);
         return topicBoList;
     }
 

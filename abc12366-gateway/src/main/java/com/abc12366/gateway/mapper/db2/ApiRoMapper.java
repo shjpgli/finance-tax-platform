@@ -17,4 +17,6 @@ public interface ApiRoMapper {
     List<ApiBO> selectList(Api api);
 
     List<ApiBO> selectBySettingList(String appId);
+
+    ApiBO selectByUriAndVersion(Api temp);
 }

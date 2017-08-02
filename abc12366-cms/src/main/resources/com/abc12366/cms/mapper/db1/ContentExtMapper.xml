@@ -260,7 +260,15 @@
 
     <!--更新：根据主键ID批量更新-->
     <update id="updatRegenerateList0" >
-        UPDATE cms_content_ext t SET t.needRegenerate = 0
+        UPDATE cms_content_ext SET needRegenerate = 0
+        WHERE contentId in <foreach item="item" index="index" collection="contentIds" open="(" separator="," close=")">
+        #{item}
+    </foreach>
+    </update>
+
+    <!--更新：根据主键ID批量更新-->
+    <update id="updateReleaseDate" >
+        update cms_content_ext SET releaseDate = null
         WHERE contentId in <foreach item="item" index="index" collection="contentIds" open="(" separator="," close=")">
         #{item}
     </foreach>

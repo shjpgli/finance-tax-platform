@@ -46,4 +46,6 @@ public interface EventMapper{
 	 **/
 	int updateByPrimaryKey(Event record);
 
+    void updateStatus();
+
 }

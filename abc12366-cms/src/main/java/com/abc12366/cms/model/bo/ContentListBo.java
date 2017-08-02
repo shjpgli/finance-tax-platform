@@ -60,6 +60,9 @@ public class ContentListBo implements Serializable {
 	/**访问路径**varchar(30)**/
 	private String channelPath;
 
+    /**站点Id**varchar(64)**/
+    private String siteId;
+
 	/**域名**varchar(50)**/
 	private String domain;
 
@@ -71,6 +74,12 @@ public class ContentListBo implements Serializable {
 
 	/**站点路径**varchar(500)**/
 	private String staticLink;
+
+    /**栏目是否显示**/
+    private String isDisplay;
+
+    /**站点状态**/
+    private String siteStatus;
 
 
 	public String getContentId() {
@@ -201,7 +210,15 @@ public class ContentListBo implements Serializable {
 		this.channelPath = channelPath;
 	}
 
-	public String getDomain() {
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
+    }
+
+    public String getDomain() {
 		return domain;
 	}
 
@@ -232,4 +249,20 @@ public class ContentListBo implements Serializable {
 	public void setStaticLink(String staticLink) {
 		this.staticLink = staticLink;
 	}
+
+    public String getIsDisplay() {
+        return isDisplay;
+    }
+
+    public void setIsDisplay(String isDisplay) {
+        this.isDisplay = isDisplay;
+    }
+
+    public String getSiteStatus() {
+        return siteStatus;
+    }
+
+    public void setSiteStatus(String siteStatus) {
+        this.siteStatus = siteStatus;
+    }
 }

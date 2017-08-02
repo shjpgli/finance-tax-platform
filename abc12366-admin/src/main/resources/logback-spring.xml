@@ -3,6 +3,9 @@
     <include resource="org/springframework/boot/logging/logback/base.xml" />
 
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
         <File>${LOG_PATH}/admin_info.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/admin_info-%d{yyyyMMdd}.log.%i
@@ -37,7 +40,7 @@
         </layout>
     </appender>
 
-    <logger name="druid.sql" level="warn,stdout"/>
+    <!--<logger name="druid.sql" level="warn,stdout"/>-->
 
     <root level="INFO">
         <appender-ref ref="INFO_FILE" />

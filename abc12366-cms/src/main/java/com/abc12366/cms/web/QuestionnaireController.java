@@ -105,7 +105,7 @@ public class QuestionnaireController {
      * @return
      */
     @PutMapping(path = "/status/{id}")
-    public ResponseEntity updateStatus(@Valid @RequestBody Boolean status, @PathVariable("id") String id) {
+    public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("id") String id) {
         LOGGER.info("{}", status);
         questionnaireService.updateStatus(id,status);
         return ResponseEntity.ok(Utils.kv());

@@ -118,6 +118,7 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         if(answerLogBO != null && answerLogBO.getId() != null){
             String ids[] = answerLogBO.getId().split(",");
             for (String id: ids){
+                answerMapper.deleteByPrimaryKey(id);
                 int del = answerLogMapper.deleteByPrimaryKey(id);
                 if (del != 1){
                     LOGGER.info("{删除答题记录失败}", id);
@@ -180,7 +181,7 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         BeanUtils.copyProperties(answerLogBO,answerLog);
         AnswerLogBO bo = answerLogRoMapper.selectAvgTime(answerLog);
         if (bo != null && bo.getAvgTimeLong() != null){
-            String avg = formatTime(bo.getAvgTimeLong());
+            String avg = formatTime(bo.getAvgTimeLong()*1000);
             bo.setAvgTime(avg);
         }else{
             LOGGER.info("{该问卷没有答题记录}", answerLog);

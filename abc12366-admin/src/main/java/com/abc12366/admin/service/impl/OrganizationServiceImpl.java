@@ -50,7 +50,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         int insert = organizationMapper.insert(organization);
         if (insert != 1) {
             LOGGER.warn("插入失败，参数：{}", organization.toString());
-            throw new ServiceException(4001);
+            throw new ServiceException(4101);
         }
         return organization;
     }
@@ -61,11 +61,11 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     private void validateOrg(OrganizationBO organizationBO) {
         if(isOrgName(organizationBO.getName())){
-            LOGGER.warn("已存在该机构名称", organizationBO);
+            LOGGER.warn("已存在该机构名称{}", organizationBO);
             throw new ServiceException(4099);
         }
         if(isOrgParentId(organizationBO.getParentId())){
-            LOGGER.warn("该机构已禁用", organizationBO);
+            LOGGER.warn("该机构已禁用{}", organizationBO);
             throw new ServiceException(4099);
         }
 
@@ -151,7 +151,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 BeanUtils.copyProperties(bo,org);
                 int upd = organizationMapper.update(org);
                 if (upd != 1) {
-                    LOGGER.warn("修改子节点状态失败", upd);
+                    LOGGER.warn("修改子节点状态失败{}", upd);
                     throw new ServiceException(4097);
                 }
             }

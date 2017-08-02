@@ -103,10 +103,10 @@ public class UserTaskServiceImpl implements UserTaskService {
         //计算该用户当月完成任务获取积分的排名。-1代表没有排名
         List<TaskRangeBO> taskRangeBOList = userTaskRoMapper.selectTaskRangeList();
         if (taskRangeBOList == null || taskRangeBOList.size() == 0) {
-            myTaskBO.setTaskRange("-1");
+            myTaskBO.setTaskRange("0");
             return myTaskBO;
         }
-        myTaskBO.setTaskRange("-1");
+        myTaskBO.setTaskRange("0");
         for (int i = 1; i <= taskRangeBOList.size(); i++) {
             TaskRangeBO taskRangeBO = taskRangeBOList.get(i - 1);
             if (taskRangeBO.getUserId().equals(userId)) {

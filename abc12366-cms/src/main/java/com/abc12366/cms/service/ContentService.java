@@ -15,9 +15,11 @@ import java.util.Map;
 public interface ContentService {
     List<ContentListBo> selectList(Map<String,Object> map);
 
+    List<ContentsListBo> selectListByviews(Map<String,Object> map);
+
     List<ContentsListBo> selectListByContentType(Map<String,Object> map);
 
-    List<ContentsListBo> selectContentType(Map<String,Object> map);
+    List<ContenttagidBo> selectContentType(Map<String,Object> map);
 
     List<ContentsListBo> selectListByChannelId(Map<String,Object> map);
 

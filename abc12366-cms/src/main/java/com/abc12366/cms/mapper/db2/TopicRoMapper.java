@@ -5,6 +5,7 @@ import com.abc12366.cms.model.bo.TopicBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -27,7 +28,7 @@ public interface TopicRoMapper{
 	 * 查询(根据查询条件查询)
 	 *
 	 **/
-	List<TopicBo> selectList();
+	List<TopicBo> selectList(Map<String,Object> map);
 
 	/**
 	 *

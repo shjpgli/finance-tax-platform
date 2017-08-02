@@ -1,6 +1,5 @@
 package com.abc12366.admin.web;
 
-import com.abc12366.admin.model.LoginInfo;
 import com.abc12366.admin.model.User;
 import com.abc12366.admin.model.UserExtend;
 import com.abc12366.admin.model.bo.*;
@@ -12,11 +11,9 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -48,7 +45,7 @@ public class UserController {
         user.setOrganizationId(orgId);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<UserBO> userList = userService.selectList(user);
-        LOGGER.info("{}", userList);
+        LOGGER.info("userList:{}", userList);
         return userList == null ?
                 ResponseEntity.ok(Utils.kv()):
                 ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
@@ -56,9 +53,9 @@ public class UserController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
-        UserBO temp = userService.selectOne(id);
-        LOGGER.info("{}", temp);
-        return ResponseEntity.ok(Utils.kv("data", temp));
+        UserBO userBO = userService.selectOne(id);
+        LOGGER.info("userBO:{}", userBO);
+        return ResponseEntity.ok(Utils.kv("data", userBO));
     }
 
 
@@ -82,7 +79,7 @@ public class UserController {
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(@Valid @RequestBody UserUpdateBO userUpdateBO, @PathVariable("id") String id) {
-        LOGGER.info("{id}", id);
+        LOGGER.info("id:{}", id);
         userUpdateBO.setId(id);
         UserUpdateBO bo = userService.updateUser(userUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", bo));
@@ -107,9 +104,9 @@ public class UserController {
      */
     @PutMapping(path = "/password")
     public ResponseEntity updateUserPwd(@Valid @RequestBody UserPasswordBO userPasswordBO) {
-        LOGGER.info("{userPasswordBO}", userPasswordBO);
+        LOGGER.info("userPasswordBO:{}", userPasswordBO);
         int upd = userService.updateUserPwd(userPasswordBO);
-        LOGGER.info("{upd}", upd);
+        LOGGER.info("upd:{}", upd);
         return ResponseEntity.ok(Utils.kv("data", upd));
     }
 
@@ -120,17 +117,17 @@ public class UserController {
      */
     @PutMapping(path = "/password/{id}")
     public ResponseEntity resetUserPwd( @PathVariable("id") String id) {
-        LOGGER.info("{id}", id);
+        LOGGER.info("id:{}", id);
         int upd = userService.resetUserPwd(id);
-        LOGGER.info("{}", upd);
+        LOGGER.info("upd:{}", upd);
         return ResponseEntity.ok(Utils.kv("data", upd));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteUserById(@PathVariable("id") String id) {
-        LOGGER.info("{id }", id);
+        LOGGER.info("id{}", id);
         int del = userService.deleteUserById(id);
-        LOGGER.info("{}", del);
+        LOGGER.info("del{}", del);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -142,9 +139,9 @@ public class UserController {
      */
     @GetMapping(path = "/extend/{id}")
     public ResponseEntity selectUserExtend(@PathVariable("id") String id) {
-        LOGGER.info("{id }", id);
+        LOGGER.info("id:{}", id);
         UserExtend userExtend = userService.selectUserExtendByUserId(id);
-        LOGGER.info("{userExtend }", userExtend);
+        LOGGER.info("userExtend:{}", userExtend);
         return ResponseEntity.ok(Utils.kv("data", userExtend));
     }
 
@@ -155,10 +152,10 @@ public class UserController {
      */
     @PutMapping(path = "/extend/{id}")
     public ResponseEntity updateUserExtend(@Valid @RequestBody UserExtendBO userExtendBO,@PathVariable("id") String id) {
-        LOGGER.info("{userExtendBO}", userExtendBO);
+        LOGGER.info("userExtendBO:{}", userExtendBO);
         userExtendBO.setUserId(id);
         UserExtend userExtend = userService.updateUserExtend(userExtendBO);
-        LOGGER.info("{userExtend }", userExtend);
+        LOGGER.info("userExtend:{}", userExtend);
         return ResponseEntity.ok(Utils.kv("data", userExtend));
     }
 
@@ -169,9 +166,13 @@ public class UserController {
      */
     @GetMapping(path = "/token/{token}")
     public ResponseEntity selectUser(@PathVariable("token") String token) {
-        LOGGER.info("{id }", token);
+        long start = System.currentTimeMillis();
+        LOGGER.info("token:{}", token);
         LoginInfoBO loginInfo = userService.selectLoginInfoByToken(token);
-        LOGGER.info("{userExtend }", loginInfo);
+        LOGGER.info("loginInfo:{}", loginInfo);
+        long end = System.currentTimeMillis();
+        long res = end - start;
+        LOGGER.info("响应用时:{}毫秒",res);
         return ResponseEntity.ok(Utils.kv("data", loginInfo));
     }
 }

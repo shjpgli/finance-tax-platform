@@ -259,4 +259,9 @@
 		 WHERE eventId = #{eventId}
 	</update>
 
+    <!-- 修 改状态-->
+    <update id="updateStatus">
+        update cms_event set status = 3 where <![CDATA[ endtime < now()]]> and status = 1
+    </update>
+
 </mapper>

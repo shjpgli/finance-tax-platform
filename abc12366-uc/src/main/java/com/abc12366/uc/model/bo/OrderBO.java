@@ -37,6 +37,8 @@ public class OrderBO implements Serializable {
     private String remark;
     private Integer giftPoints;
     private String tradeMethod;
+    /**是否已开发票，true：是，false：否**/
+    private Boolean isInvoice;
     private GoodsBO goodsBO;
     private User user;
 
@@ -289,5 +291,13 @@ public class OrderBO implements Serializable {
 
     public void setDeliveryMethodBO(DeliveryMethodBO deliveryMethodBO) {
         this.deliveryMethodBO = deliveryMethodBO;
+    }
+
+    public Boolean getIsInvoice() {
+        return isInvoice;
+    }
+
+    public void setIsInvoice(Boolean isInvoice) {
+        this.isInvoice = isInvoice;
     }
 }

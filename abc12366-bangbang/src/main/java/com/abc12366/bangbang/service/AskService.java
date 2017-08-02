@@ -23,4 +23,8 @@ public interface AskService {
     int delete(String id, String userId);
 
     int block(String id, String userId);
+
+    List<HotspotAskBO> selectHotspotAsks();
+
+    List<AskBO> selectHotspotComments();
 }

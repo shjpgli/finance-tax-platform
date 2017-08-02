@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.web;
 
+import com.abc12366.bangbang.model.AskLog;
 import com.abc12366.bangbang.model.bo.*;
+import com.abc12366.bangbang.service.AskLogService;
 import com.abc12366.bangbang.service.AskService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -9,13 +11,13 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +33,9 @@ public class AskController {
 
     @Autowired
     AskService askService;
+
+    @Autowired
+    private AskLogService askLogService;
 
     @GetMapping(path = "/asks")
     public ResponseEntity selectListForAdmin(@RequestParam(required = false) String ask,
@@ -119,15 +124,27 @@ public class AskController {
     }
 
     @GetMapping(path = "/ask/{id}")
-    public ResponseEntity selectOne(@PathVariable("id") String id) {
-        LOGGER.info("{}", id);
+    public ResponseEntity selectOne(@PathVariable String id, HttpServletRequest request) {
+        LOGGER.info("{}:{}", id, request);
         AskBO askBO = askService.selectOne(id);
+
+        //记日志
+        String userId = (String) request.getAttribute(Constant.USER_ID);
+        AskLog askLog = new AskLog();
+        askLog.setId(Utils.uuid());
+        askLog.setAskId(id);
+        askLog.setCreateTime(new Date());
+        if (userId != null && !userId.trim().equals("")) {
+            askLog.setUserId(userId);
+        }
+        askLogService.insert(askLog);
+
         LOGGER.info("{}", (askBO == null) ? null : askBO);
         return ResponseEntity.ok(Utils.kv("data", askBO));
     }
 
     @PutMapping(path = "/ask/{id}")
-    public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody AskUpdateBO askUpdateBO, HttpServletRequest request) {
+    public ResponseEntity update(@PathVariable String id, @Valid @RequestBody AskUpdateBO askUpdateBO, HttpServletRequest request) {
         LOGGER.info("{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         AskBO askBO = askService.update(id, askUpdateBO, userId);
@@ -136,7 +153,7 @@ public class AskController {
     }
 
     @DeleteMapping(path = "/ask/{id}")
-    public ResponseEntity delete(@PathVariable("id") String id, HttpServletRequest request) {
+    public ResponseEntity delete(@PathVariable String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         askService.delete(id, userId);
@@ -144,7 +161,7 @@ public class AskController {
     }
 
     @PutMapping(path = "/block/ask/{id}")
-    public ResponseEntity block(@PathVariable("id") String id, HttpServletRequest request) {
+    public ResponseEntity block(@PathVariable String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         askService.block(id, userId);

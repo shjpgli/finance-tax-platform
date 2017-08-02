@@ -29,6 +29,15 @@ public class ApiController {
     @Autowired
     private ApiService apiService;
 
+    /**
+     * API列表
+     * @param name
+     * @param status
+     * @param dictId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @GetMapping(path = "/api")
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) Boolean status,
@@ -46,6 +55,11 @@ public class ApiController {
         return ResponseEntity.ok(Utils.kv("dataList",pageInfo.getList() , "total", pageInfo.getTotal()));
     }
 
+    /**
+     * 通过AppId查找未授权的API
+     * @param appId
+     * @return
+     */
     @GetMapping(path = "/api/apisetting/{appId}")
     public ResponseEntity selectBySettingList(@PathVariable("appId") String appId) {
         LOGGER.info("{appId}", appId);
@@ -54,6 +68,11 @@ public class ApiController {
         return ResponseEntity.ok(Utils.kv("dataList",apiList));
     }
 
+    /**
+     * API单个查询
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/api/{id}")
     public ResponseEntity selectApi(@PathVariable("id") String id) {
         LOGGER.info(id);
@@ -62,6 +81,11 @@ public class ApiController {
         return ResponseEntity.ok(Utils.kv("data", api));
     }
 
+    /**
+     * API新增
+     * @param apiBO
+     * @return
+     */
     @PostMapping(path = "/api")
     public ResponseEntity insert(@Valid @RequestBody ApiBO apiBO) {
         LOGGER.info("{}", apiBO);
@@ -70,6 +94,12 @@ public class ApiController {
         return ResponseEntity.ok(Utils.kv("data", api));
     }
 
+    /**
+     * API修改
+     * @param id
+     * @param apiBO
+     * @return
+     */
     @PutMapping(path = "/api/{id}")
     public ResponseEntity update(@PathVariable("id") String id,
                                  @Valid @RequestBody ApiBO apiBO) {
@@ -80,6 +110,11 @@ public class ApiController {
         return ResponseEntity.ok(Utils.kv("data", api));
     }
 
+    /**
+     * API删除
+     * @param id
+     * @return
+     */
     @DeleteMapping(path = "/api/{id}")
     public ResponseEntity delete(@PathVariable("id")String id) {
         LOGGER.info("{}", id);

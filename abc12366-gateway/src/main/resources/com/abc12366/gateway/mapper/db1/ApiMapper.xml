@@ -11,9 +11,6 @@
             <if test="name != null">
                 name,
             </if>
-            <if test="nickname != null">
-                nickname,
-            </if>
             <if test="uri != null">
                 uri,
             </if>
@@ -47,9 +44,6 @@
             <if test="name!=null">
                 #{name},
             </if>
-            <if test="nickname!=null">
-                #{nickname},
-            </if>
             <if test="uri!=null">
                 #{uri},
             </if>
@@ -80,15 +74,34 @@
     <update id="update" parameterType="com.abc12366.gateway.model.Api">
         UPDATE gw_api
         <set>
-            <if test="name != null">name = #{name},</if>
-            <if test="nickname != null">nickname = #{nickname},</if>
-            <if test="uri != null">uri = #{uri},</if>
-            <if test="method != null">method = #{method},</if>
-            <if test="version != null">version = #{version},</if>
-            <if test="dictId != null">dictId = #{dictId},</if>
-            <if test="authentication != null">authentication = #{authentication},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="lastUpdate != null">lastUpdate = #{lastUpdate}</if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="uri != null">
+                uri = #{uri},
+            </if>
+            <if test="method != null">
+                method = #{method},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+            <if test="dictId != null">
+                dictId = #{dictId},
+            </if>
+            <if test="authentication != null">
+                authentication = #{authentication},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="lastUpdate != null">
+                lastUpdate = #{lastUpdate},
+            </if>
+
         </set>
         WHERE id = #{id}
     </update>

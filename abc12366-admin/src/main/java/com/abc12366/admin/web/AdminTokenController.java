@@ -29,7 +29,7 @@ public class AdminTokenController {
      */
     @PostMapping(value = "/check/{token}")
     public ResponseEntity checkToken(@PathVariable("token") String token) {
-        LOGGER.info("验证token"+token);
+        LOGGER.info("验证token{}"+token);
         Boolean isToken = userService.checkToken(token);
         return ResponseEntity.ok(isToken);
     }
@@ -41,7 +41,7 @@ public class AdminTokenController {
      */
     @PostMapping(value = "/refresh/{token}")
     public ResponseEntity refreshToken(@PathVariable("token") String token) {
-        LOGGER.info("刷新token"+token);
+        LOGGER.info("刷新token{}"+token);
         Boolean isToken = userService.refreshToken(token);
         return ResponseEntity.ok(isToken);
     }

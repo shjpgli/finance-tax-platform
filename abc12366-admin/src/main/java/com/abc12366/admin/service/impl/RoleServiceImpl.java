@@ -69,7 +69,7 @@ public class RoleServiceImpl implements RoleService {
         int insert = roleMapper.insert(role);
         if (insert != 1) {
             logger.warn("插入失败，参数：{}", role.toString());
-            throw new ServiceException(4001);
+            throw new ServiceException(4101);
         }
         String roleId = role.getId();
         String[] resources = roleBO.getMenuIds().split(",");

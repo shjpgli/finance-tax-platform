@@ -4,6 +4,7 @@ import com.abc12366.message.model.PhoneCode;
 import com.abc12366.message.model.bo.PhoneCodeBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -11,5 +12,7 @@ import java.util.List;
  * Time: 17:20
  */
 public interface PhoneCodeRoMapper {
-    List<PhoneCodeBO> selectList(PhoneCode phoneCodeParam);
+    List<PhoneCodeBO> selectList(PhoneCode phoneCode);
+
+    List<PhoneCodeBO> selectListByPhone(PhoneCode phoneCode);
 }

@@ -31,12 +31,32 @@
 		<if test="category != null and category != ''">
 			AND category = #{category}
 		</if>
-		<if test="begintime!=null and begintime!=''">
-			AND UNIX_TIMESTAMP(b.begintime) &gt;= #{begintime}
-		</if>
-		<if test="endtime!=null and endtime!=''">
-			AND UNIX_TIMESTAMP(b.endtime) &lt;= #{endtime}
-		</if>
+		<!--<if test="begintime!=null and begintime!=''">-->
+			<!--AND UNIX_TIMESTAMP(begintime) &gt;= #{begintime}-->
+		<!--</if>-->
+		<!--<if test="endtime!=null and endtime!=''">-->
+			<!--AND UNIX_TIMESTAMP(endtime) &lt;= #{endtime}-->
+		<!--</if>-->
+        <!--<if test="begintime != null">-->
+            <!--<![CDATA[-->
+              <!--and date_format(endTime, '%Y%m%d') >= date_format(#{begintime}, '%Y%m%d')-->
+                <!--]]>-->
+        <!--</if>-->
+        <!--<if test="endtime != null">-->
+            <!--<![CDATA[-->
+              <!--and date_format(begintime, '%Y%m%d') <= date_format(#{endtime}, '%Y%m%d')-->
+              <!--]]>-->
+        <!--</if>-->
+        <if test="begintime != null">
+            <![CDATA[
+              and date_format(begintime, '%Y%m%d') >= date_format(#{begintime}, '%Y%m%d')
+                ]]>
+        </if>
+        <if test="endtime != null">
+            <![CDATA[
+              and date_format(endTime, '%Y%m%d') <= date_format(#{endtime}, '%Y%m%d')
+              ]]>
+        </if>
 		ORDER BY createtime DESC
 	</select>
 

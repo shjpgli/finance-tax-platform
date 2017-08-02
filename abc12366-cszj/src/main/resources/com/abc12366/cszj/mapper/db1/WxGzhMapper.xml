@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cszj.mapper.db1.WxGzhMapper">
+       
+    <sql id="Base_Column_List">
+		id, gzhName, appid, secret, tokenStr, serverUrl, creatDate,lastupdate
+	</sql>
+
+    <insert id="insert" parameterType="com.abc12366.cszj.model.weixin.bo.gzh.GzhInfo">
+        INSERT INTO cszj_gzh(<include refid="Base_Column_List"/>)
+        VALUES (#{id}, #{gzhName}, #{appid}, #{secret}, #{tokenStr}, #{serverUrl}, #{creatDate}, #{lastupdate})
+    </insert>
+    
+    <update id="update" parameterType="com.abc12366.cszj.model.weixin.bo.gzh.GzhInfo">
+        UPDATE cszj_gzh
+        <set>
+            <if test="gzhName != null">gzhName = #{gzhName},</if>
+            <if test="appid != null">appid = #{appid},</if>
+            <if test="secret != null">secret = #{secret},</if>
+            <if test="tokenStr != null">tokenStr = #{tokenStr},</if>
+            <if test="serverUrl != null">serverUrl = #{serverUrl},</if>
+            <if test="lastupdate != null">lastupdate = #{lastupdate},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="java.lang.String">
+          DELETE FROM cszj_gzh WHERE id = #{id}
+    </delete>
+
+</mapper>

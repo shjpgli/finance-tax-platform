@@ -31,6 +31,13 @@ public class AppSettingController {
     @Autowired
     private AppSettingService appSettingService;
 
+    /**
+     * APP设置列表查询
+     * @param appId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @GetMapping(path = "/appsetting")
     public ResponseEntity selectList(@RequestParam(value = "appId", required = true) String appId,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -43,6 +50,12 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
+    /**
+     * APP设置详细查询
+     * @param appId
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity selectOne(@PathVariable("appId") String appId,
                                     @PathVariable("id") String id) {
@@ -52,15 +65,27 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("data", appSetting));
     }
 
+    /**
+     * APP设置批量授权
+     * @param appId
+     * @param appSettingBOList
+     * @return
+     */
     @PostMapping(path = "/appsetting/list/{appId}")
     public ResponseEntity insertList(@PathVariable("appId") String appId,
-                                 @Valid @RequestBody List<AppSettingBO> appSettingBOList) {
+                                     @Valid @RequestBody List<AppSettingBO> appSettingBOList) {
         LOGGER.info("{}: {}", appId, appSettingBOList);
         List<AppSetting> appSettingList = appSettingService.insertList(appId,appSettingBOList);
         LOGGER.info("{}", appSettingList);
         return ResponseEntity.ok(Utils.kv("data", appSettingList));
     }
 
+    /**
+     * APP设置单个查询
+     * @param appId
+     * @param appSettingBO
+     * @return
+     */
     @PostMapping(path = "/appsetting/{appId}")
     public ResponseEntity insert(@PathVariable("appId") String appId,
                                  @Valid @RequestBody AppSettingBO appSettingBO) {
@@ -73,6 +98,13 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("data", appSetting));
     }
 
+    /**
+     * APP设置修改
+     * @param appId
+     * @param id
+     * @param appSettingBO
+     * @return
+     */
     @PutMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity update(@PathVariable("appId") String appId,
                                  @PathVariable("id") String id,
@@ -85,6 +117,12 @@ public class AppSettingController {
         return ResponseEntity.ok(Utils.kv("data", appSetting));
     }
 
+    /**
+     * APP设置删除
+     * @param appId
+     * @param id
+     * @return
+     */
     @DeleteMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity delete(@PathVariable("appId") String appId,
                                  @PathVariable("id") String id) {

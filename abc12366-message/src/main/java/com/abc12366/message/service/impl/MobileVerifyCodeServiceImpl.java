@@ -3,16 +3,16 @@ package com.abc12366.message.service.impl;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Properties;
 import com.abc12366.common.util.Utils;
+import com.abc12366.message.mapper.db1.PhoneCodeMapper;
+import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
 import com.abc12366.message.model.PhoneCode;
-import com.abc12366.message.model.bo.NeteaseQueryStatusResponseBO;
-import com.abc12366.message.model.bo.NeteaseTemplateResponseBO;
-import com.abc12366.message.model.bo.PhoneCodeBO;
-import com.abc12366.message.model.bo.SmsOpsLog;
+import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.MobileVerifyCodeService;
-import com.abc12366.message.service.PhoneCodeService;
 import com.abc12366.message.util.CheckSumBuilder;
 import com.abc12366.message.util.MessageConstant;
 import com.abc12366.message.util.RandomNumber;
+import com.abc12366.message.util.soaUtil;
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +47,10 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private PhoneCodeService phoneCodeService;
+    private PhoneCodeMapper phoneCodeMapper;
+
+    @Autowired
+    private PhoneCodeRoMapper phoneCodeRoMapper;
 
     private static Properties properties = new Properties("application.properties");
     private static String appKey;
@@ -71,42 +73,51 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     //获取验证码
     @Transactional("db1TxManager")
     @Override
-    public void getCode(String phone, String codeType, HttpSession session) throws IOException {
-        LOGGER.info("{}", phone);
+    public void getCode(String type, String phone) throws IOException {
+        LOGGER.info("{}:{}", type, phone);
         //手机号码不是11为抛出异常
         if (!(phone.trim().length() == 11)) {
             throw new ServiceException(4801);
         }
-        String code = RandomNumber.getRandomNumber(MessageConstant.VERIFY_CODE_LENGTH);
 
-        //将验证码信息写入表
-        PhoneCode phoneCodeParam = new PhoneCode();
-        phoneCodeParam.setPhone(phone);
-        phoneCodeParam.setCode(code);
-        phoneCodeService.delete(phoneCodeParam);
+        //五分钟之内重复获取验证码，就发送之前的那个
+        String code = getPriviousCode(type, phone);
+        if (code == null || code.trim().equals("")) {
+            code = RandomNumber.getRandomNumber(MessageConstant.VERIFY_CODE_LENGTH);
+            //将验证码信息写入表
+            PhoneCode phoneCodeDel = new PhoneCode();
+            phoneCodeDel.setType(type);
+            phoneCodeDel.setPhone(phone);
+            phoneCodeMapper.delete(phoneCodeDel);
 
-        PhoneCode phoneCode = new PhoneCode();
-        phoneCode.setId(Utils.uuid());
-        phoneCode.setPhone(phone);
-        phoneCode.setCode(code);
-        phoneCode.setExpireDate(new Date(System.currentTimeMillis() + 1000 * 60 * 5));
-        phoneCodeService.insert(phoneCode);
-
-        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, codeType, code);
-        //调用网易短信接口不成功，则换调用阿里云短信接口
+            PhoneCode phoneCode = new PhoneCode();
+            phoneCode.setId(Utils.uuid());
+            phoneCode.setPhone(phone);
+            phoneCode.setCode(code);
+            phoneCode.setExpireDate(new Date(System.currentTimeMillis() + 1000 * MessageConstant.VERIFY_CODE_VALID_SECONDS));
+            phoneCode.setType(type);
+            phoneCodeMapper.insert(phoneCode);
+        }
+        boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, code);
+        //boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, MessageConstant.VERIFY_CODE_FILL_CONTENT, code);
+//        调用网易短信接口不成功，则换调用又拍云短信接口
 //        if (!sendCodeThroghNetease) {
-//            sendAliyunTemplate(phone, code);
+//            boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, code);
+//            if (!sendCodeThroghUpyun) {
+//                throw new ServiceException(4204);
+//            }
 //        }
 
     }
 
     @Override
-    public void verify(String phone, String code, HttpSession session) {
-        LOGGER.info("{}:{}:{}", phone, code, session);
+    public void verify(VerifyParam verifyParam) {
+        LOGGER.info("{}", verifyParam);
         PhoneCode phoneCodeParam = new PhoneCode();
-        phoneCodeParam.setPhone(phone);
-        phoneCodeParam.setCode(code);
-        List<PhoneCodeBO> phoneCodeBOList = phoneCodeService.selectList(phoneCodeParam);
+        phoneCodeParam.setType(verifyParam.getType());
+        phoneCodeParam.setPhone(verifyParam.getPhone());
+        phoneCodeParam.setCode(verifyParam.getCode());
+        List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectList(phoneCodeParam);
         if (phoneCodeBOList == null) {
             throw new ServiceException(4202);
         }
@@ -118,9 +129,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
         long now = System.currentTimeMillis();
         long exp = phoneCodeBO.getExpireDate().getTime();
-        boolean b3 = exp > now;
+        boolean isValid = exp > now;
 
-        if (!b3) {
+        if (!isValid) {
             throw new ServiceException(4203);
         }
 
@@ -184,6 +195,47 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             }
         }
         return false;
+    }
+
+    private String getPriviousCode(String type, String phone) {
+        //五分钟之内重复获取验证码，就发送之前的那个
+        PhoneCode phoneCode = new PhoneCode();
+        phoneCode.setType(type);
+        phoneCode.setPhone(phone);
+        List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectListByPhone(phoneCode);
+        String privCode = "";
+        if (phoneCodeBOList != null && phoneCodeBOList.size() > 0) {
+            PhoneCodeBO phoneCodeBO = phoneCodeBOList.get(0);
+            if (phoneCodeBO.getExpireDate().getTime() > System.currentTimeMillis()) {
+                privCode = phoneCodeBOList.get(0).getCode();
+            }
+        }
+        return privCode;
+    }
+
+    private boolean sendYoupaiTemplate(String phone, String code) throws IOException {
+        //发送通知类短信接口地址
+        String url = properties.getValue("message.upyun.send.url");
+        //调用网易接口请求头设置
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Type", contentType);
+        httpHeaders.add("Authorization", properties.getValue("message.upyun.auth"));
+        //调用网易接口请求体设置
+        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("mobile", phone);
+        requestBody.add("template_id", properties.getValue("message.upyun.templateid"));
+        requestBody.add("vars", code);
+        HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
+        ResponseEntity responseEntity = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
+        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+            //UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
+            return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) throws IOException {
+        new MobileVerifyCodeServiceImpl().sendYoupaiTemplate("13278849423", "9876987");
     }
 
 //    private boolean sendAliyunTemplate(String phone, String code) throws IOException {

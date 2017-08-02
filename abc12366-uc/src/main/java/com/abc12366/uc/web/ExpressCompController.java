@@ -75,7 +75,7 @@ public class ExpressCompController {
         List<ExpressBO> expressList = expressService.selectList(expressBO);
         LOGGER.info("{}", expressList);
         return (expressList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) expressList, "total", ((Page) expressList).getTotal()));
     }
 
@@ -170,7 +170,7 @@ public class ExpressCompController {
         List<ExpressComp> compList = expressCompService.selectList(expressComp);
         LOGGER.info("{}", compList);
         return (compList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) compList, "total", ((Page) compList).getTotal()));
     }
 

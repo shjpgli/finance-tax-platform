@@ -24,7 +24,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/uvipPrice", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/uvipprice", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class UvipPriceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UvipPriceController.class);

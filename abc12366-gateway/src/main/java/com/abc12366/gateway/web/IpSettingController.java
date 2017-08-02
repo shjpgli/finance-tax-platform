@@ -28,7 +28,7 @@ public class IpSettingController {
     public ResponseEntity selectOne() {
         IpSetting ipSetting = ipSettingService.selectOne();
         LOGGER.info("{}", ipSetting);
-        return (ipSetting != null) ? ResponseEntity.ok(ipSetting) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(ipSetting);
     }
 
     @PutMapping(path = "/{id}")
@@ -37,6 +37,6 @@ public class IpSettingController {
         ipSetting.setId(id);
         IpSetting setting = ipSettingService.update(ipSetting);
         LOGGER.info("{}", setting);
-        return (setting != null) ? ResponseEntity.ok(setting) : new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(setting);
     }
 }

@@ -6,6 +6,7 @@ import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.common.exception.ServiceException;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -72,6 +73,9 @@ public class ContentServiceImpl implements ContentService {
     private ContentTopicRoMapper topicRoMapper;
 
     @Autowired
+    private TopicRoMapper tpRoMapper;
+
+    @Autowired
     private ContentGroupViewMapper groupMapper;
 
     @Autowired
@@ -79,6 +83,12 @@ public class ContentServiceImpl implements ContentService {
 
     @Autowired
     private ContentCountMapper contentCountMapper;
+
+    @Autowired
+    private ContenttagidMapper tagMapper;
+
+    @Autowired
+    private ContenttagidRoMapper tagRoMapper;
 
     @Override
     public List<ContentListBo> selectList(Map<String,Object> map) {
@@ -89,17 +99,25 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
+    public List<ContentsListBo> selectListByviews(Map<String,Object> map) {
+        //查询内容列表按访问量
+        List<ContentsListBo> contents = contentRoMapper.selectListByviews(map);
+        LOGGER.info("{}", contents);
+        return contents;
+    }
+
+    @Override
     public List<ContentsListBo> selectListByContentType(Map<String,Object> map) {
-        //查询内容列表
+        //查询内容列表按标签
         List<ContentsListBo> contents = contentRoMapper.selectListByContentType(map);
         LOGGER.info("{}", contents);
         return contents;
     }
 
     @Override
-    public List<ContentsListBo> selectContentType(Map<String,Object> map) {
-        //查询内容列表
-        List<ContentsListBo> contents = contentRoMapper.selectContentType(map);
+    public List<ContenttagidBo> selectContentType(Map<String,Object> map) {
+        //查询标签
+        List<ContenttagidBo> contents = contentRoMapper.selectContentType(map);
         LOGGER.info("{}", contents);
         return contents;
     }
@@ -108,7 +126,8 @@ public class ContentServiceImpl implements ContentService {
     public List<ContentsListBo> selectListByChannelId(Map<String,Object> map) {
         int cnt = contentRoMapper.selectCntByChannelId(map);
         if(cnt > 0){
-            throw new ServiceException(4304);
+            //该栏目或者专题下存在未生成静态页的内容信息，请先生成内容静态页
+            throw new ServiceException(4255);
         }
         //查询内容列表
         List<ContentsListBo> contents = contentRoMapper.selectListByChannelId(map);
@@ -143,6 +162,8 @@ public class ContentServiceImpl implements ContentService {
     @Transactional("db1TxManager")
     @Override
     public ContentSaveBo save(ContentSaveBo contentSaveBo) {
+        JSONObject jsonStu = JSONObject.fromObject(contentSaveBo);
+        LOGGER.info("新增文章信息:{}", jsonStu.toString());
         String uuid = UUID.randomUUID().toString().replace("-", "");
         //内容
         ContentBo contentBo = contentSaveBo.getContent();
@@ -151,21 +172,23 @@ public class ContentServiceImpl implements ContentService {
         Content content = new Content();
         try {
             BeanUtils.copyProperties(contentBo, content);
+            contentMapper.insert(content);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("新增文章信息异常：{}", e);
+            throw new ServiceException(4250);
         }
         //内容扩展项
         ContentExtBo contentExtBo = contentSaveBo.getContentExt();
         contentExtBo.setContentId(uuid);
-//        contentExtBo.setReleaseDate(new Date());
+        contentExtBo.setReleaseDate(new Date());
         ContentExt contentExt = new ContentExt();
         try {
             BeanUtils.copyProperties(contentExtBo, contentExt);
             contentExt.setNeedRegenerate(0);
+            contentExtMapper.insert(contentExt);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("新增文章信息异常：{}", e);
+            throw new ServiceException(4250);
         }
                 //内容文本
         ContentTxtBo contentTxtBo = contentSaveBo.getContentTxt();
@@ -174,10 +197,11 @@ public class ContentServiceImpl implements ContentService {
         try {
             if(contentTxtBo != null){
                 BeanUtils.copyProperties(contentTxtBo, contentTxt);
+                contentTxtMapper.insert(contentTxt);
             }
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("新增文章信息异常：{}", e);
+            throw new ServiceException(4250);
         }
         //内容扩展属性
         List<ContentAttrBo> contentAttrList = contentSaveBo.getContentAttrList();
@@ -186,22 +210,18 @@ public class ContentServiceImpl implements ContentService {
         //内容附件
         List<FileBo> fileList = contentSaveBo.getFileList();
 
-        contentMapper.insert(content);
-        contentExtMapper.insert(contentExt);
-        if(contentTxt != null){
-            contentTxtMapper.insert(contentTxt);
-        }
         if(contentAttrList != null){
             for(ContentAttrBo contentAttrBo:contentAttrList){
                 contentAttrBo.setContentId(uuid);
                 ContentAttr contentAttr = new ContentAttr();
                 try {
                     BeanUtils.copyProperties(contentAttrBo, contentAttr);
+                    contentAttrMapper.insert(contentAttr);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("新增文章信息异常：{}", e);
+                    throw new ServiceException(4250);
                 }
-                contentAttrMapper.insert(contentAttr);
+
             }
         }
         if(contentPictureList != null){
@@ -210,11 +230,12 @@ public class ContentServiceImpl implements ContentService {
                 ContentPicture contentPicture = new ContentPicture();
                 try {
                     BeanUtils.copyProperties(contentPictureBo, contentPicture);
+                    contentPictureMapper.insert(contentPicture);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("新增文章信息异常：{}", e);
+                    throw new ServiceException(4250);
                 }
-                contentPictureMapper.insert(contentPicture);
+
             }
         }
         if(fileList != null){
@@ -223,11 +244,12 @@ public class ContentServiceImpl implements ContentService {
                 File file = new File();
                 try {
                     BeanUtils.copyProperties(fileBo, file);
+                    fileMapper.insert(file);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("新增文章信息异常：{}", e);
+                    throw new ServiceException(4250);
                 }
-                fileMapper.insert(file);
+
             }
         }
 
@@ -239,11 +261,12 @@ public class ContentServiceImpl implements ContentService {
                 groupBo.setContentId(uuid);
                 try {
                     BeanUtils.copyProperties(groupBo, group);
+                    groupMapper.insert(group);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("新增文章信息异常：{}", e);
+                    throw new ServiceException(4250);
                 }
-                groupMapper.insert(group);
+
             }
         }
 
@@ -255,30 +278,54 @@ public class ContentServiceImpl implements ContentService {
                 topicBo.setContentId(uuid);
                 try {
                     BeanUtils.copyProperties(topicBo, topic);
+                    topicMapper.insert(topic);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("新增文章信息异常：{}", e);
+                    throw new ServiceException(4250);
                 }
-                topicMapper.insert(topic);
+
             }
         }
 
+        //标签组
+        List<ContenttagidBo> tagList = contentSaveBo.getTagList();
+        if(tagList != null){
+            for(ContenttagidBo tagBo:tagList){
+                Contenttagid tag = new Contenttagid();
+                tagBo.setContentId(uuid);
+                try {
+                    BeanUtils.copyProperties(tagBo, tag);
+                    tagMapper.insert(tag);
+                } catch (Exception e) {
+                    LOGGER.error("新增文章信息异常：{}", e);
+                    throw new ServiceException(4250);
+                }
+
+            }
+        }
+
+        //统计表
         ContentCount cons = new ContentCount();
         cons.setContentId(uuid);
-        contentCountMapper.insert(cons);
+        try {
+            contentCountMapper.insert(cons);
+        } catch (Exception e) {
+            LOGGER.error("新增文章信息异常：{}", e);
+            throw new ServiceException(4250);
+        }
 
-
-        LOGGER.info("{}", contentSaveBo);
         return contentSaveBo;
     }
 
     @Override
     public ContentSaveBo selectContent(String contentId) {
+        LOGGER.info("查询单个文章信息:{}", contentId);
         ContentSaveBo contentSaveBo = new ContentSaveBo();
         //内容
         Content content = contentRoMapper.selectByContentId(contentId);
         if(content == null){
-            return contentSaveBo;
+            //未查询到文章信息，请检查文章是否已被删除
+            throw new ServiceException(4251);
         }
 
         //内容扩展项
@@ -296,8 +343,8 @@ public class ContentServiceImpl implements ContentService {
         try {
             BeanUtils.copyProperties(content, contentBo);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("查询单个文章信息异常：{}", e);
+            throw new ServiceException(4252);
         }
         contentSaveBo.setContent(contentBo);
 
@@ -305,8 +352,8 @@ public class ContentServiceImpl implements ContentService {
         try {
             BeanUtils.copyProperties(contentExt, contentExtBo);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("查询单个文章信息异常：{}", e);
+            throw new ServiceException(4252);
         }
         contentSaveBo.setContentExt(contentExtBo);
 
@@ -316,8 +363,8 @@ public class ContentServiceImpl implements ContentService {
                 BeanUtils.copyProperties(contentTxt, contentTxtBo);
             }
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("查询单个文章信息异常：{}", e);
+            throw new ServiceException(4252);
         }
         contentSaveBo.setContentTxt(contentTxtBo);
 
@@ -328,8 +375,8 @@ public class ContentServiceImpl implements ContentService {
                 BeanUtils.copyProperties(contentAttr, contentAttrBo);
                 contentAttrBoList.add(contentAttrBo);
             } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+                LOGGER.error("查询单个文章信息异常：{}", e);
+                throw new ServiceException(4252);
             }
         }
         contentSaveBo.setContentAttrList(contentAttrBoList);
@@ -341,8 +388,8 @@ public class ContentServiceImpl implements ContentService {
                 BeanUtils.copyProperties(contentPicture, contentPictureBo);
                 contentPictureBoList.add(contentPictureBo);
             } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+                LOGGER.error("查询单个文章信息异常：{}", e);
+                throw new ServiceException(4252);
             }
         }
         contentSaveBo.setContentPictureList(contentPictureBoList);
@@ -354,8 +401,8 @@ public class ContentServiceImpl implements ContentService {
                 BeanUtils.copyProperties(file, fileBo);
                 fileBoList.add(fileBo);
             } catch (Exception e) {
-                LOGGER.error("类转换异常：{}", e);
-                throw new RuntimeException("类型转换异常：{}", e);
+                LOGGER.error("查询单个文章信息异常：{}", e);
+                throw new ServiceException(4252);
             }
         }
         contentSaveBo.setFileList(fileBoList);
@@ -370,8 +417,8 @@ public class ContentServiceImpl implements ContentService {
                     BeanUtils.copyProperties(group, groupBo);
                     groupBoList.add(groupBo);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("查询单个文章信息异常：{}", e);
+                    throw new ServiceException(4252);
                 }
             }
         }
@@ -387,12 +434,29 @@ public class ContentServiceImpl implements ContentService {
                     BeanUtils.copyProperties(topic, topicBo);
                     topicBoList.add(topicBo);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("查询单个文章信息异常：{}", e);
+                    throw new ServiceException(4252);
                 }
             }
         }
         contentSaveBo.setTopicList(topicBoList);
+
+        //获取标签组
+        List<Contenttagid> tagList = tagRoMapper.selectList(contentId);
+        List<ContenttagidBo> tagBoList = new ArrayList<ContenttagidBo>();
+        if(tagList != null){
+            for(Contenttagid tag:tagList){
+                ContenttagidBo tagBo = new ContenttagidBo();
+                try {
+                    BeanUtils.copyProperties(tag, tagBo);
+                    tagBoList.add(tagBo);
+                } catch (Exception e) {
+                    LOGGER.error("查询单个文章信息异常：{}", e);
+                    throw new ServiceException(4252);
+                }
+            }
+        }
+        contentSaveBo.setTagList(tagBoList);
 
         LOGGER.info("{}", contentSaveBo);
         return contentSaveBo;
@@ -401,23 +465,27 @@ public class ContentServiceImpl implements ContentService {
     @Transactional("db1TxManager")
     @Override
     public ContentSaveBo update(ContentSaveBo contentSaveBo) {
+        JSONObject jsonStu = JSONObject.fromObject(contentSaveBo);
+        LOGGER.info("更新文章信息:{}", jsonStu.toString());
         //内容
         ContentBo contentBo = contentSaveBo.getContent();
         Content content = new Content();
         try {
             BeanUtils.copyProperties(contentBo, content);
+            contentMapper.updateByPrimaryKeySelective(content);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("更新文章信息异常：{}", e);
+            throw new ServiceException(4253);
         }
         //内容扩展项
         ContentExtBo contentExtBo = contentSaveBo.getContentExt();
         ContentExt contentExt = new ContentExt();
         try {
             BeanUtils.copyProperties(contentExtBo, contentExt);
+            contentExtMapper.updateByPrimaryKeySelective(contentExt);
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("更新文章信息异常：{}", e);
+            throw new ServiceException(4253);
         }
         //内容文本
         ContentTxtBo contentTxtBo = contentSaveBo.getContentTxt();
@@ -425,10 +493,11 @@ public class ContentServiceImpl implements ContentService {
         try {
             if(contentTxtBo != null){
                 BeanUtils.copyProperties(contentTxtBo, contentTxt);
+                contentTxtMapper.updateByPrimaryKeySelective(contentTxt);
             }
         } catch (Exception e) {
-            LOGGER.error("类转换异常：{}", e);
-            throw new RuntimeException("类型转换异常：{}", e);
+            LOGGER.error("更新文章信息异常：{}", e);
+            throw new ServiceException(4253);
         }
         //内容扩展属性
         List<ContentAttrBo> contentAttrList = contentSaveBo.getContentAttrList();
@@ -436,21 +505,17 @@ public class ContentServiceImpl implements ContentService {
         List<ContentPictureBo> contentPictureList = contentSaveBo.getContentPictureList();
         //内容附件
         List<FileBo> fileList = contentSaveBo.getFileList();
-        contentMapper.updateByPrimaryKeySelective(content);
-        contentExtMapper.updateByPrimaryKeySelective(contentExt);
-        if(contentTxt != null){
-            contentTxtMapper.updateByPrimaryKeySelective(contentTxt);
-        }
+
         if(contentAttrList != null){
             for(ContentAttrBo contentAttrBo:contentAttrList){
                 ContentAttr contentAttr = new ContentAttr();
                 try {
                     BeanUtils.copyProperties(contentAttrBo, contentAttr);
+                    contentAttrMapper.updateByPrimaryKeySelective(contentAttr);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("更新文章信息异常：{}", e);
+                    throw new ServiceException(4253);
                 }
-                contentAttrMapper.updateByPrimaryKeySelective(contentAttr);
             }
         }
 
@@ -463,12 +528,12 @@ public class ContentServiceImpl implements ContentService {
                 ContentPicture contentPicture = new ContentPicture();
                 try {
                     BeanUtils.copyProperties(contentPictureBo, contentPicture);
+                    contentPictureMapper.insert(contentPicture);
+                    priority++;
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("更新文章信息异常：{}", e);
+                    throw new ServiceException(4253);
                 }
-                contentPictureMapper.insert(contentPicture);
-                priority++;
             }
         }
 
@@ -479,11 +544,11 @@ public class ContentServiceImpl implements ContentService {
                 File file = new File();
                 try {
                     BeanUtils.copyProperties(fileBo, file);
+                    fileMapper.insert(file);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("更新文章信息异常：{}", e);
+                    throw new ServiceException(4253);
                 }
-                fileMapper.insert(file);
             }
         }
 
@@ -496,11 +561,11 @@ public class ContentServiceImpl implements ContentService {
                 ContentGroupView group = new ContentGroupView();
                 try {
                     BeanUtils.copyProperties(groupBo, group);
+                    groupMapper.insert(group);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("更新文章信息异常：{}", e);
+                    throw new ServiceException(4253);
                 }
-                groupMapper.insert(group);
             }
         }
 
@@ -512,38 +577,59 @@ public class ContentServiceImpl implements ContentService {
                 ContentTopic topic = new ContentTopic();
                 try {
                     BeanUtils.copyProperties(topicBo, topic);
+                    topicMapper.insert(topic);
                 } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
+                    LOGGER.error("更新文章信息异常：{}", e);
+                    throw new ServiceException(4253);
                 }
-                topicMapper.insert(topic);
             }
         }
 
-        LOGGER.info("{}", contentSaveBo);
+        //标签组
+        tagMapper.deleteByPrimaryKey(content.getContentId());
+        List<ContenttagidBo> tagList = contentSaveBo.getTagList();
+        if(tagList != null){
+            for(ContenttagidBo tagBo:tagList){
+                Contenttagid tag = new Contenttagid();
+                try {
+                    BeanUtils.copyProperties(tagBo, tag);
+                    tagMapper.insert(tag);
+                } catch (Exception e) {
+                    LOGGER.error("更新文章信息异常：{}", e);
+                    throw new ServiceException(4253);
+                }
+            }
+        }
         return contentSaveBo;
     }
 
     @Transactional("db1TxManager")
     @Override
     public String delete(String contentId) {
-        //删除内容扩展信息
-        contentExtMapper.deleteByPrimaryKey(contentId);
-        //删除内容文本信息
-        contentTxtMapper.deleteByPrimaryKey(contentId);
-        //删除内容扩展属性信息
-        contentAttrMapper.deleteByPrimaryKey(contentId);
-        //删除内容图片信息
-        contentPictureMapper.deleteByPrimaryKey(contentId);
-        //删除内容附件信息
-        fileMapper.updateByContentId(contentId);
-        //用户组
-        groupMapper.deleteByPrimaryKey(contentId);
-        //专题组
-        topicMapper.deleteByContentId(contentId);
-        //删除内容信息
-        int r = contentMapper.deleteByPrimaryKey(contentId);
-        LOGGER.info("{}", r);
+        try {
+            LOGGER.info("删除文章信息:{}", contentId);
+            //删除内容扩展信息
+            contentExtMapper.deleteByPrimaryKey(contentId);
+            //删除内容文本信息
+            contentTxtMapper.deleteByPrimaryKey(contentId);
+            //删除内容扩展属性信息
+            contentAttrMapper.deleteByPrimaryKey(contentId);
+            //删除内容图片信息
+            contentPictureMapper.deleteByPrimaryKey(contentId);
+            //删除内容附件信息
+            fileMapper.updateByContentId(contentId);
+            //用户组
+            groupMapper.deleteByPrimaryKey(contentId);
+            //专题组
+            topicMapper.deleteByContentId(contentId);
+            //标签组
+            tagMapper.deleteByPrimaryKey(contentId);
+            //删除内容信息
+            contentMapper.deleteByPrimaryKey(contentId);
+        } catch (Exception e) {
+            LOGGER.error("删除文章信息异常：{}", e);
+            throw new ServiceException(4254);
+        }
         return "";
     }
 
@@ -559,8 +645,14 @@ public class ContentServiceImpl implements ContentService {
     @Transactional("db1TxManager")
     @Override
     public String updateStatusList(String[] contentIds) {
-        contentMapper.updateStatusList(contentIds);
-        contentExtMapper.updatRegenerateList0(contentIds);
+        try {
+            contentMapper.updateStatusList(contentIds);
+            contentExtMapper.updatRegenerateList0(contentIds);
+            contentExtMapper.updateReleaseDate(contentIds);
+        } catch (Exception e) {
+            LOGGER.error("撤销文章信息异常：{}", e);
+            throw new ServiceException(4258);
+        }
         return "";
     }
 
@@ -600,6 +692,15 @@ public class ContentServiceImpl implements ContentService {
                     LOGGER.error("类转换异常：{}", e);
                     throw new RuntimeException("类型转换异常：{}", e);
                 }
+                Topic tp = tpRoMapper.selectByPrimaryKey(topic.getTopicId());
+                Content ct = contentRoMapper.selectByContentId(topic.getContentId());
+                if(tp != null && ct != null && tp.getSiteId() != null){
+                    if(!tp.getSiteId().equals(ct.getSiteId())){
+                        throw new ServiceException(4256);
+                    }
+                }else{
+                    throw new ServiceException(4257);
+                }
                 topicMapper.deleteByPrimaryKey(topic);
                 topicMapper.insert(topic);
             }
@@ -617,7 +718,6 @@ public class ContentServiceImpl implements ContentService {
         //上一篇
         ContentudBo contentudBo2 = contentRoMapper.selectByReleaseDateDesc(map);
         list.add(contentudBo2);
-        LOGGER.info("{}", list);
         return list;
     }
 

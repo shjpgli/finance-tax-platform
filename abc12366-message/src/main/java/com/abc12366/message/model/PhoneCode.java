@@ -13,8 +13,17 @@ public class PhoneCode {
     private String phone;
     private String code;
     private Date expireDate;
+    private String type;
 
     public PhoneCode() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getId() {
