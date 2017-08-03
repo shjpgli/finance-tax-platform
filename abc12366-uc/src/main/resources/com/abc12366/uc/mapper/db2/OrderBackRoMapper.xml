@@ -30,7 +30,7 @@
             <result column="vipLevel" property="vipLevel"/>
         </association>
         <association property="orderBO" javaType="com.abc12366.uc.model.bo.OrderBO">
-            <id column="orderId" property="id" jdbcType="VARCHAR"/>
+            <id column="orderNo" property="id" jdbcType="VARCHAR"/>
             <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
             <result column="userId" property="userId" jdbcType="VARCHAR"/>
             <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
@@ -67,7 +67,7 @@
     <select id="selectOrderBackList" resultMap="orderBackBOMap" parameterType="com.abc12366.uc.model.OrderBack">
         SELECT
         b.id,	b.userId,	b.orderNo,	b.reason,	b.remark,	b.expressNo,	b.expressComp,	b.status,	b.createTime,	b.lastUpdate,
-        o.id as orderId,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,
+        o.id as orderNo,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,
         o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,
         u.id as userId,u.username,u.phone,u.vipLevel,u.nickname
         FROM uc_order_back b

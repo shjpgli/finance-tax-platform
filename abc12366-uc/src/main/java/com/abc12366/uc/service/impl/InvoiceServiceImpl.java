@@ -116,9 +116,9 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
         }
 
-        String[] orderIds = invoiceBO.getOrderNos().split(",");
+        String[] orderNos = invoiceBO.getOrderNos().split(",");
         OrderInvoice orderInvoice = new OrderInvoice();
-        for (String orderId : orderIds) {
+        for (String orderId : orderNos) {
             orderInvoice.setId(Utils.uuid());
             orderInvoice.setInvoiceId(id);
             orderInvoice.setOrderNo(orderId);
@@ -396,7 +396,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceBO billing(InvoiceBO invoiceBO) {
         if("2".equals(invoiceBO.getStatus())){
-            InvoiceDetail detail = invoiceBO.getInvoiceDetail();
+            InvoiceDetail tail = invoiceBO.getInvoiceDetail();
+            InvoiceDetail detail = invoiceDetailRoMapper.selectByPrimaryKey(tail.getId());
             if(detail == null){
                 LOGGER.info("发票详情信息不能为空：{}", detail);
                 throw new ServiceException(4186);

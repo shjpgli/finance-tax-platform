@@ -98,7 +98,7 @@ public class WxMenuServiceImpl implements IWxMenuService{
             
         } catch (Exception e) {
             LOGGER.error("查询单个微信菜单信息异常：{}", e);
-            throw new ServiceException(4234);
+            throw new ServiceException(4104);
         }
         return button;
 	}
@@ -124,7 +124,7 @@ public class WxMenuServiceImpl implements IWxMenuService{
         if(update != 1){
             if (update != 1){
                 LOGGER.info("{修改微信菜单失败}", update);
-                throw new ServiceException(4421);
+                throw new ServiceException(4102);
             }
         }
         return wxMenuRoMapper.selectOne(button.getId());

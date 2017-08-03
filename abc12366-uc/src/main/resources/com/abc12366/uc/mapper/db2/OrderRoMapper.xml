@@ -5,7 +5,6 @@
 
     <!--订单对象-->
     <resultMap id="orderBOResultMap" type="com.abc12366.uc.model.bo.OrderBO">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
@@ -141,7 +140,7 @@
 
     <!--订单和产品对应关系对象-->
     <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.bo.OrderProductBO">
-        <id column="orderId" property="orderId" jdbcType="VARCHAR"/>
+        <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
         <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
         <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
@@ -208,9 +207,9 @@
     <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
-        orderId,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
+        orderNo,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
         FROM uc_order_product
-        WHERE orderId = #{orderId}
+        WHERE orderNo = #{orderNo}
     </select>
 
     <!--获取用户信息-->
@@ -254,7 +253,7 @@
 
     <!-- 通用BO查询结果列-->
     <sql id="Base_Column_BO_List">
-        o.id,	o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,
         o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,u.id as userId,u.username,u.phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->

@@ -4,11 +4,11 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderProductRoMapper">
 
     <sql id="Base_Column_List">
-		 orderId,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
+		 orderNo,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
 	</sql>
 
     <resultMap type="com.abc12366.uc.model.bo.OrderProductBO" id="orderProductRoMap">
-        <id column="orderId" property="orderId" jdbcType="VARCHAR"/>
+        <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
         <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
         <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
@@ -36,7 +36,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_product
-        WHERE orderId = #{orderId}
+        WHERE orderNo = #{orderNo}
     </select>
 
     <select id="selectByProductId" resultType="com.abc12366.uc.model.OrderProduct" parameterType="java.lang.String">
@@ -48,7 +48,7 @@
 
     <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.bo.OrderProductBO">
         SELECT
-        op.orderId,	op.productId,	op.sellingPrice,	op.unitPrice,	op.num,	op.discount,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,
+        op.orderNo,	op.productId,	op.sellingPrice,	op.unitPrice,	op.num,	op.discount,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,
         p.id,	p.goodsId,	p.marketPrice,	p.sellingPrice,	p.costPrice,	p.createTime,	p.lastUpdate,p.stock
         FROM uc_order_product op
         LEFT JOIN uc_product p ON p.id = op.productId

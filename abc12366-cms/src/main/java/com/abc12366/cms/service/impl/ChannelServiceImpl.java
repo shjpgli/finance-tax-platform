@@ -237,9 +237,18 @@ public class ChannelServiceImpl implements ChannelService {
         if(cnt1 >0){
             throw new ServiceException(4239);
         }
+
+
+
         try {
             JSONObject jsonStu = JSONObject.fromObject(channelSaveBo);
             LOGGER.info("更新栏目信息:{}", jsonStu.toString());
+
+            //查询栏目信息
+            Channel channel1 = channelRoMapper.selectByPrimaryKey(channelBo.getChannelId());
+            if(channelBo.getIsDisplay() != channel1.getIsDisplay()){
+                updateChannelByparentId(channelBo);
+            }
 
             Channel channel = new Channel();
             BeanUtils.copyProperties(channelBo, channel);

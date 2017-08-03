@@ -71,6 +71,12 @@
          </where>
      </select>
      
+     <select id="selectOne" resultMap="newsResultMap" parameterType="com.abc12366.cszj.model.weixin.bo.message.News">
+         SELECT id,ArticleCount,creatDate,lastUpdate 
+         from cszj_news
+         where id= #{id}
+     </select>
+     
      
      <select id="getArticleList" resultMap="newsArticle" parameterType="java.lang.String">
         SELECT

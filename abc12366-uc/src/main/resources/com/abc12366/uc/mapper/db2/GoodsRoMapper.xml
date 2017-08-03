@@ -60,6 +60,7 @@
             <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
             <if test="goodsType != null  and goodsType!=''"> AND g.goodsType = #{goodsType}</if>
         </where>
+        order by g.sort asc
     </select>
 
     <resultMap id="goodsBoMap" type="com.abc12366.uc.model.bo.GoodsBO">

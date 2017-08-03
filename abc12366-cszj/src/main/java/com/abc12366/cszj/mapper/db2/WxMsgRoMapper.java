@@ -15,4 +15,6 @@ public interface WxMsgRoMapper {
 
 	ReturnMsg selectOneWxremsg(String id);
 
+	News selectOne(String id);
+
 }
