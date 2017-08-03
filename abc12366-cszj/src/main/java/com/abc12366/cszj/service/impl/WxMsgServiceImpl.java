@@ -24,11 +24,11 @@ import com.abc12366.cszj.config.Scheduler;
 import com.abc12366.cszj.mapper.db1.WxMsgMapper;
 import com.abc12366.cszj.mapper.db2.WxMsgRoMapper;
 import com.abc12366.cszj.model.weixin.bo.message.Article;
+import com.abc12366.cszj.model.weixin.bo.message.FileContent;
+import com.abc12366.cszj.model.weixin.bo.message.ImgMaterial;
 import com.abc12366.cszj.model.weixin.bo.message.News;
 import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
 import com.abc12366.cszj.model.weixin.bo.message.WxNews;
-import com.abc12366.cszj.model.weixin.bo.template.FileContent;
-import com.abc12366.cszj.model.weixin.bo.template.ImgMaterial;
 import com.abc12366.cszj.service.IWxMsgService;
 import com.abc12366.cszj.util.wx.MsgMap;
 import com.abc12366.cszj.util.wx.WechatUrl;
@@ -266,6 +266,19 @@ public class WxMsgServiceImpl implements IWxMsgService {
             throw new ServiceException(4234);
         }
         return newmsg;
+	}
+
+	@Override
+	public News selectOne(String id) {
+		News info = new News();
+        try {
+            LOGGER.info("查询单个模板消息:{}", id);
+            info = msgRoMapper.selectOne(id);
+        } catch (Exception e) {
+            LOGGER.error("查询单个模板消息异常：{}", e);
+            throw new ServiceException(4234);
+        }
+        return info;
 	}
 
 }

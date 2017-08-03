@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.abc12366.cszj.config.SpringCtxHolder;
 import com.abc12366.cszj.model.weixin.BaseWxRespon;
-import com.abc12366.cszj.model.weixin.bo.template.FileContent;
+import com.abc12366.cszj.model.weixin.bo.message.FileContent;
 import com.alibaba.fastjson.JSON;
 
 

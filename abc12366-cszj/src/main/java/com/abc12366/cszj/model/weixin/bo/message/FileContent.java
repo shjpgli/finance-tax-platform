@@ -1,4 +1,4 @@
-package com.abc12366.cszj.model.weixin.bo.template;
+package com.abc12366.cszj.model.weixin.bo.message;
 
 import java.io.Serializable;
 import java.util.List;

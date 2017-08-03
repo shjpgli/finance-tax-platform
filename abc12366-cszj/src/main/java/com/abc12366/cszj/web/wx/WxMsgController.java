@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
+import com.abc12366.cszj.model.weixin.bo.message.FileContent;
 import com.abc12366.cszj.model.weixin.bo.message.News;
 import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
 import com.abc12366.cszj.model.weixin.bo.message.WxNews;
-import com.abc12366.cszj.model.weixin.bo.template.FileContent;
 import com.abc12366.cszj.service.IWxMsgService;
 import com.github.pagehelper.PageInfo;
 
@@ -99,6 +99,21 @@ public class WxMsgController {
 		LOGGER.info("{}", responseEntity);
 		return responseEntity;
 	}
+	
+	//图文信息查看
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/wxnews/db/{id}")
+	public ResponseEntity wxnewsInfo(@PathVariable("id")String id) {
+		LOGGER.info("{}", id);
+
+		News news= iWxMsgService.selectOne(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", news));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+		
+	}
+	
 
 	// 图文消息查看
 	@SuppressWarnings("rawtypes")
