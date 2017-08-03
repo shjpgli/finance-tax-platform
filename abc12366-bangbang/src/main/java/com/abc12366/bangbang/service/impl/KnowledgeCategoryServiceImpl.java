@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.StringUtil;
 import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper;
@@ -39,18 +40,22 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
         record.setId(Utils.uuid());
         record.setCreateUser(UcUserCommon.getUserId());
         record.setUpdateUser(UcUserCommon.getUserId());
-        String code = genCodes(6);
-        code =  record.getParentCode() + code;
+        String parentCode = StringUtil.nullToString(record.getParentCode());
+        String code = parentCode + genCodes(6);
         for (;;){
             KnowledgeCategory rs = knowledgeCategoryMapper.selectByCode(code);
             if(rs != null){
-                code = record.getParentCode() + genCodes(6);
+                code = parentCode + genCodes(6);
             }else{
                 break;
             }
         }
         record.setCode(code);
-        knowledgeCategoryMapper.insert(record);
+        int rs = knowledgeCategoryMapper.insert(record);
+        if(rs != 1){
+            LOGGER.error("知识库分类新增失败：{}", record);
+            throw new ServiceException(4501);
+        }
         return record;
     }
 

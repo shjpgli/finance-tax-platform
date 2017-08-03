@@ -61,7 +61,7 @@ public class KnowledgeBaseController {
         byte[] b = {new Byte("1")};
         KnowledgeBase record = new KnowledgeBase();
         record.setId(Utils.uuid());
-        record.setCategoryId("1");
+        record.setCategoryCode("1");
         record.setContent(b);
         record.setCreateUser("1");
         record.setIsOpen(Boolean.TRUE);

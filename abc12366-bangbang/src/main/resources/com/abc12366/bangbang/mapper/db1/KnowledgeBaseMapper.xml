@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		id,	categoryId,	type,	recommend,	subject,	content,	status,	activeTime,	source,	isOpen,	pv,	usefulVotes,	uselessVotes,	shareNum,	createTime,	updateTime,	createUser,	updateUser
+		id,	categoryCode,	type,	recommend,	subject,	content,	status,	activeTime,	source,	isOpen,	pv,	usefulVotes,	uselessVotes,	shareNum,	createTime,	updateTime,	createUser,	updateUser
 	</sql>
 
 	<!-- 列表查询 -->
@@ -15,8 +15,8 @@
 		FROM bb_knowledge_base
 		<where>
 			1 = 1
-			<if test="categoryId != null">
-				AND categoryId = #{categoryId}
+			<if test="categoryCode != null">
+				AND categoryCode LIKE CONCAT(#{categoryCode},'%')
 			</if>
 			<if test="keywords != null">
 				AND subject LIKE CONCAT('%',#{keywords},'%')
@@ -42,9 +42,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="knowledgeBase">
 		 INSERT INTO bb_knowledge_base
- 		(id,categoryId,type,recommend,subject,content,status,activeTime,source,isOpen,pv,usefulVotes,uselessVotes,shareNum,createTime,updateTime,createUser,updateUser)
+ 		(id,categoryCode,type,recommend,subject,content,status,activeTime,source,isOpen,pv,usefulVotes,uselessVotes,shareNum,createTime,updateTime,createUser,updateUser)
 		 VALUES
- 		(#{id},#{categoryId},#{type},#{recommend},#{subject},#{content},#{status},#{activeTime},#{source},#{isOpen},#{pv},#{usefulVotes},#{uselessVotes},#{shareNum},#{createTime},#{updateTime},#{createUser},#{updateUser})
+ 		(#{id},#{categoryCode},#{type},#{recommend},#{subject},#{content},#{status},#{activeTime},#{source},#{isOpen},#{pv},#{usefulVotes},#{uselessVotes},#{shareNum},#{createTime},#{updateTime},#{createUser},#{updateUser})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -54,8 +54,8 @@
 			<if test="id != null">
 				id,
 			</if>
-			<if test="categoryId != null">
-				categoryId,
+			<if test="categoryCode != null">
+				categoryCode,
 			</if>
 			<if test="type != null">
 				type,
@@ -111,8 +111,8 @@
 			<if test="id!=null">
 				#{id},
 			</if>
-			<if test="categoryId!=null">
-				#{categoryId},
+			<if test="categoryCode!=null">
+				#{categoryCode},
 			</if>
 			<if test="type!=null">
 				#{type},
@@ -169,8 +169,8 @@
 	<update id="updateByPrimaryKeySelective" parameterType="knowledgeBase">
 		UPDATE bb_knowledge_base
 		<set>
-			<if test="categoryId != null">
-				categoryId = #{categoryId},
+			<if test="categoryCode != null">
+				categoryCode = #{categoryCode},
 			</if>
 			<if test="type != null">
 				type = #{type},
@@ -229,7 +229,7 @@
 	<update id="updateByPrimaryKey" parameterType="knowledgeBase">
 		UPDATE bb_knowledge_base
 		SET
-		categoryId = #{categoryId},
+		categoryCode = #{categoryCode},
 		type = #{type},
 		recommend = #{recommend},
 		subject = #{subject},
