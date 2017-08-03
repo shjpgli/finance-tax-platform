@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.abc12366.cszj.model.weixin.bo.menu.Button;
 import com.abc12366.cszj.model.weixin.bo.menu.Menu;
-import com.abc12366.cszj.model.weixin.bo.template.FileContent;
+import com.abc12366.cszj.model.weixin.bo.message.FileContent;
 import com.alibaba.fastjson.JSON;
 
 
@@ -18,7 +18,7 @@ import com.alibaba.fastjson.JSON;
  */
 public class WxConnectFactory {
 	 private static final String HTTP_GET="GET";
-	 private static final String HTTP_POST="GET";
+	 private static final String HTTP_POST="POST";
 
 
 	 public static  <T extends Object> T get(WechatUrl url,Map<String, String> headparamters,Object bodyparamters,Class<T> _class) {

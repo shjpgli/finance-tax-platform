@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.abc12366.cszj.model.weixin.bo.message.FileContent;
+import com.abc12366.cszj.model.weixin.bo.message.ImgMaterial;
 import com.abc12366.cszj.model.weixin.bo.message.News;
 import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
 import com.abc12366.cszj.model.weixin.bo.message.WxNews;
-import com.abc12366.cszj.model.weixin.bo.template.FileContent;
-import com.abc12366.cszj.model.weixin.bo.template.ImgMaterial;
 /**
  * 
  * @author zhushuai 2017-7-27
@@ -45,6 +45,8 @@ public interface IWxMsgService {
 	void deleteWxremsg(String id);
 
 	ReturnMsg selectOneWxremsg(String id);
+
+	News selectOne(String id);
 	
 	
 	
