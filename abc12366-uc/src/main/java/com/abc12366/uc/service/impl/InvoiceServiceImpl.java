@@ -8,6 +8,7 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
+import com.abc12366.uc.model.bo.OrderInvoiceBO;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
 import org.slf4j.Logger;
@@ -360,6 +361,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                     throw new ServiceException(4148);
                 }
             }
+            //删除订单和发票对应关系
+            orderInvoiceMapper.deleteByInvoiceId(invoice.getId());
+
         }
         invoiceBack.setLastUpdate(new Date());
         int bUpdate = invoiceBackMapper.update(invoiceBack);
@@ -391,7 +395,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional("db1TxManager")
     @Override
     public InvoiceBO billing(InvoiceBO invoiceBO) {
-        if(invoiceBO.getIsBilling()){
+        if("2".equals(invoiceBO.getStatus())){
             InvoiceDetail detail = invoiceBO.getInvoiceDetail();
             if(detail == null){
                 LOGGER.info("发票详情信息不能为空：{}", detail);
@@ -403,6 +407,23 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("发票详情信息修改失败：{}", detail);
                 throw new ServiceException(4187);
             }
+        }else if("3".equals(invoiceBO.getStatus())){
+            List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoiceBO.getId());
+            Order order = null;
+            //修改订单是否已开发票状态
+            for (OrderInvoice orderInvoice:orderInvoiceList){
+                order = new Order();
+                order.setOrderNo(orderInvoice.getOrderNo());
+                order.setIsInvoice(false);
+                order.setLastUpdate(new Date());
+                int oUpdate = orderMapper.update(order);
+                if(oUpdate != 1){
+                    LOGGER.info("订单信息修改错误：{}", order);
+                    throw new ServiceException(4148);
+                }
+            }
+            //删除订单和发票对应关系
+            orderInvoiceMapper.deleteByInvoiceId(invoiceBO.getId());
         }
         invoiceBO.setLastUpdate(new Date());
         Invoice invoice = new Invoice();
