@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	name,	parentId,	level, sort
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectAll" resultType="knowledgeCategory">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_knowledge_category
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="knowledgeCategory" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_knowledge_category
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM bb_knowledge_category
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="knowledgeCategory">
+		 INSERT INTO bb_knowledge_category
+ 		(id,name,parentId,level) 
+		 VALUES 
+ 		(#{id},#{name},#{parentId},#{level}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="knowledgeCategory">
+		 INSERT INTO bb_knowledge_category
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="parentId != null">
+				 parentId,
+			</if>
+			<if test="level != null">
+				 level,
+			</if>
+			 <if test="sort != null">
+				 sort,
+			 </if>
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="parentId!=null">
+				 #{parentId},
+			</if>
+			<if test="level!=null">
+				 #{level},
+			</if>
+			 <if test="sort!=null">
+				 #{sort},
+			 </if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="knowledgeCategory">
+		 UPDATE bb_knowledge_category
+ 		 <set> 
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="parentId != null">
+				 parentId = #{parentId},
+			</if>
+			<if test="level != null">
+				 level = #{level},
+			</if>
+			 <if test="sort != null">
+				 sort = #{sort},
+			 </if>
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="knowledgeCategory">
+		 UPDATE bb_knowledge_category
+		 SET 
+			 name = #{name},
+			 parentId = #{parentId},
+			 level = #{level},
+			 sort = #{sort}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
