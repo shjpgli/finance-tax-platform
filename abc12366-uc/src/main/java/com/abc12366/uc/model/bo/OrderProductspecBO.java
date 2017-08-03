@@ -10,19 +10,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class OrderProductspecBO implements Serializable {
 
-	private String orderId;
+	private String orderNo;
 	private String productId;
 	private String specId;
 
 
-
-	public void setOrderId(String orderId){
-		this.orderId = orderId;
-	}
-
-	public String getOrderId(){
-		return this.orderId;
-	}
 
 	public void setProductId(String productId){
 		this.productId = productId;
@@ -40,4 +32,11 @@ public class OrderProductspecBO implements Serializable {
 		return this.specId;
 	}
 
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 }

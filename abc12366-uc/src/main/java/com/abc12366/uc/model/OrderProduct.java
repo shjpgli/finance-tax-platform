@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class OrderProduct implements Serializable {
 
 	/**FK**/
-	private String orderId;
+	private String orderNo;
 
 	/**FK**/
 	private String productId;
@@ -49,15 +49,6 @@ public class OrderProduct implements Serializable {
 	/****/
 	private java.util.Date lastUpdate;
 
-
-
-	public void setOrderId(String orderId){
-		this.orderId = orderId;
-	}
-
-	public String getOrderId(){
-		return this.orderId;
-	}
 
 	public void setProductId(String productId){
 		this.productId = productId;
@@ -155,4 +146,11 @@ public class OrderProduct implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 }

@@ -10,8 +10,6 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Order implements Serializable {
 
-    /**PK**/
-    private String id;
 
     /**订单编号**/
     private String orderNo;
@@ -79,14 +77,6 @@ public class Order implements Serializable {
     private Boolean isInvoice;
 
     private String cancelId;
-
-    public void setId(String id){
-        this.id = id;
-    }
-
-    public String getId(){
-        return this.id;
-    }
 
     public void setOrderNo(String orderNo){
         this.orderNo = orderNo;

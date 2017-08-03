@@ -5,15 +5,15 @@
 
 	<delete id="delete" parameterType="java.lang.String">
 		 DELETE FROM uc_order_product
-		 WHERE orderId = #{orderId}
+		 WHERE orderNo = #{orderNo}
 	</delete>
 
 
 	<insert id="insert" parameterType="com.abc12366.uc.model.OrderProduct">
 		 INSERT INTO uc_order_product
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="orderId != null">
-				 orderId,
+			<if test="orderNo != null">
+				 orderNo,
 			</if>
 			<if test="productId != null">
 				 productId,
@@ -54,8 +54,8 @@
 
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="orderId!=null">
-				 #{orderId},
+			<if test="orderNo!=null">
+				 #{orderNo},
 			</if>
 			<if test="productId!=null">
 				 #{productId},
@@ -137,7 +137,7 @@
 			</if>
 
  		 </set>
-		 WHERE orderId = #{orderId}
+		 WHERE orderNo = #{orderNo}
 	</update>
 
 </mapper>

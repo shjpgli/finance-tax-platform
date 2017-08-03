@@ -173,7 +173,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public OrderBO submitOrder(OrderBO orderBO) {
-        isValidate(orderBO);
+        //isValidate(orderBO);
         String orderId = Utils.uuid();
         orderBO.setOrderNo(DataUtils.getDateToString());
         Date date = new Date();
@@ -195,7 +195,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4166);
         }else{
             for (OrderProductBO orderProductBO : orderProductBOs){
-                orderProductBO.setOrderId(orderId);
+                orderProductBO.setOrderNo(orderId);
                 OrderProduct orderProduct = new OrderProduct();
                 BeanUtils.copyProperties(orderProductBO,orderProduct);
                 int opInsert = orderProductMapper.insert(orderProduct);
@@ -290,7 +290,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4166);
         }else{
             for (OrderProductBO orderProductBO : orderProductBOs){
-                int opDel = orderProductMapper.delete(orderProductBO.getOrderId());
+                int opDel = orderProductMapper.delete(orderProductBO.getOrderNo());
                 if (opDel != 1){
                     LOGGER.info("删除订单与产品关系信息失败：{}", orderBO);
                     throw new ServiceException(4168);
@@ -395,10 +395,10 @@ public class OrderServiceImpl implements OrderService {
 
             //获取订单和产品关系信息
             OrderProductBO pBO = new OrderProductBO();
-            pBO.setOrderId(orderBack.getOrderNo());
+            pBO.setOrderNo(orderBack.getOrderNo());
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
             for (OrderProductBO orderProductBO : orderProductBOs){
-                orderProductBO.setOrderId(orderNo);
+                orderProductBO.setOrderNo(orderNo);
                 OrderProduct orderProduct = new OrderProduct();
                 BeanUtils.copyProperties(orderProductBO,orderProduct);
                 int opInsert = orderProductMapper.insert(orderProduct);

@@ -1,6 +1,5 @@
 package com.abc12366.uc.model.bo;
-import com.abc12366.uc.model.Order;
-import com.abc12366.uc.model.OrderProduct;
+
 import com.abc12366.uc.model.User;
 
 import java.io.Serializable;
@@ -16,7 +15,6 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class OrderBO implements Serializable {
 
-    private String id;
     private String orderNo;
     private String userId;
     private String orderStatus;
@@ -53,14 +51,6 @@ public class OrderBO implements Serializable {
     private InvoiceBO invoiceBO;
 
     private DeliveryMethodBO deliveryMethodBO;
-
-    public void setId(String id){
-        this.id = id;
-    }
-
-    public String getId(){
-        return this.id;
-    }
 
     public void setOrderNo(String orderNo){
         this.orderNo = orderNo;

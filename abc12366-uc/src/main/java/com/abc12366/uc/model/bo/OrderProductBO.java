@@ -11,7 +11,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class OrderProductBO implements Serializable {
 
-    private String orderId;
+    private String orderNo;
     private String productId;
     private Double sellingPrice;
     private Double unitPrice;
@@ -26,14 +26,6 @@ public class OrderProductBO implements Serializable {
     private java.util.Date lastUpdate;
 
     private ProductBO productBO;
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getOrderId() {
-        return this.orderId;
-    }
 
     public void setProductId(String productId) {
         this.productId = productId;
@@ -137,5 +129,13 @@ public class OrderProductBO implements Serializable {
 
     public void setProductBO(ProductBO productBO) {
         this.productBO = productBO;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 }
