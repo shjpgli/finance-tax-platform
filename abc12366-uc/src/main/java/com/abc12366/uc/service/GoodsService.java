@@ -33,4 +33,6 @@ public interface GoodsService {
     List<GoodsBO> selectProductRepoList(GoodsBO goods);
 
     GoodsBO selectUserGoods(String id);
+
+    List<GoodsBO> selectGoodsBOList(Goods goods);
 }

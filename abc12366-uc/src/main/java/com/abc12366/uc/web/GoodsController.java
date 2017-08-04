@@ -94,7 +94,7 @@ public class GoodsController {
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                      @RequestParam(value = "categoryId", required = false) String categoryId,
-                                          @RequestParam(value = "goodsType", required = false) String goodsType,
+                                     @RequestParam(value = "goodsType", required = false) String goodsType,
                                      @RequestParam(value = "recommendType", required = false) String recommendType) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
@@ -106,7 +106,7 @@ public class GoodsController {
         //已发布状态
         goods.setStatus(true);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<GoodsBO> goodsList = goodsService.selectList(goods);
+        List<GoodsBO> goodsList = goodsService.selectGoodsBOList(goods);
         LOGGER.info("{}", goodsList);
         return (goodsList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :

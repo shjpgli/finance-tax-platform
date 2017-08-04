@@ -33,4 +33,6 @@ public interface GoodsRoMapper {
     GoodsBO selecGoodsByProductId(String id);
 
     GoodsBO selectUserGoods(String id);
+
+    List<GoodsBO> selectGoodsBOList(Goods goods);
 }

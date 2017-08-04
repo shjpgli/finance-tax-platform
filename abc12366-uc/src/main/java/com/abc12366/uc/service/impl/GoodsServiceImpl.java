@@ -285,4 +285,9 @@ public class GoodsServiceImpl implements GoodsService {
     public GoodsBO selectUserGoods(String id) {
         return goodsRoMapper.selectUserGoods(id);
     }
+
+    @Override
+    public List<GoodsBO> selectGoodsBOList(Goods goods) {
+        return goodsRoMapper.selectGoodsBOList(goods);
+    }
 }
