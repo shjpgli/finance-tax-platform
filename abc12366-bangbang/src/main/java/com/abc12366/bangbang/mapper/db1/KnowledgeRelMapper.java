@@ -28,6 +28,14 @@ public interface KnowledgeRelMapper {
 	 **/
 	int deleteByPrimaryKey(@Param("id") Long id);
 
+
+	/**
+	 *
+	 * 删除（根据KnowledgeID删除）
+	 *
+	 **/
+	int deleteByKnowledgeId(@Param("KnowledgeId") String KnowledgeId);
+
 	/**
 	 * 
 	 * 添加

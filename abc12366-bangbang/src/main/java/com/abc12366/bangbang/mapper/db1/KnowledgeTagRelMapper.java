@@ -26,7 +26,16 @@ public interface KnowledgeTagRelMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("id") String id);
+
+
+	/**
+	 *
+	 * 删除（根据KnowledgeID删除）
+	 *
+	 **/
+	int deleteByKnowledgeId(@Param("KnowledgeId") String KnowledgeId);
+
 
 	/**
 	 * 

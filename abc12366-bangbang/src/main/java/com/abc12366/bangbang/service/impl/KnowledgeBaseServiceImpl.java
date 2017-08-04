@@ -57,31 +57,63 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
         knowledgeBase.setCreateUser(UcUserCommon.getUserId());
         knowledgeBase.setUpdateUser(UcUserCommon.getUserId());
         knowledgeBaseMapper.insert(knowledgeBase);
-
         //添加关联标签
+        addTagRel(knowledgeBaseBO);
+        //添加关联的问题
+        addKnowledgeRel(knowledgeBaseBO);
+
+        return knowledgeBaseBO;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO) {
+
+        KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
+        String knowledgeBaseId = knowledgeBase.getId();
+        knowledgeBaseMapper.updateByPrimaryKey(knowledgeBase);
+
+        //管理关联 标签
+        knowledgeTagRelMapper.deleteByKnowledgeId(knowledgeBaseId);
+        addTagRel(knowledgeBaseBO);
+        //管理关联 的知识库
+        knowledgeRelMapper.deleteByKnowledgeId(knowledgeBaseId);
+        addKnowledgeRel(knowledgeBaseBO);
+
+        return knowledgeBaseBO;
+    }
+
+    private void addTagRel(KnowledgeBaseBO knowledgeBaseBO){
         List<String> tagIds = knowledgeBaseBO.getTagIds();
         if(tagIds!=null && !tagIds.isEmpty()){
+            KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             List<KnowledgeTagRel> list = new ArrayList<>();
             for (String tagId :tagIds){
                 KnowledgeTagRel rel = new KnowledgeTagRel();
                 rel.setId(Utils.uuid());
                 rel.setKnowledgeId(knowledgeBase.getId());
                 rel.setTagId(tagId);
+                list.add(rel);
             }
             knowledgeTagRelMapper.insertBatch(list);
         }
-        //添加关联的问题
+    }
+
+    private void addKnowledgeRel(KnowledgeBaseBO knowledgeBaseBO){
         List<String> relKnowledgeIds = knowledgeBaseBO.getRefKnowledgeId();
         if(relKnowledgeIds!= null && !relKnowledgeIds.isEmpty()){
+            KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             List<KnowledgeRel> list = new ArrayList<>();
             for (String relKnowledgeId :relKnowledgeIds){
                 KnowledgeRel rel = new KnowledgeRel();
                 rel.setId(Utils.uuid());
                 rel.setKnowledgeId(knowledgeBase.getId());
                 rel.setRelKnowledgeId(relKnowledgeId);
+                list.add(rel);
             }
             knowledgeRelMapper.insertBatch(list);
         }
-        return knowledgeBaseBO;
     }
+
+
 }

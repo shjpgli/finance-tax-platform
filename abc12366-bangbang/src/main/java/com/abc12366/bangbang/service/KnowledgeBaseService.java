@@ -20,4 +20,6 @@ public interface KnowledgeBaseService {
     /*添加知识库数据*/
     KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO);
 
+    KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO);
+
 }

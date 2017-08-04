@@ -49,11 +49,27 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    /**
+     * 添加知识库 接口
+     */
     @PostMapping(path = "/add")
     public ResponseEntity add(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
         knowledgeBaseService.add(knowledgeBaseBO);
         return ResponseEntity.ok(Utils.kv("data",knowledgeBaseBO));
     }
+
+
+    /*
+    * 修改知识库 接口
+    */
+    @PutMapping(path="/modify")
+    public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
+
+
+        return null;
+    }
+
+
 
     //test
     @PostMapping(path = "/add1")

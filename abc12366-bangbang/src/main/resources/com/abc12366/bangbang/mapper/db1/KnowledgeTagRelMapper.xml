@@ -22,6 +22,12 @@
 		 WHERE id = #{id}
 	</delete>
 
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByKnowledgeId" parameterType="java.lang.String">
+		DELETE FROM bb_knowledge_tag_rel
+		WHERE knowledgeId = #{knowledgeId}
+	</delete>
+
 	<!-- 添加 -->
 	<insert id="insert" parameterType="knowledgeTagRel">
 		 INSERT INTO bb_knowledge_tag_rel
