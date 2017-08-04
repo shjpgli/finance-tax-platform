@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.TemplateMapper">
+
+
+    <insert id="insert" parameterType="com.abc12366.uc.model.weixin.bo.template.Template">
+        INSERT INTO cszj_template(template_id,title,primary_industry,deputy_industry,content,example,lastupdate)
+        VALUES (#{template_id}, #{title}, #{primary_industry}, #{deputy_industry}, #{content}, #{example},
+        #{lastupdate})
+    </insert>
+
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM cszj_template WHERE template_id = #{template_id}
+    </delete>
+
+    <delete id="deleteAll" parameterType="java.lang.String">
+        DELETE FROM cszj_template
+    </delete>
+
+</mapper>
