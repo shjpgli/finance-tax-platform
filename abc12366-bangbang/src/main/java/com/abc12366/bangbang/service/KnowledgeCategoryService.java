@@ -11,6 +11,17 @@ import java.util.List;
  */
 public interface KnowledgeCategoryService {
 
+
     List<KnowledgeCategory> listAll();
+
+
+    KnowledgeCategory add(KnowledgeCategory knowledgeCategory);
+
+    /* 修改分类名称 */
+    void modifyNameById(String id, String name);
+
+    /* 修改分类排序 */
+    void modifySort(List<KnowledgeCategory> list);
+
 
 }

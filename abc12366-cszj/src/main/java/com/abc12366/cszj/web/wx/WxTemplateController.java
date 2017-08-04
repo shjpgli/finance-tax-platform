@@ -89,4 +89,11 @@ public class WxTemplateController {
 		LOGGER.info("{}", responseEntity);
 		return responseEntity;
 	}
+	
+	//模板消息发送
+	@SuppressWarnings("rawtypes")
+	@DeleteMapping("/wxTemplate/send")
+	public ResponseEntity templateSend(){
+         return null;
+	}
 }

@@ -19,8 +19,15 @@ public interface KnowledgeCategoryMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	KnowledgeCategory  selectByPrimaryKey(@Param("id") Long id);
+	KnowledgeCategory  selectByPrimaryKey(@Param("id") String id);
 
+
+	/**
+	 *
+	 * 查询（根据CODE查询）
+	 *
+	 **/
+	KnowledgeCategory  selectByCode(@Param("code") String code);
 
 	/**
 	 * 列表查询
@@ -33,7 +40,7 @@ public interface KnowledgeCategoryMapper{
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 

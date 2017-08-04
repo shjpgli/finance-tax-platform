@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,8 +34,31 @@ public class KnowledgeCategoryController {
         return ResponseEntity.ok(Utils.kv("dataList", all));
     }
 
+    /* 新增分类 */
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody KnowledgeCategory record){
+        KnowledgeCategory rs = knowledgeCategoryService.add(record);
+        return ResponseEntity.ok(Utils.kv("data", rs));
+    }
 
 
+    /* 修改分类的名称 */
+    @PutMapping(path = "/modifyName/{id}")
+    public ResponseEntity modifyName(@PathVariable String id, @RequestParam String name){
+        knowledgeCategoryService.modifyNameById(id, name);
+        return null;
+    }
+
+
+    /* 编辑分类 */
+    @PutMapping(path = "/edit")
+    public ResponseEntity edit(){
+
+        return null;
+    }
+
+
+    /* 删除分类*/
 
 
 }

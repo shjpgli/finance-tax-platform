@@ -13,7 +13,7 @@ public class KnowledgeBase{
 	private String id;
 
 	/**分类ID**/
-	private String categoryId;
+	private String categoryCode;
 
 	/**类别：QA问答，K知识**/
 	private String type;
@@ -73,12 +73,12 @@ public class KnowledgeBase{
 		return this.id;
 	}
 
-	public void setCategoryId(String categoryId){
-		this.categoryId = categoryId;
+	public String getCategoryCode() {
+		return categoryCode;
 	}
 
-	public String getCategoryId(){
-		return this.categoryId;
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
 	}
 
 	public void setType(String type){

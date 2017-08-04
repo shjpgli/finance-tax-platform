@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.common.util.Constant;
@@ -48,20 +49,36 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    /**
+     * 添加知识库 接口
+     */
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
+        knowledgeBaseService.add(knowledgeBaseBO);
+        return ResponseEntity.ok(Utils.kv("data",knowledgeBaseBO));
+    }
 
 
+    /*
+    * 修改知识库 接口
+    */
+    @PutMapping(path="/modify")
+    public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
 
+
+        return null;
+    }
 
 
 
     //test
-    @PostMapping(path = "/add")
-    public ResponseEntity add(){
+    @PostMapping(path = "/add1")
+    public ResponseEntity add1(){
 
         byte[] b = {new Byte("1")};
         KnowledgeBase record = new KnowledgeBase();
         record.setId(Utils.uuid());
-        record.setCategoryId("1");
+        record.setCategoryCode("1");
         record.setContent(b);
         record.setCreateUser("1");
         record.setIsOpen(Boolean.TRUE);

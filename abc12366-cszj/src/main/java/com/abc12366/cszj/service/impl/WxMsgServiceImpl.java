@@ -171,7 +171,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		int update=msgMapper.updateNews(news);
         if(update != 1){
             LOGGER.info("{修改图文消息失败}", update);
-            throw new ServiceException(4421);
+            throw new ServiceException(4102);
         }else{
         	msgMapper.deleteArticle(news.getId());
     		for (Article article : news.getArticles()) {
@@ -194,7 +194,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 			ReturnMsg	newmsg = msgRoMapper.getReMsgOneBysetting(returnMsg.getSetting());
 			if(newmsg!=null){
 				LOGGER.info("{修改自动回复消息失败:被添加回复或者自动回复只能存在一条记录}", returnMsg.getSetting());
-	            throw new ServiceException(4421);
+	            throw new ServiceException(4101);
 			}
 		}
 		Timestamp now = new Timestamp(new Date().getTime());
@@ -263,7 +263,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
         	newmsg = msgRoMapper.selectOneWxremsg(id);
         } catch (Exception e) {
             LOGGER.error("查询单个自动回复信息信息异常：{}", e);
-            throw new ServiceException(4234);
+            throw new ServiceException(4102);
         }
         return newmsg;
 	}
@@ -276,7 +276,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
             info = msgRoMapper.selectOne(id);
         } catch (Exception e) {
             LOGGER.error("查询单个模板消息异常：{}", e);
-            throw new ServiceException(4234);
+            throw new ServiceException(4104);
         }
         return info;
 	}

@@ -15,11 +15,26 @@ public class KnowledgeCategory{
 	/**分类名称**/
 	private String name;
 
-	/**父类ID**/
-	private String parentId;
+	/**标识编码**/
+	private String code;
 
-	/**级别**/
-	private Integer level;
+	/**父类标识编码**/
+	private String parentCode;
+
+	/**顺序**/
+	private Integer sort;
+
+	/**创建时间**/
+	private java.util.Date createTime;
+
+	/**修改时间**/
+	private java.util.Date updateTime;
+
+	/**创建人**/
+	private String createUser;
+
+	/**修改人**/
+	private String updateUser;
 
 
 
@@ -39,20 +54,60 @@ public class KnowledgeCategory{
 		return this.name;
 	}
 
-	public void setParentId(String parentId){
-		this.parentId = parentId;
+	public void setCode(String code){
+		this.code = code;
 	}
 
-	public String getParentId(){
-		return this.parentId;
+	public String getCode(){
+		return this.code;
 	}
 
-	public void setLevel(Integer level){
-		this.level = level;
+	public void setParentCode(String parentCode){
+		this.parentCode = parentCode;
 	}
 
-	public Integer getLevel(){
-		return this.level;
+	public String getParentCode(){
+		return this.parentCode;
+	}
+
+	public void setSort(Integer sort){
+		this.sort = sort;
+	}
+
+	public Integer getSort(){
+		return this.sort;
+	}
+
+	public void setCreateTime(java.util.Date createTime){
+		this.createTime = createTime;
+	}
+
+	public java.util.Date getCreateTime(){
+		return this.createTime;
+	}
+
+	public void setUpdateTime(java.util.Date updateTime){
+		this.updateTime = updateTime;
+	}
+
+	public java.util.Date getUpdateTime(){
+		return this.updateTime;
+	}
+
+	public void setCreateUser(String createUser){
+		this.createUser = createUser;
+	}
+
+	public String getCreateUser(){
+		return this.createUser;
+	}
+
+	public void setUpdateUser(String updateUser){
+		this.updateUser = updateUser;
+	}
+
+	public String getUpdateUser(){
+		return this.updateUser;
 	}
 
 }

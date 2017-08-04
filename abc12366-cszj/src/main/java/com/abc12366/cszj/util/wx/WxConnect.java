@@ -32,7 +32,7 @@ import com.alibaba.fastjson.JSON;
  * @param <T>
  */
 public class WxConnect<T> {
-	//public final static ObjectMapper mapper = new ObjectMapper();
+	 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WxConnect.class);
 	
 	protected Class<T> _class;
@@ -52,8 +52,6 @@ public class WxConnect<T> {
 		this.bodyparamters=bodyparamters;
 		this._class=_class;
 		this.requestUrl=SpringCtxHolder.getProperty("abc.wx-url")+wechatUrl.uri;
-		//mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		//mapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
 	}
 	
 	public WxConnect(WechatUrl url,Map<String, String> headparamters,Object bodyparamters,Class<T> _class,FileContent file){
@@ -79,7 +77,6 @@ public class WxConnect<T> {
 				requestUrl=url.toString();
 			}
 			if (bodyparamters!=null){
-				//this.outputStr=mapper.writeValueAsString(bodyparamters);
 				this.outputStr=JSON.toJSONString(bodyparamters);
 			}
 		} catch (Exception e) {
@@ -246,7 +243,6 @@ public class WxConnect<T> {
 	T parseObject() {
 		try {
 			T res = JSON.parseObject(this.getJsonStr(), _class);
-			//T res = mapper.readValue(this.getJsonStr(), _class);
 			return res;
 		} catch (Exception e) {
 			LOGGER.error("微信服务器返回json格式异常", e);
@@ -263,5 +259,9 @@ public class WxConnect<T> {
 
 	public void setJsonStr(String jsonStr) {
 		this.jsonStr = jsonStr;
+	}
+	
+    public static void main(String[] args) {
+    	
 	}
 }
