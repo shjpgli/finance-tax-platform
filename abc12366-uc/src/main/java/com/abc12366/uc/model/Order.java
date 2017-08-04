@@ -78,6 +78,9 @@ public class Order implements Serializable {
 
     private String cancelId;
 
+    /**商品ID**/
+    private String goodsId;
+
     public void setOrderNo(String orderNo){
         this.orderNo = orderNo;
     }
@@ -252,5 +255,13 @@ public class Order implements Serializable {
 
     public void setCancelId(String cancelId) {
         this.cancelId = cancelId;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 }

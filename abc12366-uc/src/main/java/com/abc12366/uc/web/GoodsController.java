@@ -92,6 +92,7 @@ public class GoodsController {
     public ResponseEntity selectGoodsList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                      @RequestParam(value = "categoryId", required = false) String categoryId,
                                      @RequestParam(value = "recommendType", required = false) String recommendType) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -99,6 +100,7 @@ public class GoodsController {
         goods.setName(name);
         goods.setCategoryId(categoryId);
         goods.setRecommendType(recommendType);
+        goods.setTradeMethod(tradeMethod);
         //已发布状态
         goods.setStatus(true);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -130,6 +132,19 @@ public class GoodsController {
     public ResponseEntity selectGoods(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         GoodsBO goodsBO = goodsService.selectGoods(id);
+        LOGGER.info("{}", goodsBO);
+        return ResponseEntity.ok(Utils.kv("data", goodsBO));
+    }
+
+    /**
+     * 前台用户查询单个商品
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity selectUserGoods(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        GoodsBO goodsBO = goodsService.selectUserGoods(id);
         LOGGER.info("{}", goodsBO);
         return ResponseEntity.ok(Utils.kv("data", goodsBO));
     }

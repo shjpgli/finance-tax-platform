@@ -39,6 +39,7 @@ public class DataUtils {
     public static  String getDateToString(){
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");//设置日期格式
         StringBuffer buffer = new StringBuffer();
+        buffer.append("DD");
         buffer.append(df.format(new Date()));
         buffer.append(getRandom());
         return buffer.toString();
