@@ -1,15 +1,25 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
+import com.abc12366.bangbang.mapper.db1.KnowledgeRelMapper;
+import com.abc12366.bangbang.mapper.db1.KnowledgeTagRelMapper;
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.KnowledgeRel;
+import com.abc12366.bangbang.model.KnowledgeTagRel;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
+import com.abc12366.common.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @Author liuqi
@@ -23,6 +33,12 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
     @Autowired
     private KnowledgeBaseMapper knowledgeBaseMapper;
 
+    @Autowired
+    private KnowledgeTagRelMapper knowledgeTagRelMapper;
+
+    @Autowired
+    private KnowledgeRelMapper knowledgeRelMapper;
+
     @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
         return knowledgeBaseMapper.selectList(param);
@@ -31,5 +47,41 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
     @Override
     public void add(KnowledgeBase knowledgeBase) {
         knowledgeBaseMapper.insert(knowledgeBase);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO) {
+        KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
+        knowledgeBase.setId(Utils.uuid());
+        knowledgeBase.setCreateUser(UcUserCommon.getUserId());
+        knowledgeBase.setUpdateUser(UcUserCommon.getUserId());
+        knowledgeBaseMapper.insert(knowledgeBase);
+
+        //添加关联标签
+        List<String> tagIds = knowledgeBaseBO.getTagIds();
+        if(tagIds!=null && !tagIds.isEmpty()){
+            List<KnowledgeTagRel> list = new ArrayList<>();
+            for (String tagId :tagIds){
+                KnowledgeTagRel rel = new KnowledgeTagRel();
+                rel.setId(Utils.uuid());
+                rel.setKnowledgeId(knowledgeBase.getId());
+                rel.setTagId(tagId);
+            }
+            knowledgeTagRelMapper.insertBatch(list);
+        }
+        //添加关联的问题
+        List<String> relKnowledgeIds = knowledgeBaseBO.getRefKnowledgeId();
+        if(relKnowledgeIds!= null && !relKnowledgeIds.isEmpty()){
+            List<KnowledgeRel> list = new ArrayList<>();
+            for (String relKnowledgeId :relKnowledgeIds){
+                KnowledgeRel rel = new KnowledgeRel();
+                rel.setId(Utils.uuid());
+                rel.setKnowledgeId(knowledgeBase.getId());
+                rel.setRelKnowledgeId(relKnowledgeId);
+            }
+            knowledgeRelMapper.insertBatch(list);
+        }
+        return knowledgeBaseBO;
     }
 }

@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 
 import java.util.List;
@@ -15,5 +16,8 @@ public interface KnowledgeBaseService {
     List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
 
     void add(KnowledgeBase knowledgeBase);
+
+    /*添加知识库数据*/
+    KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO);
 
 }

@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.common.util.Constant;
@@ -48,15 +49,15 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
-
-
-
-
-
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
+        knowledgeBaseService.add(knowledgeBaseBO);
+        return ResponseEntity.ok(Utils.kv("data",knowledgeBaseBO));
+    }
 
     //test
-    @PostMapping(path = "/add")
-    public ResponseEntity add(){
+    @PostMapping(path = "/add1")
+    public ResponseEntity add1(){
 
         byte[] b = {new Byte("1")};
         KnowledgeBase record = new KnowledgeBase();
