@@ -1,10 +1,8 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Product;
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
-import com.abc12366.uc.model.bo.ProductRepoBO;
 
 import java.util.List;
 

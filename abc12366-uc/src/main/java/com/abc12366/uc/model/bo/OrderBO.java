@@ -1,6 +1,5 @@
 package com.abc12366.uc.model.bo;
-import com.abc12366.uc.model.Order;
-import com.abc12366.uc.model.OrderProduct;
+
 import com.abc12366.uc.model.User;
 
 import java.io.Serializable;

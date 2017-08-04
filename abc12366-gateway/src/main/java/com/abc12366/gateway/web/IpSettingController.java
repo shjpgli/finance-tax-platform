@@ -1,8 +1,8 @@
 package com.abc12366.gateway.web;
 
-import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.model.IpSetting;
 import com.abc12366.gateway.service.IpSettingService;
+import com.abc12366.gateway.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,17 +1,13 @@
 package com.abc12366.gateway.component;
 
-import com.abc12366.gateway.model.BodyStatus;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.gateway.mapper.util.DataUtils;
 import com.abc12366.gateway.model.ApiLog;
 import com.abc12366.gateway.model.Blacklist;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.model.bo.BlacklistBO;
 import com.abc12366.gateway.service.ApiLogService;
 import com.abc12366.gateway.service.BlacklistService;
 import com.abc12366.gateway.service.IpSettingService;
-import com.abc12366.gateway.util.PropertiesUtil;
-import com.abc12366.gateway.util.TimeUtil;
+import com.abc12366.gateway.util.*;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +48,7 @@ public class IpInterceptor extends HandlerInterceptorAdapter {
         ApiLog apiLog = new ApiLog();
         String ip = Utils.getAddr(request);
         apiLog.setIp(ip);
-        apiLog.setYyyyMMdd(DataUtils.getDataString());
+        apiLog.setYyyyMMdd(DateUtils.getDataString());
         long time = System.currentTimeMillis();
         apiLog.setStartTime(time-(setTime*1000));
         apiLog.setEndTime(time);

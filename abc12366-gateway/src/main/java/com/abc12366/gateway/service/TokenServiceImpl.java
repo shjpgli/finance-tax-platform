@@ -1,10 +1,10 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.model.bo.AdminResponseBO;
 import com.abc12366.gateway.model.bo.LoginInfoBO;
 import com.abc12366.gateway.model.bo.ResultLoginInfo;
 import com.abc12366.gateway.model.bo.UserResponseBO;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.PropertiesUtil;
 import com.abc12366.gateway.util.RestTemplateUtil;
 import com.alibaba.fastjson.JSON;
@@ -49,7 +49,7 @@ public class TokenServiceImpl implements TokenService {
         LOGGER.info("{}:{}", adminToken, request);
         boolean isAuth = false;
         try {
-            String abcAdmin = PropertiesUtil.getValue("abc12366.admin.url");
+            String abcAdmin = PropertiesUtil.getValue("abc12366.uc.url");
             String checkUrl = "/user/token/" + adminToken;
             // 1.调用admin的token校验接口，如果校验通过直接返回true
             String result = restTemplateUtil.send(abcAdmin + checkUrl, HttpMethod.GET, request);
@@ -82,8 +82,8 @@ public class TokenServiceImpl implements TokenService {
         LOGGER.info("{}:{}", adminToken, request);
         boolean isAuth = false;
         try {
-            String abc12366_admin = PropertiesUtil.getValue("abc12366.admin.url");
-            String check_url = "/admintoken/check/" + adminToken;
+            String abc12366_admin = PropertiesUtil.getValue("abc12366.uc.url");
+            String check_url = "/admin/token/check/" + adminToken;
             // 1.调用admin的token校验接口，如果校验通过直接返回true
             String result = restTemplateUtil.send(abc12366_admin + check_url, HttpMethod.POST, request);
             if ("true".equals(result)) {
@@ -100,7 +100,7 @@ public class TokenServiceImpl implements TokenService {
 
     private void refreshAdminToken(String adminToken, HttpServletRequest request, String abc12366_admin) {
         // 刷新token时间
-        String refresh_url = "/admintoken/refresh/" + adminToken;
+        String refresh_url = "/admin/token/refresh/" + adminToken;
         // 根据token获取admin的userId
         String userid_url = "/user/token/" + adminToken;
         restTemplateUtil.send(abc12366_admin + refresh_url, HttpMethod.POST, request);

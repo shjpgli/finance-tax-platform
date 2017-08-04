@@ -1,11 +1,7 @@
 package com.abc12366.cms.service;
 
 
-import com.abc12366.cms.model.questionnaire.bo.PrizeBO;
 import com.abc12366.cms.model.questionnaire.bo.PrizeSetBO;
-import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
-
-import java.util.List;
 
 /**
  * 发奖管理接口类

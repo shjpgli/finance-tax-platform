@@ -1,5 +1,7 @@
 package com.abc12366.uc.service.admin.impl;
 
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.RoleMapper;
 import com.abc12366.uc.mapper.db1.RoleMenuMapper;
 import com.abc12366.uc.mapper.db1.UserRoleMapper;
@@ -12,8 +14,6 @@ import com.abc12366.uc.model.admin.UserRole;
 import com.abc12366.uc.model.admin.bo.RoleBO;
 import com.abc12366.uc.model.admin.bo.UserRoleBO;
 import com.abc12366.uc.service.admin.RoleService;
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

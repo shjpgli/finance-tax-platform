@@ -1,4 +1,4 @@
-package com.abc12366.uc.model.admin.bo;
+package com.abc12366.uc.model.bo;
 
 import java.io.Serializable;
 

@@ -1,6 +1,5 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.Nsr;
 import com.abc12366.uc.model.bo.NsrBO;
 import com.abc12366.uc.model.bo.NsrSelectBO;
 import com.abc12366.uc.model.bo.NsrUpdateBO;

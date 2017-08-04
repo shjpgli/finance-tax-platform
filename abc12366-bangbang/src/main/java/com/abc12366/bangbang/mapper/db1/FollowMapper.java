@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.FollowUser;
+
 import java.util.Map;
 
 /**

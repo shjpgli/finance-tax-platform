@@ -73,22 +73,22 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<UserBO> selectUser(Admin admin) {
+    public List<AdminBO> selectUser(Admin admin) {
         return null;
     }
 
     @Override
-    public List<UserBO> selectList(Admin admin) {
-        List<UserBO> users = adminRoMapper.selectList(admin);
+    public List<AdminBO> selectList(Admin admin) {
+        List<AdminBO> users = adminRoMapper.selectList(admin);
         return users;
     }
 
     @Transactional("db1TxManager")
     @Override
-    public int register(UserBO userBO) {
+    public int register(AdminBO adminBO) {
         Admin admin = new Admin();
         try {
-            BeanUtils.copyProperties(userBO, admin);
+            BeanUtils.copyProperties(adminBO, admin);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new ServiceException(4105);
@@ -108,7 +108,7 @@ public class AdminServiceImpl implements AdminService {
         int ins = adminMapper.insert(admin);
 
         String id = admin.getId();
-        String[] roles = userBO.getRoleIds().split(",");
+        String[] roles = adminBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
 
         for (String roleId : roles) {
@@ -126,17 +126,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public UserBO selectUserVOById(String id) {
+    public AdminBO selectUserVOById(String id) {
         return adminRoMapper.selectUserBoById(id);
     }
 
     @Transactional("db1TxManager")
     @Override
-    public UserUpdateBO updateUser(UserUpdateBO userUpdateBO) {
-        UserUpdateBO uBO = new UserUpdateBO();
+    public AdminUpdateBO updateUser(AdminUpdateBO adminUpdateBO) {
+        AdminUpdateBO uBO = new AdminUpdateBO();
         Admin admin = new Admin();
         try {
-            BeanUtils.copyProperties(userUpdateBO, admin);
+            BeanUtils.copyProperties(adminUpdateBO, admin);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new ServiceException(4105);
@@ -144,9 +144,9 @@ public class AdminServiceImpl implements AdminService {
         Date date = new Date();
         admin.setLastUpdate(date);
         //密码不为空时，给密码加密
-        /*if(userUpdateBO.getPassword() != null && !"".equals(userUpdateBO.getPassword())){
+        /*if(adminUpdateBO.getPassword() != null && !"".equals(adminUpdateBO.getPassword())){
             try {
-                admin.setPassword(Utils.md5(userUpdateBO.getPassword()));
+                admin.setPassword(Utils.md5(adminUpdateBO.getPassword()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -158,7 +158,7 @@ public class AdminServiceImpl implements AdminService {
 
         //修改用户详情
         AdminExtend adminExtend = new AdminExtend();
-        BeanUtils.copyProperties(userUpdateBO, adminExtend);
+        BeanUtils.copyProperties(adminUpdateBO, adminExtend);
         adminExtend.setUserId(admin.getId());
         adminExtend.setLastUpdate(date);
         int updExtend = adminExtendMapper.updateUserExtentBO(adminExtend);
@@ -166,7 +166,7 @@ public class AdminServiceImpl implements AdminService {
             throw new ServiceException(4114);
         }
         BeanUtils.copyProperties(admin,uBO);
-        String id = userUpdateBO.getId();
+        String id = adminUpdateBO.getId();
         List<UserRole> userRoles = userRoleRoMapper.selectUserRoleByUserId(id);
         if (userRoles != null && (!userRoles.isEmpty())) {
             for (UserRole userRole : userRoles) {
@@ -174,7 +174,7 @@ public class AdminServiceImpl implements AdminService {
             }
         }
 
-        String[] roles = userUpdateBO.getRoleIds().split(",");
+        String[] roles = adminUpdateBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
         for (String roleId : roles) {
             userRole.setId(Utils.uuid());
@@ -201,15 +201,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public UserBO selectOne(String id) {
+    public AdminBO selectOne(String id) {
         return adminRoMapper.selectOne(id);
     }
 
 
     @Transactional("db1TxManager")
     @Override
-    public UserBO login(UserBO userBO, String appId) {
-        UserBO user = adminRoMapper.selectUserBOByLoginName(userBO.getUsername());
+    public AdminBO login(AdminBO adminBO, String appId) {
+        AdminBO user = adminRoMapper.selectUserBOByLoginName(adminBO.getUsername());
         //判断用户是否被禁用
         if(user != null){
             Boolean status = user.getStatus();
@@ -220,7 +220,7 @@ public class AdminServiceImpl implements AdminService {
         }
         String password = "";
         try {
-            password = Utils.md5(userBO.getPassword());
+            password = Utils.md5(adminBO.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException(4106);
@@ -260,18 +260,18 @@ public class AdminServiceImpl implements AdminService {
                     throw new ServiceException(4131);
                 }
             }
-            BeanUtils.copyProperties(user, userBO);
-            userBO.setLoginInfo(loginInfo);
+            BeanUtils.copyProperties(user, adminBO);
+            adminBO.setLoginInfo(loginInfo);
 
             //查询用户菜单信息
             Map<String, List<Menu>> menuMap = new HashMap<String, List<Menu>>();
-            List<Role> roles = userBO.getRolesList();
+            List<Role> roles = adminBO.getRolesList();
             for (Role role : roles) {
                 List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
                 menuMap.put(role.getId(), menus);
             }
-            userBO.setMenuMap(menuMap);
-            return userBO;
+            adminBO.setMenuMap(menuMap);
+            return adminBO;
         } else {
             throw new ServiceException(4125);
         }
@@ -284,11 +284,11 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public AdminExtend updateUserExtend(UserExtendBO userExtendBO) {
+    public AdminExtend updateUserExtend(AdminExtendBO adminExtendBO) {
         /*AdminExtend userExtend = new AdminExtend();
-        BeanUtils.copyProperties(userExtendBO,userExtend);
+        BeanUtils.copyProperties(adminExtendBO,userExtend);
         //查询该用户是否存在详情，不存在，insert；存在，Update
-        AdminExtend extend = adminExtendRoMapper.selectUserExtendByUserId(userExtendBO.getUserId());
+        AdminExtend extend = adminExtendRoMapper.selectUserExtendByUserId(adminExtendBO.getUserId());
         Date date = new Date();
         if (extend == null){
             userExtend.setId(Utils.uuid());
@@ -324,15 +324,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional("db1TxManager")
     @Override
-    public UserBO addUser(UserBO userBO) {
-        UserBO bo = adminRoMapper.selectUserBOByLoginName(userBO.getUsername());
+    public AdminBO addUser(AdminBO adminBO) {
+        AdminBO bo = adminRoMapper.selectUserBOByLoginName(adminBO.getUsername());
         if (bo != null) {
-            LOGGER.error("该用户已经存在{}:",userBO);
+            LOGGER.error("该用户已经存在{}:", adminBO);
             throw new ServiceException(4117);
         }
         Admin admin = new Admin();
         try {
-            BeanUtils.copyProperties(userBO, admin);
+            BeanUtils.copyProperties(adminBO, admin);
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new ServiceException(4105);
@@ -354,23 +354,23 @@ public class AdminServiceImpl implements AdminService {
             throw new ServiceException(4101);
         }
         AdminExtend adminExtend = new AdminExtend();
-        BeanUtils.copyProperties(userBO, adminExtend);
+        BeanUtils.copyProperties(adminBO, adminExtend);
         adminExtend.setLastUpdate(date);
         adminExtend.setCreateTime(date);
         adminExtend.setUserId(admin.getId());
         /*adminExtend.setLastUpdate(date);
         adminExtend.setCreateTime(date);
         adminExtend.setUserId(admin.getId());
-        adminExtend.setAddress(userBO.getAddress());
-        adminExtend.setJob(userBO.getJob());
-        adminExtend.setOrgId(userBO.getOrgId());
-        adminExtend.setPhone(userBO.getPhone());*/
+        adminExtend.setAddress(adminBO.getAddress());
+        adminExtend.setJob(adminBO.getJob());
+        adminExtend.setOrgId(adminBO.getOrgId());
+        adminExtend.setPhone(adminBO.getPhone());*/
         int extInsert = adminExtendMapper.insert(adminExtend);
         if (extInsert != 1) {
             throw new ServiceException(4112);
         }
         String id = admin.getId();
-        String[] roles = userBO.getRoleIds().split(",");
+        String[] roles = adminBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
 
         int roleIns = 0;
@@ -383,7 +383,7 @@ public class AdminServiceImpl implements AdminService {
                 throw new ServiceException(4113);
             }
         }
-        UserBO temp = new UserBO();
+        AdminBO temp = new AdminBO();
         BeanUtils.copyProperties(admin,temp);
         return temp;
     }
@@ -410,7 +410,7 @@ public class AdminServiceImpl implements AdminService {
     public int updateUserPwd(UserPasswordBO userPasswordBO) {
 
         int update = 0;
-        UserBO user = adminRoMapper.selectUserBoById(userPasswordBO.getId());
+        AdminBO user = adminRoMapper.selectUserBoById(userPasswordBO.getId());
         String newPassword;
         String oldPassword;
         try {
@@ -446,13 +446,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void enable(UserUpdateBO userUpdateBO) {
-        String[] idArray = userUpdateBO.getId().split(",");
+    public void enable(AdminUpdateBO adminUpdateBO) {
+        String[] idArray = adminUpdateBO.getId().split(",");
         Admin admin = new Admin();
         admin.setLastUpdate(new Date());
         for (String userId : idArray) {
             admin.setId(userId);
-            admin.setStatus(userUpdateBO.getStatus());
+            admin.setStatus(adminUpdateBO.getStatus());
             int update = adminMapper.updateUser(admin);
             if (update != 1) {
                 LOGGER.warn("修改失败，id：{}", admin.toString());
@@ -533,8 +533,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void disableAll() {
         Admin admin = new Admin();
-        List<UserBO> userBOs = adminRoMapper.selectList(admin);
-        for (UserBO temp : userBOs) {
+        List<AdminBO> adminBOs = adminRoMapper.selectList(admin);
+        for (AdminBO temp : adminBOs) {
             admin.setId(temp.getId());
             admin.setStatus(false);
             int enable = adminMapper.updateUser(admin);
@@ -545,7 +545,7 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    private LoginInfo getLoginInfo(UserBO user, String userToken, App app) {
+    private LoginInfo getLoginInfo(AdminBO user, String userToken, App app) {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setUserId(user.getId());
         loginInfo.setAppId(app.getId());

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 
  **/
 @SuppressWarnings("serial")
-public class UserExtendUpdateBO implements Serializable {
+public class AdminExtendUpdateBO implements Serializable {
 
 	private String userId;
 	private String orgId;

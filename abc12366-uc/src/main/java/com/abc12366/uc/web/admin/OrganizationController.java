@@ -1,10 +1,10 @@
 package com.abc12366.uc.web.admin;
 
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.Organization;
 import com.abc12366.uc.model.admin.bo.OrganizationBO;
 import com.abc12366.uc.model.admin.bo.OrganizationUpdateBO;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.service.admin.OrganizationService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -22,7 +22,7 @@ import java.util.List;
  * @description：组织管理
  */
 @Controller
-@RequestMapping(path = "/org", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/admin/org", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class OrganizationController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(OrganizationController.class);

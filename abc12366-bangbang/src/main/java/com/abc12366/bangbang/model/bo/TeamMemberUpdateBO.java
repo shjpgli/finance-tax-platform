@@ -1,7 +1,5 @@
 package com.abc12366.bangbang.model.bo;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.validation.constraints.Size;
 
 /**

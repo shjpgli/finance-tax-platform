@@ -1,5 +1,4 @@
 package com.abc12366.cms.model.bo;
-import com.abc12366.cms.model.ModelItem;
 
 import java.io.Serializable;
 import java.util.List;

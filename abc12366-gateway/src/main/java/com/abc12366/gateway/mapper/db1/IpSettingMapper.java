@@ -1,7 +1,6 @@
 package com.abc12366.gateway.mapper.db1;
 
 import com.abc12366.gateway.model.IpSetting;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 

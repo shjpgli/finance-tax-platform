@@ -119,7 +119,7 @@ public class Menu implements Serializable {
 
     @Override
     public String toString() {
-        return "Menu{" +
+        return "WxMenu{" +
                 "menuId='" + menuId + '\'' +
                 ", menuName='" + menuName + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +

@@ -3,8 +3,6 @@ package com.abc12366.cms.mapper.db1;
 import com.abc12366.cms.model.questionnaire.Images;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 public interface ImagesMapper {
 
 

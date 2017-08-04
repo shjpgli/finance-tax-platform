@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.service;
 
 
-import com.abc12366.bangbang.model.Wiki;
 import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 import com.abc12366.bangbang.model.bo.WikiBO;
 

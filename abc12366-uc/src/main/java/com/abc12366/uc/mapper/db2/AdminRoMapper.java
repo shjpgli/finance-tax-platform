@@ -1,7 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.admin.Admin;
-import com.abc12366.uc.model.admin.bo.UserBO;
+import com.abc12366.uc.model.admin.bo.AdminBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,13 +25,13 @@ public interface AdminRoMapper {
 
 	Admin selectUserByLoginName(String username);
 
-	UserBO selectUserBOByLoginName(String username);
+	AdminBO selectUserBOByLoginName(String username);
 
 	Admin selectUserById(String id);
 
-	UserBO selectUserBoById(String id);
+	AdminBO selectUserBoById(String id);
 
-	List<UserBO> selectList(Admin admin);
+	List<AdminBO> selectList(Admin admin);
 
-    UserBO selectOne(@Param("id") String id);
+    AdminBO selectOne(@Param("id") String id);
 }

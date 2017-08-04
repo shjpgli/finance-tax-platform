@@ -1,26 +1,21 @@
 package com.abc12366.uc.util.wx;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.abc12366.uc.config.SpringCtxHolder;
+import com.abc12366.uc.model.weixin.BaseWxRespon;
+import com.abc12366.uc.model.weixin.bo.template.FileContent;
+import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-
-import com.abc12366.uc.config.SpringCtxHolder;
-import com.abc12366.uc.model.weixin.BaseWxRespon;
-import com.abc12366.uc.model.weixin.bo.template.FileContent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.alibaba.fastjson.JSON;
+import java.io.*;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 

@@ -1,10 +1,10 @@
 package com.abc12366.uc.util.wx;
 
+import com.abc12366.uc.config.SpringCtxHolder;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
-import com.abc12366.cszj.config.SpringCtxHolder;
 
 /**
  * 微信服务器访问加密

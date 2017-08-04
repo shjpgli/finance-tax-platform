@@ -1,8 +1,8 @@
 package com.abc12366.uc.model.weixin.bo.person;
 
-import java.util.Date;
-
 import com.abc12366.uc.model.weixin.BaseWxRespon;
+
+import java.util.Date;
 
 /**
  * 微信用户信息

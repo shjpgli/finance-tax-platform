@@ -1,11 +1,12 @@
 package com.abc12366.uc.web.admin;
 
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.Menu;
 import com.abc12366.uc.model.admin.bo.MenuBO;
 import com.abc12366.uc.model.admin.bo.MenuUpdateBO;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.service.admin.MenuService;
+import com.abc12366.uc.web.DictController;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;

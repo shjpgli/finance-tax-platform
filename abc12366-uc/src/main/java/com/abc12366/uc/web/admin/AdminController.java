@@ -1,10 +1,10 @@
 package com.abc12366.uc.web.admin;
 
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.Admin;
 import com.abc12366.uc.model.admin.AdminExtend;
 import com.abc12366.uc.model.admin.bo.*;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.service.admin.AdminService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -23,7 +23,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/admin/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AdminController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
@@ -44,7 +44,7 @@ public class AdminController {
         admin.setStatus(status);
         admin.setOrganizationId(orgId);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<UserBO> userList = adminService.selectList(admin);
+        List<AdminBO> userList = adminService.selectList(admin);
         LOGGER.info("userList:{}", userList);
         return userList == null ?
                 ResponseEntity.ok(Utils.kv()):
@@ -53,35 +53,35 @@ public class AdminController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
-        UserBO userBO = adminService.selectOne(id);
-        LOGGER.info("userBO:{}", userBO);
-        return ResponseEntity.ok(Utils.kv("data", userBO));
+        AdminBO adminBO = adminService.selectOne(id);
+        LOGGER.info("adminBO:{}", adminBO);
+        return ResponseEntity.ok(Utils.kv("data", adminBO));
     }
 
 
     /**
      * 新增用户
-     * @param userBO
+     * @param adminBO
      * @return
      */
     @PostMapping
-    public ResponseEntity addUser(@Valid @RequestBody UserBO userBO) {
-        UserBO bo = adminService.addUser(userBO);
+    public ResponseEntity addUser(@Valid @RequestBody AdminBO adminBO) {
+        AdminBO bo = adminService.addUser(adminBO);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
      * 修改用户信息
-     * @param userUpdateBO
+     * @param adminUpdateBO
      * @param id
      * @return
      */
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateUser(@Valid @RequestBody UserUpdateBO userUpdateBO, @PathVariable("id") String id) {
+    public ResponseEntity updateUser(@Valid @RequestBody AdminUpdateBO adminUpdateBO, @PathVariable("id") String id) {
         LOGGER.info("id:{}", id);
-        userUpdateBO.setId(id);
-        UserUpdateBO bo = adminService.updateUser(userUpdateBO);
+        adminUpdateBO.setId(id);
+        AdminUpdateBO bo = adminService.updateUser(adminUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
@@ -90,9 +90,9 @@ public class AdminController {
      * @return
      */
     @PutMapping(path = "/enable")
-    public ResponseEntity enable(@Valid @RequestBody UserUpdateBO userUpdateBO) {
-        LOGGER.info("{}", userUpdateBO);
-        adminService.enable(userUpdateBO);
+    public ResponseEntity enable(@Valid @RequestBody AdminUpdateBO adminUpdateBO) {
+        LOGGER.info("{}", adminUpdateBO);
+        adminService.enable(adminUpdateBO);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -151,10 +151,10 @@ public class AdminController {
      * @return
      */
     @PutMapping(path = "/extend/{id}")
-    public ResponseEntity updateUserExtend(@Valid @RequestBody UserExtendBO userExtendBO,@PathVariable("id") String id) {
-        LOGGER.info("userExtendBO:{}", userExtendBO);
-        userExtendBO.setUserId(id);
-        AdminExtend adminExtend = adminService.updateUserExtend(userExtendBO);
+    public ResponseEntity updateUserExtend(@Valid @RequestBody AdminExtendBO adminExtendBO,@PathVariable("id") String id) {
+        LOGGER.info("adminExtendBO:{}", adminExtendBO);
+        adminExtendBO.setUserId(id);
+        AdminExtend adminExtend = adminService.updateUserExtend(adminExtendBO);
         LOGGER.info("adminExtend:{}", adminExtend);
         return ResponseEntity.ok(Utils.kv("data", adminExtend));
     }

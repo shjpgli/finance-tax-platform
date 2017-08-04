@@ -1,7 +1,6 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.ContentAttr;
-import com.abc12366.cms.model.bo.ContentAttrBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

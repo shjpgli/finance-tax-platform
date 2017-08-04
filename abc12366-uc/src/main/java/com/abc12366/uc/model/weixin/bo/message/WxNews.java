@@ -1,9 +1,9 @@
 package com.abc12366.uc.model.weixin.bo.message;
 
-import java.util.List;
-import javax.validation.constraints.NotNull;
-
 import com.abc12366.uc.model.weixin.BaseWxRespon;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 

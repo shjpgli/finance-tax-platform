@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * User: liuguiyao<435720953@qq.com>

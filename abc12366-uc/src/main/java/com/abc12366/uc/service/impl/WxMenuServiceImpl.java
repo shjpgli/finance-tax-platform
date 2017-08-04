@@ -1,17 +1,13 @@
 package com.abc12366.uc.service.impl;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.config.Scheduler;
 import com.abc12366.uc.mapper.db1.WxMenuMapper;
 import com.abc12366.uc.mapper.db2.WxMenuRoMapper;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.menu.Button;
-import com.abc12366.uc.model.weixin.bo.menu.Menu;
+import com.abc12366.uc.model.weixin.bo.menu.WxMenu;
 import com.abc12366.uc.service.IWxMenuService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
@@ -21,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Utils;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class WxMenuServiceImpl implements IWxMenuService {
@@ -36,18 +35,18 @@ public class WxMenuServiceImpl implements IWxMenuService {
 	
 
 	@Override
-	public BaseWxRespon creatWxMenu(Menu menu) {
+	public BaseWxRespon creatWxMenu(WxMenu wxMenu) {
 		 Map<String,String> tks=new HashMap<String, String>();
   	     tks.put("access_token", Scheduler.token.getAccess_token());
-    	 BaseWxRespon respon= WxConnectFactory.post(WechatUrl.WXMENUCREATE, tks, menu, BaseWxRespon.class);
+    	 BaseWxRespon respon= WxConnectFactory.post(WechatUrl.WXMENUCREATE, tks, wxMenu, BaseWxRespon.class);
 		 return respon;
 	}
 
 	@Override
-	public Menu getWxMenu() {
+	public WxMenu getWxMenu() {
 		Map<String,String> tks=new HashMap<String, String>();
    	    tks.put("access_token", Scheduler.token.getAccess_token());
-   	    return WxConnectFactory.get(WechatUrl.WXMENUQUERY,tks,null,Menu.class);
+   	    return WxConnectFactory.get(WechatUrl.WXMENUQUERY,tks,null,WxMenu.class);
 	}
 
 	@Override
@@ -59,8 +58,8 @@ public class WxMenuServiceImpl implements IWxMenuService {
 	}
 
 	@Override
-	public Menu getWxMenuDb() {
-		Menu menu=new Menu();
+	public WxMenu getWxMenuDb() {
+		WxMenu wxMenu =new WxMenu();
 		List<Button> buttons=wxMenuRoMapper.seletFisrt();
 		if(buttons!=null && buttons.size()>0){
 			Button[] first=new  Button[buttons.size()];
@@ -75,10 +74,10 @@ public class WxMenuServiceImpl implements IWxMenuService {
 				}
 				first[i]=buttons.get(i);
 			}
-			menu.setButton(first);
+			wxMenu.setButton(first);
 		}
 		
-		return menu;
+		return wxMenu;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
-import com.abc12366.uc.model.admin.Dict;
+import com.abc12366.uc.model.Dict;
 
 /**
  * @author lijun <ljun51@outlook.com>

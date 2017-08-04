@@ -1,6 +1,5 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.VipLevel;
 import com.abc12366.uc.model.bo.VipLevelBO;
 
 import java.util.List;

@@ -1,11 +1,11 @@
 package com.abc12366.uc.service;
 
 
-import com.abc12366.cszj.model.weixin.bo.message.News;
-import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
-import com.abc12366.cszj.model.weixin.bo.message.WxNews;
-import com.abc12366.cszj.model.weixin.bo.template.FileContent;
-import com.abc12366.cszj.model.weixin.bo.template.ImgMaterial;
+import com.abc12366.uc.model.weixin.bo.message.News;
+import com.abc12366.uc.model.weixin.bo.message.ReturnMsg;
+import com.abc12366.uc.model.weixin.bo.message.WxNews;
+import com.abc12366.uc.model.weixin.bo.template.FileContent;
+import com.abc12366.uc.model.weixin.bo.template.ImgMaterial;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

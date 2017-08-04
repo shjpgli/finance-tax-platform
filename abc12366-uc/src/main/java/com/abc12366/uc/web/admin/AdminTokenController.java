@@ -1,12 +1,15 @@
 package com.abc12366.uc.web.admin;
 
-import com.abc12366.uc.service.admin.AdminService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.uc.service.admin.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author lizhongwei
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/admintoken", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/admin/token", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AdminTokenController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminTokenController.class);

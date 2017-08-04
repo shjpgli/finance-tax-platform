@@ -1,25 +1,19 @@
 package com.abc12366.uc.web.wx;
 
-import javax.validation.Valid;
-
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.weixin.BaseWxRespon;
+import com.abc12366.uc.model.weixin.bo.menu.Button;
+import com.abc12366.uc.model.weixin.bo.menu.WxMenu;
+import com.abc12366.uc.service.IWxMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.cszj.model.weixin.BaseWxRespon;
-import com.abc12366.cszj.model.weixin.bo.menu.Button;
-import com.abc12366.cszj.model.weixin.bo.menu.Menu;
-import com.abc12366.cszj.service.IWxMenuService;
+import javax.validation.Valid;
 
 /**
  * 微信自定义菜单
@@ -39,9 +33,9 @@ public class WxMenuController {
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/wxmenu/db/list")
 	public ResponseEntity wxmenudbList() {
-		Menu menu = iWxMenuService.getWxMenuDb();
+		WxMenu wxMenu = iWxMenuService.getWxMenuDb();
 		ResponseEntity responseEntity = ResponseEntity.ok(Utils
-				.kv("data", menu));
+				.kv("data", wxMenu));
 		LOGGER.info("{}", responseEntity);
 		return responseEntity;
 	}
@@ -104,9 +98,9 @@ public class WxMenuController {
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/wxmenu/list")
 	public ResponseEntity wxmenuList() {
-		Menu menu = iWxMenuService.getWxMenu();
+		WxMenu wxMenu = iWxMenuService.getWxMenu();
 		ResponseEntity responseEntity = ResponseEntity.ok(Utils
-				.kv("data", menu));
+				.kv("data", wxMenu));
 		LOGGER.info("{}", responseEntity);
 		return responseEntity;
 	}
@@ -115,8 +109,8 @@ public class WxMenuController {
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/wxmenu/create")
 	public ResponseEntity wxmenuCreate() {
-		Menu menu = iWxMenuService.getWxMenuDb();
-		BaseWxRespon result = iWxMenuService.creatWxMenu(menu);
+		WxMenu wxMenu = iWxMenuService.getWxMenuDb();
+		BaseWxRespon result = iWxMenuService.creatWxMenu(wxMenu);
 		if (0==result.getErrcode()) {
 			return ResponseEntity.ok(Utils.kv());
 		} else {

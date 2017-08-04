@@ -31,7 +31,7 @@ public interface AdminService {
      *
      * @param admin
      */
-    List<UserBO> selectUser(Admin admin);
+    List<AdminBO> selectUser(Admin admin);
 
 
     /**
@@ -39,14 +39,14 @@ public interface AdminService {
      *
      * @param admin
      */
-    List<UserBO> selectList(Admin admin);
+    List<AdminBO> selectList(Admin admin);
 
     /**
      * 添加用户
      *
-     * @param userBO
+     * @param adminBO
      */
-    int register(UserBO userBO);
+    int register(AdminBO adminBO);
 
     /**
      * 修改密码
@@ -62,14 +62,14 @@ public interface AdminService {
      * @param id
      * @return
      */
-    UserBO selectUserVOById(String id);
+    AdminBO selectUserVOById(String id);
 
     /**
      * 修改用户
      *
-     * @param userUpdateBO
+     * @param adminUpdateBO
      */
-    UserUpdateBO updateUser(UserUpdateBO userUpdateBO);
+    AdminUpdateBO updateUser(AdminUpdateBO adminUpdateBO);
 
     /**
      * 删除用户
@@ -78,14 +78,14 @@ public interface AdminService {
      */
     int deleteUserById(String id);
 
-    UserBO selectOne(String id);
+    AdminBO selectOne(String id);
 
-    UserBO login(UserBO userBO, String appId);
+    AdminBO login(AdminBO adminBO, String appId);
 
 
     AdminExtend selectUserExtendByUserId(String id);
 
-    AdminExtend updateUserExtend(UserExtendBO userExtendBO);
+    AdminExtend updateUserExtend(AdminExtendBO adminExtendBO);
 
     /**
      * 判断该tonken是否存在
@@ -94,7 +94,7 @@ public interface AdminService {
      */
     boolean isAuthentication(String userToken);
 
-    UserBO addUser(UserBO userBO);
+    AdminBO addUser(AdminBO adminBO);
 
     /**
      * 登出
@@ -118,7 +118,7 @@ public interface AdminService {
 
     void disableAll();
 
-    void enable(UserUpdateBO userUpdateBO);
+    void enable(AdminUpdateBO adminUpdateBO);
 
     Boolean checkToken(String token);
 

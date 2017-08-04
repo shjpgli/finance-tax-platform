@@ -1,8 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.PointsLog;
-import com.abc12366.uc.model.PointsRule;
-import com.abc12366.uc.model.bo.PointsLogBO;
 
 /**
  * @author liuguiyao<435720953@qq.com.com>

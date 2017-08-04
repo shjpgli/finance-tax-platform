@@ -1,13 +1,13 @@
 package com.abc12366.uc.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.abc12366.uc.model.weixin.bo.WxUseToken;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 定时器获取微信usertoken

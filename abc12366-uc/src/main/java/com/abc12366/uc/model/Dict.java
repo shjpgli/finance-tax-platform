@@ -1,9 +1,7 @@
-package com.abc12366.uc.model.admin;
+package com.abc12366.uc.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author lijun <ljun51@outlook.com>

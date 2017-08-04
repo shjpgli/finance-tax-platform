@@ -1,8 +1,5 @@
 package com.abc12366.cms.model.bo;
 
-import com.abc12366.cms.model.Comment;
-import com.abc12366.cms.model.CommentExt;
-
 /**
  *
  * CMS评论表

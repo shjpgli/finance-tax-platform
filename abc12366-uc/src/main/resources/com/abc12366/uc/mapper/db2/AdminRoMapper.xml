@@ -3,7 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.AdminRoMapper">
 
-	<resultMap id="userBoResultMap" type="com.abc12366.uc.model.admin.bo.UserBO">
+	<resultMap id="userBoResultMap" type="com.abc12366.uc.model.admin.bo.AdminBO">
 		<id column="id" property="id" jdbcType="VARCHAR"/>
 		<result column="username" property="username" jdbcType="VARCHAR"/>
 		<result column="password" property="password" jdbcType="VARCHAR"/>
@@ -95,14 +95,6 @@
         </where>
     </select>
 
-    <!--根据条件查找单个用户-->
-    <!--<select id="selectOne" resultType="userBoResultMap" parameterType="com.abc12366.admin.model.Admin">
-        select
-        <include refid="Base_Column_List"/>
-        from uc_admin
-        where id = #{id}
-    </select>
--->
 	<select id="selectUserBOByLoginName" resultMap="userBoResultMap" parameterType="java.lang.String">
         SELECT
         t.id,

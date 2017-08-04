@@ -3,7 +3,6 @@ package com.abc12366.uc.model.bo;
 import com.abc12366.uc.model.Goods;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 /**

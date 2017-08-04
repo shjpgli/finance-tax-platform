@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.admin.mapper.db1.DictMapper">
+<mapper namespace="com.abc12366.uc.mapper.db1.DictMapper">
 
-    <insert id="insert" parameterType="com.abc12366.uc.model.admin.Dict">
+    <insert id="insert" parameterType="com.abc12366.uc.model.Dict">
         INSERT INTO uc_dict
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null">
@@ -78,7 +78,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.admin.Dict">
+    <update id="update" parameterType="com.abc12366.uc.model.Dict">
         update uc_dict
         <set>
             <if test="dictId != null">dictId = #{dictId},</if>

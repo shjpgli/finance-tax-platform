@@ -9,7 +9,7 @@
 	</sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectCityList" resultType="com.abc12366.uc.model.admin.City" parameterType="java.lang.String">
+    <select id="selectCityList" resultType="com.abc12366.uc.model.City" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_city
@@ -20,7 +20,7 @@
     </select>
 
     <!-- 查询（根据省ID查询） -->
-    <select id="selectCityByProId" resultType="com.abc12366.uc.model.admin.City" parameterType="java.lang.String">
+    <select id="selectCityByProId" resultType="com.abc12366.uc.model.City" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM uc_city

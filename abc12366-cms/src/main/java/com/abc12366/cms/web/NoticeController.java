@@ -1,9 +1,9 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.cms.model.bo.NoticeBO;
 import com.abc12366.cms.service.NoticeService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,4 @@
 package com.abc12366.cms.model.bo;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

@@ -1,11 +1,11 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.mapper.db2.AppRoMapper;
+import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.gateway.mapper.db2.AppRoMapper;
-import com.abc12366.gateway.model.App;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;

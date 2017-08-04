@@ -1,9 +1,9 @@
 package com.abc12366.cms.model.questionnaire.bo;
+
 import com.abc12366.cms.model.questionnaire.Option;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

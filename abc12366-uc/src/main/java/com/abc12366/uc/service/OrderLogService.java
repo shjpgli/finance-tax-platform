@@ -1,8 +1,6 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.OrderLog;
-import com.abc12366.uc.model.bo.OrderBO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

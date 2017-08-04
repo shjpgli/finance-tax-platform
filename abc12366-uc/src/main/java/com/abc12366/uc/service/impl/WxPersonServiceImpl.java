@@ -1,30 +1,29 @@
 package com.abc12366.uc.service.impl;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.uc.config.Scheduler;
+import com.abc12366.uc.mapper.db1.WxPersonMapper;
+import com.abc12366.uc.mapper.db2.WxPersonRoMapper;
+import com.abc12366.uc.model.weixin.OpenIdRs;
+import com.abc12366.uc.model.weixin.bo.person.WxPerson;
+import com.abc12366.uc.service.IWxPersonService;
+import com.abc12366.uc.util.wx.WechatUrl;
+import com.abc12366.uc.util.wx.WxConnectFactory;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.cszj.config.Scheduler;
-import com.abc12366.cszj.mapper.db1.WxPersonMapper;
-import com.abc12366.cszj.mapper.db2.WxPersonRoMapper;
-import com.abc12366.cszj.model.weixin.OpenIdRs;
-import com.abc12366.cszj.model.weixin.bo.person.WxPerson;
-import com.abc12366.cszj.service.IWxPersonService;
-import com.abc12366.cszj.util.wx.WechatUrl;
-import com.abc12366.cszj.util.wx.WxConnectFactory;
-import com.github.pagehelper.PageHelper;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
-public class WxPersonServiceImpl implements IWxPersonService{
+public class WxPersonServiceImpl implements IWxPersonService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(WxPersonServiceImpl.class);
 	
@@ -58,7 +57,7 @@ public class WxPersonServiceImpl implements IWxPersonService{
 			while(true){
 				headparamters.put("access_token", Scheduler.token.getAccess_token());
 				headparamters.put("next_openid", "");
-				OpenIdRs listRs=WxConnectFactory.get(WechatUrl.WXUSELIST, headparamters, null, OpenIdRs.class);
+				OpenIdRs listRs= WxConnectFactory.get(WechatUrl.WXUSELIST, headparamters, null, OpenIdRs.class);
 				String [] ids =listRs.getData().getOpenid();
 		     	for(int i=0;i<ids.length;i++){
 		     		 Map<String,String> tks1=new HashMap<String, String>();

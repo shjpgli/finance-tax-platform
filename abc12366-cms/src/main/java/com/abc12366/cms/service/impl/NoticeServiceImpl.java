@@ -1,11 +1,11 @@
 package com.abc12366.cms.service.impl;
 
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.cms.mapper.db1.NoticeMapper;
 import com.abc12366.cms.mapper.db2.NoticeRoMapper;
 import com.abc12366.cms.model.bo.NoticeBO;
 import com.abc12366.cms.service.NoticeService;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

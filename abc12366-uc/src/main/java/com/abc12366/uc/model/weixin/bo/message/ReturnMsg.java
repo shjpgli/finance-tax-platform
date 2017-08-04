@@ -1,8 +1,8 @@
 package com.abc12366.uc.model.weixin.bo.message;
 
-import java.util.Date;
-
 import org.hibernate.validator.constraints.NotEmpty;
+
+import java.util.Date;
 
 public class ReturnMsg {
     private String id;

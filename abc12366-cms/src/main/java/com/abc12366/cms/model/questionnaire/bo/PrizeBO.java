@@ -1,5 +1,4 @@
 package com.abc12366.cms.model.questionnaire.bo;
-import com.abc12366.cms.model.questionnaire.Prize;
 
 import java.io.Serializable;
 

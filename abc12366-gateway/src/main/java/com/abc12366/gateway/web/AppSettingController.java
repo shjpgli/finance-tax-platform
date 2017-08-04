@@ -1,10 +1,10 @@
 package com.abc12366.gateway.web;
 
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.model.AppSetting;
 import com.abc12366.gateway.model.bo.AppSettingBO;
 import com.abc12366.gateway.service.AppSettingService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;

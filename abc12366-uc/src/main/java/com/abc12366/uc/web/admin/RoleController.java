@@ -1,12 +1,12 @@
 package com.abc12366.uc.web.admin;
 
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.Role;
 import com.abc12366.uc.model.admin.bo.RoleBO;
 import com.abc12366.uc.model.admin.bo.RoleMenuBO;
 import com.abc12366.uc.model.admin.bo.UserRoleBO;
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.service.admin.RoleService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -27,7 +27,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/role", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "admin/role", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class RoleController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleController.class);

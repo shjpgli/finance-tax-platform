@@ -12,7 +12,7 @@ import java.io.Serializable;
  * 
  **/
 @SuppressWarnings("serial")
-public class UserPasswordBO extends UserExtendBO implements Serializable {
+public class UserPasswordBO extends AdminExtendBO implements Serializable {
 
 	/**ID**/
 	private String id;

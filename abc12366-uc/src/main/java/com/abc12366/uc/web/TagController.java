@@ -2,8 +2,10 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.TagBO;
 import com.abc12366.uc.model.bo.TagInsertBO;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.TagSelectParamBO;
+import com.abc12366.uc.model.bo.TagUpdateBO;
 import com.abc12366.uc.service.TagService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

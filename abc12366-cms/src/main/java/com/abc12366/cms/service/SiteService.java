@@ -2,7 +2,6 @@ package com.abc12366.cms.service;
 
 import com.abc12366.cms.model.bo.SiteBo;
 import com.abc12366.cms.model.bo.SiteListBo;
-import com.abc12366.cms.vo.SiteVO;
 
 import java.util.List;
 

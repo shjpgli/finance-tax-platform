@@ -1,8 +1,8 @@
 package com.abc12366.uc.service.admin;
 
-import com.abc12366.uc.model.admin.Area;
-import com.abc12366.uc.model.admin.City;
-import com.abc12366.uc.model.admin.Province;
+import com.abc12366.uc.model.Area;
+import com.abc12366.uc.model.City;
+import com.abc12366.uc.model.Province;
 
 import java.util.List;
 

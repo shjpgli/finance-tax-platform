@@ -2,7 +2,10 @@ package com.abc12366.message.service;
 
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.message.model.bo.*;
+import com.abc12366.message.model.bo.QueryStatusParam;
+import com.abc12366.message.model.bo.SendCodeParam;
+import com.abc12366.message.model.bo.SendTemplateParam;
+import com.abc12366.message.model.bo.VerifyCodeParam;
 import com.abc12366.message.util.CheckSumBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

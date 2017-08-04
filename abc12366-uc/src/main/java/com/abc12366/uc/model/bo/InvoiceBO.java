@@ -2,7 +2,6 @@ package com.abc12366.uc.model.bo;
 
 import com.abc12366.uc.model.InvoiceDetail;
 import com.abc12366.uc.model.InvoiceLog;
-import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.UserAddress;
 
 import java.io.Serializable;

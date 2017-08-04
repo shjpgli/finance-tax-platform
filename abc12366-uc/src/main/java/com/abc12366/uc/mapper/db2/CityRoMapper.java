@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.admin.City;
+import com.abc12366.uc.model.City;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -10,7 +10,7 @@ import java.util.Date;
  * @create 2017-03-27 4:20 PM
  * @since 1.0.0
  */
-public class TokenBO implements Serializable {
+public class AdminTokenBO implements Serializable {
 
     private String id;
     private String name;
@@ -21,17 +21,17 @@ public class TokenBO implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expireTime;
 
-    public TokenBO() {
+    public AdminTokenBO() {
     }
 
-    public TokenBO(String id, String name, Date createTime, Date expireTime) {
+    public AdminTokenBO(String id, String name, Date createTime, Date expireTime) {
         this.id = id;
         this.name = name;
         this.createTime = createTime;
         this.expireTime = expireTime;
     }
 
-    private TokenBO(Builder builder) {
+    private AdminTokenBO(Builder builder) {
         setId(builder.id);
         setName(builder.name);
         setCreateTime(builder.createTime);
@@ -99,8 +99,8 @@ public class TokenBO implements Serializable {
             return this;
         }
 
-        public TokenBO build() {
-            return new TokenBO(this);
+        public AdminTokenBO build() {
+            return new AdminTokenBO(this);
         }
     }
 }

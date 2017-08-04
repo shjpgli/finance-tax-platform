@@ -2,17 +2,17 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.menu.Button;
-import com.abc12366.uc.model.weixin.bo.menu.Menu;
+import com.abc12366.uc.model.weixin.bo.menu.WxMenu;
 
 public interface IWxMenuService {
      
-	 public BaseWxRespon creatWxMenu(Menu menu);
+	 public BaseWxRespon creatWxMenu(WxMenu wxMenu);
 	 
-	 public Menu getWxMenu();
+	 public WxMenu getWxMenu();
 	 
 	 public BaseWxRespon delWxMenu();
 
-	 public Menu getWxMenuDb();
+	 public WxMenu getWxMenuDb();
 
 	public Button selectOne(String id);
 

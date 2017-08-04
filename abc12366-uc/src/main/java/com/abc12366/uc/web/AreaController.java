@@ -1,10 +1,10 @@
-package com.abc12366.uc.web.admin;
+package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.admin.Area;
-import com.abc12366.uc.model.admin.City;
-import com.abc12366.uc.model.admin.Province;
+import com.abc12366.uc.model.Area;
+import com.abc12366.uc.model.City;
+import com.abc12366.uc.model.Province;
 import com.abc12366.uc.service.admin.AreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

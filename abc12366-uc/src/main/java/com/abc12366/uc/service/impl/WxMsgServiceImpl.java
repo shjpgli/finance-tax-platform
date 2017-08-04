@@ -1,14 +1,20 @@
 package com.abc12366.uc.service.impl;
 
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.config.Scheduler;
+import com.abc12366.uc.mapper.db1.WxMsgMapper;
+import com.abc12366.uc.mapper.db2.WxMsgRoMapper;
+import com.abc12366.uc.model.weixin.bo.message.Article;
+import com.abc12366.uc.model.weixin.bo.message.News;
+import com.abc12366.uc.model.weixin.bo.message.ReturnMsg;
+import com.abc12366.uc.model.weixin.bo.message.WxNews;
+import com.abc12366.uc.model.weixin.bo.template.FileContent;
+import com.abc12366.uc.model.weixin.bo.template.ImgMaterial;
+import com.abc12366.uc.service.IWxMsgService;
+import com.abc12366.uc.util.wx.MsgMap;
+import com.abc12366.uc.util.wx.WechatUrl;
+import com.abc12366.uc.util.wx.WxConnectFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -18,21 +24,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.cszj.config.Scheduler;
-import com.abc12366.cszj.mapper.db1.WxMsgMapper;
-import com.abc12366.cszj.mapper.db2.WxMsgRoMapper;
-import com.abc12366.cszj.model.weixin.bo.message.Article;
-import com.abc12366.cszj.model.weixin.bo.message.News;
-import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
-import com.abc12366.cszj.model.weixin.bo.message.WxNews;
-import com.abc12366.cszj.model.weixin.bo.template.FileContent;
-import com.abc12366.cszj.model.weixin.bo.template.ImgMaterial;
-import com.abc12366.cszj.service.IWxMsgService;
-import com.abc12366.cszj.util.wx.MsgMap;
-import com.abc12366.cszj.util.wx.WechatUrl;
-import com.abc12366.cszj.util.wx.WxConnectFactory;
+import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**

@@ -1,29 +1,39 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @create 2017-07-04 3:10 PM
+ *
+ * @author liuguiyao
+ * @create 2017-04-27 10:08 AM
  * @since 1.0.0
  */
 public class DictBO implements Serializable {
-
     private String id;
+    @NotEmpty
     private String dictId;
+    @NotEmpty
     private String dictName;
+    @NotEmpty
     private String fieldKey;
+    @NotEmpty
     private String fieldValue;
-    private Boolean status;
+    @NotNull
+    private boolean status;
     private Date createTime;
     private String createUser;
     private Date lastUpdate;
     private String lastUser;
     private String sort;
+
     public DictBO() {
     }
 
-    public DictBO(String id, String dictId, String dictName, String fieldKey, String fieldValue, Boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser, String sort) {
+    public DictBO(String id, String dictId, String dictName, String fieldKey, String fieldValue, boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser,String sort) {
         this.id = id;
         this.dictId = dictId;
         this.dictName = dictName;
@@ -77,11 +87,11 @@ public class DictBO implements Serializable {
         this.fieldValue = fieldValue;
     }
 
-    public Boolean isStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -119,7 +129,7 @@ public class DictBO implements Serializable {
 
     @Override
     public String toString() {
-        return "Dict{" +
+        return "DictBO{" +
                 "id='" + id + '\'' +
                 ", dictId='" + dictId + '\'' +
                 ", dictName='" + dictName + '\'' +

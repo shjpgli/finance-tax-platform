@@ -2,7 +2,6 @@ package com.abc12366.cms.service;
 
 
 import com.abc12366.cms.model.questionnaire.WhiteList;
-import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import com.abc12366.cms.model.questionnaire.bo.WhiteListBO;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.abc12366.uc.service.admin;
 
-import com.abc12366.uc.model.admin.Dict;
-import com.abc12366.uc.model.admin.bo.DictBO;
-import com.abc12366.uc.model.admin.bo.DictUpdateBO;
+import com.abc12366.uc.model.Dict;
+import com.abc12366.uc.model.bo.DictBO;
+import com.abc12366.uc.model.bo.DictUpdateBO;
 
 import java.util.List;
 

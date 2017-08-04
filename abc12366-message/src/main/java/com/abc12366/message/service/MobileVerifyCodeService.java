@@ -1,6 +1,5 @@
 package com.abc12366.message.service;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**

@@ -1,6 +1,9 @@
 package com.abc12366.message.service;
 
-import com.abc12366.message.model.bo.*;
+import com.abc12366.message.model.bo.QueryStatusResponseBO;
+import com.abc12366.message.model.bo.SendTemplateParam;
+import com.abc12366.message.model.bo.SendTemplateResponseBO;
+import com.abc12366.message.model.bo.SmsOps;
 
 /**
  * User: liuguiyao<435720953@qq.com>

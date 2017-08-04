@@ -1,6 +1,5 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.OrderLog;
 import com.abc12366.uc.model.TradeLog;
 import org.springframework.stereotype.Service;
 

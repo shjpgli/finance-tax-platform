@@ -1,10 +1,8 @@
 package com.abc12366.uc.model.bo;
 
 import com.abc12366.uc.model.InvoiceDetail;
-import com.abc12366.uc.model.InvoiceRepo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 

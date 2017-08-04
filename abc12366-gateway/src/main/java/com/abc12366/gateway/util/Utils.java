@@ -1,6 +1,6 @@
 package com.abc12366.gateway.util;
 
-import com.abc12366.common.model.BodyStatus;
+import com.abc12366.gateway.model.BodyStatus;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 

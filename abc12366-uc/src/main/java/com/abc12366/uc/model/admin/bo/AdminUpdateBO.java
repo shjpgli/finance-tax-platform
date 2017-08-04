@@ -2,9 +2,7 @@ package com.abc12366.uc.model.admin.bo;
 import com.abc12366.uc.model.admin.LoginInfo;
 import com.abc12366.uc.model.admin.Menu;
 import com.abc12366.uc.model.admin.Role;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -16,33 +14,16 @@ import java.util.Map;
  * 
  **/
 @SuppressWarnings("serial")
-public class UserBO extends UserExtendBO implements Serializable {
+public class AdminUpdateBO extends AdminExtendUpdateBO implements Serializable {
 
-	/**ID**/
 	private String id;
-
-	/**用户名**/
-    @NotEmpty
-    @Size(min = 6, max = 32)
 	private String username;
-
-    @NotEmpty
-    @Size(min = 6, max = 32)
-	/**密码**/
 	private String password;
-
-	/**昵称**/
 	private String nickname;
-
-	/**用户状态**/
 	private Boolean status;
-
 	private String roleIds;
-
 	private List<Role> rolesList;
-
     private LoginInfo loginInfo;
-
     private Map<String,List<Menu>> menuMap;
 
 	public List<Role> getRolesList() {

@@ -1,10 +1,9 @@
 package com.abc12366.uc.model.weixin.bo.message;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 
 
 

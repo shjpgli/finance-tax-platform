@@ -2,7 +2,6 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.SensitiveWords;
-import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 
 import java.util.List;
 import java.util.Map;

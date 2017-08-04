@@ -1,7 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.admin.Dict;
-import com.abc12366.uc.model.admin.bo.DictBO;
+import com.abc12366.uc.model.Dict;
+import com.abc12366.uc.model.bo.DictBO;
 
 import java.util.List;
 

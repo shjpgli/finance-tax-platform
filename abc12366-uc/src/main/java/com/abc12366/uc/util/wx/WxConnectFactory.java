@@ -1,13 +1,12 @@
 package com.abc12366.uc.util.wx;
 
 
-
-import java.util.Map;
-
 import com.abc12366.uc.model.weixin.bo.menu.Button;
-import com.abc12366.uc.model.weixin.bo.menu.Menu;
+import com.abc12366.uc.model.weixin.bo.menu.WxMenu;
 import com.abc12366.uc.model.weixin.bo.template.FileContent;
 import com.alibaba.fastjson.JSON;
+
+import java.util.Map;
 
 
 
@@ -80,7 +79,7 @@ public class WxConnectFactory {
      		 System.out.println(person.getNickname());
      	 }*/
      	 
-    	 Menu menu=new Menu();
+    	 WxMenu wxMenu =new WxMenu();
     	 
     	 Button btn11 = new Button();
          btn11.setName("天气预报");
@@ -111,19 +110,19 @@ public class WxConnectFactory {
     	 bt2.setType("view");
     	 bt2.setUrl("http://www.baidu.com");
     	 
-    	 menu.setButton(new Button[]{bt1,bt2});
+    	 wxMenu.setButton(new Button[]{bt1,bt2});
     	 
-    	 System.out.println(JSON.toJSONString(menu));
+    	 System.out.println(JSON.toJSONString(wxMenu));
     	 
      	/* Map<String,String> tks=new HashMap<String, String>();
    	     tks.put("access_token", token);
-     	 BaseWxRespon respon=post("https://api.weixin.qq.com/cgi-bin/menu/create",tks,menu,BaseWxRespon.class);
+     	 BaseWxRespon respon=post("https://api.weixin.qq.com/cgi-bin/menu/create",tks,wxMenu,BaseWxRespon.class);
     	 System.out.println(respon.getErrcode());*/
     	 
     	/* Map<String,String> tks=new HashMap<String, String>();
     	 tks.put("access_token", token);
-    	 Menu menu=get("https://api.weixin.qq.com/cgi-bin/menu/get",tks,null,Menu.class);
-    	 System.out.println(menu.getErrcode());*/
+    	 WxMenu wxMenu=get("https://api.weixin.qq.com/cgi-bin/menu/get",tks,null,WxMenu.class);
+    	 System.out.println(wxMenu.getErrcode());*/
     	 
     	 /*Map<String,String> tks1=new HashMap<String, String>();
     	 tks1.put("access_token", token);
