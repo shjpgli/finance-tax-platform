@@ -7,8 +7,7 @@ import java.io.Serializable;
  * 
  * 
  **/
-@SuppressWarnings("serial")
-public class KnowledgeRel implements Serializable {
+public class KnowledgeRel  {
 
 	/****/
 	private String id;

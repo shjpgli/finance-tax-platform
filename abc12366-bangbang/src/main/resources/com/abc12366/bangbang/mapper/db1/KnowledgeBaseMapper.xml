@@ -18,6 +18,9 @@
 			<if test="categoryCode != null">
 				AND categoryCode LIKE CONCAT(#{categoryCode},'%')
 			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
 			<if test="keywords != null">
 				AND subject LIKE CONCAT('%',#{keywords},'%')
 			</if>

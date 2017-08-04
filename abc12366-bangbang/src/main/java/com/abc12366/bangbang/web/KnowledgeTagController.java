@@ -1,0 +1,81 @@
+package com.abc12366.bangbang.web;
+
+import com.abc12366.bangbang.model.KnowledgeTag;
+import com.abc12366.bangbang.service.KnowledgeTagService;
+import com.abc12366.common.util.Constant;
+import com.abc12366.common.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * @Author liuqi
+ * @Date 2017/8/4 15:57
+ */
+
+@RestController
+@RequestMapping(path = "/KnowledgeTag", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class KnowledgeTagController {
+
+    @Autowired
+    private KnowledgeTagService knowledgeTagService;
+
+    /*
+    *  知识库标签 分页查询
+    *  支持 关键字查询
+    */
+    @GetMapping(path = "/list")
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "keywords", required = false) String keywords) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+
+        List<KnowledgeTag> list = knowledgeTagService.selectList(keywords);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+
+    /**
+     * 添加知识库标签 接口
+     */
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody KnowledgeTag knowledgeTag){
+        knowledgeTagService.add(knowledgeTag);
+        return ResponseEntity.ok(Utils.kv("data",knowledgeTag));
+    }
+
+
+    /*
+    * 修改知识库标签 接口
+    */
+    @PutMapping(path="/modify")
+    public ResponseEntity modify(@RequestBody KnowledgeTag knowledgeTag){
+        knowledgeTagService.modify(knowledgeTag);
+        return ResponseEntity.ok(Utils.kv("data",knowledgeTag));
+    }
+
+    /*
+    * 删除知识库标签 接口
+    */
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity delete(@PathVariable String id){
+        knowledgeTagService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /*
+    *  停用启用 接口
+    */
+    @PutMapping(path = "/modifyStatus/{id}")
+    public ResponseEntity modifyStatus(@PathVariable String id, @RequestParam Boolean status){
+        knowledgeTagService.modifyStatus(id, status);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+}

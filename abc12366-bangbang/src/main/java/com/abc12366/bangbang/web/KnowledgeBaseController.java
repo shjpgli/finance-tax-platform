@@ -32,16 +32,17 @@ public class KnowledgeBaseController {
 
     /*
     *  知识库 分页查询
-    *  支持分类 和 关键字查询
+    *  支持 分类,类别 和 关键字查询
     */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "categoryCode", required = false) String categoryCode,
-                                     @RequestParam(value = "keywords", required = false) String keywords) {
+                                     @RequestParam(value = "keywords", required = false) String keywords,
+                                     @RequestParam(value = "type", required = false) String type) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, keywords);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
         return (list == null) ?
@@ -72,7 +73,7 @@ public class KnowledgeBaseController {
     /*
     * 删除知识库 接口
     */
-    @DeleteMapping(path = "/del")
+    @DeleteMapping(path = "/delete")
     public ResponseEntity delete(@RequestBody List<String> ids){
         knowledgeBaseService.delete(ids);
         return ResponseEntity.ok(Utils.kv());
