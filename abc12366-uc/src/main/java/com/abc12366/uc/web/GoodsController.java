@@ -94,10 +94,12 @@ public class GoodsController {
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                      @RequestParam(value = "categoryId", required = false) String categoryId,
+                                          @RequestParam(value = "goodsType", required = false) String goodsType,
                                      @RequestParam(value = "recommendType", required = false) String recommendType) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
         goods.setName(name);
+        goods.setGoodsType(goodsType);
         goods.setCategoryId(categoryId);
         goods.setRecommendType(recommendType);
         goods.setTradeMethod(tradeMethod);
