@@ -6,7 +6,7 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
-        <File>${LOG_PATH}/core_info.log</File>
+        <File>${LOG_PATH}/sns_info.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/core_info-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
@@ -25,7 +25,7 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
-        <File>${LOG_PATH}/core_error.log</File>
+        <File>${LOG_PATH}/sns_error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/core_error-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
