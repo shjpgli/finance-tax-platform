@@ -3,10 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
 import com.abc12366.uc.model.ProductRepo;
-import com.abc12366.uc.model.bo.GoodsBO;
-import com.abc12366.uc.model.bo.OrderBO;
-import com.abc12366.uc.model.bo.ProductBO;
-import com.abc12366.uc.model.bo.ProductRepoBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ProductRepoService;
 import com.abc12366.uc.service.ProductService;
 import com.github.pagehelper.Page;
@@ -59,6 +56,16 @@ public class ProductController {
         return ResponseEntity.ok(Utils.kv("dataList",  productList));
     }
 
+
+    @GetMapping(path = "/spec/{goodsId}")
+    public ResponseEntity selectSpecList(@PathVariable("goodsId") String goodsId) {
+        LOGGER.info("{}:{}", goodsId);
+        ProductBO product = new ProductBO();
+        product.setGoodsId(goodsId);
+        List<DictBO> dictBOList = productService.selectSpecByGoodsId(product);
+        LOGGER.info("{}", dictBOList);
+        return ResponseEntity.ok(Utils.kv("dataList",  dictBOList));
+    }
     /**
      * 查询商品库存列表
      * @param pageNum

@@ -5,6 +5,7 @@ import com.abc12366.common.util.Utils;
 import com.abc12366.uc.mapper.db1.ProductMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.Product;
+import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.ProductRepoBO;
@@ -80,5 +81,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<GoodsBO> selectBOList(ProductBO productBO) {
         return productRoMapper.selectBOList(productBO);
+    }
+
+    @Override
+    public List<DictBO> selectSpecByGoodsId(ProductBO product) {
+        return productRoMapper.selectSpecByGoodsId(product);
     }
 }
