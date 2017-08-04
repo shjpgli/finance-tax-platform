@@ -51,6 +51,18 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
 
     @Transactional("db1TxManager")
     @Override
+    public void delete(List<String> ids) {
+        //删除关联标签
+        knowledgeTagRelMapper.deleteByKnowledgeIds(ids);
+        //删除关联问题
+        knowledgeRelMapper.deleteByKnowledgeIds(ids);
+        knowledgeRelMapper.deleteByRelKnowledgeIds(ids);
+        //删除知识库
+        knowledgeBaseMapper.deleteByPrimaryKeys(ids);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
     public KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO) {
         KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
         knowledgeBase.setId(Utils.uuid());

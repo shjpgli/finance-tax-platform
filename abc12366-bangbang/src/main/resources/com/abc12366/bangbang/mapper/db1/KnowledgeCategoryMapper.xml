@@ -14,15 +14,13 @@
 		<include refid="Base_Column_List" />
 		FROM bb_knowledge_category
 	</select>
-
-	<!-- 查询（根据主键ID查询） -->
+	<!-- 查询（根据CODE查询） -->
 	<select id="selectByCode" resultType="knowledgeCategory" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_knowledge_category
 		WHERE code = #{code}
 	</select>
-
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="knowledgeCategory" parameterType="java.lang.String">
 		SELECT
@@ -140,6 +138,12 @@
 
 		</set>
 		WHERE id = #{id}
+	</update>
+
+	<update id="batchUpdateSort" parameterType="java.util.List">
+		<foreach collection="list" item="item" separator="" open="begin" close="end;">
+			update bb_knowledge_category set sort=#{item.sort} where id= #{item.id};
+		</foreach>
 	</update>
 
 	<!-- 修 改-->

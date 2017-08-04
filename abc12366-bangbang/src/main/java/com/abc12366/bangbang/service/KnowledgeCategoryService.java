@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.KnowledgeCategory;
+import com.abc12366.bangbang.model.bo.SortBO;
 
 import java.util.List;
 
@@ -21,7 +22,8 @@ public interface KnowledgeCategoryService {
     void modifyNameById(String id, String name);
 
     /* 修改分类排序 */
-    void modifySort(List<KnowledgeCategory> list);
+    void modifySort(List<SortBO> list);
 
-
+    /* 删除分类 */
+    void deleteById(String id);
 }

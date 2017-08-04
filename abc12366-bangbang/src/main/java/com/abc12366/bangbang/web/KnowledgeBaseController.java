@@ -37,11 +37,11 @@ public class KnowledgeBaseController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "categoryId", required = false) String categoryId,
+                                     @RequestParam(value = "categoryCode", required = false) String categoryCode,
                                      @RequestParam(value = "keywords", required = false) String keywords) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryId, keywords);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, keywords);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
         return (list == null) ?
@@ -64,9 +64,18 @@ public class KnowledgeBaseController {
     */
     @PutMapping(path="/modify")
     public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
+        knowledgeBaseService.modify(knowledgeBaseBO);
+        return ResponseEntity.ok(Utils.kv("data",knowledgeBaseBO));
+    }
 
 
-        return null;
+    /*
+    * 删除知识库 接口
+    */
+    @DeleteMapping(path = "/del")
+    public ResponseEntity delete(@RequestBody List<String> ids){
+        knowledgeBaseService.delete(ids);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 
@@ -74,7 +83,6 @@ public class KnowledgeBaseController {
     //test
     @PostMapping(path = "/add1")
     public ResponseEntity add1(){
-
         byte[] b = {new Byte("1")};
         KnowledgeBase record = new KnowledgeBase();
         record.setId(Utils.uuid());
@@ -96,7 +104,4 @@ public class KnowledgeBaseController {
         knowledgeBaseService.add(record);
         return ResponseEntity.ok(Utils.kv());
     }
-
-
-
 }

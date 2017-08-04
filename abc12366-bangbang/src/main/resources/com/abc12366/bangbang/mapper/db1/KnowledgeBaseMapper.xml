@@ -38,6 +38,14 @@
 		 DELETE FROM bb_knowledge_base
 		 WHERE id = #{id}
 	</delete>
+	<!--删除：根据主键ID批量删除-->
+	<delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+		DELETE FROM bb_knowledge_base
+		WHERE id IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
 
 	<!-- 添加 -->
 	<insert id="insert" parameterType="knowledgeBase">

@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.KnowledgeCategory;
+import com.abc12366.bangbang.model.bo.SortBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -69,5 +70,10 @@ public interface KnowledgeCategoryMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(KnowledgeCategory record);
-
+	/**
+	 *
+	 * 修改 （匹配有值的字段）
+	 *
+	 **/
+	int batchUpdateSort(List<SortBO> list);
 }

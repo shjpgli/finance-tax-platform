@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.bangbang.mapper.KnowledgeRelMapper">
+<mapper namespace="com.abc12366.bangbang.mapper.db1.KnowledgeRelMapper">
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
@@ -21,12 +21,28 @@
 		 DELETE FROM bb_knowledge_rel
 		 WHERE id = #{id}
 	</delete>
-
-	<!--删除：根据主键ID删除-->
+	<!--删除：根据KnowledgeId删除-->
 	<delete id="deleteByKnowledgeId" parameterType="java.lang.String">
 		DELETE FROM bb_knowledge_rel
 		WHERE knowledgeId = #{knowledgeId}
 	</delete>
+	<!--删除：根据KnowledgeIds批量删除-->
+	<delete id="deleteByKnowledgeIds" parameterType="java.util.List">
+		DELETE FROM bb_knowledge_rel
+		WHERE knowledgeId IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<!--删除：根据deleteByRelKnowledgeIds批量删除-->
+	<delete id="deleteByRelKnowledgeIds" parameterType="java.util.List">
+		DELETE FROM bb_knowledge_rel
+		WHERE relKnowledgeId IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
 
 	<!-- 添加 -->
 	<insert id="insert" parameterType="knowledgeRel">
