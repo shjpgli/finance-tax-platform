@@ -8,20 +8,22 @@ public class DataUtils {
 
     /**
      * 当前年月日字符串
+     *
      * @return
      */
-    public static String getDataString(){
+    public static String getDataString() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         return df.format(new Date());
     }
 
     /**
      * 获取当前时间戳
+     *
      * @return
      */
-    public static String getDataLong(int datalong,int i){
-        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long time = datalong + i*1000;
+    public static String getDataLong(int datalong, int i) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long time = datalong + i * 1000;
         return format.format(time);
     }
 
@@ -33,11 +35,13 @@ public class DataUtils {
 
     /**
      * yyyyMMddHHmmssSSS+三位随机数
+     *
      * @return
      */
-    public static  String getDateToString(){
+    public static String getDateToString() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");//设置日期格式
         StringBuffer buffer = new StringBuffer();
+        buffer.append("DD");
         buffer.append(df.format(new Date()));
         buffer.append(getRandom());
         return buffer.toString();
@@ -45,9 +49,10 @@ public class DataUtils {
 
     /**
      * 获取用户订单号
+     *
      * @return
      */
-    public static String getUserOrderString(){
+    public static String getUserOrderString() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");//设置日期格式
         StringBuffer buffer = new StringBuffer();
         buffer.append("YHDDH");
@@ -58,6 +63,7 @@ public class DataUtils {
 
     /**
      * 返回一个三位随机数的字符串
+     *
      * @return
      */
     public static String getRandom() {
@@ -73,6 +79,7 @@ public class DataUtils {
 
     /**
      * 字符串转换成日期
+     *
      * @param str
      * @return date
      */

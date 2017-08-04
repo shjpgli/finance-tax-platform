@@ -13,13 +13,13 @@ public interface ChannelService {
 
     List<ChannelBo> selectList();
 
-    List<ChannelBo> selectLists(Map<String,Object> map);
+    List<ChannelBo> selectLists(Map<String, Object> map);
 
     List<ChannelBo> selectListByparentId(String parentId);
 
     List<ChannelExtBo> selectListBytplChannel(String tplChannel);
 
-    List<ModelItemBo> selectModeList(Map<String,Object> map);
+    List<ModelItemBo> selectModeList(Map<String, Object> map);
 
     ChannelSaveBo save(ChannelSaveBo channelSaveBo);
 

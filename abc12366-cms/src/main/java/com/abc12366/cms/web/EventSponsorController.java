@@ -23,7 +23,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/eventSponsor",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/eventSponsor", headers = Constant.VERSION_HEAD + "=1")
 public class EventSponsorController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventSponsorController.class);
 

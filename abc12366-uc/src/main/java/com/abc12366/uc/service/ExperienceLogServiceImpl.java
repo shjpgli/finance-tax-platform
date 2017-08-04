@@ -8,6 +8,7 @@ import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceLog;
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.ExpLogUcBO;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.ExperienceLogQueryBO;
 import org.slf4j.Logger;
@@ -85,5 +86,10 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
     @Override
     public List<ExperienceLogQueryBO> selectList(Map map) {
         return experienceLogRoMapper.selectList(map);
+    }
+
+    @Override
+    public List<ExpLogUcBO> selectListByUser(Map<String, Object> map) {
+        return experienceLogRoMapper.selectListByUser(map);
     }
 }

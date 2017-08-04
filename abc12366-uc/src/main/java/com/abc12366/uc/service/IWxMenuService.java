@@ -5,20 +5,20 @@ import com.abc12366.uc.model.weixin.bo.menu.Button;
 import com.abc12366.uc.model.weixin.bo.menu.WxMenu;
 
 public interface IWxMenuService {
-     
-	 public BaseWxRespon creatWxMenu(WxMenu wxMenu);
-	 
-	 public WxMenu getWxMenu();
-	 
-	 public BaseWxRespon delWxMenu();
 
-	 public WxMenu getWxMenuDb();
+    public BaseWxRespon creatWxMenu(WxMenu wxMenu);
 
-	public Button selectOne(String id);
+    public WxMenu getWxMenu();
 
-	public Button insert(Button button);
+    public BaseWxRespon delWxMenu();
 
-	public Button update(Button button);
+    public WxMenu getWxMenuDb();
 
-	public void delete(String id);
+    public Button selectOne(String id);
+
+    public Button insert(Button button);
+
+    public Button update(Button button);
+
+    public void delete(String id);
 }

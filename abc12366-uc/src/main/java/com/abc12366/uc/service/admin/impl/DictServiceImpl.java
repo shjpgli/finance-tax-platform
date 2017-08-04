@@ -38,28 +38,28 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-    public List<DictBO> selectFirstLevel(){
+    public List<DictBO> selectFirstLevel() {
         List<Dict> dicts = dictRoMapper.selectFirstLevel();
-        if(dicts == null || dicts.size()==0){
+        if (dicts == null || dicts.size() == 0) {
             throw new ServiceException(4104);
         }
         List<DictBO> dictBOs = new ArrayList<>();
-        for(Dict dict : dicts){
+        for (Dict dict : dicts) {
             DictBO dictBO = new DictBO();
-            BeanUtils.copyProperties(dict,dictBO);
+            BeanUtils.copyProperties(dict, dictBO);
             dictBOs.add(dictBO);
         }
         return dictBOs;
     }
 
     @Override
-    public DictBO selectOne(Dict dict){
+    public DictBO selectOne(Dict dict) {
         Dict dict1 = dictRoMapper.selectOne(dict);
         DictBO dictBO = new DictBO();
-        if(dict1 == null){
+        if (dict1 == null) {
             return null;
         }
-        BeanUtils.copyProperties(dict1,dictBO);
+        BeanUtils.copyProperties(dict1, dictBO);
         return dictBO;
     }
 
@@ -67,8 +67,8 @@ public class DictServiceImpl implements DictService {
     public DictBO insert(DictBO dictBO) {
         //dictId，fieldKey确定数据唯一性
         Dict dict = dictRoMapper.selectDict(dictBO);
-        if(dict != null){
-            LOGGER.info("dictId，fieldKey确定数据唯一性{}",dict);
+        if (dict != null) {
+            LOGGER.info("dictId，fieldKey确定数据唯一性{}", dict);
             throw new ServiceException(4165);
         }
         dict = new Dict();
@@ -79,7 +79,7 @@ public class DictServiceImpl implements DictService {
         dict.setLastUpdate(new Date());
 
         dictMapper.insert(dict);
-        BeanUtils.copyProperties(dict,dictBO);
+        BeanUtils.copyProperties(dict, dictBO);
         return dictBO;
     }
 
@@ -89,7 +89,7 @@ public class DictServiceImpl implements DictService {
         dict.setLastUpdate(new Date());
         BeanUtils.copyProperties(dictUpdateBO, dict);
         int upd = dictMapper.update(dict);
-        if(upd != 1){
+        if (upd != 1) {
             throw new ServiceException(4102);
         }
         DictBO dictBO = new DictBO();
@@ -101,7 +101,7 @@ public class DictServiceImpl implements DictService {
     public int delete(String id) {
 
         int del = dictMapper.delete(id);
-        if(del != 1){
+        if (del != 1) {
             throw new ServiceException(4103);
         }
         return del;
@@ -120,14 +120,14 @@ public class DictServiceImpl implements DictService {
     @Override
     public void batchDelete(Dict bo) {
         String id = bo.getId();
-        if(id == null || "".equals(id)){
-            LOGGER.info("id不能为空{}",bo);
+        if (id == null || "".equals(id)) {
+            LOGGER.info("id不能为空{}", bo);
             throw new ServiceException(4150);
         }
         String[] ids = id.split(",");
-        for (String dId : ids){
+        for (String dId : ids) {
             int del = dictMapper.delete(dId);
-            if(del != 1){
+            if (del != 1) {
                 throw new ServiceException(4103);
             }
         }

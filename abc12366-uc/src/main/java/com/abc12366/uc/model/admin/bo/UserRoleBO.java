@@ -28,28 +28,28 @@ public class UserRoleBO implements Serializable {
 
     private Role role;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
         return this.userId;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getRoleId() {
         return this.roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
     public Role getRole() {

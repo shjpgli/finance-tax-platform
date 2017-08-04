@@ -1,6 +1,8 @@
 package com.abc12366.uc.model.bo;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 
@@ -21,8 +23,19 @@ public class TagUpdateBO {
     private String rule;
     @Max(9999)
     private Integer weight;
+    @NotEmpty
+    @Size(max = 20)
+    private String type;
 
     public TagUpdateBO() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTagName() {

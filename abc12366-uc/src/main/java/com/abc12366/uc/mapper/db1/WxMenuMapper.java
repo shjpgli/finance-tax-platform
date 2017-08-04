@@ -4,10 +4,10 @@ import com.abc12366.uc.model.weixin.bo.menu.Button;
 
 public interface WxMenuMapper {
 
-	void insert(Button button);
+    void insert(Button button);
 
-	int update(Button button);
+    int update(Button button);
 
-	void deleteByPrimaryKey(String id);
+    void deleteByPrimaryKey(String id);
 
 }

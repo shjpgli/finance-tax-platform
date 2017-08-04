@@ -59,7 +59,7 @@ public class BlacklistServiceImpl implements BlacklistService {
         BeanUtils.copyProperties(bo, blacklist);
 
         int insert = blacklistMapper.insert(blacklist);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.warn("新增异常{}", blacklist);
             throw new ServiceException(4101);
         }
@@ -70,10 +70,10 @@ public class BlacklistServiceImpl implements BlacklistService {
     @Override
     public Blacklist update(BlacklistBO bo) {
         Blacklist blacklist = new Blacklist();
-        BeanUtils.copyProperties(bo,blacklist);
+        BeanUtils.copyProperties(bo, blacklist);
 
         int update = blacklistMapper.update(blacklist);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.warn("修改异常{}", blacklist);
             throw new ServiceException(4102);
         }
@@ -84,7 +84,7 @@ public class BlacklistServiceImpl implements BlacklistService {
     @Override
     public void delete(String id) {
         int del = blacklistMapper.delete(id);
-        if(del != 1){
+        if (del != 1) {
             LOGGER.warn("删除异常{}", del);
             throw new ServiceException(4103);
         }

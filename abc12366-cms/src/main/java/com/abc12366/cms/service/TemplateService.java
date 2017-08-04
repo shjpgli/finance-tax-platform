@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface TemplateService {
 
-    List<TemplateBo> selectList(Map<String,Object> map);
+    List<TemplateBo> selectList(Map<String, Object> map);
 
     TemplateBo save(TemplateBo templateBo);
 

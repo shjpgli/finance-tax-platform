@@ -33,6 +33,7 @@ public class ImagesController {
 
     /**
      * 背景图片列表查询
+     *
      * @return
      */
     @GetMapping
@@ -75,12 +76,13 @@ public class ImagesController {
 
     /**
      * 背景图片修改
+     *
      * @param images
      * @param id
      * @return
      */
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody Images images,@PathVariable("id") String id) {
+    public ResponseEntity update(@Valid @RequestBody Images images, @PathVariable("id") String id) {
         LOGGER.info("{}", images);
         Images bos = imagesService.update(images, id);
         LOGGER.info("{}", bos);

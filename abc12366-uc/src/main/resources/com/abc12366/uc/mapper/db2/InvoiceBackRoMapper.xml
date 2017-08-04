@@ -5,8 +5,8 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		 id,	userId,	expressId,	reason,	remark,	expressNo,	expressComp,	status,	createTime,	lastUpdate,invoiceId
-	</sql>
+        id, userId, expressId, reason, remark, expressNo, expressComp, status, createTime, lastUpdate,invoiceId
+    </sql>
     <resultMap id="invoiceBackBOMap" type="com.abc12366.uc.model.bo.InvoiceBackBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
@@ -54,7 +54,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultType="com.abc12366.uc.model.InvoiceBack" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_invoice_back
         WHERE id = #{id}
     </select>
@@ -62,7 +62,8 @@
     <!-- 查询（根据主键ID查询BO） -->
     <select id="selectBackOne" resultMap="invoiceBackBOMap" parameterType="java.lang.String">
         SELECT
-        b.id,	b.userId,	b.expressId,	b.reason,	b.remark,	b.expressNo,	b.expressComp,	b.status,	b.createTime,	b.lastUpdate,b.invoiceId,
+        b.id, b.userId, b.expressId, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime,
+        b.lastUpdate,b.invoiceId,
         i.userOrderNo, e.expressNo as sendExpressNo,i.compName,i.invoiceNo,i.invoiceCode,i.content,i.property,i.amount
         FROM uc_invoice_back b
         LEFT JOIN uc_invoice i ON i.id = b.invoiceId
@@ -72,7 +73,8 @@
 
     <select id="selectBOList" resultMap="invoiceBackBOMap" parameterType="com.abc12366.uc.model.bo.InvoiceBackBO">
         SELECT
-        b.id,	b.userId,	b.expressId,	b.reason,	b.remark,	b.expressNo,	b.expressComp,	b.status,	b.createTime,	b.lastUpdate,b.invoiceId,
+        b.id, b.userId, b.expressId, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime,
+        b.lastUpdate,b.invoiceId,
         i.userOrderNo, e.expressNo as sendExpressNo
         FROM uc_invoice_back b
         LEFT JOIN uc_invoice i ON i.id = b.invoiceId

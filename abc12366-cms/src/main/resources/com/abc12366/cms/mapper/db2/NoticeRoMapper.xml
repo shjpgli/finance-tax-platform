@@ -5,10 +5,11 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-      id, title, author, content, status, createTime, lastUpdate,count
+        id, title, author, content, status, createTime, lastUpdate,count
     </sql>
 
-    <select id="selectList" resultType="com.abc12366.cms.model.bo.NoticeBO" parameterType="com.abc12366.cms.model.bo.NoticeBO">
+    <select id="selectList" resultType="com.abc12366.cms.model.bo.NoticeBO"
+            parameterType="com.abc12366.cms.model.bo.NoticeBO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM cms_notice
@@ -18,13 +19,14 @@
         ORDER BY lastUpdate DESC
     </select>
 
-    <select id="selectListForqt" resultType="com.abc12366.cms.model.bo.NoticeBO" parameterType="com.abc12366.cms.model.bo.NoticeBO">
+    <select id="selectListForqt" resultType="com.abc12366.cms.model.bo.NoticeBO"
+            parameterType="com.abc12366.cms.model.bo.NoticeBO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM cms_notice
         <where>
-            status  = '1'
-            <if test="title != null"> and title like CONCAT('%',#{title},'%')</if>
+            status = '1'
+            <if test="title != null">and title like CONCAT('%',#{title},'%')</if>
         </where>
         ORDER BY lastUpdate DESC
     </select>

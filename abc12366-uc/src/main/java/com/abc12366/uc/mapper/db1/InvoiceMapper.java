@@ -4,35 +4,27 @@ import com.abc12366.uc.model.Invoice;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 
  * InvoiceMapper数据库操作接口类
- * 
  **/
 
-public interface InvoiceMapper{
+public interface InvoiceMapper {
 
 
-	/**
-	 * 
-	 * 删除（根据主键ID删除）
-	 * 
-	 **/
-	int delete(@Param("id") Long id);
+    /**
+     * 删除（根据主键ID删除）
+     **/
+    int delete(@Param("id") Long id);
 
-	/**
-	 * 
-	 * 添加
-	 * 
-	 **/
-	int insert(Invoice record);
+    /**
+     * 添加
+     **/
+    int insert(Invoice record);
 
 
-	/**
-	 * 
-	 * 修改（根据主键ID修改）
-	 * 
-	 **/
-	int update(Invoice record);
+    /**
+     * 修改（根据主键ID修改）
+     **/
+    int update(Invoice record);
 
     int deleteByIdAndUserId(Invoice invoice);
 }

@@ -20,7 +20,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/contentType",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/contentType", headers = Constant.VERSION_HEAD + "=1")
 public class ContentTypeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentTypeController.class);
 
@@ -72,8 +72,6 @@ public class ContentTypeController {
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(rtn);
     }
-
-
 
 
 }

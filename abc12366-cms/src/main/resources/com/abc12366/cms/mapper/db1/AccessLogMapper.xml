@@ -19,7 +19,7 @@
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insert" parameterType="com.abc12366.cms.model.questionnaire.AccessLog">
         INSERT INTO cms_paper_access_log
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
@@ -40,7 +40,7 @@
             </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 #{id},
             </if>

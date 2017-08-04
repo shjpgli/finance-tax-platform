@@ -8,27 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * EventMapper数据库操作接口类
- * 
  **/
 
 public interface EventRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Event  selectByPrimaryKey(@Param("eventId") String eventId);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Event selectByPrimaryKey(@Param("eventId") String eventId);
 
-	/**
-	 *
-	 * 查询（根据条件查询）
-	 *
-	 **/
-	List<EventListBo> selectList(Map<String,Object> map);
+    /**
+     * 查询（根据条件查询）
+     **/
+    List<EventListBo> selectList(Map<String, Object> map);
 
 
 }

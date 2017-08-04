@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface EventService {
 
-    List<EventListBo> selectList(Map<String,Object> map);
+    List<EventListBo> selectList(Map<String, Object> map);
 
     EventSaveBo save(EventSaveBo eventSaveBo);
 

@@ -14,13 +14,16 @@ import java.util.List;
  * Time: 15:07
  */
 public interface SubjectTagService {
-    SubjectTagBO insert(@RequestParam("subject")String subject, @RequestParam("id")String id, @RequestParam("tagId")String tagId, HttpServletRequest request);
+    SubjectTagBO insert(@RequestParam("subject") String subject, @RequestParam("id") String id, @RequestParam
+            ("tagId") String tagId, HttpServletRequest request);
 
-    List<SubjectTagBO> batchInsert(@RequestParam("subject")String subject, @RequestParam("id")String id, TagList tagList, HttpServletRequest request);
+    List<SubjectTagBO> batchInsert(@RequestParam("subject") String subject, @RequestParam("id") String id, TagList
+            tagList, HttpServletRequest request);
 
-    List<SubjectTagBO> selectList(@RequestParam("subject")String subject, @RequestParam("id")String id);
+    List<SubjectTagBO> selectList(@RequestParam("subject") String subject, @RequestParam("id") String id);
 
-    int delete(@RequestParam("subject")String subject, @RequestParam("id")String id, @RequestParam("tagId")String tagId);
+    int delete(@RequestParam("subject") String subject, @RequestParam("id") String id, @RequestParam("tagId") String
+            tagId);
 
     int deleteByTagId(String id);
 

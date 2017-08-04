@@ -8,7 +8,8 @@ import java.util.List;
  * Time: 15:40
  */
 public class SubjectList {
-    List<Subject>  subjectList;
+    List<Subject> subjectList;
+
     public SubjectList() {
     }
 

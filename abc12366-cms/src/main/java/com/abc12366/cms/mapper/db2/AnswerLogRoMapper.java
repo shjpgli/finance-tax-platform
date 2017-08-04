@@ -9,20 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * AnswerLogMapper数据库操作接口类
- * 
  **/
 
 public interface AnswerLogRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	AnswerLog selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    AnswerLog selectByPrimaryKey(@Param("id") String id);
 
     List<AnswerLogBO> selectList(AnswerLogBO answerLogBO);
 
@@ -31,23 +27,17 @@ public interface AnswerLogRoMapper {
     AnswerLogBO selectAvgTime(AnswerLog answerLog);
 
     /**
-     *
      * 查询（浏览统计）
-     *
      **/
-    List<AnswerLogRolltjBo> selectlltj(Map<String,Object> map);
+    List<AnswerLogRolltjBo> selectlltj(Map<String, Object> map);
 
     /**
-     *
      * 查询（浏览统计总数按时间）
-     *
      **/
-    Integer selectlltjsbysj(Map<String,Object> map);
+    Integer selectlltjsbysj(Map<String, Object> map);
 
     /**
-     *
      * 查询（浏览统计总数）
-     *
      **/
-    Integer selectlltjs(Map<String,Object> map);
+    Integer selectlltjs(Map<String, Object> map);
 }

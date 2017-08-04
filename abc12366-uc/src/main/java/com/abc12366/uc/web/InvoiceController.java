@@ -45,6 +45,7 @@ public class InvoiceController {
 
     @Autowired
     private InvoiceService invoiceService;
+
     /**
      * 发票列表管理
      *
@@ -57,23 +58,24 @@ public class InvoiceController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value ="consignee", required = false) String consignee,
-                                     @RequestParam(value ="userOrderNo", required = false) String userOrderNo,
-                                     @RequestParam(value ="username", required = false) String username,
-                                     @RequestParam(value ="invoiceNo", required = false) String invoiceNo,
-                                     @RequestParam(value ="startTime", required = false) String startTime,
-                                     @RequestParam(value ="endTime", required = false) String endTime){
+                                     @RequestParam(value = "consignee", required = false) String consignee,
+                                     @RequestParam(value = "userOrderNo", required = false) String userOrderNo,
+                                     @RequestParam(value = "username", required = false) String username,
+                                     @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
+                                     @RequestParam(value = "property", required = false) String property,
+                                     @RequestParam(value = "startTime", required = false) String startTime,
+                                     @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceBO invoice = new InvoiceBO();
         invoice.setConsignee(consignee);
         invoice.setUserOrderNo(userOrderNo);
         invoice.setUsername(username);
         invoice.setInvoiceNo(invoiceNo);
-
-        if(startTime != null && !"".equals(startTime)){
+        invoice.setProperty(property);
+        if (startTime != null && !"".equals(startTime)) {
             invoice.setStartTime(DataUtils.StrToDate(startTime));
         }
-        if(endTime != null && !"".equals(endTime)){
+        if (endTime != null && !"".equals(endTime)) {
             invoice.setEndTime(DataUtils.StrToDate(endTime));
         }
 
@@ -95,8 +97,8 @@ public class InvoiceController {
     @GetMapping(path = "/history")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value ="userId", required = true) String userId,
-                                     @RequestParam(value ="status", required = true) String status){
+                                     @RequestParam(value = "userId", required = true) String userId,
+                                     @RequestParam(value = "status", required = true) String status) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceBO invoice = new InvoiceBO();
         invoice.setStatus(status);
@@ -116,7 +118,8 @@ public class InvoiceController {
      * @return
      */
     @GetMapping(path = "/user/{invoiceId}/{userId}")
-    public ResponseEntity userInvoice(@PathVariable("invoiceId") String invoiceId,@PathVariable("userId") String userId) {
+    public ResponseEntity userInvoice(@PathVariable("invoiceId") String invoiceId, @PathVariable("userId") String
+            userId) {
         LOGGER.info("{}", invoiceId);
         Invoice invoice = new Invoice();
         invoice.setUserId(userId);
@@ -133,7 +136,7 @@ public class InvoiceController {
      * @return
      */
     @GetMapping(path = "/{invoiceId}")
-    public ResponseEntity addInvoice(@PathVariable("invoiceId") String invoiceId) {
+    public ResponseEntity selectInvoice(@PathVariable("invoiceId") String invoiceId) {
         LOGGER.info("{}", invoiceId);
         InvoiceBO bo = invoiceService.selectOne(invoiceId);
         LOGGER.info("{}", bo);
@@ -157,14 +160,14 @@ public class InvoiceController {
 
     /**
      * 管理员开票、拒绝开票
+     *
      * @return
      */
     @PostMapping(path = "/billing")
-    public ResponseEntity billing(@Valid @RequestBody InvoiceBO invoiceBO,
-                                  @RequestParam(value ="isBilling", required = true) Boolean isBilling) {
-        InvoiceBO bo = invoiceService.billing(invoiceBO,isBilling);
+    public ResponseEntity billing(@Valid @RequestBody InvoiceBO invoiceBO) {
+        InvoiceBO bo = invoiceService.billing(invoiceBO);
         LOGGER.info("{}", bo);
-        return  ResponseEntity.ok(Utils.kv("data", bo));
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -204,15 +207,19 @@ public class InvoiceController {
 
     /**
      * 发票仓库列表
+     *
      * @param pageNum
      * @param pageSize
      * @param invoiceCode
      * @return
      */
     @GetMapping(path = "/repo")
-    public ResponseEntity selectInvoiceRepoList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                                @RequestParam(value = "invoiceCode", required = false) String invoiceCode) {
+    public ResponseEntity selectInvoiceRepoList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                            pageNum,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                        pageSize,
+                                                @RequestParam(value = "invoiceCode", required = false) String
+                                                            invoiceCode) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceRepo invoiceRepo = new InvoiceRepo();
         invoiceRepo.setInvoiceCode(invoiceCode);
@@ -243,7 +250,7 @@ public class InvoiceController {
      * @return
      */
     @DeleteMapping(path = "/repo/{id}")
-    public ResponseEntity deleteInvoiceRepo( @PathVariable("id") String id) {
+    public ResponseEntity deleteInvoiceRepo(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         invoiceRepoService.deleteInvoiceRepo(id);
         return ResponseEntity.ok(Utils.kv());
@@ -272,7 +279,7 @@ public class InvoiceController {
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-          ResponseEntity.ok(Utils.kv("dataList", invoiceList));
+                ResponseEntity.ok(Utils.kv("dataList", invoiceList));
     }
 
     /**
@@ -282,11 +289,12 @@ public class InvoiceController {
      */
     @GetMapping(path = "/back")
     public ResponseEntity selectBackList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                   @RequestParam(value ="expressNo", required = false) String expressNo,
-                                   @RequestParam(value ="userOrderNo", required = false) String userOrderNo,
-                                   @RequestParam(value ="invoiceNo", required = false) String invoiceNo,
-                                   @RequestParam(value ="sendExpressNo", required = false) String sendExpressNo) {
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                         @RequestParam(value = "expressNo", required = false) String expressNo,
+                                         @RequestParam(value = "userOrderNo", required = false) String userOrderNo,
+                                         @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
+                                         @RequestParam(value = "sendExpressNo", required = false) String
+                                                     sendExpressNo) {
         InvoiceBackBO invoiceBackBO = new InvoiceBackBO();
         invoiceBackBO.setExpressNo(expressNo);
 
@@ -326,7 +334,8 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/back/{expressId}")
-    public ResponseEntity refund(@PathVariable("expressId") String expressId, @Valid @RequestBody InvoiceBackBO invoiceBackBO) {
+    public ResponseEntity refund(@PathVariable("expressId") String expressId, @Valid @RequestBody InvoiceBackBO
+            invoiceBackBO) {
         invoiceBackBO.setExpressId(expressId);
         InvoiceBackBO bo = invoiceService.refund(invoiceBackBO);
 
@@ -341,7 +350,8 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/back/check/{expressId}/{id}")
-    public ResponseEntity refundCheck(@PathVariable("expressId") String expressId,@PathVariable("id") String id, @Valid @RequestBody InvoiceBack invoiceBack) {
+    public ResponseEntity refundCheck(@PathVariable("expressId") String expressId, @PathVariable("id") String id,
+                                      @Valid @RequestBody InvoiceBack invoiceBack) {
         invoiceBack.setId(id);
         invoiceBack.setExpressId(expressId);
         InvoiceBackBO bo = invoiceService.refundCheck(invoiceBack);
@@ -352,6 +362,7 @@ public class InvoiceController {
 
     /**
      * 发票仓库详情列表
+     *
      * @param pageNum
      * @param pageSize
      * @param invoiceNo
@@ -360,12 +371,16 @@ public class InvoiceController {
      * @return
      */
     @GetMapping(path = "/detail")
-    public ResponseEntity selectInvoiceDetailList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectInvoiceDetailList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                              pageNum,
+                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                          pageSize,
                                                   @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
-                                                  @RequestParam(value = "invoiceCode", required = false) String invoiceCode,
+                                                  @RequestParam(value = "invoiceCode", required = false) String
+                                                              invoiceCode,
                                                   @RequestParam(value = "status", required = false) String status,
-                                                  @RequestParam(value = "invoiceRepoId", required = true) String invoiceRepoId) {
+                                                  @RequestParam(value = "invoiceRepoId", required = true) String
+                                                              invoiceRepoId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceDetail invoiceDetail = new InvoiceDetail();
         invoiceDetail.setInvoiceNo(invoiceNo);
@@ -383,13 +398,17 @@ public class InvoiceController {
 
     /**
      * 根据发票号码，获取发票仓库详情信息
+     *
      * @param invoiceNo
      * @return
      */
     @GetMapping(path = "/detail/invoice")
-    public ResponseEntity selectInvoiceDetailListByInvoice(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                                           @RequestParam(value = "invoiceNo", required = false) String invoiceNo) {
+    public ResponseEntity selectInvoiceDetailListByInvoice(@RequestParam(value = "page", defaultValue = Constant
+            .pageNum) int pageNum,
+                                                           @RequestParam(value = "size", defaultValue = Constant
+                                                                   .pageSize) int pageSize,
+                                                           @RequestParam(value = "invoiceNo", required = false)
+                                                               String invoiceNo) {
         InvoiceDetail invoiceDetail = new InvoiceDetail();
         invoiceDetail.setInvoiceNo(invoiceNo);
         invoiceDetail.setStatus("0");
@@ -397,7 +416,7 @@ public class InvoiceController {
         List<InvoiceDetail> invoiceList = invoiceRepoService.selectInvoiceDetailListByInvoice(invoiceDetail);
         PageInfo<InvoiceDetail> pageInfo = new PageInfo<>(invoiceList);
         LOGGER.info("{}", invoiceList);
-        return  ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -406,31 +425,32 @@ public class InvoiceController {
      * @return
      */
     @DeleteMapping(path = "/detail/del/{id}")
-    public ResponseEntity deleteInvoiceDetail( @PathVariable("id") String id) {
+    public ResponseEntity deleteInvoiceDetail(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         invoiceRepoService.deleteInvoiceDetail(id);
         return ResponseEntity.ok(Utils.kv());
     }
 
 
-
     /**
      * 获取一张发票
+     *
      * @return
      */
     @GetMapping(path = "/detail/select")
     public ResponseEntity selectInvoiceDetail() {
         InvoiceDetail invoiceDetail = invoiceRepoService.selectInvoiceDetail();
         LOGGER.info("{}", invoiceDetail);
-        return  ResponseEntity.ok(Utils.kv("data", invoiceDetail));
+        return ResponseEntity.ok(Utils.kv("data", invoiceDetail));
     }
+
     /**
      * 发票详情信息作废
      *
      * @return
      */
     @PutMapping(path = "/detail/invalid/{id}")
-    public ResponseEntity invalidInvoiceDetail( @PathVariable("id") String id) {
+    public ResponseEntity invalidInvoiceDetail(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         invoiceRepoService.invalidInvoiceDetail(id);
         return ResponseEntity.ok(Utils.kv());

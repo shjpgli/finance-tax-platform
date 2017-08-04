@@ -4,8 +4,10 @@
 <mapper namespace="com.abc12366.bangbang.mapper.db1.TeamMapper">
 
     <insert id="insert" parameterType="com.abc12366.bangbang.model.Team">
-        insert into bb_team(id,teamName,introduction,status,members,createTime,lastUpdate,teamPicturePath,maxPicturePath,midPicturePath,minPicturePath)
-        values (#{id},#{teamName},#{introduction},#{status},#{members},#{createTime},#{lastUpdate},#{teamPicturePath},#{maxPicturePath},#{midPicturePath},#{minPicturePath})
+        insert into
+        bb_team(id,teamName,introduction,status,members,createTime,lastUpdate,teamPicturePath,maxPicturePath,midPicturePath,minPicturePath)
+        values
+        (#{id},#{teamName},#{introduction},#{status},#{members},#{createTime},#{lastUpdate},#{teamPicturePath},#{maxPicturePath},#{midPicturePath},#{minPicturePath})
     </insert>
     <update id="update" parameterType="com.abc12366.bangbang.model.Team">
         update bb_team

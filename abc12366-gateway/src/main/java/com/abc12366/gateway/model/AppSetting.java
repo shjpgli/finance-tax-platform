@@ -1,117 +1,135 @@
 package com.abc12366.gateway.model;
+
 import java.io.Serializable;
 
 
 /**
- *
  * 接入应用设置表
- *
  **/
 @SuppressWarnings("serial")
 public class AppSetting implements Serializable {
 
-	/**ID**/
-	private String id;
+    /**
+     * ID
+     **/
+    private String id;
 
-	/**APPID**/
-	private String appId;
+    /**
+     * APPID
+     **/
+    private String appId;
 
-	/**接口ID**/
-	private String apiId;
+    /**
+     * 接口ID
+     **/
+    private String apiId;
 
-	/**每分钟允许访问次数**/
-	private Integer timesPerMinute;
+    /**
+     * 每分钟允许访问次数
+     **/
+    private Integer timesPerMinute;
 
-	/**每小时允许访问次数**/
-	private Integer timesPerHour;
+    /**
+     * 每小时允许访问次数
+     **/
+    private Integer timesPerHour;
 
-	/**每天允许访问次数**/
-	private Integer timesPerDay;
+    /**
+     * 每天允许访问次数
+     **/
+    private Integer timesPerDay;
 
-	/**启停状态: 0停用，1启用**/
-	private Boolean status;
+    /**
+     * 启停状态: 0停用，1启用
+     **/
+    private Boolean status;
 
-	/**创建时间**/
-	private java.util.Date createTime;
+    /**
+     * 创建时间
+     **/
+    private java.util.Date createTime;
 
-	/**修改时间**/
-	private java.util.Date lastUpdate;
+    /**
+     * 修改时间
+     **/
+    private java.util.Date lastUpdate;
 
-	/**是否需要身份验证**/
-	private Boolean isValidate;
+    /**
+     * 是否需要身份验证
+     **/
+    private Boolean isValidate;
 
+    public String getId() {
+        return this.id;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public String getAppId() {
+        return this.appId;
+    }
 
-	public void setAppId(String appId){
-		this.appId = appId;
-	}
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-	public String getAppId(){
-		return this.appId;
-	}
+    public String getApiId() {
+        return this.apiId;
+    }
 
-	public void setApiId(String apiId){
-		this.apiId = apiId;
-	}
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
+    }
 
-	public String getApiId(){
-		return this.apiId;
-	}
+    public Integer getTimesPerMinute() {
+        return this.timesPerMinute;
+    }
 
-	public void setTimesPerMinute(Integer timesPerMinute){
-		this.timesPerMinute = timesPerMinute;
-	}
+    public void setTimesPerMinute(Integer timesPerMinute) {
+        this.timesPerMinute = timesPerMinute;
+    }
 
-	public Integer getTimesPerMinute(){
-		return this.timesPerMinute;
-	}
+    public Integer getTimesPerHour() {
+        return this.timesPerHour;
+    }
 
-	public void setTimesPerHour(Integer timesPerHour){
-		this.timesPerHour = timesPerHour;
-	}
+    public void setTimesPerHour(Integer timesPerHour) {
+        this.timesPerHour = timesPerHour;
+    }
 
-	public Integer getTimesPerHour(){
-		return this.timesPerHour;
-	}
+    public Integer getTimesPerDay() {
+        return this.timesPerDay;
+    }
 
-	public void setTimesPerDay(Integer timesPerDay){
-		this.timesPerDay = timesPerDay;
-	}
+    public void setTimesPerDay(Integer timesPerDay) {
+        this.timesPerDay = timesPerDay;
+    }
 
-	public Integer getTimesPerDay(){
-		return this.timesPerDay;
-	}
+    public Boolean getStatus() {
+        return this.status;
+    }
 
-	public void setStatus(Boolean status){
-		this.status = status;
-	}
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
-	public Boolean getStatus(){
-		return this.status;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
+    }
 
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
-
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
     public Boolean getIsValidate() {
         return isValidate;

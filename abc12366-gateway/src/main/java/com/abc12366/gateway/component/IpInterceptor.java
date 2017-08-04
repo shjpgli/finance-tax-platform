@@ -50,11 +50,11 @@ public class IpInterceptor extends HandlerInterceptorAdapter {
         apiLog.setIp(ip);
         apiLog.setYyyyMMdd(DateUtils.getDataString());
         long time = System.currentTimeMillis();
-        apiLog.setStartTime(time-(setTime*1000));
+        apiLog.setStartTime(time - (setTime * 1000));
         apiLog.setEndTime(time);
 
         int count = apiLogService.selectApiLogCount(apiLog);
-        if(count > threshold){
+        if (count > threshold) {
             LOGGER.warn("此IP访问超过每分钟阀值：{}", count);
             BodyStatus bodyStatus = Utils.bodyStatus(4034);
             response.setStatus(401);
@@ -65,19 +65,19 @@ public class IpInterceptor extends HandlerInterceptorAdapter {
             //加入黑名单表
             BlacklistBO bo = new BlacklistBO();
             bo.setIp(ip);
-            bo.setUserId((String)request.getAttribute(Constant.USER_ID));
+            bo.setUserId((String) request.getAttribute(Constant.USER_ID));
             Date date = new Date();
             bo.setCreateTime(date);
             bo.setStartTime(date);
-            bo.setEndTime(TimeUtil.getLongToDate(System.currentTimeMillis()+lockingTime));
+            bo.setEndTime(TimeUtil.getLongToDate(System.currentTimeMillis() + lockingTime));
             bo.setStatus(true);
             bo.setRemark("系统自动锁定");
             blacklistService.insert(bo);
             return false;
-        }else {
+        } else {
             //查询黑名单是否有这个IP信息，并且是锁定状态的，有就解锁
             Blacklist black = blacklistService.selectByIp(ip);
-            if(black != null){
+            if (black != null) {
                 BlacklistBO listBO = new BlacklistBO();
                 listBO.setId(black.getId());
                 listBO.setStatus(true);

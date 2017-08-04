@@ -47,7 +47,7 @@ public class AdminController {
         List<AdminBO> userList = adminService.selectList(admin);
         LOGGER.info("userList:{}", userList);
         return userList == null ?
-                ResponseEntity.ok(Utils.kv()):
+                ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
@@ -61,6 +61,7 @@ public class AdminController {
 
     /**
      * 新增用户
+     *
      * @param adminBO
      * @return
      */
@@ -73,6 +74,7 @@ public class AdminController {
 
     /**
      * 修改用户信息
+     *
      * @param adminUpdateBO
      * @param id
      * @return
@@ -87,6 +89,7 @@ public class AdminController {
 
     /**
      * 启用、禁用
+     *
      * @return
      */
     @PutMapping(path = "/enable")
@@ -99,6 +102,7 @@ public class AdminController {
 
     /**
      * 修改用户密码
+     *
      * @param userPasswordBO
      * @return
      */
@@ -112,11 +116,12 @@ public class AdminController {
 
     /**
      * 重置用户密码
+     *
      * @param id
      * @return
      */
     @PutMapping(path = "/password/{id}")
-    public ResponseEntity resetUserPwd( @PathVariable("id") String id) {
+    public ResponseEntity resetUserPwd(@PathVariable("id") String id) {
         LOGGER.info("id:{}", id);
         int upd = adminService.resetUserPwd(id);
         LOGGER.info("upd:{}", upd);
@@ -134,6 +139,7 @@ public class AdminController {
 
     /**
      * 查看User详情
+     *
      * @param id
      * @return
      */
@@ -147,11 +153,13 @@ public class AdminController {
 
     /**
      * 更新User详情
+     *
      * @param id
      * @return
      */
     @PutMapping(path = "/extend/{id}")
-    public ResponseEntity updateUserExtend(@Valid @RequestBody AdminExtendBO adminExtendBO,@PathVariable("id") String id) {
+    public ResponseEntity updateUserExtend(@Valid @RequestBody AdminExtendBO adminExtendBO, @PathVariable("id")
+    String id) {
         LOGGER.info("adminExtendBO:{}", adminExtendBO);
         adminExtendBO.setUserId(id);
         AdminExtend adminExtend = adminService.updateUserExtend(adminExtendBO);
@@ -161,6 +169,7 @@ public class AdminController {
 
     /**
      * 查看LoginInfo信息
+     *
      * @param token
      * @return
      */
@@ -172,7 +181,7 @@ public class AdminController {
         LOGGER.info("loginInfo:{}", loginInfo);
         long end = System.currentTimeMillis();
         long res = end - start;
-        LOGGER.info("响应用时:{}毫秒",res);
+        LOGGER.info("响应用时:{}毫秒", res);
         return ResponseEntity.ok(Utils.kv("data", loginInfo));
     }
 }

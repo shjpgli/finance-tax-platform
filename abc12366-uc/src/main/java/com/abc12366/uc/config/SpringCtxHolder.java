@@ -17,14 +17,14 @@ public class SpringCtxHolder implements ApplicationContextAware {
 
     private static Environment env;
 
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SpringCtxHolder.applicationContext = applicationContext;
         env = applicationContext.getEnvironment();
-    }
-
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     public static Environment getEnv() {
@@ -35,8 +35,8 @@ public class SpringCtxHolder implements ApplicationContextAware {
         SpringCtxHolder.env = env;
     }
 
-    public static String getProperty(String key){
-        if(StringUtils.isEmpty(key)){
+    public static String getProperty(String key) {
+        if (StringUtils.isEmpty(key)) {
             return "";
         }
         return env.getProperty(key);

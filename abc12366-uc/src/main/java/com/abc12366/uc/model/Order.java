@@ -1,34 +1,43 @@
 package com.abc12366.uc.model;
+
 import java.io.Serializable;
 
 
 /**
- *
  * 用户订单
- *
  **/
 @SuppressWarnings("serial")
 public class Order implements Serializable {
 
-    /**PK**/
-    private String id;
 
-    /**订单编号**/
+    /**
+     * 订单编号
+     **/
     private String orderNo;
 
-    /**用户ID**/
+    /**
+     * 用户ID
+     **/
     private String userId;
 
-    /**订单状态：1.新订单 2.确认订单 3.取消订单 4.作废订单 5.完成订单 6.退款 7.部分退款**/
+    /**
+     * 订单状态：1.新订单 2.确认订单 3.取消订单 4.作废订单 5.完成订单 6.退款 7.部分退款
+     **/
     private String orderStatus;
 
-    /**配送方式**/
+    /**
+     * 配送方式
+     **/
     private String deliveryMethod;
 
-    /**支付方式：WEIXIN、ALIPAY**/
+    /**
+     * 支付方式：WEIXIN、ALIPAY
+     **/
     private String payMethod;
 
-    /**当前会员等级**/
+    /**
+     * 当前会员等级
+     **/
     private String nowVipLevel;
 
     /****/
@@ -37,34 +46,54 @@ public class Order implements Serializable {
     /****/
     private java.util.Date lastUpdate;
 
-    /**用户名**/
+    /**
+     * 用户名
+     **/
     private String username;
 
-    /**是否需要寄送**/
+    /**
+     * 是否需要寄送
+     **/
     private Integer isShipping;
 
-    /**是否免运费**/
+    /**
+     * 是否免运费
+     **/
     private Integer isFreeShipping;
 
-    /**配送费**/
+    /**
+     * 配送费
+     **/
     private Double deliveryFee;
 
-    /**是否保价**/
+    /**
+     * 是否保价
+     **/
     private Integer isInsured;
 
-    /**保价费用**/
+    /**
+     * 保价费用
+     **/
     private Double insuredFee;
 
-    /**成交总金额**/
+    /**
+     * 成交总金额
+     **/
     private Double totalPrice;
 
-    /**配送地址ID**/
+    /**
+     * 配送地址ID
+     **/
     private String addressId;
 
-    /**运单号**/
+    /**
+     * 运单号
+     **/
     private String expressNo;
 
-    /**备注**/
+    /**
+     * 备注
+     **/
     private String remark;
 
     /**
@@ -72,154 +101,157 @@ public class Order implements Serializable {
      **/
     private Integer giftPoints;
 
-    /**交易方式：RMB、POINTS**/
+    /**
+     * 交易方式：RMB、POINTS
+     **/
     private String tradeMethod;
 
-    /**是否已开发票，true：是，false：否**/
+    /**
+     * 是否已开发票，true：是，false：否
+     **/
     private Boolean isInvoice;
 
-    public void setId(String id){
-        this.id = id;
-    }
+    private String cancelId;
 
-    public String getId(){
-        return this.id;
-    }
+    /**
+     * 商品ID
+     **/
+    private String goodsId;
 
-    public void setOrderNo(String orderNo){
-        this.orderNo = orderNo;
-    }
-
-    public String getOrderNo(){
+    public String getOrderNo() {
         return this.orderNo;
     }
 
-    public void setUserId(String userId){
-        this.userId = userId;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
-    public String getUserId(){
+    public String getUserId() {
         return this.userId;
     }
 
-    public void setOrderStatus(String orderStatus){
-        this.orderStatus = orderStatus;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getOrderStatus(){
+    public String getOrderStatus() {
         return this.orderStatus;
     }
 
-    public void setDeliveryMethod(String deliveryMethod){
-        this.deliveryMethod = deliveryMethod;
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
-    public String getDeliveryMethod(){
+    public String getDeliveryMethod() {
         return this.deliveryMethod;
     }
 
-    public void setPayMethod(String payMethod){
-        this.payMethod = payMethod;
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
     }
 
-    public String getPayMethod(){
+    public String getPayMethod() {
         return this.payMethod;
     }
 
-    public void setCreateTime(java.util.Date createTime){
-        this.createTime = createTime;
+    public void setPayMethod(String payMethod) {
+        this.payMethod = payMethod;
     }
 
-    public java.util.Date getCreateTime(){
+    public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate){
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
-    public java.util.Date getLastUpdate(){
+    public java.util.Date getLastUpdate() {
         return this.lastUpdate;
     }
 
-    public void setUsername(String username){
-        this.username = username;
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return this.username;
     }
 
-    public void setIsShipping(Integer isShipping){
-        this.isShipping = isShipping;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Integer getIsShipping(){
+    public Integer getIsShipping() {
         return this.isShipping;
     }
 
-    public void setIsFreeShipping(Integer isFreeShipping){
-        this.isFreeShipping = isFreeShipping;
+    public void setIsShipping(Integer isShipping) {
+        this.isShipping = isShipping;
     }
 
-    public Integer getIsFreeShipping(){
+    public Integer getIsFreeShipping() {
         return this.isFreeShipping;
     }
 
-    public void setDeliveryFee(Double deliveryFee){
-        this.deliveryFee = deliveryFee;
+    public void setIsFreeShipping(Integer isFreeShipping) {
+        this.isFreeShipping = isFreeShipping;
     }
 
-    public Double getDeliveryFee(){
+    public Double getDeliveryFee() {
         return this.deliveryFee;
     }
 
-    public void setIsInsured(Integer isInsured){
-        this.isInsured = isInsured;
+    public void setDeliveryFee(Double deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
-    public Integer getIsInsured(){
+    public Integer getIsInsured() {
         return this.isInsured;
     }
 
-    public void setInsuredFee(Double insuredFee){
-        this.insuredFee = insuredFee;
+    public void setIsInsured(Integer isInsured) {
+        this.isInsured = isInsured;
     }
 
-    public Double getInsuredFee(){
+    public Double getInsuredFee() {
         return this.insuredFee;
     }
 
-    public void setTotalPrice(Double totalPrice){
-        this.totalPrice = totalPrice;
+    public void setInsuredFee(Double insuredFee) {
+        this.insuredFee = insuredFee;
     }
 
-    public Double getTotalPrice(){
+    public Double getTotalPrice() {
         return this.totalPrice;
     }
 
-    public void setAddressId(String addressId){
-        this.addressId = addressId;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public String getAddressId(){
+    public String getAddressId() {
         return this.addressId;
     }
 
-    public void setExpressNo(String expressNo){
-        this.expressNo = expressNo;
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 
-    public String getExpressNo(){
+    public String getExpressNo() {
         return this.expressNo;
     }
 
-    public void setRemark(String remark){
-        this.remark = remark;
+    public void setExpressNo(String expressNo) {
+        this.expressNo = expressNo;
     }
 
-    public String getRemark(){
+    public String getRemark() {
         return this.remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getNowVipLevel() {
@@ -252,5 +284,21 @@ public class Order implements Serializable {
 
     public void setIsInvoice(Boolean isInvoice) {
         this.isInvoice = isInvoice;
+    }
+
+    public String getCancelId() {
+        return cancelId;
+    }
+
+    public void setCancelId(String cancelId) {
+        this.cancelId = cancelId;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 }

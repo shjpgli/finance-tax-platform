@@ -2,9 +2,12 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.ExpLogUcBO;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.ExperienceLogQueryBO;
 import com.abc12366.uc.service.ExperienceLogService;
+import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -14,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +72,41 @@ public class ExperienceLogController {
         map.put("userId", userId);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ExperienceLogQueryBO> logList = experienceLogService.selectList(map);
+        LOGGER.info("{}", logList);
+        return (logList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
+    }
+
+    @GetMapping(path = "/user")
+    public ResponseEntity selectListByUser(@RequestParam(required = false) String start,
+                                           @RequestParam(required = false) String end,
+                                           HttpServletRequest request,
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}:{}:{}", start, end, request, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String, Object> map = new HashMap<>();
+        if (start != null && "".equals(start.trim())) {
+            start = null;
+        }
+        if (end != null && "".equals(end.trim())) {
+            end = null;
+        }
+        Date startDate = null;
+        Date endDate = null;
+        if (start != null) {
+            startDate = DateUtils.StrToDate(start);
+        }
+        if (end != null) {
+            endDate = DateUtils.StrToDate(end);
+        }
+
+        map.put("userId", UserUtil.getUserId(request));
+        map.put("start", startDate);
+        map.put("end", endDate);
+
+        List<ExpLogUcBO> logList = experienceLogService.selectListByUser(map);
         LOGGER.info("{}", logList);
         return (logList == null) ?
                 ResponseEntity.ok(Utils.kv()) :

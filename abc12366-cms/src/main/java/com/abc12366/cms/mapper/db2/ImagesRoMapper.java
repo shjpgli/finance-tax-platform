@@ -8,12 +8,10 @@ import java.util.List;
 public interface ImagesRoMapper {
 
 
-	/**
-	 *
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Images selectByPrimaryKey ( @Param("id") String id );
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Images selectByPrimaryKey(@Param("id") String id);
 
-	List<Images> selectList(Images images);
+    List<Images> selectList(Images images);
 }

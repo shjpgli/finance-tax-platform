@@ -31,6 +31,7 @@ public class ProductRepoController {
 
     /**
      * 查询库存详情
+     *
      * @param id
      * @return
      */
@@ -44,6 +45,7 @@ public class ProductRepoController {
 
     /**
      * 库存入库
+     *
      * @return
      */
     @PostMapping(path = "/income")
@@ -56,6 +58,7 @@ public class ProductRepoController {
 
     /**
      * 库存出库
+     *
      * @return
      */
     @PostMapping(path = "/outcome")

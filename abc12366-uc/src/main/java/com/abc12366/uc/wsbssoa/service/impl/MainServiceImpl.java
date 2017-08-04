@@ -32,12 +32,10 @@ import java.util.Map;
  */
 @Service
 public class MainServiceImpl implements MainService {
+    private static Properties properties = new Properties("application.properties");
     protected Logger _log = LoggerFactory.getLogger(RSAUtil.class);
-
     @Autowired
     private RestTemplate restTemplate;
-
-    private static Properties properties = new Properties("application.properties");
 
     public String RSAEncrypt(HttpServletRequest request, String inputStr) throws Exception {
         RSAPublicKey pbk = (RSAPublicKey) getRSAPublicKey(request);
@@ -50,7 +48,8 @@ public class MainServiceImpl implements MainService {
      * @return
      * @throws Exception
      */
-    private Object getRSAPublicKey(HttpServletRequest request) throws Exception {
+    @Override
+    public Object getRSAPublicKey(HttpServletRequest request) throws Exception {
         RSAPkResponse rsaPkResp = getRSAPublicKeyStr(request);
         if (rsaPkResp.isSuccess()) {
             ObjectInputStream i = new ObjectInputStream(new ByteArrayInputStream(rsaPkResp.getPk()));

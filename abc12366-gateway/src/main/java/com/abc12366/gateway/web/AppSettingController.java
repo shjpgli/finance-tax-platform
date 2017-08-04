@@ -33,6 +33,7 @@ public class AppSettingController {
 
     /**
      * APP设置列表查询
+     *
      * @param appId
      * @param pageNum
      * @param pageSize
@@ -52,6 +53,7 @@ public class AppSettingController {
 
     /**
      * APP设置详细查询
+     *
      * @param appId
      * @param id
      * @return
@@ -67,6 +69,7 @@ public class AppSettingController {
 
     /**
      * APP设置批量授权
+     *
      * @param appId
      * @param appSettingBOList
      * @return
@@ -75,13 +78,14 @@ public class AppSettingController {
     public ResponseEntity insertList(@PathVariable("appId") String appId,
                                      @Valid @RequestBody List<AppSettingBO> appSettingBOList) {
         LOGGER.info("{}: {}", appId, appSettingBOList);
-        List<AppSetting> appSettingList = appSettingService.insertList(appId,appSettingBOList);
+        List<AppSetting> appSettingList = appSettingService.insertList(appId, appSettingBOList);
         LOGGER.info("{}", appSettingList);
         return ResponseEntity.ok(Utils.kv("data", appSettingList));
     }
 
     /**
      * APP设置单个查询
+     *
      * @param appId
      * @param appSettingBO
      * @return
@@ -100,6 +104,7 @@ public class AppSettingController {
 
     /**
      * APP设置修改
+     *
      * @param appId
      * @param id
      * @param appSettingBO
@@ -119,6 +124,7 @@ public class AppSettingController {
 
     /**
      * APP设置删除
+     *
      * @param appId
      * @param id
      * @return

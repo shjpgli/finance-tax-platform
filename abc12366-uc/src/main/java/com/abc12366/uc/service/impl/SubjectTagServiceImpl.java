@@ -5,11 +5,9 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.SubjectTagMapper;
 import com.abc12366.uc.mapper.db2.SubjectTagRoMapper;
+import com.abc12366.uc.mapper.db2.TagRoMapper;
 import com.abc12366.uc.model.SubjectTag;
-import com.abc12366.uc.model.bo.BatchTagInsertBO;
-import com.abc12366.uc.model.bo.SubjectTagBO;
-import com.abc12366.uc.model.bo.TagId;
-import com.abc12366.uc.model.bo.TagList;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.SubjectTagService;
 import com.abc12366.uc.web.SubjectTagController;
 import org.slf4j.Logger;
@@ -39,6 +37,9 @@ public class SubjectTagServiceImpl implements SubjectTagService {
     @Autowired
     private SubjectTagRoMapper subjectTagRoMapper;
 
+    @Autowired
+    private TagRoMapper tagRoMapper;
+
     @Override
     public SubjectTagBO insert(String subject, String id, String tagId, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, tagId);
@@ -48,6 +49,11 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         if (isExist(tagId, id)) {
             LOGGER.warn("{}:{}", tagId, id);
             throw new ServiceException(4612);
+        }
+
+        //判断被打标签对象和标签类型是否匹配
+        if (!isObjectTagMatch(subject, tagId)) {
+            throw new ServiceException(4627);
         }
         SubjectTag subjectTag = new SubjectTag();
         subjectTag.setId(Utils.uuid());
@@ -62,7 +68,7 @@ public class SubjectTagServiceImpl implements SubjectTagService {
             throw new ServiceException(4101);
         }
         SubjectTagBO subjectTagBO = new SubjectTagBO();
-        BeanUtils.copyProperties(subject, subjectTagBO);
+        BeanUtils.copyProperties(subjectTag, subjectTagBO);
         return subjectTagBO;
     }
 
@@ -139,7 +145,8 @@ public class SubjectTagServiceImpl implements SubjectTagService {
 
     @Transactional("db1TxManager")
     @Override
-    public List<SubjectTagBO> batchUserInsert(String subject, String tagId, String subjectIds, HttpServletRequest request) {
+    public List<SubjectTagBO> batchUserInsert(String subject, String tagId, String subjectIds, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}:{}:{}", subject, tagId, subjectIds, request);
         List<SubjectTagBO> subjectTagBOList = new ArrayList<>();
         SubjectTag subjectTag = new SubjectTag();
@@ -167,7 +174,8 @@ public class SubjectTagServiceImpl implements SubjectTagService {
 
     @Transactional("db1TxManager")
     @Override
-    public List<SubjectTagBO> batchInsert2(String subject, BatchTagInsertBO batchTagInsertBO, HttpServletRequest request) {
+    public List<SubjectTagBO> batchInsert2(String subject, BatchTagInsertBO batchTagInsertBO, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}:{}", subject, batchTagInsertBO, request);
         List<String> tagIdList = stringToList(",", batchTagInsertBO.getTagIds());
         List<String> subjectIdList = stringToList(",", batchTagInsertBO.getSubjectIds());
@@ -206,5 +214,16 @@ public class SubjectTagServiceImpl implements SubjectTagService {
 
     public List stringToList(String sliptor, String string) {
         return Arrays.asList(string.split(sliptor));
+    }
+
+    public boolean isObjectTagMatch(String subject, String tagId) {
+        TagBO tagBO = tagRoMapper.selectOne(tagId);
+        if (tagBO == null) {
+            throw new ServiceException(4628);
+        }
+        if (subject.trim().toUpperCase().equals(tagBO.getType().toUpperCase())) {
+            return true;
+        }
+        return false;
     }
 }

@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id, name, startTime, endTime, login, channel, status, createTime, lastUpdate,
+        id, name, startTime, endTime, login, channel, status, createTime, lastUpdate,
         quickVote,
         privacyVote,
         privacyPassword,
@@ -19,7 +19,7 @@
         url,
         validateCode,
         hiddenResult
-	</sql>
+    </sql>
 
     <sql id="Result_Column_List">
         id, voteId, subjectId, itemId, userId, openId, ip, userAgent, createTime

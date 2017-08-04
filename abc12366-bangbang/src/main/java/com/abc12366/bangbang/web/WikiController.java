@@ -41,6 +41,7 @@ public class WikiController {
 
     /**
      * 百科主题列表管理
+     *
      * @return
      */
     @GetMapping
@@ -67,6 +68,7 @@ public class WikiController {
 
     /**
      * 查询百科主题详情
+     *
      * @param id
      * @return
      */
@@ -80,14 +82,15 @@ public class WikiController {
 
     /**
      * 敏感词新增
+     *
      * @return
      */
     @PostMapping
     public ResponseEntity addWiki(@Valid @RequestBody WikiBO wikiBO) {
         LOGGER.info("{}", wikiBO);
-        if (wikiBO != null){
+        if (wikiBO != null) {
             Set<String> set = sensitiveWordFilter.getSensitiveWord(wikiBO.toString(), 1);
-            if(set != null && set.size()!=0){
+            if (set != null && set.size() != 0) {
                 LOGGER.info("请求存在敏感词，请求失败", set);
                 throw new ServiceException(4508);
             }
@@ -99,6 +102,7 @@ public class WikiController {
 
     /**
      * 修改百科主题
+     *
      * @param wikiBO
      * @param id
      * @return
@@ -115,6 +119,7 @@ public class WikiController {
 
     /**
      * 删除百科主题
+     *
      * @param id
      * @return
      */
@@ -128,10 +133,12 @@ public class WikiController {
 
     /**
      * 新增百科主题日志
+     *
      * @return
      */
     @PostMapping(path = "/log/{wikiId}")
-    public ResponseEntity addWikiLog(@Valid @RequestBody WikiAccesslogBO accesslogBO,@PathVariable("wikiId") String wikiId) {
+    public ResponseEntity addWikiLog(@Valid @RequestBody WikiAccesslogBO accesslogBO, @PathVariable("wikiId") String
+            wikiId) {
         LOGGER.info("{}", accesslogBO);
         accesslogBO.setWikiId(wikiId);
         WikiAccesslogBO bo = wikiService.addWikiLog(accesslogBO);

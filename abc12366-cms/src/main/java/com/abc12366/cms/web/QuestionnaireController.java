@@ -42,6 +42,7 @@ public class QuestionnaireController {
 
     /**
      * 问卷列表查询
+     *
      * @return
      */
     @GetMapping
@@ -85,6 +86,7 @@ public class QuestionnaireController {
 
     /**
      * 问卷修改
+     *
      * @param questionnaireBO
      * @param id
      * @return
@@ -100,6 +102,7 @@ public class QuestionnaireController {
 
     /**
      * 问卷状态修改
+     *
      * @param status
      * @param id
      * @return
@@ -107,12 +110,13 @@ public class QuestionnaireController {
     @PutMapping(path = "/status/{id}")
     public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("id") String id) {
         LOGGER.info("{}", status);
-        questionnaireService.updateStatus(id,status);
+        questionnaireService.updateStatus(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
 
     /**
      * 问卷皮肤路径修改
+     *
      * @param skinUrl
      * @param id
      * @return
@@ -126,6 +130,7 @@ public class QuestionnaireController {
 
     /**
      * 问卷状态修改
+     *
      * @param id
      * @return
      */
@@ -137,6 +142,7 @@ public class QuestionnaireController {
 
     /**
      * 问卷状态修改
+     *
      * @param id
      * @return
      */
@@ -149,6 +155,7 @@ public class QuestionnaireController {
 
     /**
      * 问卷回收率
+     *
      * @param id
      * @return
      */
@@ -159,7 +166,7 @@ public class QuestionnaireController {
 //        Integer recoveryRate = questionnaireBO.getRecoveryRate();
 //        Integer accessRate = questionnaireBO.getAccessRate();
 //        String rate = accuracy(recoveryRate,accessRate,3);
-        return ResponseEntity.ok(Utils.kv("data",questionnaireBO));
+        return ResponseEntity.ok(Utils.kv("data", questionnaireBO));
     }
 
     /*public static String accuracy(double recoveryRate, double accessRate, int scale){
@@ -210,16 +217,16 @@ public class QuestionnaireController {
                                         @RequestParam(value = "questionId", required = false) String questionId) {
 
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("questionId",questionId);
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        dataMap.put("questionId", questionId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime()/1000);
+                dataMap.put("startTime", startTime1.getTime() / 1000);
             }
-            if(endTime != null && !"".equals(endTime)){
+            if (endTime != null && !"".equals(endTime)) {
                 Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime()/1000);
+                dataMap.put("endTime", startTime2.getTime() / 1000);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);

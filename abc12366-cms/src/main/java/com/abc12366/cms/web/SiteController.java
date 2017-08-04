@@ -24,51 +24,50 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/site",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/site", headers = Constant.VERSION_HEAD + "=1")
 public class SiteController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SiteController.class);
-	@Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(SiteController.class);
+    @Autowired
     private SiteService siteService;
 
-	/**
-	 * 查询站点列表信息
-	 */
-	@GetMapping
-	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-		List<SiteListBo> dataList = siteService.selectList();
-		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
-	}
+    /**
+     * 查询站点列表信息
+     */
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<SiteListBo> dataList = siteService.selectList();
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
 
-	/**
-	 * 查询单个站点
-	 */
-	@GetMapping(path = "/{siteId}")
-	public ResponseEntity selectOneById(@PathVariable("siteId") String siteId) {
-		SiteBo siteBo = siteService.selectOneById(siteId);
-		return ResponseEntity.ok(Utils.kv("data", siteBo));
-	}
+    /**
+     * 查询单个站点
+     */
+    @GetMapping(path = "/{siteId}")
+    public ResponseEntity selectOneById(@PathVariable("siteId") String siteId) {
+        SiteBo siteBo = siteService.selectOneById(siteId);
+        return ResponseEntity.ok(Utils.kv("data", siteBo));
+    }
 
-	/**
-	 * 新增站点
-	 */
-	@PostMapping
-	public ResponseEntity save(@Valid @RequestBody SiteBo siteBo) {
-		siteBo = siteService.save(siteBo);
-		return ResponseEntity.ok(Utils.kv("data", siteBo));
-	}
+    /**
+     * 新增站点
+     */
+    @PostMapping
+    public ResponseEntity save(@Valid @RequestBody SiteBo siteBo) {
+        siteBo = siteService.save(siteBo);
+        return ResponseEntity.ok(Utils.kv("data", siteBo));
+    }
 
-	/**
-	 * 更新站点
-	 */
-	@PutMapping(path = "/{siteId}")
-	public ResponseEntity update(@Valid @RequestBody SiteBo siteBo, @PathVariable("siteId") String siteId) {
-		siteBo = siteService.update(siteBo);
-		return ResponseEntity.ok(Utils.kv("data", siteBo));
-	}
+    /**
+     * 更新站点
+     */
+    @PutMapping(path = "/{siteId}")
+    public ResponseEntity update(@Valid @RequestBody SiteBo siteBo, @PathVariable("siteId") String siteId) {
+        siteBo = siteService.update(siteBo);
+        return ResponseEntity.ok(Utils.kv("data", siteBo));
+    }
 
 
-	
 }

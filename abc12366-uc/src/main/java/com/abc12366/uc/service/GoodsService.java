@@ -31,4 +31,8 @@ public interface GoodsService {
     void deleteGoods(String id);
 
     List<GoodsBO> selectProductRepoList(GoodsBO goods);
+
+    GoodsBO selectUserGoods(String id);
+
+    List<GoodsBO> selectGoodsBOList(Goods goods);
 }

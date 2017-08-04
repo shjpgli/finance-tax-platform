@@ -14,29 +14,22 @@ import org.apache.ibatis.annotations.Param;
 public interface NoticeMapper {
 
 
+    /**
+     * ��������ɾ��֪ͨ����
+     **/
+    int deleteByPrimaryKey(@Param("id") String id);
 
-	/**
-	 * 
-	 * ��������ɾ��֪ͨ����
-	 * 
-	 **/
-	int deleteByPrimaryKey(@Param("id") String id);
-
-	/**
-	 * 
-	 * ����֪ͨ����
-	 * 
-	 **/
-	int insert(NoticeBO notice);
+    /**
+     * ����֪ͨ����
+     **/
+    int insert(NoticeBO notice);
 
 
-	/**
-	 * 
-	 * ����֪ͨ����
-	 * 
-	 **/
-	int update(NoticeBO notice);
+    /**
+     * ����֪ͨ����
+     **/
+    int update(NoticeBO notice);
 
-	int updatecount(NoticeBO notice);
+    int updatecount(NoticeBO notice);
 
 }

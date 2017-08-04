@@ -52,7 +52,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                         //定时任务查询不需验证
                 .excludePathPatterns("/task/list")
-                //修改内容浏览量
+                        //修改内容浏览量
                 .excludePathPatterns("/content/updateViewsDay")
                         //获取标签
                 .excludePathPatterns("/content/selectContentType")
@@ -68,7 +68,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/task/list")
                         //修改内容浏览量
                 .excludePathPatterns("/content/updateViewsDay")
-                //获取标签
+                        //获取标签
                 .excludePathPatterns("/content/selectContentType")
                 .excludePathPatterns("/login", "/register");
 

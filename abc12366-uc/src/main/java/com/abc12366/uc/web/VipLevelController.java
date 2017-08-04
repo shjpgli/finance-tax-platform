@@ -52,7 +52,8 @@ public class VipLevelController {
         List<VipLevelBO> vipLevelBOList = vipLevelService.selectList(map);
         return (vipLevelBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) vipLevelBOList, "total", ((Page) vipLevelBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) vipLevelBOList, "total", ((Page) vipLevelBOList)
+                        .getTotal()));
     }
 
     @GetMapping(path = "/{id}")
@@ -91,6 +92,13 @@ public class VipLevelController {
         LOGGER.info("{}:{}", id, status);
         vipLevelService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    @GetMapping(path = "/bo/{levelCode}")
+    public ResponseEntity selectByLevelCode(@PathVariable String levelCode) {
+        LOGGER.info("{}", levelCode);
+        VipLevelBO vipLevelBO = vipLevelService.selectByLevelCode(levelCode);
+        return ResponseEntity.ok(Utils.kv("data", vipLevelBO));
     }
 }
 

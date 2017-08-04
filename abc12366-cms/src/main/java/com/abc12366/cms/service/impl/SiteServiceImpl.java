@@ -66,7 +66,7 @@ public class SiteServiceImpl implements SiteService {
         SiteBo siteBo1 = new SiteBo();
         siteBo1.setSitePath(siteBo.getSitePath());
         int cnt = siteRoMapper.selectCnt(siteBo1);
-        if(cnt >0){
+        if (cnt > 0) {
             throw new ServiceException(4214);
         }
         try {
@@ -90,7 +90,7 @@ public class SiteServiceImpl implements SiteService {
         siteBo1.setSitePath(siteBo.getSitePath());
         siteBo1.setSiteId(siteBo.getSiteId());
         int cnt = siteRoMapper.selectCnt(siteBo1);
-        if(cnt >0){
+        if (cnt > 0) {
             throw new ServiceException(4214);
         }
         try {

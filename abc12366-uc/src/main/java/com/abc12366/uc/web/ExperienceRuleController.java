@@ -78,7 +78,8 @@ public class ExperienceRuleController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody ExperienceRuleUpdateBO experienceRuleUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody ExperienceRuleUpdateBO experienceRuleUpdateBO, @PathVariable
+    String id) {
         LOGGER.info("{}:{}", experienceRuleUpdateBO, id);
         ExperienceRuleBO experienceRuleReturn = experienceRuleService.update(experienceRuleUpdateBO, id);
         LOGGER.info("{}", experienceRuleReturn);

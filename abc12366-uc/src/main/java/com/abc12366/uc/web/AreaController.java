@@ -30,6 +30,7 @@ public class AreaController {
 
     /**
      * 省列表
+     *
      * @param provinceId
      * @return
      */
@@ -37,11 +38,12 @@ public class AreaController {
     public ResponseEntity selectProvinceList(@RequestParam(value = "provinceId", required = false) String provinceId) {
         List<Province> provinceList = areaService.selectProvinceList(provinceId);
         LOGGER.info("{}", provinceList);
-        return ResponseEntity.ok(Utils.kv("dataList",provinceList));
+        return ResponseEntity.ok(Utils.kv("dataList", provinceList));
     }
 
     /**
      * 市列表
+     *
      * @param cityId
      * @return
      */
@@ -49,11 +51,12 @@ public class AreaController {
     public ResponseEntity selectCityList(@RequestParam(value = "cityId", required = false) String cityId) {
         List<City> cityList = areaService.selectCityList(cityId);
         LOGGER.info("{}", cityList);
-        return ResponseEntity.ok(Utils.kv("dataList",cityList));
+        return ResponseEntity.ok(Utils.kv("dataList", cityList));
     }
 
     /**
      * 根据省ID查市
+     *
      * @param provinceId
      * @return
      */
@@ -61,11 +64,12 @@ public class AreaController {
     public ResponseEntity selectCityByProId(@PathVariable("provinceId") String provinceId) {
         List<City> cityList = areaService.selectCityByProId(provinceId);
         LOGGER.info("{}", cityList);
-        return ResponseEntity.ok(Utils.kv("dataList",cityList));
+        return ResponseEntity.ok(Utils.kv("dataList", cityList));
     }
 
     /**
      * 区列表
+     *
      * @param areaId
      * @return
      */
@@ -73,23 +77,25 @@ public class AreaController {
     public ResponseEntity selectAreaList(@RequestParam(value = "areaId", required = false) String areaId) {
         List<Area> areaList = areaService.selectAreaList(areaId);
         LOGGER.info("{}", areaList);
-        return ResponseEntity.ok(Utils.kv("dataList",areaList));
+        return ResponseEntity.ok(Utils.kv("dataList", areaList));
     }
 
     /**
      * 根据市ID查区
+     *
      * @return
      */
     @GetMapping(path = "/area/{cityId}")
     public ResponseEntity selectAreaByCityId(@PathVariable("cityId") String cityId) {
         List<Area> areaList = areaService.selectAreaByCityId(cityId);
         LOGGER.info("{}", areaList);
-        return ResponseEntity.ok(Utils.kv("dataList",areaList));
+        return ResponseEntity.ok(Utils.kv("dataList", areaList));
     }
 
 
     /**
      * 查询所有省市区
+     *
      * @return
      */
     @GetMapping(path = "/provincecityarea")
@@ -98,10 +104,10 @@ public class AreaController {
         List<Province> provinceList = areaService.selectProvinceList("");
         List<City> cityList = areaService.selectCityList("");
         List<Area> areaList = areaService.selectAreaList("");
-        LOGGER.info("{}", provinceList,cityList,areaList);
+        LOGGER.info("{}", provinceList, cityList, areaList);
         return (provinceList == null) && (cityList == null) && (areaList == null) ?
                 ResponseEntity.ok(null) :
-                ResponseEntity.ok(Utils.kv("provinceList", provinceList, "cityList", cityList, "areaList",  areaList));
+                ResponseEntity.ok(Utils.kv("provinceList", provinceList, "cityList", cityList, "areaList", areaList));
     }
 
 }

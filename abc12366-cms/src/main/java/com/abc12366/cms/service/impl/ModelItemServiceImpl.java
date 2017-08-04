@@ -54,7 +54,7 @@ public class ModelItemServiceImpl implements ModelItemService {
             JSONObject jsonStu = JSONObject.fromObject(modelItemListBo);
             LOGGER.info("批量更新模型项信息:{}", jsonStu.toString());
             List<ModelItemBo> list = modelItemListBo.getModelItemBoList();
-            for(ModelItemBo modelItemBo:list){
+            for (ModelItemBo modelItemBo : list) {
                 ModelItem modelItem = new ModelItem();
                 BeanUtils.copyProperties(modelItemBo, modelItem);
                 modelItemMapper.updateByPrimaryKeySelective(modelItem);
@@ -73,7 +73,7 @@ public class ModelItemServiceImpl implements ModelItemService {
             JSONObject jsonStu = JSONObject.fromObject(modelItemListBo);
             LOGGER.info("批量新增模型项信息:{}", jsonStu.toString());
             List<ModelItemBo> list = modelItemListBo.getModelItemBoList();
-            for(ModelItemBo modelItemBo:list){
+            for (ModelItemBo modelItemBo : list) {
                 ModelItem modelItem = new ModelItem();
                 String uuid = UUID.randomUUID().toString().replace("-", "");
                 modelItemBo.setModelitemId(uuid);

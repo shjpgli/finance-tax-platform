@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * Date: 2017-05-25
  * Time: 11:34
  */
-public class UserInterceptor extends HandlerInterceptorAdapter{
+public class UserInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserInterceptor.class);
 
@@ -27,12 +27,13 @@ public class UserInterceptor extends HandlerInterceptorAdapter{
     private AuthService authService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
+            Exception {
 
         String userToken = request.getHeader(Constant.USER_TOKEN_HEAD);
         response.setContentType("application/json;charset=UTF-8");
 
-        if(StringUtils.isEmpty(userToken)){
+        if (StringUtils.isEmpty(userToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4199);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
@@ -41,7 +42,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter{
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        if(!authService.isAuthentication(userToken, request)){
+        if (!authService.isAuthentication(userToken, request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
@@ -50,7 +51,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter{
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        if(!authService.refreshToken(userToken)){
+        if (!authService.refreshToken(userToken)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));

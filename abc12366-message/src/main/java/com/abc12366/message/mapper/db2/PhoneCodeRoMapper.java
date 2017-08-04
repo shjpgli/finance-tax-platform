@@ -13,5 +13,5 @@ import java.util.List;
 public interface PhoneCodeRoMapper {
     List<PhoneCodeBO> selectList(PhoneCode phoneCode);
 
-    List<PhoneCodeBO> selectListByPhone(String phone);
+    List<PhoneCodeBO> selectListByPhone(PhoneCode phoneCode);
 }

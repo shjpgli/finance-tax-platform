@@ -16,6 +16,7 @@ public class HttpRequestUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestUtil.class);
     private String jsonStr;
+
     /**
      * 向指定URL发送GET方法的请求
      *
@@ -92,7 +93,7 @@ public class HttpRequestUtil {
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
             conn.setRequestProperty(Constant.APP_TOKEN_HEAD, "4872aafb54a58d7bfcf8aa16fb8f945f");
             //conn.setRequestProperty(Constant.ADMIN_TOKEN_HEAD, "8b4a21e4c23e280108f8438cca12f4c6");
-            conn.setRequestProperty(Constant.VERSION_HEAD,Constant.VERSION_1);
+            conn.setRequestProperty(Constant.VERSION_HEAD, Constant.VERSION_1);
             // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -135,7 +136,8 @@ public class HttpRequestUtil {
         System.out.println(s);*/
 
         //发送 GET 请求
-        String sr = HttpRequestUtil.sendGet("http://118.118.116.202:9500/admins/user/token/37748c5dbddea1e0151b8c52b1144966", "");
+        String sr = HttpRequestUtil.sendGet("http://118.118.116" +
+                ".202:9500/admins/user/token/37748c5dbddea1e0151b8c52b1144966", "");
 
         System.out.println(sr);
     }

@@ -27,7 +27,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     private TokenService tokenService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
+            Exception {
 
         String adminToken = request.getHeader(Constant.ADMIN_TOKEN_HEAD);
         String userToken = request.getHeader(Constant.USER_TOKEN_HEAD);

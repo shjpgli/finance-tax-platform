@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.LoginInfoRoMapper">
 
     <resultMap id="loginInfoMap" type="com.abc12366.uc.model.admin.bo.LoginInfoBO">
@@ -19,49 +19,51 @@
         </association>
     </resultMap>
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	userId,	appId,	token,	lastResetTokenTime
-	</sql>
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, userId, appId, token, lastResetTokenTime
+    </sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.admin.LoginInfo" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_login_info
-		 WHERE id = #{id}
-	</select>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.admin.LoginInfo" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_login_info
+        WHERE id = #{id}
+    </select>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectLoginInfoByToken" resultMap="loginInfoMap" parameterType="java.lang.String">
-		 SELECT
-		 i.id,	i.userId,	i.appId,	i.token,	i.lastResetTokenTime,
-		 u.id as uId,	u.username,	u.password,	u.nickname,	u.status,	u.createTime,	u.lastUpdate
-		 FROM uc_login_info i
-		 LEFT JOIN uc_admin u ON u.id = i.userId
-		 WHERE i.token = #{token}
-	</select>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectLoginInfoByToken" resultMap="loginInfoMap" parameterType="java.lang.String">
+        SELECT
+        i.id, i.userId, i.appId, i.token, i.lastResetTokenTime,
+        u.id as uId, u.username, u.password, u.nickname, u.status, u.createTime, u.lastUpdate
+        FROM uc_login_info i
+        LEFT JOIN uc_admin u ON u.id = i.userId
+        WHERE i.token = #{token}
+    </select>
 
     <!-- 查询（根据userId和appId查询） -->
-    <select id="selectOne" resultType="com.abc12366.uc.model.admin.LoginInfo" parameterType="com.abc12366.uc.model.admin.LoginInfo">
+    <select id="selectOne" resultType="com.abc12366.uc.model.admin.LoginInfo"
+            parameterType="com.abc12366.uc.model.admin.LoginInfo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_login_info
         <where>
             1=1
             <if test="userId != null">
-               and userId = #{userId}
+                and userId = #{userId}
             </if>
             <if test="appId != null">
-               and appId = #{appId}
+                and appId = #{appId}
             </if>
         </where>
     </select>
 
     <!-- 查询（根据userId和appId查询） -->
-    <select id="selectInfoByToken" resultType="com.abc12366.uc.model.admin.LoginInfo" parameterType="com.abc12366.uc.model.admin.LoginInfo">
+    <select id="selectInfoByToken" resultType="com.abc12366.uc.model.admin.LoginInfo"
+            parameterType="com.abc12366.uc.model.admin.LoginInfo">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_login_info
         <where>
             1=1

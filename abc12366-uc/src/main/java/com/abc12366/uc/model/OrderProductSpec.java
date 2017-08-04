@@ -1,48 +1,50 @@
 package com.abc12366.uc.model;
+
 import java.io.Serializable;
 
 
 /**
- * 
  * 订单产品规格
- * 
  **/
 @SuppressWarnings("serial")
 public class OrderProductSpec implements Serializable {
 
-	/**FK**/
-	private String orderId;
+    /**
+     * FK
+     **/
+    private String orderNo;
 
-	/**FK**/
-	private String productId;
+    /**
+     * FK
+     **/
+    private String productId;
 
-	/**FK**/
-	private String specId;
+    /**
+     * FK
+     **/
+    private String specId;
 
+    public String getProductId() {
+        return this.productId;
+    }
 
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
-	public void setOrderId(String orderId){
-		this.orderId = orderId;
-	}
+    public String getSpecId() {
+        return this.specId;
+    }
 
-	public String getOrderId(){
-		return this.orderId;
-	}
+    public void setSpecId(String specId) {
+        this.specId = specId;
+    }
 
-	public void setProductId(String productId){
-		this.productId = productId;
-	}
+    public String getOrderNo() {
+        return orderNo;
+    }
 
-	public String getProductId(){
-		return this.productId;
-	}
-
-	public void setSpecId(String specId){
-		this.specId = specId;
-	}
-
-	public String getSpecId(){
-		return this.specId;
-	}
-
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 }

@@ -27,24 +27,26 @@ public class AdminTokenController {
 
     /**
      * 验证token
+     *
      * @param token
      * @return
      */
     @PostMapping(value = "/check/{token}")
     public ResponseEntity checkToken(@PathVariable("token") String token) {
-        LOGGER.info("验证token{}"+token);
+        LOGGER.info("验证token{}" + token);
         Boolean isToken = adminService.checkToken(token);
         return ResponseEntity.ok(isToken);
     }
 
     /**
      * 刷新token
+     *
      * @param token
      * @return
      */
     @PostMapping(value = "/refresh/{token}")
     public ResponseEntity refreshToken(@PathVariable("token") String token) {
-        LOGGER.info("刷新token{}"+token);
+        LOGGER.info("刷新token{}" + token);
         Boolean isToken = adminService.refreshToken(token);
         return ResponseEntity.ok(isToken);
     }

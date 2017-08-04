@@ -35,6 +35,20 @@ public class NoticeBO {
     private Integer count;
 
 
+    public NoticeBO() {
+    }
+
+    public NoticeBO(String id, String title, String author, String content, String status, Timestamp createTime,
+                    Timestamp lastUpdate) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.content = content;
+        this.status = status;
+        this.createTime = createTime;
+        this.lastUpdate = lastUpdate;
+    }
+
     public String getId() {
         return id;
     }
@@ -65,19 +79,6 @@ public class NoticeBO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public NoticeBO() {
-    }
-
-    public NoticeBO(String id, String title, String author, String content, String status, Timestamp createTime, Timestamp lastUpdate) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.content = content;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
     }
 
     @Override

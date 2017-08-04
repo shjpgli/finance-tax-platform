@@ -26,7 +26,7 @@ public class AdPageBO {
     private Integer sort;
     @NotNull
     private Boolean showName;
-   @NotNull
+    @NotNull
     private Boolean status;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -35,6 +35,28 @@ public class AdPageBO {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp lastUpdate;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp startTime;
+
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp endTime;
+
+
+    public AdPageBO() {
+    }
+
+    public AdPageBO(String id, String name, String url, String link, Integer sort, Boolean showName, Boolean status,
+                    Timestamp createTime, Timestamp lastUpdate) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+        this.link = link;
+        this.sort = sort;
+        this.showName = showName;
+        this.status = status;
+        this.createTime = createTime;
+        this.lastUpdate = lastUpdate;
+    }
 
     public String getId() {
         return id;
@@ -108,21 +130,6 @@ public class AdPageBO {
         this.status = status;
     }
 
-    public AdPageBO() {
-    }
-
-    public AdPageBO(String id,String name, String url,String link, Integer sort, Boolean showName, Boolean status,Timestamp createTime,Timestamp lastUpdate) {
-        this.id = id;
-        this.name = name;
-        this.url = url;
-        this.link = link;
-        this.sort = sort;
-        this.showName = showName;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-    }
-
     @Override
     public String toString() {
         return "ExperienceRuleInsertBO{" +
@@ -136,5 +143,21 @@ public class AdPageBO {
                 ", createTime=" + createTime + '\'' +
                 ", lastUpdate=" + lastUpdate +
                 '}';
+    }
+
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
     }
 }

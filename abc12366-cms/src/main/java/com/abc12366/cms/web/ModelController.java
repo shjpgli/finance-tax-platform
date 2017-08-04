@@ -25,7 +25,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/model",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/model", headers = Constant.VERSION_HEAD + "=1")
 public class ModelController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelController.class);
 
@@ -114,8 +114,6 @@ public class ModelController {
         String rtn = modelService.deleteList(idsBo.getIds());
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
-
-
 
 
 }

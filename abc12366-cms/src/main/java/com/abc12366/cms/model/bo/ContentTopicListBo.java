@@ -5,20 +5,18 @@ import java.util.List;
 
 
 /**
- * 
  * CMS专题内容关联表
- * 
  **/
 @SuppressWarnings("serial")
 public class ContentTopicListBo implements Serializable {
 
-	private List<ContentTopicBo> topicBoList;
+    private List<ContentTopicBo> topicBoList;
 
-	public List<ContentTopicBo> getTopicBoList() {
-		return topicBoList;
-	}
+    public List<ContentTopicBo> getTopicBoList() {
+        return topicBoList;
+    }
 
-	public void setTopicBoList(List<ContentTopicBo> topicBoList) {
-		this.topicBoList = topicBoList;
-	}
+    public void setTopicBoList(List<ContentTopicBo> topicBoList) {
+        this.topicBoList = topicBoList;
+    }
 }

@@ -72,7 +72,8 @@ public class ExperienceLevelController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody ExperienceLevelInsertAndUpdateBO experienceLevelUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody ExperienceLevelInsertAndUpdateBO experienceLevelUpdateBO,
+                                 @PathVariable String id) {
         LOGGER.info("{}:{}", experienceLevelUpdateBO, id);
         ExperienceLevelBO experienceLevelReturn = experienceLevelService.update(experienceLevelUpdateBO, id);
         LOGGER.info("{}", experienceLevelReturn);

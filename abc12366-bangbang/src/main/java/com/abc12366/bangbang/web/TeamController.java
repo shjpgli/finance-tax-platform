@@ -33,7 +33,7 @@ public class TeamController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}", page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<TeamBO> teamBOList = teamService.selectList();
@@ -44,7 +44,7 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody TeamInsertBO teamInsertBO){
+    public ResponseEntity insert(@Valid @RequestBody TeamInsertBO teamInsertBO) {
         LOGGER.info("{}", teamInsertBO);
         TeamBO teamBO = teamService.insert(teamInsertBO);
         LOGGER.info("{}", teamBO);
@@ -52,13 +52,14 @@ public class TeamController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         teamService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
+
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody TeamUpdateBO teamUpdateBO, @PathVariable String id){
+    public ResponseEntity update(@Valid @RequestBody TeamUpdateBO teamUpdateBO, @PathVariable String id) {
         LOGGER.info("{}:{}", teamUpdateBO, id);
         TeamBO teamBO = teamService.update(teamUpdateBO, id);
         LOGGER.info("{}", teamBO);

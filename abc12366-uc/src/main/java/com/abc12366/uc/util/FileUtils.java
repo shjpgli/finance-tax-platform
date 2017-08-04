@@ -14,8 +14,10 @@ public class FileUtils {
         File dir = new File("E://abc12306-");
         judeDirExists(dir);
     }
+
     /**
      * 判断文件是否存在
+     *
      * @param file
      */
     public static void judeFileExists(File file) {
@@ -35,6 +37,7 @@ public class FileUtils {
 
     /**
      * 判断文件夹是否存在
+     *
      * @param file
      */
     public static void judeDirExists(File file) {
@@ -52,7 +55,7 @@ public class FileUtils {
 
     }
 
-    public static String getDefaultFolder(){
+    public static String getDefaultFolder() {
         File dir = new File(defaultFolder);
         judeDirExists(dir);
         return defaultFolder;

@@ -18,9 +18,11 @@
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,
         (select uue.realName from uc_user_extend uue where uue.userId=uu.id) realName,
-        (select uul.name from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) levelName,
+        (select uul.name from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
+        levelName,
         (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
-        (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medalIcon
+        (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
+        medalIcon
         from uc_user uu
         <where>
             <if test="username!=null">
@@ -70,8 +72,10 @@
         </where>
     </select>
     <select id="selectOneByToken" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
-        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime, uu.lastUpdate,
-        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp, uu.vipLevel
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime,
+        uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
+        uu.vipLevel
         from uc_user uu, uc_token ut
         where uu.id=ut.userId
         and ut.token=#{userToken}

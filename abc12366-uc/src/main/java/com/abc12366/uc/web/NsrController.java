@@ -38,7 +38,9 @@ public class NsrController {
     }
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam String userId, @RequestParam(required = false) String djxh, @RequestParam(required = false) String nsrsbh, @RequestParam(required = false) String shxydm) {
+    public ResponseEntity selectList(@RequestParam String userId, @RequestParam(required = false) String djxh,
+                                     @RequestParam(required = false) String nsrsbh, @RequestParam(required = false)
+                                         String shxydm) {
         LOGGER.info("{}:{}:{}:{}", userId, djxh, nsrsbh, shxydm);
         NsrSelectBO nsrSelectBO = new NsrSelectBO(userId, djxh, nsrsbh, shxydm);
         List<NsrBO> nsrBOs = nsrService.selectList(nsrSelectBO);

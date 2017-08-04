@@ -5,11 +5,11 @@ import com.abc12366.uc.model.weixin.bo.person.WxPerson;
 import java.util.List;
 
 public interface IWxPersonService {
-	boolean startUsersynchro();
+    boolean startUsersynchro();
 
-	List<WxPerson> selectList(WxPerson person, int page, int size);
+    List<WxPerson> selectList(WxPerson person, int page, int size);
 
-	WxPerson selectOne(String openid);
+    WxPerson selectOne(String openid);
 
-	WxPerson synchroOne(String openid);
+    WxPerson synchroOne(String openid);
 }

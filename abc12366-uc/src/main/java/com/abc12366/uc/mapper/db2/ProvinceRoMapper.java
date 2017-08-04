@@ -6,12 +6,10 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * ProvinceMapper数据库操作接口类
- * 
  **/
 
 public interface ProvinceRoMapper {
 
-    List<Province> selectProvinceList(@Param("provinceId")String provinceId);
+    List<Province> selectProvinceList(@Param("provinceId") String provinceId);
 }

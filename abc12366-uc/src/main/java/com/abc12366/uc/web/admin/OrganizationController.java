@@ -43,7 +43,7 @@ public class OrganizationController {
                                      @RequestParam(value = "type", required = false) String type,
                                      @RequestParam(value = "parentId", required = false) String parentId,
                                      @RequestParam(value = "status", required = false) Boolean status) {
-        LOGGER.info("{}", name,status);
+        LOGGER.info("{}", name, status);
         Organization organization = new Organization();
         organization.setName(name);
         organization.setStatus(status);
@@ -54,7 +54,8 @@ public class OrganizationController {
         LOGGER.info("{}", organizationList);
         return organizationList == null ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) organizationList, "total", ((Page) organizationList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) organizationList, "total", ((Page) organizationList)
+                        .getTotal()));
     }
 
     /**
@@ -67,8 +68,9 @@ public class OrganizationController {
         LOGGER.info("{}", name);
         OrganizationBO bo = organizationService.selectOrganizationByName(name);
         LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("date",bo));
+        return ResponseEntity.ok(Utils.kv("date", bo));
     }
+
     /**
      * 添加组织
      *
@@ -120,9 +122,9 @@ public class OrganizationController {
     @PutMapping(path = "/{id}")
     public ResponseEntity updateOrganization(@Valid @RequestBody OrganizationBO organizationBO,
                                              @PathVariable("id") String id) {
-        LOGGER.info("id",id);
+        LOGGER.info("id", id);
         OrganizationBO bo = organizationService.updateOrganization(organizationBO);
-        LOGGER.info("修改组织成功",organizationBO);
+        LOGGER.info("修改组织成功", organizationBO);
         return ResponseEntity.ok(Utils.kv("data", organizationBO));
     }
 
@@ -134,7 +136,7 @@ public class OrganizationController {
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteOrganizationById(@PathVariable("id") String id) {
-        LOGGER.info("id",id);
+        LOGGER.info("id", id);
         organizationService.deleteOrganizationById(id);
         LOGGER.info("删除组织成功");
         return ResponseEntity.ok(Utils.kv());
@@ -142,6 +144,7 @@ public class OrganizationController {
 
     /**
      * 启用、禁用
+     *
      * @return
      */
     @PutMapping(path = "/enable")
@@ -153,6 +156,7 @@ public class OrganizationController {
 
     /**
      * 全部启用、禁用
+     *
      * @return
      */
     @PutMapping(path = "/disableAll")

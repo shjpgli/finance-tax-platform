@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.RoleRoMapper">
 
     <resultMap id="roleBoResultMap" type="com.abc12366.uc.model.admin.bo.RoleBO">
@@ -10,13 +10,14 @@
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <collection property="menuList" ofType="com.abc12366.uc.model.admin.Menu" column="id" select="getMenu"></collection>
+        <collection property="menuList" ofType="com.abc12366.uc.model.admin.Menu" column="id"
+                    select="getMenu"></collection>
     </resultMap>
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	roleName,	remark,	createTime,	updateTime,	status
-	</sql>
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, roleName, remark, createTime, updateTime, status
+    </sql>
 
     <!-- 查询菜单-->
     <select id="getMenu" resultType="com.abc12366.uc.model.admin.Menu" parameterType="java.lang.String">
@@ -43,13 +44,14 @@
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <collection property="adminList" ofType="com.abc12366.uc.model.admin.Admin" column="id" select="getUser"></collection>
+        <collection property="adminList" ofType="com.abc12366.uc.model.admin.Admin" column="id"
+                    select="getUser"></collection>
     </resultMap>
 
 
     <!-- 查询菜单-->
     <select id="getUser" resultType="com.abc12366.uc.model.admin.Admin" parameterType="java.lang.String">
-         SELECT
+        SELECT
         t.id,
         t.username,
         t.password,
@@ -65,31 +67,31 @@
 
     <select id="selectUserByRoleId" resultMap="roleMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_role
         WHERE id = #{id}
     </select>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.admin.Role" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_role
-		 WHERE id = #{id}
-	</select>
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.admin.Role" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_role
+        WHERE id = #{id}
+    </select>
 
     <select id="selectList" resultMap="roleBoResultMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_role
         <where>
             1=1
-            <if test="roleName != null and roleName!=''"> and roleName LIKE CONCAT('%',#{roleName},'%') </if>
-            <if test="status != null and status!=''"> AND status = #{status}</if>
+            <if test="roleName != null and roleName!=''">and roleName LIKE CONCAT('%',#{roleName},'%')</if>
+            <if test="status != null and status!=''">AND status = #{status}</if>
         </where>
     </select>
 
-	<!--<select id="selectList" resultMap="roleBoResultMap" parameterType="com.abc12366.admin.model.Role">
+    <!--<select id="selectList" resultMap="roleBoResultMap" parameterType="com.abc12366.admin.model.Role">
         select
         r.id,
         r.roleName,
@@ -115,14 +117,14 @@
             <if test="roleName != null and roleName!=''"> and r.roleName LIKE CONCAT('%',#{roleName},'%') </if>
             <if test="status != null and status!=''"> AND r.status = #{status}</if>
         </where>
-	</select>-->
+    </select>-->
 
-	<select id="selectRoleById" resultMap="roleBoResultMap" parameterType="java.lang.String">
+    <select id="selectRoleById" resultMap="roleBoResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from uc_role
         where id = #{id}
-	</select>
+    </select>
 
     <!--<select id="selectOne" resultType="com.abc12366.admin.model.Role" parameterType="com.abc12366.admin.model.Role">
         select
@@ -133,7 +135,8 @@
         </where>
     </select>-->
 
-    <select id="selectRoleByName" resultType="com.abc12366.uc.model.admin.Role" parameterType="com.abc12366.uc.model.admin.Role">
+    <select id="selectRoleByName" resultType="com.abc12366.uc.model.admin.Role"
+            parameterType="com.abc12366.uc.model.admin.Role">
         select
         <include refid="Base_Column_List"/>
         from uc_role
@@ -142,36 +145,36 @@
         </where>
     </select>
 
-	<select id="selectMenuIdListByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
-		SELECT
-		e.menuId AS id
-		FROM
-		uc_role r
-		LEFT JOIN uc_role_menu e ON r.id = e.roleId
-		WHERE
-		r.id = #{id}
-	</select>
+    <select id="selectMenuIdListByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+        e.menuId AS id
+        FROM
+        uc_role r
+        LEFT JOIN uc_role_menu e ON r.id = e.roleId
+        WHERE
+        r.id = #{id}
+    </select>
 
-	<select id="selectRoleMenuIdListByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
-		SELECT
-		e.id AS id
-		FROM
-		uc_role r
-		LEFT JOIN uc_role_menu e ON r.id = e.roleId
-		WHERE
-		r.id = #{id}
-	</select>
+    <select id="selectRoleMenuIdListByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+        e.id AS id
+        FROM
+        uc_role r
+        LEFT JOIN uc_role_menu e ON r.id = e.roleId
+        WHERE
+        r.id = #{id}
+    </select>
 
-	<select id="selectRoleMenuListByRoleId" resultType="java.util.HashMap" parameterType="java.lang.String">
-		SELECT
-		e.id AS id,
-		s.MenuUrl AS url
-		FROM
-		uc_role r
-		LEFT JOIN uc_role_menu e ON r.id = e.roleId
-		LEFT JOIN uc_menu s ON e.menuId = s.menuId
-		WHERE
-		r.id = #{id}
-	</select>
+    <select id="selectRoleMenuListByRoleId" resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT
+        e.id AS id,
+        s.MenuUrl AS url
+        FROM
+        uc_role r
+        LEFT JOIN uc_role_menu e ON r.id = e.roleId
+        LEFT JOIN uc_menu s ON e.menuId = s.menuId
+        WHERE
+        r.id = #{id}
+    </select>
 
 </mapper>

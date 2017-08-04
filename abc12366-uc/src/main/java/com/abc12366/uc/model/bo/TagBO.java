@@ -18,6 +18,10 @@ public class TagBO {
     private String rule;
     private String tagedCount;
     private int weight;
+    private String type;
+
+    public TagBO() {
+    }
 
     public int getWeight() {
         return weight;
@@ -27,7 +31,12 @@ public class TagBO {
         this.weight = weight;
     }
 
-    public TagBO() {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getId() {

@@ -1,10 +1,8 @@
 package com.abc12366.cms.model.bo;
 
 /**
- *
  * CMS评论表
  * add by xieyanmao on 2017-5-2
- *
  **/
 public class CommentSaveBo {
     private CommentBo comment;

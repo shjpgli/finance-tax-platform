@@ -30,7 +30,7 @@ public class FollowController {
 
     //关注用户
     @PostMapping(path = "/follow/{followedUserId}")
-    public ResponseEntity insert(@PathVariable String followedUserId, HttpServletRequest request){
+    public ResponseEntity insert(@PathVariable String followedUserId, HttpServletRequest request) {
         LOGGER.info("{}", followedUserId);
         FollowUserBO followUserBO = followService.insert(followedUserId, request);
         return ResponseEntity.ok(Utils.kv("data", followUserBO));
@@ -38,7 +38,7 @@ public class FollowController {
 
     //取消关注
     @DeleteMapping(path = "/follow/{followedUserId}")
-    public ResponseEntity delete(@PathVariable String followedUserId, HttpServletRequest request){
+    public ResponseEntity delete(@PathVariable String followedUserId, HttpServletRequest request) {
         LOGGER.info("{}:{}", followedUserId, request);
         followService.delete(followedUserId, request);
         return ResponseEntity.ok(Utils.kv());
@@ -48,33 +48,37 @@ public class FollowController {
     @GetMapping(path = "/follow/{userId}")
     public ResponseEntity selectPeopleIFollow(@PathVariable String userId,
                                               @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                          size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<FollowUserBO> followUserBOList =  followService.selectPeopleIFollow(userId);
+        List<FollowUserBO> followUserBOList = followService.selectPeopleIFollow(userId);
         LOGGER.info("{}", followUserBOList);
         return (followUserBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) followUserBOList, "total", ((Page) followUserBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) followUserBOList, "total", ((Page) followUserBOList)
+                        .getTotal()));
     }
 
     //查询谁关注了我
     @GetMapping(path = "/followed/{userId}")
     public ResponseEntity selectMyFollowerList(@PathVariable String userId,
                                                @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                           size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<FollowUserBO> followUserBOList = followService.selectMyFollowerList(userId);
         LOGGER.info("{}", followUserBOList);
         return (followUserBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) followUserBOList, "total", ((Page) followUserBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) followUserBOList, "total", ((Page) followUserBOList)
+                        .getTotal()));
     }
 
     //查询用户被关注次数
     @GetMapping(path = "count/follow/{followedUserId}")
-    public ResponseEntity selectFollowedCount(@PathVariable String followedUserId){
+    public ResponseEntity selectFollowedCount(@PathVariable String followedUserId) {
         LOGGER.info("{}", followedUserId);
         int count = followService.selectFollowedCount(followedUserId);
         return ResponseEntity.ok(Utils.kv("data", count));

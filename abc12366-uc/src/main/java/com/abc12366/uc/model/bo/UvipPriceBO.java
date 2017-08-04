@@ -1,88 +1,85 @@
 package com.abc12366.uc.model.bo;
+
 import java.io.Serializable;
 
 
 /**
- * 
  * 会员价格表
- * 
  **/
 @SuppressWarnings("serial")
 public class UvipPriceBO implements Serializable {
 
-	private String id;
-	private String productId;
-	private String vipLevel;
-	private Double discount;
-	private Double tradePrice;
-	private Integer giftPoints;
-	private java.util.Date createTime;
-	private java.util.Date lastUpdate;
+    private String id;
+    private String productId;
+    private String vipLevel;
+    private Double discount;
+    private Double tradePrice;
+    private Integer giftPoints;
+    private java.util.Date createTime;
+    private java.util.Date lastUpdate;
 
+    public String getId() {
+        return this.id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public String getProductId() {
+        return this.productId;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
-	public void setProductId(String productId){
-		this.productId = productId;
-	}
+    public String getVipLevel() {
+        return this.vipLevel;
+    }
 
-	public String getProductId(){
-		return this.productId;
-	}
+    public void setVipLevel(String vipLevel) {
+        this.vipLevel = vipLevel;
+    }
 
-	public void setVipLevel(String vipLevel){
-		this.vipLevel = vipLevel;
-	}
+    public Double getDiscount() {
+        return this.discount;
+    }
 
-	public String getVipLevel(){
-		return this.vipLevel;
-	}
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
 
-	public void setDiscount(Double discount){
-		this.discount = discount;
-	}
+    public Double getTradePrice() {
+        return this.tradePrice;
+    }
 
-	public Double getDiscount(){
-		return this.discount;
-	}
+    public void setTradePrice(Double tradePrice) {
+        this.tradePrice = tradePrice;
+    }
 
-	public void setTradePrice(Double tradePrice){
-		this.tradePrice = tradePrice;
-	}
+    public Integer getGiftPoints() {
+        return this.giftPoints;
+    }
 
-	public Double getTradePrice(){
-		return this.tradePrice;
-	}
+    public void setGiftPoints(Integer giftPoints) {
+        this.giftPoints = giftPoints;
+    }
 
-	public void setGiftPoints(Integer giftPoints){
-		this.giftPoints = giftPoints;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public Integer getGiftPoints(){
-		return this.giftPoints;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
-
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
-
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
 }

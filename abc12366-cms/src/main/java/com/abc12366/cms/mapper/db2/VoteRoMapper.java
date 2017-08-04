@@ -33,44 +33,32 @@ public interface VoteRoMapper {
     List<VoteStatAreaBO> statIpArea(String voteId);
 
     /**
-     *
      * 查询（浏览统计）
-     *
      **/
-    List<VoteRolltjBo> selectlltj(Map<String,Object> map);
+    List<VoteRolltjBo> selectlltj(Map<String, Object> map);
 
     /**
-     *
      * 查询（浏览统计总数按时间）
-     *
      **/
-    Integer selectlltjsbysj(Map<String,Object> map);
+    Integer selectlltjsbysj(Map<String, Object> map);
 
     /**
-     *
      * 查询（浏览统计总数）
-     *
      **/
-    Integer selectlltjs(Map<String,Object> map);
+    Integer selectlltjs(Map<String, Object> map);
 
     /**
-     *
      * 查询（投票统计按时间）
-     *
      **/
-    List<VoteRolltjBo> selecttptjbysj(Map<String,Object> map);
+    List<VoteRolltjBo> selecttptjbysj(Map<String, Object> map);
 
     /**
-     *
      * 查询（投票统计总数）
-     *
      **/
-    Integer selecttptjs(Map<String,Object> map);
+    Integer selecttptjs(Map<String, Object> map);
 
     /**
-     *
      * 查询（投票统计）
-     *
      **/
-    List<VoteRotptjBo> selecttptj(Map<String,Object> map);
+    List<VoteRotptjBo> selecttptj(Map<String, Object> map);
 }

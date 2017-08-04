@@ -355,7 +355,7 @@ public enum ConstantsUri {
     QUERY_PUBLIC_REFRESH_TIME("查询应用服务最新的操作时间", "ggfw/new"),
 
     //获取办税日历信息
-    QUERY_TAXDATE_LIST("查询某年办税日历","ggfw/bsrl/getsbrq"),
+    QUERY_TAXDATE_LIST("查询某年办税日历", "ggfw/bsrl/getsbrq"),
 
     DOWNLOAD_SOFT("外网下载查询列表", "ggfw/download/getlist"),
 

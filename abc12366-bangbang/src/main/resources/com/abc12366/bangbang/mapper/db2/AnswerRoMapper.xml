@@ -26,8 +26,8 @@
         ORDER BY lastUpdate DESC
     </select>
     <select id="selectOne" resultType="com.abc12366.bangbang.model.bo.AnswerBO" parameterType="java.lang.String">
-                select id,askId,userId,answer,status,createTime,lastUpdate,isAccept,imageUrl,type
-                from bb_answer
-                where id=#{id}
+        select id,askId,userId,answer,status,createTime,lastUpdate,isAccept,imageUrl,type
+        from bb_answer
+        where id=#{id}
     </select>
 </mapper>

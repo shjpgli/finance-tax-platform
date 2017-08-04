@@ -3,7 +3,6 @@ package com.abc12366.uc.model.bo;
 import java.io.Serializable;
 
 
-
 /**
  * 发票退票
  **/
@@ -21,83 +20,85 @@ public class InvoiceBackBO implements Serializable {
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
 
-    /**操作人员ID**/
+    /**
+     * 操作人员ID
+     **/
     private String operatorUser;
 
     private String sendExpressNo;
     private String invoiceId;
     private InvoiceBO invoiceBO;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
         return this.userId;
     }
 
-    public void setExpressId(String expressId) {
-        this.expressId = expressId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getExpressId() {
         return this.expressId;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setExpressId(String expressId) {
+        this.expressId = expressId;
     }
 
     public String getReason() {
         return this.reason;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public String getRemark() {
         return this.remark;
     }
 
-    public void setExpressComp(String expressComp) {
-        this.expressComp = expressComp;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getExpressComp() {
         return this.expressComp;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setExpressComp(String expressComp) {
+        this.expressComp = expressComp;
     }
 
     public String getStatus() {
         return this.status;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
+    }
+
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String getExpressNo() {

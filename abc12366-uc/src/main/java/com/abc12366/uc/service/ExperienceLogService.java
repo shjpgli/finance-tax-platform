@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.bo.ExpLogUcBO;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.ExperienceLogQueryBO;
 
@@ -15,4 +16,6 @@ public interface ExperienceLogService {
     ExperienceLogQueryBO insert(ExperienceLogBO experienceLogBO);
 
     List<ExperienceLogQueryBO> selectList(Map map);
+
+    List<ExpLogUcBO> selectListByUser(Map<String, Object> map);
 }

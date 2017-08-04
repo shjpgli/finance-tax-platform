@@ -9,33 +9,34 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.Dict" parameterType="com.abc12366.uc.model.Dict">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_dict
         <where>
             1=1
-            <if test="dictName != null and dictName!=''"> and dictName LIKE CONCAT('%',#{dictName},'%')</if>
-            <if test="status != null "> and status = #{status}</if>
+            <if test="dictName != null and dictName!=''">and dictName LIKE CONCAT('%',#{dictName},'%')</if>
+            <if test="status != null ">and status = #{status}</if>
         </where>
     </select>
 
-    <select id="selectListByDictName" resultType="com.abc12366.uc.model.Dict" parameterType="com.abc12366.uc.model.Dict">
+    <select id="selectListByDictName" resultType="com.abc12366.uc.model.Dict"
+            parameterType="com.abc12366.uc.model.Dict">
         select
         distinct dictName
         from uc_dict
         <where>
             1=1
-            <if test="dictName != null and dictName!=''"> and dictName LIKE CONCAT('%',#{dictName},'%')</if>
+            <if test="dictName != null and dictName!=''">and dictName LIKE CONCAT('%',#{dictName},'%')</if>
         </where>
         ORDER BY dictName
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.Dict" parameterType="com.abc12366.uc.model.Dict">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_dict
         <where>
             1=1
-            <if test="dictId != null and dictId!=''"> and dictId = #{dictId}</if>
+            <if test="dictId != null and dictId!=''">and dictId = #{dictId}</if>
         </where>
     </select>
 
@@ -46,21 +47,21 @@
 
     <select id="selectById" resultType="com.abc12366.uc.model.Dict">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_dict
         where id = #{id}
     </select>
 
     <select id="selectByDictId" resultType="com.abc12366.uc.model.Dict">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_dict
         where dictId = #{dictId}
     </select>
 
     <select id="selectByDictName" resultType="com.abc12366.uc.model.Dict">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_dict
         where dictName = #{dictName}
     </select>
@@ -68,18 +69,18 @@
     <!-- 根据dictId，fieldKey条件查询字典表数据-->
     <select id="selectDict" resultType="com.abc12366.uc.model.Dict" parameterType="com.abc12366.uc.model.Dict">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_dict
         where dictId = #{dictId} AND fieldValue = #{fieldValue}
     </select>
 
     <select id="selectDictList" resultType="com.abc12366.uc.model.Dict" parameterType="com.abc12366.uc.model.Dict">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_dict
         <where>
             1=1
-            <if test="dictId != null and dictId!='' "> and dictId = #{dictId}</if>
+            <if test="dictId != null and dictId!='' ">and dictId = #{dictId}</if>
         </where>
         ORDER BY sort ASC
     </select>

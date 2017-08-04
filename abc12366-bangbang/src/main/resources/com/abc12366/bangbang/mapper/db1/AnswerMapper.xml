@@ -5,7 +5,8 @@
 
     <insert id="insert" parameterType="com.abc12366.bangbang.model.Answer">
         insert into bb_answer(id,askId,userId,answer,status,createTime,lastUpdate,isAccept,imageUrl,type)
-        values (#{id},#{askId},#{userId},#{answer},#{status},#{createTime},#{lastUpdate},#{isAccept},#{imageUrl},#{type})
+        values
+        (#{id},#{askId},#{userId},#{answer},#{status},#{createTime},#{lastUpdate},#{isAccept},#{imageUrl},#{type})
     </insert>
     <update id="update" parameterType="com.abc12366.bangbang.model.Answer">
         update bb_answer

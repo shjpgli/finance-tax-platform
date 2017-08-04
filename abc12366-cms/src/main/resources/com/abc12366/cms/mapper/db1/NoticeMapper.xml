@@ -5,8 +5,8 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id, title, author, content, status, createTime, lastUpdate,count
-	</sql>
+        id, title, author, content, status, createTime, lastUpdate,count
+    </sql>
 
     <insert id="insert" parameterType="com.abc12366.cms.model.bo.NoticeBO">
         INSERT INTO cms_notice(<include refid="Base_Column_List"/>)

@@ -41,23 +41,23 @@ public class DeliveryMethodServiceImpl implements DeliveryMethodService {
     @Override
     public DeliveryMethodBO add(DeliveryMethodBO deliveryMethodBO) {
         DeliveryMethod deliveryMethod = new DeliveryMethod();
-        BeanUtils.copyProperties(deliveryMethodBO,deliveryMethod);
+        BeanUtils.copyProperties(deliveryMethodBO, deliveryMethod);
         deliveryMethod.setId(Utils.uuid());
         Date date = new Date();
         deliveryMethod.setCreateTime(date);
         deliveryMethod.setLastUpdate(date);
         DeliveryMethod method = deliveryMethodRoMapper.selectByName(deliveryMethod.getName());
-        if (method != null){
+        if (method != null) {
             LOGGER.info("{配送方式名称不能重复}", deliveryMethod);
             throw new ServiceException(4151);
         }
         int insert = deliveryMethodMapper.insert(deliveryMethod);
-        if (insert != 1){
+        if (insert != 1) {
             LOGGER.info("{新增配送方式失败}", deliveryMethod);
             throw new ServiceException(4101);
         }
         DeliveryMethodBO bo = new DeliveryMethodBO();
-        BeanUtils.copyProperties(deliveryMethod,bo);
+        BeanUtils.copyProperties(deliveryMethod, bo);
         return bo;
     }
 
@@ -65,27 +65,27 @@ public class DeliveryMethodServiceImpl implements DeliveryMethodService {
     @Override
     public DeliveryMethodBO update(DeliveryMethodBO deliveryMethodBO) {
         DeliveryMethod deliveryMethod = new DeliveryMethod();
-        BeanUtils.copyProperties(deliveryMethodBO,deliveryMethod);
+        BeanUtils.copyProperties(deliveryMethodBO, deliveryMethod);
         Date date = new Date();
         deliveryMethod.setLastUpdate(date);
         int update = deliveryMethodMapper.update(deliveryMethod);
-        if (update != 1){
+        if (update != 1) {
             LOGGER.info("{修改配送方式失败}", deliveryMethod);
             throw new ServiceException(4102);
         }
         DeliveryMethodBO bo = new DeliveryMethodBO();
-        BeanUtils.copyProperties(deliveryMethod,bo);
+        BeanUtils.copyProperties(deliveryMethod, bo);
         return bo;
     }
 
     @Override
     public DeliveryMethodBO selectDeliveryMethod(String id) {
         DeliveryMethod deliveryMethod = deliveryMethodRoMapper.selectByPrimaryKey(id);
-        if(deliveryMethod == null){
+        if (deliveryMethod == null) {
             throw new ServiceException(4104);
         }
         DeliveryMethodBO bo = new DeliveryMethodBO();
-        BeanUtils.copyProperties(deliveryMethod,bo);
+        BeanUtils.copyProperties(deliveryMethod, bo);
         return bo;
     }
 
@@ -93,7 +93,7 @@ public class DeliveryMethodServiceImpl implements DeliveryMethodService {
     @Override
     public void delete(String id) {
         int del = deliveryMethodMapper.deleteByPrimaryKey(id);
-        if (del != 1){
+        if (del != 1) {
             LOGGER.info("{删除配送方式失败}", del);
             throw new ServiceException(4103);
         }
@@ -106,12 +106,12 @@ public class DeliveryMethodServiceImpl implements DeliveryMethodService {
         String ids[] = deliveryMethodUpdateBO.getId().split(",");
         int upd = 0;
         DeliveryMethod deliveryMethod = null;
-        for (String id : ids){
+        for (String id : ids) {
             deliveryMethod = new DeliveryMethod();
             deliveryMethod.setId(id);
             deliveryMethod.setStatus(deliveryMethodUpdateBO.getStatus());
             upd = deliveryMethodMapper.update(deliveryMethod);
-            if(upd != 1){
+            if (upd != 1) {
                 LOGGER.info("{启用或禁用配送方式失败}", deliveryMethod);
                 throw new ServiceException(4102);
             }

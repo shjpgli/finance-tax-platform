@@ -9,43 +9,33 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * AccessLogMapper数据库操作接口类
- * 
  **/
 
 public interface AccessLogRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	AccessLog selectByPrimaryKey ( @Param("id") String id );
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    AccessLog selectByPrimaryKey(@Param("id") String id);
 
-	List<AccessLogBO> selectList(AccessLog accessLog);
+    List<AccessLogBO> selectList(AccessLog accessLog);
 
-	List<AccessLogBO> selectAccessLogStatis(AccessLog accessLog);
+    List<AccessLogBO> selectAccessLogStatis(AccessLog accessLog);
 
-	/**
-	 *
-	 * 查询（浏览统计）
-	 *
-	 **/
-	List<AccessLogRolltjBo> selectlltj(Map<String,Object> map);
+    /**
+     * 查询（浏览统计）
+     **/
+    List<AccessLogRolltjBo> selectlltj(Map<String, Object> map);
 
-	/**
-	 *
-	 * 查询（浏览统计总数按时间）
-	 *
-	 **/
-	Integer selectlltjsbysj(Map<String,Object> map);
+    /**
+     * 查询（浏览统计总数按时间）
+     **/
+    Integer selectlltjsbysj(Map<String, Object> map);
 
-	/**
-	 *
-	 * 查询（浏览统计总数）
-	 *
-	 **/
-	Integer selectlltjs(Map<String,Object> map);
+    /**
+     * 查询（浏览统计总数）
+     **/
+    Integer selectlltjs(Map<String, Object> map);
 }

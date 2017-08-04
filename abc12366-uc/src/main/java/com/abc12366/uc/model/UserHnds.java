@@ -25,7 +25,8 @@ public class UserHnds {
     public UserHnds() {
     }
 
-    public UserHnds(String id, String userId, String username, String subuser, String nsrmc, String nsrsbh, String djxh, String shxydm, String swjgMc, String swjgDm, boolean status, Date createTime, Date lastUpdate) {
+    public UserHnds(String id, String userId, String username, String subuser, String nsrmc, String nsrsbh, String
+            djxh, String shxydm, String swjgMc, String swjgDm, boolean status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.userId = userId;
         this.username = username;

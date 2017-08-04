@@ -13,7 +13,6 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.util.RandomNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -39,26 +38,19 @@ import java.util.Map;
 public class AuthServiceImpl implements AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
-
+    private static Properties properties = new Properties("application.properties");
     @Autowired
     private RestTemplate restTemplate;
-
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private UserRoMapper userRoMapper;
-
     @Autowired
     private AppRoMapper appRoMapper;
-
     @Autowired
     private TokenRoMapper tokenRoMapper;
-
     @Autowired
     private TokenMapper tokenMapper;
-
-    private static Properties properties = new Properties("application.properties");
 
     @Transactional("db1TxManager")
     @Override
@@ -94,7 +86,6 @@ public class AuthServiceImpl implements AuthService {
         BeanUtils.copyProperties(registerBO, user);
 
         user.setId(Utils.uuid());
-        user.setUsername("UC" + RandomNumber.getRandomNumber(8));
         user.setSalt(salt);
         user.setPassword(encodePassword);
         user.setPoints(0);

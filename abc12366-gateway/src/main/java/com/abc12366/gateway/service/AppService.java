@@ -60,6 +60,7 @@ public interface AppService {
      * @return App对象
      */
     AppBO update(AppBO appUpdateBO);
+
     /**
      * 查询App对象
      *

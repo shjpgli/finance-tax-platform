@@ -18,7 +18,6 @@ public class VipLogBO {
     }
 
 
-
     public String getId() {
         return id;
     }

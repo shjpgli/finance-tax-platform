@@ -15,8 +15,8 @@ public class RandomNumber {
         String returnNumber = "";
         for (int i = 0; i < length; i++) {
             randomString = Math.random() + "";
-            int oneNumber = Integer.parseInt(randomString.substring(randomString.indexOf("0.") + 2, randomString.indexOf("0.") + 3));
-            System.out.println(oneNumber);
+            int oneNumber = Integer.parseInt(randomString.substring(randomString.indexOf("0.") + 2, randomString
+                    .indexOf("0.") + 3));
             returnNumber += oneNumber;
         }
         return returnNumber;

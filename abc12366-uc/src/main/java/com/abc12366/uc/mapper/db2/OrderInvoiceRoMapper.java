@@ -6,20 +6,16 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * OrderInvoiceMapper数据库操作接口类
- * 
  **/
 
 public interface OrderInvoiceRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	OrderInvoice  selectById(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    OrderInvoice selectById(@Param("id") String id);
 
     List<OrderInvoice> selectByInvoiceId(String id);
 }

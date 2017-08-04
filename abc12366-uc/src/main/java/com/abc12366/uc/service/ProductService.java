@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Product;
+import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
 
@@ -20,4 +21,6 @@ public interface ProductService {
     List<ProductBO> selectByGoodsId(ProductBO product);
 
     List<GoodsBO> selectBOList(ProductBO productBO);
+
+    List<DictBO> selectSpecByGoodsId(ProductBO product);
 }

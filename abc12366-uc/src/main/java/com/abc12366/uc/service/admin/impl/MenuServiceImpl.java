@@ -138,10 +138,10 @@ public class MenuServiceImpl implements MenuService {
             }
             //查找子节点
             List<MenuBO> boList = menuRoMapper.selectByParentId(menuId);
-            for (MenuBO menuBO : boList){
+            for (MenuBO menuBO : boList) {
                 menuBO.setStatus(updateBO.getStatus());
                 Menu me = new Menu();
-                BeanUtils.copyProperties(menuBO,me);
+                BeanUtils.copyProperties(menuBO, me);
                 int upd = menuMapper.update(me);
                 if (upd != 1) {
                     LOGGER.warn("修改子节点状态失败，id：{}", me);

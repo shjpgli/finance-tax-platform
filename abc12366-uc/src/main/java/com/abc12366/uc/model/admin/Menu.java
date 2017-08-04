@@ -3,8 +3,6 @@ package com.abc12366.uc.model.admin;
 import java.io.Serializable;
 
 /**
- *
- *
  * @author liuguiyao
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
@@ -25,7 +23,8 @@ public class Menu implements Serializable {
     public Menu() {
     }
 
-    public Menu(String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort, Boolean status, String remark) {
+    public Menu(String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort,
+                Boolean status, String remark) {
         this.menuName = menuName;
         this.menuUrl = menuUrl;
         this.parentId = parentId;

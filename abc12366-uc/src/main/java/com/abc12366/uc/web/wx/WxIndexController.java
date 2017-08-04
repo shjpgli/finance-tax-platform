@@ -13,32 +13,34 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 微信主接入口
- * @author zhushuai 2017-7-31
  *
+ * @author zhushuai 2017-7-31
  */
 @Controller
 public class WxIndexController {
-	@Autowired
+    @Autowired
     private IWxMsgService iWxMsgService;
 
     @RequestMapping("/abc/wechat")
-    public @ResponseBody String wechatVlidate(Model model, HttpServletRequest request,HttpServletResponse response){
-    	 boolean isGet = request.getMethod().toLowerCase().equals("get");
-    	 if(isGet){
-    		 String signature = request.getParameter("signature");
-             // 时间戳
-             String timestamp = request.getParameter("timestamp");
-             // 随机数
-             String nonce = request.getParameter("nonce");
-             // 随机字符串
-             String echostr = request.getParameter("echostr");
-             if(signature != null && SignUtil.checkSignature(signature, timestamp, nonce)){
-            	 return echostr;
-             }else{
-            	 return null;
-             }
-    	 }else{
-    		 return iWxMsgService.exec(request);
-    	 }
+    public
+    @ResponseBody
+    String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
+        boolean isGet = request.getMethod().toLowerCase().equals("get");
+        if (isGet) {
+            String signature = request.getParameter("signature");
+            // 时间戳
+            String timestamp = request.getParameter("timestamp");
+            // 随机数
+            String nonce = request.getParameter("nonce");
+            // 随机字符串
+            String echostr = request.getParameter("echostr");
+            if (signature != null && SignUtil.checkSignature(signature, timestamp, nonce)) {
+                return echostr;
+            } else {
+                return null;
+            }
+        } else {
+            return iWxMsgService.exec(request);
+        }
     }
 }

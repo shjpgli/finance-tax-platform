@@ -38,7 +38,8 @@ public class SubjectItem {
     public SubjectItem() {
     }
 
-    public SubjectItem(String id, String subjectId, String type, String item, String image, String detail, Integer sort, Integer nop,String status) {
+    public SubjectItem(String id, String subjectId, String type, String item, String image, String detail, Integer
+            sort, Integer nop, String status) {
         this.id = id;
         this.subjectId = subjectId;
         this.type = type;

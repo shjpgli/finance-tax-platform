@@ -79,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setId(id);
         comment.setLastUpdate(new Date());
         int result = commentMapper.update(comment);
-        if(result != 1){
+        if (result != 1) {
             LOGGER.warn("更新失败！");
             throw new ServiceException(4102);
         }
@@ -96,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setStatus("2");
         comment.setLastUpdate(new Date());
         int result = commentMapper.update(comment);
-        if(result != 1){
+        if (result != 1) {
             LOGGER.warn("更新失败！");
             throw new ServiceException(4102);
         }
@@ -120,7 +120,7 @@ public class CommentServiceImpl implements CommentService {
     public int delete(String id, String userId) {
         LOGGER.info("{}:{}", id, userId);
         int result = commentMapper.delete(id);
-        if(result < 1){
+        if (result < 1) {
             LOGGER.warn("删除失败！");
             throw new ServiceException(4103);
         }

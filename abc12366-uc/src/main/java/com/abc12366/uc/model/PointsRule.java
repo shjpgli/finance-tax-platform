@@ -21,7 +21,8 @@ public class PointsRule {
     public PointsRule() {
     }
 
-    public PointsRule(String id, String name, String code, int points, String description, String type, boolean status, Date createTime, Date lastUpdate) {
+    public PointsRule(String id, String name, String code, int points, String description, String type, boolean
+            status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.code = code;

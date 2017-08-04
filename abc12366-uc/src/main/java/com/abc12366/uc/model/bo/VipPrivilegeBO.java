@@ -19,7 +19,8 @@ public class VipPrivilegeBO {
     public VipPrivilegeBO() {
     }
 
-    public VipPrivilegeBO(String id, String name, String level, String remark, Boolean status, Date lastUpdate, Date createTime) {
+    public VipPrivilegeBO(String id, String name, String level, String remark, Boolean status, Date lastUpdate, Date
+            createTime) {
         this.id = id;
         this.name = name;
         this.level = level;

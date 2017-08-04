@@ -13,21 +13,21 @@ import java.util.Map;
  * @since 1.0.0
  */
 public interface ContentService {
-    List<ContentListBo> selectList(Map<String,Object> map);
+    List<ContentListBo> selectList(Map<String, Object> map);
 
-    List<ContentsListBo> selectListByviews(Map<String,Object> map);
+    List<ContentsListBo> selectListByviews(Map<String, Object> map);
 
-    List<ContentsListBo> selectListByContentType(Map<String,Object> map);
+    List<ContentsListBo> selectListByContentType(Map<String, Object> map);
 
-    List<ContenttagidBo> selectContentType(Map<String,Object> map);
+    List<ContenttagidBo> selectContentType(Map<String, Object> map);
 
-    List<ContentsListBo> selectListByChannelId(Map<String,Object> map);
+    List<ContentsListBo> selectListByChannelId(Map<String, Object> map);
 
-    List<ContentsListBo> selectListBytopicId(Map<String,Object> map);
+    List<ContentsListBo> selectListBytopicId(Map<String, Object> map);
 
-    List<ContentsListBo> selectListByTplContent(Map<String,Object> map);
+    List<ContentsListBo> selectListByTplContent(Map<String, Object> map);
 
-    List<ModelItemBo> selectModeList(Map<String,Object> map);
+    List<ModelItemBo> selectModeList(Map<String, Object> map);
 
     ContentSaveBo save(ContentSaveBo contentSaveBo);
 
@@ -47,7 +47,7 @@ public interface ContentService {
 
     ContentTopicListBo updatetopicList(ContentTopicListBo topicListBo);
 
-    List<ContentudBo> selectContentudList(Map<String,Object> map);
+    List<ContentudBo> selectContentudList(Map<String, Object> map);
 
     String updateViewsDay(String contentId);
 

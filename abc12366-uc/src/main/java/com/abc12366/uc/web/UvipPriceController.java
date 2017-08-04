@@ -33,6 +33,7 @@ public class UvipPriceController {
 
     /**
      * 会员价格列表管理
+     *
      * @return
      */
     @GetMapping(path = "/select/{productId}")
@@ -42,7 +43,7 @@ public class UvipPriceController {
         uvipPrice.setProductId(productId);
         List<UvipPrice> uvipPriceList = uvipPriceService.selectList(uvipPrice);
         LOGGER.info("{}", uvipPriceList);
-        return ResponseEntity.ok(Utils.kv("dataList",  uvipPriceList));
+        return ResponseEntity.ok(Utils.kv("dataList", uvipPriceList));
     }
 
 }

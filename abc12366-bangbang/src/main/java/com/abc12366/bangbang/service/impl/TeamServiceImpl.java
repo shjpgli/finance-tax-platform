@@ -49,7 +49,7 @@ public class TeamServiceImpl implements TeamService {
         team.setCreateTime(date);
         team.setLastUpdate(date);
         int result = teamMapper.insert(team);
-        if(result <1){
+        if (result < 1) {
             throw new ServiceException(4101);
         }
         TeamBO teamBO = new TeamBO();

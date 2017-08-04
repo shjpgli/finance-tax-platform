@@ -20,7 +20,8 @@ public class SmsOpsLog {
     public SmsOpsLog() {
     }
 
-    public SmsOpsLog(String id, String templateid, String mobiles, String params, String code, String msg, String obj, Date createTime) {
+    public SmsOpsLog(String id, String templateid, String mobiles, String params, String code, String msg, String
+            obj, Date createTime) {
         this.id = id;
         this.templateid = templateid;
         this.mobiles = mobiles;

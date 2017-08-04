@@ -30,7 +30,7 @@ public class EventSponsorServiceImpl implements EventSponsorService {
     @Override
     public List<EventSponsorBo> selectList() {
         //查询主办方列表
-        List<EventSponsorBo> eventSponsorBoList =  eventSponsorRoMapper.selectList();
+        List<EventSponsorBo> eventSponsorBoList = eventSponsorRoMapper.selectList();
         return eventSponsorBoList;
     }
 
@@ -56,7 +56,7 @@ public class EventSponsorServiceImpl implements EventSponsorService {
         EventSponsor eventSponsor = eventSponsorRoMapper.selectByPrimaryKey(topicId);
         EventSponsorBo eventSponsorBo = new EventSponsorBo();
         try {
-            if(eventSponsor != null){
+            if (eventSponsor != null) {
                 BeanUtils.copyProperties(eventSponsor, eventSponsorBo);
             }
 

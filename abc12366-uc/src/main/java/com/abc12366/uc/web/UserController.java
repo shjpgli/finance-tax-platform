@@ -130,7 +130,8 @@ public class UserController {
 
     //用户修改密码
     @PutMapping(path = "/password")
-    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
+    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}", passwordUpdateBO, request);
         Boolean message = userService.updatePassword(passwordUpdateBO, request);
         LOGGER.info("{}", message);

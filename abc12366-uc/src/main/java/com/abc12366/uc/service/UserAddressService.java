@@ -13,6 +13,7 @@ public interface UserAddressService {
 
     /**
      * 查询user所有地址
+     *
      * @param userId
      * @return
      */
@@ -20,6 +21,7 @@ public interface UserAddressService {
 
     /**
      * 查询地址详情
+     *
      * @param userAddress
      * @return
      */
@@ -27,6 +29,7 @@ public interface UserAddressService {
 
     /**
      * 更新地址信息
+     *
      * @param userAddressBO
      * @return
      */
@@ -34,6 +37,7 @@ public interface UserAddressService {
 
     /**
      * 删除地址信息
+     *
      * @param userAddressBO
      * @return
      */
@@ -41,6 +45,7 @@ public interface UserAddressService {
 
     /**
      * 新增地址信息
+     *
      * @param userAddressBO
      * @return
      */

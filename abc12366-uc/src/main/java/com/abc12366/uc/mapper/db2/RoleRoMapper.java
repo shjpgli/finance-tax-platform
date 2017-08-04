@@ -8,22 +8,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * RoleMapper数据库操作接口类
- * 
  **/
 
 public interface RoleRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Role  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Role selectByPrimaryKey(@Param("id") String id);
 
-	List<RoleBO> selectList(Role role);
+    List<RoleBO> selectList(Role role);
 
 
     RoleBO selectRoleById(String id);
@@ -32,7 +28,7 @@ public interface RoleRoMapper {
 
     List<String> selectRoleMenuIdListByRoleId(String id);
 
-    List<Map<String,String>> selectRoleResourceListByRoleId(String roleId);
+    List<Map<String, String>> selectRoleResourceListByRoleId(String roleId);
 
     Role selectOne(Role role);
 

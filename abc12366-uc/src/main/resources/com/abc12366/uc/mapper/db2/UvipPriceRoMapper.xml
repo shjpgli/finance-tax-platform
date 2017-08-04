@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UvipPriceRoMapper">
 
-	<sql id="Base_Column_List">
-		 id,	productId,	vipLevel,	discount,	tradePrice,	giftPoints,	createTime,	lastUpdate
-	</sql>
+    <sql id="Base_Column_List">
+        id, productId, vipLevel, discount, tradePrice, giftPoints, createTime, lastUpdate
+    </sql>
 
-	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.UvipPrice" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_uvip_price
-		 WHERE id = #{id}
-	</select>
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.UvipPrice" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_uvip_price
+        WHERE id = #{id}
+    </select>
 
-	<select id="selectList" resultType="com.abc12366.uc.model.UvipPrice" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_uvip_price
-		 WHERE productId = #{productId}
-	</select>
-
+    <select id="selectList" resultType="com.abc12366.uc.model.UvipPrice" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_uvip_price
+        WHERE productId = #{productId}
+    </select>
 
 
 </mapper>

@@ -23,7 +23,8 @@ public class AskBO {
     public AskBO() {
     }
 
-    public AskBO(String id, String userId, String ask, String detail, String status, Date createTime, Date lastUpdate, int points, Boolean isSolve, String askedUserId, String type) {
+    public AskBO(String id, String userId, String ask, String detail, String status, Date createTime, Date
+            lastUpdate, int points, Boolean isSolve, String askedUserId, String type) {
         this.id = id;
         this.userId = userId;
         this.ask = ask;

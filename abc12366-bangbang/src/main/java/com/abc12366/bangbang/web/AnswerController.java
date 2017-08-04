@@ -105,7 +105,8 @@ public class AnswerController {
     }
 
     @PutMapping(path = "/answer/{id}")
-    public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody AnswerUpdateBO answerUpdateBO, HttpServletRequest request) {
+    public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody AnswerUpdateBO answerUpdateBO,
+                                 HttpServletRequest request) {
         LOGGER.info("{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         AnswerBO answerBO = answerService.update(id, answerUpdateBO, userId);

@@ -40,7 +40,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }*/
 
     @Bean
-    public TokenInterceptor ucUserInterceptor(){
+    public TokenInterceptor ucUserInterceptor() {
         return new TokenInterceptor();
     }
 
@@ -70,6 +70,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid*/**")
                 .excludePathPatterns("/auth/**")
-                .excludePathPatterns("/login", "/logout/**", "/refresh", "/register", "/test", "/verifylogin", "/user/token/**", "/user/u/**");
+                .excludePathPatterns("/login", "/logout/**", "/refresh", "/register", "/test", "/verifylogin",
+                        "/user/token/**", "/user/u/**");
     }
 }

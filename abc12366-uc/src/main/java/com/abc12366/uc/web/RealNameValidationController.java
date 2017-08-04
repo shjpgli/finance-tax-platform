@@ -47,11 +47,13 @@ public class RealNameValidationController {
         List<UserExtendListBO> userExtendBOList = realNameValidationService.selectList(map);
         return (userExtendBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userExtendBOList, "total", ((Page) userExtendBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userExtendBOList, "total", ((Page) userExtendBOList)
+                        .getTotal()));
     }
 
     @PutMapping(path = "/{userId}/{validStatus}")
-    public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus, @Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
+    public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus, @Valid
+    @RequestBody UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
         UserExtendBO userExtendBO = realNameValidationService.validate(userId, validStatus, userExtendUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", userExtendBO));

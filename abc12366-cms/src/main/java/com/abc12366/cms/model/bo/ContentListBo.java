@@ -1,94 +1,139 @@
 package com.abc12366.cms.model.bo;
+
 import java.io.Serializable;
 import java.util.Date;
 
 
 /**
- *
  * CMS内容表
  * add by xieyanmao on 2017-4-25
- *
  **/
 @SuppressWarnings("serial")
 public class ContentListBo implements Serializable {
 
-	/**内容ID**/
-	private String contentId;
+    /**
+     * 内容ID
+     **/
+    private String contentId;
 
-    /**userid**varchar(64)**/
+    /**
+     * userid**varchar(64)
+     **/
     private String userid;
 
-    /**username**varchar(100)**/
+    /**
+     * username**varchar(100)
+     **/
     private String username;
 
-	/**标题**/
-	private String title;
+    /**
+     * 标题
+     **/
+    private String title;
 
-	/**标题颜色**varchar(10)**/
-	private String titleColor;
+    /**
+     * 标题颜色**varchar(10)
+     **/
+    private String titleColor;
 
-	/**栏目ID**/
-	private String channelId;
+    /**
+     * 栏目ID
+     **/
+    private String channelId;
 
-	/**栏目名称**/
-	private String channelName;
+    /**
+     * 栏目名称
+     **/
+    private String channelName;
 
-	/**固顶级别**/
-	private Integer topLevel;
+    /**
+     * 固顶级别
+     **/
+    private Integer topLevel;
 
-	/**属性ID**/
-	private String typeId;
+    /**
+     * 属性ID
+     **/
+    private String typeId;
 
-	/**作者**/
-	private String author;
+    /**
+     * 作者
+     **/
+    private String author;
 
-	/**总访问数**/
-	private String views;
+    /**
+     * 总访问数
+     **/
+    private String views;
 
-	/**发布日期**/
-	private Date releaseDate;
+    /**
+     * 发布日期
+     **/
+    private Date releaseDate;
 
-	/**状态(0:草稿;1:审核中;2:审核通过;3:回收站;4:投稿;5:归档)**/
-	private Integer status;
+    /**
+     * 状态(0:草稿;1:审核中;2:审核通过;3:回收站;4:投稿;5:归档)
+     **/
+    private Integer status;
 
-	/**推荐级别**/
-	private Integer recommendLevel;
+    /**
+     * 推荐级别
+     **/
+    private Integer recommendLevel;
 
-	/**是否已生成静态页**/
-	private Integer needRegenerate;
+    /**
+     * 是否已生成静态页
+     **/
+    private Integer needRegenerate;
 
-	/**访问路径**varchar(30)**/
-	private String channelPath;
+    /**
+     * 访问路径**varchar(30)
+     **/
+    private String channelPath;
 
-    /**站点Id**varchar(64)**/
+    /**
+     * 站点Id**varchar(64)
+     **/
     private String siteId;
 
-	/**域名**varchar(50)**/
-	private String domain;
+    /**
+     * 域名**varchar(50)
+     **/
+    private String domain;
 
-	/**站点路径**varchar(20)**/
-	private String sitePath;
+    /**
+     * 站点路径**varchar(20)
+     **/
+    private String sitePath;
 
-    /**站点名称**varchar(100)**/
+    /**
+     * 站点名称**varchar(100)
+     **/
     private String siteName;
 
-	/**站点路径**varchar(500)**/
-	private String staticLink;
+    /**
+     * 站点路径**varchar(500)
+     **/
+    private String staticLink;
 
-    /**栏目是否显示**/
+    /**
+     * 栏目是否显示
+     **/
     private String isDisplay;
 
-    /**站点状态**/
+    /**
+     * 站点状态
+     **/
     private String siteStatus;
 
 
-	public String getContentId() {
-		return contentId;
-	}
+    public String getContentId() {
+        return contentId;
+    }
 
-	public void setContentId(String contentId) {
-		this.contentId = contentId;
-	}
+    public void setContentId(String contentId) {
+        this.contentId = contentId;
+    }
 
     public String getUserid() {
         return userid;
@@ -107,108 +152,108 @@ public class ContentListBo implements Serializable {
     }
 
     public String getTitle() {
-		return title;
-	}
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getTitleColor() {
-		return titleColor;
-	}
+    public String getTitleColor() {
+        return titleColor;
+    }
 
-	public void setTitleColor(String titleColor) {
-		this.titleColor = titleColor;
-	}
+    public void setTitleColor(String titleColor) {
+        this.titleColor = titleColor;
+    }
 
-	public Integer getRecommendLevel() {
-		return recommendLevel;
-	}
+    public Integer getRecommendLevel() {
+        return recommendLevel;
+    }
 
-	public void setRecommendLevel(Integer recommendLevel) {
-		this.recommendLevel = recommendLevel;
-	}
+    public void setRecommendLevel(Integer recommendLevel) {
+        this.recommendLevel = recommendLevel;
+    }
 
-	public String getChannelId() {
-		return channelId;
-	}
+    public String getChannelId() {
+        return channelId;
+    }
 
-	public void setChannelId(String channelId) {
-		this.channelId = channelId;
-	}
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
 
-	public String getChannelName() {
-		return channelName;
-	}
+    public String getChannelName() {
+        return channelName;
+    }
 
-	public void setChannelName(String channelName) {
-		this.channelName = channelName;
-	}
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
 
-	public Integer getTopLevel() {
-		return topLevel;
-	}
+    public Integer getTopLevel() {
+        return topLevel;
+    }
 
-	public void setTopLevel(Integer topLevel) {
-		this.topLevel = topLevel;
-	}
+    public void setTopLevel(Integer topLevel) {
+        this.topLevel = topLevel;
+    }
 
-	public String getTypeId() {
-		return typeId;
-	}
+    public String getTypeId() {
+        return typeId;
+    }
 
-	public void setTypeId(String typeId) {
-		this.typeId = typeId;
-	}
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
+    }
 
-	public String getAuthor() {
-		return author;
-	}
+    public String getAuthor() {
+        return author;
+    }
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-	public String getViews() {
-		return views;
-	}
+    public String getViews() {
+        return views;
+    }
 
-	public void setViews(String views) {
-		this.views = views;
-	}
+    public void setViews(String views) {
+        this.views = views;
+    }
 
-	public Date getReleaseDate() {
-		return releaseDate;
-	}
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
 
-	public void setReleaseDate(Date releaseDate) {
-		this.releaseDate = releaseDate;
-	}
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
-	public Integer getStatus() {
-		return status;
-	}
+    public Integer getStatus() {
+        return status;
+    }
 
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
-	public Integer getNeedRegenerate() {
-		return needRegenerate;
-	}
+    public Integer getNeedRegenerate() {
+        return needRegenerate;
+    }
 
-	public void setNeedRegenerate(Integer needRegenerate) {
-		this.needRegenerate = needRegenerate;
-	}
+    public void setNeedRegenerate(Integer needRegenerate) {
+        this.needRegenerate = needRegenerate;
+    }
 
-	public String getChannelPath() {
-		return channelPath;
-	}
+    public String getChannelPath() {
+        return channelPath;
+    }
 
-	public void setChannelPath(String channelPath) {
-		this.channelPath = channelPath;
-	}
+    public void setChannelPath(String channelPath) {
+        this.channelPath = channelPath;
+    }
 
     public String getSiteId() {
         return siteId;
@@ -219,20 +264,20 @@ public class ContentListBo implements Serializable {
     }
 
     public String getDomain() {
-		return domain;
-	}
+        return domain;
+    }
 
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
 
-	public String getSitePath() {
-		return sitePath;
-	}
+    public String getSitePath() {
+        return sitePath;
+    }
 
-	public void setSitePath(String sitePath) {
-		this.sitePath = sitePath;
-	}
+    public void setSitePath(String sitePath) {
+        this.sitePath = sitePath;
+    }
 
     public String getSiteName() {
         return siteName;
@@ -243,12 +288,12 @@ public class ContentListBo implements Serializable {
     }
 
     public String getStaticLink() {
-		return staticLink;
-	}
+        return staticLink;
+    }
 
-	public void setStaticLink(String staticLink) {
-		this.staticLink = staticLink;
-	}
+    public void setStaticLink(String staticLink) {
+        this.staticLink = staticLink;
+    }
 
     public String getIsDisplay() {
         return isDisplay;

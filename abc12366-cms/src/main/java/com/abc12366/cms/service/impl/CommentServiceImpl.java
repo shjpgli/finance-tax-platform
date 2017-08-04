@@ -182,7 +182,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional("db1TxManager")
     @Override
-     public String deleteList(String[] commentIds) {
+    public String deleteList(String[] commentIds) {
         //删除评论信息
         commentExtMapper.deleteList(commentIds);
         //删除评论扩展信息

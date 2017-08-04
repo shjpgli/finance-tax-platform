@@ -20,7 +20,7 @@
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insert" parameterType="com.abc12366.uc.model.UserAddress">
         INSERT INTO uc_user_address
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
@@ -59,7 +59,7 @@
             </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 #{id},
             </if>

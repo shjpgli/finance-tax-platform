@@ -26,7 +26,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/event",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/event", headers = Constant.VERSION_HEAD + "=1")
 public class EventController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 

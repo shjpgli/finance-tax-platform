@@ -42,71 +42,71 @@ public class DictController {
         dict.setStatus(status);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<Dict> dictList = dictService.selectList(dict);
-        LOGGER.info("{}",dictList);
+        LOGGER.info("{}", dictList);
         return (dictList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dictList, "total", ((Page) dictList).getTotal()));
     }
 
-    @GetMapping(path="/{id}")
-    public ResponseEntity selectById(@PathVariable("id") String id){
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectById(@PathVariable("id") String id) {
         Dict dict = dictService.selectById(id);
-        LOGGER.info("{}",dict);
-        return ResponseEntity.ok(Utils.kv("data",dict));
+        LOGGER.info("{}", dict);
+        return ResponseEntity.ok(Utils.kv("data", dict));
     }
 
-    @GetMapping(path="/name")
-    public ResponseEntity selectListByDictName(@RequestParam(value = "dictName", required = false) String dictName){
+    @GetMapping(path = "/name")
+    public ResponseEntity selectListByDictName(@RequestParam(value = "dictName", required = false) String dictName) {
         Dict dict = new Dict();
         dict.setDictName(dictName);
         List<Dict> dictList = dictService.selectListByDictName(dict);
-        LOGGER.info("{}",dictList);
-        return ResponseEntity.ok(Utils.kv("dataList",dictList));
+        LOGGER.info("{}", dictList);
+        return ResponseEntity.ok(Utils.kv("dataList", dictList));
     }
 
-    @GetMapping(path="/firstLevel")
-    public ResponseEntity selectFirstLevel(){
+    @GetMapping(path = "/firstLevel")
+    public ResponseEntity selectFirstLevel() {
         List<DictBO> dictBOs = dictService.selectFirstLevel();
-        LOGGER.info("{}",dictBOs);
-        return ResponseEntity.ok(Utils.kv("dataList",dictBOs));
+        LOGGER.info("{}", dictBOs);
+        return ResponseEntity.ok(Utils.kv("dataList", dictBOs));
     }
 
-    @GetMapping(path="/kv/{dictId}")
-    public ResponseEntity selectDictList(@PathVariable("dictId") String dictId){
+    @GetMapping(path = "/kv/{dictId}")
+    public ResponseEntity selectDictList(@PathVariable("dictId") String dictId) {
         Dict dict = new Dict();
         dict.setDictId(dictId);
         List<DictBO> dictBOList = dictService.selectDictList(dict);
-        LOGGER.info("{}",dictBOList);
-        return ResponseEntity.ok(Utils.kv("dataList",dictBOList));
+        LOGGER.info("{}", dictBOList);
+        return ResponseEntity.ok(Utils.kv("dataList", dictBOList));
     }
 
-    @DeleteMapping(path="/{id}")
-    public ResponseEntity delete(@PathVariable("id") String id){
-        LOGGER.info("{}",id);
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
         dictService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @PutMapping(path="/{id}")
-    public ResponseEntity update(@Valid @RequestBody DictUpdateBO dictUpdateBO, @PathVariable("id") String id){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@Valid @RequestBody DictUpdateBO dictUpdateBO, @PathVariable("id") String id) {
         LOGGER.info("{}", dictUpdateBO, id);
         dictUpdateBO.setId(id);
         DictBO dictBO = dictService.update(dictUpdateBO);
-        LOGGER.info("{}",dictBO);
-        return ResponseEntity.ok(Utils.kv("data",dictBO));
+        LOGGER.info("{}", dictBO);
+        return ResponseEntity.ok(Utils.kv("data", dictBO));
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid@RequestBody DictBO bo){
-        LOGGER.info("{}",bo);
+    public ResponseEntity insert(@Valid @RequestBody DictBO bo) {
+        LOGGER.info("{}", bo);
         DictBO dictBO = dictService.insert(bo);
-        LOGGER.info("{}",dictBO);
-        return ResponseEntity.ok(Utils.kv("data",dictBO));
+        LOGGER.info("{}", dictBO);
+        return ResponseEntity.ok(Utils.kv("data", dictBO));
     }
 
     @PostMapping(path = "/delete")
-    public ResponseEntity batchDelete(@Valid@RequestBody Dict bo){
-        LOGGER.info("{}",bo);
+    public ResponseEntity batchDelete(@Valid @RequestBody Dict bo) {
+        LOGGER.info("{}", bo);
         dictService.batchDelete(bo);
         return ResponseEntity.ok(Utils.kv());
     }

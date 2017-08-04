@@ -17,8 +17,17 @@ public class Tag {
     private String description;
     private String rule;
     private int weight;
+    private String type;
 
     public Tag() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getId() {

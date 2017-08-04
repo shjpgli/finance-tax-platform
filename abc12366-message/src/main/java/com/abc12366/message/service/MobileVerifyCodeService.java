@@ -1,5 +1,7 @@
 package com.abc12366.message.service;
 
+import com.abc12366.message.model.bo.VerifyParam;
+
 import java.io.IOException;
 
 /**
@@ -8,7 +10,7 @@ import java.io.IOException;
  * Time: 0:09
  */
 public interface MobileVerifyCodeService {
-    void getCode(String phone) throws IOException;
+    void getCode(String type, String phone) throws IOException;
 
-    void verify(String phone, String code);
+    void verify(VerifyParam verifyParam);
 }

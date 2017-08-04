@@ -83,111 +83,113 @@ public class Goods implements Serializable {
      **/
     private String tradeMethod;
 
-    /**商品类型**/
+    /**
+     * 商品类型
+     **/
     private String goodsType;
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getId() {
         return this.id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getImageUrl() {
         return this.imageUrl;
     }
 
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getIntroduction() {
         return this.introduction;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     public String getDetails() {
         return this.details;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public String getCategoryId() {
         return this.categoryId;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Boolean getStatus() {
         return this.status;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
     }
 
-    public void setGiftPoints(Integer giftPoints) {
-        this.giftPoints = giftPoints;
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public Integer getGiftPoints() {
         return this.giftPoints;
     }
 
-    public void setSort(Integer sort) {
-        this.sort = sort;
+    public void setGiftPoints(Integer giftPoints) {
+        this.giftPoints = giftPoints;
     }
 
     public Integer getSort() {
         return this.sort;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public String getUnit() {
         return this.unit;
     }
 
-    public void setRecommendType(String recommendType) {
-        this.recommendType = recommendType;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getRecommendType() {
         return this.recommendType;
+    }
+
+    public void setRecommendType(String recommendType) {
+        this.recommendType = recommendType;
     }
 
     public Integer getIsShipping() {

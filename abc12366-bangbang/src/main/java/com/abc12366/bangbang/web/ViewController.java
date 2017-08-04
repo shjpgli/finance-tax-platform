@@ -30,7 +30,7 @@ public class ViewController {
 
     @PostMapping(path = "/view/{askId}")
     public ResponseEntity insert(@PathVariable String askId, HttpServletRequest request) {
-        LOGGER.info("{}:{}",askId, request);
+        LOGGER.info("{}:{}", askId, request);
         ViewBO viewBO = viewService.insert(askId, request);
         return ResponseEntity.ok(Utils.kv("data", viewBO));
     }
@@ -53,6 +53,7 @@ public class ViewController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) viewBOList, "total", ((Page) viewBOList).getTotal()));
     }
+
     @GetMapping(path = "/count/view/{askId}")
     public ResponseEntity selectCount(@PathVariable String askId) {
         LOGGER.info("{}", askId);

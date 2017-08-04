@@ -5,7 +5,7 @@
 
     <insert id="insert" parameterType="com.abc12366.uc.model.Dict">
         INSERT INTO uc_dict
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
@@ -41,7 +41,7 @@
             </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 #{id},
             </if>

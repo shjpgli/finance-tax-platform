@@ -3,7 +3,10 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.PointsLogBO;
+import com.abc12366.uc.model.bo.PointsLogUcBO;
 import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -13,16 +16,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 积分规则日志接口
- *
- * @author liuguiyao<435720953@qq.com.com>
- * @create 2017-05-15 10:18 PM
- * @since 2.0.0
+ * User: liuguiyao<435720953@qq.com>
+ * Date: 2017-07-25
+ * Time: 16:22
  */
 @RestController
 @RequestMapping(path = "/upoints/log", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -34,8 +38,10 @@ public class PointsLogController {
     private PointsLogService pointsLogService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false) String name, @RequestParam(required = false) String code,
-                                     @RequestParam(required = false) String type, @RequestParam(required = false) String userId,
+    public ResponseEntity selectList(@RequestParam(required = false) String name, @RequestParam(required = false)
+    String code,
+                                     @RequestParam(required = false) String type, @RequestParam(required = false)
+                                         String userId,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}:{}", name, code, type, userId, page, size);
@@ -71,4 +77,40 @@ public class PointsLogController {
         LOGGER.info("{}", points_log);
         return ResponseEntity.ok(Utils.kv("data", points_log));
     }
+
+    @GetMapping(path = "/user")
+    public ResponseEntity selectListByUser(@RequestParam(required = false) String start,
+                                           @RequestParam(required = false) String end,
+                                           HttpServletRequest request,
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}:{}:{}", start, end, request, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String, Object> map = new HashMap<>();
+        if (start != null && "".equals(start.trim())) {
+            start = null;
+        }
+        if (end != null && "".equals(end.trim())) {
+            end = null;
+        }
+        Date startDate = null;
+        Date endDate = null;
+        if (start != null) {
+            startDate = DateUtils.StrToDate(start);
+        }
+        if (end != null) {
+            endDate = DateUtils.StrToDate(end);
+        }
+
+        map.put("userId", UserUtil.getUserId(request));
+        map.put("start", startDate);
+        map.put("end", endDate);
+
+        List<PointsLogUcBO> logList = pointsLogService.selectListByUser(map);
+        LOGGER.info("{}", logList);
+        return (logList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
+    }
+
 }

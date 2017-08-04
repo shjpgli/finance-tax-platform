@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * @author lizhongwei
- * 物流公司控制类
+ *         物流公司控制类
  * @since 2.0.0
  */
 @RestController
@@ -50,7 +50,8 @@ public class ExpressCompController {
 
     @GetMapping
     public ResponseEntity selectExpressList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                    pageSize,
                                             @RequestParam(value = "username", required = false) String username,
                                             @RequestParam(value = "phone", required = false) String phone,
                                             @RequestParam(value = "expressId", required = false) String expressId,
@@ -64,10 +65,10 @@ public class ExpressCompController {
         user.setPhone(phone);
         expressBO.setUser(user);
         expressBO.setExpressNo(expressId);
-        if(startTime == null || "".equals(startTime)){
+        if (startTime == null || "".equals(startTime)) {
             expressBO.setStartTime(Constant.getToday(new Date()));
         }
-        if(endTime == null || "".equals(endTime)){
+        if (endTime == null || "".equals(endTime)) {
             expressBO.setEndTime(Constant.getToday(new Date()));
         }
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -80,6 +81,7 @@ public class ExpressCompController {
 
     /**
      * 新增物流公司
+     *
      * @param express
      * @return
      */
@@ -95,52 +97,50 @@ public class ExpressCompController {
      *采用spring提供的上传文件的方法
      */
     @PostMapping(path = "/excel")
-    public ResponseEntity  springUpload(HttpServletRequest request,String fileName) throws IllegalStateException, IOException
-    {
+    public ResponseEntity springUpload(HttpServletRequest request, String fileName) throws IllegalStateException,
+            IOException {
         request.setCharacterEncoding("UTF-8");
         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
-        CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver(
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
                 request.getSession().getServletContext());
         multipartResolver.setDefaultEncoding("UTF-8");
         //检查form中是否有enctype="multipart/form-data"
-        String path=null;
+        String path = null;
         List<ExpressBO> expressBOList = null;
         List<ExpressBO> orderNumList = null;
-        if(multipartResolver.isMultipart(request))
-        {
+        if (multipartResolver.isMultipart(request)) {
             //将request变成多部分request
-            MultipartHttpServletRequest multiRequest=(MultipartHttpServletRequest)request;
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 
             //获取multiRequest 中所有的文件名
-            Iterator iter=multiRequest.getFileNames();
+            Iterator iter = multiRequest.getFileNames();
 
-            while(iter.hasNext())
-            {
+            while (iter.hasNext()) {
                 //一次遍历所有文件
-                MultipartFile file=multiRequest.getFile(iter.next().toString());
-                if(file!=null)
-                {
+                MultipartFile file = multiRequest.getFile(iter.next().toString());
+                if (file != null) {
                     //filePath = new String(file.getOriginalFilename().getBytes(), "UTF-8");
-                    path= FileUtils.getDefaultFolder()+"//"+fileName;
+                    path = FileUtils.getDefaultFolder() + "//" + fileName;
                     //上传
                     file.transferTo(new File(path));
                 }
             }
-            String keyValue ="订单号:userOrderNo,运单号:expressNo";
+            String keyValue = "订单号:userOrderNo,运单号:expressNo";
 
             try {
-                expressBOList = ExcelUtil.readXls(FileUtils.getDefaultFolder() + "//" + fileName, ExcelUtil.getMap(keyValue), "com.abc12366.uc.model.Express");
+                expressBOList = ExcelUtil.readXls(FileUtils.getDefaultFolder() + "//" + fileName, ExcelUtil.getMap
+                        (keyValue), "com.abc12366.uc.model.Express");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(expressBOList != null){
+            if (expressBOList != null) {
                 ExpressBO bo = null;
                 System.out.println(expressBOList.size());
                 for (ExpressBO expressBO : expressBOList) {
                     bo = new ExpressBO();
                     System.out.println("订单号:" + expressBO.getUserOrderNo() + "  运单号:" + expressBO.getExpressNo());
                     bo = expressService.importExpress(expressBO);
-                    if(bo == null){
+                    if (bo == null) {
                         orderNumList.add(expressBO);
                     }
                 }
@@ -153,6 +153,7 @@ public class ExpressCompController {
 
     /**
      * 获取物流公司列表
+     *
      * @param pageNum
      * @param pageSize
      * @param compName
@@ -160,8 +161,8 @@ public class ExpressCompController {
      */
     @GetMapping(path = "/comp")
     public ResponseEntity selectCompList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value = "compName", required = false) String compName) {
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                         @RequestParam(value = "compName", required = false) String compName) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         ExpressComp expressComp = new ExpressComp();
         expressComp.setCompName(compName);
@@ -175,6 +176,7 @@ public class ExpressCompController {
 
     /**
      * 新增物流公司
+     *
      * @param expressCompBO
      * @return
      */
@@ -188,6 +190,7 @@ public class ExpressCompController {
 
     /**
      * 查询单个物流公司
+     *
      * @param id
      * @return
      */
@@ -201,12 +204,14 @@ public class ExpressCompController {
 
     /**
      * 修改物流公司信息
+     *
      * @param expressCompBO
      * @param id
      * @return
      */
     @PutMapping(path = "/comp/{id}")
-    public ResponseEntity updateExpressComp(@Valid @RequestBody ExpressCompBO expressCompBO, @PathVariable("id") String id) {
+    public ResponseEntity updateExpressComp(@Valid @RequestBody ExpressCompBO expressCompBO, @PathVariable("id")
+    String id) {
         LOGGER.info("{}", expressCompBO);
         expressCompBO.setId(id);
         ExpressCompBO bo = expressCompService.update(expressCompBO);
@@ -216,6 +221,7 @@ public class ExpressCompController {
 
     /**
      * 删除物流公司信息
+     *
      * @return
      */
     @DeleteMapping(path = "/comp/{id}")

@@ -165,7 +165,7 @@ public class AdminServiceImpl implements AdminService {
         if (updExtend != 1) {
             throw new ServiceException(4114);
         }
-        BeanUtils.copyProperties(admin,uBO);
+        BeanUtils.copyProperties(admin, uBO);
         String id = adminUpdateBO.getId();
         List<UserRole> userRoles = userRoleRoMapper.selectUserRoleByUserId(id);
         if (userRoles != null && (!userRoles.isEmpty())) {
@@ -211,9 +211,9 @@ public class AdminServiceImpl implements AdminService {
     public AdminBO login(AdminBO adminBO, String appId) {
         AdminBO user = adminRoMapper.selectUserBOByLoginName(adminBO.getUsername());
         //判断用户是否被禁用
-        if(user != null){
+        if (user != null) {
             Boolean status = user.getStatus();
-            if(!status){
+            if (!status) {
                 LOGGER.error("用户为禁用状态，不能登录{}", user);
                 throw new ServiceException(4126);
             }
@@ -239,7 +239,7 @@ public class AdminServiceImpl implements AdminService {
             loginInfo.setUserId(user.getId());
             loginInfo.setAppId(appId);
             Date date = new Date();
-            long lastLong = TimeUtil.getDateStringToLong(new Date())+Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+            long lastLong = TimeUtil.getDateStringToLong(new Date()) + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
             loginInfo.setLastResetTokenTime(TimeUtil.getLongToDate(lastLong));
             LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
 
@@ -384,7 +384,7 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         AdminBO temp = new AdminBO();
-        BeanUtils.copyProperties(admin,temp);
+        BeanUtils.copyProperties(admin, temp);
         return temp;
     }
 
@@ -422,7 +422,7 @@ public class AdminServiceImpl implements AdminService {
         }
         if (user != null && oldPassword.equals(user.getPassword())) {
             update = adminMapper.updateUserPwdById(user.getId(), newPassword);
-        }else{
+        } else {
             throw new ServiceException(4120);
         }
 
@@ -475,7 +475,7 @@ public class AdminServiceImpl implements AdminService {
         //严重Token是否过期
         long datelong = System.currentTimeMillis();
         long lastTime = TimeUtil.getDateStringToLong(info.getLastResetTokenTime());
-        if(datelong > lastTime){
+        if (datelong > lastTime) {
             LOGGER.warn("Admin-Token过期，请重新登录{}", info);
             throw new ServiceException(4127);
         }
@@ -492,10 +492,10 @@ public class AdminServiceImpl implements AdminService {
             LOGGER.warn("Admin-Token不存在{}", info);
             throw new ServiceException(4128);
         }
-        long datelong = System.currentTimeMillis()+Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+        long datelong = System.currentTimeMillis() + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
         info.setLastResetTokenTime(TimeUtil.getLongToDate(datelong));
         int upd = loginInfoMapper.update(info);
-        if(upd != 1){
+        if (upd != 1) {
             LOGGER.warn("修改Admin-token有效时间失败{}", info);
             throw new ServiceException(4129);
         }
@@ -515,15 +515,15 @@ public class AdminServiceImpl implements AdminService {
         //严重Token是否过期
         long dateLong = System.currentTimeMillis();
         long lastTime = TimeUtil.getDateStringToLong(info.getLastResetTokenTime());
-        if(dateLong > lastTime){
+        if (dateLong > lastTime) {
             LOGGER.warn("Admin-Token过期，请重新登录{}", info);
             throw new ServiceException(4127);
         }
 
-        long refLong = dateLong+Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+        long refLong = dateLong + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
         info.setLastResetTokenTime(TimeUtil.getLongToDate(refLong));
         int upd = loginInfoMapper.update(info);
-        if(upd != 1){
+        if (upd != 1) {
             LOGGER.warn("修改Admin-token有效时间失败{}", info);
             throw new ServiceException(4129);
         }

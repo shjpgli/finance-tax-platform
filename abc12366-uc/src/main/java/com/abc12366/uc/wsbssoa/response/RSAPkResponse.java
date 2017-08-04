@@ -4,7 +4,7 @@ package com.abc12366.uc.wsbssoa.response;
  * RSA公钥
  * Created by zhouzhi on 2015-11-24.
  */
-public class RSAPkResponse extends BaseResponse{
+public class RSAPkResponse extends BaseResponse {
     private byte[] pk;
 
     public byte[] getPk() {

@@ -19,7 +19,8 @@ public class PointsLog {
     public PointsLog() {
     }
 
-    public PointsLog(String id, String userId, String ruleId, int income, int outgo, int usablePoints, Date createTime) {
+    public PointsLog(String id, String userId, String ruleId, int income, int outgo, int usablePoints, Date
+            createTime) {
         this.id = id;
         this.userId = userId;
         this.ruleId = ruleId;

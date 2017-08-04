@@ -42,7 +42,8 @@ public class UserAddressController {
      * @return
      */
     @GetMapping(path = "/{userId}")
-    public ResponseEntity selectList(@PathVariable("userId") String userId,@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+    public ResponseEntity selectList(@PathVariable("userId") String userId, @RequestParam(value = "page",
+            defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -50,11 +51,12 @@ public class UserAddressController {
         LOGGER.info("{}", userAddressList);
         return (userAddressList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userAddressList, "total", ((Page) userAddressList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userAddressList, "total", ((Page) userAddressList)
+                        .getTotal()));
     }
 
     @GetMapping(path = "/{userId}/{id}")
-    public ResponseEntity selectOne(@PathVariable("userId") String userId,@PathVariable("id") String id) {
+    public ResponseEntity selectOne(@PathVariable("userId") String userId, @PathVariable("id") String id) {
         UserAddress userAddress = new UserAddress();
         userAddress.setId(id);
         userAddress.setUserId(userId);
@@ -70,7 +72,8 @@ public class UserAddressController {
      * @return
      */
     @PostMapping(path = "/{userId}")
-    public ResponseEntity addUserAddress(@PathVariable("userId") String userId, @Valid @RequestBody UserAddressBO userAddressBO) {
+    public ResponseEntity addUserAddress(@PathVariable("userId") String userId, @Valid @RequestBody UserAddressBO
+            userAddressBO) {
         userAddressBO.setUserId(userId);
         UserAddressBO bo = userAddressService.addUserAddress(userAddressBO);
 
@@ -86,7 +89,7 @@ public class UserAddressController {
      */
     @PutMapping(path = "/{userId}/{id}")
     public ResponseEntity updateUserAddress(@PathVariable("userId") String userId, @PathVariable("id") String id,
-                                        @Valid @RequestBody UserAddressBO userAddressBO) {
+                                            @Valid @RequestBody UserAddressBO userAddressBO) {
         userAddressBO.setId(id);
         userAddressBO.setUserId(userId);
         UserAddressBO bo = userAddressService.updateUserAddress(userAddressBO);

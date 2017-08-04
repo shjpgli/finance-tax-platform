@@ -58,8 +58,8 @@ public class SysTaskServiceImpl implements SysTaskService {
         }
         //任务名称唯一性校验逻辑
         List<SysTaskBO> sysTaskBOList = sysTaskRoMapper.selectList(null);
-        for(SysTaskBO sysTaskBO:sysTaskBOList){
-            if(sysTaskBO.getName().equals(sysTaskInsertBO.getName())){
+        for (SysTaskBO sysTaskBO : sysTaskBOList) {
+            if (sysTaskBO.getName().equals(sysTaskInsertBO.getName())) {
                 LOGGER.info("新增失败，参数为：{}", sysTaskInsertBO);
                 throw new ServiceException(4601);
             }
@@ -91,14 +91,14 @@ public class SysTaskServiceImpl implements SysTaskService {
         //任务名称唯一性校验逻辑
         List<SysTaskBO> sysTaskBOList = sysTaskRoMapper.selectList(null);
         //这条数据本身不做校验
-        for(int i=0; i<sysTaskBOList.size(); i++){
-            if((sysTaskBOList.get(i)).getId().equals(id)){
+        for (int i = 0; i < sysTaskBOList.size(); i++) {
+            if ((sysTaskBOList.get(i)).getId().equals(id)) {
                 sysTaskBOList.remove(i);
             }
         }
-        if(sysTaskUpdateBO.getName()!=null){
-            for(SysTaskBO sysTaskBO:sysTaskBOList){
-                if(sysTaskBO.getName().equals(sysTaskUpdateBO.getName())){
+        if (sysTaskUpdateBO.getName() != null) {
+            for (SysTaskBO sysTaskBO : sysTaskBOList) {
+                if (sysTaskBO.getName().equals(sysTaskUpdateBO.getName())) {
                     LOGGER.info("参数失败，参数为：{}", sysTaskUpdateBO);
                     throw new ServiceException(4601);
                 }

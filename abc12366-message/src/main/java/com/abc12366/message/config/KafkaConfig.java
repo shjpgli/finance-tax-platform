@@ -52,7 +52,7 @@ public class KafkaConfig {
 
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<Object, Object>>
-            kafkaListenerContainerFactory() {
+    kafkaListenerContainerFactory() {
 
         ConcurrentKafkaListenerContainerFactory<Object, Object> factory
                 = new ConcurrentKafkaListenerContainerFactory<>();

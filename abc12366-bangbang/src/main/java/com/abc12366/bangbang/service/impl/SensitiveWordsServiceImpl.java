@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
  * @author lizhongwei
  * @create 2017-06-20
  * @since 1.0.0
@@ -48,7 +47,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
         Date date = new Date();
         sensitiveWords.setLastUpdate(date);
         int update = sensitiveWordsMapper.update(sensitiveWords);
-        if (update != 1){
+        if (update != 1) {
             LOGGER.info("敏感词数据，修改失败", sensitiveWords);
             throw new ServiceException(4506);
         }
@@ -62,7 +61,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
         sensitiveWords.setCreateTime(date);
         sensitiveWords.setLastUpdate(date);
         int insert = sensitiveWordsMapper.insert(sensitiveWords);
-        if (insert != 1){
+        if (insert != 1) {
             LOGGER.info("敏感词数据，新增失败", sensitiveWords);
             throw new ServiceException(4505);
         }
@@ -72,7 +71,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
     @Override
     public void delete(SensitiveWords sensitiveWords) {
         int del = sensitiveWordsMapper.deleteByPrimaryKey(sensitiveWords.getId());
-        if (del != 1){
+        if (del != 1) {
             LOGGER.info("敏感词数据，删除失败", sensitiveWords);
             throw new ServiceException(4507);
         }

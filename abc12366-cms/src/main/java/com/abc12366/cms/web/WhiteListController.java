@@ -33,6 +33,7 @@ public class WhiteListController {
 
     /**
      * 白名单列表查询
+     *
      * @param questionId
      * @return
      */
@@ -48,9 +49,9 @@ public class WhiteListController {
     }
 
 
-
     /**
      * 白名单新增
+     *
      * @return
      */
     @PostMapping

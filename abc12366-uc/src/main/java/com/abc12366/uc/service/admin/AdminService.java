@@ -1,4 +1,5 @@
 package com.abc12366.uc.service.admin;
+
 import com.abc12366.uc.model.admin.Admin;
 import com.abc12366.uc.model.admin.AdminExtend;
 import com.abc12366.uc.model.admin.bo.*;
@@ -89,6 +90,7 @@ public interface AdminService {
 
     /**
      * 判断该tonken是否存在
+     *
      * @param userToken
      * @return
      */
@@ -98,12 +100,14 @@ public interface AdminService {
 
     /**
      * 登出
+     *
      * @param token
      */
     void logout(String token);
 
     /**
      * 修改用户密码
+     *
      * @param userPasswordBO
      * @return
      */
@@ -111,6 +115,7 @@ public interface AdminService {
 
     /**
      * 重置用户密码
+     *
      * @param id
      * @return
      */

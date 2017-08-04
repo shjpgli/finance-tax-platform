@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.MenuRoMapper">
 
     <sql id="Base_Column_List">
-        menuId, menuName, menuUrl, parentId,  perms, type, icon, sort, status, remark
+        menuId, menuName, menuUrl, parentId, perms, type, icon, sort, status, remark
     </sql>
     <resultMap id="menuBoResultMap" type="com.abc12366.uc.model.admin.bo.MenuBO">
         <id column="menuId" property="menuId" jdbcType="VARCHAR"/>
@@ -37,15 +37,15 @@
         left join uc_menu p on p.menuId = m.parentId
         <where>
             1=1
-            <if test="menuName != null  and menuName!=''"> AND m.menuName LIKE CONCAT('%',#{menuName},'%')</if>
-            <if test="parentId != null"> AND m.parentId = #{parentId}</if>
-            <if test="type != null and type!=''"> AND m.type = #{type}</if>
+            <if test="menuName != null  and menuName!=''">AND m.menuName LIKE CONCAT('%',#{menuName},'%')</if>
+            <if test="parentId != null">AND m.parentId = #{parentId}</if>
+            <if test="type != null and type!=''">AND m.type = #{type}</if>
         </where>
         ORDER BY m.sort ASC
     </select>
 
     <select id="selectByParentId" resultMap="menuBoResultMap" parameterType="java.lang.String">
-       select
+        select
         m.menuId,
         m.menuName,
         m.menuUrl,
@@ -64,7 +64,7 @@
 
     <select id="selectFirstLevel" resultType="com.abc12366.uc.model.admin.Menu">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_menu
         where parentId IS NULL
     </select>
@@ -89,7 +89,7 @@
 
     <select id="selectByMenuName" resultType="com.abc12366.uc.model.admin.Menu">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from uc_menu
         where menuName = #{menuName}
     </select>

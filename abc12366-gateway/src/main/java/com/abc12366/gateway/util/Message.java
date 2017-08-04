@@ -11,9 +11,8 @@ import java.io.IOException;
  */
 public class Message {
 
-    private static String MESSAGE = "message.properties";
-
     static Properties properties;
+    private static String MESSAGE = "message.properties";
 
     static {
         try {

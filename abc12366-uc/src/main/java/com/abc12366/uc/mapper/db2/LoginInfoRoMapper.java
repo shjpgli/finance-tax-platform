@@ -5,20 +5,16 @@ import com.abc12366.uc.model.admin.bo.LoginInfoBO;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 
  * LoginInfoMapper数据库操作接口类
- * 
  **/
 
 public interface LoginInfoRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	LoginInfo selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    LoginInfo selectByPrimaryKey(@Param("id") String id);
 
 
     LoginInfo selectOne(LoginInfo loginInfo);

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * mybatis映射文件扫描配置
- *
+ * <p>
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-06-08
  * Time: 14:55

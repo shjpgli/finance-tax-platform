@@ -53,13 +53,13 @@ public class TokenServiceImpl implements TokenService {
             String checkUrl = "/user/token/" + adminToken;
             // 1.调用admin的token校验接口，如果校验通过直接返回true
             String result = restTemplateUtil.send(abcAdmin + checkUrl, HttpMethod.GET, request);
-            ResultLoginInfo resultLoginInfo=JSON.parseObject(result,ResultLoginInfo.class);
+            ResultLoginInfo resultLoginInfo = JSON.parseObject(result, ResultLoginInfo.class);
 
             LoginInfoBO bo = resultLoginInfo.getData();
-            if(bo == null){
+            if (bo == null) {
                 LOGGER.info("查询失败: {}", isAuth);
                 isAuth = false;
-            }else{
+            } else {
                 request.setAttribute(Constant.ADMIN_ID, bo.getUserId());
                 request.setAttribute(Constant.ADMIN_USER, bo.getUser());
                 isAuth = true;

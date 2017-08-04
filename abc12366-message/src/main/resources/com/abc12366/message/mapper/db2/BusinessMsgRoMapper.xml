@@ -4,15 +4,15 @@
 <mapper namespace="com.abc12366.message.mapper.db2.BusinessMsgRoMapper">
 
     <sql id="Base_Column">
-		id, userId, businessId, content, status, type, createTime, lastUpdate
-	</sql>
+        id, userId, businessId, content, status, type, createTime, lastUpdate
+    </sql>
 
     <select id="selectOne" resultType="com.abc12366.message.model.BusinessMessage">
         SELECT
         <include refid="Base_Column"/>
         FROM msg_business_message
-		WHERE id=#{id}
-	</select>
+        WHERE id=#{id}
+    </select>
 
     <!-- 只查询半年内的记录 -->
     <select id="selectList" parameterType="com.abc12366.message.model.BusinessMessage"

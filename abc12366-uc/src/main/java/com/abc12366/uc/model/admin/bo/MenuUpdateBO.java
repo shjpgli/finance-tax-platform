@@ -26,7 +26,8 @@ public class MenuUpdateBO implements Serializable {
     public MenuUpdateBO() {
     }
 
-    public MenuUpdateBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort, Boolean status, String remark) {
+    public MenuUpdateBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type,
+                        String icon, int sort, Boolean status, String remark) {
         this.menuId = menuId;
         this.menuName = menuName;
         this.menuUrl = menuUrl;

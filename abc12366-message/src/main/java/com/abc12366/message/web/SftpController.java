@@ -20,37 +20,36 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/sftp",headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/sftp", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class SftpController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SftpController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SftpController.class);
 
-	@PostMapping
-	public ResponseEntity upload(@Valid @RequestBody FjListBo fjListBo) {
-		LOGGER.info("{}", fjListBo);
-		SFTPUtil sf = new SFTPUtil();
-		String host = "118.118.116.202";
-		int port = 22;
-		String username = "root";
-		String password = "hngs_123";
-		String directory = fjListBo.getDirectory();
-		List<FjBo> fjBoList = fjListBo.getFjBo();
-		List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
-		String fileName = "";
-		List<Byte> content = null;
-		for(FjBo fjBo:fjBoList){
-            ChannelSftp sftp=sf.connect(host, port, username, password);
-			fileName = fjBo.getFileName();
-			content = fjBo.getContent();
-			Map<String, String> map = sf.uploadByByte(directory,content,fileName,sftp);
-			dataList.add(map);
+    @PostMapping
+    public ResponseEntity upload(@Valid @RequestBody FjListBo fjListBo) {
+        LOGGER.info("{}", fjListBo);
+        SFTPUtil sf = new SFTPUtil();
+        String host = "118.118.116.202";
+        int port = 22;
+        String username = "root";
+        String password = "hngs_123";
+        String directory = fjListBo.getDirectory();
+        List<FjBo> fjBoList = fjListBo.getFjBo();
+        List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
+        String fileName = "";
+        List<Byte> content = null;
+        for (FjBo fjBo : fjBoList) {
+            ChannelSftp sftp = sf.connect(host, port, username, password);
+            fileName = fjBo.getFileName();
+            content = fjBo.getContent();
+            Map<String, String> map = sf.uploadByByte(directory, content, fileName, sftp);
+            dataList.add(map);
             sftp.disconnect();
             sftp.exit();
-		}
-		LOGGER.info("{}", dataList);
-		return ResponseEntity.ok(Utils.kv("dataList", dataList));
-	}
+        }
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
 
 
-	
 }

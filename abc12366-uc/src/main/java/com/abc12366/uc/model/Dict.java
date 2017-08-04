@@ -21,10 +21,12 @@ public class Dict implements Serializable {
     private Date lastUpdate;
     private String lastUser;
     private String sort;
+
     public Dict() {
     }
 
-    public Dict(String id, String dictId, String dictName, String fieldKey, String fieldValue, Boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser,String sort) {
+    public Dict(String id, String dictId, String dictName, String fieldKey, String fieldValue, Boolean status, Date
+            createTime, String createUser, Date lastUpdate, String lastUser, String sort) {
         this.id = id;
         this.dictId = dictId;
         this.dictName = dictName;

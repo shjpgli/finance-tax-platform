@@ -30,9 +30,9 @@ public class TemplateServiceImpl implements TemplateService {
     private TemplateRoMapper templateRoMapper;
 
     @Override
-    public List<TemplateBo> selectList(Map<String,Object> map) {
+    public List<TemplateBo> selectList(Map<String, Object> map) {
         //查询模型列表
-        List<TemplateBo> templateBoList =  templateRoMapper.selectList(map);
+        List<TemplateBo> templateBoList = templateRoMapper.selectList(map);
         return templateBoList;
     }
 

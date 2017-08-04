@@ -5,6 +5,7 @@ import com.abc12366.cms.model.questionnaire.bo.PrizeSetBO;
 
 /**
  * 发奖管理接口类
+ *
  * @author lizhongwei
  * @create 2017-6-17
  * @since 1.0.0

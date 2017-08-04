@@ -52,7 +52,8 @@ public class CollectController {
         List<CollectListBO> collectBOList = collectService.selectList(userId);
         return (collectBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) collectBOList, "total", ((Page) collectBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) collectBOList, "total", ((Page) collectBOList).getTotal
+                        ()));
     }
 
     @GetMapping(path = "/count/collect/{askId}")

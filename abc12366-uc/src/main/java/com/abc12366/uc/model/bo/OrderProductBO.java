@@ -11,7 +11,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class OrderProductBO implements Serializable {
 
-    private String orderId;
+    private String orderNo;
     private String productId;
     private Double sellingPrice;
     private Double unitPrice;
@@ -27,108 +27,100 @@ public class OrderProductBO implements Serializable {
 
     private ProductBO productBO;
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getOrderId() {
-        return this.orderId;
+    public String getProductId() {
+        return this.productId;
     }
 
     public void setProductId(String productId) {
         this.productId = productId;
     }
 
-    public String getProductId() {
-        return this.productId;
+    public Double getSellingPrice() {
+        return this.sellingPrice;
     }
 
     public void setSellingPrice(Double sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 
-    public Double getSellingPrice() {
-        return this.sellingPrice;
+    public Double getUnitPrice() {
+        return this.unitPrice;
     }
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public Double getUnitPrice() {
-        return this.unitPrice;
+    public Integer getNum() {
+        return this.num;
     }
 
     public void setNum(Integer num) {
         this.num = num;
     }
 
-    public Integer getNum() {
-        return this.num;
+    public Double getDiscount() {
+        return this.discount;
     }
 
     public void setDiscount(Double discount) {
         this.discount = discount;
     }
 
-    public Double getDiscount() {
-        return this.discount;
+    public Double getDealPrice() {
+        return this.dealPrice;
     }
 
     public void setDealPrice(Double dealPrice) {
         this.dealPrice = dealPrice;
     }
 
-    public Double getDealPrice() {
-        return this.dealPrice;
+    public String getName() {
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
+    public String getCategoryId() {
+        return this.categoryId;
     }
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 
-    public String getCategoryId() {
-        return this.categoryId;
+    public String getCategory() {
+        return this.category;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
 
-    public String getCategory() {
-        return this.category;
+    public Double getWeight() {
+        return this.weight;
     }
 
     public void setWeight(Double weight) {
         this.weight = weight;
     }
 
-    public Double getWeight() {
-        return this.weight;
+    public java.util.Date getCreateTime() {
+        return this.createTime;
     }
 
     public void setCreateTime(java.util.Date createTime) {
         this.createTime = createTime;
     }
 
-    public java.util.Date getCreateTime() {
-        return this.createTime;
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
     }
 
     public void setLastUpdate(java.util.Date lastUpdate) {
         this.lastUpdate = lastUpdate;
-    }
-
-    public java.util.Date getLastUpdate() {
-        return this.lastUpdate;
     }
 
     public ProductBO getProductBO() {
@@ -137,5 +129,13 @@ public class OrderProductBO implements Serializable {
 
     public void setProductBO(ProductBO productBO) {
         this.productBO = productBO;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 }

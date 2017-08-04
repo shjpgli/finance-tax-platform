@@ -56,7 +56,7 @@ public class MenuController {
     public ResponseEntity selectFirstLevel(@PathVariable String parentId) {
         List<MenuBO> menuBOs = menuService.selectFirstLevel();
         LOGGER.info("{}", menuBOs);
-        return ResponseEntity.ok(Utils.kv("dataList",menuBOs));
+        return ResponseEntity.ok(Utils.kv("dataList", menuBOs));
     }
 
     @GetMapping(path = "/project/{parentId}")
@@ -64,7 +64,7 @@ public class MenuController {
         LOGGER.info("{}", parentId);
         MenuBO menuBO = menuService.selectByParentId(parentId);
         LOGGER.info("{}", menuBO);
-        return ResponseEntity.ok(Utils.kv("data",menuBO));
+        return ResponseEntity.ok(Utils.kv("data", menuBO));
     }
 
     @GetMapping(path = "/{menuId}")
@@ -72,7 +72,7 @@ public class MenuController {
         LOGGER.info("{}", menuId);
         MenuBO menuBO = menuService.selectByMenuId(menuId);
         LOGGER.info("{}", menuBO);
-        return ResponseEntity.ok(Utils.kv("data",menuBO));
+        return ResponseEntity.ok(Utils.kv("data", menuBO));
     }
 
     @PostMapping
@@ -80,7 +80,7 @@ public class MenuController {
         LOGGER.info("{}", mBO);
         MenuBO menuBO = menuService.insert(mBO);
         LOGGER.info("{}", menuBO);
-        return ResponseEntity.ok(Utils.kv("data",menuBO));
+        return ResponseEntity.ok(Utils.kv("data", menuBO));
     }
 
     @DeleteMapping(path = "/{menuId}")
@@ -96,22 +96,24 @@ public class MenuController {
         bo.setMenuId(menuId);
         MenuBO menuBO = menuService.update(bo);
         LOGGER.info("{}", menuBO);
-        return ResponseEntity.ok(Utils.kv("data",menuBO));
+        return ResponseEntity.ok(Utils.kv("data", menuBO));
     }
 
     /**
      * 启用、禁用
+     *
      * @return
      */
     @PutMapping(path = "/enable")
     public ResponseEntity enable(@Valid @RequestBody MenuUpdateBO updateBO) {
-        LOGGER.info("{}",updateBO);
+        LOGGER.info("{}", updateBO);
         menuService.enable(updateBO);
         return ResponseEntity.ok(Utils.kv());
     }
 
     /**
      * 启用、禁用
+     *
      * @return
      */
     @PutMapping(path = "/disableAll")

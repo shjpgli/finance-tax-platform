@@ -9,6 +9,7 @@ import java.util.Date;
  * @since 2.0.0
  */
 public class UserDzsb {
+    boolean status;
     private String id;
     private String userId;
     private String djxh;
@@ -17,14 +18,14 @@ public class UserDzsb {
     private String shxydm;
     private String swjgMc;
     private String swjgDm;
-    boolean status;
     private Date createTime;
     private Date lastUpdate;
 
     public UserDzsb() {
     }
 
-    public UserDzsb(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc, String swjgDm, boolean status, Date createTime, Date lastUpdate) {
+    public UserDzsb(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc,
+                    String swjgDm, boolean status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.userId = userId;
         this.djxh = djxh;

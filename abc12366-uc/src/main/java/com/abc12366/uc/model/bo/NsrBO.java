@@ -19,7 +19,8 @@ public class NsrBO {
     public NsrBO() {
     }
 
-    public NsrBO(String id, String userId, String djxh, String nsrsbh, String shxydm, boolean status, Date createTime, Date lastUpdate) {
+    public NsrBO(String id, String userId, String djxh, String nsrsbh, String shxydm, boolean status, Date
+            createTime, Date lastUpdate) {
         this.id = id;
         this.userId = userId;
         this.djxh = djxh;

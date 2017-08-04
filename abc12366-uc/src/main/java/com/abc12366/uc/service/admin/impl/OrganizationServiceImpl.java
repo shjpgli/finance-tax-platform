@@ -55,14 +55,15 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * 验证部门信息
+     *
      * @param organizationBO
      */
     private void validateOrg(OrganizationBO organizationBO) {
-        if(isOrgName(organizationBO.getName())){
+        if (isOrgName(organizationBO.getName())) {
             LOGGER.warn("已存在该机构名称{}", organizationBO);
             throw new ServiceException(4099);
         }
-        if(isOrgParentId(organizationBO.getParentId())){
+        if (isOrgParentId(organizationBO.getParentId())) {
             LOGGER.warn("该机构已禁用{}", organizationBO);
             throw new ServiceException(4099);
         }
@@ -71,12 +72,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * 验证部门是否被禁用
+     *
      * @param parentId
      * @return
      */
-    public boolean isOrgParentId(String parentId){
+    public boolean isOrgParentId(String parentId) {
         OrganizationBO bo = organizationRoMapper.selectOrganizationById(parentId);
-        if(bo != null && bo.getStatus() == false){
+        if (bo != null && bo.getStatus() == false) {
             return true;
         }
         return false;
@@ -84,16 +86,18 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * 验证部门名称是否存在
+     *
      * @param orgName
      * @return
      */
-    public boolean isOrgName(String orgName){
+    public boolean isOrgName(String orgName) {
         OrganizationBO bo = organizationRoMapper.selectOrganizationByName(orgName);
-        if(bo == null){
+        if (bo == null) {
             return false;
         }
         return true;
     }
+
     @Override
     public OrganizationBO selectOrganizationById(String id) {
         return organizationRoMapper.selectOrganizationById(id);
@@ -112,7 +116,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new ServiceException(4102);
         }
         OrganizationBO bo = new OrganizationBO();
-        BeanUtils.copyProperties(organizationBO,bo);
+        BeanUtils.copyProperties(organizationBO, bo);
         bo.setLastUpdate(date);
         return bo;
     }
@@ -132,7 +136,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         String[] idArray = updateBO.getId().split(",");
         Organization organization = new Organization();
         organization.setLastUpdate(new Date());
-        for(String orgId : idArray){
+        for (String orgId : idArray) {
             organization.setId(orgId);
             Boolean status = updateBO.getStatus();
             organization.setStatus(status);
@@ -143,10 +147,10 @@ public class OrganizationServiceImpl implements OrganizationService {
             }
             //查找子节点
             List<OrganizationBO> boList = organizationRoMapper.selectChildOrg(updateBO.getId());
-            for (OrganizationBO bo:boList){
+            for (OrganizationBO bo : boList) {
                 bo.setStatus(status);
                 Organization org = new Organization();
-                BeanUtils.copyProperties(bo,org);
+                BeanUtils.copyProperties(bo, org);
                 int upd = organizationMapper.update(org);
                 if (upd != 1) {
                     LOGGER.warn("修改子节点状态失败{}", upd);
@@ -170,11 +174,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void disableAll() {
         Organization organization = new Organization();
         List<OrganizationBO> organizationBOs = organizationRoMapper.selectList(organization);
-        for (OrganizationBO temp:organizationBOs){
+        for (OrganizationBO temp : organizationBOs) {
             organization.setId(temp.getId());
             organization.setStatus(false);
             int enable = organizationMapper.update(organization);
-            if(enable != 1){
+            if (enable != 1) {
                 LOGGER.warn("修改失败，id：{}", organization.toString());
                 throw new ServiceException(4102);
             }

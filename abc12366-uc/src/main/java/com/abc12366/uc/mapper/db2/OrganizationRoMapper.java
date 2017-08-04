@@ -7,20 +7,16 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * OrganizationMapper数据库操作接口类
- * 
  **/
 
 public interface OrganizationRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-    OrganizationBO  selectOrganizationById(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    OrganizationBO selectOrganizationById(@Param("id") String id);
 
     List<OrganizationBO> selectList(Organization organization);
 

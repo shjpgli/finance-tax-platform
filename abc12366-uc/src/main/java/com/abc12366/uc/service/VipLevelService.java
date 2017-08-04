@@ -24,4 +24,6 @@ public interface VipLevelService {
     int delete(String id);
 
     void enableOrDisable(String id, String status);
+
+    VipLevelBO selectByLevelCode(String levelCode);
 }

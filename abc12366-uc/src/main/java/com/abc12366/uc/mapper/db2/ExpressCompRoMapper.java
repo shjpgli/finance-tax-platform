@@ -6,20 +6,16 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * ExpressCompMapper数据库操作接口类
- * 
  **/
 
 public interface ExpressCompRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	ExpressComp  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    ExpressComp selectByPrimaryKey(@Param("id") String id);
 
 
     List<ExpressComp> selectList(ExpressComp expressComp);

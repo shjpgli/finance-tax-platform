@@ -3,7 +3,6 @@ package com.abc12366.uc.model.bo;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- *
  * @author liuguiyao
  * @create 2017-05-08 10:08 AM
  * @since 1.0.0

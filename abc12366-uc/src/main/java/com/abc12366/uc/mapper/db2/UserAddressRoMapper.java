@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserAddressRoMapper {
 
 
-    UserAddress  selectByPrimaryKey ( @Param("id") String id );
+    UserAddress selectByPrimaryKey(@Param("id") String id);
 
     List<UserAddress> selectList(String userId);
 

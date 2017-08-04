@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.bo.ExpLogUcBO;
 import com.abc12366.uc.model.bo.ExperienceLogQueryBO;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface ExperienceLogRoMapper {
     List<ExperienceLogQueryBO> selectList(Map map);
 
     ExperienceLogQueryBO selectOne(String id);
+
+    List<ExpLogUcBO> selectListByUser(Map<String, Object> map);
 }

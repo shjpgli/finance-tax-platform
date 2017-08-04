@@ -42,12 +42,13 @@ public class LoginController {
 
     /**
      * 退出
+     *
      * @param token
      * @param request
      * @return
      */
     @PostMapping(value = "/logout/{token}")
-    public ResponseEntity logout(@PathVariable("token") String token,HttpServletRequest request) {
+    public ResponseEntity logout(@PathVariable("token") String token, HttpServletRequest request) {
         LOGGER.info("登出");
         adminService.logout(token);
         return ResponseEntity.ok(Utils.kv());

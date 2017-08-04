@@ -33,20 +33,22 @@ public class NsrBindQueryController {
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}", username, nsrsbh, page, size);
-        if(username!=null&&username.equals("")){
-            username=null;
+        if (username != null && username.equals("")) {
+            username = null;
         }
-        if(nsrsbh!=null&&nsrsbh.equals("")){
-            nsrsbh=null;
+        if (nsrsbh != null && nsrsbh.equals("")) {
+            nsrsbh = null;
         }
         NsrBindQueryParamBO nsrBindQueryParamBO = new NsrBindQueryParamBO(username, nsrsbh);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<NsrBindQueryBO> nsrBindQueryBOList = nsrBindQueryService.selectList(nsrBindQueryParamBO);
         return (nsrBindQueryBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page) nsrBindQueryBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page)
+                        nsrBindQueryBOList).getTotal()));
 
     }
+
     @GetMapping(path = "/dzsb/{id}")
     public ResponseEntity selectDzsb(@PathVariable String id) {
         LOGGER.info("{}", id);

@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface WxPersonRoMapper {
 
-	long countPersonNum(WxPerson wxPerson);
+    long countPersonNum(WxPerson wxPerson);
 
-	List<WxPerson> selectList(WxPerson person);
+    List<WxPerson> selectList(WxPerson person);
 
-	WxPerson selectOne(String openid);
+    WxPerson selectOne(String openid);
 
 }

@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  * 投票附加信息
- *
+ * <p>
  * Created by lijun on 6/27/17.
  */
 public class VoteAddition {

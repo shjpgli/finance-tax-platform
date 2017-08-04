@@ -16,6 +16,7 @@ public interface ProductRepoService {
 
     /**
      * 查询库存列表信息
+     *
      * @param productRepoBO
      * @return
      */
@@ -23,6 +24,7 @@ public interface ProductRepoService {
 
     /**
      * 查询库存信息
+     *
      * @param id
      * @return
      */
@@ -30,6 +32,7 @@ public interface ProductRepoService {
 
     /**
      * 库存入库
+     *
      * @param productRepoBO
      * @return
      */
@@ -37,6 +40,7 @@ public interface ProductRepoService {
 
     /**
      * 库存出库
+     *
      * @param productRepoBO
      * @return
      */

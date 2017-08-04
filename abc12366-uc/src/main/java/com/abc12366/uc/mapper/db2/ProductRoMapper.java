@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.Product;
+import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
 import org.apache.ibatis.annotations.Param;
@@ -8,20 +9,18 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * ProductMapper数据库查询操作接口类
- * 
  **/
 
 public interface ProductRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
+    /**
+     * 查询（根据主键ID查询）
+     **/
     List<Product> selectById(@Param("id") String id);
+
+    ProductBO selectBOById(@Param("id") String id);
 
 
     List<Product> selectList(Product product);
@@ -32,9 +31,11 @@ public interface ProductRoMapper {
 
     Product selectProduct(Product product);
 
-    List<Product> selectByGoodsId(@Param("goodsId")String goodsId);
+    List<Product> selectByGoodsId(@Param("goodsId") String goodsId);
 
     List<ProductBO> selectBOListByGoodsId(String goodsId);
 
     List<GoodsBO> selectBOList(ProductBO productBO);
+
+    List<DictBO> selectSpecByGoodsId(ProductBO product);
 }

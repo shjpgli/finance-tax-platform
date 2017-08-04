@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db1.KnowledgeTagMapper">
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, name, description, status, createTime, updateTime, createUser, updateUser
+    </sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="knowledgeTag" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bb_knowledge_tag
+        WHERE id = #{id}
+    </select>
+    <!-- 查询列表 -->
+    <select id="selectList" resultType="knowledgeTag" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bb_knowledge_tag
+        <if test="keywords != null">
+            WHERE name LIKE CONCAT('%',#{keywords},'%')
+        </if>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM bb_knowledge_tag
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 添加 -->
+    <insert id="insert" parameterType="knowledgeTag">
+        INSERT INTO bb_knowledge_tag
+        (id,name,description,status,createTime,updateTime,createUser,updateUser)
+        VALUES
+        (#{id},#{name},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
+    </insert>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="insertSelective" parameterType="knowledgeTag">
+        INSERT INTO bb_knowledge_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="createUser != null">
+                createUser,
+            </if>
+            <if test="updateUser != null">
+                updateUser,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="name!=null">
+                #{name},
+            </if>
+            <if test="description!=null">
+                #{description},
+            </if>
+            <if test="status!=null">
+                #{status},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="updateTime!=null">
+                #{updateTime},
+            </if>
+            <if test="createUser!=null">
+                #{createUser},
+            </if>
+            <if test="updateUser!=null">
+                #{updateUser},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateByPrimaryKeySelective" parameterType="knowledgeTag">
+        UPDATE bb_knowledge_tag
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                updateUser = #{updateUser},
+            </if>
+
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 修 改-->
+    <update id="updateByPrimaryKey" parameterType="knowledgeTag">
+        UPDATE bb_knowledge_tag
+        SET
+        name = #{name},
+        description = #{description},
+        status = #{status},
+        updateTime = #{updateTime},
+        updateUser = #{updateUser}
+        WHERE id = #{id}
+    </update>
+
+
+</mapper>

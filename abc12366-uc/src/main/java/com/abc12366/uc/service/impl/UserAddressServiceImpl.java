@@ -43,7 +43,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     public UserAddressBO selectOne(UserAddress userAddress) {
         UserAddress address = userAddressRoMapper.selectOne(userAddress);
         UserAddressBO bo = new UserAddressBO();
-        BeanUtils.copyProperties(address,bo);
+        BeanUtils.copyProperties(address, bo);
         return bo;
     }
 
@@ -51,16 +51,16 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     public UserAddressBO updateUserAddress(UserAddressBO userAddressBO) {
         UserAddress userAddress = new UserAddress();
-        BeanUtils.copyProperties(userAddressBO,userAddress);
+        BeanUtils.copyProperties(userAddressBO, userAddress);
         Date date = new Date();
         userAddress.setLastUpdate(date);
         int update = userAddressMapper.update(userAddress);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.info("修改失败{}", userAddress);
             throw new ServiceException(4102);
         }
         UserAddressBO bo = new UserAddressBO();
-        BeanUtils.copyProperties(userAddress,bo);
+        BeanUtils.copyProperties(userAddress, bo);
         return bo;
     }
 
@@ -68,7 +68,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     public int deleteByIdAndUserId(UserAddressBO userAddressBO) {
         UserAddress userAddress = new UserAddress();
-        BeanUtils.copyProperties(userAddressBO,userAddress);
+        BeanUtils.copyProperties(userAddressBO, userAddress);
         return userAddressMapper.deleteByIdAndUserId(userAddress);
     }
 
@@ -76,18 +76,18 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     public UserAddressBO addUserAddress(UserAddressBO userAddressBO) {
         UserAddress userAddress = new UserAddress();
-        BeanUtils.copyProperties(userAddressBO,userAddress);
+        BeanUtils.copyProperties(userAddressBO, userAddress);
         userAddress.setId(Utils.uuid());
         Date date = new Date();
         userAddress.setCreateTime(date);
         userAddress.setLastUpdate(date);
         int insert = userAddressMapper.insert(userAddress);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.info("新增失败{}", userAddress);
             throw new ServiceException(4101);
         }
         UserAddressBO bo = new UserAddressBO();
-        BeanUtils.copyProperties(userAddress,bo);
+        BeanUtils.copyProperties(userAddress, bo);
         return bo;
     }
 
@@ -98,16 +98,16 @@ public class UserAddressServiceImpl implements UserAddressService {
         userAddress.setUserId(userAddressBO.getUserId());
         userAddress.setIsDefault(userAddressBO.getIsDefault());
         int update = userAddressMapper.update(userAddress);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.info("修改失败{}", userAddress);
             throw new ServiceException(4102);
         }
 
         List<UserAddress> list = userAddressRoMapper.selectByUserId(userAddress);
-        for (UserAddress address:list){
+        for (UserAddress address : list) {
             address.setIsDefault(false);
             int upd = userAddressMapper.update(address);
-            if(upd != 1){
+            if (upd != 1) {
                 LOGGER.info("修改失败!!!!{}", address);
                 throw new ServiceException(4102);
             }

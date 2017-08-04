@@ -71,7 +71,7 @@ public class AdPageServiceImpl implements AdPageService {
             LOGGER.error("查询单个广告图片管理异常：{}", e);
             throw new ServiceException(4234);
         }
-        return  adPage;
+        return adPage;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class AdPageServiceImpl implements AdPageService {
             LOGGER.error("查询单个广告管理异常：{}", e);
             throw new ServiceException(4234);
         }
-        return  adPage;
+        return adPage;
     }
 
     @Transactional("db1TxManager")
@@ -93,8 +93,8 @@ public class AdPageServiceImpl implements AdPageService {
         Timestamp now = new Timestamp(new Date().getTime());
         adPage.setLastUpdate(now);
         int update = adPageMapper.update(adPage);
-        if(update != 1){
-            if (update != 1){
+        if (update != 1) {
+            if (update != 1) {
                 LOGGER.info("{修改广告图片失败}", update);
                 throw new ServiceException(4421);
             }

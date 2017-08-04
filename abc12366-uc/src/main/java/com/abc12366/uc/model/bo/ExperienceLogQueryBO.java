@@ -22,7 +22,8 @@ public class ExperienceLogQueryBO {
     public ExperienceLogQueryBO() {
     }
 
-    public ExperienceLogQueryBO(String id, String userId, String ruleId, String name, String code, String type, int income, int outgo, int usableExp, Date createTime) {
+    public ExperienceLogQueryBO(String id, String userId, String ruleId, String name, String code, String type, int
+            income, int outgo, int usableExp, Date createTime) {
         this.id = id;
         this.userId = userId;
         this.ruleId = ruleId;

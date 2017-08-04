@@ -43,7 +43,8 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     }
 
     @Override
-    public UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
+    public UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
+            ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
         UserExtend userExtend = userExtendRoMapper.selectOne(userId);
         if (userExtend == null) {

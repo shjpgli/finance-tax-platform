@@ -7,28 +7,32 @@ import java.io.Serializable;
 
 
 /**
- * 
  * 系统用户表
- * 
  **/
 @SuppressWarnings("serial")
 public class UserPasswordBO extends AdminExtendBO implements Serializable {
 
-	/**ID**/
-	private String id;
+    /**
+     * ID
+     **/
+    private String id;
 
-	/**用户名**/
-	private String username;
+    /**
+     * 用户名
+     **/
+    private String username;
 
-    /**密码**/
+    /**
+     * 密码
+     **/
     @NotEmpty
     @Size(min = 8, max = 32)
     private String password;
 
     @NotEmpty
     @Size(min = 8, max = 32)
-	/**新密码**/
-	private String newPassword;
+    /**新密码**/
+    private String newPassword;
 
 
     public String getId() {

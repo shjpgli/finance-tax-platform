@@ -32,10 +32,6 @@ import java.util.HashMap;
 public class SmsServiceImpl implements SmsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsServiceImpl.class);
-
-    @Autowired
-    private RestTemplate restTemplate;
-
     private static Properties properties = new Properties("application.properties");
     private static String appKey;
     private static String appSecret;
@@ -53,6 +49,9 @@ public class SmsServiceImpl implements SmsService {
             e.printStackTrace();
         }
     }
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public ResponseEntity sendCode(SendCodeParam sendCodeParam) throws IOException {

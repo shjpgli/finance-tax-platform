@@ -10,86 +10,69 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * CommentMapper数据库操作接口类
- * 
  **/
 
 public interface CommentRoMapper {
 
 
-	/**
-	 * 
-	 * 查询(根据主键ID查询)
-	 * 
-	 **/
-	Comment selectByPrimaryKey(@Param("commentId") String commentId);
+    /**
+     * 查询(根据主键ID查询)
+     **/
+    Comment selectByPrimaryKey(@Param("commentId") String commentId);
 
-	/**
-	 *
-	 * 查询(根据查询条件查询)
-	 *
-	 **/
-	List<CommentListBo> selectList(Map<String,Object> map);
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    List<CommentListBo> selectList(Map<String, Object> map);
 
-	/**
-	 *
-	 * 查询(根据contentId查询)
-	 *
-	 **/
-	List<CommentBo> selectBycontentId(@Param("contentId") String contentId);
+    /**
+     * 查询(根据contentId查询)
+     **/
+    List<CommentBo> selectBycontentId(@Param("contentId") String contentId);
 
-	/**
-	 *
-	 * 查询(统计所有)
-	 *
-	 **/
-	Long selectall();
-	/**
-	 *
-	 * 查询(按天统计)
-	 *
-	 **/
-	Long selectday();
+    /**
+     * 查询(统计所有)
+     **/
+    Long selectall();
 
-	List<CommentTjBo> selectByday();
+    /**
+     * 查询(按天统计)
+     **/
+    Long selectday();
 
-	List<CommentTjBo> selectByday0();
+    List<CommentTjBo> selectByday();
 
-	List<CommentTjBo> selectByday1();
+    List<CommentTjBo> selectByday0();
 
-	/**
-	 *
-	 * 查询(按天统计)
-	 *
-	 **/
-	Long selectweek();
+    List<CommentTjBo> selectByday1();
 
-	/**
-	 *
-	 * 查询(按月统计)
-	 *
-	 **/
-	Long selectmonth();
+    /**
+     * 查询(按天统计)
+     **/
+    Long selectweek();
 
-	List<CommentTjBo> selectBymonth();
+    /**
+     * 查询(按月统计)
+     **/
+    Long selectmonth();
 
-	List<CommentTjBo> selectBymonth0();
+    List<CommentTjBo> selectBymonth();
 
-	List<CommentTjBo> selectBymonth1();
+    List<CommentTjBo> selectBymonth0();
 
-	/**
-	 *
-	 * 查询(按年统计)
-	 *
-	 **/
-	Long selectyear();
+    List<CommentTjBo> selectBymonth1();
 
-	List<CommentTjBo> selectByyear();
+    /**
+     * 查询(按年统计)
+     **/
+    Long selectyear();
 
-	List<CommentTjBo> selectByyear0();
+    List<CommentTjBo> selectByyear();
 
-	List<CommentTjBo> selectByyear1();
+    List<CommentTjBo> selectByyear0();
+
+    List<CommentTjBo> selectByyear1();
 
 
 }

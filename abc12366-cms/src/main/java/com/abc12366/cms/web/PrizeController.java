@@ -31,6 +31,7 @@ public class PrizeController {
 
     /**
      * 查询奖品详情
+     *
      * @param questionId
      * @return
      */
@@ -44,6 +45,7 @@ public class PrizeController {
 
     /**
      * 奖品新增
+     *
      * @return
      */
     @PostMapping
@@ -56,12 +58,14 @@ public class PrizeController {
 
     /**
      * 奖品修改
+     *
      * @param prizeSetBO
      * @param questionId
      * @return
      */
     @PutMapping(path = "/{questionId}")
-    public ResponseEntity update(@Valid @RequestBody PrizeSetBO prizeSetBO, @PathVariable("questionId") String questionId) {
+    public ResponseEntity update(@Valid @RequestBody PrizeSetBO prizeSetBO, @PathVariable("questionId") String
+            questionId) {
         LOGGER.info("{}", prizeSetBO);
         prizeSetBO.setQuestionId(questionId);
         PrizeSetBO bo = prizeSetService.update(prizeSetBO);

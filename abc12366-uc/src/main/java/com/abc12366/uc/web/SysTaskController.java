@@ -61,7 +61,8 @@ public class SysTaskController {
     public ResponseEntity selectDeployedList(@RequestParam(required = false) String name,
                                              @RequestParam(required = false) String type,
                                              @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
-                                             @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+                                             @RequestParam(required = false, defaultValue = Constant.pageSize) int
+                                                         size) {
         LOGGER.info("{}:{}:{}:{}", name, type, page, size);
         Map<String, String> map = new HashMap<>();
         if (name != null && StringUtils.isEmpty(name)) {
@@ -96,7 +97,8 @@ public class SysTaskController {
     }
 
     @PutMapping(path = "/task/{id}")
-    public ResponseEntity update(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String
+            id) {
         LOGGER.info("{}:{}", sysTaskUpdateBO, id);
         SysTaskBO sysTaskBO = sysTaskService.update(sysTaskUpdateBO, id);
         LOGGER.info("{}", sysTaskBO);

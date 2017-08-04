@@ -10,6 +10,7 @@ public interface TradeLogService {
 
     /**
      * 查询交易日志列表信息
+     *
      * @param tradeLog
      * @return
      */

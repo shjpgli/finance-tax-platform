@@ -61,21 +61,24 @@ public class AuthController extends BaseController {
     }*/
 
     @PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws IOException {
+    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws
+            IOException {
         LOGGER.info("{}", registerBO);
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         //进行手机验证码验证
-        /*ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(), request);
+        /*ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(),
+        request);
         if (response == null) {
             throw new ServiceException(4201);
         }
         if(!response.hasBody()){
             throw new ServiceException(4201);
         }
-        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
+        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(),
+        VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
             throw new ServiceException(4201);
         }*/
@@ -106,7 +109,8 @@ public class AuthController extends BaseController {
     用户通过手机验证码进行登录
      */
     @PostMapping(path = "/verifylogin")
-    public ResponseEntity loginByVerifyingCode(@Valid @RequestBody LoginVerifyingCodeBO loginBO, HttpServletRequest request) throws Exception {
+    public ResponseEntity loginByVerifyingCode(@Valid @RequestBody LoginVerifyingCodeBO loginBO, HttpServletRequest
+            request) throws Exception {
         LOGGER.info("{}", loginBO);
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
@@ -117,7 +121,8 @@ public class AuthController extends BaseController {
         if (response == null) {
             return ResponseEntity.ok(Utils.kv("data", null));
         }
-        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
+        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(),
+        VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
             return ResponseEntity.ok(Utils.kv("data", null));
         }*/

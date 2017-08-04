@@ -1,8 +1,8 @@
 package com.abc12366.uc.model.bo;
 
 import javax.validation.constraints.Size;
+
 /**
- *
  * @author liuguiyao<435720953@qq.com.com>
  * @create 2017-05-16 10:18 PM
  * @since 2.0.0

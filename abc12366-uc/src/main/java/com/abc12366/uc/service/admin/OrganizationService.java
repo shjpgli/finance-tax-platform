@@ -13,8 +13,9 @@ public interface OrganizationService {
 
     /**
      * 查询组织列表
-     * @return
+     *
      * @param organization
+     * @return
      */
     List<OrganizationBO> selectList(Organization organization);
 

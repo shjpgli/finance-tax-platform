@@ -28,7 +28,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/comment",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/comment", headers = Constant.VERSION_HEAD + "=1")
 public class CommentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
 
@@ -140,8 +140,6 @@ public class CommentController {
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
-
-
 
 
 }

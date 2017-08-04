@@ -33,10 +33,10 @@
             </if>
 
             <if test="uri != null">
-              and uri = #{uri}
+                and uri = #{uri}
             </if>
             <if test="ip != null">
-              and ip = #{ip}
+                and ip = #{ip}
             </if>
         </where>
     </select>

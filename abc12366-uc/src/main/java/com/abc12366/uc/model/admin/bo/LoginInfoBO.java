@@ -39,44 +39,44 @@ public class LoginInfoBO implements Serializable {
 
     private Admin admin;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
         return this.userId;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getAppId() {
         return this.appId;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getToken() {
         return this.token;
     }
 
-    public void setLastResetTokenTime(java.util.Date lastResetTokenTime) {
-        this.lastResetTokenTime = lastResetTokenTime;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public java.util.Date getLastResetTokenTime() {
         return this.lastResetTokenTime;
+    }
+
+    public void setLastResetTokenTime(java.util.Date lastResetTokenTime) {
+        this.lastResetTokenTime = lastResetTokenTime;
     }
 
     public Admin getAdmin() {

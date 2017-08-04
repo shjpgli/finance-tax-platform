@@ -7,23 +7,19 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * InvoiceBackMapper数据库操作接口类
- * 
  **/
 
 public interface InvoiceBackRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	InvoiceBack  selectById(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    InvoiceBack selectById(@Param("id") String id);
 
 
-	List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO);
+    List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO);
 
-	InvoiceBackBO selectBackOne(String id);
+    InvoiceBackBO selectBackOne(String id);
 }

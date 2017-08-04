@@ -7,8 +7,14 @@ import java.util.List;
 
 public interface WxMsgRoMapper {
 
-	List<News> getNews(News news);
+    List<News> getNews(News news);
 
-	ReturnMsg getReMsgOneBysetting(String setting);
+    ReturnMsg getReMsgOneBysetting(String setting);
+
+    List<ReturnMsg> selectList(ReturnMsg returnMsg);
+
+    ReturnMsg selectOneWxremsg(String id);
+
+    News selectOne(String id);
 
 }

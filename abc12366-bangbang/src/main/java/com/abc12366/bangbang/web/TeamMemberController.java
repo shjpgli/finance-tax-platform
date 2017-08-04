@@ -33,18 +33,19 @@ public class TeamMemberController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}", page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<TeamMemberBO> teamMemberBOList = teamMemberService.selectList();
         LOGGER.info("{}", teamMemberBOList);
         return (teamMemberBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) teamMemberBOList, "total", ((Page) teamMemberBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) teamMemberBOList, "total", ((Page) teamMemberBOList)
+                        .getTotal()));
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody TeamMemberInsertBO teamMemberInsertBO){
+    public ResponseEntity insert(@Valid @RequestBody TeamMemberInsertBO teamMemberInsertBO) {
         LOGGER.info("{}", teamMemberInsertBO);
         TeamMemberBO teamMemberBO = teamMemberService.insert(teamMemberInsertBO);
         LOGGER.info("{}", teamMemberBO);
@@ -52,20 +53,23 @@ public class TeamMemberController {
     }
 
     @DeleteMapping(path = "/{teamId}/{userId}")
-    public ResponseEntity delete(@PathVariable String teamId, @PathVariable String userId){
+    public ResponseEntity delete(@PathVariable String teamId, @PathVariable String userId) {
         LOGGER.info("{}:{}", teamId, userId);
         teamMemberService.delete(teamId, userId);
         return ResponseEntity.ok(Utils.kv());
     }
+
     @PutMapping(path = "/{teamId}/{userId}")
-    public ResponseEntity update(@Valid @RequestBody TeamMemberUpdateBO teamMemberUpdateBO, @PathVariable String teamId, @PathVariable String userId){
+    public ResponseEntity update(@Valid @RequestBody TeamMemberUpdateBO teamMemberUpdateBO, @PathVariable String
+            teamId, @PathVariable String userId) {
         LOGGER.info("{}:{}", teamMemberUpdateBO, teamId, userId);
         TeamMemberBO teamMemberBO = teamMemberService.update(teamMemberUpdateBO, teamId, userId);
         LOGGER.info("{}", teamMemberBO);
         return ResponseEntity.ok(Utils.kv("data", teamMemberBO));
     }
+
     @GetMapping(path = "/{teamId}/{userId}")
-    public ResponseEntity selectOne(@PathVariable String teamId, @PathVariable String userId){
+    public ResponseEntity selectOne(@PathVariable String teamId, @PathVariable String userId) {
         LOGGER.info("{}:{}", teamId, userId);
         TeamMemberBO teamMemberBO = teamMemberService.selectOne(teamId, userId);
         LOGGER.info("{}", teamMemberBO);

@@ -49,8 +49,8 @@ public class NoticeController {
 
     @GetMapping("/notices")
     public ResponseEntity selectListForqt(@RequestParam(value = "title", required = false) String title,
-                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                          @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{},{},{}", title, page, size);
 
         NoticeBO notice = new NoticeBO();

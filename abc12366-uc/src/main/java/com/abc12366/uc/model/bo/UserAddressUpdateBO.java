@@ -11,29 +11,28 @@ public class UserAddressUpdateBO implements Serializable {
 
     private Boolean isDefault;
 
-    public void setId(String id){
-        this.id = id;
-    }
-
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
-    public void setUserId(String userId){
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUserId(){
+    public String getUserId() {
         return this.userId;
     }
 
-
-    public void setIsDefault(Boolean isDefault){
-        this.isDefault = isDefault;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public Boolean getIsDefault(){
+    public Boolean getIsDefault() {
         return this.isDefault;
+    }
+
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
     }
 
 }

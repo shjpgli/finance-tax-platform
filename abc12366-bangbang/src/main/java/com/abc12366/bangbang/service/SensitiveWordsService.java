@@ -14,6 +14,7 @@ public interface SensitiveWordsService {
 
     /**
      * 查询敏感词列表信息
+     *
      * @param sensitiveWords
      * @return
      */
@@ -21,6 +22,7 @@ public interface SensitiveWordsService {
 
     /**
      * 查询敏感词信息
+     *
      * @param id
      * @return
      */
@@ -29,6 +31,7 @@ public interface SensitiveWordsService {
 
     /**
      * 修改购物车
+     *
      * @param sensitiveWords
      * @return
      */
@@ -37,6 +40,7 @@ public interface SensitiveWordsService {
 
     /**
      * 新增敏感词
+     *
      * @param sensitiveWords
      * @return
      */
@@ -45,6 +49,7 @@ public interface SensitiveWordsService {
 
     /**
      * 删除敏感词
+     *
      * @param sensitiveWords
      */
     void delete(SensitiveWords sensitiveWords);

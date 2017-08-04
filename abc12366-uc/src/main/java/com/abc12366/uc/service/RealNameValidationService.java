@@ -16,6 +16,7 @@ import java.util.Map;
 public interface RealNameValidationService {
     List<UserExtendListBO> selectList(Map map);
 
-    UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws ParseException;
+    UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
+            ParseException;
 
 }

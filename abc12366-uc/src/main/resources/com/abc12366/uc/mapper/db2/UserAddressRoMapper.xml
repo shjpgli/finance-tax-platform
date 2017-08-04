@@ -5,13 +5,13 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	userId,	name,	province,	city,	area,	detail,	phone,	isDefault,	status,	createTime,	lastUpdate
+        id, userId, name, province, city, area, detail, phone, isDefault, status, createTime, lastUpdate
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_user_address
         WHERE id = #{id}
     </select>
@@ -19,21 +19,23 @@
     <!-- 根据UserId查询 -->
     <select id="selectList" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_user_address
         WHERE userId = #{userId}
     </select>
 
-    <select id="selectOne" resultType="com.abc12366.uc.model.UserAddress" parameterType="com.abc12366.uc.model.UserAddress">
+    <select id="selectOne" resultType="com.abc12366.uc.model.UserAddress"
+            parameterType="com.abc12366.uc.model.UserAddress">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_user_address
         WHERE id = #{id} and userId = #{userId}
     </select>
 
-    <select id="selectByUserId" resultType="com.abc12366.uc.model.UserAddress" parameterType="com.abc12366.uc.model.UserAddress">
+    <select id="selectByUserId" resultType="com.abc12366.uc.model.UserAddress"
+            parameterType="com.abc12366.uc.model.UserAddress">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_user_address
         WHERE id != #{id} and userId = #{userId}
     </select>

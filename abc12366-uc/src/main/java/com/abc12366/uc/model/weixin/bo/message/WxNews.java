@@ -6,38 +6,36 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
-
 /**
  * 图文消息
- * @author zhushuai 2017-8-1
  *
+ * @author zhushuai 2017-8-1
  */
-public class WxNews extends BaseWxRespon{
+public class WxNews extends BaseWxRespon {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@NotNull 
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    @NotNull
     private List<WxArticle> articles;
-    
-    private  String media_id;
 
-	public List<WxArticle> getArticles() {
-		return articles;
-	}
+    private String media_id;
 
-	public void setArticles(List<WxArticle> articles) {
-		this.articles = articles;
-	}
+    public List<WxArticle> getArticles() {
+        return articles;
+    }
 
-	public String getMedia_id() {
-		return media_id;
-	}
+    public void setArticles(List<WxArticle> articles) {
+        this.articles = articles;
+    }
 
-	public void setMedia_id(String media_id) {
-		this.media_id = media_id;
-	}
-    
-	
-    
+    public String getMedia_id() {
+        return media_id;
+    }
+
+    public void setMedia_id(String media_id) {
+        this.media_id = media_id;
+    }
+
+
 }

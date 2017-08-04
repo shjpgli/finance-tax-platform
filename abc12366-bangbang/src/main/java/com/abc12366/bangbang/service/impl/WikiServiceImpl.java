@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
  * @author lizhongwei
  * @create 2017-06-19
  * @since 1.0.0
@@ -51,40 +50,40 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public WikiBO update(WikiBO wikiBO) {
         Wiki wiki = new Wiki();
-        BeanUtils.copyProperties(wikiBO,wiki);
+        BeanUtils.copyProperties(wikiBO, wiki);
         wiki.setLastUpdate(new Date());
         int upd = wikiMapper.update(wiki);
-        if(upd != 1){
+        if (upd != 1) {
             LOGGER.info("维基百科数据，修改失败", wikiBO);
             throw new ServiceException(4502);
         }
         WikiBO bo = new WikiBO();
-        BeanUtils.copyProperties(wiki,bo);
+        BeanUtils.copyProperties(wiki, bo);
         return bo;
     }
 
     @Override
     public WikiBO addWiki(WikiBO wikiBO) {
         Wiki wiki = new Wiki();
-        BeanUtils.copyProperties(wikiBO,wiki);
+        BeanUtils.copyProperties(wikiBO, wiki);
         wiki.setId(Utils.uuid());
         Date date = new Date();
         wiki.setLastUpdate(date);
         wiki.setCreateTime(date);
         int insert = wikiMapper.insert(wiki);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.info("维基百科数据，新增失败", wikiBO);
             throw new ServiceException(4501);
         }
         WikiBO bo = new WikiBO();
-        BeanUtils.copyProperties(wiki,bo);
+        BeanUtils.copyProperties(wiki, bo);
         return bo;
     }
 
     @Override
     public void deleteWiki(WikiBO wikiBO) {
         int del = wikiMapper.deleteByPrimaryKey(wikiBO.getId());
-        if(del != 1){
+        if (del != 1) {
             LOGGER.info("维基百科数据，删除失败", wikiBO);
             throw new ServiceException(4503);
         }
@@ -93,17 +92,17 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public WikiAccesslogBO addWikiLog(WikiAccesslogBO accesslogBO) {
         WikiAccesslog accesslog = new WikiAccesslog();
-        BeanUtils.copyProperties(accesslogBO,accesslog);
+        BeanUtils.copyProperties(accesslogBO, accesslog);
         accesslog.setId(Utils.uuid());
         Date date = new Date();
         accesslog.setCreateTime(date);
         int insert = wikiAccesslogMapper.insert(accesslog);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.info("维基百科日志数据，新增失败", accesslogBO);
             throw new ServiceException(4504);
         }
         WikiAccesslogBO bo = new WikiAccesslogBO();
-        BeanUtils.copyProperties(accesslog,bo);
+        BeanUtils.copyProperties(accesslog, bo);
         return bo;
     }
 }

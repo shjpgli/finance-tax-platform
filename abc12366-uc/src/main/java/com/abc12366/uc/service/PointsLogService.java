@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.PointsLogBO;
+import com.abc12366.uc.model.bo.PointsLogUcBO;
 
 import java.util.List;
 import java.util.Map;
@@ -14,4 +15,6 @@ public interface PointsLogService {
     List<PointsLogBO> selectList(Map map);
 
     PointsLogBO insert(PointsLogBO pointsLogBO);
+
+    List<PointsLogUcBO> selectListByUser(Map<String, Object> map);
 }

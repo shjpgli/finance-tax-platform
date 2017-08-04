@@ -40,18 +40,18 @@ public class ExpressCompServiceImpl implements ExpressCompService {
     @Override
     public ExpressCompBO add(ExpressCompBO expressCompBO) {
         ExpressComp expressComp = new ExpressComp();
-        BeanUtils.copyProperties(expressCompBO,expressComp);
+        BeanUtils.copyProperties(expressCompBO, expressComp);
         expressComp.setId(Utils.uuid());
         Date date = new Date();
         expressComp.setCreateTime(date);
         expressComp.setLastUpdate(date);
         int insert = expressCompMapper.insert(expressComp);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.info("{新增物流公司失败}", expressComp);
             throw new ServiceException(4101);
         }
         ExpressCompBO bo = new ExpressCompBO();
-        BeanUtils.copyProperties(expressComp,bo);
+        BeanUtils.copyProperties(expressComp, bo);
         return bo;
     }
 
@@ -59,16 +59,16 @@ public class ExpressCompServiceImpl implements ExpressCompService {
     @Override
     public ExpressCompBO update(ExpressCompBO expressCompBO) {
         ExpressComp expressComp = new ExpressComp();
-        BeanUtils.copyProperties(expressCompBO,expressComp);
+        BeanUtils.copyProperties(expressCompBO, expressComp);
         Date date = new Date();
         expressComp.setLastUpdate(date);
         int update = expressCompMapper.update(expressComp);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.info("{修改物流公司失败}", expressComp);
             throw new ServiceException(4102);
         }
         ExpressCompBO bo = new ExpressCompBO();
-        BeanUtils.copyProperties(expressComp,bo);
+        BeanUtils.copyProperties(expressComp, bo);
         return bo;
     }
 
@@ -81,7 +81,7 @@ public class ExpressCompServiceImpl implements ExpressCompService {
     @Override
     public void delete(String id) {
         int del = expressCompMapper.deleteByPrimaryKey(id);
-        if(del != 1){
+        if (del != 1) {
             LOGGER.info("{删除物流公司失败}", del);
             throw new ServiceException(4103);
         }

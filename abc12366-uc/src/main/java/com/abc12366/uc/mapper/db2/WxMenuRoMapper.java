@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface WxMenuRoMapper {
 
-	List<Button> seletSec(String parentId);
+    List<Button> seletSec(String parentId);
 
-	List<Button> seletFisrt();
+    List<Button> seletFisrt();
 
-	Button selectOne(String id);
+    Button selectOne(String id);
 
 }

@@ -33,13 +33,14 @@ public class TagStatisticsController {
 
     @GetMapping()
     public ResponseEntity selectStatistics(@RequestParam(required = false) String tagName,
-                                            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}", page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<TagStatisticsBO> tagStatisticsBOList =  tagStatisticsService.selectStatistics(tagName);
+        List<TagStatisticsBO> tagStatisticsBOList = tagStatisticsService.selectStatistics(tagName);
         return (tagStatisticsBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) tagStatisticsBOList, "total", ((Page) tagStatisticsBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) tagStatisticsBOList, "total", ((Page)
+                        tagStatisticsBOList).getTotal()));
     }
 }

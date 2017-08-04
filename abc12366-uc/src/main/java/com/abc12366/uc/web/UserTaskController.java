@@ -47,7 +47,8 @@ public class UserTaskController {
     }
 
     @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity update(@RequestBody UserTaskUpdateBO userTaskUpdateBO, @PathVariable String userId, @PathVariable String id) {
+    public ResponseEntity update(@RequestBody UserTaskUpdateBO userTaskUpdateBO, @PathVariable String userId,
+                                 @PathVariable String id) {
         LOGGER.info("{}:{}:{}", userTaskUpdateBO, userId, id);
         UserTaskBO userTaskBO = userTaskService.update(userTaskUpdateBO, userId, id);
         LOGGER.info("{}", userTaskBO);

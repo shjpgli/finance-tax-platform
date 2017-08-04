@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate,stock
+        id, goodsId, marketPrice, sellingPrice, costPrice, createTime, lastUpdate,stock
     </sql>
 
     <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
@@ -36,10 +36,39 @@
         <result column="sort" property="sort" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="selectSpecByGoodsId" parameterType="com.abc12366.uc.model.bo.ProductBO" resultMap="oneDictBO">
+        SELECT
+        d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate,
+        d.lastUser,d.sort
+        FROM
+        (
+        SELECT
+        specId,
+        COUNT(specId) counts
+        FROM
+        (
+        SELECT
+        id
+        FROM
+        uc_product
+        WHERE
+        goodsId = #{goodsId}
+        ) a
+        LEFT JOIN uc_product_spec b ON a.id = b.productId
+        GROUP BY
+        specid
+        ) c
+        LEFT JOIN uc_view_sys_dict d ON c.specId = d.id
+        WHERE
+        <![CDATA[
+                 c.counts > 0
+                ]]>
+    </select>
 
     <select id="getDictBO" parameterType="java.lang.String" resultMap="oneDictBO">
         SELECT
-        d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate, d.lastUser,d.sort
+        d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate,
+        d.lastUser,d.sort
         FROM uc_view_sys_dict d
         LEFT JOIN uc_product_spec s ON s.specId = d.id
         WHERE s.productId = #{productId}
@@ -93,12 +122,13 @@
     <!-- 查询条件根据） -->
     <select id="selectBOList" resultMap="productResultMap" parameterType="com.abc12366.uc.model.bo.ProductBO">
         SELECT
-        p.id,	p.goodsId,	p.marketPrice,	p.sellingPrice,	p.costPrice,	p.createTime,	p.lastUpdate,p.stock,g.name as goodsName
+        p.id, p.goodsId, p.marketPrice, p.sellingPrice, p.costPrice, p.createTime, p.lastUpdate,p.stock,g.name as
+        goodsName
         FROM uc_product p
         LEFT JOIN uc_goods g ON g.id = p.goodsId
         <where>
             1=1
-            <if test="goodsName != null  and goodsName!=''"> AND g.name LIKE CONCAT('%',#{goodsName},'%')</if>
+            <if test="goodsName != null  and goodsName!=''">AND g.name LIKE CONCAT('%',#{goodsName},'%')</if>
             <if test="startRepo != null  and startRepo!=''">
                 <![CDATA[
                   AND p.stock >= #{startRepo}
@@ -110,6 +140,15 @@
                 ]]>
             </if>
         </where>
+    </select>
+    <!-- 查询条件根据） -->
+    <select id="selectBOById" resultMap="productResultMap" parameterType="java.lang.String">
+        SELECT
+        p.id, p.goodsId, p.marketPrice, p.sellingPrice, p.costPrice, p.createTime, p.lastUpdate,p.stock,g.name as
+        goodsName
+        FROM uc_product p
+        LEFT JOIN uc_goods g ON g.id = p.goodsId
+        where p.id = #{id}
     </select>
 
 </mapper>

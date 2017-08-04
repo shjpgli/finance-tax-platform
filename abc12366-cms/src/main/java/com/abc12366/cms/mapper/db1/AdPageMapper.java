@@ -2,6 +2,7 @@ package com.abc12366.cms.mapper.db1;
 
 import com.abc12366.cms.model.bo.AdPageBO;
 import org.apache.ibatis.annotations.Param;
+
 /**
  * ���ͼƬ����
  *
@@ -13,27 +14,20 @@ import org.apache.ibatis.annotations.Param;
 public interface AdPageMapper {
 
 
+    /**
+     * ��������ɾ�����ͼƬ
+     **/
+    int deleteByPrimaryKey(@Param("id") String id);
 
-	/**
-	 * 
-	 * ��������ɾ�����ͼƬ
-	 * 
-	 **/
-	int deleteByPrimaryKey(@Param("id") String id);
-
-	/**
-	 * 
-	 * �������ͼƬ
-	 * 
-	 **/
-	int insert(AdPageBO adPage);
+    /**
+     * �������ͼƬ
+     **/
+    int insert(AdPageBO adPage);
 
 
-	/**
-	 * 
-	 * ���¹��ͼƬ
-	 * 
-	 **/
-	int update(AdPageBO adPage);
+    /**
+     * ���¹��ͼƬ
+     **/
+    int update(AdPageBO adPage);
 
 }

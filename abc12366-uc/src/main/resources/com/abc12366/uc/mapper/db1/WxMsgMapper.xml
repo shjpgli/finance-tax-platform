@@ -2,45 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.WxMsgMapper">
-       
-       <insert id="insertNews" parameterType="com.abc12366.uc.model.weixin.bo.message.News">
-         INSERT INTO uc_news(id,ArticleCount,creatDate,lastUpdate)
-         VALUES (#{id}, #{articleCount}, #{creatDate}, #{lastUpdate})
-       </insert>
-       
-       <insert id="insertArticle" parameterType="com.abc12366.uc.model.weixin.bo.message.Article">
-         INSERT INTO cszj_article(newsId,Title,Description,PicUrl,Url)
-         VALUES (#{newsId}, #{title}, #{description}, #{picUrl}, #{url})
-       </insert>
-       
-       <update id="updateNews" parameterType="com.abc12366.uc.model.weixin.bo.message.News">
-         UPDATE uc_news
-         set ArticleCount=#{articleCount},lastUpdate=#{lastUpdate}
-         where id=#{id}
-       </update>
-       
-       <delete id="deleteArticle" parameterType="java.lang.String">
-          DELETE FROM cszj_article WHERE newsId = #{id}
-       </delete> 
-       
-       <delete id="deleteNews" parameterType="java.lang.String">
-          DELETE FROM uc_news WHERE id = #{id}
-       </delete> 
-       
-       <insert id="insertRemsg" parameterType="com.abc12366.uc.model.weixin.bo.message.ReturnMsg">
-         INSERT INTO uc_remsg(id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate)
-         VALUES (#{id}, #{setting}, #{keyString}, #{msgType}, #{content}, #{mediaId}, #{imgurl}, #{newsId}, #{createDate}, #{lastUpdate})
-       </insert>
-       
-       <update id="updateRemsg" parameterType="com.abc12366.uc.model.weixin.bo.message.ReturnMsg">
-         UPDATE uc_remsg
-         set setting=#{setting},keyString=#{keyString},msgType=#{msgType},content=#{content},
-         mediaId=#{mediaId},imgurl=#{imgurl},newsId=#{newsId},lastUpdate=#{lastUpdate}
-         where id=#{id}
-       </update>
-       
-       <delete id="deleteRemsg" parameterType="java.lang.String">
-          DELETE FROM uc_remsg WHERE id = #{id}
-       </delete> 
-       
+
+    <insert id="insertNews" parameterType="com.abc12366.uc.model.weixin.bo.message.News">
+        INSERT INTO uc_news(id,ArticleCount,creatDate,lastUpdate)
+        VALUES (#{id}, #{articleCount}, #{creatDate}, #{lastUpdate})
+    </insert>
+
+    <insert id="insertArticle" parameterType="com.abc12366.uc.model.weixin.bo.message.Article">
+        INSERT INTO cszj_article(newsId,Title,Description,PicUrl,Url)
+        VALUES (#{newsId}, #{title}, #{description}, #{picUrl}, #{url})
+    </insert>
+
+    <update id="updateNews" parameterType="com.abc12366.uc.model.weixin.bo.message.News">
+        UPDATE uc_news
+        set ArticleCount=#{articleCount},lastUpdate=#{lastUpdate}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteArticle" parameterType="java.lang.String">
+        DELETE FROM cszj_article WHERE newsId = #{id}
+    </delete>
+
+    <delete id="deleteNews" parameterType="java.lang.String">
+        DELETE FROM uc_news WHERE id = #{id}
+    </delete>
+
+    <insert id="insertRemsg" parameterType="com.abc12366.uc.model.weixin.bo.message.ReturnMsg">
+        INSERT INTO uc_remsg(id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate)
+        VALUES (#{id}, #{setting}, #{keyString}, #{msgType}, #{content}, #{mediaId}, #{imgurl}, #{newsId},
+        #{createDate}, #{lastUpdate})
+    </insert>
+
+    <update id="updateRemsg" parameterType="com.abc12366.uc.model.weixin.bo.message.ReturnMsg">
+        UPDATE uc_remsg
+        set setting=#{setting},keyString=#{keyString},msgType=#{msgType},content=#{content},
+        mediaId=#{mediaId},imgurl=#{imgurl},newsId=#{newsId},lastUpdate=#{lastUpdate}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteWxremsg" parameterType="java.lang.String">
+        DELETE FROM cszj_remsg WHERE id = #{id}
+    </delete>
+
 </mapper>

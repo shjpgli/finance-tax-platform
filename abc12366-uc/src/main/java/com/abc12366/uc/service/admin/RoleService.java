@@ -16,8 +16,8 @@ public interface RoleService {
     /**
      * 查询权限树
      *
-     * @return
      * @param role
+     * @return
      */
     List<RoleBO> selectList(Role role);
 
@@ -84,7 +84,6 @@ public interface RoleService {
 
 
     /**
-     *
      * @param roleBO
      * @return
      */
@@ -92,6 +91,7 @@ public interface RoleService {
 
     /**
      * 根据角色名称查询角色
+     *
      * @param roleBO
      * @return
      */

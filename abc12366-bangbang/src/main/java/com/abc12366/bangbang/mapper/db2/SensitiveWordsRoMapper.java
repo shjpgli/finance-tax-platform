@@ -7,20 +7,16 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 
  * SensitiveWordsMapper数据库操作接口类
- * 
  **/
 
 public interface SensitiveWordsRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	SensitiveWords  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    SensitiveWords selectByPrimaryKey(@Param("id") String id);
 
 
     List<SensitiveWords> selectList(SensitiveWords sensitiveWords);

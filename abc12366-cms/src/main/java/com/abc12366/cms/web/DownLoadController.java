@@ -55,11 +55,11 @@ public class DownLoadController {
                     restype = "image/jpeg";
                 } else if (type.equalsIgnoreCase("pdf")) {
                     restype = "application/pdf";
-                }else if (type.equalsIgnoreCase("ppt")) {
+                } else if (type.equalsIgnoreCase("ppt")) {
                     restype = "application/vnd.ms-powerpoint";
-                }else if (type.equalsIgnoreCase("mp3")) {
+                } else if (type.equalsIgnoreCase("mp3")) {
                     restype = "audio/mpeg";
-                }else if (type.equalsIgnoreCase("avi")) {
+                } else if (type.equalsIgnoreCase("avi")) {
                     restype = "video/x-msvideo";
                 }
             }
@@ -90,15 +90,15 @@ public class DownLoadController {
                         String username = "root";
                         String password = "hngs_123";
 
-                        ChannelSftp sftp=sf.connect(host, port, username, password);
+                        ChannelSftp sftp = sf.connect(host, port, username, password);
 
-                        InputStream in = sf.getInputStream(filepath,fileName,sftp);
+                        InputStream in = sf.getInputStream(filepath, fileName, sftp);
 
                         int byteCount = 0;
                         byte[] buffer = new byte[4096];
 
                         int bytesRead1;
-                        for(boolean bytesRead = true; (bytesRead1 = in.read(buffer)) != -1; byteCount += bytesRead1) {
+                        for (boolean bytesRead = true; (bytesRead1 = in.read(buffer)) != -1; byteCount += bytesRead1) {
                             out.write(buffer, 0, bytesRead1);
                         }
 

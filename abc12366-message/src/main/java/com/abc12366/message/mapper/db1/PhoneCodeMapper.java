@@ -10,5 +10,5 @@ import com.abc12366.message.model.PhoneCode;
 public interface PhoneCodeMapper {
     int insert(PhoneCode phoneCode);
 
-    int delete(String phone);
+    int delete(PhoneCode phoneCodeDel);
 }

@@ -49,8 +49,8 @@ public class AdPageController {
 
     @GetMapping("/adpages")
     public ResponseEntity selectListForqt(@RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                          @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{},{},{}", name, page, size);
 
         AdPageBO adPage = new AdPageBO();

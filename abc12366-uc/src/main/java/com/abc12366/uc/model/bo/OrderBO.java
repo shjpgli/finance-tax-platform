@@ -8,14 +8,11 @@ import java.util.List;
 
 
 /**
- *
  * 用户订单
- *
  **/
 @SuppressWarnings("serial")
 public class OrderBO implements Serializable {
 
-    private String id;
     private String orderNo;
     private String userId;
     private String orderStatus;
@@ -36,7 +33,11 @@ public class OrderBO implements Serializable {
     private String remark;
     private Integer giftPoints;
     private String tradeMethod;
-    /**是否已开发票，true：是，false：否**/
+    private String cancelId;
+    private String goodsId;
+    /**
+     * 是否已开发票，true：是，false：否
+     **/
     private Boolean isInvoice;
     private GoodsBO goodsBO;
     private User user;
@@ -52,148 +53,140 @@ public class OrderBO implements Serializable {
 
     private DeliveryMethodBO deliveryMethodBO;
 
-    public void setId(String id){
-        this.id = id;
-    }
-
-    public String getId(){
-        return this.id;
-    }
-
-    public void setOrderNo(String orderNo){
-        this.orderNo = orderNo;
-    }
-
-    public String getOrderNo(){
+    public String getOrderNo() {
         return this.orderNo;
     }
 
-    public void setUserId(String userId){
-        this.userId = userId;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
-    public String getUserId(){
+    public String getUserId() {
         return this.userId;
     }
 
-    public void setOrderStatus(String orderStatus){
-        this.orderStatus = orderStatus;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getOrderStatus(){
+    public String getOrderStatus() {
         return this.orderStatus;
     }
 
-    public void setDeliveryMethod(String deliveryMethod){
-        this.deliveryMethod = deliveryMethod;
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
-    public String getDeliveryMethod(){
+    public String getDeliveryMethod() {
         return this.deliveryMethod;
     }
 
-    public void setPayMethod(String payMethod){
-        this.payMethod = payMethod;
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
     }
 
-    public String getPayMethod(){
+    public String getPayMethod() {
         return this.payMethod;
     }
 
-    public void setCreateTime(java.util.Date createTime){
-        this.createTime = createTime;
+    public void setPayMethod(String payMethod) {
+        this.payMethod = payMethod;
     }
 
-    public java.util.Date getCreateTime(){
+    public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate){
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
-    public java.util.Date getLastUpdate(){
+    public java.util.Date getLastUpdate() {
         return this.lastUpdate;
     }
 
-    public void setUsername(String username){
-        this.username = username;
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return this.username;
     }
 
-    public void setIsShipping(Integer isShipping){
-        this.isShipping = isShipping;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Integer getIsShipping(){
+    public Integer getIsShipping() {
         return this.isShipping;
     }
 
-    public void setIsFreeShipping(Integer isFreeShipping){
-        this.isFreeShipping = isFreeShipping;
+    public void setIsShipping(Integer isShipping) {
+        this.isShipping = isShipping;
     }
 
-    public Integer getIsFreeShipping(){
+    public Integer getIsFreeShipping() {
         return this.isFreeShipping;
     }
 
-    public void setDeliveryFee(Double deliveryFee){
-        this.deliveryFee = deliveryFee;
+    public void setIsFreeShipping(Integer isFreeShipping) {
+        this.isFreeShipping = isFreeShipping;
     }
 
-    public Double getDeliveryFee(){
+    public Double getDeliveryFee() {
         return this.deliveryFee;
     }
 
-    public void setIsInsured(Integer isInsured){
-        this.isInsured = isInsured;
+    public void setDeliveryFee(Double deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
-    public Integer getIsInsured(){
+    public Integer getIsInsured() {
         return this.isInsured;
     }
 
-    public void setInsuredFee(Double insuredFee){
-        this.insuredFee = insuredFee;
+    public void setIsInsured(Integer isInsured) {
+        this.isInsured = isInsured;
     }
 
-    public Double getInsuredFee(){
+    public Double getInsuredFee() {
         return this.insuredFee;
     }
 
-    public void setTotalPrice(Double totalPrice){
-        this.totalPrice = totalPrice;
+    public void setInsuredFee(Double insuredFee) {
+        this.insuredFee = insuredFee;
     }
 
-    public Double getTotalPrice(){
+    public Double getTotalPrice() {
         return this.totalPrice;
     }
 
-    public void setAddressId(String addressId){
-        this.addressId = addressId;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public String getAddressId(){
+    public String getAddressId() {
         return this.addressId;
     }
 
-    public void setExpressNo(String expressNo){
-        this.expressNo = expressNo;
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 
-    public String getExpressNo(){
+    public String getExpressNo() {
         return this.expressNo;
     }
 
-    public void setRemark(String remark){
-        this.remark = remark;
+    public void setExpressNo(String expressNo) {
+        this.expressNo = expressNo;
     }
 
-    public String getRemark(){
+    public String getRemark() {
         return this.remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public GoodsBO getGoodsBO() {
@@ -298,5 +291,21 @@ public class OrderBO implements Serializable {
 
     public void setIsInvoice(Boolean isInvoice) {
         this.isInvoice = isInvoice;
+    }
+
+    public String getCancelId() {
+        return cancelId;
+    }
+
+    public void setCancelId(String cancelId) {
+        this.cancelId = cancelId;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 }

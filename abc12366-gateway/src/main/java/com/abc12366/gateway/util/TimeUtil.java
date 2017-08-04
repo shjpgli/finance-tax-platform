@@ -25,12 +25,12 @@ public class TimeUtil {
     /*
      * 将时间戳转换为时间
      */
-    public static Date getLongToDate(long lt){
+    public static Date getLongToDate(long lt) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
         return new Date(lt);
     }
 
     public static void main(String[] args) {
-        System.out.println(getLongToDate(getDateStringToLong(new Date())+ Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
+        System.out.println(getLongToDate(getDateStringToLong(new Date()) + Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
     }
 }

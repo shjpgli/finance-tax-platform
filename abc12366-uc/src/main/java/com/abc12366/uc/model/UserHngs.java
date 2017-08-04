@@ -1,6 +1,7 @@
 package com.abc12366.uc.model;
 
 import java.util.Date;
+
 /**
  * @author liuguiyao<435720953@qq.com.com>
  * @create 2017-05-15 10:18 PM
@@ -24,7 +25,8 @@ public class UserHngs {
     public UserHngs() {
     }
 
-    public UserHngs(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc, String swjgDm, String bsy, boolean smrzzt, boolean status, Date createTime, Date lastUpdate) {
+    public UserHngs(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc,
+                    String swjgDm, String bsy, boolean smrzzt, boolean status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.userId = userId;
         this.djxh = djxh;

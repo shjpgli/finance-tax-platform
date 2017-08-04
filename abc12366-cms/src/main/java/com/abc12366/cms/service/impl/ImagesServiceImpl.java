@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- *
  * @author lizhongwei
  * @create 2017-07-01 4:21 PM
  * @since 1.0.0
@@ -44,8 +43,8 @@ public class ImagesServiceImpl implements ImagesService {
     public Images insert(Images images) {
         images.setId(Utils.uuid());
         int insert = imagesMapper.insert(images);
-        if(insert != 1){
-            if (insert != 1){
+        if (insert != 1) {
+            if (insert != 1) {
                 LOGGER.info("{新增背景图片失败}", images);
                 throw new ServiceException(4420);
             }
@@ -57,8 +56,8 @@ public class ImagesServiceImpl implements ImagesService {
     public Images update(Images images, String id) {
         images.setId(id);
         int update = imagesMapper.update(images);
-        if(update != 1){
-            if (update != 1){
+        if (update != 1) {
+            if (update != 1) {
                 LOGGER.info("{新增背景图片失败}", images);
                 throw new ServiceException(4421);
             }
@@ -69,8 +68,8 @@ public class ImagesServiceImpl implements ImagesService {
     @Override
     public void delete(String id) {
         int del = imagesMapper.deleteByPrimaryKey(id);
-        if(del != 1){
-            if (del != 1){
+        if (del != 1) {
+            if (del != 1) {
                 LOGGER.info("{删除背景图片失败}", id);
                 throw new ServiceException(4421);
             }

@@ -46,6 +46,14 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private AppSettingRoMapper appSettingRoMapper;
 
+    /*
+     * 将时间戳转换为时间
+     */
+    public static Date getLongToDate(long lt) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+        return new Date(lt);
+    }
+
     @Transactional("db1TxManager")
     @Override
     public AppBO register(AppBO bo) throws Exception {
@@ -58,15 +66,15 @@ public class AppServiceImpl implements AppService {
         bo.setLastUpdate(date);
         bo.setEndTime(DateUtils.addYears(date, Constant.APP_VALID_YEARS));
         App app = new App();
-        BeanUtils.copyProperties(bo,app);
+        BeanUtils.copyProperties(bo, app);
         //根据名称查询app
         App temp = appRoMapper.selectByName(app.getName());
-        if(temp != null){
+        if (temp != null) {
             LOGGER.warn("APP应用名称已存在{}", app);
             throw new ServiceException(4095);
         }
         int insert = appMapper.insert(app);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.warn("插入失败，参数：{}", app);
             throw new ServiceException(4101);
         }
@@ -81,7 +89,7 @@ public class AppServiceImpl implements AppService {
         app.setName(bo.getName());
         app.setStatus(true);
         app = appRoMapper.selectByName(bo.getName());
-        if(app == null){
+        if (app == null) {
             LOGGER.warn("APP用户名不存在：{}", app);
             throw new ServiceException(4094);
         }
@@ -92,33 +100,26 @@ public class AppServiceImpl implements AppService {
             long currentTime = System.currentTimeMillis();
             String token = app.getAccessToken();
             Date now = new Date();
-            if(currentTime > lastTime){
+            if (currentTime > lastTime) {
                 LOGGER.warn("APP登录已过期，返回新的token：{}", app);
                 token = Utils.token();
                 app.setAccessToken(token);
                 //设置有效时间
             }
-            app.setLastResetTokenTime(getLongToDate(System.currentTimeMillis()+Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
+            app.setLastResetTokenTime(getLongToDate(System.currentTimeMillis() + Constant
+                    .ADMIN_USER_TOKEN_VALID_SECONDS));
             app.setLastUpdate(now);
             int upd = appMapper.update(app);
-            if(upd != 1){
+            if (upd != 1) {
                 LOGGER.warn("APP修改异常：{}", app);
                 throw new ServiceException(4102);
             }
             LOGGER.info("{}", token);
             return token;
-        }else{
+        } else {
             LOGGER.warn("APP密码错误：{}", app);
             throw new ServiceException(4093);
         }
-    }
-
-    /*
-     * 将时间戳转换为时间
-     */
-    public static Date getLongToDate(long lt){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
-        return new Date(lt);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class AppServiceImpl implements AppService {
         app.setStatus(true);
         app = appRoMapper.selectOne(app);
         //判断app是否正常
-        if(app == null){
+        if (app == null) {
             LOGGER.warn("APP不存在或APP未启用：{}", app);
             throw new ServiceException(4035);
         }
@@ -140,7 +141,8 @@ public class AppServiceImpl implements AppService {
     public boolean isAuthentization(HttpServletRequest request) {
         // 1.获取最佳匹配地址
         // path: /uc
-        String bestMatchingPattern = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping.bestMatchingPattern");
+        String bestMatchingPattern = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping" +
+                ".bestMatchingPattern");
 
         // 2.查询接口表中是否存在对应的接口
         String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
@@ -149,20 +151,20 @@ public class AppServiceImpl implements AppService {
         app.setStatus(true);
         app = appRoMapper.selectOne(app);
         //判断app是否正常
-        if(app == null){
+        if (app == null) {
             LOGGER.warn("APP不存在或APP未启用：{}", app);
             throw new ServiceException(4035);
         }
         //判断app登录是否已过期
         long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
         long currentTime = System.currentTimeMillis();
-        if(currentTime > lastTime){
+        if (currentTime > lastTime) {
             LOGGER.warn("APP登录已过期，请重新登录：{}", app);
             throw new ServiceException(4025);
         }
         //判断app是否已过期
         long endTime = TimeUtil.getDateStringToLong(app.getEndTime());
-        if(currentTime > endTime){
+        if (currentTime > endTime) {
             LOGGER.warn("APP已过期，请重新续费：{}", app);
             throw new ServiceException(4026);
         }
@@ -240,7 +242,7 @@ public class AppServiceImpl implements AppService {
         BeanUtils.copyProperties(appBO, app);
         app.setLastUpdate(new Date());
         int update = appMapper.update(app);
-        if (update != 1){
+        if (update != 1) {
             LOGGER.warn("修改异常：{}", app);
             throw new ServiceException(4102);
         }

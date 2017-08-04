@@ -21,6 +21,7 @@ public class NsrBindQueryServiceImpl implements NsrBindQueryService {
 
     @Autowired
     private NsrBindQueryRoMapper nsrBindQueryRoMapper;
+
     @Override
     public List<NsrBindQueryBO> selectList(NsrBindQueryParamBO nsrBindQueryParamBO) {
         LOGGER.info("{}", nsrBindQueryParamBO);

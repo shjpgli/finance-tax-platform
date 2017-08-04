@@ -31,6 +31,7 @@ public class ApiController {
 
     /**
      * API列表
+     *
      * @param name
      * @param status
      * @param dictId
@@ -52,11 +53,12 @@ public class ApiController {
         List<ApiBO> apiList = apiService.selectList(api);
         PageInfo<ApiBO> pageInfo = new PageInfo<>(apiList);
         LOGGER.info("{}", apiList);
-        return ResponseEntity.ok(Utils.kv("dataList",pageInfo.getList() , "total", pageInfo.getTotal()));
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**
      * 通过AppId查找未授权的API
+     *
      * @param appId
      * @return
      */
@@ -65,11 +67,12 @@ public class ApiController {
         LOGGER.info("{appId}", appId);
         List<ApiBO> apiList = apiService.selectBySettingList(appId);
         LOGGER.info("{}", apiList);
-        return ResponseEntity.ok(Utils.kv("dataList",apiList));
+        return ResponseEntity.ok(Utils.kv("dataList", apiList));
     }
 
     /**
      * API单个查询
+     *
      * @param id
      * @return
      */
@@ -83,6 +86,7 @@ public class ApiController {
 
     /**
      * API新增
+     *
      * @param apiBO
      * @return
      */
@@ -96,6 +100,7 @@ public class ApiController {
 
     /**
      * API修改
+     *
      * @param id
      * @param apiBO
      * @return
@@ -112,11 +117,12 @@ public class ApiController {
 
     /**
      * API删除
+     *
      * @param id
      * @return
      */
     @DeleteMapping(path = "/api/{id}")
-    public ResponseEntity delete(@PathVariable("id")String id) {
+    public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         apiService.delete(id);
         return ResponseEntity.ok(Utils.kv());

@@ -3,7 +3,6 @@ package com.abc12366.uc.model.bo;
 import java.io.Serializable;
 
 /**
- *
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
  */
@@ -64,14 +63,14 @@ public class DictUpdateBO implements Serializable {
     }
 
     @Override
-    public String toString(){
-        return "DictUpdateBO{"+
-                "id="+id+
-                "dictId="+dictId+
-                "dictName="+dictName+
-                "fieldKey="+fieldKey+
-                "fieldValue+"+fieldValue+
-                "status="+status+"}";
+    public String toString() {
+        return "DictUpdateBO{" +
+                "id=" + id +
+                "dictId=" + dictId +
+                "dictName=" + dictName +
+                "fieldKey=" + fieldKey +
+                "fieldValue+" + fieldValue +
+                "status=" + status + "}";
     }
 }
 

@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author lizhongwei
  * @create 2017-06-16 4:21 PM
  * @since 1.0.0
@@ -46,150 +45,6 @@ public class AnswerLogServiceImpl implements AnswerLogService {
     @Autowired
     private AnswerMapper answerMapper;
 
-    @Override
-    public List<AnswerLogBO> selectList(AnswerLogBO answerLogBO) {
-
-        return answerLogRoMapper.selectList(answerLogBO);
-    }
-
-    @Override
-    public AnswerLogBO selectOne(String id) {
-        return answerLogRoMapper.selectOne(id);
-    }
-
-
-    @Transactional("db1TxManager")
-    @Override
-    public AnswerLogBO insert(AnswerLogBO answerLogBO) {
-        AnswerLog answerLog = new AnswerLog();
-        BeanUtils.copyProperties(answerLogBO,answerLog);
-        String answerLogId = Utils.uuid();
-        answerLog.setId(answerLogId);
-        Date date = new Date();
-        answerLog.setStartTime(date);
-        answerLog.setEndTime(date);
-        int insert = answerLogMapper.insert(answerLog);
-        if(insert != 1){
-            LOGGER.info("{新增答题记录失败}", answerLog);
-            throw new ServiceException(4407);
-        }
-        AnswerLogBO bo = new AnswerLogBO();
-        BeanUtils.copyProperties(answerLog,bo);
-        return bo;
-    }
-
-    @Transactional("db1TxManager")
-    @Override
-    public AnswerLogBO update(AnswerLogBO answerLogBO) {
-        AnswerLog answerLog = new AnswerLog();
-        BeanUtils.copyProperties(answerLogBO,answerLog);
-        answerLog.setEndTime(new Date());
-        int update = answerLogMapper.update(answerLog);
-        if(update != 1){
-            LOGGER.info("{修改答题记录失败}", answerLog);
-            throw new ServiceException(4408);
-        }
-        Answer answer = answerLogBO.getAnswer();
-        answer.setAnswerLogId(answerLogBO.getId());
-        //查询是否存在该题回答
-        Answer temp = answerRoMapper.selectByLogId(answer);
-        if(temp != null){
-            int upd = answerMapper.update(answer);
-            if(upd != 1){
-                LOGGER.info("{修改答题失败}", answerLog);
-                throw new ServiceException(4411);
-            }
-        }else{
-            int ins = answerMapper.insert(answer);
-            if(ins != 1){
-                LOGGER.info("{新增答题失败}", answerLog);
-                throw new ServiceException(4410);
-            }
-        }
-        AnswerLogBO bo = new AnswerLogBO();
-        BeanUtils.copyProperties(answerLog,bo);
-        bo.setAnswer(answer);
-        return bo;
-    }
-
-    @Transactional("db1TxManager")
-    @Override
-    public void delete(AnswerLogBO answerLogBO) {
-        if(answerLogBO != null && answerLogBO.getId() != null){
-            String ids[] = answerLogBO.getId().split(",");
-            for (String id: ids){
-                answerMapper.deleteByPrimaryKey(id);
-                int del = answerLogMapper.deleteByPrimaryKey(id);
-                if (del != 1){
-                    LOGGER.info("{删除答题记录失败}", id);
-                    throw new ServiceException(4409);
-                }
-            }
-        }else{
-            LOGGER.info("{答题记录ID不能为空}", answerLogBO);
-            throw new ServiceException(4424);
-        }
-
-    }
-
-    @Override
-    public AnswerLogBO batch(AnswerLogBO answerLogBO) {
-        AnswerLog answerLog = new AnswerLog();
-        String answerLogId = Utils.uuid();
-        answerLogBO.setId(answerLogId);
-        BeanUtils.copyProperties(answerLogBO,answerLog);
-//        answerLog.setEndTime(new Date());
-//        int update = answerLogMapper.update(answerLog);
-//        if(update != 1){
-//            LOGGER.info("{修改答题记录失败}", answerLog);
-//            throw new ServiceException(4408);
-//        }
-        int insert = answerLogMapper.insert(answerLog);
-        if(insert != 1){
-            LOGGER.info("{新增答题记录失败}", answerLog);
-            throw new ServiceException(4408);
-        }
-        List<Answer> answerList = answerLogBO.getAnswerList();
-        for (Answer answer : answerList){
-            answer.setAnswerLogId(answerLogBO.getId());
-            //查询是否存在该题回答
-//            Answer temp = answerRoMapper.selectByLogId(answer);
-//            if(temp != null){
-//                int upd = answerMapper.update(answer);
-//                if(upd != 1){
-//                    LOGGER.info("{修改答题失败}", answerLog);
-//                    throw new ServiceException(4411);
-//                }
-//            }else{
-                int ins = answerMapper.insert(answer);
-                if(ins != 1){
-                    LOGGER.info("{新增答题失败}", answerLog);
-                    throw new ServiceException(4410);
-                }
-//            }
-        }
-
-        AnswerLogBO bo = new AnswerLogBO();
-        BeanUtils.copyProperties(answerLog,bo);
-        bo.setAnswerList(answerList);
-        return bo;
-    }
-
-    @Override
-    public AnswerLogBO answerAvg(AnswerLogBO answerLogBO) {
-        AnswerLog answerLog = new AnswerLog();
-        BeanUtils.copyProperties(answerLogBO,answerLog);
-        AnswerLogBO bo = answerLogRoMapper.selectAvgTime(answerLog);
-        if (bo != null && bo.getAvgTimeLong() != null){
-            String avg = formatTime(bo.getAvgTimeLong()*1000);
-            bo.setAvgTime(avg);
-        }else{
-            LOGGER.info("{该问卷没有答题记录}", answerLog);
-            throw new ServiceException(4425);
-        }
-        return bo;
-    }
-
     /*
  * 毫秒转化时分秒毫秒
  */
@@ -206,26 +61,169 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         Long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;
 
         StringBuffer sb = new StringBuffer();
-        if(day > 0) {
-            sb.append(day+"天");
+        if (day > 0) {
+            sb.append(day + "天");
         }
-        if(hour > 0) {
-            sb.append(hour+"小时");
+        if (hour > 0) {
+            sb.append(hour + "小时");
         }
-        if(minute > 0) {
-            sb.append(minute+"分");
+        if (minute > 0) {
+            sb.append(minute + "分");
         }
-        if(second > 0) {
-            sb.append(second+"秒");
+        if (second > 0) {
+            sb.append(second + "秒");
         }
-        if(milliSecond > 0) {
-            sb.append(milliSecond+"毫秒");
+        if (milliSecond > 0) {
+            sb.append(milliSecond + "毫秒");
         }
         return sb.toString();
     }
 
     @Override
-    public AnswerLogtjListBo selecttj(Map<String,Object> map) {
+    public List<AnswerLogBO> selectList(AnswerLogBO answerLogBO) {
+
+        return answerLogRoMapper.selectList(answerLogBO);
+    }
+
+    @Override
+    public AnswerLogBO selectOne(String id) {
+        return answerLogRoMapper.selectOne(id);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public AnswerLogBO insert(AnswerLogBO answerLogBO) {
+        AnswerLog answerLog = new AnswerLog();
+        BeanUtils.copyProperties(answerLogBO, answerLog);
+        String answerLogId = Utils.uuid();
+        answerLog.setId(answerLogId);
+        Date date = new Date();
+        answerLog.setStartTime(date);
+        answerLog.setEndTime(date);
+        int insert = answerLogMapper.insert(answerLog);
+        if (insert != 1) {
+            LOGGER.info("{新增答题记录失败}", answerLog);
+            throw new ServiceException(4407);
+        }
+        AnswerLogBO bo = new AnswerLogBO();
+        BeanUtils.copyProperties(answerLog, bo);
+        return bo;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public AnswerLogBO update(AnswerLogBO answerLogBO) {
+        AnswerLog answerLog = new AnswerLog();
+        BeanUtils.copyProperties(answerLogBO, answerLog);
+        answerLog.setEndTime(new Date());
+        int update = answerLogMapper.update(answerLog);
+        if (update != 1) {
+            LOGGER.info("{修改答题记录失败}", answerLog);
+            throw new ServiceException(4408);
+        }
+        Answer answer = answerLogBO.getAnswer();
+        answer.setAnswerLogId(answerLogBO.getId());
+        //查询是否存在该题回答
+        Answer temp = answerRoMapper.selectByLogId(answer);
+        if (temp != null) {
+            int upd = answerMapper.update(answer);
+            if (upd != 1) {
+                LOGGER.info("{修改答题失败}", answerLog);
+                throw new ServiceException(4411);
+            }
+        } else {
+            int ins = answerMapper.insert(answer);
+            if (ins != 1) {
+                LOGGER.info("{新增答题失败}", answerLog);
+                throw new ServiceException(4410);
+            }
+        }
+        AnswerLogBO bo = new AnswerLogBO();
+        BeanUtils.copyProperties(answerLog, bo);
+        bo.setAnswer(answer);
+        return bo;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public void delete(AnswerLogBO answerLogBO) {
+        if (answerLogBO != null && answerLogBO.getId() != null) {
+            String ids[] = answerLogBO.getId().split(",");
+            for (String id : ids) {
+                answerMapper.deleteByPrimaryKey(id);
+                int del = answerLogMapper.deleteByPrimaryKey(id);
+                if (del != 1) {
+                    LOGGER.info("{删除答题记录失败}", id);
+                    throw new ServiceException(4409);
+                }
+            }
+        } else {
+            LOGGER.info("{答题记录ID不能为空}", answerLogBO);
+            throw new ServiceException(4424);
+        }
+
+    }
+
+    @Override
+    public AnswerLogBO batch(AnswerLogBO answerLogBO) {
+        AnswerLog answerLog = new AnswerLog();
+        String answerLogId = Utils.uuid();
+        answerLogBO.setId(answerLogId);
+        BeanUtils.copyProperties(answerLogBO, answerLog);
+//        answerLog.setEndTime(new Date());
+//        int update = answerLogMapper.update(answerLog);
+//        if(update != 1){
+//            LOGGER.info("{修改答题记录失败}", answerLog);
+//            throw new ServiceException(4408);
+//        }
+        int insert = answerLogMapper.insert(answerLog);
+        if (insert != 1) {
+            LOGGER.info("{新增答题记录失败}", answerLog);
+            throw new ServiceException(4408);
+        }
+        List<Answer> answerList = answerLogBO.getAnswerList();
+        for (Answer answer : answerList) {
+            answer.setAnswerLogId(answerLogBO.getId());
+            //查询是否存在该题回答
+//            Answer temp = answerRoMapper.selectByLogId(answer);
+//            if(temp != null){
+//                int upd = answerMapper.update(answer);
+//                if(upd != 1){
+//                    LOGGER.info("{修改答题失败}", answerLog);
+//                    throw new ServiceException(4411);
+//                }
+//            }else{
+            int ins = answerMapper.insert(answer);
+            if (ins != 1) {
+                LOGGER.info("{新增答题失败}", answerLog);
+                throw new ServiceException(4410);
+            }
+//            }
+        }
+
+        AnswerLogBO bo = new AnswerLogBO();
+        BeanUtils.copyProperties(answerLog, bo);
+        bo.setAnswerList(answerList);
+        return bo;
+    }
+
+    @Override
+    public AnswerLogBO answerAvg(AnswerLogBO answerLogBO) {
+        AnswerLog answerLog = new AnswerLog();
+        BeanUtils.copyProperties(answerLogBO, answerLog);
+        AnswerLogBO bo = answerLogRoMapper.selectAvgTime(answerLog);
+        if (bo != null && bo.getAvgTimeLong() != null) {
+            String avg = formatTime(bo.getAvgTimeLong() * 1000);
+            bo.setAvgTime(avg);
+        } else {
+            LOGGER.info("{该问卷没有答题记录}", answerLog);
+            throw new ServiceException(4425);
+        }
+        return bo;
+    }
+
+    @Override
+    public AnswerLogtjListBo selecttj(Map<String, Object> map) {
         AnswerLogtjListBo answerLogtjListBo = new AnswerLogtjListBo();
         //浏览统计总数
         Integer llcnt = answerLogRoMapper.selectlltjs(map);
@@ -237,7 +235,7 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         List<AnswerLogRolltjBo> list = answerLogRoMapper.selectlltj(map);
         answerLogtjListBo.setList(list);
         //pc浏览统计浏览统计
-        map.put("accessTerminal","PC");
+        map.put("accessTerminal", "PC");
         List<AnswerLogRolltjBo> pclist = answerLogRoMapper.selectlltj(map);
         answerLogtjListBo.setPclist(pclist);
         //mobileWeb浏览统计

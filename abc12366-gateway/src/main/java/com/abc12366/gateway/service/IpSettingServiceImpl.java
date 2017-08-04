@@ -29,7 +29,7 @@ public class IpSettingServiceImpl implements IpSettingService {
     @Override
     public IpSetting update(IpSetting ipSetting) {
         int upd = ipSettingMapper.update(ipSetting);
-        if(upd != 1){
+        if (upd != 1) {
             throw new ServiceException(4102);
         }
         return ipSetting;

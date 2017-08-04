@@ -21,7 +21,8 @@ public class ExperienceRuleBO {
     public ExperienceRuleBO() {
     }
 
-    public ExperienceRuleBO(String id, String name, String code, int exp, String description, String type, Boolean status, Date createTime, Date lastUpdate) {
+    public ExperienceRuleBO(String id, String name, String code, int exp, String description, String type, Boolean
+            status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.code = code;

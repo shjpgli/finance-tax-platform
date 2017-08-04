@@ -19,7 +19,8 @@ public class ExperienceLog {
     public ExperienceLog() {
     }
 
-    public ExperienceLog(String id, String userId, String ruleId, int income, int outgo, int usableExp, Date createTime) {
+    public ExperienceLog(String id, String userId, String ruleId, int income, int outgo, int usableExp, Date
+            createTime) {
         this.id = id;
         this.userId = userId;
         this.ruleId = ruleId;

@@ -34,7 +34,9 @@ public class InvoiceBO implements Serializable {
     private String phone;
     private String bank;
     private String addressId;
-    /**用户订单号(运单号)**/
+    /**
+     * 用户订单号(运单号)
+     **/
     private String userOrderNo;
     private String deliveryMethod;
     private Integer isShipping;
@@ -43,7 +45,9 @@ public class InvoiceBO implements Serializable {
     private Integer isInsured;
     private Double InsuredFee;
     private String payMethod;
-    /** 收货人**/
+    /**
+     * 收货人
+     **/
     private String consignee;
 
     private List<OrderBO> orderBOList;
@@ -54,169 +58,176 @@ public class InvoiceBO implements Serializable {
     private DeliveryMethodBO deliveryMethodBO;
 
     private InvoiceDetail invoiceDetail;
-    /**是否已开发票，true：是，false：否**/
+    /**
+     * 是否已开发票，true：是，false：否
+     **/
     private Boolean isInvoice;
 
     private InvoiceLog invoiceLog;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    /**
+     * 是否同意开票
+     **/
+    private Boolean isBilling;
 
     public String getId() {
         return this.id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
         return this.userId;
     }
 
-    public void setInvoiceNo(String invoiceNo) {
-        this.invoiceNo = invoiceNo;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getInvoiceNo() {
         return this.invoiceNo;
     }
 
-    public void setInvoiceCode(String invoiceCode) {
-        this.invoiceCode = invoiceCode;
+    public void setInvoiceNo(String invoiceNo) {
+        this.invoiceNo = invoiceNo;
     }
 
     public String getInvoiceCode() {
         return this.invoiceCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setInvoiceCode(String invoiceCode) {
+        this.invoiceCode = invoiceCode;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getContent() {
         return this.content;
     }
 
-    public void setCompName(String compName) {
-        this.compName = compName;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getCompName() {
         return this.compName;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public void setCompName(String compName) {
+        this.compName = compName;
     }
 
     public Double getAmount() {
         return this.amount;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public String getType() {
         return this.type;
     }
 
-    public void setProperty(String property) {
-        this.property = property;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getProperty() {
         return this.property;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setProperty(String property) {
+        this.property = property;
     }
 
     public String getStatus() {
         return this.status;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
     }
 
-    public void setNsrsbh(String nsrsbh) {
-        this.nsrsbh = nsrsbh;
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String getNsrsbh() {
         return this.nsrsbh;
     }
 
-    public void setNsrmc(String nsrmc) {
-        this.nsrmc = nsrmc;
+    public void setNsrsbh(String nsrsbh) {
+        this.nsrsbh = nsrsbh;
     }
 
     public String getNsrmc() {
         return this.nsrmc;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setNsrmc(String nsrmc) {
+        this.nsrmc = nsrmc;
     }
 
     public String getAddress() {
         return this.address;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhone() {
         return this.phone;
     }
 
-    public void setBank(String bank) {
-        this.bank = bank;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getBank() {
         return this.bank;
     }
 
-    public void setAddressId(String addressId) {
-        this.addressId = addressId;
+    public void setBank(String bank) {
+        this.bank = bank;
     }
 
     public String getAddressId() {
         return this.addressId;
     }
 
-    public void setUserOrderNo(String userOrderNo) {
-        this.userOrderNo = userOrderNo;
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 
     public String getUserOrderNo() {
         return this.userOrderNo;
+    }
+
+    public void setUserOrderNo(String userOrderNo) {
+        this.userOrderNo = userOrderNo;
     }
 
     public String getUsername() {
@@ -361,5 +372,13 @@ public class InvoiceBO implements Serializable {
 
     public void setInvoiceLog(InvoiceLog invoiceLog) {
         this.invoiceLog = invoiceLog;
+    }
+
+    public Boolean getIsBilling() {
+        return isBilling;
+    }
+
+    public void setIsBilling(Boolean isBilling) {
+        this.isBilling = isBilling;
     }
 }

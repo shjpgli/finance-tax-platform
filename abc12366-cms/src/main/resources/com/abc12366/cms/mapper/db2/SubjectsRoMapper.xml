@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.cms.mapper.db2.SubjectsRoMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	questionId,	title,	simpleDesc,	isRequired,	optionType,	isQuestion,	pages,	picPath,	picName,	randomOrder,	displayMultiple,	mostOptional, number
-	</sql>
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, questionId, title, simpleDesc, isRequired, optionType, isQuestion, pages, picPath, picName, randomOrder,
+        displayMultiple, mostOptional, number
+    </sql>
     <resultMap id="subjectsBOResultMap" type="com.abc12366.cms.model.questionnaire.bo.SubjectsBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="questionId" property="questionId" jdbcType="VARCHAR"/>
@@ -22,27 +23,29 @@
         <result column="displayMultiple" property="displayMultiple" jdbcType="INTEGER"/>
         <result column="mostOptional" property="mostOptional" jdbcType="INTEGER"/>
         <result column="number" property="number" jdbcType="INTEGER"/>
-        <collection property="optionList" ofType="com.abc12366.cms.model.questionnaire.Option" column="id" select="getOption"></collection>
+        <collection property="optionList" ofType="com.abc12366.cms.model.questionnaire.Option" column="id"
+                    select="getOption"></collection>
     </resultMap>
 
-    <resultMap type="com.abc12366.cms.model.questionnaire.Option" id="oneOption" >
-        <id property="id" column="id"  />
-        <result property="subjectsId" column="subjectsId"  />
-        <result property="optionString" column="optionString"  />
-        <result property="status" column="status" />
+    <resultMap type="com.abc12366.cms.model.questionnaire.Option" id="oneOption">
+        <id property="id" column="id"/>
+        <result property="subjectsId" column="subjectsId"/>
+        <result property="optionString" column="optionString"/>
+        <result property="status" column="status"/>
     </resultMap>
 
-	<!-- 查询（根据主键id查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.questionnaire.Subjects" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM cms_paper_subjects
-		 WHERE id = #{id}
-	</select>
-
-    <select id="getOption" parameterType="java.lang.String" resultMap="oneOption" >
+    <!-- 查询（根据主键id查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.questionnaire.Subjects"
+            parameterType="java.lang.String">
         SELECT
-        id,	subjectsId,	optionString, status
+        <include refid="Base_Column_List"/>
+        FROM cms_paper_subjects
+        WHERE id = #{id}
+    </select>
+
+    <select id="getOption" parameterType="java.lang.String" resultMap="oneOption">
+        SELECT
+        id, subjectsId, optionString, status
         FROM cms_paper_option
         WHERE subjectsId = #{subjectsId}
     </select>
@@ -50,15 +53,16 @@
     <!-- 查询（根据主键id查询） -->
     <select id="selectOne" resultMap="subjectsBOResultMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM cms_paper_subjects
         WHERE id = #{id}
     </select>
 
     <!-- 查询（根据主键Pages查询） -->
-    <select id="selectSubjectsByPages" resultMap="subjectsBOResultMap" parameterType="com.abc12366.cms.model.questionnaire.Subjects">
+    <select id="selectSubjectsByPages" resultMap="subjectsBOResultMap"
+            parameterType="com.abc12366.cms.model.questionnaire.Subjects">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM cms_paper_subjects
         <where>
             1 = 1
@@ -75,7 +79,7 @@
     <!-- 根据条件查询所有题目 -->
     <select id="selectList" resultMap="subjectsBOResultMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM cms_paper_subjects
         <where>
             1 = 1
@@ -94,7 +98,7 @@
     <!-- 根据条件查询所有题目 -->
     <select id="selectListdttj" resultType="com.abc12366.cms.model.bo.SubjectsdtxxtjBo" parameterType="java.util.Map">
         SELECT
-          id,title
+        id,title
         FROM cms_paper_subjects
         <where>
             optionType IN (1,2)

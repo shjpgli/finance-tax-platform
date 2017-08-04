@@ -35,6 +35,7 @@ public class Utils {
     public static void main(String[] args) {
         kv();
     }
+
     /**
      * 返回Map形式的对象，参数必须为偶数个
      *
@@ -44,9 +45,9 @@ public class Utils {
     public static Map kv(Object... kvs) {
 
         Map<Object, Object> map = new HashMap<>();
-        map.put("code",2000);
+        map.put("code", 2000);
         try {
-            map.put("message",Message.getValue(2000));
+            map.put("message", Message.getValue(2000));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,7 +60,6 @@ public class Utils {
         }
         return map;
     }
-
 
 
     /**

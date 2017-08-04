@@ -10,41 +10,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * EventApplyMapper数据库操作接口类
- * 
  **/
 
 public interface EventApplyRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	EventApply  selectByPrimaryKey(@Param("applyId") String applyId);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    EventApply selectByPrimaryKey(@Param("applyId") String applyId);
 
-	/**
-	 *
-	 * 查询（根据主键ID查询）
-	 *
-	 **/
-	List<EventApplyBo> selectList(Map<String,Object> map);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    List<EventApplyBo> selectList(Map<String, Object> map);
 
-	/**
-	 *
-	 * 查询（根据主键ID查询）
-	 *
-	 **/
-	EventbmtjBo selectbmtj(Map<String,Object> map);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    EventbmtjBo selectbmtj(Map<String, Object> map);
 
-	/**
-	 *
-	 * 查询（根据主键ID查询）
-	 *
-	 **/
-	List<EventlltjBo> selectlltj(Map<String,Object> map);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    List<EventlltjBo> selectlltj(Map<String, Object> map);
 
 
 }

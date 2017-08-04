@@ -29,7 +29,8 @@ public class ExperienceRuleInsertBO {
     public ExperienceRuleInsertBO() {
     }
 
-    public ExperienceRuleInsertBO(String name, String code, Integer exp, String description, String type, Boolean status) {
+    public ExperienceRuleInsertBO(String name, String code, Integer exp, String description, String type, Boolean
+            status) {
         this.name = name;
         this.code = code;
         this.exp = exp;

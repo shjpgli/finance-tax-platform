@@ -7,26 +7,22 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * ProductRepoMapper数据库操作接口类
- * 
  **/
 
 public interface ProductRepoRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	ProductRepo  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    ProductRepo selectByPrimaryKey(@Param("id") String id);
 
-	List<ProductRepoBO> selectList(ProductRepoBO productRepoBO);
+    List<ProductRepoBO> selectList(ProductRepoBO productRepoBO);
 
-	ProductRepoBO selectById(String id);
+    ProductRepoBO selectById(String id);
 
-	ProductRepoBO selectByGoodsId(ProductRepoBO productRepoBO);
+    ProductRepoBO selectByGoodsId(ProductRepoBO productRepoBO);
 
-	List<ProductRepoBO> selectProductRepoDetail(ProductRepo productRepo);
+    List<ProductRepoBO> selectProductRepoDetail(ProductRepo productRepo);
 }

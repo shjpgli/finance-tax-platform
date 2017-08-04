@@ -5,7 +5,8 @@
     <insert id="insert">
         insert into uc_ip (id,ip,country,countryId,area,areaId,region,regionId,city,cityId,county,countyId,
         isp,ispId,createTime,updateTime)
-        values (#{id},#{ip},#{country},#{countryId},#{area},#{areaId},#{region},#{regionId},#{city},#{cityId},#{county},#{countyId},
+        values
+        (#{id},#{ip},#{country},#{countryId},#{area},#{areaId},#{region},#{regionId},#{city},#{cityId},#{county},#{countyId},
         #{isp},#{ispId},#{createTime},#{updateTime})
     </insert>
 

@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.ProductRepo;
+import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.ProductRepoBO;
@@ -30,12 +31,9 @@ import java.util.List;
 @RequestMapping(path = "/product", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class ProductController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
-
     public final static String startStock = "0";
-
     public final static String endStock = "10000";
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
     @Autowired
     private ProductService productService;
 
@@ -45,6 +43,7 @@ public class ProductController {
 
     /**
      * 产品参数列表查询
+     *
      * @return
      */
     @GetMapping(path = "/select/{goodsId}")
@@ -54,11 +53,23 @@ public class ProductController {
         product.setGoodsId(goodsId);
         List<ProductBO> productList = productService.selectByGoodsId(product);
         LOGGER.info("{}", productList);
-        return ResponseEntity.ok(Utils.kv("dataList",  productList));
+        return ResponseEntity.ok(Utils.kv("dataList", productList));
+    }
+
+
+    @GetMapping(path = "/spec/{goodsId}")
+    public ResponseEntity selectSpecList(@PathVariable("goodsId") String goodsId) {
+        LOGGER.info("{}:{}", goodsId);
+        ProductBO product = new ProductBO();
+        product.setGoodsId(goodsId);
+        List<DictBO> dictBOList = productService.selectSpecByGoodsId(product);
+        LOGGER.info("{}", dictBOList);
+        return ResponseEntity.ok(Utils.kv("dataList", dictBOList));
     }
 
     /**
      * 查询商品库存列表
+     *
      * @param pageNum
      * @param pageSize
      * @param goodsName
@@ -66,10 +77,10 @@ public class ProductController {
      */
     @GetMapping(path = "/productrepo")
     public ResponseEntity selectBOList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                            @RequestParam(value = "goodsName", required = false) String goodsName,
-                                            @RequestParam(value = "startRepo", defaultValue = startStock) int startRepo,
-                                            @RequestParam(value = "endRepo", defaultValue = endStock) int endRepo) {
+                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                       @RequestParam(value = "goodsName", required = false) String goodsName,
+                                       @RequestParam(value = "startRepo", defaultValue = startStock) int startRepo,
+                                       @RequestParam(value = "endRepo", defaultValue = endStock) int endRepo) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         ProductBO productBO = new ProductBO();
         productBO.setGoodsName(goodsName);
@@ -85,13 +96,17 @@ public class ProductController {
 
     /**
      * 查询库存详情
+     *
      * @return
      */
     @GetMapping(path = "/productrepo/select")
-    public ResponseEntity selectProductRepoDetail(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectProductRepoDetail(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                              pageNum,
+                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                          pageSize,
                                                   @RequestParam(value = "goodsId", required = true) String goodsId,
-                                                  @RequestParam(value = "productId", required = true) String productId) {
+                                                  @RequestParam(value = "productId", required = true) String
+                                                              productId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         ProductRepo productRepo = new ProductRepo();
         productRepo.setGoodsId(goodsId);

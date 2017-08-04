@@ -57,7 +57,7 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setLastUpdate(now);
         notice.setCount(0);
         String status = notice.getStatus();
-        if(status == null){
+        if (status == null) {
             //默认草稿状态
             notice.setStatus("1");
         }
@@ -70,12 +70,12 @@ public class NoticeServiceImpl implements NoticeService {
         NoticeBO notice = noticeRoMapper.selectOne(id);
         NoticeBO n = new NoticeBO();
         if (notice != null) {
-        int num = notice.getCount();
-        num += 1;
+            int num = notice.getCount();
+            num += 1;
             n.setCount(num);
             n.setId(notice.getId());
             updateCount(n);
-        return  notice;
+            return notice;
         } else {
             LOGGER.error("查询单个通知公告异常：{}", id);
             throw new ServiceException(4012);
@@ -98,14 +98,15 @@ public class NoticeServiceImpl implements NoticeService {
     public void updateCount(NoticeBO notice) {
         noticeMapper.updatecount(notice);
     }
+
     @Transactional("db1TxManager")
     @Override
     public NoticeBO update(NoticeBO notice) {
         Timestamp now = new Timestamp(new Date().getTime());
         notice.setLastUpdate(now);
         int update = noticeMapper.update(notice);
-        if(update != 1){
-            if (update != 1){
+        if (update != 1) {
+            if (update != 1) {
                 LOGGER.info("{修改通知公告失败}", update);
                 throw new ServiceException(4421);
             }

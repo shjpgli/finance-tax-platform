@@ -8,33 +8,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * TaskMapper数据库操作接口类
- * 
  **/
 
-public interface TaskRoMapper{
+public interface TaskRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Task selectByPrimaryKey(@Param("taskId") String taskId);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Task selectByPrimaryKey(@Param("taskId") String taskId);
 
-	/**
-	 *
-	 * 查询（根据主键ID查询）
-	 *
-	 **/
-	List<TaskBo> selectList(Map<String,Object> map);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    List<TaskBo> selectList(Map<String, Object> map);
 
-	/**
-	 *
-	 * 查询（根据主键ID查询）
-	 *
-	 **/
-	Integer selectCnt(TaskBo taskBo);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Integer selectCnt(TaskBo taskBo);
 
 }

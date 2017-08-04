@@ -213,7 +213,8 @@ public class AnswerServiceImpl implements AnswerService {
             httpHeaders.add("Content-Type", "application/json");
             //先查出回答者的当前积分
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-            if (responseEntity == null || !responseEntity.getStatusCode().is2xxSuccessful() || !responseEntity.hasBody()) {
+            if (responseEntity == null || !responseEntity.getStatusCode().is2xxSuccessful() || !responseEntity
+                    .hasBody()) {
                 throw new ServiceException(4104);
             }
             UCUserBO ucUserBO = objectMapper.readValue(((String) responseEntity.getBody()).getBytes(), UCUserBO.class);

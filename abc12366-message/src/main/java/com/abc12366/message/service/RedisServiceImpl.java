@@ -34,7 +34,7 @@ public class RedisServiceImpl implements RedisService {
     @Resource(name = "redisTemplate")
     private ListOperations<String, String> listOperations;
 
-    public void test(){
+    public void test() {
         if (redisTemplate.hasKey("foo")) {
             String foo = valueOperations.get("foo");
             LOGGER.info("foo: {}", foo);

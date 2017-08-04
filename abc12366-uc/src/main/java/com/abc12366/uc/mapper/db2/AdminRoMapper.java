@@ -7,31 +7,27 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * UserMapper数据库操作接口类
- * 
  **/
 
 public interface AdminRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Admin selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Admin selectByPrimaryKey(@Param("id") String id);
 
 
-	Admin selectUserByLoginName(String username);
+    Admin selectUserByLoginName(String username);
 
-	AdminBO selectUserBOByLoginName(String username);
+    AdminBO selectUserBOByLoginName(String username);
 
-	Admin selectUserById(String id);
+    Admin selectUserById(String id);
 
-	AdminBO selectUserBoById(String id);
+    AdminBO selectUserBoById(String id);
 
-	List<AdminBO> selectList(Admin admin);
+    List<AdminBO> selectList(Admin admin);
 
     AdminBO selectOne(@Param("id") String id);
 }

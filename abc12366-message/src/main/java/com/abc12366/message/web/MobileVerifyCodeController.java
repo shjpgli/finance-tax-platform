@@ -2,16 +2,15 @@ package com.abc12366.message.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.model.bo.VerifyParam;
 import com.abc12366.message.service.MobileVerifyCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 /**
@@ -29,7 +28,8 @@ public class MobileVerifyCodeController {
 
     //获取验证码接口
 //    @PostMapping(path = "/getcode/{phone}/{codeType}")
-//    public ResponseEntity getCode(@PathVariable String phone, @PathVariable String codeType, HttpSession session) throws IOException {
+//    public ResponseEntity getCode(@PathVariable String phone, @PathVariable String codeType, HttpSession session)
+// throws IOException {
 //        LOGGER.info("{}:{}:{}", phone, codeType, session);
 //        moboleVerifyCodeService.getCode(phone, codeType, session);
 //        return ResponseEntity.ok(Utils.kv());
@@ -68,18 +68,18 @@ public class MobileVerifyCodeController {
 //    }
 
     //获取验证码接口
-    @PostMapping(path = "/getcode/{phone}")
-    public ResponseEntity getCode(@PathVariable String phone) throws IOException {
-        LOGGER.info("{}", phone);
-        moboleVerifyCodeService.getCode(phone);
+    @PostMapping(path = "/getcode/{type}/{phone}")
+    public ResponseEntity getCode(@PathVariable String type, @PathVariable String phone) throws IOException {
+        LOGGER.info("{}:{}", type, phone);
+        moboleVerifyCodeService.getCode(type, phone);
         return ResponseEntity.ok(Utils.kv());
     }
 
     //验证码校验接口
-    @PostMapping(path = "/verify/{phone}/{code}")
-    public ResponseEntity verify(@PathVariable String phone, @PathVariable String code) throws IOException {
-        LOGGER.info("{}:{}", phone, code);
-        moboleVerifyCodeService.verify(phone, code);
+    @PostMapping(path = "/verify")
+    public ResponseEntity verify(@Valid @RequestBody VerifyParam verifyParam) throws IOException {
+        LOGGER.info("{}", verifyParam);
+        moboleVerifyCodeService.verify(verifyParam);
         return ResponseEntity.ok(Utils.kv());
     }
 }

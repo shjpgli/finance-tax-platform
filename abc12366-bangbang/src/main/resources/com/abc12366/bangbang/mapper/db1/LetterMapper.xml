@@ -14,7 +14,7 @@
         where id=#{id}
     </update>
     <update id="delete" parameterType="java.lang.String">
-       update bb_letter
+        update bb_letter
         set status='0'
         where id=#{id}
     </update>

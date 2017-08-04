@@ -5,17 +5,17 @@
 
     <!--删除：根据主键ID删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		 DELETE FROM cms_contenttag
-		 WHERE contentId = #{contentId}
-	</delete>
+        DELETE FROM cms_contenttag
+        WHERE contentId = #{contentId}
+    </delete>
 
     <!-- 添加 -->
     <insert id="insert" parameterType="com.abc12366.cms.model.ContentTag">
-		 INSERT INTO cms_contenttag
- 		(contentId,tagId,priority) 
-		 VALUES 
- 		(#{contentId},#{tagId},#{priority}) 
-	</insert>
+        INSERT INTO cms_contenttag
+        (contentId,tagId,priority)
+        VALUES
+        (#{contentId},#{tagId},#{priority})
+    </insert>
 
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insertSelective" parameterType="com.abc12366.cms.model.ContentTag">
@@ -62,11 +62,11 @@
 
     <!-- 修 改-->
     <update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.ContentTag">
-		 UPDATE cms_contenttag
-		 SET 
-			 tagId = #{tagId},
-			 priority = #{priority}
-		 WHERE contentId = #{contentId}
-	</update>
+        UPDATE cms_contenttag
+        SET
+        tagId = #{tagId},
+        priority = #{priority}
+        WHERE contentId = #{contentId}
+    </update>
 
 </mapper>

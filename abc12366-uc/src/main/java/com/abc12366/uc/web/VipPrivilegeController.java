@@ -57,7 +57,8 @@ public class VipPrivilegeController {
         LOGGER.info("{}", privilegeList);
         return (privilegeList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) privilegeList, "total", ((Page) privilegeList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) privilegeList, "total", ((Page) privilegeList).getTotal
+                        ()));
     }
 
     @GetMapping(path = "/{id}")
@@ -77,7 +78,8 @@ public class VipPrivilegeController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody VipPrivilegeInsertAndUpdateBO vipPrivilegeUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody VipPrivilegeInsertAndUpdateBO vipPrivilegeUpdateBO,
+                                 @PathVariable String id) {
         LOGGER.info("{}", vipPrivilegeUpdateBO);
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.update(vipPrivilegeUpdateBO, id);
         LOGGER.info("{}", vipPrivilegeBOReturn);

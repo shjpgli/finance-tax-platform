@@ -32,7 +32,8 @@ public class UserBindController {
     private UserBindService userBindService;
 
     @PostMapping(path = "/bind/dzsb")
-    public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) {
+    public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}", userDzsbInsertBO, request);
         UserDzsbBO user_dzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
         LOGGER.info("{}", user_dzsb);
@@ -56,7 +57,8 @@ public class UserBindController {
         LOGGER.info("{}", userDzsbBOList);
         return (userDzsbBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userDzsbBOList, "total", ((Page) userDzsbBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userDzsbBOList, "total", ((Page) userDzsbBOList)
+                        .getTotal()));
     }
 
     @GetMapping(path = "/bind/hngs/{userId}")
@@ -69,7 +71,8 @@ public class UserBindController {
         LOGGER.info("{}", userHngsBOList);
         return (userHngsBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList)
+                        .getTotal()));
     }
 
     @GetMapping(path = "/bind/hnds/{userId}")
@@ -82,11 +85,13 @@ public class UserBindController {
         LOGGER.info("{}", userHngsBOList);
         return (userHngsBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList)
+                        .getTotal()));
     }
 
     @PostMapping(path = "/bind/hngs")
-    public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception {
+    public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest
+            request) throws Exception {
         LOGGER.info("{}:{}", userHngsInsertBO, request);
         UserHngsBO user_hngs = userBindService.hngsBind(userHngsInsertBO, request);
         return ResponseEntity.ok(Utils.kv("data", user_hngs));
@@ -100,7 +105,8 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/bind/hnds")
-    public ResponseEntity userHndsBind(@Valid @RequestBody UserHndsInsertBO userHndsInsertBO, HttpServletRequest request) {
+    public ResponseEntity userHndsBind(@Valid @RequestBody UserHndsInsertBO userHndsInsertBO, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}", userHndsInsertBO, request);
         UserHndsBO user_hnds = userBindService.hndsBind(userHndsInsertBO, request);
         return ResponseEntity.ok(Utils.kv("data", user_hnds));

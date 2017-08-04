@@ -41,7 +41,7 @@ public class ModelServiceImpl implements ModelService {
         List<ModelBo> modelBoList;
         try {
             //查询模型列表
-            modelBoList =  modelRoMapper.selectList();
+            modelBoList = modelRoMapper.selectList();
         } catch (Exception e) {
             LOGGER.error("查询模型信息异常：{}", e);
             throw new ServiceException(4220);
@@ -106,7 +106,7 @@ public class ModelServiceImpl implements ModelService {
             LOGGER.info("批量更新模型信息:{}", jsonStu.toString());
             //保存模型项列表
             List<ModelBo> list = modelListBo.getModelBoList();
-            for(ModelBo modelBo:list){
+            for (ModelBo modelBo : list) {
                 Model model = new Model();
                 BeanUtils.copyProperties(modelBo, model);
                 modelMapper.updateByPrimaryKeySelective(model);
@@ -125,7 +125,7 @@ public class ModelServiceImpl implements ModelService {
             LOGGER.info("删除模型信息:{}", modelId);
             int con = modelRoMapper.selectConByModelId(modelId);
             int cha = modelRoMapper.selectChaByModelId(modelId);
-            if(con != 0 || cha !=0){
+            if (con != 0 || cha != 0) {
                 throw new ServiceException(4227);
             }
             modelItemMapper.deleteBymodelId(modelId);
@@ -144,7 +144,7 @@ public class ModelServiceImpl implements ModelService {
             LOGGER.info("批量删除模型信息:{}", jsonArray.toString());
             //modelItemMapper.deleteListBymodelIds(modelIds);
             //int r = modelMapper.deleteList(modelIds);
-            for(int i=0;i<modelIds.length;i++){
+            for (int i = 0; i < modelIds.length; i++) {
                 this.delete(modelIds[i]);
             }
         } catch (Exception e) {

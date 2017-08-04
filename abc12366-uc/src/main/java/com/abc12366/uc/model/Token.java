@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 
 /**
- *
  * @author liuguiyao <435720953@qq.com>
  * @create 2017-04-05 12:59 PM
  * @since 1.0.0

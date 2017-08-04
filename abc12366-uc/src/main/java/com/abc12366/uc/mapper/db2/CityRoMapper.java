@@ -6,14 +6,12 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * CityMapper数据库操作接口类
- * 
  **/
 
 public interface CityRoMapper {
 
-    List<City> selectCityList(@Param("cityId")String cityId);
+    List<City> selectCityList(@Param("cityId") String cityId);
 
-    List<City> selectCityByProId(@Param("provinceId")String provinceId);
+    List<City> selectCityByProId(@Param("provinceId") String provinceId);
 }

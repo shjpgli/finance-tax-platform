@@ -82,76 +82,76 @@ public class ApiBO implements Serializable {
 
     private String appId;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUri() {
         return this.uri;
     }
 
-    public void setMethod(String method) {
-        this.method = method;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getMethod() {
         return this.method;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public String getVersion() {
         return this.version;
     }
 
-    public void setAuthentication(Boolean authentication) {
-        this.authentication = authentication;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public Boolean getAuthentication() {
         return this.authentication;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setAuthentication(Boolean authentication) {
+        this.authentication = authentication;
     }
 
     public Boolean getStatus() {
         return this.status;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
+    }
+
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String getAppName() {

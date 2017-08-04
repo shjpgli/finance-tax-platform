@@ -19,7 +19,8 @@ public class ExperienceLogBO {
     public ExperienceLogBO() {
     }
 
-    public ExperienceLogBO(String id, String userId, String ruleId, int income, int outgo, int usableExp, Date createTime) {
+    public ExperienceLogBO(String id, String userId, String ruleId, int income, int outgo, int usableExp, Date
+            createTime) {
         this.id = id;
         this.userId = userId;
         this.ruleId = ruleId;

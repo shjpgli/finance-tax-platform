@@ -43,7 +43,7 @@ public class MyBangbangController {
     public ResponseEntity selectTeamsListByUserId(
             @PathVariable String userId,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<TeamBO> teamBOList = teamService.selectListByUserId(userId);
@@ -57,41 +57,44 @@ public class MyBangbangController {
     public ResponseEntity selectFollowerListByUserId(
             @PathVariable String userId,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<MyFollowerListBO> myFollowerBOList = followService.selectFollowerListByUserId(userId);
         LOGGER.info("{}", myFollowerBOList);
         return (myFollowerBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) myFollowerBOList, "total", ((Page) myFollowerBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) myFollowerBOList, "total", ((Page) myFollowerBOList)
+                        .getTotal()));
     }
 
     @GetMapping(path = "/mycollect/{userId}")
     public ResponseEntity selectCollectListByUserId(
             @PathVariable String userId,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<MyCollectListBO> myCollectList = collectService.selectCollectListByUserId(userId);
         LOGGER.info("{}", myCollectList);
         return (myCollectList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) myCollectList, "total", ((Page) myCollectList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) myCollectList, "total", ((Page) myCollectList).getTotal
+                        ()));
     }
 
     @GetMapping(path = "/myfollow/{userId}")
     public ResponseEntity selectMyfollowByUserId(
             @PathVariable String userId,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<MyFollowListBO> myFollowBOList = followService.selectMyfollowByUserId(userId);
         LOGGER.info("{}", myFollowBOList);
         return (myFollowBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) myFollowBOList, "total", ((Page) myFollowBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) myFollowBOList, "total", ((Page) myFollowBOList)
+                        .getTotal()));
     }
 }

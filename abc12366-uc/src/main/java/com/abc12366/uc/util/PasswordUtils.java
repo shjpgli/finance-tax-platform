@@ -9,7 +9,7 @@ import com.abc12366.gateway.util.Utils;
  * Time: 10:51
  */
 public class PasswordUtils {
-    public static String encodePassword(String password){
+    public static String encodePassword(String password) {
         //密码加密
         String encodePassword;
         String salt;

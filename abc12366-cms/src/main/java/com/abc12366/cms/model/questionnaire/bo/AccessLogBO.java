@@ -21,53 +21,52 @@ public class AccessLogBO implements Serializable {
     private String days;
     private String count;
 
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setQuestionId(String questionId) {
-        this.questionId = questionId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getQuestionId() {
         return this.questionId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 
     public String getUserId() {
         return this.userId;
     }
 
-    public void setAccessTerminal(String accessTerminal) {
-        this.accessTerminal = accessTerminal;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getAccessTerminal() {
         return this.accessTerminal;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setAccessTerminal(String accessTerminal) {
+        this.accessTerminal = accessTerminal;
     }
 
     public String getIpAddress() {
         return this.ipAddress;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
+    }
+
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getDays() {

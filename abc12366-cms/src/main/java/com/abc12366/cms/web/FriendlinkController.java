@@ -23,70 +23,70 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/link",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/link", headers = Constant.VERSION_HEAD + "=1")
 public class FriendlinkController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(FriendlinkController.class);
-	@Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(FriendlinkController.class);
+    @Autowired
     private FriendlinkService friendlinkService;
 
-	/**
-	 * 查询友情链接列表信息
-	 */
-	@GetMapping
-	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-									 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-		List<FriendlinkBo> dataList = friendlinkService.selectList();
-		LOGGER.info("{}", dataList);
-		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
-	}
+    /**
+     * 查询友情链接列表信息
+     */
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<FriendlinkBo> dataList = friendlinkService.selectList();
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
 
-	/**
-	 * 查询单个友情链接信息
-	 */
-	@GetMapping(path = "/{friendlinkId}")
-	public ResponseEntity selectOneById(@PathVariable("friendlinkId") String friendlinkId) {
-		LOGGER.info("{}", friendlinkId);
-		FriendlinkBo friendlinkBo = friendlinkService.selectOneById(friendlinkId);
-		LOGGER.info("{}", friendlinkBo);
-		return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
-	}
+    /**
+     * 查询单个友情链接信息
+     */
+    @GetMapping(path = "/{friendlinkId}")
+    public ResponseEntity selectOneById(@PathVariable("friendlinkId") String friendlinkId) {
+        LOGGER.info("{}", friendlinkId);
+        FriendlinkBo friendlinkBo = friendlinkService.selectOneById(friendlinkId);
+        LOGGER.info("{}", friendlinkBo);
+        return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
+    }
 
-	/**
-	 * 新增友情链接信息
-	 */
-	@PostMapping
-	public ResponseEntity save(@Valid @RequestBody FriendlinkBo friendlinkBo) {
-		LOGGER.info("{}", friendlinkBo);
-		friendlinkBo = friendlinkService.save(friendlinkBo);
-		LOGGER.info("{}", friendlinkBo);
-		return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
-	}
+    /**
+     * 新增友情链接信息
+     */
+    @PostMapping
+    public ResponseEntity save(@Valid @RequestBody FriendlinkBo friendlinkBo) {
+        LOGGER.info("{}", friendlinkBo);
+        friendlinkBo = friendlinkService.save(friendlinkBo);
+        LOGGER.info("{}", friendlinkBo);
+        return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
+    }
 
-	/**
-	 * 更新友情链接信息
-	 */
-	@PutMapping(path = "/{friendlinkId}")
-	public ResponseEntity update(@Valid @RequestBody FriendlinkBo friendlinkBo, @PathVariable("friendlinkId") String friendlinkId) {
-		LOGGER.info("{}", friendlinkBo);
-		friendlinkBo = friendlinkService.update(friendlinkBo);
-		LOGGER.info("{}", friendlinkBo);
-		return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
-	}
+    /**
+     * 更新友情链接信息
+     */
+    @PutMapping(path = "/{friendlinkId}")
+    public ResponseEntity update(@Valid @RequestBody FriendlinkBo friendlinkBo, @PathVariable("friendlinkId") String
+            friendlinkId) {
+        LOGGER.info("{}", friendlinkBo);
+        friendlinkBo = friendlinkService.update(friendlinkBo);
+        LOGGER.info("{}", friendlinkBo);
+        return ResponseEntity.ok(Utils.kv("data", friendlinkBo));
+    }
 
-	/**
-	 * 删除友情链接信息
-	 */
-	@DeleteMapping(path = "/{friendlinkId}")
-	public ResponseEntity delete(@PathVariable String friendlinkId) {
-		LOGGER.info("{}", friendlinkId);
-		//删除友情链接信息
-		String rtn = friendlinkService.delete(friendlinkId);
-		LOGGER.info("{}", rtn);
-		return ResponseEntity.ok(Utils.kv("data", rtn));
-	}
+    /**
+     * 删除友情链接信息
+     */
+    @DeleteMapping(path = "/{friendlinkId}")
+    public ResponseEntity delete(@PathVariable String friendlinkId) {
+        LOGGER.info("{}", friendlinkId);
+        //删除友情链接信息
+        String rtn = friendlinkService.delete(friendlinkId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
 
 
-	
 }

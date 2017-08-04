@@ -4,9 +4,8 @@ import java.io.IOException;
 
 public class PropertiesUtil {
 
-    private static String GATEWAY_PROPERTIES = "application-gateway.properties";
-
     static com.abc12366.gateway.util.Properties properties;
+    private static String GATEWAY_PROPERTIES = "application-gateway.properties";
 
     static {
         try {
@@ -28,5 +27,5 @@ public class PropertiesUtil {
         }
 
         return properties.getValue(String.valueOf(key));
-    }  
+    }
 } 

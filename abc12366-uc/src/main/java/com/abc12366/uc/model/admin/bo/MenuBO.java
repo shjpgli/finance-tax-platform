@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author liuguiyao
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
@@ -40,7 +39,8 @@ public class MenuBO implements Serializable {
     public MenuBO() {
     }
 
-    public MenuBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort, Boolean status, String remark) {
+    public MenuBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type, String
+            icon, int sort, Boolean status, String remark) {
         this.menuId = menuId;
         this.menuName = menuName;
         this.menuUrl = menuUrl;

@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- *
  * @author liuguiyao
  * @create 2017-04-27 10:08 AM
  * @since 1.0.0
@@ -33,7 +32,8 @@ public class DictBO implements Serializable {
     public DictBO() {
     }
 
-    public DictBO(String id, String dictId, String dictName, String fieldKey, String fieldValue, boolean status, Date createTime, String createUser, Date lastUpdate, String lastUser,String sort) {
+    public DictBO(String id, String dictId, String dictName, String fieldKey, String fieldValue, boolean status, Date
+            createTime, String createUser, Date lastUpdate, String lastUser, String sort) {
         this.id = id;
         this.dictId = dictId;
         this.dictName = dictName;

@@ -52,11 +52,13 @@ public class SupportController {
         List<SupportBO> supportBOList = supportService.selectList(subject, userId);
         return (supportBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) supportBOList, "total", ((Page) supportBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) supportBOList, "total", ((Page) supportBOList).getTotal
+                        ()));
     }
+
     @GetMapping(path = "/count/support/{subject}/{id}")
     public ResponseEntity selectCount(@PathVariable String subject,
-                                     @PathVariable String id) {
+                                      @PathVariable String id) {
         LOGGER.info("{}:{}", subject, id);
         int count = supportService.selectCount(subject, id);
         return ResponseEntity.ok(Utils.kv("data", count));

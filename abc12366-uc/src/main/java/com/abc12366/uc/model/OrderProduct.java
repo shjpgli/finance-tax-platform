@@ -1,158 +1,178 @@
 package com.abc12366.uc.model;
+
 import java.io.Serializable;
 
 
 /**
- * 
- * 
- * 
+ *
+ *
+ *
  **/
 @SuppressWarnings("serial")
 public class OrderProduct implements Serializable {
 
-	/**FK**/
-	private String orderId;
+    /**
+     * FK
+     **/
+    private String orderNo;
 
-	/**FK**/
-	private String productId;
+    /**
+     * FK
+     **/
+    private String productId;
 
-	/**销售价**/
-	private Double sellingPrice;
+    /**
+     * 销售价
+     **/
+    private Double sellingPrice;
 
-	/**单价**/
-	private Double unitPrice;
+    /**
+     * 单价
+     **/
+    private Double unitPrice;
 
-	/**购买数量**/
-	private Integer num;
+    /**
+     * 购买数量
+     **/
+    private Integer num;
 
-	/**折扣**/
-	private Double discount;
+    /**
+     * 折扣
+     **/
+    private Double discount;
 
-	/**成交价格**/
-	private Double dealPrice;
+    /**
+     * 成交价格
+     **/
+    private Double dealPrice;
 
-	/**商品名称**/
-	private String name;
+    /**
+     * 商品名称
+     **/
+    private String name;
 
-	/**商品分类**/
-	private String categoryId;
+    /**
+     * 商品分类
+     **/
+    private String categoryId;
 
-	/**分类名称**/
-	private String category;
+    /**
+     * 分类名称
+     **/
+    private String category;
 
-	/**商品重量，单位：克**/
-	private Double weight;
+    /**
+     * 商品重量，单位：克
+     **/
+    private Double weight;
 
-	/****/
-	private java.util.Date createTime;
+    /****/
+    private java.util.Date createTime;
 
-	/****/
-	private java.util.Date lastUpdate;
+    /****/
+    private java.util.Date lastUpdate;
 
+    public String getProductId() {
+        return this.productId;
+    }
 
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
-	public void setOrderId(String orderId){
-		this.orderId = orderId;
-	}
+    public Double getSellingPrice() {
+        return this.sellingPrice;
+    }
 
-	public String getOrderId(){
-		return this.orderId;
-	}
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
 
-	public void setProductId(String productId){
-		this.productId = productId;
-	}
+    public Double getUnitPrice() {
+        return this.unitPrice;
+    }
 
-	public String getProductId(){
-		return this.productId;
-	}
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
 
-	public void setSellingPrice(Double sellingPrice){
-		this.sellingPrice = sellingPrice;
-	}
+    public Integer getNum() {
+        return this.num;
+    }
 
-	public Double getSellingPrice(){
-		return this.sellingPrice;
-	}
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
-	public void setUnitPrice(Double unitPrice){
-		this.unitPrice = unitPrice;
-	}
+    public Double getDiscount() {
+        return this.discount;
+    }
 
-	public Double getUnitPrice(){
-		return this.unitPrice;
-	}
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
 
-	public void setNum(Integer num){
-		this.num = num;
-	}
+    public Double getDealPrice() {
+        return this.dealPrice;
+    }
 
-	public Integer getNum(){
-		return this.num;
-	}
+    public void setDealPrice(Double dealPrice) {
+        this.dealPrice = dealPrice;
+    }
 
-	public void setDiscount(Double discount){
-		this.discount = discount;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public Double getDiscount(){
-		return this.discount;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDealPrice(Double dealPrice){
-		this.dealPrice = dealPrice;
-	}
+    public String getCategoryId() {
+        return this.categoryId;
+    }
 
-	public Double getDealPrice(){
-		return this.dealPrice;
-	}
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public void setName(String name){
-		this.name = name;
-	}
+    public String getCategory() {
+        return this.category;
+    }
 
-	public String getName(){
-		return this.name;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setCategoryId(String categoryId){
-		this.categoryId = categoryId;
-	}
+    public Double getWeight() {
+        return this.weight;
+    }
 
-	public String getCategoryId(){
-		return this.categoryId;
-	}
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
 
-	public void setCategory(String category){
-		this.category = category;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public String getCategory(){
-		return this.category;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setWeight(Double weight){
-		this.weight = weight;
-	}
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
+    }
 
-	public Double getWeight(){
-		return this.weight;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public String getOrderNo() {
+        return orderNo;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
-
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
-
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
-
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 }

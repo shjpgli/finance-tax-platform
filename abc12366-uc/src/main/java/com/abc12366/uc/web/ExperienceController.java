@@ -27,7 +27,7 @@ public class ExperienceController {
     private ExperienceService experienceService;
 
     @GetMapping(path = "/{userId}")
-    public ResponseEntity getMyExperience(@PathVariable String userId){
+    public ResponseEntity getMyExperience(@PathVariable String userId) {
         LOGGER.info("{}", userId);
         MyExperienceBO myExperienceBO = experienceService.getMyExperience(userId);
         return ResponseEntity.ok(Utils.kv("data", myExperienceBO));
