@@ -37,11 +37,11 @@ public class KnowledgeBaseController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "categoryId", required = false) String categoryId,
+                                     @RequestParam(value = "categoryCode", required = false) String categoryCode,
                                      @RequestParam(value = "keywords", required = false) String keywords) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryId, keywords);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, keywords);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
         return (list == null) ?

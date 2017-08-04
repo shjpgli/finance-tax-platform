@@ -6,21 +6,21 @@ package com.abc12366.bangbang.model.bo;
  */
 public class KnowledgeBaseParamBO {
 
-    private String categoryId;  //知识库 分类ID
+    private String categoryCode;  //知识库 分类编号
 
     private String keywords;    //关键字（知识库标题 模糊匹配）
 
-    public KnowledgeBaseParamBO(String categoryId, String keywords){
-        this.categoryId = categoryId;
+    public KnowledgeBaseParamBO(String categoryCode, String keywords){
+        this.categoryCode = categoryCode;
         this.keywords = keywords;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public String getCategoryCode() {
+        return categoryCode;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
     }
 
     public String getKeywords() {
