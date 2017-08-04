@@ -64,9 +64,18 @@ public class KnowledgeBaseController {
     */
     @PutMapping(path="/modify")
     public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
+        knowledgeBaseService.modify(knowledgeBaseBO);
+        return ResponseEntity.ok(Utils.kv("data",knowledgeBaseBO));
+    }
 
 
-        return null;
+    /*
+    * 删除知识库 接口
+    */
+    @DeleteMapping(path = "/del")
+    public ResponseEntity delete(@RequestBody List<String> ids){
+        knowledgeBaseService.delete(ids);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 
@@ -74,7 +83,6 @@ public class KnowledgeBaseController {
     //test
     @PostMapping(path = "/add1")
     public ResponseEntity add1(){
-
         byte[] b = {new Byte("1")};
         KnowledgeBase record = new KnowledgeBase();
         record.setId(Utils.uuid());
@@ -96,7 +104,4 @@ public class KnowledgeBaseController {
         knowledgeBaseService.add(record);
         return ResponseEntity.ok(Utils.kv());
     }
-
-
-
 }

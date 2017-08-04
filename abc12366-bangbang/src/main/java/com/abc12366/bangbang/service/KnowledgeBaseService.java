@@ -17,9 +17,14 @@ public interface KnowledgeBaseService {
 
     void add(KnowledgeBase knowledgeBase);
 
+    void delete(List<String> ids);
+
     /*添加知识库数据*/
     KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO);
 
     KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO);
+
+
+
 
 }

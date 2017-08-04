@@ -36,7 +36,12 @@ public interface KnowledgeTagRelMapper{
 	 **/
 	int deleteByKnowledgeId(@Param("KnowledgeId") String KnowledgeId);
 
-
+	/**
+	 *
+	 * 删除（根据KnowledgeIDs批量删除）
+	 *
+	 **/
+	int deleteByKnowledgeIds(List<String> ids);
 	/**
 	 * 
 	 * 添加

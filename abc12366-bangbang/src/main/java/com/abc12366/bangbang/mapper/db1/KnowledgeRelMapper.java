@@ -37,6 +37,18 @@ public interface KnowledgeRelMapper {
 	int deleteByKnowledgeId(@Param("KnowledgeId") String KnowledgeId);
 
 	/**
+	 *
+	 * 删除（根据KnowledgeID删除）
+	 *
+	 **/
+	int deleteByKnowledgeIds(List<String> knowledgeIds);
+	/**
+	 *
+	 * 删除（根据KnowledgeID删除）
+	 *
+	 **/
+	int deleteByRelKnowledgeIds(List<String> relKnowledgeIds);
+	/**
 	 * 
 	 * 添加
 	 * 

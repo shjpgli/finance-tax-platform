@@ -22,10 +22,19 @@
 		 WHERE id = #{id}
 	</delete>
 
-	<!--删除：根据主键ID删除-->
+	<!--删除：根据KnowledgeId删除-->
 	<delete id="deleteByKnowledgeId" parameterType="java.lang.String">
 		DELETE FROM bb_knowledge_tag_rel
 		WHERE knowledgeId = #{knowledgeId}
+	</delete>
+
+	<!--删除：根据KnowledgeIds批量删除-->
+	<delete id="deleteByKnowledgeIds" parameterType="java.util.List">
+		DELETE FROM bb_knowledge_tag_rel
+		WHERE knowledgeId IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
 	</delete>
 
 	<!-- 添加 -->
