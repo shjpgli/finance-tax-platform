@@ -1,9 +1,9 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Properties;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
 import com.abc12366.uc.mapper.db1.TokenMapper;
@@ -310,7 +310,7 @@ public class AuthServiceImpl implements AuthService {
         }
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
-        return Utils.kv("User-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
+        return Utils.kv("Admin-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
     }
 
     @Override

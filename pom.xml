@@ -15,10 +15,7 @@
         <module>abc12366-gateway</module>
         <module>abc12366-message</module>
         <module>abc12366-bangbang</module>
-        <module>abc12366-common</module>
-        <module>abc12366-admin</module>
         <module>abc12366-cms</module>
-        <module>abc12366-cszj</module>
     </modules>
 
     <parent>

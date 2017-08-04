@@ -1,6 +1,6 @@
 package com.abc12366.message.service.impl;
 
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.SmsLogMapper;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.SmsLogService;

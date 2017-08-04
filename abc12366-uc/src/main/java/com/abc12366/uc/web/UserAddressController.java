@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.UserAddress;
 import com.abc12366.uc.model.bo.UserAddressBO;
 import com.abc12366.uc.model.bo.UserAddressUpdateBO;
@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 /**

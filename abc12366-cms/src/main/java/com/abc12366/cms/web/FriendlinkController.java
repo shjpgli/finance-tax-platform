@@ -2,8 +2,8 @@ package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.FriendlinkBo;
 import com.abc12366.cms.service.FriendlinkService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;

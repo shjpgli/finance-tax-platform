@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.IpMapper;
 import com.abc12366.uc.mapper.db2.IpRoMapper;
 import com.abc12366.uc.model.Ip;

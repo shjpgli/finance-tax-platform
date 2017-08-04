@@ -1,7 +1,7 @@
 package com.abc12366.gateway.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.model.Api;
 import com.abc12366.gateway.model.bo.ApiBO;
 import com.abc12366.gateway.service.ApiService;

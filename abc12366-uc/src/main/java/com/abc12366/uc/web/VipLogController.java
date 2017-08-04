@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.service.VipLogService;
 import com.github.pagehelper.Page;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-19
  * Time: 15:33
  */

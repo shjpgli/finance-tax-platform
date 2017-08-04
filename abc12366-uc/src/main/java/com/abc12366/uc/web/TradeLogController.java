@@ -1,8 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
-import com.abc12366.uc.model.OrderLog;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.service.TradeLogService;
 import org.slf4j.Logger;

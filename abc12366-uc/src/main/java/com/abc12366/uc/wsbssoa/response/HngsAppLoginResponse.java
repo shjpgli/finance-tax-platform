@@ -3,7 +3,7 @@ package com.abc12366.uc.wsbssoa.response;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-28
  * Time: 16:48
  */

@@ -1,7 +1,7 @@
 package com.abc12366.bangbang.common;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 

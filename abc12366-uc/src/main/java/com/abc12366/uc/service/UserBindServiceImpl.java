@@ -1,9 +1,9 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Properties;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
@@ -26,7 +26,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +34,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
  * Time: 16:22
  */

@@ -7,7 +7,7 @@ import com.abc12366.bangbang.model.bo.TeamMemberBO;
 import com.abc12366.bangbang.model.bo.TeamMemberInsertBO;
 import com.abc12366.bangbang.model.bo.TeamMemberUpdateBO;
 import com.abc12366.bangbang.service.TeamMemberService;
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

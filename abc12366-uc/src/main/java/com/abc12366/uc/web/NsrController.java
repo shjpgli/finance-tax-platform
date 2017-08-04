@@ -1,6 +1,6 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.bo.NsrBO;
 import com.abc12366.uc.model.bo.NsrSelectBO;
 import com.abc12366.uc.model.bo.NsrUpdateBO;

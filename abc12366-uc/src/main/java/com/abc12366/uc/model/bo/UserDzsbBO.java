@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
  * Time: 16:22
  */

@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.DeliveryMethodMapper;
 import com.abc12366.uc.mapper.db2.DeliveryMethodRoMapper;
 import com.abc12366.uc.model.DeliveryMethod;

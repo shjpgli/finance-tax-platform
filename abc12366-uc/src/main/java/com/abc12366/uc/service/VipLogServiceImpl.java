@@ -1,7 +1,7 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.VipLogMapper;
 import com.abc12366.uc.mapper.db2.VipLogRoMapper;
 import com.abc12366.uc.model.VipLog;
@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-19
  * Time: 15:39
  */

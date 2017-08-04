@@ -1,7 +1,5 @@
 package com.abc12366.gateway.util;
 
-import com.abc12366.common.util.Constant;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-23
  * Time: 10:25
  */

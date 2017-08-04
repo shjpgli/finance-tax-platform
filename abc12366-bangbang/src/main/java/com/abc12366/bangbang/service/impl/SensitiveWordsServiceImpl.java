@@ -1,22 +1,13 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.SensitiveWordsMapper;
-import com.abc12366.bangbang.mapper.db1.WikiAccesslogMapper;
-import com.abc12366.bangbang.mapper.db1.WikiMapper;
 import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
-import com.abc12366.bangbang.mapper.db2.WikiRoMapper;
 import com.abc12366.bangbang.model.SensitiveWords;
-import com.abc12366.bangbang.model.Wiki;
-import com.abc12366.bangbang.model.WikiAccesslog;
-import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
-import com.abc12366.bangbang.model.bo.WikiBO;
 import com.abc12366.bangbang.service.SensitiveWordsService;
-import com.abc12366.bangbang.service.WikiService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

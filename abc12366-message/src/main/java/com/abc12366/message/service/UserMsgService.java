@@ -1,6 +1,6 @@
 package com.abc12366.message.service;
 
-import com.abc12366.common.model.BodyStatus;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.message.model.UserMessage;
 
 import java.util.List;

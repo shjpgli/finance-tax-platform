@@ -2,7 +2,7 @@ package com.abc12366.uc.util;
 
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-19
  * Time: 18:24
  */

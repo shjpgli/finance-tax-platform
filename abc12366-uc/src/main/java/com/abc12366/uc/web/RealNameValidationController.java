@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-04
  * Time: 10:29
  */

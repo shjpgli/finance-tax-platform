@@ -5,7 +5,7 @@ import com.abc12366.cms.mapper.db2.TaskRoMapper;
 import com.abc12366.cms.model.Task;
 import com.abc12366.cms.model.bo.TaskBo;
 import com.abc12366.cms.service.TaskService;
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

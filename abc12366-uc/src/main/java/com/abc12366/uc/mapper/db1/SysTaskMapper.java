@@ -3,7 +3,7 @@ package com.abc12366.uc.mapper.db1;
 import com.abc12366.uc.model.SysTask;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-24
  * Time: 9:53
  */

@@ -1,8 +1,8 @@
 package com.abc12366.uc.component;
 
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.service.AuthService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-05-25
  * Time: 11:34
  */

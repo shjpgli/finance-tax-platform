@@ -1,6 +1,6 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.NsrMapper;
 import com.abc12366.uc.mapper.db2.NsrRoMapper;
 import com.abc12366.uc.model.Nsr;

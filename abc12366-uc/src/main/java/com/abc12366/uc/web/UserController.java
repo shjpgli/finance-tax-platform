@@ -1,8 +1,8 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserService;
 import com.github.pagehelper.Page;

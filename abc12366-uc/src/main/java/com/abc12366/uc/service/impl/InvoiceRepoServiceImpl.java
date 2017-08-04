@@ -1,14 +1,13 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
 import com.abc12366.uc.mapper.db1.InvoiceRepoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
 import com.abc12366.uc.model.InvoiceDetail;
 import com.abc12366.uc.model.InvoiceRepo;
-import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.InvoiceRepoService;
 import org.slf4j.Logger;

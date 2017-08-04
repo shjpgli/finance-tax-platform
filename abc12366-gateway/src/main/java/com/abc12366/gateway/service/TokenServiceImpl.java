@@ -1,7 +1,6 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.model.bo.AdminResponseBO;
 import com.abc12366.gateway.model.bo.LoginInfoBO;
 import com.abc12366.gateway.model.bo.ResultLoginInfo;

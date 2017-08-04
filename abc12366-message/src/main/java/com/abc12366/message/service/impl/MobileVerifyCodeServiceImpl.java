@@ -1,8 +1,8 @@
 package com.abc12366.message.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Properties;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
 import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
 import com.abc12366.message.model.PhoneCode;
@@ -30,9 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>

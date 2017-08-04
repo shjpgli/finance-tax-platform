@@ -1,12 +1,8 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.ContentType;
-import com.abc12366.cms.model.ModelItem;
-import com.abc12366.cms.model.bo.ContentListBo;
-import com.abc12366.cms.model.bo.ContentSaveBo;
-import com.abc12366.cms.model.bo.ContentTypeBo;
 import com.abc12366.cms.service.ContentTypeService;
-import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 内容类型管理模块

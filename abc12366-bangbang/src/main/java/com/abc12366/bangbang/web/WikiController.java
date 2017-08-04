@@ -1,13 +1,12 @@
 package com.abc12366.bangbang.web;
 
-import com.abc12366.bangbang.model.WikiAccesslog;
 import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 import com.abc12366.bangbang.model.bo.WikiBO;
 import com.abc12366.bangbang.service.SensitiveWordFilter;
 import com.abc12366.bangbang.service.WikiService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 

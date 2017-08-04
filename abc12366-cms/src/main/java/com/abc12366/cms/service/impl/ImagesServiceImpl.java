@@ -1,27 +1,16 @@
 package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.ImagesMapper;
-import com.abc12366.cms.mapper.db1.OptionMapper;
-import com.abc12366.cms.mapper.db1.SubjectsMapper;
 import com.abc12366.cms.mapper.db2.ImagesRoMapper;
-import com.abc12366.cms.mapper.db2.OptionRoMapper;
-import com.abc12366.cms.mapper.db2.SubjectsRoMapper;
 import com.abc12366.cms.model.questionnaire.Images;
-import com.abc12366.cms.model.questionnaire.Option;
-import com.abc12366.cms.model.questionnaire.Subjects;
-import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import com.abc12366.cms.service.ImagesService;
-import com.abc12366.cms.service.SubjectsService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

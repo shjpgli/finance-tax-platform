@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.SysTaskMapper;
 import com.abc12366.uc.mapper.db2.SysTaskRoMapper;
 import com.abc12366.uc.model.SysTask;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-24
  * Time: 9:51
  */

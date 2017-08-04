@@ -1,7 +1,7 @@
 package com.abc12366.message.service.impl;
 
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
 import com.abc12366.message.model.UserMessage;

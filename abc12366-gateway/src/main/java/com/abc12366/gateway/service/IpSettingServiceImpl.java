@@ -1,6 +1,6 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db1.IpSettingMapper;
 import com.abc12366.gateway.mapper.db2.IpSettingRoMapper;
 import com.abc12366.gateway.model.IpSetting;

@@ -5,7 +5,7 @@ import com.abc12366.uc.model.bo.VipLogBO;
 import java.util.List;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-19
  * Time: 15:40
  */

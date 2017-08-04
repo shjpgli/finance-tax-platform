@@ -1,7 +1,7 @@
 package com.abc12366.message.service;
 
-import com.abc12366.common.util.Properties;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.util.CheckSumBuilder;
 import org.slf4j.Logger;

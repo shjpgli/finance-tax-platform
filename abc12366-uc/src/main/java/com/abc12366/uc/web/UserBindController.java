@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserBindService;
 import com.github.pagehelper.Page;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 用户绑定办税身份控制器类，以常规JSON形式返回数据
  * <p>
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
  * Time: 16:22
  */

@@ -28,7 +28,7 @@
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
         <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
 
-        <association property="user" javaType="com.abc12366.uc.model.User">
+        <association property="admin" javaType="com.abc12366.uc.model.User">
             <id column="userId" property="id"/>
             <result column="username" property="username"/>
             <result column="nickname" property="nickname"/>
@@ -264,8 +264,8 @@
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
             1 = 1
-            <if test=" user.username != null and user.username != '' ">
-                and u.username = #{user.username}
+            <if test=" admin.username != null and admin.username != '' ">
+                and u.username = #{admin.username}
             </if>
             <if test=" orderStatus != null and orderStatus != '' ">
                 and o.orderStatus = #{orderStatus}
@@ -297,8 +297,8 @@
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
             1 = 1
-            <if test=" user.username != null and user.username != '' ">
-                and u.username = #{user.username}
+            <if test=" admin.username != null and admin.username != '' ">
+                and u.username = #{admin.username}
             </if>
             <!--<if test=" orderStatus != null and orderStatus != '' ">-->
             <!--<if test=" orderStatus != null and orderStatus != '' ">-->
@@ -333,8 +333,8 @@
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
             1 = 1
-            <if test=" user.id != null and user.id != '' ">
-                and u.id = #{user.id}
+            <if test=" admin.id != null and admin.id != '' ">
+                and u.id = #{admin.id}
             </if>
             <if test=" orderStatus != null and orderStatus != '' ">
                 and o.orderStatus = #{orderStatus}

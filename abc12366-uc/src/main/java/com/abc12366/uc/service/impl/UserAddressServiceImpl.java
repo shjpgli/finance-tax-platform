@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserAddressMapper;
 import com.abc12366.uc.mapper.db2.UserAddressRoMapper;
 import com.abc12366.uc.model.UserAddress;

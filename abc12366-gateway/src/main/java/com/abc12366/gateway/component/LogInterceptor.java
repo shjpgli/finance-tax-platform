@@ -1,9 +1,9 @@
 package com.abc12366.gateway.component;
 
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.DateUtils;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.model.ApiLog;
 import com.abc12366.gateway.service.ApiLogService;
 import com.abc12366.gateway.service.BlacklistService;

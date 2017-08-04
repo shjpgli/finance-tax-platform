@@ -1,9 +1,6 @@
 package com.abc12366.bangbang.config;
 
 import com.abc12366.bangbang.service.SensitiveWordsService;
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Utils;
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +8,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Map;
 
 /**
  * 敏感词拦截器

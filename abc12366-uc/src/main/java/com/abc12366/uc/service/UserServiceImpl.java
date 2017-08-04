@@ -1,7 +1,7 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;

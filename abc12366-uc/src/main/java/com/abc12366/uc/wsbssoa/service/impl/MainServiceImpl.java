@@ -1,7 +1,7 @@
 package com.abc12366.uc.wsbssoa.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Properties;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Properties;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
 import com.abc12366.uc.wsbssoa.response.RSAPkResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;

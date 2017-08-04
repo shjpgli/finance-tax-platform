@@ -1,6 +1,6 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.UserExtend;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-04
  * Time: 11:07
  */
