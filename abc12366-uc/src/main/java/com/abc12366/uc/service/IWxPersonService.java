@@ -1,8 +1,8 @@
 package com.abc12366.uc.service;
 
-import java.util.List;
-
 import com.abc12366.cszj.model.weixin.bo.person.WxPerson;
+
+import java.util.List;
 
 public interface IWxPersonService {
 	public boolean startUsersynchro();

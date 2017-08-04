@@ -1,16 +1,14 @@
 package com.abc12366.uc.service;
 
 
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.abc12366.cszj.model.weixin.bo.message.News;
 import com.abc12366.cszj.model.weixin.bo.message.ReturnMsg;
 import com.abc12366.cszj.model.weixin.bo.message.WxNews;
 import com.abc12366.cszj.model.weixin.bo.template.FileContent;
 import com.abc12366.cszj.model.weixin.bo.template.ImgMaterial;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 /**
  * 
  * @author zhushuai 2017-7-27
