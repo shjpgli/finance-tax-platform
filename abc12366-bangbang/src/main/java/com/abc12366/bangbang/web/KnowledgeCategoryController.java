@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeCategory;
+import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
 import com.abc12366.common.util.Constant;
 import com.abc12366.common.util.Utils;
@@ -27,6 +28,7 @@ public class KnowledgeCategoryController {
     @Autowired
     private KnowledgeCategoryService knowledgeCategoryService;
 
+
     /* 查询所有分类 */
     @GetMapping("/listAll")
     public ResponseEntity listAll(){
@@ -41,24 +43,29 @@ public class KnowledgeCategoryController {
         return ResponseEntity.ok(Utils.kv("data", rs));
     }
 
-
     /* 修改分类的名称 */
     @PutMapping(path = "/modifyName/{id}")
     public ResponseEntity modifyName(@PathVariable String id, @RequestParam String name){
         knowledgeCategoryService.modifyNameById(id, name);
-        return null;
+        return ResponseEntity.ok(Utils.kv());
     }
 
-
-    /* 编辑分类 */
-    @PutMapping(path = "/edit")
-    public ResponseEntity edit(){
-
-        return null;
+    /* 修改分类排序 */
+    @PutMapping(path = "/modifySort")
+    public ResponseEntity modifySort(@RequestBody List<SortBO> list){
+        knowledgeCategoryService.modifySort(list);
+        return ResponseEntity.ok(Utils.kv());
     }
-
 
     /* 删除分类*/
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity delete(@PathVariable String id){
+        knowledgeCategoryService.deleteById(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+
+
 
 
 }

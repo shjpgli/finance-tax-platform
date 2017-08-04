@@ -5,6 +5,7 @@ import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper;
 import com.abc12366.bangbang.model.KnowledgeCategory;
+import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
 import com.abc12366.common.exception.ServiceException;
 import com.abc12366.common.util.Utils;
@@ -72,12 +73,15 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     }
 
     @Override
-    public void modifySort(List<KnowledgeCategory> list) {
-        if(!list.isEmpty()){
-
-
-
+    public void modifySort(List<SortBO> list) {
+        if(list!=null && !list.isEmpty()){
+            knowledgeCategoryMapper.batchUpdateSort(list);
         }
+    }
+
+    @Override
+    public void deleteById(String id) {
+        int rs = knowledgeCategoryMapper.deleteByPrimaryKey(id);
     }
 
 
