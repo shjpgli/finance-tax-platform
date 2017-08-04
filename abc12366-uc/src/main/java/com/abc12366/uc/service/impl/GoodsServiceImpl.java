@@ -258,9 +258,15 @@ public class GoodsServiceImpl implements GoodsService {
         for (Product prod:pBOList){
             OrderProduct orderProduct = orderProductRoMapper.selectByProductId(id);
             if(orderProduct != null){
-                LOGGER.info("商品有被卖出，被卖出不能修改：{}", prod);
+                LOGGER.info("商品有被卖出，不能删除：{}", prod);
                 throw new ServiceException(4163);
             }
+        }
+        Goods goods = goodsRoMapper.selectByPrimaryKey(id);
+        //商品类型是会员服务=4，不能删除
+        if(goods != null && "4".equals(goods.getGoodsType())){
+            LOGGER.info("商品类型是会员服务，不能删除：{}", goods);
+            throw new ServiceException(4902);
         }
         //删除产品信息
         int gDelete = goodsMapper.deleteByPrimaryKey(id);
@@ -273,5 +279,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<GoodsBO> selectProductRepoList(GoodsBO goodsBO) {
         return goodsRoMapper.selectProductRepoList(goodsBO);
+    }
+
+    @Override
+    public GoodsBO selectUserGoods(String id) {
+        return goodsRoMapper.selectUserGoods(id);
     }
 }

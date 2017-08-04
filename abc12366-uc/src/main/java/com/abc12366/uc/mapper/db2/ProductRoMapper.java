@@ -24,6 +24,8 @@ public interface ProductRoMapper {
 	 **/
     List<Product> selectById(@Param("id") String id);
 
+    ProductBO selectBOById(@Param("id") String id);
+
 
     List<Product> selectList(Product product);
 

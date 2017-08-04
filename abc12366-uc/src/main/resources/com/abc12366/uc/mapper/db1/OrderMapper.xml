@@ -6,7 +6,7 @@
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM uc_order
-		 WHERE id = #{id}
+		 WHERE orderNo = #{orderNo}
 	</delete>
 
 	<!--删除：根据主键ID和UserID删除-->
@@ -19,9 +19,6 @@
 	<insert id="insert" parameterType="com.abc12366.uc.model.Order">
         INSERT INTO uc_order
         <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="id != null">
-                id,
-            </if>
             <if test="orderNo != null">
                 orderNo,
             </if>
@@ -91,9 +88,6 @@
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="id!=null">
-                #{id},
-            </if>
             <if test="orderNo!=null">
                 #{orderNo},
             </if>

@@ -36,6 +36,7 @@ public class OrderBO implements Serializable {
     private Integer giftPoints;
     private String tradeMethod;
     private String cancelId;
+    private String goodsId;
     /**是否已开发票，true：是，false：否**/
     private Boolean isInvoice;
     private GoodsBO goodsBO;
@@ -298,5 +299,13 @@ public class OrderBO implements Serializable {
 
     public void setCancelId(String cancelId) {
         this.cancelId = cancelId;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 }

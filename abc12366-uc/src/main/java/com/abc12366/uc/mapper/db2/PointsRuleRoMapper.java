@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.PointsRule;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 
 import java.util.List;

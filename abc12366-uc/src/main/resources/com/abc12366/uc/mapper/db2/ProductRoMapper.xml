@@ -111,5 +111,13 @@
             </if>
         </where>
     </select>
+    <!-- 查询条件根据） -->
+    <select id="selectBOById" resultMap="productResultMap" parameterType="java.lang.String">
+        SELECT
+        p.id,	p.goodsId,	p.marketPrice,	p.sellingPrice,	p.costPrice,	p.createTime,	p.lastUpdate,p.stock,g.name as goodsName
+        FROM uc_product p
+        LEFT JOIN uc_goods g ON g.id = p.goodsId
+        where p.id = #{id}
+    </select>
 
 </mapper>
