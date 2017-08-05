@@ -18,11 +18,8 @@ public interface UvipPriceRoMapper {
     UvipPrice selectByPrimaryKey(@Param("id") String id);
 
 
-<<<<<<< HEAD
 	List<UvipPrice> selectList(UvipPrice uvipPrice);
 
 	UvipPrice selectByLevel(UvipPrice uvip);
-=======
-    List<UvipPrice> selectList(UvipPrice uvipPrice);
->>>>>>> 3b9f2277b0b6b426634f6333601286124f814462
+
 }
