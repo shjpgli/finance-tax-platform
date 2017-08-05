@@ -28,7 +28,7 @@ public interface UserService {
 
     UserBO delete(String userId);
 
-    UserBO selectOneByToken(String userToken);
+    UserBO authAndRefreshToken(String token);
 
     Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request);
 

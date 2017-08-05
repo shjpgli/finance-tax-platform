@@ -49,14 +49,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test");
+                .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test");
+                .excludePathPatterns("/test");
     }
 }

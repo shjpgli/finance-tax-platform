@@ -49,28 +49,33 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         // App验证、授权拦截
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
+                .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/test")
                         //定时任务查询不需验证
                 .excludePathPatterns("/task/list")
                         //修改内容浏览量
                 .excludePathPatterns("/content/updateViewsDay")
                         //获取标签
-                .excludePathPatterns("/content/selectContentType")
-                .excludePathPatterns("/app/login", "/app/register", "/test");
+                .excludePathPatterns("/content/selectContentType");
 
-        // UserToken验证、授权拦截
+        //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
+                .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/app/login", "/app/register", "/test")
-                .excludePathPatterns("/admintoken/**", "/user/token/*")
+                .excludePathPatterns("/test")
                         //定时任务查询不需验证
                 .excludePathPatterns("/task/list")
                         //修改内容浏览量
                 .excludePathPatterns("/content/updateViewsDay")
                         //获取标签
-                .excludePathPatterns("/content/selectContentType")
-                .excludePathPatterns("/login", "/register");
-
+                .excludePathPatterns("/content/selectContentType");
     }
 }

@@ -87,12 +87,17 @@ public class TokenServiceImpl implements TokenService {
         try {
             //调用uc的token校验接口，如果校验通过刷新token并返回true
             String abc12366_uc = PropertiesUtil.getValue("abc12366.uc.url");
-            String check_url = "/auth/" + userToken;
-            String result = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.POST, request);
-            if ("true".equals(result)) {
-                isAuth = true;
-                //根据token获取admin的userId，并将userId设置到request中
-                refreshUserToken(userToken, request, abc12366_uc);
+            String check_url = "/user/token/" + userToken;
+            String body = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.GET, request);
+            if (body != null) {
+                UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
+                LOGGER.info("{}", userResponseBO);
+                if (userResponseBO.getData() != null) {
+                    isAuth = true;
+                    // 设置USER_ID，USER_INFO
+                    request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
+                    request.setAttribute(Constant.USER_INFO, userResponseBO.getData());
+                }
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -100,17 +105,4 @@ public class TokenServiceImpl implements TokenService {
         LOGGER.info("校验uc的token状态为: {}", isAuth);
         return isAuth;
     }
-
-    private void refreshUserToken(String userToken, HttpServletRequest request, String abc12366_uc) {
-        String url = "/user/token/" + userToken;
-        String body = restTemplateUtil.send(abc12366_uc + url, HttpMethod.GET, request);
-        if (body != null) {
-            UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
-            LOGGER.info("{}", userResponseBO);
-            if (userResponseBO.getData() != null && !StringUtils.isEmpty(userResponseBO.getData().getId())) {
-                request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
-            }
-        }
-    }
-
 }
