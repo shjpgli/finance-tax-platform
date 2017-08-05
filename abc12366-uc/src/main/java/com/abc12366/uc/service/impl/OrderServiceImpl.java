@@ -192,7 +192,7 @@ public class OrderServiceImpl implements OrderService {
                 //1：实物，2：虚拟物品，3：服务，4：会员服务，5：会员充值
 
                 String goodsType = goodsBO.getGoodsType();
-                if ("RMB".equals(goodsType)) {
+                if ("RMB".equals(goodsBO.getTradeMethod())) {
                     if ("1".equals(goodsType)) {
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
                     } else if ("2".equals(goodsType)) {
@@ -272,7 +272,7 @@ public class OrderServiceImpl implements OrderService {
         if(uvipPrice != null && uvipPrice.getTradePrice() != null && !"".equals(uvipPrice.getTradePrice())){
             totalPrice = uvipPrice.getTradePrice();
         }else{
-            totalPrice = goodsBO.getSellingPrice();
+            totalPrice = prBO.getSellingPrice();
         }
         //查找对应的积分
         if(uvipPrice != null && uvipPrice.getGiftPoints() != null && !"".equals(uvipPrice.getGiftPoints())){
@@ -571,12 +571,14 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4189);
         }
         order.setOrderStatus("4");
+
         int update = orderMapper.update(order);
         if (update != 1) {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(), "用户删除订单");
+
+        insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(), "用户取消订单");
         return bo;
     }
 
