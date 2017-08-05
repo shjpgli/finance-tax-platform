@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 支付宝统一下单支付实体
+ * 支付宝统一收单线下交易实体
  * @author zhushuai 2017-8-5
  *
  */

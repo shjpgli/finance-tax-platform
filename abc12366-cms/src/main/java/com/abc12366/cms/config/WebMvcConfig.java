@@ -56,11 +56,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
                         //定时任务查询不需验证
-                .excludePathPatterns("/task/list")
-                        //修改内容浏览量
-                .excludePathPatterns("/content/updateViewsDay")
-                        //获取标签
-                .excludePathPatterns("/content/selectContentType");
+                .excludePathPatterns("/task/list");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())

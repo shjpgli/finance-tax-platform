@@ -79,6 +79,20 @@ public class Utils {
         }
         return body;
     }
+    
+    /**
+     * 返回第三方错误信息
+     * @param code
+     * @param message
+     * @return
+     */
+    public static BodyStatus bodyStatus(int code,String message){
+    	BodyStatus body = new BodyStatus();
+        body.setCode(code);
+        body.setMessage(message);
+        return body;
+    }
+    
 
     /**
      * md5字符串

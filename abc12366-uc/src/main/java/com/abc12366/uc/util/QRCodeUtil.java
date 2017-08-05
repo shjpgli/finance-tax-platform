@@ -58,7 +58,7 @@ public class QRCodeUtil {
 	public static String getCreatQRcodeString(String content,int qrCodeSize,String formatName){
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
 		try {
-			ImageIO.write(creatQRcode(content,qrCodeSize), formatName, baos);
+			 ImageIO.write(creatQRcode(content,qrCodeSize), formatName, baos);
 			 BASE64Encoder encoder = new BASE64Encoder();  
 		     return encoder.encode(baos.toByteArray());
 		} catch (IOException e) {
