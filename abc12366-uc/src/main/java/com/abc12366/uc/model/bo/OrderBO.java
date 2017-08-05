@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import com.abc12366.uc.model.OrderProduct;
+import com.abc12366.uc.model.OrderProductSpec;
 import com.abc12366.uc.model.User;
 
 import java.io.Serializable;
@@ -43,6 +45,7 @@ public class OrderBO implements Serializable {
     private User user;
 
     private List<OrderProductBO> orderProductBOList;
+    private List<OrderProductSpec> orderProductSpecList;
     private List<DictBO> dictBOList;
     private Date startTime;
     private Date endTime;
@@ -307,5 +310,13 @@ public class OrderBO implements Serializable {
 
     public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public List<OrderProductSpec> getOrderProductSpecList() {
+        return orderProductSpecList;
+    }
+
+    public void setOrderProductSpecList(List<OrderProductSpec> orderProductSpecList) {
+        this.orderProductSpecList = orderProductSpecList;
     }
 }

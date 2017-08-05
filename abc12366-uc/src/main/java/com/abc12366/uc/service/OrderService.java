@@ -4,6 +4,7 @@ import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.OrderBack;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.model.bo.OrderBackBO;
+import com.abc12366.uc.model.bo.OrderPayBO;
 
 import java.util.List;
 
@@ -93,4 +94,6 @@ public interface OrderService {
     OrderBack backCheckOrder(OrderBack orderBack);
 
     List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO);
+
+    OrderBO paymentOrder(OrderPayBO orderPayBO);
 }

@@ -23,4 +23,6 @@ public interface UvipPriceRoMapper {
 
 
 	List<UvipPrice> selectList(UvipPrice uvipPrice);
+
+	UvipPrice selectByLevel(UvipPrice uvip);
 }

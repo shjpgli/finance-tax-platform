@@ -147,6 +147,8 @@ public class OrderController {
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
+
+
     /**
      * 查询订单详情
      * @param orderNo
@@ -173,6 +175,19 @@ public class OrderController {
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
+
+    /**
+     * 用户将订单改为支付中
+     * @return
+     */
+    @PostMapping(path = "/payment")
+    public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO) {
+        LOGGER.info("{}{}", orderPayBO);
+        OrderBO bo = orderService.paymentOrder(orderPayBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
 
     /**
      * 用户取消订单

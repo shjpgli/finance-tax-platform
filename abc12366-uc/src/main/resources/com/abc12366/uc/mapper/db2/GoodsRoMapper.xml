@@ -90,7 +90,7 @@
 
 
     <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productBOMap" >
-        <id column="id" property="id" jdbcType="VARCHAR" />
+        <id column="productId" property="id" jdbcType="VARCHAR" />
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
         <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
