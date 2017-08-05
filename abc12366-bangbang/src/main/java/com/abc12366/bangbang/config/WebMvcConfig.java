@@ -1,5 +1,7 @@
 package com.abc12366.bangbang.config;
 
+import com.abc12366.gateway.component.AppInterceptor;
+import com.abc12366.gateway.component.LogInterceptor;
 import com.abc12366.gateway.component.TokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,33 +25,63 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public LogInterceptor logInterceptor() {
+        return new LogInterceptor();
+    }
+
+    @Bean
+    public AppInterceptor appInterceptor() {
+        return new AppInterceptor();
+    }
+
+    @Bean
+    public TokenInterceptor tokenInterceptor() {
+        return new TokenInterceptor();
+    }
+
+    @Bean
     public SensitiveWordsInterceptor getSensitiveWordsInterceptor() {
         return new SensitiveWordsInterceptor();
     }
 
-    @Bean
-    public TokenInterceptor ucUserInterceptor() {
-        return new TokenInterceptor();
-    }
-
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
+        // 前置日志、黑名单、后置日志、接口计数拦截
+        registry.addInterceptor(logInterceptor())
+                .excludePathPatterns("/druid/**");
+
+        // App验证、授权拦截
+        registry.addInterceptor(appInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/blacklist/**")
+                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/test");
+
+        //前台用户访问拦截器迁移到网关后的
+        registry.addInterceptor(tokenInterceptor())
+                .excludePathPatterns("/")
+                .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/blacklist/**")
+                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/test")
+                .excludePathPatterns("/hotspot/**")
+                .excludePathPatterns("/knowledgeBase/list", "/knowledgeCategory/listAll");
 
         // 敏感词拦截
         registry.addInterceptor(getSensitiveWordsInterceptor())
-                .excludePathPatterns("/druid/**");
-
-        //前台用户访问拦截器迁移到网关后的
-        registry.addInterceptor(ucUserInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app*/**")
-                .excludePathPatterns("/druid*/**")
-                .excludePathPatterns("/auth/**")
-                .excludePathPatterns("/login", "/refresh", "/register", "/test", "/verifylogin", "/user/token/**")
-                .excludePathPatterns("/hotspot/**")
-                .excludePathPatterns("/knowledgeBase/list", "/knowledgeCategory/listAll");
+                .excludePathPatterns("/app/**")
+                .excludePathPatterns("/appsetting/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/blacklist/**")
+                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/test");
 
     }
 }

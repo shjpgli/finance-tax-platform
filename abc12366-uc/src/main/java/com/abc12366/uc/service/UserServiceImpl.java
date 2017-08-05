@@ -168,9 +168,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserBO selectOneByToken(String userToken) {
-        LOGGER.info("{}", userToken);
-        return userRoMapper.selectOneByToken(userToken);
+    public UserBO authAndRefreshToken(String token) {
+        LOGGER.info("{}", token);
+        UserBO user = userRoMapper.selectOneByToken(token);
+        if (user != null) {
+            tokenMapper.updateLastTokenResetTime(token);
+        }
+        return user;
     }
 
     @Transactional("db1TxManager")

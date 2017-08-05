@@ -34,11 +34,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new AppInterceptor();
     }
 
-    /*@Bean
-    public UserInterceptor userInterceptor(){
-        return new UserInterceptor();
-    }*/
-
     @Bean
     public TokenInterceptor tokenInterceptor() {
         return new TokenInterceptor();
@@ -58,20 +53,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
-                .excludePathPatterns("/app*/**")
+                .excludePathPatterns("/app/**")
                 .excludePathPatterns("/appsetting/**")
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
-                .excludePathPatterns("/druid*/**")
-                .excludePathPatterns("/auth/**")
-                .excludePathPatterns("/login", "/logout/**", "/refresh", "/register", "/test", "/verifylogin",
-                        "/user/token/**", "/user/u/**")
-                .excludePathPatterns("/admin/login", "/admin/token/**");
+                .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/test")
+                        // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
+                .excludePathPatterns("/login", "/verifylogin", "/logout/**", "/refresh", "/register", "/user/token/**", "/user/u/**")
+                        // 操作员登录、登出、token验证自动刷新
+                .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**");
     }
 }
