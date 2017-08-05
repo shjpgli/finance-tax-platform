@@ -49,7 +49,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/login", "/refresh", "/register", "/test", "/verifylogin", "/user/token/**")
                 .excludePathPatterns("/hotspot/**")
-                .excludePathPatterns("/knowledgeBase/list", "/knowledgeCategory/listAll");
+                .excludePathPatterns("/knowledgeBase/list","/knowledgeBase/hotList", "/knowledgeCategory/listAll");
 
     }
 }
