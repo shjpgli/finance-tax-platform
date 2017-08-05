@@ -59,6 +59,12 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     }
 
     @Override
+    public KnowledgeCategory modify(KnowledgeCategory knowledgeCategory) {
+        knowledgeCategoryMapper.updateByPrimaryKey(knowledgeCategory);
+        return knowledgeCategory;
+    }
+
+    @Override
     public void modifyNameById(String id, String name) {
         KnowledgeCategory record = new KnowledgeCategory();
         record.setId(id);

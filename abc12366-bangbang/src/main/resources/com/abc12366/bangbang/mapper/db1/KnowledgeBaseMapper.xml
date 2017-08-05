@@ -15,7 +15,10 @@
     <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
         SELECT t.*,t1.name AS categoryName FROM
         (
-            SELECT * FROM bb_knowledge_base a WHERE a.categoryCode
+            SELECT * FROM bb_knowledge_base a WHERE
+            TYPE = #{KnowledgeType}
+            AND recommend = #{KnowledgeRecommend}
+            AND a.categoryCode
             IN
             (
                 SELECT t.categoryCode FROM (
@@ -48,7 +51,17 @@
                 AND type = #{type}
             </if>
             <if test="keywords != null">
-                AND subject LIKE CONCAT('%',#{keywords},'%')
+                AND (
+                    subject LIKE CONCAT('%',#{keywords},'%')
+                    OR
+                    t_base.id IN(
+                        SELECT DISTINCT t1.knowledgeId
+                        FROM
+                        bb_knowledge_tag_rel t1
+                        LEFT JOIN bb_knowledge_tag t2 ON t1.tagId = t2.id
+                        WHERE t2.name LIKE CONCAT('%',#{keywords},'%')
+                    )
+                )
             </if>
     </select>
 
