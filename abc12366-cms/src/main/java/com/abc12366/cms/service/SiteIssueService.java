@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface SiteIssueService {
 
-    List<SiteIssueBo> selectList(Map<String,Object> map);
+    List<SiteIssueBo> selectList(Map<String, Object> map);
 
     SiteIssueBo save(SiteIssueBo siteIssueBo);
 

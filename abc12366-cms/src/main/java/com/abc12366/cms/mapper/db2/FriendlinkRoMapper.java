@@ -7,24 +7,20 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * FriendlinkMapper数据库操作接口类
- * 
  **/
 
-public interface FriendlinkRoMapper{
+public interface FriendlinkRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Friendlink selectByPrimaryKey(@Param("friendlinkId") String friendlinkId);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Friendlink selectByPrimaryKey(@Param("friendlinkId") String friendlinkId);
 
-	/**
-	 * 查询所有
-	 **/
-	List<FriendlinkBo> selectList();
+    /**
+     * 查询所有
+     **/
+    List<FriendlinkBo> selectList();
 
 }

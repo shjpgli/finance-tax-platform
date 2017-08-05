@@ -1,22 +1,13 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.SensitiveWordsMapper;
-import com.abc12366.bangbang.mapper.db1.WikiAccesslogMapper;
-import com.abc12366.bangbang.mapper.db1.WikiMapper;
 import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
-import com.abc12366.bangbang.mapper.db2.WikiRoMapper;
 import com.abc12366.bangbang.model.SensitiveWords;
-import com.abc12366.bangbang.model.Wiki;
-import com.abc12366.bangbang.model.WikiAccesslog;
-import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
-import com.abc12366.bangbang.model.bo.WikiBO;
 import com.abc12366.bangbang.service.SensitiveWordsService;
-import com.abc12366.bangbang.service.WikiService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
  * @author lizhongwei
  * @create 2017-06-20
  * @since 1.0.0
@@ -57,7 +47,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
         Date date = new Date();
         sensitiveWords.setLastUpdate(date);
         int update = sensitiveWordsMapper.update(sensitiveWords);
-        if (update != 1){
+        if (update != 1) {
             LOGGER.info("敏感词数据，修改失败", sensitiveWords);
             throw new ServiceException(4506);
         }
@@ -71,7 +61,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
         sensitiveWords.setCreateTime(date);
         sensitiveWords.setLastUpdate(date);
         int insert = sensitiveWordsMapper.insert(sensitiveWords);
-        if (insert != 1){
+        if (insert != 1) {
             LOGGER.info("敏感词数据，新增失败", sensitiveWords);
             throw new ServiceException(4505);
         }
@@ -81,7 +71,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
     @Override
     public void delete(SensitiveWords sensitiveWords) {
         int del = sensitiveWordsMapper.deleteByPrimaryKey(sensitiveWords.getId());
-        if (del != 1){
+        if (del != 1) {
             LOGGER.info("敏感词数据，删除失败", sensitiveWords);
             throw new ServiceException(4507);
         }

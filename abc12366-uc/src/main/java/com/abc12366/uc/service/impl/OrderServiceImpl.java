@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
@@ -83,7 +83,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderProductspecMapper orderProductspecMapper;
-
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -242,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
         //减去Product库存数量
         int num = orderProductBO.getNum();
         int stock = prBO.getStock() - num;
-        if(stock < 0){
+        if (stock < 0) {
             LOGGER.info("库存不足,请联系管理员：{}", orderProduct);
             throw new ServiceException(4905);
         }
@@ -414,7 +413,7 @@ public class OrderServiceImpl implements OrderService {
         productRepoMapper.insert(repo);
 
         //消费积分
-        int outPoints = (int)prBO.getSellingPrice().doubleValue();
+        int outPoints = (int) prBO.getSellingPrice().doubleValue();
         //收入积分
         int giftPoints;
 
@@ -430,7 +429,7 @@ public class OrderServiceImpl implements OrderService {
         }
         int userPoints = user.getPoints();
         //比较用户积分是否足够
-        if(user != null && userPoints < outPoints){
+        if (user != null && userPoints < outPoints) {
             LOGGER.info("用户积分不足，请充值：{}", user);
             throw new ServiceException(4904);
         }
@@ -453,7 +452,7 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setCreateTime(new Date());
         pointsLog.setUsablePoints(usablePoints);
         int result = pointsLogMapper.insert(pointsLog);
-        if(result != 1){
+        if (result != 1) {
             LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
             throw new ServiceException(4101);
         }

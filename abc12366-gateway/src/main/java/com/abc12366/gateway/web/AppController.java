@@ -1,13 +1,12 @@
 package com.abc12366.gateway.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.mapper.util.DataUtils;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +37,7 @@ public class AppController {
 
     /**
      * APP注册
+     *
      * @param appBO
      * @return
      * @throws Exception
@@ -55,6 +52,7 @@ public class AppController {
 
     /**
      * APP登录
+     *
      * @param appBO
      * @return
      * @throws Exception
@@ -70,6 +68,7 @@ public class AppController {
 
     /**
      * APP列表查询
+     *
      * @param pageNum
      * @param pageSize
      * @param name
@@ -82,15 +81,15 @@ public class AppController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(required = false,value = "name") String name,
-                                     @RequestParam(required = false,value = "accessToken") String accessToken,
-                                     @RequestParam(required = false,value = "startTime") String startTime,
-                                     @RequestParam(required = false,value = "endTime") String endTime,
-                                     @RequestParam(required = false,value = "status") Boolean status
+                                     @RequestParam(required = false, value = "name") String name,
+                                     @RequestParam(required = false, value = "accessToken") String accessToken,
+                                     @RequestParam(required = false, value = "startTime") String startTime,
+                                     @RequestParam(required = false, value = "endTime") String endTime,
+                                     @RequestParam(required = false, value = "status") Boolean status
     ) {
         LOGGER.info("{}:{}", pageNum, pageSize);
-        if(name!=null&&StringUtils.isEmpty(name)){
-        	name=null;
+        if (name != null && StringUtils.isEmpty(name)) {
+            name = null;
         }
 //        Date start=null;
 //        if(startTime!=null){
@@ -108,12 +107,12 @@ public class AppController {
 //				end=null;
 //			}
 //        }
-        AppBO appBO=new AppBO();
+        AppBO appBO = new AppBO();
         appBO.setName(name);
-        if(startTime != null && !"".equals(startTime)){
+        if (startTime != null && !"".equals(startTime)) {
             appBO.setStartTime(DataUtils.StrToDate(startTime));
         }
-        if(endTime != null && !"".equals(endTime)){
+        if (endTime != null && !"".equals(endTime)) {
             appBO.setEndTime(DataUtils.StrToDate(endTime));
         }
         appBO.setAccessToken(accessToken);
@@ -130,6 +129,7 @@ public class AppController {
 
     /**
      * APP详情查询
+     *
      * @param id
      * @return
      */
@@ -143,6 +143,7 @@ public class AppController {
 
     /**
      * APP修改
+     *
      * @param appUpdateBO
      * @param id
      * @return

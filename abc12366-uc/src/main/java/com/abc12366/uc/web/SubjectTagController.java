@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.BatchTagInsertBO;
 import com.abc12366.uc.model.bo.SubjectTagBO;
 import com.abc12366.uc.service.SubjectTagService;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-06-15
  * Time: 11:38
  */
@@ -30,14 +30,16 @@ public class SubjectTagController {
     private SubjectTagService subjectTagService;
 
     @PostMapping(path = "/{subject}/{id}/{tagId}")
-    public ResponseEntity insert(@PathVariable String subject, @PathVariable String id, @PathVariable String tagId, HttpServletRequest request) {
+    public ResponseEntity insert(@PathVariable String subject, @PathVariable String id, @PathVariable String tagId,
+                                 HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, tagId);
         SubjectTagBO subjectTagBO = subjectTagService.insert(subject, id, tagId, request);
         return ResponseEntity.ok(Utils.kv("data", subjectTagBO));
     }
 
     /*@PostMapping(path = "/{subject}/{id}")
-    public ResponseEntity batchTagInsert(@PathVariable String subject, @PathVariable String id, @RequestBody TagList tagList, HttpServletRequest request) {
+    public ResponseEntity batchTagInsert(@PathVariable String subject, @PathVariable String id, @RequestBody TagList
+    tagList, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, tagList);
         List<SubjectTagBO> subjectTagBOList = subjectTagService.batchInsert(subject, id, tagList, request);
         return (subjectTagBOList == null) ?
@@ -46,7 +48,8 @@ public class SubjectTagController {
     }
 
     @PostMapping(path = "/batch/{subject}/{tagId}")
-    public ResponseEntity batchUserInsert(@PathVariable String subject, @PathVariable String tagId, @RequestBody String subjectIds, HttpServletRequest request) {
+    public ResponseEntity batchUserInsert(@PathVariable String subject, @PathVariable String tagId, @RequestBody
+    String subjectIds, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}:{}", subject, tagId, subjectIds, request);
         List<SubjectTagBO> subjectTagBOList = subjectTagService.batchUserInsert(subject, tagId, subjectIds, request);
         return (subjectTagBOList == null) ?
@@ -54,7 +57,8 @@ public class SubjectTagController {
                 ResponseEntity.ok(Utils.kv("dataList", subjectTagBOList, "total", subjectTagBOList.size()));
     }*/
     @PostMapping(path = "/batch/{subject}")
-    public ResponseEntity batchInsert(@PathVariable String subject, @RequestBody BatchTagInsertBO batchTagInsertBO, HttpServletRequest request) {
+    public ResponseEntity batchInsert(@PathVariable String subject, @RequestBody BatchTagInsertBO batchTagInsertBO,
+                                      HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, batchTagInsertBO, request);
         List<SubjectTagBO> subjectTagBOList = subjectTagService.batchInsert2(subject, batchTagInsertBO, request);
         return (subjectTagBOList == null) ?
@@ -72,7 +76,8 @@ public class SubjectTagController {
         List<SubjectTagBO> subjectTagBOList = subjectTagService.selectList(subject, id);
         return (subjectTagBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) subjectTagBOList, "total", ((Page) subjectTagBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) subjectTagBOList, "total", ((Page) subjectTagBOList)
+                        .getTotal()));
     }
 
     @DeleteMapping(path = "/{subject}/{id}/{tagId}")

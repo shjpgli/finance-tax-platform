@@ -66,7 +66,8 @@ public class RSAUtil {
         if (!file.exists()) {
             return null;
         }
-        FileInputStream fis = new FileInputStream(StringUtils.isNotBlank(basePath) ? (basePath + RSAKeyStore) : RSAKeyStore);
+        FileInputStream fis = new FileInputStream(StringUtils.isNotBlank(basePath) ? (basePath + RSAKeyStore) :
+                RSAKeyStore);
         ObjectInputStream oos = new ObjectInputStream(fis);
         KeyPair kp = (KeyPair) oos.readObject();
         oos.close();
@@ -94,7 +95,8 @@ public class RSAUtil {
                 }
             }
         }
-        FileOutputStream fos = new FileOutputStream(StringUtils.isNotBlank(basePath) ? (basePath + RSAKeyStore) : RSAKeyStore);
+        FileOutputStream fos = new FileOutputStream(StringUtils.isNotBlank(basePath) ? (basePath + RSAKeyStore) :
+                RSAKeyStore);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         // 生成密钥
         oos.writeObject(kp);

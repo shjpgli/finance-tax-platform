@@ -7,8 +7,8 @@ import com.abc12366.bangbang.model.bo.CommentBO;
 import com.abc12366.bangbang.model.bo.CommentInsertBO;
 import com.abc12366.bangbang.model.bo.CommentUpdateBO;
 import com.abc12366.bangbang.service.CommentService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -79,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setId(id);
         comment.setLastUpdate(new Date());
         int result = commentMapper.update(comment);
-        if(result != 1){
+        if (result != 1) {
             LOGGER.warn("更新失败！");
             throw new ServiceException(4102);
         }
@@ -96,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setStatus("2");
         comment.setLastUpdate(new Date());
         int result = commentMapper.update(comment);
-        if(result != 1){
+        if (result != 1) {
             LOGGER.warn("更新失败！");
             throw new ServiceException(4102);
         }
@@ -120,7 +120,7 @@ public class CommentServiceImpl implements CommentService {
     public int delete(String id, String userId) {
         LOGGER.info("{}:{}", id, userId);
         int result = commentMapper.delete(id);
-        if(result < 1){
+        if (result < 1) {
             LOGGER.warn("删除失败！");
             throw new ServiceException(4103);
         }

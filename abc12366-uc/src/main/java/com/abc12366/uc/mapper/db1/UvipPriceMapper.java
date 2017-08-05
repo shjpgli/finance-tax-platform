@@ -4,35 +4,26 @@ import com.abc12366.uc.model.UvipPrice;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 
  * UvipPriceMapper数据库操作接口类
- * 
  **/
 
-public interface UvipPriceMapper{
+public interface UvipPriceMapper {
 
 
+    /**
+     * 删除（根据主键ID删除）
+     **/
+    int delete(@Param("id") String id);
 
-	/**
-	 * 
-	 * 删除（根据主键ID删除）
-	 * 
-	 **/
-	int delete(@Param("id") String id);
-
-	/**
-	 * 
-	 * 添加
-	 * 
-	 **/
-	int insert(UvipPrice record);
+    /**
+     * 添加
+     **/
+    int insert(UvipPrice record);
 
 
-	/**
-	 * 
-	 * 修改（根据主键ID修改）
-	 * 
-	 **/
-	int update(UvipPrice record);
+    /**
+     * 修改（根据主键ID修改）
+     **/
+    int update(UvipPrice record);
 
 }

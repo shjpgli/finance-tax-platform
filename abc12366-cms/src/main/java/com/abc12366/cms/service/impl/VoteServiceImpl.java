@@ -9,9 +9,9 @@ import com.abc12366.cms.mapper.db2.VoteRoMapper;
 import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.VoteService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -364,7 +364,7 @@ public class VoteServiceImpl implements VoteService {
                 .userAgent(userAgent)
                 .createTime(new Timestamp(new Date().getTime()))
                 .build();
-                voteMapper.insertHistory(vh);
+        voteMapper.insertHistory(vh);
         return vh;
     }
 
@@ -387,7 +387,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public VotetjListBo selecttj(Map<String,Object> map) {
+    public VotetjListBo selecttj(Map<String, Object> map) {
         VotetjListBo votetjListBo = new VotetjListBo();
         //投票统计按时间
         List<VoteRolltjBo> tptj = voteRoMapper.selecttptjbysj(map);
@@ -405,7 +405,7 @@ public class VoteServiceImpl implements VoteService {
         Integer llcnts = voteRoMapper.selectlltjsbysj(map);
         votetjListBo.setLlcnts(llcnts);
         //pc浏览统计浏览统计
-        map.put("source","PC");
+        map.put("source", "PC");
         List<VoteRolltjBo> pclist = voteRoMapper.selectlltj(map);
         votetjListBo.setPclist(pclist);
         //mobileWeb浏览统计
@@ -421,7 +421,6 @@ public class VoteServiceImpl implements VoteService {
         subjectMapper.updateStatus(subItemBo);
         return "";
     }
-
 
 
 }

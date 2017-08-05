@@ -1,8 +1,8 @@
 package com.abc12366.message.web;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.SmsLogService;
 import com.abc12366.message.service.SmsService;
@@ -11,11 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-05-27
@@ -37,7 +41,8 @@ public class SmsController {
     private ObjectMapper objectMapper;
 
     @PostMapping(path = "/sendcode")
-    public ResponseEntity sendCode(@Valid @RequestBody SendCodeParam sendCodeParam, HttpServletRequest request) throws IOException {
+    public ResponseEntity sendCode(@Valid @RequestBody SendCodeParam sendCodeParam, HttpServletRequest request)
+            throws IOException {
         LOGGER.info("{}", sendCodeParam);
 
         ResponseEntity response = smsService.sendCode(sendCodeParam);
@@ -47,7 +52,8 @@ public class SmsController {
         if (!response.hasBody()) {
             throw new ServiceException(4201);
         }
-        SendCodeResponseBO sendCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(), SendCodeResponseBO.class);
+        SendCodeResponseBO sendCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(),
+                SendCodeResponseBO.class);
         //记日志
         smsLogService.smsVerifyCodeInsert(sendCodeParam, sendCodeResponseBO);
         LOGGER.info("{}", sendCodeResponseBO);
@@ -64,7 +70,8 @@ public class SmsController {
         if (!response.hasBody()) {
             throw new ServiceException(4201);
         }
-        VerifyCodeResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponseBO.class);
+        VerifyCodeResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(),
+                VerifyCodeResponseBO.class);
         //记日志
         smsLogService.smsVerifyCodeInsert(verifyCodeParam, verifyCodeResponseBO);
         LOGGER.info("{}", verifyCodeResponseBO);
@@ -82,7 +89,8 @@ public class SmsController {
         if (!response.hasBody()) {
             throw new ServiceException(4201);
         }
-        SendTemplateResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(), SendTemplateResponseBO.class);
+        SendTemplateResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes()
+                , SendTemplateResponseBO.class);
         //记日志
         smsLogService.smsOpsLogInsert(sendTemplateParam, verifyCodeResponseBO);
         LOGGER.info("{}", verifyCodeResponseBO);
@@ -100,7 +108,8 @@ public class SmsController {
         if (!response.hasBody()) {
             throw new ServiceException(4201);
         }
-        QueryStatusResponseBO queryStatusResponseBO = objectMapper.readValue(((String) response.getBody()), QueryStatusResponseBO.class);
+        QueryStatusResponseBO queryStatusResponseBO = objectMapper.readValue(((String) response.getBody()),
+                QueryStatusResponseBO.class);
         //记日志
         smsLogService.smsOpsUpdate(queryStatusParam.getSendid().toString(), queryStatusResponseBO);
         LOGGER.info("{}", queryStatusResponseBO);

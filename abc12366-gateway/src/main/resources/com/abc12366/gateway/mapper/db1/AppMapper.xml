@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.gateway.mapper.db1.AppMapper">
     <insert id="insert" parameterType="com.abc12366.gateway.model.App">
         INSERT INTO gw_app
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
@@ -43,7 +43,7 @@
             </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 #{id},
             </if>

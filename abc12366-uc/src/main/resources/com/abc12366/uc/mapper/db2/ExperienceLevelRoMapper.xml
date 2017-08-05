@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.ExperienceLevelBO" parameterType="java.util.Map">
-        SELECT  id,name,minValue,maxValue,topPerDay,status,lastUpdate,createTime,medal,medalIcon
+        SELECT id,name,minValue,maxValue,topPerDay,status,lastUpdate,createTime,medal,medalIcon
         from uc_uexp_level
         <where>
             <if test="name!=null">
@@ -18,7 +18,7 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExperienceLevelBO" parameterType="java.lang.String">
-        SELECT  id,name,minValue,maxValue,topPerDay,status,lastUpdate,createTime,medal,medalIcon
+        SELECT id,name,minValue,maxValue,topPerDay,status,lastUpdate,createTime,medal,medalIcon
         from uc_uexp_level
         where id=#{id}
     </select>

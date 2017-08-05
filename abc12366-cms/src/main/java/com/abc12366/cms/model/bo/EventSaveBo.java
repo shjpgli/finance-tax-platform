@@ -5,32 +5,34 @@ import java.util.List;
 
 
 /**
- * 
  * CMS活动信息
- * 
  **/
 @SuppressWarnings("serial")
 public class EventSaveBo implements Serializable {
 
-	/**活动信息**/
-	private EventBo event;
+    /**
+     * 活动信息
+     **/
+    private EventBo event;
 
-	/**活动模型项信息**/
-	private List<EventModelItemBo> modelItemList;
+    /**
+     * 活动模型项信息
+     **/
+    private List<EventModelItemBo> modelItemList;
 
-	public EventBo getEvent() {
-		return event;
-	}
+    public EventBo getEvent() {
+        return event;
+    }
 
-	public void setEvent(EventBo event) {
-		this.event = event;
-	}
+    public void setEvent(EventBo event) {
+        this.event = event;
+    }
 
-	public List<EventModelItemBo> getModelItemList() {
-		return modelItemList;
-	}
+    public List<EventModelItemBo> getModelItemList() {
+        return modelItemList;
+    }
 
-	public void setModelItemList(List<EventModelItemBo> modelItemList) {
-		this.modelItemList = modelItemList;
-	}
+    public void setModelItemList(List<EventModelItemBo> modelItemList) {
+        this.modelItemList = modelItemList;
+    }
 }

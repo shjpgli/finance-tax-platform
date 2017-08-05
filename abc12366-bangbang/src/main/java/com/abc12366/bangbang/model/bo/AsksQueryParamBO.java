@@ -17,7 +17,8 @@ public class AsksQueryParamBO {
     public AsksQueryParamBO() {
     }
 
-    public AsksQueryParamBO(String ask, String detail, String type, String status, Boolean isSolve, String userId, String askedUserId) {
+    public AsksQueryParamBO(String ask, String detail, String type, String status, Boolean isSolve, String userId,
+                            String askedUserId) {
         this.ask = ask;
         this.detail = detail;
         this.type = type;

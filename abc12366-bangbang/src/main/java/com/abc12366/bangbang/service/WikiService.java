@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.service;
 
 
-import com.abc12366.bangbang.model.Wiki;
 import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 import com.abc12366.bangbang.model.bo.WikiBO;
 
@@ -14,6 +13,7 @@ public interface WikiService {
 
     /**
      * 查询百科主题列表信息
+     *
      * @param wikiBO
      * @return
      */
@@ -21,6 +21,7 @@ public interface WikiService {
 
     /**
      * 查询百科主题信息
+     *
      * @param id
      * @return
      */
@@ -29,6 +30,7 @@ public interface WikiService {
 
     /**
      * 修改购物车
+     *
      * @param wikiBO
      * @return
      */
@@ -37,6 +39,7 @@ public interface WikiService {
 
     /**
      * 新增百科主题
+     *
      * @param wikiBO
      * @return
      */
@@ -45,6 +48,7 @@ public interface WikiService {
 
     /**
      * 删除百科主题
+     *
      * @param wikiBO
      */
     void deleteWiki(WikiBO wikiBO);

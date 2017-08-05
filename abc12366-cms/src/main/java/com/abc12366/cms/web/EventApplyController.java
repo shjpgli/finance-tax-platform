@@ -2,8 +2,8 @@ package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.EventApplyService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/eventApply",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/eventApply", headers = Constant.VERSION_HEAD + "=1")
 public class EventApplyController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventApplyController.class);
 
@@ -75,15 +75,15 @@ public class EventApplyController {
                                      @RequestParam(value = "eventId", required = false) String eventId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("eventId", eventId);//活动ID
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime()/1000);
+                dataMap.put("startTime", startTime1.getTime() / 1000);
             }
-            if(endTime != null && !"".equals(endTime)){
+            if (endTime != null && !"".equals(endTime)) {
                 Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime()/1000);
+                dataMap.put("endTime", startTime2.getTime() / 1000);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);

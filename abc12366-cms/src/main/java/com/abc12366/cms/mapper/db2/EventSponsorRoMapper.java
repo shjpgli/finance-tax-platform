@@ -7,26 +7,20 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * EventSponsorMapper数据库操作接口类
- * 
  **/
 
 public interface EventSponsorRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	EventSponsor  selectByPrimaryKey(@Param("sponsorId") String sponsorId);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    EventSponsor selectByPrimaryKey(@Param("sponsorId") String sponsorId);
 
-	/**
-	 *
-	 * 查询（根据主键ID查询）
-	 *
-	 **/
-	List<EventSponsorBo> selectList();
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    List<EventSponsorBo> selectList();
 
 }

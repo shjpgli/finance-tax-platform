@@ -2,8 +2,8 @@ package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.TemplateBo;
 import com.abc12366.cms.service.TemplateService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/template",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/template", headers = Constant.VERSION_HEAD + "=1")
 public class TemplateController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateController.class);
 
@@ -34,20 +34,21 @@ public class TemplateController {
      * 查询模板列表信息
      */
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "templateProperty", required = false) String templateProperty,
+    public ResponseEntity selectList(@RequestParam(value = "templateProperty", required = false) String
+                                                 templateProperty,
                                      @RequestParam(value = "templateType", required = false) String templateType,
                                      @RequestParam(value = "siteId", required = false) String siteId,
                                      @RequestParam(value = "isFolder", required = false) String isFolder,
                                      @RequestParam(value = "parentPath", required = false) String parentPath,
                                      @RequestParam(value = "state", required = false) String state) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("templateProperty",templateProperty);//模板属性
-        dataMap.put("templateType",templateType);//模板类型
-        dataMap.put("siteId",siteId);//站点ID
-        dataMap.put("isFolder",isFolder);//是否文件夹
+        dataMap.put("templateProperty", templateProperty);//模板属性
+        dataMap.put("templateType", templateType);//模板类型
+        dataMap.put("siteId", siteId);//站点ID
+        dataMap.put("isFolder", isFolder);//是否文件夹
 
-        dataMap.put("parentPath",parentPath);//父节点路径
-        dataMap.put("state",state);//启停标志位
+        dataMap.put("parentPath", parentPath);//父节点路径
+        dataMap.put("state", state);//启停标志位
         List<TemplateBo> dataList = templateService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));

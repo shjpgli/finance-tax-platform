@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.DeliveryMethod;
 import com.abc12366.uc.model.bo.DeliveryMethodBO;
 import com.abc12366.uc.model.bo.DeliveryMethodUpdateBO;
@@ -48,6 +48,7 @@ public class DeliveryMethodController {
 
     /**
      * 新增商品
+     *
      * @param deliveryMethodBO
      * @return
      */
@@ -61,6 +62,7 @@ public class DeliveryMethodController {
 
     /**
      * 查询单个配送方式
+     *
      * @param id
      * @return
      */
@@ -74,12 +76,14 @@ public class DeliveryMethodController {
 
     /**
      * 修改配送方式
+     *
      * @param deliveryMethodBO
      * @param id
      * @return
      */
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateDeliveryMethod(@Valid @RequestBody DeliveryMethodBO deliveryMethodBO, @PathVariable("id") String id) {
+    public ResponseEntity updateDeliveryMethod(@Valid @RequestBody DeliveryMethodBO deliveryMethodBO, @PathVariable
+            ("id") String id) {
         LOGGER.info("{}", deliveryMethodBO);
         deliveryMethodBO.setId(id);
         DeliveryMethodBO bo = deliveryMethodService.update(deliveryMethodBO);
@@ -89,6 +93,7 @@ public class DeliveryMethodController {
 
     /**
      * 启用或禁用配送方式
+     *
      * @param deliveryMethodUpdateBO
      * @return
      */
@@ -101,6 +106,7 @@ public class DeliveryMethodController {
 
     /**
      * 删除配送方式
+     *
      * @return
      */
     @DeleteMapping(path = "/{id}")

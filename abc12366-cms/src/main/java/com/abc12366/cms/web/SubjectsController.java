@@ -3,10 +3,8 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import com.abc12366.cms.service.SubjectsService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +33,7 @@ public class SubjectsController {
 
     /**
      * 题目列表查询
+     *
      * @param questionId
      * @param title
      * @param pages
@@ -78,9 +76,10 @@ public class SubjectsController {
      * @return
      */
     @PostMapping(path = "/list/{questionId}")
-    public ResponseEntity addSubjects(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("questionId") String questionId) {
+    public ResponseEntity addSubjects(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("questionId")
+    String questionId) {
         LOGGER.info("{}", subjectsBOs);
-        List<SubjectsBO> bos = subjectsService.insertList(subjectsBOs,questionId);
+        List<SubjectsBO> bos = subjectsService.insertList(subjectsBOs, questionId);
         LOGGER.info("{}", bos);
         return ResponseEntity.ok(Utils.kv("dataList", bos));
     }
@@ -92,24 +91,27 @@ public class SubjectsController {
      * @return
      */
     @PostMapping(path = "/copy/{subjectsId}")
-    public ResponseEntity copySubjects(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("subjectsId") String subjectsId) {
+    public ResponseEntity copySubjects(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("subjectsId")
+    String subjectsId) {
         LOGGER.info("{}", subjectsBOs);
-        SubjectsBO bos = subjectsService.copySubjects(subjectsBOs,subjectsId);
+        SubjectsBO bos = subjectsService.copySubjects(subjectsBOs, subjectsId);
         LOGGER.info("{}", bos);
         return ResponseEntity.ok(Utils.kv("data", bos));
     }
 
     /**
      * 题目修改，并修改编号
+     *
      * @param subjectsBOs
      * @param questionId
      * @param id
      * @return
      */
     @PutMapping(path = "/list/{id}/{questionId}")
-    public ResponseEntity update(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("questionId") String questionId, @PathVariable("id") String id) {
+    public ResponseEntity update(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("questionId") String
+            questionId, @PathVariable("id") String id) {
         LOGGER.info("{}", subjectsBOs);
-        List<SubjectsBO> bos = subjectsService.updateList(subjectsBOs,questionId,id);
+        List<SubjectsBO> bos = subjectsService.updateList(subjectsBOs, questionId, id);
         LOGGER.info("{}", bos);
         return ResponseEntity.ok(Utils.kv("dataList", bos));
     }
@@ -122,9 +124,10 @@ public class SubjectsController {
      * @return
      */
     @DeleteMapping(path = "/list/{id}/{questionId}")
-    public ResponseEntity deleteList(@Valid @RequestBody List<SubjectsBO> subjectsBOs,@PathVariable("questionId") String questionId, @PathVariable("id") String id) {
+    public ResponseEntity deleteList(@Valid @RequestBody List<SubjectsBO> subjectsBOs, @PathVariable("questionId")
+    String questionId, @PathVariable("id") String id) {
         LOGGER.info("{}", subjectsBOs);
-        List<SubjectsBO> bos = subjectsService.deleteList(subjectsBOs,questionId,id);
+        List<SubjectsBO> bos = subjectsService.deleteList(subjectsBOs, questionId, id);
         LOGGER.info("{}", bos);
         return ResponseEntity.ok(Utils.kv("dataList", bos));
     }
@@ -136,7 +139,8 @@ public class SubjectsController {
      * @return
      */
     @PostMapping(path = "/{questionId}")
-    public ResponseEntity addSubjects(@Valid @RequestBody SubjectsBO subjectsBO, @PathVariable("questionId") String questionId) {
+    public ResponseEntity addSubjects(@Valid @RequestBody SubjectsBO subjectsBO, @PathVariable("questionId") String
+            questionId) {
         LOGGER.info("{}", subjectsBO);
         subjectsBO.setQuestionId(questionId);
         SubjectsBO bos = subjectsService.insert(subjectsBO);
@@ -146,13 +150,15 @@ public class SubjectsController {
 
     /**
      * 题目修改
+     *
      * @param subjectsBO
      * @param questionId
      * @param id
      * @return
      */
     @PutMapping(path = "/{id}/{questionId}")
-    public ResponseEntity update(@Valid @RequestBody SubjectsBO subjectsBO, @PathVariable("questionId") String questionId, @PathVariable("id") String id) {
+    public ResponseEntity update(@Valid @RequestBody SubjectsBO subjectsBO, @PathVariable("questionId") String
+            questionId, @PathVariable("id") String id) {
         LOGGER.info("{}", subjectsBO);
         subjectsBO.setQuestionId(questionId);
         subjectsBO.setId(id);
@@ -186,7 +192,8 @@ public class SubjectsController {
      * @return
      */
     @DeleteMapping(path = "/pages/{pages}/{questionId}")
-    public ResponseEntity deleteSubjectsByPages(@PathVariable("questionId") String questionId, @PathVariable("pages") Integer pages) {
+    public ResponseEntity deleteSubjectsByPages(@PathVariable("questionId") String questionId, @PathVariable("pages")
+    Integer pages) {
         Subjects subjects = new Subjects();
         subjects.setQuestionId(questionId);
         subjects.setPages(pages);

@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.VipPrivilegeBO;
 import com.abc12366.uc.model.bo.VipPrivilegeInsertAndUpdateBO;
 import com.abc12366.uc.service.VipPrivilegeService;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 9:13
  */
@@ -57,7 +57,8 @@ public class VipPrivilegeController {
         LOGGER.info("{}", privilegeList);
         return (privilegeList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) privilegeList, "total", ((Page) privilegeList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) privilegeList, "total", ((Page) privilegeList).getTotal
+                        ()));
     }
 
     @GetMapping(path = "/{id}")
@@ -77,7 +78,8 @@ public class VipPrivilegeController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody VipPrivilegeInsertAndUpdateBO vipPrivilegeUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody VipPrivilegeInsertAndUpdateBO vipPrivilegeUpdateBO,
+                                 @PathVariable String id) {
         LOGGER.info("{}", vipPrivilegeUpdateBO);
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.update(vipPrivilegeUpdateBO, id);
         LOGGER.info("{}", vipPrivilegeBOReturn);

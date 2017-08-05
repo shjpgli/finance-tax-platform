@@ -15,45 +15,44 @@ public class ExpressInvoiceBO implements Serializable {
     private java.util.Date createTime;
     private String lastUpdate;
 
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setExpressId(String expressId) {
-        this.expressId = expressId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getExpressId() {
         return this.expressId;
     }
 
-    public void setInvoiceId(String invoiceId) {
-        this.invoiceId = invoiceId;
+    public void setExpressId(String expressId) {
+        this.expressId = expressId;
     }
 
     public String getInvoiceId() {
         return this.invoiceId;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(String lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getLastUpdate() {
         return this.lastUpdate;
+    }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
 }

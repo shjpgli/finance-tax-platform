@@ -59,97 +59,111 @@ public class AppSettingBO implements Serializable {
      **/
     private java.util.Date lastUpdate;
 
-    /**是否需要身份验证**/
+    /**
+     * 是否需要身份验证
+     **/
     private Boolean isValidate;
 
-    /**接口名称**/
+    /**
+     * 接口名称
+     **/
     private String name;
 
-    /**接口地址**/
+    /**
+     * 接口地址
+     **/
     private String uri;
 
-    /**接口方法**/
+    /**
+     * 接口方法
+     **/
     private String method;
 
-    /**版本**/
+    /**
+     * 版本
+     **/
     private String version;
 
-    /**是否需要验证用户身份: 0不需要，1需要**/
+    /**
+     * 是否需要验证用户身份: 0不需要，1需要
+     **/
     private Boolean authentication;
 
-    /**所属系统**/
+    /**
+     * 所属系统
+     **/
     private String appName;
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getId() {
         return this.id;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAppId() {
         return this.appId;
     }
 
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getApiId() {
         return this.apiId;
     }
 
-    public void setTimesPerMinute(Integer timesPerMinute) {
-        this.timesPerMinute = timesPerMinute;
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
 
     public Integer getTimesPerMinute() {
         return this.timesPerMinute;
     }
 
-    public void setTimesPerHour(Integer timesPerHour) {
-        this.timesPerHour = timesPerHour;
+    public void setTimesPerMinute(Integer timesPerMinute) {
+        this.timesPerMinute = timesPerMinute;
     }
 
     public Integer getTimesPerHour() {
         return this.timesPerHour;
     }
 
-    public void setTimesPerDay(Integer timesPerDay) {
-        this.timesPerDay = timesPerDay;
+    public void setTimesPerHour(Integer timesPerHour) {
+        this.timesPerHour = timesPerHour;
     }
 
     public Integer getTimesPerDay() {
         return this.timesPerDay;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setTimesPerDay(Integer timesPerDay) {
+        this.timesPerDay = timesPerDay;
     }
 
     public Boolean getStatus() {
         return this.status;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
+    }
+
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String getName() {

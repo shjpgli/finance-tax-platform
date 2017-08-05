@@ -8,28 +8,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * ChannelMapper数据库操作接口类
- * 
  **/
 
-public interface ChannelRoMapper{
+public interface ChannelRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Channel selectByPrimaryKey(@Param("channelId") String channelId);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Channel selectByPrimaryKey(@Param("channelId") String channelId);
 
-	List<Channel> selectListByParam(Channel channel);
+    List<Channel> selectListByParam(Channel channel);
 
-	List<Channel> selectList();
+    List<Channel> selectList();
 
-	List<ChannelBo> selectLists(Map<String,Object> map);
+    List<ChannelBo> selectLists(Map<String, Object> map);
 
-	List<Channel> selectListByparentId(@Param("parentId") String parentId);
+    List<Channel> selectListByparentId(@Param("parentId") String parentId);
 
     Integer selectChannelIdCnt(@Param("channelId") String channelId);
 

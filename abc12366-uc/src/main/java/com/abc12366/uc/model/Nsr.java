@@ -18,7 +18,8 @@ public class Nsr {
     public Nsr() {
     }
 
-    public Nsr(String id, String userId, String djxh, String nsrsbh, String shxydm, boolean status, Date createTime, Date lastUpdate) {
+    public Nsr(String id, String userId, String djxh, String nsrsbh, String shxydm, boolean status, Date createTime,
+               Date lastUpdate) {
         this.id = id;
         this.userId = userId;
         this.djxh = djxh;

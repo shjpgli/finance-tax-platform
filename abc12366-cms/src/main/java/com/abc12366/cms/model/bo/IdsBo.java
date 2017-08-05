@@ -1,21 +1,20 @@
 package com.abc12366.cms.model.bo;
+
 import java.io.Serializable;
 
 
 /**
- * 
  * 文件上传
- * 
  **/
 @SuppressWarnings("serial")
 public class IdsBo implements Serializable {
-	private String[] ids;
+    private String[] ids;
 
-	public String[] getIds() {
-		return ids;
-	}
+    public String[] getIds() {
+        return ids;
+    }
 
-	public void setIds(String[] ids) {
-		this.ids = ids;
-	}
+    public void setIds(String[] ids) {
+        this.ids = ids;
+    }
 }

@@ -3,7 +3,6 @@ package com.abc12366.message.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -35,7 +34,7 @@ public class RedisServiceImpl implements RedisService {
     @Resource(name = "redisTemplate")
     private ListOperations<String, String> listOperations;
 
-    public void test(){
+    public void test() {
         if (redisTemplate.hasKey("foo")) {
             String foo = valueOperations.get("foo");
             LOGGER.info("foo: {}", foo);

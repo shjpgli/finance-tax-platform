@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.OrderProductspecMapper">
 
-	<insert id="insert" parameterType="com.abc12366.uc.model.OrderProductSpec">
-		 INSERT INTO uc_order_productspec
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="orderNo != null">
-				 orderNo,
-			</if>
-			<if test="productId != null">
-				 productId,
-			</if>
-			<if test="specId != null">
-				 specId,
-			</if>
+    <insert id="insert" parameterType="com.abc12366.uc.model.OrderProductSpec">
+        INSERT INTO uc_order_productspec
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">
+                orderNo,
+            </if>
+            <if test="productId != null">
+                productId,
+            </if>
+            <if test="specId != null">
+                specId,
+            </if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="orderNo!=null">
-				 #{orderNo},
-			</if>
-			<if test="productId!=null">
-				 #{productId},
-			</if>
-			<if test="specId!=null">
-				 #{specId},
-			</if>
-		 </trim>
-	</insert>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo!=null">
+                #{orderNo},
+            </if>
+            <if test="productId!=null">
+                #{productId},
+            </if>
+            <if test="specId!=null">
+                #{specId},
+            </if>
+        </trim>
+    </insert>
 
-	<update id="update" parameterType="com.abc12366.uc.model.OrderProductSpec">
-		 UPDATE uc_order_productspec
- 		 <set> 
-			<if test="productId != null">
-				 productId = #{productId},
-			</if>
-			<if test="specId != null">
-				 specId = #{specId},
-			</if>
+    <update id="update" parameterType="com.abc12366.uc.model.OrderProductSpec">
+        UPDATE uc_order_productspec
+        <set>
+            <if test="productId != null">
+                productId = #{productId},
+            </if>
+            <if test="specId != null">
+                specId = #{specId},
+            </if>
 
- 		 </set>
-		 WHERE orderNo = #{orderNo}
-	</update>
+        </set>
+        WHERE orderNo = #{orderNo}
+    </update>
 
 
 </mapper>

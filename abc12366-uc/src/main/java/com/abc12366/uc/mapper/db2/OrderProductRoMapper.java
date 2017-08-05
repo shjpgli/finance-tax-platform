@@ -7,23 +7,19 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * OrderProductMapper数据库操作接口类
- * 
  **/
 
 public interface OrderProductRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	OrderProduct  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    OrderProduct selectByPrimaryKey(@Param("id") String id);
 
 
-	OrderProduct selectByProductId(@Param("productId") String productId );
+    OrderProduct selectByProductId(@Param("productId") String productId);
 
-	List<OrderProductBO> selectByOrderNo(OrderProductBO pBO);
+    List<OrderProductBO> selectByOrderNo(OrderProductBO pBO);
 }

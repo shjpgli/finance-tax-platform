@@ -5,7 +5,7 @@ import com.abc12366.cms.mapper.db2.*;
 import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ContentService;
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +91,7 @@ public class ContentServiceImpl implements ContentService {
     private ContenttagidRoMapper tagRoMapper;
 
     @Override
-    public List<ContentListBo> selectList(Map<String,Object> map) {
+    public List<ContentListBo> selectList(Map<String, Object> map) {
         //查询内容列表
         List<ContentListBo> contents = contentRoMapper.selectList(map);
         LOGGER.info("{}", contents);
@@ -99,7 +99,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentsListBo> selectListByviews(Map<String,Object> map) {
+    public List<ContentsListBo> selectListByviews(Map<String, Object> map) {
         //查询内容列表按访问量
         List<ContentsListBo> contents = contentRoMapper.selectListByviews(map);
         LOGGER.info("{}", contents);
@@ -107,7 +107,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentsListBo> selectListByContentType(Map<String,Object> map) {
+    public List<ContentsListBo> selectListByContentType(Map<String, Object> map) {
         //查询内容列表按标签
         List<ContentsListBo> contents = contentRoMapper.selectListByContentType(map);
         LOGGER.info("{}", contents);
@@ -115,7 +115,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContenttagidBo> selectContentType(Map<String,Object> map) {
+    public List<ContenttagidBo> selectContentType(Map<String, Object> map) {
         //查询标签
         List<ContenttagidBo> contents = contentRoMapper.selectContentType(map);
         LOGGER.info("{}", contents);
@@ -123,9 +123,9 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentsListBo> selectListByChannelId(Map<String,Object> map) {
+    public List<ContentsListBo> selectListByChannelId(Map<String, Object> map) {
         int cnt = contentRoMapper.selectCntByChannelId(map);
-        if(cnt > 0){
+        if (cnt > 0) {
             //该栏目或者专题下存在未生成静态页的内容信息，请先生成内容静态页
             throw new ServiceException(4255);
         }
@@ -136,7 +136,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentsListBo> selectListBytopicId(Map<String,Object> map) {
+    public List<ContentsListBo> selectListBytopicId(Map<String, Object> map) {
         //查询内容列表
         List<ContentsListBo> contents = contentRoMapper.selectListBytopicId(map);
         LOGGER.info("{}", contents);
@@ -144,7 +144,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentsListBo> selectListByTplContent(Map<String,Object> map) {
+    public List<ContentsListBo> selectListByTplContent(Map<String, Object> map) {
         //查询内容列表
         List<ContentsListBo> contents = contentRoMapper.selectListByTplContent(map);
         LOGGER.info("{}", contents);
@@ -152,7 +152,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ModelItemBo> selectModeList(Map<String,Object> map) {
+    public List<ModelItemBo> selectModeList(Map<String, Object> map) {
         //查询模型项
         List<ModelItemBo> modelItemBos = modelItemRoMapper.selectList(map);
         LOGGER.info("{}", modelItemBos);
@@ -190,12 +190,12 @@ public class ContentServiceImpl implements ContentService {
             LOGGER.error("新增文章信息异常：{}", e);
             throw new ServiceException(4250);
         }
-                //内容文本
+        //内容文本
         ContentTxtBo contentTxtBo = contentSaveBo.getContentTxt();
         contentTxtBo.setContentId(uuid);
         ContentTxt contentTxt = new ContentTxt();
         try {
-            if(contentTxtBo != null){
+            if (contentTxtBo != null) {
                 BeanUtils.copyProperties(contentTxtBo, contentTxt);
                 contentTxtMapper.insert(contentTxt);
             }
@@ -210,8 +210,8 @@ public class ContentServiceImpl implements ContentService {
         //内容附件
         List<FileBo> fileList = contentSaveBo.getFileList();
 
-        if(contentAttrList != null){
-            for(ContentAttrBo contentAttrBo:contentAttrList){
+        if (contentAttrList != null) {
+            for (ContentAttrBo contentAttrBo : contentAttrList) {
                 contentAttrBo.setContentId(uuid);
                 ContentAttr contentAttr = new ContentAttr();
                 try {
@@ -224,8 +224,8 @@ public class ContentServiceImpl implements ContentService {
 
             }
         }
-        if(contentPictureList != null){
-            for(ContentPictureBo contentPictureBo:contentPictureList){
+        if (contentPictureList != null) {
+            for (ContentPictureBo contentPictureBo : contentPictureList) {
                 contentPictureBo.setContentId(uuid);
                 ContentPicture contentPicture = new ContentPicture();
                 try {
@@ -238,8 +238,8 @@ public class ContentServiceImpl implements ContentService {
 
             }
         }
-        if(fileList != null){
-            for(FileBo fileBo:fileList){
+        if (fileList != null) {
+            for (FileBo fileBo : fileList) {
                 fileBo.setContentId(uuid);
                 File file = new File();
                 try {
@@ -255,8 +255,8 @@ public class ContentServiceImpl implements ContentService {
 
         //用户组
         List<ContentGroupViewBo> groupList = contentSaveBo.getGroupList();
-        if(groupList != null){
-            for(ContentGroupViewBo groupBo:groupList){
+        if (groupList != null) {
+            for (ContentGroupViewBo groupBo : groupList) {
                 ContentGroupView group = new ContentGroupView();
                 groupBo.setContentId(uuid);
                 try {
@@ -272,8 +272,8 @@ public class ContentServiceImpl implements ContentService {
 
         //专题组
         List<ContentTopicBo> topicList = contentSaveBo.getTopicList();
-        if(topicList != null){
-            for(ContentTopicBo topicBo:topicList){
+        if (topicList != null) {
+            for (ContentTopicBo topicBo : topicList) {
                 ContentTopic topic = new ContentTopic();
                 topicBo.setContentId(uuid);
                 try {
@@ -289,8 +289,8 @@ public class ContentServiceImpl implements ContentService {
 
         //标签组
         List<ContenttagidBo> tagList = contentSaveBo.getTagList();
-        if(tagList != null){
-            for(ContenttagidBo tagBo:tagList){
+        if (tagList != null) {
+            for (ContenttagidBo tagBo : tagList) {
                 Contenttagid tag = new Contenttagid();
                 tagBo.setContentId(uuid);
                 try {
@@ -323,7 +323,7 @@ public class ContentServiceImpl implements ContentService {
         ContentSaveBo contentSaveBo = new ContentSaveBo();
         //内容
         Content content = contentRoMapper.selectByContentId(contentId);
-        if(content == null){
+        if (content == null) {
             //未查询到文章信息，请检查文章是否已被删除
             throw new ServiceException(4251);
         }
@@ -359,7 +359,7 @@ public class ContentServiceImpl implements ContentService {
 
         ContentTxtBo contentTxtBo = new ContentTxtBo();
         try {
-            if(contentTxt != null){
+            if (contentTxt != null) {
                 BeanUtils.copyProperties(contentTxt, contentTxtBo);
             }
         } catch (Exception e) {
@@ -369,7 +369,7 @@ public class ContentServiceImpl implements ContentService {
         contentSaveBo.setContentTxt(contentTxtBo);
 
         List<ContentAttrBo> contentAttrBoList = new ArrayList<ContentAttrBo>();
-        for(ContentAttr contentAttr : contentAttrList){
+        for (ContentAttr contentAttr : contentAttrList) {
             ContentAttrBo contentAttrBo = new ContentAttrBo();
             try {
                 BeanUtils.copyProperties(contentAttr, contentAttrBo);
@@ -382,7 +382,7 @@ public class ContentServiceImpl implements ContentService {
         contentSaveBo.setContentAttrList(contentAttrBoList);
 
         List<ContentPictureBo> contentPictureBoList = new ArrayList<ContentPictureBo>();
-        for(ContentPicture contentPicture : contentPictureList){
+        for (ContentPicture contentPicture : contentPictureList) {
             ContentPictureBo contentPictureBo = new ContentPictureBo();
             try {
                 BeanUtils.copyProperties(contentPicture, contentPictureBo);
@@ -395,7 +395,7 @@ public class ContentServiceImpl implements ContentService {
         contentSaveBo.setContentPictureList(contentPictureBoList);
 
         List<FileBo> fileBoList = new ArrayList<FileBo>();
-        for(File file : fileList){
+        for (File file : fileList) {
             FileBo fileBo = new FileBo();
             try {
                 BeanUtils.copyProperties(file, fileBo);
@@ -410,8 +410,8 @@ public class ContentServiceImpl implements ContentService {
         //获取用户组
         List<ContentGroupView> groupList = groupRoMapper.selectList(contentId);
         List<ContentGroupViewBo> groupBoList = new ArrayList<ContentGroupViewBo>();
-        if(groupList != null){
-            for(ContentGroupView group:groupList){
+        if (groupList != null) {
+            for (ContentGroupView group : groupList) {
                 ContentGroupViewBo groupBo = new ContentGroupViewBo();
                 try {
                     BeanUtils.copyProperties(group, groupBo);
@@ -427,8 +427,8 @@ public class ContentServiceImpl implements ContentService {
         //获取专题组
         List<ContentTopic> topicList = topicRoMapper.selectByPrimaryKey(contentId);
         List<ContentTopicBo> topicBoList = new ArrayList<ContentTopicBo>();
-        if(topicList != null){
-            for(ContentTopic topic:topicList){
+        if (topicList != null) {
+            for (ContentTopic topic : topicList) {
                 ContentTopicBo topicBo = new ContentTopicBo();
                 try {
                     BeanUtils.copyProperties(topic, topicBo);
@@ -444,8 +444,8 @@ public class ContentServiceImpl implements ContentService {
         //获取标签组
         List<Contenttagid> tagList = tagRoMapper.selectList(contentId);
         List<ContenttagidBo> tagBoList = new ArrayList<ContenttagidBo>();
-        if(tagList != null){
-            for(Contenttagid tag:tagList){
+        if (tagList != null) {
+            for (Contenttagid tag : tagList) {
                 ContenttagidBo tagBo = new ContenttagidBo();
                 try {
                     BeanUtils.copyProperties(tag, tagBo);
@@ -491,7 +491,7 @@ public class ContentServiceImpl implements ContentService {
         ContentTxtBo contentTxtBo = contentSaveBo.getContentTxt();
         ContentTxt contentTxt = new ContentTxt();
         try {
-            if(contentTxtBo != null){
+            if (contentTxtBo != null) {
                 BeanUtils.copyProperties(contentTxtBo, contentTxt);
                 contentTxtMapper.updateByPrimaryKeySelective(contentTxt);
             }
@@ -506,8 +506,8 @@ public class ContentServiceImpl implements ContentService {
         //内容附件
         List<FileBo> fileList = contentSaveBo.getFileList();
 
-        if(contentAttrList != null){
-            for(ContentAttrBo contentAttrBo:contentAttrList){
+        if (contentAttrList != null) {
+            for (ContentAttrBo contentAttrBo : contentAttrList) {
                 ContentAttr contentAttr = new ContentAttr();
                 try {
                     BeanUtils.copyProperties(contentAttrBo, contentAttr);
@@ -522,8 +522,8 @@ public class ContentServiceImpl implements ContentService {
         int priority = 0;//排序
         //根据内容ID删除内容图片，然后再新增
         contentPictureMapper.deleteByContentId(content.getContentId());
-        if(contentPictureList != null){
-            for(ContentPictureBo contentPictureBo:contentPictureList){
+        if (contentPictureList != null) {
+            for (ContentPictureBo contentPictureBo : contentPictureList) {
                 contentPictureBo.setPriority(priority);
                 ContentPicture contentPicture = new ContentPicture();
                 try {
@@ -539,8 +539,8 @@ public class ContentServiceImpl implements ContentService {
 
         //根据内容ID删除附件信息，然后再新增
         fileMapper.deleteByContentId(content.getContentId());
-        if(fileList != null){
-            for(FileBo fileBo:fileList){
+        if (fileList != null) {
+            for (FileBo fileBo : fileList) {
                 File file = new File();
                 try {
                     BeanUtils.copyProperties(fileBo, file);
@@ -556,8 +556,8 @@ public class ContentServiceImpl implements ContentService {
         //用户组
         groupMapper.deleteByPrimaryKey(content.getContentId());
         List<ContentGroupViewBo> groupList = contentSaveBo.getGroupList();
-        if(groupList != null){
-            for(ContentGroupViewBo groupBo:groupList){
+        if (groupList != null) {
+            for (ContentGroupViewBo groupBo : groupList) {
                 ContentGroupView group = new ContentGroupView();
                 try {
                     BeanUtils.copyProperties(groupBo, group);
@@ -572,8 +572,8 @@ public class ContentServiceImpl implements ContentService {
         //专题组
         topicMapper.deleteByContentId(content.getContentId());
         List<ContentTopicBo> topicList = contentSaveBo.getTopicList();
-        if(topicList != null){
-            for(ContentTopicBo topicBo:topicList){
+        if (topicList != null) {
+            for (ContentTopicBo topicBo : topicList) {
                 ContentTopic topic = new ContentTopic();
                 try {
                     BeanUtils.copyProperties(topicBo, topic);
@@ -588,8 +588,8 @@ public class ContentServiceImpl implements ContentService {
         //标签组
         tagMapper.deleteByPrimaryKey(content.getContentId());
         List<ContenttagidBo> tagList = contentSaveBo.getTagList();
-        if(tagList != null){
-            for(ContenttagidBo tagBo:tagList){
+        if (tagList != null) {
+            for (ContenttagidBo tagBo : tagList) {
                 Contenttagid tag = new Contenttagid();
                 try {
                     BeanUtils.copyProperties(tagBo, tag);
@@ -636,7 +636,7 @@ public class ContentServiceImpl implements ContentService {
     @Transactional("db1TxManager")
     @Override
     public String deleteList(String[] contentIds) {
-        for(int i=0;i<contentIds.length;i++){
+        for (int i = 0; i < contentIds.length; i++) {
             this.delete(contentIds[i]);
         }
         return "";
@@ -667,7 +667,7 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public ContentUpdateListBo updateList(ContentUpdateListBo contentUpdateListBo) {
         List<ContentBo> contentBoList = contentUpdateListBo.getContentBoList();
-        for(ContentBo contentBo : contentBoList){
+        for (ContentBo contentBo : contentBoList) {
             Content content = new Content();
             try {
                 BeanUtils.copyProperties(contentBo, content);
@@ -683,8 +683,8 @@ public class ContentServiceImpl implements ContentService {
     @Transactional("db1TxManager")
     @Override
     public ContentTopicListBo updatetopicList(ContentTopicListBo topicListBo) {
-        if(topicListBo != null){
-            for(ContentTopicBo topicBo:topicListBo.getTopicBoList()){
+        if (topicListBo != null) {
+            for (ContentTopicBo topicBo : topicListBo.getTopicBoList()) {
                 ContentTopic topic = new ContentTopic();
                 try {
                     BeanUtils.copyProperties(topicBo, topic);
@@ -694,11 +694,11 @@ public class ContentServiceImpl implements ContentService {
                 }
                 Topic tp = tpRoMapper.selectByPrimaryKey(topic.getTopicId());
                 Content ct = contentRoMapper.selectByContentId(topic.getContentId());
-                if(tp != null && ct != null && tp.getSiteId() != null){
-                    if(!tp.getSiteId().equals(ct.getSiteId())){
+                if (tp != null && ct != null && tp.getSiteId() != null) {
+                    if (!tp.getSiteId().equals(ct.getSiteId())) {
                         throw new ServiceException(4256);
                     }
-                }else{
+                } else {
                     throw new ServiceException(4257);
                 }
                 topicMapper.deleteByPrimaryKey(topic);
@@ -710,7 +710,7 @@ public class ContentServiceImpl implements ContentService {
 
 
     @Override
-    public List<ContentudBo> selectContentudList(Map<String,Object> map) {
+    public List<ContentudBo> selectContentudList(Map<String, Object> map) {
         List<ContentudBo> list = new ArrayList<ContentudBo>();
         //下一篇
         ContentudBo contentudBo1 = contentRoMapper.selectByReleaseDateAsc(map);

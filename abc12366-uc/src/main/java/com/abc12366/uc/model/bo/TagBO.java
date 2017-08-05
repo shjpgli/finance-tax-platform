@@ -3,7 +3,7 @@ package com.abc12366.uc.model.bo;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-06-15
  * Time: 10:32
  */
@@ -20,8 +20,15 @@ public class TagBO {
     private int weight;
     private String type;
 
+    public TagBO() {
+    }
+
     public int getWeight() {
         return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
     public String getType() {
@@ -30,13 +37,6 @@ public class TagBO {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public TagBO() {
     }
 
     public String getId() {

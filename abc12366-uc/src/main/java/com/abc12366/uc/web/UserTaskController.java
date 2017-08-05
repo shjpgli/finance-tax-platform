@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.MyTaskBO;
 import com.abc12366.uc.model.bo.UserTaskBO;
 import com.abc12366.uc.model.bo.UserTaskInsertBO;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-24
  * Time: 11:39
  */
@@ -47,7 +47,8 @@ public class UserTaskController {
     }
 
     @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity update(@RequestBody UserTaskUpdateBO userTaskUpdateBO, @PathVariable String userId, @PathVariable String id) {
+    public ResponseEntity update(@RequestBody UserTaskUpdateBO userTaskUpdateBO, @PathVariable String userId,
+                                 @PathVariable String id) {
         LOGGER.info("{}:{}:{}", userTaskUpdateBO, userId, id);
         UserTaskBO userTaskBO = userTaskService.update(userTaskUpdateBO, userId, id);
         LOGGER.info("{}", userTaskBO);

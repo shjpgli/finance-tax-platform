@@ -1,7 +1,7 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceLevelMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.model.ExperienceLevel;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 15:50
  */
@@ -59,10 +59,14 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
                 throw new ServiceException(4610);
             }
             //判断经验值范围与已有经验值等级是否存在冲突
-            if (((experienceLevelInsertBO.getMinValue() >= experienceLevelBO.getMinValue()) && (experienceLevelInsertBO.getMinValue() <= experienceLevelBO.getMaxValue()))
-                    || ((experienceLevelInsertBO.getMaxValue() >= experienceLevelBO.getMinValue()) && (experienceLevelInsertBO.getMaxValue() <= experienceLevelBO.getMaxValue()))
-                    || ((experienceLevelBO.getMinValue() >= experienceLevelInsertBO.getMinValue()) && (experienceLevelBO.getMinValue() <= experienceLevelInsertBO.getMaxValue()))
-                    || ((experienceLevelBO.getMaxValue() >= experienceLevelInsertBO.getMinValue()) && (experienceLevelBO.getMaxValue() <= experienceLevelInsertBO.getMaxValue()))) {
+            if (((experienceLevelInsertBO.getMinValue() >= experienceLevelBO.getMinValue()) &&
+                    (experienceLevelInsertBO.getMinValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelInsertBO.getMaxValue() >= experienceLevelBO.getMinValue()) &&
+                    (experienceLevelInsertBO.getMaxValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelBO.getMinValue() >= experienceLevelInsertBO.getMinValue()) &&
+                    (experienceLevelBO.getMinValue() <= experienceLevelInsertBO.getMaxValue()))
+                    || ((experienceLevelBO.getMaxValue() >= experienceLevelInsertBO.getMinValue()) &&
+                    (experienceLevelBO.getMaxValue() <= experienceLevelInsertBO.getMaxValue()))) {
                 LOGGER.warn("新增失败，参数：{}", experienceLevelInsertBO);
                 throw new ServiceException(4611);
             }
@@ -108,10 +112,14 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
                 throw new ServiceException(4610);
             }
             //判断经验值范围与已有经验值等级是否存在冲突
-            if (((experienceLevelUpdateBO.getMinValue() >= experienceLevelBO.getMinValue()) && (experienceLevelUpdateBO.getMinValue() <= experienceLevelBO.getMaxValue()))
-                    || ((experienceLevelUpdateBO.getMaxValue() >= experienceLevelBO.getMinValue()) && (experienceLevelUpdateBO.getMaxValue() <= experienceLevelBO.getMaxValue()))
-                    || ((experienceLevelBO.getMinValue() >= experienceLevelUpdateBO.getMinValue()) && (experienceLevelBO.getMinValue() <= experienceLevelUpdateBO.getMaxValue()))
-                    || ((experienceLevelBO.getMaxValue() >= experienceLevelUpdateBO.getMinValue()) && (experienceLevelBO.getMaxValue() <= experienceLevelUpdateBO.getMaxValue()))) {
+            if (((experienceLevelUpdateBO.getMinValue() >= experienceLevelBO.getMinValue()) &&
+                    (experienceLevelUpdateBO.getMinValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelUpdateBO.getMaxValue() >= experienceLevelBO.getMinValue()) &&
+                    (experienceLevelUpdateBO.getMaxValue() <= experienceLevelBO.getMaxValue()))
+                    || ((experienceLevelBO.getMinValue() >= experienceLevelUpdateBO.getMinValue()) &&
+                    (experienceLevelBO.getMinValue() <= experienceLevelUpdateBO.getMaxValue()))
+                    || ((experienceLevelBO.getMaxValue() >= experienceLevelUpdateBO.getMinValue()) &&
+                    (experienceLevelBO.getMaxValue() <= experienceLevelUpdateBO.getMaxValue()))) {
                 LOGGER.warn("修改失败，参数：{}", experienceLevelUpdateBO);
                 throw new ServiceException(4611);
             }

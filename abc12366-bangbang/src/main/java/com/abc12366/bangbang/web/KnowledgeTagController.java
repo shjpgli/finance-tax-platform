@@ -2,8 +2,8 @@ package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeTag;
 import com.abc12366.bangbang.service.KnowledgeTagService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,26 +45,26 @@ public class KnowledgeTagController {
      * 添加知识库标签 接口
      */
     @PostMapping(path = "/add")
-    public ResponseEntity add(@RequestBody KnowledgeTag knowledgeTag){
+    public ResponseEntity add(@RequestBody KnowledgeTag knowledgeTag) {
         knowledgeTagService.add(knowledgeTag);
-        return ResponseEntity.ok(Utils.kv("data",knowledgeTag));
+        return ResponseEntity.ok(Utils.kv("data", knowledgeTag));
     }
 
 
     /*
     * 修改知识库标签 接口
     */
-    @PutMapping(path="/modify")
-    public ResponseEntity modify(@RequestBody KnowledgeTag knowledgeTag){
+    @PutMapping(path = "/modify")
+    public ResponseEntity modify(@RequestBody KnowledgeTag knowledgeTag) {
         knowledgeTagService.modify(knowledgeTag);
-        return ResponseEntity.ok(Utils.kv("data",knowledgeTag));
+        return ResponseEntity.ok(Utils.kv("data", knowledgeTag));
     }
 
     /*
     * 删除知识库标签 接口
     */
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity delete(@PathVariable String id) {
         knowledgeTagService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
@@ -73,7 +73,7 @@ public class KnowledgeTagController {
     *  停用启用 接口
     */
     @PutMapping(path = "/modifyStatus/{id}")
-    public ResponseEntity modifyStatus(@PathVariable String id, @RequestParam Boolean status){
+    public ResponseEntity modifyStatus(@PathVariable String id, @RequestParam Boolean status) {
         knowledgeTagService.modifyStatus(id, status);
         return ResponseEntity.ok(Utils.kv());
     }

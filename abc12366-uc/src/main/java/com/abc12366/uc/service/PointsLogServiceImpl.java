@@ -1,7 +1,7 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.PointsLogMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.PointsLogRoMapper;
@@ -27,7 +27,7 @@ import java.util.Map;
  * Time: 16:22
  */
 @Service
-public class PointsLogServiceImpl implements PointsLogService{
+public class PointsLogServiceImpl implements PointsLogService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PointsLogServiceImpl.class);
 
     @Autowired
@@ -50,7 +50,7 @@ public class PointsLogServiceImpl implements PointsLogService{
     @Transactional("db1TxManager")
     @Override
     public PointsLogBO insert(PointsLogBO pointsLogBO) {
-        if(pointsLogBO==null){
+        if (pointsLogBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
@@ -60,7 +60,7 @@ public class PointsLogServiceImpl implements PointsLogService{
             throw new ServiceException(4101);
         }
         //可用积分=上一次的可用积分+|-本次收入|支出
-        int usablePoints = user.getPoints() + pointsLogBO.getIncome()-pointsLogBO.getOutgo();
+        int usablePoints = user.getPoints() + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
         int userUpdateResult = userMapper.update(user);
@@ -75,7 +75,7 @@ public class PointsLogServiceImpl implements PointsLogService{
         pointsLog.setCreateTime(new Date());
         pointsLog.setUsablePoints(usablePoints);
         int result = pointsLogMapper.insert(pointsLog);
-        if(result<1){
+        if (result < 1) {
             LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
             throw new ServiceException(4101);
         }

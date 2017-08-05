@@ -1,11 +1,9 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.gateway.model.bo.AdminResponseBO;
 import com.abc12366.gateway.model.bo.LoginInfoBO;
 import com.abc12366.gateway.model.bo.ResultLoginInfo;
 import com.abc12366.gateway.model.bo.UserResponseBO;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.PropertiesUtil;
 import com.abc12366.gateway.util.RestTemplateUtil;
 import com.alibaba.fastjson.JSON;
@@ -37,39 +35,10 @@ public class TokenServiceImpl implements TokenService {
         if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
             return userTokenAuth(userToken, request);
         }
-        /*if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
-            return adminTokenAuth(adminToken, request);
-        }*/
         if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
-            return authAdminToken(adminToken, request);
+            return adminTokenAuth(adminToken, request);
         }
         return false;
-    }
-
-    private boolean authAdminToken(String adminToken, HttpServletRequest request) {
-        LOGGER.info("{}:{}", adminToken, request);
-        boolean isAuth = false;
-        try {
-            String abcAdmin = PropertiesUtil.getValue("abc12366.admin.url");
-            String checkUrl = "/user/token/" + adminToken;
-            // 1.调用admin的token校验接口，如果校验通过直接返回true
-            String result = restTemplateUtil.send(abcAdmin + checkUrl, HttpMethod.GET, request);
-            ResultLoginInfo resultLoginInfo=JSON.parseObject(result,ResultLoginInfo.class);
-
-            LoginInfoBO bo = resultLoginInfo.getData();
-            if(bo == null){
-                LOGGER.info("查询失败: {}", isAuth);
-                isAuth = false;
-            }else{
-                request.setAttribute(Constant.ADMIN_ID, bo.getUserId());
-                request.setAttribute(Constant.ADMIN_USER, bo.getUser());
-                isAuth = true;
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-        LOGGER.info("校验admin的token状态为: {}", isAuth);
-        return isAuth;
     }
 
     /**
@@ -83,37 +52,26 @@ public class TokenServiceImpl implements TokenService {
         LOGGER.info("{}:{}", adminToken, request);
         boolean isAuth = false;
         try {
-            String abc12366_admin = PropertiesUtil.getValue("abc12366.admin.url");
-            String check_url = "/admintoken/check/" + adminToken;
+            String abcAdmin = PropertiesUtil.getValue("abc12366.uc.url");
+            String checkUrl = "/admin/token/" + adminToken;
             // 1.调用admin的token校验接口，如果校验通过直接返回true
-            String result = restTemplateUtil.send(abc12366_admin + check_url, HttpMethod.POST, request);
-            if ("true".equals(result)) {
+            String result = restTemplateUtil.send(abcAdmin + checkUrl, HttpMethod.GET, request);
+            ResultLoginInfo resultLoginInfo = JSON.parseObject(result, ResultLoginInfo.class);
+
+            LoginInfoBO bo = resultLoginInfo.getData();
+            if (bo == null) {
+                LOGGER.info("查询失败: {}", isAuth);
+                isAuth = false;
+            } else {
+                request.setAttribute(Constant.ADMIN_ID, bo.getUserId());
+                request.setAttribute(Constant.ADMIN_USER, bo.getUser());
                 isAuth = true;
-                // 刷新token时间
-                refreshAdminToken(adminToken, request, abc12366_admin);
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
         LOGGER.info("校验admin的token状态为: {}", isAuth);
         return isAuth;
-    }
-
-    private void refreshAdminToken(String adminToken, HttpServletRequest request, String abc12366_admin) {
-        // 刷新token时间
-        String refresh_url = "/admintoken/refresh/" + adminToken;
-        // 根据token获取admin的userId
-        String userid_url = "/user/token/" + adminToken;
-        restTemplateUtil.send(abc12366_admin + refresh_url, HttpMethod.POST, request);
-        // 将userId设置到request中
-        String body = restTemplateUtil.send(abc12366_admin + userid_url, HttpMethod.GET, request);
-        if (body != null) {
-            AdminResponseBO adminResponseBO = JSON.parseObject(body, AdminResponseBO.class);
-            LOGGER.info("{}", adminResponseBO);
-            if (adminResponseBO.getData() != null && !StringUtils.isEmpty(adminResponseBO.getData().getUserId())) {
-                request.setAttribute(Constant.USER_ID, adminResponseBO.getData().getUserId());
-            }
-        }
     }
 
     /**
@@ -129,12 +87,17 @@ public class TokenServiceImpl implements TokenService {
         try {
             //调用uc的token校验接口，如果校验通过刷新token并返回true
             String abc12366_uc = PropertiesUtil.getValue("abc12366.uc.url");
-            String check_url = "/auth/" + userToken;
-            String result = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.POST, request);
-            if ("true".equals(result)) {
-                isAuth = true;
-                //根据token获取admin的userId，并将userId设置到request中
-                refreshUserToken(userToken, request, abc12366_uc);
+            String check_url = "/user/token/" + userToken;
+            String body = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.GET, request);
+            if (body != null) {
+                UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
+                LOGGER.info("{}", userResponseBO);
+                if (userResponseBO.getData() != null) {
+                    isAuth = true;
+                    // 设置USER_ID，USER_INFO
+                    request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
+                    request.setAttribute(Constant.USER_INFO, userResponseBO.getData());
+                }
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -142,17 +105,4 @@ public class TokenServiceImpl implements TokenService {
         LOGGER.info("校验uc的token状态为: {}", isAuth);
         return isAuth;
     }
-
-    private void refreshUserToken(String userToken, HttpServletRequest request, String abc12366_uc) {
-        String url = "/user/token/" + userToken;
-        String body = restTemplateUtil.send(abc12366_uc + url, HttpMethod.GET, request);
-        if (body != null) {
-            UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
-            LOGGER.info("{}", userResponseBO);
-            if (userResponseBO.getData() != null && !StringUtils.isEmpty(userResponseBO.getData().getId())) {
-                request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
-            }
-        }
-    }
-
 }

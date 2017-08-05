@@ -7,7 +7,7 @@ package com.abc12366.bangbang.common;
 public class StringUtil {
 
     public static String nullToString(Object obj) {
-        if(obj == null) {
+        if (obj == null) {
             return "";
         } else {
             return obj.toString();

@@ -11,8 +11,8 @@ import com.abc12366.cms.model.questionnaire.Option;
 import com.abc12366.cms.model.questionnaire.Subjects;
 import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 import com.abc12366.cms.service.SubjectsService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -284,7 +284,7 @@ public class SubjectsServiceImpl implements SubjectsService {
             //查询题目
             boList = subjectsRoMapper.selectOne(subjectsId);
             Integer number = boList.getNumber();
-            boList.setNumber(number+1);
+            boList.setNumber(number + 1);
             String subId = Utils.uuid();
             boList.setId(subId);
             Subjects subjects = new Subjects();
@@ -326,7 +326,7 @@ public class SubjectsServiceImpl implements SubjectsService {
     @Override
     public void deleteSubjectsByPages(Subjects subjects) {
         List<SubjectsBO> subjectsList = subjectsRoMapper.selectSubjectsByPages(subjects);
-        for (SubjectsBO sub:subjectsList){
+        for (SubjectsBO sub : subjectsList) {
             int del = subjectsMapper.deleteByPrimaryKey(sub.getId());
             if (del != 1) {
                 LOGGER.info("{删除题目失败}", sub);
@@ -337,11 +337,11 @@ public class SubjectsServiceImpl implements SubjectsService {
     }
 
     @Override
-    public List<SubjectsdtxxtjBo> selectListdttj(Map<String,Object> map) {
+    public List<SubjectsdtxxtjBo> selectListdttj(Map<String, Object> map) {
         List<SubjectsdtxxtjBo> sublist = subjectsRoMapper.selectListdttj(map);
-        for(SubjectsdtxxtjBo subjectsdttjBo : sublist){
+        for (SubjectsdtxxtjBo subjectsdttjBo : sublist) {
             String id = subjectsdttjBo.getId();
-            map.put("subjectsId",id);
+            map.put("subjectsId", id);
             List<AnswerdttjBo> anslist = answerRoMapper.selectdttj(map);
             Integer cnt = answerRoMapper.selectdttjs(map);
             subjectsdttjBo.setCnt(cnt);

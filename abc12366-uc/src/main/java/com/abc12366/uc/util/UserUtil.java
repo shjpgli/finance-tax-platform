@@ -1,12 +1,12 @@
 package com.abc12366.uc.util;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-26
  * Time: 17:19
  */

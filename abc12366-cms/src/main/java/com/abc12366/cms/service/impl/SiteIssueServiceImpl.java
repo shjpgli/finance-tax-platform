@@ -33,7 +33,7 @@ public class SiteIssueServiceImpl implements SiteIssueService {
     private SiteIssueRoMapper siteIssueRoMapper;
 
     @Override
-    public List<SiteIssueBo> selectList(Map<String,Object> map) {
+    public List<SiteIssueBo> selectList(Map<String, Object> map) {
         List<SiteIssueBo> siteIssueListBo = siteIssueRoMapper.selectList(map);
         LOGGER.info("{}", siteIssueListBo);
         return siteIssueListBo;

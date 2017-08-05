@@ -6,9 +6,9 @@
 
     <!--删除：根据主键ID删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		 DELETE FROM cms_paper_questionnaire
-		 WHERE id = #{id}
-	</delete>
+        DELETE FROM cms_paper_questionnaire
+        WHERE id = #{id}
+    </delete>
 
     <!--删除：根据主键ID删除-->
     <delete id="delete" parameterType="com.abc12366.cms.model.questionnaire.Questionnaire">
@@ -169,7 +169,8 @@
 
     <!-- 修 改 皮肤路径-->
     <update id="updateStatus">
-        update cms_paper_questionnaire q set q.status = 2 where  q.status = 0 and q.id in (select p.questionId from cms_paper_questionnaire_param p
+        update cms_paper_questionnaire q set q.status = 2 where q.status = 0 and q.id in (select p.questionId from
+        cms_paper_questionnaire_param p
         where q.id = p.questionId and <![CDATA[ p.recoveryEndTime < now()]]>)
     </update>
 

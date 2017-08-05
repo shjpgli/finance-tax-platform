@@ -27,100 +27,100 @@ public class OrderProductBO implements Serializable {
 
     private ProductBO productBO;
 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
     public String getProductId() {
         return this.productId;
     }
 
-    public void setSellingPrice(Double sellingPrice) {
-        this.sellingPrice = sellingPrice;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public Double getSellingPrice() {
         return this.sellingPrice;
     }
 
-    public void setUnitPrice(Double unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
     }
 
     public Double getUnitPrice() {
         return this.unitPrice;
     }
 
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public Integer getNum() {
         return this.num;
     }
 
-    public void setDiscount(Double discount) {
-        this.discount = discount;
+    public void setNum(Integer num) {
+        this.num = num;
     }
 
     public Double getDiscount() {
         return this.discount;
     }
 
-    public void setDealPrice(Double dealPrice) {
-        this.dealPrice = dealPrice;
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public Double getDealPrice() {
         return this.dealPrice;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDealPrice(Double dealPrice) {
+        this.dealPrice = dealPrice;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCategoryId() {
         return this.categoryId;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategory() {
         return this.category;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public Double getWeight() {
         return this.weight;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
+    }
+
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public ProductBO getProductBO() {

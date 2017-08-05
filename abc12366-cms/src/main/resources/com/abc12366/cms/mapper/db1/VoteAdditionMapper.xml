@@ -5,9 +5,8 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id, voteId, dictId, required, content
-	</sql>
-
+        id, voteId, dictId, required, content
+    </sql>
 
 
     <insert id="insert" parameterType="com.abc12366.cms.model.Vote">

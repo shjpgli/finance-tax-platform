@@ -7,8 +7,8 @@ import com.abc12366.cms.model.bo.AccessLogtjListBo;
 import com.abc12366.cms.model.questionnaire.AccessLog;
 import com.abc12366.cms.model.questionnaire.bo.AccessLogBO;
 import com.abc12366.cms.service.AccessLogService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author lizhongwei
  * @create 2017-06-16 4:21 PM
  * @since 1.0.0
@@ -46,7 +45,7 @@ public class AccessLogServiceImpl implements AccessLogService {
     }
 
     @Override
-    public AccessLogtjListBo selecttj(Map<String,Object> map) {
+    public AccessLogtjListBo selecttj(Map<String, Object> map) {
         AccessLogtjListBo accessLogtjListBo = new AccessLogtjListBo();
         //浏览统计总数
         Integer llcnt = accessLogRoMapper.selectlltjs(map);
@@ -58,7 +57,7 @@ public class AccessLogServiceImpl implements AccessLogService {
         List<AccessLogRolltjBo> list = accessLogRoMapper.selectlltj(map);
         accessLogtjListBo.setList(list);
         //pc浏览统计浏览统计
-        map.put("accessTerminal","PC");
+        map.put("accessTerminal", "PC");
         List<AccessLogRolltjBo> pclist = accessLogRoMapper.selectlltj(map);
         accessLogtjListBo.setPclist(pclist);
         //mobileWeb浏览统计
@@ -73,9 +72,9 @@ public class AccessLogServiceImpl implements AccessLogService {
         accessLogBO.setId(Utils.uuid());
         accessLogBO.setCreateTime(new Date());
         AccessLog log = new AccessLog();
-        BeanUtils.copyProperties(accessLogBO,log);
+        BeanUtils.copyProperties(accessLogBO, log);
         int insert = accessLogMapper.insert(log);
-        if (insert != 1){
+        if (insert != 1) {
             LOGGER.info("{新增问卷访问记录失败}", log);
             throw new ServiceException(4423);
         }

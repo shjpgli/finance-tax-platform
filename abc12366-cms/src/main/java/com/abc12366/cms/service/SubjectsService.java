@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * 题目管理接口类
+ *
  * @author lizhongwei
  * @create 2017-6-14
  * @since 1.0.0
@@ -36,5 +37,5 @@ public interface SubjectsService {
 
     void deleteSubjectsByPages(Subjects subjects);
 
-    List<SubjectsdtxxtjBo> selectListdttj(Map<String,Object> map);
+    List<SubjectsdtxxtjBo> selectListdttj(Map<String, Object> map);
 }

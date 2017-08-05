@@ -1,8 +1,8 @@
 package com.abc12366.message.web;
 
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.service.BusinessMsgService;
 import com.github.pagehelper.PageInfo;
@@ -115,7 +115,7 @@ public class BusinessMsgController {
     /**
      * 用户删除消息，物理删除
      *
-     * @param id 消息ID
+     * @param id      消息ID
      * @param request 获取USER_ID
      * @return ResponseEntity
      */

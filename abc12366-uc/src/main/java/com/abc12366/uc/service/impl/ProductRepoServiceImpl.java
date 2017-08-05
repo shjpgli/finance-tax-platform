@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ProductMapper;
 import com.abc12366.uc.mapper.db1.ProductRepoMapper;
 import com.abc12366.uc.mapper.db2.ProductRepoRoMapper;
@@ -39,7 +39,6 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     private ProductMapper productMapper;
 
 
-
     @Override
     public List<ProductRepoBO> selectList(ProductRepoBO productRepoBO) {
         return productRepoRoMapper.selectList(productRepoBO);
@@ -55,9 +54,9 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setId(Utils.uuid());
         int stock = 0;
         ProductRepoBO temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
-        if(temp == null){
+        if (temp == null) {
             stock = productRepoBO.getIncome();
-        }else{
+        } else {
             stock = temp.getStock() + productRepoBO.getIncome();
         }
         Date date = new Date();
@@ -67,7 +66,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.info("商品入库失败:{}", productRepo);
             throw new ServiceException(4158);
         }
@@ -83,9 +82,9 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setId(Utils.uuid());
         int stock = 0;
         ProductRepoBO temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
-        if(temp == null){
+        if (temp == null) {
             stock = productRepoBO.getIncome();
-        }else{
+        } else {
             stock = temp.getStock() - productRepoBO.getOutcome();
         }
         Date date = new Date();
@@ -95,7 +94,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.info("商品出库失败:{}", productRepo);
             throw new ServiceException(4159);
         }
@@ -115,7 +114,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         product.setId(productRepoBO.getProductId());
         product.setStock(stock);
         int pUpdate = productMapper.update(product);
-        if (pUpdate != 1){
+        if (pUpdate != 1) {
             LOGGER.info("产品库存修改失败:{}", product);
             throw new ServiceException(4164);
         }

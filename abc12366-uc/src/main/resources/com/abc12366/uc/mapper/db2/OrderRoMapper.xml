@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderRoMapper">
 
     <!--订单对象-->
@@ -28,7 +28,7 @@
         <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
 
-        <association property="user" javaType="com.abc12366.uc.model.User">
+        <association property="admin" javaType="com.abc12366.uc.model.User">
             <id column="userId" property="id"/>
             <result column="username" property="username"/>
             <result column="nickname" property="nickname"/>
@@ -38,7 +38,8 @@
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <association property="orderLogBO" column="orderNo" select="getOrderLogBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
-        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="id" select="getOrderProduct"></collection>
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="id"
+                    select="getOrderProduct"></collection>
     </resultMap>
 
     <!--订单日志对象-->
@@ -105,7 +106,8 @@
     <!--获取配送方式-->
     <select id="getDeliveryMethodBO" resultMap="deliveryMethodBOMap" parameterType="java.lang.String">
         SELECT
-        id as deliveryId,	name,	type,	sort,	status,	description,	createTime,	lastUpdate,	firstWeight,	firstWeightFee,	addedWeight,	addedWeightFee,	isInsured,	rate,	minInsuredFee,	areaFeeType
+        id as deliveryId, name, type, sort, status, description, createTime, lastUpdate, firstWeight, firstWeightFee,
+        addedWeight, addedWeightFee, isInsured, rate, minInsuredFee, areaFeeType
         FROM uc_delivery_method
         WHERE id = #{deliveryMethod}
     </select>
@@ -113,9 +115,11 @@
     <!--获取发票信息-->
     <select id="getInvoiceBO" resultMap="invoiceBOMap" parameterType="java.lang.String">
         SELECT
-        iv.id as invoiceId,	iv.userId,	iv.username,	iv.invoiceNo,	iv.invoiceCode,	iv.name,	iv.content,	iv.compName,	iv.amount,	iv.type,
-        iv.property,	iv.status,	iv.createTime,	iv.lastUpdate,	iv.nsrsbh,	iv.nsrmc,
-        iv.address,	iv.phone,	iv.bank,	iv.addressId,	iv.deliveryMethod,	iv.isShipping,	iv.isFreeShipping,	iv.deliveryFee,	iv.isInsured,	iv.insuredFee,	iv.payMethod
+        iv.id as invoiceId, iv.userId, iv.username, iv.invoiceNo, iv.invoiceCode, iv.name, iv.content, iv.compName,
+        iv.amount, iv.type,
+        iv.property, iv.status, iv.createTime, iv.lastUpdate, iv.nsrsbh, iv.nsrmc,
+        iv.address, iv.phone, iv.bank, iv.addressId, iv.deliveryMethod, iv.isShipping, iv.isFreeShipping,
+        iv.deliveryFee, iv.isInsured, iv.insuredFee, iv.payMethod
         FROM uc_invoice iv
         LEFT JOIN uc_order_invoice uoi ON uoi.invoiceId = iv.id
         WHERE uoi.orderNo = #{orderNo}
@@ -124,7 +128,7 @@
     <!--获取订单日志-->
     <select id="getOrderLogBO" resultMap="orderLogMap" parameterType="java.lang.String">
         SELECT
-        l.id as orderLogId,	l.orderNo,	l.action,	l.createTime,	l.createUser,	l.remark
+        l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark
         FROM uc_order_log l
         WHERE l.orderNo = #{orderNo}
     </select>
@@ -153,8 +157,8 @@
         <result column="weight" property="weight" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <association  property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
-                    select="getProductBO"></association >
+        <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
+                     select="getProductBO"></association>
     </resultMap>
 
     <!--产品对象-->
@@ -190,7 +194,7 @@
     <!--获取产品信息-->
     <select id="getProductBO" parameterType="java.lang.String" resultMap="productResultMap">
         SELECT
-        id,	goodsId,	marketPrice,	sellingPrice,	costPrice,	createTime,	lastUpdate,stock
+        id, goodsId, marketPrice, sellingPrice, costPrice, createTime, lastUpdate,stock
         FROM uc_product
         WHERE id = #{productId}
     </select>
@@ -198,7 +202,8 @@
     <!--获取字典信息-->
     <select id="getDictBO" parameterType="java.lang.String" resultMap="oneDictBO">
         SELECT
-        d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate, d.lastUser,d.sort
+        d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate,
+        d.lastUser,d.sort
         FROM uc_view_sys_dict d
         LEFT JOIN uc_product_spec s ON s.specId = d.id
         WHERE s.productId = #{productId}
@@ -207,7 +212,8 @@
     <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
-        orderNo,	productId,	sellingPrice,	unitPrice,	num,	discount,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate
+        orderNo, productId, sellingPrice, unitPrice, num, discount, dealPrice, name, categoryId, category, weight,
+        createTime, lastUpdate
         FROM uc_order_product
         WHERE orderNo = #{orderNo}
     </select>
@@ -218,34 +224,35 @@
         from uc_user WHERE id = #{userId}
     </select>
 
-	<!-- 通用查询结果列-->
+    <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		 id,	orderNo,	userId,	orderStatus,	deliveryMethod,	payMethod,	nowVipLevel,	createTime,	lastUpdate,	username,	isShipping,	isFreeShipping,	deliveryFee,
-		 isInsured,	insuredFee,	totalPrice,	addressId,	expressNo,	remark,giftPoints,tradeMethod,isInvoice,cancelId
-	</sql>
+        id, orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
+        isShipping, isFreeShipping, deliveryFee,
+        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId
+    </sql>
 
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Order" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM uc_order
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Order" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_order
         WHERE orderNo = #{orderNo}
-	</select>
+    </select>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectById" resultMap="orderBOResultMap" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_BO_List" />
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectById" resultMap="orderBOResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_BO_List"/>
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         WHERE o.orderNo = #{orderNo}
-	</select>
+    </select>
 
     <!-- 查询（根据主键ID和UserId查询） -->
     <select id="selectOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.Order">
         SELECT
-        <include refid="Base_Column_BO_List" />
+        <include refid="Base_Column_BO_List"/>
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         WHERE o.orderNo = #{orderNo} and o.userId = #{userId}
@@ -253,19 +260,22 @@
 
     <!-- 通用BO查询结果列-->
     <sql id="Base_Column_BO_List">
-        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,
-        o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,u.id as userId,u.username,u.phone,u.vipLevel,u.nickname
+        o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
+        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
+        o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
+        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,u.id as
+        userId,u.username,u.phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
-        <include refid="Base_Column_BO_List" />
+        <include refid="Base_Column_BO_List"/>
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
             1 = 1
-            <if test=" user.username != null and user.username != '' ">
-                and u.username = #{user.username}
+            <if test=" admin.username != null and admin.username != '' ">
+                and u.username = #{admin.username}
             </if>
             <if test=" orderStatus != null and orderStatus != '' ">
                 and o.orderStatus = #{orderStatus}
@@ -292,17 +302,17 @@
 
     <select id="selectWaitList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
-        <include refid="Base_Column_BO_List" />
+        <include refid="Base_Column_BO_List"/>
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
             1 = 1
-            <if test=" user.username != null and user.username != '' ">
-                and u.username = #{user.username}
+            <if test=" admin.username != null and admin.username != '' ">
+                and u.username = #{admin.username}
             </if>
             <!--<if test=" orderStatus != null and orderStatus != '' ">-->
             <!--<if test=" orderStatus != null and orderStatus != '' ">-->
-                <!--and o.orderStatus = #{orderStatus}-->
+            <!--and o.orderStatus = #{orderStatus}-->
             <!--</if>-->
             <!--</if>-->
             <if test=" orderNo != null and orderNo != '' ">
@@ -328,13 +338,13 @@
     <!-- 前台查询（根据条件查询） -->
     <select id="selectOrderList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
-        <include refid="Base_Column_BO_List" />
+        <include refid="Base_Column_BO_List"/>
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>
             1 = 1
-            <if test=" user.id != null and user.id != '' ">
-                and u.id = #{user.id}
+            <if test=" admin.id != null and admin.id != '' ">
+                and u.id = #{admin.id}
             </if>
             <if test=" orderStatus != null and orderStatus != '' ">
                 and o.orderStatus = #{orderStatus}
@@ -347,14 +357,14 @@
             </if>
         </where>
 
-         order by o.lastUpdate desc
+        order by o.lastUpdate desc
 
     </select>
 
     <!-- 前台查询（根据条件查询） -->
     <select id="selectCartList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
-        <include refid="Base_Column_BO_List" />
+        <include refid="Base_Column_BO_List"/>
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         <where>

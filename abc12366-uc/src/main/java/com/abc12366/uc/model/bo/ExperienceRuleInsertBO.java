@@ -4,10 +4,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-23
  * Time: 11:06
  */
@@ -30,7 +29,8 @@ public class ExperienceRuleInsertBO {
     public ExperienceRuleInsertBO() {
     }
 
-    public ExperienceRuleInsertBO(String name, String code, Integer exp, String description, String type, Boolean status) {
+    public ExperienceRuleInsertBO(String name, String code, Integer exp, String description, String type, Boolean
+            status) {
         this.name = name;
         this.code = code;
         this.exp = exp;

@@ -2,10 +2,11 @@ package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuqi
@@ -28,6 +30,21 @@ public class KnowledgeBaseController {
 
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
+
+    /*
+    *
+    * 帮助中心 热点问题知识
+    *
+    * */
+    @GetMapping(path = "/hotList")
+    public ResponseEntity hotList(@RequestParam(value = "categoryNum", defaultValue = "6") int categoryNum,
+                                  @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
+                                  @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType,
+                                  @RequestParam(value = "KnowledgeRecommend", defaultValue = "hot") String KnowledgeRecommend){
+        KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(categoryNum, KnowledgePageSize, KnowledgeType, KnowledgeRecommend);
+        Map<String, List<KnowledgeBase>> map = knowledgeBaseService.hotMap(param);
+        return ResponseEntity.ok(Utils.kv("data",map));
+    }
 
 
     /*
@@ -54,19 +71,19 @@ public class KnowledgeBaseController {
      * 添加知识库 接口
      */
     @PostMapping(path = "/add")
-    public ResponseEntity add(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
+    public ResponseEntity add(@RequestBody KnowledgeBaseBO knowledgeBaseBO) {
         knowledgeBaseService.add(knowledgeBaseBO);
-        return ResponseEntity.ok(Utils.kv("data",knowledgeBaseBO));
+        return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
 
 
     /*
     * 修改知识库 接口
     */
-    @PutMapping(path="/modify")
-    public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO){
+    @PutMapping(path = "/modify")
+    public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO) {
         knowledgeBaseService.modify(knowledgeBaseBO);
-        return ResponseEntity.ok(Utils.kv("data",knowledgeBaseBO));
+        return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
 
 
@@ -74,16 +91,15 @@ public class KnowledgeBaseController {
     * 删除知识库 接口
     */
     @DeleteMapping(path = "/delete")
-    public ResponseEntity delete(@RequestBody List<String> ids){
+    public ResponseEntity delete(@RequestBody List<String> ids) {
         knowledgeBaseService.delete(ids);
         return ResponseEntity.ok(Utils.kv());
     }
 
 
-
     //test
     @PostMapping(path = "/add1")
-    public ResponseEntity add1(){
+    public ResponseEntity add1() {
         byte[] b = {new Byte("1")};
         KnowledgeBase record = new KnowledgeBase();
         record.setId(Utils.uuid());

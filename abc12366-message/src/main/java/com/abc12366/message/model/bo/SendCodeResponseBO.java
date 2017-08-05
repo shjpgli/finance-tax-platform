@@ -6,9 +6,9 @@ package com.abc12366.message.model.bo;
  * Time: 15:47
  */
 public class SendCodeResponseBO {
-    private  String code;
-    private  String msg;
-    private  String obj;
+    private String code;
+    private String msg;
+    private String obj;
 
     public SendCodeResponseBO() {
     }

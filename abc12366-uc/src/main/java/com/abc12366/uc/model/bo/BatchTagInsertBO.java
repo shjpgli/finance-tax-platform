@@ -1,12 +1,12 @@
 package com.abc12366.uc.model.bo;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-07
  * Time: 18:22
  */
 public class BatchTagInsertBO {
-    private String  tagIds;
+    private String tagIds;
     private String subjectIds;
 
     public BatchTagInsertBO() {

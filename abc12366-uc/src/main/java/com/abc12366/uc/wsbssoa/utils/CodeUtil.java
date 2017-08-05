@@ -19,32 +19,6 @@ import java.io.*;
 public class CodeUtil {
     protected Logger _log = LoggerFactory.getLogger(CodeUtil.class);
 
-    public char[] Base64Encode(String inFileName) {
-        FileInputStream fis = null;
-        try {
-            File inFile = new File(inFileName);
-            fis = new FileInputStream(inFileName);
-            byte[] fb = new byte[(int) inFile.length()];
-            fis.read(fb);
-            fis.close();
-            char[] chars = Base64Encoder.encode(fb);
-            return chars;
-        } catch (FileNotFoundException e) {
-            _log.error(e.getMessage());
-        } catch (IOException e) {
-            _log.error(e.getMessage());
-        } finally {
-            try {
-                if (fis != null)
-                    fis.close();
-            } catch (IOException e) {
-                _log.error(e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        return new char[0];
-    }
-
     /**
      * 对比特流进行Base64编码，返回编码后的字符串
      *
@@ -85,6 +59,42 @@ public class CodeUtil {
         return bytes;
     }
 
+    /**
+     * 对字符串进行"BASE64"解码，将解码后的比特流转换成字符串输出
+     *
+     * @param content 输入字符串
+     * @return string 输出字符串
+     */
+    public static String decodeContent(String content) {
+        return new String(CodeUtil.decodeContent("BASE64", content));
+    }
+
+    public char[] Base64Encode(String inFileName) {
+        FileInputStream fis = null;
+        try {
+            File inFile = new File(inFileName);
+            fis = new FileInputStream(inFileName);
+            byte[] fb = new byte[(int) inFile.length()];
+            fis.read(fb);
+            fis.close();
+            char[] chars = Base64Encoder.encode(fb);
+            return chars;
+        } catch (FileNotFoundException e) {
+            _log.error(e.getMessage());
+        } catch (IOException e) {
+            _log.error(e.getMessage());
+        } finally {
+            try {
+                if (fis != null)
+                    fis.close();
+            } catch (IOException e) {
+                _log.error(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return new char[0];
+    }
+
     public void decodeContentToFile(String code, String content, File contentFile) {
         FileOutputStream fos = null;
         try {
@@ -107,15 +117,5 @@ public class CodeUtil {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * 对字符串进行"BASE64"解码，将解码后的比特流转换成字符串输出
-     *
-     * @param content 输入字符串
-     * @return string 输出字符串
-     */
-    public static String decodeContent(String content) {
-        return new String(CodeUtil.decodeContent("BASE64", content));
     }
 }

@@ -32,13 +32,13 @@
         ORDER BY lastUpdate DESC
     </select>
     <select id="selectOne" resultType="com.abc12366.bangbang.model.bo.AskBO" parameterType="java.lang.String">
-                select id,userId,ask,detail,status,createTime,lastUpdate,points,isSolve,askedUserId
-                from bb_ask
-                where id=#{id}
+        select id,userId,ask,detail,status,createTime,lastUpdate,points,isSolve,askedUserId
+        from bb_ask
+        where id=#{id}
     </select>
     <select id="selectHotspotAsks" resultType="com.abc12366.bangbang.model.bo.HotspotAskBO">
-      select id,userId,ask,detail,status,createTime,lastUpdate,points,isSolve,askedUserId,
-      (select count(1) from bb_ask_log bal where bal.askId = ba.id) pageviews
+        select id,userId,ask,detail,status,createTime,lastUpdate,points,isSolve,askedUserId,
+        (select count(1) from bb_ask_log bal where bal.askId = ba.id) pageviews
         from bb_ask ba
         where ba.status='1'
         order by pageviews desc
@@ -46,7 +46,8 @@
 
     <select id="selectHotspotComments" resultType="com.abc12366.bangbang.model.bo.AskBO">
         select id,userId,ask,detail,status,createTime,lastUpdate,points,isSolve,askedUserId,
-        (select count(bc.id) from bb_comment bc, bb_answer ban where bc.answerId=ban.id and ban.askId=ba.id) commentsCount
+        (select count(bc.id) from bb_comment bc, bb_answer ban where bc.answerId=ban.id and ban.askId=ba.id)
+        commentsCount
         from bb_ask ba
         where ba.status='1'
         order by commentsCount desc

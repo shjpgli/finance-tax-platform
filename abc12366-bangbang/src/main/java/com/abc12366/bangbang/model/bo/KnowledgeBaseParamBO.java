@@ -12,7 +12,7 @@ public class KnowledgeBaseParamBO {
 
     private String keywords;    //关键字（知识库标题 模糊匹配）
 
-    public KnowledgeBaseParamBO(String categoryCode, String type, String keywords){
+    public KnowledgeBaseParamBO(String categoryCode, String type, String keywords) {
         this.categoryCode = categoryCode;
         this.type = type;
         this.keywords = keywords;

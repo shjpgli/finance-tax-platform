@@ -4,8 +4,8 @@ import com.abc12366.bangbang.model.bo.CommentBO;
 import com.abc12366.bangbang.model.bo.CommentInsertBO;
 import com.abc12366.bangbang.model.bo.CommentUpdateBO;
 import com.abc12366.bangbang.service.CommentService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping(path = "/comment/{answerId}")
-    public ResponseEntity insert(@Valid @RequestBody CommentInsertBO commentInsertBO, @PathVariable String answerId){
+    public ResponseEntity insert(@Valid @RequestBody CommentInsertBO commentInsertBO, @PathVariable String answerId) {
         LOGGER.info("{}:{}", commentInsertBO, answerId);
         CommentBO commentBO = commentService.insert(commentInsertBO, answerId);
         return ResponseEntity.ok(Utils.kv("data", commentBO));
@@ -41,11 +41,11 @@ public class CommentController {
 
     @GetMapping(path = "/comments")
     public ResponseEntity selectListForAdmin(@RequestParam(required = false) String userId,
-                                     @RequestParam(required = false) String answerId,
-                                     @RequestParam(required = false) String commentedUserId,
-                                     @RequestParam(required = false) String status,
-                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                             @RequestParam(required = false) String answerId,
+                                             @RequestParam(required = false) String commentedUserId,
+                                             @RequestParam(required = false) String status,
+                                             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}:{}", userId, answerId, commentedUserId, status, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         if (userId != null && StringUtils.isEmpty(userId)) {
@@ -64,14 +64,16 @@ public class CommentController {
         LOGGER.info("{}", commentBOList);
         return (commentBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) commentBOList, "total", ((Page) commentBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) commentBOList, "total", ((Page) commentBOList).getTotal
+                        ()));
     }
+
     @GetMapping(path = "/comment")
     public ResponseEntity selectListForUser(@RequestParam(required = false) String userId,
-                                     @RequestParam(required = false) String answerId,
-                                     @RequestParam(required = false) String commentedUserId,
-                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                            @RequestParam(required = false) String answerId,
+                                            @RequestParam(required = false) String commentedUserId,
+                                            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}", userId, answerId, commentedUserId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         if (userId != null && StringUtils.isEmpty(userId)) {
@@ -87,24 +89,26 @@ public class CommentController {
         LOGGER.info("{}", commentBOList);
         return (commentBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) commentBOList, "total", ((Page) commentBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) commentBOList, "total", ((Page) commentBOList).getTotal
+                        ()));
     }
 
     @GetMapping(path = "/comment/{id}")
-    public ResponseEntity selectOne(@PathVariable String id){
+    public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
         CommentBO commentBO = commentService.selectOne(id);
         return ResponseEntity.ok(Utils.kv("data", commentBO));
     }
 
     @PutMapping(path = "/comment/{id}")
-    public ResponseEntity update(@PathVariable String id, @RequestBody CommentUpdateBO commentUpdateBO){
+    public ResponseEntity update(@PathVariable String id, @RequestBody CommentUpdateBO commentUpdateBO) {
         LOGGER.info("{}:{}", id, commentUpdateBO);
         CommentBO commentBO = commentService.update(id, commentUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", commentBO));
     }
+
     @PutMapping(path = "/block/comment/{id}")
-    public ResponseEntity block(@PathVariable String id){
+    public ResponseEntity block(@PathVariable String id) {
         LOGGER.info("{}", id);
         CommentBO commentBO = commentService.block(id);
         return ResponseEntity.ok(Utils.kv("data", commentBO));

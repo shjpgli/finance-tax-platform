@@ -1,13 +1,8 @@
 package com.abc12366.cms.model.bo;
 
-import com.abc12366.cms.model.Comment;
-import com.abc12366.cms.model.CommentExt;
-
 /**
- *
  * CMS评论表
  * add by xieyanmao on 2017-5-2
- *
  **/
 public class CommentSaveBo {
     private CommentBo comment;

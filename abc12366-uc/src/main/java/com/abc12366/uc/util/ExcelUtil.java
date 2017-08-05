@@ -18,42 +18,41 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-
 /**
  * ClassName:ExcelUtil
  * Date:     2017年6月7日 上午9:44:58
- * 
- * 只需要两步即可完成以前复杂的Excel读取 
- * 用法步骤： 
- * 1.定义需要读取的表头字段和表头对应的属性字段 
- * String keyValue ="手机名称:phoneName,颜色:color,售价:price"; 
- * 2.读取数据 
+ * <p>
+ * 只需要两步即可完成以前复杂的Excel读取
+ * 用法步骤：
+ * 1.定义需要读取的表头字段和表头对应的属性字段
+ * String keyValue ="手机名称:phoneName,颜色:color,售价:price";
+ * 2.读取数据
  * List<PhoneModel> list =  ExcelUtil.readXls("C://test.xlsx",ExcelUtil.getMap(keyValue),"com.lkx.excel.PhoneModel");
  *
- * 
- * @author   likaixuan
- * @version  V1.0
- * @since    JDK 1.7
+ * @author likaixuan
+ * @version V1.0
  * @see
+ * @since JDK 1.7
  */
-public class ExcelUtil implements Serializable{
+public class ExcelUtil implements Serializable {
     /**
      * serialVersionUID:
+     *
      * @since JDK 1.7
      */
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ExcelUtil.class);
 
     /**
      * getMap:(将传进来的表头和表头对应的属性存进Map集合，表头字段为key,属性为value)
      *
-     * @author likaixuan
      * @param keyValue 把传进指定格式的字符串解析到Map中
-     *            形如: String keyValue = "手机名称:phoneName,颜色:color,售价:price";
+     *                 形如: String keyValue = "手机名称:phoneName,颜色:color,售价:price";
      * @return
+     * @author likaixuan
      * @since JDK 1.7
      */
     public static Map<String, String> getMap(String keyValue) {
@@ -71,19 +70,16 @@ public class ExcelUtil implements Serializable{
     /**
      * readXlsPart:(根据传进来的map集合读取Excel) 传进来4个参数 <String,String>类型，第二个要反射的类的具体路径)
      *
-     * @author likaixuan
-     * @param filePath
-     *            Excel文件路径
-     * @param map
-     *            表头和属性的Map集合,其中Map中Key为Excel列的名称，Value为反射类的属性
-     * @param classPath
-     *            需要映射的model的路径
+     * @param filePath  Excel文件路径
+     * @param map       表头和属性的Map集合,其中Map中Key为Excel列的名称，Value为反射类的属性
+     * @param classPath 需要映射的model的路径
      * @return
      * @throws Exception
+     * @author likaixuan
      * @since JDK 1.7
      */
     public static <T> List<T> readXlsPart(String filePath, Map map,
-            String classPath, int... rowNumIndex) throws Exception {
+                                          String classPath, int... rowNumIndex) throws Exception {
 
         Set keySet = map.keySet();// 返回键的集合
 
@@ -116,10 +112,10 @@ public class ExcelUtil implements Serializable{
             Sheet hssfSheet = wb.getSheetAt(sheetNum);
 
             //设置默认最大行为2w行
-            if(hssfSheet != null && hssfSheet.getLastRowNum()>20000){
+            if (hssfSheet != null && hssfSheet.getLastRowNum() > 20000) {
                 throw new Exception("Excel 数据超过20000行,请检查是否有空行,或分批导入");
             }
-            
+
             // 循环行Row
             for (int rowNum = 0; rowNum <= hssfSheet
                     .getLastRowNum(); rowNum++) {
@@ -172,7 +168,7 @@ public class ExcelUtil implements Serializable{
                             Object key = it.next();
                             if (StringUtils.isNotBlank(tempCellValue)
                                     && StringUtils.equals(tempCellValue,
-                                            key.toString())) {
+                                    key.toString())) {
                                 rowNum_x = rowNum;
                                 cellmap.put(map.get(key).toString(), cellNum);
                             }
@@ -197,7 +193,7 @@ public class ExcelUtil implements Serializable{
                         String attr = map.get(key).toString();// 得到属性
 
                         Class<?> attrType = BeanUtils.findPropertyType(attr,
-                                new Class[] { obj.getClass() });
+                                new Class[]{obj.getClass()});
 
                         Cell cell = hssfRow.getCell(cellNum_x);
                         getValue(cell, obj, attr, attrType, rowNum, cellNum_x,
@@ -217,19 +213,16 @@ public class ExcelUtil implements Serializable{
     /**
      * readXls:(根据传进来的map集合读取Excel) 传进来3个参数 <String,String>类型，第二个要反射的类的具体路径)
      *
-     * @author likaixuan
-     * @param filePath
-     *            Excel文件路径
-     * @param map
-     *            表头和属性的Map集合,其中Map中Key为Excel列的名称，Value为反射类的属性
-     * @param classPath
-     *            需要映射的model的路径
+     * @param filePath  Excel文件路径
+     * @param map       表头和属性的Map集合,其中Map中Key为Excel列的名称，Value为反射类的属性
+     * @param classPath 需要映射的model的路径
      * @return
      * @throws Exception
+     * @author likaixuan
      * @since JDK 1.7
      */
     public static <T> List<T> readXls(String filePath, Map map,
-            String classPath, int... rowNumIndex) throws Exception {
+                                      String classPath, int... rowNumIndex) throws Exception {
 
         Set keySet = map.keySet();// 返回键的集合
 
@@ -310,7 +303,7 @@ public class ExcelUtil implements Serializable{
                             Object key = it.next();
                             if (StringUtils.isNotBlank(tempCellValue)
                                     && StringUtils.equals(tempCellValue,
-                                            key.toString())) {
+                                    key.toString())) {
                                 rowNum_x = rowNum;
                                 cellmap.put(map.get(key).toString(), cellNum);
                             }
@@ -365,7 +358,7 @@ public class ExcelUtil implements Serializable{
                         String attr = map.get(key).toString();// 得到属性
 
                         Class<?> attrType = BeanUtils.findPropertyType(attr,
-                                new Class[] { obj.getClass() });
+                                new Class[]{obj.getClass()});
 
                         Cell cell = hssfRow.getCell(cellNum_x);
                         getValue(cell, obj, attr, attrType, rowNum, cellNum_x,
@@ -385,16 +378,16 @@ public class ExcelUtil implements Serializable{
     /**
      * setter:(反射的set方法给属性赋值)
      *
-     * @author likaixuan
      * @param obj   具体的类
      * @param att   类的属性@注意首字母记得大写
      * @param value 赋予属性的值
      * @param type  属性是哪种类型 比如:String double boolean等类型
      * @throws Exception
+     * @author likaixuan
      * @since JDK 1.7
      */
     public static void setter(Object obj, String att, Object value,
-            Class<?> type, int row, int col, Object key) throws Exception {
+                              Class<?> type, int row, int col, Object key) throws Exception {
         try {
             Method method = obj.getClass().getMethod(
                     "set" + StringUtil.toUpperCaseFirstOne(att), type);
@@ -412,13 +405,13 @@ public class ExcelUtil implements Serializable{
     /**
      * getValue:(得到Excel列的值)
      *
-     * @author likaixuan
      * @return
      * @throws Exception
+     * @author likaixuan
      * @since JDK 1.7
      */
     public static void getValue(Cell cell, Object obj, String attr,
-            Class attrType, int row, int col, Object key) throws Exception {
+                                Class attrType, int row, int col, Object key) throws Exception {
         Object val = null;
         if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
             val = cell.getBooleanCellValue();
@@ -467,8 +460,8 @@ public class ExcelUtil implements Serializable{
 
         setter(obj, attr, val, attrType, row, col, key);
     }
-    
-    
+
+
     /**
      * String类型日期转为Date类型
      *
@@ -483,7 +476,7 @@ public class ExcelUtil implements Serializable{
         date = format.parse(dateStr);
         return date;
     }
-    
+
 
 }
 

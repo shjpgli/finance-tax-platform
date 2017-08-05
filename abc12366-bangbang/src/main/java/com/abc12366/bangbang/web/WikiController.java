@@ -1,13 +1,12 @@
 package com.abc12366.bangbang.web;
 
-import com.abc12366.bangbang.model.WikiAccesslog;
 import com.abc12366.bangbang.model.bo.WikiAccesslogBO;
 import com.abc12366.bangbang.model.bo.WikiBO;
 import com.abc12366.bangbang.service.SensitiveWordFilter;
 import com.abc12366.bangbang.service.WikiService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +41,7 @@ public class WikiController {
 
     /**
      * 百科主题列表管理
+     *
      * @return
      */
     @GetMapping
@@ -69,6 +68,7 @@ public class WikiController {
 
     /**
      * 查询百科主题详情
+     *
      * @param id
      * @return
      */
@@ -82,14 +82,15 @@ public class WikiController {
 
     /**
      * 敏感词新增
+     *
      * @return
      */
     @PostMapping
     public ResponseEntity addWiki(@Valid @RequestBody WikiBO wikiBO) {
         LOGGER.info("{}", wikiBO);
-        if (wikiBO != null){
+        if (wikiBO != null) {
             Set<String> set = sensitiveWordFilter.getSensitiveWord(wikiBO.toString(), 1);
-            if(set != null && set.size()!=0){
+            if (set != null && set.size() != 0) {
                 LOGGER.info("请求存在敏感词，请求失败", set);
                 throw new ServiceException(4508);
             }
@@ -101,6 +102,7 @@ public class WikiController {
 
     /**
      * 修改百科主题
+     *
      * @param wikiBO
      * @param id
      * @return
@@ -117,6 +119,7 @@ public class WikiController {
 
     /**
      * 删除百科主题
+     *
      * @param id
      * @return
      */
@@ -130,10 +133,12 @@ public class WikiController {
 
     /**
      * 新增百科主题日志
+     *
      * @return
      */
     @PostMapping(path = "/log/{wikiId}")
-    public ResponseEntity addWikiLog(@Valid @RequestBody WikiAccesslogBO accesslogBO,@PathVariable("wikiId") String wikiId) {
+    public ResponseEntity addWikiLog(@Valid @RequestBody WikiAccesslogBO accesslogBO, @PathVariable("wikiId") String
+            wikiId) {
         LOGGER.info("{}", accesslogBO);
         accesslogBO.setWikiId(wikiId);
         WikiAccesslogBO bo = wikiService.addWikiLog(accesslogBO);

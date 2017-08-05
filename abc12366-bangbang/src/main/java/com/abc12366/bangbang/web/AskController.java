@@ -4,8 +4,8 @@ import com.abc12366.bangbang.model.AskLog;
 import com.abc12366.bangbang.model.bo.*;
 import com.abc12366.bangbang.service.AskLogService;
 import com.abc12366.bangbang.service.AskService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -69,7 +69,8 @@ public class AskController {
         if (askedUserId != null && StringUtils.isEmpty(askedUserId)) {
             askedUserId = null;
         }
-        AsksQueryParamBO asksQueryParamBO = new AsksQueryParamBO(ask, detail, type, status, isSolve, userId, askedUserId);
+        AsksQueryParamBO asksQueryParamBO = new AsksQueryParamBO(ask, detail, type, status, isSolve, userId,
+                askedUserId);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<AskBO> askList = askService.selectListForAdmin(asksQueryParamBO);
         LOGGER.info("{}", askList);
@@ -144,7 +145,8 @@ public class AskController {
     }
 
     @PutMapping(path = "/ask/{id}")
-    public ResponseEntity update(@PathVariable String id, @Valid @RequestBody AskUpdateBO askUpdateBO, HttpServletRequest request) {
+    public ResponseEntity update(@PathVariable String id, @Valid @RequestBody AskUpdateBO askUpdateBO,
+                                 HttpServletRequest request) {
         LOGGER.info("{}", id);
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         AskBO askBO = askService.update(id, askUpdateBO, userId);

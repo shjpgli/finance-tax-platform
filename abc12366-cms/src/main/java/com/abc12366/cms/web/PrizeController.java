@@ -2,8 +2,8 @@ package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.questionnaire.bo.PrizeSetBO;
 import com.abc12366.cms.service.PrizeSetService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,7 @@ public class PrizeController {
 
     /**
      * 查询奖品详情
+     *
      * @param questionId
      * @return
      */
@@ -44,6 +45,7 @@ public class PrizeController {
 
     /**
      * 奖品新增
+     *
      * @return
      */
     @PostMapping
@@ -56,12 +58,14 @@ public class PrizeController {
 
     /**
      * 奖品修改
+     *
      * @param prizeSetBO
      * @param questionId
      * @return
      */
     @PutMapping(path = "/{questionId}")
-    public ResponseEntity update(@Valid @RequestBody PrizeSetBO prizeSetBO, @PathVariable("questionId") String questionId) {
+    public ResponseEntity update(@Valid @RequestBody PrizeSetBO prizeSetBO, @PathVariable("questionId") String
+            questionId) {
         LOGGER.info("{}", prizeSetBO);
         prizeSetBO.setQuestionId(questionId);
         PrizeSetBO bo = prizeSetService.update(prizeSetBO);

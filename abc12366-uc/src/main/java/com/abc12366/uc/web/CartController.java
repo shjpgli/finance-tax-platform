@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.service.OrderService;
@@ -36,6 +36,7 @@ public class CartController {
 
     /**
      * 订单列表查询
+     *
      * @param pageNum
      * @param pageSize
      * @param userId
@@ -58,12 +59,13 @@ public class CartController {
 
     /**
      * 加入购物车
+     *
      * @param orderBO
      * @param userId
      * @return
      */
     @PostMapping(path = "/{userId}")
-    public ResponseEntity joinCart(@Valid @RequestBody OrderBO orderBO,@PathVariable("userId") String userId) {
+    public ResponseEntity joinCart(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId) {
         LOGGER.info("{}", orderBO);
         OrderBO bo = orderService.joinCart(orderBO);
         LOGGER.info("{}", bo);
@@ -72,13 +74,15 @@ public class CartController {
 
     /**
      * 修改购物车
+     *
      * @param orderBO
      * @param userId
      * @param id
      * @return
      */
     @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity updateCart(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId, @PathVariable("id") String id) {
+    public ResponseEntity updateCart(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId,
+                                     @PathVariable("id") String id) {
         LOGGER.info("{}", orderBO);
         orderBO.setOrderNo(id);
         orderBO.setUserId(userId);
@@ -89,13 +93,14 @@ public class CartController {
 
     /**
      * 提交购物车订单
+     *
      * @param userId
      * @param id
      * @return
      */
     @PutMapping(path = "/submit/{userId}/{id}")
     public ResponseEntity submitCart(@PathVariable("userId") String userId, @PathVariable("id") String id) {
-        LOGGER.info("{}", userId,id);
+        LOGGER.info("{}", userId, id);
         Order order = new Order();
         order.setOrderNo(id);
         order.setUserId(userId);
@@ -106,13 +111,14 @@ public class CartController {
 
     /**
      * 删除购物车
+     *
      * @param userId
      * @param id
      * @return
      */
     @DeleteMapping(path = "/{userId}/{id}")
     public ResponseEntity deleteCart(@PathVariable("userId") String userId, @PathVariable("id") String id) {
-        LOGGER.info("{}", userId,id);
+        LOGGER.info("{}", userId, id);
         OrderBO orderBO = new OrderBO();
         orderBO.setOrderNo(id);
         orderBO.setUserId(userId);

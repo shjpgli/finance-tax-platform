@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.VipLevelBO;
 import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 9:13
  */
@@ -52,7 +52,8 @@ public class VipLevelController {
         List<VipLevelBO> vipLevelBOList = vipLevelService.selectList(map);
         return (vipLevelBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) vipLevelBOList, "total", ((Page) vipLevelBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) vipLevelBOList, "total", ((Page) vipLevelBOList)
+                        .getTotal()));
     }
 
     @GetMapping(path = "/{id}")

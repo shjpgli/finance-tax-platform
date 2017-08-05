@@ -2,12 +2,12 @@ package com.abc12366.cms.service;
 
 
 import com.abc12366.cms.model.questionnaire.Images;
-import com.abc12366.cms.model.questionnaire.bo.SubjectsBO;
 
 import java.util.List;
 
 /**
  * 题目管理接口类
+ *
  * @author lizhongwei
  * @create 2017-7-1
  * @since 1.0.0

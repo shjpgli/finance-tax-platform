@@ -9,20 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * AnswerMapper数据库操作接口类
- * 
  **/
 
 public interface AnswerRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Answer  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Answer selectByPrimaryKey(@Param("id") String id);
 
     Answer selectByLogId(Answer answer);
 
@@ -30,7 +26,7 @@ public interface AnswerRoMapper {
 
     List<AnswertjBO> selectListBysubjectsId(String subjectsId);
 
-    List<AnswerdttjBo> selectdttj(Map<String,Object> map);
+    List<AnswerdttjBo> selectdttj(Map<String, Object> map);
 
-    Integer selectdttjs(Map<String,Object> map);
+    Integer selectdttjs(Map<String, Object> map);
 }

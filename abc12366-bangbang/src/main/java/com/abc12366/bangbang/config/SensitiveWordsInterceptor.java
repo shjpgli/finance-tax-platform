@@ -1,9 +1,6 @@
 package com.abc12366.bangbang.config;
 
 import com.abc12366.bangbang.service.SensitiveWordsService;
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Utils;
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +8,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.io.*;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 敏感词拦截器
@@ -30,6 +24,12 @@ public class SensitiveWordsInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private SensitiveWordsService sensitiveWordsService;
+
+    private static byte[] subBytes(byte[] b, int from, int end) {
+        byte[] result = new byte[end - from];
+        System.arraycopy(b, from, result, 0, end - from);
+        return result;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -117,7 +117,8 @@ public class SensitiveWordsInterceptor extends HandlerInterceptorAdapter {
                     temPosition += (reader.readLine().getBytes().length + 4);
                     end = this.locateEnd(bytes, temPosition, totalBytes, endBoundary);
                     String path = request.getSession().getServletContext().getRealPath("/");
-                    DataOutputStream dOutputStream = new DataOutputStream(new FileOutputStream(new File(path + "/test.jpg")));
+                    DataOutputStream dOutputStream = new DataOutputStream(new FileOutputStream(new File(path + "/test
+                    .jpg")));
                     dOutputStream.write(bytes, temPosition, end-temPosition-2);
                     dOutputStream.close();
 
@@ -129,37 +130,32 @@ public class SensitiveWordsInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    private static byte[] subBytes(byte[] b, int from, int end) {
-        byte[] result = new byte[end - from];
-        System.arraycopy(b, from, result, 0, end - from);
-        return result;
-    }
-
     /**
      * 定位当前头信息的结束位置
+     *
      * @param bytes
-     * @param start :开始位置
-     * @param end :结束位置
+     * @param start  :开始位置
+     * @param end    :结束位置
      * @param endStr :比较字符串
      * @return
      */
-    public int locateEnd(byte[] bytes,int start,int end,String endStr){
+    public int locateEnd(byte[] bytes, int start, int end, String endStr) {
         byte[] endByte = endStr.getBytes();
-        for(int i=start+1;i<end;i++){
-            if(bytes[i]==endByte[0]){
+        for (int i = start + 1; i < end; i++) {
+            if (bytes[i] == endByte[0]) {
                 int k = 1;
-                while(k<endByte.length){
-                    if(bytes[i+k] != endByte[k]){
+                while (k < endByte.length) {
+                    if (bytes[i + k] != endByte[k]) {
                         break;
                     }
                     k++;
                 }
                 System.out.println(i);
-                if(i==3440488){
+                if (i == 3440488) {
                     System.out.println("start");
                 }
                 //返回结束符的开始位置
-                if(k == endByte.length){
+                if (k == endByte.length) {
                     return i;
                 }
             }
@@ -169,7 +165,7 @@ public class SensitiveWordsInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String getParam(HttpServletRequest request) {
-        String str ="";
+        String str = "";
         byte[] bytes = new byte[1024 * 1024];
         InputStream is;
         try {

@@ -4,8 +4,8 @@ import com.abc12366.cms.model.bo.AccessLogtjListBo;
 import com.abc12366.cms.model.questionnaire.AccessLog;
 import com.abc12366.cms.model.questionnaire.bo.AccessLogBO;
 import com.abc12366.cms.service.AccessLogService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,7 @@ public class AccessLogController {
 
     /**
      * 访问记录列表查询
+     *
      * @param questionId
      * @return
      */
@@ -55,6 +56,7 @@ public class AccessLogController {
 
     /**
      * 访问记录访问量
+     *
      * @param questionId
      * @return
      */
@@ -74,16 +76,16 @@ public class AccessLogController {
                                    @RequestParam(value = "endTime", required = false) String endTime,
                                    @RequestParam(value = "questionId", required = false) String questionId) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("questionId",questionId);
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        dataMap.put("questionId", questionId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime()/1000);
+                dataMap.put("startTime", startTime1.getTime() / 1000);
             }
-            if(endTime != null && !"".equals(endTime)){
+            if (endTime != null && !"".equals(endTime)) {
                 Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime()/1000);
+                dataMap.put("endTime", startTime2.getTime() / 1000);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
@@ -95,14 +97,14 @@ public class AccessLogController {
     }
 
 
-
     /**
      * 访问记录新增
      *
      * @return
      */
     @PostMapping(path = "/{questionId}")
-    public ResponseEntity submitAccessLog(@Valid @RequestBody AccessLogBO accessLogBO,@PathVariable("questionId") String questionId) {
+    public ResponseEntity submitAccessLog(@Valid @RequestBody AccessLogBO accessLogBO, @PathVariable("questionId")
+    String questionId) {
         LOGGER.info("{}", accessLogBO);
         accessLogBO.setQuestionId(questionId);
         AccessLogBO bo = accessLogService.insert(accessLogBO);

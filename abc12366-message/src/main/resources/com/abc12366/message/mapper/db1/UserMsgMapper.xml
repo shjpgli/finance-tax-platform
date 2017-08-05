@@ -4,8 +4,8 @@
 <mapper namespace="com.abc12366.message.mapper.db1.UserMsgMapper">
 
     <sql id="Base_Column">
-		id, fromUserId, toUserId, content, status, type, createTime, lastUpdate
-	</sql>
+        id, fromUserId, toUserId, content, status, type, createTime, lastUpdate
+    </sql>
 
     <insert id="insert">
         INSERT INTO msg_user_message (<include refid="Base_Column"/>) VALUES

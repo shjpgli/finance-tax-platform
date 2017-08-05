@@ -4,35 +4,26 @@ import com.abc12366.uc.model.DeliveryMethod;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 
  * DeliveryMethodMapper数据库操作接口类
- * 
  **/
 
-public interface DeliveryMethodMapper{
+public interface DeliveryMethodMapper {
 
 
+    /**
+     * 删除（根据主键ID删除）
+     **/
+    int deleteByPrimaryKey(@Param("id") String id);
 
-	/**
-	 * 
-	 * 删除（根据主键ID删除）
-	 * 
-	 **/
-	int deleteByPrimaryKey(@Param("id") String id);
-
-	/**
-	 * 
-	 * 添加
-	 * 
-	 **/
-	int insert(DeliveryMethod record);
+    /**
+     * 添加
+     **/
+    int insert(DeliveryMethod record);
 
 
-	/**
-	 * 
-	 * 修改（根据主键ID修改）
-	 * 
-	 **/
-	int update(DeliveryMethod record);
+    /**
+     * 修改（根据主键ID修改）
+     **/
+    int update(DeliveryMethod record);
 
 }

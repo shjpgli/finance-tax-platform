@@ -4,8 +4,8 @@ import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.service.ModelService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/model",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/model", headers = Constant.VERSION_HEAD + "=1")
 public class ModelController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelController.class);
 
@@ -114,8 +114,6 @@ public class ModelController {
         String rtn = modelService.deleteList(idsBo.getIds());
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
-
-
 
 
 }

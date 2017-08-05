@@ -7,8 +7,8 @@ import com.abc12366.bangbang.model.bo.TeamBO;
 import com.abc12366.bangbang.model.bo.TeamInsertBO;
 import com.abc12366.bangbang.model.bo.TeamUpdateBO;
 import com.abc12366.bangbang.service.TeamService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -49,7 +49,7 @@ public class TeamServiceImpl implements TeamService {
         team.setCreateTime(date);
         team.setLastUpdate(date);
         int result = teamMapper.insert(team);
-        if(result <1){
+        if (result < 1) {
             throw new ServiceException(4101);
         }
         TeamBO teamBO = new TeamBO();

@@ -1,9 +1,12 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
-import com.abc12366.common.web.BaseController;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.web.BaseController;
+import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.LoginVerifyingCodeBO;
+import com.abc12366.uc.model.bo.RegisterBO;
+import com.abc12366.uc.model.bo.UserReturnBO;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IpService;
 import org.slf4j.Logger;
@@ -58,21 +61,24 @@ public class AuthController extends BaseController {
     }*/
 
     @PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws IOException {
+    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws
+            IOException {
         LOGGER.info("{}", registerBO);
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         //进行手机验证码验证
-        /*ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(), request);
+        /*ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(),
+        request);
         if (response == null) {
             throw new ServiceException(4201);
         }
         if(!response.hasBody()){
             throw new ServiceException(4201);
         }
-        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
+        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(),
+        VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
             throw new ServiceException(4201);
         }*/
@@ -103,7 +109,8 @@ public class AuthController extends BaseController {
     用户通过手机验证码进行登录
      */
     @PostMapping(path = "/verifylogin")
-    public ResponseEntity loginByVerifyingCode(@Valid @RequestBody LoginVerifyingCodeBO loginBO, HttpServletRequest request) throws Exception {
+    public ResponseEntity loginByVerifyingCode(@Valid @RequestBody LoginVerifyingCodeBO loginBO, HttpServletRequest
+            request) throws Exception {
         LOGGER.info("{}", loginBO);
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
@@ -114,7 +121,8 @@ public class AuthController extends BaseController {
         if (response == null) {
             return ResponseEntity.ok(Utils.kv("data", null));
         }
-        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(), VerifyCodeResponse.class);
+        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(),
+        VerifyCodeResponse.class);
         if (!verifyCodeResponse.getCode().equals("200")) {
             return ResponseEntity.ok(Utils.kv("data", null));
         }*/
@@ -122,16 +130,6 @@ public class AuthController extends BaseController {
 
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
-    }
-
-    /*
-    用户token校验
-    */
-    @PostMapping(path = "/auth/{token}")
-    public ResponseEntity userTokenAuth(@PathVariable String token, HttpServletRequest request) throws Exception {
-        LOGGER.info("{}", token);
-        boolean isAuth = authService.isAuthentication(token, request);
-        return ResponseEntity.ok(isAuth);
     }
 
     /**

@@ -21,7 +21,8 @@ public class SmsVerifyCode {
     public SmsVerifyCode() {
     }
 
-    public SmsVerifyCode(String id, String mobile, String deviceId, String templateid, String code, String msg, String obj, Date createTime, Date lastUpdate) {
+    public SmsVerifyCode(String id, String mobile, String deviceId, String templateid, String code, String msg,
+                         String obj, Date createTime, Date lastUpdate) {
         this.id = id;
         this.mobile = mobile;
         this.deviceId = deviceId;

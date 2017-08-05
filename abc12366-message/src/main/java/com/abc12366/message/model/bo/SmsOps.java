@@ -21,7 +21,8 @@ public class SmsOps {
     public SmsOps() {
     }
 
-    public SmsOps(String id, String mobile, String templateid, String params, String status, String updatetime, Date createTime, Date lastUpdate, String sendid) {
+    public SmsOps(String id, String mobile, String templateid, String params, String status, String updatetime, Date
+            createTime, Date lastUpdate, String sendid) {
         this.id = id;
         this.mobile = mobile;
         this.templateid = templateid;

@@ -1,7 +1,7 @@
 package com.abc12366.message.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.bo.VerifyParam;
 import com.abc12366.message.service.MobileVerifyCodeService;
 import org.slf4j.Logger;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -29,7 +28,8 @@ public class MobileVerifyCodeController {
 
     //获取验证码接口
 //    @PostMapping(path = "/getcode/{phone}/{codeType}")
-//    public ResponseEntity getCode(@PathVariable String phone, @PathVariable String codeType, HttpSession session) throws IOException {
+//    public ResponseEntity getCode(@PathVariable String phone, @PathVariable String codeType, HttpSession session)
+// throws IOException {
 //        LOGGER.info("{}:{}:{}", phone, codeType, session);
 //        moboleVerifyCodeService.getCode(phone, codeType, session);
 //        return ResponseEntity.ok(Utils.kv());

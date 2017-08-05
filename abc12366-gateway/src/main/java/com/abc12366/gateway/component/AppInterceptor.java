@@ -1,15 +1,14 @@
 package com.abc12366.gateway.component;
 
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.service.AppService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,7 +67,8 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    /*public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+    /*public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception
+     ex)
             throws Exception {
         // 移除appId，用于在业务中快速获取有效AppId，在AppInterceptor.preHandle.isAuthentization中设置
         request.removeAttribute(Constant.APP_ID);

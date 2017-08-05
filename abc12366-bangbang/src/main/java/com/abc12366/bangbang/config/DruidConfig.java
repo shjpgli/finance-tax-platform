@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Druid配置
- * <p/>
+ * <p>
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-06-08
  * Time: 14:55

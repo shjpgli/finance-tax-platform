@@ -1,9 +1,5 @@
 package com.abc12366.uc.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-
 /**
  * 应用配置文件
  *

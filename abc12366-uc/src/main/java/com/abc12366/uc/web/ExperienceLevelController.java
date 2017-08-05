@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.ExperienceLevelBO;
 import com.abc12366.uc.model.bo.ExperienceLevelInsertAndUpdateBO;
 import com.abc12366.uc.service.ExperienceLevelService;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 15:44
  */
@@ -72,7 +72,8 @@ public class ExperienceLevelController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody ExperienceLevelInsertAndUpdateBO experienceLevelUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody ExperienceLevelInsertAndUpdateBO experienceLevelUpdateBO,
+                                 @PathVariable String id) {
         LOGGER.info("{}:{}", experienceLevelUpdateBO, id);
         ExperienceLevelBO experienceLevelReturn = experienceLevelService.update(experienceLevelUpdateBO, id);
         LOGGER.info("{}", experienceLevelReturn);

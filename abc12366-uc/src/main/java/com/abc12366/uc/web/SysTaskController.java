@@ -1,8 +1,8 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.SysTaskBO;
 import com.abc12366.uc.model.bo.SysTaskInsertAndUpdateBO;
 import com.abc12366.uc.model.bo.SysTaskListBO;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-23
  * Time: 17:40
  */
@@ -61,7 +61,8 @@ public class SysTaskController {
     public ResponseEntity selectDeployedList(@RequestParam(required = false) String name,
                                              @RequestParam(required = false) String type,
                                              @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
-                                             @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+                                             @RequestParam(required = false, defaultValue = Constant.pageSize) int
+                                                         size) {
         LOGGER.info("{}:{}:{}:{}", name, type, page, size);
         Map<String, String> map = new HashMap<>();
         if (name != null && StringUtils.isEmpty(name)) {
@@ -96,7 +97,8 @@ public class SysTaskController {
     }
 
     @PutMapping(path = "/task/{id}")
-    public ResponseEntity update(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String
+            id) {
         LOGGER.info("{}:{}", sysTaskUpdateBO, id);
         SysTaskBO sysTaskBO = sysTaskService.update(sysTaskUpdateBO, id);
         LOGGER.info("{}", sysTaskBO);

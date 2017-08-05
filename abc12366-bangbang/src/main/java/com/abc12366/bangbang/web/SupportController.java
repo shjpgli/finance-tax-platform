@@ -2,8 +2,8 @@ package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.bo.SupportBO;
 import com.abc12366.bangbang.service.SupportService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -52,11 +52,13 @@ public class SupportController {
         List<SupportBO> supportBOList = supportService.selectList(subject, userId);
         return (supportBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) supportBOList, "total", ((Page) supportBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) supportBOList, "total", ((Page) supportBOList).getTotal
+                        ()));
     }
+
     @GetMapping(path = "/count/support/{subject}/{id}")
     public ResponseEntity selectCount(@PathVariable String subject,
-                                     @PathVariable String id) {
+                                      @PathVariable String id) {
         LOGGER.info("{}:{}", subject, id);
         int count = supportService.selectCount(subject, id);
         return ResponseEntity.ok(Utils.kv("data", count));

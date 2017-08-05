@@ -1,9 +1,9 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Properties;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
@@ -36,7 +36,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
  * Time: 16:22
  */
@@ -44,20 +44,25 @@ import java.util.*;
 public class UserBindServiceImpl implements UserBindService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserBindServiceImpl.class);
-
+    private static Properties properties = new Properties("application.properties");
     @Autowired
     private UserBindMapper userBindMapper;
-
     @Autowired
     private UserBindRoMapper userBindRoMapper;
-
-    private static Properties properties = new Properties("application.properties");
-
     @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
     private MainService mainService;
+
+    public static void main(String[] args) {
+//        new UserBindServiceImpl().testPost();
+//        try {
+//            new UserBindServiceImpl().appLoginWsbs();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) {
@@ -90,7 +95,8 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     //登录网上报税接口
-    private HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception {
+    private HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws
+            Exception {
         HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
         if (hngsAppLoginResponse != null) {
             String url = properties.getValue("wsbssoa.hngs.url") + "/login";
@@ -109,8 +115,10 @@ public class UserBindServiceImpl implements UserBindService {
 
             try {
                 RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
-                pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes("iso-8859-1")), "iso-8859-1");
-                nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")), "iso-8859-1");
+                pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
+                        ("iso-8859-1")), "iso-8859-1");
+                nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")),
+                        "iso-8859-1");
 //                nsrsbh = mainService.RSAEncrypt(request, new MD5(nsrsbh + timestamp.getTime()).compute());
 //                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
             } catch (Exception e) {
@@ -150,7 +158,8 @@ public class UserBindServiceImpl implements UserBindService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            HngsAppLoginResponse hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsAppLoginResponse.class);
+            HngsAppLoginResponse hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
+                    HngsAppLoginResponse.class);
             request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
             return hngsAppLoginResponse;
         }
@@ -277,16 +286,6 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public List<UserHndsBO> getUserhndsBind(String userId) {
         return userBindRoMapper.getUserhndsBind(userId);
-    }
-
-
-    public static void main(String[] args) {
-//        new UserBindServiceImpl().testPost();
-//        try {
-//            new UserBindServiceImpl().appLoginWsbs();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private void testPost() {

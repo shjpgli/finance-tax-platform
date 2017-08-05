@@ -4,8 +4,8 @@ import com.abc12366.bangbang.model.bo.LetterBO;
 import com.abc12366.bangbang.model.bo.LetterInsertBO;
 import com.abc12366.bangbang.model.bo.LetterListBO;
 import com.abc12366.bangbang.service.LetterService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ import java.util.List;
  * Time: 17:39
  */
 @RestController
-@RequestMapping(path = "/letter" ,headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/letter", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class LetterController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LetterController.class);
 
@@ -32,7 +32,8 @@ public class LetterController {
     private LetterService letterService;
 
     @PostMapping(path = "/{fromId}/to/{toId}")
-    public ResponseEntity send(@PathVariable String fromId, @PathVariable String toId, @Valid @RequestBody LetterInsertBO letterInsertBO){
+    public ResponseEntity send(@PathVariable String fromId, @PathVariable String toId, @Valid @RequestBody
+    LetterInsertBO letterInsertBO) {
         LOGGER.info("{}:{}:{}", fromId, toId, letterInsertBO);
         LetterBO letterBO = letterService.send(fromId, toId, letterInsertBO);
         return ResponseEntity.ok(Utils.kv("data", letterBO));
@@ -40,25 +41,26 @@ public class LetterController {
 
     @GetMapping()
     public ResponseEntity selectList(HttpServletRequest request,
-                                    @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                    @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", request, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LetterListBO> letterListBOList = letterService.selectList(request);
         return (letterListBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) letterListBOList, "total", ((Page) letterListBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) letterListBOList, "total", ((Page) letterListBOList)
+                        .getTotal()));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity read(@PathVariable String id){
+    public ResponseEntity read(@PathVariable String id) {
         LOGGER.info("{}", id);
         letterService.read(id);
         return ResponseEntity.ok(Utils.kv());
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         letterService.delete(id);
         return ResponseEntity.ok(Utils.kv());

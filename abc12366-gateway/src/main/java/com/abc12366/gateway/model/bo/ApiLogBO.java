@@ -1,147 +1,168 @@
 package com.abc12366.gateway.model.bo;
+
 import java.io.Serializable;
 
 
 /**
- *
  * 接口调用日志表
- *
  **/
 @SuppressWarnings("serial")
 public class ApiLogBO implements Serializable {
 
-	/**ID**/
-	private String id;
+    /**
+     * ID
+     **/
+    private String id;
 
-	/**访问接口地址**/
-	private String uri;
+    /**
+     * 访问接口地址
+     **/
+    private String uri;
 
-	/**用户代理**/
-	private String userAgent;
+    /**
+     * 用户代理
+     **/
+    private String userAgent;
 
-	/**接入userId**/
-	private String userId;
+    /**
+     * 接入userId
+     **/
+    private String userId;
 
-	/**接入AppId**/
-	private String appId;
+    /**
+     * 接入AppId
+     **/
+    private String appId;
 
-	/**接入IP地址**/
-	private String ip;
+    /**
+     * 接入IP地址
+     **/
+    private String ip;
 
-	/**访问时间**/
-	private long inTime;
+    /**
+     * 访问时间
+     **/
+    private long inTime;
 
-	/**响应时间**/
-	private long outTime;
+    /**
+     * 响应时间
+     **/
+    private long outTime;
 
-	/**结果代码**/
-	private String status;
+    /**
+     * 结果代码
+     **/
+    private String status;
 
-	/**附言**/
-	private String version;
+    /**
+     * 附言
+     **/
+    private String version;
 
-	/**返回代码**/
-	private String code;
+    /**
+     * 返回代码
+     **/
+    private String code;
 
-	/**返回消息**/
-	private String message;
+    /**
+     * 返回消息
+     **/
+    private String message;
 
+    public String getId() {
+        return this.id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public String getUri() {
+        return this.uri;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
-	public void setUri(String uri){
-		this.uri = uri;
-	}
+    public String getUserAgent() {
+        return this.userAgent;
+    }
 
-	public String getUri(){
-		return this.uri;
-	}
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
 
-	public void setUserAgent(String userAgent){
-		this.userAgent = userAgent;
-	}
+    public String getUserId() {
+        return this.userId;
+    }
 
-	public String getUserAgent(){
-		return this.userAgent;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public void setUserId(String userId){
-		this.userId = userId;
-	}
+    public String getAppId() {
+        return this.appId;
+    }
 
-	public String getUserId(){
-		return this.userId;
-	}
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-	public void setAppId(String appId){
-		this.appId = appId;
-	}
+    public String getIp() {
+        return this.ip;
+    }
 
-	public String getAppId(){
-		return this.appId;
-	}
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
-	public void setIp(String ip){
-		this.ip = ip;
-	}
+    public long getInTime() {
+        return this.inTime;
+    }
 
-	public String getIp(){
-		return this.ip;
-	}
+    public void setInTime(long inTime) {
+        this.inTime = inTime;
+    }
 
-	public void setInTime(long inTime){
-		this.inTime = inTime;
-	}
+    public long getOutTime() {
+        return this.outTime;
+    }
 
-	public long getInTime(){
-		return this.inTime;
-	}
+    public void setOutTime(long outTime) {
+        this.outTime = outTime;
+    }
 
-	public void setOutTime(long outTime){
-		this.outTime = outTime;
-	}
+    public String getStatus() {
+        return this.status;
+    }
 
-	public long getOutTime(){
-		return this.outTime;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setStatus(String status){
-		this.status = status;
-	}
+    public String getVersion() {
+        return this.version;
+    }
 
-	public String getStatus(){
-		return this.status;
-	}
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-	public void setVersion(String version){
-		this.version = version;
-	}
+    public String getCode() {
+        return this.code;
+    }
 
-	public String getVersion(){
-		return this.version;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setCode(String code){
-		this.code = code;
-	}
+    public String getMessage() {
+        return this.message;
+    }
 
-	public String getCode(){
-		return this.code;
-	}
-
-	public void setMessage(String message){
-		this.message = message;
-	}
-
-	public String getMessage(){
-		return this.message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
 }

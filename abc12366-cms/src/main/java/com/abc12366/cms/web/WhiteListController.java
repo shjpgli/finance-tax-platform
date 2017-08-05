@@ -3,8 +3,8 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.questionnaire.WhiteList;
 import com.abc12366.cms.model.questionnaire.bo.WhiteListBO;
 import com.abc12366.cms.service.WhiteListService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,7 @@ public class WhiteListController {
 
     /**
      * 白名单列表查询
+     *
      * @param questionId
      * @return
      */
@@ -48,9 +49,9 @@ public class WhiteListController {
     }
 
 
-
     /**
      * 白名单新增
+     *
      * @return
      */
     @PostMapping

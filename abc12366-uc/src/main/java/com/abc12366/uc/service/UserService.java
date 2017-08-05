@@ -1,7 +1,9 @@
 package com.abc12366.uc.service;
 
 
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.PasswordUpdateBO;
+import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserUpdateBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,11 +24,11 @@ public interface UserService {
 
     UserBO selectByUsernameOrPhone(String usernameOrPhone);
 
-    //UserBO register(RegisterBO registerBO);
+    //AdminBO register(RegisterBO registerBO);
 
     UserBO delete(String userId);
 
-    UserBO selectOneByToken(String userToken);
+    UserBO authAndRefreshToken(String token);
 
     Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request);
 

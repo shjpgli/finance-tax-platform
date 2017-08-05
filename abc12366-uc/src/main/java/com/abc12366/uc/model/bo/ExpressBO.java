@@ -1,82 +1,89 @@
 package com.abc12366.uc.model.bo;
+
 import com.abc12366.uc.model.User;
 
 import java.io.Serializable;
 
 
 /**
- * 
  * 发票快递单
- * 
  **/
 @SuppressWarnings("serial")
 public class ExpressBO implements Serializable {
 
-    /**ID**/
+    /**
+     * ID
+     **/
     private String id;
 
-    /**用户订单号**/
+    /**
+     * 用户订单号
+     **/
     private String userOrderNo;
 
-    /**用户ID**/
+    /**
+     * 用户ID
+     **/
     private String userId;
 
-    /**快递单号**/
+    /**
+     * 快递单号
+     **/
     private String expressNo;
 
-    /**快递公司ID**/
+    /**
+     * 快递公司ID
+     **/
     private String deliveryId;
 
-    /**快递状态**/
+    /**
+     * 快递状态
+     **/
     private String status;
 
-	/****/
-	private java.util.Date createTime;
+    /****/
+    private java.util.Date createTime;
 
-	/****/
-	private java.util.Date lastUpdate;
+    /****/
+    private java.util.Date lastUpdate;
 
     private java.util.Date startTime;
 
-	private java.util.Date endTime;
+    private java.util.Date endTime;
 
     private User user;
 
+    public String getId() {
+        return this.id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public String getStatus() {
+        return this.status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setStatus(String status){
-		this.status = status;
-	}
+    public java.util.Date getLastUpdate() {
+        return this.lastUpdate;
+    }
 
-	public String getStatus(){
-		return this.status;
-	}
-
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
-
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
-
-	public void setLastUpdate(java.util.Date lastUpdate){
-		this.lastUpdate = lastUpdate;
-	}
-
-	public java.util.Date getLastUpdate(){
-		return this.lastUpdate;
-	}
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
     public java.util.Date getStartTime() {
         return startTime;

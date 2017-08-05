@@ -3,26 +3,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.message.mapper.db2.PhoneCodeRoMapper">
 
-	<select id="selectOne">
-		select id, phone, code, expireDate, type
-		from msg_phone_code
-		where id=#{id}
-	</select>
+    <select id="selectOne">
+        select id, phone, code, expireDate, type
+        from msg_phone_code
+        where id=#{id}
+    </select>
 
-	<select id="selectList" parameterType="com.abc12366.message.model.PhoneCode" resultType="com.abc12366.message.model.bo.PhoneCodeBO">
-		select id, phone, code, expireDate, type
-		from msg_phone_code
-		where type=#{type}
-		and phone=#{phone}
-		and code=#{code}
-	</select>
+    <select id="selectList" parameterType="com.abc12366.message.model.PhoneCode"
+            resultType="com.abc12366.message.model.bo.PhoneCodeBO">
+        select id, phone, code, expireDate, type
+        from msg_phone_code
+        where type=#{type}
+        and phone=#{phone}
+        and code=#{code}
+    </select>
 
-	<select id="selectListByPhone" parameterType="java.lang.String" resultType="com.abc12366.message.model.bo.PhoneCodeBO">
-		select id, phone, code, expireDate, type
-		from msg_phone_code
-		where type=#{type}
-		and phone=#{phone}
-		order by expireDate DESC
-	</select>
+    <select id="selectListByPhone" parameterType="java.lang.String"
+            resultType="com.abc12366.message.model.bo.PhoneCodeBO">
+        select id, phone, code, expireDate, type
+        from msg_phone_code
+        where type=#{type}
+        and phone=#{phone}
+        order by expireDate DESC
+    </select>
 
 </mapper>

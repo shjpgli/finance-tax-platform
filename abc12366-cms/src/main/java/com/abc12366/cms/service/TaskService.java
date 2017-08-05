@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface TaskService {
 
-    List<TaskBo> selectList(Map<String,Object> map);
+    List<TaskBo> selectList(Map<String, Object> map);
 
     TaskBo save(TaskBo taskBo);
 

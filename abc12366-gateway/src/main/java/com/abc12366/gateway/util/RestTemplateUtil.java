@@ -1,6 +1,5 @@
 package com.abc12366.gateway.util;
 
-import com.abc12366.common.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class RestTemplateUtil {
     @Autowired
     private RestTemplate restTemplate;
 
-    public String send(String url, HttpMethod method, HttpServletRequest request){
+    public String send(String url, HttpMethod method, HttpServletRequest request) {
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
         if (!StringUtils.isEmpty(request.getHeader(Constant.APP_TOKEN_HEAD))) {

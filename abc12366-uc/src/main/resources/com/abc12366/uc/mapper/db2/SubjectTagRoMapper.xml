@@ -4,21 +4,22 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.SubjectTagRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.SubjectTagBO" parameterType="java.util.HashMap">
-        SELECT  id,userId,subjectId,tagId,type,createTime
+        SELECT id,userId,subjectId,tagId,type,createTime
         from uc_subject_tag
         where type=#{subject}
         and subjectId=#{id}
     </select>
 
-    <select id="selectListByTagIdsAndSubjectIds" resultType="com.abc12366.uc.model.bo.SubjectTagBO" parameterType="java.util.HashMap">
-        SELECT  id,userId,subjectId,tagId,type,createTime
+    <select id="selectListByTagIdsAndSubjectIds" resultType="com.abc12366.uc.model.bo.SubjectTagBO"
+            parameterType="java.util.HashMap">
+        SELECT id,userId,subjectId,tagId,type,createTime
         from uc_subject_tag
         where tagId in (#{tagIds})
         and subjectId in (#{subjectIds})
     </select>
 
     <select id="selectExist" resultType="com.abc12366.uc.model.bo.SubjectTagBO" parameterType="java.util.HashMap">
-        SELECT  id,userId,subjectId,tagId,type,createTime
+        SELECT id,userId,subjectId,tagId,type,createTime
         from uc_subject_tag
         where tagId=#{tagId}
         and subjectId=#{subjectId}

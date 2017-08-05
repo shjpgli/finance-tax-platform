@@ -1,11 +1,8 @@
 package com.abc12366.uc.model.bo;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.util.Date;
 
 /**
- *
  * @author liuguiyao<435720953@qq.com.com>
  * @create 2017-05-16 10:18 PM
  * @since 2.0.0
@@ -24,7 +21,8 @@ public class PointsRuleBO {
     public PointsRuleBO() {
     }
 
-    public PointsRuleBO(String id, String name, String code, int points, String description, String type, boolean status, Date createTime, Date lastUpdate) {
+    public PointsRuleBO(String id, String name, String code, int points, String description, String type, boolean
+            status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.code = code;

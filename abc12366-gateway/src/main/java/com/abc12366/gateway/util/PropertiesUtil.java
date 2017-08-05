@@ -1,20 +1,15 @@
 package com.abc12366.gateway.util;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Properties;
 
 public class PropertiesUtil {
 
+    static com.abc12366.gateway.util.Properties properties;
     private static String GATEWAY_PROPERTIES = "application-gateway.properties";
-
-    static com.abc12366.common.util.Properties properties;
 
     static {
         try {
-            properties = new com.abc12366.common.util.Properties(GATEWAY_PROPERTIES);
+            properties = new com.abc12366.gateway.util.Properties(GATEWAY_PROPERTIES);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -28,9 +23,9 @@ public class PropertiesUtil {
      */
     public static String getValue(String key) throws IOException {
         if (properties == null) {
-            properties = new com.abc12366.common.util.Properties(GATEWAY_PROPERTIES);
+            properties = new com.abc12366.gateway.util.Properties(GATEWAY_PROPERTIES);
         }
 
         return properties.getValue(String.valueOf(key));
-    }  
+    }
 } 

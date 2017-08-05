@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.ExperienceRuleRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.ExperienceRuleBO" parameterType="java.util.Map">
-        SELECT  id,name,code,exp,description,type,status,createTime,lastUpdate
+        SELECT id,name,code,exp,description,type,status,createTime,lastUpdate
         from uc_uexp_rule
         <where>
             <if test="name!=null">
@@ -21,7 +21,7 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExperienceRuleBO" parameterType="java.lang.String">
-        SELECT  id,name,code,exp,description,type,status,createTime,lastUpdate
+        SELECT id,name,code,exp,description,type,status,createTime,lastUpdate
         from uc_uexp_rule
         where id=#{id}
     </select>

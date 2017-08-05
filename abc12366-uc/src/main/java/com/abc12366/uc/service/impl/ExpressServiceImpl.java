@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.ExpressMapper;
 import com.abc12366.uc.mapper.db2.ExpressRoMapper;
 import com.abc12366.uc.model.Express;
@@ -40,12 +39,12 @@ public class ExpressServiceImpl implements ExpressService {
     @Override
     public ExpressBO send(Express express) {
         int update = expressMapper.update(express);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.info("{快递寄送失败}", express);
             throw new ServiceException(4144);
         }
         ExpressBO bo = new ExpressBO();
-        BeanUtils.copyProperties(express,bo);
+        BeanUtils.copyProperties(express, bo);
         return bo;
     }
 
@@ -53,16 +52,16 @@ public class ExpressServiceImpl implements ExpressService {
     @Override
     public ExpressBO update(ExpressBO expressBO) {
         Express express = new Express();
-        BeanUtils.copyProperties(expressBO,express);
+        BeanUtils.copyProperties(expressBO, express);
         Date date = new Date();
         express.setLastUpdate(date);
         int update = expressMapper.update(express);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.info("{修改快递信息失败}", express);
             throw new ServiceException(4102);
         }
         ExpressBO bo = new ExpressBO();
-        BeanUtils.copyProperties(express,bo);
+        BeanUtils.copyProperties(express, bo);
         return bo;
     }
 
@@ -75,7 +74,7 @@ public class ExpressServiceImpl implements ExpressService {
     @Override
     public void delete(String id) {
         int del = expressMapper.deleteByPrimaryKey(id);
-        if(del != 1){
+        if (del != 1) {
             LOGGER.info("{删除快递信息失败}", del);
             throw new ServiceException(4103);
         }
@@ -84,15 +83,15 @@ public class ExpressServiceImpl implements ExpressService {
     @Override
     public ExpressBO importExpress(ExpressBO expressBO) {
         Express express = new Express();
-        BeanUtils.copyProperties(expressBO,express);
+        BeanUtils.copyProperties(expressBO, express);
         Date date = new Date();
         express.setLastUpdate(date);
         int update = expressMapper.update(express);
-        if(update != 1){
+        if (update != 1) {
             return null;
         }
         ExpressBO bo = new ExpressBO();
-        BeanUtils.copyProperties(express,bo);
+        BeanUtils.copyProperties(express, bo);
         return bo;
     }
 }

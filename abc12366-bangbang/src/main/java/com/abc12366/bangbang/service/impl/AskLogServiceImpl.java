@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * Time: 15:24
  */
 @Service
-public class AskLogServiceImpl implements AskLogService{
+public class AskLogServiceImpl implements AskLogService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AskLogServiceImpl.class);
 
     @Autowired

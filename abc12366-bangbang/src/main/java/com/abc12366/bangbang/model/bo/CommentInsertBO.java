@@ -3,7 +3,6 @@ package com.abc12366.bangbang.model.bo;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * User: liuguiyao<435720953@qq.com>

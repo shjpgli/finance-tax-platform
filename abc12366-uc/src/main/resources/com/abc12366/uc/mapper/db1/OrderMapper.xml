@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.OrderMapper">
 
-	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		 DELETE FROM uc_order
-		 WHERE orderNo = #{orderNo}
-	</delete>
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM uc_order
+        WHERE orderNo = #{orderNo}
+    </delete>
 
-	<!--删除：根据主键ID和UserID删除-->
-	<delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.Order">
-		 DELETE FROM uc_order
-		 WHERE orderNo = #{orderNo} and userId=#{userId} and status = '1'
-	</delete>
+    <!--删除：根据主键ID和UserID删除-->
+    <delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.Order">
+        DELETE FROM uc_order
+        WHERE orderNo = #{orderNo} and userId=#{userId} and status = '1'
+    </delete>
 
-	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insert" parameterType="com.abc12366.uc.model.Order">
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="insert" parameterType="com.abc12366.uc.model.Order">
         INSERT INTO uc_order
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderNo != null">
                 orderNo,
             </if>
@@ -87,7 +87,7 @@
             </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNo!=null">
                 #{orderNo},
             </if>
@@ -155,10 +155,10 @@
                 #{cancelId},
             </if>
         </trim>
-	</insert>
+    </insert>
 
-	<!-- 修 改-->
-	<update id="update" parameterType="com.abc12366.uc.model.Order">
+    <!-- 修 改-->
+    <update id="update" parameterType="com.abc12366.uc.model.Order">
         UPDATE uc_order
         <set>
             <if test="orderNo != null">
@@ -230,6 +230,6 @@
 
         </set>
         WHERE orderNo = #{orderNo} and userId = #{userId}
-	</update>
+    </update>
 
 </mapper>

@@ -4,8 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.ProductRepoRoMapper">
 
     <sql id="Base_Column_List">
-		 id,	goodsId,	productId,	income,	outcome,	stock,	remark,	createTime,	lastUpdate
-	</sql>
+        id, goodsId, productId, income, outcome, stock, remark, createTime, lastUpdate
+    </sql>
 
     <resultMap id="productRepoBOResultMap" type="com.abc12366.uc.model.bo.ProductRepoBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
@@ -64,7 +64,8 @@
     </select>
 
     <!-- 根据goodsId和ProductId查询库存列表信息-->
-    <select id="selectProductRepoDetail" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.ProductRepo">
+    <select id="selectProductRepoDetail" resultMap="productRepoBOResultMap"
+            parameterType="com.abc12366.uc.model.ProductRepo">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product_repo

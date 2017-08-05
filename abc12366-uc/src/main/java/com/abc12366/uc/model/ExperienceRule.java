@@ -3,7 +3,7 @@ package com.abc12366.uc.model;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 11:19
  */
@@ -21,7 +21,8 @@ public class ExperienceRule {
     public ExperienceRule() {
     }
 
-    public ExperienceRule(String id, String name, String code, int exp, String description, String type, Boolean status, Date createTime, Date lastUpdate) {
+    public ExperienceRule(String id, String name, String code, int exp, String description, String type, Boolean
+            status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.code = code;

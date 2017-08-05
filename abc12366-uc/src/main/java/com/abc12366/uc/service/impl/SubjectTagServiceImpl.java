@@ -1,8 +1,8 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.SubjectTagMapper;
 import com.abc12366.uc.mapper.db2.SubjectTagRoMapper;
 import com.abc12366.uc.mapper.db2.TagRoMapper;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-06-15
  * Time: 15:08
  */
@@ -145,7 +145,8 @@ public class SubjectTagServiceImpl implements SubjectTagService {
 
     @Transactional("db1TxManager")
     @Override
-    public List<SubjectTagBO> batchUserInsert(String subject, String tagId, String subjectIds, HttpServletRequest request) {
+    public List<SubjectTagBO> batchUserInsert(String subject, String tagId, String subjectIds, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}:{}:{}", subject, tagId, subjectIds, request);
         List<SubjectTagBO> subjectTagBOList = new ArrayList<>();
         SubjectTag subjectTag = new SubjectTag();
@@ -173,7 +174,8 @@ public class SubjectTagServiceImpl implements SubjectTagService {
 
     @Transactional("db1TxManager")
     @Override
-    public List<SubjectTagBO> batchInsert2(String subject, BatchTagInsertBO batchTagInsertBO, HttpServletRequest request) {
+    public List<SubjectTagBO> batchInsert2(String subject, BatchTagInsertBO batchTagInsertBO, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}:{}", subject, batchTagInsertBO, request);
         List<String> tagIdList = stringToList(",", batchTagInsertBO.getTagIds());
         List<String> subjectIdList = stringToList(",", batchTagInsertBO.getSubjectIds());

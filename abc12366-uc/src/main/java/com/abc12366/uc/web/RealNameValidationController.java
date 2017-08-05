@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-04
  * Time: 10:29
  */
@@ -47,11 +47,13 @@ public class RealNameValidationController {
         List<UserExtendListBO> userExtendBOList = realNameValidationService.selectList(map);
         return (userExtendBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userExtendBOList, "total", ((Page) userExtendBOList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userExtendBOList, "total", ((Page) userExtendBOList)
+                        .getTotal()));
     }
 
     @PutMapping(path = "/{userId}/{validStatus}")
-    public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus, @Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
+    public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus, @Valid
+    @RequestBody UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
         UserExtendBO userExtendBO = realNameValidationService.validate(userId, validStatus, userExtendUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", userExtendBO));

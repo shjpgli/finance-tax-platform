@@ -1,15 +1,15 @@
 package com.abc12366.uc.util;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-19
  * Time: 10:51
  */
 public class PasswordUtils {
-    public static String encodePassword(String password){
+    public static String encodePassword(String password) {
         //密码加密
         String encodePassword;
         String salt;

@@ -3,7 +3,7 @@ package com.abc12366.uc.model;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 9:47
  */
@@ -19,7 +19,8 @@ public class VipPrivilege {
     public VipPrivilege() {
     }
 
-    public VipPrivilege(String id, String name, String level, String remark, Boolean status, Date lastUpdate, Date createTime) {
+    public VipPrivilege(String id, String name, String level, String remark, Boolean status, Date lastUpdate, Date
+            createTime) {
         this.id = id;
         this.name = name;
         this.level = level;

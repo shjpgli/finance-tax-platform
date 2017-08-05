@@ -3,7 +3,6 @@ package com.abc12366.cms.mapper.db2;
 import com.abc12366.cms.model.Site;
 import com.abc12366.cms.model.bo.SiteBo;
 import com.abc12366.cms.model.bo.SiteListBo;
-import com.abc12366.cms.vo.SiteVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -8,27 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * ModelItemMapper数据库操作接口类
- * 
  **/
 
-public interface ModelItemRoMapper{
+public interface ModelItemRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	ModelItem selectByPrimaryKey(@Param("modelitemId") String modelitemId);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    ModelItem selectByPrimaryKey(@Param("modelitemId") String modelitemId);
 
-	/**
-	 *
-	 * 查询（根据modelId查询）
-	 *
-	 **/
-	List<ModelItemBo> selectList(Map map);
+    /**
+     * 查询（根据modelId查询）
+     **/
+    List<ModelItemBo> selectList(Map map);
 
 
 }

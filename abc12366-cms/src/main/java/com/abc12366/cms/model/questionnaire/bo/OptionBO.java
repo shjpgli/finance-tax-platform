@@ -1,43 +1,46 @@
 package com.abc12366.cms.model.questionnaire.bo;
+
 import java.io.Serializable;
 
 
 /**
- * 
  * 选项表
- * 
  **/
 @SuppressWarnings("serial")
 public class OptionBO implements Serializable {
 
-	/**选项ID**/
-	private String id;
+    /**
+     * 选项ID
+     **/
+    private String id;
 
-	/**题目ID**/
-	private String subjectsId;
+    /**
+     * 题目ID
+     **/
+    private String subjectsId;
 
-	/**答案内容**/
-	private String optionString;
+    /**
+     * 答案内容
+     **/
+    private String optionString;
 
     private Boolean status;
 
+    public String getId() {
+        return this.id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public String getOptionString() {
+        return this.optionString;
+    }
 
-	public String getId(){
-		return this.id;
-	}
-
-	public void setOptionString(String optionString){
-		this.optionString = optionString;
-	}
-
-	public String getOptionString(){
-		return this.optionString;
-	}
+    public void setOptionString(String optionString) {
+        this.optionString = optionString;
+    }
 
     public Boolean getStatus() {
         return status;

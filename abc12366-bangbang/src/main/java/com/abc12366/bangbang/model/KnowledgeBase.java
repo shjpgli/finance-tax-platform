@@ -1,212 +1,257 @@
 package com.abc12366.bangbang.model;
-import java.io.Serializable;
-
 
 /**
  * @Author liuqi
  * @Date 2017/8/2 17:58
  * 知识库表
  **/
-public class KnowledgeBase{
+public class KnowledgeBase {
 
-	/**PK**/
-	private String id;
+    /**
+     * PK
+     **/
+    private String id;
 
-	/**分类ID**/
-	private String categoryCode;
+    /**
+     * 分类Code
+     **/
+    private String categoryCode;
 
-	/**类别：QA问答，K知识**/
-	private String type;
+    /*
+    *  分类名称
+    **/
+    private String categoryName;
 
-	/**推荐 QA(common常见,hot热点); K(top头条，hot热点)**/
-	private String recommend;
+    /**
+     * 类别：QA问答，K知识
+     **/
+    private String type;
 
-	/**名称**/
-	private String subject;
+    /**
+     * 推荐 QA(common常见,hot热点); K(top头条，hot热点)
+     **/
+    private String recommend;
 
-	/**内容**/
-	private byte[] content;
+    /**
+     * 名称
+     **/
+    private String subject;
 
-	/**状态**/
-	private Boolean status;
+    /**
+     * 内容
+     **/
+    private byte[] content;
 
-	/**生效时间**/
-	private java.util.Date activeTime;
+    /**
+     * 状态
+     **/
+    private Boolean status;
 
-	/**知识来源**/
-	private String source;
+    /**
+     * 生效时间
+     **/
+    private java.util.Date activeTime;
 
-	/**是否对外开放**/
-	private Boolean isOpen;
+    /**
+     * 知识来源
+     **/
+    private String source;
 
-	/**浏览量**/
-	private Long pv;
+    /**
+     * 是否对外开放
+     **/
+    private Boolean isOpen;
 
-	/**有用投票数**/
-	private Long usefulVotes;
+    /**
+     * 浏览量
+     **/
+    private Long pv;
 
-	/**无用投票数**/
-	private Long uselessVotes;
+    /**
+     * 有用投票数
+     **/
+    private Long usefulVotes;
 
-	/**分享数量**/
-	private Long shareNum;
+    /**
+     * 无用投票数
+     **/
+    private Long uselessVotes;
 
-	/**创建时间**/
-	private java.util.Date createTime;
+    /**
+     * 分享数量
+     **/
+    private Long shareNum;
 
-	/**修改时间**/
-	private java.util.Date updateTime;
+    /**
+     * 创建时间
+     **/
+    private java.util.Date createTime;
 
-	/**创建人**/
-	private String createUser;
+    /**
+     * 修改时间
+     **/
+    private java.util.Date updateTime;
 
-	/**修改人**/
-	private String updateUser;
+    /**
+     * 创建人
+     **/
+    private String createUser;
 
+    /**
+     * 修改人
+     **/
+    private String updateUser;
 
+    public String getId() {
+        return this.id;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId(){
-		return this.id;
-	}
+    public String getCategoryCode() {
+        return categoryCode;
+    }
 
-	public String getCategoryCode() {
-		return categoryCode;
-	}
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
 
-	public void setCategoryCode(String categoryCode) {
-		this.categoryCode = categoryCode;
-	}
+    public String getCategoryName() {
+        return categoryName;
+    }
 
-	public void setType(String type){
-		this.type = type;
-	}
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
-	public String getType(){
-		return this.type;
-	}
+    public String getType() {
+        return this.type;
+    }
 
-	public void setRecommend(String recommend){
-		this.recommend = recommend;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public String getRecommend(){
-		return this.recommend;
-	}
+    public String getRecommend() {
+        return this.recommend;
+    }
 
-	public void setSubject(String subject){
-		this.subject = subject;
-	}
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
+    }
 
-	public String getSubject(){
-		return this.subject;
-	}
+    public String getSubject() {
+        return this.subject;
+    }
 
-	public void setContent(byte[] content){
-		this.content = content;
-	}
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
-	public byte[] getContent(){
-		return this.content;
-	}
+    public byte[] getContent() {
+        return this.content;
+    }
 
-	public void setStatus(Boolean status){
-		this.status = status;
-	}
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
 
-	public Boolean getStatus(){
-		return this.status;
-	}
+    public Boolean getStatus() {
+        return this.status;
+    }
 
-	public void setActiveTime(java.util.Date activeTime){
-		this.activeTime = activeTime;
-	}
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
-	public java.util.Date getActiveTime(){
-		return this.activeTime;
-	}
+    public java.util.Date getActiveTime() {
+        return this.activeTime;
+    }
 
-	public void setSource(String source){
-		this.source = source;
-	}
+    public void setActiveTime(java.util.Date activeTime) {
+        this.activeTime = activeTime;
+    }
 
-	public String getSource(){
-		return this.source;
-	}
+    public String getSource() {
+        return this.source;
+    }
 
-	public void setIsOpen(Boolean isOpen){
-		this.isOpen = isOpen;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public Boolean getIsOpen(){
-		return this.isOpen;
-	}
+    public Boolean getIsOpen() {
+        return this.isOpen;
+    }
 
-	public void setPv(Long pv){
-		this.pv = pv;
-	}
+    public void setIsOpen(Boolean isOpen) {
+        this.isOpen = isOpen;
+    }
 
-	public Long getPv(){
-		return this.pv;
-	}
+    public Long getPv() {
+        return this.pv;
+    }
 
-	public void setUsefulVotes(Long usefulVotes){
-		this.usefulVotes = usefulVotes;
-	}
+    public void setPv(Long pv) {
+        this.pv = pv;
+    }
 
-	public Long getUsefulVotes(){
-		return this.usefulVotes;
-	}
+    public Long getUsefulVotes() {
+        return this.usefulVotes;
+    }
 
-	public void setUselessVotes(Long uselessVotes){
-		this.uselessVotes = uselessVotes;
-	}
+    public void setUsefulVotes(Long usefulVotes) {
+        this.usefulVotes = usefulVotes;
+    }
 
-	public Long getUselessVotes(){
-		return this.uselessVotes;
-	}
+    public Long getUselessVotes() {
+        return this.uselessVotes;
+    }
 
-	public void setShareNum(Long shareNum){
-		this.shareNum = shareNum;
-	}
+    public void setUselessVotes(Long uselessVotes) {
+        this.uselessVotes = uselessVotes;
+    }
 
-	public Long getShareNum(){
-		return this.shareNum;
-	}
+    public Long getShareNum() {
+        return this.shareNum;
+    }
 
-	public void setCreateTime(java.util.Date createTime){
-		this.createTime = createTime;
-	}
+    public void setShareNum(Long shareNum) {
+        this.shareNum = shareNum;
+    }
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
-	}
+    public java.util.Date getCreateTime() {
+        return this.createTime;
+    }
 
-	public void setUpdateTime(java.util.Date updateTime){
-		this.updateTime = updateTime;
-	}
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public java.util.Date getUpdateTime(){
-		return this.updateTime;
-	}
+    public java.util.Date getUpdateTime() {
+        return this.updateTime;
+    }
 
-	public void setCreateUser(String createUser){
-		this.createUser = createUser;
-	}
+    public void setUpdateTime(java.util.Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	public String getCreateUser(){
-		return this.createUser;
-	}
+    public String getCreateUser() {
+        return this.createUser;
+    }
 
-	public void setUpdateUser(String updateUser){
-		this.updateUser = updateUser;
-	}
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
-	public String getUpdateUser(){
-		return this.updateUser;
-	}
+    public String getUpdateUser() {
+        return this.updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
 
 }

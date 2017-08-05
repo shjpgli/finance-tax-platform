@@ -4,8 +4,8 @@ import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ChannelService;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.cms.service.ModelService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import java.util.*;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/content",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/content", headers = Constant.VERSION_HEAD + "=1")
 public class ContentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
@@ -70,7 +70,8 @@ public class ContentController {
         // 将List对象强制转成Page可以获取Page的相关属性。如：((Page)dataList).getTotal()，总记录数统一使用total返回。
         // 代码解释：
         // count=true(第一个),默认值为false，是查询总记录数
-        // pageSizeZero=true,默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 pageNum = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是 Page 类型）
+        // pageSizeZero=true,默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 pageNum = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是
+        // Page 类型）
         // reasonable=true,分页合理化参数，默认值为false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询内容列表
@@ -84,10 +85,10 @@ public class ContentController {
      */
     @GetMapping(path = "/selectListByviews")
     public ResponseEntity selectListByviews(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "tagId", required = false) String tagId,
-                                     @RequestParam(value = "siteId", required = false) String siteId,
-                                     @RequestParam(value = "channelId", required = false) String channelId) {
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                            @RequestParam(value = "tagId", required = false) String tagId,
+                                            @RequestParam(value = "siteId", required = false) String siteId,
+                                            @RequestParam(value = "channelId", required = false) String channelId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("tagId", tagId);//标签
         dataMap.put("channelId", channelId);//栏目ID
@@ -98,7 +99,8 @@ public class ContentController {
         // 将List对象强制转成Page可以获取Page的相关属性。如：((Page)dataList).getTotal()，总记录数统一使用total返回。
         // 代码解释：
         // count=true(第一个),默认值为false，是查询总记录数
-        // pageSizeZero=true,默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 pageNum = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是 Page 类型）
+        // pageSizeZero=true,默认值为 false，当该参数设置为 true 时，如果 pageSize=0 或者 pageNum = 0 就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是
+        // Page 类型）
         // reasonable=true,分页合理化参数，默认值为false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询内容列表
@@ -111,20 +113,22 @@ public class ContentController {
      * 根据内容标签查询内容列表信息
      */
     @GetMapping(path = "/selectListByContentType")
-    public ResponseEntity selectListByContentType(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+    public ResponseEntity selectListByContentType(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                              page,
+                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                          size,
                                                   @RequestParam(value = "siteId", required = false) String siteId,
                                                   @RequestParam(value = "tagId", required = false) String tagId,
-                                                @RequestParam(value = "channelId", required = false) String channelId,
-                                                @RequestParam(value = "startTime", required = false) String startTime,
-                                                @RequestParam(value = "endTime", required = false) String endTime) {
+                                                  @RequestParam(value = "channelId", required = false) String channelId,
+                                                  @RequestParam(value = "startTime", required = false) String startTime,
+                                                  @RequestParam(value = "endTime", required = false) String endTime) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("tagId", tagId);//内容类型(标签)
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("siteId", siteId);//站点ID
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime() / 1000);
             }
@@ -145,7 +149,7 @@ public class ContentController {
      */
     @GetMapping(path = "/selectContentType")
     public ResponseEntity selectContentType(@RequestParam(value = "siteId", required = false) String siteId,
-                                                  @RequestParam(value = "channelId", required = false) String channelId) {
+                                            @RequestParam(value = "channelId", required = false) String channelId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("siteId", siteId);//栏目ID
@@ -160,24 +164,27 @@ public class ContentController {
      */
     @GetMapping(path = "/selectListByChannelId")
     public ResponseEntity selectListByChannelId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "typeId", required = false) String typeId,
-                                     @RequestParam(value = "status", required = false) String status,
-                                     @RequestParam(value = "channelId", required = false) String channelId,
-                                      @RequestParam(value = "topicId", required = false) String topicId,
-                                     @RequestParam(value = "channelName", required = false) String channelName,
-                                     @RequestParam(value = "startTime", required = false) String startTime,
-                                     @RequestParam(value = "endTime", required = false) String endTime,
-                                     @RequestParam(value = "tplContent", required = false) String tplContent) {
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                        size,
+                                                @RequestParam(value = "typeId", required = false) String typeId,
+                                                @RequestParam(value = "status", required = false) String status,
+                                                @RequestParam(value = "channelId", required = false) String channelId,
+                                                @RequestParam(value = "topicId", required = false) String topicId,
+                                                @RequestParam(value = "channelName", required = false) String
+                                                            channelName,
+                                                @RequestParam(value = "startTime", required = false) String startTime,
+                                                @RequestParam(value = "endTime", required = false) String endTime,
+                                                @RequestParam(value = "tplContent", required = false) String
+                                                            tplContent) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("topicId", topicId);//专题ID
         dataMap.put("typeId", typeId);//内容类型
         dataMap.put("status", status);//状态
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("channelName", channelName);//栏目名称
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime() / 1000);
             }
@@ -202,8 +209,8 @@ public class ContentController {
     public ResponseEntity init(@RequestParam(value = "modelId", required = false) String modelId) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("modelId",modelId);
-        dataMap.put("isChannel",0);
+        dataMap.put("modelId", modelId);
+        dataMap.put("isChannel", 0);
         ContentInitBo dataList = new ContentInitBo();
         List<ModelItemBo> modelItems = contentService.selectModeList(dataMap);
         List<ChannelBo> channels = channelService.selectList();
@@ -251,12 +258,12 @@ public class ContentController {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("tplContent", tplContent);
         dataMap.put("channelId", channelId);
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime()/1000);
-            }else{
+                dataMap.put("startTime", startTime1.getTime() / 1000);
+            } else {
                 dataMap.put("needRegenerate", "0");
             }
         } catch (ParseException e) {
@@ -265,7 +272,7 @@ public class ContentController {
         }
         List<ContentsListBo> contentBoList = contentService.selectListByTplContent(dataMap);
         List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
-        for(ContentsListBo contentBo : contentBoList){
+        for (ContentsListBo contentBo : contentBoList) {
             ContentSaveBo contentSaveBo = contentService.selectContent(contentBo.getContentId());
             dataList.add(contentSaveBo);
         }
@@ -278,19 +285,19 @@ public class ContentController {
      */
     @GetMapping(path = "/selectListBytopicId")
     public ResponseEntity selectListBytopicId(@RequestParam(value = "startTime", required = false) String startTime,
-                                      @RequestParam(value = "endTime", required = false) String endTime,
-                                      @RequestParam(value = "tplContent", required = false) String tplContent,
-                                      @RequestParam(value = "topicId", required = false) String topicId) {
+                                              @RequestParam(value = "endTime", required = false) String endTime,
+                                              @RequestParam(value = "tplContent", required = false) String tplContent,
+                                              @RequestParam(value = "topicId", required = false) String topicId) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("tplContent", tplContent);
         dataMap.put("topicId", topicId);
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime()/1000);
-            }else{
+                dataMap.put("startTime", startTime1.getTime() / 1000);
+            } else {
                 dataMap.put("needRegenerate", "0");
             }
         } catch (ParseException e) {
@@ -299,7 +306,7 @@ public class ContentController {
         }
         List<ContentsListBo> contentBoList = contentService.selectListBytopicId(dataMap);
         List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
-        for(ContentsListBo contentBo : contentBoList){
+        for (ContentsListBo contentBo : contentBoList) {
             ContentSaveBo contentSaveBo = contentService.selectContent(contentBo.getContentId());
             dataList.add(contentSaveBo);
         }
@@ -312,11 +319,11 @@ public class ContentController {
      */
     @GetMapping(path = "/contentListByContentids")
     public ResponseEntity contentListByContentids(
-                                      @RequestParam(value = "contentIds", required = false) String contentIds) {
+            @RequestParam(value = "contentIds", required = false) String contentIds) {
         List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
-        if(contentIds != null && !"".equals(contentIds)){
+        if (contentIds != null && !"".equals(contentIds)) {
             String[] contentIdstr = contentIds.split(",");
-            for(int i=0;i<contentIdstr.length;i++){
+            for (int i = 0; i < contentIdstr.length; i++) {
                 ContentSaveBo contentSaveBo = contentService.selectContent(contentIdstr[i]);
                 dataList.add(contentSaveBo);
             }
@@ -374,7 +381,7 @@ public class ContentController {
         String rtn = contentService.updateStatusList(idsBo.getIds());
         List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
         String[] contentIdstr = idsBo.getIds();
-        for(int i=0;i<contentIdstr.length;i++){
+        for (int i = 0; i < contentIdstr.length; i++) {
             ContentSaveBo contentSaveBo = contentService.selectContent(contentIdstr[i]);
             dataList.add(contentSaveBo);
         }
@@ -425,7 +432,8 @@ public class ContentController {
      */
     @GetMapping(path = "/selectContentudList")
     public ResponseEntity selectContentudList(@RequestParam(value = "channelId", required = false) String channelId,
-                                                @RequestParam(value = "releaseDate", required = false) String releaseDate) {
+                                              @RequestParam(value = "releaseDate", required = false) String
+                                                      releaseDate) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("releaseDate", releaseDate);//发布时间
         dataMap.put("channelId", channelId);//栏目ID
@@ -446,9 +454,6 @@ public class ContentController {
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
-
-
-
 
 
 }

@@ -1,9 +1,6 @@
 package com.abc12366.bangbang.service;
 
 
-import com.abc12366.bangbang.model.SensitiveWords;
-
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,13 +8,13 @@ public interface SensitiveWordFilter {
 
     Map getSensitiveWordMap();
 
-    boolean isContaintSensitiveWord(String txt,int matchType);
+    boolean isContaintSensitiveWord(String txt, int matchType);
 
-    Set<String> getSensitiveWord(String txt , int matchType);
+    Set<String> getSensitiveWord(String txt, int matchType);
 
-    String replaceSensitiveWord(String txt,int matchType,String replaceChar);
+    String replaceSensitiveWord(String txt, int matchType, String replaceChar);
 
-    String getReplaceChars(String replaceChar,int length);
+    String getReplaceChars(String replaceChar, int length);
 
-    int CheckSensitiveWord(String txt,int beginIndex,int matchType);
+    int CheckSensitiveWord(String txt, int beginIndex, int matchType);
 }

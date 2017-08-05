@@ -3,7 +3,6 @@ package com.abc12366.uc.model.bo;
 import com.abc12366.uc.model.Goods;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 /**
@@ -27,76 +26,76 @@ public class ProductRepoBO implements Serializable {
     private Integer option;
     private Goods goods;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setGoodsId(String goodsId) {
-        this.goodsId = goodsId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getGoodsId() {
         return this.goodsId;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 
     public String getProductId() {
         return this.productId;
     }
 
-    public void setIncome(Integer income) {
-        this.income = income;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public Integer getIncome() {
         return this.income;
     }
 
-    public void setOutcome(Integer outcome) {
-        this.outcome = outcome;
+    public void setIncome(Integer income) {
+        this.income = income;
     }
 
     public Integer getOutcome() {
         return this.outcome;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
+    public void setOutcome(Integer outcome) {
+        this.outcome = outcome;
     }
 
     public Integer getStock() {
         return this.stock;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
     public String getRemark() {
         return this.remark;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
+    }
+
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public String getProductName() {

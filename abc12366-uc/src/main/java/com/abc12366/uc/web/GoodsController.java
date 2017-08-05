@@ -1,10 +1,12 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.GoodsCategory;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.GoodsBO;
+import com.abc12366.uc.model.bo.GoodsCategoryBO;
+import com.abc12366.uc.model.bo.GoodsCheckBO;
 import com.abc12366.uc.service.GoodsCategoryService;
 import com.abc12366.uc.service.GoodsService;
 import com.github.pagehelper.Page;
@@ -37,6 +39,7 @@ public class GoodsController {
 
     /**
      * 商品后台管理查询
+     *
      * @param pageNum
      * @param pageSize
      * @param name
@@ -52,7 +55,7 @@ public class GoodsController {
                                      @RequestParam(value = "categoryId", required = false) String categoryId,
                                      @RequestParam(value = "recommendType", required = false) String recommendType,
                                      @RequestParam(value = "goodsType", required = false) String goodsType
-                                     ) {
+    ) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
         goods.setStatus(status);
@@ -81,6 +84,7 @@ public class GoodsController {
 
     /**
      * 商品前台列表查询
+     *
      * @param pageNum
      * @param pageSize
      * @param name
@@ -90,12 +94,13 @@ public class GoodsController {
      */
     @GetMapping(path = "/user")
     public ResponseEntity selectGoodsList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
-                                     @RequestParam(value = "categoryId", required = false) String categoryId,
-                                     @RequestParam(value = "goodsType", required = false) String goodsType,
-                                     @RequestParam(value = "recommendType", required = false) String recommendType) {
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                          @RequestParam(value = "name", required = false) String name,
+                                          @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
+                                          @RequestParam(value = "categoryId", required = false) String categoryId,
+                                          @RequestParam(value = "goodsType", required = false) String goodsType,
+                                          @RequestParam(value = "recommendType", required = false) String
+                                                      recommendType) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
         goods.setName(name);
@@ -112,8 +117,10 @@ public class GoodsController {
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
+
     /**
      * 新增商品
+     *
      * @param goodsBO
      * @return
      */
@@ -127,6 +134,7 @@ public class GoodsController {
 
     /**
      * 查询单个商品
+     *
      * @param id
      * @return
      */
@@ -140,6 +148,7 @@ public class GoodsController {
 
     /**
      * 前台用户查询单个商品
+     *
      * @param id
      * @return
      */
@@ -153,6 +162,7 @@ public class GoodsController {
 
     /**
      * 修改商品信息
+     *
      * @param goodsBO
      * @param id
      * @return
@@ -168,6 +178,7 @@ public class GoodsController {
 
     /**
      * 删除商品信息
+     *
      * @param id
      * @return
      */
@@ -180,6 +191,7 @@ public class GoodsController {
 
     /**
      * 审核商品信息
+     *
      * @return
      */
     @PutMapping(path = "/check")
@@ -192,23 +204,25 @@ public class GoodsController {
 
     /**
      * 产品分类列表
+     *
      * @return
      */
     @GetMapping(path = "/category")
     public ResponseEntity selectGategoryList(
-                                     @RequestParam(value = "category", required = false) String category) {
+            @RequestParam(value = "category", required = false) String category) {
         GoodsCategory goodsCategory = new GoodsCategory();
         goodsCategory.setCategory(category);
         GoodsCategoryBO categoryBO = goodsCategoryService.selectList(goodsCategory);
         LOGGER.info("{}", categoryBO);
         return (categoryBO == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                 ResponseEntity.ok(Utils.kv("data", categoryBO));
+                ResponseEntity.ok(Utils.kv("data", categoryBO));
     }
 
 
     /**
      * 查询单个产品分类
+     *
      * @param id
      * @return
      */
@@ -222,6 +236,7 @@ public class GoodsController {
 
     /**
      * 新增产品分类
+     *
      * @param goodsCategoryBO
      * @return
      */
@@ -235,12 +250,14 @@ public class GoodsController {
 
     /**
      * 查找商品分类详情
+     *
      * @param goodsCategoryBO
      * @param id
      * @return
      */
     @PutMapping(path = "/category/{id}")
-    public ResponseEntity updateGategory(@Valid @RequestBody GoodsCategoryBO goodsCategoryBO, @PathVariable("id") String id) {
+    public ResponseEntity updateGategory(@Valid @RequestBody GoodsCategoryBO goodsCategoryBO, @PathVariable("id")
+    String id) {
         LOGGER.info("{}", goodsCategoryBO);
         goodsCategoryBO.setId(id);
         GoodsCategoryBO bo = goodsCategoryService.update(goodsCategoryBO);
@@ -250,6 +267,7 @@ public class GoodsController {
 
     /**
      * 删除商品分类
+     *
      * @param id
      * @return
      */

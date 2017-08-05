@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.GoodsMapper;
 import com.abc12366.uc.mapper.db1.ProductMapper;
 import com.abc12366.uc.mapper.db1.ProductSpecMapper;
@@ -148,9 +148,9 @@ public class GoodsServiceImpl implements GoodsService {
         BeanUtils.copyProperties(goodsBO, goods);
         //先判断商品是否有被卖出，被卖出不能修改
         List<Product> pBOList = productRoMapper.selectByGoodsId(goodsBO.getId());
-        for (Product product:pBOList){
+        for (Product product : pBOList) {
             OrderProduct orderProduct = orderProductRoMapper.selectByProductId(product.getId());
-            if(orderProduct != null){
+            if (orderProduct != null) {
                 LOGGER.info("商品有被卖出，被卖出不能修改：{}", product);
                 throw new ServiceException(4162);
             }
@@ -255,16 +255,16 @@ public class GoodsServiceImpl implements GoodsService {
     public void deleteGoods(String id) {
         //先判断商品是否有被卖出，被卖出不能删除
         List<Product> pBOList = productRoMapper.selectByGoodsId(id);
-        for (Product prod:pBOList){
+        for (Product prod : pBOList) {
             OrderProduct orderProduct = orderProductRoMapper.selectByProductId(id);
-            if(orderProduct != null){
+            if (orderProduct != null) {
                 LOGGER.info("商品有被卖出，不能删除：{}", prod);
                 throw new ServiceException(4163);
             }
         }
         Goods goods = goodsRoMapper.selectByPrimaryKey(id);
         //商品类型是会员服务=4，不能删除
-        if(goods != null && "4".equals(goods.getGoodsType())){
+        if (goods != null && "4".equals(goods.getGoodsType())) {
             LOGGER.info("商品类型是会员服务，不能删除：{}", goods);
             throw new ServiceException(4902);
         }

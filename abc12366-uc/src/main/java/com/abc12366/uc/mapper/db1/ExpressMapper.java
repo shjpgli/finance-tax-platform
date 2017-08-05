@@ -4,34 +4,25 @@ import com.abc12366.uc.model.Express;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 
  * ExpressMapper数据库操作接口类
- * 
  **/
 
-public interface ExpressMapper{
+public interface ExpressMapper {
 
 
+    /**
+     * 删除（根据主键ID删除）
+     **/
+    int deleteByPrimaryKey(@Param("id") String id);
 
-	/**
-	 * 
-	 * 删除（根据主键ID删除）
-	 * 
-	 **/
-	int deleteByPrimaryKey(@Param("id") String id);
+    /**
+     * 添加
+     **/
+    int insert(Express record);
 
-	/**
-	 * 
-	 * 添加
-	 * 
-	 **/
-	int insert(Express record);
-
-	/**
-	 * 
-	 * 修改（根据主键ID修改）
-	 * 
-	 **/
-	int update(Express record);
+    /**
+     * 修改（根据主键ID修改）
+     **/
+    int update(Express record);
 
 }

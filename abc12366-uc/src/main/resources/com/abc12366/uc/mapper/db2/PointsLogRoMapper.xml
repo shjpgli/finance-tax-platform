@@ -4,7 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.PointsLogRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.PointsLogBO" parameterType="java.util.Map">
-        select uul.id,uul.userId,uul.ruleId,uur.name,uur.code,uur.type,uul.income,uul.outgo,uul.usablePoints,uul.createTime
+        select
+        uul.id,uul.userId,uul.ruleId,uur.name,uur.code,uur.type,uul.income,uul.outgo,uul.usablePoints,uul.createTime
         from uc_upoints_log uul, uc_upoints_rule uur
         <where>
             uul.ruleId = uur.id
@@ -17,7 +18,7 @@
     </select>
 
     <select id="selectListByUser" resultType="com.abc12366.uc.model.bo.PointsLogUcBO" parameterType="java.util.Map">
-        SELECT  uul.id id,
+        SELECT uul.id id,
         (SELECT uur.name FROM uc_upoints_rule uur WHERE uur.id = uul.ruleId) channel,
         (SELECT uur.points FROM uc_upoints_rule uur WHERE uur.id = uul.ruleId) points,
         (SELECT SUM(uu.income)-SUM(uu.outgo) sums FROM uc_upoints_log uu WHERE uu.userId=uul.userId) sums,

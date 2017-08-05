@@ -1,9 +1,12 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.PasswordUpdateBO;
+import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.UserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -35,6 +38,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthService authService;
 
     //查询用户列表，支持多标签查询
     @GetMapping
@@ -117,18 +123,26 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    //根据用户token获取用户
-    @GetMapping(path = "/token/{userToken}")
-    public ResponseEntity selectOneByToken(@PathVariable String userToken) {
-        LOGGER.info("{}", userToken);
-        UserBO userBO = userService.selectOneByToken(userToken);
+    // 用户token校验,根据用户token获取用户并刷新token
+    @GetMapping(path = "/token/{token}")
+    public ResponseEntity authAndRefreshToken(@PathVariable String token, HttpServletRequest request) {
+        LOGGER.info("{}", token);
+
+        // token校验
+        boolean isAuth = authService.isAuthentication(token, request);
+        if (!isAuth) {
+            return ResponseEntity.ok().build();
+        }
+        // 根据用户token获取用户
+        UserBO userBO = userService.authAndRefreshToken(token);
         LOGGER.info("{}", userBO);
         return ResponseEntity.ok(Utils.kv("data", userBO));
     }
 
     //用户修改密码
     @PutMapping(path = "/password")
-    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
+    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest
+            request) {
         LOGGER.info("{}:{}", passwordUpdateBO, request);
         Boolean message = userService.updatePassword(passwordUpdateBO, request);
         LOGGER.info("{}", message);

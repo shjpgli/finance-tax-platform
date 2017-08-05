@@ -8,24 +8,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * SiteIssueMapper数据库操作接口类
- * 
  **/
 
-public interface SiteIssueRoMapper{
+public interface SiteIssueRoMapper {
 
 
-	/**
-	 * 
-	 * 查询(根据主键ID查询)
-	 * 
-	 **/
-	SiteIssue selectByPrimaryKey(@Param("issueId") String issueId);
+    /**
+     * 查询(根据主键ID查询)
+     **/
+    SiteIssue selectByPrimaryKey(@Param("issueId") String issueId);
 
-	/**
-	 * 查询所有
-	 **/
-	List<SiteIssueBo> selectList(Map<String,Object> map);
+    /**
+     * 查询所有
+     **/
+    List<SiteIssueBo> selectList(Map<String, Object> map);
 
 }

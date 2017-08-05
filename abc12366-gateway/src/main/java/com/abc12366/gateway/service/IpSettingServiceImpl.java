@@ -1,6 +1,6 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db1.IpSettingMapper;
 import com.abc12366.gateway.mapper.db2.IpSettingRoMapper;
 import com.abc12366.gateway.model.IpSetting;
@@ -29,7 +29,7 @@ public class IpSettingServiceImpl implements IpSettingService {
     @Override
     public IpSetting update(IpSetting ipSetting) {
         int upd = ipSettingMapper.update(ipSetting);
-        if(upd != 1){
+        if (upd != 1) {
             throw new ServiceException(4102);
         }
         return ipSetting;

@@ -3,8 +3,8 @@ package com.abc12366.bangbang.web;
 import com.abc12366.bangbang.model.KnowledgeCategory;
 import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,41 +31,38 @@ public class KnowledgeCategoryController {
 
     /* 查询所有分类 */
     @GetMapping("/listAll")
-    public ResponseEntity listAll(){
+    public ResponseEntity listAll() {
         List<KnowledgeCategory> all = knowledgeCategoryService.listAll();
         return ResponseEntity.ok(Utils.kv("dataList", all));
     }
 
     /* 新增分类 */
     @PostMapping(path = "/add")
-    public ResponseEntity add(@RequestBody KnowledgeCategory record){
+    public ResponseEntity add(@RequestBody KnowledgeCategory record) {
         KnowledgeCategory rs = knowledgeCategoryService.add(record);
         return ResponseEntity.ok(Utils.kv("data", rs));
     }
 
     /* 修改分类的名称 */
     @PutMapping(path = "/modifyName/{id}")
-    public ResponseEntity modifyName(@PathVariable String id, @RequestParam String name){
+    public ResponseEntity modifyName(@PathVariable String id, @RequestParam String name) {
         knowledgeCategoryService.modifyNameById(id, name);
         return ResponseEntity.ok(Utils.kv());
     }
 
     /* 修改分类排序 */
     @PutMapping(path = "/modifySort")
-    public ResponseEntity modifySort(@RequestBody List<SortBO> list){
+    public ResponseEntity modifySort(@RequestBody List<SortBO> list) {
         knowledgeCategoryService.modifySort(list);
         return ResponseEntity.ok(Utils.kv());
     }
 
     /* 删除分类*/
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity delete(@PathVariable String id) {
         knowledgeCategoryService.deleteById(id);
         return ResponseEntity.ok(Utils.kv());
     }
-
-
-
 
 
 }

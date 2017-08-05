@@ -1,6 +1,6 @@
 package com.abc12366.uc.util;
 
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

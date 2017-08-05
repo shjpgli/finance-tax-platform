@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TagMapper;
 import com.abc12366.uc.mapper.db2.TagRoMapper;
 import com.abc12366.uc.model.Tag;
@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-06-15
  * Time: 15:23
  */

@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.VipLogRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLogListBO" parameterType="java.lang.String">
-        SELECT  uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level, uulo.createTime
+        SELECT uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level, uulo.createTime
         from uc_uvip_log uulo, uc_uvip_level uule
         <where>
             uulo.userId = #{userId}

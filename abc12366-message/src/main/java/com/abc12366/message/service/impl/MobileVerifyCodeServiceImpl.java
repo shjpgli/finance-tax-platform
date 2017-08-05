@@ -1,8 +1,8 @@
 package com.abc12366.message.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Properties;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
 import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
 import com.abc12366.message.model.PhoneCode;
@@ -12,7 +12,6 @@ import com.abc12366.message.util.CheckSumBuilder;
 import com.abc12366.message.util.MessageConstant;
 import com.abc12366.message.util.RandomNumber;
 import com.abc12366.message.util.soaUtil;
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,19 +38,6 @@ import java.util.List;
 @Service
 public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MobileVerifyCodeServiceImpl.class);
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private PhoneCodeMapper phoneCodeMapper;
-
-    @Autowired
-    private PhoneCodeRoMapper phoneCodeRoMapper;
-
     private static Properties properties = new Properties("application.properties");
     private static String appKey;
     private static String appSecret;
@@ -68,6 +54,19 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             LOGGER.warn("网易短信服务接口参数加载异常！");
             throw new ServiceException(4802);
         }
+    }
+
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private PhoneCodeMapper phoneCodeMapper;
+    @Autowired
+    private PhoneCodeRoMapper phoneCodeRoMapper;
+
+    public static void main(String[] args) throws IOException {
+        new MobileVerifyCodeServiceImpl().sendYoupaiTemplate("13278849423", "9876987");
     }
 
     //获取验证码
@@ -94,7 +93,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCode.setId(Utils.uuid());
             phoneCode.setPhone(phone);
             phoneCode.setCode(code);
-            phoneCode.setExpireDate(new Date(System.currentTimeMillis() + 1000 * MessageConstant.VERIFY_CODE_VALID_SECONDS));
+            phoneCode.setExpireDate(new Date(System.currentTimeMillis() + 1000 * MessageConstant
+                    .VERIFY_CODE_VALID_SECONDS));
             phoneCode.setType(type);
             phoneCodeMapper.insert(phoneCode);
         }
@@ -168,7 +168,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity neteaseResponse = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
         if (neteaseResponse != null && neteaseResponse.getStatusCode().is2xxSuccessful() && neteaseResponse.hasBody()) {
-            NeteaseTemplateResponseBO neteaseTemplateResponseBO = objectMapper.readValue(((String) neteaseResponse.getBody()).getBytes(), NeteaseTemplateResponseBO.class);
+            NeteaseTemplateResponseBO neteaseTemplateResponseBO = objectMapper.readValue(((String) neteaseResponse
+                    .getBody()).getBytes(), NeteaseTemplateResponseBO.class);
             if (neteaseTemplateResponseBO != null && neteaseTemplateResponseBO.getCode().equals("200")) {
                 return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
             }
@@ -185,10 +186,14 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
         HttpHeaders httpHeaders = getHeader();
         HttpEntity requestQueryEntity = new HttpEntity(requestQueryBody, httpHeaders);
-        ResponseEntity queryStatusResponse = restTemplate.exchange(neteaseQueryUrl, HttpMethod.POST, requestQueryEntity, String.class);
-        if (queryStatusResponse != null && queryStatusResponse.getStatusCode().is2xxSuccessful() && queryStatusResponse.hasBody()) {
-            NeteaseQueryStatusResponseBO neteaseQueryStatusResponseBO = objectMapper.readValue(((String) queryStatusResponse.getBody()).getBytes(), NeteaseQueryStatusResponseBO.class);
-            if (neteaseQueryStatusResponseBO.getCode().equals("200") && (neteaseQueryStatusResponseBO.getObj().get(0)).getStatus().equals("1")) {
+        ResponseEntity queryStatusResponse = restTemplate.exchange(neteaseQueryUrl, HttpMethod.POST,
+                requestQueryEntity, String.class);
+        if (queryStatusResponse != null && queryStatusResponse.getStatusCode().is2xxSuccessful() &&
+                queryStatusResponse.hasBody()) {
+            NeteaseQueryStatusResponseBO neteaseQueryStatusResponseBO = objectMapper.readValue(((String)
+                    queryStatusResponse.getBody()).getBytes(), NeteaseQueryStatusResponseBO.class);
+            if (neteaseQueryStatusResponseBO.getCode().equals("200") && (neteaseQueryStatusResponseBO.getObj().get(0)
+            ).getStatus().equals("1")) {
                 //记日志
                 SmsOpsLog smsOpsLog = new SmsOpsLog();
                 return true;
@@ -228,14 +233,11 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity responseEntity = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            //UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
+            //UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()),
+            // UpyunMessageResponse.class);
             return true;
         }
         return false;
-    }
-
-    public static void main(String[] args) throws IOException {
-        new MobileVerifyCodeServiceImpl().sendYoupaiTemplate("13278849423", "9876987");
     }
 
 //    private boolean sendAliyunTemplate(String phone, String code) throws IOException {

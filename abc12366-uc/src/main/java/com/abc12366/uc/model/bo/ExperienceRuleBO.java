@@ -1,12 +1,9 @@
 package com.abc12366.uc.model.bo;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 11:37
  */
@@ -24,7 +21,8 @@ public class ExperienceRuleBO {
     public ExperienceRuleBO() {
     }
 
-    public ExperienceRuleBO(String id, String name, String code, int exp, String description, String type, Boolean status, Date createTime, Date lastUpdate) {
+    public ExperienceRuleBO(String id, String name, String code, int exp, String description, String type, Boolean
+            status, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.code = code;

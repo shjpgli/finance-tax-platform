@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.NsrMapper">
     <insert id="insert" parameterType="Nsr">
         insert into uc_user_nsr (id, userId, djxh, nsrsbh, shxydm, status, createTime, lastUpdate)
-        values (#{id}, #{userId}, #{djxh},#{nsrsbh},  #{shxydm}, #{status}, #{createTime}, #{lastUpdate})
+        values (#{id}, #{userId}, #{djxh},#{nsrsbh}, #{shxydm}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
     <update id="update">

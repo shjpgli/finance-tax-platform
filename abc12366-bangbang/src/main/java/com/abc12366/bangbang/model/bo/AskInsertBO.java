@@ -30,7 +30,8 @@ public class AskInsertBO {
     public AskInsertBO() {
     }
 
-    public AskInsertBO(String userId, String ask, String detail, String status, int points, Boolean isSolve, String askedUserId, String type) {
+    public AskInsertBO(String userId, String ask, String detail, String status, int points, Boolean isSolve, String
+            askedUserId, String type) {
         this.userId = userId;
         this.ask = ask;
         this.detail = detail;

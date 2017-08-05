@@ -6,7 +6,7 @@ import com.abc12366.cms.model.ModelItem;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 import com.abc12366.cms.service.ModelItemService;
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -54,7 +54,7 @@ public class ModelItemServiceImpl implements ModelItemService {
             JSONObject jsonStu = JSONObject.fromObject(modelItemListBo);
             LOGGER.info("批量更新模型项信息:{}", jsonStu.toString());
             List<ModelItemBo> list = modelItemListBo.getModelItemBoList();
-            for(ModelItemBo modelItemBo:list){
+            for (ModelItemBo modelItemBo : list) {
                 ModelItem modelItem = new ModelItem();
                 BeanUtils.copyProperties(modelItemBo, modelItem);
                 modelItemMapper.updateByPrimaryKeySelective(modelItem);
@@ -73,7 +73,7 @@ public class ModelItemServiceImpl implements ModelItemService {
             JSONObject jsonStu = JSONObject.fromObject(modelItemListBo);
             LOGGER.info("批量新增模型项信息:{}", jsonStu.toString());
             List<ModelItemBo> list = modelItemListBo.getModelItemBoList();
-            for(ModelItemBo modelItemBo:list){
+            for (ModelItemBo modelItemBo : list) {
                 ModelItem modelItem = new ModelItem();
                 String uuid = UUID.randomUUID().toString().replace("-", "");
                 modelItemBo.setModelitemId(uuid);

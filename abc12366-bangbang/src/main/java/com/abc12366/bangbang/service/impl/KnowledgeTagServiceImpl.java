@@ -4,7 +4,7 @@ import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagMapper;
 import com.abc12366.bangbang.model.KnowledgeTag;
 import com.abc12366.bangbang.service.KnowledgeTagService;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

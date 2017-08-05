@@ -3,8 +3,8 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.bo.EventListBo;
 import com.abc12366.cms.model.bo.EventSaveBo;
 import com.abc12366.cms.service.EventService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/event",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/event", headers = Constant.VERSION_HEAD + "=1")
 public class EventController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 

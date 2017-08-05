@@ -1,11 +1,11 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db1.AppSettingMapper;
 import com.abc12366.gateway.mapper.db2.AppSettingRoMapper;
 import com.abc12366.gateway.model.AppSetting;
 import com.abc12366.gateway.model.bo.AppSettingBO;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -44,9 +44,9 @@ public class AppSettingServiceImpl implements AppSettingService {
     @Override
     public AppSetting update(AppSettingBO bo) {
         AppSetting appSetting = new AppSetting();
-        BeanUtils.copyProperties(bo,appSetting);
+        BeanUtils.copyProperties(bo, appSetting);
         int update = appSettingMapper.update(appSetting);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.warn("修改失败，参数：{}", appSetting);
             throw new ServiceException(4102);
         }
@@ -61,9 +61,9 @@ public class AppSettingServiceImpl implements AppSettingService {
         bo.setCreateTime(now);
         bo.setLastUpdate(now);
         AppSetting appSetting = new AppSetting();
-        BeanUtils.copyProperties(bo,appSetting);
+        BeanUtils.copyProperties(bo, appSetting);
         int insert = appSettingMapper.insert(appSetting);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.warn("插入失败，参数：{}", appSetting);
             throw new ServiceException(4101);
         }
@@ -89,18 +89,18 @@ public class AppSettingServiceImpl implements AppSettingService {
     @Override
     public List<AppSetting> insertList(String appId, List<AppSettingBO> appSettingBOList) {
         List<AppSetting> list = new ArrayList<>();
-        if(appSettingBOList != null && appSettingBOList.size() !=0){
+        if (appSettingBOList != null && appSettingBOList.size() != 0) {
             //根据appId删除授权信息
             appSettingMapper.deleteByAppId(appId);
-            for (AppSettingBO bo:appSettingBOList){
+            for (AppSettingBO bo : appSettingBOList) {
                 bo.setId(Utils.uuid());
                 Date date = new Date();
                 bo.setCreateTime(date);
                 bo.setLastUpdate(date);
                 AppSetting appSetting = new AppSetting();
-                BeanUtils.copyProperties(bo,appSetting);
+                BeanUtils.copyProperties(bo, appSetting);
                 int insert = appSettingMapper.insert(appSetting);
-                if(insert != 1){
+                if (insert != 1) {
                     LOGGER.warn("插入失败，参数：{}", appSetting);
                     throw new ServiceException(4101);
                 }

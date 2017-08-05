@@ -1,11 +1,10 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.ExpLogUcBO;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.ExperienceLogQueryBO;
-import com.abc12366.uc.model.bo.PointsLogUcBO;
 import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UserUtil;
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 14:38
  */

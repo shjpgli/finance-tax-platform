@@ -5,8 +5,9 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		 id,	title,	simpleDesc,	status,	createUser,	createTime,	updateTime,	updateUser,	recoveryRate,	accessRate,	sceneCode,skinUrl,	tradeCode
-	</sql>
+        id, title, simpleDesc, status, createUser, createTime, updateTime, updateUser, recoveryRate, accessRate,
+        sceneCode,skinUrl, tradeCode
+    </sql>
 
     <resultMap id="questionBOResultMap" type="com.abc12366.cms.model.questionnaire.bo.QuestionnaireBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
@@ -49,8 +50,10 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectOne" resultMap="questionBOResultMap" parameterType="java.lang.String">
         SELECT
-        q.id,	q.title,	q.simpleDesc,	q.status,	q.createUser,	q.createTime,	q.updateTime,	q.updateUser,	q.recoveryRate,	q.accessRate,	q.sceneCode,	q.skinUrl,q.tradeCode,
-        p.questionId,	p.isDisplayNumber,	p.isBackspace,	p.isDisplayResults,	p.recoveryEndTime,	p.isLoginAuth,	p.isAnswerOnce,	p.isUserRange,	p.isAnswerRemind,	p.isPrize
+        q.id, q.title, q.simpleDesc, q.status, q.createUser, q.createTime, q.updateTime, q.updateUser, q.recoveryRate,
+        q.accessRate, q.sceneCode, q.skinUrl,q.tradeCode,
+        p.questionId, p.isDisplayNumber, p.isBackspace, p.isDisplayResults, p.recoveryEndTime, p.isLoginAuth,
+        p.isAnswerOnce, p.isUserRange, p.isAnswerRemind, p.isPrize
         FROM cms_paper_questionnaire q
         LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId
         WHERE id = #{id}
@@ -59,9 +62,11 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultMap="questionBOResultMap" parameterType="java.lang.String">
         SELECT
-        q.id,	q.title,	q.simpleDesc,	q.status,	q.createUser,	q.createTime,	q.updateTime,	q.updateUser,	(SELECT COUNT(a.id) recoveryRate FROM cms_paper_answer_log a
-        WHERE q.id=a.questionId) recoveryRate,	q.accessRate,	q.sceneCode,	q.skinUrl,q.tradeCode,
-        p.questionId,	p.isDisplayNumber,	p.isBackspace,	p.isDisplayResults,	p.recoveryEndTime,	p.isLoginAuth,	p.isAnswerOnce,	p.isUserRange,	p.isAnswerRemind,	p.isPrize
+        q.id, q.title, q.simpleDesc, q.status, q.createUser, q.createTime, q.updateTime, q.updateUser, (SELECT
+        COUNT(a.id) recoveryRate FROM cms_paper_answer_log a
+        WHERE q.id=a.questionId) recoveryRate, q.accessRate, q.sceneCode, q.skinUrl,q.tradeCode,
+        p.questionId, p.isDisplayNumber, p.isBackspace, p.isDisplayResults, p.recoveryEndTime, p.isLoginAuth,
+        p.isAnswerOnce, p.isUserRange, p.isAnswerRemind, p.isPrize
         FROM cms_paper_questionnaire q
         LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId
         order by q.updateTime desc
@@ -69,27 +74,27 @@
 
     <select id="selectAccessNum" resultMap="questionBOResultMap" parameterType="java.lang.String">
         SELECT
-            an.questionId as id,
-            an.alog as recoveryRate,
-            ac.acount as accessRate,
-            an.alog/ac.acount as accessNum
+        an.questionId as id,
+        an.alog as recoveryRate,
+        ac.acount as accessRate,
+        an.alog/ac.acount as accessNum
         FROM
-            (
-                SELECT
-                    questionId,COUNT(id) as alog
-                FROM
-                    cms_paper_answer_log
-            ) AS an
-            left JOIN (
-                SELECT
-                    questionId,COUNT(id) as acount
-                FROM
-                    cms_paper_access_log
-            ) AS ac on ac.questionId = an.questionId
+        (
+        SELECT
+        questionId,COUNT(id) as alog
+        FROM
+        cms_paper_answer_log
+        ) AS an
+        left JOIN (
+        SELECT
+        questionId,COUNT(id) as acount
+        FROM
+        cms_paper_access_log
+        ) AS ac on ac.questionId = an.questionId
         WHERE
-            an.questionId = #{questionId}
+        an.questionId = #{questionId}
         GROUP BY
-	an.questionId
+        an.questionId
     </select>
 
 

@@ -3,7 +3,7 @@ package com.abc12366.uc.wsbssoa.utils;
 import org.springframework.http.ResponseEntity;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-28
  * Time: 17:05
  */

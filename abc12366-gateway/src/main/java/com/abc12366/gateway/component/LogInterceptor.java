@@ -1,12 +1,12 @@
 package com.abc12366.gateway.component;
 
-import com.abc12366.common.model.BodyStatus;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.DateUtils;
-import com.abc12366.common.util.Utils;
 import com.abc12366.gateway.model.ApiLog;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.service.ApiLogService;
 import com.abc12366.gateway.service.BlacklistService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.Utils;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +97,8 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
             throws Exception {
         String addr = Utils.getAddr(request);
         String userAgent = Utils.getUserAgent(request);
-        String uri = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping.bestMatchingPattern");
+        String uri = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping" +
+                ".bestMatchingPattern");
         long inTime = (long) request.getAttribute("inTime");
         request.removeAttribute("inTime");
 

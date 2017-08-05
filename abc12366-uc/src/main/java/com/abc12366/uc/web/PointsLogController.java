@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsLogUcBO;
 import com.abc12366.uc.service.PointsLogService;
@@ -38,8 +38,10 @@ public class PointsLogController {
     private PointsLogService pointsLogService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false) String name, @RequestParam(required = false) String code,
-                                     @RequestParam(required = false) String type, @RequestParam(required = false) String userId,
+    public ResponseEntity selectList(@RequestParam(required = false) String name, @RequestParam(required = false)
+    String code,
+                                     @RequestParam(required = false) String type, @RequestParam(required = false)
+                                         String userId,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}:{}", name, code, type, userId, page, size);

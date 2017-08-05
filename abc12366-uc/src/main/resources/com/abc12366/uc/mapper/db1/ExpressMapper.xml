@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.ExpressMapper">
 
-	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		 DELETE FROM uc_express
-		 WHERE id = #{id}
-	</delete>
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM uc_express
+        WHERE id = #{id}
+    </delete>
 
-	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insert" parameterType="com.abc12366.uc.model.Express">
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="insert" parameterType="com.abc12366.uc.model.Express">
         INSERT INTO uc_express
-        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
             </if>
@@ -39,7 +39,7 @@
             </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 #{id},
             </if>
@@ -65,10 +65,10 @@
                 #{lastUpdate},
             </if>
         </trim>
-	</insert>
+    </insert>
 
-	<!-- 修 改-->
-	<update id="update" parameterType="com.abc12366.uc.model.Express">
+    <!-- 修 改-->
+    <update id="update" parameterType="com.abc12366.uc.model.Express">
         UPDATE uc_express
         <set>
             <if test="userOrderNo != null">
@@ -95,6 +95,6 @@
 
         </set>
         WHERE id = #{id}
-	</update>
+    </update>
 
 </mapper>

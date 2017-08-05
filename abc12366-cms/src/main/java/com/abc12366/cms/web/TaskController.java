@@ -3,8 +3,8 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.TaskBo;
 import com.abc12366.cms.service.TaskService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/task",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/task", headers = Constant.VERSION_HEAD + "=1")
 public class TaskController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskController.class);
 
@@ -52,7 +52,7 @@ public class TaskController {
     @GetMapping(path = "/list")
     public ResponseEntity list() {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("isEnable",1);
+        dataMap.put("isEnable", 1);
         List<TaskBo> dataList = taskService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
@@ -119,8 +119,6 @@ public class TaskController {
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
-
-
 
 
 }

@@ -1,7 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-06-02
  * Time: 10:52
  */

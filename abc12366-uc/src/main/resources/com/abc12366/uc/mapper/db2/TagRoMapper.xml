@@ -19,7 +19,8 @@
         ORDER BY category ASC
     </select>
     <select id="selectListByUserId" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="java.lang.String">
-        SELECT  ut.id,ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ut.weight,ut.type
+        SELECT
+        ut.id,ut.tagName,ut.status,ut.createTime,ut.lastUpdate,ut.category,ut.description,ut.rule,ut.weight,ut.type
         from uc_tag ut,uc_subject_tag ust
         where ut.id=ust.tagId
         and ust.subjectId=#{userId}
@@ -27,7 +28,8 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.TagBO" parameterType="java.lang.String">
-        SELECT  id,tagName,status,createTime,lastUpdate,category,description,rule,(SELECT COUNT(1) FROM uc_subject_tag us WHERE us.tagId=ut.id) tagedCount,weight,type
+        SELECT id,tagName,status,createTime,lastUpdate,category,description,rule,(SELECT COUNT(1) FROM uc_subject_tag us
+        WHERE us.tagId=ut.id) tagedCount,weight,type
         from uc_tag ut
         where ut.id=#{id}
     </select>

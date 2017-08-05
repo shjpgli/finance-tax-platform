@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.VipLevelRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLevelBO" parameterType="java.util.Map">
-        SELECT  id,level,factor,status,lastUpdate,createTime,levelCode
+        SELECT id,level,factor,status,lastUpdate,createTime,levelCode
         from uc_uvip_level
         <where>
             <if test="level!=null">

@@ -4,8 +4,8 @@ import com.abc12366.cms.model.bo.IdsBo;
 import com.abc12366.cms.model.bo.ModelItemBo;
 import com.abc12366.cms.model.bo.ModelItemListBo;
 import com.abc12366.cms.service.ModelItemService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/modelItem",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/modelItem", headers = Constant.VERSION_HEAD + "=1")
 public class ModelItemController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelItemController.class);
 
@@ -44,8 +44,8 @@ public class ModelItemController {
                                      @RequestParam(value = "isChannel", required = false) String isChannel) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("modelId",modelId);//模型ID
-        dataMap.put("isChannel",isChannel);//是否为栏目
+        dataMap.put("modelId", modelId);//模型ID
+        dataMap.put("isChannel", isChannel);//是否为栏目
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ModelItemBo> dataList = modelItemService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
@@ -108,7 +108,7 @@ public class ModelItemController {
      * 删除模型项
      */
     @DeleteMapping(path = "/{modelItemId}")
-     public ResponseEntity delete(@PathVariable String modelItemId) {
+    public ResponseEntity delete(@PathVariable String modelItemId) {
         //删除模型项信息
         String rtn = modelItemService.delete(modelItemId);
         return ResponseEntity.ok(Utils.kv("data", rtn));
@@ -123,8 +123,6 @@ public class ModelItemController {
         String rtn = modelItemService.deleteList(idsBo.getIds());
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
-
-
 
 
 }

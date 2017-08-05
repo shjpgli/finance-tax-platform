@@ -1,235 +1,272 @@
 package com.abc12366.cms.model.bo;
+
 import java.io.Serializable;
 
 
 /**
- * 
  * CMS报名模型项表
- * 
  **/
 @SuppressWarnings("serial")
 public class EventModelItemBo implements Serializable {
 
-	/**模型项ID**varchar(64)**/
-	private String modelitemId;
+    /**
+     * 模型项ID**varchar(64)
+     **/
+    private String modelitemId;
 
-	/**活动ID**varchar(64)**/
-	private String eventId;
+    /**
+     * 活动ID**varchar(64)
+     **/
+    private String eventId;
 
-	/**字段**varchar(50)**/
-	private String field;
+    /**
+     * 字段**varchar(50)
+     **/
+    private String field;
 
-	/**名称**varchar(100)**/
-	private String itemLabel;
+    /**
+     * 名称**varchar(100)
+     **/
+    private String itemLabel;
 
-	/**排列顺序**int(11)**/
-	private Integer priority;
+    /**
+     * 排列顺序**int(11)
+     **/
+    private Integer priority;
 
-	/**默认值**varchar(255)**/
-	private String defValue;
+    /**
+     * 默认值**varchar(255)
+     **/
+    private String defValue;
 
-	/**可选项**varchar(255)**/
-	private String optValue;
+    /**
+     * 可选项**varchar(255)
+     **/
+    private String optValue;
 
-	/**长度**varchar(20)**/
-	private String textSize;
+    /**
+     * 长度**varchar(20)
+     **/
+    private String textSize;
 
-	/**校验方式**varchar(100)**/
-	private String checkWay;
+    /**
+     * 校验方式**varchar(100)
+     **/
+    private String checkWay;
 
-	/**文本行数**varchar(3)**/
-	private String areaRows;
+    /**
+     * 文本行数**varchar(3)
+     **/
+    private String areaRows;
 
-	/**文本列数**varchar(3)**/
-	private String areaCols;
+    /**
+     * 文本列数**varchar(3)
+     **/
+    private String areaCols;
 
-	/**帮助信息**varchar(255)**/
-	private String help;
+    /**
+     * 帮助信息**varchar(255)
+     **/
+    private String help;
 
-	/**帮助位置**varchar(1)**/
-	private String helpPosition;
+    /**
+     * 帮助位置**varchar(1)
+     **/
+    private String helpPosition;
 
-	/**数据类型**varchar(11)**/
-	private String dataType;
+    /**
+     * 数据类型**varchar(11)
+     **/
+    private String dataType;
 
-	/**是否独占一行**tinyint(1)**/
-	private Integer isSingle;
+    /**
+     * 是否独占一行**tinyint(1)
+     **/
+    private Integer isSingle;
 
-	/**是否显示**tinyint(1)**/
-	private Integer isDisplay;
+    /**
+     * 是否显示**tinyint(1)
+     **/
+    private Integer isDisplay;
 
-	/**是否必填项**tinyint(1)**/
-	private Integer isRequired;
+    /**
+     * 是否必填项**tinyint(1)
+     **/
+    private Integer isRequired;
 
-	/**图片宽度**int(11)**/
-	private Integer imageWidth;
+    /**
+     * 图片宽度**int(11)
+     **/
+    private Integer imageWidth;
 
-	/**图片高度**int(11)**/
-	private Integer imageHeight;
+    /**
+     * 图片高度**int(11)
+     **/
+    private Integer imageHeight;
 
-	/**校验规则**varchar(500)**/
-	private String checkRule;
+    /**
+     * 校验规则**varchar(500)
+     **/
+    private String checkRule;
 
+    public String getModelitemId() {
+        return this.modelitemId;
+    }
 
+    public void setModelitemId(String modelitemId) {
+        this.modelitemId = modelitemId;
+    }
 
-	public void setModelitemId(String modelitemId){
-		this.modelitemId = modelitemId;
-	}
+    public String getEventId() {
+        return this.eventId;
+    }
 
-	public String getModelitemId(){
-		return this.modelitemId;
-	}
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
-	public void setEventId(String eventId){
-		this.eventId = eventId;
-	}
+    public String getField() {
+        return this.field;
+    }
 
-	public String getEventId(){
-		return this.eventId;
-	}
+    public void setField(String field) {
+        this.field = field;
+    }
 
-	public void setField(String field){
-		this.field = field;
-	}
+    public String getItemLabel() {
+        return this.itemLabel;
+    }
 
-	public String getField(){
-		return this.field;
-	}
+    public void setItemLabel(String itemLabel) {
+        this.itemLabel = itemLabel;
+    }
 
-	public void setItemLabel(String itemLabel){
-		this.itemLabel = itemLabel;
-	}
+    public Integer getPriority() {
+        return this.priority;
+    }
 
-	public String getItemLabel(){
-		return this.itemLabel;
-	}
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
 
-	public void setPriority(Integer priority){
-		this.priority = priority;
-	}
+    public String getDefValue() {
+        return this.defValue;
+    }
 
-	public Integer getPriority(){
-		return this.priority;
-	}
+    public void setDefValue(String defValue) {
+        this.defValue = defValue;
+    }
 
-	public void setDefValue(String defValue){
-		this.defValue = defValue;
-	}
+    public String getOptValue() {
+        return this.optValue;
+    }
 
-	public String getDefValue(){
-		return this.defValue;
-	}
+    public void setOptValue(String optValue) {
+        this.optValue = optValue;
+    }
 
-	public void setOptValue(String optValue){
-		this.optValue = optValue;
-	}
+    public String getTextSize() {
+        return this.textSize;
+    }
 
-	public String getOptValue(){
-		return this.optValue;
-	}
+    public void setTextSize(String textSize) {
+        this.textSize = textSize;
+    }
 
-	public void setTextSize(String textSize){
-		this.textSize = textSize;
-	}
+    public String getCheckWay() {
+        return this.checkWay;
+    }
 
-	public String getTextSize(){
-		return this.textSize;
-	}
+    public void setCheckWay(String checkWay) {
+        this.checkWay = checkWay;
+    }
 
-	public void setCheckWay(String checkWay){
-		this.checkWay = checkWay;
-	}
+    public String getAreaRows() {
+        return this.areaRows;
+    }
 
-	public String getCheckWay(){
-		return this.checkWay;
-	}
+    public void setAreaRows(String areaRows) {
+        this.areaRows = areaRows;
+    }
 
-	public void setAreaRows(String areaRows){
-		this.areaRows = areaRows;
-	}
+    public String getAreaCols() {
+        return this.areaCols;
+    }
 
-	public String getAreaRows(){
-		return this.areaRows;
-	}
+    public void setAreaCols(String areaCols) {
+        this.areaCols = areaCols;
+    }
 
-	public void setAreaCols(String areaCols){
-		this.areaCols = areaCols;
-	}
+    public String getHelp() {
+        return this.help;
+    }
 
-	public String getAreaCols(){
-		return this.areaCols;
-	}
+    public void setHelp(String help) {
+        this.help = help;
+    }
 
-	public void setHelp(String help){
-		this.help = help;
-	}
+    public String getHelpPosition() {
+        return this.helpPosition;
+    }
 
-	public String getHelp(){
-		return this.help;
-	}
+    public void setHelpPosition(String helpPosition) {
+        this.helpPosition = helpPosition;
+    }
 
-	public void setHelpPosition(String helpPosition){
-		this.helpPosition = helpPosition;
-	}
+    public String getDataType() {
+        return this.dataType;
+    }
 
-	public String getHelpPosition(){
-		return this.helpPosition;
-	}
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
 
-	public void setDataType(String dataType){
-		this.dataType = dataType;
-	}
+    public Integer getIsSingle() {
+        return this.isSingle;
+    }
 
-	public String getDataType(){
-		return this.dataType;
-	}
+    public void setIsSingle(Integer isSingle) {
+        this.isSingle = isSingle;
+    }
 
-	public void setIsSingle(Integer isSingle){
-		this.isSingle = isSingle;
-	}
+    public Integer getIsDisplay() {
+        return this.isDisplay;
+    }
 
-	public Integer getIsSingle(){
-		return this.isSingle;
-	}
+    public void setIsDisplay(Integer isDisplay) {
+        this.isDisplay = isDisplay;
+    }
 
-	public void setIsDisplay(Integer isDisplay){
-		this.isDisplay = isDisplay;
-	}
+    public Integer getIsRequired() {
+        return this.isRequired;
+    }
 
-	public Integer getIsDisplay(){
-		return this.isDisplay;
-	}
+    public void setIsRequired(Integer isRequired) {
+        this.isRequired = isRequired;
+    }
 
-	public void setIsRequired(Integer isRequired){
-		this.isRequired = isRequired;
-	}
+    public Integer getImageWidth() {
+        return this.imageWidth;
+    }
 
-	public Integer getIsRequired(){
-		return this.isRequired;
-	}
+    public void setImageWidth(Integer imageWidth) {
+        this.imageWidth = imageWidth;
+    }
 
-	public void setImageWidth(Integer imageWidth){
-		this.imageWidth = imageWidth;
-	}
+    public Integer getImageHeight() {
+        return this.imageHeight;
+    }
 
-	public Integer getImageWidth(){
-		return this.imageWidth;
-	}
+    public void setImageHeight(Integer imageHeight) {
+        this.imageHeight = imageHeight;
+    }
 
-	public void setImageHeight(Integer imageHeight){
-		this.imageHeight = imageHeight;
-	}
+    public String getCheckRule() {
+        return this.checkRule;
+    }
 
-	public Integer getImageHeight(){
-		return this.imageHeight;
-	}
-
-	public void setCheckRule(String checkRule){
-		this.checkRule = checkRule;
-	}
-
-	public String getCheckRule(){
-		return this.checkRule;
-	}
+    public void setCheckRule(String checkRule) {
+        this.checkRule = checkRule;
+    }
 
 }

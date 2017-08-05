@@ -1,10 +1,9 @@
 package com.abc12366.message.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.model.UserMessage;
-import com.abc12366.message.model.bo.ApiLogBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

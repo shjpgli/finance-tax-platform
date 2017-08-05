@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * 访问记录管理接口类
+ *
  * @author lizhongwei
  * @create 2017-7-5
  * @since 1.0.0

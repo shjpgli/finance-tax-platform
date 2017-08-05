@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-04
  * Time: 11:07
  */
 public interface RealNameValidationService {
     List<UserExtendListBO> selectList(Map map);
 
-    UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws ParseException;
+    UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
+            ParseException;
 
 }

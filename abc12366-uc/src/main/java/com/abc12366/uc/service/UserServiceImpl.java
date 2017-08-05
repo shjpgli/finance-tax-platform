@@ -1,7 +1,7 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
@@ -10,7 +10,10 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.PasswordUpdateBO;
+import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserUpdateBO;
 import com.abc12366.uc.util.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,9 +168,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserBO selectOneByToken(String userToken) {
-        LOGGER.info("{}", userToken);
-        return userRoMapper.selectOneByToken(userToken);
+    public UserBO authAndRefreshToken(String token) {
+        LOGGER.info("{}", token);
+        UserBO user = userRoMapper.selectOneByToken(token);
+        if (user != null) {
+            tokenMapper.updateLastTokenResetTime(token);
+        }
+        return user;
     }
 
     @Transactional("db1TxManager")

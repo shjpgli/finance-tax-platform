@@ -42,31 +42,29 @@ public class QuestionnaireBO implements Serializable {
 
     private List<SubjectsBO> subjectsBOList;
 
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return this.title;
     }
 
-    public void setSimpleDesc(String simpleDesc) {
-        this.simpleDesc = simpleDesc;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getSimpleDesc() {
         return this.simpleDesc;
     }
 
+    public void setSimpleDesc(String simpleDesc) {
+        this.simpleDesc = simpleDesc;
+    }
 
     public String getStatus() {
         return status;
@@ -76,68 +74,68 @@ public class QuestionnaireBO implements Serializable {
         this.status = status;
     }
 
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
     public String getCreateUser() {
         return this.createUser;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setUpdateTime(java.util.Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getUpdateTime() {
         return this.updateTime;
     }
 
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
+    public void setUpdateTime(java.util.Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getUpdateUser() {
         return this.updateUser;
     }
 
-    public void setRecoveryRate(Integer recoveryRate) {
-        this.recoveryRate = recoveryRate;
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
     }
 
     public Integer getRecoveryRate() {
         return this.recoveryRate;
     }
 
-    public void setAccessRate(Integer accessRate) {
-        this.accessRate = accessRate;
+    public void setRecoveryRate(Integer recoveryRate) {
+        this.recoveryRate = recoveryRate;
     }
 
     public Integer getAccessRate() {
         return this.accessRate;
     }
 
-    public void setSceneCode(String sceneCode) {
-        this.sceneCode = sceneCode;
+    public void setAccessRate(Integer accessRate) {
+        this.accessRate = accessRate;
     }
 
     public String getSceneCode() {
         return this.sceneCode;
     }
 
-    public void setTradeCode(String tradeCode) {
-        this.tradeCode = tradeCode;
+    public void setSceneCode(String sceneCode) {
+        this.sceneCode = sceneCode;
     }
 
     public String getTradeCode() {
         return this.tradeCode;
+    }
+
+    public void setTradeCode(String tradeCode) {
+        this.tradeCode = tradeCode;
     }
 
     public String getSkinUrl() {

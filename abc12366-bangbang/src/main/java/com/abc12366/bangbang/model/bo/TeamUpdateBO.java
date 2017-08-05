@@ -1,10 +1,6 @@
 package com.abc12366.bangbang.model.bo;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**

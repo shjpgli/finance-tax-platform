@@ -4,16 +4,16 @@
  * Package Name:com.lkx.util
  * Date:2017年6月7日上午9:47:06
  * Copyright (c) 2017~2020, likaixuan@test.com.cn All Rights Reserved.
- *
-*/
+ */
 
 package com.abc12366.uc.util;
+
 /**
  * ClassName:StringUtil
  * Date:     2017年6月7日 上午9:47:06
- * @author   likaixuan
- * @version  V1.0
- * @since    JDK 1.7
+ * @author likaixuan
+ * @version V1.0
+ * @since JDK 1.7
  * @see
  */
 public class StringUtil {
@@ -51,7 +51,7 @@ public class StringUtil {
 
     /**
      * replace:(替换字符串函数)
-     * 
+     *
      * @param strSource
      *            源字符串
      * @param strFrom
@@ -62,7 +62,7 @@ public class StringUtil {
      * @since JDK 1.7
      */
     public static String replace(String strSource, String strFrom,
-            String strTo) {
+                                 String strTo) {
         // 如果要替换的子串为空，则直接返回源串
         if (strFrom == null || strFrom.equals(""))
             return strSource;

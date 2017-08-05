@@ -25,61 +25,60 @@ public class ExpressCompBO implements Serializable {
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
 
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setCompCode(String compCode) {
-        this.compCode = compCode;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCompCode() {
         return this.compCode;
     }
 
-    public void setCompName(String compName) {
-        this.compName = compName;
+    public void setCompCode(String compCode) {
+        this.compCode = compCode;
     }
 
     public String getCompName() {
         return this.compName;
     }
 
-    public void setCompUrl(String compUrl) {
-        this.compUrl = compUrl;
+    public void setCompName(String compName) {
+        this.compName = compName;
     }
 
     public String getCompUrl() {
         return this.compUrl;
     }
 
-    public void setSort(Integer sort) {
-        this.sort = sort;
+    public void setCompUrl(String compUrl) {
+        this.compUrl = compUrl;
     }
 
     public Integer getSort() {
         return this.sort;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setCreateTime(java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
     public java.util.Date getLastUpdate() {
         return this.lastUpdate;
+    }
+
+    public void setLastUpdate(java.util.Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
 }

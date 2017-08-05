@@ -1,11 +1,11 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db1.ApiMapper;
 import com.abc12366.gateway.mapper.db2.ApiRoMapper;
 import com.abc12366.gateway.model.Api;
 import com.abc12366.gateway.model.bo.ApiBO;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -48,7 +48,7 @@ public class ApiServiceImpl implements ApiService {
         Api api = new Api();
         BeanUtils.copyProperties(apiBO, api);
         int insert = apiMapper.insert(api);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.warn("插入失败，参数：{}", api);
             throw new ServiceException(4101);
         }
@@ -62,7 +62,7 @@ public class ApiServiceImpl implements ApiService {
         temp.setVersion(apiBO.getVersion());
         temp.setMethod(apiBO.getMethod());
         ApiBO bo = apiRoMapper.selectByUriAndVersion(temp);
-        if(bo != null && !apiBO.getId().equals(bo.getId())){
+        if (bo != null && !apiBO.getId().equals(bo.getId())) {
             LOGGER.warn("uri，version，method，确定数据的唯一性：{}", bo);
             throw new ServiceException(4030);
         }
@@ -71,12 +71,12 @@ public class ApiServiceImpl implements ApiService {
     @Transactional("db1TxManager")
     @Override
     public Api update(ApiBO apiBO) {
-         isSameInvoice(apiBO);
+        isSameInvoice(apiBO);
         Api api = new Api();
         BeanUtils.copyProperties(apiBO, api);
         api.setLastUpdate(new Date());
         int update = apiMapper.update(api);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.warn("修改失败，参数：{}", api);
             throw new ServiceException(4102);
         }
@@ -88,7 +88,7 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public void delete(String id) {
         int del = apiMapper.delete(id);
-        if(del != 1){
+        if (del != 1) {
             LOGGER.warn("修改失败，参数：{}", id);
             throw new ServiceException(4103);
         }
@@ -104,9 +104,9 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public List<ApiBO> selectBySettingList(String appId) {
         List<ApiBO> boList = apiRoMapper.selectBySettingList(appId);
-        if(boList != null && boList.size() != 0){
+        if (boList != null && boList.size() != 0) {
             return boList;
-        }else{
+        } else {
             boList = apiRoMapper.selectList(new Api());
         }
         return boList;

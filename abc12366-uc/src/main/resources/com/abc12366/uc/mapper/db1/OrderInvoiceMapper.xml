@@ -5,14 +5,14 @@
 
     <!--删除：根据主键ID删除-->
     <delete id="delete" parameterType="java.lang.String">
-		 DELETE FROM uc_order_invoice
-		 WHERE id = #{id}
-	</delete>
+        DELETE FROM uc_order_invoice
+        WHERE id = #{id}
+    </delete>
 
     <delete id="deleteByInvoiceId" parameterType="java.lang.String">
-		 DELETE FROM uc_order_invoice
-		 WHERE invoiceId = #{invoiceId}
-	</delete>
+        DELETE FROM uc_order_invoice
+        WHERE invoiceId = #{invoiceId}
+    </delete>
 
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insert" parameterType="com.abc12366.uc.model.OrderInvoice">

@@ -2,7 +2,7 @@ package com.abc12366.uc.util;
 
 
 /**
- * User: liuguiyao<435720953@qq.com>
+ * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-19
  * Time: 18:24
  */
@@ -15,7 +15,8 @@ public class RandomNumber {
         String returnNumber = "";
         for (int i = 0; i < length; i++) {
             randomString = Math.random() + "";
-            int oneNumber = Integer.parseInt(randomString.substring(randomString.indexOf("0.") + 2, randomString.indexOf("0.") + 3));
+            int oneNumber = Integer.parseInt(randomString.substring(randomString.indexOf("0.") + 2, randomString
+                    .indexOf("0.") + 3));
             System.out.println(oneNumber);
             returnNumber += oneNumber;
         }

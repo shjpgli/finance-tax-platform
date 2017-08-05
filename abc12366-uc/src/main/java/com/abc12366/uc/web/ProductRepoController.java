@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.ProductRepoBO;
 import com.abc12366.uc.service.ProductRepoService;
 import org.slf4j.Logger;
@@ -31,6 +31,7 @@ public class ProductRepoController {
 
     /**
      * 查询库存详情
+     *
      * @param id
      * @return
      */
@@ -44,6 +45,7 @@ public class ProductRepoController {
 
     /**
      * 库存入库
+     *
      * @return
      */
     @PostMapping(path = "/income")
@@ -56,6 +58,7 @@ public class ProductRepoController {
 
     /**
      * 库存出库
+     *
      * @return
      */
     @PostMapping(path = "/outcome")

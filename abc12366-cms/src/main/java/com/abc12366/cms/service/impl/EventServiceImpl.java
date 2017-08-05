@@ -40,10 +40,10 @@ public class EventServiceImpl implements EventService {
     private EventModelItemRoMapper eventModelItemRoMapper;
 
     @Override
-    public List<EventListBo> selectList(Map<String,Object> map) {
+    public List<EventListBo> selectList(Map<String, Object> map) {
         //查询活动列表
         eventMapper.updateStatus();
-        List<EventListBo> dataList =  eventRoMapper.selectList(map);
+        List<EventListBo> dataList = eventRoMapper.selectList(map);
         return dataList;
     }
 
@@ -53,10 +53,10 @@ public class EventServiceImpl implements EventService {
         //保存活动信息
         String uuid = UUID.randomUUID().toString().replace("-", "");
         EventBo eventBo = eventSaveBo.getEvent();
-        Event event= new Event();
+        Event event = new Event();
         eventBo.setEventId(uuid);
         eventBo.setCreatetime(new Date());
-        if("2".equals(eventBo.getStatus())){
+        if ("2".equals(eventBo.getStatus())) {
             eventBo.setUpdatetime(new Date());
         }
         try {
@@ -66,9 +66,9 @@ public class EventServiceImpl implements EventService {
             throw new RuntimeException("类型转换异常：{}", e);
         }
         eventMapper.insert(event);
-        List<EventModelItemBo> eventModelItemBoList =eventSaveBo.getModelItemList();
-        if(eventModelItemBoList != null){
-            for(EventModelItemBo eventModelItemBo : eventModelItemBoList){
+        List<EventModelItemBo> eventModelItemBoList = eventSaveBo.getModelItemList();
+        if (eventModelItemBoList != null) {
+            for (EventModelItemBo eventModelItemBo : eventModelItemBoList) {
                 eventModelItemBo.setEventId(uuid);
                 eventModelItemBo.setModelitemId(UUID.randomUUID().toString().replace("-", ""));
                 EventModelItem eventModelItem = new EventModelItem();
@@ -92,7 +92,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRoMapper.selectByPrimaryKey(eventId);
         EventBo eventBo = new EventBo();
         try {
-            if(event != null){
+            if (event != null) {
                 BeanUtils.copyProperties(event, eventBo);
                 eventSaveBo.setEvent(eventBo);
             }
@@ -102,8 +102,8 @@ public class EventServiceImpl implements EventService {
         }
         List<EventModelItemBo> eventModelItemBoList = new ArrayList<EventModelItemBo>();
         List<EventModelItem> eventModelItemList = eventModelItemRoMapper.selectByEventId(eventId);
-        if(eventModelItemList != null){
-            for(EventModelItem eventModelItem : eventModelItemList){
+        if (eventModelItemList != null) {
+            for (EventModelItem eventModelItem : eventModelItemList) {
                 EventModelItemBo eventModelItemBo = new EventModelItemBo();
                 try {
                     BeanUtils.copyProperties(eventModelItem, eventModelItemBo);
@@ -123,8 +123,8 @@ public class EventServiceImpl implements EventService {
     public EventSaveBo update(EventSaveBo eventSaveBo) {
         //更新活动信息
         EventBo eventBo = eventSaveBo.getEvent();
-        Event event= new Event();
-        if("2".equals(eventBo.getStatus())){
+        Event event = new Event();
+        if ("2".equals(eventBo.getStatus())) {
             eventBo.setUpdatetime(new Date());
         }
         try {
@@ -135,9 +135,9 @@ public class EventServiceImpl implements EventService {
         }
         eventMapper.updateByPrimaryKeySelective(event);
         eventModelItemMapper.deleteByEventId(eventBo.getEventId());
-        List<EventModelItemBo> eventModelItemBoList =eventSaveBo.getModelItemList();
-        if(eventModelItemBoList != null){
-            for(EventModelItemBo eventModelItemBo : eventModelItemBoList){
+        List<EventModelItemBo> eventModelItemBoList = eventSaveBo.getModelItemList();
+        if (eventModelItemBoList != null) {
+            for (EventModelItemBo eventModelItemBo : eventModelItemBoList) {
                 eventModelItemBo.setEventId(eventBo.getEventId());
                 eventModelItemBo.setModelitemId(UUID.randomUUID().toString().replace("-", ""));
                 EventModelItem eventModelItem = new EventModelItem();

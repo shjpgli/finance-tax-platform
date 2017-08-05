@@ -17,6 +17,13 @@
         </set>
         where id=#{id}
     </update>
+
+    <update id="updateLastTokenResetTime">
+        update uc_token
+        SET lastTokenResetTime = now()
+        where token=#{token}
+    </update>
+
     <delete id="delete" parameterType="java.lang.String">
         delete from uc_token where token=#{token}
     </delete>

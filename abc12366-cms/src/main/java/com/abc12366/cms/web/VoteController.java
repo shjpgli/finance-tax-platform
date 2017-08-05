@@ -8,8 +8,8 @@ import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 import com.abc12366.cms.model.bo.VotetjListBo;
 import com.abc12366.cms.service.VoteService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,10 +106,10 @@ public class VoteController {
     /**
      * 单个题目投票
      *
-     * @param voteId 投票ID
+     * @param voteId    投票ID
      * @param subjectId 题目ID
-     * @param itemId 选项ID
-     * @param request HttpServletRequest
+     * @param itemId    选项ID
+     * @param request   HttpServletRequest
      * @return VoteResult
      */
     @PostMapping("/result/{voteId}/{subjectId}/{itemId}")
@@ -135,9 +135,9 @@ public class VoteController {
     /**
      * 多个题目投票
      *
-     * @param voteId 投票ID
+     * @param voteId     投票ID
      * @param resultList 投票结果列表
-     * @param request HttpServletRequest
+     * @param request    HttpServletRequest
      * @return VoteResult集合
      */
     @PostMapping("/result/{voteId}")
@@ -155,7 +155,7 @@ public class VoteController {
     /**
      * 投票浏览记录
      *
-     * @param voteId 投票ID
+     * @param voteId  投票ID
      * @param request HttpServletRequest
      * @return VoteHistory
      */
@@ -215,19 +215,19 @@ public class VoteController {
 
     @GetMapping(path = "/selecttj")
     public ResponseEntity selecttj(@RequestParam(value = "startTime", required = false) String startTime,
-                                     @RequestParam(value = "endTime", required = false) String endTime,
-                                     @RequestParam(value = "voteId", required = false) String voteId) {
+                                   @RequestParam(value = "endTime", required = false) String endTime,
+                                   @RequestParam(value = "voteId", required = false) String voteId) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("voteId",voteId);
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        dataMap.put("voteId", voteId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime()/1000);
+                dataMap.put("startTime", startTime1.getTime() / 1000);
             }
-            if(endTime != null && !"".equals(endTime)){
+            if (endTime != null && !"".equals(endTime)) {
                 Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime()/1000);
+                dataMap.put("endTime", startTime2.getTime() / 1000);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);

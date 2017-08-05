@@ -3,7 +3,7 @@ package com.abc12366.uc.model.bo;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 9:51
  */
@@ -19,7 +19,8 @@ public class VipPrivilegeBO {
     public VipPrivilegeBO() {
     }
 
-    public VipPrivilegeBO(String id, String name, String level, String remark, Boolean status, Date lastUpdate, Date createTime) {
+    public VipPrivilegeBO(String id, String name, String level, String remark, Boolean status, Date lastUpdate, Date
+            createTime) {
         this.id = id;
         this.name = name;
         this.level = level;

@@ -4,8 +4,8 @@ import com.abc12366.cms.model.bo.AnswerLogtjListBo;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
 import com.abc12366.cms.model.questionnaire.bo.AnswertjBO;
 import com.abc12366.cms.service.AnswerLogService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -41,6 +41,7 @@ public class AnswerLogController {
 
     /**
      * 答题记录列表查询
+     *
      * @param questionId
      * @return
      */
@@ -52,13 +53,13 @@ public class AnswerLogController {
                                      @RequestParam(value = "endDate", defaultValue = "") String endDate) {
         AnswerLogBO answerLog = new AnswerLogBO();
         answerLog.setQuestionId(questionId);
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startDate != null && !"".equals(startDate)){
+            if (startDate != null && !"".equals(startDate)) {
                 Date startTime = sdf.parse(startDate);
                 answerLog.setStartDate(startTime);
             }
-            if(endDate != null && !"".equals(endDate)){
+            if (endDate != null && !"".equals(endDate)) {
                 Date endTime = sdf.parse(endDate);
                 answerLog.setEndDate(endTime);
             }
@@ -77,6 +78,7 @@ public class AnswerLogController {
 
     /**
      * 答题记录平均答题查询
+     *
      * @param questionId
      * @return
      */
@@ -121,6 +123,7 @@ public class AnswerLogController {
 
     /**
      * 答题记录批量新增
+     *
      * @param answerLogBO
      * @return
      */
@@ -134,6 +137,7 @@ public class AnswerLogController {
 
     /**
      * 答题记录修改
+     *
      * @param answerLogBO
      * @param id
      * @return
@@ -154,7 +158,8 @@ public class AnswerLogController {
      * @return
      */
     @DeleteMapping(path = "/{questionId}")
-    public ResponseEntity delete(@PathVariable("questionId") String questionId,@Valid @RequestBody AnswerLogBO answerLogBO) {
+    public ResponseEntity delete(@PathVariable("questionId") String questionId, @Valid @RequestBody AnswerLogBO
+            answerLogBO) {
         answerLogBO.setQuestionId(questionId);
         answerLogService.delete(answerLogBO);
         return ResponseEntity.ok(Utils.kv());
@@ -165,16 +170,16 @@ public class AnswerLogController {
                                    @RequestParam(value = "endTime", required = false) String endTime,
                                    @RequestParam(value = "questionId", required = false) String questionId) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("questionId",questionId);
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd");
+        dataMap.put("questionId", questionId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            if(startTime != null && !"".equals(startTime)){
+            if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime()/1000);
+                dataMap.put("startTime", startTime1.getTime() / 1000);
             }
-            if(endTime != null && !"".equals(endTime)){
+            if (endTime != null && !"".equals(endTime)) {
                 Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime()/1000);
+                dataMap.put("endTime", startTime2.getTime() / 1000);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
@@ -188,6 +193,7 @@ public class AnswerLogController {
 
     /**
      * 答题记录列表查询
+     *
      * @param subjectsId
      * @return
      */
@@ -197,7 +203,7 @@ public class AnswerLogController {
         LOGGER.info("{}", dataList);
         return (dataList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList",dataList));
+                ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
 }

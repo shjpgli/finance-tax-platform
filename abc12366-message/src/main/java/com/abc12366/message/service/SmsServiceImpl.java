@@ -1,8 +1,11 @@
 package com.abc12366.message.service;
 
-import com.abc12366.common.util.Properties;
-import com.abc12366.common.util.Utils;
-import com.abc12366.message.model.bo.*;
+import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.model.bo.QueryStatusParam;
+import com.abc12366.message.model.bo.SendCodeParam;
+import com.abc12366.message.model.bo.SendTemplateParam;
+import com.abc12366.message.model.bo.VerifyCodeParam;
 import com.abc12366.message.util.CheckSumBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +32,6 @@ import java.util.HashMap;
 public class SmsServiceImpl implements SmsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsServiceImpl.class);
-
-    @Autowired
-    private RestTemplate restTemplate;
-
     private static Properties properties = new Properties("application.properties");
     private static String appKey;
     private static String appSecret;
@@ -50,6 +49,9 @@ public class SmsServiceImpl implements SmsService {
             e.printStackTrace();
         }
     }
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public ResponseEntity sendCode(SendCodeParam sendCodeParam) throws IOException {

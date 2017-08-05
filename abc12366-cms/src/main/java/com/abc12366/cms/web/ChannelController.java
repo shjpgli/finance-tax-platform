@@ -3,8 +3,8 @@ package com.abc12366.cms.web;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ChannelService;
 import com.abc12366.cms.service.ModelService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/channel",headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/channel", headers = Constant.VERSION_HEAD + "=1")
 public class ChannelController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChannelController.class);
 
@@ -44,7 +44,7 @@ public class ChannelController {
                                      @RequestParam(value = "siteId", required = false) String siteId,
                                      @RequestParam(value = "isDisplay", required = false) String isDisplay,
                                      @RequestParam(value = "channelName", required = false) String channelName
-                                     ) {
+    ) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("parentId", parentId);//父栏目ID
@@ -60,8 +60,8 @@ public class ChannelController {
      */
     @GetMapping(path = "/list")
     public ResponseEntity list(@RequestParam(value = "channelId", required = false) String channelId,
-                                     @RequestParam(value = "parentId", required = false) String parentId,
-                                     @RequestParam(value = "channelName", required = false) String channelName) {
+                               @RequestParam(value = "parentId", required = false) String parentId,
+                               @RequestParam(value = "channelName", required = false) String channelName) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("parentId", parentId);//父栏目ID
@@ -77,8 +77,8 @@ public class ChannelController {
     public ResponseEntity init(@RequestParam(value = "modelId", required = false) String modelId) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("modelId",modelId);//模型ID
-        dataMap.put("isChannel",1);//是否为栏目，1为是
+        dataMap.put("modelId", modelId);//模型ID
+        dataMap.put("isChannel", 1);//是否为栏目，1为是
         ChannelInitBo dataList = new ChannelInitBo();
         List<ModelItemBo> modelItems = channelService.selectModeList(dataMap);
         ModelBo modelBo = modelService.selectModel(modelId);
@@ -120,8 +120,8 @@ public class ChannelController {
         Map<String, Object> dataMap = new HashMap<>();
         List<ChannelExtBo> channelExtBoList = channelService.selectListBytplChannel(tplChannel);
         List<ChannelSaveBo> dataList = new ArrayList<ChannelSaveBo>();
-        if(channelExtBoList != null){
-            for(ChannelExtBo channelExtBo : channelExtBoList){
+        if (channelExtBoList != null) {
+            for (ChannelExtBo channelExtBo : channelExtBoList) {
                 ChannelSaveBo channelSaveBo = channelService.selectChannel(channelExtBo.getChannelId());
                 dataList.add(channelSaveBo);
             }
@@ -159,8 +159,6 @@ public class ChannelController {
         String rtn = channelService.delete(channelId);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
-
-
 
 
 }

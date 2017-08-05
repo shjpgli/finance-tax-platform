@@ -3,7 +3,6 @@ package com.abc12366.cms.service;
 import com.abc12366.cms.model.ContentType;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 内容类型管理模块

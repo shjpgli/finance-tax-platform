@@ -16,7 +16,7 @@
             <if test="lastUpdate!=null">lastUpdate=#{lastUpdate}</if>
         </set>
         where
-          teamId=#{teamId}
+        teamId=#{teamId}
         and userId=#{userId}
     </update>
     <delete id="delete" parameterType="com.abc12366.bangbang.model.TeamMember">

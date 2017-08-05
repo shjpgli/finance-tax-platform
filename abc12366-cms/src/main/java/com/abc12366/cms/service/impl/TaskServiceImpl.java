@@ -5,7 +5,7 @@ import com.abc12366.cms.mapper.db2.TaskRoMapper;
 import com.abc12366.cms.model.Task;
 import com.abc12366.cms.model.bo.TaskBo;
 import com.abc12366.cms.service.TaskService;
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,9 +30,9 @@ public class TaskServiceImpl implements TaskService {
     private TaskRoMapper taskRoMapper;
 
     @Override
-    public List<TaskBo> selectList(Map<String,Object> map) {
+    public List<TaskBo> selectList(Map<String, Object> map) {
         //查询模型列表
-        List<TaskBo> taskBoList =  taskRoMapper.selectList(map);
+        List<TaskBo> taskBoList = taskRoMapper.selectList(map);
         return taskBoList;
     }
 
@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
         TaskBo taskBo1 = new TaskBo();
         taskBo1.setTaskName(taskBo.getTaskName());
         int cnt = taskRoMapper.selectCnt(taskBo1);
-        if(cnt >0){
+        if (cnt > 0) {
             throw new ServiceException(4302);
         }
         //保存模型信息
@@ -78,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
         taskBo1.setTaskName(taskBo.getTaskName());
         taskBo1.setTaskId(taskBo.getTaskId());
         int cnt = taskRoMapper.selectCnt(taskBo1);
-        if(cnt >0){
+        if (cnt > 0) {
             throw new ServiceException(4302);
         }
         //更新模型信息

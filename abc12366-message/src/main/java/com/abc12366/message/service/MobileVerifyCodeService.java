@@ -2,7 +2,6 @@ package com.abc12366.message.service;
 
 import com.abc12366.message.model.bo.VerifyParam;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**

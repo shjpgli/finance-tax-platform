@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface TopicService {
 
-    List<TopicBo> selectList(Map<String,Object> map);
+    List<TopicBo> selectList(Map<String, Object> map);
 
     List<TopicBo> selectListBytplContent(String tplContent);
 

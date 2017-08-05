@@ -37,35 +37,35 @@ public class EventApplyServiceImpl implements EventApplyService {
     private EventApplyAttrRoMapper eventApplyAttrRoMapper;
 
     @Override
-    public List<EventApplyBo> selectList(Map<String,Object> map) {
+    public List<EventApplyBo> selectList(Map<String, Object> map) {
         //查询活动列表
-        List<EventApplyBo> dataList =  eventApplyRoMapper.selectList(map);
+        List<EventApplyBo> dataList = eventApplyRoMapper.selectList(map);
         return dataList;
     }
 
     @Override
-    public EventbmtjBo selectbmtj(Map<String,Object> map) {
+    public EventbmtjBo selectbmtj(Map<String, Object> map) {
         //查询活动列表
-        EventbmtjBo eventbmtjBo =  eventApplyRoMapper.selectbmtj(map);
+        EventbmtjBo eventbmtjBo = eventApplyRoMapper.selectbmtj(map);
         return eventbmtjBo;
     }
 
     @Override
-    public EventlltjListBo selectlltj(Map<String,Object> map) {
+    public EventlltjListBo selectlltj(Map<String, Object> map) {
         EventlltjListBo eventlltjListBo = new EventlltjListBo();
         //总浏览次数
-        List<EventlltjBo> list =  eventApplyRoMapper.selectlltj(map);
-        map.put("source","PC");
-        List<EventlltjBo> pclist =  eventApplyRoMapper.selectlltj(map);
-        map.put("source","MobileWeb");
-        List<EventlltjBo> mobileWeblist =  eventApplyRoMapper.selectlltj(map);
-        map.put("source","WeChat");
-        List<EventlltjBo> weChatlist =  eventApplyRoMapper.selectlltj(map);
-        Map<String,List<EventlltjBo>> lltj = new HashMap<String,List<EventlltjBo>>();
-        lltj.put("total",list);
-        lltj.put("PC",pclist);
-        lltj.put("MobileWeb",mobileWeblist);
-        lltj.put("WeChat",weChatlist);
+        List<EventlltjBo> list = eventApplyRoMapper.selectlltj(map);
+        map.put("source", "PC");
+        List<EventlltjBo> pclist = eventApplyRoMapper.selectlltj(map);
+        map.put("source", "MobileWeb");
+        List<EventlltjBo> mobileWeblist = eventApplyRoMapper.selectlltj(map);
+        map.put("source", "WeChat");
+        List<EventlltjBo> weChatlist = eventApplyRoMapper.selectlltj(map);
+        Map<String, List<EventlltjBo>> lltj = new HashMap<String, List<EventlltjBo>>();
+        lltj.put("total", list);
+        lltj.put("PC", pclist);
+        lltj.put("MobileWeb", mobileWeblist);
+        lltj.put("WeChat", weChatlist);
         eventlltjListBo.setLltj(lltj);
         return eventlltjListBo;
     }
@@ -76,7 +76,7 @@ public class EventApplyServiceImpl implements EventApplyService {
         //保存活动信息
         String uuid = UUID.randomUUID().toString().replace("-", "");
         EventApplyBo eventApplyBo = eventApplySaveBo.getEventApply();
-        EventApply eventApply= new EventApply();
+        EventApply eventApply = new EventApply();
         eventApplyBo.setApplyId(uuid);
         eventApplyBo.setApplytime(new Date());
         try {
@@ -86,9 +86,9 @@ public class EventApplyServiceImpl implements EventApplyService {
             throw new RuntimeException("类型转换异常：{}", e);
         }
         eventApplyMapper.insert(eventApply);
-        List<EventApplyAttrBo> eventApplyAttrBoList =eventApplySaveBo.getApplyAttrList();
-        if(eventApplyAttrBoList != null){
-            for(EventApplyAttrBo eventApplyAttrBo : eventApplyAttrBoList){
+        List<EventApplyAttrBo> eventApplyAttrBoList = eventApplySaveBo.getApplyAttrList();
+        if (eventApplyAttrBoList != null) {
+            for (EventApplyAttrBo eventApplyAttrBo : eventApplyAttrBoList) {
                 eventApplyAttrBo.setApplyId(uuid);
                 EventApplyAttr eventApplyAttr = new EventApplyAttr();
                 try {
@@ -119,8 +119,8 @@ public class EventApplyServiceImpl implements EventApplyService {
         eventApplySaveBo.setEventApply(eventApplyBo);
         List<EventApplyAttrBo> eventApplyAttrBoList = new ArrayList<EventApplyAttrBo>();
         List<EventApplyAttr> eventApplyAttrList = eventApplyAttrRoMapper.selectByPrimaryKey(applyId);
-        if(eventApplyAttrList != null){
-            for(EventApplyAttr eventApplyAttr : eventApplyAttrList){
+        if (eventApplyAttrList != null) {
+            for (EventApplyAttr eventApplyAttr : eventApplyAttrList) {
                 EventApplyAttrBo eventApplyAttrBo = new EventApplyAttrBo();
                 try {
                     BeanUtils.copyProperties(eventApplyAttr, eventApplyAttrBo);
@@ -140,7 +140,7 @@ public class EventApplyServiceImpl implements EventApplyService {
     public EventApplySaveBo update(EventApplySaveBo eventApplySaveBo) {
         //更新活动信息
         EventApplyBo eventApplyBo = eventApplySaveBo.getEventApply();
-        EventApply eventApply= new EventApply();
+        EventApply eventApply = new EventApply();
         try {
             BeanUtils.copyProperties(eventApplyBo, eventApply);
         } catch (Exception e) {
@@ -149,9 +149,9 @@ public class EventApplyServiceImpl implements EventApplyService {
         }
         eventApplyMapper.insert(eventApply);
         eventApplyAttrMapper.deleteByPrimaryKey(eventApplyBo.getApplyId());
-        List<EventApplyAttrBo> eventApplyAttrBoList =eventApplySaveBo.getApplyAttrList();
-        if(eventApplyAttrBoList != null){
-            for(EventApplyAttrBo eventApplyAttrBo : eventApplyAttrBoList){
+        List<EventApplyAttrBo> eventApplyAttrBoList = eventApplySaveBo.getApplyAttrList();
+        if (eventApplyAttrBoList != null) {
+            for (EventApplyAttrBo eventApplyAttrBo : eventApplyAttrBoList) {
                 eventApplyAttrBo.setApplyId(eventApplyBo.getApplyId());
                 EventApplyAttr eventApplyAttr = new EventApplyAttr();
                 try {

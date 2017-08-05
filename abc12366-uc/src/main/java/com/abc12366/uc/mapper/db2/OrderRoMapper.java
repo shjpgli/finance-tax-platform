@@ -7,20 +7,16 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 
  * OrderMapper数据库操作接口类
- * 
  **/
 
 public interface OrderRoMapper {
 
 
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	Order  selectByPrimaryKey(@Param("id") String id);
+    /**
+     * 查询（根据主键ID查询）
+     **/
+    Order selectByPrimaryKey(@Param("id") String id);
 
     List<OrderBO> selectList(OrderBO order);
 

@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.GoodsCategoryMapper;
 import com.abc12366.uc.mapper.db2.GoodsCategoryRoMapper;
 import com.abc12366.uc.model.GoodsCategory;
@@ -37,13 +37,13 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public GoodsCategoryBO selectList(GoodsCategory goodsCategory) {
         //查询所有父节点
         GoodsCategoryBO bo;
-        if(goodsCategory != null && goodsCategory.getCategory() != null && !"".equals(goodsCategory.getCategory())){
+        if (goodsCategory != null && goodsCategory.getCategory() != null && !"".equals(goodsCategory.getCategory())) {
             bo = goodsCategoryRoMapper.selectByName(goodsCategory.getCategory());
-        }else{
+        } else {
             bo = goodsCategoryRoMapper.selectParentCategory();
         }
-        GoodsCategoryBO  categoryBO = new GoodsCategoryBO();
-        if(bo != null){
+        GoodsCategoryBO categoryBO = new GoodsCategoryBO();
+        if (bo != null) {
             categoryBO = recursiveTree(bo.getId());
         }
         return categoryBO;
@@ -58,7 +58,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         GoodsCategoryBO node = goodsCategoryRoMapper.selectById(id);
         List<GoodsCategoryBO> treeNodes = goodsCategoryRoMapper.selectByParentId(id);
         //遍历子节点
-        for(GoodsCategoryBO child : treeNodes){
+        for (GoodsCategoryBO child : treeNodes) {
             GoodsCategoryBO n = recursiveTree(child.getId()); //递归
             node.getNodes().add(n);
         }
@@ -68,23 +68,23 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     @Override
     public GoodsCategory add(GoodsCategoryBO goodsCategoryBO) {
         GoodsCategory goodsCategory = new GoodsCategory();
-        BeanUtils.copyProperties(goodsCategoryBO,goodsCategory);
+        BeanUtils.copyProperties(goodsCategoryBO, goodsCategory);
         goodsCategory.setId(Utils.uuid());
         Date date = new Date();
         goodsCategory.setCreateTime(date);
         goodsCategory.setLastUpdate(date);
-        if (goodsCategoryBO.getParentId() == null || "".equals(goodsCategory.getParentId())){
+        if (goodsCategoryBO.getParentId() == null || "".equals(goodsCategory.getParentId())) {
             LOGGER.info("请选择分类的父节点：{}", goodsCategoryBO);
             throw new ServiceException(4153);
         }
         //不能加入名称相同的分类
         GoodsCategoryBO bo = goodsCategoryRoMapper.selectByName(goodsCategoryBO.getCategory());
-        if(bo != null){
+        if (bo != null) {
             LOGGER.info("不能加入名称相同的分类：{}", goodsCategoryBO);
             throw new ServiceException(4152);
         }
         int insert = goodsCategoryMapper.insert(goodsCategory);
-        if(insert != 1){
+        if (insert != 1) {
             LOGGER.info("新增失败：{}", goodsCategory);
             throw new ServiceException(4101);
         }
@@ -96,23 +96,23 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         String id = goodsCategoryBO.getId();
         String parentId = goodsCategoryBO.getParentId();
         //判断节点是否是自己本身
-        if(parentId != null && !"".equals(parentId)){
-            if(id.equals(parentId)){
+        if (parentId != null && !"".equals(parentId)) {
+            if (id.equals(parentId)) {
                 throw new ServiceException(4118);
             }
-        }else{
+        } else {
             LOGGER.info("请选择分类的父节点：{}", goodsCategoryBO);
             throw new ServiceException(4153);
         }
         GoodsCategory category = new GoodsCategory();
-        BeanUtils.copyProperties(goodsCategoryBO,category);
+        BeanUtils.copyProperties(goodsCategoryBO, category);
         category.setLastUpdate(new Date());
         int upd = goodsCategoryMapper.update(category);
-        if(upd != 1){
+        if (upd != 1) {
             throw new ServiceException(4102);
         }
         GoodsCategoryBO bo = new GoodsCategoryBO();
-        BeanUtils.copyProperties(category,bo);
+        BeanUtils.copyProperties(category, bo);
         return bo;
     }
 
@@ -135,7 +135,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         List<GoodsCategoryBO> treeNodes = new ArrayList<GoodsCategoryBO>();
         treeNodes = goodsCategoryRoMapper.selectByParentId(id);
         //遍历子节点
-        for(GoodsCategoryBO child : treeNodes){
+        for (GoodsCategoryBO child : treeNodes) {
             deleteTree(child.getId()); //递归
         }
         goodsCategoryMapper.deleteByPrimaryKey(id);

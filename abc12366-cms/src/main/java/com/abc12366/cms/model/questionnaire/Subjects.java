@@ -1,154 +1,177 @@
 package com.abc12366.cms.model.questionnaire;
+
 import java.io.Serializable;
 
 
 /**
- * 
  * 题目表
- * 
  **/
 @SuppressWarnings("serial")
 public class Subjects implements Serializable {
 
-	/****/
-	private String id;
+    /****/
+    private String id;
 
-	/**问卷ID**/
-	private String questionId;
+    /**
+     * 问卷ID
+     **/
+    private String questionId;
 
-	/**题目名称**/
-	private String title;
+    /**
+     * 题目名称
+     **/
+    private String title;
 
-	/**题目简单描述**/
-	private String simpleDesc;
+    /**
+     * 题目简单描述
+     **/
+    private String simpleDesc;
 
-	/**是否必填**/
-	private Integer isRequired;
+    /**
+     * 是否必填
+     **/
+    private Integer isRequired;
 
-	/**选项类型**/
-	private String optionType;
+    /**
+     * 选项类型
+     **/
+    private String optionType;
 
-	/**是否为题库**/
-	private String isQuestion;
+    /**
+     * 是否为题库
+     **/
+    private String isQuestion;
 
-	/**页数**/
-	private Integer pages;
+    /**
+     * 页数
+     **/
+    private Integer pages;
 
-	/**图片路径**/
-	private String picPath;
+    /**
+     * 图片路径
+     **/
+    private String picPath;
 
-	/**图片名字**/
-	private String picName;
+    /**
+     * 图片名字
+     **/
+    private String picName;
 
-	/**选项随机顺序**/
-	private Integer randomOrder;
+    /**
+     * 选项随机顺序
+     **/
+    private Integer randomOrder;
 
-	/**每行显示多个**/
-	private Integer displayMultiple;
+    /**
+     * 每行显示多个
+     **/
+    private Integer displayMultiple;
 
-	/**最多可选**/
-	private Integer mostOptional;
+    /**
+     * 最多可选
+     **/
+    private Integer mostOptional;
 
-	/**题目编号**/
-	private Integer number;
+    /**
+     * 题目编号
+     **/
+    private Integer number;
 
+    public String getQuestionId() {
+        return this.questionId;
+    }
 
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
+    }
 
-	public void setQuestionId(String questionId){
-		this.questionId = questionId;
-	}
+    public String getTitle() {
+        return this.title;
+    }
 
-	public String getQuestionId(){
-		return this.questionId;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setTitle(String title){
-		this.title = title;
-	}
+    public String getSimpleDesc() {
+        return this.simpleDesc;
+    }
 
-	public String getTitle(){
-		return this.title;
-	}
+    public void setSimpleDesc(String simpleDesc) {
+        this.simpleDesc = simpleDesc;
+    }
 
-	public void setSimpleDesc(String simpleDesc){
-		this.simpleDesc = simpleDesc;
-	}
+    public Integer getIsRequired() {
+        return this.isRequired;
+    }
 
-	public String getSimpleDesc(){
-		return this.simpleDesc;
-	}
+    public void setIsRequired(Integer isRequired) {
+        this.isRequired = isRequired;
+    }
 
-	public void setIsRequired(Integer isRequired){
-		this.isRequired = isRequired;
-	}
+    public String getOptionType() {
+        return this.optionType;
+    }
 
-	public Integer getIsRequired(){
-		return this.isRequired;
-	}
+    public void setOptionType(String optionType) {
+        this.optionType = optionType;
+    }
 
-	public void setOptionType(String optionType){
-		this.optionType = optionType;
-	}
+    public String getIsQuestion() {
+        return this.isQuestion;
+    }
 
-	public String getOptionType(){
-		return this.optionType;
-	}
+    public void setIsQuestion(String isQuestion) {
+        this.isQuestion = isQuestion;
+    }
 
-	public void setIsQuestion(String isQuestion){
-		this.isQuestion = isQuestion;
-	}
+    public Integer getPages() {
+        return this.pages;
+    }
 
-	public String getIsQuestion(){
-		return this.isQuestion;
-	}
+    public void setPages(Integer pages) {
+        this.pages = pages;
+    }
 
-	public void setPages(Integer pages){
-		this.pages = pages;
-	}
+    public String getPicPath() {
+        return this.picPath;
+    }
 
-	public Integer getPages(){
-		return this.pages;
-	}
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
+    }
 
-	public void setPicPath(String picPath){
-		this.picPath = picPath;
-	}
+    public String getPicName() {
+        return this.picName;
+    }
 
-	public String getPicPath(){
-		return this.picPath;
-	}
+    public void setPicName(String picName) {
+        this.picName = picName;
+    }
 
-	public void setPicName(String picName){
-		this.picName = picName;
-	}
+    public Integer getRandomOrder() {
+        return this.randomOrder;
+    }
 
-	public String getPicName(){
-		return this.picName;
-	}
+    public void setRandomOrder(Integer randomOrder) {
+        this.randomOrder = randomOrder;
+    }
 
-	public void setRandomOrder(Integer randomOrder){
-		this.randomOrder = randomOrder;
-	}
+    public Integer getDisplayMultiple() {
+        return this.displayMultiple;
+    }
 
-	public Integer getRandomOrder(){
-		return this.randomOrder;
-	}
+    public void setDisplayMultiple(Integer displayMultiple) {
+        this.displayMultiple = displayMultiple;
+    }
 
-	public void setDisplayMultiple(Integer displayMultiple){
-		this.displayMultiple = displayMultiple;
-	}
+    public Integer getMostOptional() {
+        return this.mostOptional;
+    }
 
-	public Integer getDisplayMultiple(){
-		return this.displayMultiple;
-	}
-
-	public void setMostOptional(Integer mostOptional){
-		this.mostOptional = mostOptional;
-	}
-
-	public Integer getMostOptional(){
-		return this.mostOptional;
-	}
+    public void setMostOptional(Integer mostOptional) {
+        this.mostOptional = mostOptional;
+    }
 
     public String getId() {
         return id;
@@ -158,11 +181,11 @@ public class Subjects implements Serializable {
         this.id = id;
     }
 
-	public Integer getNumber() {
-		return number;
-	}
+    public Integer getNumber() {
+        return number;
+    }
 
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 }

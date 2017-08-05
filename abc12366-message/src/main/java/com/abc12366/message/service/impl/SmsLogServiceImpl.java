@@ -1,6 +1,6 @@
 package com.abc12366.message.service.impl;
 
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.SmsLogMapper;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.SmsLogService;
@@ -34,10 +34,10 @@ public class SmsLogServiceImpl implements SmsLogService {
             SmsVerifyCode smsVerifyCode = new SmsVerifyCode();
             smsVerifyCode.setId(Utils.uuid());
             smsVerifyCode.setMobile(sendCodeParam.getMobile());
-            if(!StringUtils.isEmpty(sendCodeParam.getDeviceId())){
+            if (!StringUtils.isEmpty(sendCodeParam.getDeviceId())) {
                 smsVerifyCode.setDeviceId(sendCodeParam.getDeviceId());
             }
-            if(!StringUtils.isEmpty(sendCodeParam.getTemplateid())){
+            if (!StringUtils.isEmpty(sendCodeParam.getTemplateid())) {
                 smsVerifyCode.setTemplateid(sendCodeParam.getTemplateid().toString());
             }
             smsVerifyCode.setCode(sendCodeResponseBO.getCode());

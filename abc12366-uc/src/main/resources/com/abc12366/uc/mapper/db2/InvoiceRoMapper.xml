@@ -34,7 +34,8 @@
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <association property="userAddress" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
-        <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id" select="getOrderBO"></collection>
+        <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
+                    select="getOrderBO"></collection>
     </resultMap>
 
     <resultMap id="oneOrderBOMap" type="com.abc12366.uc.model.bo.OrderBO">
@@ -80,7 +81,8 @@
     <!--获取配送方式-->
     <select id="getDeliveryMethodBO" resultMap="deliveryMethodBOMap" parameterType="java.lang.String">
         SELECT
-        id as deliveryId,	name,	type,	sort,	status,	description,	createTime,	lastUpdate,	firstWeight,	firstWeightFee,	addedWeight,	addedWeightFee,	isInsured,	rate,	minInsuredFee,	areaFeeType
+        id as deliveryId, name, type, sort, status, description, createTime, lastUpdate, firstWeight, firstWeightFee,
+        addedWeight, addedWeightFee, isInsured, rate, minInsuredFee, areaFeeType
         FROM uc_delivery_method
         WHERE id = #{deliveryMethod}
     </select>
@@ -88,7 +90,7 @@
     <!-- 查询用户地址信息 -->
     <select id="getUserAddress" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
         SELECT
-          id,	userId,	name,	province,	city,	area,	detail,	phone,	isDefault,	status,	createTime,	lastUpdate
+        id, userId, name, province, city, area, detail, phone, isDefault, status, createTime, lastUpdate
         FROM uc_user_address
         WHERE id = #{id}
     </select>
@@ -96,8 +98,9 @@
     <!-- 查询订单信息 -->
     <select id="getOrderBO" resultMap="oneOrderBOMap" parameterType="java.lang.String">
         SELECT
-        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,
-        o.username,	o.isShipping,	o.isFreeShipping,	o.deliveryFee,	o.isInsured,	o.insuredFee,	o.totalPrice,	o.addressId,	o.expressNo,	o.remark
+        o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
+        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee, o.isInsured, o.insuredFee, o.totalPrice, o.addressId,
+        o.expressNo, o.remark
         FROM uc_order o
         LEFT JOIN uc_order_invoice uoi ON uoi.orderNo = o.orderNo
         WHERE uoi.invoiceId = #{invoiceId}
@@ -105,13 +108,15 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		 id,	userId,	username,	invoiceNo,	invoiceCode,	name,	content,	compName,	amount,	type,	property,	status,	createTime,	lastUpdate,	nsrsbh,	nsrmc,	address,	phone,	bank,	addressId,	deliveryMethod,	isShipping,	isFreeShipping,	deliveryFee,	isInsured,	insuredFee,	payMethod
-	</sql>
+        id, userId, username, invoiceNo, invoiceCode, name, content, compName, amount, type, property, status,
+        createTime, lastUpdate, nsrsbh, nsrmc, address, phone, bank, addressId, deliveryMethod, isShipping,
+        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod
+    </sql>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultMap="invoiceBOResultMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_invoice
         WHERE id = #{id}
     </select>
@@ -119,7 +124,7 @@
     <!-- 查询（根据主键ID和UserId查询） -->
     <select id="selectUserInvoice" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.Invoice">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_invoice
         WHERE id = #{id} AND userId = #{userId}
     </select>
@@ -127,29 +132,29 @@
     <!-- 查询（根据userOrderNo查询） -->
     <select id="selectByUserOrderNo" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_invoice
         WHERE userOrderNo = #{userOrderNo}
     </select>
 
     <select id="selectAvailableInvoice" resultType="com.abc12366.uc.model.Invoice">
         SELECT
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         FROM uc_invoice
         WHERE userOrderNo = #{userOrderNo}
     </select>
 
     <sql id="InvoiceBO_Column_List">
-        i.id,	i.userId,	i.username,	i.invoiceNo,	i.invoiceCode,	i.name,	i.content,	i.compName,	i.amount,	i.type,
-        i.property,	i.status,	i.createTime,	i.lastUpdate,	i.nsrsbh,	i.nsrmc,	i.address,	i.phone,	i.bank,	i.addressId,
-        i.deliveryMethod,	i.isShipping,	i.isFreeShipping,	i.deliveryFee,	i.isInsured,	i.insuredFee,	i.payMethod,
+        i.id, i.userId, i.username, i.invoiceNo, i.invoiceCode, i.name, i.content, i.compName, i.amount, i.type,
+        i.property, i.status, i.createTime, i.lastUpdate, i.nsrsbh, i.nsrmc, i.address, i.phone, i.bank, i.addressId,
+        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,
         u.username as username, a.name as consignee
     </sql>
 
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.bo.InvoiceBO">
         SELECT
-        <include refid="InvoiceBO_Column_List" />
+        <include refid="InvoiceBO_Column_List"/>
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
         LEFT JOIN uc_user_address a ON a.id = i.addressId

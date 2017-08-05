@@ -26,7 +26,8 @@ public class PointsLogBO {
     public PointsLogBO() {
     }
 
-    public PointsLogBO(String id, String userId, String ruleId, String name, String code, String type, int income, int outgo, int usablePoints, Date createTime) {
+    public PointsLogBO(String id, String userId, String ruleId, String name, String code, String type, int income,
+                       int outgo, int usablePoints, Date createTime) {
         this.id = id;
         this.userId = userId;
         this.ruleId = ruleId;

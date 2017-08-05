@@ -24,7 +24,8 @@ public class AskUpdateBO {
     public AskUpdateBO() {
     }
 
-    public AskUpdateBO(String userId, String ask, String detail, String status, Date lastUpdate, int points, Boolean isSolve, String askedUserId, String type) {
+    public AskUpdateBO(String userId, String ask, String detail, String status, Date lastUpdate, int points, Boolean
+            isSolve, String askedUserId, String type) {
         this.userId = userId;
         this.ask = ask;
         this.detail = detail;

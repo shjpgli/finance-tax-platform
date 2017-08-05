@@ -1,6 +1,5 @@
 package com.abc12366.uc.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;

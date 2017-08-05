@@ -3,8 +3,8 @@ package com.abc12366.bangbang.web;
 import com.abc12366.bangbang.model.SensitiveWords;
 import com.abc12366.bangbang.service.SensitiveWordFilter;
 import com.abc12366.bangbang.service.SensitiveWordsService;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 敏感词控制类
@@ -39,6 +38,7 @@ public class SensitiveWordsController {
 
     /**
      * 敏感词列表管理
+     *
      * @return
      */
     @GetMapping
@@ -62,12 +62,14 @@ public class SensitiveWordsController {
         LOGGER.info("{}", sensitiveWordsList);
         return (sensitiveWordsList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) sensitiveWordsList, "total", ((Page) sensitiveWordsList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) sensitiveWordsList, "total", ((Page)
+                        sensitiveWordsList).getTotal()));
     }
 
 
     /**
      * 查询敏感词详情
+     *
      * @param id
      * @return
      */
@@ -81,6 +83,7 @@ public class SensitiveWordsController {
 
     /**
      * 敏感词新增
+     *
      * @return
      */
     @PostMapping
@@ -93,6 +96,7 @@ public class SensitiveWordsController {
 
     /**
      * 修改敏感词
+     *
      * @param sensitiveWords
      * @param id
      * @return
@@ -109,6 +113,7 @@ public class SensitiveWordsController {
 
     /**
      * 删除敏感词
+     *
      * @param id
      * @return
      */

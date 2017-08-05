@@ -4,11 +4,19 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.ExperienceRoMapper">
 
     <select id="getMyExperience" resultType="com.abc12366.uc.model.bo.MyExperienceBO" parameterType="java.lang.String">
-        SELECT  uu.exp exp,
-        (select sum(uul.income) incomeMonth from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uul.createTime &lt; (SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) incomeMonth,
-        (select sum(uul.outgo) outgoMonth from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uul.createTime &lt; (SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) outgoMonth,
-        (select sum(uul.income) incomeYear from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY)) and uul.createTime &lt; (SELECT CONCAT(YEAR(NOW())+1,'-01-01'))) incomeYear,
-        (select sum(uul.outgo) outgoYear from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY)) and uul.createTime &lt; (SELECT CONCAT(YEAR(NOW())+1,'-01-01'))) outgoYear
+        SELECT uu.exp exp,
+        (select sum(uul.income) incomeMonth from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT
+        DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uul.createTime &lt; (SELECT DATE_ADD(CURDATE() -
+        DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) incomeMonth,
+        (select sum(uul.outgo) outgoMonth from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT
+        DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uul.createTime &lt; (SELECT DATE_ADD(CURDATE() -
+        DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) outgoMonth,
+        (select sum(uul.income) incomeYear from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT
+        DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY)) and uul.createTime &lt; (SELECT
+        CONCAT(YEAR(NOW())+1,'-01-01'))) incomeYear,
+        (select sum(uul.outgo) outgoYear from uc_uexp_log uul where uul.userId=uu.id and uul.createTime &gt;=(SELECT
+        DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY)) and uul.createTime &lt; (SELECT
+        CONCAT(YEAR(NOW())+1,'-01-01'))) outgoYear
         from uc_user uu
         where uu.id=#{userId}
     </select>

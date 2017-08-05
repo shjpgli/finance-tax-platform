@@ -1,7 +1,7 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.ExperienceRuleBO;
 import com.abc12366.uc.model.bo.ExperienceRuleInsertBO;
 import com.abc12366.uc.model.bo.ExperienceRuleUpdateBO;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 9:13
  */
@@ -78,7 +78,8 @@ public class ExperienceRuleController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody ExperienceRuleUpdateBO experienceRuleUpdateBO, @PathVariable String id) {
+    public ResponseEntity update(@Valid @RequestBody ExperienceRuleUpdateBO experienceRuleUpdateBO, @PathVariable
+    String id) {
         LOGGER.info("{}:{}", experienceRuleUpdateBO, id);
         ExperienceRuleBO experienceRuleReturn = experienceRuleService.update(experienceRuleUpdateBO, id);
         LOGGER.info("{}", experienceRuleReturn);

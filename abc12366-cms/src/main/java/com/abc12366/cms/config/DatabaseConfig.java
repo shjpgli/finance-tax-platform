@@ -36,9 +36,8 @@ import java.util.Arrays;
 public class DatabaseConfig implements EnvironmentAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseConfig.class);
-
-    private Environment environment;
     private static RelaxedPropertyResolver propertyResolver;
+    private Environment environment;
 
     @Override
     public void setEnvironment(Environment environment) {
@@ -68,16 +67,21 @@ public class DatabaseConfig implements EnvironmentAware {
         druidDataSource.setMinIdle(Integer.parseInt(propertyResolver.getProperty("db1.minIdle")));
         druidDataSource.setMaxActive(Integer.parseInt(propertyResolver.getProperty("db1.maxActive")));
         druidDataSource.setMaxWait(Integer.parseInt(propertyResolver.getProperty("db1.maxWait")));
-        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("db1.timeBetweenEvictionRunsMillis")));
-        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("db1.minEvictableIdleTimeMillis")));
+        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("db1" +
+                ".timeBetweenEvictionRunsMillis")));
+        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("db1" +
+                ".minEvictableIdleTimeMillis")));
         druidDataSource.setValidationQuery(propertyResolver.getProperty("db1.validationQuery"));
         druidDataSource.setTestWhileIdle(Boolean.parseBoolean(propertyResolver.getProperty("db1.testWhileIdle")));
         druidDataSource.setTestOnBorrow(Boolean.parseBoolean(propertyResolver.getProperty("db1.testOnBorrow")));
         druidDataSource.setTestOnReturn(Boolean.parseBoolean(propertyResolver.getProperty("db1.testOnReturn")));
-        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("db1.poolPreparedStatements")));
-        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty("db1.maxPoolPreparedStatementPerConnectionSize")));
+        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("db1" +
+                ".poolPreparedStatements")));
+        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty
+                ("db1.maxPoolPreparedStatementPerConnectionSize")));
         druidDataSource.setFilters(propertyResolver.getProperty("db1.filters"));
-        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("db1.useGlobalDataSourceStat")));
+        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("db1" +
+                ".useGlobalDataSourceStat")));
         return druidDataSource;
     }
 
@@ -100,16 +104,21 @@ public class DatabaseConfig implements EnvironmentAware {
         druidDataSource.setMinIdle(Integer.parseInt(propertyResolver.getProperty("db2.minIdle")));
         druidDataSource.setMaxActive(Integer.parseInt(propertyResolver.getProperty("db2.maxActive")));
         druidDataSource.setMaxWait(Integer.parseInt(propertyResolver.getProperty("db2.maxWait")));
-        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("db2.timeBetweenEvictionRunsMillis")));
-        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("db2.minEvictableIdleTimeMillis")));
+        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("db2" +
+                ".timeBetweenEvictionRunsMillis")));
+        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("db2" +
+                ".minEvictableIdleTimeMillis")));
         druidDataSource.setValidationQuery(propertyResolver.getProperty("db2.validationQuery"));
         druidDataSource.setTestWhileIdle(Boolean.parseBoolean(propertyResolver.getProperty("db2.testWhileIdle")));
         druidDataSource.setTestOnBorrow(Boolean.parseBoolean(propertyResolver.getProperty("db2.testOnBorrow")));
         druidDataSource.setTestOnReturn(Boolean.parseBoolean(propertyResolver.getProperty("db2.testOnReturn")));
-        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("db2.poolPreparedStatements")));
-        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty("db2.maxPoolPreparedStatementPerConnectionSize")));
+        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("db2" +
+                ".poolPreparedStatements")));
+        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty
+                ("db2.maxPoolPreparedStatementPerConnectionSize")));
         druidDataSource.setFilters(propertyResolver.getProperty("db2.filters"));
-        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("db2.useGlobalDataSourceStat")));
+        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("db2" +
+                ".useGlobalDataSourceStat")));
         return druidDataSource;
     }
 
@@ -201,16 +210,21 @@ public class DatabaseConfig implements EnvironmentAware {
         druidDataSource.setMinIdle(Integer.parseInt(propertyResolver.getProperty("gw1.minIdle")));
         druidDataSource.setMaxActive(Integer.parseInt(propertyResolver.getProperty("gw1.maxActive")));
         druidDataSource.setMaxWait(Integer.parseInt(propertyResolver.getProperty("gw1.maxWait")));
-        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("gw1.timeBetweenEvictionRunsMillis")));
-        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("gw1.minEvictableIdleTimeMillis")));
+        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("gw1" +
+                ".timeBetweenEvictionRunsMillis")));
+        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("gw1" +
+                ".minEvictableIdleTimeMillis")));
         druidDataSource.setValidationQuery(propertyResolver.getProperty("gw1.validationQuery"));
         druidDataSource.setTestWhileIdle(Boolean.parseBoolean(propertyResolver.getProperty("gw1.testWhileIdle")));
         druidDataSource.setTestOnBorrow(Boolean.parseBoolean(propertyResolver.getProperty("gw1.testOnBorrow")));
         druidDataSource.setTestOnReturn(Boolean.parseBoolean(propertyResolver.getProperty("gw1.testOnReturn")));
-        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("gw1.poolPreparedStatements")));
-        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty("gw1.maxPoolPreparedStatementPerConnectionSize")));
+        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("gw1" +
+                ".poolPreparedStatements")));
+        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty
+                ("gw1.maxPoolPreparedStatementPerConnectionSize")));
         druidDataSource.setFilters(propertyResolver.getProperty("gw1.filters"));
-        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("gw1.useGlobalDataSourceStat")));
+        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("gw1" +
+                ".useGlobalDataSourceStat")));
         return druidDataSource;
     }
 
@@ -233,16 +247,21 @@ public class DatabaseConfig implements EnvironmentAware {
         druidDataSource.setMinIdle(Integer.parseInt(propertyResolver.getProperty("gw2.minIdle")));
         druidDataSource.setMaxActive(Integer.parseInt(propertyResolver.getProperty("gw2.maxActive")));
         druidDataSource.setMaxWait(Integer.parseInt(propertyResolver.getProperty("gw2.maxWait")));
-        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("gw2.timeBetweenEvictionRunsMillis")));
-        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("gw2.minEvictableIdleTimeMillis")));
+        druidDataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(propertyResolver.getProperty("gw2" +
+                ".timeBetweenEvictionRunsMillis")));
+        druidDataSource.setMinEvictableIdleTimeMillis(Long.parseLong(propertyResolver.getProperty("gw2" +
+                ".minEvictableIdleTimeMillis")));
         druidDataSource.setValidationQuery(propertyResolver.getProperty("gw2.validationQuery"));
         druidDataSource.setTestWhileIdle(Boolean.parseBoolean(propertyResolver.getProperty("gw2.testWhileIdle")));
         druidDataSource.setTestOnBorrow(Boolean.parseBoolean(propertyResolver.getProperty("gw2.testOnBorrow")));
         druidDataSource.setTestOnReturn(Boolean.parseBoolean(propertyResolver.getProperty("gw2.testOnReturn")));
-        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("gw2.poolPreparedStatements")));
-        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty("gw2.maxPoolPreparedStatementPerConnectionSize")));
+        druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("gw2" +
+                ".poolPreparedStatements")));
+        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty
+                ("gw2.maxPoolPreparedStatementPerConnectionSize")));
         druidDataSource.setFilters(propertyResolver.getProperty("gw2.filters"));
-        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("gw2.useGlobalDataSourceStat")));
+        druidDataSource.setUseGlobalDataSourceStat(Boolean.parseBoolean(propertyResolver.getProperty("gw2" +
+                ".useGlobalDataSourceStat")));
         return druidDataSource;
     }
 

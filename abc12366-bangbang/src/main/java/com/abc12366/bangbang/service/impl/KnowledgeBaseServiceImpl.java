@@ -8,25 +8,24 @@ import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeRel;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author liuqi
  * @Date 2017/8/2 19:57
  */
 @Service
-public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
+public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeBaseServiceImpl.class);
 
@@ -38,6 +37,34 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
 
     @Autowired
     private KnowledgeRelMapper knowledgeRelMapper;
+
+    @Override
+    public Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO) {
+        List<KnowledgeBase> list = knowledgeBaseMapper.hotList(paramBO);
+        if(!list.isEmpty()){
+            return category(list);
+        }
+        return Collections.EMPTY_MAP;
+    }
+
+    private Map<String, List<KnowledgeBase>> category(List<KnowledgeBase> list){
+        Map<String, List<KnowledgeBase>> map = new HashMap<>();
+        if(list!= null && !list.isEmpty()){
+            for (KnowledgeBase knowledge : list){
+                String categoryCode = knowledge.getCategoryCode();
+                if(map.containsKey(categoryCode)){
+                    List<KnowledgeBase> knowledges = map.get(categoryCode);
+                    knowledges.add(knowledge);
+                }else{
+                    List<KnowledgeBase> knowledges = new ArrayList<>();
+                    map.put(categoryCode,knowledges);
+                }
+            }
+        }
+        return map;
+    }
+
+
 
     @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
@@ -95,12 +122,12 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
         return knowledgeBaseBO;
     }
 
-    private void addTagRel(KnowledgeBaseBO knowledgeBaseBO){
+    private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> tagIds = knowledgeBaseBO.getTagIds();
-        if(tagIds!=null && !tagIds.isEmpty()){
+        if (tagIds != null && !tagIds.isEmpty()) {
             KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             List<KnowledgeTagRel> list = new ArrayList<>();
-            for (String tagId :tagIds){
+            for (String tagId : tagIds) {
                 KnowledgeTagRel rel = new KnowledgeTagRel();
                 rel.setId(Utils.uuid());
                 rel.setKnowledgeId(knowledgeBase.getId());
@@ -111,12 +138,12 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService{
         }
     }
 
-    private void addKnowledgeRel(KnowledgeBaseBO knowledgeBaseBO){
+    private void addKnowledgeRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> relKnowledgeIds = knowledgeBaseBO.getRefKnowledgeId();
-        if(relKnowledgeIds!= null && !relKnowledgeIds.isEmpty()){
+        if (relKnowledgeIds != null && !relKnowledgeIds.isEmpty()) {
             KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             List<KnowledgeRel> list = new ArrayList<>();
-            for (String relKnowledgeId :relKnowledgeIds){
+            for (String relKnowledgeId : relKnowledgeIds) {
                 KnowledgeRel rel = new KnowledgeRel();
                 rel.setId(Utils.uuid());
                 rel.setKnowledgeId(knowledgeBase.getId());

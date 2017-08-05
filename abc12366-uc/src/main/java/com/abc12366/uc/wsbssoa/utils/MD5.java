@@ -9,10 +9,9 @@ import java.security.MessageDigest;
  *
  */
 public class MD5 {
+    protected Logger _log = LoggerFactory.getLogger(MD5.class);
     private String inStr;
     private MessageDigest md5;
-
-    protected Logger _log = LoggerFactory.getLogger(MD5.class);
 
     /**
      * Constructs the MD5 object and sets the string whose MD5 is to be computed.

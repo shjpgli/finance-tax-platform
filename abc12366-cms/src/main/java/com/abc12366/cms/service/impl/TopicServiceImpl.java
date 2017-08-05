@@ -30,16 +30,16 @@ public class TopicServiceImpl implements TopicService {
     private TopicRoMapper topicRoMapper;
 
     @Override
-    public List<TopicBo> selectList(Map<String,Object> map) {
+    public List<TopicBo> selectList(Map<String, Object> map) {
         //查询模型列表
-        List<TopicBo> topicBoList =  topicRoMapper.selectList(map);
+        List<TopicBo> topicBoList = topicRoMapper.selectList(map);
         return topicBoList;
     }
 
     @Override
     public List<TopicBo> selectListBytplContent(String tplContent) {
         //查询模型列表
-        List<TopicBo> topicBoList =  topicRoMapper.selectListBytplContent(tplContent);
+        List<TopicBo> topicBoList = topicRoMapper.selectListBytplContent(tplContent);
         return topicBoList;
     }
 
@@ -92,7 +92,7 @@ public class TopicServiceImpl implements TopicService {
     public TopicListBo updateList(TopicListBo topicListBo) {
         //保存模型项列表
         List<TopicBo> list = topicListBo.getTopicBoList();
-        for(TopicBo topicBo:list){
+        for (TopicBo topicBo : list) {
             Topic topic = new Topic();
             try {
                 BeanUtils.copyProperties(topicBo, topic);

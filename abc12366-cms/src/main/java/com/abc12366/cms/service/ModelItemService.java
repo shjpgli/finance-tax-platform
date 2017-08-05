@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ModelItemService {
-    List<ModelItemBo> selectList(Map<String,Object> map);
+    List<ModelItemBo> selectList(Map<String, Object> map);
 
     ModelItemListBo updateList(ModelItemListBo modelItemListBo);
 

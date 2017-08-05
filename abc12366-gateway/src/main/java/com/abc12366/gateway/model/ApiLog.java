@@ -79,101 +79,100 @@ public class ApiLog extends TableBO implements Serializable {
     private int hourCount;
     private int dayCount;
 
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return this.id;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUri() {
         return this.uri;
     }
 
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getUserAgent() {
         return this.userAgent;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
     }
 
     public String getUserId() {
         return this.userId;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getAppId() {
         return this.appId;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getIp() {
         return this.ip;
     }
 
-    public void setInTime(long inTime) {
-        this.inTime = inTime;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public long getInTime() {
         return this.inTime;
     }
 
-    public void setOutTime(long outTime) {
-        this.outTime = outTime;
+    public void setInTime(long inTime) {
+        this.inTime = inTime;
     }
 
     public long getOutTime() {
         return this.outTime;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOutTime(long outTime) {
+        this.outTime = outTime;
     }
 
     public String getStatus() {
         return this.status;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getVersion() {
         return this.version;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public String getCode() {
         return this.code;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getMessage() {
         return this.message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public long getStartTime() {

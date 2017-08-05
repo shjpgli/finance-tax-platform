@@ -3,7 +3,7 @@ package com.abc12366.uc.model.bo;
 import java.util.Date;
 
 /**
- * User: liuguiyao<435720953@qq.com.com>
+ * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 14:52
  */
@@ -22,7 +22,8 @@ public class ExperienceLogQueryBO {
     public ExperienceLogQueryBO() {
     }
 
-    public ExperienceLogQueryBO(String id, String userId, String ruleId, String name, String code, String type, int income, int outgo, int usableExp, Date createTime) {
+    public ExperienceLogQueryBO(String id, String userId, String ruleId, String name, String code, String type, int
+            income, int outgo, int usableExp, Date createTime) {
         this.id = id;
         this.userId = userId;
         this.ruleId = ruleId;

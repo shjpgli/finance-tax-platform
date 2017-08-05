@@ -8,9 +8,9 @@ import com.abc12366.bangbang.model.Answer;
 import com.abc12366.bangbang.model.Ask;
 import com.abc12366.bangbang.model.bo.*;
 import com.abc12366.bangbang.service.AnswerService;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Constant;
-import com.abc12366.common.util.Utils;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,7 +213,8 @@ public class AnswerServiceImpl implements AnswerService {
             httpHeaders.add("Content-Type", "application/json");
             //先查出回答者的当前积分
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-            if (responseEntity == null || !responseEntity.getStatusCode().is2xxSuccessful() || !responseEntity.hasBody()) {
+            if (responseEntity == null || !responseEntity.getStatusCode().is2xxSuccessful() || !responseEntity
+                    .hasBody()) {
                 throw new ServiceException(4104);
             }
             UCUserBO ucUserBO = objectMapper.readValue(((String) responseEntity.getBody()).getBytes(), UCUserBO.class);
