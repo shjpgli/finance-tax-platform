@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.abc12366.common.exception.ServiceException;
-import com.abc12366.common.util.Utils;
+
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.pay.AliPayReq;
 import com.abc12366.uc.model.pay.PayCodeRsp;
 import com.abc12366.uc.model.pay.PayqueryReq;
