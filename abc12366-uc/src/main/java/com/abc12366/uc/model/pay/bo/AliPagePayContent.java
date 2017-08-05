@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 支付宝发起支付实体类
+ * 支付宝发起页面支付实体类
  * 
  * @author zhushuai 2017-8-4
  * 
