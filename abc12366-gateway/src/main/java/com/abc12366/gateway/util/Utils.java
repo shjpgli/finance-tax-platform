@@ -32,8 +32,8 @@ public class Utils {
         return UUID.randomUUID().toString();
     }
 
-    public static void main(String[] args) {
-        kv();
+    public static void main(String[] args) throws Exception {
+        System.out.println(md5("12345678"));
     }
 
     /**

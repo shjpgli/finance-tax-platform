@@ -40,7 +40,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }*/
 
     @Bean
-    public TokenInterceptor ucUserInterceptor() {
+    public TokenInterceptor tokenInterceptor() {
         return new TokenInterceptor();
     }
 
@@ -62,7 +62,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
-        registry.addInterceptor(ucUserInterceptor())
+        registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app*/**")
                 .excludePathPatterns("/appsetting/**")
@@ -71,6 +71,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid*/**")
                 .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/login", "/logout/**", "/refresh", "/register", "/test", "/verifylogin",
-                        "/user/token/**", "/user/u/**");
+                        "/user/token/**", "/user/u/**")
+                .excludePathPatterns("/admin/login", "/admin/token/**");
     }
 }

@@ -166,22 +166,4 @@ public class AdminController {
         LOGGER.info("adminExtend:{}", adminExtend);
         return ResponseEntity.ok(Utils.kv("data", adminExtend));
     }
-
-    /**
-     * 查看LoginInfo信息
-     *
-     * @param token
-     * @return
-     */
-    @GetMapping(path = "/token/{token}")
-    public ResponseEntity selectUser(@PathVariable("token") String token) {
-        long start = System.currentTimeMillis();
-        LOGGER.info("token:{}", token);
-        LoginInfoBO loginInfo = adminService.selectLoginInfoByToken(token);
-        LOGGER.info("loginInfo:{}", loginInfo);
-        long end = System.currentTimeMillis();
-        long res = end - start;
-        LOGGER.info("响应用时:{}毫秒", res);
-        return ResponseEntity.ok(Utils.kv("data", loginInfo));
-    }
 }

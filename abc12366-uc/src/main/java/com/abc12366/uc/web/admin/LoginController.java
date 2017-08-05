@@ -3,6 +3,7 @@ package com.abc12366.uc.web.admin;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.bo.AdminBO;
+import com.abc12366.uc.model.admin.bo.LoginInfoBO;
 import com.abc12366.uc.service.admin.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,24 @@ public class LoginController {
         LOGGER.info("登出");
         adminService.logout(token);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 查看LoginInfo信息
+     *
+     * @param token
+     * @return
+     */
+    @GetMapping(path = "/token/{token}")
+    public ResponseEntity selectUser(@PathVariable("token") String token) {
+        long start = System.currentTimeMillis();
+        LOGGER.info("token:{}", token);
+        LoginInfoBO loginInfo = adminService.selectLoginInfoByToken(token);
+        LOGGER.info("loginInfo:{}", loginInfo);
+        long end = System.currentTimeMillis();
+        long res = end - start;
+        LOGGER.info("响应用时:{}毫秒", res);
+        return ResponseEntity.ok(Utils.kv("data", loginInfo));
     }
 
     /*@PostMapping(path = "/register")

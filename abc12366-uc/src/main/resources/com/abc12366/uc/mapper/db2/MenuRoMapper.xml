@@ -108,7 +108,7 @@
         m.remark
         FROM
         uc_menu m
-        LEFT JOIN sys_role_menu r ON m.menuId = r.menuId
+        LEFT JOIN uc_role_menu r ON m.menuId = r.menuId
         <where>
             r.roleId = #{roleId}
         </where>

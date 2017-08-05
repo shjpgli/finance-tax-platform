@@ -1,6 +1,5 @@
 package com.abc12366.gateway.service;
 
-import com.abc12366.gateway.model.bo.AdminResponseBO;
 import com.abc12366.gateway.model.bo.LoginInfoBO;
 import com.abc12366.gateway.model.bo.ResultLoginInfo;
 import com.abc12366.gateway.model.bo.UserResponseBO;
@@ -36,21 +35,25 @@ public class TokenServiceImpl implements TokenService {
         if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
             return userTokenAuth(userToken, request);
         }
-        /*if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
-            return adminTokenAuth(adminToken, request);
-        }*/
         if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
-            return authAdminToken(adminToken, request);
+            return adminTokenAuth(adminToken, request);
         }
         return false;
     }
 
-    private boolean authAdminToken(String adminToken, HttpServletRequest request) {
+    /**
+     * 调用admin的token校验接口，如果校验通过刷新token
+     *
+     * @param adminToken 用户token
+     * @param request    HttpServletRequest
+     * @return true: 通过校验
+     */
+    private boolean adminTokenAuth(String adminToken, HttpServletRequest request) {
         LOGGER.info("{}:{}", adminToken, request);
         boolean isAuth = false;
         try {
             String abcAdmin = PropertiesUtil.getValue("abc12366.uc.url");
-            String checkUrl = "/user/token/" + adminToken;
+            String checkUrl = "/admin/token/" + adminToken;
             // 1.调用admin的token校验接口，如果校验通过直接返回true
             String result = restTemplateUtil.send(abcAdmin + checkUrl, HttpMethod.GET, request);
             ResultLoginInfo resultLoginInfo = JSON.parseObject(result, ResultLoginInfo.class);
@@ -69,50 +72,6 @@ public class TokenServiceImpl implements TokenService {
         }
         LOGGER.info("校验admin的token状态为: {}", isAuth);
         return isAuth;
-    }
-
-    /**
-     * 调用admin的token校验接口，如果校验通过刷新token
-     *
-     * @param adminToken 用户token
-     * @param request    HttpServletRequest
-     * @return true: 通过校验
-     */
-    private boolean adminTokenAuth(String adminToken, HttpServletRequest request) {
-        LOGGER.info("{}:{}", adminToken, request);
-        boolean isAuth = false;
-        try {
-            String abc12366_admin = PropertiesUtil.getValue("abc12366.uc.url");
-            String check_url = "/admin/token/check/" + adminToken;
-            // 1.调用admin的token校验接口，如果校验通过直接返回true
-            String result = restTemplateUtil.send(abc12366_admin + check_url, HttpMethod.POST, request);
-            if ("true".equals(result)) {
-                isAuth = true;
-                // 刷新token时间
-                refreshAdminToken(adminToken, request, abc12366_admin);
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-        LOGGER.info("校验admin的token状态为: {}", isAuth);
-        return isAuth;
-    }
-
-    private void refreshAdminToken(String adminToken, HttpServletRequest request, String abc12366_admin) {
-        // 刷新token时间
-        String refresh_url = "/admin/token/refresh/" + adminToken;
-        // 根据token获取admin的userId
-        String userid_url = "/user/token/" + adminToken;
-        restTemplateUtil.send(abc12366_admin + refresh_url, HttpMethod.POST, request);
-        // 将userId设置到request中
-        String body = restTemplateUtil.send(abc12366_admin + userid_url, HttpMethod.GET, request);
-        if (body != null) {
-            AdminResponseBO adminResponseBO = JSON.parseObject(body, AdminResponseBO.class);
-            LOGGER.info("{}", adminResponseBO);
-            if (adminResponseBO.getData() != null && !StringUtils.isEmpty(adminResponseBO.getData().getUserId())) {
-                request.setAttribute(Constant.USER_ID, adminResponseBO.getData().getUserId());
-            }
-        }
     }
 
     /**
