@@ -188,6 +188,11 @@ redis常用命令：
 - [x] 数据库[Mysql](https://www.mysql.com)
 - [x] 操作JSON[fastjson](https://github.com/alibaba/fastjson)
 
+### alipay-sdk安装
+
+在工程根目录执行：
+> mvn install:install-file -DgroupId=com.alipay -DartifactId=alipay-sdk -Dversion=20170324180803 -Dpackaging=jar -Dfile=alipay-sdk-java20170324180803.jar
+
 ### 接口规范
 
 参考项目根目录结构中的`RESTful.md`
