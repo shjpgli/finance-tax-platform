@@ -8,7 +8,7 @@
         </filter>
         <File>${LOG_PATH}/cms_info.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/core_info-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/cms_info-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
@@ -27,7 +27,7 @@
         </filter>
         <File>${LOG_PATH}/cms_error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/core_error-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/cms_error-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
