@@ -8,6 +8,7 @@ import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeRel;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Utils;
@@ -17,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author liuqi
@@ -37,6 +37,34 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Autowired
     private KnowledgeRelMapper knowledgeRelMapper;
+
+    @Override
+    public Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO) {
+        List<KnowledgeBase> list = knowledgeBaseMapper.hotList(paramBO);
+        if(!list.isEmpty()){
+            return category(list);
+        }
+        return Collections.EMPTY_MAP;
+    }
+
+    private Map<String, List<KnowledgeBase>> category(List<KnowledgeBase> list){
+        Map<String, List<KnowledgeBase>> map = new HashMap<>();
+        if(list!= null && !list.isEmpty()){
+            for (KnowledgeBase knowledge : list){
+                String categoryCode = knowledge.getCategoryCode();
+                if(map.containsKey(categoryCode)){
+                    List<KnowledgeBase> knowledges = map.get(categoryCode);
+                    knowledges.add(knowledge);
+                }else{
+                    List<KnowledgeBase> knowledges = new ArrayList<>();
+                    map.put(categoryCode,knowledges);
+                }
+            }
+        }
+        return map;
+    }
+
+
 
     @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {

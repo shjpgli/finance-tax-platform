@@ -13,9 +13,14 @@ public class KnowledgeBase {
     private String id;
 
     /**
-     * 分类ID
+     * 分类Code
      **/
     private String categoryCode;
+
+    /*
+    *  分类名称
+    **/
+    private String categoryName;
 
     /**
      * 类别：QA问答，K知识
@@ -111,6 +116,14 @@ public class KnowledgeBase {
 
     public void setCategoryCode(String categoryCode) {
         this.categoryCode = categoryCode;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getType() {

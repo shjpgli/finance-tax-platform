@@ -2,6 +2,7 @@ package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Constant;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuqi
@@ -28,6 +30,21 @@ public class KnowledgeBaseController {
 
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
+
+    /*
+    *
+    * 帮助中心 热点问题知识
+    *
+    * */
+    @GetMapping(path = "/hotList")
+    public ResponseEntity hotList(@RequestParam(value = "categoryNum", defaultValue = "6") int categoryNum,
+                                  @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
+                                  @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType,
+                                  @RequestParam(value = "KnowledgeRecommend", defaultValue = "hot") String KnowledgeRecommend){
+        KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(categoryNum, KnowledgePageSize, KnowledgeType, KnowledgeRecommend);
+        Map<String, List<KnowledgeBase>> map = knowledgeBaseService.hotMap(param);
+        return ResponseEntity.ok(Utils.kv("data",map));
+    }
 
 
     /*

@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,6 +18,14 @@ public interface KnowledgeBaseMapper {
      * 查询（根据主键ID查询）
      **/
     KnowledgeBase selectByPrimaryKey(@Param("id") Long id);
+
+
+    /*
+    *
+    * 首页热点推荐查询
+    *
+    **/
+    List<KnowledgeBase> hotList(KnowledgeBaseHotParamBO param);
 
     /*
     *

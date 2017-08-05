@@ -9,14 +9,38 @@
         uselessVotes, shareNum, createTime, updateTime, createUser, updateUser
     </sql>
 
+
+
+    <!-- 首页热点问题查询 -->
+    <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
+        SELECT t.*,t1.name AS categoryName FROM
+        (
+            SELECT * FROM bb_knowledge_base a WHERE a.categoryCode
+            IN
+            (
+                SELECT t.categoryCode FROM (
+                  SELECT categoryCode FROM bb_knowledge_base
+                  WHERE
+                  TYPE = #{KnowledgeType}
+                  AND recommend = #{KnowledgeRecommend}
+                  GROUP BY categoryCode ORDER BY COUNT(1) DESC LIMIT #{categoryNum}
+                )AS t
+            )
+            AND
+            #{KnowledgePageSize} > (SELECT COUNT(*) FROM bb_knowledge_base WHERE categoryCode = a.categoryCode AND pv > a.pv)
+        ) AS t JOIN bb_knowledge_category t1
+        WHERE t.categoryCode = t1.code;
+    </select>
+
+
+
     <!-- 列表查询 -->
     <select id="selectList" resultType="knowledgeBase"
             parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM bb_knowledge_base
-        <where>
-            1 = 1
+        t_base.*,t_category.name AS categoryName
+        FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
+        WHERE t_base.categoryCode = t_category.code
             <if test="categoryCode != null">
                 AND categoryCode LIKE CONCAT(#{categoryCode},'%')
             </if>
@@ -26,7 +50,6 @@
             <if test="keywords != null">
                 AND subject LIKE CONCAT('%',#{keywords},'%')
             </if>
-        </where>
     </select>
 
 

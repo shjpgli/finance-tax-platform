@@ -2,9 +2,11 @@ package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuqi
@@ -12,6 +14,8 @@ import java.util.List;
  * 知识库 CRUD
  */
 public interface KnowledgeBaseService {
+
+    Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO);
 
     List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
 
