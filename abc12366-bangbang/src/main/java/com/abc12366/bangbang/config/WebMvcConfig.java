@@ -71,7 +71,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
                 .excludePathPatterns("/hotspot/**")
-                .excludePathPatterns("/knowledgeBase/list","/knowledgeBase/hotList","/knowledgeBase/interestedList", "/knowledgeBase/view","/knowledgeCategory/listAll");
+                .excludePathPatterns("/knowledgeBase/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**",
+                        "/knowledgeBase/view/**","/knowledgeCategory/listAll");
 
         // 敏感词拦截
         registry.addInterceptor(getSensitiveWordsInterceptor())

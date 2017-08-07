@@ -4,9 +4,11 @@ import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeRelMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagRelMapper;
+import com.abc12366.bangbang.mapper.db1.KnowledgeVoteLogMapper;
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeRel;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
+import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
@@ -37,6 +39,9 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Autowired
     private KnowledgeRelMapper knowledgeRelMapper;
+
+    @Autowired
+    private KnowledgeVoteLogMapper knowledgeVoteLogMapper;
 
     @Override
     public Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO) {
@@ -132,13 +137,17 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         return knowledgeBaseBO;
     }
 
+    @Transactional("db1TxManager")
     @Override
-    public void useFull(String id, Boolean isUseFull) {
+    public void useFull(KnowledgeVoteLog knowledgeVoteLog) {
+        Boolean isUseFull = knowledgeVoteLog.getIsUseFull();
+        String knowledgeId = knowledgeVoteLog.getKnowledgeId();
         if(isUseFull == Boolean.TRUE){
-            knowledgeBaseMapper.addUsefulVoteByPK(id);
+            knowledgeBaseMapper.addUsefulVoteByPK(knowledgeId);
         }else{
-            knowledgeBaseMapper.addUselessVoteByPK(id);
+            knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
         }
+        knowledgeVoteLogMapper.insert(knowledgeVoteLog);
     }
 
     @Override

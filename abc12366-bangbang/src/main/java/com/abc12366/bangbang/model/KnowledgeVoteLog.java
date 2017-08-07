@@ -16,6 +16,9 @@ public class KnowledgeVoteLog  {
 	/**知识ID**/
 	private String knowledgeId;
 
+	/**是否有用**/
+	private Boolean isUseFull;
+
 	/**来源IP**/
 	private String sourceIP;
 
@@ -48,6 +51,14 @@ public class KnowledgeVoteLog  {
 		return this.knowledgeId;
 	}
 
+	public Boolean getIsUseFull() {
+		return isUseFull;
+	}
+
+	public void setIsUseFull(Boolean isUseFull) {
+		this.isUseFull = isUseFull;
+	}
+
 	public void setSourceIP(String sourceIP){
 		this.sourceIP = sourceIP;
 	}
@@ -63,5 +74,4 @@ public class KnowledgeVoteLog  {
 	public java.util.Date getCreateTime(){
 		return this.createTime;
 	}
-
 }

@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
@@ -91,9 +92,8 @@ public class KnowledgeBaseController {
      * 修改知识库 是否有用 接口
      */
     @PutMapping(path = "/useful/{id}")
-    public ResponseEntity useful(@PathVariable String id, @RequestBody Map<String,Boolean> map) {
-        Boolean isUseFull = map.get("isUseFull");
-        knowledgeBaseService.useFull(id, isUseFull);
+    public ResponseEntity useful(@PathVariable String id, @RequestBody KnowledgeVoteLog knowledgeVoteLog) {
+        knowledgeBaseService.useFull(knowledgeVoteLog);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -136,9 +136,23 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    /*
-    * 意见反馈接口
-    */
+//    /*
+//    * 知识库投票列表  接口
+//    */
+//    @GetMapping(path = "/list")
+//    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+//                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+//                                     @RequestParam(value = "sourceType", required = false) String sourceType,
+//                                     @RequestParam(value = "feedbackType", required = false) String feedbackType) {
+//        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+//
+//        FeedbackParamBO param = new FeedbackParamBO(sourceType, feedbackType);
+//        List<Feedback> list = feedbackService.selectList(param);
+//
+//        return (list == null) ?
+//                ResponseEntity.ok(Utils.kv()) :
+//                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+//    }
 
 
 
