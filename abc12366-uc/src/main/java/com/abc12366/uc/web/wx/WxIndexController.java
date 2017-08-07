@@ -25,7 +25,7 @@ public class WxIndexController {
     @Autowired
     private IWxMsgService iWxMsgService;
 
-    @RequestMapping("/abc/wechat")
+    @RequestMapping("/server/wechat")
     public @ResponseBody String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
     	LOGGER.info("微信服务器回调!-----------");
         boolean isGet = request.getMethod().toLowerCase().equals("get");
