@@ -171,7 +171,7 @@ public class OrderController {
     }
 
     /**
-     * 查询订单详情
+     * 导出订单信息
      *
      * @return
      */
@@ -185,7 +185,7 @@ public class OrderController {
     }
 
     /**
-     * 查询订单详情
+     * 导入订单信息
      *
      * @return
      */
@@ -200,7 +200,6 @@ public class OrderController {
 
     /**
      * 用户下单
-     *
      * @param userId
      * @return
      */
@@ -226,6 +225,29 @@ public class OrderController {
     }
 
 
+    /**
+     *
+     * 订单发货
+     * @return
+     */
+    @PostMapping(path = "/send")
+    public ResponseEntity sendOrder(@Valid @RequestBody OrderOperationBO orderOperationBO) {
+        LOGGER.info("{}", orderOperationBO);
+        orderService.sendOrder(orderOperationBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     *
+     * 订单作废
+     * @return
+     */
+    @PostMapping(path = "/invalid")
+    public ResponseEntity invalidOrder(@Valid @RequestBody OrderOperationBO orderOperationBO) {
+        LOGGER.info("{}", orderOperationBO);
+        orderService.invalidOrder(orderOperationBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
 
     /**
      * 用户取消订单
@@ -295,16 +317,11 @@ public class OrderController {
      * 反馈虚拟产品订单信息
      *
      * @param orderBO
-     * @param userId
-     * @param id
      * @return
      */
-    @PutMapping(path = "/feedback/{userId}/{id}")
-    public ResponseEntity feedback(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId,
-                                   @PathVariable("id") String id) {
+    @PutMapping(path = "/feedback")
+    public ResponseEntity feedback(@Valid @RequestBody OrderBO orderBO) {
         LOGGER.info("{}", orderBO);
-        orderBO.setOrderNo(id);
-        orderBO.setUserId(userId);
         OrderBO bo = orderService.feedback(orderBO);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
@@ -357,18 +374,11 @@ public class OrderController {
     /**
      * 管理员审核退单申请
      *
-     * @param userId
      * @return
      */
-    @PostMapping(path = "/back/check/{userId}/{orderNo}/{backId}")
-    public ResponseEntity backCheckOrder(@Valid @RequestBody OrderBack orderBack,
-                                         @PathVariable("userId") String userId,
-                                         @PathVariable("orderNo") String orderNo,
-                                         @PathVariable("backId") String backId) {
+    @PostMapping(path = "/back/check")
+    public ResponseEntity backCheckOrder(@Valid @RequestBody OrderBack orderBack) {
         LOGGER.info("{}", orderBack);
-        orderBack.setUserId(userId);
-        orderBack.setOrderNo(orderNo);
-        orderBack.setId(backId);
         OrderBack bo = orderService.backCheckOrder(orderBack);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
@@ -377,20 +387,16 @@ public class OrderController {
     /**
      * 用户提交退单
      *
-     * @param userId
      * @return
      */
-    @PostMapping(path = "/back/submit/{userId}/{orderNo}/{backId}")
-    public ResponseEntity submitBackOrder(@Valid @RequestBody OrderBack orderBack,
-                                          @PathVariable("userId") String userId,
-                                          @PathVariable("orderNo") String orderNo,
-                                          @PathVariable("backId") String backId) {
+    @PostMapping(path = "/back/submit")
+    public ResponseEntity submitBackOrder(@Valid @RequestBody OrderBack orderBack) {
         LOGGER.info("{}", orderBack);
-        orderBack.setUserId(userId);
-        orderBack.setOrderNo(orderNo);
-        orderBack.setId(backId);
         OrderBack bo = orderService.submitBackOrder(orderBack);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
+
+
+
 }
