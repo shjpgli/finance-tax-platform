@@ -1,8 +1,13 @@
 package com.abc12366.uc.web.pay;
 
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.pay.AliPayReq;
 import com.abc12366.uc.model.pay.BillListReq;
 import com.abc12366.uc.model.pay.BillListRes;
@@ -24,6 +30,7 @@ import com.abc12366.uc.model.pay.RefundQueryRes;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliCodePay;
 import com.abc12366.uc.model.pay.bo.AliRefund;
+import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.QRCodeUtil;
 import com.alibaba.fastjson.JSON;
@@ -55,6 +62,8 @@ import com.alipay.api.response.AlipayTradeRefundResponse;
 public class AliPayController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AliPayController.class);
+	@Autowired
+	private TradeLogService tradeLogService;
     
 	/**
 	 * 支付宝支付接口,返回支付页面
@@ -147,9 +156,27 @@ public class AliPayController {
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(aliRefund));
 			AlipayTradeRefundResponse response = alipayClient.execute(request);
 			if(response.isSuccess()){
+				
 				JSONObject object = JSON.parseObject(response.getBody());
-				return ResponseEntity.ok(Utils.kv("data", 
-						JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class)));
+				RefundRes refundRes=JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
+				
+				LOGGER.info("支付宝退款成功,插入退款流水记录");
+				
+				TradeLog tradeLog=new TradeLog();
+				tradeLog.setId(Utils.uuid());
+				tradeLog.setOrderNo(refundRes.getOut_trade_no());
+				tradeLog.setAliTrandeNo(refundRes.getTrade_no());
+				tradeLog.setTradeStatus("1");
+				tradeLog.setTradeType("2");
+				tradeLog.setAmount(Double.parseDouble("-"+refundRes.getRefund_fee()));
+				tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
+				Timestamp now = new Timestamp(new Date().getTime());
+				tradeLog.setCreateTime(now);
+				tradeLog.setLastUpdate(now);
+				tradeLog.setPayMethod("ALIPAY");
+				tradeLogService.insertTradeLog(tradeLog);
+				
+				return ResponseEntity.ok(Utils.kv("data", refundRes));
 			}else{
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
 			}
@@ -261,4 +288,5 @@ public class AliPayController {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝交易对账单地址查询异常"));
 		}
 	}
+	
 }

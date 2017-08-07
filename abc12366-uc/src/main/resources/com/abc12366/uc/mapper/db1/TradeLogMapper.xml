@@ -3,11 +3,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.TradeLogMapper">
 
+    <sql id="Base_Column_List">
+        id, orderNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime,tradeType,aliTrandeNo
+    </sql>
+
     <!--删除：根据主键ID删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         DELETE FROM uc_trade_log
         WHERE id = #{id}
     </delete>
+    
+    <insert id="insertTradeLog" parameterType="com.abc12366.uc.model.TradeLog">
+        INSERT INTO uc_trade_log (<include refid="Base_Column_List"/>)
+        VALUES (#{id},#{orderNo},#{amount},#{tradeStatus},#{tradeTime},#{payMethod},#{createTime},#{lastUpdate},#{compareStatus},#{compareTime},#{tradeType},#{aliTrandeNo})
+    </insert>
+    
+    
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insert" parameterType="com.abc12366.uc.model.TradeLog">
         INSERT INTO uc_trade_log

@@ -24,6 +24,8 @@ public interface TradeLogMapper {
      * 修改 （匹配有值的字段）
      **/
     int update(TradeLog record);
+    
+    int insertTradeLog(TradeLog record);
 
 
 }
