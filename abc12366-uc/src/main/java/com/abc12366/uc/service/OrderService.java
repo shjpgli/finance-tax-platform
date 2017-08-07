@@ -2,10 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.OrderBack;
-import com.abc12366.uc.model.bo.OrderBO;
-import com.abc12366.uc.model.bo.OrderBackBO;
-import com.abc12366.uc.model.bo.OrderCancelBO;
-import com.abc12366.uc.model.bo.OrderPayBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
@@ -111,4 +108,8 @@ public interface OrderService {
     List<OrderBO> selectExprotOrder(Order order);
 
     void selectImprotOrder(List<OrderBO> orderBOList);
+
+    void sendOrder(OrderOperationBO orderOperationBO);
+
+    void invalidOrder(OrderOperationBO orderOperationBO);
 }

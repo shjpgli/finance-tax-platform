@@ -26,6 +26,10 @@ public class TradeLog implements Serializable {
      * 交易状态：1.交易中 2.交易成功 3.交易失败 4.取消交易
      **/
     private String tradeStatus;
+    
+    
+    private String tradeType;//交易类型 1：支付 2：退款
+    
 
     /**
      * 交易时间
@@ -132,5 +136,13 @@ public class TradeLog implements Serializable {
     public void setCompareTime(java.util.Date compareTime) {
         this.compareTime = compareTime;
     }
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
 
 }

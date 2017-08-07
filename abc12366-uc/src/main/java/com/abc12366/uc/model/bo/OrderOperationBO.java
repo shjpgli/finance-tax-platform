@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 
 /**
- * 用户取消订单BO
+ * 管理员操作订单BO
  **/
 @SuppressWarnings("serial")
-public class OrderCancelBO implements Serializable {
+public class OrderOperationBO implements Serializable {
 
     /**
      * 订单号
@@ -33,6 +33,11 @@ public class OrderCancelBO implements Serializable {
      * 取消原因，字典ID
      */
     private String cancelId;
+
+    /**
+     * 配送方式
+     **/
+    private String deliveryMethod;
 
     public String getOrderNo() {
         return orderNo;
@@ -72,5 +77,13 @@ public class OrderCancelBO implements Serializable {
 
     public void setCancelId(String cancelId) {
         this.cancelId = cancelId;
+    }
+
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
     }
 }
