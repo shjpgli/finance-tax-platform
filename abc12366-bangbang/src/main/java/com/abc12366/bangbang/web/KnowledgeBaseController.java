@@ -39,7 +39,7 @@ public class KnowledgeBaseController {
     *
     */
     @GetMapping(path = "/hotList")
-    public ResponseEntity hotList(@RequestParam(value = "categoryNum", defaultValue = "6") int categoryNum,
+    public ResponseEntity hotList(@RequestParam(value = "categoryNum", defaultValue = "5") int categoryNum,
                                   @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
                                   @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType,
                                   @RequestParam(value = "KnowledgeRecommend", defaultValue = "hot") String KnowledgeRecommend){
@@ -179,35 +179,4 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv("data", log));
     }
 
-
-
-
-
-
-
-
-    //test
-    @PostMapping(path = "/add1")
-    public ResponseEntity add1() {
-        byte[] b = {new Byte("1")};
-        KnowledgeBase record = new KnowledgeBase();
-        record.setId(Utils.uuid());
-        record.setCategoryCode("1");
-        record.setContent(b);
-        record.setCreateUser("1");
-        record.setIsOpen(Boolean.TRUE);
-        record.setCreateUser("1");
-        record.setRecommend("hot");
-        record.setShareNum(Long.MAX_VALUE);
-        record.setSource("baidu");
-        record.setSubject("head");
-        record.setStatus(Boolean.TRUE);
-        record.setType("QA");
-        record.setPv(new Long(0));
-        record.setUsefulVotes(new Long(0));
-        record.setUselessVotes(new Long(0));
-        record.setShareNum(new Long(0));
-        knowledgeBaseService.add(record);
-        return ResponseEntity.ok(Utils.kv());
-    }
 }
