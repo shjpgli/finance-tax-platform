@@ -47,7 +47,7 @@ public class WxConnect<T> {
         this.requestUrl = SpringCtxHolder.getProperty("abc.wx-url") + wechatUrl.uri;
         //mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //mapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
-        this.requestUrl = SpringCtxHolder.getProperty("abc.wx-url") + wechatUrl.uri;
+        //this.requestUrl = SpringCtxHolder.getProperty("abc.wx-url") + wechatUrl.uri;
     }
 
     public WxConnect(WechatUrl url, Map<String, String> headparamters, Object bodyparamters, Class<T> _class,
