@@ -31,7 +31,7 @@ import com.alibaba.fastjson.JSON;
  * @author zhushuai 2017-8-4
  * 
  */
-@Controller()
+@Controller
 @RequestMapping(path = "/payreturn")
 public class PayReturnController {
 
@@ -43,7 +43,7 @@ public class PayReturnController {
 	@Autowired
 	private OrderService orderService;
 
-	@PostMapping("/alipay.do")
+	@PostMapping("/alipay")
 	public @ResponseBody String aliPayReturn(HttpServletRequest request) {
 		try {
 			Map<String, String> params = new HashMap<String, String>();

@@ -80,6 +80,7 @@ public class AliPayController {
 			alipayRequest.setNotifyUrl(payReq.getNotify_url());
 			alipayRequest.setBizContent(AliPayConfig.toCharsetJsonStr(payReq.getPayContent()));
 			String result = alipayClient.pageExecute(alipayRequest).getBody();
+			System.out.println(result);
             return ResponseEntity.ok(Utils.kv("data", result));
 		} catch (Exception e) {
 			LOGGER.error("发起支付宝支付异常,原因:",e);
@@ -103,6 +104,7 @@ public class AliPayController {
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(payReq));
 			AlipayTradePrecreateResponse response = alipayClient.execute(request);
+
 			if(response.isSuccess()){
 				PayCodeRsp payCodeRsp=new PayCodeRsp(response.getOutTradeNo(),QRCodeUtil.getCreatQRcodeString(response.getQrCode(), payReq.getQrCodeSize(), "JPG"));
 				return ResponseEntity.ok(Utils.kv("data", payCodeRsp));

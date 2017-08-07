@@ -55,7 +55,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
                 //第三方交易毁回调地址
-                .excludePathPatterns("/payreturn/*.do");
+                .excludePathPatterns("/payreturn/*");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
@@ -71,6 +71,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 操作员登录、登出、token验证自动刷新
                 .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**")
                         //第三方交易毁回调地址
-                .excludePathPatterns("/payreturn/*.do");
+                .excludePathPatterns("/payreturn/*");
     }
 }
