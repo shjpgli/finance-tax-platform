@@ -8,7 +8,7 @@ import com.abc12366.cms.model.ChannelExt;
 import com.abc12366.cms.model.ChnlGroupView;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ChannelService;
-import com.abc12366.common.exception.ServiceException;
+import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
