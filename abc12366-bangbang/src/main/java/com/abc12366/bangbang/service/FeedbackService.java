@@ -14,4 +14,6 @@ public interface FeedbackService {
     Feedback add(Feedback feedBack);
 
     List<Feedback> selectList(FeedbackParamBO param);
+
+    int delete(List<String> ids);
 }

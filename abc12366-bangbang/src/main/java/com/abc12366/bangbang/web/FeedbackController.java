@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuqi
@@ -59,7 +60,15 @@ public class FeedbackController {
         return ResponseEntity.ok(Utils.kv("data", feedback));
     }
 
-
+    /*
+    * 删除意见反馈 接口
+    */
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity delete(@RequestBody Map<String,List<String>> map) {
+        List<String> ids = map.get("ids");
+        feedbackService.delete(ids);
+        return ResponseEntity.ok(Utils.kv());
+    }
 
 
 

@@ -1,7 +1,11 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.KnowledgeVoteLog;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  *
@@ -11,21 +15,42 @@ import org.apache.ibatis.annotations.Param;
 
 public interface KnowledgeVoteLogMapper{
 
+	/**
+	 *
+	 * 列表查询
+	 *
+	 */
+	List<KnowledgeVoteLogBO> selectList(KnowledgeBaseParamBO param);
+
+
 
 	/**
 	 *
 	 * 查询（根据主键ID查询）
 	 *
 	 **/
-	KnowledgeVoteLog  selectByPrimaryKey ( @Param("id") Long id );
+	KnowledgeVoteLog  selectByPrimaryKey ( @Param("id") String id );
+
+
+	/**
+	 *
+	 * 查询（用户投票过的数据）
+	 *
+	 **/
+	KnowledgeVoteLog  selectByUserVotedKnowledge ( @Param("userId") String userId, @Param("knowledgeId") String knowledgeId );
 
 	/**
 	 *
 	 * 删除（根据主键ID删除）
 	 *
 	 **/
-	int deleteByPrimaryKey ( @Param("id") Long id );
-
+	int deleteByPrimaryKey ( @Param("id") String id );
+	/**
+	 *
+	 * 删除（根据主键ID删除）
+	 *
+	 **/
+	int deleteByPrimaryKeys (List<String> ids );
 	/**
 	 *
 	 * 添加

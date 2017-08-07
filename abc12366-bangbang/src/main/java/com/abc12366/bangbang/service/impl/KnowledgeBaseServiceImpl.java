@@ -12,6 +12,7 @@ import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
@@ -139,7 +140,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Transactional("db1TxManager")
     @Override
-    public void useFull(KnowledgeVoteLog knowledgeVoteLog) {
+    public void addVote(KnowledgeVoteLog knowledgeVoteLog) {
         Boolean isUseFull = knowledgeVoteLog.getIsUseFull();
         String knowledgeId = knowledgeVoteLog.getKnowledgeId();
         if(isUseFull == Boolean.TRUE){
@@ -154,6 +155,22 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     public void addPV(String id) {
         knowledgeBaseMapper.addPVByPK(id);
     }
+
+    @Override
+    public void deleteVoteLogs(List<String> ids) {
+        knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
+    }
+
+    @Override
+    public List<KnowledgeVoteLogBO> selectVoteList(KnowledgeBaseParamBO param) {
+        return knowledgeVoteLogMapper.selectList(param);
+    }
+
+    @Override
+    public KnowledgeVoteLog selectByUserVotedKnowledge(String userId, String knowledgeId) {
+        return knowledgeVoteLogMapper.selectByUserVotedKnowledge(userId, knowledgeId);
+    }
+
 
     private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> tagIds = knowledgeBaseBO.getTagIds();

@@ -18,6 +18,9 @@ public class Feedback{
 	/**反馈用户**/
 	private String feedbackUserId;
 
+	/**反馈用户名**/
+	private String feedbackUserName;
+
 	/**反馈类型**/
 	private String feedbackType;
 
@@ -54,6 +57,14 @@ public class Feedback{
 
 	public String getFeedbackUserId(){
 		return this.feedbackUserId;
+	}
+
+	public String getFeedbackUserName() {
+		return feedbackUserName;
+	}
+
+	public void setFeedbackUserName(String feedbackUserName) {
+		this.feedbackUserName = feedbackUserName;
 	}
 
 	public void setFeedbackType(String feedbackType){

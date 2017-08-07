@@ -37,6 +37,13 @@ public interface FeedbackMapper {
 	int deleteByPrimaryKey(@Param("id") Long id);
 
 	/**
+	 *
+	 * 删除（根据主键ID批量删除）
+	 *
+	 **/
+	int deleteByPrimaryKeys(List<String> ids);
+
+	/**
 	 * 
 	 * 添加
 	 * 

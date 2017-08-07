@@ -11,22 +11,24 @@
 	<!-- 查询列表 -->
 	<select id="selectList" resultType="feedback" parameterType="com.abc12366.bangbang.model.bo.FeedbackParamBO">
 		SELECT
-		<include refid="Base_Column_List" />
-		FROM bb_feedback
+		t1.*, t2.username as feedbackUserName
+		FROM bb_feedback t1 LEFT JOIN abc12366_uc.uc_user t2
+		ON t1.feedbackUserId = t2.id
 		WHERE 1=1
 		<if test="sourceType != null">
-			AND sourceType = #{sourceType}
+			AND t1.sourceType = #{sourceType}
 		</if>
 		<if test="feedbackType != null">
-			AND feedbackType = #{feedbackType}
+			AND t1.feedbackType = #{feedbackType}
 		</if>
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="feedback" parameterType="java.lang.String">
 		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_feedback
+		 t1.*
+		 FROM bb_feedback t1 LEFT JOIN abc12366_uc.uc_user t2
+		 ON  t1.feedbackUserId = t2.id
 		 WHERE id = #{id}
 	</select>
 
@@ -34,6 +36,14 @@
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM bb_feedback
 		 WHERE id = #{id}
+	</delete>
+	<!--删除：根据主键ID批量删除-->
+	<delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+		DELETE FROM bb_feedback
+		WHERE id IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
 	</delete>
 
 	<!-- 添加 -->

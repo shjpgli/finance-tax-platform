@@ -15,7 +15,7 @@ import java.io.*;
  * @author ziben
  * @version 1.0 11-3-29 上午11:33
  */
-@Component("codeUtil")
+@Component("codeUtil2")
 public class CodeUtil {
     protected Logger _log = LoggerFactory.getLogger(CodeUtil.class);
 

@@ -4,6 +4,8 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.jrxt.model.TY11Response.JBXXCX;
+import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
@@ -11,6 +13,7 @@ import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.UserUtil;
+import com.abc12366.uc.webservice.AcceptClient;
 import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
@@ -18,6 +21,8 @@ import com.abc12366.uc.wsbssoa.utils.MD5;
 import com.abc12366.uc.wsbssoa.utils.RSAUtil;
 import com.abc12366.uc.wsbssoa.utils.soaUtil;
 import com.alibaba.fastjson.JSON;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -55,28 +60,28 @@ public class UserBindServiceImpl implements UserBindService {
     @Autowired
     private MainService mainService;
 
-    public static void main(String[] args) {
-//        new UserBindServiceImpl().testPost();
-//        try {
-//            new UserBindServiceImpl().appLoginWsbs();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
+    @Autowired
+    private AcceptClient client;
 
     @Override
-    public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) {
+    public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws MarshalException, ValidationException {
         if (userDzsbInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
-
+        if (userDzsbInsertBO.getNsrsbhOrShxydm() == null || userDzsbInsertBO.getNsrsbhOrShxydm().trim().equals("")) {
+            throw new ServiceException();
+        }
         //调外系统接口获取电子申报绑定信息
+        Map<String, String> map = new HashMap<>();
+        map.put("serviceid", "TY11");
+        map.put("nsrsbh", userDzsbInsertBO.getNsrsbhOrShxydm());
+        Map<String, String> resMap = client.process(map);
+        System.out.println(resMap);
+        UserDzsb userDzsbTemp = analyzeXml(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
 
 
         UserDzsb userDzsb = new UserDzsb();
-        //BeanUtils.copyProperties(userDzsbBO, userDzsb);
-
 
         userDzsb.setId(Utils.uuid());
         Date date = new Date();
@@ -84,6 +89,12 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setLastUpdate(date);
         userDzsb.setStatus(true);
         userDzsb.setUserId(UserUtil.getUserId(request));
+        userDzsb.setDjxh(userDzsbTemp.getDjxh());
+        userDzsb.setNsrsbh(userDzsbTemp.getNsrsbh());
+        userDzsb.setNsrmc(userDzsbTemp.getNsrmc());
+        userDzsb.setShxydm(userDzsbTemp.getShxydm());
+        userDzsb.setSwjgMc(userDzsbTemp.getSwjgMc());
+        userDzsb.setSwjgDm(userDzsbTemp.getSwjgDm());
         int result = userBindMapper.dzsbBind(userDzsb);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());
@@ -286,6 +297,39 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public List<UserHndsBO> getUserhndsBind(String userId) {
         return userBindRoMapper.getUserhndsBind(userId);
+    }
+
+    public UserDzsb analyzeXml(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException(4629);
+        }
+        JBXXCX jbxxcx = (JBXXCX) XmlJavaParser.parseXmlToObject(JBXXCX.class, String.valueOf(resMap.get("taxML_CRM_NSRXXCX_" + nsrsbh + ".xml")));
+        String cxjg = jbxxcx.getCXJG();
+        UserDzsb userDzsbTemp = new UserDzsb();
+        if ("1".equals(cxjg)) {
+            com.abc12366.uc.jrxt.model.TY11Response.MXXX[] mxxxes = jbxxcx.getMXXXS().getMXXX();
+            for (com.abc12366.uc.jrxt.model.TY11Response.MXXX mx : mxxxes) {
+                if ("DJXH".equals(mx.getCODE())) {
+                    userDzsbTemp.setDjxh(mx.getVALUE());
+                }
+                userDzsbTemp.setNsrmc(jbxxcx.getNSRMC());
+                if ("Y_NSRSBH".equals(mx.getCODE())) {
+                    userDzsbTemp.setNsrsbh(mx.getVALUE());
+                }
+                if ("SHXYDM".equals(mx.getCODE())) {
+                    userDzsbTemp.setShxydm(mx.getVALUE());
+                }
+                if ("SWJGMC".equals(mx.getCODE())) {
+                    userDzsbTemp.setSwjgMc(mx.getVALUE());
+                }
+                if ("SWJGDM".equals(mx.getCODE())) {
+                    userDzsbTemp.setSwjgDm(mx.getVALUE());
+                }
+            }
+        } else {
+            throw new ServiceException(4629);
+        }
+        return userDzsbTemp;
     }
 
     private void testPost() {

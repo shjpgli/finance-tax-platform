@@ -16,7 +16,7 @@ import java.io.*;
  * @author ziben
  * @version 1.0 11-3-29 上午11:36
  */
-@Component("cryptUtil")
+@Component("cryptUtil2")
 public class CryptUtil {
 
     protected Logger _log = LoggerFactory.getLogger(CryptUtil.class);

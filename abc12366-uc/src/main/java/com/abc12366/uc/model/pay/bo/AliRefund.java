@@ -20,7 +20,7 @@ public class AliRefund implements Serializable{
 	@NotEmpty
 	@Size(min = 1, max = 64)
 	private String out_trade_no;//订单支付时传入的商户订单号,
-	
+	@NotEmpty
 	private String trade_no;//支付宝交易号
 	@NotEmpty
 	@Size(min = 1, max = 11)

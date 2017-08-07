@@ -15,5 +15,7 @@ public interface TradeLogService {
      * @return
      */
     List<TradeLog> selectList(TradeLog tradeLog);
+    
+    int insertTradeLog(TradeLog tradeLog);
 
 }
