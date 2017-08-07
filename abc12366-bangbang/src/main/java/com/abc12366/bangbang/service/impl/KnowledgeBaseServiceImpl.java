@@ -72,6 +72,16 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     }
 
     @Override
+    public List<KnowledgeBase> interestedList(String id, int num) {
+        return knowledgeBaseMapper.interestedList(id, num);
+    }
+
+    @Override
+    public KnowledgeBase selectOne(String id) {
+        return knowledgeBaseMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public void add(KnowledgeBase knowledgeBase) {
         knowledgeBaseMapper.insert(knowledgeBase);
     }
@@ -120,6 +130,20 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         addKnowledgeRel(knowledgeBaseBO);
 
         return knowledgeBaseBO;
+    }
+
+    @Override
+    public void useFull(String id, Boolean isUseFull) {
+        if(isUseFull == Boolean.TRUE){
+            knowledgeBaseMapper.addUsefulVoteByPK(id);
+        }else{
+            knowledgeBaseMapper.addUselessVoteByPK(id);
+        }
+    }
+
+    @Override
+    public void addPV(String id) {
+        knowledgeBaseMapper.addPVByPK(id);
     }
 
     private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
