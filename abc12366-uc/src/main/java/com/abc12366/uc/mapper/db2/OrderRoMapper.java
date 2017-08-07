@@ -29,4 +29,6 @@ public interface OrderRoMapper {
     List<OrderBO> selectCartList(OrderBO order);
 
     List<OrderBO> selectWaitList(OrderBO order);
+
+    List<OrderBO> selectExprotOrder(Order order);
 }

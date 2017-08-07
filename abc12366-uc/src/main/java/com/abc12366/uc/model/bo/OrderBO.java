@@ -50,7 +50,7 @@ public class OrderBO implements Serializable {
     private Date startTime;
     private Date endTime;
 
-    private OrderLogBO orderLogBO;
+    private List<OrderLogBO> orderLogBOList;
 
     private InvoiceBO invoiceBO;
 
@@ -248,14 +248,6 @@ public class OrderBO implements Serializable {
         this.nowVipLevel = nowVipLevel;
     }
 
-    public OrderLogBO getOrderLogBO() {
-        return orderLogBO;
-    }
-
-    public void setOrderLogBO(OrderLogBO orderLogBO) {
-        this.orderLogBO = orderLogBO;
-    }
-
     public Integer getGiftPoints() {
         return giftPoints;
     }
@@ -318,5 +310,13 @@ public class OrderBO implements Serializable {
 
     public void setOrderProductSpecList(List<OrderProductSpec> orderProductSpecList) {
         this.orderProductSpecList = orderProductSpecList;
+    }
+
+    public List<OrderLogBO> getOrderLogBOList() {
+        return orderLogBOList;
+    }
+
+    public void setOrderLogBOList(List<OrderLogBO> orderLogBOList) {
+        this.orderLogBOList = orderLogBOList;
     }
 }
