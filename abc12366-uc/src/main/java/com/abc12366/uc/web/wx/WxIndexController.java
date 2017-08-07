@@ -2,6 +2,9 @@ package com.abc12366.uc.web.wx;
 
 import com.abc12366.uc.service.IWxMsgService;
 import com.abc12366.uc.util.wx.SignUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,15 +21,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class WxIndexController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(WxIndexController.class);
     @Autowired
     private IWxMsgService iWxMsgService;
 
     @RequestMapping("/abc/wechat")
-    public
-    @ResponseBody
-    String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
+    public @ResponseBody String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
+    	LOGGER.info("微信服务器回调!-----------");
         boolean isGet = request.getMethod().toLowerCase().equals("get");
         if (isGet) {
+        	LOGGER.info("微信服务器回调校验!");
             String signature = request.getParameter("signature");
             // 时间戳
             String timestamp = request.getParameter("timestamp");
