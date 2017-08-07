@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/5/9.
@@ -68,9 +65,9 @@ public class ChannelServiceImpl implements ChannelService {
         List<ChannelBo> channelBoList = new ArrayList<>();
         try {
             List<Channel> channelList = channelRoMapper.selectList();
-            for (Channel channel : channelList) {
+            for(Channel channel : channelList){
                 ChannelBo channelBo = new ChannelBo();
-                BeanUtils.copyProperties(channel, channelBo);
+                BeanUtils.copyProperties(channel,channelBo);
                 channelBoList.add(channelBo);
             }
         } catch (Exception e) {
@@ -81,7 +78,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<ChannelBo> selectLists(Map<String, Object> map) {
+    public List<ChannelBo> selectLists(Map<String,Object> map) {
         List<ChannelBo> channelBoList;
         try {
             JSONObject jsonStu = JSONObject.fromObject(map);
@@ -95,7 +92,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<ModelItemBo> selectModeList(Map<String, Object> map) {
+    public List<ModelItemBo> selectModeList(Map<String,Object> map) {
         List<ModelItemBo> modelItemBos;
         try {
             JSONObject jsonStu = JSONObject.fromObject(map);
@@ -118,7 +115,7 @@ public class ChannelServiceImpl implements ChannelService {
         channelBo1.setSiteId(channelBo.getSiteId());
         channelBo1.setChannelPath(channelBo.getChannelPath());
         int cnt1 = channelRoMapper.selectChannelPathCnt(channelBo1);
-        if (cnt1 > 0) {
+        if(cnt1 >0){
             throw new ServiceException(4239);
         }
         try {
@@ -130,11 +127,11 @@ public class ChannelServiceImpl implements ChannelService {
 
             String parentId = channelBo.getParentId();
 
-            for (int i = 0; i < 20; i++) {
+            for(int i=0;i<20;i++){
                 code = this.genCodes(6);
                 uuid = parentId + code;
                 int cnt = channelRoMapper.selectChannelIdCnt(uuid);
-                if (cnt == 0) {
+                if(cnt ==0){
                     break;
                 }
             }
@@ -152,8 +149,8 @@ public class ChannelServiceImpl implements ChannelService {
             channelExtMapper.insert(channelExt);
             //栏目扩展项信息
             List<ChannelAttrBo> channelAttrBoList = channelSaveBo.getChannelAttrList();
-            if (channelAttrBoList != null) {
-                for (ChannelAttrBo channelAttrBo : channelAttrBoList) {
+            if(channelAttrBoList != null){
+                for(ChannelAttrBo channelAttrBo:channelAttrBoList){
                     channelAttrBo.setChannelId(uuid);
                     ChannelAttr channelAttr = new ChannelAttr();
                     BeanUtils.copyProperties(channelAttrBo, channelAttr);
@@ -163,8 +160,8 @@ public class ChannelServiceImpl implements ChannelService {
 
             //用户组
             List<ChnlGroupViewBo> groupBoList = channelSaveBo.getGroupList();
-            if (groupBoList != null) {
-                for (ChnlGroupViewBo groupBo : groupBoList) {
+            if(groupBoList != null){
+                for(ChnlGroupViewBo groupBo:groupBoList){
                     ChnlGroupView group = new ChnlGroupView();
                     groupBo.setChannelId(uuid);
                     BeanUtils.copyProperties(groupBo, group);
@@ -186,20 +183,20 @@ public class ChannelServiceImpl implements ChannelService {
             //查询栏目信息
             Channel channel = channelRoMapper.selectByPrimaryKey(channelId);
             ChannelBo channelBo = new ChannelBo();
-            if (channel != null) {
+            if(channel != null){
                 BeanUtils.copyProperties(channel, channelBo);
             }
             //查询栏目扩展信息
             ChannelExt channelExt = channelExtRoMapper.selectByPrimaryKey(channelId);
             ChannelExtBo channelExtBo = new ChannelExtBo();
-            if (channelExt != null) {
+            if(channelExt != null){
                 BeanUtils.copyProperties(channelExt, channelExtBo);
             }
             //查询栏目扩展项信息
             List<ChannelAttr> channelAttrList = channelAttrRoMapper.selectByChannelId(channelId);
             List<ChannelAttrBo> channelAttrBoList = new ArrayList<ChannelAttrBo>();
-            if (channelAttrList != null) {
-                for (ChannelAttr channelAttr : channelAttrList) {
+            if(channelAttrList != null){
+                for(ChannelAttr channelAttr:channelAttrList){
                     ChannelAttrBo channelAttrBo = new ChannelAttrBo();
                     BeanUtils.copyProperties(channelAttr, channelAttrBo);
                     channelAttrBoList.add(channelAttrBo);
@@ -208,8 +205,8 @@ public class ChannelServiceImpl implements ChannelService {
             //用户组
             List<ChnlGroupView> groupList = groupRoMapper.selectList(channelId);
             List<ChnlGroupViewBo> groupBoList = new ArrayList<ChnlGroupViewBo>();
-            if (groupBoList != null) {
-                for (ChnlGroupView group : groupList) {
+            if(groupBoList != null){
+                for(ChnlGroupView group:groupList){
                     ChnlGroupViewBo groupBo = new ChnlGroupViewBo();
                     BeanUtils.copyProperties(group, groupBo);
                     groupBoList.add(groupBo);
@@ -237,18 +234,16 @@ public class ChannelServiceImpl implements ChannelService {
         channelBo1.setChannelPath(channelBo.getChannelPath());
         channelBo1.setChannelId(channelBo.getChannelId());
         int cnt1 = channelRoMapper.selectChannelPathCnt(channelBo1);
-        if (cnt1 > 0) {
+        if(cnt1 >0){
             throw new ServiceException(4239);
         }
-
-
         try {
             JSONObject jsonStu = JSONObject.fromObject(channelSaveBo);
             LOGGER.info("更新栏目信息:{}", jsonStu.toString());
 
             //查询栏目信息
             Channel channel1 = channelRoMapper.selectByPrimaryKey(channelBo.getChannelId());
-            if (channelBo.getIsDisplay() != channel1.getIsDisplay()) {
+            if(channelBo.getIsDisplay() != channel1.getIsDisplay()){
                 updateChannelByparentId(channelBo);
             }
 
@@ -262,8 +257,8 @@ public class ChannelServiceImpl implements ChannelService {
             channelExtMapper.updateByPrimaryKeySelective(channelExt);
             //栏目扩展项信息
             List<ChannelAttrBo> channelAttrBoList = channelSaveBo.getChannelAttrList();
-            if (channelAttrBoList != null) {
-                for (ChannelAttrBo channelAttrBo : channelAttrBoList) {
+            if(channelAttrBoList != null){
+                for(ChannelAttrBo channelAttrBo:channelAttrBoList){
                     ChannelAttr channelAttr = new ChannelAttr();
                     BeanUtils.copyProperties(channelAttrBo, channelAttr);
                     channelAttrMapper.updateByPrimaryKeySelective(channelAttr);
@@ -273,8 +268,8 @@ public class ChannelServiceImpl implements ChannelService {
             //用户组
             groupMapper.deleteByPrimaryKey(channelBo.getChannelId());
             List<ChnlGroupViewBo> groupBoList = channelSaveBo.getGroupList();
-            if (groupBoList != null) {
-                for (ChnlGroupViewBo groupBo : groupBoList) {
+            if(groupBoList != null){
+                for(ChnlGroupViewBo groupBo:groupBoList){
                     ChnlGroupView group = new ChnlGroupView();
                     BeanUtils.copyProperties(groupBo, group);
                     groupMapper.insert(group);
@@ -298,10 +293,10 @@ public class ChannelServiceImpl implements ChannelService {
             BeanUtils.copyProperties(channelBo, channel);
             channelMapper.updateByPrimaryKeySelective(channel);
             List<Channel> channelList = channelRoMapper.selectListByparentId(channelBo.getChannelId());
-            if (channelList != null) {
-                for (Channel channel1 : channelList) {
+            if(channelList != null){
+                for(Channel channel1 : channelList){
                     ChannelBo channelBo1 = new ChannelBo();
-                    BeanUtils.copyProperties(channel1, channelBo1);
+                        BeanUtils.copyProperties(channel1, channelBo1);
                     channelBo1.setIsDisplay(channelBo.getIsDisplay());
                     this.updateChannelByparentId(channelBo1);
                 }
@@ -320,10 +315,10 @@ public class ChannelServiceImpl implements ChannelService {
         try {
             LOGGER.info("根据父栏目查询栏目信息:{}", parentId);
             List<Channel> channelList = channelRoMapper.selectListByparentId(parentId);
-            if (channelList != null) {
-                for (Channel channel : channelList) {
+            if(channelList != null){
+                for(Channel channel : channelList){
                     ChannelBo channelBo = new ChannelBo();
-                    BeanUtils.copyProperties(channel, channelBo);
+                    BeanUtils.copyProperties(channel,channelBo);
                     channelBoList.add(channelBo);
                 }
             }
@@ -341,10 +336,10 @@ public class ChannelServiceImpl implements ChannelService {
         try {
             LOGGER.info("根据模板查询栏目信息:{}", tplChannel);
             List<ChannelExt> channelExtList = channelExtRoMapper.selectListBytplChannel(tplChannel);
-            if (channelExtList != null) {
-                for (ChannelExt channelExt : channelExtList) {
+            if(channelExtList != null){
+                for(ChannelExt channelExt : channelExtList){
                     ChannelExtBo channelExtBo = new ChannelExtBo();
-                    BeanUtils.copyProperties(channelExt, channelExtBo);
+                    BeanUtils.copyProperties(channelExt,channelExtBo);
                     channelExtBoList.add(channelExtBo);
                 }
             }
@@ -360,7 +355,7 @@ public class ChannelServiceImpl implements ChannelService {
     public String delete(String channelId) {
         LOGGER.info("删除栏目信息:{}", channelId);
         int cnt = contentRoMapper.selectByChannelId(channelId).intValue();
-        if (cnt != 0) {
+        if(cnt != 0){
             //该栏目下存在内容信息,不能删除
             throw new ServiceException(4249);
         }
@@ -377,7 +372,7 @@ public class ChannelServiceImpl implements ChannelService {
             channelMapper.deleteByPrimaryKey(channelId);
 
             List<Channel> channelList = channelRoMapper.selectListByparentId(channelId);
-            for (Channel channel : channelList) {
+            for(Channel channel : channelList){
                 this.delete(channel.getChannelId());
             }
         } catch (Exception e) {
@@ -387,23 +382,25 @@ public class ChannelServiceImpl implements ChannelService {
         return "";
     }
 
-    public String genCodes(int length) {
+    public String genCodes(int length){
 
-        String val = "";
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; // 输出字母还是数字
+            String val = "";
+            Random random = new Random();
+            for(int i = 0; i < length; i++)
+            {
+                String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; // 输出字母还是数字
 
-            if ("char".equalsIgnoreCase(charOrNum)) // 字符串
-            {
-                int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; //取得大写字母还是小写字母
-                val += (char) (choice + random.nextInt(26));
-            } else if ("num".equalsIgnoreCase(charOrNum)) // 数字
-            {
-                val += String.valueOf(random.nextInt(10));
+                if("char".equalsIgnoreCase(charOrNum)) // 字符串
+                {
+                    int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; //取得大写字母还是小写字母
+                    val += (char) (choice + random.nextInt(26));
+                }
+                else if("num".equalsIgnoreCase(charOrNum)) // 数字
+                {
+                    val += String.valueOf(random.nextInt(10));
+                }
             }
-        }
-        val = val.toLowerCase();
+            val=val.toLowerCase();
 
         return val;
     }
