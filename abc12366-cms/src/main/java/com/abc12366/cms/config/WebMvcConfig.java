@@ -46,7 +46,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**");
 
-        // App验证、授权拦截
+        // App验证、授权拦截(Access-Token)
         registry.addInterceptor(appInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
@@ -54,9 +54,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/test")
-                        //定时任务查询不需验证
-                .excludePathPatterns("/task/list");
+                .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
