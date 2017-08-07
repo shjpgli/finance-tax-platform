@@ -5,98 +5,108 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	userId,	knowledgeId,	sourceIP,	createTime
+		id,	userId,	knowledgeId,	isUsefull,	sourceIP,	createTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="knowledgeVoteLog" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_knowledge_vote_log
-		 WHERE id = #{id}
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_knowledge_vote_log
+		WHERE id = #{id}
 	</select>
 
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		 DELETE FROM bb_knowledge_vote_log
-		 WHERE id = #{id}
+		DELETE FROM bb_knowledge_vote_log
+		WHERE id = #{id}
 	</delete>
 
 	<!-- 添加 -->
 	<insert id="insert" parameterType="knowledgeVoteLog">
-		 INSERT INTO bb_knowledge_vote_log
- 		(id,userId,knowledgeId,sourceIP,createTime) 
-		 VALUES 
- 		(#{id},#{userId},#{knowledgeId},#{sourceIP},#{createTime}) 
+		INSERT INTO bb_knowledge_vote_log
+		(id,userId,knowledgeId,isUsefull,sourceIP,createTime)
+		VALUES
+		(#{id},#{userId},#{knowledgeId},#{isUsefull},#{sourceIP},#{createTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insertSelective" parameterType="knowledgeVoteLog">
-		 INSERT INTO bb_knowledge_vote_log
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
+		INSERT INTO bb_knowledge_vote_log
+		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
-				 id,
+				id,
 			</if>
 			<if test="userId != null">
-				 userId,
+				userId,
 			</if>
 			<if test="knowledgeId != null">
-				 knowledgeId,
+				knowledgeId,
+			</if>
+			<if test="isUsefull != null">
+				isUsefull,
 			</if>
 			<if test="sourceIP != null">
-				 sourceIP,
+				sourceIP,
 			</if>
 			<if test="createTime != null">
-				 createTime,
+				createTime,
 			</if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
-				 #{id},
+				#{id},
 			</if>
 			<if test="userId!=null">
-				 #{userId},
+				#{userId},
 			</if>
 			<if test="knowledgeId!=null">
-				 #{knowledgeId},
+				#{knowledgeId},
+			</if>
+			<if test="isUsefull!=null">
+				#{isUsefull},
 			</if>
 			<if test="sourceIP!=null">
-				 #{sourceIP},
+				#{sourceIP},
 			</if>
 			<if test="createTime!=null">
-				 #{createTime},
+				#{createTime},
 			</if>
-		 </trim>
+		</trim>
 	</insert>
 
 	<!-- 修 改-->
 	<update id="updateByPrimaryKeySelective" parameterType="knowledgeVoteLog">
-		 UPDATE bb_knowledge_vote_log
- 		 <set> 
+		UPDATE bb_knowledge_vote_log
+		<set>
 			<if test="userId != null">
-				 userId = #{userId},
+				userId = #{userId},
 			</if>
 			<if test="knowledgeId != null">
-				 knowledgeId = #{knowledgeId},
+				knowledgeId = #{knowledgeId},
+			</if>
+			<if test="isUsefull != null">
+				isUsefull = #{isUsefull},
 			</if>
 			<if test="sourceIP != null">
-				 sourceIP = #{sourceIP},
+				sourceIP = #{sourceIP},
 			</if>
 			<if test="createTime != null">
-				 createTime = #{createTime},
+				createTime = #{createTime},
 			</if>
 
- 		 </set>
-		 WHERE id = #{id}
+		</set>
+		WHERE id = #{id}
 	</update>
 
 	<!-- 修 改-->
 	<update id="updateByPrimaryKey" parameterType="knowledgeVoteLog">
 		 UPDATE bb_knowledge_vote_log
-		 SET 
+		 SET
 			 userId = #{userId},
 			 knowledgeId = #{knowledgeId},
+			 isUsefull = #{isUsefull},
 			 sourceIP = #{sourceIP},
 			 createTime = #{createTime}
 		 WHERE id = #{id}

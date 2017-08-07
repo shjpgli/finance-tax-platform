@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
@@ -91,9 +92,8 @@ public class KnowledgeBaseController {
      * 修改知识库 是否有用 接口
      */
     @PutMapping(path = "/useful/{id}")
-    public ResponseEntity useful(@PathVariable String id, @RequestBody Map<String,Boolean> map) {
-        Boolean isUseFull = map.get("isUseFull");
-        knowledgeBaseService.useFull(id, isUseFull);
+    public ResponseEntity useful(@PathVariable String id, @RequestBody KnowledgeVoteLog knowledgeVoteLog) {
+        knowledgeBaseService.useFull(knowledgeVoteLog);
         return ResponseEntity.ok(Utils.kv());
     }
 

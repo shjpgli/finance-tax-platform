@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
@@ -33,7 +34,7 @@ public interface KnowledgeBaseService {
     KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO);
 
     /*修改知识库数据 是否有用*/
-    void useFull(String id, Boolean isUseFull);
+    void useFull(KnowledgeVoteLog knowledgeVoteLog);
 
     /*修改知识库数据 浏览量*/
     void addPV(String id);
