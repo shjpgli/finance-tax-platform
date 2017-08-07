@@ -699,9 +699,14 @@ public class OrderServiceImpl implements OrderService {
             int isPay = orderPayBO.getIsPay();
             Order order = new Order();
             order.setOrderNo(orderNo);
+            order.setUserId(orderPayBO.getUserId());
             if(isPay == 1){
                 order.setOrderStatus("3");
-                orderMapper.update(order);
+                int update = orderMapper.update(order);
+                if(update != 1){
+                    LOGGER.warn("修改失败，参数：{}", order);
+                    throw new ServiceException(4102);
+                }
             }else if(isPay == 2){
                 Goods goods = goodsRoMapper.selectByPrimaryKey(orderBO.getGoodsId());
                 //查询商品类型，商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值
