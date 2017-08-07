@@ -9,9 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuqi
@@ -52,7 +54,8 @@ public class KnowledgeCategoryController {
 
     /* 修改分类的名称 */
     @PutMapping(path = "/modifyName/{id}")
-    public ResponseEntity modifyName(@PathVariable String id, @RequestParam String name) {
+    public ResponseEntity modifyName(@PathVariable String id, @RequestBody Map<String,String> map) {
+        String name = map.get("name");
         knowledgeCategoryService.modifyNameById(id, name);
         return ResponseEntity.ok(Utils.kv());
     }

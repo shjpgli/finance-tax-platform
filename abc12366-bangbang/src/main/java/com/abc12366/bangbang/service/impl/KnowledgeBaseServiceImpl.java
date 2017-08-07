@@ -4,12 +4,15 @@ import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeRelMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagRelMapper;
+import com.abc12366.bangbang.mapper.db1.KnowledgeVoteLogMapper;
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeRel;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
+import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
@@ -37,6 +40,9 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Autowired
     private KnowledgeRelMapper knowledgeRelMapper;
+
+    @Autowired
+    private KnowledgeVoteLogMapper knowledgeVoteLogMapper;
 
     @Override
     public Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO) {
@@ -69,6 +75,16 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
         return knowledgeBaseMapper.selectList(param);
+    }
+
+    @Override
+    public List<KnowledgeBase> interestedList(String id, int num) {
+        return knowledgeBaseMapper.interestedList(id, num);
+    }
+
+    @Override
+    public KnowledgeBase selectOne(String id) {
+        return knowledgeBaseMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -121,6 +137,40 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
         return knowledgeBaseBO;
     }
+
+    @Transactional("db1TxManager")
+    @Override
+    public void addVote(KnowledgeVoteLog knowledgeVoteLog) {
+        Boolean isUseFull = knowledgeVoteLog.getIsUseFull();
+        String knowledgeId = knowledgeVoteLog.getKnowledgeId();
+        if(isUseFull == Boolean.TRUE){
+            knowledgeBaseMapper.addUsefulVoteByPK(knowledgeId);
+        }else{
+            knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
+        }
+        knowledgeVoteLogMapper.insert(knowledgeVoteLog);
+    }
+
+    @Override
+    public void addPV(String id) {
+        knowledgeBaseMapper.addPVByPK(id);
+    }
+
+    @Override
+    public void deleteVoteLogs(List<String> ids) {
+        knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
+    }
+
+    @Override
+    public List<KnowledgeVoteLogBO> selectVoteList(KnowledgeBaseParamBO param) {
+        return knowledgeVoteLogMapper.selectList(param);
+    }
+
+    @Override
+    public KnowledgeVoteLog selectByUserVotedKnowledge(String userId, String knowledgeId) {
+        return knowledgeVoteLogMapper.selectByUserVotedKnowledge(userId, knowledgeId);
+    }
+
 
     private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> tagIds = knowledgeBaseBO.getTagIds();

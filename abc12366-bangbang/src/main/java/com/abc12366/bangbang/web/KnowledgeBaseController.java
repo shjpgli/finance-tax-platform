@@ -1,9 +1,11 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -35,7 +37,7 @@ public class KnowledgeBaseController {
     *
     * 帮助中心 热点问题知识
     *
-    * */
+    */
     @GetMapping(path = "/hotList")
     public ResponseEntity hotList(@RequestParam(value = "categoryNum", defaultValue = "6") int categoryNum,
                                   @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
@@ -45,7 +47,6 @@ public class KnowledgeBaseController {
         Map<String, List<KnowledgeBase>> map = knowledgeBaseService.hotMap(param);
         return ResponseEntity.ok(Utils.kv("data",map));
     }
-
 
     /*
     *  知识库 分页查询
@@ -66,6 +67,38 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
+
+    /*
+    *  详情页感兴趣的知识查询
+    */
+    @GetMapping(path = "/interestedList/{id}")
+    public ResponseEntity interestedList(@PathVariable String id, @RequestParam(value = "num", defaultValue = "5") int num) {
+        List<KnowledgeBase> list = knowledgeBaseService.interestedList(id, num);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", list));
+    }
+
+
+    /**
+     * 单个知识库查询 接口
+     */
+    @GetMapping(path = "/view/{id}")
+    public ResponseEntity view(@PathVariable String id){
+        KnowledgeBase knowledgeBase = knowledgeBaseService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data", knowledgeBase));
+    }
+
+
+    /**
+     * 新增PV 接口
+     */
+    @PutMapping(path = "/pv/{id}")
+    public ResponseEntity pv(@PathVariable String id) {
+        knowledgeBaseService.addPV(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
 
     /**
      * 添加知识库 接口
@@ -91,10 +124,66 @@ public class KnowledgeBaseController {
     * 删除知识库 接口
     */
     @DeleteMapping(path = "/delete")
-    public ResponseEntity delete(@RequestBody List<String> ids) {
+    public ResponseEntity delete(@RequestBody Map<String,List<String>> map) {
+        List<String> ids = map.get("ids");
         knowledgeBaseService.delete(ids);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    /**
+     * 为知识库投票
+     */
+    @PostMapping(path = "/vote/add")
+    public ResponseEntity voteAdd(@RequestBody KnowledgeVoteLog knowledgeVoteLog) {
+        knowledgeBaseService.addVote(knowledgeVoteLog);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /*
+     * 删除知识库投票 接口
+     */
+    @DeleteMapping(path = "/vote/delete")
+    public ResponseEntity voteDelete(@RequestBody Map<String,List<String>> map) {
+        List<String> ids = map.get("ids");
+        knowledgeBaseService.deleteVoteLogs(ids);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /*
+    * 知识库投票列表  接口
+    */
+    @GetMapping(path = "/vote/list")
+    public ResponseEntity selectVoteList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                         @RequestParam(value = "categoryCode", required = false) String categoryCode,
+                                         @RequestParam(value = "keywords", required = false) String keywords,
+                                         @RequestParam(value = "type", required = false) String type) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords);
+        List<KnowledgeVoteLogBO> list = knowledgeBaseService.selectVoteList(param);
+
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /*
+    * 查询该知识库投过票的投票数据
+    */
+    @GetMapping(path = "/vote/one/{userId}/{knowledgeId}")
+    public ResponseEntity selectVoteList(@PathVariable String userId, @PathVariable String knowledgeId) {
+
+        KnowledgeVoteLog log = knowledgeBaseService.selectByUserVotedKnowledge(userId, knowledgeId);
+
+        return ResponseEntity.ok(Utils.kv("data", log));
+    }
+
+
+
+
+
+
 
 
     //test

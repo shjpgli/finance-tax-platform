@@ -1,10 +1,6 @@
 package com.abc12366.uc.model.bo;
 
-import com.abc12366.uc.model.User;
-
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 
 /**

@@ -23,9 +23,18 @@ public class TradeLog implements Serializable {
     private Double amount;
 
     /**
-     * 交易状态：1.交易中 2.交易成功 3.交易失败 4.取消交易
+     * 交易状态： 1.交易成功 2.交易超时 3.交易关闭
      **/
     private String tradeStatus;
+    
+    //阿里交易流水
+    private String aliTrandeNo;
+    
+    
+    private String tradeType;//交易类型 1：支付 2：退款
+    
+    
+    
 
     /**
      * 交易时间
@@ -132,5 +141,21 @@ public class TradeLog implements Serializable {
     public void setCompareTime(java.util.Date compareTime) {
         this.compareTime = compareTime;
     }
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+
+	public String getAliTrandeNo() {
+		return aliTrandeNo;
+	}
+
+	public void setAliTrandeNo(String aliTrandeNo) {
+		this.aliTrandeNo = aliTrandeNo;
+	}
 
 }

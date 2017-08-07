@@ -560,24 +560,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderBO cancelOrder(Order order) {
-        OrderBO bo = orderRoMapper.selectById(order.getOrderNo());
+    public OrderBO cancelOrder(OrderCancelBO orderCancelBO) {
+        OrderBO bo = orderRoMapper.selectById(orderCancelBO.getOrderNo());
         if (bo == null) {
-            LOGGER.info("订单信息不存在：{}", order);
+            LOGGER.info("订单信息不存在：{}", orderCancelBO);
             throw new ServiceException(4134);
         }
         if (!bo.getOrderStatus().equals("2")) {
-            LOGGER.info("只有待支付可以取消订单：{}", order);
+            LOGGER.info("只有待支付可以取消订单：{}", orderCancelBO);
             throw new ServiceException(4189);
         }
-        order.setOrderStatus("4");
-
+        orderCancelBO.setOrderStatus("7");
+        Order order = new Order();
+        BeanUtils.copyProperties(orderCancelBO,order);
         int update = orderMapper.update(order);
         if (update != 1) {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
-
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(), "用户取消订单");
         return bo;
     }
@@ -611,11 +611,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderBack submitBackOrder(OrderBack orderBack) {
+        orderBack.setId(Utils.uuid());
         orderBack.setLastUpdate(new Date());
-        int upd = orderBackMap.update(orderBack);
+        int upd = orderBackMap.insert(orderBack);
         if (upd != 1) {
-            LOGGER.info("修改失败：{}", orderBack);
-            throw new ServiceException(4102);
+            LOGGER.info("新增失败：{}", orderBack);
+            throw new ServiceException(4101);
         }
         insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), new Date(), "用户填写快递号");
         return orderBack;
@@ -645,17 +646,17 @@ public class OrderServiceImpl implements OrderService {
             pBO.setOrderNo(orderBack.getOrderNo());
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
             for (OrderProductBO orderProductBO : orderProductBOs) {
-                orderProductBO.setOrderNo(orderNo);
+                /*orderProductBO.setOrderNo(orderNo);
                 OrderProduct orderProduct = new OrderProduct();
                 BeanUtils.copyProperties(orderProductBO, orderProduct);
                 int opInsert = orderProductMapper.insert(orderProduct);
                 if (opInsert != 1) {
                     LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
                     throw new ServiceException(4167);
-                }
+                }*/
                 //增加Product库存数量
                 ProductBO productBO = orderProductBO.getProductBO();
-                int stock = productBO.getStock() + orderProduct.getNum();
+                int stock = productBO.getStock() + orderProductBO.getNum();
                 productBO.setStock(stock);
                 Product product = new Product();
                 BeanUtils.copyProperties(productBO, product);
@@ -665,7 +666,7 @@ public class OrderServiceImpl implements OrderService {
                 repo.setId(Utils.uuid());
                 repo.setGoodsId(productBO.getGoodsId());
                 repo.setProductId(productBO.getId());
-                repo.setIncome(orderProduct.getNum());
+                repo.setIncome(orderProductBO.getNum());
                 repo.setStock(stock);
                 repo.setCreateTime(date);
                 repo.setLastUpdate(date);
@@ -698,9 +699,14 @@ public class OrderServiceImpl implements OrderService {
             int isPay = orderPayBO.getIsPay();
             Order order = new Order();
             order.setOrderNo(orderNo);
+            order.setUserId(orderPayBO.getUserId());
             if(isPay == 1){
                 order.setOrderStatus("3");
-                orderMapper.update(order);
+                int update = orderMapper.update(order);
+                if(update != 1){
+                    LOGGER.warn("修改失败，参数：{}", order);
+                    throw new ServiceException(4102);
+                }
             }else if(isPay == 2){
                 Goods goods = goodsRoMapper.selectByPrimaryKey(orderBO.getGoodsId());
                 //查询商品类型，商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值
@@ -746,6 +752,50 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<OrderBO> selectExprotOrder(Order order) {
+        return orderRoMapper.selectExprotOrder(order);
+    }
+
+    @Override
+    public void selectImprotOrder(List<OrderBO> orderBOList) {
+        for(OrderBO bo:orderBOList){
+            Order order = new Order();
+            BeanUtils.copyProperties(bo,order);
+            int upd = orderMapper.update(order);
+            if(upd != 1){
+                LOGGER.warn("修改失败，参数：{}", order);
+                throw new ServiceException(4102);
+            }
+            insertOrderLog(order.getUserId(), order.getOrderNo(), new Date(), "管理员已发货");
+        }
+    }
+
+    @Override
+    public void sendOrder(OrderOperationBO orderOperationBO) {
+        //订单状态，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
+        orderOperationBO.setOrderStatus("6");
+        Order order = new Order();
+        BeanUtils.copyProperties(orderOperationBO,order);
+        int upd = orderMapper.update(order);
+        if(upd != 1){
+            LOGGER.warn("修改失败，参数：{}", order);
+            throw new ServiceException(4102);
+        }
+    }
+
+    @Override
+    public void invalidOrder(OrderOperationBO orderOperationBO) {
+        orderOperationBO.setOrderStatus("6");
+        Order order = new Order();
+        BeanUtils.copyProperties(orderOperationBO,order);
+        int upd = orderMapper.update(order);
+        if(upd != 1){
+            LOGGER.warn("修改失败，参数：{}", order);
+            throw new ServiceException(4102);
+        }
     }
 
 }

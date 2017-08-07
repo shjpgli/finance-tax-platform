@@ -111,6 +111,7 @@ public class Order implements Serializable {
      **/
     private Boolean isInvoice;
 
+    /**取消原因，字典表ID**/
     private String cancelId;
 
     /**

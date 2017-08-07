@@ -10,6 +10,27 @@
     </sql>
 
 
+    <!-- 查询感兴趣的知识 -->
+    <select id="interestedList" resultType="knowledgeBase">
+        SELECT * FROM bb_knowledge_base WHERE
+        id IN(
+            SELECT DISTINCT knowledgeId FROM
+            bb_knowledge_tag_rel
+            WHERE
+            tagId
+            IN(
+                SELECT tagId
+                FROM
+                bb_knowledge_tag_rel
+                WHERE
+                knowledgeId = #{id}
+            )
+            AND  knowledgeId !=  #{id}
+        )
+        limit #{num}
+    </select>
+
+
 
     <!-- 首页热点问题查询 -->
     <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
@@ -45,23 +66,23 @@
         FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
         WHERE t_base.categoryCode = t_category.code
             <if test="categoryCode != null">
-                AND categoryCode LIKE CONCAT(#{categoryCode},'%')
+                AND t_base.categoryCode LIKE CONCAT(#{categoryCode},'%')
             </if>
             <if test="type != null">
-                AND type = #{type}
+                AND t_base.type = #{type}
             </if>
             <if test="keywords != null">
-                AND (
-                    subject LIKE CONCAT('%',#{keywords},'%')
-                    OR
-                    t_base.id IN(
-                        SELECT DISTINCT t1.knowledgeId
-                        FROM
-                        bb_knowledge_tag_rel t1
-                        LEFT JOIN bb_knowledge_tag t2 ON t1.tagId = t2.id
-                        WHERE t2.name LIKE CONCAT('%',#{keywords},'%')
+                    AND (
+                        t_base.subject LIKE CONCAT('%',#{keywords},'%')
+                        OR
+                        t_base.id IN(
+                            SELECT DISTINCT t1.knowledgeId
+                            FROM
+                            bb_knowledge_tag_rel t1
+                            LEFT JOIN bb_knowledge_tag t2 ON t1.tagId = t2.id
+                            WHERE t2.name LIKE CONCAT('%',#{keywords},'%')
+                        )
                     )
-                )
             </if>
     </select>
 
@@ -69,9 +90,10 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="knowledgeBase" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM bb_knowledge_base
-        WHERE id = #{id}
+        t_base.*,t_category.name AS categoryName
+        FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
+        WHERE t_base.categoryCode = t_category.code
+        AND t_base.id = #{id}
     </select>
 
     <!--删除：根据主键ID删除-->
@@ -87,6 +109,8 @@
             #{item}
         </foreach>
     </delete>
+
+
 
     <!-- 添加 -->
     <insert id="insert" parameterType="knowledgeBase">
@@ -298,5 +322,17 @@
         WHERE id = #{id}
     </update>
 
+
+    <!-- 修改  知识是否有用 -->
+    <update id="addUsefulVoteByPK" parameterType="java.lang.String">
+      UPDATE bb_knowledge_base SET usefulVotes = usefulVotes + 1 WHERE id = #{id}
+    </update>
+    <update id="addUselessVoteByPK" parameterType="java.lang.String">
+        UPDATE bb_knowledge_base SET uselessVotes = uselessVotes + 1 WHERE id = #{id}
+    </update>
+    <!-- 新增浏览量 -->
+    <update id="addPVByPK">
+      UPDATE bb_knowledge_base SET pv = pv + 1 WHERE id = #{id}
+    </update>
 
 </mapper>

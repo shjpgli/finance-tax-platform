@@ -60,4 +60,5 @@ public interface KnowledgeCategoryMapper {
      * 修改 （匹配有值的字段）
      **/
     int batchUpdateSort(List<SortBO> list);
+
 }

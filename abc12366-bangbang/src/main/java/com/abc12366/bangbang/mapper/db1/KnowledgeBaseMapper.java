@@ -17,7 +17,15 @@ public interface KnowledgeBaseMapper {
     /**
      * 查询（根据主键ID查询）
      **/
-    KnowledgeBase selectByPrimaryKey(@Param("id") Long id);
+    KnowledgeBase selectByPrimaryKey(@Param("id") String id);
+
+
+    /*
+    *
+    * 知识详情页 感兴趣的知识查询
+    *
+    **/
+    List<KnowledgeBase> interestedList(@Param("id") String id, @Param("num") int num);
 
 
     /*
@@ -65,5 +73,20 @@ public interface KnowledgeBaseMapper {
      * 修改（根据主键ID修改）
      **/
     int updateByPrimaryKey(KnowledgeBase record);
+
+    /**
+     * 新增知识的有用投票数
+     **/
+    int addUsefulVoteByPK(String id);
+
+    /**
+     * 新增知识的无用投票数
+     **/
+    int addUselessVoteByPK(String id);
+
+    /**
+     * 新增知识的浏览量
+     **/
+    int addPVByPK(String id);
 
 }
