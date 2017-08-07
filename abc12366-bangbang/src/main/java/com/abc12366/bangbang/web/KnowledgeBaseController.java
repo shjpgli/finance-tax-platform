@@ -46,7 +46,6 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv("data",map));
     }
 
-
     /*
     *  知识库 分页查询
     *  支持 分类,类别 和 关键字查询
@@ -66,6 +65,47 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
+
+    /*
+    *  详情页感兴趣的知识查询
+    */
+    @GetMapping(path = "/interestedList/{id}")
+    public ResponseEntity interestedList(@PathVariable String id, @RequestParam(value = "num", defaultValue = "5") int num) {
+        List<KnowledgeBase> list = knowledgeBaseService.interestedList(id, num);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", list));
+    }
+
+
+    /**
+     * 单个知识库查询 接口
+     */
+    @GetMapping(path = "/view/{id}")
+    public ResponseEntity view(@PathVariable String id){
+        KnowledgeBase knowledgeBase = knowledgeBaseService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data", knowledgeBase));
+    }
+
+    /**
+     * 修改知识库 是否有用 接口
+     */
+    @PutMapping(path = "/useful/{id}")
+    public ResponseEntity useful(@PathVariable String id, @RequestBody Map<String,Boolean> map) {
+        Boolean isUseFull = map.get("isUseFull");
+        knowledgeBaseService.useFull(id, isUseFull);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 新增PV 接口
+     */
+    @PutMapping(path = "/pv/{id}")
+    public ResponseEntity pv(@PathVariable String id) {
+        knowledgeBaseService.addPV(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
 
     /**
      * 添加知识库 接口
@@ -95,6 +135,15 @@ public class KnowledgeBaseController {
         knowledgeBaseService.delete(ids);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    /*
+    * 意见反馈接口
+    */
+
+
+
+
+
 
 
     //test

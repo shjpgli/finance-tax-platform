@@ -19,6 +19,10 @@ public interface KnowledgeBaseService {
 
     List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
 
+    List<KnowledgeBase> interestedList(String id, int num);
+
+    KnowledgeBase selectOne(String id);
+
     void add(KnowledgeBase knowledgeBase);
 
     void delete(List<String> ids);
@@ -28,5 +32,10 @@ public interface KnowledgeBaseService {
 
     KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO);
 
+    /*修改知识库数据 是否有用*/
+    void useFull(String id, Boolean isUseFull);
+
+    /*修改知识库数据 浏览量*/
+    void addPV(String id);
 
 }

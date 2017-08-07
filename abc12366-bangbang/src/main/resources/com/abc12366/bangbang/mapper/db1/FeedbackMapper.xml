@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db1.FeedbackMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	sourceType,	feedbackUserId,	feedbackType,	feedbackTime,	opinionDesc,	contactNumber
+	</sql>
+
+	<!-- 查询列表 -->
+	<select id="selectList" resultType="feedback" parameterType="com.abc12366.bangbang.model.bo.FeedbackParamBO">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_feedback
+		WHERE 1=1
+		<if test="sourceType != null">
+			AND sourceType = #{sourceType}
+		</if>
+		<if test="feedbackType != null">
+			AND feedbackType = #{feedbackType}
+		</if>
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="feedback" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_feedback
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM bb_feedback
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="feedback">
+		 INSERT INTO bb_feedback
+ 		(id,sourceType,feedbackUserId,feedbackType,feedbackTime,opinionDesc,contactNumber) 
+		 VALUES 
+ 		(#{id},#{sourceType},#{feedbackUserId},#{feedbackType},#{feedbackTime},#{opinionDesc},#{contactNumber}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="feedback">
+		 INSERT INTO bb_feedback
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="sourceType != null">
+				 sourceType,
+			</if>
+			<if test="feedbackUserId != null">
+				 feedbackUserId,
+			</if>
+			<if test="feedbackType != null">
+				 feedbackType,
+			</if>
+			<if test="feedbackTime != null">
+				 feedbackTime,
+			</if>
+			<if test="opinionDesc != null">
+				 opinionDesc,
+			</if>
+			<if test="contactNumber != null">
+				 contactNumber,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="sourceType!=null">
+				 #{sourceType},
+			</if>
+			<if test="feedbackUserId!=null">
+				 #{feedbackUserId},
+			</if>
+			<if test="feedbackType!=null">
+				 #{feedbackType},
+			</if>
+			<if test="feedbackTime!=null">
+				 #{feedbackTime},
+			</if>
+			<if test="opinionDesc!=null">
+				 #{opinionDesc},
+			</if>
+			<if test="contactNumber!=null">
+				 #{contactNumber},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="feedback">
+		 UPDATE bb_feedback
+ 		 <set> 
+			<if test="sourceType != null">
+				 sourceType = #{sourceType},
+			</if>
+			<if test="feedbackUserId != null">
+				 feedbackUserId = #{feedbackUserId},
+			</if>
+			<if test="feedbackType != null">
+				 feedbackType = #{feedbackType},
+			</if>
+			<if test="feedbackTime != null">
+				 feedbackTime = #{feedbackTime},
+			</if>
+			<if test="opinionDesc != null">
+				 opinionDesc = #{opinionDesc},
+			</if>
+			<if test="contactNumber != null">
+				 contactNumber = #{contactNumber},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="feedback">
+		 UPDATE bb_feedback
+		 SET 
+			 sourceType = #{sourceType},
+			 feedbackUserId = #{feedbackUserId},
+			 feedbackType = #{feedbackType},
+			 feedbackTime = #{feedbackTime},
+			 opinionDesc = #{opinionDesc},
+			 contactNumber = #{contactNumber}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

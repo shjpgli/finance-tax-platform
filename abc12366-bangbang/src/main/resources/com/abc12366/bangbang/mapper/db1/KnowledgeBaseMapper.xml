@@ -10,6 +10,27 @@
     </sql>
 
 
+    <!-- 查询感兴趣的知识 -->
+    <select id="interestedList" resultType="knowledgeBase">
+        SELECT * FROM bb_knowledge_base WHERE
+        id IN(
+            SELECT DISTINCT knowledgeId FROM
+            bb_knowledge_tag_rel
+            WHERE
+            tagId
+            IN(
+                SELECT tagId
+                FROM
+                bb_knowledge_tag_rel
+                WHERE
+                knowledgeId = #{id}
+            )
+            AND  knowledgeId !=  #{id}
+        )
+        limit #{num}
+    </select>
+
+
 
     <!-- 首页热点问题查询 -->
     <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
@@ -87,6 +108,8 @@
             #{item}
         </foreach>
     </delete>
+
+
 
     <!-- 添加 -->
     <insert id="insert" parameterType="knowledgeBase">
@@ -298,5 +321,17 @@
         WHERE id = #{id}
     </update>
 
+
+    <!-- 修改  知识是否有用 -->
+    <update id="addUsefulVoteByPK" parameterType="java.lang.String">
+      UPDATE bb_knowledge_base SET usefulVotes = usefulVotes + 1 WHERE id = #{id}
+    </update>
+    <update id="addUselessVoteByPK" parameterType="java.lang.String">
+        UPDATE bb_knowledge_base SET uselessVotes = uselessVotes + 1 WHERE id = #{id}
+    </update>
+    <!-- 新增浏览量 -->
+    <update id="addPVByPK">
+      UPDATE bb_knowledge_base SET pv = pv + 1 WHERE id = #{id}
+    </update>
 
 </mapper>
