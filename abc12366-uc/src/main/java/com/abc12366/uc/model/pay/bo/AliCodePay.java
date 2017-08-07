@@ -33,7 +33,7 @@ public class AliCodePay implements Serializable {
     private String subject;
     
     @NotEmpty
-    private Integer qrCodeSize;//二维码大小
+    private Integer qrCodeSize=200;//二维码大小
 
 	private String body;//对交易或商品的描述
     

@@ -22,6 +22,7 @@ import com.abc12366.uc.model.pay.bo.AliCodePay;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.QRCodeUtil;
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
 import com.alipay.api.request.AlipayTradeCancelRequest;
@@ -58,6 +59,7 @@ public class AliPayController {
 	@PostMapping("/payform")
 	public ResponseEntity aliPayForm(@RequestBody AliPayReq payReq){
 		try {
+			LOGGER.info("支付宝网页支付接收信息{}",JSON.toJSONString(payReq));
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
 			alipayRequest.setReturnUrl(payReq.getReturn_url());
@@ -82,12 +84,14 @@ public class AliPayController {
 	@PostMapping("/paycode")
 	public ResponseEntity aliPayCode(@RequestBody AliCodePay payReq){
 		try {
+			LOGGER.info("支付宝二维码支付接收信息{}",JSON.toJSONString(payReq));
+			int qsize=payReq.getQrCodeSize();
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(payReq));
 			AlipayTradePrecreateResponse response = alipayClient.execute(request);
 			if(response.isSuccess()){
-				PayCodeRsp payCodeRsp=new PayCodeRsp(response.getOutTradeNo(),QRCodeUtil.getCreatQRcodeString(response.getQrCode(), payReq.getQrCodeSize(), "JPG"));
+				PayCodeRsp payCodeRsp=new PayCodeRsp(response.getOutTradeNo(),QRCodeUtil.getCreatQRcodeString(response.getQrCode(), qsize, "JPG"));
 				return ResponseEntity.ok(Utils.kv("data", payCodeRsp));
 			}else{
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));

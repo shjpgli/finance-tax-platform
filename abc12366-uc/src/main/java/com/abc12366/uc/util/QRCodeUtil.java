@@ -32,8 +32,8 @@ public class QRCodeUtil {
 					BarcodeFormat.QR_CODE, qrCodeSize,qrCodeSize, hintMap);
 			// 使BufferedImage勾画QRCode (matrixWidth 是行二维码像素点)
 			int matrixWidth = byteMatrix.getWidth();
-			BufferedImage image = new BufferedImage(matrixWidth - 200,
-					matrixWidth - 200, BufferedImage.TYPE_INT_RGB);
+			BufferedImage image = new BufferedImage(matrixWidth,
+					matrixWidth, BufferedImage.TYPE_INT_RGB);
 			image.createGraphics();
 			Graphics2D graphics = (Graphics2D) image.getGraphics();
 			graphics.setColor(Color.WHITE);
