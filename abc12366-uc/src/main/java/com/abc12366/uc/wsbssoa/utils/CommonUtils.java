@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @version v1.0
  * @created 2014-3-7
  */
-@Component
+@Component("commonUtils2")
 public class CommonUtils {
 
     public static boolean nullOrBlank(String param) {
