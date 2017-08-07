@@ -229,7 +229,7 @@
             </if>
 
         </set>
-        WHERE orderNo = #{orderNo} and userId = #{userId}
+        WHERE orderNo = #{orderNo}
     </update>
 
 </mapper>

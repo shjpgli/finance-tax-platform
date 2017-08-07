@@ -6,6 +6,8 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserBindService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class UserBindController {
 
     @PostMapping(path = "/bind/dzsb")
     public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest
-            request) {
+            request) throws MarshalException, ValidationException {
         LOGGER.info("{}:{}", userDzsbInsertBO, request);
         UserDzsbBO user_dzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
         LOGGER.info("{}", user_dzsb);
