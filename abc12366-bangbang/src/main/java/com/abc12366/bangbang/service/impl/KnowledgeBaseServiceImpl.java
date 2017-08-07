@@ -139,7 +139,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Transactional("db1TxManager")
     @Override
-    public void useFull(KnowledgeVoteLog knowledgeVoteLog) {
+    public void addVote(KnowledgeVoteLog knowledgeVoteLog) {
         Boolean isUseFull = knowledgeVoteLog.getIsUseFull();
         String knowledgeId = knowledgeVoteLog.getKnowledgeId();
         if(isUseFull == Boolean.TRUE){

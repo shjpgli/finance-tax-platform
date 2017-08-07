@@ -133,8 +133,8 @@ public class KnowledgeBaseController {
      * 为知识库投票
      */
     @PostMapping(path = "/vote/add")
-    public ResponseEntity useful(@RequestBody KnowledgeVoteLog knowledgeVoteLog) {
-        knowledgeBaseService.useFull(knowledgeVoteLog);
+    public ResponseEntity voteAdd(@RequestBody KnowledgeVoteLog knowledgeVoteLog) {
+        knowledgeBaseService.addVote(knowledgeVoteLog);
         return ResponseEntity.ok(Utils.kv());
     }
 

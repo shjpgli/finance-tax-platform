@@ -19,11 +19,13 @@ public interface KnowledgeBaseService {
     /* 帮助中心首页 热点问题，词条 */
     Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO);
 
+    /* 知识库列表查询数据*/
     List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
 
     /* 根据知识ID 查询关联感兴趣的知识列表 */
     List<KnowledgeBase> interestedList(String id, int num);
 
+    /* 知识库单个查询*/
     KnowledgeBase selectOne(String id);
 
     /* 新增知识库数据 */
@@ -38,11 +40,11 @@ public interface KnowledgeBaseService {
     /*修改知识库数据*/
     KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO);
 
-    /*修改知识库数据 是否有用*/
-    void useFull(KnowledgeVoteLog knowledgeVoteLog);
-
     /*修改知识库数据 浏览量*/
     void addPV(String id);
+
+    /*新增知识库投票数据*/
+    void addVote(KnowledgeVoteLog knowledgeVoteLog);
 
     /*删除知识库投票数据*/
     void deleteVoteLogs(List<String> ids);
