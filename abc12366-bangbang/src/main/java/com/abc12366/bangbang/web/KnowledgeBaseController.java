@@ -136,9 +136,23 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    /*
-    * 意见反馈接口
-    */
+//    /*
+//    * 知识库投票列表  接口
+//    */
+//    @GetMapping(path = "/list")
+//    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+//                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+//                                     @RequestParam(value = "sourceType", required = false) String sourceType,
+//                                     @RequestParam(value = "feedbackType", required = false) String feedbackType) {
+//        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+//
+//        FeedbackParamBO param = new FeedbackParamBO(sourceType, feedbackType);
+//        List<Feedback> list = feedbackService.selectList(param);
+//
+//        return (list == null) ?
+//                ResponseEntity.ok(Utils.kv()) :
+//                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+//    }
 
 
 

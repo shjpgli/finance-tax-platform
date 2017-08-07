@@ -137,7 +137,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         return knowledgeBaseBO;
     }
 
-
+    @Transactional("db1TxManager")
     @Override
     public void useFull(KnowledgeVoteLog knowledgeVoteLog) {
         Boolean isUseFull = knowledgeVoteLog.getIsUseFull();

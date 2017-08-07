@@ -29,15 +29,6 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
-    /**
-     * 添加意见反馈接口
-     */
-    @PostMapping(path = "/add")
-    public ResponseEntity add(@RequestBody Feedback feedback) {
-        feedbackService.add(feedback);
-        return ResponseEntity.ok(Utils.kv("data", feedback));
-    }
-
 
     /*
     *  意见反馈 分页查询
@@ -57,6 +48,19 @@ public class FeedbackController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
+
+
+    /**
+     * 添加意见反馈接口
+     */
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody Feedback feedback) {
+        feedbackService.add(feedback);
+        return ResponseEntity.ok(Utils.kv("data", feedback));
+    }
+
+
+
 
 
 }
