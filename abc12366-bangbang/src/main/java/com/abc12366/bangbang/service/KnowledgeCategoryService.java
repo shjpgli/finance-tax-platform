@@ -18,6 +18,9 @@ public interface KnowledgeCategoryService {
 
     KnowledgeCategory add(KnowledgeCategory knowledgeCategory);
 
+    /* 修改分类 */
+    KnowledgeCategory modify(KnowledgeCategory knowledgeCategory);
+
     /* 修改分类名称 */
     void modifyNameById(String id, String name);
 

@@ -43,6 +43,13 @@ public class KnowledgeCategoryController {
         return ResponseEntity.ok(Utils.kv("data", rs));
     }
 
+    /* 新增分类 */
+    @PostMapping(path = "/modify")
+    public ResponseEntity modify(@RequestBody KnowledgeCategory record) {
+        KnowledgeCategory rs = knowledgeCategoryService.modify(record);
+        return ResponseEntity.ok(Utils.kv("data", rs));
+    }
+
     /* 修改分类的名称 */
     @PutMapping(path = "/modifyName/{id}")
     public ResponseEntity modifyName(@PathVariable String id, @RequestParam String name) {

@@ -8,7 +8,7 @@
         </filter>
         <File>${LOG_PATH}/uc_info.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/core_info-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/uc_info-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
@@ -27,7 +27,7 @@
         </filter>
         <File>${LOG_PATH}/uc_error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/core_error-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/uc_error-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
@@ -39,8 +39,6 @@
             </Pattern>
         </layout>
     </appender>
-
-    <logger name="druid.sql" level="warn,stdout"/>
 
     <root level="INFO">
         <appender-ref ref="INFO_FILE"/>

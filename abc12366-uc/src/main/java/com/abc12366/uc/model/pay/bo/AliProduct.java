@@ -1,7 +1,11 @@
 package com.abc12366.uc.model.pay.bo;
 
 import java.io.Serializable;
-
+/**
+ * 商品信息
+ * @author zhushuai 2017-8-5
+ *
+ */
 public class AliProduct implements Serializable{
 
 	/**

@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 支付宝统一下单支付实体
+ * 支付宝统一收单线下交易实体
  * @author zhushuai 2017-8-5
  *
  */
@@ -32,7 +32,10 @@ public class AliCodePay implements Serializable {
 	@Size(min = 1, max = 256)
     private String subject;
     
-    private String body;//对交易或商品的描述
+    @NotEmpty
+    private Integer qrCodeSize=200;//二维码大小
+
+	private String body;//对交易或商品的描述
     
     private String operator_id;//商户操作员编号
     
@@ -140,6 +143,14 @@ public class AliCodePay implements Serializable {
 
 	public void setExtend_params(PayExtend extend_params) {
 		this.extend_params = extend_params;
+	}
+
+	public Integer getQrCodeSize() {
+		return qrCodeSize;
+	}
+
+	public void setQrCodeSize(Integer qrCodeSize) {
+		this.qrCodeSize = qrCodeSize;
 	}
     
     
