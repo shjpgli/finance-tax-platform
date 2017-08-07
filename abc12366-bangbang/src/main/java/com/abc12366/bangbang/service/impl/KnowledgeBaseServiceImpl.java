@@ -166,6 +166,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         return knowledgeVoteLogMapper.selectList(param);
     }
 
+    @Override
+    public KnowledgeVoteLog selectByUserVotedKnowledge(String userId, String knowledgeId) {
+        return knowledgeVoteLogMapper.selectByUserVotedKnowledge(userId, knowledgeId);
+    }
+
 
     private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> tagIds = knowledgeBaseBO.getTagIds();

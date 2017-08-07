@@ -29,7 +29,15 @@ public interface KnowledgeVoteLogMapper{
 	 * 查询（根据主键ID查询）
 	 *
 	 **/
-	KnowledgeVoteLog  selectByPrimaryKey ( @Param("id") Long id );
+	KnowledgeVoteLog  selectByPrimaryKey ( @Param("id") String id );
+
+
+	/**
+	 *
+	 * 查询（用户投票过的数据）
+	 *
+	 **/
+	KnowledgeVoteLog  selectByUserVotedKnowledge ( @Param("userId") String userId, @Param("knowledgeId") String knowledgeId );
 
 	/**
 	 *

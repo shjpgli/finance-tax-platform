@@ -168,6 +168,21 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    /*
+    * 查询该知识库投过票的投票数据
+    */
+    @GetMapping(path = "/vote/one/{userId}/{knowledgeId}")
+    public ResponseEntity selectVoteList(@PathVariable String userId, @PathVariable String knowledgeId) {
+
+        KnowledgeVoteLog log = knowledgeBaseService.selectByUserVotedKnowledge(userId, knowledgeId);
+
+        return ResponseEntity.ok(Utils.kv("data", log));
+    }
+
+
+
+
+
 
 
 

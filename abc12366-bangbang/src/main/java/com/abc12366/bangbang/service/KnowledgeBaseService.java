@@ -53,4 +53,6 @@ public interface KnowledgeBaseService {
     /*知识库投票列表查询*/
     List<KnowledgeVoteLogBO> selectVoteList(KnowledgeBaseParamBO param);
 
+    /*查询用户该知识库投过票的数据*/
+    KnowledgeVoteLog selectByUserVotedKnowledge(String userId, String knowledgeId);
 }

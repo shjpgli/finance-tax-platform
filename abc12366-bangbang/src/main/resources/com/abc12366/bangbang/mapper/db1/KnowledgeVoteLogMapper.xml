@@ -45,6 +45,13 @@
 		FROM bb_knowledge_vote_log
 		WHERE id = #{id}
 	</select>
+	<!-- 查询（根据查询） -->
+	<select id="selectByUserVotedKnowledge" resultType="knowledgeVoteLog">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_knowledge_vote_log
+		WHERE userId = #{userId} AND knowledgeId = #{knowledgeId}
+	</select>
 
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
