@@ -89,8 +89,8 @@ public class WxConnect<T> {
                 this.outputStr = JSON.toJSONString(bodyparamters);
             }
         } catch (Exception e) {
-            this.setJsonStr("{\"errcode\":\"-999\",\"errmsg\":\"组装微信请求参数异常，请联系管理员\"}");
-            LOGGER.info("组装微信请求[" + wechatUrl.describe + "]参数异常:{}", e);
+//            this.setJsonStr("{\"errcode\":\"-999\",\"errmsg\":\"组装微信请求参数异常，请联系管理员\"}");
+//            LOGGER.info("组装微信请求[" + wechatUrl.describe + "]参数异常:{}", e);
         }
     }
 

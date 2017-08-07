@@ -1,6 +1,8 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.*;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.ValidationException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
  * Time: 16:22
  */
 public interface UserBindService {
-    UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request);
+    UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws MarshalException, ValidationException;
 
     boolean dzsbUnbind(String id);
 
