@@ -5,6 +5,7 @@ import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -148,28 +149,24 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /*
+    * 知识库投票列表  接口
+    */
+    @GetMapping(path = "/vote/list")
+    public ResponseEntity selectVoteList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                         @RequestParam(value = "categoryCode", required = false) String categoryCode,
+                                         @RequestParam(value = "keywords", required = false) String keywords,
+                                         @RequestParam(value = "type", required = false) String type) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords);
+        List<KnowledgeVoteLogBO> list = knowledgeBaseService.selectVoteList(param);
 
-//    /*
-//    * 知识库投票列表  接口
-//    */
-//    @GetMapping(path = "/list")
-//    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-//                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-//                                     @RequestParam(value = "sourceType", required = false) String sourceType,
-//                                     @RequestParam(value = "feedbackType", required = false) String feedbackType) {
-//        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-//
-//        FeedbackParamBO param = new FeedbackParamBO(sourceType, feedbackType);
-//        List<Feedback> list = feedbackService.selectList(param);
-//
-//        return (list == null) ?
-//                ResponseEntity.ok(Utils.kv()) :
-//                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
-//    }
-
-
-
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
 
 
 

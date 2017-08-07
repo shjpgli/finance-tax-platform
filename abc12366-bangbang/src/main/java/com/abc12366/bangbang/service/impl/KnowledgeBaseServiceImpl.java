@@ -12,6 +12,7 @@ import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
@@ -158,6 +159,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     @Override
     public void deleteVoteLogs(List<String> ids) {
         knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
+    }
+
+    @Override
+    public List<KnowledgeVoteLogBO> selectVoteList(KnowledgeBaseParamBO param) {
+        return knowledgeVoteLogMapper.selectList(param);
     }
 
 

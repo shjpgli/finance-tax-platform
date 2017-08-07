@@ -5,8 +5,38 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		id,	userId,	knowledgeId,	isUsefull,	sourceIP,	createTime
+		id,	userId,	knowledgeId,	isUseFull,	sourceIP,	createTime
 	</sql>
+
+	<!-- 列表查询 -->
+	<select id="selectList" resultType="knowledgeVoteLogBO"
+			parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
+		SELECT t_votelog.*,t_user.username AS userName, t_base.subject AS knowledgeSubject
+		FROM
+		bb_knowledge_vote_log t_votelog
+		LEFT JOIN abc12366_uc.uc_user t_user ON t_votelog.userId = t_user.id
+		LEFT JOIN bb_knowledge_base  t_base ON t_votelog.knowledgeId = t_base.id
+		WHERE 1=1
+		<if test="categoryCode != null">
+			AND t_base.categoryCode LIKE CONCAT(#{categoryCode},'%')
+		</if>
+		<if test="type != null">
+			AND t_base.type = #{type}
+		</if>
+		<if test="keywords != null">
+			AND (
+				t_base.subject LIKE CONCAT('%',#{keywords},'%')
+				OR
+				t_base.id IN(
+					SELECT DISTINCT t1.knowledgeId
+					FROM
+					bb_knowledge_tag_rel t1
+					LEFT JOIN bb_knowledge_tag t2 ON t1.tagId = t2.id
+					WHERE t2.name LIKE CONCAT('%',#{keywords},'%')
+				)
+			)
+		</if>
+	</select>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="knowledgeVoteLog" parameterType="java.lang.String">
@@ -33,9 +63,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="knowledgeVoteLog">
 		INSERT INTO bb_knowledge_vote_log
-		(id,userId,knowledgeId,isUsefull,sourceIP,createTime)
+		(id,userId,knowledgeId,isUseFull,sourceIP,createTime)
 		VALUES
-		(#{id},#{userId},#{knowledgeId},#{isUsefull},#{sourceIP},#{createTime})
+		(#{id},#{userId},#{knowledgeId},#{isUseFull},#{sourceIP},#{createTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -51,8 +81,8 @@
 			<if test="knowledgeId != null">
 				knowledgeId,
 			</if>
-			<if test="isUsefull != null">
-				isUsefull,
+			<if test="isUseFull != null">
+				isUseFull,
 			</if>
 			<if test="sourceIP != null">
 				sourceIP,
@@ -72,8 +102,8 @@
 			<if test="knowledgeId!=null">
 				#{knowledgeId},
 			</if>
-			<if test="isUsefull!=null">
-				#{isUsefull},
+			<if test="isUseFull!=null">
+				#{isUseFull},
 			</if>
 			<if test="sourceIP!=null">
 				#{sourceIP},
@@ -94,8 +124,8 @@
 			<if test="knowledgeId != null">
 				knowledgeId = #{knowledgeId},
 			</if>
-			<if test="isUsefull != null">
-				isUsefull = #{isUsefull},
+			<if test="isUseFull != null">
+				isUseFull = #{isUseFull},
 			</if>
 			<if test="sourceIP != null">
 				sourceIP = #{sourceIP},
@@ -114,7 +144,7 @@
 		 SET
 			 userId = #{userId},
 			 knowledgeId = #{knowledgeId},
-			 isUsefull = #{isUsefull},
+			 isUseFull = #{isUseFull},
 			 sourceIP = #{sourceIP},
 			 createTime = #{createTime}
 		 WHERE id = #{id}

@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.KnowledgeVoteLog;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,6 +14,14 @@ import java.util.List;
  **/
 
 public interface KnowledgeVoteLogMapper{
+
+	/**
+	 *
+	 * 列表查询
+	 *
+	 */
+	List<KnowledgeVoteLogBO> selectList(KnowledgeBaseParamBO param);
+
 
 
 	/**
