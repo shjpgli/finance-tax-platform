@@ -44,6 +44,7 @@ public class PayReturnController {
 				valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
 				params.put(name, valueStr);
 			}
+			
 			LOGGER.info("支付宝回调信息:",JSON.toJSONString(params));
 			boolean signVerified =AliPayConfig.rsaCheckV1(params);  //调用SDK验证签名
 			if(signVerified) {//验证成功
