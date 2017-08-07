@@ -1,9 +1,13 @@
 package com.abc12366.uc.util;
 
 
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
+import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.internal.util.AlipaySignature;
 
 public class AliPayConfig {
 	
@@ -38,6 +42,10 @@ public class AliPayConfig {
 
 	public static String toCharsetStr(String val) throws Exception{
 		return new String(val.getBytes("ISO-8859-1"),charset);
+	}
+
+	public static boolean rsaCheckV1(Map<String, String> params) throws AlipayApiException {
+		return AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key, AliPayConfig.charset, AliPayConfig.sign_type);
 	}
 	
 }

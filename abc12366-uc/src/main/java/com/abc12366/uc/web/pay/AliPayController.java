@@ -15,14 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.pay.AliPayReq;
 import com.abc12366.uc.model.pay.BillListReq;
+import com.abc12366.uc.model.pay.BillListRes;
 import com.abc12366.uc.model.pay.PayCodeRsp;
 import com.abc12366.uc.model.pay.PayqueryReq;
+import com.abc12366.uc.model.pay.PayqueryRes;
 import com.abc12366.uc.model.pay.RefundQueryReq;
+import com.abc12366.uc.model.pay.RefundQueryRes;
+import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliCodePay;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.QRCodeUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
 import com.alipay.api.request.AlipayTradeCancelRequest;
@@ -116,7 +121,9 @@ public class AliPayController {
 			alipayRequest.setBizContent(AliPayConfig.toCharsetJsonStr(payqueryReq));
 			AlipayTradeQueryResponse response = alipayClient.execute(alipayRequest);
 			if(response.isSuccess()){
-				return ResponseEntity.ok(Utils.kv("data", response));
+				JSONObject object = JSON.parseObject(response.getBody());
+				return ResponseEntity.ok(Utils.kv("data", 
+						JSON.parseObject(object.getString("alipay_trade_query_response"), PayqueryRes.class)));
 			}else{
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
 			}
@@ -140,7 +147,9 @@ public class AliPayController {
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(aliRefund));
 			AlipayTradeRefundResponse response = alipayClient.execute(request);
 			if(response.isSuccess()){
-				return ResponseEntity.ok(Utils.kv("data", response));
+				JSONObject object = JSON.parseObject(response.getBody());
+				return ResponseEntity.ok(Utils.kv("data", 
+						JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class)));
 			}else{
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
 			}
@@ -166,7 +175,9 @@ public class AliPayController {
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(new RefundQueryReq(out_trade_no,out_request_no)));
 			AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
 			if(response.isSuccess()){
-				return ResponseEntity.ok(Utils.kv("data", response));
+				JSONObject object = JSON.parseObject(response.getBody());
+				return ResponseEntity.ok(Utils.kv("data", 
+						JSON.parseObject(object.getString("alipay_trade_fastpay_refund_query_response"), RefundQueryRes.class)));
 			}else{
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
 			}
@@ -239,13 +250,15 @@ public class AliPayController {
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(billListReq));
 			AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(request);
 			if(response.isSuccess()){
-				return ResponseEntity.ok(Utils.kv("data", response));
+				JSONObject object = JSON.parseObject(response.getBody());
+				return ResponseEntity.ok(Utils.kv("data", 
+						JSON.parseObject(object.getString("alipay_data_dataservice_bill_downloadurl_query_response"), BillListRes.class)));
 			}else{
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
 			}
 		} catch (Exception e) {
-			LOGGER.error("支付宝支付交易取消异常,原因:",e);
-			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝支付交易取消异常"));
+			LOGGER.error("支付宝交易对账单地址查询异常,原因:",e);
+			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝交易对账单地址查询异常"));
 		}
 	}
 }

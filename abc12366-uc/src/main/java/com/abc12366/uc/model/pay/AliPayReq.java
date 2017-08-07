@@ -2,6 +2,8 @@ package com.abc12366.uc.model.pay;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import com.abc12366.uc.model.pay.bo.AliPagePayContent;
 /**
  *支付宝支付请求
@@ -13,6 +15,7 @@ public class AliPayReq implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@NotNull
 	private AliPagePayContent payContent;
 	private String notify_url;
 	private String return_url;
