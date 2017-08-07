@@ -560,24 +560,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderBO cancelOrder(Order order) {
-        OrderBO bo = orderRoMapper.selectById(order.getOrderNo());
+    public OrderBO cancelOrder(OrderCancelBO orderCancelBO) {
+        OrderBO bo = orderRoMapper.selectById(orderCancelBO.getOrderNo());
         if (bo == null) {
-            LOGGER.info("订单信息不存在：{}", order);
+            LOGGER.info("订单信息不存在：{}", orderCancelBO);
             throw new ServiceException(4134);
         }
         if (!bo.getOrderStatus().equals("2")) {
-            LOGGER.info("只有待支付可以取消订单：{}", order);
+            LOGGER.info("只有待支付可以取消订单：{}", orderCancelBO);
             throw new ServiceException(4189);
         }
-        order.setOrderStatus("4");
-
+        orderCancelBO.setOrderStatus("7");
+        Order order = new Order();
+        BeanUtils.copyProperties(orderCancelBO,order);
         int update = orderMapper.update(order);
         if (update != 1) {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
-
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), new Date(), "用户取消订单");
         return bo;
     }
@@ -746,6 +746,25 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<OrderBO> selectExprotOrder(Order order) {
+        return orderRoMapper.selectExprotOrder(order);
+    }
+
+    @Override
+    public void selectImprotOrder(List<OrderBO> orderBOList) {
+        for(OrderBO bo:orderBOList){
+            Order order = new Order();
+            BeanUtils.copyProperties(bo,order);
+            int upd = orderMapper.update(order);
+            if(upd != 1){
+                LOGGER.warn("修改失败，参数：{}", order);
+                throw new ServiceException(4102);
+            }
+            insertOrderLog(order.getUserId(), order.getOrderNo(), new Date(), "管理员已发货");
+        }
     }
 
 }

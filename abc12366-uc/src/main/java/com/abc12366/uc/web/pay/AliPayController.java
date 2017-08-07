@@ -85,13 +85,12 @@ public class AliPayController {
 	public ResponseEntity aliPayCode(@RequestBody AliCodePay payReq){
 		try {
 			LOGGER.info("支付宝二维码支付接收信息{}",JSON.toJSONString(payReq));
-			int qsize=payReq.getQrCodeSize();
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(payReq));
 			AlipayTradePrecreateResponse response = alipayClient.execute(request);
 			if(response.isSuccess()){
-				PayCodeRsp payCodeRsp=new PayCodeRsp(response.getOutTradeNo(),QRCodeUtil.getCreatQRcodeString(response.getQrCode(), qsize, "JPG"));
+				PayCodeRsp payCodeRsp=new PayCodeRsp(response.getOutTradeNo(),QRCodeUtil.getCreatQRcodeString(response.getQrCode(), payReq.getQrCodeSize(), "JPG"));
 				return ResponseEntity.ok(Utils.kv("data", payCodeRsp));
 			}else{
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
