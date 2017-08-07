@@ -26,7 +26,7 @@ public class PayqueryRes implements Serializable{
     private String send_pay_date;//本次交易打款给卖家的时间
     private String total_amount;//交易的订单金额
     private String trade_no;//支付宝交易号
-    private String trade_statu;//交易状态：WAIT_BUYER_PAY（交易创建，等待买家付款）、TRADE_CLOSED（未付款交易超时关闭，或支付完成后全额退款）、TRADE_SUCCESS（交易支付成功）、TRADE_FINISHED（交易结束，不可退款）
+    private String trade_status;//交易状态：WAIT_BUYER_PAY（交易创建，等待买家付款）、TRADE_CLOSED（未付款交易超时关闭，或支付完成后全额退款）、TRADE_SUCCESS（交易支付成功）、TRADE_FINISHED（交易结束，不可退款）
     private List<Fundbill> fund_bill_list;//交易支付使用的资金渠道
     
     
@@ -108,18 +108,20 @@ public class PayqueryRes implements Serializable{
 	public void setTrade_no(String trade_no) {
 		this.trade_no = trade_no;
 	}
-	public String getTrade_statu() {
-		return trade_statu;
-	}
-	public void setTrade_statu(String trade_statu) {
-		this.trade_statu = trade_statu;
-	}
+	
     
     public List<Fundbill> getFund_bill_list() {
 		return fund_bill_list;
 	}
 	public void setFund_bill_list(List<Fundbill> fund_bill_list) {
 		this.fund_bill_list = fund_bill_list;
+	}
+
+	public String getTrade_status() {
+		return trade_status;
+	}
+	public void setTrade_status(String trade_status) {
+		this.trade_status = trade_status;
 	}
 
 	class Fundbill{
