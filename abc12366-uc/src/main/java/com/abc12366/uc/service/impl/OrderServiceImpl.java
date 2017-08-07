@@ -776,7 +776,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void sendOrder(OrderOperationBO orderOperationBO) {
         //订单状态，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
-        orderOperationBO.setOrderStatus("6");
+        orderOperationBO.setOrderStatus("5");
         Order order = new Order();
         BeanUtils.copyProperties(orderOperationBO,order);
         int upd = orderMapper.update(order);

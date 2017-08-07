@@ -27,6 +27,7 @@
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
         <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.User">
             <id column="userId" property="id"/>
@@ -37,10 +38,13 @@
         </association>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
+        <association property="userAddress" column="addressId" select="getUserAddress"/>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
-                    select="getOrderProduct"></collection>
+        select="getOrderProduct"></collection>
         <collection property="orderLogBOList" ofType="com.abc12366.uc.model.bo.OrderLogBO" column="orderNo"
-                    select="getOrderLog"></collection>
+        select="getOrderLog"></collection>
+        <collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO" column="orderNo"
+                    select="getTradeLogBO"></collection>
     </resultMap>
 
     <!--订单日志对象-->
@@ -85,6 +89,29 @@
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="goodsBoMap" type="com.abc12366.uc.model.bo.GoodsBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
+        <result column="details" property="details" jdbcType="VARCHAR"/>
+        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
+        <result column="categoryName" property="categoryName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="recommendType" property="recommendType" jdbcType="VARCHAR"/>
+        <result column="totalStock" property="totalStock" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <!--配送方式对象-->
     <resultMap id="deliveryMethodBOMap" type="com.abc12366.uc.model.bo.DeliveryMethodBO">
         <id column="deliveryId" property="id"/>
@@ -103,6 +130,24 @@
         <result column="minInsuredFee" property="minInsuredFee" jdbcType="DOUBLE"/>
         <result column="areaFeeType" property="areaFeeType" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <!-- 获取商品信息-->
+    <select id="selectGoodsBOList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.Goods">
+        SELECT
+        g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
+        g.giftPoints,
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType
+        FROM uc_goods g
+
+    </select>
+
+    <!-- 查询用户地址信息 -->
+    <select id="getUserAddress" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
+        SELECT
+        id, userId, name, province, city, area, detail, phone, isDefault, status, createTime, lastUpdate
+        FROM uc_user_address
+        WHERE id = #{id}
+    </select>
 
     <!--获取配送方式-->
     <select id="getDeliveryMethodBO" resultMap="deliveryMethodBOMap" parameterType="java.lang.String">
@@ -132,6 +177,29 @@
         l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark
         FROM uc_order_log l
         WHERE l.orderNo = #{orderNo}
+    </select>
+
+    <!--订单和产品对应关系对象-->
+    <resultMap id="tradeLogBOMap" type="com.abc12366.uc.model.bo.TradeLogBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="DOUBLE"/>
+        <result column="tradeStatus" property="tradeStatus" jdbcType="VARCHAR"/>
+        <result column="tradeType" property="tradeType" jdbcType="VARCHAR"/>
+        <result column="tradeTime" property="tradeTime" jdbcType="TIMESTAMP"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="compareStatus" property="compareStatus" jdbcType="VARCHAR"/>
+        <result column="compareTime" property="compareTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--获取交易记录信息-->
+    <select id="getTradeLogBO" resultMap="tradeLogBOMap" parameterType="java.lang.String">
+        SELECT
+        id, orderNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime
+        FROM uc_trade_log
+        WHERE orderNo = #{orderNo}
     </select>
 
     <!--用户对象-->
@@ -226,7 +294,9 @@
         SELECT
         orderNo, productId, sellingPrice, unitPrice, num, discount, dealPrice, name, categoryId, category, weight,
         createTime, lastUpdate
-        FROM uc_order_product
+        FROM uc_order_product op
+        LEFT JOIN uc_product p ON op.productId = p.id
+        LEFT JOIN uc_goods g ON g.id = p.goodsId
         WHERE orderNo = #{orderNo}
     </select>
 

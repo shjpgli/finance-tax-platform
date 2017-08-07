@@ -43,10 +43,13 @@ public class OrderBO implements Serializable {
     private Boolean isInvoice;
     private GoodsBO goodsBO;
     private User user;
+    private String userAddress;
+
 
     private List<OrderProductBO> orderProductBOList;
     private List<OrderProductSpec> orderProductSpecList;
     private List<DictBO> dictBOList;
+    private List<TradeLogBO> tradeLogBOList;
     private Date startTime;
     private Date endTime;
 
@@ -318,5 +321,21 @@ public class OrderBO implements Serializable {
 
     public void setOrderLogBOList(List<OrderLogBO> orderLogBOList) {
         this.orderLogBOList = orderLogBOList;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public List<TradeLogBO> getTradeLogBOList() {
+        return tradeLogBOList;
+    }
+
+    public void setTradeLogBOList(List<TradeLogBO> tradeLogBOList) {
+        this.tradeLogBOList = tradeLogBOList;
     }
 }
