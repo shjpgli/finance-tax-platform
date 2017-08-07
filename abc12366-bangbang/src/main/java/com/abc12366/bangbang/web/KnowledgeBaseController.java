@@ -36,7 +36,7 @@ public class KnowledgeBaseController {
     *
     * 帮助中心 热点问题知识
     *
-    * */
+    */
     @GetMapping(path = "/hotList")
     public ResponseEntity hotList(@RequestParam(value = "categoryNum", defaultValue = "6") int categoryNum,
                                   @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
@@ -88,14 +88,6 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv("data", knowledgeBase));
     }
 
-    /**
-     * 修改知识库 是否有用 接口
-     */
-    @PutMapping(path = "/useful/{id}")
-    public ResponseEntity useful(@PathVariable String id, @RequestBody KnowledgeVoteLog knowledgeVoteLog) {
-        knowledgeBaseService.useFull(knowledgeVoteLog);
-        return ResponseEntity.ok(Utils.kv());
-    }
 
     /**
      * 新增PV 接口
@@ -131,10 +123,32 @@ public class KnowledgeBaseController {
     * 删除知识库 接口
     */
     @DeleteMapping(path = "/delete")
-    public ResponseEntity delete(@RequestBody List<String> ids) {
+    public ResponseEntity delete(@RequestBody Map<String,List<String>> map) {
+        List<String> ids = map.get("ids");
         knowledgeBaseService.delete(ids);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    /**
+     * 为知识库投票
+     */
+    @PostMapping(path = "/vote/add")
+    public ResponseEntity useful(@RequestBody KnowledgeVoteLog knowledgeVoteLog) {
+        knowledgeBaseService.useFull(knowledgeVoteLog);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /*
+     * 删除知识库投票 接口
+     */
+    @DeleteMapping(path = "/vote/delete")
+    public ResponseEntity voteDelete(@RequestBody Map<String,List<String>> map) {
+        List<String> ids = map.get("ids");
+        knowledgeBaseService.deleteVoteLogs(ids);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+
 
 //    /*
 //    * 知识库投票列表  接口

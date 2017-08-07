@@ -16,21 +16,26 @@ import java.util.Map;
  */
 public interface KnowledgeBaseService {
 
+    /* 帮助中心首页 热点问题，词条 */
     Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO);
 
     List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
 
+    /* 根据知识ID 查询关联感兴趣的知识列表 */
     List<KnowledgeBase> interestedList(String id, int num);
 
     KnowledgeBase selectOne(String id);
 
+    /* 新增知识库数据 */
     void add(KnowledgeBase knowledgeBase);
 
+    /* 批量删除知识库 */
     void delete(List<String> ids);
 
     /*添加知识库数据*/
     KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO);
 
+    /*修改知识库数据*/
     KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO);
 
     /*修改知识库数据 是否有用*/
@@ -38,5 +43,8 @@ public interface KnowledgeBaseService {
 
     /*修改知识库数据 浏览量*/
     void addPV(String id);
+
+    /*删除知识库投票数据*/
+    void deleteVoteLogs(List<String> ids);
 
 }

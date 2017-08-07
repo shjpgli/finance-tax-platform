@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  *
  * KnowledgeVoteLogMapper数据库操作接口类
@@ -24,8 +26,13 @@ public interface KnowledgeVoteLogMapper{
 	 * 删除（根据主键ID删除）
 	 *
 	 **/
-	int deleteByPrimaryKey ( @Param("id") Long id );
-
+	int deleteByPrimaryKey ( @Param("id") String id );
+	/**
+	 *
+	 * 删除（根据主键ID删除）
+	 *
+	 **/
+	int deleteByPrimaryKeys (List<String> ids );
 	/**
 	 *
 	 * 添加

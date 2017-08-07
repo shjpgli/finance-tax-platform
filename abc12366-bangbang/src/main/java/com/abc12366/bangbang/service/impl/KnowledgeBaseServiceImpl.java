@@ -155,6 +155,12 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         knowledgeBaseMapper.addPVByPK(id);
     }
 
+    @Override
+    public void deleteVoteLogs(List<String> ids) {
+        knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
+    }
+
+
     private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> tagIds = knowledgeBaseBO.getTagIds();
         if (tagIds != null && !tagIds.isEmpty()) {

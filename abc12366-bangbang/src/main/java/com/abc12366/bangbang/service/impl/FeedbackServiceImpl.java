@@ -32,5 +32,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbackMapper.selectList(param);
     }
 
+    @Override
+    public int delete(List<String> ids) {
+        return feedbackMapper.deleteByPrimaryKeys(ids);
+    }
+
 
 }
