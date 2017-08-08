@@ -7,14 +7,18 @@ import com.abc12366.bangbang.model.bo.LetterBO;
 import com.abc12366.bangbang.model.bo.LetterInsertBO;
 import com.abc12366.bangbang.model.bo.LetterListBO;
 import com.abc12366.bangbang.service.LetterService;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -34,6 +38,9 @@ public class LetterServiceImpl implements LetterService {
 
     @Autowired
     private LetterRoMapper letterRoMapper;
+
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
     public LetterBO send(String fromId, String toId, LetterInsertBO letterInsertBO) {
@@ -58,13 +65,34 @@ public class LetterServiceImpl implements LetterService {
     }
 
     @Override
-    public List<LetterListBO> selectList(HttpServletRequest request) {
+    public LetterListBO selectList(HttpServletRequest request) {
         LOGGER.info("{}", request);
         String toId = (String) request.getAttribute(Constant.USER_ID);
         if (toId == null || toId.trim().equals("")) {
             throw new ServiceException(4193);
         }
-        return letterRoMapper.selectList(toId);
+        //老套路：查库
+        //return letterRoMapper.selectList(toId);
+
+        //新套路，调message接口
+        String url = "http://localhost:9200/message/user";
+        if (!StringUtils.isEmpty(request.getAttribute("page"))) {
+            url += "?page=" + request.getAttribute("page");
+            if (!StringUtils.isEmpty(request.getAttribute("size"))) {
+                url += "&size=" + request.getAttribute("size");
+            }
+        }
+        String responseStr;
+        try {
+            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.GET, request);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
+        }
+        LetterListBO response = null;
+        if (!StringUtils.isEmpty(responseStr)) {
+            response = JSON.parseObject(responseStr, LetterListBO.class);
+        }
+        return response;
     }
 
     @Override
