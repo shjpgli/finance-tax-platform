@@ -55,6 +55,11 @@ public interface ContentRoMapper {
     /**
      * 查询(根据查询条件查询)
      **/
+    List<ContentsListBo> selectListcszxw(Map<String, Object> map);
+
+    /**
+     * 查询(根据查询条件查询)
+     **/
     Integer selectCntByChannelId(Map<String, Object> map);
 
     /**

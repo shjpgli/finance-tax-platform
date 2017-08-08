@@ -164,8 +164,7 @@ public class ContentController {
      */
     @GetMapping(path = "/selectListByChannelId")
     public ResponseEntity selectListByChannelId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
-                                                        size,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                                 @RequestParam(value = "typeId", required = false) String typeId,
                                                 @RequestParam(value = "status", required = false) String status,
                                                 @RequestParam(value = "channelId", required = false) String channelId,
@@ -200,6 +199,20 @@ public class ContentController {
         List<ContentsListBo> dataList = contentService.selectListByChannelId(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
+    /**
+     * 财税咨询网
+     */
+    @GetMapping(path = "/selectListcszxw")
+    public ResponseEntity selectListcszxw(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("siteId", "3ef33a7ece264f859a4c4af37ba458c9");//站点ID
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        //查询内容列表
+        List<ContentsListBo> dataList = contentService.selectListcszxw(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
     /**
