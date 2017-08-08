@@ -84,6 +84,16 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderProductspecMapper orderProductspecMapper;
 
+    @Autowired
+    private CityRoMapper cityRoMapper;
+
+    @Autowired
+    private AreaRoMapper areaRoMapper;
+
+    @Autowired
+    private ProvinceRoMapper provinceRoMapper;
+
+
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -233,6 +243,7 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setOrderNo(orderBO.getOrderNo());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
+
         int opInsert = orderProductMapper.insert(orderProduct);
         if (opInsert != 1) {
             LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
@@ -540,6 +551,7 @@ public class OrderServiceImpl implements OrderService {
                     LOGGER.info("删除订单与产品关系信息失败：{}", orderBO);
                     throw new ServiceException(4168);
                 }
+                orderProductspecMapper.deleteByOrderNo(orderProductBO.getOrderNo());
             }
         }
         insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), new Date(), "用户删除订单");
@@ -699,6 +711,7 @@ public class OrderServiceImpl implements OrderService {
             int isPay = orderPayBO.getIsPay();
             Order order = new Order();
             order.setOrderNo(orderNo);
+            order.setPayMethod(orderPayBO.getPayMethod());
             order.setUserId(orderPayBO.getUserId());
             if(isPay == 1){
                 order.setOrderStatus("3");
@@ -755,8 +768,46 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderBO> selectExprotOrder(Order order) {
-        return orderRoMapper.selectExprotOrder(order);
+    public List<OrderListBO> selectExprotOrder(Order order) {
+        List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
+        List<OrderListBO> orderListBOList = new ArrayList<>();
+        for(OrderBO bo:orderBOList){
+            OrderListBO orderListBO = new OrderListBO();
+            orderListBO.setOrderNo(bo.getOrderNo());
+            //收货地址
+            if(bo.getUserAddressBO() != null){
+                UserAddressBO userAddress = bo.getUserAddressBO();
+                StringBuffer address = new StringBuffer();
+                address.append(userAddress.getProvinceName() + "-");
+                address.append(userAddress.getCityName() + "-");
+                address.append(userAddress.getAreaName() + "-");
+                address.append(userAddress.getDetail());
+                orderListBO.setAddress(address.toString());
+                orderListBO.setPhone(userAddress.getPhone());
+                orderListBO.setFullName(userAddress.getName());
+            }
+            //支付方式
+            orderListBO.setPayMethod(bo.getPayMethod());
+            //寄托货物
+            StringBuffer goodsName = new StringBuffer();
+            if(bo.getOrderProductBOList() != null){
+                List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
+                for(OrderProductBO orderProductBO:orderProductBOList){
+                    goodsName.append(orderProductBO.getName());
+                    List<OrderProductspecBO> orderProductspecBOs = orderProductBO.getOrderProductspecBOList();
+                    if(orderProductspecBOs != null){
+                        for (OrderProductspecBO specBO:orderProductspecBOs){
+                            goodsName.append(specBO.getFieldValue());
+                        }
+                    }
+                }
+                orderListBO.setGoodsName(goodsName.toString());
+            }
+            //寄托数量
+            orderListBO.setNum(1);
+            orderListBOList.add(orderListBO);
+        }
+        return orderListBOList;
     }
 
     @Override

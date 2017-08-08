@@ -25,4 +25,5 @@ public interface OrderProductspecMapper {
      **/
     int update(OrderProductSpec record);
 
+    int deleteByOrderNo(String orderNo);
 }

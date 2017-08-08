@@ -8,6 +8,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.util.DataUtils;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -43,7 +44,6 @@ public class OrderController {
      * @param pageSize
      * @param orderNo
      * @param username
-     * @param phone
      * @param startTime
      * @param endTime
      * @return
@@ -58,28 +58,26 @@ public class OrderController {
                                      @RequestParam(value = "startTime", required = false) String startTime,
                                      @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
-        OrderBO order = new OrderBO();
+        OrderBO orderBO = new OrderBO();
         User user = new User();
         user.setUsername(username);
         user.setPhone(phone);
-        order.setUser(user);
-        order.setOrderNo(orderNo);
-        order.setOrderStatus(orderStatus);
-//        order.setStartTime(startTime);
-//        order.setEndTime(endTime);
+        orderBO.setUser(user);
+        orderBO.setOrderNo(orderNo);
+        orderBO.setOrderStatus(orderStatus);
         if (startTime != null && !"".equals(startTime)) {
-            order.setStartTime(DataUtils.StrToDate(startTime));
+            orderBO.setStartTime(DataUtils.StrToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            order.setEndTime(DataUtils.StrToDate(endTime));
+            orderBO.setEndTime(DataUtils.StrToDate(endTime));
         }
 
-        List<OrderBO> orderList = orderService.selectList(order, pageNum, pageSize);
+        List<OrderBO> orderList = orderService.selectList(orderBO, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
         LOGGER.info("{}", orderList);
         return (orderList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -92,14 +90,14 @@ public class OrderController {
      * @return
      */
     @GetMapping(path = "/user")
-    public ResponseEntity selectUserOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
-                                                          pageNum,
-                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int
-                                                      pageSize,
+    public ResponseEntity selectUserOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                               @RequestParam(value = "name", required = false) String name,
                                               @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                               @RequestParam(value = "status", required = true) String status,
-                                              @RequestParam(value = "userId", required = true) String userId) {
+                                              @RequestParam(value = "userId", required = true) String userId,
+                                              @RequestParam(value = "startTime", required = false) String startTime,
+                                              @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
         User user = new User();
@@ -112,12 +110,19 @@ public class OrderController {
         order.setOrderStatus(status);
         order.setTradeMethod(tradeMethod);
         order.setIsInvoice(false);
+
+        if (startTime != null && !"".equals(startTime)) {
+            order.setStartTime(DataUtils.StrToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            order.setEndTime(DataUtils.StrToDate(endTime));
+        }
         List<OrderBO> orderBOs = orderService.selectOrderList(order, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -130,10 +135,8 @@ public class OrderController {
      * @return
      */
     @GetMapping(path = "/user/all")
-    public ResponseEntity selectUserAllOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
-                                                             pageNum,
-                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int
-                                                         pageSize,
+    public ResponseEntity selectUserAllOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                                  @RequestParam(value = "name", required = false) String name,
                                                  @RequestParam(value = "userId", required = true) String userId) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -151,9 +154,8 @@ public class OrderController {
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
     }
-
 
 
     /**
@@ -179,9 +181,9 @@ public class OrderController {
     public ResponseEntity exportOrder() {
         Order order = new Order();
         order.setOrderStatus("4");
-        List<OrderBO> orderBOList = orderService.selectExprotOrder(order);
-        LOGGER.info("{}", orderBOList);
-        return ResponseEntity.ok(Utils.kv("dataList", orderBOList));
+        List<OrderListBO> orderListBOList = orderService.selectExprotOrder(order);
+        LOGGER.info("{}", orderListBOList);
+        return ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(orderListBOList)));
     }
 
     /**
@@ -197,9 +199,9 @@ public class OrderController {
     }
 
 
-
     /**
      * 用户下单
+     *
      * @param userId
      * @return
      */
@@ -214,6 +216,7 @@ public class OrderController {
 
     /**
      * 用户将订单改为支付中
+     *
      * @return
      */
     @PostMapping(path = "/payment")
@@ -226,8 +229,8 @@ public class OrderController {
 
 
     /**
-     *
      * 订单发货
+     *
      * @return
      */
     @PostMapping(path = "/send")
@@ -238,8 +241,8 @@ public class OrderController {
     }
 
     /**
-     *
      * 订单作废
+     *
      * @return
      */
     @PostMapping(path = "/invalid")
@@ -351,7 +354,7 @@ public class OrderController {
         LOGGER.info("{}", orderBackBOs);
         return (orderBackBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -396,7 +399,6 @@ public class OrderController {
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
-
 
 
 }

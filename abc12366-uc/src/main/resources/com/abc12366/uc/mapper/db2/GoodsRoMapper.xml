@@ -42,7 +42,7 @@
         categoryName
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
-        WHERE id = #{id}
+        WHERE g.id = #{id}
     </select>
 
     <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">

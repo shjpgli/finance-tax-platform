@@ -105,7 +105,7 @@ public interface OrderService {
 
     OrderBO paymentOrder(OrderPayBO orderPayBO);
 
-    List<OrderBO> selectExprotOrder(Order order);
+    List<OrderListBO> selectExprotOrder(Order order);
 
     void selectImprotOrder(List<OrderBO> orderBOList);
 

@@ -11,7 +11,7 @@
             parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM uc_order_productspec
+        FROM uc_order_product_spec
         WHERE orderNo = #{orderNo}
     </select>
 
