@@ -77,6 +77,10 @@ public class OrderListBO implements Serializable {
 
     private String address;
 
+    private String addressId;
+
+    private String expressNo;
+
     /**
      * 手机号码
      */
@@ -257,5 +261,21 @@ public class OrderListBO implements Serializable {
 
     public void setNum(int num) {
         this.num = num;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
+    }
+
+    public String getExpressNo() {
+        return expressNo;
+    }
+
+    public void setExpressNo(String expressNo) {
+        this.expressNo = expressNo;
     }
 }
