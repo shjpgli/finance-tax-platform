@@ -28,9 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -102,6 +100,11 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         }
         boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, MessageConstant.VERIFY_CODE_FILL_CONTENT, code);
         //调用网易短信接口不成功，则换调用又拍云短信接口
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (!sendCodeThroghNetease) {
             boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, code);
             if (!sendCodeThroghUpyun) {
@@ -177,7 +180,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             NeteaseTemplateResponseBO neteaseTemplateResponseBO = objectMapper.readValue(((String) neteaseResponse
                     .getBody()).getBytes(), NeteaseTemplateResponseBO.class);
             if (neteaseTemplateResponseBO != null && neteaseTemplateResponseBO.getCode().equals("200")) {
-                return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
+                return true;
+                //return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
             }
         }
         return false;

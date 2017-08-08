@@ -16,8 +16,10 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
+import com.abc12366.uc.model.dzfp.DzfqQueryReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.alibaba.fastjson.JSON;
 
@@ -78,7 +80,7 @@ public class DzfpClient {
     	
     	String xml = getCommonXml(interfaceCode, new BASE64Encoder().encodeBuffer(content.getBytes("UTF-8")));
     	
-    	LOGGER.info("调用电子发票WebService,请求信息:",xml);
+    	LOGGER.info("调用电子发票WebService,请求信息:"+xml);
 		
     	Object[] opArgs = new Object[] {xml };
     	Class<?>[] opReturnType = new Class[] { String.class };
@@ -89,7 +91,7 @@ public class DzfpClient {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Object xmlToObject(String result,Class _class) throws Exception{
 		
-		LOGGER.info("调用电子发票WebService,接收信息:",result);
+		LOGGER.info("调用电子发票WebService,接收信息:"+result);
 		
 		Object object=_class.newInstance();
 		Document doc = DocumentHelper.parseText(result);
@@ -106,21 +108,22 @@ public class DzfpClient {
 		
 		Element data=rootElt.element("Data").element("content");
 		String content=new String(new BASE64Decoder().decodeBuffer(data.getTextTrim()),"UTF-8");
-		Document doc2 = DocumentHelper.parseText(content);		
-		
-		
-		List<Element> elements=doc2.getRootElement().elements();
-		if(elements!=null && elements.size()>0){
-			for(Element element:elements){
-				try{
-				 Method m3 = _class.getDeclaredMethod("set"+element.getName(), String.class);
-				 m3.invoke(object,element.getTextTrim()); 
-				}catch(Exception e){
-					continue;
+		if(!StringUtils.isEmpty(content)){
+			Document doc2 = DocumentHelper.parseText(content);		
+
+			List<Element> elements=doc2.getRootElement().elements();
+			if(elements!=null && elements.size()>0){
+				for(Element element:elements){
+					try{
+					 Method m3 = _class.getDeclaredMethod("set"+element.getName(), String.class);
+					 m3.invoke(object,element.getTextTrim()); 
+					}catch(Exception e){
+						continue;
+					}
 				}
 			}
+
 		}
-			
 		return object;
 	}
 	
@@ -187,7 +190,7 @@ public class DzfpClient {
 	public static void main(String[] args) throws Exception {
 		//doSender("DFXJ1001","<REQUEST_COMMON_FPKJ class='REQUEST_COMMON_FPKJ'> <FPQQLSH>21151334123422451</FPQQLSH><KPLX>0</KPLX><XSF_NSRSBH>110109500321655</XSF_NSRSBH><XSF_MC>百旺电子测试2</XSF_MC><XSF_DZDH>山东省青岛市</XSF_DZDH><XSF_YHZH>92523123213412341234</XSF_YHZH><GMF_NSRSBH>440300568519737</GMF_NSRSBH><GMF_MC>张三</GMF_MC><GMF_DZDH>浙江省杭州市余杭区文一西路xxx号18234561212</GMF_DZDH><GMF_YHZH>123412341234</GMF_YHZH><GMF_SJH>18234561212</GMF_SJH><GMF_DZYX>mytest@xxx.com</GMF_DZYX><FPT_ZH></FPT_ZH><KPR>小张</KPR><SKR></SKR><FHR>小林</FHR><YFP_DM>111100000000</YFP_DM><YFP_HM>00004349</YFP_HM><JSHJ>1170.00</JSHJ><HJJE>1000.00</HJJE><HJSE>170.00</HJSE><BZ>电子发票测试</BZ><HYLX>1</HYLX><BY1></BY1><BY2></BY2><BY3></BY3><BY4></BY4><BY5></BY5><BY6></BY6><BY7></BY7><BY8></BY8><BY9></BY9><BY10></BY10><COMMON_FPKJ_XMXXS class='COMMON_FPKJ_XMXX' size='1'><COMMON_FPKJ_XMXX><FPHXZ>0</FPHXZ><SPBM>3040201990000000000</SPBM><XMMC>软件服务</XMMC><GGXH>X100</GGXH><DW>台</DW><XMSL>10</XMSL><XMDJ>100.00</XMDJ><XMJE>1000.00</XMJE><SL>0.17</SL><SE>170.00</SE><BY1></BY1><BY2></BY2><BY3></BY3><BY4></BY4><BY5></BY5><BY6></BY6></COMMON_FPKJ_XMXX></COMMON_FPKJ_XMXXS></REQUEST_COMMON_FPKJ>");		
 		 
-		DzfpGetReq dzfpGetReq=new DzfpGetReq();
+		/*DzfpGetReq dzfpGetReq=new DzfpGetReq();
 		dzfpGetReq.setZsfs("0");
 		dzfpGetReq.setKplx("0");
 		dzfpGetReq.setXsf_nsrsbh("110109500321655");
@@ -205,9 +208,13 @@ public class DzfpClient {
 		dzfpGetReq.setHylx("0");
 		dzfpGetReq.setFphxz("0");
 		dzfpGetReq.setYhzcbs("0");
-		dzfpGetReq.setKpr("shuaiia");
+		dzfpGetReq.setKpr("shuaiia");*/
 		
-		Einvocie einvocie=(Einvocie) doSender("DFXJ1001",dzfpGetReq.tosendXml(),Einvocie.class);
+		DzfqQueryReq dzfqQueryReq=new DzfqQueryReq();
+		dzfqQueryReq.setFpqqlsh("ABC1502195853485");
+		dzfqQueryReq.setXsf_nsrsbh("110109500321655");
+		
+		Einvocie einvocie=(Einvocie) doSender("DFXJ1004",dzfqQueryReq.tosendXml(),Einvocie.class);
 		System.out.println(JSON.toJSONString(einvocie));
 	}
 }
