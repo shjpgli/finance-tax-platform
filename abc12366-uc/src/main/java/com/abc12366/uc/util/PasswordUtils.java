@@ -9,14 +9,12 @@ import com.abc12366.gateway.util.Utils;
  * Time: 10:51
  */
 public class PasswordUtils {
-    public static String encodePassword(String password) {
+    public static String encodePassword(String password, String salt) {
         //密码加密
         String encodePassword;
-        String salt;
         try {
             //密码生产规则：前台传密码md5之后的值，后台用该值加上salt再md5 ，salt是随机生成的六位整数
             password = Utils.md5(password);
-            salt = Utils.salt();
             encodePassword = Utils.md5(password + salt);
         } catch (Exception e) {
             throw new ServiceException(4106);

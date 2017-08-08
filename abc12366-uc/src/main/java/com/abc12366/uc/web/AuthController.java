@@ -3,10 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.web.BaseController;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.LoginVerifyingCodeBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.UserReturnBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IpService;
 import org.slf4j.Logger;
@@ -117,15 +114,9 @@ public class AuthController extends BaseController {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         //进行手机验证码验证
-        /*ResponseEntity response = authService.verifyCode(loginBO.getPhone(), loginBO.getCode(), request);
-        if (response == null) {
-            return ResponseEntity.ok(Utils.kv("data", null));
+        if(authService.verifyCode(loginBO, request)){
+
         }
-        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(),
-        VerifyCodeResponse.class);
-        if (!verifyCodeResponse.getCode().equals("200")) {
-            return ResponseEntity.ok(Utils.kv("data", null));
-        }*/
         Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
 
         LOGGER.info("{}", token);

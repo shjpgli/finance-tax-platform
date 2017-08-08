@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -39,7 +40,7 @@ public class LetterController {
     @GetMapping()
     public ResponseEntity selectList(HttpServletRequest request,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) throws IOException {
         LOGGER.info("{}:{}:{}", request, page, size);
         request.setAttribute("page", page);
         request.setAttribute("size", size);

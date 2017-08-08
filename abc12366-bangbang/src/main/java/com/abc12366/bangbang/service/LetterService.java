@@ -5,6 +5,7 @@ import com.abc12366.bangbang.model.bo.LetterInsertBO;
 import com.abc12366.bangbang.model.bo.LetterListBO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 public interface LetterService {
     LetterBO send(String fromId, String toId, LetterInsertBO letterInsertBO);
 
-    LetterListBO selectList(HttpServletRequest request);
+    LetterListBO selectList(HttpServletRequest request) throws IOException;
 
     void read(String id);
 

@@ -12,6 +12,8 @@ import java.io.Serializable;
  */
 public class LoginVerifyingCodeBO implements Serializable {
     @NotEmpty
+    private String type;
+    @NotEmpty
     @Size(min = 11, max = 11)
     private String phone;
     @NotEmpty
@@ -21,9 +23,12 @@ public class LoginVerifyingCodeBO implements Serializable {
     public LoginVerifyingCodeBO() {
     }
 
-    public LoginVerifyingCodeBO(String phone, String code) {
-        this.phone = phone;
-        this.code = code;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getPhone() {

@@ -10,6 +10,7 @@ import com.abc12366.bangbang.service.LetterService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,8 @@ import java.util.List;
 @Service
 public class LetterServiceImpl implements LetterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LetterServiceImpl.class);
+
+    private static Properties properties = new Properties("application.properties");
 
     @Autowired
     private LetterMapper letterMapper;
@@ -65,7 +69,7 @@ public class LetterServiceImpl implements LetterService {
     }
 
     @Override
-    public LetterListBO selectList(HttpServletRequest request) {
+    public LetterListBO selectList(HttpServletRequest request) throws IOException {
         LOGGER.info("{}", request);
         String toId = (String) request.getAttribute(Constant.USER_ID);
         if (toId == null || toId.trim().equals("")) {
@@ -75,7 +79,7 @@ public class LetterServiceImpl implements LetterService {
         //return letterRoMapper.selectList(toId);
 
         //新套路，调message接口
-        String url = "http://localhost:9200/message/user";
+        String url = properties.getValue("chabc.soa.url") + "/message/user";
         if (!StringUtils.isEmpty(request.getAttribute("page"))) {
             url += "?page=" + request.getAttribute("page");
             if (!StringUtils.isEmpty(request.getAttribute("size"))) {

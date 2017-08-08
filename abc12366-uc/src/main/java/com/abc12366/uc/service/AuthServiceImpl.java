@@ -255,7 +255,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRoMapper.selectByUsernameOrPhone(loginBOQery);
         if (user == null) {
             LOGGER.warn("登录失败，该用户不存在，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4104);
+            throw new ServiceException(4018);
         }
 
         String userToken = Utils.token(Utils.uuid());
@@ -273,7 +273,7 @@ public class AuthServiceImpl implements AuthService {
         //如果不存在有效的注册应用，则不允许登录
         if (app == null) {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4104);
+            throw new ServiceException(4094);
         }
 
         Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
@@ -299,13 +299,14 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
             throw new ServiceException(4101);
         }
+
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
-        return Utils.kv("Admin-Token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
+        return Utils.kv("token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
     }
 
     @Override
-    public ResponseEntity verifyCode(String phone, String code, HttpServletRequest request) throws IOException {
+    public boolean verifyCode(LoginVerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
         //String url = "http://localhost:9200/message/sms/verifycode";
         String url = properties.getValue("message.message.url.verifycode");
@@ -316,22 +317,18 @@ public class AuthServiceImpl implements AuthService {
         httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
 
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("mobile", phone);
-        requestBody.put("code", code);
+        requestBody.put("phone", loginVerifyingCodeBO.getPhone());
+        requestBody.put("code", loginVerifyingCodeBO.getPhone());
+        requestBody.put("type", loginVerifyingCodeBO.getType());
 
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
 
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
-        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful()) {
-            if (responseEntity.hasBody()) {
-                return responseEntity;
-            } else {
-                throw new ServiceException(4201);
-            }
-        } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
+            return true;
         }
+        return false;
     }
 
     @Override
