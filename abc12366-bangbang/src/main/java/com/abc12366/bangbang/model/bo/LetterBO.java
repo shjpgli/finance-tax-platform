@@ -9,12 +9,13 @@ import java.util.Date;
  */
 public class LetterBO {
     private String id;
-    private String fromId;
-    private String toId;
+    private String fromUserId;
+    private String toUserId;
     private String content;
     private String status;
     private Date createTime;
     private Date lastUpdate;
+    private String type;
 
     public LetterBO() {
     }
@@ -27,20 +28,20 @@ public class LetterBO {
         this.id = id;
     }
 
-    public String getFromId() {
-        return fromId;
+    public String getFromUserId() {
+        return fromUserId;
     }
 
-    public void setFromId(String fromId) {
-        this.fromId = fromId;
+    public void setFromUserId(String fromUserId) {
+        this.fromUserId = fromUserId;
     }
 
-    public String getToId() {
-        return toId;
+    public String getToUserId() {
+        return toUserId;
     }
 
-    public void setToId(String toId) {
-        this.toId = toId;
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 
     public String getContent() {
@@ -73,5 +74,13 @@ public class LetterBO {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
