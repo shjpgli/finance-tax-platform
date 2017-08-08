@@ -2,7 +2,9 @@ package com.abc12366.uc.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DataUtils {
 
@@ -75,6 +77,15 @@ public class DataUtils {
             }
         }
         return String.valueOf(number);
+    }
+
+    public static Date getAddDate(int num){
+        Date date = new Date();//取时间
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.DATE,num);//把日期往后增加一天.整数往后推,负数往前移动
+        date=calendar.getTime();   //这个时间就是日期往后推一天的结果
+        return date;
     }
 
     /**

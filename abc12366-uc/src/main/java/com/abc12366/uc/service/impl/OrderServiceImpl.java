@@ -798,4 +798,28 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public void automaticReceipt() {
+        Date date = DataUtils.getAddDate(15);
+        //查询15天之前未确认的订单
+        List<Order> orderList = orderRoMapper.selectReceiptOrderByDate(date);
+        for(Order order:orderList){
+            order.setOrderStatus("6");
+            orderMapper.update(order);
+            insertOrderLog("",order.getOrderNo(),date,"系统自动确认收货");
+        }
+    }
+
+    @Override
+    public void automaticCancel() {
+        Date date = DataUtils.getAddDate(15);
+        //查询15天之前未确认的订单
+        List<Order> orderList = orderRoMapper.selectCancelOrderByDate(date);
+        for(Order order:orderList){
+            order.setOrderStatus("7");
+            orderMapper.update(order);
+            insertOrderLog("",order.getOrderNo(),date,"系统自动取消订单");
+        }
+    }
+
 }

@@ -274,9 +274,10 @@
     <!--获取产品信息-->
     <select id="getProductBO" parameterType="java.lang.String" resultMap="productResultMap">
         SELECT
-        id, goodsId, marketPrice, sellingPrice, costPrice, createTime, lastUpdate,stock
-        FROM uc_product
-        WHERE id = #{productId}
+        p.id, p.goodsId, p.marketPrice, p.sellingPrice, p.costPrice, p.createTime, p.lastUpdate,p.stock,g.name as goodsName
+        FROM uc_product p
+        LEFT JOIN uc_goods g ON p.goodsId = g.id
+        WHERE p.id = #{productId}
     </select>
 
     <!--获取字典信息-->
@@ -292,12 +293,10 @@
     <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
-        orderNo, productId, sellingPrice, unitPrice, num, discount, dealPrice, name, categoryId, category, weight,
-        createTime, lastUpdate
+        op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
+        op.createTime, op.lastUpdate
         FROM uc_order_product op
-        LEFT JOIN uc_product p ON op.productId = p.id
-        LEFT JOIN uc_goods g ON g.id = p.goodsId
-        WHERE orderNo = #{orderNo}
+        WHERE op.orderNo = #{orderNo}
     </select>
 
     <!--获取订单操作日志信息-->
@@ -328,6 +327,28 @@
         <include refid="Base_Column_List"/>
         FROM uc_order
         WHERE orderNo = #{orderNo}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectReceiptOrderByDate" resultType="com.abc12366.uc.model.Order" parameterType="java.util.Date">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_order
+        WHERE orderStatus = '5'
+              <![CDATA[
+                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                ]]>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCancelOrderByDate" resultType="com.abc12366.uc.model.Order" parameterType="java.util.Date">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_order
+        WHERE orderStatus = '2'
+              <![CDATA[
+                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                ]]>
     </select>
 
     <!-- 查询（根据主键ID查询） -->
@@ -400,11 +421,6 @@
             <if test=" user.username != null and user.username != '' ">
                 and u.username = #{user.username}
             </if>
-            <!--<if test=" orderStatus != null and orderStatus != '' ">-->
-            <!--<if test=" orderStatus != null and orderStatus != '' ">-->
-            <!--and o.orderStatus = #{orderStatus}-->
-            <!--</if>-->
-            <!--</if>-->
             <if test=" orderNo != null and orderNo != '' ">
                 and o.orderNo = #{orderNo}
             </if>
@@ -424,6 +440,7 @@
         order by o.lastUpdate desc
 
     </select>
+
 
     <!-- 前台查询（根据条件查询） -->
     <select id="selectOrderList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">

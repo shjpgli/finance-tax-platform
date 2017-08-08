@@ -112,4 +112,14 @@ public interface OrderService {
     void sendOrder(OrderOperationBO orderOperationBO);
 
     void invalidOrder(OrderOperationBO orderOperationBO);
+
+    /**
+     * 自动确认收货
+     */
+    void automaticReceipt();
+
+    /**
+     * 自动取消订单
+     */
+    void automaticCancel();
 }
