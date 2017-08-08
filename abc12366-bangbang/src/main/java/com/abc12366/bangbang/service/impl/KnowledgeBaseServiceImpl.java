@@ -109,6 +109,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             knowledgeBase.setId(Utils.uuid());
             knowledgeBase.setCreateUser(UcUserCommon.getAdminId());
             knowledgeBase.setUpdateUser(UcUserCommon.getAdminId());
+            Long zero = new Long(0);
+            knowledgeBase.setPv(zero);
+            knowledgeBase.setShareNum(zero);
+            knowledgeBase.setUsefulVotes(zero);
+            knowledgeBase.setUselessVotes(zero);
             knowledgeBaseMapper.insert(knowledgeBase);
             //添加关联标签
             addTagRel(knowledgeBaseBO);

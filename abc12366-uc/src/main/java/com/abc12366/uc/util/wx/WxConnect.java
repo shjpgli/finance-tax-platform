@@ -68,9 +68,7 @@ public class WxConnect<T> {
         return bytes;
     }
 
-    public static void main(String[] args) {
 
-    }
 
     public void initJson() {
         try {

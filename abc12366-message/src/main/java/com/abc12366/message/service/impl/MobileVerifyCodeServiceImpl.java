@@ -98,15 +98,19 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCode.setType(type);
             phoneCodeMapper.insert(phoneCode);
         }
-        boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, code);
-        //boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, MessageConstant.VERIFY_CODE_FILL_CONTENT, code);
-//        调用网易短信接口不成功，则换调用又拍云短信接口
-//        if (!sendCodeThroghNetease) {
-//            boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, code);
-//            if (!sendCodeThroghUpyun) {
-//                throw new ServiceException(4204);
-//            }
-//        }
+        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, MessageConstant.VERIFY_CODE_FILL_CONTENT, code);
+        //调用网易短信接口不成功，则换调用又拍云短信接口
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (!sendCodeThroghNetease) {
+            boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, code);
+            if (!sendCodeThroghUpyun) {
+                throw new ServiceException(4204);
+            }
+        }
 
     }
 
@@ -166,14 +170,19 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         requestBody.add("params", "['" + codeType + "','" + code + "']");
 
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
-        ResponseEntity neteaseResponse = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity neteaseResponse;
+        try{
+            neteaseResponse = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        }catch (Exception e){
+            throw new ServiceException(4204);
+        }
         if (neteaseResponse != null && neteaseResponse.getStatusCode().is2xxSuccessful() && neteaseResponse.hasBody()) {
             NeteaseTemplateResponseBO neteaseTemplateResponseBO = objectMapper.readValue(((String) neteaseResponse
                     .getBody()).getBytes(), NeteaseTemplateResponseBO.class);
             if (neteaseTemplateResponseBO != null && neteaseTemplateResponseBO.getCode().equals("200")) {
-                return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
+                return true;
+                //return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
             }
-
         }
         return false;
     }
@@ -218,6 +227,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         return privCode;
     }
 
+
     private boolean sendYoupaiTemplate(String phone, String code) throws IOException {
         //发送通知类短信接口地址
         String url = properties.getValue("message.upyun.send.url");
@@ -226,12 +236,17 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         httpHeaders.add("Content-Type", contentType);
         httpHeaders.add("Authorization", properties.getValue("message.upyun.auth"));
         //调用网易接口请求体设置
-        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+        LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("mobile", phone);
         requestBody.add("template_id", properties.getValue("message.upyun.templateid"));
         requestBody.add("vars", code);
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
-        ResponseEntity responseEntity = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
+        ResponseEntity responseEntity;
+        try{
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        }catch (Exception e){
+            throw new ServiceException(4204);
+        }
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
             //UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()),
             // UpyunMessageResponse.class);
@@ -240,58 +255,4 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         return false;
     }
 
-//    private boolean sendAliyunTemplate(String phone, String code) throws IOException {
-//        /**
-//         * Step 1. 获取主题引用
-//         */
-//        String accessId = properties.getValue("message.aliyun.accesskey.id");
-//        String accessKey = properties.getValue("message.aliyun.accesskey.secret");
-//        String mnsEndpoint = properties.getValue("message.aliyun.endpoint");
-//        String myTopic = properties.getValue("message.aliyun.topic");
-//        String mySignature = properties.getValue("message.aliyun.signature");
-//        String templateCode = properties.getValue("message.aliyun.template.code");
-//        String messageBody = properties.getValue("message.aliyun.messagebody");
-//
-//        CloudAccount account = new CloudAccount(accessId, accessKey, mnsEndpoint);
-//        MNSClient client = account.getMNSClient();
-//        CloudTopic topic = client.getTopicRef(myTopic);
-//        /**
-//         * Step 2. 设置SMS消息体（必须）
-//         *
-//         * 注：目前暂时不支持消息内容为空，需要指定消息内容，不为空即可。
-//         */
-//        RawTopicMessage msg = new RawTopicMessage();
-//        msg.setMessageBody(messageBody);
-//        /**
-//         * Step 3. 生成SMS消息属性
-//         */
-//        MessageAttributes messageAttributes = new MessageAttributes();
-//        BatchSmsAttributes batchSmsAttributes = new BatchSmsAttributes();
-//        // 3.1 设置发送短信的签名（SMSSignName）
-//        batchSmsAttributes.setFreeSignName(mySignature);
-//        // 3.2 设置发送短信使用的模板（SMSTempateCode）
-//        batchSmsAttributes.setTemplateCode(templateCode);
-//        // 3.3 设置发送短信所使用的模板中参数对应的值（在短信模板中定义的，没有可以不用设置）
-//        BatchSmsAttributes.SmsReceiverParams smsReceiverParams = new BatchSmsAttributes.SmsReceiverParams();
-//        smsReceiverParams.setParam("code", code);
-//        // 3.4 增加接收短信的号码
-//        batchSmsAttributes.addSmsReceiver(phone, smsReceiverParams);
-//        messageAttributes.setBatchSmsAttributes(batchSmsAttributes);
-//        try {
-//            /**
-//             * Step 4. 发布SMS消息
-//             */
-//            TopicMessage ret = topic.publishMessage(msg, messageAttributes);
-//            System.out.println("MessageId: " + ret.getMessageId());
-//            System.out.println("MessageMD5: " + ret.getMessageBodyMD5());
-//        } catch (com.aliyun.mns.common.ServiceException se) {
-//            System.out.println(se.getErrorCode() + se.getRequestId());
-//            System.out.println(se.getMessage());
-//            se.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        client.close();
-//        return true;
-//    }
 }

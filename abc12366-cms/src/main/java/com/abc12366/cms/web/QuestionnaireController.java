@@ -6,6 +6,8 @@ import com.abc12366.cms.service.QuestionnaireService;
 import com.abc12366.cms.service.SubjectsService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +48,17 @@ public class QuestionnaireController {
      * @return
      */
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+
         QuestionnaireBO questionnaire = new QuestionnaireBO();
-        List<QuestionnaireBO> questionnaireList = questionnaireService.selectList(questionnaire);
-        LOGGER.info("{}", questionnaireList);
-        return (questionnaireList == null) ?
+        List<QuestionnaireBO> list = questionnaireService.selectList(questionnaire);
+        LOGGER.info("{}", list);
+        return (list == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", questionnaireList));
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
 

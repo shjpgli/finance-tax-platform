@@ -3,8 +3,10 @@ package com.abc12366.bangbang.service;
 import com.abc12366.bangbang.model.bo.LetterBO;
 import com.abc12366.bangbang.model.bo.LetterInsertBO;
 import com.abc12366.bangbang.model.bo.LetterListBO;
+import com.abc12366.bangbang.model.bo.LetterResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -13,11 +15,14 @@ import java.util.List;
  * Time: 17:40
  */
 public interface LetterService {
-    LetterBO send(String fromId, String toId, LetterInsertBO letterInsertBO);
+    LetterResponse send(LetterInsertBO letterInsertBO, HttpServletRequest request) throws IOException;
 
-    LetterListBO selectList(HttpServletRequest request);
+    LetterListBO selectList(HttpServletRequest request) throws IOException;
 
-    void read(String id);
+    LetterResponse read(String id, HttpServletRequest request) throws IOException;
 
-    void delete(String id);
+    LetterResponse update(String id, HttpServletRequest request) throws IOException;
+
+
+    LetterResponse delete(String id, HttpServletRequest request) throws IOException;
 }

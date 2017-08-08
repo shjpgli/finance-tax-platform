@@ -6,52 +6,52 @@ package com.abc12366.uc.model.bo;
  * Time: 16:32
  */
 public class MyExperienceBO {
-    private String exp;
-    private String incomeMonth;
-    private String outgoMonth;
-    private String incomeYear;
-    private String outgoYear;
+    private int exp;
+    private int incomeMonth;
+    private int outgoMonth;
+    private int incomeYear;
+    private int outgoYear;
 
     public MyExperienceBO() {
     }
 
-    public String getExp() {
+    public int getExp() {
         return exp;
     }
 
-    public void setExp(String exp) {
+    public void setExp(int exp) {
         this.exp = exp;
     }
 
-    public String getIncomeMonth() {
+    public int getIncomeMonth() {
         return incomeMonth;
     }
 
-    public void setIncomeMonth(String incomeMonth) {
+    public void setIncomeMonth(int incomeMonth) {
         this.incomeMonth = incomeMonth;
     }
 
-    public String getOutgoMonth() {
+    public int getOutgoMonth() {
         return outgoMonth;
     }
 
-    public void setOutgoMonth(String outgoMonth) {
+    public void setOutgoMonth(int outgoMonth) {
         this.outgoMonth = outgoMonth;
     }
 
-    public String getIncomeYear() {
+    public int getIncomeYear() {
         return incomeYear;
     }
 
-    public void setIncomeYear(String incomeYear) {
+    public void setIncomeYear(int incomeYear) {
         this.incomeYear = incomeYear;
     }
 
-    public String getOutgoYear() {
+    public int getOutgoYear() {
         return outgoYear;
     }
 
-    public void setOutgoYear(String outgoYear) {
+    public void setOutgoYear(int outgoYear) {
         this.outgoYear = outgoYear;
     }
 }
