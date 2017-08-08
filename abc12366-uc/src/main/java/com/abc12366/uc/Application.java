@@ -15,6 +15,7 @@ import java.util.concurrent.Executor;
  * @author lijun <ljun51@outlook.com>
  * @create 2017-02-20 2:09 PM
  * @since 1.0.0
+ * 3
  */
 @SpringBootApplication(scanBasePackages = "com.abc12366.uc, com.abc12366.gateway")
 @PropertySource("classpath:application.properties")
@@ -31,7 +32,7 @@ public class Application extends AsyncConfigurerSupport {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(4);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("uc-");
+        executor.setThreadNamePrefix("uc-");//uc-
         executor.initialize();
         return executor;
     }

@@ -14,6 +14,7 @@ import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,76 +90,110 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Override
     public void add(KnowledgeBase knowledgeBase) {
-        knowledgeBaseMapper.insert(knowledgeBase);
+        try {
+            knowledgeBaseMapper.insert(knowledgeBase);
+        }catch (Exception e){
+            LOGGER.error("新增知识库ERROR:" + e);
+            throw new ServiceException(4501);
+        }
     }
 
     @Transactional("db1TxManager")
     @Override
     public void delete(List<String> ids) {
-        //删除关联标签
-        knowledgeTagRelMapper.deleteByKnowledgeIds(ids);
-        //删除关联问题
-        knowledgeRelMapper.deleteByKnowledgeIds(ids);
-        knowledgeRelMapper.deleteByRelKnowledgeIds(ids);
-        //删除知识库
-        knowledgeBaseMapper.deleteByPrimaryKeys(ids);
+        try {
+            //删除关联标签
+            knowledgeTagRelMapper.deleteByKnowledgeIds(ids);
+            //删除关联问题
+            knowledgeRelMapper.deleteByKnowledgeIds(ids);
+            knowledgeRelMapper.deleteByRelKnowledgeIds(ids);
+            //删除知识库
+            knowledgeBaseMapper.deleteByPrimaryKeys(ids);
+        }catch (Exception e){
+            LOGGER.error("删除知识库ERROR:" + e);
+            throw new ServiceException(4503);
+        }
     }
 
     @Transactional("db1TxManager")
     @Override
     public KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO) {
-        KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
-        knowledgeBase.setId(Utils.uuid());
-        knowledgeBase.setCreateUser(UcUserCommon.getUserId());
-        knowledgeBase.setUpdateUser(UcUserCommon.getUserId());
-        knowledgeBaseMapper.insert(knowledgeBase);
-        //添加关联标签
-        addTagRel(knowledgeBaseBO);
-        //添加关联的问题
-        addKnowledgeRel(knowledgeBaseBO);
+        try {
+            KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
+            knowledgeBase.setId(Utils.uuid());
+            knowledgeBase.setCreateUser(UcUserCommon.getUserId());
+            knowledgeBase.setUpdateUser(UcUserCommon.getUserId());
+            knowledgeBaseMapper.insert(knowledgeBase);
+            //添加关联标签
+            addTagRel(knowledgeBaseBO);
+            //添加关联的问题
+            addKnowledgeRel(knowledgeBaseBO);
 
-        return knowledgeBaseBO;
+            return knowledgeBaseBO;
+        }catch (Exception e){
+            LOGGER.error("新增知识库BO,ERROR:" + e);
+            throw new ServiceException(4503);
+        }
     }
 
     @Transactional("db1TxManager")
     @Override
     public KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO) {
+        try {
+            KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
+            String knowledgeBaseId = knowledgeBase.getId();
+            knowledgeBaseMapper.updateByPrimaryKey(knowledgeBase);
 
-        KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
-        String knowledgeBaseId = knowledgeBase.getId();
-        knowledgeBaseMapper.updateByPrimaryKey(knowledgeBase);
+            //管理关联 标签
+            knowledgeTagRelMapper.deleteByKnowledgeId(knowledgeBaseId);
+            addTagRel(knowledgeBaseBO);
+            //管理关联 的知识库
+            knowledgeRelMapper.deleteByKnowledgeId(knowledgeBaseId);
+            addKnowledgeRel(knowledgeBaseBO);
 
-        //管理关联 标签
-        knowledgeTagRelMapper.deleteByKnowledgeId(knowledgeBaseId);
-        addTagRel(knowledgeBaseBO);
-        //管理关联 的知识库
-        knowledgeRelMapper.deleteByKnowledgeId(knowledgeBaseId);
-        addKnowledgeRel(knowledgeBaseBO);
-
-        return knowledgeBaseBO;
+            return knowledgeBaseBO;
+        }catch (Exception e){
+            LOGGER.error("修改知识库BO,ERROR:" + e);
+            throw new ServiceException(4503);
+        }
     }
 
     @Transactional("db1TxManager")
     @Override
     public void addVote(KnowledgeVoteLog knowledgeVoteLog) {
-        Boolean isUseFull = knowledgeVoteLog.getIsUseFull();
-        String knowledgeId = knowledgeVoteLog.getKnowledgeId();
-        if(isUseFull == Boolean.TRUE){
-            knowledgeBaseMapper.addUsefulVoteByPK(knowledgeId);
-        }else{
-            knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
+        try {
+            Boolean isUseFull = knowledgeVoteLog.getIsUseFull();
+            String knowledgeId = knowledgeVoteLog.getKnowledgeId();
+            if(isUseFull == Boolean.TRUE){
+                knowledgeBaseMapper.addUsefulVoteByPK(knowledgeId);
+            }else{
+                knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
+            }
+            knowledgeVoteLogMapper.insert(knowledgeVoteLog);
+        }catch (Exception e){
+            LOGGER.error("新增知识库投票,ERROR:" + e);
+            throw new ServiceException(4501);
         }
-        knowledgeVoteLogMapper.insert(knowledgeVoteLog);
     }
 
     @Override
     public void addPV(String id) {
-        knowledgeBaseMapper.addPVByPK(id);
+        try {
+            knowledgeBaseMapper.addPVByPK(id);
+        }catch (Exception e){
+            LOGGER.error("新增知识库浏览量,ERROR:" + e);
+            throw new ServiceException(4503);
+        }
     }
 
     @Override
     public void deleteVoteLogs(List<String> ids) {
-        knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
+        try {
+            knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
+        }catch (Exception e){
+            LOGGER.error("删除知识库投票,ERROR:" + e);
+            throw new ServiceException(4503);
+        }
     }
 
     @Override
