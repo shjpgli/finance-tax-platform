@@ -65,6 +65,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     }
 
     @Override
+    public List<KnowledgeBase> relatedList(String id, int num) {
+        return knowledgeBaseMapper.relatedList(id, num);
+    }
+
+    @Override
     public KnowledgeBase selectOne(String id) {
         return knowledgeBaseMapper.selectByPrimaryKey(id);
     }
