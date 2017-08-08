@@ -231,11 +231,12 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             for (KnowledgeBase knowledge : list){
                 String categoryCode = knowledge.getCategoryCode();
                 if(map.containsKey(categoryCode)){
-                    List<KnowledgeBase> knowledges = map.get(categoryCode);
-                    knowledges.add(knowledge);
+                    List<KnowledgeBase> knowledgeList = map.get(categoryCode);
+                    knowledgeList.add(knowledge);
                 }else{
-                    List<KnowledgeBase> knowledges = new ArrayList<>();
-                    map.put(categoryCode,knowledges);
+                    List<KnowledgeBase> knowledgeList = new ArrayList<>();
+                    knowledgeList.add(knowledge);
+                    map.put(categoryCode,knowledgeList);
                 }
             }
         }
