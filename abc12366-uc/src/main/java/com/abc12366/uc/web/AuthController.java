@@ -1,5 +1,6 @@
 package com.abc12366.uc.web;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.web.BaseController;
@@ -115,12 +116,12 @@ public class AuthController extends BaseController {
         }
         //进行手机验证码验证
         if(authService.verifyCode(loginBO, request)){
-
+            Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+            LOGGER.info("{}", token);
+            return ResponseEntity.ok(Utils.kv("data", token));
+        }else{
+            throw new ServiceException(4201);
         }
-        Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
-
-        LOGGER.info("{}", token);
-        return ResponseEntity.ok(Utils.kv("data", token));
     }
 
     /**

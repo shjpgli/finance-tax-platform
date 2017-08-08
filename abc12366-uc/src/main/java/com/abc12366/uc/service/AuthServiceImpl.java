@@ -309,7 +309,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean verifyCode(LoginVerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
         //String url = "http://localhost:9200/message/sms/verifycode";
-        String url = properties.getValue("message.message.url.verifycode");
+        String url = properties.getValue("message.api.url") + "/verify";
 
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
