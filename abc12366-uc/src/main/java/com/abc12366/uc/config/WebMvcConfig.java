@@ -57,7 +57,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //第三方交易回调地址
                 .excludePathPatterns("/payreturn/*")
                 //微信服务回调地址
-                .excludePathPatterns("/server/wechat");
+                .excludePathPatterns("/wechatserver/*");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
@@ -75,6 +75,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //第三方交易毁回调地址
                 .excludePathPatterns("/payreturn/*")
                 //微信服务回调地址
-                .excludePathPatterns("/server/wechat");;
+                .excludePathPatterns("/wechatserver/*");;
     }
 }

@@ -20,12 +20,13 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhushuai 2017-7-31
  */
 @Controller
+@RequestMapping(path = "/wechatserver")
 public class WxIndexController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WxIndexController.class);
     @Autowired
     private IWxMsgService iWxMsgService;
 
-    @RequestMapping("/server/wechat")
+    @RequestMapping("/init")
     public @ResponseBody String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
     	LOGGER.info("微信服务器回调!-----------");
         boolean isGet = request.getMethod().toLowerCase().equals("get");
