@@ -1,5 +1,8 @@
 package com.abc12366.bangbang.model.bo;
 
+import com.abc12366.bangbang.model.BaseObject;
+
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -7,14 +10,21 @@ import java.util.Date;
  * Date: 2017-07-24
  * Time: 17:59
  */
-public class LetterBO {
+public class LetterBO{
     private String id;
+
     private String fromUserId;
+
     private String toUserId;
+
     private String content;
+
     private String status;
-    private Date createTime;
-    private Date lastUpdate;
+
+    private Timestamp createTime;
+
+    private Timestamp lastUpdate;
+
     private String type;
 
     public LetterBO() {
@@ -60,19 +70,19 @@ public class LetterBO {
         this.status = status;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
-    public Date getLastUpdate() {
+    public Timestamp getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Date lastUpdate) {
+    public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
