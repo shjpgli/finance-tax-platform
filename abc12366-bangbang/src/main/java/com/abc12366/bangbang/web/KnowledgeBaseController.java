@@ -11,8 +11,6 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +25,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/knowledgeBase", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class KnowledgeBaseController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeBaseController.class);
 
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
@@ -78,7 +74,16 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", list));
     }
-
+    /*
+    *  详情页关联问题的知识查询
+    */
+    @GetMapping(path = "/relatedList/{id}")
+    public ResponseEntity relatedList(@PathVariable String id, @RequestParam(value = "num", defaultValue = "5") int num) {
+        List<KnowledgeBase> list = knowledgeBaseService.relatedList(id, num);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", list));
+    }
 
     /**
      * 单个知识库查询 接口

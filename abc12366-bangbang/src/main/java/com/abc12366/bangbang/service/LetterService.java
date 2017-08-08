@@ -15,7 +15,7 @@ import java.util.List;
 public interface LetterService {
     LetterBO send(String fromId, String toId, LetterInsertBO letterInsertBO);
 
-    List<LetterListBO> selectList(HttpServletRequest request);
+    LetterListBO selectList(HttpServletRequest request);
 
     void read(String id);
 

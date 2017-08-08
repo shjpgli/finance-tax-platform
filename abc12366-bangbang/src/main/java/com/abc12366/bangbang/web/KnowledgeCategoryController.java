@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class KnowledgeCategoryController {
         return ResponseEntity.ok(Utils.kv("data", rs));
     }
 
-    /* 新增分类 */
+    /* 修改分类 */
     @PostMapping(path = "/modify")
     public ResponseEntity modify(@RequestBody KnowledgeCategory record) {
         KnowledgeCategory rs = knowledgeCategoryService.modify(record);

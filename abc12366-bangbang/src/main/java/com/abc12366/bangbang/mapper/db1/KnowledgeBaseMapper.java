@@ -27,6 +27,12 @@ public interface KnowledgeBaseMapper {
     **/
     List<KnowledgeBase> interestedList(@Param("id") String id, @Param("num") int num);
 
+    /*
+     *
+     * 知识详情页 感兴趣的知识查询
+     *
+     **/
+    List<KnowledgeBase> relatedList(@Param("id") String id, @Param("num") int num);
 
     /*
     *

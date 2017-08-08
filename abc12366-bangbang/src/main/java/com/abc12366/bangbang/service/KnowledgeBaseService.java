@@ -26,6 +26,9 @@ public interface KnowledgeBaseService {
     /* 根据知识ID 查询关联感兴趣的知识列表 */
     List<KnowledgeBase> interestedList(String id, int num);
 
+    /* 根据知识ID 查询已关联的知识列表 */
+    List<KnowledgeBase> relatedList(String id, int num);
+
     /* 知识库单个查询*/
     KnowledgeBase selectOne(String id);
 
