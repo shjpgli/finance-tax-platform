@@ -32,7 +32,7 @@ public class Application extends AsyncConfigurerSupport {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(4);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("uc-");
+        executor.setThreadNamePrefix("uc-");//uc-
         executor.initialize();
         return executor;
     }
