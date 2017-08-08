@@ -105,11 +105,21 @@ public interface OrderService {
 
     OrderBO paymentOrder(OrderPayBO orderPayBO);
 
-    List<OrderBO> selectExprotOrder(Order order);
+    List<OrderListBO> selectExprotOrder(Order order);
 
     void selectImprotOrder(List<OrderBO> orderBOList);
 
     void sendOrder(OrderOperationBO orderOperationBO);
 
     void invalidOrder(OrderOperationBO orderOperationBO);
+
+    /**
+     * 自动确认收货
+     */
+    void automaticReceipt();
+
+    /**
+     * 自动取消订单
+     */
+    void automaticCancel();
 }

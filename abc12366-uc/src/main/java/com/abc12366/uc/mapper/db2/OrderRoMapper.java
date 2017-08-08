@@ -4,6 +4,7 @@ import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.bo.OrderBO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,4 +32,8 @@ public interface OrderRoMapper {
     List<OrderBO> selectWaitList(OrderBO order);
 
     List<OrderBO> selectExprotOrder(Order order);
+
+    List<Order> selectReceiptOrderByDate(@Param("date")Date date);
+
+    List<Order> selectCancelOrderByDate(@Param("date")Date date);
 }

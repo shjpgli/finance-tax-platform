@@ -38,13 +38,50 @@
         </association>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
-        <association property="userAddress" column="addressId" select="getUserAddress"/>
+        <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
         select="getOrderProduct"></collection>
         <collection property="orderLogBOList" ofType="com.abc12366.uc.model.bo.OrderLogBO" column="orderNo"
         select="getOrderLog"></collection>
         <collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO" column="orderNo"
                     select="getTradeLogBO"></collection>
+    </resultMap>
+
+    <!--订单列表对象-->
+    <resultMap id="orderBOListResultMap" type="com.abc12366.uc.model.bo.OrderBO">
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="nowVipLevel" property="nowVipLevel" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
+        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
+        <result column="insuredFee" property="insuredFee" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
+        <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
+        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
+        <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+
+        <association property="user" javaType="com.abc12366.uc.model.User">
+            <id column="userId" property="id"/>
+            <result column="username" property="username"/>
+            <result column="nickname" property="nickname"/>
+            <result column="phone" property="phone"/>
+            <result column="vipLevel" property="vipLevel"/>
+        </association>
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
+                    select="getOrderProduct"></collection>
     </resultMap>
 
     <!--订单日志对象-->
@@ -142,11 +179,15 @@
     </select>
 
     <!-- 查询用户地址信息 -->
-    <select id="getUserAddress" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
+    <select id="getUserAddress" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
         SELECT
-        id, userId, name, province, city, area, detail, phone, isDefault, status, createTime, lastUpdate
-        FROM uc_user_address
-        WHERE id = #{id}
+        a.id, a.userId, a.name, a.province, a.city, a.area, a.detail, a.phone, a.isDefault, a.status, a.createTime, a.lastUpdate,
+        p.province as provinceName,c.city as cityName,e.area as areaName
+        FROM uc_user_address a
+        LEFT JOIN uc_province p ON p.provinceId = a.province
+				LEFT JOIN uc_city c on c.cityId = a.city
+				LEFT JOIN uc_area e on e.areaId = a.area
+        WHERE a.id = #{id}
     </select>
 
     <!--获取配送方式-->
@@ -228,6 +269,8 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
                      select="getProductBO"></association>
+        <association property="orderProductspecBOList" javaType="com.abc12366.uc.model.bo.OrderProductspecBO" column="{productId=productId,orderNo=orderNo}"
+                     select="getOrderProductspecBO"></association>
     </resultMap>
 
     <!--订单日志对象-->
@@ -256,6 +299,7 @@
                     select="getDictBO"></collection>
     </resultMap>
 
+
     <!--字典对象-->
     <resultMap type="com.abc12366.uc.model.bo.DictBO" id="oneDictBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
@@ -271,12 +315,30 @@
         <result column="sort" property="sort" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!--字典对象-->
+    <resultMap type="com.abc12366.uc.model.bo.OrderProductspecBO" id="orderProducctspecResultMap">
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="VARCHAR"/>
+        <result column="specId" property="specId" jdbcType="VARCHAR"/>
+        <result column="fieldValue" property="fieldValue" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <!--获取产品信息-->
     <select id="getProductBO" parameterType="java.lang.String" resultMap="productResultMap">
         SELECT
-        id, goodsId, marketPrice, sellingPrice, costPrice, createTime, lastUpdate,stock
-        FROM uc_product
-        WHERE id = #{productId}
+        p.id, p.goodsId, p.marketPrice, p.sellingPrice, p.costPrice, p.createTime, p.lastUpdate,p.stock,g.name as goodsName
+        FROM uc_product p
+        LEFT JOIN uc_goods g ON p.goodsId = g.id
+        WHERE p.id = #{productId}
+    </select>
+
+    <!--获取订单与产品对应规格信息-->
+    <select id="getOrderProductspecBO" parameterType="java.util.Map" resultMap="orderProducctspecResultMap">
+        SELECT
+        p.orderNo, p.productId, p.specId,d.fieldValue
+        FROM uc_order_product_spec p
+        LEFT JOIN uc_dict d on d.id = p.specId
+        WHERE p.orderNo = #{orderNo} and p.productId = #{productId}
     </select>
 
     <!--获取字典信息-->
@@ -292,12 +354,10 @@
     <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
-        orderNo, productId, sellingPrice, unitPrice, num, discount, dealPrice, name, categoryId, category, weight,
-        createTime, lastUpdate
+        op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
+        op.createTime, op.lastUpdate
         FROM uc_order_product op
-        LEFT JOIN uc_product p ON op.productId = p.id
-        LEFT JOIN uc_goods g ON g.id = p.goodsId
-        WHERE orderNo = #{orderNo}
+        WHERE op.orderNo = #{orderNo}
     </select>
 
     <!--获取订单操作日志信息-->
@@ -331,6 +391,28 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
+    <select id="selectReceiptOrderByDate" resultType="com.abc12366.uc.model.Order" parameterType="java.util.Date">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_order
+        WHERE orderStatus = '5'
+              <![CDATA[
+                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                ]]>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCancelOrderByDate" resultType="com.abc12366.uc.model.Order" parameterType="java.util.Date">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_order
+        WHERE orderStatus = '2'
+              <![CDATA[
+                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                ]]>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultMap="orderBOResultMap" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_BO_List"/>
@@ -357,7 +439,7 @@
         userId,u.username,u.phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->
-    <select id="selectList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -400,11 +482,6 @@
             <if test=" user.username != null and user.username != '' ">
                 and u.username = #{user.username}
             </if>
-            <!--<if test=" orderStatus != null and orderStatus != '' ">-->
-            <!--<if test=" orderStatus != null and orderStatus != '' ">-->
-            <!--and o.orderStatus = #{orderStatus}-->
-            <!--</if>-->
-            <!--</if>-->
             <if test=" orderNo != null and orderNo != '' ">
                 and o.orderNo = #{orderNo}
             </if>
@@ -425,8 +502,9 @@
 
     </select>
 
+
     <!-- 前台查询（根据条件查询） -->
-    <select id="selectOrderList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectOrderList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -444,6 +522,17 @@
             </if>
             <if test=" isInvoice != null and isInvoice != '' ">
                 and o.isInvoice = #{isInvoice}
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
             </if>
         </where>
 

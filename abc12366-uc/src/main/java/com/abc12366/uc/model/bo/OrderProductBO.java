@@ -1,6 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -26,6 +27,7 @@ public class OrderProductBO implements Serializable {
     private java.util.Date lastUpdate;
 
     private ProductBO productBO;
+    private List<OrderProductspecBO> orderProductspecBOList;
 
     public String getProductId() {
         return this.productId;
@@ -137,5 +139,13 @@ public class OrderProductBO implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public List<OrderProductspecBO> getOrderProductspecBOList() {
+        return orderProductspecBOList;
+    }
+
+    public void setOrderProductspecBOList(List<OrderProductspecBO> orderProductspecBOList) {
+        this.orderProductspecBOList = orderProductspecBOList;
     }
 }

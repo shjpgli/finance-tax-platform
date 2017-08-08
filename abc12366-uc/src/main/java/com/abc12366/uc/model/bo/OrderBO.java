@@ -3,6 +3,7 @@ package com.abc12366.uc.model.bo;
 import com.abc12366.uc.model.OrderProduct;
 import com.abc12366.uc.model.OrderProductSpec;
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserAddress;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -43,8 +44,7 @@ public class OrderBO implements Serializable {
     private Boolean isInvoice;
     private GoodsBO goodsBO;
     private User user;
-    private String userAddress;
-
+    private UserAddressBO userAddressBO;
 
     private List<OrderProductBO> orderProductBOList;
     private List<OrderProductSpec> orderProductSpecList;
@@ -323,19 +323,19 @@ public class OrderBO implements Serializable {
         this.orderLogBOList = orderLogBOList;
     }
 
-    public String getUserAddress() {
-        return userAddress;
-    }
-
-    public void setUserAddress(String userAddress) {
-        this.userAddress = userAddress;
-    }
-
     public List<TradeLogBO> getTradeLogBOList() {
         return tradeLogBOList;
     }
 
     public void setTradeLogBOList(List<TradeLogBO> tradeLogBOList) {
         this.tradeLogBOList = tradeLogBOList;
+    }
+
+    public UserAddressBO getUserAddressBO() {
+        return userAddressBO;
+    }
+
+    public void setUserAddressBO(UserAddressBO userAddressBO) {
+        this.userAddressBO = userAddressBO;
     }
 }

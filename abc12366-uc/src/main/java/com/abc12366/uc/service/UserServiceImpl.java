@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         User user = userRoMapper.selectOne(userUpdateBO.getId());
         if (user == null) {
             LOGGER.warn("修改失败");
-            throw new ServiceException(4102);
+            throw new ServiceException(4018);
         }
         //进行用户名和电话唯一性确认
         List<UserBO> userBOList = userRoMapper.selectListExcludedId(userUpdateBO.getId());
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //密码加密
-        String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword());
+        String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword(), userExist.getSalt());
 
         //改库..
         User user = new User();

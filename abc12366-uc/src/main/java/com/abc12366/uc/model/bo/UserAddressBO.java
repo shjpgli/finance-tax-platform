@@ -38,6 +38,12 @@ public class UserAddressBO implements Serializable {
 
     private java.util.Date lastUpdate;
 
+    private String provinceName;
+
+    private String cityName;
+
+    private String areaName;
+
     public String getId() {
         return this.id;
     }
@@ -134,4 +140,27 @@ public class UserAddressBO implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
 }

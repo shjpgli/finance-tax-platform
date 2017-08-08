@@ -1,6 +1,6 @@
 package com.abc12366.uc.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -14,7 +14,6 @@ public class UserExtendUpdateBO {
     private String signature;
     @Size(max = 1)
     private String sex;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
     @Size(max = 2)
     private String bloodType;
@@ -57,13 +56,10 @@ public class UserExtendUpdateBO {
     private String frontImage;
     @Size(max = 100)
     private String backImage;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     @Size(max = 1)
     private String validStatus;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date validTime;
     @Size(max = 500)
     private String remark;
