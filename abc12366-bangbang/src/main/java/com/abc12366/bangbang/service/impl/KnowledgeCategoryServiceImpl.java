@@ -28,7 +28,6 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     @Autowired
     private KnowledgeCategoryMapper knowledgeCategoryMapper;
 
-
     @Override
     public List<KnowledgeCategory> listAll() {
         return knowledgeCategoryMapper.selectAll();
@@ -36,56 +35,73 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     @Override
     public KnowledgeCategory add(KnowledgeCategory record) {
-        record.setId(Utils.uuid());
-        record.setCreateUser(UcUserCommon.getUserId());
-        record.setUpdateUser(UcUserCommon.getUserId());
-        String parentCode = StringUtil.nullToString(record.getParentCode());
-        String code = parentCode + genCodes(6);
-        for (; ; ) {
-            KnowledgeCategory rs = knowledgeCategoryMapper.selectByCode(code);
-            if (rs != null) {
-                code = parentCode + genCodes(6);
-            } else {
-                break;
+        try{
+            record.setId(Utils.uuid());
+            record.setCreateUser(UcUserCommon.getUserId());
+            record.setUpdateUser(UcUserCommon.getUserId());
+            String parentCode = StringUtil.nullToString(record.getParentCode());
+            String code = parentCode + genCodes(6);
+            for (; ; ) {
+                KnowledgeCategory rs = knowledgeCategoryMapper.selectByCode(code);
+                if (rs != null) {
+                    code = parentCode + genCodes(6);
+                } else {
+                    break;
+                }
             }
+            record.setCode(code);
+            knowledgeCategoryMapper.insert(record);
+            return record;
+        }catch (Exception e){
+            LOGGER.error("KnowledgeCategoryServiceImpl.add()", e);
+            throw new ServiceException(4511);
         }
-        record.setCode(code);
-        int rs = knowledgeCategoryMapper.insert(record);
-        if (rs != 1) {
-            LOGGER.error("知识库分类新增失败：{}", record);
-            throw new ServiceException(4501);
-        }
-        return record;
     }
 
     @Override
     public KnowledgeCategory modify(KnowledgeCategory knowledgeCategory) {
-        knowledgeCategoryMapper.updateByPrimaryKey(knowledgeCategory);
-        return knowledgeCategory;
+        try{
+            knowledgeCategoryMapper.updateByPrimaryKey(knowledgeCategory);
+            return knowledgeCategory;
+        }catch (Exception e){
+            LOGGER.error("KnowledgeCategoryServiceImpl.modify()", e);
+            throw new ServiceException(4513);
+        }
     }
 
     @Override
     public void modifyNameById(String id, String name) {
-        KnowledgeCategory record = new KnowledgeCategory();
-        record.setId(id);
-        record.setName(name);
-        int rs = knowledgeCategoryMapper.updateByPrimaryKeySelective(record);
-        if (rs != 1) {
-            LOGGER.error("知识库分类修改名称失败：{}", id);
-            throw new ServiceException(4502);
+        try{
+            KnowledgeCategory record = new KnowledgeCategory();
+            record.setId(id);
+            record.setName(name);
+            knowledgeCategoryMapper.updateByPrimaryKeySelective(record);
+        }catch (Exception e){
+            LOGGER.error("KnowledgeCategoryServiceImpl.modifyNameById()", e);
+            throw new ServiceException(4513);
         }
     }
 
     @Override
     public void modifySort(List<SortBO> list) {
-        if (list != null && !list.isEmpty()) {
-            knowledgeCategoryMapper.batchUpdateSort(list);
+        try {
+            if (list != null && !list.isEmpty()) {
+                knowledgeCategoryMapper.batchUpdateSort(list);
+            }
+        }catch (Exception e){
+            LOGGER.error("KnowledgeCategoryServiceImpl.modifySort()", e);
+            throw new ServiceException(4513);
         }
     }
 
     @Override
     public void deleteById(String id) {
-        int rs = knowledgeCategoryMapper.deleteByPrimaryKey(id);
+        try {
+            knowledgeCategoryMapper.deleteByPrimaryKey(id);
+        }catch (Exception e){
+            LOGGER.error("KnowledgeCategoryServiceImpl.modifySort()", e);
+            throw new ServiceException(4512);
+        }
     }
 
 

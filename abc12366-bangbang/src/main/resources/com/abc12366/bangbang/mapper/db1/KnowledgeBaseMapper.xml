@@ -10,14 +10,12 @@
     </sql>
 
 
-    <!-- 查询感兴趣的知识 -->
+    <!-- 详情页查询感兴趣的知识 -->
     <select id="interestedList" resultType="knowledgeBase">
         SELECT * FROM bb_knowledge_base WHERE
         id IN(
-            SELECT DISTINCT knowledgeId FROM
-            bb_knowledge_tag_rel
-            WHERE
-            tagId
+            SELECT DISTINCT knowledgeId FROM bb_knowledge_tag_rel
+            WHERE tagId
             IN(
                 SELECT tagId
                 FROM
@@ -27,26 +25,35 @@
             )
             AND  knowledgeId !=  #{id}
         )
+        AND STATUS = 1 AND isOpen = 1 AND (activeTime IS NULL OR activeTime > NOW())
+        limit #{num}
+    </select>
+    <!-- 详情页查询关联问题的知识 -->
+    <select id="relatedList" resultType="knowledgeBase">
+        SELECT t_base.* FROM bb_knowledge_rel t_rel
+        LEFT JOIN bb_knowledge_base t_base ON t_rel.relKnowledgeId = t_base.id
+        WHERE
+        t_base.status = 1 AND t_base.isOpen = 1 AND (t_base.activeTime IS NULL OR t_base.activeTime > NOW())
+        AND t_rel.knowledgeId = #{id}
         limit #{num}
     </select>
 
-
-
     <!-- 首页热点问题查询 -->
-    <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
+    <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
         SELECT t.*,t1.name AS categoryName FROM
         (
-            SELECT * FROM bb_knowledge_base a WHERE
-            TYPE = #{KnowledgeType}
-            AND recommend = #{KnowledgeRecommend}
+            SELECT * FROM bb_knowledge_base a
+            WHERE
+            TYPE = #{KnowledgeType} AND recommend = #{KnowledgeRecommend}
+            AND STATUS = 1 AND isOpen = 1 AND (activeTime IS NULL OR activeTime > NOW())
             AND a.categoryCode
             IN
             (
                 SELECT t.categoryCode FROM (
                   SELECT categoryCode FROM bb_knowledge_base
                   WHERE
-                  TYPE = #{KnowledgeType}
-                  AND recommend = #{KnowledgeRecommend}
+                  TYPE = #{KnowledgeType} AND recommend = #{KnowledgeRecommend}
+                  AND STATUS = 1 AND isOpen = 1 AND (activeTime IS NULL OR activeTime > NOW())
                   GROUP BY categoryCode ORDER BY COUNT(1) DESC LIMIT #{categoryNum}
                 )AS t
             )

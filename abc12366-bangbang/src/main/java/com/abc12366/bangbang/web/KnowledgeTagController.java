@@ -72,8 +72,8 @@ public class KnowledgeTagController {
     /*
     *  停用启用 接口
     */
-    @PutMapping(path = "/modifyStatus/{id}")
-    public ResponseEntity modifyStatus(@PathVariable String id, @RequestParam Boolean status) {
+    @PutMapping(path = "/modifyStatus/{id}/{status}")
+    public ResponseEntity modifyStatus(@PathVariable String id, @PathVariable Boolean status) {
         knowledgeTagService.modifyStatus(id, status);
         return ResponseEntity.ok(Utils.kv());
     }

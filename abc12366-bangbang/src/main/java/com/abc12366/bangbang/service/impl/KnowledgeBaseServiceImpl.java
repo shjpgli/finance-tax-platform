@@ -54,25 +54,6 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         return Collections.EMPTY_MAP;
     }
 
-    private Map<String, List<KnowledgeBase>> category(List<KnowledgeBase> list){
-        Map<String, List<KnowledgeBase>> map = new HashMap<>();
-        if(list!= null && !list.isEmpty()){
-            for (KnowledgeBase knowledge : list){
-                String categoryCode = knowledge.getCategoryCode();
-                if(map.containsKey(categoryCode)){
-                    List<KnowledgeBase> knowledges = map.get(categoryCode);
-                    knowledges.add(knowledge);
-                }else{
-                    List<KnowledgeBase> knowledges = new ArrayList<>();
-                    map.put(categoryCode,knowledges);
-                }
-            }
-        }
-        return map;
-    }
-
-
-
     @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
         return knowledgeBaseMapper.selectList(param);
@@ -81,6 +62,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     @Override
     public List<KnowledgeBase> interestedList(String id, int num) {
         return knowledgeBaseMapper.interestedList(id, num);
+    }
+
+    @Override
+    public List<KnowledgeBase> relatedList(String id, int num) {
+        return knowledgeBaseMapper.relatedList(id, num);
     }
 
     @Override
@@ -93,7 +79,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         try {
             knowledgeBaseMapper.insert(knowledgeBase);
         }catch (Exception e){
-            LOGGER.error("新增知识库ERROR:" + e);
+            LOGGER.error("KnowledgeBaseServiceImpl.add():" + e);
             throw new ServiceException(4501);
         }
     }
@@ -110,7 +96,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             //删除知识库
             knowledgeBaseMapper.deleteByPrimaryKeys(ids);
         }catch (Exception e){
-            LOGGER.error("删除知识库ERROR:" + e);
+            LOGGER.error("KnowledgeBaseServiceImpl.delete():" + e);
             throw new ServiceException(4503);
         }
     }
@@ -131,8 +117,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
             return knowledgeBaseBO;
         }catch (Exception e){
-            LOGGER.error("新增知识库BO,ERROR:" + e);
-            throw new ServiceException(4503);
+            LOGGER.error("KnowledgeBaseServiceImpl.add(KnowledgeBaseBO knowledgeBaseBO):" + e);
+            throw new ServiceException(4501);
         }
     }
 
@@ -153,8 +139,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
             return knowledgeBaseBO;
         }catch (Exception e){
-            LOGGER.error("修改知识库BO,ERROR:" + e);
-            throw new ServiceException(4503);
+            LOGGER.error("KnowledgeBaseServiceImpl.modify():" + e);
+            throw new ServiceException(4502);
         }
     }
 
@@ -171,8 +157,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             }
             knowledgeVoteLogMapper.insert(knowledgeVoteLog);
         }catch (Exception e){
-            LOGGER.error("新增知识库投票,ERROR:" + e);
-            throw new ServiceException(4501);
+            LOGGER.error("KnowledgeBaseServiceImpl.addVote():" + e);
+            throw new ServiceException(4504);
         }
     }
 
@@ -181,7 +167,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         try {
             knowledgeBaseMapper.addPVByPK(id);
         }catch (Exception e){
-            LOGGER.error("新增知识库浏览量,ERROR:" + e);
+            LOGGER.error("KnowledgeBaseServiceImpl.addPV():" + e);
             throw new ServiceException(4503);
         }
     }
@@ -191,8 +177,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         try {
             knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
         }catch (Exception e){
-            LOGGER.error("删除知识库投票,ERROR:" + e);
-            throw new ServiceException(4503);
+            LOGGER.error("KnowledgeBaseServiceImpl.deleteVoteLogs():" + e);
+            throw new ServiceException(4505);
         }
     }
 
@@ -239,5 +225,22 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         }
     }
 
+    private Map<String, List<KnowledgeBase>> category(List<KnowledgeBase> list){
+        Map<String, List<KnowledgeBase>> map = new HashMap<>();
+        if(list!= null && !list.isEmpty()){
+            for (KnowledgeBase knowledge : list){
+                String categoryCode = knowledge.getCategoryCode();
+                if(map.containsKey(categoryCode)){
+                    List<KnowledgeBase> knowledgeList = map.get(categoryCode);
+                    knowledgeList.add(knowledge);
+                }else{
+                    List<KnowledgeBase> knowledgeList = new ArrayList<>();
+                    knowledgeList.add(knowledge);
+                    map.put(categoryCode,knowledgeList);
+                }
+            }
+        }
+        return map;
+    }
 
 }
