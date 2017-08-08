@@ -17,7 +17,7 @@ public class Einvocie implements Serializable{
     private String JYM;//发票校验码
     private String KPRQ;//开票日期
     private String PDF_URL;//pdf下载地址
-    
+    private String SP_URL;//收票地址
     
     
 	public String getReturnCode() {
@@ -67,6 +67,12 @@ public class Einvocie implements Serializable{
 	}
 	public void setPDF_URL(String pDF_URL) {
 		PDF_URL = pDF_URL;
+	}
+	public String getSP_URL() {
+		return SP_URL;
+	}
+	public void setSP_URL(String sP_URL) {
+		SP_URL = sP_URL;
 	}
     
 }
