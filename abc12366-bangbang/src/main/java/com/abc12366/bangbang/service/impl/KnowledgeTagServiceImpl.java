@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,8 +35,8 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     public KnowledgeTag add(KnowledgeTag knowledgeTag) {
         try {
             knowledgeTag.setId(Utils.uuid());
-            knowledgeTag.setCreateUser(UcUserCommon.getUserId());
-            knowledgeTag.setUpdateUser(UcUserCommon.getUserId());
+            knowledgeTag.setCreateUser(UcUserCommon.getAdminId());
+            knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
             knowledgeTagMapper.insert(knowledgeTag);
             return knowledgeTag;
         }catch (Exception e){
@@ -47,6 +48,8 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     @Override
     public KnowledgeTag modify(KnowledgeTag knowledgeTag) {
         try {
+            knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeTag.setUpdateTime(new Date());
             knowledgeTagMapper.updateByPrimaryKey(knowledgeTag);
             return knowledgeTag;
         }catch (Exception e){
@@ -61,6 +64,8 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
             KnowledgeTag knowledgeTag = new KnowledgeTag();
             knowledgeTag.setId(id);
             knowledgeTag.setStatus(status);
+            knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeTag.setUpdateTime(new Date());
             knowledgeTagMapper.updateByPrimaryKeySelective(knowledgeTag);
         }catch (Exception e){
             LOGGER.error("KnowledgeTagServiceImpl.modifyStatus()", e);

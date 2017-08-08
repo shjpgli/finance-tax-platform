@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -37,16 +38,16 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     public KnowledgeCategory add(KnowledgeCategory record) {
         try{
             record.setId(Utils.uuid());
-            record.setCreateUser(UcUserCommon.getUserId());
-            record.setUpdateUser(UcUserCommon.getUserId());
+            record.setCreateUser(UcUserCommon.getAdminId());
+            record.setUpdateUser(UcUserCommon.getAdminId());
             String parentCode = StringUtil.nullToString(record.getParentCode());
             String code = parentCode + genCodes(6);
             for (; ; ) {
                 KnowledgeCategory rs = knowledgeCategoryMapper.selectByCode(code);
-                if (rs != null) {
-                    code = parentCode + genCodes(6);
-                } else {
+                if (rs == null) {
                     break;
+                } else {
+                    code = parentCode + genCodes(6);
                 }
             }
             record.setCode(code);
@@ -61,6 +62,8 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     @Override
     public KnowledgeCategory modify(KnowledgeCategory knowledgeCategory) {
         try{
+            knowledgeCategory.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKey(knowledgeCategory);
             return knowledgeCategory;
         }catch (Exception e){
@@ -72,10 +75,12 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     @Override
     public void modifyNameById(String id, String name) {
         try{
-            KnowledgeCategory record = new KnowledgeCategory();
-            record.setId(id);
-            record.setName(name);
-            knowledgeCategoryMapper.updateByPrimaryKeySelective(record);
+            KnowledgeCategory knowledgeCategory = new KnowledgeCategory();
+            knowledgeCategory.setId(id);
+            knowledgeCategory.setName(name);
+            knowledgeCategory.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeCategory.setUpdateTime(new Date());
+            knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
         }catch (Exception e){
             LOGGER.error("KnowledgeCategoryServiceImpl.modifyNameById()", e);
             throw new ServiceException(4513);

@@ -22,14 +22,24 @@ public class UcUserCommon {
         return userId;
     }
 
+    public static String getAdminId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        String adminId = (String) request.getAttribute(Constant.ADMIN_ID);
+        if (StringUtils.isEmpty(adminId)) {
+            throw new ServiceException(4130);
+        }
+        return adminId;
+    }
+
     public static String getUserId() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
         String userId = (String) request.getAttribute(Constant.USER_ID);
-        userId = "e132ea76-a820-4649-82db-ba6753bf6dfc";
-//        if (StringUtils.isEmpty(userId)) {
-//            throw new ServiceException(4193);
-//        }
+        if (StringUtils.isEmpty(userId)) {
+            throw new ServiceException(4193);
+        }
         return userId;
     }
+
 }

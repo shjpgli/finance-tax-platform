@@ -107,8 +107,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         try {
             KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             knowledgeBase.setId(Utils.uuid());
-            knowledgeBase.setCreateUser(UcUserCommon.getUserId());
-            knowledgeBase.setUpdateUser(UcUserCommon.getUserId());
+            knowledgeBase.setCreateUser(UcUserCommon.getAdminId());
+            knowledgeBase.setUpdateUser(UcUserCommon.getAdminId());
             knowledgeBaseMapper.insert(knowledgeBase);
             //添加关联标签
             addTagRel(knowledgeBaseBO);
@@ -127,6 +127,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     public KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO) {
         try {
             KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
+            knowledgeBase.setUpdateTime(new Date());
+            knowledgeBase.setUpdateUser(UcUserCommon.getAdminId());
             String knowledgeBaseId = knowledgeBase.getId();
             knowledgeBaseMapper.updateByPrimaryKey(knowledgeBase);
 
