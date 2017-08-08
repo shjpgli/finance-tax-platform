@@ -103,6 +103,7 @@ public class AliPayController {
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(payReq));
+			request.setNotifyUrl("http://test.chabc.net/uc/payreturn/alipay");
 			AlipayTradePrecreateResponse response = alipayClient.execute(request);
 
 			if(response.isSuccess()){
@@ -265,7 +266,7 @@ public class AliPayController {
 	
 	/**
 	 * 交易对账单
-	 * @param payqueryReq
+	 * @param bill_date
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")

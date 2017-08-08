@@ -44,6 +44,7 @@ public class PayReturnController {
 
 	@RequestMapping("/alipay")
 	public @ResponseBody String aliPayReturn(HttpServletRequest request) {
+		LOGGER.info("{}", request);
 		try {
 			Map<String, String> params = new HashMap<String, String>();
 			Map<String, String[]> requestParams = request.getParameterMap();

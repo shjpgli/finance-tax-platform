@@ -15,6 +15,7 @@ import java.util.concurrent.Executor;
  * @author lijun <ljun51@outlook.com>
  * @create 2017-02-20 2:09 PM
  * @since 1.0.0
+ * 11
  */
 @SpringBootApplication(scanBasePackages = "com.abc12366.uc, com.abc12366.gateway")
 @PropertySource("classpath:application.properties")
