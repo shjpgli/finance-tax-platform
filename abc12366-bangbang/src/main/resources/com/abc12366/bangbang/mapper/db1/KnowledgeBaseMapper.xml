@@ -328,7 +328,13 @@
         updateUser = #{updateUser}
         WHERE id = #{id}
     </update>
-
+    <update id="updateStatusByPKs">
+        UPDATE bb_knowledge_base SET STATUS = #{status}
+        WHERE id IN
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
     <!-- 修改  知识是否有用 -->
     <update id="addUsefulVoteByPK" parameterType="java.lang.String">
