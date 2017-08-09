@@ -155,7 +155,6 @@ public class ContentController {
         dataMap.put("siteId", siteId);//栏目ID
         //查询内容列表
         List<ContenttagidBo> dataList = contentService.selectContentType(dataMap);
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
@@ -194,11 +193,10 @@ public class ContentController {
 
 //        dataMap.put("endTime", endTime);
         dataMap.put("tplContent", tplContent);
-
         //查询内容列表
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ContentsListBo> dataList = contentService.selectListByChannelId(dataMap);
-        LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
     /**
