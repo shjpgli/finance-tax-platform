@@ -10,9 +10,11 @@ import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -309,7 +311,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
         //String url = "http://localhost:9200/message/sms/verifycode";
-        String url = properties.getValue("message.api.url") + "/verify";
+        String url = properties.getValue("chabc.soa.message.url") + "/verify";
 
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -318,15 +320,22 @@ public class AuthServiceImpl implements AuthService {
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("phone", loginVerifyingCodeBO.getPhone());
-        requestBody.put("code", loginVerifyingCodeBO.getPhone());
+        requestBody.put("code", loginVerifyingCodeBO.getCode());
         requestBody.put("type", loginVerifyingCodeBO.getType());
 
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
-
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        }catch (Exception e){
+            throw new ServiceException(4821);
+        }
 
         if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
-            return true;
+            BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
+            if(object.getCode().equals("2000")){
+                return true;
+            }
         }
         return false;
     }
