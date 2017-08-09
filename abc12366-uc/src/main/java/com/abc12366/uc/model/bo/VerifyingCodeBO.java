@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Date: 2017-06-01
  * Time: 10:40
  */
-public class LoginVerifyingCodeBO implements Serializable {
+public class VerifyingCodeBO implements Serializable {
     @NotEmpty
     private String type;
     @NotEmpty
@@ -20,7 +20,7 @@ public class LoginVerifyingCodeBO implements Serializable {
     @Size(min = 6, max = 6)
     private String code;
 
-    public LoginVerifyingCodeBO() {
+    public VerifyingCodeBO() {
     }
 
     public String getType() {

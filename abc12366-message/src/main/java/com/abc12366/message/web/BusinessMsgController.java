@@ -40,7 +40,8 @@ public class BusinessMsgController {
      * @return ResponseEntity
      */
     @GetMapping()
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+    public ResponseEntity selectList(@RequestParam(required = false) String type,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      HttpServletRequest request) {
         LOGGER.info("{},{}", page, size);
@@ -50,7 +51,7 @@ public class BusinessMsgController {
         String userId = (String) request.getAttribute(Constant.USER_ID);
 
         if (!StringUtils.isEmpty(userId)) {
-            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).build();
+            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).build();
             List<BusinessMessage> dataList = businessMsgService.selectList(bm, page, size);
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
