@@ -269,7 +269,7 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
                      select="getProductBO"></association>
-        <association property="orderProductspecBOList" javaType="com.abc12366.uc.model.bo.OrderProductspecBO" column="{productId=productId,orderNo=orderNo}"
+        <association property="orderProductspecBOList" column="{productId=productId,orderNo=orderNo}"
                      select="getOrderProductspecBO"></association>
     </resultMap>
 
@@ -335,7 +335,7 @@
     <!--获取订单与产品对应规格信息-->
     <select id="getOrderProductspecBO" parameterType="java.util.Map" resultMap="orderProducctspecResultMap">
         SELECT
-        p.orderNo, p.productId, p.specId,d.fieldValue
+        p.orderNo, p.productId, p.specId,d.fieldValue,d.fieldKey
         FROM uc_order_product_spec p
         LEFT JOIN uc_dict d on d.id = p.specId
         WHERE p.orderNo = #{orderNo} and p.productId = #{productId}
@@ -347,7 +347,7 @@
         d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate,
         d.lastUser,d.sort
         FROM uc_view_sys_dict d
-        LEFT JOIN uc_product_spec s ON s.specId = d.id
+        LEFT JOIN uc_order_product_spec s ON s.specId = d.id
         WHERE s.productId = #{productId}
     </select>
 
@@ -540,7 +540,7 @@
 
     </select>
     <!-- 查询未发货订单 -->
-    <select id="selectExprotOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectExprotOrder" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o

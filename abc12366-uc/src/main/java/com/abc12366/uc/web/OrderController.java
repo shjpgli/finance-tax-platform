@@ -183,7 +183,7 @@ public class OrderController {
         order.setOrderStatus("4");
         List<OrderListBO> orderListBOList = orderService.selectExprotOrder(order);
         LOGGER.info("{}", orderListBOList);
-        return ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(orderListBOList)));
+        return ResponseEntity.ok(Utils.kv("dataList", orderListBOList));
     }
 
     /**

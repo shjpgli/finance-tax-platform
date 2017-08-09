@@ -797,7 +797,7 @@ public class OrderServiceImpl implements OrderService {
                     List<OrderProductspecBO> orderProductspecBOs = orderProductBO.getOrderProductspecBOList();
                     if(orderProductspecBOs != null){
                         for (OrderProductspecBO specBO:orderProductspecBOs){
-                            goodsName.append(specBO.getFieldValue());
+                            goodsName.append("  "+specBO.getFieldKey());
                         }
                     }
                 }
