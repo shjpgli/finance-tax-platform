@@ -62,6 +62,7 @@ public class PayReturnController {
 			LOGGER.info("支付宝回调信息:", JSON.toJSONString(params));
 			boolean signVerified = AliPayConfig.rsaCheckV1(params); // 调用SDK验证签名
 			if (signVerified) {// 验证成功
+				LOGGER.info("支付宝回调信息:验证签名成功");
 				// 商户订单号
 				String out_trade_no = new String(request.getParameter(
 						"out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
@@ -108,6 +109,7 @@ public class PayReturnController {
 				}
 				return "success";
 			} else {// 验证失败
+				LOGGER.info("支付宝回调信息:验证签名失败");
 				return ("fail");
 			}
 
