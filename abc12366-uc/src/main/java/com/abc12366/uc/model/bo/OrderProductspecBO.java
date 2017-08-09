@@ -13,6 +13,7 @@ public class OrderProductspecBO implements Serializable {
     private String productId;
     private String specId;
     private String fieldValue;
+    private String fieldKey;
 
     public String getProductId() {
         return this.productId;
@@ -44,5 +45,13 @@ public class OrderProductspecBO implements Serializable {
 
     public void setFieldValue(String fieldValue) {
         this.fieldValue = fieldValue;
+    }
+
+    public String getFieldKey() {
+        return fieldKey;
+    }
+
+    public void setFieldKey(String fieldKey) {
+        this.fieldKey = fieldKey;
     }
 }

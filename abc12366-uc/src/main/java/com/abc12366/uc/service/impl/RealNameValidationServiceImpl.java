@@ -53,20 +53,22 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         UserExtend userExtendUpdate = new UserExtend();
         Date startTime = new Date();
 
+        if (userExtendUpdateBO != null) {
+            BeanUtils.copyProperties(userExtendUpdateBO, userExtendUpdate);
+        }
         userExtendUpdate.setUserId(userId);
         userExtendUpdate.setLastUpdate(startTime);
         userExtendUpdate.setStartTime(startTime);
         userExtendUpdate.setEndTime(getSpecifiedDate("2099-12-30 23:59:59"));
         userExtendUpdate.setValidStatus(validStatus);
         userExtendUpdate.setValidTime(startTime);
-        userExtendUpdate.setRemark(userExtendUpdateBO.getRemark());
         int result = userExtendMapper.update(userExtendUpdate);
         if (result < 1) {
             throw new ServiceException();
         }
         UserExtendBO userExtendBO = new UserExtendBO();
-        BeanUtils.copyProperties(userExtend, userExtendBO);
-        userExtendBO.setValidStatus(userExtendUpdate.getValidStatus());
+        UserExtend userExtend1 = userExtendRoMapper.selectOne(userExtendUpdate.getUserId());
+        BeanUtils.copyProperties(userExtend1, userExtendBO);
         return userExtendBO;
     }
 

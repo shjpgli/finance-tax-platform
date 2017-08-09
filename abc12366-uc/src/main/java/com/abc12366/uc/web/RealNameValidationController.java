@@ -6,6 +6,7 @@ import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
+import com.abc12366.uc.util.AdminUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -53,9 +55,11 @@ public class RealNameValidationController {
 
     @PutMapping(path = "/{userId}/{validStatus}")
     public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus, @Valid
-    @RequestBody UserExtendUpdateBO userExtendUpdateBO) throws ParseException {
+    @RequestBody(required = false) UserExtendUpdateBO userExtendUpdateBO, HttpServletRequest request) throws ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
-        UserExtendBO userExtendBO = realNameValidationService.validate(userId, validStatus, userExtendUpdateBO);
+        //必须admin用户登录才能操作
+        AdminUtil.getAdminId(request);
+        UserExtendBO userExtendBO = realNameValidationService.validate(userId.trim(), validStatus.trim(), userExtendUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", userExtendBO));
     }
 

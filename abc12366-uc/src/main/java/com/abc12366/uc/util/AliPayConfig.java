@@ -19,6 +19,8 @@ public class AliPayConfig {
 	private static String charset="UTF-8"; // 字符编码格式
 	private static String alipay_public_key="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjtYXpvouj+ZnvoaY/6SsIkDiTKA2LF9VW+L5X6X0YgIhO8BX8yJE+ZYXuq0i/yRA+tMdjhj5YuckOh+wt0WGtVT8vSG6slHL5TnqZicvkCPRGq2suxyawoVL8eQLS7IHFGbxljRK1YpZtCqSyUzN+Z+RZ+ED14jxMiWUl7mtPrljwuygtu4RgSemENu5nvXlEOXXVu9XT99PYMhCfS+U1O4PC98jMJyfyTrRhrByFZCmporr9yfVSMmUnhEw3+8Oh5e+73RD21CN6yr0TuDA36GcTfo9ldx0biZTAjFoKlcQdhndwpJc0RfdBvEiwpaiE1zggf2BFmB3+dem/8s+OQIDAQAB";
 	private static String sign_type="RSA2"; //签名方式
+	//支付宝异步通知地址
+	public static String NOTIFY_URL="http://test.chabc.net/uc/payreturn/alipay";
 
 	public static AlipayClient getInstance(){    
         if (alipayClient == null){
@@ -35,7 +37,7 @@ public class AliPayConfig {
 	}
 
 	public static String toCharsetStr(String val) throws Exception{
-		return new String(val.getBytes("ISO-8859-1"),charset);
+		return new String(val.getBytes(charset),charset);
 	}
 
 	public static boolean rsaCheckV1(Map<String, String> params) throws AlipayApiException {

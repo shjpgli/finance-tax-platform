@@ -1,8 +1,8 @@
 package com.abc12366.bangbang.web;
 
-import com.abc12366.bangbang.model.bo.LetterBO;
 import com.abc12366.bangbang.model.bo.LetterInsertBO;
 import com.abc12366.bangbang.model.bo.LetterListBO;
+import com.abc12366.bangbang.model.bo.LetterResponse;
 import com.abc12366.bangbang.service.LetterService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -29,14 +29,28 @@ public class LetterController {
     @Autowired
     private LetterService letterService;
 
-    @PostMapping(path = "/{fromId}/to/{toId}")
-    public ResponseEntity send(@PathVariable String fromId, @PathVariable String toId, @Valid @RequestBody
-    LetterInsertBO letterInsertBO) {
-        LOGGER.info("{}:{}:{}", fromId, toId, letterInsertBO);
-        LetterBO letterBO = letterService.send(fromId, toId, letterInsertBO);
-        return ResponseEntity.ok(Utils.kv("data", letterBO));
+    /**
+     * 发送私信接口
+     * @param letterInsertBO
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @PostMapping
+    public ResponseEntity send(@Valid @RequestBody LetterInsertBO letterInsertBO, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", letterInsertBO, request);
+        LetterResponse response = letterService.send(letterInsertBO, request);
+        return ResponseEntity.ok(response);
     }
 
+    /**
+     * 用户获取自己的私信列表接口
+     * @param request
+     * @param page
+     * @param size
+     * @return
+     * @throws IOException
+     */
     @GetMapping()
     public ResponseEntity selectList(HttpServletRequest request,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -48,18 +62,44 @@ public class LetterController {
         return ResponseEntity.ok(letterListBO);
     }
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity read(@PathVariable String id) {
-        LOGGER.info("{}", id);
-        letterService.read(id);
-        return ResponseEntity.ok(Utils.kv());
+    /**
+     * 用户查看消息，如果消息状态为'未读'，则将消息状态置为'已读'
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "/{id}")
+    public ResponseEntity read(@PathVariable String id, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", id, request);
+        LetterResponse response = letterService.read(id, request);
+        return ResponseEntity.ok(response);
     }
 
+    /**
+     * 直接将'未读'消息置为'已读'，不需要进入消息
+     * @param id
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@PathVariable String id, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", id, request);
+        LetterResponse response = letterService.update(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 用户删除消息，物理删除
+     *
+     * @param id      消息ID
+     * @param
+     * @return ResponseEntity
+     */
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity delete(@PathVariable String id) {
-        LOGGER.info("{}", id);
-        letterService.delete(id);
-        return ResponseEntity.ok(Utils.kv());
+    public ResponseEntity delete(@PathVariable String id, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", id, request);
+        LetterResponse response = letterService.delete(id, request);
+        return ResponseEntity.ok(response);
     }
 
 }

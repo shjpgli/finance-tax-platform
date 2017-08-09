@@ -2,6 +2,7 @@ package com.abc12366.uc.webservice;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +17,11 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
+import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.alibaba.fastjson.JSON;
 
 import sun.misc.BASE64Decoder;
@@ -32,17 +35,17 @@ import sun.misc.BASE64Encoder;
 public class DzfpClient {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DzfpClient.class);
-	/**
-	 * 	 进入test.cer所在目录，执行如下操作（注意配置环境变量），生成testclient.truststore文件:
-	 *   keytool -import -file test.cer -storepass 123456 -keystore testclient.truststore
-	 *   然后输入“y”，回车
-	 *   命令说明：
-	 *   keytool  JDK提供的证书生成工具，所有参数的用法参见keytool –help
-	 *   -import  执行导入
-	 *   -file test.cer  要导入的证书，即从ie上导出的证书
-	 *   -storepass 123456  证书的存取密码
-	 *   -keystore testclient.truststore 保存路径及文件名
-	 */
+	
+	public static final  Double SL=0.06; //税率固定
+	
+	public static final String XSF_NSRSBH="110109500321655";
+	
+	public static final String XSF_MC="百旺电子测试2";
+	
+	public static final String TXSF_DZDH="南山区蛇口 83484949";
+	
+	public static final String XSF_YHZH="";
+	
 	private static String ssl_store = "C:/cer/testclient.truststore";//证书地址
 	
 	private static String ssl_pwd = "123456";//证书密码
@@ -78,7 +81,7 @@ public class DzfpClient {
     	
     	String xml = getCommonXml(interfaceCode, new BASE64Encoder().encodeBuffer(content.getBytes("UTF-8")));
     	
-    	LOGGER.info("调用电子发票WebService,请求信息:",xml);
+    	LOGGER.info("调用电子发票WebService,请求信息:"+xml);
 		
     	Object[] opArgs = new Object[] {xml };
     	Class<?>[] opReturnType = new Class[] { String.class };
@@ -89,7 +92,7 @@ public class DzfpClient {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Object xmlToObject(String result,Class _class) throws Exception{
 		
-		LOGGER.info("调用电子发票WebService,接收信息:",result);
+		LOGGER.info("调用电子发票WebService,接收信息:"+result);
 		
 		Object object=_class.newInstance();
 		Document doc = DocumentHelper.parseText(result);
@@ -106,21 +109,22 @@ public class DzfpClient {
 		
 		Element data=rootElt.element("Data").element("content");
 		String content=new String(new BASE64Decoder().decodeBuffer(data.getTextTrim()),"UTF-8");
-		Document doc2 = DocumentHelper.parseText(content);		
-		
-		
-		List<Element> elements=doc2.getRootElement().elements();
-		if(elements!=null && elements.size()>0){
-			for(Element element:elements){
-				try{
-				 Method m3 = _class.getDeclaredMethod("set"+element.getName(), String.class);
-				 m3.invoke(object,element.getTextTrim()); 
-				}catch(Exception e){
-					continue;
+		if(!StringUtils.isEmpty(content)){
+			Document doc2 = DocumentHelper.parseText(content);		
+
+			List<Element> elements=doc2.getRootElement().elements();
+			if(elements!=null && elements.size()>0){
+				for(Element element:elements){
+					try{
+					 Method m3 = _class.getDeclaredMethod("set"+element.getName(), String.class);
+					 m3.invoke(object,element.getTextTrim()); 
+					}catch(Exception e){
+						continue;
+					}
 				}
 			}
+
 		}
-			
 		return object;
 	}
 	
@@ -183,29 +187,53 @@ public class DzfpClient {
 		return String.valueOf((int)(Math.random()*900000000+100000000));
 	}
 	
+	public static double formatDouble2(double d) {
+		return (double)Math.round(d*100)/100;
+    }
+	
+	
 	
 	public static void main(String[] args) throws Exception {
 		//doSender("DFXJ1001","<REQUEST_COMMON_FPKJ class='REQUEST_COMMON_FPKJ'> <FPQQLSH>21151334123422451</FPQQLSH><KPLX>0</KPLX><XSF_NSRSBH>110109500321655</XSF_NSRSBH><XSF_MC>百旺电子测试2</XSF_MC><XSF_DZDH>山东省青岛市</XSF_DZDH><XSF_YHZH>92523123213412341234</XSF_YHZH><GMF_NSRSBH>440300568519737</GMF_NSRSBH><GMF_MC>张三</GMF_MC><GMF_DZDH>浙江省杭州市余杭区文一西路xxx号18234561212</GMF_DZDH><GMF_YHZH>123412341234</GMF_YHZH><GMF_SJH>18234561212</GMF_SJH><GMF_DZYX>mytest@xxx.com</GMF_DZYX><FPT_ZH></FPT_ZH><KPR>小张</KPR><SKR></SKR><FHR>小林</FHR><YFP_DM>111100000000</YFP_DM><YFP_HM>00004349</YFP_HM><JSHJ>1170.00</JSHJ><HJJE>1000.00</HJJE><HJSE>170.00</HJSE><BZ>电子发票测试</BZ><HYLX>1</HYLX><BY1></BY1><BY2></BY2><BY3></BY3><BY4></BY4><BY5></BY5><BY6></BY6><BY7></BY7><BY8></BY8><BY9></BY9><BY10></BY10><COMMON_FPKJ_XMXXS class='COMMON_FPKJ_XMXX' size='1'><COMMON_FPKJ_XMXX><FPHXZ>0</FPHXZ><SPBM>3040201990000000000</SPBM><XMMC>软件服务</XMMC><GGXH>X100</GGXH><DW>台</DW><XMSL>10</XMSL><XMDJ>100.00</XMDJ><XMJE>1000.00</XMJE><SL>0.17</SL><SE>170.00</SE><BY1></BY1><BY2></BY2><BY3></BY3><BY4></BY4><BY5></BY5><BY6></BY6></COMMON_FPKJ_XMXX></COMMON_FPKJ_XMXXS></REQUEST_COMMON_FPKJ>");		
 		 
 		DzfpGetReq dzfpGetReq=new DzfpGetReq();
 		dzfpGetReq.setZsfs("0");
-		dzfpGetReq.setKplx("0");
-		dzfpGetReq.setXsf_nsrsbh("110109500321655");
-		dzfpGetReq.setXsf_mc("百旺电子测试2");
-		dzfpGetReq.setXsf_dzdh("南山区蛇口、83484949");
+		dzfpGetReq.setKplx("1");
+		dzfpGetReq.setYfp_dm("050003523333");
+		dzfpGetReq.setYfp_hm("21120084");
 		dzfpGetReq.setGmf_mc("王毅");
-		dzfpGetReq.setJshj("3504.27");
-		dzfpGetReq.setHjje("3504.27");
-		dzfpGetReq.setHjse("0");
-		dzfpGetReq.setXmmc("棉花");
-		dzfpGetReq.setSpbm("1010105000000000000");
-		dzfpGetReq.setSl("0");
-		dzfpGetReq.setSe("0");
-		dzfpGetReq.setXmje("3504.27");
+		dzfpGetReq.setGmf_nsrsbh("110109500321655");
+		
+		dzfpGetReq.setKpr("小帅哥");
 		dzfpGetReq.setHylx("0");
-		dzfpGetReq.setFphxz("0");
-		dzfpGetReq.setYhzcbs("0");
-		dzfpGetReq.setKpr("shuaiia");
+		
+		List<InvoiceXm> invocieXms=new ArrayList<InvoiceXm>();
+		
+		InvoiceXm invoiceXm1=new InvoiceXm();
+		invoiceXm1.setXmmc("棉花");
+		invoiceXm1.setSpbm("1010105000000000000");
+		invoiceXm1.setFphxz("0");
+		invoiceXm1.setYhzcbs("0");
+		invoiceXm1.setTotalAmt(-260.00);
+		invoiceXm1.setXmsl(-1.00);
+		invocieXms.add(invoiceXm1);
+		
+		InvoiceXm invoiceXm2=new InvoiceXm();
+		invoiceXm2.setXmmc("棉花2");
+		invoiceXm2.setSpbm("1010105000000000000");
+		invoiceXm2.setFphxz("0");
+		invoiceXm2.setYhzcbs("0");
+		invoiceXm2.setTotalAmt(-400.00);
+		invoiceXm2.setXmsl(-1.00);
+		invocieXms.add(invoiceXm2);
+		
+		dzfpGetReq.setInvoiceXms(invocieXms);
+		
+		System.out.println(dzfpGetReq.tosendXml());
+		
+		/*DzfqQueryReq dzfqQueryReq=new DzfqQueryReq();
+		dzfqQueryReq.setFpqqlsh("ABC1502195853485");
+		dzfqQueryReq.setXsf_nsrsbh("110109500321655");*/
 		
 		Einvocie einvocie=(Einvocie) doSender("DFXJ1001",dzfpGetReq.tosendXml(),Einvocie.class);
 		System.out.println(JSON.toJSONString(einvocie));

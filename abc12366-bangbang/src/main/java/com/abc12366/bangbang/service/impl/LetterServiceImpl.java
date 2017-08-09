@@ -1,21 +1,17 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.LetterMapper;
-import com.abc12366.bangbang.mapper.db2.LetterRoMapper;
-import com.abc12366.bangbang.model.Letter;
-import com.abc12366.bangbang.model.bo.LetterBO;
 import com.abc12366.bangbang.model.bo.LetterInsertBO;
 import com.abc12366.bangbang.model.bo.LetterListBO;
+import com.abc12366.bangbang.model.bo.LetterResponse;
 import com.abc12366.bangbang.service.LetterService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Properties;
-import com.abc12366.gateway.util.Utils;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -23,8 +19,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -41,31 +37,28 @@ public class LetterServiceImpl implements LetterService {
     private LetterMapper letterMapper;
 
     @Autowired
-    private LetterRoMapper letterRoMapper;
-
-    @Autowired
     private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
-    public LetterBO send(String fromId, String toId, LetterInsertBO letterInsertBO) {
-        LOGGER.info("{}:{}", fromId, toId);
-        Letter letter = new Letter();
-        Date date = new Date();
-        letter.setId(Utils.uuid());
-        letter.setFromId(fromId);
-        letter.setToId(toId);
-        letter.setStatus("1");
-        letter.setContent(letterInsertBO.getContent());
-        letter.setCreateTime(date);
-        letter.setLastUpdate(date);
-
-        int result = letterMapper.insert(letter);
-        if (result < 1) {
-            throw new ServiceException(4820);
+    public LetterResponse send(LetterInsertBO letterInsertBO, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}", letterInsertBO);
+        String url = properties.getValue("chabc.soa.url") + "/message/user";
+        Map<String, Object> map = new HashMap<>();
+        map.put("fromUserId", letterInsertBO.getFromUserId());
+        map.put("toUserId", letterInsertBO.getToUserId());
+        map.put("content", letterInsertBO.getContent());
+        map.put("type", letterInsertBO.getType());
+        String responseStr;
+        try {
+            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, map, request);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
         }
-        LetterBO letterBO = new LetterBO();
-        BeanUtils.copyProperties(letter, letterBO);
-        return letterBO;
+        LetterResponse response = null;
+        if (!StringUtils.isEmpty(responseStr)) {
+            response = JSON.parseObject(responseStr, LetterResponse.class);
+        }
+        return response;
     }
 
     @Override
@@ -100,20 +93,59 @@ public class LetterServiceImpl implements LetterService {
     }
 
     @Override
-    public void read(String id) {
-        LOGGER.info("{}", id);
-        int result = letterMapper.read(id);
-        if (result < 1) {
-            throw new ServiceException(4102);
+    public LetterResponse read(String id, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", id, request);
+        String url = properties.getValue("chabc.soa.url") + "/message/user/" + id;
+
+        String responseStr;
+        try {
+            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.GET, request);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
         }
+        LetterResponse response = null;
+        if (!StringUtils.isEmpty(responseStr)) {
+            response = JSON.parseObject(responseStr, LetterResponse.class);
+        }
+        return response;
     }
 
     @Override
-    public void delete(String id) {
-        LOGGER.info("{}", id);
-        int result = letterMapper.delete(id);
-        if (result < 1) {
-            throw new ServiceException(4103);
+    public LetterResponse update(String id, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", id, request);
+        String url = properties.getValue("chabc.soa.url") + "/message/user/" + id;
+
+        String responseStr;
+        try {
+            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.PUT, request);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
         }
+        LetterResponse response = null;
+        if (!StringUtils.isEmpty(responseStr)) {
+            response = JSON.parseObject(responseStr, LetterResponse.class);
+        }
+        return response;
+    }
+
+    @Override
+    public LetterResponse delete(String id, HttpServletRequest request) throws IOException {
+        LOGGER.info("{}:{}", id, request);
+        String url = properties.getValue("chabc.soa.url") + "/message/user/" + id;
+
+        String responseStr;
+        LetterResponse response = null;
+        if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
+            try {
+                responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.DELETE, request);
+            } catch (Exception e) {
+                throw new ServiceException(4821);
+            }
+            if (!StringUtils.isEmpty(responseStr)) {
+                response = JSON.parseObject(responseStr, LetterResponse.class);
+            }
+        }
+
+        return response;
     }
 }

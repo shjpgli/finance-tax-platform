@@ -6,6 +6,7 @@ import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * KnowledgeBaseMapper数据库操作接口类
@@ -59,6 +60,10 @@ public interface KnowledgeBaseMapper {
      **/
     int deleteByPrimaryKeys(List<String> ids);
 
+    /**
+     * 删除（根据主键ID批量修改状态）
+     **/
+    int updateStatusByPKs(Map<String, Object> map);
 
     /**
      * 添加

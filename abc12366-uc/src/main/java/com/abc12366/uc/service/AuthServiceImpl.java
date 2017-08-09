@@ -90,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(encodePassword);
         user.setPoints(0);
         user.setExp(0);
-        user.setVipLevel("LV1");
+        user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
         if (!StringUtils.isEmpty(registerBO.getRegMail())) {
             user.setRegMail(registerBO.getRegMail());
         }
@@ -242,7 +242,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Map loginByVerifyingCode(LoginVerifyingCodeBO loginBO, String appToken) throws Exception {
+    public Map loginByVerifyingCode(VerifyingCodeBO loginBO, String appToken) throws Exception {
 
         //判断apptoken是否为空，为空则不允许登录
         if (appToken == null || appToken.equals("")) {
@@ -306,10 +306,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean verifyCode(LoginVerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
+    public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
         //String url = "http://localhost:9200/message/sms/verifycode";
-        String url = properties.getValue("message.message.url.verifycode");
+        String url = properties.getValue("message.api.url") + "/verify";
 
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();

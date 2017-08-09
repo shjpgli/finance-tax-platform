@@ -4,6 +4,7 @@ import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ChannelService;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.cms.service.ModelService;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
@@ -155,7 +156,6 @@ public class ContentController {
         dataMap.put("siteId", siteId);//栏目ID
         //查询内容列表
         List<ContenttagidBo> dataList = contentService.selectContentType(dataMap);
-        LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
@@ -164,8 +164,7 @@ public class ContentController {
      */
     @GetMapping(path = "/selectListByChannelId")
     public ResponseEntity selectListByChannelId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
-                                                        size,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                                 @RequestParam(value = "typeId", required = false) String typeId,
                                                 @RequestParam(value = "status", required = false) String status,
                                                 @RequestParam(value = "channelId", required = false) String channelId,
@@ -196,10 +195,31 @@ public class ContentController {
 //        dataMap.put("endTime", endTime);
         dataMap.put("tplContent", tplContent);
 
+        int cnt = contentService.selectCntByChannelId(dataMap);
+        if (cnt > 0) {
+            //该栏目或者专题下存在未生成静态页的内容信息，请先生成内容静态页
+            throw new ServiceException(4255);
+        }
+
+
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询内容列表
         List<ContentsListBo> dataList = contentService.selectListByChannelId(dataMap);
-        LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
+
+    /**
+     * 财税咨询网
+     */
+    @GetMapping(path = "/selectListcszxw")
+    public ResponseEntity selectListcszxw(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("siteId", "3ef33a7ece264f859a4c4af37ba458c9");//站点ID
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        //查询内容列表
+        List<ContentsListBo> dataList = contentService.selectListcszxw(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
     /**

@@ -101,6 +101,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         }
     }
 
+    @Override
+    public void modifyStatus(Map<String,Object> map) {
+        knowledgeBaseMapper.updateStatusByPKs(map);
+    }
+
     @Transactional("db1TxManager")
     @Override
     public KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO) {
@@ -109,6 +114,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             knowledgeBase.setId(Utils.uuid());
             knowledgeBase.setCreateUser(UcUserCommon.getAdminId());
             knowledgeBase.setUpdateUser(UcUserCommon.getAdminId());
+            Long zero = new Long(0);
+            knowledgeBase.setPv(zero);
+            knowledgeBase.setShareNum(zero);
+            knowledgeBase.setUsefulVotes(zero);
+            knowledgeBase.setUselessVotes(zero);
             knowledgeBaseMapper.insert(knowledgeBase);
             //添加关联标签
             addTagRel(knowledgeBaseBO);
@@ -157,6 +167,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             }else{
                 knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
             }
+            knowledgeVoteLog.setId(Utils.uuid());
             knowledgeVoteLogMapper.insert(knowledgeVoteLog);
         }catch (Exception e){
             LOGGER.error("KnowledgeBaseServiceImpl.addVote():" + e);

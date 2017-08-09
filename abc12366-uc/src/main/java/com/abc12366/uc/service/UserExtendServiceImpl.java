@@ -8,7 +8,6 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
-import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -126,11 +125,13 @@ public class UserExtendServiceImpl implements UserExtendService {
             userExtend1.setLastUpdate(new Date());
             int result = userExtendMapper.update(userExtend1);
             UserExtendBO userExtendBO = new UserExtendBO();
-            BeanUtils.copyProperties(userExtend1, userExtendBO);
-            if (result != 1) {
+
+            if (result < 1) {
                 LOGGER.warn("修改失败，参数：{}" + userExtendUpdateBO);
                 throw new ServiceException(4102);
             }
+            UserExtend userExtend2 = userExtendRoMapper.selectOne(userExtend1.getUserId());
+            BeanUtils.copyProperties(userExtend2, userExtendBO);
             LOGGER.info("{}", userExtendBO);
             return userExtendBO;
         }

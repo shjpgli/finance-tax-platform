@@ -17,6 +17,14 @@
         WHERE eventId = #{eventId}
     </select>
 
+    <!-- 查询最新活动 -->
+    <select id="selecttopone" resultType="com.abc12366.cms.model.Event" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cms_event
+        ORDER BY createtime DESC LIMIT 1
+    </select>
+
     <!-- 查询（根据条件查询） -->
     <select id="selectList" resultType="com.abc12366.cms.model.bo.EventListBo" parameterType="java.util.Map">
         SELECT
