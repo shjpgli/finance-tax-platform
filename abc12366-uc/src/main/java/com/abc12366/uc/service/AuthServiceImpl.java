@@ -260,7 +260,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4018);
         }
 
-        String userToken = Utils.token(Utils.uuid());
+        String userToken;
         user.setLastUpdate(new Date());
         int result = userMapper.update(user);
         if (result != 1) {
@@ -274,17 +274,18 @@ public class AuthServiceImpl implements AuthService {
         App app = appRoMapper.selectOne(appTemp);
         //如果不存在有效的注册应用，则不允许登录
         if (app == null) {
-            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4094);
+            throw new ServiceException(4035);
         }
 
         Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
         int result02;
         //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
         if (queryToken != null) {
+            userToken = queryToken.getToken();
             queryToken.setLastTokenResetTime(new Date());
             result02 = tokenMapper.update(queryToken);
         } else {
+            userToken = Utils.uuid();
             Token token = new Token();
             token.setId(Utils.uuid());
             if (app.getId() != null) {
@@ -327,13 +328,13 @@ public class AuthServiceImpl implements AuthService {
         ResponseEntity responseEntity;
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ServiceException(4821);
         }
 
         if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
             BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
-            if(object.getCode().equals("2000")){
+            if (object.getCode().equals("2000")) {
                 return true;
             }
         }
