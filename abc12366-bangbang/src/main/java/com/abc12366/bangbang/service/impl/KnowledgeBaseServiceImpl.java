@@ -101,6 +101,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         }
     }
 
+    @Override
+    public void modifyStatus(Map<String,Object> map) {
+        knowledgeBaseMapper.updateStatusByPKs(map);
+    }
+
     @Transactional("db1TxManager")
     @Override
     public KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO) {

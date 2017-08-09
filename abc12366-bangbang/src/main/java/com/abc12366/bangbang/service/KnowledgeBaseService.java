@@ -38,6 +38,9 @@ public interface KnowledgeBaseService {
     /* 批量删除知识库 */
     void delete(List<String> ids);
 
+    /* 批量删除知识库 */
+    void modifyStatus(Map<String,Object> map);
+
     /*添加知识库数据*/
     KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO);
 

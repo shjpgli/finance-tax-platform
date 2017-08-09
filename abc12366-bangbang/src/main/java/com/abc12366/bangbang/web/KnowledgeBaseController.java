@@ -128,6 +128,16 @@ public class KnowledgeBaseController {
     /*
     * 删除知识库 接口
     */
+    @PutMapping(path = "/modifyStatus")
+    public ResponseEntity modifyStatus(@RequestBody Map<String, Object> map) {
+        knowledgeBaseService.modifyStatus(map);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+
+    /*
+    * 删除知识库 接口
+    */
     @DeleteMapping(path = "/delete")
     public ResponseEntity delete(@RequestBody Map<String,List<String>> map) {
         List<String> ids = map.get("ids");
