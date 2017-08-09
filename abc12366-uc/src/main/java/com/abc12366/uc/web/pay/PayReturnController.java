@@ -104,6 +104,7 @@ public class PayReturnController {
 						OrderPayBO orderPayBO = new OrderPayBO();
 						orderPayBO.setOrderNo(out_trade_no);
 						orderPayBO.setIsPay(2);
+						orderPayBO.setPayMethod("ALIPAY");
 						orderService.paymentOrder(orderPayBO);
 					}
 				}
