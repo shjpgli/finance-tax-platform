@@ -55,7 +55,7 @@ public class PayReturnController {
 							: valueStr + values[i] + ",";
 				}
 				// 乱码解决，这段代码在出现乱码时使用
-				valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+				valueStr = new String(valueStr.getBytes("utf-8"), "utf-8");
 				params.put(name, valueStr);
 			}
 
@@ -65,21 +65,21 @@ public class PayReturnController {
 				LOGGER.info("支付宝回调信息:验证签名成功");
 				// 商户订单号
 				String out_trade_no = new String(request.getParameter(
-						"out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+						"out_trade_no").getBytes("utf-8"), "UTF-8");
 
 				// 支付宝交易号
 				String trade_no = new String(request.getParameter("trade_no")
-						.getBytes("ISO-8859-1"), "UTF-8");
+						.getBytes("utf-8"), "UTF-8");
 
 				// 交易状态
 				String trade_status = new String(request.getParameter(
-						"trade_status").getBytes("ISO-8859-1"), "UTF-8");
+						"trade_status").getBytes("utf-8"), "UTF-8");
 
 				String total_amount = new String(request.getParameter(
-						"total_amount").getBytes("ISO-8859-1"), "UTF-8");
+						"total_amount").getBytes("utf-8"), "UTF-8");
 
 				String date = new String(request.getParameter("gmt_payment")
-						.getBytes("ISO-8859-1"), "UTF-8");
+						.getBytes("utf-8"), "UTF-8");
 
 				if (trade_status.equals("TRADE_FINISHED")) {// 交易结束
 
