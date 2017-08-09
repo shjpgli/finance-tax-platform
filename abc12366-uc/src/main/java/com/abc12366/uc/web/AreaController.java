@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -110,4 +111,36 @@ public class AreaController {
                 ResponseEntity.ok(Utils.kv("provinceList", provinceList, "cityList", cityList, "areaList", areaList));
     }
 
+    @GetMapping("/provinceorcityorarea")
+    public ResponseEntity selectProvinceOrCityOrArea(
+            @RequestParam(value = "provinceId", required = false) String provinceId,
+            @RequestParam(value = "cityId", required = false) String cityId,
+            @RequestParam(value = "areaId", required = false) String areaId) {
+
+        LOGGER.info("{},{},{}", provinceId, cityId, areaId);
+        Province province = null;
+        City city = null;
+        Area area = null;
+        if (!StringUtils.isEmpty(provinceId)) {
+            List<Province> provinceList = areaService.selectProvinceList(provinceId);
+            if (provinceList.size() == 1) {
+                province = provinceList.get(0);
+            }
+        }
+        if (!StringUtils.isEmpty(cityId)) {
+            List<City> cityList = areaService.selectCityList(cityId);
+            if (cityList.size() == 1) {
+                city = cityList.get(0);
+            }
+        }
+        if (!StringUtils.isEmpty(areaId)) {
+            List<Area> areaList = areaService.selectAreaList(areaId);
+            if (areaList.size() == 1) {
+                area = areaList.get(0);
+            }
+        }
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("province", province, "city", city, "area", area));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
 }
