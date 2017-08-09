@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class InvoiceXm {
 	
-	
 	@NotEmpty
 	private String fphxz=""; //发票行性质 0.正常行 1.折扣行 2.被折扣行
 	private String spbm=""; //商品编码

@@ -1,14 +1,15 @@
-package com.abc12366.uc.config;
+package com.abc12366.uc.job.wx;
 
 import com.abc12366.uc.model.weixin.bo.WxUseToken;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +18,8 @@ import java.util.Map;
  *
  * @author zhushuai 2017-7-27
  */
-@Component
-public class Scheduler {
+
+public class WxUserTokenJob implements Job{
 
     public static WxUseToken token = null;
     @Autowired
@@ -26,11 +27,12 @@ public class Scheduler {
     // token获取失败，重复获取次数
     private Integer regetTime = 10;
 
-    private GzhInfo gzhInfo = null;
+    public static GzhInfo gzhInfo = null;
 
-    @Scheduled(fixedRate = 3600000)
-    public void getUserToken() {
-
+	@Override
+	public void execute(JobExecutionContext jobexecutioncontext)
+			throws JobExecutionException {
+		System.out.println("------------------------------------------");
         if (gzhInfo == null) {
             gzhInfo = iWxGzhService.wxgzhList(new GzhInfo(), 0, 1).get(0);
         }
@@ -44,6 +46,8 @@ public class Scheduler {
             token = WxConnectFactory.get(WechatUrl.WXUSETOKEN, tks, null,
                     WxUseToken.class);
             if (0 == token.getErrcode()) {
+            	gzhInfo.setUserToken(token.getAccess_token());
+            	iWxGzhService.updateUserToken(gzhInfo);
                 break;
             } else {
                 if (time >= regetTime) {
@@ -57,6 +61,5 @@ public class Scheduler {
                 time += 1;
             }
         }
-
-    }
+	}
 }

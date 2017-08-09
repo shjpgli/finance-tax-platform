@@ -2,8 +2,9 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.config.Scheduler;
+import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.WxMenuMapper;
+import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.mapper.db2.WxMenuRoMapper;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.menu.Button;
@@ -30,11 +31,13 @@ public class WxMenuServiceImpl implements IWxMenuService {
     private WxMenuMapper wxMenuMapper;
     @Autowired
     private WxMenuRoMapper wxMenuRoMapper;
+    @Autowired
+    private WxGzhRoMapper gzhRoMapper;
 
     @Override
     public BaseWxRespon creatWxMenu(WxMenu wxMenu) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", Scheduler.token.getAccess_token());
+        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         BaseWxRespon respon = WxConnectFactory.post(WechatUrl.WXMENUCREATE, tks, wxMenu, BaseWxRespon.class);
         return respon;
     }
@@ -42,14 +45,14 @@ public class WxMenuServiceImpl implements IWxMenuService {
     @Override
     public WxMenu getWxMenu() {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", Scheduler.token.getAccess_token());
+        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         return WxConnectFactory.get(WechatUrl.WXMENUQUERY, tks, null, WxMenu.class);
     }
 
     @Override
     public BaseWxRespon delWxMenu() {
         Map<String, String> tks1 = new HashMap<String, String>();
-        tks1.put("access_token", Scheduler.token.getAccess_token());
+        tks1.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         BaseWxRespon respon = WxConnectFactory.get(WechatUrl.WXMENUDEL, tks1, null, BaseWxRespon.class);
         return respon;
     }

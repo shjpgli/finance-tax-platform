@@ -1,9 +1,10 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.uc.config.Scheduler;
+import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.TemplateMapper;
 import com.abc12366.uc.mapper.db2.TemplateRoMapper;
+import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.template.Template;
 import com.abc12366.uc.model.weixin.bo.template.WxTemplates;
@@ -31,12 +32,14 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
     private TemplateRoMapper templateRoMapper;
     @Autowired
     private TemplateMapper templateMapper;
+    @Autowired
+    private WxGzhRoMapper gzhRoMapper;
 
     @Transactional("db1TxManager")
     public boolean synchroTemplate() {
         LOGGER.info("开始同步微信模板消息数据.......");
         Map<String, String> headparamters = new HashMap<String, String>();
-        headparamters.put("access_token", Scheduler.token.getAccess_token());
+        headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         WxTemplates listRs = WxConnectFactory.get(WechatUrl.TEMPLATEMSG_LIST, headparamters, null, WxTemplates.class);
         templateMapper.deleteAll();
         if (listRs.getErrcode() != 0) {
@@ -56,7 +59,7 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
     public void delete(String id) {
         templateMapper.delete(id);
         Map<String, String> headparamters = new HashMap<String, String>();
-        headparamters.put("access_token", Scheduler.token.getAccess_token());
+        headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         BaseWxRespon baseWxRespon = WxConnectFactory.get(WechatUrl.TEMPLATEMSG_LIST, headparamters, null,
                 BaseWxRespon.class);
         if (baseWxRespon.getErrcode() != 0) {

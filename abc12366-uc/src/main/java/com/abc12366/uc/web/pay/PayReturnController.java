@@ -6,16 +6,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.bo.OrderPayBO;
@@ -25,7 +22,7 @@ import com.abc12366.uc.util.AliPayConfig;
 import com.alibaba.fastjson.JSON;
 
 /**
- * 支付接口毁掉地址
+ * 支付接口回调地址
  * 
  * @author zhushuai 2017-8-4
  * 

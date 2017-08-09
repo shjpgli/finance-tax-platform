@@ -10,4 +10,6 @@ public interface WxGzhRoMapper {
 
     GzhInfo selectOne(String id);
 
+	String selectUserToken(String appid);
+
 }

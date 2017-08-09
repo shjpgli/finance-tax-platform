@@ -15,6 +15,7 @@
         <where>
             1 = 1
             <if test="gzhName != null">and gzhName = #{gzhName}</if>
+            <if test="appid != null">and appid = #{appid}</if>
         </where>
         ORDER BY lastUpdate DESC
     </select>
@@ -25,4 +26,9 @@
         FROM uc_gzh
         WHERE id = #{id}
     </select>
+    
+    <select id="selectUserToken" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT userToken from uc_gzh where appid =  #{appid}
+    </select>
+    
 </mapper>
