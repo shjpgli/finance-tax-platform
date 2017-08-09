@@ -347,11 +347,9 @@ public class OrderServiceImpl implements OrderService {
         repo.setLastUpdate(date);
         productRepoMapper.insert(repo);
 
-        //商品价格
-        double totalPrice;
-        int giftPoints;
+
         //根据用户等级查找该等级下赠送的积分，没有则设置为goods中设置的赠送积分
-        UvipPrice uvip = new UvipPrice();
+        /*UvipPrice uvip = new UvipPrice();
         uvip.setProductId(prBO.getId());
         uvip.setVipLevel(user.getVipLevel());
         UvipPrice uvipPrice = uvipPriceRoMapper.selectByLevel(uvip);
@@ -366,14 +364,19 @@ public class OrderServiceImpl implements OrderService {
             giftPoints = (int) (uvipPrice.getGiftPoints()+(uvipPrice.getGiftPoints() * 0.1)) * 1000;
         }else{
             giftPoints = (int) (goodsBO.getGiftPoints()+(goodsBO.getGiftPoints() * 0.1)) * 1000;
-        }
+        }*/
+
+        //商品价格
+        double totalPrice = orderBO.getTotalPrice();
+        int giftPoints = (int) (totalPrice+(totalPrice * 0.1)) * 1000;
+
         //加入订单信息
         orderBO.setOrderStatus(orderStatus);
         orderBO.setIsInvoice(false);
         orderBO.setNowVipLevel(user.getVipLevel());
         orderBO.setUsername(user.getUsername());
         orderBO.setGiftPoints(giftPoints);
-        orderBO.setTotalPrice(totalPrice);
+        //orderBO.setTotalPrice(totalPrice);
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {
