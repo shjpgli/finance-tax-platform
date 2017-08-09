@@ -1,13 +1,12 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
-import com.abc12366.uc.util.UserUtil;
+import com.abc12366.uc.util.AdminUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -58,9 +57,8 @@ public class RealNameValidationController {
     public ResponseEntity realNameValidate(@PathVariable String userId, @PathVariable String validStatus, @Valid
     @RequestBody(required = false) UserExtendUpdateBO userExtendUpdateBO, HttpServletRequest request) throws ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
-        if (!userId.trim().equals(UserUtil.getUserId(request))) {
-            throw new ServiceException(4190);
-        }
+        //必须admin用户登录才能操作
+        AdminUtil.getAdminId(request);
         UserExtendBO userExtendBO = realNameValidationService.validate(userId.trim(), validStatus.trim(), userExtendUpdateBO);
         return ResponseEntity.ok(Utils.kv("data", userExtendBO));
     }
