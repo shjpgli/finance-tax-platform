@@ -4,6 +4,7 @@ import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ChannelService;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.cms.service.ModelService;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
@@ -193,8 +194,16 @@ public class ContentController {
 
 //        dataMap.put("endTime", endTime);
         dataMap.put("tplContent", tplContent);
-        //查询内容列表
+
+        int cnt = contentService.selectCntByChannelId(dataMap);
+        if (cnt > 0) {
+            //该栏目或者专题下存在未生成静态页的内容信息，请先生成内容静态页
+            throw new ServiceException(4255);
+        }
+
+
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        //查询内容列表
         List<ContentsListBo> dataList = contentService.selectListByChannelId(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
