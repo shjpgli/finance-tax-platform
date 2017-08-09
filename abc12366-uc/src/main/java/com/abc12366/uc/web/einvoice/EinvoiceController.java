@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.dzfp.DzfpDownloadReq;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.DzfqQueryReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
+import com.abc12366.uc.model.dzfp.EinvocieDown;
 import com.abc12366.uc.service.einvoice.IEinvoiceService;
 
 /**
@@ -28,7 +30,7 @@ public class EinvoiceController {
 	IEinvoiceService iEinvoiceService;
 	
 	/**
-	 * 开取电子发票
+	 * 电子发票开票/退票
 	 * @param dzfpGetReq
 	 * @return
 	 */
@@ -37,7 +39,7 @@ public class EinvoiceController {
 	public ResponseEntity getEinvoice(@Valid @RequestBody DzfpGetReq dzfpGetReq){
 		Einvocie einvoice=iEinvoiceService.getEinvoice(dzfpGetReq);
 		if(einvoice==null){
-			return ResponseEntity.ok(Utils.bodyStatus(9999, "电子发票开取异常"));
+			return ResponseEntity.ok(Utils.bodyStatus(9999, "电子发票开票/退票异常"));
 		}else{
 			if("0000".equals(einvoice.getReturnCode())){
 				return ResponseEntity.ok(Utils.kv("data", einvoice));
@@ -68,4 +70,26 @@ public class EinvoiceController {
 		}
 		
 	}
+	
+	/**
+	 * 电子发票下载地址查询
+	 * @param dzfpGetReq
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/queryDown")
+	public ResponseEntity queryDownEinvoice(@Valid @RequestBody DzfpDownloadReq downloadReq){
+		EinvocieDown einvoice=iEinvoiceService.queryEinvoice(downloadReq);
+		if(einvoice==null){
+			return ResponseEntity.ok(Utils.bodyStatus(9999, "电子发票下载地址查询异常"));
+		}else{
+			if("0000".equals(einvoice.getReturnCode())){
+				return ResponseEntity.ok(Utils.kv("data", einvoice));
+			}else{
+				return ResponseEntity.ok(Utils.bodyStatus(9999, einvoice.getReturnMessage()));
+			}
+		}
+		
+	}
+	
 }
