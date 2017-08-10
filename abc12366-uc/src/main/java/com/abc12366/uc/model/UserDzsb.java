@@ -1,5 +1,6 @@
 package com.abc12366.uc.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 
@@ -20,8 +21,44 @@ public class UserDzsb {
     private String swjgDm;
     private Date createTime;
     private Date lastUpdate;
+    private Timestamp expireTime;
+    private Timestamp expandExpireTime;
+    private String frmc;
+    private String frzjh;
 
     public UserDzsb() {
+    }
+
+    public Timestamp getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Timestamp expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    public Timestamp getExpandExpireTime() {
+        return expandExpireTime;
+    }
+
+    public void setExpandExpireTime(Timestamp expandExpireTime) {
+        this.expandExpireTime = expandExpireTime;
+    }
+
+    public String getFrmc() {
+        return frmc;
+    }
+
+    public void setFrmc(String frmc) {
+        this.frmc = frmc;
+    }
+
+    public String getFrzjh() {
+        return frzjh;
+    }
+
+    public void setFrzjh(String frzjh) {
+        this.frzjh = frzjh;
     }
 
     public UserDzsb(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc,

@@ -21,4 +21,6 @@ public interface UserBindMapper {
     int hndsBind(UserHnds userHnds);
 
     int hndsUnbind(String id);
+
+    int update(UserDzsb userDzsb);
 }
