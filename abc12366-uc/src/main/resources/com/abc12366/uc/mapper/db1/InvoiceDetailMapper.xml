@@ -17,7 +17,7 @@
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.InvoiceDetail">
+    <insert id="insert" parameterType="com.abc12366.uc.model.invoice.InvoiceDetail">
         INSERT INTO uc_invoice_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -87,7 +87,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.InvoiceDetail">
+    <update id="update" parameterType="com.abc12366.uc.model.invoice.InvoiceDetail">
         UPDATE uc_invoice_detail
         <set>
             <if test="invoiceNo != null">

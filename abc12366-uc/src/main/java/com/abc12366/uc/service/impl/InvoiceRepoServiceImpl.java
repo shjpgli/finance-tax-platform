@@ -6,9 +6,9 @@ import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
 import com.abc12366.uc.mapper.db1.InvoiceRepoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
-import com.abc12366.uc.model.InvoiceDetail;
-import com.abc12366.uc.model.InvoiceRepo;
-import com.abc12366.uc.model.bo.InvoiceRepoBO;
+import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.InvoiceRepo;
+import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.InvoiceRepoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,16 +62,16 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             throw new ServiceException(4169);
         }
         //拆分发票段
-        String invoiceSection = invoiceRepoBO.getInvoiceSection();
-        boolean isSection = invoiceSection.contains("-");
-        if (isSection == false) {
-            LOGGER.info("{发票段信息错误}", invoiceSection);
-            throw new ServiceException(4170);
-        }
-        String[] sections = invoiceSection.split("-");
-        //入库发票详情表
-        int start = Integer.valueOf(sections[0]);
-        int end = Integer.valueOf(sections[1]);
+//        String invoiceSection = invoiceRepoBO.getInvoiceSection();
+//        boolean isSection = invoiceSection.contains("-");
+//        if (isSection == false) {
+//            LOGGER.info("{发票段信息错误}", invoiceSection);
+//            throw new ServiceException(4170);
+//        }
+//        String[] sections = invoiceSection.split("-");
+//        //入库发票详情表
+        int start = Integer.valueOf(invoiceRepoBO.getInvoiceNoStart());
+        int end = Integer.valueOf(invoiceRepoBO.getInvoiceNoEnd());
         List<InvoiceDetail> list = new ArrayList<>();
         int successNum = 0;
         for (int i = start; i <= end; i++) {
@@ -83,7 +83,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             invoiceDetail.setInvoiceNo(String.valueOf(i));
             invoiceDetail.setInvoiceCode(invoiceRepoBO.getInvoiceCode());
             invoiceDetail.setProperty(invoiceRepoBO.getProperty());
-            invoiceDetail.setInvoiceName(invoiceRepoBO.getInvoiceName());
+            //invoiceDetail.setInvoiceName(invoiceRepoBO.getInvoiceName());
             invoiceDetail.setStatus("0");
             invoiceDetail.setCreateTime(date);
             invoiceDetail.setLastUpdate(date);
@@ -100,7 +100,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
                 }
             }
         }
-        invoiceRepoBO.setSuccessNum(successNum);
+        //invoiceRepoBO.setSuccessNum(successNum);
         return invoiceRepoBO;
     }
 

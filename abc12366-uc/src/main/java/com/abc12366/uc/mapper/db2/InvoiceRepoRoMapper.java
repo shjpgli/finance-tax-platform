@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.InvoiceRepo;
+import com.abc12366.uc.model.invoice.InvoiceRepo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

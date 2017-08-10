@@ -5,11 +5,11 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, invoiceCode, invoiceName, property, invoiceSection, createTime, lastUpdate
+        id,	invoiceTypeCode,	invoiceCode,	invoiceNoStart,	invoiceNoEnd,	property,	share,	book,	createTime,	lastUpdate,	createUser,	updateUser
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.InvoiceRepo" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.invoice.InvoiceRepo" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice_repo
@@ -17,8 +17,8 @@
     </select>
 
     <!-- 查询列表 -->
-    <select id="selectInvoiceRepoList" resultType="com.abc12366.uc.model.InvoiceRepo"
-            parameterType="com.abc12366.uc.model.InvoiceRepo">
+    <select id="selectInvoiceRepoList" resultType="com.abc12366.uc.model.invoice.InvoiceRepo"
+            parameterType="com.abc12366.uc.model.invoice.InvoiceRepo">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice_repo

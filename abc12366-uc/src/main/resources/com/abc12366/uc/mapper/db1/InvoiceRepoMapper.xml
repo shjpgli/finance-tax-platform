@@ -10,23 +10,32 @@
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.InvoiceRepo">
+    <insert id="insert" parameterType="invoiceRepo">
         INSERT INTO uc_invoice_repo
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null">
                 id,
+            </if>
+            <if test="invoiceTypeCode != null">
+                invoiceTypeCode,
             </if>
             <if test="invoiceCode != null">
                 invoiceCode,
             </if>
-            <if test="invoiceName != null">
-                invoiceName,
+            <if test="invoiceNoStart != null">
+                invoiceNoStart,
+            </if>
+            <if test="invoiceNoEnd != null">
+                invoiceNoEnd,
             </if>
             <if test="property != null">
                 property,
             </if>
-            <if test="invoiceSection != null">
-                invoiceSection,
+            <if test="share != null">
+                share,
+            </if>
+            <if test="book != null">
+                book,
             </if>
             <if test="createTime != null">
                 createTime,
@@ -34,23 +43,38 @@
             <if test="lastUpdate != null">
                 lastUpdate,
             </if>
+            <if test="createUser != null">
+                createUser,
+            </if>
+            <if test="updateUser != null">
+                updateUser,
+            </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id!=null">
                 #{id},
+            </if>
+            <if test="invoiceTypeCode!=null">
+                #{invoiceTypeCode},
             </if>
             <if test="invoiceCode!=null">
                 #{invoiceCode},
             </if>
-            <if test="invoiceName!=null">
-                #{invoiceName},
+            <if test="invoiceNoStart!=null">
+                #{invoiceNoStart},
+            </if>
+            <if test="invoiceNoEnd!=null">
+                #{invoiceNoEnd},
             </if>
             <if test="property!=null">
                 #{property},
             </if>
-            <if test="invoiceSection!=null">
-                #{invoiceSection},
+            <if test="share!=null">
+                #{share},
+            </if>
+            <if test="book!=null">
+                #{book},
             </if>
             <if test="createTime!=null">
                 #{createTime},
@@ -58,30 +82,51 @@
             <if test="lastUpdate!=null">
                 #{lastUpdate},
             </if>
+            <if test="createUser!=null">
+                #{createUser},
+            </if>
+            <if test="updateUser!=null">
+                #{updateUser},
+            </if>
         </trim>
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.InvoiceRepo">
+    <update id="update" parameterType="invoiceRepo">
         UPDATE uc_invoice_repo
         <set>
+            <if test="invoiceTypeCode != null">
+                invoiceTypeCode = #{invoiceTypeCode},
+            </if>
             <if test="invoiceCode != null">
                 invoiceCode = #{invoiceCode},
             </if>
-            <if test="invoiceName != null">
-                invoiceName = #{invoiceName},
+            <if test="invoiceNoStart != null">
+                invoiceNoStart = #{invoiceNoStart},
+            </if>
+            <if test="invoiceNoEnd != null">
+                invoiceNoEnd = #{invoiceNoEnd},
             </if>
             <if test="property != null">
                 property = #{property},
             </if>
-            <if test="invoiceSection != null">
-                invoiceSection = #{invoiceSection},
+            <if test="share != null">
+                share = #{share},
+            </if>
+            <if test="book != null">
+                book = #{book},
             </if>
             <if test="createTime != null">
                 createTime = #{createTime},
             </if>
             <if test="lastUpdate != null">
                 lastUpdate = #{lastUpdate},
+            </if>
+            <if test="createUser != null">
+                createUser = #{createUser},
+            </if>
+            <if test="updateUser != null">
+                updateUser = #{updateUser},
             </if>
 
         </set>
