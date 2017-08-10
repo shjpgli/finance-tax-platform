@@ -58,7 +58,8 @@ public class VoteServiceImpl implements VoteService {
         List<Vote> voteList = voteRoMapper.selectList(vote);
         // 根据发票状态、IP查询参与人数
         if (voteList != null && voteList.size() > 0) {
-            voteList.stream().filter(v -> v.getStatus()).forEach(v -> {
+            //0:停用，1：启用，3：草稿，4：过期
+            voteList.stream().filter(v -> v.getStatus()==1 || v.getStatus()==4).forEach(v -> {
                 VoteResult vr = new VoteResult.Builder().voteId(v.getId()).build();
                 v.setNop(voteRoMapper.selectResultCount(vr));
                 v.setNov(voteRoMapper.selectHistoryCount(v.getId()));
@@ -135,7 +136,7 @@ public class VoteServiceImpl implements VoteService {
             vote.setAdditionList(voteAdditionRoMapper.selectList(vote.getId()));
 
             // 如果为已发布状态，统计参与总人数
-            if (vote.getStatus()) {
+            if (vote.getStatus() ==1 || vote.getStatus() == 4) {
                 VoteResult vr = new VoteResult.Builder().voteId(vote.getId()).build();
                 vote.setNop(voteRoMapper.selectResultCount(vr));
                 vote.setNov(voteRoMapper.selectHistoryCount(vote.getId()));
@@ -145,7 +146,7 @@ public class VoteServiceImpl implements VoteService {
                 for (Subject subject : subjectList) {
                     List<SubjectItem> itemList = subjectRoMapper.selectItemList(subject.getId());
                     // 如果为已发布状态，统计得票数
-                    if (vote.getStatus()) {
+                    if (vote.getStatus() ==1 || vote.getStatus() == 4) {
                         for (SubjectItem item : itemList) {
                             VoteResult vr = new VoteResult.Builder()
                                     .voteId(vote.getId())

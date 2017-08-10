@@ -15,6 +15,8 @@ public interface EventService {
 
     EventSaveBo selectEvent(String eventId);
 
+    EventSaveBo selecttopone();
+
     EventSaveBo update(EventSaveBo eventSaveBo);
 
     String delete(String eventId);

@@ -12,6 +12,7 @@ import com.abc12366.message.util.CheckSumBuilder;
 import com.abc12366.message.util.MessageConstant;
 import com.abc12366.message.util.RandomNumber;
 import com.abc12366.message.util.soaUtil;
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,14 +172,13 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity neteaseResponse;
-        try{
+        try {
             neteaseResponse = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ServiceException(4204);
         }
         if (neteaseResponse != null && neteaseResponse.getStatusCode().is2xxSuccessful() && neteaseResponse.hasBody()) {
-            NeteaseTemplateResponseBO neteaseTemplateResponseBO = objectMapper.readValue(((String) neteaseResponse
-                    .getBody()).getBytes(), NeteaseTemplateResponseBO.class);
+            NeteaseTemplateResponseBO neteaseTemplateResponseBO = JSON.parseObject(String.valueOf(neteaseResponse.getBody()), NeteaseTemplateResponseBO.class);
             if (neteaseTemplateResponseBO != null && neteaseTemplateResponseBO.getCode().equals("200")) {
                 return true;
                 //return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
@@ -242,9 +242,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         requestBody.add("vars", code);
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity responseEntity;
-        try{
+        try {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ServiceException(4204);
         }
         if (soaUtil.isExchangeSuccessful(responseEntity)) {

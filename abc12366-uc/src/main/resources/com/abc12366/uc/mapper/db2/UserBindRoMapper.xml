@@ -43,4 +43,16 @@
         where userId=#{userId}
         and status=1
     </select>
+    <select id="selectListByUserId" parameterType="java.lang.String" resultType="com.abc12366.uc.model.abc4000.NSRXX">
+        select uud.nsrsbh nsrsbh,
+                uud.shxydm shxydm,
+                uud.nsrmc nsrmc,
+                uud.createTime bdsj,
+                uud.expireTime dqr,
+                uud.swjgMc swjgmc,
+                uud.swjgDm swjgdm,
+                uud.expandExpireTime yqdqr
+        from uc_user_dzsb uud
+        where uud.userId = #{userId}
+    </select>
 </mapper>

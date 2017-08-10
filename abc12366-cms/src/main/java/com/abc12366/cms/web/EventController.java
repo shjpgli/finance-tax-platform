@@ -81,6 +81,17 @@ public class EventController {
     }
 
     /**
+     * 查询最新的一个活动信息
+     */
+    @GetMapping(path = "/topone")
+    public ResponseEntity selecttopone() {
+        //查询活动信息
+        EventSaveBo eventSaveBo = eventService.selecttopone();
+        LOGGER.info("{}", eventSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
+    }
+
+    /**
      * 更新活动
      */
     @PutMapping(path = "/{eventId}")

@@ -124,13 +124,22 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public List<ContentsListBo> selectListByChannelId(Map<String, Object> map) {
-        int cnt = contentRoMapper.selectCntByChannelId(map);
-        if (cnt > 0) {
-            //该栏目或者专题下存在未生成静态页的内容信息，请先生成内容静态页
-            throw new ServiceException(4255);
-        }
         //查询内容列表
         List<ContentsListBo> contents = contentRoMapper.selectListByChannelId(map);
+        LOGGER.info("{}", contents);
+        return contents;
+    }
+
+    @Override
+    public int selectCntByChannelId(Map<String, Object> map) {
+        int cnt = contentRoMapper.selectCntByChannelId(map);
+        return cnt;
+    }
+
+    @Override
+    public List<ContentsListBo> selectListcszxw(Map<String, Object> map) {
+        //查询内容列表
+        List<ContentsListBo> contents = contentRoMapper.selectListcszxw(map);
         LOGGER.info("{}", contents);
         return contents;
     }

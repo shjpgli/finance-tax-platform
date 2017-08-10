@@ -17,7 +17,6 @@ public class LoginBO implements Serializable {
     private String usernameOrPhone;
 
     @NotEmpty
-    @Size(min = 8, max = 32)
     private String password;
 
     public LoginBO() {

@@ -5,9 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.abc12366.uc.model.dzfp.DzfpDownloadReq;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.DzfqQueryReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
+import com.abc12366.uc.model.dzfp.EinvocieDown;
 import com.abc12366.uc.service.einvoice.IEinvoiceService;
 import com.abc12366.uc.webservice.DzfpClient;
 
@@ -36,6 +38,17 @@ public class EinvoiceServiceImpl implements IEinvoiceService {
 			LOGGER.error("电子发票webservice调用异常,原因：",e);
 		}
 		return einvocie;
+	}
+
+	@Override
+	public EinvocieDown queryEinvoice(DzfpDownloadReq downloadReq) {
+		EinvocieDown einvocieDown=null;
+		try {
+			einvocieDown = (EinvocieDown) DzfpClient.doSender("DFXJ1005", downloadReq.tosendXml(), Einvocie.class);
+		} catch (Exception e) {
+			LOGGER.error("电子发票webservice调用异常,原因：",e);
+		}
+		return einvocieDown;
 	}
 	
 }

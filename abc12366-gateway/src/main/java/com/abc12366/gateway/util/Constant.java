@@ -68,6 +68,9 @@ public class Constant {
     // 淘宝IP地址库（http://ip.taobao.com）查询接口，每个用户的访问频率需小于10qps
     public final static String IP_QUERY_URL = "http://ip.taobao.com/service/getIpInfo.php?ip={ip}";
 
+    //用户初始会员等级
+    public final static String USER_ORIGINAL_LEVEL = "LV0";
+
 
     /**
      * 获取当前系统当天日期String

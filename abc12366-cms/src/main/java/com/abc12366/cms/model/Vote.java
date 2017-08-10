@@ -85,7 +85,7 @@ public class Vote {
 
     // 发布状态
     @NotNull
-    private Boolean status;
+    private Integer status;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createTime;
@@ -114,7 +114,7 @@ public class Vote {
     public Vote(String id, String name, Timestamp startTime, Timestamp endTime, Boolean login, String channel,
                 Boolean quickVote, String privacyVote, String privacyPassword, Boolean dayVote, Boolean showResult,
                 String startIntro, String endIntro, Boolean access, String header, String footer, String url,
-                Boolean status, Timestamp createTime, Timestamp lastUpdate, Boolean validateCode, Boolean hiddenResult,
+                Integer status, Timestamp createTime, Timestamp lastUpdate, Boolean validateCode, Boolean hiddenResult,
                 Integer nop, Integer nov) {
         this.id = id;
         this.name = name;
@@ -305,11 +305,11 @@ public class Vote {
         this.url = url;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -427,7 +427,7 @@ public class Vote {
         private String header;
         private String footer;
         private String url;
-        private Boolean status;
+        private Integer status;
         private Timestamp createTime;
         private Timestamp lastUpdate;
         private Boolean validateCode;
@@ -523,7 +523,7 @@ public class Vote {
             return this;
         }
 
-        public Builder status(Boolean val) {
+        public Builder status(Integer val) {
             status = val;
             return this;
         }

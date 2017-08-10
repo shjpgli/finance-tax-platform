@@ -76,8 +76,8 @@ public class AliPayController {
 			LOGGER.info("支付宝网页支付接收信息{}",JSON.toJSONString(payReq));
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
-			alipayRequest.setReturnUrl(payReq.getReturn_url());
-			alipayRequest.setNotifyUrl(payReq.getNotify_url());
+			//alipayRequest.setReturnUrl(payReq.getReturn_url());
+			//alipayRequest.setNotifyUrl(AliPayConfig.NOTIFY_URL);
 			alipayRequest.setBizContent(AliPayConfig.toCharsetJsonStr(payReq.getPayContent()));
 			String result = alipayClient.pageExecute(alipayRequest).getBody();
 			System.out.println(result);
@@ -103,9 +103,9 @@ public class AliPayController {
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(payReq));
-			request.setNotifyUrl("http://test.chabc.net/uc/payreturn/alipay");
+			//request.setNotifyUrl(AliPayConfig.NOTIFY_URL);
 			AlipayTradePrecreateResponse response = alipayClient.execute(request);
-
+			LOGGER.info("支付宝二维码支付支付宝返回信息{}",JSON.toJSONString(response));
 			if(response.isSuccess()){
 				PayCodeRsp payCodeRsp=new PayCodeRsp(response.getOutTradeNo(),QRCodeUtil.getCreatQRcodeString(response.getQrCode(), payReq.getQrCodeSize(), "JPG"));
 				return ResponseEntity.ok(Utils.kv("data", payCodeRsp));
@@ -119,8 +119,12 @@ public class AliPayController {
 		
 	}
 	
+	
+	
+	
+	
 	/**
-	 * 交易结果查询
+	 * 支付宝交易结果查询
 	 * @param payqueryReq
 	 * @return
 	 */
@@ -132,6 +136,7 @@ public class AliPayController {
 			AlipayTradeQueryRequest alipayRequest = new AlipayTradeQueryRequest();
 			alipayRequest.setBizContent(AliPayConfig.toCharsetJsonStr(payqueryReq));
 			AlipayTradeQueryResponse response = alipayClient.execute(alipayRequest);
+			LOGGER.info("支付宝支付结果查询支付宝返回信息{}",JSON.toJSONString(response));
 			if(response.isSuccess()){
 				JSONObject object = JSON.parseObject(response.getBody());
 				return ResponseEntity.ok(Utils.kv("data", 
@@ -158,13 +163,13 @@ public class AliPayController {
 			AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(aliRefund));
 			AlipayTradeRefundResponse response = alipayClient.execute(request);
+			LOGGER.info("支付宝退款支付宝返回信息{}",JSON.toJSONString(response));
 			if(response.isSuccess()){
 				
 				JSONObject object = JSON.parseObject(response.getBody());
 				RefundRes refundRes=JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
 				
 				LOGGER.info("支付宝退款成功,插入退款流水记录");
-				
 				TradeLog tradeLog=new TradeLog();
 				tradeLog.setId(Utils.uuid());
 				tradeLog.setOrderNo(refundRes.getOut_trade_no());
@@ -204,6 +209,7 @@ public class AliPayController {
 			AlipayTradeFastpayRefundQueryRequest  request = new AlipayTradeFastpayRefundQueryRequest ();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(new RefundQueryReq(out_trade_no,out_request_no)));
 			AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
+			LOGGER.info("支付宝退款结果查询支付宝返回信息{}",JSON.toJSONString(response));
 			if(response.isSuccess()){
 				JSONObject object = JSON.parseObject(response.getBody());
 				return ResponseEntity.ok(Utils.kv("data", 
@@ -212,7 +218,7 @@ public class AliPayController {
 				return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
 			}
 		} catch (Exception e) {
-			LOGGER.error("支付宝退款异常,原因:",e);
+			LOGGER.error("支付宝退款结果查询异常,原因:",e);
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝退款异常"));
 		}
 	}

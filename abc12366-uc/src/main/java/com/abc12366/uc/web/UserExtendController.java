@@ -1,16 +1,19 @@
 package com.abc12366.uc.web;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.UserExtendService;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -54,9 +57,12 @@ public class UserExtendController {
 
     @PutMapping(path = "/{userId}")
     public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String
-            userId) {
-        LOGGER.info("{}:{}", userExtendUpdateBO, userId);
-        userExtendUpdateBO.setUserId(userId);
+            userId, HttpServletRequest request) {
+        LOGGER.info("{}:{}:{}", userExtendUpdateBO, userId, request);
+        if (!userId.trim().equals(UserUtil.getUserId(request))) {
+            throw new ServiceException(4190);
+        }
+        userExtendUpdateBO.setUserId(userId.trim());
         UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO);
         LOGGER.info("{}", user_extend);
         return ResponseEntity.ok(Utils.kv("data", user_extend));

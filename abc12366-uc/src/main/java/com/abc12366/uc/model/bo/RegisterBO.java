@@ -48,8 +48,18 @@ public class RegisterBO implements Serializable {
     private String minUserPicturePath;
     @NotEmpty
     private String verifyingCode;
+    @NotEmpty
+    private String verifyingType;
 
     public RegisterBO() {
+    }
+
+    public String getVerifyingType() {
+        return verifyingType;
+    }
+
+    public void setVerifyingType(String verifyingType) {
+        this.verifyingType = verifyingType;
     }
 
     public String getUsername() {

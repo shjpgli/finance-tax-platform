@@ -167,6 +167,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             }else{
                 knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
             }
+            knowledgeVoteLog.setId(Utils.uuid());
             knowledgeVoteLogMapper.insert(knowledgeVoteLog);
         }catch (Exception e){
             LOGGER.error("KnowledgeBaseServiceImpl.addVote():" + e);

@@ -25,6 +25,7 @@ public class WxGzhServiceimpl implements IWxGzhService {
     private WxGzhMapper wxGzhMapper;
     @Autowired
     private WxGzhRoMapper wxGzhRoMapper;
+    
 
 
     public List<GzhInfo> wxgzhList(GzhInfo gzhInfo, int page, int size) {
@@ -82,4 +83,13 @@ public class WxGzhServiceimpl implements IWxGzhService {
     }
 
 
+    @Transactional("db1TxManager")
+	public void updateUserToken(GzhInfo gzhInfo) {
+		wxGzhMapper.updateUserToken(gzhInfo);
+	}
+
+	
+    public String getUserToken(String appid){
+    	return wxGzhRoMapper.selectUserToken(appid);
+    }
 }

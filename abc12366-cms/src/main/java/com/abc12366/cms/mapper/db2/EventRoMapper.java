@@ -20,6 +20,11 @@ public interface EventRoMapper {
     Event selectByPrimaryKey(@Param("eventId") String eventId);
 
     /**
+     * 查询（根据主键ID查询）
+     **/
+    Event selecttopone();
+
+    /**
      * 查询（根据条件查询）
      **/
     List<EventListBo> selectList(Map<String, Object> map);

@@ -10,9 +10,11 @@ import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -90,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(encodePassword);
         user.setPoints(0);
         user.setExp(0);
-        user.setVipLevel("LV1");
+        user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
         if (!StringUtils.isEmpty(registerBO.getRegMail())) {
             user.setRegMail(registerBO.getRegMail());
         }
@@ -242,7 +244,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Map loginByVerifyingCode(LoginVerifyingCodeBO loginBO, String appToken) throws Exception {
+    public Map loginByVerifyingCode(VerifyingCodeBO loginBO, String appToken) throws Exception {
 
         //判断apptoken是否为空，为空则不允许登录
         if (appToken == null || appToken.equals("")) {
@@ -258,7 +260,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4018);
         }
 
-        String userToken = Utils.token(Utils.uuid());
+        String userToken;
         user.setLastUpdate(new Date());
         int result = userMapper.update(user);
         if (result != 1) {
@@ -272,17 +274,18 @@ public class AuthServiceImpl implements AuthService {
         App app = appRoMapper.selectOne(appTemp);
         //如果不存在有效的注册应用，则不允许登录
         if (app == null) {
-            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
-            throw new ServiceException(4094);
+            throw new ServiceException(4035);
         }
 
         Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
         int result02;
         //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
         if (queryToken != null) {
+            userToken = queryToken.getToken();
             queryToken.setLastTokenResetTime(new Date());
             result02 = tokenMapper.update(queryToken);
         } else {
+            userToken = Utils.uuid();
             Token token = new Token();
             token.setId(Utils.uuid());
             if (app.getId() != null) {
@@ -306,10 +309,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean verifyCode(LoginVerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
+    public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
         //String url = "http://localhost:9200/message/sms/verifycode";
-        String url = properties.getValue("message.api.url") + "/verify";
+        String url = properties.getValue("chabc.soa.message.url") + "/verify";
 
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -318,15 +321,22 @@ public class AuthServiceImpl implements AuthService {
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("phone", loginVerifyingCodeBO.getPhone());
-        requestBody.put("code", loginVerifyingCodeBO.getPhone());
+        requestBody.put("code", loginVerifyingCodeBO.getCode());
         requestBody.put("type", loginVerifyingCodeBO.getType());
 
         HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
-
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
+        }
 
         if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
-            return true;
+            BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
+            if (object.getCode().equals("2000")) {
+                return true;
+            }
         }
         return false;
     }

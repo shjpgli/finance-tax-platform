@@ -23,6 +23,10 @@ public interface ContentService {
 
     List<ContentsListBo> selectListByChannelId(Map<String, Object> map);
 
+    int selectCntByChannelId(Map<String, Object> map);
+
+    List<ContentsListBo> selectListcszxw(Map<String, Object> map);
+
     List<ContentsListBo> selectListBytopicId(Map<String, Object> map);
 
     List<ContentsListBo> selectListByTplContent(Map<String, Object> map);
