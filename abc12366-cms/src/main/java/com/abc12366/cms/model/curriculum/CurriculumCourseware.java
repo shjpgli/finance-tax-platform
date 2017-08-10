@@ -16,6 +16,9 @@ public class CurriculumCourseware implements Serializable {
 	/**课程ID**varchar(64)**/
 	private String curriculumId;
 
+    /**章节ID**varchar(64)**/
+    private String chapterId;
+
 	/**课件类型**varchar(64)**/
 	private String type;
 
@@ -43,6 +46,15 @@ public class CurriculumCourseware implements Serializable {
 	/**是否允许下载**tinyint(1)**/
 	private Integer isDownload;
 
+    /**排列顺序**tinyint(4)**/
+    private Integer coursewareSeq;
+
+    /**创建人ID**varchar(64)**/
+    private String createrId;
+
+    /**创建人名称**varchar(30)**/
+    private String createrName;
+
 	/**创建时间**datetime**/
 	private java.util.Date createTime;
 
@@ -67,7 +79,15 @@ public class CurriculumCourseware implements Serializable {
 		return this.curriculumId;
 	}
 
-	public void setType(String type){
+    public String getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(String chapterId) {
+        this.chapterId = chapterId;
+    }
+
+    public void setType(String type){
 		this.type = type;
 	}
 
@@ -139,7 +159,31 @@ public class CurriculumCourseware implements Serializable {
 		return this.isDownload;
 	}
 
-	public void setCreateTime(java.util.Date createTime){
+    public Integer getCoursewareSeq() {
+        return coursewareSeq;
+    }
+
+    public void setCoursewareSeq(Integer coursewareSeq) {
+        this.coursewareSeq = coursewareSeq;
+    }
+
+    public String getCreaterId() {
+        return createrId;
+    }
+
+    public void setCreaterId(String createrId) {
+        this.createrId = createrId;
+    }
+
+    public String getCreaterName() {
+        return createrName;
+    }
+
+    public void setCreaterName(String createrName) {
+        this.createrName = createrName;
+    }
+
+    public void setCreateTime(java.util.Date createTime){
 		this.createTime = createTime;
 	}
 

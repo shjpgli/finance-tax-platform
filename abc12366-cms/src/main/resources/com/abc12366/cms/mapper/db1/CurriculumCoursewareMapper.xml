@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.curriculum.CurriculumCourseware">
 		 INSERT INTO cms_curriculum_courseware
- 		(coursewareId,curriculumId,type,title,UploadWay,link,fileName,fileSite,fileSize,duration,isDownload,createTime,updateTime) 
+ 		(coursewareId,curriculumId,chapterId,type,title,UploadWay,link,fileName,fileSite,fileSize,duration,isDownload,coursewareSeq,createrId,createrName,createTime,updateTime)
 		 VALUES 
- 		(#{coursewareId},#{curriculumId},#{type},#{title},#{UploadWay},#{link},#{fileName},#{fileSite},#{fileSize},#{duration},#{isDownload},#{createTime},#{updateTime}) 
+ 		(#{coursewareId},#{curriculumId},#{chapterId},#{type},#{title},#{UploadWay},#{link},#{fileName},#{fileSite},#{fileSize},#{duration},#{isDownload},#{coursewareSeq},#{createrId},#{createrName},#{createTime},#{updateTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -27,6 +27,9 @@
 			<if test="curriculumId != null">
 				 curriculumId,
 			</if>
+             <if test="chapterId != null">
+                 chapterId,
+             </if>
 			<if test="type != null">
 				 type,
 			</if>
@@ -54,6 +57,15 @@
 			<if test="isDownload != null">
 				 isDownload,
 			</if>
+             <if test="coursewareSeq != null">
+                 coursewareSeq,
+             </if>
+             <if test="createrId != null">
+                 createrId,
+             </if>
+             <if test="createrName != null">
+                 createrName,
+             </if>
 			<if test="createTime != null">
 				 createTime,
 			</if>
@@ -69,6 +81,9 @@
 			<if test="curriculumId!=null">
 				 #{curriculumId},
 			</if>
+             <if test="chapterId!=null">
+                 #{chapterId},
+             </if>
 			<if test="type!=null">
 				 #{type},
 			</if>
@@ -96,6 +111,15 @@
 			<if test="isDownload!=null">
 				 #{isDownload},
 			</if>
+             <if test="coursewareSeq!=null">
+                 #{coursewareSeq},
+             </if>
+             <if test="createrId!=null">
+                 #{createrId},
+             </if>
+             <if test="createrName!=null">
+                 #{createrName},
+             </if>
 			<if test="createTime!=null">
 				 #{createTime},
 			</if>
@@ -112,6 +136,9 @@
 			<if test="curriculumId != null">
 				 curriculumId = #{curriculumId},
 			</if>
+             <if test="chapterId != null">
+                 chapterId = #{chapterId},
+             </if>
 			<if test="type != null">
 				 type = #{type},
 			</if>
@@ -139,6 +166,15 @@
 			<if test="isDownload != null">
 				 isDownload = #{isDownload},
 			</if>
+             <if test="coursewareSeq != null">
+                 coursewareSeq = #{coursewareSeq},
+             </if>
+             <if test="createrId != null">
+                 createrId = #{createrId},
+             </if>
+             <if test="createrName != null">
+                 createrName = #{createrName},
+             </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
 			</if>
@@ -155,6 +191,7 @@
 		 UPDATE cms_curriculum_courseware
 		 SET 
 			 curriculumId = #{curriculumId},
+			 chapterId = #{chapterId},
 			 type = #{type},
 			 title = #{title},
 			 UploadWay = #{UploadWay},
@@ -164,6 +201,9 @@
 			 fileSize = #{fileSize},
 			 duration = #{duration},
 			 isDownload = #{isDownload},
+			 coursewareSeq = #{coursewareSeq},
+			 createrId = #{createrId},
+			 createrName = #{createrName},
 			 createTime = #{createTime},
 			 updateTime = #{updateTime}
 		 WHERE coursewareId = #{coursewareId}
