@@ -78,6 +78,7 @@ public class AliPayController {
 			AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
 			//alipayRequest.setReturnUrl(payReq.getReturn_url());
 			//alipayRequest.setNotifyUrl(AliPayConfig.NOTIFY_URL);
+			alipayRequest.setReturnUrl(payReq.getReturn_url());
 			alipayRequest.setBizContent(AliPayConfig.toCharsetJsonStr(payReq.getPayContent()));
 			String result = alipayClient.pageExecute(alipayRequest).getBody();
 			System.out.println(result);
