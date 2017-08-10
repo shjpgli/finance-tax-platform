@@ -261,7 +261,7 @@
 
     <!-- 修 改状态-->
     <update id="updateStatus">
-        update cms_event set status = 3 where <![CDATA[ endtime < now()]]> and status = 1
+        update cms_event set status = 3 where <![CDATA[ endtime < now()]]> and status = 2
     </update>
 
 </mapper>

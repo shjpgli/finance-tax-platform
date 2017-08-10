@@ -63,7 +63,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/getcode/**","/verify")
+                .excludePathPatterns("/getcode","/verify")
                 .excludePathPatterns("/test");
     }
 }

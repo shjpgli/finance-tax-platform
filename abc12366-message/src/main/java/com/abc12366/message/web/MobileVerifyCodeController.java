@@ -2,6 +2,7 @@ package com.abc12366.message.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.model.bo.GetCodeParam;
 import com.abc12366.message.model.bo.VerifyParam;
 import com.abc12366.message.service.MobileVerifyCodeService;
 import org.slf4j.Logger;
@@ -27,51 +28,10 @@ public class MobileVerifyCodeController {
     private MobileVerifyCodeService moboleVerifyCodeService;
 
     //获取验证码接口
-//    @PostMapping(path = "/getcode/{phone}/{codeType}")
-//    public ResponseEntity getCode(@PathVariable String phone, @PathVariable String codeType, HttpSession session)
-// throws IOException {
-//        LOGGER.info("{}:{}:{}", phone, codeType, session);
-//        moboleVerifyCodeService.getCode(phone, codeType, session);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-    //获取注册验证码接口
-//    @PostMapping(path = "/getcode/register/{phone}")
-//    public ResponseEntity getRegisterCode(@PathVariable String phone, HttpSession session) throws IOException {
-//        LOGGER.info("{}:{}", phone, session);
-//        moboleVerifyCodeService.getCode(phone, "注册", session);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-    //获取更新密码验证码接口
-//    @PostMapping(path = "/getcode/updatepassword/{phone}")
-//    public ResponseEntity getUpdatePasswordCode(@PathVariable String phone, HttpSession session) throws IOException {
-//        LOGGER.info("{}:{}", phone, session);
-//        moboleVerifyCodeService.getCode(phone, "更新密码", session);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-    //获取登录验证码接口
-//    @PostMapping(path = "/getcode/login/{phone}")
-//    public ResponseEntity getLoginCode(@PathVariable String phone, HttpSession session) throws IOException {
-//        LOGGER.info("{}:{}", phone, session);
-//        moboleVerifyCodeService.getCode(phone, "登录", session);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-    //获取绑定企业验证码接口
-//    @PostMapping(path = "/getcode/bind/{phone}")
-//    public ResponseEntity getBindCode(@PathVariable String phone, HttpSession session) throws IOException {
-//        LOGGER.info("{}:{}", phone, session);
-//        moboleVerifyCodeService.getCode(phone, "绑定企业", session);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-    //获取验证码接口
-    @PostMapping(path = "/getcode/{type}/{phone}")
-    public ResponseEntity getCode(@PathVariable String type, @PathVariable String phone) throws IOException {
-        LOGGER.info("{}:{}", type, phone);
-        moboleVerifyCodeService.getCode(type, phone);
+    @PostMapping(path = "/getcode")
+    public ResponseEntity getCode(@Valid @RequestBody GetCodeParam getCodeParam) throws IOException {
+        LOGGER.info("{}", getCodeParam);
+        moboleVerifyCodeService.getCode(getCodeParam.getType().trim(), getCodeParam.getPhone().trim());
         return ResponseEntity.ok(Utils.kv());
     }
 

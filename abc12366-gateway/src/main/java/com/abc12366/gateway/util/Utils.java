@@ -1,8 +1,11 @@
 package com.abc12366.gateway.util;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -165,5 +168,33 @@ public class Utils {
             userAgent = request.getHeader(Constant.CLIENT_USER_AGENT);
         }
         return userAgent;
+    }
+
+    public static String getUserId(HttpServletRequest request) {
+        String userId = (String) request.getAttribute(Constant.USER_ID);
+        if (userId == null || userId.equals("")) {
+            throw new ServiceException(4193);
+        }
+        return userId;
+    }
+
+    public static String getAdminId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        String adminId = (String) request.getAttribute(Constant.ADMIN_ID);
+        if (StringUtils.isEmpty(adminId)) {
+            throw new ServiceException(4130);
+        }
+        return adminId;
+    }
+
+    public static String getUserId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        String userId = (String) request.getAttribute(Constant.USER_ID);
+        if (StringUtils.isEmpty(userId)) {
+            throw new ServiceException(4193);
+        }
+        return userId;
     }
 }

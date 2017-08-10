@@ -66,10 +66,6 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     @Autowired
     private PhoneCodeRoMapper phoneCodeRoMapper;
 
-    public static void main(String[] args) throws IOException {
-        new MobileVerifyCodeServiceImpl().sendYoupaiTemplate("13278849423", "9876987");
-    }
-
     //获取验证码
     @Transactional("db1TxManager")
     @Override
@@ -99,15 +95,11 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCode.setType(type);
             phoneCodeMapper.insert(phoneCode);
         }
-        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, MessageConstant.VERIFY_CODE_FILL_CONTENT, code);
+        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, type, code);
         //调用网易短信接口不成功，则换调用又拍云短信接口
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         if (!sendCodeThroghNetease) {
-            boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, code);
+            boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, type, code);
             if (!sendCodeThroghUpyun) {
                 throw new ServiceException(4204);
             }
@@ -119,9 +111,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     public void verify(VerifyParam verifyParam) {
         LOGGER.info("{}", verifyParam);
         PhoneCode phoneCodeParam = new PhoneCode();
-        phoneCodeParam.setType(verifyParam.getType());
-        phoneCodeParam.setPhone(verifyParam.getPhone());
-        phoneCodeParam.setCode(verifyParam.getCode());
+        phoneCodeParam.setType(verifyParam.getType().trim());
+        phoneCodeParam.setPhone(verifyParam.getPhone().trim());
+        phoneCodeParam.setCode(verifyParam.getCode().trim());
         List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectList(phoneCodeParam);
         if (phoneCodeBOList == null) {
             throw new ServiceException(4202);
@@ -139,6 +131,10 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         if (!isValid) {
             throw new ServiceException(4203);
         }
+        PhoneCode del = new PhoneCode();
+        del.setPhone(phoneCodeBO.getPhone());
+        del.setType(phoneCodeBO.getType());
+        phoneCodeMapper.delete(del);
 
     }
 
@@ -228,7 +224,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     }
 
 
-    private boolean sendYoupaiTemplate(String phone, String code) throws IOException {
+    private boolean sendYoupaiTemplate(String phone, String type, String code) throws IOException {
         //发送通知类短信接口地址
         String url = properties.getValue("message.upyun.send.url");
         //调用网易接口请求头设置
@@ -239,7 +235,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("mobile", phone);
         requestBody.add("template_id", properties.getValue("message.upyun.templateid"));
-        requestBody.add("vars", code);
+        requestBody.add("vars", type + "|" + code);
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity responseEntity;
         try {

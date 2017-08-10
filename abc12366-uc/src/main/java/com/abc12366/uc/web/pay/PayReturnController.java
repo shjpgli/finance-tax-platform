@@ -3,11 +3,16 @@ package com.abc12366.uc.web.pay;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.abc12366.gateway.util.Utils;
@@ -17,6 +22,7 @@ import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.alibaba.fastjson.JSON;
+import com.alipay.api.AlipayApiException;
 
 /**
  * 支付接口回调地址
@@ -35,6 +41,21 @@ public class PayReturnController {
 	private TradeLogService tradeLogService;
 	@Autowired
 	private OrderService orderService;
+	
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/validate")
+	public ResponseEntity validate(@RequestBody Map<String, String> params){
+		 LOGGER.info("验证回调信息签名:", JSON.toJSONString(params));
+		 try {
+			 return ResponseEntity.ok(Utils.kv("data", AliPayConfig.rsaCheckV1(params)));
+		 } catch (AlipayApiException e) {
+			 LOGGER.error("验证回调信息签名异常,原因:", e);
+			 return ResponseEntity.ok(Utils.bodyStatus(9999, "验证回调信息签名异常:"+e.getMessage()));
+		 }
+	}
+	
+	
 
 	@RequestMapping("/alipay")
 	public @ResponseBody String aliPayReturn(HttpServletRequest request) {
@@ -112,7 +133,7 @@ public class PayReturnController {
 //			}
 
 		} catch (Exception e) {
-			LOGGER.error("支付宝回调处理异常异常,原因:", e);
+			LOGGER.error("支付宝回调处理异常,原因:", e);
 			return ("fail");
 		}
 	}

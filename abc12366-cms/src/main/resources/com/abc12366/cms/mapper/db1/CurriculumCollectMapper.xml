@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.cms.mapper.db1.CurriculumCollectMapper">
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM cms_curriculum_collect
+		 WHERE collectId = #{collectId}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.abc12366.cms.model.curriculum.CurriculumCollect">
+		 INSERT INTO cms_curriculum_collect
+ 		(collectId,curriculumId,userId) 
+		 VALUES 
+ 		(#{collectId},#{curriculumId},#{userId}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.abc12366.cms.model.curriculum.CurriculumCollect">
+		 INSERT INTO cms_curriculum_collect
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="collectId != null">
+				 collectId,
+			</if>
+			<if test="curriculumId != null">
+				 curriculumId,
+			</if>
+			<if test="userId != null">
+				 userId,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="collectId!=null">
+				 #{collectId},
+			</if>
+			<if test="curriculumId!=null">
+				 #{curriculumId},
+			</if>
+			<if test="userId!=null">
+				 #{userId},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.cms.model.curriculum.CurriculumCollect">
+		 UPDATE cms_curriculum_collect
+ 		 <set> 
+			<if test="curriculumId != null">
+				 curriculumId = #{curriculumId},
+			</if>
+			<if test="userId != null">
+				 userId = #{userId},
+			</if>
+
+ 		 </set>
+		 WHERE collectId = #{collectId}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.cms.model.curriculum.CurriculumCollect">
+		 UPDATE cms_curriculum_collect
+		 SET 
+			 curriculumId = #{curriculumId},
+			 userId = #{userId}
+		 WHERE collectId = #{collectId}
+	</update>
+
+</mapper>

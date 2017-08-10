@@ -54,11 +54,12 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public List<Vote> selectList(Vote vote, int page, int size) {
+        voteMapper.updateStatus();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<Vote> voteList = voteRoMapper.selectList(vote);
         // 根据发票状态、IP查询参与人数
         if (voteList != null && voteList.size() > 0) {
-            //0:停用，1：启用，3：草稿，4：过期
+            //0:停用，1：启用，3：草稿，4：结束
             voteList.stream().filter(v -> v.getStatus()==1 || v.getStatus()==4).forEach(v -> {
                 VoteResult vr = new VoteResult.Builder().voteId(v.getId()).build();
                 v.setNop(voteRoMapper.selectResultCount(vr));
