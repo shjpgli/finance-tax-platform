@@ -31,4 +31,6 @@ public interface DictService {
     void batchDelete(Dict bo);
 
     List<Dict> selectListByDictName(Dict dict);
+
+    List<Dict> selectList(String dictId);
 }

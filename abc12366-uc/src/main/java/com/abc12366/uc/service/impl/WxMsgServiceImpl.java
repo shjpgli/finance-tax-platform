@@ -2,8 +2,9 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.config.Scheduler;
+import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.WxMsgMapper;
+import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.mapper.db2.WxMsgRoMapper;
 import com.abc12366.uc.model.weixin.bo.message.*;
 import com.abc12366.uc.model.weixin.bo.template.ImgMaterial;
@@ -42,11 +43,14 @@ public class WxMsgServiceImpl implements IWxMsgService {
 
     @Autowired
     private WxMsgRoMapper msgRoMapper;
+    
+    @Autowired
+    private WxGzhRoMapper gzhRoMapper;
 
     @Override
     public ImgMaterial uploadWxImag(FileContent fileContent) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", Scheduler.token.getAccess_token());
+        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         return WxConnectFactory.postFile(WechatUrl.MATERIAL_NEWSIMG, tks, null,
                 ImgMaterial.class, fileContent);
     }
@@ -129,14 +133,14 @@ public class WxMsgServiceImpl implements IWxMsgService {
     @Override
     public WxNews add_news(WxNews news) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", Scheduler.token.getAccess_token());
+        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         return WxConnectFactory.post(WechatUrl.MATERIAL_ADDNEWS, tks, news, WxNews.class);
     }
 
     @Override
     public ImgMaterial add_img(FileContent fileContent) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", Scheduler.token.getAccess_token());
+        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         tks.put("type", "image");
         return WxConnectFactory.postFile(WechatUrl.MATERIAL_ADDMATE, tks, null,
                 ImgMaterial.class, fileContent);

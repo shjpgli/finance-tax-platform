@@ -19,4 +19,6 @@ public interface VoteMapper {
     void insertResult(VoteResult result);
 
     void insertHistory(VoteHistory history);
+
+    void updateStatus();
 }

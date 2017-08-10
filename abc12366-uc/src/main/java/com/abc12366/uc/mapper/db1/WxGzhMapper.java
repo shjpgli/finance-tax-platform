@@ -10,4 +10,6 @@ public interface WxGzhMapper {
 
     void delete(String id);
 
+	void updateUserToken(GzhInfo gzhInfo);
+
 }

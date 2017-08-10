@@ -1,8 +1,8 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.InvoiceDetail;
-import com.abc12366.uc.model.InvoiceRepo;
-import com.abc12366.uc.model.bo.InvoiceRepoBO;
+import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.InvoiceRepo;
+import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

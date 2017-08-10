@@ -16,4 +16,6 @@ public interface IWxGzhService {
 
     void delete(String id);
 
+	void updateUserToken(GzhInfo gzhInfo);
+
 }

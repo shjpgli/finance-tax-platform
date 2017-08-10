@@ -87,4 +87,10 @@
         INSERT INTO cms_vote_history (<include refid="History_Column_List"/>)
         VALUES (#{id}, #{voteId}, #{ip}, #{userAgent}, #{createTime})
     </insert>
+
+    <!-- 修 改状态-->
+    <update id="updateStatus">
+        update cms_vote set status = 4 where <![CDATA[ endtime < now()]]> and status = 1
+    </update>
+
 </mapper>

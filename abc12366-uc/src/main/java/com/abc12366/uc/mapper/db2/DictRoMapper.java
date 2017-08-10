@@ -17,7 +17,7 @@ public interface DictRoMapper {
 
     Dict selectOne(Dict dict);
 
-    Dict selectByDictId(String dictId);
+    List<Dict> selectByDictId(String dictId);
 
     Dict selectById(String id);
 

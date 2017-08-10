@@ -66,25 +66,21 @@ public class AuthController extends BaseController {
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
+
         //进行手机验证码验证
-        /*ResponseEntity response = authService.verifyCode(registerBO.getPhone(), registerBO.getVerifyingCode(),
-        request);
-        if (response == null) {
+        VerifyingCodeBO verifyBO = new VerifyingCodeBO();
+        verifyBO.setPhone(registerBO.getPhone());
+        verifyBO.setType(registerBO.getVerifyingType());
+        verifyBO.setCode(registerBO.getVerifyingCode());
+        if (authService.verifyCode(verifyBO, request)) {
+            //注册
+            UserReturnBO userReturnBO = authService.register(registerBO);
+            return ResponseEntity.ok(Utils.kv("data", userReturnBO));
+        } else {
             throw new ServiceException(4201);
         }
-        if(!response.hasBody()){
-            throw new ServiceException(4201);
-        }
-        VerifyCodeResponse verifyCodeResponse = objectMapper.readValue(((String) response.getBody()).getBytes(),
-        VerifyCodeResponse.class);
-        if (!verifyCodeResponse.getCode().equals("200")) {
-            throw new ServiceException(4201);
-        }*/
 
-        //注册
-        UserReturnBO userReturnBO = authService.register(registerBO);
 
-        return ResponseEntity.ok(Utils.kv("data", userReturnBO));
     }
 
     /*
@@ -107,7 +103,7 @@ public class AuthController extends BaseController {
     用户通过手机验证码进行登录
      */
     @PostMapping(path = "/verifylogin")
-    public ResponseEntity loginByVerifyingCode(@Valid @RequestBody LoginVerifyingCodeBO loginBO, HttpServletRequest
+    public ResponseEntity loginByVerifyingCode(@Valid @RequestBody VerifyingCodeBO loginBO, HttpServletRequest
             request) throws Exception {
         LOGGER.info("{}", loginBO);
         // 记录用户IP归属
@@ -115,11 +111,11 @@ public class AuthController extends BaseController {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         //进行手机验证码验证
-        if(authService.verifyCode(loginBO, request)){
+        if (authService.verifyCode(loginBO, request)) {
             Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
             LOGGER.info("{}", token);
             return ResponseEntity.ok(Utils.kv("data", token));
-        }else{
+        } else {
             throw new ServiceException(4201);
         }
     }

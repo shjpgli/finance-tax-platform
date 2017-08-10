@@ -37,6 +37,7 @@
         <where>
             1=1
             <if test="dictId != null and dictId!=''">and dictId = #{dictId}</if>
+            <if test="fieldValue != null ">and fieldValue = #{fieldValue}</if>
         </where>
     </select>
 

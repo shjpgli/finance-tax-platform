@@ -1,10 +1,9 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.LoginVerifyingCodeBO;
+import com.abc12366.uc.model.bo.VerifyingCodeBO;
 import com.abc12366.uc.model.bo.RegisterBO;
 import com.abc12366.uc.model.bo.UserReturnBO;
-import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -27,9 +26,9 @@ public interface AuthService {
 
     boolean refreshToken(String token);
 
-    Map loginByVerifyingCode(LoginVerifyingCodeBO loginBO, String header) throws Exception;
+    Map loginByVerifyingCode(VerifyingCodeBO loginBO, String header) throws Exception;
 
-    boolean verifyCode(LoginVerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException;
+    boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException;
 
     void logout(String token);
 }

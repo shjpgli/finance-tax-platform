@@ -27,6 +27,9 @@ public class GzhInfo implements Serializable {
     private String tokenStr;
     @NotEmpty
     private String serverUrl;
+    
+    private String userToken;//usertoken
+    
     private Date creatDate;
     private Date lastupdate;
 
@@ -93,6 +96,14 @@ public class GzhInfo implements Serializable {
     public void setLastupdate(Date lastupdate) {
         this.lastupdate = lastupdate;
     }
+
+	public String getUserToken() {
+		return userToken;
+	}
+
+	public void setUserToken(String userToken) {
+		this.userToken = userToken;
+	}
 
 
 }

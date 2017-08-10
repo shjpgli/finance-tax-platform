@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.InvoiceRepo;
+import com.abc12366.uc.model.invoice.InvoiceRepo;
+import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface InvoiceRepoRoMapper {
     InvoiceRepo selectByPrimaryKey(@Param("id") String id);
 
     List<InvoiceRepo> selectInvoiceRepoList(InvoiceRepo invoiceRepo);
+
+    List<InvoiceRepoBO> selectList(InvoiceRepoBO invoiceRepoBO);
+
+    InvoiceRepoBO selectInvoiceRepo(String id);
 }
