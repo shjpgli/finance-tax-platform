@@ -32,6 +32,11 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     }
 
     @Override
+    public List<KnowledgeTag> selectRelatedTags(String knowledgeId) {
+        return knowledgeTagMapper.selectRelatedTags(knowledgeId);
+    }
+
+    @Override
     public KnowledgeTag add(KnowledgeTag knowledgeTag) {
         try {
             knowledgeTag.setId(Utils.uuid());

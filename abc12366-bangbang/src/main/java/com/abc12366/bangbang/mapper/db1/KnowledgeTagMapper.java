@@ -23,6 +23,11 @@ public interface KnowledgeTagMapper {
     List<KnowledgeTag> selectList(@Param("keywords") String keywords);
 
     /**
+     * 查询相关联的标签
+     **/
+    List<KnowledgeTag> selectRelatedTags(@Param("knowledgeId") String knowledgeId);
+
+    /**
      * 删除（根据主键ID删除）
      **/
     int deleteByPrimaryKey(@Param("id") String id);

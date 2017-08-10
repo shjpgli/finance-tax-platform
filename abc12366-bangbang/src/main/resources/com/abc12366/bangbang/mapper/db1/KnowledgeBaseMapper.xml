@@ -35,7 +35,9 @@
         WHERE
         t_base.status = 1 AND t_base.isOpen = 1 AND (t_base.activeTime IS NULL OR t_base.activeTime > NOW())
         AND t_rel.knowledgeId = #{id}
-        limit #{num}
+        <if test="num != 0">
+          limit #{num}
+        </if>
     </select>
 
     <!-- 首页热点问题查询 -->

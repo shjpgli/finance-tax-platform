@@ -14,6 +14,9 @@ public interface KnowledgeTagService {
     /* 知识库标签查询 */
     List<KnowledgeTag> selectList(String keywords);
 
+    /* 知识库关联标签查询 */
+    List<KnowledgeTag> selectRelatedTags(String knowledgeId);
+
     /* 新增标签 */
     KnowledgeTag add(KnowledgeTag knowledgeTag);
 

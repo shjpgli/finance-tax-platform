@@ -40,6 +40,15 @@ public class KnowledgeTagController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    @GetMapping(path = "/list/{knowledgeId}")
+    public ResponseEntity selectRelatedTags(@PathVariable String knowledgeId) {
+
+        List<KnowledgeTag> list = knowledgeTagService.selectRelatedTags(knowledgeId);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", list));
+    }
+
 
     /**
      * 添加知识库标签 接口
