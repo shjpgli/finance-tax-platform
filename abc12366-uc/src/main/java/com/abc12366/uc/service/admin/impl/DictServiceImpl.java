@@ -38,6 +38,11 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
+    public List<Dict> selectList(String dictId) {
+        return dictRoMapper.selectByDictId(dictId);
+    }
+
+    @Override
     public List<DictBO> selectFirstLevel() {
         List<Dict> dicts = dictRoMapper.selectFirstLevel();
         if (dicts == null || dicts.size() == 0) {

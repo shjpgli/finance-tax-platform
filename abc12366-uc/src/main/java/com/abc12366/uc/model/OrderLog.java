@@ -1,6 +1,7 @@
 package com.abc12366.uc.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -25,7 +26,7 @@ public class OrderLog implements Serializable {
     /**
      * 创建时间
      **/
-    private java.util.Date createTime;
+    private Date createTime;
 
     /**
      * 创建用户
@@ -36,6 +37,18 @@ public class OrderLog implements Serializable {
      * 备注
      **/
     private String remark;
+
+    public OrderLog() {
+    }
+
+    private OrderLog(Builder builder) {
+        setId(builder.id);
+        setOrderNo(builder.orderNo);
+        setAction(builder.action);
+        setCreateTime(builder.createTime);
+        setCreateUser(builder.createUser);
+        setRemark(builder.remark);
+    }
 
     public String getId() {
         return this.id;
@@ -61,11 +74,11 @@ public class OrderLog implements Serializable {
         this.action = action;
     }
 
-    public java.util.Date getCreateTime() {
+    public Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -83,5 +96,52 @@ public class OrderLog implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+
+    public static final class Builder {
+        private String id;
+        private String orderNo;
+        private String action;
+        private Date createTime;
+        private String createUser;
+        private String remark;
+
+        public Builder() {
+        }
+
+        public Builder id(String val) {
+            id = val;
+            return this;
+        }
+
+        public Builder orderNo(String val) {
+            orderNo = val;
+            return this;
+        }
+
+        public Builder action(String val) {
+            action = val;
+            return this;
+        }
+
+        public Builder createTime(Date val) {
+            createTime = val;
+            return this;
+        }
+
+        public Builder createUser(String val) {
+            createUser = val;
+            return this;
+        }
+
+        public Builder remark(String val) {
+            remark = val;
+            return this;
+        }
+
+        public OrderLog build() {
+            return new OrderLog(this);
+        }
     }
 }
