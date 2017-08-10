@@ -93,6 +93,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             //删除关联问题
             knowledgeRelMapper.deleteByKnowledgeIds(ids);
             knowledgeRelMapper.deleteByRelKnowledgeIds(ids);
+            //根据知识库ids删除知识库投票数据
+            knowledgeVoteLogMapper.deleteByKnowledgeIds(ids);
             //删除知识库
             knowledgeBaseMapper.deleteByPrimaryKeys(ids);
         }catch (Exception e){

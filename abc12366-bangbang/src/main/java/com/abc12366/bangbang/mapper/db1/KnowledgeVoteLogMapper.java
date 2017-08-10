@@ -51,6 +51,14 @@ public interface KnowledgeVoteLogMapper{
 	 *
 	 **/
 	int deleteByPrimaryKeys (List<String> ids );
+
+	/**
+	 *
+	 * 删除（根据主键ID删除）
+	 *
+	 **/
+	int deleteByKnowledgeIds (List<String> knowledgeIds);
+
 	/**
 	 *
 	 * 添加
