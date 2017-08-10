@@ -206,58 +206,6 @@ public class InvoiceController {
 
 
     /**
-     * 发票仓库列表
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param invoiceCode
-     * @return
-     */
-    @GetMapping(path = "/repo")
-    public ResponseEntity selectInvoiceRepoList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
-                                                            pageNum,
-                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
-                                                        pageSize,
-                                                @RequestParam(value = "invoiceCode", required = false) String
-                                                            invoiceCode) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
-        InvoiceRepo invoiceRepo = new InvoiceRepo();
-        invoiceRepo.setInvoiceCode(invoiceCode);
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<InvoiceRepo> invoiceList = invoiceRepoService.selectInvoiceRepoList(invoiceRepo);
-        LOGGER.info("{}", invoiceList);
-        return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
-    }
-
-    /**
-     * 发票仓库新增
-     *
-     * @return
-     */
-    @PostMapping(path = "/repo")
-    public ResponseEntity addInvoiceRepo(@Valid @RequestBody InvoiceRepoBO invoiceRepoBO) {
-        LOGGER.info("{}", invoiceRepoBO);
-        InvoiceRepoBO bo = invoiceRepoService.addInvoiceRepo(invoiceRepoBO);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 发票仓库删除
-     *
-     * @return
-     */
-    @DeleteMapping(path = "/repo/{id}")
-    public ResponseEntity deleteInvoiceRepo(@PathVariable("id") String id) {
-        LOGGER.info("{}", id);
-        invoiceRepoService.deleteInvoiceRepo(id);
-        return ResponseEntity.ok(Utils.kv());
-    }
-
-
-    /**
      * 发票导出列表查询
      *
      * @return

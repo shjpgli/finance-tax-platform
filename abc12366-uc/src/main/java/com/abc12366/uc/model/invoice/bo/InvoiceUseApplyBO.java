@@ -14,9 +14,14 @@ public class InvoiceUseApplyBO implements Serializable {
     private String id;
 
     /**
-     * 申请人
+     * 申请人ID
      **/
     private String applyUser;
+
+    /**
+     * 申请人名称
+     */
+    private String applyUserName;
 
     /**
      * 申请时间
@@ -158,6 +163,14 @@ public class InvoiceUseApplyBO implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
     }
 
     public InvoiceUseDetailBO getInvoiceUseDetailBO() {
