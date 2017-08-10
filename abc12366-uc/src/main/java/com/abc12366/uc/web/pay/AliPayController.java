@@ -76,8 +76,10 @@ public class AliPayController {
 			LOGGER.info("支付宝网页支付接收信息{}",JSON.toJSONString(payReq));
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
+			//alipayRequest.setReturnUrl(payReq.getReturn_url());
+			//alipayRequest.setNotifyUrl(AliPayConfig.NOTIFY_URL);
 			alipayRequest.setReturnUrl(payReq.getReturn_url());
-			alipayRequest.setNotifyUrl(AliPayConfig.NOTIFY_URL);
+			alipayRequest.setNotifyUrl(payReq.getNotify_url());
 			alipayRequest.setBizContent(AliPayConfig.toCharsetJsonStr(payReq.getPayContent()));
 			String result = alipayClient.pageExecute(alipayRequest).getBody();
 			System.out.println(result);
@@ -103,7 +105,7 @@ public class AliPayController {
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(payReq));
-			request.setNotifyUrl(AliPayConfig.NOTIFY_URL);
+			request.setNotifyUrl(payReq.getNotify_url());
 			AlipayTradePrecreateResponse response = alipayClient.execute(request);
 			LOGGER.info("支付宝二维码支付支付宝返回信息{}",JSON.toJSONString(response));
 			if(response.isSuccess()){

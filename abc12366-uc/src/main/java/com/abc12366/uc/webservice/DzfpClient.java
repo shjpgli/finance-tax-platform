@@ -65,12 +65,9 @@ public class DzfpClient {
 		System.setProperty("javax.net.ssl.keyStorePassword", ssl_pwd);
 		System.setProperty("javax.net.ssl.trustStorePassword", ssl_pwd);
 		
-		Protocol protocol = null;
-		SSLIgnoreErrorProtocolSocketFactory socketfactory = null;
+		SSLIgnoreErrorProtocolSocketFactory socketfactory = new SSLIgnoreErrorProtocolSocketFactory();
 
-		socketfactory = new SSLIgnoreErrorProtocolSocketFactory();
-
-		protocol = new Protocol("https", socketfactory, 443);
+		Protocol protocol = new Protocol("https", socketfactory, 443);
 		RPCServiceClient serviceClient = new RPCServiceClient();
     	Options options = serviceClient.getOptions();
     	EndpointReference targetEPR = new EndpointReference(endpoint);

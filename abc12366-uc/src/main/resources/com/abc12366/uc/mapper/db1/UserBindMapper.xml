@@ -49,4 +49,24 @@
         </set>
         where id=#{id}
     </update>
+
+    <update id="update" parameterType="com.abc12366.uc.model.UserDzsb">
+        update uc_user_dzsb uud
+        <set>
+            <if test="status!=null">uud.status = #{status},</if>
+            <if test="djxh!=null">uud.djxh = #{djxh},</if>
+            <if test="nsrsbh!=null">uud.nsrsbh = #{nsrsbh},</if>
+            <if test="nsrmc!=null">uud.nsrmc = #{nsrmc},</if>
+            <if test="shxydm!=null">uud.shxydm = #{shxydm},</if>
+            <if test="swjgMc!=null">uud.swjgMc = #{swjgMc},</if>
+            <if test="swjgDm!=null">uud.swjgDm = #{swjgDm},</if>
+            <if test="lastUpdate!=null">uud.lastUpdate = #{lastUpdate},</if>
+            <if test="expireTime!=null">uud.expireTime = #{expireTime},</if>
+            <if test="expandExpireTime!=null">uud.expandExpireTime = #{expandExpireTime},</if>
+            <if test="frmc!=null">uud.frmc = #{frmc},</if>
+            <if test="frzjh!=null">uud.frzjh = #{frzjh}</if>
+        </set>
+        where uud.userId = #{userId}
+        and uud.djxh = #{djxh}
+    </update>
 </mapper>

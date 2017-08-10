@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
-import com.abc12366.uc.model.InvoiceRepo;
+import com.abc12366.uc.model.invoice.InvoiceRepo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -20,9 +20,8 @@ public interface InvoiceRepoMapper {
      **/
     int insert(InvoiceRepo record);
 
-
     /**
-     * 修改（根据主键ID修改）
+     * 修改 （匹配有值的字段）
      **/
     int update(InvoiceRepo record);
 
