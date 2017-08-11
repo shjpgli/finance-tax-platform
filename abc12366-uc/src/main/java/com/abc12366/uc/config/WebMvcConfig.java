@@ -45,7 +45,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**")
                 //第三方交易回调地址
-                //.excludePathPatterns("/payreturn/**")
+                .excludePathPatterns("/payreturn/**")
                 //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
 
@@ -59,7 +59,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
                 //第三方交易回调地址
-                //.excludePathPatterns("/payreturn/**")
+                .excludePathPatterns("/payreturn/**")
                 //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
 
@@ -77,7 +77,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 操作员登录、登出、token验证自动刷新
                 .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**")
                         //第三方交易毁回调地址
-                //.excludePathPatterns("/payreturn/**")
+                .excludePathPatterns("/payreturn/**")
                 //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
     }
