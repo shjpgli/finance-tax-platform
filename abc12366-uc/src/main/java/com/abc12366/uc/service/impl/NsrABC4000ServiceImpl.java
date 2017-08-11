@@ -1,17 +1,16 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
-import com.abc12366.uc.model.abc4000.ABC4000CallbackBO;
-import com.abc12366.uc.model.abc4000.NSRXX;
-import com.abc12366.uc.model.abc4000.ResponseForAbc4000;
-import com.abc12366.uc.model.abc4000.ResponseForAbc4000Simple;
+import com.abc12366.uc.model.abc4000.*;
 import com.abc12366.uc.service.NsrABC4000Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +30,9 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     @Autowired
     private UserBindMapper userBindMapper;
 
+    @Autowired
+    private TokenMapper tokenMapper;
+
     @Override
     public ResponseForAbc4000 selectList(String userId) {
         LOGGER.info("{}", userId);
@@ -43,24 +45,28 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
         return response;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ResponseForAbc4000Simple update(ABC4000CallbackBO data) {
         LOGGER.info("{}", data);
-        UserDzsb userDzsb = new UserDzsb();
-        userDzsb.setStatus(true);
-        userDzsb.setUserId(data.getUserid());
-        userDzsb.setNsrsbh(data.getY_nsrsbh());
-        userDzsb.setShxydm(data.getShxydm());
-        userDzsb.setDjxh(data.getDjxh());
-        userDzsb.setSwjgMc(data.getSwjgmc());
-        userDzsb.setSwjgDm(data.getSwjgdm());
-        userDzsb.setLastUpdate(new Date());
-        userDzsb.setExpireTime(data.getRjdqr());
-        userDzsb.setExpandExpireTime(data.getYqdqr());
-        userDzsb.setFrmc(data.getFrmc());
-        userDzsb.setFrzjh(data.getFrzjh());
+        int result = 0;
+        for (NSRXXBO nsrxxbo : data.getT_nsrxx()) {
+            UserDzsb userDzsb = new UserDzsb();
+            userDzsb.setStatus(true);
+            userDzsb.setUserId(data.getUserid());
+            userDzsb.setNsrsbh(nsrxxbo.getY_nsrsbh());
+            userDzsb.setShxydm(nsrxxbo.getShxydm());
+            userDzsb.setDjxh(nsrxxbo.getDjxh());
+            userDzsb.setSwjgMc(nsrxxbo.getSwjgmc());
+            userDzsb.setSwjgDm(nsrxxbo.getSwjgdm());
+            userDzsb.setLastUpdate(new Date());
+            userDzsb.setExpireTime(nsrxxbo.getRjdqr());
+            userDzsb.setExpandExpireTime(nsrxxbo.getYqdqr());
+            userDzsb.setFrmc(nsrxxbo.getFrmc());
+            userDzsb.setFrzjh(nsrxxbo.getFrzjh());
+            result += userBindMapper.update(userDzsb);
+        }
 
-        int result = userBindMapper.update(userDzsb);
         ResponseForAbc4000Simple response = new ResponseForAbc4000Simple();
         if (result < 1) {
             response.setSuccess(false);

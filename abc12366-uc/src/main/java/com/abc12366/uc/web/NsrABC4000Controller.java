@@ -1,10 +1,7 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.uc.model.abc4000.ABC4000CallbackBO;
-import com.abc12366.uc.model.abc4000.NsrbindListParam;
-import com.abc12366.uc.model.abc4000.ResponseForAbc4000;
-import com.abc12366.uc.model.abc4000.ResponseForAbc4000Simple;
+import com.abc12366.uc.model.abc4000.*;
 import com.abc12366.uc.service.NsrABC4000Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +31,13 @@ public class NsrABC4000Controller {
         ResponseForAbc4000 response = nsrABC4000Service.selectList(data.getUserId());
         return ResponseEntity.ok(response);
     }
+
+//    @PostMapping(path = "/update")
+//    public ResponseEntity update(@Valid @RequestBody ABC4000CallbackBO data) {
+//        LOGGER.info("{}", data);
+//        ResponseForAbc4000Simple response = nsrABC4000Service.update(data);
+//        return ResponseEntity.ok(response);
+//    }
 
     @PostMapping(path = "/update")
     public ResponseEntity update(@Valid @RequestBody ABC4000CallbackBO data) {

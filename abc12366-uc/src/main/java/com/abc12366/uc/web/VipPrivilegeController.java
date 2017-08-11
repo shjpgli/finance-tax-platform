@@ -34,23 +34,18 @@ public class VipPrivilegeController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String name,
-                                     @RequestParam(required = false) String level,
                                      @RequestParam(required = false) Boolean status,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}:{}:{}", name, level, status, page, size);
+        LOGGER.info("{}:{}:{}:{}:{}", name, status, page, size);
         Map<String, Object> map = new HashMap<>();
         if (name != null && StringUtils.isEmpty(name)) {
             name = null;
-        }
-        if (level != null && StringUtils.isEmpty(level)) {
-            level = null;
         }
         if (status != null && StringUtils.isEmpty(status)) {
             status = null;
         }
         map.put("name", name);
-        map.put("level", level);
         map.put("status", status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<VipPrivilegeBO> privilegeList = vipPrivilegeService.selectList(map);

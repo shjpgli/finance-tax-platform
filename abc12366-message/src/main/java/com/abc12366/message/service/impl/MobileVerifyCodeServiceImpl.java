@@ -96,8 +96,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCodeMapper.insert(phoneCode);
         }
         boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, type, code);
-        //调用网易短信接口不成功，则换调用又拍云短信接口
 
+        //调用网易短信接口不成功，则换调用又拍云短信接口
         if (!sendCodeThroghNetease) {
             boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, type, code);
             if (!sendCodeThroghUpyun) {
@@ -244,8 +244,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             throw new ServiceException(4204);
         }
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            //UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()),
-            // UpyunMessageResponse.class);
+            UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()),
+             UpyunMessageResponse.class);
             return true;
         }
         return false;

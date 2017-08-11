@@ -4,8 +4,8 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.bo.*;
-import com.abc12366.message.service.SmsLogService;
 import com.abc12366.message.service.SmsService;
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +35,6 @@ public class SmsController {
     private SmsService smsService;
 
     @Autowired
-    private SmsLogService smsLogService;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     @PostMapping(path = "/sendcode")
@@ -55,7 +52,7 @@ public class SmsController {
         SendCodeResponseBO sendCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(),
                 SendCodeResponseBO.class);
         //记日志
-        smsLogService.smsVerifyCodeInsert(sendCodeParam, sendCodeResponseBO);
+        //smsLogService.smsVerifyCodeInsert(sendCodeParam, sendCodeResponseBO);
         LOGGER.info("{}", sendCodeResponseBO);
         return ResponseEntity.ok(Utils.kv("data", sendCodeResponseBO));
     }
@@ -72,8 +69,6 @@ public class SmsController {
         }
         VerifyCodeResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes(),
                 VerifyCodeResponseBO.class);
-        //记日志
-        smsLogService.smsVerifyCodeInsert(verifyCodeParam, verifyCodeResponseBO);
         LOGGER.info("{}", verifyCodeResponseBO);
         return ResponseEntity.ok(Utils.kv("data", verifyCodeResponseBO));
     }
@@ -91,8 +86,6 @@ public class SmsController {
         }
         SendTemplateResponseBO verifyCodeResponseBO = objectMapper.readValue(((String) response.getBody()).getBytes()
                 , SendTemplateResponseBO.class);
-        //记日志
-        smsLogService.smsOpsLogInsert(sendTemplateParam, verifyCodeResponseBO);
         LOGGER.info("{}", verifyCodeResponseBO);
         return ResponseEntity.ok(Utils.kv("data", verifyCodeResponseBO));
     }
@@ -102,17 +95,22 @@ public class SmsController {
         LOGGER.info("{}", queryStatusParam);
 
         ResponseEntity response = smsService.queryStatus(queryStatusParam);
+        System.out.println("短信发送状态：");
+        System.out.println(response.getBody());
+        System.out.println();
         if (response == null || !response.getStatusCode().is2xxSuccessful()) {
             return (ResponseEntity) ResponseEntity.badRequest();
         }
         if (!response.hasBody()) {
             throw new ServiceException(4201);
         }
-        QueryStatusResponseBO queryStatusResponseBO = objectMapper.readValue(((String) response.getBody()),
-                QueryStatusResponseBO.class);
+        NeteaseQueryStatusResponseBO neteaseQueryStatusResponseBO = JSON.parseObject(((String) response.getBody()),
+                NeteaseQueryStatusResponseBO.class);
+        System.out.println("发送时间：");
+        System.out.println(neteaseQueryStatusResponseBO.getObj().toString());
         //记日志
-        smsLogService.smsOpsUpdate(queryStatusParam.getSendid().toString(), queryStatusResponseBO);
-        LOGGER.info("{}", queryStatusResponseBO);
-        return ResponseEntity.ok(Utils.kv("data", queryStatusResponseBO));
+        //smsLogService.smsOpsUpdate(queryStatusParam.getSendid().toString(), queryStatusResponseBO);
+        LOGGER.info("{}", neteaseQueryStatusResponseBO);
+        return ResponseEntity.ok(Utils.kv("data", neteaseQueryStatusResponseBO));
     }
 }
