@@ -43,7 +43,8 @@ public class SubjectTagServiceImpl implements SubjectTagService {
     @Override
     public SubjectTagBO insert(String subject, String id, String tagId, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, tagId);
-        if (StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
+        String userId = (String) request.getAttribute(Constant.ADMIN_ID);
+        if (StringUtils.isEmpty(userId)) {
             throw new ServiceException(4130);
         }
         if (isExist(tagId, id)) {
@@ -57,7 +58,7 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         }
         SubjectTag subjectTag = new SubjectTag();
         subjectTag.setId(Utils.uuid());
-        subjectTag.setUserId((String) request.getAttribute(Constant.USER_ID));
+        subjectTag.setUserId(userId);
         subjectTag.setSubjectId(id);
         subjectTag.setTagId(tagId);
         subjectTag.setType(subject);

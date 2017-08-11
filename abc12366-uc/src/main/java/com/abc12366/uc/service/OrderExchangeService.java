@@ -1,6 +1,9 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.OrderExchange;
+import com.abc12366.uc.model.bo.OrderExchangeExportBO;
+import com.abc12366.uc.model.bo.SfExportBO;
+import com.abc12366.uc.model.bo.SfImportBO;
 
 import java.util.List;
 
@@ -23,4 +26,8 @@ public interface OrderExchangeService {
     OrderExchange confirm(OrderExchange data);
 
     OrderExchange update(OrderExchange data);
+
+    List<SfExportBO> export(OrderExchangeExportBO data);
+
+    void importJson(List<SfImportBO> dataList);
 }

@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -14,31 +15,9 @@ import java.sql.Timestamp;
 public class ABC4000CallbackBO {
     @NotEmpty
     private String userid;
-    @NotEmpty
-    @Size(max = 32)
-    private String y_nsrsbh;
-    @NotEmpty
-    @Size(max = 32)
-    private String shxydm;
-    @NotEmpty
-    @Size(max = 64)
-    private String djxh;
-    @NotEmpty
-    @Size(max = 32)
-    private String swjgdm;
-    @NotEmpty
-    @Size(max = 200)
-    private String swjgmc;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp rjdqr;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp yqdqr;
-    @NotEmpty
-    @Size(max = 20)
-    private String frmc;
-    @NotEmpty
-    @Size(max = 64)
-    private String frzjh;
+    private Timestamp dlsj;
+    private List<NSRXXBO> t_nsrxx;
 
     public ABC4000CallbackBO() {
     }
@@ -51,75 +30,19 @@ public class ABC4000CallbackBO {
         this.userid = userid;
     }
 
-    public String getY_nsrsbh() {
-        return y_nsrsbh;
+    public Timestamp getDlsj() {
+        return dlsj;
     }
 
-    public void setY_nsrsbh(String y_nsrsbh) {
-        this.y_nsrsbh = y_nsrsbh;
+    public void setDlsj(Timestamp dlsj) {
+        this.dlsj = dlsj;
     }
 
-    public String getShxydm() {
-        return shxydm;
+    public List<NSRXXBO> getT_nsrxx() {
+        return t_nsrxx;
     }
 
-    public void setShxydm(String shxydm) {
-        this.shxydm = shxydm;
-    }
-
-    public String getDjxh() {
-        return djxh;
-    }
-
-    public void setDjxh(String djxh) {
-        this.djxh = djxh;
-    }
-
-    public String getSwjgdm() {
-        return swjgdm;
-    }
-
-    public void setSwjgdm(String swjgdm) {
-        this.swjgdm = swjgdm;
-    }
-
-    public String getSwjgmc() {
-        return swjgmc;
-    }
-
-    public void setSwjgmc(String swjgmc) {
-        this.swjgmc = swjgmc;
-    }
-
-    public Timestamp getRjdqr() {
-        return rjdqr;
-    }
-
-    public void setRjdqr(Timestamp rjdqr) {
-        this.rjdqr = rjdqr;
-    }
-
-    public Timestamp getYqdqr() {
-        return yqdqr;
-    }
-
-    public void setYqdqr(Timestamp yqdqr) {
-        this.yqdqr = yqdqr;
-    }
-
-    public String getFrmc() {
-        return frmc;
-    }
-
-    public void setFrmc(String frmc) {
-        this.frmc = frmc;
-    }
-
-    public String getFrzjh() {
-        return frzjh;
-    }
-
-    public void setFrzjh(String frzjh) {
-        this.frzjh = frzjh;
+    public void setT_nsrxx(List<NSRXXBO> t_nsrxx) {
+        this.t_nsrxx = t_nsrxx;
     }
 }

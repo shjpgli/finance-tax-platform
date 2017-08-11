@@ -9,6 +9,9 @@ import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
 import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.OrderExchange;
 import com.abc12366.uc.model.OrderLog;
+import com.abc12366.uc.model.bo.OrderExchangeExportBO;
+import com.abc12366.uc.model.bo.SfExportBO;
+import com.abc12366.uc.model.bo.SfImportBO;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +87,27 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }
         }
         return oe;
+    }
+
+    @Override
+    public List<SfExportBO> export(OrderExchangeExportBO data) {
+        return orderExchangeRoMapper.export(data);
+    }
+
+    @Override
+    public void importJson(List<SfImportBO> dataList) {
+        if (dataList.size() > 0) {
+            for (SfImportBO data : dataList) {
+                OrderExchange oe = new OrderExchange.Builder()
+                        .orderNo(data.getOrderNo())
+                        .toExpressNo(data.getExpressNo())
+                        .status("3")
+                        .build();
+                orderExchangeMapper.update(oe);
+                // 插入订单日志
+                insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark());
+            }
+        }
     }
 
     @Override

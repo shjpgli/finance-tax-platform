@@ -26,7 +26,7 @@ public class PkgUtil extends BaseObject{
     public String generatorPkgStrbyTdps(final Map<String, String> map) throws Exception {
         String result = null;
         String serviceId = map.get("serviceid").toUpperCase();
-        if(serviceId.equalsIgnoreCase("TY11")){//´Óµç×ÓÉê±¨»ñÈ¡ÄÉË°ÈË»ù´¡ÐÅÏ¢²éÑ¯
+        if(serviceId.equalsIgnoreCase("TY11")){//ï¿½Óµï¿½ï¿½ï¿½ï¿½ê±¨ï¿½ï¿½È¡ï¿½ï¿½Ë°ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ñ¯
             result = makeTiripPackageBytdps(makeTY11(map), serviceId, "ABC_4000");
 //            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
@@ -41,6 +41,7 @@ public class PkgUtil extends BaseObject{
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         mxxx.setCODE("NSRSBH");
         mxxx.setVALUE(map.get("nsrsbh"));
+
         nsrjbxx.addMXXX(mxxx);
         request.setNSRJBXX(nsrjbxx);
         try {
@@ -127,7 +128,7 @@ public class PkgUtil extends BaseObject{
     public String makeTiripPackageBytdps(String contentStr, String serviceId, String yhmc){
         _log.info("subPackage: \n" + contentStr);
         String mm=CommonUtils.getRandom();
-        //¼ÓÃÜºóµÄÃÜÂë
+        //ï¿½ï¿½ï¿½Üºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         String jmmm=cryptutiltdps.b64AsymmetricEncrypt(mm);
         String content = processBusinessPkgBytdps(contentStr, "abc",mm);
         TiripPackage tiripPackage = new TiripPackage();

@@ -4,7 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderExchangeRoMapper">
 
     <sql id="Base_Column_List">
-        id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate
+        id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
+        toExpressNo
     </sql>
 
     <select id="selectList" parameterType="com.abc12366.uc.model.OrderExchange"
@@ -29,5 +30,29 @@
         SELECT <include refid="Base_Column_List"/>
         FROM uc_order_exchange
         WHERE id = #{id}
+    </select>
+
+    <select id="export" parameterType="com.abc12366.uc.model.bo.OrderExchangeExportBO"
+            resultType="com.abc12366.uc.model.bo.SfExportBO">
+        select h.orderNo, h.company, h.name, h.phone, h.address, j.name as content, 1 as num from (SELECT
+        c.orderNo, d.name  as company, d.name, d.phone, concat(e.province, f.city, g.area, d.detail) as address
+        FROM
+        (SELECT
+        b.*
+        FROM
+        uc_order_exchange a
+        LEFT JOIN uc_order b ON a.orderNo = b.orderNo
+        WHERE a.status = '2'
+        and a.createTime <![CDATA[>=]]> DATE_FORMAT(#{startTime}, '%Y-%m-%d %H-%i-%s')
+        and a.createTime <![CDATA[<=]]> DATE_FORMAT(#{endTime}, '%Y-%m-%d %H-%i-%s')) c,
+        uc_user_address d,
+        uc_province e,
+        uc_city f,
+        uc_area g
+        WHERE
+        c.addressId = d.id
+        AND d.province = e.provinceId
+        AND d.city = f.cityId
+        AND d.area = g.areaId) h left join (select x.orderNo, x.name, y.specId from abc12366_uc.uc_order_product x left join uc_order_product_spec y on x.productId = y.productId) j on h.orderNo = j.orderNo
     </select>
 </mapper>

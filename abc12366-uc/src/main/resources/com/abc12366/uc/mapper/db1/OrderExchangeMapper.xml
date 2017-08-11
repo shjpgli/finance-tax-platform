@@ -4,7 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.OrderExchangeMapper">
 
     <sql id="Base_Column_List">
-        id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate
+        id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
+        toExpressNo
     </sql>
 
     <!--删除：根据主键ID删除-->
@@ -19,7 +20,7 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         (#{id}, #{userId}, #{orderNo}, #{reason}, #{adminRemark}, #{userRemark}, #{expressNo}, #{expressComp},
-         #{status},#{createTime},#{lastUpdate})
+         #{status},#{createTime},#{lastUpdate}, #{toExpressNo})
     </insert>
 
     <!-- 修 改-->
@@ -47,8 +48,14 @@
             <if test="lastUpdate != null">
                 lastUpdate = #{lastUpdate},
             </if>
+            <if test="toExpressNo != null">
+                toExpressNo = #{toExpressNo},
+            </if>
         </set>
-        WHERE id = #{id}
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="orderNo != null">orderNo = #{orderNo}</if>
+        </where>
     </update>
 
 </mapper>

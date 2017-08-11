@@ -41,15 +41,19 @@ public class OrderExchange implements Serializable {
     private String adminRemark;
 
     /**
-     * 快递单号
+     * 用户换货快递单号
      **/
     private String expressNo;
 
     /**
-     * 快递公司
+     * 用户换货快递公司
      **/
     private String expressComp;
 
+    /**
+     * 用户换货快递单号
+     **/
+    private String toExpressNo;
     /**
      * 退单状态
      **/
@@ -66,7 +70,7 @@ public class OrderExchange implements Serializable {
 
     public OrderExchange(String id, String userId, String orderNo, String reason, String userRemark, String
             adminRemark, String expressNo, String expressComp, String status, Timestamp createTime, Timestamp
-            lastUpdate) {
+            lastUpdate, String toExpressNo) {
         this.id = id;
         this.userId = userId;
         this.orderNo = orderNo;
@@ -78,6 +82,7 @@ public class OrderExchange implements Serializable {
         this.status = status;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
+        this.toExpressNo = toExpressNo;
     }
 
     private OrderExchange(Builder builder) {
@@ -92,6 +97,7 @@ public class OrderExchange implements Serializable {
         setStatus(builder.status);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
+        setToExpressNo(builder.toExpressNo);
     }
 
     public String getId() {
@@ -182,6 +188,31 @@ public class OrderExchange implements Serializable {
         this.adminRemark = adminRemark;
     }
 
+    public String getToExpressNo() {
+        return toExpressNo;
+    }
+
+    public void setToExpressNo(String toExpressNo) {
+        this.toExpressNo = toExpressNo;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderExchange{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", reason='" + reason + '\'' +
+                ", userRemark='" + userRemark + '\'' +
+                ", adminRemark='" + adminRemark + '\'' +
+                ", expressNo='" + expressNo + '\'' +
+                ", expressComp='" + expressComp + '\'' +
+                ", toExpressNo='" + toExpressNo + '\'' +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                '}';
+    }
 
     public static final class Builder {
         private String id;
@@ -195,6 +226,7 @@ public class OrderExchange implements Serializable {
         private String status;
         private Timestamp createTime;
         private Timestamp lastUpdate;
+        private String toExpressNo;
 
         public Builder() {
         }
@@ -251,6 +283,11 @@ public class OrderExchange implements Serializable {
 
         public Builder lastUpdate(Timestamp val) {
             lastUpdate = val;
+            return this;
+        }
+
+        public Builder toExpressNo(String val) {
+            toExpressNo = val;
             return this;
         }
 
