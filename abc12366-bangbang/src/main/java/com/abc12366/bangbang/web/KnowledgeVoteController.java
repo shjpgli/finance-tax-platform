@@ -33,11 +33,11 @@ public class KnowledgeVoteController {
                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                          @RequestParam(value = "categoryCode", required = false) String categoryCode,
                                          @RequestParam(value = "keywords", required = false) String keywords,
-                                         @RequestParam(value = "knowledgeType", required = false) String type) {
+                                         @RequestParam(value = "knowledgeType", required = false) String knowledgeType) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
 
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, null, null);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, knowledgeType, keywords, null, null);
         List<KnowledgeVoteLogBO> list = knowledgeVoteService.selectVoteList(param);
 
         return (list == null) ?
