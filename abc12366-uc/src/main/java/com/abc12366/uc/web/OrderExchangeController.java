@@ -121,6 +121,21 @@ public class OrderExchangeController {
     }
 
     /**
+     * 确认退货
+     */
+    @PutMapping(path = "/back/{id}")
+    public ResponseEntity back(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data) {
+
+        data.setId(id);
+        LOGGER.info("{}", data);
+        OrderExchange oe = orderExchangeService.back(data);
+
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
      * 用户提交换货单
      */
     @PostMapping()
