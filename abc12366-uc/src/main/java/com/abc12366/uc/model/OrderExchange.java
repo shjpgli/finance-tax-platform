@@ -65,12 +65,26 @@ public class OrderExchange implements Serializable {
     /****/
     private Timestamp lastUpdate;
 
+    // 服务类型 1-换货 2-退货
+    private String type;
+    // 产品名称
+    private String name;
+    // 产品图片
+    private String imageUrl;
+    // 用户名
+    private String username;
+    // 下单时间
+    private Timestamp orderTime;
+    // 商品数量
+    private Integer num;
+
     public OrderExchange() {
     }
 
     public OrderExchange(String id, String userId, String orderNo, String reason, String userRemark, String
-            adminRemark, String expressNo, String expressComp, String status, Timestamp createTime, Timestamp
-            lastUpdate, String toExpressNo) {
+            adminRemark, String expressNo, String expressComp, String toExpressNo, String status, Timestamp
+            createTime, Timestamp lastUpdate, String type, String name, String username, Timestamp orderTime, Integer
+            num, String imageUrl) {
         this.id = id;
         this.userId = userId;
         this.orderNo = orderNo;
@@ -79,10 +93,16 @@ public class OrderExchange implements Serializable {
         this.adminRemark = adminRemark;
         this.expressNo = expressNo;
         this.expressComp = expressComp;
+        this.toExpressNo = toExpressNo;
         this.status = status;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
-        this.toExpressNo = toExpressNo;
+        this.type = type;
+        this.name = name;
+        this.username = username;
+        this.orderTime = orderTime;
+        this.num = num;
+        this.imageUrl = imageUrl;
     }
 
     private OrderExchange(Builder builder) {
@@ -94,14 +114,20 @@ public class OrderExchange implements Serializable {
         setAdminRemark(builder.adminRemark);
         setExpressNo(builder.expressNo);
         setExpressComp(builder.expressComp);
+        setToExpressNo(builder.toExpressNo);
         setStatus(builder.status);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
-        setToExpressNo(builder.toExpressNo);
+        setType(builder.type);
+        setName(builder.name);
+        setUsername(builder.username);
+        setOrderTime(builder.orderTime);
+        setNum(builder.num);
+        setImageUrl(builder.imageUrl);
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(String id) {
@@ -109,7 +135,7 @@ public class OrderExchange implements Serializable {
     }
 
     public String getUserId() {
-        return this.userId;
+        return userId;
     }
 
     public void setUserId(String userId) {
@@ -117,7 +143,7 @@ public class OrderExchange implements Serializable {
     }
 
     public String getOrderNo() {
-        return this.orderNo;
+        return orderNo;
     }
 
     public void setOrderNo(String orderNo) {
@@ -125,51 +151,11 @@ public class OrderExchange implements Serializable {
     }
 
     public String getReason() {
-        return this.reason;
+        return reason;
     }
 
     public void setReason(String reason) {
         this.reason = reason;
-    }
-
-    public String getExpressNo() {
-        return this.expressNo;
-    }
-
-    public void setExpressNo(String expressNo) {
-        this.expressNo = expressNo;
-    }
-
-    public String getExpressComp() {
-        return this.expressComp;
-    }
-
-    public void setExpressComp(String expressComp) {
-        this.expressComp = expressComp;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Timestamp getCreateTime() {
-        return this.createTime;
-    }
-
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
-    }
-
-    public Timestamp getLastUpdate() {
-        return this.lastUpdate;
-    }
-
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
 
     public String getUserRemark() {
@@ -188,12 +174,100 @@ public class OrderExchange implements Serializable {
         this.adminRemark = adminRemark;
     }
 
+    public String getExpressNo() {
+        return expressNo;
+    }
+
+    public void setExpressNo(String expressNo) {
+        this.expressNo = expressNo;
+    }
+
+    public String getExpressComp() {
+        return expressComp;
+    }
+
+    public void setExpressComp(String expressComp) {
+        this.expressComp = expressComp;
+    }
+
     public String getToExpressNo() {
         return toExpressNo;
     }
 
     public void setToExpressNo(String toExpressNo) {
         this.toExpressNo = toExpressNo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public Timestamp getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Timestamp lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Timestamp getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(Timestamp orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -211,6 +285,12 @@ public class OrderExchange implements Serializable {
                 ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", orderTime=" + orderTime +
+                ", num=" + num +
                 '}';
     }
 
@@ -223,10 +303,16 @@ public class OrderExchange implements Serializable {
         private String adminRemark;
         private String expressNo;
         private String expressComp;
+        private String toExpressNo;
         private String status;
         private Timestamp createTime;
         private Timestamp lastUpdate;
-        private String toExpressNo;
+        private String type;
+        private String name;
+        private String username;
+        private Timestamp orderTime;
+        private Integer num;
+        private String imageUrl;
 
         public Builder() {
         }
@@ -271,6 +357,11 @@ public class OrderExchange implements Serializable {
             return this;
         }
 
+        public Builder toExpressNo(String val) {
+            toExpressNo = val;
+            return this;
+        }
+
         public Builder status(String val) {
             status = val;
             return this;
@@ -286,8 +377,33 @@ public class OrderExchange implements Serializable {
             return this;
         }
 
-        public Builder toExpressNo(String val) {
-            toExpressNo = val;
+        public Builder type(String val) {
+            type = val;
+            return this;
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public Builder username(String val) {
+            username = val;
+            return this;
+        }
+
+        public Builder orderTime(Timestamp val) {
+            orderTime = val;
+            return this;
+        }
+
+        public Builder num(Integer val) {
+            num = val;
+            return this;
+        }
+
+        public Builder imageUrl(String val) {
+            imageUrl = val;
             return this;
         }
 

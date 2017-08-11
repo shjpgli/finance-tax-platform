@@ -33,4 +33,5 @@ public interface InvoiceApprovalLogMapper{
 	 **/
 	int update(InvoiceApprovalLog record);
 
+	void deleteByUseId(String id);
 }

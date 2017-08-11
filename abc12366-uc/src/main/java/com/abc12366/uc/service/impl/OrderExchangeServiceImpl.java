@@ -9,11 +9,10 @@ import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
 import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.OrderExchange;
 import com.abc12366.uc.model.OrderLog;
-import com.abc12366.uc.model.bo.OrderExchangeExportBO;
-import com.abc12366.uc.model.bo.SfExportBO;
-import com.abc12366.uc.model.bo.SfImportBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.github.pagehelper.PageHelper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +43,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderExchange insert(OrderExchange data) {
+    public OrderExchange insert(ExchangeApplicationBO ra) {
         // todo 1.实物商品才能换货
+        OrderExchange data = new OrderExchange();
+        BeanUtils.copyProperties(ra, data);
         if (data != null) {
             List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
             if (dataList.size() == 0){
@@ -57,8 +58,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 orderExchangeMapper.insert(data);
 
                 // 插入订单日志
-//                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
-                insertLog(data.getOrderNo(), "1", Utils.getAdminId(), data.getUserRemark());
+                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
+//                insertLog(data.getOrderNo(), "1", Utils.getAdminId(), data.getUserRemark());
             } else {
                 throw new ServiceException(4950);
             }
@@ -67,21 +68,21 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     }
 
     @Override
-    public OrderExchange update(OrderExchange data) {
+    public OrderExchange update(ExchangeApplicationBO data) {
         OrderExchange oe = selectOne(data.getId());
         if (oe != null) {
             List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
             if (dataList.size() == 0){
                 oe.setReason(data.getReason());
                 oe.setUserRemark(data.getUserRemark());
-                Timestamp now = new Timestamp(new Date().getTime());
-                oe.setLastUpdate(now);
+                oe.setType(data.getType());
+                oe.setLastUpdate(new Timestamp(new Date().getTime()));
                 oe.setStatus("1");
                 orderExchangeMapper.update(oe);
 
                 // 插入订单日志
-//                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
-                insertLog(oe.getOrderNo(), "1", Utils.getAdminId(), oe.getUserRemark());
+                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
+//                insertLog(oe.getOrderNo(), "1", Utils.getAdminId(), oe.getUserRemark());
             } else {
                 throw new ServiceException(4950);
             }
@@ -118,7 +119,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderExchange disagree(OrderExchange data) {
+    public OrderExchange disagree(ExchangeAdminBO data) {
         OrderExchange oe = selectOne(data.getId());
 
         if (oe != null) {
@@ -141,7 +142,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderExchange agree(OrderExchange data) {
+    public OrderExchange agree(ExchangeAdminBO data) {
         OrderExchange oe = selectOne(data.getId());
 
         if (oe != null) {
@@ -158,7 +159,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     }
 
     @Override
-    public OrderExchange confirm(OrderExchange data) {
+    public OrderExchange confirm(ExchangeConfirmBO data) {
         OrderExchange oe = selectOne(data.getId());
 
         if (oe != null) {

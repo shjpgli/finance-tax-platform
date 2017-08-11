@@ -2,20 +2,13 @@ package com.abc12366.uc.service.invoice.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db1.InvoiceApprovalLogMapper;
 import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
 import com.abc12366.uc.mapper.db1.InvoiceRepoMapper;
-import com.abc12366.uc.mapper.db1.InvoiceUseDetailMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseDetailRoMapper;
-import com.abc12366.uc.model.invoice.InvoiceApprovalLog;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
-import com.abc12366.uc.model.invoice.InvoiceUseDetail;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +24,9 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
-public class InvoiceuseRepoImpl implements InvoiceRepoService {
+public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceuseRepoImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceRepoServiceImpl.class);
 
     @Autowired
     private InvoiceRepoRoMapper invoiceRepoRoMapper;
@@ -65,11 +58,7 @@ public class InvoiceuseRepoImpl implements InvoiceRepoService {
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
         }
-        int dDelete = invoiceDetailMapper.delete(id);
-        if(dDelete != 1){
-            LOGGER.warn("删除失败，参数{}：" + id);
-            throw new ServiceException(4103);
-        }
+        invoiceDetailMapper.delete(id);
     }
 
     @Override
@@ -135,16 +124,72 @@ public class InvoiceuseRepoImpl implements InvoiceRepoService {
         return String.format("%0" + num + "d", code + 1);
     }
 
-    private void insertLog(String id,String opinions,String result) {
-        InvoiceApprovalLog log = new InvoiceApprovalLog();
-        log.setId(Utils.uuid());
-        log.setUseId(id);
-        log.setApprovalOpinions(opinions);
-        log.setApprovalResult(result);
-    }
-
     @Override
     public InvoiceRepoBO update(InvoiceRepoBO invoiceRepoBO) {
         return null;
+    }
+
+    @Override
+    public String selectRepoId(String invoiceTypeCode) {
+        String repoId;
+        InvoiceRepo invoiceRepo = invoiceRepoRoMapper.selectRepoId(invoiceTypeCode);
+        if(invoiceRepo == null){
+            repoId = invoiceTypeCode;
+        }else{
+            repoId = invoiceRepo.getInvoiceTypeCode();
+        }
+        return repoId;
+    }
+
+    @Override
+    public List<InvoiceDetail> selectInvoiceDetailList(InvoiceDetail invoiceDetail) {
+        return invoiceDetailRoMapper.selectInvoiceDetailList(invoiceDetail);
+    }
+
+    @Override
+    public void deleteInvoiceDetail(String id) {
+        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(id);
+        if (invoiceDetail != null) {
+            if ("1".equals(invoiceDetail.getStatus()) || "2".equals(invoiceDetail.getStatus())) {
+                LOGGER.info("{发票在分配中或已使用，不能删除}：{}", id);
+                throw new ServiceException(4174);
+            }
+            int rDel = invoiceDetailMapper.delete(id);
+            if (rDel != 1) {
+                LOGGER.info("{发票详情信息删除失败}：{}", id);
+                throw new ServiceException(4172);
+            }
+        } else {
+            LOGGER.info("{发票信息不存在}：{}", id);
+            throw new ServiceException(4175);
+        }
+    }
+
+    @Override
+    public void invalidInvoiceDetail(String id) {
+        InvoiceDetail invoiceDetail = new InvoiceDetail();
+        invoiceDetail.setId(id);
+        invoiceDetail.setStatus("3");
+        int update = invoiceDetailMapper.update(invoiceDetail);
+        if (update != 1) {
+            LOGGER.info("{发票详情信息作废失败}：{}", id);
+            throw new ServiceException(4176);
+        }
+    }
+
+    @Override
+    public InvoiceRepoBO selectInvoiceRepoNum(String code) {
+        InvoiceRepoBO invoiceRepoBO = invoiceRepoRoMapper.selectInvoiceRepoNum(code);
+        return invoiceRepoBO;
+    }
+
+    @Override
+    public InvoiceDetail selectInvoiceDetail() {
+        return invoiceDetailRoMapper.selectInvoiceDetail();
+    }
+
+    @Override
+    public List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail) {
+        return invoiceDetailRoMapper.selectInvoiceDetailListByInvoice(invoiceDetail);
     }
 }

@@ -1,7 +1,10 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.invoice.InvoiceDistribute;
+import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -20,4 +23,9 @@ public interface InvoiceDistributeRoMapper {
 	InvoiceDistribute  selectByPrimaryKey(@Param("id") String id);
 
 
+	List<InvoiceDistributeBO> selectList(InvoiceDistributeBO applyBO);
+
+	InvoiceDistributeBO selectInvoiceDistribute(String id);
+
+	List<InvoiceDistribute> selectInvoiceDistributeList(String useId);
 }

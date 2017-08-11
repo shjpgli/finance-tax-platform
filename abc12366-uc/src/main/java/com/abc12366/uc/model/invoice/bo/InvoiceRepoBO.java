@@ -1,5 +1,8 @@
 package com.abc12366.uc.model.invoice.bo;
+import com.abc12366.uc.model.invoice.InvoiceDetail;
+
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -28,6 +31,9 @@ public class InvoiceRepoBO implements Serializable {
 	/**发票性质：1.纸质发票 2.电子发票**/
 	private String property;
 
+	/**发票库存状态，0：可使用，1：已分发，2：已作废**/
+	private String status;
+
 	/**每本份数**/
 	private Integer share;
 
@@ -46,6 +52,13 @@ public class InvoiceRepoBO implements Serializable {
 	/**修改人**/
 	private String updateUser;
 
+	/**可用份数**/
+	private Integer usableShare;
+
+	/**库存本数**/
+	private Integer repoBook;
+
+	private List<InvoiceDetailBO> invoiceDetailBOList;
 
 
 	public void setId(String id){
@@ -144,4 +157,35 @@ public class InvoiceRepoBO implements Serializable {
 		return this.updateUser;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public List<InvoiceDetailBO> getInvoiceDetailBOList() {
+		return invoiceDetailBOList;
+	}
+
+	public void setInvoiceDetailBOList(List<InvoiceDetailBO> invoiceDetailBOList) {
+		this.invoiceDetailBOList = invoiceDetailBOList;
+	}
+
+	public Integer getUsableShare() {
+		return usableShare;
+	}
+
+	public void setUsableShare(Integer usableShare) {
+		this.usableShare = usableShare;
+	}
+
+	public Integer getRepoBook() {
+		return repoBook;
+	}
+
+	public void setRepoBook(Integer repoBook) {
+		this.repoBook = repoBook;
+	}
 }
