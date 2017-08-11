@@ -43,14 +43,23 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public int delete(List<String> ids) {
+    public void delete(List<String> ids) {
         try {
-            return feedbackMapper.deleteByPrimaryKeys(ids);
+            feedbackMapper.deleteByPrimaryKeys(ids);
         }catch (Exception e){
             LOGGER.error("FeedbackServiceImpl.delete()", e);
             throw new ServiceException(4519);
         }
     }
 
+    @Override
+    public void delete(String id) {
+        try {
+            feedbackMapper.deleteByPrimaryKey(id);
+        }catch (Exception e){
+            LOGGER.error("FeedbackServiceImpl.delete()", e);
+            throw new ServiceException(4519);
+        }
+    }
 
 }

@@ -62,6 +62,16 @@ public class KnowledgeVoteServiceImpl implements KnowledgeVoteService {
     }
 
     @Override
+    public void deleteVoteLog(String id) {
+        try {
+            knowledgeVoteLogMapper.deleteByPrimaryKey(id);
+        }catch (Exception e){
+            LOGGER.error("KnowledgeBaseServiceImpl.deleteVoteLogs():" + e);
+            throw new ServiceException(4505);
+        }
+    }
+
+    @Override
     public List<KnowledgeVoteLogBO> selectVoteList(KnowledgeBaseParamBO param) {
         return knowledgeVoteLogMapper.selectList(param);
     }

@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author liuqi
@@ -26,37 +24,6 @@ public class KnowledgeVoteController {
 
     @Autowired
     private KnowledgeVoteService knowledgeVoteService;
-
-    /**
-     * 为知识库投票
-     */
-    @PostMapping(path = "/add")
-    public ResponseEntity add(@RequestBody KnowledgeVoteLog knowledgeVoteLog) {
-        knowledgeVoteService.addVote(knowledgeVoteLog);
-        return ResponseEntity.ok(Utils.kv());
-    }
-
-
-    /*
-     * 删除知识库投票 接口
-     */
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity delete(@PathVariable String id) {
-        List<String> ids = new ArrayList<>();
-        ids.add(id);
-        knowledgeVoteService.deleteVoteLogs(ids);
-        return ResponseEntity.ok(Utils.kv());
-    }
-
-    /*
-     * 批量删除知识库投票 接口
-     */
-    @DeleteMapping(path = "/delete")
-    public ResponseEntity deleteList(@RequestBody Map<String,List<String>> map) {
-        List<String> ids = map.get("ids");
-        knowledgeVoteService.deleteVoteLogs(ids);
-        return ResponseEntity.ok(Utils.kv());
-    }
 
     /*
     * 知识库投票列表  接口
@@ -75,6 +42,34 @@ public class KnowledgeVoteController {
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /**
+     * 为知识库投票
+     */
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody KnowledgeVoteLog knowledgeVoteLog) {
+        knowledgeVoteService.addVote(knowledgeVoteLog);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+
+    /*
+     * 删除知识库投票 接口
+     */
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        knowledgeVoteService.deleteVoteLog(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /*
+     * 批量删除知识库投票 接口
+     */
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity deleteList(@RequestBody List<String> ids) {
+        knowledgeVoteService.deleteVoteLogs(ids);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /*

@@ -3,16 +3,12 @@ package com.abc12366.uc.service.invoice.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.InvoiceApprovalLogMapper;
+import com.abc12366.uc.mapper.db1.InvoiceDistributeMapper;
 import com.abc12366.uc.mapper.db1.InvoiceUseApplyMapper;
 import com.abc12366.uc.mapper.db1.InvoiceUseDetailMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseApplyRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseDetailRoMapper;
-import com.abc12366.uc.model.invoice.InvoiceApprovalLog;
-import com.abc12366.uc.model.invoice.InvoiceUseApply;
-import com.abc12366.uc.model.invoice.InvoiceUseDetail;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
+import com.abc12366.uc.mapper.db2.*;
+import com.abc12366.uc.model.invoice.*;
+import com.abc12366.uc.model.invoice.bo.*;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +24,9 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
-public class InvoiceuseApplyServiceImpl implements InvoiceUseApplyService {
+public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceuseApplyServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceUseApplyServiceImpl.class);
 
     @Autowired
     private InvoiceUseApplyRoMapper invoiceUseApplyRoMapper;
@@ -39,13 +35,22 @@ public class InvoiceuseApplyServiceImpl implements InvoiceUseApplyService {
     private InvoiceUseApplyMapper invoiceUseApplyMapper;
 
     @Autowired
-    private InvoiceUseDetailRoMapper invoiceUseDetailRoMapper;
+    private InvoiceRepoRoMapper invoiceRepoRoMapper;
+
+    @Autowired
+    private InvoiceUseDetailMapper invoiceUseDetailMapper;
+
+    @Autowired
+    private InvoiceDistributeMapper invoiceDistributeMapper;
+
+    @Autowired
+    private InvoiceDistributeRoMapper invoiceDistributeRoMapper;
 
     @Autowired
     private InvoiceApprovalLogMapper invoiceApprovalLogMapper;
 
     @Autowired
-    private InvoiceUseDetailMapper invoiceUseDetailMapper;
+    private InvoiceApprovalLogRoMapper invoiceApprovalLogRoMapper;
 
     @Override
     public List<InvoiceUseApplyBO> selectList(InvoiceUseApplyBO applyBO) {
@@ -64,11 +69,8 @@ public class InvoiceuseApplyServiceImpl implements InvoiceUseApplyService {
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
         }
-        int dDelete = invoiceUseDetailMapper.delete(id);
-        if(dDelete != 1){
-            LOGGER.warn("删除失败，参数{}：" + id);
-            throw new ServiceException(4103);
-        }
+        invoiceUseDetailMapper.delete(id);
+        invoiceApprovalLogMapper.deleteByUseId(id);
     }
 
     @Override
@@ -88,20 +90,21 @@ public class InvoiceuseApplyServiceImpl implements InvoiceUseApplyService {
             LOGGER.warn("新增失败，参数{}：" + invoiceUseApplyBO);
             throw new ServiceException(4101);
         }
-        InvoiceUseDetailBO invoiceUseDetailBO = invoiceUseApplyBO.getInvoiceUseDetailBO();
-        if(invoiceUseApplyBO == null){
+        List<InvoiceUseDetailBO> invoiceUseDetailBOList = invoiceUseApplyBO.getInvoiceUseDetailBOList();
+        if(invoiceUseDetailBOList == null || invoiceUseDetailBOList.size()<1){
             LOGGER.warn("数据错误{}：" + null);
             throw new ServiceException(4906);
         }
-        invoiceUseDetailBO.setUseId(id);
-        InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
-        BeanUtils.copyProperties(invoiceUseDetailBO,invoiceUseDetail);
-        int dInsert = invoiceUseDetailMapper.insert(invoiceUseDetail);
-        if(dInsert != 1){
-            LOGGER.warn("新增失败，参数{}：" + invoiceUseDetail);
-            throw new ServiceException(4101);
+        for (InvoiceUseDetailBO detailBO:invoiceUseDetailBOList){
+            detailBO.setUseId(id);
+            InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
+            BeanUtils.copyProperties(detailBO,invoiceUseDetail);
+            int dInsert = invoiceUseDetailMapper.insert(invoiceUseDetail);
+            if(dInsert != 1){
+                LOGGER.warn("新增失败，参数{}：" + invoiceUseDetail);
+                throw new ServiceException(4101);
+            }
         }
-        invoiceUseApplyBO.setInvoiceUseDetailBO(invoiceUseDetailBO);
 
         //加入日志
         insertLog(id,"","已提交");
@@ -114,6 +117,7 @@ public class InvoiceuseApplyServiceImpl implements InvoiceUseApplyService {
         log.setUseId(id);
         log.setApprovalOpinions(opinions);
         log.setApprovalResult(result);
+        invoiceApprovalLogMapper.insert(log);
     }
 
     @Override
@@ -131,21 +135,22 @@ public class InvoiceuseApplyServiceImpl implements InvoiceUseApplyService {
             LOGGER.warn("修改失败，参数{}：" + invoiceUseApplyBO);
             throw new ServiceException(4102);
         }
-        InvoiceUseDetailBO invoiceUseDetailBO = invoiceUseApplyBO.getInvoiceUseDetailBO();
-        if(invoiceUseApplyBO == null){
+        List<InvoiceUseDetailBO> invoiceUseDetailBOList = invoiceUseApplyBO.getInvoiceUseDetailBOList();
+        if(invoiceUseDetailBOList == null || invoiceUseDetailBOList.size()<1){
             LOGGER.warn("数据错误{}：" + null);
             throw new ServiceException(4906);
         }
-        InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
-        BeanUtils.copyProperties(invoiceUseDetailBO,invoiceUseDetail);
-        int dInsert = invoiceUseDetailMapper.insert(invoiceUseDetail);
-        if(dInsert != 1){
-            LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
-            throw new ServiceException(4102);
+        for (InvoiceUseDetailBO detailBO:invoiceUseDetailBOList){
+            InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
+            BeanUtils.copyProperties(detailBO,invoiceUseDetail);
+            int dUpdate = invoiceUseDetailMapper.update(invoiceUseDetail);
+            if(dUpdate != 1){
+                LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
+                throw new ServiceException(4102);
+            }
         }
-        invoiceUseApplyBO.setInvoiceUseDetailBO(invoiceUseDetailBO);
         //加入日志
-        insertLog(invoiceUseApply.getId(),invoiceUseDetailBO.getRemark(),"已修改");
+        insertLog(invoiceUseApply.getId(),invoiceUseApply.getRemark(),"已修改");
         return invoiceUseApplyBO;
     }
 
@@ -175,7 +180,48 @@ public class InvoiceuseApplyServiceImpl implements InvoiceUseApplyService {
     }
 
     @Override
-    public void distributeUseApply(InvoiceUseCheckBO invoiceUseCheckBO) {
-
+    public void distributeUseApply(InvoiceDistributeBO invoiceDistributeBO) {
+        String[] invoiceRepoIds = invoiceDistributeBO.getInvoiceRepoIds();
+        for(String repoId : invoiceRepoIds){
+            InvoiceRepoBO repoBO = invoiceRepoRoMapper.selectInvoiceRepo(repoId);
+            if(repoBO == null){
+                LOGGER.warn("发票不存在{}：" + repoBO);
+                throw new ServiceException(4907);
+            }
+            InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
+            invoiceDistribute.setId(Utils.uuid());
+            invoiceDistribute.setInvoiceRepoId(repoBO.getId());
+            invoiceDistribute.setInvoiceCode(repoBO.getInvoiceCode());
+            invoiceDistribute.setInvoiceNoStart(repoBO.getInvoiceNoStart());
+            invoiceDistribute.setInvoiceNoEnd(repoBO.getInvoiceNoEnd());
+            invoiceDistribute.setStatus("0");
+            invoiceDistribute.setBook(repoBO.getBook());
+            invoiceDistribute.setInvoiceTypeCode(repoBO.getInvoiceTypeCode());
+            invoiceDistribute.setDistributeUser(invoiceDistributeBO.getDistributeUser());
+            invoiceDistribute.setDistributeTime(new Date());
+            invoiceDistribute.setUseId(invoiceDistributeBO.getUseId());
+            int insert = invoiceDistributeMapper.insert(invoiceDistribute);
+            if(insert != 1){
+                LOGGER.warn("新增失败，参数{}：" + invoiceDistribute);
+                throw new ServiceException(4101);
+            }
+        }
     }
+
+    @Override
+    public void signUseApply(InvoiceDistributeBO invoiceDistributeBO) {
+        List<InvoiceDistribute> invoiceDistributeList = invoiceDistributeRoMapper.selectInvoiceDistributeList(invoiceDistributeBO.getUseId());
+        for(InvoiceDistribute invoiceDistribute:invoiceDistributeList){
+            invoiceDistribute.setStatus("1");
+            invoiceDistribute.setSignTime(new Date());
+            invoiceDistribute.setSignUser(invoiceDistributeBO.getSignUser());
+            int update = invoiceDistributeMapper.update(invoiceDistribute);
+            if(update != 1){
+                LOGGER.warn("修改失败，参数{}：" + invoiceDistribute);
+                throw new ServiceException(4102);
+            }
+        }
+    }
+
+
 }

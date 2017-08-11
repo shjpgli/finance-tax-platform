@@ -27,14 +27,14 @@ public interface FeedbackMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	Feedback  selectByPrimaryKey(@Param("id") Long id);
+	Feedback  selectByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("id") String id);
 
 	/**
 	 *

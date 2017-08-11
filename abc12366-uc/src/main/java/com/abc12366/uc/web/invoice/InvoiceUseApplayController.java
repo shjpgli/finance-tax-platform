@@ -10,6 +10,7 @@ import com.abc12366.uc.model.bo.InvoiceExcel;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
 import com.abc12366.uc.model.invoice.InvoiceUseApply;
+import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
@@ -154,10 +155,23 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @DeleteMapping(path = "/dist/{id}")
-    public ResponseEntity distributeUseApply(@Valid @RequestBody InvoiceUseCheckBO invoiceUseCheckBO) {
-        LOGGER.info("{}", invoiceUseCheckBO);
-        invoiceUseApplyService.distributeUseApply(invoiceUseCheckBO);
+    @PostMapping(path = "/dist/send")
+    public ResponseEntity distributeUseApply(@Valid @RequestBody InvoiceDistributeBO invoiceDistributeBO) {
+        LOGGER.info("{}", invoiceDistributeBO);
+        invoiceUseApplyService.distributeUseApply(invoiceDistributeBO);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    /**
+     * 发票领用申请分发后，签收
+     *
+     * @return
+     */
+    @PostMapping(path = "/dist/sign")
+    public ResponseEntity signUseApply(@Valid @RequestBody InvoiceDistributeBO invoiceDistributeBO) {
+        LOGGER.info("{}", invoiceDistributeBO);
+        invoiceUseApplyService.signUseApply(invoiceDistributeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
 }

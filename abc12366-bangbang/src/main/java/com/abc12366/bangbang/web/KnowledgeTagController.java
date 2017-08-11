@@ -63,6 +63,14 @@ public class KnowledgeTagController {
         return ResponseEntity.ok(Utils.kv("data", knowledgeTag));
     }
 
+    /**
+     * 添加知识库标签 接口
+     */
+    @PostMapping(path = "/batch/add")
+    public ResponseEntity addBatch(@RequestBody List<KnowledgeTag> knowledgeTags) {
+        List<KnowledgeTag> list = knowledgeTagService.addBatch(knowledgeTags);
+        return ResponseEntity.ok(Utils.kv("dataList",list));
+    }
 
     /*
     * 修改知识库标签 接口
