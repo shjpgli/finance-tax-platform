@@ -33,7 +33,8 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
 
     @Autowired
     private VipPrivilegeMapper vipPrivilegeMapper;
-
+    @Autowired
+    private VipPrivilegeLevelService vipPrivilegeLevelService;
     @Override
     public List<VipPrivilegeBO> selectList(Map map) {
         return vipPrivilegeRoMapper.selectList(map);
@@ -140,6 +141,9 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
             LOGGER.warn("删除失败，参数：" + id);
             throw new ServiceException(4103);
         }
+        //这里把对应的会员权益删除
+        int tmpi = vipPrivilegeLevelService.deleteByPrivilege(id);
+        LOGGER.info("deleteByPrivilege:{}", tmpi);
         return true;
     }
 
