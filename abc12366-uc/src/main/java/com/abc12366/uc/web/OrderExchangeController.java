@@ -48,7 +48,7 @@ public class OrderExchangeController {
                                      @RequestParam(value = "orderNo", required = false) String orderNo,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "type", required = false) String type,
-                                     @RequestParam(value = "username", required = false) String status) {
+                                     @RequestParam(value = "status", required = false) String status) {
         OrderExchange oe = new OrderExchange.Builder()
                 .orderNo(orderNo)
                 .username(username)

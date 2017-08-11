@@ -15,10 +15,10 @@
         left join uc_order_product d on c.orderNo = d.orderNo) e
         left join (select o.id, p.imageUrl from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
         <where>
-            <if test="status != null">type = #{type}</if>
-            <if test="status != null">and status = #{status}</if>
-            <if test="status != null">and username = #{username}</if>
-            <if test="status != null">and orderNo = #{orderNo}</if>
+            <if test="type != null and type !=''">type = #{type}</if>
+            <if test="status != null and status !=''">and status = #{status}</if>
+            <if test="username != null and username !=''">and username = #{username}</if>
+            <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
         </where>
     </select>
 
@@ -32,9 +32,11 @@
     </select>
 
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
-        SELECT <include refid="Base_Column_List"/>
-        FROM uc_order_exchange
-        WHERE id = #{id}
+        select e.id, e.orderNo, e.name, q.imageUrl, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark, e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
+        from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo) c
+        left join uc_order_product d on c.orderNo = d.orderNo) e
+        left join (select o.id, p.imageUrl from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
+        WHERE e.id = #{id}
     </select>
 
     <select id="export" parameterType="com.abc12366.uc.model.bo.OrderExchangeExportBO"

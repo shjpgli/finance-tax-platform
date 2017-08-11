@@ -80,6 +80,12 @@
             <if test="type != null">
                 AND t_base.type = #{type}
             </if>
+            <if test="isOpen != null">
+                AND t_base.isOpen = #{isOpen}
+            </if>
+            <if test="status != null">
+                AND t_base.status = #{status}
+            </if>
             <if test="keywords != null">
                     AND (
                         t_base.subject LIKE CONCAT('%',#{keywords},'%')

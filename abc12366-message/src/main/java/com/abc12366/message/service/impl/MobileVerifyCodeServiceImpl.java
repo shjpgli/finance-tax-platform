@@ -1,6 +1,7 @@
 package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
@@ -157,12 +158,13 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
     private boolean sendNeteaseTemplate(String phone, String codeType, String code) throws IOException {
         //发送通知类短信接口地址
-        String url = properties.getValue("message.netease.url.sendtemplate");
+        String url = properties.getValue("message.netease.api.url") + "/sendtemplate.action";
+        String templateId = properties.getValue("message.netease.templateid");
         //调用网易接口请求头设置
         HttpHeaders httpHeaders = getHeader();
         //调用网易接口请求体设置
         MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("templateid", MessageConstant.NEREASE_TEMPLATE_ID);
+        requestBody.add("templateid", templateId);
         requestBody.add("mobiles", "['" + phone + "']");
         requestBody.add("params", "['" + codeType + "','" + code + "']");
 
@@ -175,9 +177,14 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         }
         if (neteaseResponse != null && neteaseResponse.getStatusCode().is2xxSuccessful() && neteaseResponse.hasBody()) {
             NeteaseTemplateResponseBO neteaseTemplateResponseBO = JSON.parseObject(String.valueOf(neteaseResponse.getBody()), NeteaseTemplateResponseBO.class);
-            if (neteaseTemplateResponseBO != null && neteaseTemplateResponseBO.getCode().equals("200")) {
+            String respCode = neteaseTemplateResponseBO.getCode();
+            String msg = neteaseTemplateResponseBO.getMsg();
+            if (neteaseTemplateResponseBO != null && respCode.equals("200")) {
                 return true;
                 //return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
+            } else if (respCode.equals("416") || respCode.equals("417") || respCode.equals("419")) {
+                //如果发送失败状态码是416、417、419中的一个，就将异常信息抛出给用户
+                BodyStatus bodyStatus = Utils.bodyStatus(Integer.parseInt(respCode), msg);
             }
         }
         return false;
@@ -245,7 +252,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         }
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
             UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()),
-             UpyunMessageResponse.class);
+                    UpyunMessageResponse.class);
             return true;
         }
         return false;

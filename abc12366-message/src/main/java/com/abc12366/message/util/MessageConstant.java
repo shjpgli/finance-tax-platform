@@ -13,10 +13,6 @@ public class MessageConstant {
     public static final String VERIFY_CODE_FILL_CONTENT = "财税专家";
 
     //网易通知类短信模板id
-    //public static final String NEREASE_TEMPLATE_ID = "6149";
-    //public static final String NEREASE_TEMPLATE_ID = "3062409";
-    //public static final String NEREASE_TEMPLATE_ID = "3033";
-    //public static final String NEREASE_TEMPLATE_ID = "3051628";
     public static final String NEREASE_TEMPLATE_ID = "3059771";//33333
 
     //短信验证码有效时长，单位：秒
