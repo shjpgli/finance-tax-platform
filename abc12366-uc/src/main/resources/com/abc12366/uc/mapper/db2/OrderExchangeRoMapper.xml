@@ -5,7 +5,7 @@
 
     <sql id="Base_Column_List">
         id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
-        toExpressNo
+        toExpressNo, type, name, imageUrl, username, orderTime, num
     </sql>
 
     <select id="selectList" parameterType="com.abc12366.uc.model.OrderExchange"
@@ -53,6 +53,6 @@
         c.addressId = d.id
         AND d.province = e.provinceId
         AND d.city = f.cityId
-        AND d.area = g.areaId) h left join (select x.orderNo, x.name, y.specId from abc12366_uc.uc_order_product x left join uc_order_product_spec y on x.productId = y.productId) j on h.orderNo = j.orderNo
+        AND d.area = g.areaId) h left join (select x.orderNo, x.name, y.specId from uc_order_product x left join uc_order_product_spec y on x.productId = y.productId) j on h.orderNo = j.orderNo
     </select>
 </mapper>
