@@ -16,6 +16,8 @@ public class InvoiceDistributeBO implements Serializable {
 	/**发票编号(FK)**/
 	private String invoiceRepoId;
 
+	private String[] invoiceRepoIds;
+
 	/**发票代码**/
 	private String invoiceCode;
 
@@ -54,6 +56,8 @@ public class InvoiceDistributeBO implements Serializable {
 
 	/**签收时间**/
 	private java.util.Date signTime;
+
+	private String fieldKey;
 
 
 
@@ -177,4 +181,19 @@ public class InvoiceDistributeBO implements Serializable {
 		return this.signTime;
 	}
 
+	public String getFieldKey() {
+		return fieldKey;
+	}
+
+	public void setFieldKey(String fieldKey) {
+		this.fieldKey = fieldKey;
+	}
+
+	public String[] getInvoiceRepoIds() {
+		return invoiceRepoIds;
+	}
+
+	public void setInvoiceRepoIds(String[] invoiceRepoIds) {
+		this.invoiceRepoIds = invoiceRepoIds;
+	}
 }

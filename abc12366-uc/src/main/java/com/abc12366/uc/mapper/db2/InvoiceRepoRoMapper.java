@@ -23,4 +23,8 @@ public interface InvoiceRepoRoMapper {
     List<InvoiceRepoBO> selectList(InvoiceRepoBO invoiceRepoBO);
 
     InvoiceRepoBO selectInvoiceRepo(String id);
+
+    InvoiceRepo selectRepoId(String invoiceTypeCode);
+
+    InvoiceRepoBO selectInvoiceRepoNum(String code);
 }

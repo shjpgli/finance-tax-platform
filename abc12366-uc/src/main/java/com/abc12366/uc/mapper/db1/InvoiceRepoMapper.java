@@ -26,4 +26,5 @@ public interface InvoiceRepoMapper {
     int update(InvoiceRepo record);
 
     int delete(String id);
+
 }

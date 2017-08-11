@@ -1,7 +1,10 @@
 package com.abc12366.uc.model.invoice.bo;
 
+import com.abc12366.uc.model.invoice.InvoiceApprovalLog;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -63,7 +66,9 @@ public class InvoiceUseApplyBO implements Serializable {
      **/
     private String remark;
 
-    private InvoiceUseDetailBO invoiceUseDetailBO;
+    private List<InvoiceUseDetailBO> invoiceUseDetailBOList;
+    private List<InvoiceApprovalLog> invoiceApprovalLogList;
+    private List<InvoiceDistributeBO> invoiceDistributeBOList;
 
     private Date startTime;
 
@@ -173,11 +178,27 @@ public class InvoiceUseApplyBO implements Serializable {
         this.applyUserName = applyUserName;
     }
 
-    public InvoiceUseDetailBO getInvoiceUseDetailBO() {
-        return invoiceUseDetailBO;
+    public List<InvoiceApprovalLog> getInvoiceApprovalLogList() {
+        return invoiceApprovalLogList;
     }
 
-    public void setInvoiceUseDetailBO(InvoiceUseDetailBO invoiceUseDetailBO) {
-        this.invoiceUseDetailBO = invoiceUseDetailBO;
+    public void setInvoiceApprovalLogList(List<InvoiceApprovalLog> invoiceApprovalLogList) {
+        this.invoiceApprovalLogList = invoiceApprovalLogList;
+    }
+
+    public List<InvoiceDistributeBO> getInvoiceDistributeBOList() {
+        return invoiceDistributeBOList;
+    }
+
+    public void setInvoiceDistributeBOList(List<InvoiceDistributeBO> invoiceDistributeBOList) {
+        this.invoiceDistributeBOList = invoiceDistributeBOList;
+    }
+
+    public List<InvoiceUseDetailBO> getInvoiceUseDetailBOList() {
+        return invoiceUseDetailBOList;
+    }
+
+    public void setInvoiceUseDetailBOList(List<InvoiceUseDetailBO> invoiceUseDetailBOList) {
+        this.invoiceUseDetailBOList = invoiceUseDetailBOList;
     }
 }

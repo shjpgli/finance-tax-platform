@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.invoice;
 
 import com.abc12366.uc.model.invoice.InvoiceUseApply;
+import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,7 @@ public interface InvoiceUseApplyService {
 
     void checkUseApplay(InvoiceUseCheckBO invoiceUseCheckBO);
 
-    void distributeUseApply(InvoiceUseCheckBO invoiceUseCheckBO);
+    void distributeUseApply(InvoiceDistributeBO invoiceDistributeBO);
+
+    void signUseApply(InvoiceDistributeBO invoiceDistributeBO);
 }

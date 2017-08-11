@@ -28,6 +28,9 @@ public class InvoiceRepo implements Serializable {
 	/**发票性质：1.纸质发票 2.电子发票**/
 	private String property;
 
+	/**发票库存状态，0：可使用，1：已分发，2：已作废**/
+	private String status;
+
 	/**每本份数**/
 	private Integer share;
 
@@ -144,4 +147,11 @@ public class InvoiceRepo implements Serializable {
 		return this.updateUser;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

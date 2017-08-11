@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.invoice;
 
+import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
@@ -24,4 +25,17 @@ public interface InvoiceRepoService {
 
     InvoiceRepoBO update(InvoiceRepoBO invoiceRepoBO);
 
+    String selectRepoId(String invoiceTypeCode);
+
+    List<InvoiceDetail> selectInvoiceDetailList(InvoiceDetail invoiceDetail);
+
+    List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail);
+
+    void deleteInvoiceDetail(String id);
+
+    InvoiceDetail selectInvoiceDetail();
+
+    void invalidInvoiceDetail(String id);
+
+    InvoiceRepoBO selectInvoiceRepoNum(String code);
 }
