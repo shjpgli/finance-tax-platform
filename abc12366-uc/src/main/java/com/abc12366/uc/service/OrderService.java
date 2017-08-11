@@ -103,7 +103,7 @@ public interface OrderService {
 
     List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO);
 
-    OrderBO paymentOrder(OrderPayBO orderPayBO);
+    OrderBO paymentOrder(OrderPayBO orderPayBO, String goodsType);
 
     List<OrderListBO> selectExprotOrder(Order order);
 

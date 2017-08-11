@@ -123,7 +123,7 @@ public class PayReturnController {
 						orderPayBO.setOrderNo(out_trade_no);
 						orderPayBO.setIsPay(2);
 						orderPayBO.setPayMethod("ALIPAY");
-						orderService.paymentOrder(orderPayBO);
+						orderService.paymentOrder(orderPayBO,"");
 					}
 				}
 				return "success";

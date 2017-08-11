@@ -92,6 +92,7 @@
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="createUser" property="createUser" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="createUserName" property="createUserName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--发票对象-->
@@ -215,9 +216,11 @@
     <!--获取订单日志-->
     <select id="getOrderLogBO" resultMap="orderLogMap" parameterType="java.lang.String">
         SELECT
-        l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark
+        l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark,a.username as createUserName
         FROM uc_order_log l
+        LEFT JOIN uc_admin a on a.id = l.createUser
         WHERE l.orderNo = #{orderNo}
+        ORDER BY l.createTime DESC
     </select>
 
     <!--订单和产品对应关系对象-->

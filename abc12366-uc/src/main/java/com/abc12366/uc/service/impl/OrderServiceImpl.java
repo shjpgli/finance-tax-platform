@@ -530,34 +530,35 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("订单信息不存在：{}", orderBO);
             throw new ServiceException(4134);
         }
-        //订单状态是确认状态，不能删除
-        if (!"4".equals(bo.getOrderStatus()) || !"2".equals(bo.getOrderStatus())) {
-            LOGGER.info("订单只有在未付款或作废订单可以删除：{}", orderBO);
+        //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
+        if ("7".equals(bo.getOrderStatus()) || "2".equals(bo.getOrderStatus())) {
+            //order.setOrderStatus("9");
+            int del = orderMapper.deleteByIdAndUserId(order);
+            if (del != 1) {
+                LOGGER.info("删除失败：{}", orderBO);
+                throw new ServiceException(4103);
+            }
+            //订单删除成功之后，删除订单与产品对应关系
+
+            List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
+            if (orderProductBOs == null) {
+                LOGGER.info("产品信息错误：{}", orderBO);
+                throw new ServiceException(4166);
+            } else {
+                for (OrderProductBO orderProductBO : orderProductBOs) {
+                    int opDel = orderProductMapper.delete(orderProductBO.getOrderNo());
+                    if (opDel != 1) {
+                        LOGGER.info("删除订单与产品关系信息失败：{}", orderBO);
+                        throw new ServiceException(4168);
+                    }
+                    orderProductspecMapper.deleteByOrderNo(orderProductBO.getOrderNo());
+                }
+            }
+            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), new Date(), "用户删除订单");
+        }else{
+            LOGGER.info("订单只有在未付款或已结束可以删除：{}", orderBO);
             throw new ServiceException(4140);
         }
-        //order.setOrderStatus("9");
-        int del = orderMapper.deleteByIdAndUserId(order);
-        if (del != 1) {
-            LOGGER.info("删除失败：{}", orderBO);
-            throw new ServiceException(4103);
-        }
-        //订单删除成功之后，删除订单与产品对应关系
-
-        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
-        if (orderProductBOs == null) {
-            LOGGER.info("产品信息错误：{}", orderBO);
-            throw new ServiceException(4166);
-        } else {
-            for (OrderProductBO orderProductBO : orderProductBOs) {
-                int opDel = orderProductMapper.delete(orderProductBO.getOrderNo());
-                if (opDel != 1) {
-                    LOGGER.info("删除订单与产品关系信息失败：{}", orderBO);
-                    throw new ServiceException(4168);
-                }
-                orderProductspecMapper.deleteByOrderNo(orderProductBO.getOrderNo());
-            }
-        }
-        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), new Date(), "用户删除订单");
     }
 
     @Override
@@ -633,6 +634,16 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("新增失败：{}", orderBack);
             throw new ServiceException(4101);
         }
+
+        //修改订单状态
+        Order order = new Order();
+        order.setOrderNo(orderBack.getOrderNo());
+        order.setOrderStatus("7");
+        int oUpdate = orderMapper.update(order);
+        if(oUpdate != 1){
+            LOGGER.info("修改失败：{}", order);
+            throw new ServiceException(4102);
+        }
         insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), new Date(), "用户填写快递号");
         return orderBack;
     }
@@ -705,11 +716,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderBO paymentOrder(OrderPayBO orderPayBO) {
+    public OrderBO paymentOrder(OrderPayBO orderPayBO, String goodsType) {
         String orderNo = orderPayBO.getOrderNo();
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
         if(orderBO != null){
-            //订单状态，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
+            //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
             //支付状态，1：支付中，2：支付成功，3：支付失败，
             int isPay = orderPayBO.getIsPay();
             Order order = new Order();
@@ -724,9 +735,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4102);
                 }
             }else if(isPay == 2){
-                Goods goods = goodsRoMapper.selectByPrimaryKey(orderBO.getGoodsId());
-                //查询商品类型，商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值
-                String goodsType = goods.getGoodsType();
+                //查询商品类型，商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值，6.学堂服务
                 if(goodsType.equals("1") || goodsType.equals("2")){
                     order.setOrderStatus("4");
                     orderMapper.update(order);
