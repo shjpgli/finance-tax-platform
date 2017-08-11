@@ -55,7 +55,7 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public ResponseEntity sendCode(SendCodeParam sendCodeParam) throws IOException {
-        String url = properties.getValue("message.netease.url.sendcode");//"https://api.netease.im/sms/sendcode.action";
+        String url = properties.getValue("message.netease.api.url") + "/sendcode.action";//"https://api.netease.im/sms/sendcode.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
@@ -90,7 +90,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity verify(VerifyCodeParam verifyCodeParam) throws IOException {
         //不变参数
-        String url = properties.getValue("message.netease.url.verifycode");
+        String url = properties.getValue("message.netease.api.url") + "/verifycode.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
@@ -119,7 +119,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity sendTemplate(SendTemplateParam sendTemplateParam) throws IOException {
         //不变参数
-        String url = properties.getValue("message.netease.url.sendtemplate");
+        String url = properties.getValue("message.netease.api.url") + "/sendtemplate.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
@@ -150,7 +150,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity queryStatus(QueryStatusParam queryStatusParam) throws IOException {
         //不变参数
-        String url = properties.getValue("message.netease.url.querystatus");
+        String url = properties.getValue("message.netease.api.url") + "/querystatus.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
