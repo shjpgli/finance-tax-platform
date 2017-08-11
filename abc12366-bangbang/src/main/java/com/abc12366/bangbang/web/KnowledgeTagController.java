@@ -68,8 +68,8 @@ public class KnowledgeTagController {
      */
     @PostMapping(path = "/batch/add")
     public ResponseEntity addBatch(@RequestBody List<KnowledgeTag> knowledgeTags) {
-        knowledgeTagService.addBatch(knowledgeTags);
-        return ResponseEntity.ok(Utils.kv());
+        List<KnowledgeTag> list = knowledgeTagService.addBatch(knowledgeTags);
+        return ResponseEntity.ok(Utils.kv("dataList",list));
     }
 
     /*
