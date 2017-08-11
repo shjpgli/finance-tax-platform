@@ -3,18 +3,23 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Dict;
-import com.abc12366.uc.model.OrderBack;
 import com.abc12366.uc.model.OrderExchange;
+import com.abc12366.uc.model.bo.OrderExchangeExportBO;
+import com.abc12366.uc.model.bo.SfExportBO;
+import com.abc12366.uc.model.bo.SfImportBO;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.admin.DictService;
+import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -131,6 +136,44 @@ public class OrderExchangeController {
         OrderExchange oe = orderExchangeService.update(data);
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 导出json
+     */
+    @GetMapping("/export")
+    public ResponseEntity exportJson(@RequestParam(value = "startTime", required = false) String startTime,
+                                 @RequestParam(value = "endTime", required = false) String endTime) {
+        LOGGER.info("{},{}", startTime, endTime);
+
+        if (StringUtils.isEmpty(startTime)) {
+            startTime = "2017-01-01 00:00:01";
+        }
+        if (StringUtils.isEmpty(endTime)) {
+            endTime = DataUtils.dateToStr(new Date());
+        }
+        OrderExchangeExportBO bo = new OrderExchangeExportBO();
+        bo.setStartTime(startTime);
+        bo.setEndTime(endTime);
+
+        List<SfExportBO> dataList = orderExchangeService.export(bo);
+
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", dataList));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 导入json
+     */
+    @PutMapping("/import")
+    public ResponseEntity importJson(@Valid @RequestBody List<SfImportBO> dataList) {
+        LOGGER.info("{}", dataList);
+        orderExchangeService.importJson(dataList);
+
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
