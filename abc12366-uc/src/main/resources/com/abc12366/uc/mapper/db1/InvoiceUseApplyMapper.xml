@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.InvoiceUseApplyMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+	<delete id="delete" parameterType="java.lang.String">
 		DELETE FROM uc_invoice_use_apply
 		WHERE id = #{id}
 	</delete>

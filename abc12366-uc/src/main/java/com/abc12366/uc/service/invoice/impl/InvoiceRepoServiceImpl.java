@@ -58,11 +58,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
         }
-        int dDelete = invoiceDetailMapper.delete(id);
-        if(dDelete != 1){
-            LOGGER.warn("删除失败，参数{}：" + id);
-            throw new ServiceException(4103);
-        }
+        invoiceDetailMapper.delete(id);
     }
 
     @Override
@@ -143,5 +139,57 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             repoId = invoiceRepo.getInvoiceTypeCode();
         }
         return repoId;
+    }
+
+    @Override
+    public List<InvoiceDetail> selectInvoiceDetailList(InvoiceDetail invoiceDetail) {
+        return invoiceDetailRoMapper.selectInvoiceDetailList(invoiceDetail);
+    }
+
+    @Override
+    public void deleteInvoiceDetail(String id) {
+        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(id);
+        if (invoiceDetail != null) {
+            if ("1".equals(invoiceDetail.getStatus()) || "2".equals(invoiceDetail.getStatus())) {
+                LOGGER.info("{发票在分配中或已使用，不能删除}：{}", id);
+                throw new ServiceException(4174);
+            }
+            int rDel = invoiceDetailMapper.delete(id);
+            if (rDel != 1) {
+                LOGGER.info("{发票详情信息删除失败}：{}", id);
+                throw new ServiceException(4172);
+            }
+        } else {
+            LOGGER.info("{发票信息不存在}：{}", id);
+            throw new ServiceException(4175);
+        }
+    }
+
+    @Override
+    public void invalidInvoiceDetail(String id) {
+        InvoiceDetail invoiceDetail = new InvoiceDetail();
+        invoiceDetail.setId(id);
+        invoiceDetail.setStatus("3");
+        int update = invoiceDetailMapper.update(invoiceDetail);
+        if (update != 1) {
+            LOGGER.info("{发票详情信息作废失败}：{}", id);
+            throw new ServiceException(4176);
+        }
+    }
+
+    @Override
+    public InvoiceRepoBO selectInvoiceRepoNum(String code) {
+        InvoiceRepoBO invoiceRepoBO = invoiceRepoRoMapper.selectInvoiceRepoNum(code);
+        return invoiceRepoBO;
+    }
+
+    @Override
+    public InvoiceDetail selectInvoiceDetail() {
+        return invoiceDetailRoMapper.selectInvoiceDetail();
+    }
+
+    @Override
+    public List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail) {
+        return invoiceDetailRoMapper.selectInvoiceDetailListByInvoice(invoiceDetail);
     }
 }

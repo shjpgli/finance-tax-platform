@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.invoice;
 
-import com.abc12366.uc.model.invoice.InvoiceUseApply;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
+import com.abc12366.uc.model.invoice.InvoiceDistribute;
+import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ import java.util.List;
 @Service
 public interface InvoiceDistributeService {
 
-    List<InvoiceUseApplyBO> selectList(InvoiceUseApplyBO applyBO);
+    List<InvoiceDistributeBO> selectList(InvoiceDistributeBO invoiceDistributeBO);
 
-    InvoiceUseApplyBO selectInvoiceUseApply(InvoiceUseApply invoiceUseApply);
+    InvoiceDistributeBO selectInvoiceDistribute(InvoiceDistribute invoiceDistribute);
 
     void delete(String id);
 
-    InvoiceUseApplyBO add(InvoiceUseApplyBO invoiceUseApplyBO);
+    InvoiceDistributeBO add(InvoiceDistributeBO invoiceDistributeBO);
 
-    InvoiceUseApplyBO update(InvoiceUseApplyBO invoiceUseApplyBO);
+    InvoiceDistributeBO update(InvoiceDistributeBO invoiceDistributeBO);
 
     void checkUseApplay(InvoiceUseCheckBO invoiceUseCheckBO);
 

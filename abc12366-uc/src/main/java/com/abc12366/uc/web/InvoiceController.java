@@ -7,10 +7,6 @@ import com.abc12366.uc.model.InvoiceBack;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
-import com.abc12366.uc.model.invoice.InvoiceDetail;
-import com.abc12366.uc.model.invoice.InvoiceRepo;
-import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
-import com.abc12366.uc.service.InvoiceRepoService;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
@@ -40,8 +36,6 @@ public class InvoiceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
 
-    @Autowired
-    private InvoiceRepoService invoiceRepoService;
 
     @Autowired
     private InvoiceService invoiceService;
@@ -308,99 +302,4 @@ public class InvoiceController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
-    /**
-     * 发票仓库详情列表
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param invoiceNo
-     * @param invoiceCode
-     * @param status
-     * @return
-     */
-    @GetMapping(path = "/detail")
-    public ResponseEntity selectInvoiceDetailList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
-                                                              pageNum,
-                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int
-                                                          pageSize,
-                                                  @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
-                                                  @RequestParam(value = "invoiceCode", required = false) String
-                                                              invoiceCode,
-                                                  @RequestParam(value = "status", required = false) String status,
-                                                  @RequestParam(value = "invoiceRepoId", required = true) String
-                                                              invoiceRepoId) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
-        InvoiceDetail invoiceDetail = new InvoiceDetail();
-        invoiceDetail.setInvoiceNo(invoiceNo);
-        invoiceDetail.setInvoiceCode(invoiceCode);
-        invoiceDetail.setStatus(status);
-        invoiceDetail.setInvoiceRepoId(invoiceRepoId);
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<InvoiceDetail> invoiceList = invoiceRepoService.selectInvoiceDetailList(invoiceDetail);
-        PageInfo<InvoiceDetail> pageInfo = new PageInfo<>(invoiceList);
-        LOGGER.info("{}", invoiceList);
-        return (invoiceList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    }
-
-    /**
-     * 根据发票号码，获取发票仓库详情信息
-     *
-     * @param invoiceNo
-     * @return
-     */
-    @GetMapping(path = "/detail/invoice")
-    public ResponseEntity selectInvoiceDetailListByInvoice(@RequestParam(value = "page", defaultValue = Constant
-            .pageNum) int pageNum,
-                                                           @RequestParam(value = "size", defaultValue = Constant
-                                                                   .pageSize) int pageSize,
-                                                           @RequestParam(value = "invoiceNo", required = false)
-                                                               String invoiceNo) {
-        InvoiceDetail invoiceDetail = new InvoiceDetail();
-        invoiceDetail.setInvoiceNo(invoiceNo);
-        invoiceDetail.setStatus("0");
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<InvoiceDetail> invoiceList = invoiceRepoService.selectInvoiceDetailListByInvoice(invoiceDetail);
-        PageInfo<InvoiceDetail> pageInfo = new PageInfo<>(invoiceList);
-        LOGGER.info("{}", invoiceList);
-        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    }
-
-    /**
-     * 发票详情信息删除
-     *
-     * @return
-     */
-    @DeleteMapping(path = "/detail/del/{id}")
-    public ResponseEntity deleteInvoiceDetail(@PathVariable("id") String id) {
-        LOGGER.info("{}", id);
-        invoiceRepoService.deleteInvoiceDetail(id);
-        return ResponseEntity.ok(Utils.kv());
-    }
-
-
-    /**
-     * 获取一张发票
-     *
-     * @return
-     */
-    @GetMapping(path = "/detail/select")
-    public ResponseEntity selectInvoiceDetail() {
-        InvoiceDetail invoiceDetail = invoiceRepoService.selectInvoiceDetail();
-        LOGGER.info("{}", invoiceDetail);
-        return ResponseEntity.ok(Utils.kv("data", invoiceDetail));
-    }
-
-    /**
-     * 发票详情信息作废
-     *
-     * @return
-     */
-    @PutMapping(path = "/detail/invalid/{id}")
-    public ResponseEntity invalidInvoiceDetail(@PathVariable("id") String id) {
-        LOGGER.info("{}", id);
-        invoiceRepoService.invalidInvoiceDetail(id);
-        return ResponseEntity.ok(Utils.kv());
-    }
 }

@@ -3,17 +3,17 @@ package com.abc12366.uc.service.invoice.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.InvoiceApprovalLogMapper;
-import com.abc12366.uc.mapper.db1.InvoiceUseApplyMapper;
+import com.abc12366.uc.mapper.db1.InvoiceDistributeMapper;
 import com.abc12366.uc.mapper.db1.InvoiceUseDetailMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseApplyRoMapper;
+import com.abc12366.uc.mapper.db2.InvoiceDistributeRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceUseDetailRoMapper;
 import com.abc12366.uc.model.invoice.InvoiceApprovalLog;
-import com.abc12366.uc.model.invoice.InvoiceUseApply;
+import com.abc12366.uc.model.invoice.InvoiceDistribute;
 import com.abc12366.uc.model.invoice.InvoiceUseDetail;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
+import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
-import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
+import com.abc12366.uc.service.invoice.InvoiceDistributeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,38 +28,32 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
-public class InvoiceuseDistributeServiceImpl implements InvoiceUseApplyService {
+public class InvoiceUseDistributeServiceImpl implements InvoiceDistributeService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceuseDistributeServiceImpl.class);
-
-    @Autowired
-    private InvoiceUseApplyRoMapper invoiceUseApplyRoMapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceUseDistributeServiceImpl.class);
 
     @Autowired
-    private InvoiceUseApplyMapper invoiceUseApplyMapper;
+    private InvoiceDistributeRoMapper invoiceDistributeRoMapper;
 
     @Autowired
-    private InvoiceUseDetailRoMapper invoiceUseDetailRoMapper;
-
-    @Autowired
-    private InvoiceApprovalLogMapper invoiceApprovalLogMapper;
+    private InvoiceDistributeMapper invoiceDistributeMapper;
 
     @Autowired
     private InvoiceUseDetailMapper invoiceUseDetailMapper;
 
     @Override
-    public List<InvoiceUseApplyBO> selectList(InvoiceUseApplyBO applyBO) {
-        return invoiceUseApplyRoMapper.selectList(applyBO);
+    public List<InvoiceDistributeBO> selectList(InvoiceDistributeBO applyBO) {
+        return invoiceDistributeRoMapper.selectList(applyBO);
     }
 
     @Override
-    public InvoiceUseApplyBO selectInvoiceUseApply(InvoiceUseApply invoiceUseApply) {
-        return invoiceUseApplyRoMapper.selectInvoiceUseApply(invoiceUseApply.getId());
+    public InvoiceDistributeBO selectInvoiceDistribute(InvoiceDistribute invoiceDistribute) {
+        return invoiceDistributeRoMapper.selectInvoiceDistribute(invoiceDistribute.getId());
     }
 
     @Override
     public void delete(String id) {
-        int delete = invoiceUseApplyMapper.delete(id);
+        int delete = invoiceDistributeMapper.delete(id);
         if(delete != 1){
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
@@ -72,40 +66,25 @@ public class InvoiceuseDistributeServiceImpl implements InvoiceUseApplyService {
     }
 
     @Override
-    public InvoiceUseApplyBO add(InvoiceUseApplyBO invoiceUseApplyBO) {
-        if(invoiceUseApplyBO == null){
+    public InvoiceDistributeBO add(InvoiceDistributeBO invoiceDistributeBO) {
+        if(invoiceDistributeBO == null){
             LOGGER.warn("数据错误{}：" + null);
             throw new ServiceException(4906);
         }
         String id = Utils.uuid();
-        invoiceUseApplyBO.setId(id);
+        invoiceDistributeBO.setId(id);
         Date date = new Date();
-        invoiceUseApplyBO.setApplyTime(date);
-        InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
-        BeanUtils.copyProperties(invoiceUseApplyBO,invoiceUseApply);
-        int insert = invoiceUseApplyMapper.insert(invoiceUseApply);
+        InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
+        BeanUtils.copyProperties(invoiceDistributeBO,invoiceDistribute);
+        int insert = invoiceDistributeMapper.insert(invoiceDistribute);
         if(insert != 1){
-            LOGGER.warn("新增失败，参数{}：" + invoiceUseApplyBO);
+            LOGGER.warn("新增失败，参数{}：" + invoiceDistributeBO);
             throw new ServiceException(4101);
         }
-        InvoiceUseDetailBO invoiceUseDetailBO = invoiceUseApplyBO.getInvoiceUseDetailBO();
-        if(invoiceUseApplyBO == null){
-            LOGGER.warn("数据错误{}：" + null);
-            throw new ServiceException(4906);
-        }
-        invoiceUseDetailBO.setUseId(id);
-        InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
-        BeanUtils.copyProperties(invoiceUseDetailBO,invoiceUseDetail);
-        int dInsert = invoiceUseDetailMapper.insert(invoiceUseDetail);
-        if(dInsert != 1){
-            LOGGER.warn("新增失败，参数{}：" + invoiceUseDetail);
-            throw new ServiceException(4101);
-        }
-        invoiceUseApplyBO.setInvoiceUseDetailBO(invoiceUseDetailBO);
 
         //加入日志
         insertLog(id,"","已提交");
-        return invoiceUseApplyBO;
+        return invoiceDistributeBO;
     }
 
     private void insertLog(String id,String opinions,String result) {
@@ -117,36 +96,21 @@ public class InvoiceuseDistributeServiceImpl implements InvoiceUseApplyService {
     }
 
     @Override
-    public InvoiceUseApplyBO update(InvoiceUseApplyBO invoiceUseApplyBO) {
-        if(invoiceUseApplyBO == null){
+    public InvoiceDistributeBO update(InvoiceDistributeBO invoiceDistributeBO) {
+        if(invoiceDistributeBO == null){
             LOGGER.warn("数据错误{}：" + null);
             throw new ServiceException(4906);
         }
         Date date = new Date();
-        invoiceUseApplyBO.setApplyTime(date);
-        InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
-        BeanUtils.copyProperties(invoiceUseApplyBO,invoiceUseApply);
-        int update = invoiceUseApplyMapper.update(invoiceUseApply);
+        InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
+        BeanUtils.copyProperties(invoiceDistributeBO,invoiceDistribute);
+        int update = invoiceDistributeMapper.update(invoiceDistribute);
         if(update != 1){
-            LOGGER.warn("修改失败，参数{}：" + invoiceUseApplyBO);
+            LOGGER.warn("修改失败，参数{}：" + invoiceDistributeBO);
             throw new ServiceException(4102);
         }
-        InvoiceUseDetailBO invoiceUseDetailBO = invoiceUseApplyBO.getInvoiceUseDetailBO();
-        if(invoiceUseApplyBO == null){
-            LOGGER.warn("数据错误{}：" + null);
-            throw new ServiceException(4906);
-        }
-        InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
-        BeanUtils.copyProperties(invoiceUseDetailBO,invoiceUseDetail);
-        int dInsert = invoiceUseDetailMapper.insert(invoiceUseDetail);
-        if(dInsert != 1){
-            LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
-            throw new ServiceException(4102);
-        }
-        invoiceUseApplyBO.setInvoiceUseDetailBO(invoiceUseDetailBO);
         //加入日志
-        insertLog(invoiceUseApply.getId(),invoiceUseDetailBO.getRemark(),"已修改");
-        return invoiceUseApplyBO;
+        return invoiceDistributeBO;
     }
 
     @Override
@@ -157,9 +121,9 @@ public class InvoiceuseDistributeServiceImpl implements InvoiceUseApplyService {
         }
         Date date = new Date();
         invoiceUseCheckBO.setApplyTime(date);
-        InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
-        BeanUtils.copyProperties(invoiceUseCheckBO, invoiceUseApply);
-        int update = invoiceUseApplyMapper.update(invoiceUseApply);
+        InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
+        BeanUtils.copyProperties(invoiceUseCheckBO, invoiceDistribute);
+        int update = invoiceDistributeMapper.update(invoiceDistribute);
         if(update != 1){
             LOGGER.warn("修改失败，参数{}：" + invoiceUseCheckBO);
             throw new ServiceException(4102);
@@ -167,9 +131,9 @@ public class InvoiceuseDistributeServiceImpl implements InvoiceUseApplyService {
         String check = invoiceUseCheckBO.getExamineStatus();
         /**审批状态，0：待审核，1：审核通过，2：审核不通过，3：草稿**/
         if(check.equals("1")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核通过");
+            insertLog(invoiceDistribute.getId(),invoiceUseCheckBO.getRemark(),"审核通过");
         }else if(check.equals("2")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核不通过");
+            insertLog(invoiceDistribute.getId(),invoiceUseCheckBO.getRemark(),"审核不通过");
         }
         //加入日志
     }
