@@ -4,9 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.OrderExchange;
-import com.abc12366.uc.model.bo.OrderExchangeExportBO;
-import com.abc12366.uc.model.bo.SfExportBO;
-import com.abc12366.uc.model.bo.SfImportBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.admin.DictService;
 import com.abc12366.uc.util.DataUtils;
@@ -41,14 +39,23 @@ public class OrderExchangeController {
     @Autowired
     private DictService dictService;
 
+    /**
+     * 退换货列表
+     */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "orderNo", required = false) String orderNo,
-                                     @RequestParam(value = "username", required = false) String username) {
+                                     @RequestParam(value = "username", required = false) String username,
+                                     @RequestParam(value = "type", required = false) String type,
+                                     @RequestParam(value = "username", required = false) String status) {
         OrderExchange oe = new OrderExchange.Builder()
                 .orderNo(orderNo)
+                .username(username)
+                .type(type)
+                .status(status)
                 .build();
+        LOGGER.info("{}", oe);
 
         List<OrderExchange> exchangeList = orderExchangeService.selectList(oe, pageNum, pageSize);
         PageInfo<OrderExchange> pageInfo = new PageInfo<>(exchangeList);
@@ -71,7 +78,7 @@ public class OrderExchangeController {
      * 同意换货
      */
     @PutMapping(path = "/agree/{id}")
-    public ResponseEntity agree(@PathVariable("id") String id, @Valid @RequestBody OrderExchange data) {
+    public ResponseEntity agree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data) {
 
         data.setId(id);
         LOGGER.info("{}", data);
@@ -87,7 +94,7 @@ public class OrderExchangeController {
      * 拒绝换货
      */
     @PutMapping(path = "/disagree/{id}")
-    public ResponseEntity disagree(@PathVariable("id") String id, @Valid @RequestBody OrderExchange data) {
+    public ResponseEntity disagree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data) {
 
         data.setId(id);
         LOGGER.info("{}", data);
@@ -102,7 +109,7 @@ public class OrderExchangeController {
      * 确认收货
      */
     @PutMapping(path = "/confirm/{id}")
-    public ResponseEntity confirm(@PathVariable("id") String id, @Valid @RequestBody OrderExchange data) {
+    public ResponseEntity confirm(@PathVariable("id") String id, @Valid @RequestBody ExchangeConfirmBO data) {
 
         data.setId(id);
         LOGGER.info("{}", data);
@@ -117,7 +124,7 @@ public class OrderExchangeController {
      * 用户提交换货单
      */
     @PostMapping()
-    public ResponseEntity insert(@Valid @RequestBody OrderExchange data) {
+    public ResponseEntity insert(@Valid @RequestBody ExchangeApplicationBO data) {
         LOGGER.info("{}", data);
         OrderExchange oe = orderExchangeService.insert(data);
 
@@ -130,7 +137,7 @@ public class OrderExchangeController {
      * 用户重新提交换货单
      */
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody OrderExchange data) {
+    public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody ExchangeApplicationBO data) {
         data.setId(id);
         LOGGER.info("{}", data);
         OrderExchange oe = orderExchangeService.update(data);
@@ -145,7 +152,7 @@ public class OrderExchangeController {
      */
     @GetMapping("/export")
     public ResponseEntity exportJson(@RequestParam(value = "startTime", required = false) String startTime,
-                                 @RequestParam(value = "endTime", required = false) String endTime) {
+                                     @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{},{}", startTime, endTime);
 
         if (StringUtils.isEmpty(startTime)) {
