@@ -4,24 +4,21 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.VipPrivilegeRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipPrivilegeBO" parameterType="java.util.Map">
-        SELECT id,name,level,remark,status,lastUpdate,createTime
+        SELECT id,name,css,defaults,status,lastUpdate,createTime
         from uc_uvip_privilege
         <where>
             <if test="name!=null">
                 name=#{name}
             </if>
-            <if test="level!=null">
-                and level=#{level}
-            </if>
             <if test="status!=null">
                 and status=#{status}
             </if>
         </where>
-        ORDER BY level ASC
+        ORDER BY createTime ASC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.VipPrivilegeBO" parameterType="java.lang.String">
-        SELECT id,name,level,remark,status,lastUpdate,createTime
+        SELECT id,name,css,defaults,status,lastUpdate,createTime
         from uc_uvip_privilege
         where id=#{id}
     </select>
