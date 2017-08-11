@@ -13,7 +13,7 @@ public interface OrderProductMapper {
     /**
      * 删除（根据主键ID删除）
      **/
-    int delete(@Param("id") String id);
+    int delete(@Param("orderNo") String orderNo);
 
     /**
      * 添加

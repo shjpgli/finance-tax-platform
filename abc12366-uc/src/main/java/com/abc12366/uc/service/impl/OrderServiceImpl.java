@@ -540,7 +540,7 @@ public class OrderServiceImpl implements OrderService {
             }
             //订单删除成功之后，删除订单与产品对应关系
 
-            List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
+            List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
             if (orderProductBOs == null) {
                 LOGGER.info("产品信息错误：{}", orderBO);
                 throw new ServiceException(4166);
@@ -720,61 +720,72 @@ public class OrderServiceImpl implements OrderService {
         String orderNo = orderPayBO.getOrderNo();
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
         if(orderBO != null){
-            //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
-            //支付状态，1：支付中，2：支付成功，3：支付失败，
-            int isPay = orderPayBO.getIsPay();
-            Order order = new Order();
-            order.setOrderNo(orderNo);
-            order.setPayMethod(orderPayBO.getPayMethod());
-            order.setUserId(orderPayBO.getUserId());
-            if(isPay == 1){
-                order.setOrderStatus("3");
-                int update = orderMapper.update(order);
-                if(update != 1){
-                    LOGGER.warn("修改失败，参数：{}", order);
-                    throw new ServiceException(4102);
-                }
-            }else if(isPay == 2){
-                //查询商品类型，商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值，6.学堂服务
-                if(goodsType.equals("1") || goodsType.equals("2")){
-                    order.setOrderStatus("4");
-                    orderMapper.update(order);
-                }else if(goodsType.equals("3") || goodsType.equals("4")){
-                    order.setOrderStatus("6");
-                    orderMapper.update(order);
-                    //TODO 开通服务
-                }else if(goodsType.equals("5")){
-                    order.setOrderStatus("6");
-                    orderMapper.update(order);
-                    //加入积分
-                    //可用积分=上一次的可用积分+|-本次收入|支出
-                    User user = userRoMapper.selectOne(orderBO.getUserId());
-                    int userPoints = user.getPoints();
-                    int giftPoints = orderBO.getGiftPoints();
-                    int usablePoints = userPoints + giftPoints;
-                    //uc_user的points字段和uc_point_log的usablePoints字段都要更新
-                    user.setPoints(usablePoints);
-                    int userUpdateResult = userMapper.update(user);
-                    if (userUpdateResult != 1) {
-                        LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
-                        throw new ServiceException(4101);
+            OrderProductBO pBO = new OrderProductBO();
+            pBO.setOrderNo(orderNo);
+            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+
+            for(OrderProductBO orderProductBO:orderProductBOs){
+                String goodsId = orderProductBO.getProductBO().getGoodsId();
+                GoodsBO goodsBO = goodsRoMapper.selectGoods(goodsId);
+                goodsType = goodsBO.getGoodsType();
+                //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
+                //支付状态，1：支付中，2：支付成功，3：支付失败，
+                int isPay = orderPayBO.getIsPay();
+                Order order = new Order();
+                order.setOrderNo(orderNo);
+                order.setPayMethod(orderPayBO.getPayMethod());
+                order.setUserId(orderPayBO.getUserId());
+                if(isPay == 1){
+                    order.setOrderStatus("3");
+                    int update = orderMapper.update(order);
+                    if(update != 1){
+                        LOGGER.warn("修改失败，参数：{}", order);
+                        throw new ServiceException(4102);
                     }
-                    PointsLog pointsLog = new PointsLog();
-                    pointsLog.setUserId(orderBO.getUserId());
-                    pointsLog.setId(Utils.uuid());
-                    pointsLog.setIncome(giftPoints);
-                    pointsLog.setCreateTime(new Date());
-                    pointsLog.setUsablePoints(usablePoints);
-                    int result = pointsLogMapper.insert(pointsLog);
-                    if(result != 1){
-                        LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
-                        throw new ServiceException(4101);
+                }else if(isPay == 2){
+                    //查询商品类型，商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值，6.学堂服务
+                    if(goodsType.equals("1") || goodsType.equals("2")){
+                        order.setOrderStatus("4");
+                        orderMapper.update(order);
+                    }else if(goodsType.equals("3") || goodsType.equals("4")){
+                        order.setOrderStatus("6");
+                        orderMapper.update(order);
+                        //TODO 开通服务
+                    }else if(goodsType.equals("5")){
+                        order.setOrderStatus("6");
+                        orderMapper.update(order);
+                        //加入积分
+                        //可用积分=上一次的可用积分+|-本次收入|支出
+                        User user = userRoMapper.selectOne(orderBO.getUserId());
+                        int userPoints = user.getPoints();
+                        int giftPoints = orderBO.getGiftPoints();
+                        int usablePoints = userPoints + giftPoints;
+                        //uc_user的points字段和uc_point_log的usablePoints字段都要更新
+                        user.setPoints(usablePoints);
+                        int userUpdateResult = userMapper.update(user);
+                        if (userUpdateResult != 1) {
+                            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
+                            throw new ServiceException(4101);
+                        }
+                        PointsLog pointsLog = new PointsLog();
+                        pointsLog.setUserId(orderBO.getUserId());
+                        pointsLog.setId(Utils.uuid());
+                        pointsLog.setIncome(giftPoints);
+                        pointsLog.setCreateTime(new Date());
+                        pointsLog.setUsablePoints(usablePoints);
+                        int result = pointsLogMapper.insert(pointsLog);
+                        if(result != 1){
+                            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
+                            throw new ServiceException(4101);
+                        }
                     }
+                }else if(isPay == 3){
+                    order.setOrderStatus("2");
+                    orderMapper.update(order);
                 }
-            }else if(isPay == 3){
-                order.setOrderStatus("2");
-                orderMapper.update(order);
+
             }
+
         }
         return null;
     }

@@ -219,78 +219,78 @@ public class OrderController {
      *
      * @return
      */
-    @PostMapping(path = "/payment/fictitious")
+    @PostMapping(path = "/payment")
     public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"1");
+        OrderBO bo = orderService.paymentOrder(orderPayBO,"");
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
-    /**
-     * 用户将订单改为支付中，实物订单
-     *
-     * @return
-     */
-    @PostMapping(path = "/payment/goods")
-    public ResponseEntity paymentOrderGoods(@Valid @RequestBody OrderPayBO orderPayBO) {
-        LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"2");
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 用户将订单改为支付中，积分充值
-     *
-     * @return
-     */
-    @PostMapping(path = "/payment/other")
-    public ResponseEntity paymentOrderOther(@Valid @RequestBody OrderPayBO orderPayBO) {
-        LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"3");
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 用户将订单改为支付中，积分充值
-     *
-     * @return
-     */
-    @PostMapping(path = "/payment/points")
-    public ResponseEntity paymentOrderPoints(@Valid @RequestBody OrderPayBO orderPayBO) {
-        LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"5");
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 用户将订单改为支付中，会员服务
-     *
-     * @return
-     */
-    @PostMapping(path = "/payment/member")
-    public ResponseEntity paymentOrderMember(@Valid @RequestBody OrderPayBO orderPayBO) {
-        LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO, "4");
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 用户将订单改为支付中，学堂服务
-     *
-     * @return
-     */
-    @PostMapping(path = "/payment/school")
-    public ResponseEntity paymentOrderSchool(@Valid @RequestBody OrderPayBO orderPayBO) {
-        LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO, "6");
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
+//    /**
+//     * 用户将订单改为支付中，实物订单
+//     *
+//     * @return
+//     */
+//    @PostMapping(path = "/payment/goods")
+//    public ResponseEntity paymentOrderGoods(@Valid @RequestBody OrderPayBO orderPayBO) {
+//        LOGGER.info("{}{}", orderPayBO);
+//        OrderBO bo = orderService.paymentOrder(orderPayBO,"2");
+//        LOGGER.info("{}", bo);
+//        return ResponseEntity.ok(Utils.kv("data", bo));
+//    }
+//
+//    /**
+//     * 用户将订单改为支付中，积分充值
+//     *
+//     * @return
+//     */
+//    @PostMapping(path = "/payment/other")
+//    public ResponseEntity paymentOrderOther(@Valid @RequestBody OrderPayBO orderPayBO) {
+//        LOGGER.info("{}{}", orderPayBO);
+//        OrderBO bo = orderService.paymentOrder(orderPayBO,"3");
+//        LOGGER.info("{}", bo);
+//        return ResponseEntity.ok(Utils.kv("data", bo));
+//    }
+//
+//    /**
+//     * 用户将订单改为支付中，积分充值
+//     *
+//     * @return
+//     */
+//    @PostMapping(path = "/payment/points")
+//    public ResponseEntity paymentOrderPoints(@Valid @RequestBody OrderPayBO orderPayBO) {
+//        LOGGER.info("{}{}", orderPayBO);
+//        OrderBO bo = orderService.paymentOrder(orderPayBO,"5");
+//        LOGGER.info("{}", bo);
+//        return ResponseEntity.ok(Utils.kv("data", bo));
+//    }
+//
+//    /**
+//     * 用户将订单改为支付中，会员服务
+//     *
+//     * @return
+//     */
+//    @PostMapping(path = "/payment/member")
+//    public ResponseEntity paymentOrderMember(@Valid @RequestBody OrderPayBO orderPayBO) {
+//        LOGGER.info("{}{}", orderPayBO);
+//        OrderBO bo = orderService.paymentOrder(orderPayBO, "4");
+//        LOGGER.info("{}", bo);
+//        return ResponseEntity.ok(Utils.kv("data", bo));
+//    }
+//
+//    /**
+//     * 用户将订单改为支付中，学堂服务
+//     *
+//     * @return
+//     */
+//    @PostMapping(path = "/payment/school")
+//    public ResponseEntity paymentOrderSchool(@Valid @RequestBody OrderPayBO orderPayBO) {
+//        LOGGER.info("{}{}", orderPayBO);
+//        OrderBO bo = orderService.paymentOrder(orderPayBO, "6");
+//        LOGGER.info("{}", bo);
+//        return ResponseEntity.ok(Utils.kv("data", bo));
+//    }
 
     /**
      * 订单发货
@@ -342,7 +342,7 @@ public class OrderController {
         orderBO.setOrderNo(id);
         orderBO.setUserId(userId);
         orderService.deleteOrder(orderBO);
-        return ResponseEntity.ok(Utils.kv("data", orderBO));
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**

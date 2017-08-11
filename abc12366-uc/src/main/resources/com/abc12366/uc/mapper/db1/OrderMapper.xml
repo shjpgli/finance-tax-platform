@@ -12,7 +12,7 @@
     <!--删除：根据主键ID和UserID删除-->
     <delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.Order">
         DELETE FROM uc_order
-        WHERE orderNo = #{orderNo} and userId=#{userId} and status = '1'
+        WHERE orderNo = #{orderNo} and userId=#{userId}
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
