@@ -158,24 +158,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         }
     }
 
-    @Transactional("db1TxManager")
-    @Override
-    public void addVote(KnowledgeVoteLog knowledgeVoteLog) {
-        try {
-            Boolean isUseFull = knowledgeVoteLog.getIsUseFull();
-            String knowledgeId = knowledgeVoteLog.getKnowledgeId();
-            if(isUseFull == Boolean.TRUE){
-                knowledgeBaseMapper.addUsefulVoteByPK(knowledgeId);
-            }else{
-                knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
-            }
-            knowledgeVoteLog.setId(Utils.uuid());
-            knowledgeVoteLogMapper.insert(knowledgeVoteLog);
-        }catch (Exception e){
-            LOGGER.error("KnowledgeBaseServiceImpl.addVote():" + e);
-            throw new ServiceException(4504);
-        }
-    }
+
 
     @Override
     public void addPV(String id) {
@@ -186,27 +169,6 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             throw new ServiceException(4503);
         }
     }
-
-    @Override
-    public void deleteVoteLogs(List<String> ids) {
-        try {
-            knowledgeVoteLogMapper.deleteByPrimaryKeys(ids);
-        }catch (Exception e){
-            LOGGER.error("KnowledgeBaseServiceImpl.deleteVoteLogs():" + e);
-            throw new ServiceException(4505);
-        }
-    }
-
-    @Override
-    public List<KnowledgeVoteLogBO> selectVoteList(KnowledgeBaseParamBO param) {
-        return knowledgeVoteLogMapper.selectList(param);
-    }
-
-    @Override
-    public KnowledgeVoteLog selectByUserVotedKnowledge(String userId, String knowledgeId) {
-        return knowledgeVoteLogMapper.selectByUserVotedKnowledge(userId, knowledgeId);
-    }
-
 
     private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> tagIds = knowledgeBaseBO.getTagIds();

@@ -50,15 +50,4 @@ public interface KnowledgeBaseService {
     /*修改知识库数据 浏览量*/
     void addPV(String id);
 
-    /*新增知识库投票数据*/
-    void addVote(KnowledgeVoteLog knowledgeVoteLog);
-
-    /*删除知识库投票数据*/
-    void deleteVoteLogs(List<String> ids);
-
-    /*知识库投票列表查询*/
-    List<KnowledgeVoteLogBO> selectVoteList(KnowledgeBaseParamBO param);
-
-    /*查询用户该知识库投过票的数据*/
-    KnowledgeVoteLog selectByUserVotedKnowledge(String userId, String knowledgeId);
 }
