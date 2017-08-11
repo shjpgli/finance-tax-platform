@@ -33,6 +33,20 @@ public class DateUtils {
     }
 
     /**
+     * 添加天
+     *
+     * @param date 需要添加天的日期
+     * @param day 需要添加的天数
+     * @return Date 添加天数之后的日期
+     */
+    public static Date addDays(Date date, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, day);
+        return calendar.getTime();
+    }
+
+    /**
      * 添加小时
      *
      * @param date 需要添加小时的日期

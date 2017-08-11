@@ -71,6 +71,11 @@ public class Constant {
     //用户初始会员等级
     public final static String USER_ORIGINAL_LEVEL = "LV0";
 
+    // 订单退货期限，单位：天
+    public final static Integer ORDER_BACK_DAYS = 7;
+    // 订单退货期限，单位：天
+    public final static Integer ORDER_EXCHANGE_DAYS = 15;
+
 
     /**
      * 获取当前系统当天日期String
