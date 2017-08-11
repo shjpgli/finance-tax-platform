@@ -23,6 +23,10 @@ public class ServiceException extends RuntimeException {
         this.bodyStatus = Utils.bodyStatus(code);
     }
 
+    public ServiceException(String code, String message) {
+        this.bodyStatus = Utils.bodyStatus(code, message);
+    }
+
     public BodyStatus getBodyStatus() {
         return bodyStatus;
     }

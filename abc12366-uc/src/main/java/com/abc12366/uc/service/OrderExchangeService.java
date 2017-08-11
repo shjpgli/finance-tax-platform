@@ -1,9 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.OrderExchange;
-import com.abc12366.uc.model.bo.OrderExchangeExportBO;
-import com.abc12366.uc.model.bo.SfExportBO;
-import com.abc12366.uc.model.bo.SfImportBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
@@ -13,19 +11,19 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface OrderExchangeService {
-    OrderExchange insert(OrderExchange data);
+    OrderExchange insert(ExchangeApplicationBO data);
 
     List<OrderExchange> selectList(OrderExchange oe, int pageNum, int pageSize);
 
-    OrderExchange disagree(OrderExchange data);
+    OrderExchange disagree(ExchangeAdminBO data);
 
     OrderExchange selectOne(String id);
 
-    OrderExchange agree(OrderExchange data);
+    OrderExchange agree(ExchangeAdminBO data);
 
-    OrderExchange confirm(OrderExchange data);
+    OrderExchange confirm(ExchangeConfirmBO data);
 
-    OrderExchange update(OrderExchange data);
+    OrderExchange update(ExchangeApplicationBO data);
 
     List<SfExportBO> export(OrderExchangeExportBO data);
 

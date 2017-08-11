@@ -73,7 +73,7 @@ public class Utils {
      */
     public static BodyStatus bodyStatus(int code) {
         BodyStatus body = new BodyStatus();
-        body.setCode(code);
+        body.setCode(String.valueOf(code));
         try {
             body.setMessage(Message.getValue(code));
         } catch (IOException e) {
@@ -91,7 +91,20 @@ public class Utils {
      */
     public static BodyStatus bodyStatus(int code,String message){
     	BodyStatus body = new BodyStatus();
-        body.setCode(code);
+        body.setCode(String.valueOf(code));
+        body.setMessage(message);
+        return body;
+    }
+
+    /**
+     * 返回第三方错误信息
+     * @param code
+     * @param message
+     * @return
+     */
+    public static BodyStatus bodyStatus(String code,String message){
+        BodyStatus body = new BodyStatus();
+        body.setCode(String.valueOf(code));
         body.setMessage(message);
         return body;
     }

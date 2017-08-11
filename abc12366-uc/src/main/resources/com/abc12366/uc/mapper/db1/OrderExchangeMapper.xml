@@ -5,7 +5,7 @@
 
     <sql id="Base_Column_List">
         id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
-        toExpressNo
+        toExpressNo, type
     </sql>
 
     <!--删除：根据主键ID删除-->
@@ -20,7 +20,7 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         (#{id}, #{userId}, #{orderNo}, #{reason}, #{adminRemark}, #{userRemark}, #{expressNo}, #{expressComp},
-         #{status},#{createTime},#{lastUpdate}, #{toExpressNo})
+         #{status},#{createTime},#{lastUpdate}, #{toExpressNo}, #{type})
     </insert>
 
     <!-- 修 改-->
@@ -50,6 +50,9 @@
             </if>
             <if test="toExpressNo != null">
                 toExpressNo = #{toExpressNo},
+            </if>
+            <if test="type != null">
+                type = #{type},
             </if>
         </set>
         <where>
