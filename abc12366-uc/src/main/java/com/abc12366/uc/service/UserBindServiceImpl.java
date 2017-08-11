@@ -11,6 +11,7 @@ import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
+import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
@@ -72,6 +73,7 @@ public class UserBindServiceImpl implements UserBindService {
         if (userDzsbInsertBO.getNsrsbhOrShxydm() == null || userDzsbInsertBO.getNsrsbhOrShxydm().trim().equals("")) {
             throw new ServiceException();
         }
+
         //调外系统接口获取电子申报绑定信息
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY11");
@@ -81,6 +83,17 @@ public class UserBindServiceImpl implements UserBindService {
         UserDzsb userDzsbTemp = analyzeXml(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
 
 
+        //查看是否重复绑定
+        String userId = UserUtil.getUserId(request);
+        UserDzsb queryParam = new UserDzsb();
+        queryParam.setUserId(userId);
+        queryParam.setNsrsbh(userDzsbTemp.getNsrsbh());
+        queryParam.setShxydm(userDzsbTemp.getShxydm());
+        List<NSRXXBO> nsrxxboList = userBindRoMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
+        if (nsrxxboList != null && nsrxxboList.size() >= 1) {
+            throw new ServiceException(4632);
+        }
+
         UserDzsb userDzsb = new UserDzsb();
 
         userDzsb.setId(Utils.uuid());
@@ -88,7 +101,7 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setCreateTime(date);
         userDzsb.setLastUpdate(date);
         userDzsb.setStatus(true);
-        userDzsb.setUserId(UserUtil.getUserId(request));
+        userDzsb.setUserId(userId);
         userDzsb.setDjxh(userDzsbTemp.getDjxh());
         userDzsb.setNsrsbh(userDzsbTemp.getNsrsbh());
         userDzsb.setNsrmc(userDzsbTemp.getNsrmc());
