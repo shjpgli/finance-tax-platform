@@ -15,10 +15,10 @@
         left join uc_order_product d on c.orderNo = d.orderNo) e
         left join (select o.id, p.imageUrl from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
         <where>
-            <if test="status != null">type = #{type}</if>
-            <if test="status != null">and status = #{status}</if>
-            <if test="status != null">and username = #{username}</if>
-            <if test="status != null">and orderNo = #{orderNo}</if>
+            <if test="type != null and type !=''">type = #{type}</if>
+            <if test="status != null and status !=''">and status = #{status}</if>
+            <if test="username != null and username !=''">and username = #{username}</if>
+            <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
         </where>
     </select>
 
