@@ -1,11 +1,12 @@
 package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.mapper.db1.MessageSendLogMapper;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
 import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
+import com.abc12366.message.model.MessageSendLog;
 import com.abc12366.message.model.PhoneCode;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.MobileVerifyCodeService;
@@ -23,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -67,8 +67,10 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     @Autowired
     private PhoneCodeRoMapper phoneCodeRoMapper;
 
+    @Autowired
+    private MessageSendLogMapper sendLogMapper;
+
     //获取验证码
-    @Transactional("db1TxManager")
     @Override
     public void getCode(String type, String phone) throws IOException {
         LOGGER.info("{}:{}", type, phone);
@@ -173,20 +175,30 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         try {
             neteaseResponse = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
         } catch (Exception e) {
-            throw new ServiceException(4204);
+            return false;
         }
         if (neteaseResponse != null && neteaseResponse.getStatusCode().is2xxSuccessful() && neteaseResponse.hasBody()) {
             NeteaseTemplateResponseBO neteaseTemplateResponseBO = JSON.parseObject(String.valueOf(neteaseResponse.getBody()), NeteaseTemplateResponseBO.class);
             String respCode = neteaseTemplateResponseBO.getCode();
             String msg = neteaseTemplateResponseBO.getMsg();
             if (neteaseTemplateResponseBO != null && respCode.equals("200")) {
+                //记日志
+                messageLog("wy", codeType, code, "1", respCode, "发送成功");
                 return true;
-                //return queryNeteaseStatus(neteaseTemplateResponseBO.getObj());
             } else if (respCode.equals("416") || respCode.equals("417") || respCode.equals("419")) {
                 //如果发送失败状态码是416、417、419中的一个，就将异常信息抛出给用户
-                BodyStatus bodyStatus = Utils.bodyStatus(Integer.parseInt(respCode), msg);
+                //记日志
+                messageLog("wy", codeType, code, "4", respCode, msg);
+                throw new ServiceException(respCode, msg);
+            } else {
+                //其他发送情况一律调友拍继续发
+                //记日志
+                messageLog("wy", codeType, code, "4", "4204", "网易短信发送通道异常");
+                return false;
             }
         }
+        //记日志
+        messageLog("wy", codeType, code, "4", "4204", "网易短信发送通道异常");
         return false;
     }
 
@@ -248,14 +260,39 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         } catch (Exception e) {
+            //记日志
+            messageLog("yp", type, code, "4", "4204", "短信发送通道异常");
             throw new ServiceException(4204);
         }
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            UpyunMessageResponse response = JSON.parseObject(String.valueOf(responseEntity.getBody()),
-                    UpyunMessageResponse.class);
+            try {
+                UpyunMessageResponse essageResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
+                //记日志
+                messageLog("yp", type, code, "1", "200", "发送成功");
+            } catch (Exception e) {
+                UpyunErrorBO response = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunErrorBO.class);
+                //记日志
+                messageLog("yp", type, code, "4", response.getError_code(), response.getMessage());
+                return false;
+            }
             return true;
         }
         return false;
+    }
+
+    private void messageLog(String sendchanel, String biztype, String sendinfo, String sendstatus, String failcode, String failcause) {
+        MessageSendLog sendLog = new MessageSendLog();
+        Date time = new Date();
+        sendLog.setId(Utils.uuid());
+        sendLog.setSendchanel(sendchanel);
+        sendLog.setBiztype(biztype);
+        sendLog.setSendinfo(sendinfo);
+        sendLog.setSendtime(time);
+        sendLog.setSendstatus(sendstatus);
+        sendLog.setFailcode(failcode);
+        sendLog.setFailcause(failcause);
+        sendLog.setLogtime(time);
+        sendLogMapper.insert(sendLog);
     }
 
 }
