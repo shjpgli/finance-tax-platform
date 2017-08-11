@@ -15,6 +15,7 @@ public class OrderLogBO implements Serializable {
     private java.util.Date createTime;
     private String createUser;
     private String remark;
+    private String createUserName;
 
     public String getId() {
         return this.id;
@@ -62,5 +63,13 @@ public class OrderLogBO implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 }

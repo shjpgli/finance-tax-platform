@@ -120,4 +120,11 @@ public class UserBindController {
         userBindService.hndsUnbind(id);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    @PostMapping("/nsrlogin/shb")
+    public ResponseEntity nsrLogin(@RequestBody NsrLogin login){
+        LOGGER.info("{}", login);
+        NsrLoginResponse loginResponse = userBindService.nsrLogin(login);
+        return ResponseEntity.ok(Utils.kv("data", loginResponse));
+    }
 }

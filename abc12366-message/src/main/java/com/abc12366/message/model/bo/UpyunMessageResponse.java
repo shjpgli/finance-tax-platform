@@ -8,6 +8,7 @@ import java.util.List;
  * Time: 17:05
  */
 public class UpyunMessageResponse {
+
     private List<UpyunMessageBO> message_ids;
 
     public UpyunMessageResponse() {

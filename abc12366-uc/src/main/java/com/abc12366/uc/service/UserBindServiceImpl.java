@@ -312,6 +312,14 @@ public class UserBindServiceImpl implements UserBindService {
         return userBindRoMapper.getUserhndsBind(userId);
     }
 
+    @Override
+    public NsrLoginResponse nsrLogin(NsrLogin login) {
+        LOGGER.info("{}", login);
+        NsrLoginResponse response = new NsrLoginResponse();
+        response.setLoginToken(Utils.uuid());
+        return response;
+    }
+
     public UserDzsb analyzeXml(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
         if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
             throw new ServiceException(4629);

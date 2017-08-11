@@ -30,4 +30,6 @@ public interface UserBindService {
     List<UserHngsListBO> getUserhngsBind(String userId);
 
     List<UserHndsBO> getUserhndsBind(String userId);
+
+    NsrLoginResponse nsrLogin(NsrLogin login);
 }
