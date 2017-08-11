@@ -22,8 +22,8 @@ import java.util.Map;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 /**
- * Admin: liuguiyao<435720953@qq.com.com>
- * Date: 2017-05-22
+ * Admin:lingsuzhi0 <554600654@qq.com.com>
+ * Date: 2017-08-11
  * Time: 9:13
  */
 @RestController
@@ -33,7 +33,7 @@ public class VipPrivilegeLevelController {
 
     @Autowired
     private VipPrivilegeLevelService vipPrivilegeLevelService;
-
+    //指定权益id查询
     @GetMapping(params="privilege")
     public ResponseEntity selectListPrivilege(@RequestParam(required = true) String privilege,
                                      @RequestParam(required = false) Boolean status,
@@ -55,6 +55,7 @@ public class VipPrivilegeLevelController {
                         ()));
 
     }
+    //指定会员id 权益id 查询结果
     @GetMapping(path = "/{levelId}/{privilege}")
     public ResponseEntity select(@PathVariable  String levelId,
                                      @PathVariable String privilege                  ) {
@@ -66,6 +67,7 @@ public class VipPrivilegeLevelController {
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelService.selectLevelIdPrivilegeId(obj );
         return ResponseEntity.ok(Utils.kv("data",   findObj));
     }
+    //查询指定会员对应的权益
       @GetMapping(params="levelId")
     public ResponseEntity selectList(@RequestParam(required = true) String levelId,
                                         @RequestParam(required = false) Boolean status,
@@ -86,6 +88,7 @@ public class VipPrivilegeLevelController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) privilegeList, "total", ((Page) privilegeList).getTotal
                         ()));
     }
+    //查询全部
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) Boolean status,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
@@ -103,6 +106,7 @@ public class VipPrivilegeLevelController {
                 ResponseEntity.ok(Utils.kv()) :
             ResponseEntity.ok(Utils.kv("dataList",  privilegeList));
     }
+    //批量设置会员对应的权益 需要传一个list
     @PostMapping(value = "/updateprivilege")
     @ResponseBody
     public ResponseEntity updateByPrivilege(@Valid @RequestBody List<VipPrivilegeLevelBO> list ) {
@@ -118,13 +122,6 @@ public class VipPrivilegeLevelController {
         LOGGER.info("{}", vipPrivilegeLevelBO);
         return ResponseEntity.ok(Utils.kv("data", vipPrivilegeLevelBO));
     }
-//    @GetMapping(path = "/{id}/{isN}")
-//    public ResponseEntity selectOneN(@PathVariable String id,@PathVariable String isN) {
-//        LOGGER.info("{}", id);
-//        VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectOneN(id);
-//        LOGGER.info("{}", vipPrivilegeLevelBO);
-//        return ResponseEntity.ok(Utils.kv("data", vipPrivilegeLevelBO));
-//    }
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody VipPrivilegeLevelInsertBO vipPrivilegeLevelInsertBO) {
         LOGGER.info("{}", vipPrivilegeLevelInsertBO);
@@ -132,7 +129,7 @@ public class VipPrivilegeLevelController {
         LOGGER.info("{}", vipPrivilegeLevelBOReturn);
         return ResponseEntity.ok(Utils.kv("data", vipPrivilegeLevelBOReturn));
     }
-    //查询，不存在就新建 存在就修改
+    //先查询，不存在就新建 存在就修改
     @PutMapping
     public ResponseEntity add(@Valid @RequestBody VipPrivilegeLevelBO vipPrivilegeLevelBO) {
         LOGGER.info("{}", vipPrivilegeLevelBO);
