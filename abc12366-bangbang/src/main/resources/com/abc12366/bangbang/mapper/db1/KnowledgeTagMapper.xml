@@ -47,6 +47,16 @@
         (#{id},#{name},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
 
+    <!-- 批量添加 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO bb_knowledge_tag
+        (id,name,description,status,createUser,updateUser)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.name},#{item.description},#{item.status},#{item.createUser},#{item.updateUser})
+        </foreach>
+    </insert>
+
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insertSelective" parameterType="knowledgeTag">
         INSERT INTO bb_knowledge_tag

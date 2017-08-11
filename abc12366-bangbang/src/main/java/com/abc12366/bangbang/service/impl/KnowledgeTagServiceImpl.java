@@ -37,6 +37,16 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     }
 
     @Override
+    public void addBatch(List<KnowledgeTag> knowledgeTags) {
+        for (KnowledgeTag tag: knowledgeTags){
+            tag.setId(Utils.uuid());
+            tag.setCreateUser(UcUserCommon.getAdminId());
+            tag.setUpdateUser(UcUserCommon.getAdminId());
+        }
+        knowledgeTagMapper.insertBatch(knowledgeTags);
+    }
+
+    @Override
     public KnowledgeTag add(KnowledgeTag knowledgeTag) {
         try {
             knowledgeTag.setId(Utils.uuid());

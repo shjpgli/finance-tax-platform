@@ -35,6 +35,11 @@ public interface KnowledgeTagMapper {
     /**
      * 添加
      **/
+    int  insertBatch(List<KnowledgeTag> records);
+
+    /**
+     * 添加
+     **/
     int insert(KnowledgeTag record);
 
     /**

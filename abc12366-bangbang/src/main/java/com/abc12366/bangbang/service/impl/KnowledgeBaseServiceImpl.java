@@ -141,14 +141,14 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             knowledgeBase.setUpdateTime(new Date());
             knowledgeBase.setUpdateUser(UcUserCommon.getAdminId());
-            String knowledgeBaseId = knowledgeBase.getId();
-            knowledgeBaseMapper.updateByPrimaryKey(knowledgeBase);
+            String knowledgeId = knowledgeBase.getId();
+            knowledgeBaseMapper.updateByPrimaryKeySelective(knowledgeBase);
 
             //管理关联 标签
-            knowledgeTagRelMapper.deleteByKnowledgeId(knowledgeBaseId);
+            knowledgeTagRelMapper.deleteByKnowledgeId(knowledgeId);
             addTagRel(knowledgeBaseBO);
             //管理关联 的知识库
-            knowledgeRelMapper.deleteByKnowledgeId(knowledgeBaseId);
+            knowledgeRelMapper.deleteByKnowledgeId(knowledgeId);
             addKnowledgeRel(knowledgeBaseBO);
 
             return knowledgeBaseBO;
