@@ -27,6 +27,25 @@ public class KnowledgeVoteController {
     @Autowired
     private KnowledgeVoteService knowledgeVoteService;
 
+    /*
+    * 知识库投票列表  接口
+    */
+    @GetMapping(path = "/list")
+    public ResponseEntity selectVoteList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                         @RequestParam(value = "categoryCode", required = false) String categoryCode,
+                                         @RequestParam(value = "keywords", required = false) String keywords,
+                                         @RequestParam(value = "type", required = false) String type) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords);
+        List<KnowledgeVoteLogBO> list = knowledgeVoteService.selectVoteList(param);
+
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
     /**
      * 为知识库投票
      */
@@ -52,29 +71,9 @@ public class KnowledgeVoteController {
      * 批量删除知识库投票 接口
      */
     @DeleteMapping(path = "/delete")
-    public ResponseEntity deleteList(@RequestBody Map<String,List<String>> map) {
-        List<String> ids = map.get("ids");
+    public ResponseEntity deleteList(@RequestBody List<String> ids) {
         knowledgeVoteService.deleteVoteLogs(ids);
         return ResponseEntity.ok(Utils.kv());
-    }
-
-    /*
-    * 知识库投票列表  接口
-    */
-    @GetMapping(path = "/list")
-    public ResponseEntity selectVoteList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                         @RequestParam(value = "categoryCode", required = false) String categoryCode,
-                                         @RequestParam(value = "keywords", required = false) String keywords,
-                                         @RequestParam(value = "type", required = false) String type) {
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords);
-        List<KnowledgeVoteLogBO> list = knowledgeVoteService.selectVoteList(param);
-
-        return (list == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
     /*

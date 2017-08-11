@@ -1,11 +1,9 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
-import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
-import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -74,6 +72,7 @@ public class KnowledgeBaseController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", list));
     }
+
     /*
     *  详情页关联问题的知识查询
     */
@@ -94,7 +93,6 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv("data", knowledgeBase));
     }
 
-
     /**
      * 新增PV 接口
      */
@@ -103,7 +101,6 @@ public class KnowledgeBaseController {
         knowledgeBaseService.addPV(id);
         return ResponseEntity.ok(Utils.kv());
     }
-
 
     /**
      * 添加知识库 接口
@@ -114,7 +111,6 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
 
-
     /*
     * 修改知识库 接口
     */
@@ -123,7 +119,6 @@ public class KnowledgeBaseController {
         knowledgeBaseService.modify(knowledgeBaseBO);
         return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
-
 
     /*
     * 删除知识库 接口
