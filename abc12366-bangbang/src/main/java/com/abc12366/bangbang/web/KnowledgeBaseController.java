@@ -52,10 +52,11 @@ public class KnowledgeBaseController {
                                      @RequestParam(value = "categoryCode", required = false) String categoryCode,
                                      @RequestParam(value = "keywords", required = false) String keywords,
                                      @RequestParam(value = "type", required = false) String type,
-                                     @RequestParam(value = "isOpen", required = false) Boolean isOpen) {
+                                     @RequestParam(value = "isOpen", required = false) Boolean isOpen,
+                                     @RequestParam(value = "status", required = false) Boolean status) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
         return (list == null) ?

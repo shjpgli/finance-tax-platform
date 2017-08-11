@@ -14,11 +14,22 @@ public class KnowledgeBaseParamBO {
 
     private Boolean isOpen;     //是否对外开放
 
-    public KnowledgeBaseParamBO(String categoryCode, String type, String keywords, Boolean isOpen) {
+    private Boolean status;     //是否有效
+
+    public KnowledgeBaseParamBO(String categoryCode, String type, String keywords, Boolean isOpen, Boolean status) {
         this.categoryCode = categoryCode;
         this.type = type;
         this.keywords = keywords;
         this.isOpen = isOpen;
+        this.status = status;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public String getType() {
