@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author liuqi
@@ -61,9 +59,7 @@ public class KnowledgeVoteController {
      */
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity delete(@PathVariable String id) {
-        List<String> ids = new ArrayList<>();
-        ids.add(id);
-        knowledgeVoteService.deleteVoteLogs(ids);
+        knowledgeVoteService.deleteVoteLog(id);
         return ResponseEntity.ok(Utils.kv());
     }
 

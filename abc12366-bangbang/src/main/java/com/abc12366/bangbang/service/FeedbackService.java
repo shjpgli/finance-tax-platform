@@ -15,5 +15,7 @@ public interface FeedbackService {
 
     List<Feedback> selectList(FeedbackParamBO param);
 
-    int delete(List<String> ids);
+    void delete(List<String> ids);
+
+    void delete(String id);
 }

@@ -121,7 +121,7 @@ public class KnowledgeBaseController {
     }
 
     /*
-    * 删除知识库 接口
+    * 修改知识库状态 接口
     */
     @PutMapping(path = "/modifyStatus")
     public ResponseEntity modifyStatus(@RequestBody Map<String, Object> map) {
