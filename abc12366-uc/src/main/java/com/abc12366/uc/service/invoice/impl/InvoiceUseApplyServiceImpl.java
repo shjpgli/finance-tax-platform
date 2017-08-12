@@ -41,6 +41,9 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     private InvoiceUseDetailMapper invoiceUseDetailMapper;
 
     @Autowired
+    private InvoiceUseDetailRoMapper invoiceUseDetailRoMapper;
+
+    @Autowired
     private InvoiceDistributeMapper invoiceDistributeMapper;
 
     @Autowired
@@ -224,8 +227,8 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     }
 
     @Override
-    public InvoiceUseApplyBO selectInvoiceRepoNum(String code) {
-        return invoiceUseApplyRoMapper.selectInvoiceRepoNum(code);
+    public InvoiceUseDetailBO selectInvoiceRepoNum(String code) {
+        return invoiceUseDetailRoMapper.selectInvoiceRepoNum(code);
     }
 
 

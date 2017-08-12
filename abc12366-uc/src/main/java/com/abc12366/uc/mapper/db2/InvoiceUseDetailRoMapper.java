@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.invoice.InvoiceUseDetail;
+import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -20,4 +21,5 @@ public interface InvoiceUseDetailRoMapper {
 	InvoiceUseDetail  selectByPrimaryKey(@Param("id") String id);
 
 
+	InvoiceUseDetailBO selectInvoiceRepoNum(@Param("invoiceTypeCode")String invoiceTypeCode);
 }

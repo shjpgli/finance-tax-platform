@@ -10,10 +10,8 @@ import com.abc12366.uc.model.bo.InvoiceExcel;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
 import com.abc12366.uc.model.invoice.InvoiceUseApply;
-import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
+import com.abc12366.uc.model.invoice.InvoiceUseDetail;
+import com.abc12366.uc.model.invoice.bo.*;
 import com.abc12366.uc.service.InvoiceRepoService;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
@@ -92,7 +90,7 @@ public class InvoiceUseApplayController {
      */
     @GetMapping(path = "/invoice/use/num/{code}")
     public ResponseEntity selectInvoiceRepoNum(@PathVariable("code") String code) {
-        InvoiceUseApplyBO bo = invoiceUseApplyService.selectInvoiceRepoNum(code);
+        InvoiceUseDetailBO bo = invoiceUseApplyService.selectInvoiceRepoNum(code);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
