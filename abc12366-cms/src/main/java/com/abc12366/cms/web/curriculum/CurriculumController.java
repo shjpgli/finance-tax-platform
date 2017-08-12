@@ -5,6 +5,7 @@ import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumListBo;
+import com.abc12366.cms.model.curriculum.bo.CurriculumSituationBo;
 import com.abc12366.cms.service.CurriculumService;
 import com.abc12366.cms.service.ModelService;
 import com.abc12366.gateway.util.Constant;
@@ -56,6 +57,16 @@ public class CurriculumController {
         List<CurriculumListBo> dataList = curriculumService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
+    }
+
+    /**
+     * 查询单个课程授课信息
+     */
+    @GetMapping(path = "/selectSituation/{curriculumId}")
+    public ResponseEntity selectSituation(@PathVariable String curriculumId) {
+        //查询课程信息
+        CurriculumSituationBo curriculumSituationBo = curriculumService.selectSituation(curriculumId);
+        return ResponseEntity.ok(Utils.kv("data", curriculumSituationBo));
     }
 
     /**

@@ -37,8 +37,14 @@ public class CurrOrderController {
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                     @RequestParam(value = "begintime", required = false) String begintime,
+                                     @RequestParam(value = "endtime", required = false) String endtime) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId",curriculumId);
+        dataMap.put("begintime", begintime);//开始时间
+        dataMap.put("endtime", endtime);//结束时间
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumOrderBo> dataList = currOrderService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));

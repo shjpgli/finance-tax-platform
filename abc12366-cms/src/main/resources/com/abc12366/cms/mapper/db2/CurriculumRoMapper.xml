@@ -36,5 +36,18 @@
         </if>
     </select>
 
+    <!-- 查询授课情况 -->
+    <select id="selectSituation" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumSituationBo" parameterType="java.lang.String">
+        SELECT
+            curriculumId,title,browseNum,watchNum,teachingMethod,peopleLimit,applyTimeBegin,applyTimeEnd,signTimeBegin,signTimeEnd,
+            (SELECT ifnull(sum(orderId),0) FROM abc12366_cms.cms_curriculum_order where curriculumId = c.curriculumId) orderNum,
+            (SELECT ifnull(sum(orderPrice),0) FROM abc12366_cms.cms_curriculum_order where curriculumId = c.curriculumId) generalIncome,
+            (SELECT ifnull(sum(orderIntegral),0) FROM abc12366_cms.cms_curriculum_order where curriculumId = c.curriculumId) aggregateScore,
+			(SELECT ifnull(sum(applyId),0) FROM abc12366_cms.cms_curriculum_apply where curriculumId = c.curriculumId) applyNum,
+            (SELECT ifnull(sum(applyId),0) FROM abc12366_cms.cms_curriculum_apply where curriculumId = c.curriculumId and signTime is not null) signNum
+        FROM cms_curriculum c
+        WHERE curriculumId = #{curriculumId}
+    </select>
+
 
 </mapper>

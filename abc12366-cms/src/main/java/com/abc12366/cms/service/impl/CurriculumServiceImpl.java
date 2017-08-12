@@ -9,10 +9,7 @@ import com.abc12366.cms.model.curriculum.Curriculum;
 import com.abc12366.cms.model.curriculum.CurriculumLabel;
 import com.abc12366.cms.model.curriculum.CurriculumLecturerGx;
 import com.abc12366.cms.model.curriculum.CurriculumMembergrade;
-import com.abc12366.cms.model.curriculum.bo.CurriculumBo;
-import com.abc12366.cms.model.curriculum.bo.CurriculumChapterBo;
-import com.abc12366.cms.model.curriculum.bo.CurriculumCoursewareBo;
-import com.abc12366.cms.model.curriculum.bo.CurriculumListBo;
+import com.abc12366.cms.model.curriculum.bo.*;
 import com.abc12366.cms.service.CurriculumService;
 import com.abc12366.cms.service.ModelService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -81,6 +78,19 @@ public class CurriculumServiceImpl implements CurriculumService {
             throw new ServiceException(4320);
         }
         return curriculumListBoList;
+    }
+
+    @Override
+    public CurriculumSituationBo selectSituation(String curriculumId) {
+        CurriculumSituationBo curriculumSituationBo;
+        try {
+            //查询课程授课信息
+            curriculumSituationBo = curriculumRoMapper.selectSituation(curriculumId);
+        } catch (Exception e) {
+            LOGGER.error("新增课程授课信息异常：{}", e);
+            throw new ServiceException(4322);
+        }
+        return curriculumSituationBo;
     }
 
     @Override
