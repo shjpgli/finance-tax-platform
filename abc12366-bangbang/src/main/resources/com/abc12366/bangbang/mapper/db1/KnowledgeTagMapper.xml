@@ -20,7 +20,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_tag
-        <if test="keywords != null">
+        <if test="keywords != null and keywords!=''">
             WHERE name LIKE CONCAT('%',#{keywords},'%')
         </if>
     </select>

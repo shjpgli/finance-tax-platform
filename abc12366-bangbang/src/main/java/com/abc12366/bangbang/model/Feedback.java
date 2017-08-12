@@ -1,5 +1,4 @@
 package com.abc12366.bangbang.model;
-import java.io.Serializable;
 
 
 /**

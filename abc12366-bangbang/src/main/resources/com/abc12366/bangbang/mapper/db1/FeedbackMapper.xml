@@ -15,10 +15,10 @@
 		FROM bb_feedback t1 LEFT JOIN abc12366_uc.uc_user t2
 		ON t1.feedbackUserId = t2.id
 		WHERE 1=1
-		<if test="sourceType != null">
+		<if test="sourceType != null and sourceType!=''">
 			AND t1.sourceType = #{sourceType}
 		</if>
-		<if test="feedbackType != null">
+		<if test="feedbackType != null and feedbackType!=''">
 			AND t1.feedbackType = #{feedbackType}
 		</if>
 	</select>
