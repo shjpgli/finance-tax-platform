@@ -9,7 +9,6 @@
         uselessVotes, shareNum, createTime, updateTime, createUser, updateUser
     </sql>
 
-
     <!-- 详情页查询感兴趣的知识 -->
     <select id="interestedList" resultType="knowledgeBase">
         SELECT * FROM bb_knowledge_base WHERE

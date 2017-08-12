@@ -65,7 +65,7 @@ public class FeedbackController {
     * 删除意见反馈 接口
     */
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity delete(@RequestBody String id) {
+    public ResponseEntity delete(@PathVariable String id) {
         feedbackService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
