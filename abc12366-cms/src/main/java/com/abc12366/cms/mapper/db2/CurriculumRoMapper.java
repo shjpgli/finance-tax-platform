@@ -31,6 +31,11 @@ public interface CurriculumRoMapper {
     List<CurriculumListBo> selectList(Map<String, Object> map);
 
     /**
+     * 查询推荐课程
+     **/
+    List<CurriculumListBo> selectRecommend();
+
+    /**
      * 查询课程授课信息
      **/
     CurriculumSituationBo selectSituation(@Param("curriculumId") String curriculumId);

@@ -227,7 +227,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             log.setOrderNo(oe.getOrderNo());
             log.setTradeStatus("2");
             log.setPayMethod("ALIPAY");
-            List<TradeLog> logList = tradeLogService.selectList(log);
+            List<TradeLog> logList = tradeLogService.selectList(log, 1, 10000);
 
             if (logList.size() > 0) {
                 for (int i = 0; i < logList.size(); i++) {

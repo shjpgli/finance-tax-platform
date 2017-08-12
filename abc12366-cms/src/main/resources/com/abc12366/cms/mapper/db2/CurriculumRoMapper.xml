@@ -19,7 +19,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumListBo" parameterType="java.util.Map">
         SELECT
-          curriculumId,title,browseNum,watchNum,classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
+          curriculumId,title,browseNum,watchNum,cover,classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
         FROM cms_curriculum
         WHERE 1=1
         <if test="title != null and title != ''">
@@ -34,6 +34,13 @@
         <if test="classify != null and classify != ''">
             AND classify = #{classify}
         </if>
+    </select>
+
+    <!-- 查询推荐课程 -->
+    <select id="selectRecommend" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumListBo" parameterType="java.lang.String">
+        SELECT
+        curriculumId,title,cover,browseNum,watchNum,issueTime
+        FROM cms_curriculum
     </select>
 
     <!-- 查询授课情况 -->

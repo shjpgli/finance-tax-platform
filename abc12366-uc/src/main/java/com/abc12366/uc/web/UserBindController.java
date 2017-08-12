@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -130,7 +131,7 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/shb/resetpassword")
-    public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request){
+    public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request) throws IOException {
         LOGGER.info("{}", data);
         BaseObject response = userBindService.resetPassword(data, request);
         return ResponseEntity.ok(Utils.kv());

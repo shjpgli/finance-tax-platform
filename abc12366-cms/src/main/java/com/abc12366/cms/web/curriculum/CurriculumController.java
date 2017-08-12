@@ -60,6 +60,19 @@ public class CurriculumController {
     }
 
     /**
+     * 推荐课程查询
+     */
+    @GetMapping(path = "/selectRecommend")
+    public ResponseEntity selectRecommend(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> dataMap = new HashMap<>();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CurriculumListBo> dataList = curriculumService.selectRecommend();
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 查询单个课程授课信息
      */
     @GetMapping(path = "/selectSituation/{curriculumId}")
