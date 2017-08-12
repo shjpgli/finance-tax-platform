@@ -35,6 +35,9 @@ public class CurriculumOrder implements Serializable {
 	/**订购价格**double**/
 	private Double orderPrice;
 
+    /**订购积分**double**/
+    private Double orderIntegral;
+
 	/**是否积分购买**tinyint(1)**/
 	private Integer isIntegral;
 
@@ -117,6 +120,14 @@ public class CurriculumOrder implements Serializable {
 
     public void setOrderPrice(Double orderPrice) {
         this.orderPrice = orderPrice;
+    }
+
+    public Double getOrderIntegral() {
+        return orderIntegral;
+    }
+
+    public void setOrderIntegral(Double orderIntegral) {
+        this.orderIntegral = orderIntegral;
     }
 
     public void setIsIntegral(Integer isIntegral){

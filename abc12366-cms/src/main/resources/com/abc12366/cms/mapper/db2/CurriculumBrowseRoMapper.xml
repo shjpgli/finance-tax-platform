@@ -13,8 +13,18 @@
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM cms_curriculum_browse
-		 WHERE curriculumId = #{curriculumId}
+		 WHERE browseId = #{browseId}
 	</select>
+
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumBrowseBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_curriculum_browse
+        WHERE 1=1
+    </select>
+
 
 
 </mapper>

@@ -10,8 +10,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class UserDzsbInsertBO {
     @NotEmpty
     private String nsrsbhOrShxydm;
-    @NotEmpty
-    private String password;
 
     public UserDzsbInsertBO() {
     }
@@ -24,11 +22,4 @@ public class UserDzsbInsertBO {
         this.nsrsbhOrShxydm = nsrsbhOrShxydm;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

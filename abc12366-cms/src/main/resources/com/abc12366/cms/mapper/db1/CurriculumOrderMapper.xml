@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.curriculum.CurriculumOrder">
 		 INSERT INTO cms_curriculum_order
- 		(orderId,curriculumId,userId,nickname,username,memberGrade,orderName,orderPrice,isIntegral,orderTime,phone,visitIP,visitSite,orderStatus) 
+ 		(orderId,curriculumId,userId,nickname,username,memberGrade,orderName,orderPrice,orderIntegral,isIntegral,orderTime,phone,visitIP,visitSite,orderStatus)
 		 VALUES 
- 		(#{orderId},#{curriculumId},#{userId},#{nickname},#{username},#{memberGrade},#{orderName},#{orderPrice},#{isIntegral},#{orderTime},#{phone},#{visitIP},#{visitSite},#{orderStatus}) 
+ 		(#{orderId},#{curriculumId},#{userId},#{nickname},#{username},#{memberGrade},#{orderName},#{orderPrice},#{orderIntegral},#{isIntegral},#{orderTime},#{phone},#{visitIP},#{visitSite},#{orderStatus})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -45,6 +45,9 @@
 			<if test="orderPrice != null">
 				 orderPrice,
 			</if>
+             <if test="orderIntegral != null">
+                 orderIntegral,
+             </if>
 			<if test="isIntegral != null">
 				 isIntegral,
 			</if>
@@ -90,6 +93,9 @@
 			<if test="orderPrice!=null">
 				 #{orderPrice},
 			</if>
+             <if test="orderIntegral!=null">
+                 #{orderIntegral},
+             </if>
 			<if test="isIntegral!=null">
 				 #{isIntegral},
 			</if>
@@ -136,6 +142,9 @@
 			<if test="orderPrice != null">
 				 orderPrice = #{orderPrice},
 			</if>
+             <if test="orderIntegral != null">
+                 orderIntegral = #{orderIntegral},
+             </if>
 			<if test="isIntegral != null">
 				 isIntegral = #{isIntegral},
 			</if>
@@ -170,6 +179,7 @@
 			 memberGrade = #{memberGrade},
 			 orderName = #{orderName},
 			 orderPrice = #{orderPrice},
+			 orderIntegral = #{orderIntegral},
 			 isIntegral = #{isIntegral},
 			 orderTime = #{orderTime},
 			 phone = #{phone},

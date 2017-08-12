@@ -1,7 +1,12 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.curriculum.CurriculumOrder;
+import com.abc12366.cms.model.curriculum.bo.CurriculumLecturerBo;
+import com.abc12366.cms.model.curriculum.bo.CurriculumOrderBo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -18,6 +23,11 @@ public interface CurriculumOrderRoMapper {
 	 * 
 	 **/
 	CurriculumOrder  selectByPrimaryKey(@Param("orderId") String orderId);
+
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    List<CurriculumOrderBo> selectList(Map<String, Object> map);
 
 
 }

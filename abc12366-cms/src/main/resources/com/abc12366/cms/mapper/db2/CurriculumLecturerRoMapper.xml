@@ -16,5 +16,13 @@
 		 WHERE lecturerId = #{lecturerId}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumLecturerBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_curriculum_lecturer
+        WHERE 1=1
+    </select>
+
 
 </mapper>

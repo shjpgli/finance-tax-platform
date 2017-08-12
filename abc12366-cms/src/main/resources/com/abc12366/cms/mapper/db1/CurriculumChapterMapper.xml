@@ -9,6 +9,12 @@
 		 WHERE chapterId = #{chapterId}
 	</delete>
 
+    <!--删除：根据课程ID删除-->
+    <delete id="deleteByCurriculumId" parameterType="java.lang.String">
+        DELETE FROM cms_curriculum_chapter
+        WHERE curriculumId = #{curriculumId}
+    </delete>
+
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.curriculum.CurriculumChapter">
 		 INSERT INTO cms_curriculum_chapter

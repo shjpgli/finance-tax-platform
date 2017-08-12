@@ -16,5 +16,19 @@
 		 WHERE chapterId = #{chapterId}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumChapterBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_curriculum_chapter
+        WHERE 1=1
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId = #{curriculumId}
+        </if>
+        <if test="chapterId != null and chapterId != ''">
+            AND chapterId = #{chapterId}
+        </if>
+    </select>
+
 
 </mapper>

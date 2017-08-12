@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Administrator on 15-5-15.
@@ -27,9 +28,19 @@ public class PkgUtil extends BaseObject{
         String result = null;
         String serviceId = map.get("serviceid").toUpperCase();
         if(serviceId.equalsIgnoreCase("TY11")){//�ӵ����걨��ȡ��˰�˻�����Ϣ��ѯ
-            result = makeTiripPackageBytdps(makeTY11(map), serviceId, "ABC_4000");
+            result = makeTiripPackageBytdps(makeTY11(map), serviceId, "CSZJ");
 //            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
+        if(serviceId.equalsIgnoreCase("TY20")){
+            result = makeTiripPackageBytdps(makeTY20(map), serviceId, "CSZJ");
+        }
+        if(serviceId.equalsIgnoreCase("TY12")){
+            result = makeTiripPackageBytdps(makeTY12(map), serviceId, "CSZJ");
+        }
+        if(serviceId.equalsIgnoreCase("TY21")){
+            result = makeTiripPackageBytdps(makeTY21(map), serviceId, "CSZJ");
+        }
+
         return result;
     }
 
@@ -45,7 +56,8 @@ public class PkgUtil extends BaseObject{
         nsrjbxx.addMXXX(mxxx);
         request.setNSRJBXX(nsrjbxx);
         try {
-            return XmlJavaParser.parseObjectToXml(request);
+            String str = XmlJavaParser.parseObjectToXml(request);
+            return str;
         } catch (IOException e) {
             _log.error("IOException: " + e);
             e.printStackTrace();
@@ -285,4 +297,98 @@ public class PkgUtil extends BaseObject{
         map.put("message", tiripPackage.getReturnState().getReturnMessage());
         return map;
     }
+
+    private static String makeTY20(final Map<String, String> map){
+        //com.abc12366.uc.tdps.vo.nsraqxxSzRequest.
+        com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
+        request.setNSRSBH(map.get("NSRSBH"));
+        com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX nsrjbxx=new  com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx2=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx3=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        mxxx.setCODE("NSRSBH");
+        mxxx.setVALUE(map.get("NSRSBH"));
+        nsrjbxx.addMXXX(mxxx);
+        mxxx2.setCODE("USERID");
+        mxxx2.setVALUE(map.get("USERID"));
+        nsrjbxx.addMXXX(mxxx2);
+        mxxx3.setCODE("FWMM");
+        mxxx3.setVALUE(map.get("FWMM"));
+        nsrjbxx.addMXXX(mxxx3);
+        request.setNSRJBXX(nsrjbxx);
+        try {
+            String str = XmlJavaParser.parseObjectToXml(request);
+            return str;
+        } catch (IOException e) {
+            _log.error("IOException: " + e);
+            e.printStackTrace();
+        } catch (MarshalException e) {
+            _log.error("MarshalException: " + e);
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            _log.error("ValidationException: " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String makeTY12(final Map<String, String> map){
+        com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
+        request.setNSRSBH(map.get("NSRSBH"));
+        com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX nsrjbxx=new  com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        mxxx.setCODE("NSRSBH");
+        mxxx.setVALUE(map.get("NSRSBH"));
+        nsrjbxx.addMXXX(mxxx);
+        request.setNSRJBXX(nsrjbxx);
+        try {
+            String str = XmlJavaParser.parseObjectToXml(request);
+            return str;
+        } catch (IOException e) {
+            _log.error("IOException: " + e);
+            e.printStackTrace();
+        } catch (MarshalException e) {
+            _log.error("MarshalException: " + e);
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            _log.error("ValidationException: " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String makeTY21(final Map<String, String> map){
+        com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
+        request.setNSRSBH(map.get("NSRSBH"));
+        com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX nsrjbxx=new  com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx2=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx3=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        mxxx.setCODE("NSRSBH");
+        mxxx.setVALUE(map.get("NSRSBH"));
+        nsrjbxx.addMXXX(mxxx);
+        mxxx2.setCODE("OLD_PWD");
+        mxxx2.setVALUE(map.get("OLD_PWD"));
+        nsrjbxx.addMXXX(mxxx2);
+        mxxx3.setCODE("NEW_PWD");
+        mxxx3.setVALUE(map.get("NEW_PWD"));
+        nsrjbxx.addMXXX(mxxx3);
+        request.setNSRJBXX(nsrjbxx);
+        try {
+            String str = XmlJavaParser.parseObjectToXml(request);
+            return str;
+        } catch (IOException e) {
+            _log.error("IOException: " + e);
+            e.printStackTrace();
+        } catch (MarshalException e) {
+            _log.error("MarshalException: " + e);
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            _log.error("ValidationException: " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

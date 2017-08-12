@@ -1,5 +1,10 @@
 package com.abc12366.cms.model.curriculum.bo;
+import com.abc12366.cms.model.curriculum.CurriculumLabel;
+import com.abc12366.cms.model.curriculum.CurriculumLecturerGx;
+import com.abc12366.cms.model.curriculum.CurriculumMembergrade;
+
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -15,6 +20,12 @@ public class CurriculumBo implements Serializable {
 
     /**课程标题**varchar(200)**/
     private String title;
+
+    /**浏览量**tinyint(11)**/
+    private Integer browseNum;
+
+    /**观看数**tinyint(11)**/
+    private Integer watchNum;
 
 	/**课程分类**varchar(64)**/
 	private String classify;
@@ -116,6 +127,15 @@ public class CurriculumBo implements Serializable {
 	private java.util.Date updateTime;
 
 
+    private List<CurriculumLabel> labelList;
+
+    private List<CurriculumMembergrade> membergradeList;
+
+    private List<CurriculumLecturerGx> lecturerGxList;
+
+    private List<CurriculumChapterBo> chapterBoList;
+
+
 
 	public void setCurriculumId(String curriculumId){
 		this.curriculumId = curriculumId;
@@ -131,6 +151,22 @@ public class CurriculumBo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getBrowseNum() {
+        return browseNum;
+    }
+
+    public void setBrowseNum(Integer browseNum) {
+        this.browseNum = browseNum;
+    }
+
+    public Integer getWatchNum() {
+        return watchNum;
+    }
+
+    public void setWatchNum(Integer watchNum) {
+        this.watchNum = watchNum;
     }
 
     public void setClassify(String classify){
@@ -397,4 +433,35 @@ public class CurriculumBo implements Serializable {
 		return this.updateTime;
 	}
 
+    public List<CurriculumLabel> getLabelList() {
+        return labelList;
+    }
+
+    public void setLabelList(List<CurriculumLabel> labelList) {
+        this.labelList = labelList;
+    }
+
+    public List<CurriculumMembergrade> getMembergradeList() {
+        return membergradeList;
+    }
+
+    public void setMembergradeList(List<CurriculumMembergrade> membergradeList) {
+        this.membergradeList = membergradeList;
+    }
+
+    public List<CurriculumLecturerGx> getLecturerGxList() {
+        return lecturerGxList;
+    }
+
+    public void setLecturerGxList(List<CurriculumLecturerGx> lecturerGxList) {
+        this.lecturerGxList = lecturerGxList;
+    }
+
+    public List<CurriculumChapterBo> getChapterBoList() {
+        return chapterBoList;
+    }
+
+    public void setChapterBoList(List<CurriculumChapterBo> chapterBoList) {
+        this.chapterBoList = chapterBoList;
+    }
 }
