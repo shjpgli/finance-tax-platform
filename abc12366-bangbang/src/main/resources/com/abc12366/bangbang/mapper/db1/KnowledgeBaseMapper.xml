@@ -88,6 +88,7 @@
             <if test="keywords != null and keywords !=''">
                     AND (
                         t_base.subject LIKE CONCAT('%',#{keywords},'%')
+                        OR MATCH(t_base.content) AGAINST(#{keywords})
                         OR
                         t_base.id IN(
                             SELECT DISTINCT t1.knowledgeId
