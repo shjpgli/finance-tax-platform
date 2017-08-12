@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserBindService;
 import com.github.pagehelper.Page;
@@ -121,10 +122,24 @@ public class UserBindController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @PostMapping("/nsrlogin/shb")
-    public ResponseEntity nsrLogin(@RequestBody NsrLogin login){
+    @PostMapping(path = "/nsrlogin/shb")
+    public ResponseEntity nsrLogin(@RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
-        NsrLoginResponse loginResponse = userBindService.nsrLogin(login);
+        NsrLoginResponse loginResponse = userBindService.nsrLogin(login, request);
         return ResponseEntity.ok(Utils.kv("data", loginResponse));
+    }
+
+    @PostMapping(path = "/shb/resetpassword")
+    public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request){
+        LOGGER.info("{}", data);
+        BaseObject response = userBindService.resetPassword(data, request);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    @PostMapping(path = "/shb/updatepassword")
+    public ResponseEntity updatePassword(@RequestBody UpdatePwd data){
+        LOGGER.info("{}", data);
+        BaseObject response = userBindService.updatePassword(data);
+        return ResponseEntity.ok(Utils.kv());
     }
 }

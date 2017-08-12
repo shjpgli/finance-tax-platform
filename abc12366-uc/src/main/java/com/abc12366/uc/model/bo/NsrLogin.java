@@ -8,9 +8,17 @@ package com.abc12366.uc.model.bo;
 public class NsrLogin {
     private String nsrsbh;
     private String fwmm;
-    private String userId;
+    private String shxydm;
 
     public NsrLogin() {
+    }
+
+    public String getShxydm() {
+        return shxydm;
+    }
+
+    public void setShxydm(String shxydm) {
+        this.shxydm = shxydm;
     }
 
     public String getNsrsbh() {
@@ -29,11 +37,4 @@ public class NsrLogin {
         this.fwmm = fwmm;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }
