@@ -1,7 +1,12 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.curriculum.CurriculumLecturer;
+import com.abc12366.cms.model.curriculum.bo.CurriculumChapterBo;
+import com.abc12366.cms.model.curriculum.bo.CurriculumLecturerBo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -18,6 +23,11 @@ public interface CurriculumLecturerRoMapper {
 	 * 
 	 **/
 	CurriculumLecturer  selectByPrimaryKey(@Param("lecturerId") String lecturerId);
+
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    List<CurriculumLecturerBo> selectList(Map<String, Object> map);
 
 
 }

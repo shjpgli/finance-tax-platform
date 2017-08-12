@@ -1,5 +1,8 @@
 package com.abc12366.cms.model.curriculum.bo;
+import com.abc12366.cms.model.curriculum.CurriculumCourseware;
+
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -21,6 +24,9 @@ public class CurriculumChapterBo implements Serializable {
 
 	/**章节顺序**tinyint(4)**/
 	private Integer chapterSeq;
+
+    /**课件**/
+    private List<CurriculumCoursewareBo> coursewareList;
 
 
 
@@ -56,4 +62,11 @@ public class CurriculumChapterBo implements Serializable {
 		return this.chapterSeq;
 	}
 
+    public List<CurriculumCoursewareBo> getCoursewareList() {
+        return coursewareList;
+    }
+
+    public void setCoursewareList(List<CurriculumCoursewareBo> coursewareList) {
+        this.coursewareList = coursewareList;
+    }
 }

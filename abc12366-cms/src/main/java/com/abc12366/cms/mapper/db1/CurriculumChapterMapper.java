@@ -19,6 +19,13 @@ public interface CurriculumChapterMapper{
 	 **/
 	int deleteByPrimaryKey(@Param("chapterId") String chapterId);
 
+    /**
+     *
+     * 删除（根据课程删除）
+     *
+     **/
+    int deleteByCurriculumId(@Param("curriculumId") String curriculumId);
+
 	/**
 	 * 
 	 * 添加

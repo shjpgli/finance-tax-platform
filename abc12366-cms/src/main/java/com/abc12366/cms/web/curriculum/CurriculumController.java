@@ -42,8 +42,16 @@ public class CurriculumController {
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "status", required = false) String status,
+                                     @RequestParam(value = "label", required = false) String label,
+                                     @RequestParam(value = "classify", required = false) String classify) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("status", status);//状态
+        dataMap.put("title", title);//标题
+        dataMap.put("label", label);//标签
+        dataMap.put("classify", classify);//课程分类
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumListBo> dataList = curriculumService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));

@@ -23,4 +23,6 @@ public interface CurriculumService {
 
     String delete(String curriculumId);
 
+    String deleteList(String[] curriculumIds);
+
 }

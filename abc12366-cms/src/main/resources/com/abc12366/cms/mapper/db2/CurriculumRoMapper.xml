@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 curriculumId,title,classify,	recommend,	teachingMethod,	trainTimeBegin,	trainTimeEnd,	isApply,	applyTimeBegin,	applyTimeEnd,	applyPay,	isSign,	signTimeBegin,	signTimeEnd,	issueTime,	peopleLimit,	trainSite,	cover,	label,	issueScope,	isFree,	originalPrice,	preferentialPrice,	integralOriginalPrice,	integralPreferentialPrice,	freeMember,	lecturerId,	lecturerName,	lecturerPicture,	curriculumidIntro,	status,	createrId,	createrName,	createrTime,	updateTime
+		 curriculumId,title,browseNum,watchNum,classify,	recommend,	teachingMethod,	trainTimeBegin,	trainTimeEnd,	isApply,	applyTimeBegin,	applyTimeEnd,	applyPay,	isSign,	signTimeBegin,	signTimeEnd,	issueTime,	peopleLimit,	trainSite,	cover,	label,	issueScope,	isFree,	originalPrice,	preferentialPrice,	integralOriginalPrice,	integralPreferentialPrice,	freeMember,	lecturerId,	lecturerName,	lecturerPicture,	curriculumidIntro,	status,	createrId,	createrName,	createrTime,	updateTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -19,9 +19,21 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumListBo" parameterType="java.util.Map">
         SELECT
-          curriculumId,title,classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
+          curriculumId,title,browseNum,watchNum,classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
         FROM cms_curriculum
         WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="label != null and label != ''">
+            AND label like CONCAT('%',#{label},'%')
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="classify != null and classify != ''">
+            AND classify = #{classify}
+        </if>
     </select>
 
 
