@@ -8,6 +8,7 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
+import com.abc12366.uc.model.bo.OrderBO;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
@@ -39,6 +40,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private OrderRoMapper orderRoMapper;
+
 
     @Autowired
     private OrderInvoiceMapper orderInvoiceMapper;
@@ -116,7 +121,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
         }
 
-        String[] orderNos = invoiceBO.getOrderNos().split(",");
+        String[] orderNos = invoiceBO.getOrderNos();
         OrderInvoice orderInvoice = new OrderInvoice();
         for (String orderId : orderNos) {
             orderInvoice.setId(Utils.uuid());
@@ -162,8 +167,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceBO.setId(invoiceId);
         //电子发票直接把发票信息插入
         if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
-            //获取发票编号，0，表示未使用
-            InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
+            String[] orderNos = invoiceBO.getOrderNos();
+
+            List<OrderBO> orderBOList = orderRoMapper.selectByOrderNos(orderNos);
+
+
+           /* InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
             if (invoiceDetail == null) {
                 LOGGER.info("发票号码获取失败}", invoiceDetail);
                 throw new ServiceException(4124);
@@ -177,9 +186,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
             }
             invoiceBO.setInvoiceNo(invoiceDetail.getInvoiceNo());
-            invoiceBO.setInvoiceCode(invoiceDetail.getInvoiceCode());
+            invoiceBO.setInvoiceCode(invoiceDetail.getInvoiceCode());*/
         }
-        Date date = new Date();
+       /* Date date = new Date();
         invoiceBO.setCreateTime(date);
         invoiceBO.setLastUpdate(date);
         invoiceBO.setUserOrderNo(DataUtils.getUserOrderString());
@@ -218,7 +227,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
         }
         insertInvoiceLog(invoiceId, invoiceBO.getUserId(), "索要发票");
-
+*/
         return invoiceBO;
     }
 

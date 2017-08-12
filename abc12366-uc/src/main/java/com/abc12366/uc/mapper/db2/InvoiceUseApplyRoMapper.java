@@ -25,4 +25,6 @@ public interface InvoiceUseApplyRoMapper {
 	List<InvoiceUseApplyBO> selectList(InvoiceUseApplyBO applyBO);
 
 	InvoiceUseApplyBO selectInvoiceUseApply(@Param("id")String id);
+
+	InvoiceUseApplyBO selectInvoiceRepoNum(String code);
 }

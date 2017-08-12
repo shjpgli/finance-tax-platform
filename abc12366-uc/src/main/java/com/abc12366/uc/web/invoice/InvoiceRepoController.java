@@ -71,18 +71,6 @@ public class InvoiceRepoController {
     }
 
     /**
-     * 根据发票种类代码，获取发票仓库库存数，可用份数
-     *
-     * @return
-     */
-    @GetMapping(path = "/invoice/repo/num/{code}")
-    public ResponseEntity selectInvoiceRepoNum(@PathVariable("code") String code) {
-        InvoiceRepoBO bo = invoiceRepoService.selectInvoiceRepoNum(code);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
      * 发票仓库列表
      *
      * @return
