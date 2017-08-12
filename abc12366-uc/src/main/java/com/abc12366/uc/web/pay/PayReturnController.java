@@ -57,8 +57,9 @@ public class PayReturnController {
 	
 	
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping("/alipay")
-	public @ResponseBody String aliPayReturn(HttpServletRequest request) {
+	public ResponseEntity aliPayReturn(HttpServletRequest request) {
 		LOGGER.info("{}", request);
 		try {
 //			Map<String, String> params = new HashMap<String, String>();
@@ -126,7 +127,7 @@ public class PayReturnController {
 						orderService.paymentOrder(orderPayBO,"");
 					}
 				}
-				return "success";
+				return ResponseEntity.ok(Utils.kv("data", "OK"));
 //			} else {// 验证失败
 //				LOGGER.info("支付宝回调信息:验证签名失败");
 //				return ("fail");
@@ -134,7 +135,7 @@ public class PayReturnController {
 
 		} catch (Exception e) {
 			LOGGER.error("支付宝回调处理异常,原因:", e);
-			return ("fail");
+			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝回调处理异常,原因:"+e.getMessage()));
 		}
 	}
 }

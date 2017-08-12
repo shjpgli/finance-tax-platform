@@ -28,4 +28,6 @@ public interface OrderExchangeService {
     List<SfExportBO> export(OrderExchangeExportBO data);
 
     void importJson(List<SfImportBO> dataList);
+
+    OrderExchange back(ExchangeAdminBO data);
 }

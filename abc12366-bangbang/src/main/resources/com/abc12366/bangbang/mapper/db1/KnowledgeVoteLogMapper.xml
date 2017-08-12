@@ -17,13 +17,13 @@
 		LEFT JOIN abc12366_uc.uc_user t_user ON t_votelog.userId = t_user.id
 		LEFT JOIN bb_knowledge_base  t_base ON t_votelog.knowledgeId = t_base.id
 		WHERE 1=1
-		<if test="categoryCode != null">
+		<if test="categoryCode != null and categoryCode !=''">
 			AND t_base.categoryCode LIKE CONCAT(#{categoryCode},'%')
 		</if>
-		<if test="type != null">
+		<if test="type != null and type !=''">
 			AND t_base.type = #{type}
 		</if>
-		<if test="keywords != null">
+		<if test="keywords != null and keywords !=''">
 			AND (
 				t_base.subject LIKE CONCAT('%',#{keywords},'%')
 				OR

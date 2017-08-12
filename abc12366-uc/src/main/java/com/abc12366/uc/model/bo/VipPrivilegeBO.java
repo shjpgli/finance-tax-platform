@@ -10,14 +10,14 @@ import java.util.Date;
 public class VipPrivilegeBO {
     private String id;
     private String name;//特权名称
-    private String css;//class
-    private String defaults;//缺省
+    private String icon;//icon
+    private String description;//描述
     private Boolean status;//数据状态
     private Date lastUpdate;
     private Date createTime;
     @Override
     public String toString() {
-        return "VipPrivilegeBO [id=" + id + ", name=" + name + ", css=" + css + ", defaults=" + defaults + ", status="
+        return "VipPrivilegeBO [id=" + id + ", name=" + name + ", icon=" + icon + ", defaults=" + description + ", status="
                 + status + ", lastUpdate=" + lastUpdate + ", createTime=" + createTime + "]";
     }
     public String getId() {
@@ -32,17 +32,17 @@ public class VipPrivilegeBO {
     public void setName(String name) {
         this.name = name;
     }
-    public String getCss() {
-        return css;
+    public String getIcon() {
+        return icon;
     }
-    public void setCss(String css) {
-        this.css = css;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
-    public String getDefaults() {
-        return defaults;
+    public String getDescription() {
+        return description;
     }
-    public void setDefaults(String defaults) {
-        this.defaults = defaults;
+    public void setDescription(String description) {
+        this.description = description;
     }
     public Boolean getStatus() {
         return status;

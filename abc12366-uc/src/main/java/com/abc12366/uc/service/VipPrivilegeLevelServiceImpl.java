@@ -40,72 +40,82 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
     @Autowired
     private VipLevelRoMapper vipLevelRoMapper;
 
+    //指定会员id 权益id 查询结果
     @Override
-    public VipPrivilegeLevelBO selectLevelIdPrivilegeId(VipPrivilegeLevelBO obj){
-        if (obj.getLevelId() == null || obj.getLevelId().isEmpty() || obj.getPrivilegeId()==null || obj.getPrivilegeId().isEmpty()){
+    public VipPrivilegeLevelBO selectLevelIdPrivilegeId(VipPrivilegeLevelBO obj) {
+        if (obj.getLevelId() == null || obj.getLevelId().isEmpty() || obj.getPrivilegeId() == null || obj.getPrivilegeId().isEmpty()) {
             LOGGER.warn("操作失败，参数：" + obj);
             throw new ServiceException(4101);
         }
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
         return findObj;
     }
+    //先查询，不存在就新建 存在就修改
     @Override
-    public VipPrivilegeLevelBO addOrUpdate(VipPrivilegeLevelBO obj){
-        VipPrivilegeLevelBO findObj =this.selectLevelIdPrivilegeId(obj);
-        if(findObj == null){
+    public VipPrivilegeLevelBO addOrUpdate(VipPrivilegeLevelBO obj) {
+        VipPrivilegeLevelBO findObj = this.selectLevelIdPrivilegeId(obj);
+        if (findObj == null) {
             VipPrivilegeLevelInsertBO vipPrivilegeLevelInsertBO = new VipPrivilegeLevelInsertBO();
             BeanUtils.copyProperties(obj, vipPrivilegeLevelInsertBO);
 
             return this.insert(vipPrivilegeLevelInsertBO);
-        }else{
+        } else {
             VipPrivilegeLevelUpdateBO newObj = new VipPrivilegeLevelUpdateBO();
             BeanUtils.copyProperties(obj, newObj);
-            return this.update(newObj,findObj.getId());
+            return this.update(newObj, findObj.getId());
         }
     }
+
     @Override
-    public  Integer updateByPrivilege(List<VipPrivilegeLevelBO> list){
+    public Integer updateByPrivilege(List<VipPrivilegeLevelBO> list) {
         Integer fori = 0;
-        for (VipPrivilegeLevelBO obj:list) {
-            VipPrivilegeLevelBO  tmpObj = addOrUpdate(obj);
-             fori++;   //暂时没考虑中间异常
+        for (VipPrivilegeLevelBO obj : list) {
+            VipPrivilegeLevelBO tmpObj = addOrUpdate(obj);
+            fori++;   //暂时没考虑中间异常
         }
         return fori;
     }
+
     @Override
     public VipPrivilegeLevelBO selectOne(String id) {
         return vipPrivilegeLevelRoMapper.selectOne(id);
     }
+
     @Override
-    public List<VipPrivilegeLevelBO> selectListbyPrivlege(String privilege){
+    public List<VipPrivilegeLevelBO> selectListbyPrivlege(String privilege) {
         return vipPrivilegeLevelRoMapper.selectListbyPrivlege(privilege);
     }
+
     @Override
     public VipPrivilegeLevelBO selectOneN(String id) {
         return vipPrivilegeLevelRoMapper.selectOneN(id);
     }
+
     @Override
-    public List<List<VipPrivilegeLevelBO>> selectList(){
-        List<VipLevelBO>   list = vipLevelRoMapper.selectList(null);
-        List<List<VipPrivilegeLevelBO>> returnList= new ArrayList<List<VipPrivilegeLevelBO>>();
-        for (VipLevelBO vipLevelBO: list  ) {
+    public List<List<VipPrivilegeLevelBO>> selectList() {
+        List<VipLevelBO> list = vipLevelRoMapper.selectList(null);
+        List<List<VipPrivilegeLevelBO>> returnList = new ArrayList<List<VipPrivilegeLevelBO>>();
+        for (VipLevelBO vipLevelBO : list) {
             String levelId = vipLevelBO.getId();
             List<VipPrivilegeLevelBO> levelList = vipPrivilegeLevelRoMapper.selectList(levelId);
-            if(levelList != null && levelList.size()>0){
+            if (levelList != null && levelList.size() > 0) {
                 returnList.add(levelList);
             }
         }
         return returnList;
     }
+
     @Override
-    public List<VipPrivilegeLevelBO> selectListByLevelId(String levelId){
+    public List<VipPrivilegeLevelBO> selectListByLevelId(String levelId) {
 
         return vipPrivilegeLevelRoMapper.selectList(levelId);
     }
+
     @Override
     public List<VipPrivilegeLevelBO> selectListN(Map map) {
         return vipPrivilegeLevelRoMapper.selectListN(map);
     }
+
     @Override
     public VipPrivilegeLevelBO insert(VipPrivilegeLevelInsertBO vipPrivilegeLevelInsertBO) {
         if (vipPrivilegeLevelInsertBO == null) {
@@ -141,7 +151,6 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
         }
 
 
-
         VipPrivilegeLevelBO vipPrivilegeLevelQuery = vipPrivilegeLevelRoMapper.selectOne(id);
         if (vipPrivilegeLevelQuery == null) {
             LOGGER.warn("修改失败，不存在可被修改的数据，参数：" + null);
@@ -164,16 +173,19 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
         BeanUtils.copyProperties(vipPrivilegeLevel, vipPrivilegeLevelBOReturn);
         return vipPrivilegeLevelBOReturn;
     }
+
     @Override
-    public int deleteByPrivilege(String privilegeId ){
+    public int deleteByPrivilege(String privilegeId) {
         int tmpi = vipPrivilegeLevelMapper.deleteByPrivilege(privilegeId);
         return tmpi;
     }
+
     @Override
-    public int deleteByLevel(String levelId ){
+    public int deleteByLevel(String levelId) {
         int tmpi = vipPrivilegeLevelMapper.deleteByLevel(levelId);
         return tmpi;
     }
+
     @Override
     public boolean delete(String id) {
         VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelRoMapper.selectOne(id);
