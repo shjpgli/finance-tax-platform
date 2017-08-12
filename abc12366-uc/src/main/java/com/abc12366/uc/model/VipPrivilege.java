@@ -13,8 +13,19 @@ public class VipPrivilege {
     private String icon;//图标
     private String description;//描述
     private Boolean status;//数据状态
+
     private Date lastUpdate;
     private Date createTime;
+    private Integer sort;//排序
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     @Override
     public String toString() {
         return "VipPrivilege [id=" + id + ", name=" + name + ", icon=" + icon + ", description=" + description + ", status="

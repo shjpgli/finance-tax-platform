@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.VipPrivilegeMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.VipPrivilege">
-        insert into uc_uvip_privilege(id,name,icon,description,status,lastUpdate,createTime)
-        values(#{id},#{name},#{icon},#{description},#{status},#{lastUpdate},#{createTime})
+        insert into uc_uvip_privilege(id,name,icon,description,status,sort,lastUpdate,createTime)
+        values(#{id},#{name},#{icon},#{description},#{status},#{sort},#{lastUpdate},#{createTime})
     </insert>
     <update id="update" parameterType="com.abc12366.uc.model.VipPrivilege">
         update uc_uvip_privilege
@@ -13,6 +13,7 @@
             <if test="icon!=null">icon=#{icon},</if>
             <if test="description!=null">description=#{description},</if>
             <if test="status!=null">status=#{status},</if>
+            <if test="sort!=null">sort=#{sort},</if>
             <if test="lastUpdate!=null">lastUpdate=#{lastUpdate}</if>
         </set>
         where id=#{id}

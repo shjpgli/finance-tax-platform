@@ -21,7 +21,15 @@ public class VipPrivilegeInsertAndUpdateBO {
     private String description;//描述
     @NotNull
     private Boolean status;//数据状态
+    private Integer sort;//排序 int(4)
 
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
     public VipPrivilegeInsertAndUpdateBO() {
     }
 
