@@ -77,6 +77,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/event/topone")
                         //根据访问量获取文章信息
                 .excludePathPatterns("/content/selectListByviews")
+                        //获取推荐课程
+                .excludePathPatterns("/content/selectRecommend")
                         // 财税专家客户端广告页、通知公告
                 .excludePathPatterns("/adpages", "adpages/**", "/notices", "/notices/**");
     }
