@@ -16,12 +16,20 @@ public class VipPrivilegeInsertAndUpdateBO {
     @Size(max = 100)
     private String name;//特权名称
     @Size( max = 100)
-    private String css;//class
+    private String icon;//icon
     @Size(max = 1000)
-    private String defaults;//缺省
+    private String description;//描述
     @NotNull
     private Boolean status;//数据状态
+    private Integer sort;//排序 int(4)
 
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
     public VipPrivilegeInsertAndUpdateBO() {
     }
 
@@ -33,20 +41,17 @@ public class VipPrivilegeInsertAndUpdateBO {
         this.name = name;
     }
 
-    public String getCss() {
-        return css;
+    public String getIcon() {
+        return icon;
     }
-
-    public void setCss(String css) {
-        this.css = css;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
-
-    public String getDefaults() {
-        return defaults;
+    public String getDescription() {
+        return description;
     }
-
-    public void setDefaults(String defaults) {
-        this.defaults = defaults;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Boolean getStatus() {
@@ -57,16 +62,16 @@ public class VipPrivilegeInsertAndUpdateBO {
         this.status = status;
     }
 
-    public VipPrivilegeInsertAndUpdateBO(String name, String css, String defaults, Boolean status) {
+    public VipPrivilegeInsertAndUpdateBO(String name, String icon, String description, Boolean status) {
         this.name = name;
-        this.css = css;
-        this.defaults = defaults;
+        this.icon = icon;
+        this.description = description;
         this.status = status;
     }
 
     @Override
     public String toString() {
-        return "VipPrivilegeInsertAndUpdateBO [name=" + name + ", css=" + css + ", defaults=" + defaults + ", status="
+        return "VipPrivilegeInsertAndUpdateBO [name=" + name + ", icon=" + icon + ", description=" + description + ", status="
                 + status + "]";
     }
 

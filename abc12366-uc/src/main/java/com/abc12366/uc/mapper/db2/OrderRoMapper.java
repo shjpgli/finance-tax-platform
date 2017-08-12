@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.OrderBO;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,4 +37,6 @@ public interface OrderRoMapper {
     List<Order> selectReceiptOrderByDate(@Param("date")Date date);
 
     List<Order> selectCancelOrderByDate(@Param("date")Date date);
+
+    List<OrderBO> selectByOrderNos(@Param("orderNos") String[] orderNos);
 }

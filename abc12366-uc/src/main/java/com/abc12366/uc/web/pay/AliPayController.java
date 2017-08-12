@@ -106,6 +106,7 @@ public class AliPayController {
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
 			request.setBizContent(AliPayConfig.toCharsetJsonStr(payReq));
 			request.setNotifyUrl(payReq.getNotify_url());
+			request.setReturnUrl(payReq.getReturn_url());
 			AlipayTradePrecreateResponse response = alipayClient.execute(request);
 			LOGGER.info("支付宝二维码支付支付宝返回信息{}",JSON.toJSONString(response));
 			if(response.isSuccess()){

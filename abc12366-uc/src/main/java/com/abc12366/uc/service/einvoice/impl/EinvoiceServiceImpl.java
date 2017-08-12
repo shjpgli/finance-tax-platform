@@ -44,7 +44,7 @@ public class EinvoiceServiceImpl implements IEinvoiceService {
 	public EinvocieDown queryEinvoice(DzfpDownloadReq downloadReq) {
 		EinvocieDown einvocieDown=null;
 		try {
-			einvocieDown = (EinvocieDown) DzfpClient.doSender("DFXJ1005", downloadReq.tosendXml(), Einvocie.class);
+			einvocieDown = (EinvocieDown) DzfpClient.doSender("DFXJ1005", downloadReq.tosendXml(), EinvocieDown.class);
 		} catch (Exception e) {
 			LOGGER.error("电子发票webservice调用异常,原因：",e);
 		}

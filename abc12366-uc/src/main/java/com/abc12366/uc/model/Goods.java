@@ -88,6 +88,12 @@ public class Goods implements Serializable {
      **/
     private String goodsType;
 
+    /**
+     * 发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费
+     * @return
+     */
+    private String invoiceContent;
+
     public String getId() {
         return this.id;
     }
@@ -222,5 +228,13 @@ public class Goods implements Serializable {
 
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
+    }
+
+    public String getInvoiceContent() {
+        return invoiceContent;
+    }
+
+    public void setInvoiceContent(String invoiceContent) {
+        this.invoiceContent = invoiceContent;
     }
 }

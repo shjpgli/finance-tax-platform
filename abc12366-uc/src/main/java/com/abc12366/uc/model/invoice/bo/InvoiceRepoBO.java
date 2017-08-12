@@ -52,12 +52,6 @@ public class InvoiceRepoBO implements Serializable {
 	/**修改人**/
 	private String updateUser;
 
-	/**可用份数**/
-	private Integer usableShare;
-
-	/**库存本数**/
-	private Integer repoBook;
-
 	private List<InvoiceDetailBO> invoiceDetailBOList;
 
 
@@ -171,21 +165,5 @@ public class InvoiceRepoBO implements Serializable {
 
 	public void setInvoiceDetailBOList(List<InvoiceDetailBO> invoiceDetailBOList) {
 		this.invoiceDetailBOList = invoiceDetailBOList;
-	}
-
-	public Integer getUsableShare() {
-		return usableShare;
-	}
-
-	public void setUsableShare(Integer usableShare) {
-		this.usableShare = usableShare;
-	}
-
-	public Integer getRepoBook() {
-		return repoBook;
-	}
-
-	public void setRepoBook(Integer repoBook) {
-		this.repoBook = repoBook;
 	}
 }

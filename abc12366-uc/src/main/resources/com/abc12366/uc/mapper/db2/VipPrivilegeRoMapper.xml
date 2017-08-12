@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.VipPrivilegeRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipPrivilegeBO" parameterType="java.util.Map">
-        SELECT id,name,css,defaults,status,lastUpdate,createTime
+        SELECT id,name,icon,description,status,sort,lastUpdate,createTime
         from uc_uvip_privilege
         <where>
             <if test="name!=null">
@@ -14,11 +14,11 @@
                 and status=#{status}
             </if>
         </where>
-        ORDER BY createTime ASC
+        ORDER BY sort ASC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.VipPrivilegeBO" parameterType="java.lang.String">
-        SELECT id,name,css,defaults,status,lastUpdate,createTime
+        SELECT id,name,icon,description,status,sort,lastUpdate,createTime
         from uc_uvip_privilege
         where id=#{id}
     </select>

@@ -10,10 +10,8 @@ import com.abc12366.uc.model.bo.InvoiceExcel;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
 import com.abc12366.uc.model.invoice.InvoiceUseApply;
-import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
+import com.abc12366.uc.model.invoice.InvoiceUseDetail;
+import com.abc12366.uc.model.invoice.bo.*;
 import com.abc12366.uc.service.InvoiceRepoService;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
@@ -40,7 +38,7 @@ import java.util.List;
  * @since 2.0.0
  */
 @RestController
-@RequestMapping(path = "/invoice/use", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class InvoiceUseApplayController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceUseApplayController.class);
@@ -57,7 +55,7 @@ public class InvoiceUseApplayController {
      * @param endTime
      * @return
      */
-    @GetMapping
+    @GetMapping(path = "/invoice/use")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "issueStatus", required = false) String issueStatus,
@@ -86,11 +84,23 @@ public class InvoiceUseApplayController {
     }
 
     /**
+     * 根据发票种类代码，获取发票仓库库存数，可用份数
+     *
+     * @return
+     */
+    @GetMapping(path = "/invoice/use/num/{code}")
+    public ResponseEntity selectInvoiceRepoNum(@PathVariable("code") String code) {
+        InvoiceUseDetailBO bo = invoiceUseApplyService.selectInvoiceRepoNum(code);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
      * 发票领用申请详情查看
      *
      * @return
      */
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/invoice/use/{id}")
     public ResponseEntity selectInvoiceUseApply(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
@@ -105,7 +115,7 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @PostMapping
+    @PostMapping(path = "/invoice/use")
     public ResponseEntity add(@Valid @RequestBody InvoiceUseApplyBO invoiceUseApplyBO) {
         LOGGER.info("{}", invoiceUseApplyBO);
         InvoiceUseApplyBO bo = invoiceUseApplyService.add(invoiceUseApplyBO);
@@ -118,7 +128,7 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @PutMapping
+    @PutMapping(path = "/invoice/use")
     public ResponseEntity update(@Valid @RequestBody InvoiceUseApplyBO invoiceUseApplyBO) {
         LOGGER.info("{}", invoiceUseApplyBO);
         InvoiceUseApplyBO bo = invoiceUseApplyService.update(invoiceUseApplyBO);
@@ -131,7 +141,7 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/invoice/use/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         invoiceUseApplyService.delete(id);
@@ -143,7 +153,7 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @PostMapping(path = "/check/{id}")
+    @PostMapping(path = "/invoice/use/check/{id}")
     public ResponseEntity checkUseApplay(@Valid @RequestBody InvoiceUseCheckBO invoiceUseCheckBO) {
         LOGGER.info("{}", invoiceUseCheckBO);
         invoiceUseApplyService.checkUseApplay(invoiceUseCheckBO);
@@ -155,7 +165,7 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @PostMapping(path = "/dist/send")
+    @PostMapping(path = "/invoice/dist/send")
     public ResponseEntity distributeUseApply(@Valid @RequestBody InvoiceDistributeBO invoiceDistributeBO) {
         LOGGER.info("{}", invoiceDistributeBO);
         invoiceUseApplyService.distributeUseApply(invoiceDistributeBO);
@@ -167,7 +177,7 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @PostMapping(path = "/dist/sign")
+    @PostMapping(path = "/invoice/dist/sign")
     public ResponseEntity signUseApply(@Valid @RequestBody InvoiceDistributeBO invoiceDistributeBO) {
         LOGGER.info("{}", invoiceDistributeBO);
         invoiceUseApplyService.signUseApply(invoiceDistributeBO);
