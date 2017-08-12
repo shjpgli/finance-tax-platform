@@ -88,6 +88,9 @@ public class OrderExchangeController {
         return responseEntity;
     }
 
+    /**
+     * 查看
+     */
     @GetMapping("/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);

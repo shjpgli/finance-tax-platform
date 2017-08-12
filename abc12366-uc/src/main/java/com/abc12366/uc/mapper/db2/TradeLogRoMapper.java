@@ -18,4 +18,6 @@ public interface TradeLogRoMapper {
     TradeLog selectByPrimaryKey(@Param("id") String id);
 
     List<TradeLog> selectList(TradeLog tradeLog);
+
+    TradeLog selectOne(String tradeNo);
 }
