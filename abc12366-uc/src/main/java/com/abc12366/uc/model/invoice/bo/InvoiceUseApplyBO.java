@@ -201,4 +201,5 @@ public class InvoiceUseApplyBO implements Serializable {
     public void setInvoiceUseDetailBOList(List<InvoiceUseDetailBO> invoiceUseDetailBOList) {
         this.invoiceUseDetailBOList = invoiceUseDetailBOList;
     }
+
 }

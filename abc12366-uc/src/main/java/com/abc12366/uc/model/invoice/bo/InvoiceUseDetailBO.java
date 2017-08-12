@@ -28,6 +28,13 @@ public class InvoiceUseDetailBO implements Serializable {
 	/**备注**/
 	private String remark;
 
+	/**可用份数**/
+	private Integer usableShare;
+
+	/**库存本数**/
+	private Integer repoBook;
+
+
 
 
 	public void setUseId(String useId){
@@ -78,4 +85,19 @@ public class InvoiceUseDetailBO implements Serializable {
 		return this.remark;
 	}
 
+	public Integer getUsableShare() {
+		return usableShare;
+	}
+
+	public void setUsableShare(Integer usableShare) {
+		this.usableShare = usableShare;
+	}
+
+	public Integer getRepoBook() {
+		return repoBook;
+	}
+
+	public void setRepoBook(Integer repoBook) {
+		this.repoBook = repoBook;
+	}
 }

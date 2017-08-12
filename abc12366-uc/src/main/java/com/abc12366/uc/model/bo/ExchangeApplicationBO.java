@@ -14,10 +14,6 @@ public class ExchangeApplicationBO {
 
     // PK
     private String id;
-    // 用户ID
-    @NotEmpty
-    @Length(min = 32, max = 64)
-    private String userId;
     // 订单号
     @NotEmpty
     @Length(min = 16, max = 64)
@@ -40,14 +36,6 @@ public class ExchangeApplicationBO {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getOrderNo() {
@@ -86,7 +74,6 @@ public class ExchangeApplicationBO {
     public String toString() {
         return "ExchangeApplicationBO{" +
                 "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", reason='" + reason + '\'' +
                 ", userRemark='" + userRemark + '\'' +

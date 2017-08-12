@@ -4,6 +4,7 @@ import com.abc12366.uc.model.invoice.InvoiceUseApply;
 import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
+import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface InvoiceUseApplyService {
     void distributeUseApply(InvoiceDistributeBO invoiceDistributeBO);
 
     void signUseApply(InvoiceDistributeBO invoiceDistributeBO);
+
+    InvoiceUseDetailBO selectInvoiceRepoNum(String code);
 }
