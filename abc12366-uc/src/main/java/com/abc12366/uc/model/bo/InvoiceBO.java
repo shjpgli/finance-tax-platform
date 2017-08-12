@@ -51,7 +51,7 @@ public class InvoiceBO implements Serializable {
 	private String consignee;
 
 	private List<OrderBO> orderBOList;
-	private String orderNos;
+	private String[] orderNos;
 	private java.util.Date startTime;
 	private java.util.Date endTime;
 	private UserAddress userAddress;
@@ -318,11 +318,11 @@ public class InvoiceBO implements Serializable {
 		this.consignee = consignee;
 	}
 
-	public String getOrderNos() {
+	public String[] getOrderNos() {
 		return orderNos;
 	}
 
-	public void setOrderNos(String orderNos) {
+	public void setOrderNos(String[] orderNos) {
 		this.orderNos = orderNos;
 	}
 

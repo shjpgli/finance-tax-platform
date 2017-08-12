@@ -112,6 +112,14 @@
 		WHERE d.useId = #{useId}
     </select>
 
+    <!-- 查询主键ID -->
+    <select id="selectInvoiceRepoNum" resultType="com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO" parameterType="java.lang.String">
+        SELECT
+        sum(book) as repoBook,sum(share) as usableShare
+        FROM uc_invoice_repo
+        where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
+    </select>
+
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.invoice.InvoiceUseApply"
             parameterType="java.lang.String">

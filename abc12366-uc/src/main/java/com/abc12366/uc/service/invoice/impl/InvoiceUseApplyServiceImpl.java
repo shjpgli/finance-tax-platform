@@ -223,5 +223,10 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         }
     }
 
+    @Override
+    public InvoiceUseApplyBO selectInvoiceRepoNum(String code) {
+        return invoiceUseApplyRoMapper.selectInvoiceRepoNum(code);
+    }
+
 
 }

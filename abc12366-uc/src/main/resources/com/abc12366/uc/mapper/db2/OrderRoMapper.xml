@@ -542,6 +542,18 @@
         order by o.lastUpdate desc
 
     </select>
+
+    <!-- 前台查询（根据条件查询） -->
+    <select id="selectByOrderNos" resultMap="orderBOListResultMap">
+        SELECT
+        <include refid="Base_Column_BO_List"/>
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        where o.orderNo in
+        <foreach item="item" index="index" collection="orderNos" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
     <!-- 查询未发货订单 -->
     <select id="selectExprotOrder" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT

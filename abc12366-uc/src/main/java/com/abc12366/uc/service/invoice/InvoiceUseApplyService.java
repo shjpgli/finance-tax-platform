@@ -29,4 +29,6 @@ public interface InvoiceUseApplyService {
     void distributeUseApply(InvoiceDistributeBO invoiceDistributeBO);
 
     void signUseApply(InvoiceDistributeBO invoiceDistributeBO);
+
+    InvoiceUseApplyBO selectInvoiceRepoNum(String code);
 }

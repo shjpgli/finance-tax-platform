@@ -74,6 +74,12 @@ public class InvoiceUseApplyBO implements Serializable {
 
     private Date endTime;
 
+    /**可用份数**/
+    private Integer usableShare;
+
+    /**库存本数**/
+    private Integer repoBook;
+
     public void setId(String id) {
         this.id = id;
     }
@@ -200,5 +206,21 @@ public class InvoiceUseApplyBO implements Serializable {
 
     public void setInvoiceUseDetailBOList(List<InvoiceUseDetailBO> invoiceUseDetailBOList) {
         this.invoiceUseDetailBOList = invoiceUseDetailBOList;
+    }
+
+    public Integer getUsableShare() {
+        return usableShare;
+    }
+
+    public void setUsableShare(Integer usableShare) {
+        this.usableShare = usableShare;
+    }
+
+    public Integer getRepoBook() {
+        return repoBook;
+    }
+
+    public void setRepoBook(Integer repoBook) {
+        this.repoBook = repoBook;
     }
 }
