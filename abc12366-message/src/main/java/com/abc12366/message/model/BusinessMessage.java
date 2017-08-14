@@ -38,7 +38,7 @@ public class BusinessMessage {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp lastUpdate;
 
-    @Length(min = 1, max = 1)
+    @Length(min = 1, max = 32)
     private String type;
 
     public BusinessMessage() {
