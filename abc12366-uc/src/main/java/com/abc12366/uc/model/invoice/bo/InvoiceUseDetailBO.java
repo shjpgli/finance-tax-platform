@@ -31,8 +31,11 @@ public class InvoiceUseDetailBO implements Serializable {
 	/**可用份数**/
 	private Integer usableShare;
 
-	/**库存本数**/
-	private Integer repoBook;
+	/**审批本数**/
+	private Integer checkBook;
+
+	/**发票分发流水号**/
+	private String[] invoiceRepoIds;
 
 
 
@@ -93,11 +96,19 @@ public class InvoiceUseDetailBO implements Serializable {
 		this.usableShare = usableShare;
 	}
 
-	public Integer getRepoBook() {
-		return repoBook;
+	public Integer getCheckBook() {
+		return checkBook;
 	}
 
-	public void setRepoBook(Integer repoBook) {
-		this.repoBook = repoBook;
+	public void setCheckBook(Integer checkBook) {
+		this.checkBook = checkBook;
+	}
+
+	public String[] getInvoiceRepoIds() {
+		return invoiceRepoIds;
+	}
+
+	public void setInvoiceRepoIds(String[] invoiceRepoIds) {
+		this.invoiceRepoIds = invoiceRepoIds;
 	}
 }

@@ -24,6 +24,16 @@ public class UserUtil {
         return userId;
     }
 
+    public static String getAdminId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        String adminId = (String) request.getAttribute(Constant.ADMIN_ID);
+        if (adminId == null || adminId.equals("")) {
+            throw new ServiceException(4193);
+        }
+        return adminId;
+    }
+
     public static Admin getAdminInfo() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();

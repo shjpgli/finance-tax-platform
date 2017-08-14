@@ -37,7 +37,11 @@ public class InvoiceDetail implements Serializable {
 	/**发票编号(FK)**/
 	private String invoiceRepoId;
 
+	/**收票地址**/
+	private String pdfUrl;
 
+	/**PDF下载地址**/
+	private String spUrl;
 
 	public void setId(String id){
 		this.id = id;
@@ -111,4 +115,19 @@ public class InvoiceDetail implements Serializable {
 		return this.invoiceRepoId;
 	}
 
+	public String getPdfUrl() {
+		return pdfUrl;
+	}
+
+	public void setPdfUrl(String pdfUrl) {
+		this.pdfUrl = pdfUrl;
+	}
+
+	public String getSpUrl() {
+		return spUrl;
+	}
+
+	public void setSpUrl(String spUrl) {
+		this.spUrl = spUrl;
+	}
 }

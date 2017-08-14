@@ -166,9 +166,9 @@ public class InvoiceUseApplayController {
      * @return
      */
     @PostMapping(path = "/invoice/dist/send")
-    public ResponseEntity distributeUseApply(@Valid @RequestBody InvoiceDistributeBO invoiceDistributeBO) {
-        LOGGER.info("{}", invoiceDistributeBO);
-        invoiceUseApplyService.distributeUseApply(invoiceDistributeBO);
+    public ResponseEntity distributeUseApply(@Valid @RequestBody InvoiceUseCheckBO invoiceUseCheckBO) {
+        LOGGER.info("{}", invoiceUseCheckBO);
+        invoiceUseApplyService.distributeUseApply(invoiceUseCheckBO);
         return ResponseEntity.ok(Utils.kv());
     }
 

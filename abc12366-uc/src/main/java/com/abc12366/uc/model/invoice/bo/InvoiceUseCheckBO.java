@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.invoice.bo;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -40,7 +41,7 @@ public class InvoiceUseCheckBO implements Serializable {
 	/**备注**/
 	private String remark;
 
-
+	private List<InvoiceUseDetailBO> invoiceUseDetailBOList;
 
 	public void setId(String id){
 		this.id = id;
@@ -122,4 +123,11 @@ public class InvoiceUseCheckBO implements Serializable {
 		return this.remark;
 	}
 
+	public List<InvoiceUseDetailBO> getInvoiceUseDetailBOList() {
+		return invoiceUseDetailBOList;
+	}
+
+	public void setInvoiceUseDetailBOList(List<InvoiceUseDetailBO> invoiceUseDetailBOList) {
+		this.invoiceUseDetailBOList = invoiceUseDetailBOList;
+	}
 }

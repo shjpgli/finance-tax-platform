@@ -183,30 +183,47 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     }
 
     @Override
-    public void distributeUseApply(InvoiceDistributeBO invoiceDistributeBO) {
-        String[] invoiceRepoIds = invoiceDistributeBO.getInvoiceRepoIds();
-        for(String repoId : invoiceRepoIds){
-            InvoiceRepoBO repoBO = invoiceRepoRoMapper.selectInvoiceRepo(repoId);
-            if(repoBO == null){
-                LOGGER.warn("发票不存在{}：" + repoBO);
-                throw new ServiceException(4907);
+    public void distributeUseApply(InvoiceUseCheckBO invoiceUseCheckBO) {
+        InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
+        BeanUtils.copyProperties(invoiceUseCheckBO,invoiceUseApply);
+        int aUpdate = invoiceUseApplyMapper.update(invoiceUseApply);
+        if(aUpdate != 1){
+            LOGGER.warn("修改失败，参数{}：" + invoiceUseCheckBO);
+            throw new ServiceException(4102);
+        }
+        List<InvoiceUseDetailBO> useDetailBOList = invoiceUseCheckBO.getInvoiceUseDetailBOList();
+        for(InvoiceUseDetailBO detailBO:useDetailBOList){
+            InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
+            BeanUtils.copyProperties(detailBO,invoiceUseDetail);
+            int dUpdate = invoiceUseDetailMapper.update(invoiceUseDetail);
+            if(dUpdate != 1){
+                LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
+                throw new ServiceException(4102);
             }
-            InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
-            invoiceDistribute.setId(Utils.uuid());
-            invoiceDistribute.setInvoiceRepoId(repoBO.getId());
-            invoiceDistribute.setInvoiceCode(repoBO.getInvoiceCode());
-            invoiceDistribute.setInvoiceNoStart(repoBO.getInvoiceNoStart());
-            invoiceDistribute.setInvoiceNoEnd(repoBO.getInvoiceNoEnd());
-            invoiceDistribute.setStatus("0");
-            invoiceDistribute.setBook(repoBO.getBook());
-            invoiceDistribute.setInvoiceTypeCode(repoBO.getInvoiceTypeCode());
-            invoiceDistribute.setDistributeUser(invoiceDistributeBO.getDistributeUser());
-            invoiceDistribute.setDistributeTime(new Date());
-            invoiceDistribute.setUseId(invoiceDistributeBO.getUseId());
-            int insert = invoiceDistributeMapper.insert(invoiceDistribute);
-            if(insert != 1){
-                LOGGER.warn("新增失败，参数{}：" + invoiceDistribute);
-                throw new ServiceException(4101);
+            String[] invoiceRepoIds = detailBO.getInvoiceRepoIds();
+            for(String repoId : invoiceRepoIds){
+                InvoiceRepoBO repoBO = invoiceRepoRoMapper.selectInvoiceRepo(repoId);
+                if(repoBO == null){
+                    LOGGER.warn("发票不存在{}：" + repoBO);
+                    throw new ServiceException(4907);
+                }
+                InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
+                invoiceDistribute.setId(Utils.uuid());
+                invoiceDistribute.setInvoiceRepoId(repoBO.getId());
+                invoiceDistribute.setInvoiceCode(repoBO.getInvoiceCode());
+                invoiceDistribute.setInvoiceNoStart(repoBO.getInvoiceNoStart());
+                invoiceDistribute.setInvoiceNoEnd(repoBO.getInvoiceNoEnd());
+                invoiceDistribute.setStatus("0");
+                invoiceDistribute.setBook(repoBO.getBook());
+                invoiceDistribute.setInvoiceTypeCode(repoBO.getInvoiceTypeCode());
+                invoiceDistribute.setDistributeUser(invoiceUseCheckBO.getDistributeUser());
+                invoiceDistribute.setDistributeTime(new Date());
+                invoiceDistribute.setUseId(invoiceUseCheckBO.getId());
+                int insert = invoiceDistributeMapper.insert(invoiceDistribute);
+                if(insert != 1){
+                    LOGGER.warn("新增失败，参数{}：" + invoiceDistribute);
+                    throw new ServiceException(4101);
+                }
             }
         }
     }

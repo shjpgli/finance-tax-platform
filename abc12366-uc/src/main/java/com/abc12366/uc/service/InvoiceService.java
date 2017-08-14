@@ -4,6 +4,7 @@ import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.InvoiceBack;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
+import com.abc12366.uc.model.bo.InvoiceCheckBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +44,5 @@ public interface InvoiceService {
 
     InvoiceBO selectUserInvoice(Invoice invoice);
 
-    InvoiceBO billing(InvoiceBO invoiceBO);
+    void billing(InvoiceCheckBO invoiceCheckBO);
 }

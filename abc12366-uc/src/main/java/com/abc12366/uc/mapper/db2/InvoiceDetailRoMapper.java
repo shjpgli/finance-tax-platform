@@ -30,4 +30,6 @@ public interface InvoiceDetailRoMapper {
     InvoiceDetail selectInvoiceDetail();
 
     List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail);
+
+    InvoiceDetail selectByInvoiceNoAndCode(InvoiceDetail tail);
 }

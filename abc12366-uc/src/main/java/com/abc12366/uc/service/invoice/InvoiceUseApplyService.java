@@ -27,7 +27,7 @@ public interface InvoiceUseApplyService {
 
     void checkUseApplay(InvoiceUseCheckBO invoiceUseCheckBO);
 
-    void distributeUseApply(InvoiceDistributeBO invoiceDistributeBO);
+    void distributeUseApply(InvoiceUseCheckBO invoiceUseCheckBO);
 
     void signUseApply(InvoiceDistributeBO invoiceDistributeBO);
 

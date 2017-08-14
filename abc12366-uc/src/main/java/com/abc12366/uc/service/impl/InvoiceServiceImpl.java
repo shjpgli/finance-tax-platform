@@ -5,13 +5,15 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
-import com.abc12366.uc.model.bo.InvoiceBO;
-import com.abc12366.uc.model.bo.InvoiceBackBO;
-import com.abc12366.uc.model.bo.InvoiceExcel;
-import com.abc12366.uc.model.bo.OrderBO;
+import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.dzfp.DzfpGetReq;
+import com.abc12366.uc.model.dzfp.Einvocie;
+import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.util.UserUtil;
+import com.abc12366.uc.webservice.DzfpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -166,29 +168,68 @@ public class InvoiceServiceImpl implements InvoiceService {
         String invoiceId = Utils.uuid();
         invoiceBO.setId(invoiceId);
         //电子发票直接把发票信息插入
-        if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
+        /*if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
             String[] orderNos = invoiceBO.getOrderNos();
 
             List<OrderBO> orderBOList = orderRoMapper.selectByOrderNos(orderNos);
+            List<InvoiceXm> invoiceXmList=new ArrayList<InvoiceXm>();
+            InvoiceXm invoiceXm = null;
+            //发票信息填充
+            DzfpGetReq dzfpGetReq=new DzfpGetReq();
+            dzfpGetReq.setZsfs("0"); //
+            dzfpGetReq.setKplx("0"); //开票0，退票1
+            dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
+            for(OrderBO orderBO:orderBOList){
 
-
-           /* InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
-            if (invoiceDetail == null) {
-                LOGGER.info("发票号码获取失败}", invoiceDetail);
-                throw new ServiceException(4124);
-            } else {
-                //将发票置为已使用值为2
-                invoiceDetail.setStatus("2");
-                int dUpdate = invoiceDetailMapper.update(invoiceDetail);
-                if (dUpdate != 1) {
-                    LOGGER.info("发票状态修改失败}", invoiceDetail);
-                    throw new ServiceException(4178);
+                List<OrderProductBO> orderProductBOList = orderBO.getOrderProductBOList();
+                for (OrderProductBO orderProductBO:orderProductBOList){
+                    invoiceXm = new InvoiceXm();
+                    //商品名称
+                    invoiceXm.setXmmc(orderProductBO.getProductBO().getInvoiceContentDetail());
+                    //商品编码
+                    invoiceXm.setSpbm("1010105000000000000");
+                    //价格
+                    invoiceXm.setTotalAmt(orderProductBO.getSellingPrice());
+                    //数量
+                    invoiceXm.setXmsl(Double.valueOf(orderProductBO.getNum()));
+                    invoiceXm.setFphxz("0");
+                    invoiceXm.setYhzcbs("0");
+                    invoiceXmList.add(invoiceXm);
                 }
             }
-            invoiceBO.setInvoiceNo(invoiceDetail.getInvoiceNo());
-            invoiceBO.setInvoiceCode(invoiceDetail.getInvoiceCode());*/
+            if("1".equals(invoiceBO.getName())){
+                dzfpGetReq.setGmf_mc("个人");
+                dzfpGetReq.setGmf_nsrsbh("110109500321655");
+            }else if("2".equals(invoiceBO.getName())){
+                dzfpGetReq.setGmf_mc(invoiceBO.getCompName());
+                dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
+            }
+            dzfpGetReq.setInvoiceXms(invoiceXmList);
+            Einvocie einvocie=null;
+            try {
+                einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
+            } catch (Exception e) {
+                LOGGER.error("电子发票webservice调用异常,原因：",e);
+            }
+
+        }*/
+       /* InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
+        if (invoiceDetail == null) {
+            LOGGER.info("发票号码获取失败}", invoiceDetail);
+            throw new ServiceException(4124);
+        } else {
+            //将发票置为已使用值为2
+            invoiceDetail.setStatus("2");
+            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+            if (dUpdate != 1) {
+                LOGGER.info("发票状态修改失败}", invoiceDetail);
+                throw new ServiceException(4178);
+            }
         }
-       /* Date date = new Date();
+        invoiceBO.setInvoiceNo(invoiceDetail.getInvoiceNo());
+        invoiceBO.setInvoiceCode(invoiceDetail.getInvoiceCode());
+*/
+        Date date = new Date();
         invoiceBO.setCreateTime(date);
         invoiceBO.setLastUpdate(date);
         invoiceBO.setUserOrderNo(DataUtils.getUserOrderString());
@@ -200,13 +241,12 @@ public class InvoiceServiceImpl implements InvoiceService {
             LOGGER.info("新增失败：{}", invoice);
             throw new ServiceException(4101);
         }
-        String id = invoice.getId();
-        String[] orderNos = invoiceBO.getOrderNos().split(",");
+        String[] orderNos = invoiceBO.getOrderNos();
         OrderInvoice orderInvoice = new OrderInvoice();
 
         for (String orderNo : orderNos) {
             orderInvoice.setId(Utils.uuid());
-            orderInvoice.setInvoiceId(id);
+            orderInvoice.setInvoiceId(invoiceId);
             orderInvoice.setOrderNo(orderNo);
             orderInvoice.setCreateTime(date);
             orderInvoice.setLastUpdate(date);
@@ -227,7 +267,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
         }
         insertInvoiceLog(invoiceId, invoiceBO.getUserId(), "索要发票");
-*/
+
         return invoiceBO;
     }
 
@@ -403,22 +443,96 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional("db1TxManager")
     @Override
-    public InvoiceBO billing(InvoiceBO invoiceBO) {
-        if ("2".equals(invoiceBO.getStatus())) {
-            InvoiceDetail tail = invoiceBO.getInvoiceDetail();
-            InvoiceDetail detail = invoiceDetailRoMapper.selectByPrimaryKey(tail.getId());
-            if (detail == null) {
-                LOGGER.info("发票详情信息不能为空：{}", detail);
-                throw new ServiceException(4186);
+    public void billing(InvoiceCheckBO invoiceCheckBO) {
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(invoiceCheckBO, invoice);
+        if (invoiceCheckBO.getIsBilling()) {
+            InvoiceBO invoiceBO = invoiceRoMapper.selectById(invoiceCheckBO.getId());
+            //电子发票直接把发票信息插入
+            if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
+                String[] orderNos = invoiceBO.getOrderNos();
+
+                List<OrderBO> orderBOList = orderRoMapper.selectByOrderNos(orderNos);
+                List<InvoiceXm> invoiceXmList=new ArrayList<InvoiceXm>();
+                InvoiceXm invoiceXm = null;
+                //发票信息填充
+                DzfpGetReq dzfpGetReq=new DzfpGetReq();
+                dzfpGetReq.setZsfs("0"); //
+                dzfpGetReq.setKplx("0"); //开票0，退票1
+                dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
+                for(OrderBO orderBO:orderBOList){
+
+                    List<OrderProductBO> orderProductBOList = orderBO.getOrderProductBOList();
+                    for (OrderProductBO orderProductBO:orderProductBOList){
+                        invoiceXm = new InvoiceXm();
+                        //商品名称
+                        invoiceXm.setXmmc(orderProductBO.getProductBO().getInvoiceContentDetail());
+                        //商品编码
+                        invoiceXm.setSpbm("1010105000000000000");
+                        //价格
+                        invoiceXm.setTotalAmt(orderProductBO.getSellingPrice());
+                        //数量
+                        invoiceXm.setXmsl(Double.valueOf(orderProductBO.getNum()));
+                        invoiceXm.setFphxz("0");
+                        invoiceXm.setYhzcbs("0");
+                        invoiceXmList.add(invoiceXm);
+                    }
+                }
+                if("1".equals(invoiceBO.getName())){
+                    dzfpGetReq.setGmf_mc("个人");
+                    //dzfpGetReq.setGmf_nsrsbh("110109500321655");
+                }else if("2".equals(invoiceBO.getName())){
+                    dzfpGetReq.setGmf_mc(invoiceBO.getCompName());
+                    dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
+                }
+                dzfpGetReq.setInvoiceXms(invoiceXmList);
+                Einvocie einvocie=null;
+                try {
+                    einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
+                } catch (Exception e) {
+                    LOGGER.error("电子发票webservice调用异常,原因：",e);
+                }
+                if(!einvocie.getReturnCode().equals("0000")){
+                    LOGGER.error("发票开票异常：{}", einvocie);
+                    throw new ServiceException(4908);
+                }
+                invoiceBO.setInvoiceNo(einvocie.getFP_HM());
+                invoiceBO.setInvoiceCode(einvocie.getFP_DM());
+
+                InvoiceDetail tail = new InvoiceDetail();
+                tail.setInvoiceCode(einvocie.getFP_DM());
+                tail.setInvoiceNo(einvocie.getFP_HM());
+                tail.setSpUrl(einvocie.getSP_URL());
+                tail.setPdfUrl(einvocie.getPDF_URL());
+                //根据发票号码和发票代码查找发票详细信息表
+                InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
+                if (detail == null) {
+                    LOGGER.info("发票详情信息不能为空：{}", detail);
+                    throw new ServiceException(4186);
+                }
+                BeanUtils.copyProperties(tail,detail);
+                detail.setStatus("2");
+                int dUpdate = invoiceDetailMapper.update(detail);
+                if (dUpdate != 1) {
+                    LOGGER.info("发票详情信息修改失败：{}", detail);
+                    throw new ServiceException(4187);
+                }
+            }else {
+                InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
+                if(invoiceDetail == null){
+                    LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
+                    throw new ServiceException(4186);
+                }
+                invoiceDetail.setStatus("2");
+                int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+                if (dUpdate != 1) {
+                    LOGGER.info("发票详情信息修改失败：{}", invoiceDetail);
+                    throw new ServiceException(4187);
+                }
             }
-            detail.setStatus("2");
-            int dUpdate = invoiceDetailMapper.update(detail);
-            if (dUpdate != 1) {
-                LOGGER.info("发票详情信息修改失败：{}", detail);
-                throw new ServiceException(4187);
-            }
-        } else if ("3".equals(invoiceBO.getStatus())) {
-            List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoiceBO.getId());
+            invoice.setStatus("2");
+        } else {
+            List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoiceCheckBO.getId());
             Order order = null;
             //修改订单是否已开发票状态
             for (OrderInvoice orderInvoice : orderInvoiceList) {
@@ -433,18 +547,16 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
             }
             //删除订单和发票对应关系
-            orderInvoiceMapper.deleteByInvoiceId(invoiceBO.getId());
+            orderInvoiceMapper.deleteByInvoiceId(invoiceCheckBO.getId());
         }
-        invoiceBO.setLastUpdate(new Date());
-        Invoice invoice = new Invoice();
-        BeanUtils.copyProperties(invoiceBO, invoice);
+
+        invoice.setLastUpdate(new Date());
         int update = invoiceMapper.update(invoice);
         if (update != 1) {
             LOGGER.info("修改失败：{}", invoice);
             throw new ServiceException(4102);
         }
         //加入发票日志
-        insertInvoiceLog(invoiceBO.getId(), invoiceBO.getInvoiceLog().getCreateUser(), invoiceBO.getInvoiceDetail().getRemark());
-        return invoiceBO;
+        insertInvoiceLog(invoiceCheckBO.getId(), UserUtil.getAdminId(), invoiceCheckBO.getRemark());
     }
 }

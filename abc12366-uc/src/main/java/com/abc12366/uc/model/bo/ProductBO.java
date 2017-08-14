@@ -22,6 +22,13 @@ public class ProductBO implements Serializable {
     private java.util.Date lastUpdate;
     private Integer stock;
     private String goodsName;
+    /**
+     * 发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费
+     * @return
+     */
+    private String invoiceContent;
+
+    private String invoiceContentDetail;
 
     private ProductRepoBO productRepoBO;
     private List<DictBO> dictList = new ArrayList<>();
@@ -149,5 +156,21 @@ public class ProductBO implements Serializable {
 
     public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+    }
+
+    public String getInvoiceContent() {
+        return invoiceContent;
+    }
+
+    public void setInvoiceContent(String invoiceContent) {
+        this.invoiceContent = invoiceContent;
+    }
+
+    public String getInvoiceContentDetail() {
+        return invoiceContentDetail;
+    }
+
+    public void setInvoiceContentDetail(String invoiceContentDetail) {
+        this.invoiceContentDetail = invoiceContentDetail;
     }
 }

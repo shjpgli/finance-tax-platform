@@ -6,6 +6,7 @@ import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.InvoiceBack;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import com.abc12366.uc.model.bo.InvoiceBackBO;
+import com.abc12366.uc.model.bo.InvoiceCheckBO;
 import com.abc12366.uc.model.bo.InvoiceExcel;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
@@ -158,10 +159,10 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/billing")
-    public ResponseEntity billing(@Valid @RequestBody InvoiceBO invoiceBO) {
-        InvoiceBO bo = invoiceService.billing(invoiceBO);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
+    public ResponseEntity billing(@Valid @RequestBody InvoiceCheckBO invoiceCheckBO) {
+        LOGGER.info("{}", invoiceCheckBO);
+        invoiceService.billing(invoiceCheckBO);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
