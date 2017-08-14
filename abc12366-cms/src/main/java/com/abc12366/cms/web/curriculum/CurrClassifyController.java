@@ -34,9 +34,11 @@ public class CurrClassifyController {
      * 课程分类列表查询
      */
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "classifyId", required = false) String classifyId) {
+    public ResponseEntity selectList(@RequestParam(value = "classifyId", required = false) String classifyId,
+                                     @RequestParam(value = "parentId", required = false) String parentId) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("classifyId",classifyId);
+        dataMap.put("classifyId",classifyId);//分类ID
+        dataMap.put("parentId",parentId);//父ID
         List<CurriculumClassifyBo> dataList = classifyService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
 
