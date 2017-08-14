@@ -4,10 +4,10 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.UserMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.User">
         insert into uc_user (id, username, phone, password, regMail, regIP, salt, nickname, status, createTime,
-        lastUpdate, userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel)
+        lastUpdate, userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel, usernameModifiedTimes)
         values (#{id}, #{username}, #{phone},#{password}, #{regMail}, #{regIP}, #{salt}, #{nickname}, #{status},
         #{createTime}, #{lastUpdate}, #{userPicturePath}, #{maxUserPicturePath}, #{midUserPicturePath},
-        #{minUserPicturePath}, #{points}, #{exp}, #{vipLevel} )
+        #{minUserPicturePath}, #{points}, #{exp}, #{vipLevel} ,#{usernameModifiedTimes})
     </insert>
 
     <update id="update" parameterType="com.abc12366.uc.model.User">
@@ -29,7 +29,8 @@
             <if test="minUserPicturePath != null">minUserPicturePath = #{minUserPicturePath},</if>
             <if test="points != null">points = #{points},</if>
             <if test="exp != null">exp = #{exp},</if>
-            <if test="vipLevel != null">vipLevel = #{vipLevel}</if>
+            <if test="vipLevel != null">vipLevel = #{vipLevel},</if>
+            <if test="usernameModifiedTimes != null">usernameModifiedTimes = #{usernameModifiedTimes}</if>
         </set>
         where id=#{id}
     </update>

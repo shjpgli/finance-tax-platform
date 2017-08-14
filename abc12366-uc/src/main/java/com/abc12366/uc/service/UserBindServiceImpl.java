@@ -74,8 +74,16 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
-        if (userDzsbInsertBO.getNsrsbhOrShxydm() == null || userDzsbInsertBO.getNsrsbhOrShxydm().trim().equals("")) {
-            throw new ServiceException();
+
+        //查看是否重复绑定
+        String userId = UserUtil.getUserId(request);
+        UserDzsb queryParam = new UserDzsb();
+        queryParam.setUserId(userId);
+        queryParam.setNsrsbh(userDzsbInsertBO.getNsrsbhOrShxydm());
+        queryParam.setShxydm(userDzsbInsertBO.getNsrsbhOrShxydm());
+        List<NSRXXBO> nsrxxboList = userBindRoMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
+        if (nsrxxboList != null && nsrxxboList.size() >= 1) {
+            throw new ServiceException(4632);
         }
 
         //调外系统接口获取电子申报绑定信息
@@ -88,13 +96,11 @@ public class UserBindServiceImpl implements UserBindService {
 
 
         //查看是否重复绑定
-        String userId = UserUtil.getUserId(request);
-        UserDzsb queryParam = new UserDzsb();
         queryParam.setUserId(userId);
         queryParam.setNsrsbh(userDzsbTemp.getNsrsbh());
         queryParam.setShxydm(userDzsbTemp.getShxydm());
-        List<NSRXXBO> nsrxxboList = userBindRoMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
-        if (nsrxxboList != null && nsrxxboList.size() >= 1) {
+        List<NSRXXBO> nsrxxboList2 = userBindRoMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
+        if (nsrxxboList2 != null && nsrxxboList2.size() >= 1) {
             throw new ServiceException(4632);
         }
 

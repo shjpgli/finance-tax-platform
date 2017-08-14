@@ -7,6 +7,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
+import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
@@ -14,6 +15,7 @@ import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.RandomNumber;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +55,17 @@ public class AuthServiceImpl implements AuthService {
     private TokenRoMapper tokenRoMapper;
     @Autowired
     private TokenMapper tokenMapper;
+    @Autowired
+    private UserExtendMapper userExtendMapper;
 
+
+    /**
+     * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
+     * 3、用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
+     *
+     * @param registerBO
+     * @return
+     */
     @Transactional("db1TxManager")
     @Override
     public UserReturnBO register(RegisterBO registerBO) {
@@ -88,11 +100,16 @@ public class AuthServiceImpl implements AuthService {
         BeanUtils.copyProperties(registerBO, user);
 
         user.setId(Utils.uuid());
+        //用户名（字母UC+时间戳毫秒数）
+        user.setUsername("UC" + System.currentTimeMillis());
+        //自动生成用户昵称:（财税+6位数字）
+        user.setNickname("财税" + RandomNumber.getRandomNumber(6));
         user.setSalt(salt);
         user.setPassword(encodePassword);
         user.setPoints(0);
         user.setExp(0);
         user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
+        user.setUsernameModifiedTimes(0);
         if (!StringUtils.isEmpty(registerBO.getRegMail())) {
             user.setRegMail(registerBO.getRegMail());
         }
@@ -311,7 +328,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
-        //String url = "http://localhost:9200/message/sms/verifycode";
         String url = properties.getValue("chabc.soa.message.url") + "/verify";
 
         //请求头设置
@@ -338,7 +354,7 @@ public class AuthServiceImpl implements AuthService {
                 return true;
             }
         }
-        throw new ServiceException(4821);
+        return false;
     }
 
     @Override
