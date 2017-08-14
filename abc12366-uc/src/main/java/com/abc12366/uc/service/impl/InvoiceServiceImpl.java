@@ -165,74 +165,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceBO addInvoice(InvoiceBO invoiceBO) {
 
-        String invoiceId = Utils.uuid();
+        String invoiceId = DataUtils.getInvoiceOrderString();
         invoiceBO.setId(invoiceId);
-        //电子发票直接把发票信息插入
-        /*if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
-            String[] orderNos = invoiceBO.getOrderNos();
-
-            List<OrderBO> orderBOList = orderRoMapper.selectByOrderNos(orderNos);
-            List<InvoiceXm> invoiceXmList=new ArrayList<InvoiceXm>();
-            InvoiceXm invoiceXm = null;
-            //发票信息填充
-            DzfpGetReq dzfpGetReq=new DzfpGetReq();
-            dzfpGetReq.setZsfs("0"); //
-            dzfpGetReq.setKplx("0"); //开票0，退票1
-            dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
-            for(OrderBO orderBO:orderBOList){
-
-                List<OrderProductBO> orderProductBOList = orderBO.getOrderProductBOList();
-                for (OrderProductBO orderProductBO:orderProductBOList){
-                    invoiceXm = new InvoiceXm();
-                    //商品名称
-                    invoiceXm.setXmmc(orderProductBO.getProductBO().getInvoiceContentDetail());
-                    //商品编码
-                    invoiceXm.setSpbm("1010105000000000000");
-                    //价格
-                    invoiceXm.setTotalAmt(orderProductBO.getSellingPrice());
-                    //数量
-                    invoiceXm.setXmsl(Double.valueOf(orderProductBO.getNum()));
-                    invoiceXm.setFphxz("0");
-                    invoiceXm.setYhzcbs("0");
-                    invoiceXmList.add(invoiceXm);
-                }
-            }
-            if("1".equals(invoiceBO.getName())){
-                dzfpGetReq.setGmf_mc("个人");
-                dzfpGetReq.setGmf_nsrsbh("110109500321655");
-            }else if("2".equals(invoiceBO.getName())){
-                dzfpGetReq.setGmf_mc(invoiceBO.getCompName());
-                dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
-            }
-            dzfpGetReq.setInvoiceXms(invoiceXmList);
-            Einvocie einvocie=null;
-            try {
-                einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
-            } catch (Exception e) {
-                LOGGER.error("电子发票webservice调用异常,原因：",e);
-            }
-
-        }*/
-       /* InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectInvoiceRepo("0");
-        if (invoiceDetail == null) {
-            LOGGER.info("发票号码获取失败}", invoiceDetail);
-            throw new ServiceException(4124);
-        } else {
-            //将发票置为已使用值为2
-            invoiceDetail.setStatus("2");
-            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
-            if (dUpdate != 1) {
-                LOGGER.info("发票状态修改失败}", invoiceDetail);
-                throw new ServiceException(4178);
-            }
-        }
-        invoiceBO.setInvoiceNo(invoiceDetail.getInvoiceNo());
-        invoiceBO.setInvoiceCode(invoiceDetail.getInvoiceCode());
-*/
         Date date = new Date();
         invoiceBO.setCreateTime(date);
         invoiceBO.setLastUpdate(date);
-        invoiceBO.setUserOrderNo(DataUtils.getUserOrderString());
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceBO, invoice);
         int ins = invoiceMapper.insert(invoice);
@@ -288,7 +225,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional("db1TxManager")
     @Override
-    public List<InvoiceExcel> selectInvoiceExcelList(InvoiceBO invoice) {
+    public List<InvoiceExcel> selectInvoicePrintExcelList(InvoiceBO invoice) {
+        invoice.setStatus("2");
         List<InvoiceBO> invoiceBOList = invoiceRoMapper.selectList(invoice);
         List<InvoiceExcel> excelList = new ArrayList<InvoiceExcel>();
         Express express = null;
@@ -296,60 +234,117 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoiceExcel excel = null;
             for (InvoiceBO bo : invoiceBOList) {
                 excel = new InvoiceExcel();
-                String userOrderNo = invoice.getUserOrderNo();
-                List<Express> exList = expressRoMapper.selectbyUserOrderNo(userOrderNo);
-                //获取联系人
-                UserAddress userAddress = userAddressRoMapper.selectByPrimaryKey(invoice.getAddressId());
-                if (userAddress == null) {
-                    LOGGER.info("地址信息获取失败：{}", express);
-                    throw new ServiceException(4143);
-                }
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvince() + "-");
-                address.append(userAddress.getCity() + "-");
-                address.append(userAddress.getArea() + "-");
-                address.append(userAddress.getDetail());
-                //查询该快递单信息是否已经生成
-                if (exList == null) {
-                    //导出之前，生成订单表数据，及订单表与快递关系表数据
-                    express = new Express();
-                    express.setUserOrderNo(userOrderNo);
-                    express.setUserId(invoice.getUserId());
-                    express.setCreateTime(new Date());
+                //导出之前，生成订单表数据，及订单表与快递关系表数据
+                express = new Express();
+                express.setInvoiceOrderNo(invoice.getId());
+                express.setUserId(bo.getUserId());
+                express.setCreateTime(new Date());
 
-                    int insertExpress = expressMapper.insert(express);
-                    if (insertExpress != 1) {
-                        LOGGER.info("生成订单表数据失败：{}", express);
-                        throw new ServiceException(4142);
-                    }
-                    excel.setUserOrderNo(userOrderNo);
-                    excel.setReceivingCompany(invoice.getCompName());
-                    excel.setAddress(address.toString());
-                    excel.setPhone(invoice.getPhone());
-                    excel.setCargoContent(invoice.getInvoiceNo());
-                    excel.setCargoNum(1);
-                } else {
-                    StringBuffer content = new StringBuffer();
-                    int count = 0;
-                    for (Express ex : exList) {
-                        if (count == 0) {
-                            content.append(ex.getExpressNo());
-                        } else {
-                            content.append("," + ex.getExpressNo());
-                        }
-                        count++;
-                    }
-                    excel.setUserOrderNo(userOrderNo);
-                    excel.setReceivingCompany(invoice.getCompName());
-                    excel.setAddress(address.toString());
-                    excel.setPhone(invoice.getPhone());
-                    excel.setCargoContent(content.toString());
-                    excel.setCargoNum(count);
+                int insertExpress = expressMapper.insert(express);
+                if (insertExpress != 1) {
+                    LOGGER.info("生成订单表数据失败：{}", express);
+                    throw new ServiceException(4142);
                 }
+                excel.setInvoiceOrderNo(bo.getId());
+                excel.setNsrsbh(bo.getNsrsbh());
+                excel.setCreateTime(bo.getCreateTime());
+                excel.setContent(bo.getContent());
+                excel.setNum(1);
+                excel.setAmount(bo.getAmount());
+                excel.setAmountBig(bo.getAmount());
+                excel.setAmountSmall(bo.getAmount());
+                excel.setDrawer(UserUtil.getAdminInfo().getNickname());
                 excelList.add(excel);
             }
         }
         return excelList;
+    }
+
+    @Override
+    public List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice) {
+        //发票申请状态，1：待审批，2：已审批，3：已拒绝，4：已发货，5：已退票，6：已收货，7：待发货
+        invoice.setStatus("7");
+        List<InvoiceBO> invoiceBOList = invoiceRoMapper.selectList(invoice);
+        List<InvoiceExpressExcel> excelList = new ArrayList<InvoiceExpressExcel>();
+        Express express = null;
+        if (invoiceBOList != null) {
+            InvoiceExpressExcel excel = null;
+            for (InvoiceBO bo : invoiceBOList) {
+                excel = new InvoiceExpressExcel();
+                List<Express> exList = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
+                excel.setInvoiceOrderNo(bo.getId());
+                //收货地址
+                UserAddressBO userAddress = bo.getUserAddressBO();
+                if(bo.getUserAddressBO() != null){
+                    StringBuffer address = new StringBuffer();
+                    address.append(userAddress.getProvinceName() + "-");
+                    address.append(userAddress.getCityName() + "-");
+                    address.append(userAddress.getAreaName() + "-");
+                    address.append(userAddress.getDetail());
+                    excel.setAddress(address.toString());
+                }else {
+                    LOGGER.info("收货人地址信息异常：{}", bo);
+                    throw new ServiceException(4909);
+                }
+                excel.setReceivingCompany(bo.getNsrmc());
+                excel.setLinkman(userAddress.getName());
+                excel.setPhone(userAddress.getPhone());
+                excel.setCargoContent(bo.getInvoiceNo());
+                excel.setCargoNum(1);
+//                //查询该快递单信息是否已经生成
+//                if (exList == null) {
+//                    //导出之前，生成订单表数据，及订单表与快递关系表数据
+//                    express = new Express();
+//                    express.setInvoiceOrderNo(invoice.getId());
+//                    express.setUserId(bo.getUserId());
+//                    express.setCreateTime(new Date());
+//
+//                    int insertExpress = expressMapper.insert(express);
+//                    if (insertExpress != 1) {
+//                        LOGGER.info("生成订单表数据失败：{}", express);
+//                        throw new ServiceException(4142);
+//                    }
+//                    excel.setReceivingCompany(bo.getNsrmc());
+//                    excel.setLinkman(userAddress.getName());
+//                    excel.setPhone(userAddress.getPhone());
+//                    excel.setCargoContent(bo.getInvoiceNo());
+//                    excel.setCargoNum(1);
+//                } else {
+//                    StringBuffer content = new StringBuffer();
+//                    int count = 0;
+//                    for (Express ex : exList) {
+//                        if (count == 0) {
+//                            content.append(ex.getExpressNo());
+//                        } else {
+//                            content.append("," + ex.getExpressNo());
+//                        }
+//                        count++;
+//                    }
+//                    excel.setReceivingCompany(bo.getNsrmc());
+//                    excel.setLinkman(userAddress.getName());
+//                    excel.setPhone(userAddress.getPhone());
+//                    excel.setCargoContent(bo.getInvoiceNo());
+//                    excel.setCargoNum(1);
+//                }
+                excelList.add(excel);
+            }
+        }
+        return excelList;
+    }
+
+    @Override
+    public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList) {
+        for (InvoiceExpressExcel expressExcel:expressExcelList){
+            Invoice invoice = new Invoice();
+            invoice.setStatus("4");
+            invoice.setId(expressExcel.getInvoiceOrderNo());
+            invoice.setWaybillNum(expressExcel.getWaybillNum());
+            int insert = invoiceMapper.insert(invoice);
+            if(insert != 1){
+                LOGGER.info("新增失败：{}", invoice);
+                throw new ServiceException(4101);
+            }
+        }
     }
 
     @Transactional("db1TxManager")
@@ -381,7 +376,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             LOGGER.info("发票快递单信息查询错误：{}", invoiceBack);
             throw new ServiceException(4145);
         }
-        Invoice invoice = invoiceRoMapper.selectByUserOrderNo(express.getUserOrderNo());
+        Invoice invoice = invoiceRoMapper.selectByInvoiceOrderNo(express.getInvoiceOrderNo());
         if (invoice == null) {
             LOGGER.info("发票信息查询错误：{}", invoiceBack);
             throw new ServiceException(4146);
@@ -559,4 +554,5 @@ public class InvoiceServiceImpl implements InvoiceService {
         //加入发票日志
         insertInvoiceLog(invoiceCheckBO.getId(), UserUtil.getAdminId(), invoiceCheckBO.getRemark());
     }
+
 }

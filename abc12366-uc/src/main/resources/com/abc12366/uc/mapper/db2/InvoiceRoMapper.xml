@@ -23,7 +23,6 @@
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="bank" property="bank" jdbcType="VARCHAR"/>
         <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
-        <result column="userOrderNo" property="userOrderNo" jdbcType="VARCHAR"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
         <result column="isShipping" property="isShipping" jdbcType="VARCHAR"/>
@@ -32,7 +31,8 @@
         <result column="isInsured" property="isInsured" jdbcType="VARCHAR"/>
         <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
-        <association property="userAddress" column="addressId" select="getUserAddress"/>
+        <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
+        <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
                     select="getOrderBO"></collection>
@@ -88,11 +88,15 @@
     </select>
 
     <!-- 查询用户地址信息 -->
-    <select id="getUserAddress" resultType="com.abc12366.uc.model.UserAddress" parameterType="java.lang.String">
+    <select id="getUserAddress" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
         SELECT
-        id, userId, name, province, city, area, detail, phone, isDefault, status, createTime, lastUpdate
-        FROM uc_user_address
-        WHERE id = #{id}
+        a.id, a.userId, a.name, a.province, a.city, a.area, a.detail, a.phone, a.isDefault, a.status, a.createTime, a.lastUpdate,
+        p.province as provinceName,c.city as cityName,e.area as areaName
+        FROM uc_user_address a
+        LEFT JOIN uc_province p ON p.provinceId = a.province
+				LEFT JOIN uc_city c on c.cityId = a.city
+				LEFT JOIN uc_area e on e.areaId = a.area
+        WHERE a.id = #{id}
     </select>
 
     <!-- 查询订单信息 -->
@@ -110,7 +114,7 @@
     <sql id="Base_Column_List">
         id, userId, username, invoiceNo, invoiceCode, name, content, compName, amount, type, property, status,
         createTime, lastUpdate, nsrsbh, nsrmc, address, phone, bank, addressId, deliveryMethod, isShipping,
-        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod
+        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -129,25 +133,17 @@
         WHERE id = #{id} AND userId = #{userId}
     </select>
 
-    <!-- 查询（根据userOrderNo查询） -->
-    <select id="selectByUserOrderNo" resultType="com.abc12366.uc.model.Invoice" parameterType="java.lang.String">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_invoice
-        WHERE userOrderNo = #{userOrderNo}
-    </select>
-
     <select id="selectAvailableInvoice" resultType="com.abc12366.uc.model.Invoice">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
-        WHERE userOrderNo = #{userOrderNo}
+        WHERE id = #{id}
     </select>
 
     <sql id="InvoiceBO_Column_List">
         i.id, i.userId, i.username, i.invoiceNo, i.invoiceCode, i.name, i.content, i.compName, i.amount, i.type,
         i.property, i.status, i.createTime, i.lastUpdate, i.nsrsbh, i.nsrmc, i.address, i.phone, i.bank, i.addressId,
-        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,
+        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum
         u.username as username, a.name as consignee
     </sql>
 
@@ -166,8 +162,8 @@
             <if test=" consignee != null and consignee != '' ">
                 and a.name = #{consignee}
             </if>
-            <if test=" userOrderNo != null and userOrderNo != '' ">
-                and i.userOrderNo = #{userOrderNo}
+            <if test=" id != null and id != '' ">
+                and i.id = #{id}
             </if>
             <if test=" invoiceNo != null and invoiceNo != '' ">
                 and i.invoiceNo = #{invoiceNo}

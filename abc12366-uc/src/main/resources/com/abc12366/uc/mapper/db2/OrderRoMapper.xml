@@ -116,7 +116,7 @@
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="bank" property="bank" jdbcType="VARCHAR"/>
         <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
-        <result column="userOrderNo" property="userOrderNo" jdbcType="VARCHAR"/>
+        <result column="invoiceOrderNo" property="invoiceOrderNo" jdbcType="VARCHAR"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
         <result column="isShipping" property="isShipping" jdbcType="VARCHAR"/>

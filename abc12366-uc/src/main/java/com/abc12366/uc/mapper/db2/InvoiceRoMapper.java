@@ -21,7 +21,7 @@ public interface InvoiceRoMapper {
 
     List<InvoiceBO> selectList(InvoiceBO invoice);
 
-    Invoice selectByUserOrderNo(String userOrderNo);
+    Invoice selectByInvoiceOrderNo(String invoiceOrderNo);
 
     Invoice selectAvailableInvoice();
 

@@ -4,10 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.InvoiceBack;
-import com.abc12366.uc.model.bo.InvoiceBO;
-import com.abc12366.uc.model.bo.InvoiceBackBO;
-import com.abc12366.uc.model.bo.InvoiceCheckBO;
-import com.abc12366.uc.model.bo.InvoiceExcel;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
@@ -21,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,7 +50,7 @@ public class InvoiceController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "consignee", required = false) String consignee,
-                                     @RequestParam(value = "userOrderNo", required = false) String userOrderNo,
+                                     @RequestParam(value = "id", required = false) String id,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
                                      @RequestParam(value = "property", required = false) String property,
@@ -63,7 +59,7 @@ public class InvoiceController {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceBO invoice = new InvoiceBO();
         invoice.setConsignee(consignee);
-        invoice.setUserOrderNo(userOrderNo);
+        invoice.setId(id);
         invoice.setUsername(username);
         invoice.setInvoiceNo(invoiceNo);
         invoice.setProperty(property);
@@ -201,28 +197,55 @@ public class InvoiceController {
 
 
     /**
-     * 发票导出列表查询
+     * 发票导出打印机列表
      *
      * @return
      */
-    @GetMapping(path = "/export")
-    public ResponseEntity exportInvoice(@RequestParam(value = "startTime", defaultValue = "") String startTime,
-                                        @RequestParam(value = "endTime", defaultValue = "") String endTime,
+    @GetMapping(path = "/export/print")
+    public ResponseEntity exportInvoicePrint(/*@RequestParam(value = "startTime", defaultValue = "") String startTime,
+                                        @RequestParam(value = "endTime", defaultValue = "") String endTime,*/
                                         @RequestParam(value = "status", required = false) String status) {
         InvoiceBO invoice = new InvoiceBO();
         invoice.setStatus(status);
-        Date date = new Date();
+        /*Date date = new Date();
         if (startTime == null || "".equals(startTime)) {
             invoice.setStartTime(Constant.getToday(date));
         }
         if (endTime == null || "".equals(endTime)) {
             invoice.setEndTime(Constant.getToday(date));
-        }
-        List<InvoiceExcel> invoiceList = invoiceService.selectInvoiceExcelList(invoice);
+        }*/
+        List<InvoiceExcel> invoiceList = invoiceService.selectInvoicePrintExcelList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", invoiceList));
+    }
+
+    /**
+     * 发票导出寄送信息
+     *
+     * @return
+     */
+    @GetMapping(path = "/export/express")
+    public ResponseEntity exportInvoice() {
+        InvoiceBO invoice = new InvoiceBO();
+        List<InvoiceExpressExcel> invoiceList = invoiceService.selectInvoiceExpressExcelList(invoice);
+        LOGGER.info("{}", invoiceList);
+        return (invoiceList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", invoiceList));
+    }
+
+    /**
+     * 发票导出寄送信息
+     *
+     * @return
+     */
+    @PostMapping(path = "/import/express")
+    public ResponseEntity importInvoice(List<InvoiceExpressExcel> expressExcelList) {
+        LOGGER.info("{}", expressExcelList);
+        invoiceService.insertInvoiceExpressExcelList(expressExcelList);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -234,15 +257,14 @@ public class InvoiceController {
     public ResponseEntity selectBackList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                          @RequestParam(value = "expressNo", required = false) String expressNo,
-                                         @RequestParam(value = "userOrderNo", required = false) String userOrderNo,
+                                         @RequestParam(value = "id", required = false) String id,
                                          @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
                                          @RequestParam(value = "sendExpressNo", required = false) String
                                                      sendExpressNo) {
         InvoiceBackBO invoiceBackBO = new InvoiceBackBO();
+        invoiceBackBO.setId(id);
         invoiceBackBO.setExpressNo(expressNo);
-
         InvoiceBO invoiceBO = new InvoiceBO();
-        invoiceBO.setUserOrderNo(userOrderNo);
         invoiceBO.setInvoiceNo(invoiceNo);
         invoiceBackBO.setInvoiceBO(invoiceBO);
 

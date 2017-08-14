@@ -19,7 +19,7 @@ public class ExpressBO implements Serializable {
     /**
      * 用户订单号
      **/
-    private String userOrderNo;
+    private String invoiceOrderNo;
 
     /**
      * 用户ID
@@ -109,14 +109,6 @@ public class ExpressBO implements Serializable {
         this.user = user;
     }
 
-    public String getUserOrderNo() {
-        return userOrderNo;
-    }
-
-    public void setUserOrderNo(String userOrderNo) {
-        this.userOrderNo = userOrderNo;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -139,5 +131,13 @@ public class ExpressBO implements Serializable {
 
     public void setDeliveryId(String deliveryId) {
         this.deliveryId = deliveryId;
+    }
+
+    public String getInvoiceOrderNo() {
+        return invoiceOrderNo;
+    }
+
+    public void setInvoiceOrderNo(String invoiceOrderNo) {
+        this.invoiceOrderNo = invoiceOrderNo;
     }
 }

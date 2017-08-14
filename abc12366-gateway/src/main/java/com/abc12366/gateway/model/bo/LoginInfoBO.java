@@ -37,7 +37,7 @@ public class LoginInfoBO implements Serializable {
      **/
     private java.util.Date lastResetTokenTime;
 
-    private User user;
+    private User admin;
 
     public String getId() {
         return this.id;
@@ -79,11 +79,11 @@ public class LoginInfoBO implements Serializable {
         this.lastResetTokenTime = lastResetTokenTime;
     }
 
-    public User getUser() {
-        return user;
+    public User getAdmin() {
+        return admin;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAdmin(User admin) {
+        this.admin = admin;
     }
 }
