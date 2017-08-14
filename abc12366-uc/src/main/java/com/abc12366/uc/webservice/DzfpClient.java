@@ -61,11 +61,9 @@ public class DzfpClient {
 	
 	@SuppressWarnings("rawtypes")
 	public static Object doSender(String interfaceCode,String content,Class _class) throws Exception{
-		System.setProperty("javax.net.ssl.trustStore", ssl_store);
-		System.setProperty("javax.net.ssl.keyStorePassword", ssl_pwd);
-		System.setProperty("javax.net.ssl.trustStorePassword", ssl_pwd);
 		
-		SSLIgnoreErrorProtocolSocketFactory socketfactory = new SSLIgnoreErrorProtocolSocketFactory();
+		
+		SSLIgnoreErrorProtocolSocketFactory socketfactory = new SSLIgnoreErrorProtocolSocketFactory(ssl_store,ssl_pwd);
 
 		Protocol protocol = new Protocol("https", socketfactory, 443);
 		RPCServiceClient serviceClient = new RPCServiceClient();
