@@ -74,5 +74,19 @@ public class Einvocie implements Serializable{
 	public void setSP_URL(String sP_URL) {
 		SP_URL = sP_URL;
 	}
-    
+
+	@Override
+	public String toString() {
+		return "Einvocie{" +
+				"returnCode='" + returnCode + '\'' +
+				", returnMessage='" + returnMessage + '\'' +
+				", FPQQLSH='" + FPQQLSH + '\'' +
+				", FP_DM='" + FP_DM + '\'' +
+				", FP_HM='" + FP_HM + '\'' +
+				", JYM='" + JYM + '\'' +
+				", KPRQ='" + KPRQ + '\'' +
+				", PDF_URL='" + PDF_URL + '\'' +
+				", SP_URL='" + SP_URL + '\'' +
+				'}';
+	}
 }

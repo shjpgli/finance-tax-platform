@@ -117,7 +117,12 @@
             <if test="invoiceRepoId != null">
                 invoiceRepoId = #{invoiceRepoId},
             </if>
-
+            <if test="spUrl != null">
+                spUrl = #{spUrl},
+            </if>
+            <if test="pdfUrl != null">
+                pdfUrl = #{pdfUrl},
+            </if>
         </set>
         WHERE id = #{id}
     </update>

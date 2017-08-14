@@ -5,20 +5,22 @@
 
     <sql id="Base_Column_List">
         id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
-        toExpressNo, type, name, imageUrl, username, orderTime, num
+        toExpressNo, type
     </sql>
 
     <select id="selectList" parameterType="com.abc12366.uc.model.OrderExchange"
             resultType="com.abc12366.uc.model.OrderExchange">
-        select e.id, e.userId, e.orderNo, e.name, q.imageUrl, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
+        select e.id, e.userId, e.orderNo, e.name, q.imageUrl, q.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
         e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
         from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
-        left join (select o.id, p.imageUrl from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
+        left join (select o.id, p.imageUrl, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) q
+        on e.productId = q.id
         <where>
             <if test="type != null and type !=''">type = #{type}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
-            <if test="username != null and username !=''">and username = #{username}</if>
+            <if test="status != null and status !=''">and status = #{status}</if>
+            <if test="lastUpdate != null and lastUpdate !=''">and lastUpdate >= #{lastUpdate}</if>
             <if test="userId != null and userId !=''">and userId = #{userId}</if>
             <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
         </where>
@@ -30,15 +32,23 @@
         SELECT <include refid="Base_Column_List"/>
         FROM uc_order_exchange
         WHERE orderNo = #{orderNo}
-        AND (status != '4' OR status != '5')
+        AND status != '4'
+        AND status != '5'
     </select>
 
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
-        select e.id, e.orderNo, e.name, q.imageUrl, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark, e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
+        select e.id, e.orderNo, e.name, q.imageUrl, q.goodsType, e.username, e.num, e.orderTime, e.type, e.reason,
+        e.userRemark, e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
         from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
-        left join (select o.id, p.imageUrl from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
+        left join (select o.id, p.imageUrl, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
         WHERE e.id = #{id}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
+        SELECT <include refid="Base_Column_List"/>
+        FROM uc_order_exchange
+        WHERE id = #{id}
     </select>
 
     <select id="export" parameterType="com.abc12366.uc.model.bo.OrderExchangeExportBO"
@@ -51,7 +61,7 @@
         FROM
         uc_order_exchange a
         LEFT JOIN uc_order b ON a.orderNo = b.orderNo
-        WHERE a.status = '2',
+        WHERE a.status = '6'
         and a.type = '1'
         and a.createTime <![CDATA[>=]]> DATE_FORMAT(#{startTime}, '%Y-%m-%d %H-%i-%s')
         and a.createTime <![CDATA[<=]]> DATE_FORMAT(#{endTime}, '%Y-%m-%d %H-%i-%s')) c,
@@ -79,23 +89,21 @@
     <!-- 3-已拒绝 5-已退票 6-已收货-->
     <select id="selectOrderInvoice" parameterType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO"
             resultType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO">
-        select a.orderNo, a.isInvoice, c.invoiceNo, c.invoiceCode, c.name, c.compName, c.content, c.type, c.property,
-        c.amount, c.status, c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank
-        from uc_order a, uc_order_invoice b, uc_invoice c
-        where a.orderNo = b.orderNo
-        and b.invoiceId = c.id
-        and c.status <![CDATA[!=]]> '3' and c.status <![CDATA[!=]]> '5' and c.status <![CDATA[!=]]> '6'
-        and orderNo = #{orderNo}
+        select c.invoiceNo, c.invoiceCode, c.name, c.content, c.amount, c.type, c.property, c.status,
+        c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank, d.isInvoice, d.orderNo from
+        (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId) c
+        left join uc_order d on c.orderNo = d.orderNo
+        WHERE c.status <![CDATA[!=]]> '3' and c.status <![CDATA[!=]]> '5' and c.status <![CDATA[!=]]> '6'
+        and c.orderNo = #{orderNo}
     </select>
 
     <select id="selectInvoice" parameterType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO"
             resultType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO">
-        select a.orderNo, a.isInvoice, c.invoiceNo, c.invoiceCode, c.name, c.compName, c.content, c.type, c.property,
-        c.amount, c.status, c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank
-        from uc_order a, uc_order_invoice b, uc_invoice c
-        where a.orderNo = b.orderNo
-        and b.invoiceId = c.id
-        and c.status = '6'
-        and orderNo = #{orderNo}
+        select c.invoiceNo, c.invoiceCode, c.name, c.content, c.amount, c.type, c.property, c.status,
+        c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank, d.isInvoice, d.orderNo from
+        (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId) c
+        left join uc_order d on c.orderNo = d.orderNo
+        where c.status = '6'
+        and c.orderNo = #{orderNo}
     </select>
 </mapper>

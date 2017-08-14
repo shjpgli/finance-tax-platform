@@ -71,6 +71,8 @@ public class OrderExchange implements Serializable {
     private String name;
     // 产品图片
     private String imageUrl;
+    // 商品类型
+    private String goodsType;
     // 用户名
     private String username;
     // 下单时间
@@ -84,7 +86,7 @@ public class OrderExchange implements Serializable {
     public OrderExchange(String id, String userId, String orderNo, String reason, String userRemark, String
             adminRemark, String expressNo, String expressComp, String toExpressNo, String status, Timestamp
             createTime, Timestamp lastUpdate, String type, String name, String username, Timestamp orderTime, Integer
-            num, String imageUrl) {
+            num, String imageUrl, String goodsType) {
         this.id = id;
         this.userId = userId;
         this.orderNo = orderNo;
@@ -103,6 +105,7 @@ public class OrderExchange implements Serializable {
         this.orderTime = orderTime;
         this.num = num;
         this.imageUrl = imageUrl;
+        this.goodsType = goodsType;
     }
 
     private OrderExchange(Builder builder) {
@@ -124,6 +127,7 @@ public class OrderExchange implements Serializable {
         setOrderTime(builder.orderTime);
         setNum(builder.num);
         setImageUrl(builder.imageUrl);
+        setGoodsType(builder.goodsType);
     }
 
     public String getId() {
@@ -270,6 +274,14 @@ public class OrderExchange implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
+    }
+
     @Override
     public String toString() {
         return "OrderExchange{" +
@@ -289,6 +301,7 @@ public class OrderExchange implements Serializable {
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", goodsType='" + goodsType + '\'' +
                 ", orderTime=" + orderTime +
                 ", num=" + num +
                 '}';
@@ -313,6 +326,7 @@ public class OrderExchange implements Serializable {
         private Timestamp orderTime;
         private Integer num;
         private String imageUrl;
+        private String goodsType;
 
         public Builder() {
         }
@@ -404,6 +418,11 @@ public class OrderExchange implements Serializable {
 
         public Builder imageUrl(String val) {
             imageUrl = val;
+            return this;
+        }
+
+        public Builder goodsType(String val) {
+            goodsType = val;
             return this;
         }
 

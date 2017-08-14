@@ -16,7 +16,6 @@ public class ExchangeOrderInvoiceBO {
     private String invoiceNo;
     private String invoiceCode;
     private String name;
-    private String compName;
     private String content;
     private String type;
 
@@ -85,14 +84,6 @@ public class ExchangeOrderInvoiceBO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCompName() {
-        return compName;
-    }
-
-    public void setCompName(String compName) {
-        this.compName = compName;
     }
 
     public String getContent() {
@@ -164,7 +155,18 @@ public class ExchangeOrderInvoiceBO {
         return "ExchangeOrderInvoiceBO{" +
                 "orderNo='" + orderNo + '\'' +
                 ", isInvoice=" + isInvoice +
+                ", invoiceNo='" + invoiceNo + '\'' +
+                ", invoiceCode='" + invoiceCode + '\'' +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
                 ", property='" + property + '\'' +
+                ", amount=" + amount +
+                ", nsrsbh='" + nsrsbh + '\'' +
+                ", nsrmc='" + nsrmc + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", bank='" + bank + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }
