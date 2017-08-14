@@ -1,5 +1,8 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-08-10 9:11 PM
@@ -7,7 +10,12 @@ package com.abc12366.uc.model.bo;
  */
 public class SfImportBO {
 
+    @NotEmpty
+    @Length(min=6, max = 32)
     private String orderNo;
+
+    @NotEmpty
+    @Length(min=1, max = 100)
     private String expressNo;
 
     public String getOrderNo() {

@@ -30,7 +30,11 @@ public interface OrderExchangeService {
 
     void importJson(List<SfImportBO> dataList);
 
-    OrderExchange back(ExchangeAdminBO data);
+    OrderExchange back(ExchangeBackBO data) throws Exception;
 
     ResponseEntity refund(ExchangeRefundBO data);
+
+    void automaticReceipt() throws Exception;
+
+    List<ExchangeOrderInvoiceBO> selectInvoice(String orderNo);
 }

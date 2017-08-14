@@ -26,5 +26,7 @@ public interface OrderExchangeRoMapper {
 
     List<ExchangeOrderInvoiceBO> selectOrderInvoice(String orderNo);
 
-    ExchangeOrderInvoiceBO selectInvoice(String orderNo);
+    List<ExchangeOrderInvoiceBO> selectInvoice(String orderNo);
+
+    OrderExchange selectById(String id);
 }
