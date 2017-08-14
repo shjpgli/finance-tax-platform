@@ -1,5 +1,4 @@
 package com.abc12366.bangbang.model;
-import java.io.Serializable;
 
 
 /**
@@ -12,7 +11,7 @@ public class Feedback{
 	/**主键**/
 	private String id;
 
-	/**来源类型**/
+	/**来源类型 	财税网：TAX  财务专家：TAX_EXPERT**/
 	private String sourceType;
 
 	/**反馈用户**/

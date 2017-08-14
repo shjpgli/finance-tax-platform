@@ -36,6 +36,7 @@
 				)
 			)
 		</if>
+		ORDER BY t_votelog.createTime DESC
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->

@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 orderId,	curriculumId,	userId,	nickname,	username,	memberGrade,	orderName,	orderPrice,	isIntegral,	orderTime,	phone,	visitIP,	visitSite,	orderStatus
+		 orderId,	curriculumId,	userId,	nickname,	username,	memberGrade,	orderName,	orderPrice,orderIntegral,	isIntegral,	orderTime,	phone,	visitIP,	visitSite,	orderStatus
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -15,5 +15,26 @@
 		 FROM cms_curriculum_order
 		 WHERE orderId = #{orderId}
 	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.cms.model.curriculum.bo.CurriculumOrderBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_curriculum_order
+        WHERE 1=1
+        <if test="begintime != null">
+            <![CDATA[
+              and date_format(orderTime, '%Y%m%d') >= date_format(#{begintime}, '%Y%m%d')
+                ]]>
+        </if>
+        <if test="endtime != null">
+            <![CDATA[
+              and date_format(orderTime, '%Y%m%d') <= date_format(#{endtime}, '%Y%m%d')
+              ]]>
+        </if>
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId = #{curriculumId}
+        </if>
+    </select>
 
 </mapper>

@@ -22,6 +22,12 @@
         <include refid="Base_Column_List" />
         FROM cms_curriculum_courseware
         WHERE 1=1
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId = #{curriculumId}
+        </if>
+        <if test="chapterId != null and chapterId != ''">
+            AND chapterId = #{chapterId}
+        </if>
     </select>
 
 

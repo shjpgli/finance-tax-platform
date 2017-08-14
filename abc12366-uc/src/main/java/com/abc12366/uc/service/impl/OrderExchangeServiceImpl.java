@@ -9,18 +9,21 @@ import com.abc12366.uc.mapper.db1.OrderLogMapper;
 import com.abc12366.uc.mapper.db1.OrderMapper;
 import com.abc12366.uc.mapper.db2.DictRoMapper;
 import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
-import com.abc12366.uc.model.Dict;
-import com.abc12366.uc.model.Order;
-import com.abc12366.uc.model.OrderExchange;
-import com.abc12366.uc.model.OrderLog;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
+import com.abc12366.uc.model.pay.RefundRes;
+import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
+import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.UserUtil;
+import com.abc12366.uc.web.pay.AliPayController;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +55,12 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private TradeLogService tradeLogService;
+
+    @Autowired
+    private AliPayController aliPayController;
+
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
@@ -61,7 +70,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         BeanUtils.copyProperties(ra, data);
         List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
         if (dataList.size() == 0) {
+            String userId = Utils.getUserId();
             data.setId(Utils.uuid());
+            data.setUserId(userId);
             Timestamp now = new Timestamp(new Date().getTime());
             data.setCreateTime(now);
             data.setLastUpdate(now);
@@ -69,7 +80,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.insert(data);
 
             // 插入订单日志
-            insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
+            insertLog(data.getOrderNo(), "1", userId, data.getUserRemark());
 //                insertLog(data.getOrderNo(), "1", Utils.getAdminId(), data.getUserRemark());
         } else {
             throw new ServiceException(4950);
@@ -204,6 +215,49 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         }
         return oe;
     }
+
+    @Transactional("db1TxManager")
+    @Override
+    public ResponseEntity refund(ExchangeRefundBO data) {
+        if ("1".equals(data.getRefundType())) {
+            OrderExchange oe = selectOne(data.getId());
+
+            // 查询交易日志中支付成功的订单
+            TradeLog log = new TradeLog();
+            log.setOrderNo(oe.getOrderNo());
+            log.setTradeStatus("2");
+            log.setPayMethod("ALIPAY");
+            List<TradeLog> logList = tradeLogService.selectList(log, 1, 10000);
+
+            if (logList.size() > 0) {
+                for (int i = 0; i < logList.size(); i++) {
+                    if (logList.get(i).getAmount() > data.getAmount()) {
+                        AliRefund refund = new AliRefund();
+                        refund.setOut_trade_no(logList.get(i).getOrderNo());
+                        refund.setTrade_no(logList.get(i).getAliTrandeNo());
+                        refund.setRefund_amount(String.valueOf(data.getAmount()));
+                        refund.setRefund_reason(data.getAdminRemark());
+                        refund.setOut_request_no(Utils.uuid());
+                        ResponseEntity re = aliPayController.aliPayRefund(refund);
+                        RefundRes res = JSON.parseObject(re.getBody().toString(), RefundRes.class);
+                        if ("2000".equals(res.getCode())) { // 退款成功
+                            oe.setStatus("8");
+                            oe.setAdminRemark(data.getAdminRemark());
+                            oe.setLastUpdate(new Timestamp(new Date().getTime()));
+                            orderExchangeMapper.update(oe);
+                            // 插入订单日志
+                            insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark());
+                        }
+                        return re;
+                    }
+                }
+            }
+        } else {
+            throw new ServiceException(4956);
+        }
+        throw new ServiceException(4957);
+    }
+
 
     @Override
     public List<OrderExchange> selectList(OrderExchange oe, int page, int size) {

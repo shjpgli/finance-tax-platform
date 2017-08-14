@@ -8,6 +8,7 @@ import com.abc12366.uc.jrxt.model.TY11Response.JBXXCX;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
+import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
@@ -63,6 +64,9 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Autowired
     private AcceptClient client;
+
+    @Autowired
+    private AuthService authService;
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws MarshalException, ValidationException {
@@ -313,11 +317,46 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public NsrLoginResponse nsrLogin(NsrLogin login) {
+    public NsrLoginResponse nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
+        Map<String, String> map = new HashMap<>();
+        map.put("serviceid", "TY20");
+        map.put("NSRSBH", login.getNsrsbh());
+        String userId = UserUtil.getUserId(request);
+        map.put("USERID", userId);
+        map.put("FWMM", fwmmEncode(login.getFwmm()));
+        Map respMap = client.process(map);
         NsrLoginResponse response = new NsrLoginResponse();
         response.setLoginToken(Utils.uuid());
         return response;
+    }
+
+    @Override
+    public BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException {
+        //1.验证码校验
+        VerifyingCodeBO param = new VerifyingCodeBO();
+        param.setPhone(data.getPhone());
+        param.setType(data.getType());
+        param.setCode(data.getCode());
+        authService.verifyCode(param, request);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("serviceid", "TY12");
+        map.put("NSRSBH", data.getNsrsbh());
+        Map respMap = client.process(map);
+        BaseObject response = new BaseObject();
+        return null;
+    }
+
+    @Override
+    public BaseObject updatePassword(UpdatePwd data) {
+        Map<String, String> map = new HashMap<>();
+        map.put("serviceid", "TY21");
+        map.put("NSRSBH", data.getNsrsbh());
+        map.put("OLD_PWD", data.getOldpwd());
+        map.put("NEW_PWD", data.getNewpwd());
+        Map respMap = client.process(map);
+        return null;
     }
 
     public UserDzsb analyzeXml(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
@@ -351,6 +390,25 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4629);
         }
         return userDzsbTemp;
+    }
+
+    public String fwmmEncode(String code) throws Exception {
+        String appointCode = "";
+        String encodedCode = "";
+        //1.先BASE64编码，
+        encodedCode = Utils.encode(code);
+        //2.编码串MD5，
+        encodedCode = Utils.md5(encodedCode);
+        //3.统一转成大写，
+        encodedCode = encodedCode.toUpperCase();
+        //4.生成的字符串加一串约定码，
+        encodedCode = encodedCode + appointCode;
+        //5.再进行MD5，
+        encodedCode = Utils.md5(encodedCode);
+        //6.再转一次大写
+        encodedCode = encodedCode.toUpperCase();
+
+        return encodedCode;
     }
 
     private void testPost() {

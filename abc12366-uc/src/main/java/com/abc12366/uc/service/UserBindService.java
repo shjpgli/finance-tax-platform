@@ -1,10 +1,12 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.bo.*;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -31,5 +33,9 @@ public interface UserBindService {
 
     List<UserHndsBO> getUserhndsBind(String userId);
 
-    NsrLoginResponse nsrLogin(NsrLogin login);
+    NsrLoginResponse nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception;
+
+    BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException;
+
+    BaseObject updatePassword(UpdatePwd data);
 }

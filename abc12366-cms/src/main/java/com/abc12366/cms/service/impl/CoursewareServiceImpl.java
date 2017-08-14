@@ -54,7 +54,7 @@ public class CoursewareServiceImpl implements CoursewareService {
             LOGGER.info("新增课件信息:{}", jsonStu.toString());
             coursewareBo.setCreateTime(new Date());
             coursewareBo.setUpdateTime(new Date());
-            //保存模型信息
+            //保存课件信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             CurriculumCourseware courseware = new CurriculumCourseware();
             coursewareBo.setCoursewareId(uuid);
@@ -73,7 +73,7 @@ public class CoursewareServiceImpl implements CoursewareService {
         CurriculumCoursewareBo coursewareBo = new CurriculumCoursewareBo();
         try {
             LOGGER.info("查询单个课件信息:{}", coursewareId);
-            //查询模型信息
+            //查询课件信息
             CurriculumCourseware courseware = coursewareRoMapper.selectByPrimaryKey(coursewareId);
             BeanUtils.copyProperties(courseware, coursewareBo);
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class CoursewareServiceImpl implements CoursewareService {
 
     @Override
     public CurriculumCoursewareBo update(CurriculumCoursewareBo coursewareBo) {
-        //更新模型信息
+        //更新课件信息
         CurriculumCourseware courseware = new CurriculumCourseware();
         try {
             JSONObject jsonStu = JSONObject.fromObject(coursewareBo);
@@ -102,7 +102,7 @@ public class CoursewareServiceImpl implements CoursewareService {
 
     @Override
     public String updateStatus(String coursewareId,String status) {
-        //更新模型信息
+        //更新课件信息
         try {
 //            LOGGER.info("更新课程状态信息:{}", coursewareId+","+status);
 //            Curriculum curriculum = new Curriculum();

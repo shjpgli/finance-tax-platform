@@ -338,7 +338,7 @@ public class AuthServiceImpl implements AuthService {
                 return true;
             }
         }
-        return false;
+        throw new ServiceException(4821);
     }
 
     @Override

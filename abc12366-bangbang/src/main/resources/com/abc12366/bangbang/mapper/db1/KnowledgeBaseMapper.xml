@@ -9,7 +9,6 @@
         uselessVotes, shareNum, createTime, updateTime, createUser, updateUser
     </sql>
 
-
     <!-- 详情页查询感兴趣的知识 -->
     <select id="interestedList" resultType="knowledgeBase">
         SELECT * FROM bb_knowledge_base WHERE
@@ -74,10 +73,10 @@
         t_base.*,t_category.name AS categoryName
         FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
         WHERE t_base.categoryCode = t_category.code
-            <if test="categoryCode != null">
+            <if test="categoryCode != null and categoryCode !=''">
                 AND t_base.categoryCode LIKE CONCAT(#{categoryCode},'%')
             </if>
-            <if test="type != null">
+            <if test="type != null and type !=''">
                 AND t_base.type = #{type}
             </if>
             <if test="isOpen != null">
@@ -86,9 +85,10 @@
             <if test="status != null">
                 AND t_base.status = #{status}
             </if>
-            <if test="keywords != null">
+            <if test="keywords != null and keywords !=''">
                     AND (
                         t_base.subject LIKE CONCAT('%',#{keywords},'%')
+                        OR MATCH(t_base.content) AGAINST(#{keywords})
                         OR
                         t_base.id IN(
                             SELECT DISTINCT t1.knowledgeId

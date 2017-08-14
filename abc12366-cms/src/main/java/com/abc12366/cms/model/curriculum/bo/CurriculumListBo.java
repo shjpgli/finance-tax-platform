@@ -17,6 +17,15 @@ public class CurriculumListBo implements Serializable {
     /**课程标题**varchar(200)**/
     private String title;
 
+    /**浏览量**tinyint(11)**/
+    private Integer browseNum;
+
+    /**观看数**tinyint(11)**/
+    private Integer watchNum;
+
+    /**课程封面**varchar(200)**/
+    private String cover;
+
 	/**课程分类**varchar(64)**/
 	private String classify;
 
@@ -52,6 +61,30 @@ public class CurriculumListBo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getBrowseNum() {
+        return browseNum;
+    }
+
+    public void setBrowseNum(Integer browseNum) {
+        this.browseNum = browseNum;
+    }
+
+    public Integer getWatchNum() {
+        return watchNum;
+    }
+
+    public void setWatchNum(Integer watchNum) {
+        this.watchNum = watchNum;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public String getClassify() {

@@ -10,7 +10,8 @@
 
     <select id="selectList" parameterType="com.abc12366.uc.model.OrderExchange"
             resultType="com.abc12366.uc.model.OrderExchange">
-        select e.id, e.orderNo, e.name, q.imageUrl, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark, e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
+        select e.id, e.userId, e.orderNo, e.name, q.imageUrl, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
+        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
         from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
         left join (select o.id, p.imageUrl from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
@@ -18,6 +19,7 @@
             <if test="type != null and type !=''">type = #{type}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
             <if test="username != null and username !=''">and username = #{username}</if>
+            <if test="userId != null and userId !=''">and userId = #{userId}</if>
             <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
         </where>
     </select>

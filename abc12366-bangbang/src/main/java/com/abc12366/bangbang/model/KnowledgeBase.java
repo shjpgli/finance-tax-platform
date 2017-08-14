@@ -40,7 +40,7 @@ public class KnowledgeBase {
     /**
      * 内容
      **/
-    private byte[] content;
+    private String content;
 
     /**
      * 状态
@@ -150,11 +150,11 @@ public class KnowledgeBase {
         this.subject = subject;
     }
 
-    public byte[] getContent() {
+    public String getContent() {
         return this.content;
     }
 
-    public void setContent(byte[] content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

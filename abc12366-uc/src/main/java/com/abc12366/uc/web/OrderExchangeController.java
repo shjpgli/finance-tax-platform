@@ -66,6 +66,31 @@ public class OrderExchangeController {
         return responseEntity;
     }
 
+    /**
+     * 退换货列表
+     */
+    @GetMapping("/record")
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "orderNo", required = false) String orderNo) {
+        OrderExchange oe = new OrderExchange.Builder()
+                .orderNo(orderNo)
+                .userId(Utils.getUserId())
+                .build();
+        LOGGER.info("{}", oe);
+
+        List<OrderExchange> exchangeList = orderExchangeService.selectList(oe, pageNum, pageSize);
+        PageInfo<OrderExchange> pageInfo = new PageInfo<>(exchangeList);
+
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo
+                .getTotal()));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 查看
+     */
     @GetMapping("/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
@@ -131,6 +156,20 @@ public class OrderExchangeController {
         OrderExchange oe = orderExchangeService.back(data);
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 退款
+     */
+    @PutMapping(path = "/refund/{id}")
+    public ResponseEntity refund(@PathVariable("id") String id, @Valid @RequestBody ExchangeRefundBO data) {
+
+        data.setId(id);
+        LOGGER.info("{}", data);
+        ResponseEntity responseEntity = orderExchangeService.refund(data);
+
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }

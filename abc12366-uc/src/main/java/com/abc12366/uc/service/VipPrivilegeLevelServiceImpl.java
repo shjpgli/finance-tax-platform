@@ -67,7 +67,7 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
     }
 
     @Override
-    public Integer updateByPrivilege(List<VipPrivilegeLevelBO> list) {
+    public Integer updates(List<VipPrivilegeLevelBO> list) {
         Integer fori = 0;
         for (VipPrivilegeLevelBO obj : list) {
             VipPrivilegeLevelBO tmpObj = addOrUpdate(obj);
@@ -76,6 +76,26 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
         return fori;
     }
 
+    @Override
+    public Integer updateByPrivilege(String privilege,List<VipPrivilegeLevelBO> list) {
+        if(privilege == null){
+            LOGGER.warn("操作失败，参数：" + privilege);
+            throw new ServiceException(4101);
+        }
+        this.deleteByPrivilege(privilege);
+
+        return updates(list);
+    }
+    @Override
+    public Integer updateByLevel(String level,List<VipPrivilegeLevelBO> list) {
+        if(level == null){
+            LOGGER.warn("操作失败，参数：" + level);
+            throw new ServiceException(4101);
+        }
+        this.deleteByLevel(level);
+
+        return updates(list);
+    }
     @Override
     public VipPrivilegeLevelBO selectOne(String id) {
         return vipPrivilegeLevelRoMapper.selectOne(id);

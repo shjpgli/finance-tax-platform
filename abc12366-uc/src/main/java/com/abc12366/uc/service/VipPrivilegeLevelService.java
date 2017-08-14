@@ -16,7 +16,11 @@ import java.util.Map;
 public interface VipPrivilegeLevelService {
     List<VipPrivilegeLevelBO> selectListN(Map map);
     VipPrivilegeLevelBO selectLevelIdPrivilegeId(VipPrivilegeLevelBO obj);
-    Integer updateByPrivilege(List<VipPrivilegeLevelBO> list);
+
+    Integer updateByPrivilege(String privilege,List<VipPrivilegeLevelBO> list);
+    Integer updateByLevel(String level,List<VipPrivilegeLevelBO> list);
+    Integer updates(List<VipPrivilegeLevelBO> list);
+
     VipPrivilegeLevelBO addOrUpdate(VipPrivilegeLevelBO obj);
     List<VipPrivilegeLevelBO> selectListByLevelId(String levelId);
     List<List<VipPrivilegeLevelBO>> selectList();

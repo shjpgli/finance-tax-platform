@@ -16,11 +16,22 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectOne" resultType="com.abc12366.uc.model.TradeLog" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_trade_log
+        WHERE aliTrandeNo = #{tradeNo}
+    </select>
+
     <!-- 查询（根据主键orderNo查询） -->
     <select id="selectList" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.TradeLog">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
-        WHERE orderNo = #{orderNo}
+        <where>
+            <if test="orderNo != null and orderNo != ''"> orderNo = #{orderNo}</if>
+            <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
+            <if test="payMethod != null and payMethod != ''">AND payMethod = #{payMethod}</if>
+        </where>
     </select>
 </mapper>
