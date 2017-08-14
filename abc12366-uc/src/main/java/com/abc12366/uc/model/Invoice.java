@@ -110,11 +110,6 @@ public class Invoice implements Serializable {
     private String addressId;
 
     /**
-     * 用户订单号
-     **/
-    private String userOrderNo;
-
-    /**
      * 配送方式
      **/
     private String deliveryMethod;
@@ -148,6 +143,11 @@ public class Invoice implements Serializable {
      * 支付方式：WEIXIN、ALIPAY
      **/
     private String payMethod;
+
+    /**
+     * 运单号
+     */
+    private String waybillNum;
 
     public String getId() {
         return this.id;
@@ -301,14 +301,6 @@ public class Invoice implements Serializable {
         this.addressId = addressId;
     }
 
-    public String getUserOrderNo() {
-        return this.userOrderNo;
-    }
-
-    public void setUserOrderNo(String userOrderNo) {
-        this.userOrderNo = userOrderNo;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -374,4 +366,11 @@ public class Invoice implements Serializable {
         this.insuredFee = insuredFee;
     }
 
+    public String getWaybillNum() {
+        return waybillNum;
+    }
+
+    public void setWaybillNum(String waybillNum) {
+        this.waybillNum = waybillNum;
+    }
 }

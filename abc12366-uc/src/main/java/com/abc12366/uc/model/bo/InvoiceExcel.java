@@ -1,6 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -12,91 +13,129 @@ public class InvoiceExcel implements Serializable {
     /**
      * 用户订单号
      **/
-    private String userOrderNo;
+    private String invoiceOrderNo;
 
     /**
-     * 收件公司
+     * 纳税人识别号
      **/
-    private String receivingCompany;
+    private String nsrsbh;
 
     /**
-     * 联系人
+     * 时间
      **/
-    private String linkman;
+    private Date createTime;
 
     /**
-     * 手机号码
+     * 产品名称
+     * 发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费
      **/
-    private String phone;
+    private String content;
 
     /**
-     * 收件详细地址
-     **/
-    private String address;
+     * 数量
+     */
+    private Integer num;
 
     /**
-     * 寄托物内容
+     * 发票金额
      **/
-    private String cargoContent;
+    private Double amount;
+    /**
+     * 合计金额大写
+     */
+    private Double amountBig;
 
     /**
-     * 寄托物数量
+     * 合计金额小写
+     */
+    private Double amountSmall;
+    /**
+     * 开票人
+     */
+    private String drawer;
+
+    /**
+     * 备注
      **/
-    private Integer cargoNum;
+    private Integer remark;
 
-    public String getReceivingCompany() {
-        return receivingCompany;
+    public String getInvoiceOrderNo() {
+        return invoiceOrderNo;
     }
 
-    public void setReceivingCompany(String receivingCompany) {
-        this.receivingCompany = receivingCompany;
+    public void setInvoiceOrderNo(String invoiceOrderNo) {
+        this.invoiceOrderNo = invoiceOrderNo;
     }
 
-    public String getLinkman() {
-        return linkman;
+    public String getNsrsbh() {
+        return nsrsbh;
     }
 
-    public void setLinkman(String linkman) {
-        this.linkman = linkman;
+    public void setNsrsbh(String nsrsbh) {
+        this.nsrsbh = nsrsbh;
     }
 
-    public String getPhone() {
-        return phone;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public String getAddress() {
-        return address;
+    public String getContent() {
+        return content;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getCargoContent() {
-        return cargoContent;
+    public Integer getNum() {
+        return num;
     }
 
-    public void setCargoContent(String cargoContent) {
-        this.cargoContent = cargoContent;
+    public void setNum(Integer num) {
+        this.num = num;
     }
 
-    public Integer getCargoNum() {
-        return cargoNum;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setCargoNum(Integer cargoNum) {
-        this.cargoNum = cargoNum;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
-    public String getUserOrderNo() {
-        return userOrderNo;
+    public Double getAmountBig() {
+        return amountBig;
     }
 
-    public void setUserOrderNo(String userOrderNo) {
-        this.userOrderNo = userOrderNo;
+    public void setAmountBig(Double amountBig) {
+        this.amountBig = amountBig;
+    }
+
+    public Double getAmountSmall() {
+        return amountSmall;
+    }
+
+    public void setAmountSmall(Double amountSmall) {
+        this.amountSmall = amountSmall;
+    }
+
+    public String getDrawer() {
+        return drawer;
+    }
+
+    public void setDrawer(String drawer) {
+        this.drawer = drawer;
+    }
+
+    public Integer getRemark() {
+        return remark;
+    }
+
+    public void setRemark(Integer remark) {
+        this.remark = remark;
     }
 }

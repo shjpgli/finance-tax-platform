@@ -5,8 +5,8 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, userOrderNo, invoiceId, expressId, expressComp, status, createTime, lastUpdate
-    </sql>
+		 id,	invoiceOrderNo,	userId,	expressNo,	deliveryId,	status,	createTime,	lastUpdate
+	</sql>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Express" parameterType="java.lang.String">
@@ -16,12 +16,12 @@
         WHERE id = #{id}
     </select>
 
-    <!-- 查询（根据主键userOrderNo查询） -->
-    <select id="selectbyUserOrderNo" resultType="com.abc12366.uc.model.Express" parameterType="java.lang.String">
+    <!-- 查询（根据主键 invoiceOrderNo 查询） -->
+    <select id="selectbyInvoiceOrderNo" resultType="com.abc12366.uc.model.Express" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_express
-        WHERE userOrderNo = #{userOrderNo}
+        WHERE invoiceOrderNo = #{invoiceOrderNo}
     </select>
 
 

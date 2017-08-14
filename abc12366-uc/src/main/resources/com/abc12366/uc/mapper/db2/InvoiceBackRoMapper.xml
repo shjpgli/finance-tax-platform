@@ -40,7 +40,7 @@
             <result column="phone" property="phone" jdbcType="VARCHAR"/>
             <result column="bank" property="bank" jdbcType="VARCHAR"/>
             <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
-            <result column="userOrderNo" property="userOrderNo" jdbcType="VARCHAR"/>
+            <result column="invoiceOrderNo" property="invoiceOrderNo" jdbcType="VARCHAR"/>
             <result column="username" property="username" jdbcType="VARCHAR"/>
             <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
             <result column="isShipping" property="isShipping" jdbcType="VARCHAR"/>
@@ -64,7 +64,7 @@
         SELECT
         b.id, b.userId, b.expressId, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime,
         b.lastUpdate,b.invoiceId,
-        i.userOrderNo, e.expressNo as sendExpressNo,i.compName,i.invoiceNo,i.invoiceCode,i.content,i.property,i.amount
+        i.invoiceOrderNo, e.expressNo as sendExpressNo,i.compName,i.invoiceNo,i.invoiceCode,i.content,i.property,i.amount
         FROM uc_invoice_back b
         LEFT JOIN uc_invoice i ON i.id = b.invoiceId
         LEFT JOIN uc_express e ON e.id = b.expressId
@@ -75,7 +75,7 @@
         SELECT
         b.id, b.userId, b.expressId, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime,
         b.lastUpdate,b.invoiceId,
-        i.userOrderNo, e.expressNo as sendExpressNo
+        i.invoiceOrderNo, e.expressNo as sendExpressNo
         FROM uc_invoice_back b
         LEFT JOIN uc_invoice i ON i.id = b.invoiceId
         LEFT JOIN uc_express e ON e.id = b.expressId
@@ -84,8 +84,8 @@
             <if test=" expressNo != null and expressNo != '' ">
                 and b.expressNo = #{expressNo}
             </if>
-            <if test=" invoiceBO.userOrderNo != null and invoiceBO.userOrderNo != '' ">
-                and i.userOrderNo = #{invoiceBO.userOrderNo}
+            <if test=" invoiceBO.invoiceOrderNo != null and invoiceBO.invoiceOrderNo != '' ">
+                and i.invoiceOrderNo = #{invoiceBO.invoiceOrderNo}
             </if>
             <if test=" invoiceBO.invoiceNo != null and invoiceBO.invoiceNo != '' ">
                 and i.invoiceNo = #{invoiceBO.invoiceNo}

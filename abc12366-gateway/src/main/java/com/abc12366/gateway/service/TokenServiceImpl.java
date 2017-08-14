@@ -64,7 +64,7 @@ public class TokenServiceImpl implements TokenService {
                 isAuth = false;
             } else {
                 request.setAttribute(Constant.ADMIN_ID, bo.getUserId());
-                request.setAttribute(Constant.ADMIN_USER, bo.getUser());
+                request.setAttribute(Constant.ADMIN_USER, bo.getAdmin());
                 isAuth = true;
             }
         } catch (IOException e) {
