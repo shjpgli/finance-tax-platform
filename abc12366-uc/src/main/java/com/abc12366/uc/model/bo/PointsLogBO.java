@@ -11,9 +11,9 @@ import java.util.Date;
  */
 public class PointsLogBO {
     private String id;
-    @NotEmpty(message = "userId不能为空")
+    @NotEmpty
     private String userId;
-    @NotEmpty(message = "ruleId不能为空")
+    @NotEmpty
     private String ruleId;
     private String name;
     private String code;
