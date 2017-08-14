@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("{}", userUpdateBO);
         User user = userRoMapper.selectOne(userUpdateBO.getId());
         //普通用户只允许修改一次用户名
-        if (userUpdateBO.getUsername() != null && user.getUsernameModifiedTimes() >= 1) {
+        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) && user.getUsernameModifiedTimes() >= 1) {
             throw new ServiceException(4037);
         }
         String str = "";
