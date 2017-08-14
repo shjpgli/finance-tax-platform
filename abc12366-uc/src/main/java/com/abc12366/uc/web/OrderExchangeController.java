@@ -94,7 +94,12 @@ public class OrderExchangeController {
     @GetMapping("/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
-        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", orderExchangeService.selectOne(id)));
+        OrderExchange oe = orderExchangeService.selectOne(id);
+        List<ExchangeOrderInvoiceBO> dataList = null;
+        if (oe != null) {
+            dataList = orderExchangeService.selectInvoice(oe.getOrderNo());
+        }
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe, "dataList", dataList));
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
@@ -149,10 +154,26 @@ public class OrderExchangeController {
      * 确认退货
      */
     @PutMapping(path = "/back/{id}")
-    public ResponseEntity back(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data) {
+    public ResponseEntity back(@PathVariable("id") String id, @Valid @RequestBody ExchangeBackBO data) throws
+            Exception {
 
         data.setId(id);
         LOGGER.info("{}", data);
+
+        if (StringUtils.isEmpty(data.getExpressNo()) && StringUtils.isEmpty(data.getExpressComp())) {
+            OrderExchange orderExchange = orderExchangeService.selectOne(id);
+            if ("2".equals(orderExchange.getGoodsType())) {
+                return ResponseEntity.ok(Utils.bodyStatus(4958));
+            }
+            List<ExchangeOrderInvoiceBO> dataList = orderExchangeService.selectInvoice(orderExchange.getOrderNo());
+            if (dataList.size() > 0) {
+                for (ExchangeOrderInvoiceBO eoi : dataList) {
+                    if ("1".equals(eoi.getProperty())) {
+                        return ResponseEntity.ok(Utils.bodyStatus(4959));
+                    }
+                }
+            }
+        }
         OrderExchange oe = orderExchangeService.back(data);
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));

@@ -1,15 +1,18 @@
 package com.abc12366.uc.webservice;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.SocketFactory;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -27,11 +30,24 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 public class SSLIgnoreErrorProtocolSocketFactory implements
 		ProtocolSocketFactory {
 	private SSLContext sslcontext = null;
+	
+	private String ssl_store;
+	private String ssl_pwd;
 
-	private static SSLContext createEasySSLContext() {
+	public SSLIgnoreErrorProtocolSocketFactory(String ssl_store, String ssl_pwd) {
+		this.ssl_store=ssl_store;
+		this.ssl_pwd=ssl_pwd;
+	}
+
+	private  SSLContext createEasySSLContext() {
 		try {
+			KeyStore keystore=KeyStore.getInstance("JKS");
+			keystore.load(new FileInputStream(ssl_store),ssl_pwd.toCharArray());
+			KeyManagerFactory kmf=KeyManagerFactory.getInstance("SunX509");  
+		    kmf.init(keystore,ssl_pwd.toCharArray());
+			
 			SSLContext context = SSLContext.getInstance("SSL");
-			context.init(null, new TrustManager[] { new X509TrustManager() {
+			context.init(kmf.getKeyManagers(), new TrustManager[] { new X509TrustManager() {
 				public void checkClientTrusted(X509Certificate[] arg0,
 						String arg1) throws CertificateException {
 				}

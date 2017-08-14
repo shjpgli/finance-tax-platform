@@ -52,7 +52,7 @@
 
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
         select id, username, password, phone, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
-        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
+        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel, usernameModifiedTimes
         from uc_user
         where id = #{id}
     </select>

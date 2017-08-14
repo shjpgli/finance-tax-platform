@@ -40,8 +40,12 @@ public class CoursewareController {
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                     @RequestParam(value = "chapterId", required = false) String chapterId) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId", curriculumId);//课程ID
+        dataMap.put("chapterId", chapterId);//章节ID
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumCoursewareBo> dataList = coursewareService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));

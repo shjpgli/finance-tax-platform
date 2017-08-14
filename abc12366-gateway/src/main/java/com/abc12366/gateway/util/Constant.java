@@ -73,8 +73,10 @@ public class Constant {
 
     // 订单退货期限，单位：天
     public final static Integer ORDER_BACK_DAYS = 7;
-    // 订单退货期限，单位：天
+    // 订单换货期限，单位：天
     public final static Integer ORDER_EXCHANGE_DAYS = 15;
+    // 订单换货自动收货期限，单位：天
+    public final static Integer ORDER_EXCHANGE_RECEIPT_DAYS = 15;
 
 
     /**

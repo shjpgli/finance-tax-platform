@@ -13,8 +13,17 @@ public class UserReturnBO {
     private String phone;
     private Date createTime;
     private Date lastUpdate;
+    private String nickname;
 
     public UserReturnBO() {
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public UserReturnBO(String id, String username, String phone, Date createTime, Date lastUpdate) {

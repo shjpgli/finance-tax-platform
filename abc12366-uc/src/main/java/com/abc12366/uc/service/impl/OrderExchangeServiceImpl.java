@@ -4,21 +4,27 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.jrxt.model.util.DateUtil;
+import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
 import com.abc12366.uc.mapper.db1.OrderExchangeMapper;
 import com.abc12366.uc.mapper.db1.OrderLogMapper;
 import com.abc12366.uc.mapper.db1.OrderMapper;
 import com.abc12366.uc.mapper.db2.DictRoMapper;
+import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
+import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
+import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.web.pay.AliPayController;
+import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
@@ -61,10 +67,16 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Autowired
     private AliPayController aliPayController;
 
+    @Autowired
+    private InvoiceDetailMapper invoiceDetailMapper;
+
+    @Autowired
+    private InvoiceDetailRoMapper invoiceDetailRoMapper;
+
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
-        exchangeCheck(ra);
+        //exchangeCheck(ra);
 
         OrderExchange data = new OrderExchange();
         BeanUtils.copyProperties(ra, data);
@@ -80,8 +92,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.insert(data);
 
             // 插入订单日志
-            insertLog(data.getOrderNo(), "1", userId, data.getUserRemark());
-//                insertLog(data.getOrderNo(), "1", Utils.getAdminId(), data.getUserRemark());
+//            insertLog(data.getOrderNo(), "1", userId, data.getUserRemark());
+            insertLog(data.getOrderNo(), "1", Utils.getAdminId(), data.getUserRemark());
         } else {
             throw new ServiceException(4950);
         }
@@ -98,7 +110,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(4952);
             }
             // 是否在换货日期之内
-            if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant.ORDER_EXCHANGE_DAYS))) {
+            if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant
+                    .ORDER_EXCHANGE_DAYS))) {
                 throw new ServiceException(4953);
             }
         } else { // 退货
@@ -120,8 +133,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public OrderExchange update(ExchangeApplicationBO data) {
-        exchangeCheck(data);
-        OrderExchange oe = selectOne(data.getId());
+//        exchangeCheck(data);
+        OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
         if (oe != null) {
             List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
             if (dataList.size() == 0) {
@@ -130,11 +143,14 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 oe.setType(data.getType());
                 oe.setLastUpdate(new Timestamp(new Date().getTime()));
                 oe.setStatus("1");
+                oe.setAdminRemark("");
+                oe.setExpressNo("");
+                oe.setExpressComp("");
                 orderExchangeMapper.update(oe);
 
                 // 插入订单日志
-                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
-//                insertLog(oe.getOrderNo(), "1", Utils.getAdminId(), oe.getUserRemark());
+//                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
+                insertLog(oe.getOrderNo(), "1", Utils.getAdminId(), oe.getUserRemark());
             } else {
                 throw new ServiceException(4950);
             }
@@ -166,11 +182,13 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderExchange back(ExchangeAdminBO data) {
-        OrderExchange oe = selectOne(data.getId());
+    public OrderExchange back(ExchangeBackBO data) throws Exception {
+        OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
             // 更新退货状态：确认退货
+            oe.setExpressNo(data.getExpressNo());
+            oe.setExpressComp(data.getExpressComp());
             oe.setAdminRemark(data.getAdminRemark());
             oe.setLastUpdate(new Timestamp(new Date().getTime()));
             oe.setStatus("7");
@@ -184,31 +202,51 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderMapper.update(order);
 
             // 发票作废
-            ExchangeOrderInvoiceBO eoi = orderExchangeRoMapper.selectInvoice(oe.getOrderNo());
-            if (eoi != null && "1".equals(eoi.getProperty())) { // 纸质发票
-                // todo
-            } else if (eoi != null && "2".equals(eoi.getProperty())) { // 纸质发票
-                // todo
+            List<ExchangeOrderInvoiceBO> orderInvoiceBOList = orderExchangeRoMapper.selectInvoice(oe.getOrderNo());
+
+            if (orderInvoiceBOList.size() > 0) {
                 DzfpGetReq req = new DzfpGetReq();
-                req.setKplx("1");
-                req.setZsfs("0");
-                req.setGmf_mc(eoi.getNsrmc());
-                req.setGmf_nsrsbh(eoi.getNsrsbh());
-                req.setKpr(UserUtil.getAdminInfo().getNickname());
-
-                req.setHylx("0");
-                req.setGmf_dzdh(eoi.getAddress());
-                req.setGmf_yhzh(eoi.getBank());
-                req.setGmf_sjh(eoi.getPhone());
-
                 List<InvoiceXm> dataList = new ArrayList<>();
-                InvoiceXm xm = new InvoiceXm();
-                xm.setFphxz("0");
-                xm.setXmmc(selectFieldValue("invoicecontent", "1"));
-                xm.setTotalAmt(eoi.getAmount());
-                dataList.add(xm);
+                for (ExchangeOrderInvoiceBO eoi : orderInvoiceBOList) {
+                    if ("1".equals(eoi.getProperty())) { // 纸质发票
+                        // todo
+                    } else if ("2".equals(eoi.getProperty())) { // 电子发票
+                        if ("1".equals(eoi.getName())) { // 个人发票
+                            req.setGmf_mc(eoi.getNsrmc());
+                        } else {
+                            req.setGmf_mc(eoi.getNsrmc());
+                            req.setGmf_nsrsbh(eoi.getNsrsbh());
+                            req.setGmf_dzdh(eoi.getAddress());
+                            req.setGmf_yhzh(eoi.getBank());
+                            req.setGmf_sjh(eoi.getPhone());
+                        }
+                        req.setKplx("1");
+                        req.setZsfs("0");
+                        req.setKpr(UserUtil.getAdminInfo().getNickname());
+                        req.setHylx("0");
 
-                req.setInvoiceXms(dataList);
+                        InvoiceXm xm = new InvoiceXm();
+                        xm.setFphxz("0");
+                        xm.setXmmc(selectFieldValue("invoicecontent", eoi.getContent()));
+                        xm.setXmsl(1.00);
+                        xm.setTotalAmt(eoi.getAmount());
+                        dataList.add(xm);
+
+                        req.setInvoiceXms(dataList);
+                    }
+                }
+                Einvocie einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", req.tosendXml(), Einvocie.class);
+
+                if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
+                    InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(einvocie.getFP_HM());
+                    id.setStatus("3");
+                    id.setLastUpdate(new Date());
+                    id.setSpUrl(einvocie.getSP_URL());
+                    id.setPdfUrl(einvocie.getPDF_URL());
+                    invoiceDetailMapper.update(id);
+                } else {
+                    throw new ServiceException(einvocie.getReturnCode(), einvocie.getReturnMessage());
+                }
             }
             // 插入订单日志
             insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminRemark());
@@ -220,7 +258,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Override
     public ResponseEntity refund(ExchangeRefundBO data) {
         if ("1".equals(data.getRefundType())) {
-            OrderExchange oe = selectOne(data.getId());
+            OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
             // 查询交易日志中支付成功的订单
             TradeLog log = new TradeLog();
@@ -245,8 +283,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                             oe.setAdminRemark(data.getAdminRemark());
                             oe.setLastUpdate(new Timestamp(new Date().getTime()));
                             orderExchangeMapper.update(oe);
-                            // 插入订单日志
+                            // 插入订单日志-已退款
                             insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark());
+                            // 插入订单日志-已完成
+                            insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
                         }
                         return re;
                     }
@@ -256,6 +296,32 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             throw new ServiceException(4956);
         }
         throw new ServiceException(4957);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public void automaticReceipt() throws Exception {
+        Timestamp now = new Timestamp(new Date().getTime());
+        OrderExchange oe = new OrderExchange.Builder()
+                .status("3")
+                .lastUpdate(now)
+                .build();
+        List<OrderExchange> dataList = orderExchangeRoMapper.selectList(oe);
+        for (OrderExchange data : dataList) {
+            if (data.getLastUpdate().after(DateUtil.addDays(new Date(), -Constant.ORDER_EXCHANGE_RECEIPT_DAYS))) {
+                data.setStatus("4");
+                data.setLastUpdate(now);
+                orderExchangeMapper.update(data);
+
+                // 插入订单日志
+                insertLog(data.getOrderNo(), "4", "", "系统自动完成收货");
+            }
+        }
+    }
+
+    @Override
+    public List<ExchangeOrderInvoiceBO> selectInvoice(String orderNo) {
+        return orderExchangeRoMapper.selectInvoice(orderNo);
     }
 
 
@@ -268,7 +334,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public OrderExchange disagree(ExchangeAdminBO data) {
-        OrderExchange oe = selectOne(data.getId());
+        OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
             Timestamp now = new Timestamp(new Date().getTime());
@@ -291,7 +357,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public OrderExchange agree(ExchangeAdminBO data) {
-        OrderExchange oe = selectOne(data.getId());
+        OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
             Timestamp now = new Timestamp(new Date().getTime());
@@ -309,7 +375,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public OrderExchange confirm(ExchangeConfirmBO data) {
-        OrderExchange oe = selectOne(data.getId());
+        OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
             Timestamp now = new Timestamp(new Date().getTime());

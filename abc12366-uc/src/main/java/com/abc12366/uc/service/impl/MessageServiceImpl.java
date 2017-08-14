@@ -61,15 +61,14 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageBO insert(Message message, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}", message, request);
-        String userId = UserUtil.getUserId(request);
 
         String url = properties.getValue("chabc.soa.message.url") + "/business";
 
         Map<String, Object> map = new HashMap<>();
-        map.put("userId", userId);
+        map.put("userId", message.getUserId());
         map.put("businessId", message.getBusinessId());
         map.put("content", message.getContent());
-        map.put("status", message.getStatus());
+        map.put("status", "1");
         map.put("type", message.getType());
 
         String responseStr;
