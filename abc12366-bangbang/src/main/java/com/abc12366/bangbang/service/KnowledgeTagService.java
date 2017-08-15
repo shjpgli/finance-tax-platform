@@ -32,4 +32,6 @@ public interface KnowledgeTagService {
     /* 删除标签 */
     void delete(String id);
 
+    /* 批量删除标签 */
+    void delete(List<String> ids);
 }

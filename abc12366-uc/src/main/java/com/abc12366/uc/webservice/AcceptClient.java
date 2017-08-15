@@ -19,7 +19,9 @@ public class AcceptClient {
     private PkgUtil pkgutil;
 
     public Map<String, String> process(Map<String, String> map){
-        String target = "http://dzsb.abc12366.cn/tdps-accept/services/AcceptService?wsdl";
+        //String target = "http://dzsb.abc12366.cn/tdps-accept/services/AcceptService?wsdl";
+        String target = "http://testhn.abc12366.cn/tdps-accept/services/AcceptService?wsdl";
+
         try {
             AcceptServiceStub.AcceptRequest request = new AcceptServiceStub.AcceptRequest();
             request.setTiripPkgStr(pkgutil.generatorPkgStrbyTdps(map));

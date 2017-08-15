@@ -29,8 +29,17 @@ public class UserBO {
     private Integer exp;
     private String vipLevel;
     private String realName;
+    private Integer usernameModifiedTimes;
 
     public UserBO() {
+    }
+
+    public Integer getUsernameModifiedTimes() {
+        return usernameModifiedTimes;
+    }
+
+    public void setUsernameModifiedTimes(Integer usernameModifiedTimes) {
+        this.usernameModifiedTimes = usernameModifiedTimes;
     }
 
     public String getId() {

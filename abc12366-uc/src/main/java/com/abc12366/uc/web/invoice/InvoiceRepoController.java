@@ -46,10 +46,14 @@ public class InvoiceRepoController {
     @GetMapping(path = "/invoice/repo")
     public ResponseEntity selectInvoiceRepoList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                @RequestParam(value = "status", required = false) String status,
+                                                @RequestParam(value = "invoiceTypeCode", required = false) String invoiceTypeCode,
                                                 @RequestParam(value = "invoiceCode", required = false) String invoiceCode) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceRepoBO invoiceRepo = new InvoiceRepoBO();
+        invoiceRepo.setStatus(status);
         invoiceRepo.setInvoiceCode(invoiceCode);
+        invoiceRepo.setInvoiceTypeCode(invoiceTypeCode);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<InvoiceRepoBO> invoiceList = invoiceRepoService.selectList(invoiceRepo);
         LOGGER.info("{}", invoiceList);

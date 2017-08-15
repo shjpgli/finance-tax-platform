@@ -526,7 +526,7 @@
             <if test=" tradeMethod != null and tradeMethod != '' ">
                 and o.tradeMethod = #{tradeMethod}
             </if>
-            <if test=" isInvoice != null and isInvoice != '' ">
+            <if test=" isInvoice != null ">
                 and o.isInvoice = #{isInvoice}
             </if>
             <if test="startTime != null">

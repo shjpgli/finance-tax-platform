@@ -25,6 +25,7 @@
             <if test="userId != null and userId !=''">and userId = #{userId}</if>
             <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
         </where>
+        ORDER BY e.createTime DESC
     </select>
 
     <!-- 未完成换货申请，4-已完成 5-已拒绝 -->

@@ -5,7 +5,10 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.DateUtil;
-import com.abc12366.uc.mapper.db1.*;
+import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
+import com.abc12366.uc.mapper.db1.OrderExchangeMapper;
+import com.abc12366.uc.mapper.db1.OrderLogMapper;
+import com.abc12366.uc.mapper.db1.OrderMapper;
 import com.abc12366.uc.mapper.db2.DictRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
@@ -20,7 +23,6 @@ import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.web.pay.AliPayController;
 import com.abc12366.uc.webservice.DzfpClient;
@@ -72,6 +74,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Autowired
     private InvoiceDetailRoMapper invoiceDetailRoMapper;
 
+    @Autowired
     private PointsLogService pointsLogService;
 
     @Transactional("db1TxManager")
@@ -208,7 +211,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 pointsLog.setOutgo(eco.getGiftPoints());
                 pointsLog.setUserId(eco.getUserId());
                 pointsLog.setRemark("用户退单");
-                pointsLog.setType("ORDER_BACK");
+                pointsLog.setLogType("ORDER_BACK");
                 pointsLogService.insert(pointsLog);
             } else {
                 throw new ServiceException(4960);
