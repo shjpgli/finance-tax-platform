@@ -89,16 +89,16 @@ public class UserServiceImpl implements UserService {
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
         User user = userRoMapper.selectOne(userUpdateBO.getId());
-        //普通用户只允许修改一次用户名
-        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) && user.getUsernameModifiedTimes() >= 1) {
-            throw new ServiceException(4037);
-        }
-        String str = "";
-        str.contains("");
         if (user == null) {
             LOGGER.warn("修改失败");
             throw new ServiceException(4018);
         }
+
+        //普通用户只允许修改一次用户名
+        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) && user.getUsernameModifiedTimes() >= 1) {
+            throw new ServiceException(4037);
+        }
+
         //进行用户名和电话唯一性确认
         List<UserBO> userBOList = userRoMapper.selectListExcludedId(userUpdateBO.getId());
         if (userBOList != null && userBOList.size() > 1) {
