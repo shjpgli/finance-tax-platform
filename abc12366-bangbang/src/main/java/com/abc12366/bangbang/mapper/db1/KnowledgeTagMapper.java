@@ -33,6 +33,11 @@ public interface KnowledgeTagMapper {
     int deleteByPrimaryKey(@Param("id") String id);
 
     /**
+     * 删除（根据主键IDS批量删除）
+     **/
+    int deleteByPrimaryKeys(List<String> ids);
+
+    /**
      * 添加
      **/
     int  insertBatch(List<KnowledgeTag> records);

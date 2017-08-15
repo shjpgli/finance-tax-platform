@@ -91,6 +91,15 @@ public class KnowledgeTagController {
     }
 
     /*
+    * 批量删除知识库标签 接口
+    */
+    @DeleteMapping(path = "/batch/delete")
+    public ResponseEntity batchDelete(@RequestBody List<String> ids) {
+        knowledgeTagService.delete(ids);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /*
     *  停用启用 接口
     */
     @PutMapping(path = "/modifyStatus/{id}/{status}")

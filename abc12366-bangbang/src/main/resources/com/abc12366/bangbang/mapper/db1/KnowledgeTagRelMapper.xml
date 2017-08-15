@@ -27,11 +27,24 @@
         DELETE FROM bb_knowledge_tag_rel
         WHERE knowledgeId = #{knowledgeId}
     </delete>
-
     <!--删除：根据KnowledgeIds批量删除-->
     <delete id="deleteByKnowledgeIds" parameterType="java.util.List">
         DELETE FROM bb_knowledge_tag_rel
         WHERE knowledgeId IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!--删除：根据tagId删除-->
+    <delete id="deleteByTagId" parameterType="java.lang.String">
+        DELETE FROM bb_knowledge_tag_rel
+        WHERE tagId = #{tagId}
+    </delete>
+    <!--删除：根据KnowledgeIds批量删除-->
+    <delete id="deleteByTagIds" parameterType="java.util.List">
+        DELETE FROM bb_knowledge_tag_rel
+        WHERE tagId IN
         <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
