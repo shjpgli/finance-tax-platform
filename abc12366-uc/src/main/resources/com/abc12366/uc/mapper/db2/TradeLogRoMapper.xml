@@ -33,5 +33,6 @@
             <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
             <if test="payMethod != null and payMethod != ''">AND payMethod = #{payMethod}</if>
         </where>
+        ORDER BY tradeTime DESC
     </select>
 </mapper>

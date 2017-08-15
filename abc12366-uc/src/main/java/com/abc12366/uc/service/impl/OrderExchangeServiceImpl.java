@@ -12,6 +12,7 @@ import com.abc12366.uc.mapper.db1.OrderMapper;
 import com.abc12366.uc.mapper.db2.DictRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
+import com.abc12366.uc.mapper.db2.TradeLogRoMapper;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
@@ -62,7 +63,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     private OrderMapper orderMapper;
 
     @Autowired
-    private TradeLogService tradeLogService;
+    private TradeLogRoMapper tradeLogRoMapper;
 
     @Autowired
     private AliPayController aliPayController;
@@ -263,7 +264,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             log.setOrderNo(oe.getOrderNo());
             log.setTradeStatus("2");
             log.setPayMethod("ALIPAY");
-            List<TradeLog> logList = tradeLogService.selectList(log, 1, 10000);
+            List<TradeLog> logList = tradeLogRoMapper.selectList(log);
 
             if (logList.size() > 0) {
                 for (int i = 0; i < logList.size(); i++) {

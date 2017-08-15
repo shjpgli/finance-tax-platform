@@ -158,4 +158,21 @@ public class TradeLog implements Serializable {
 		this.aliTrandeNo = aliTrandeNo;
 	}
 
+    @Override
+    public String toString() {
+        return "TradeLog{" +
+                "id='" + id + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", amount=" + amount +
+                ", tradeStatus='" + tradeStatus + '\'' +
+                ", aliTrandeNo='" + aliTrandeNo + '\'' +
+                ", tradeType='" + tradeType + '\'' +
+                ", tradeTime=" + tradeTime +
+                ", payMethod='" + payMethod + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", compareStatus='" + compareStatus + '\'' +
+                ", compareTime=" + compareTime +
+                '}';
+    }
 }

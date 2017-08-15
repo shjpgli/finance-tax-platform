@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 coursewareId,	curriculumId,	chapterId,type,	title,	UploadWay,	link,	fileName,	fileSite,	fileSize,	duration,	isDownload,coursewareSeq,createrId,createrName,	createTime,	updateTime
+		 coursewareId,	curriculumId,	chapterId,type,	title,	uploadWay,	link,	fileName,	fileSite,	fileSize,	duration,	isDownload,coursewareSeq,createrId,createrName,	createTime,	updateTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

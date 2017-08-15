@@ -28,6 +28,9 @@
 			<if test="realNum != null">
 				realNum,
 			</if>
+			<if test="checkBook != null">
+				checkBook,
+			</if>
 			<if test="remark != null">
 				remark,
 			</if>
@@ -48,6 +51,9 @@
 			</if>
 			<if test="realNum!=null">
 				#{realNum},
+			</if>
+			<if test="checkBook!=null">
+				#{checkBook},
 			</if>
 			<if test="remark!=null">
 				#{remark},
@@ -73,6 +79,9 @@
 			</if>
 			<if test="remark != null">
 				remark = #{remark},
+			</if>
+			<if test="checkBook != null">
+				checkBook = #{checkBook},
 			</if>
 
 		</set>

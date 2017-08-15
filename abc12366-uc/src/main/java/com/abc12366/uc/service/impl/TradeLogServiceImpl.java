@@ -44,7 +44,6 @@ public class TradeLogServiceImpl implements TradeLogService {
         return tradeLogRoMapper.selectOne(tradeNo);
     }
 
-    @Transactional("db1TxManager")
     @Override
     public List<TradeBillBO> bill(List<TradeBillBO> dataList) {
         List<TradeBillBO> undoneList = new ArrayList<>();
@@ -52,7 +51,7 @@ public class TradeLogServiceImpl implements TradeLogService {
             for (TradeBillBO data: dataList) {
                 TradeLog log = selectOne(data.getTradeNo());
                 if (log != null && log.getOrderNo().equals(data.getOrderNo())
-                        && log.getAmount() == data.getAmount()) {
+                        && log.getAmount().equals(data.getAmount())) {
                     log.setCompareStatus("1");
                     log.setCompareTime(new Date());
                     tradeLogMapper.update(log);

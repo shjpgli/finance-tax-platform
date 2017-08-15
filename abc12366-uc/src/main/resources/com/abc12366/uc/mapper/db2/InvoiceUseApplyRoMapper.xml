@@ -72,8 +72,15 @@
         <result column="realNum" property="realNum" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
+        <association property="usableShare" column="invoiceTypeCode" select="selectUsableShare"/>
     </resultMap>
 
+    <!--查询可用份数-->
+    <select id="selectUsableShare" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT sum(share) as usableShare
+        FROM uc_invoice_repo
+        where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
+    </select>
     <!-- 发票领用明细表对象-->
     <resultMap id="invoiceApprovalLogMap" type="com.abc12366.uc.model.invoice.bo.InvoiceApprovalLogBO">
         <result column="useId" property="useId" jdbcType="VARCHAR"/>
@@ -81,6 +88,7 @@
         <result column="repoNum" property="repoNum" jdbcType="INTEGER"/>
         <result column="applyNum" property="applyNum" jdbcType="INTEGER"/>
         <result column="realNum" property="realNum" jdbcType="INTEGER"/>
+        <result column="checkBook" property="checkBook" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
     </resultMap>
@@ -106,7 +114,7 @@
     <!-- 查询（发票领用明细表） -->
     <select id="getInvoiceUseDetailBO" resultMap="invoiceUseDetailMap" parameterType="java.lang.String">
         SELECT
-        d.useId,	d.invoiceTypeCode,	d.repoNum,	d.applyNum,d.	realNum,	d.remark,t.fieldKey as fieldKey
+        d.useId,	d.invoiceTypeCode,	d.repoNum,	d.applyNum,d.	realNum,d.checkBook,	d.remark,t.fieldKey as fieldKey
         FROM uc_invoice_use_detail d
         LEFT JOIN uc_dict t on t.id = d.invoiceTypeCode
 		WHERE d.useId = #{useId}
@@ -115,7 +123,7 @@
     <!-- 查询主键ID -->
     <select id="selectInvoiceRepoNum" resultType="com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO" parameterType="java.lang.String">
         SELECT
-        sum(book) as repoBook,sum(share) as usableShare
+        sum(book) as repoNum,sum(share) as usableShare
         FROM uc_invoice_repo
         where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
     </select>
