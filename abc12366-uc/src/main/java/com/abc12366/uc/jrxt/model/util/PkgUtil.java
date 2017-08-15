@@ -28,7 +28,7 @@ public class PkgUtil extends BaseObject{
         String result = null;
         String serviceId = map.get("serviceid").toUpperCase();
         if(serviceId.equalsIgnoreCase("TY11")){//�ӵ����걨��ȡ��˰�˻�����Ϣ��ѯ
-            result = makeTiripPackageBytdps(makeTY11(map), serviceId, "CSZJ");
+            result = makeTiripPackageBytdps(makeTY11(map), serviceId, "ABC_4000");
 //            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
         if(serviceId.equalsIgnoreCase("TY20")){
