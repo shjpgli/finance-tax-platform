@@ -445,9 +445,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoiceBO invoiceBO = invoiceRoMapper.selectById(invoiceCheckBO.getId());
             //电子发票直接把发票信息插入
             if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
-                String[] orderNos = invoiceBO.getOrderNos();
 
-                List<OrderBO> orderBOList = orderRoMapper.selectByOrderNos(orderNos);
+//                String[] orderNos = invoiceBO.getOrderNos();
+
+//                List<OrderBO> orderBOList = orderRoMapper.selectByOrderNos(orderNos);
+                List<OrderBO> orderBOList = invoiceBO.getOrderBOList();
                 List<InvoiceXm> invoiceXmList=new ArrayList<InvoiceXm>();
                 InvoiceXm invoiceXm = null;
                 //发票信息填充
@@ -541,10 +543,11 @@ public class InvoiceServiceImpl implements InvoiceService {
                     throw new ServiceException(4148);
                 }
             }
+            invoice.setStatus("3");
             //删除订单和发票对应关系
             orderInvoiceMapper.deleteByInvoiceId(invoiceCheckBO.getId());
         }
-
+        invoice.setRemark(invoiceCheckBO.getRemark());
         invoice.setLastUpdate(new Date());
         int update = invoiceMapper.update(invoice);
         if (update != 1) {

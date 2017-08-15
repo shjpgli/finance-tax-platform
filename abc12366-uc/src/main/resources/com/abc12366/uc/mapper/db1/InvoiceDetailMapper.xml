@@ -19,7 +19,7 @@
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insert" parameterType="com.abc12366.uc.model.invoice.InvoiceDetail">
         INSERT INTO uc_invoice_detail
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null">
                 id,
             </if>
@@ -28,9 +28,6 @@
             </if>
             <if test="invoiceCode != null">
                 invoiceCode,
-            </if>
-            <if test="invoiceName != null">
-                invoiceName,
             </if>
             <if test="property != null">
                 property,
@@ -50,14 +47,15 @@
             <if test="invoiceRepoId != null">
                 invoiceRepoId,
             </if>
-            <if test="pdfUrl != null">
-                pdfUrl,
-            </if>
             <if test="spUrl != null">
                 spUrl,
             </if>
+            <if test="pdfUrl != null">
+                pdfUrl,
+            </if>
+
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id!=null">
                 #{id},
             </if>
@@ -66,9 +64,6 @@
             </if>
             <if test="invoiceCode!=null">
                 #{invoiceCode},
-            </if>
-            <if test="invoiceName!=null">
-                #{invoiceName},
             </if>
             <if test="property!=null">
                 #{property},
@@ -88,11 +83,11 @@
             <if test="invoiceRepoId!=null">
                 #{invoiceRepoId},
             </if>
-            <if test="pdfUrl!=null">
-                #{pdfUrl},
-            </if>
             <if test="spUrl!=null">
                 #{spUrl},
+            </if>
+            <if test="pdfUrl!=null">
+                #{pdfUrl},
             </if>
         </trim>
     </insert>
@@ -106,9 +101,6 @@
             </if>
             <if test="invoiceCode != null">
                 invoiceCode = #{invoiceCode},
-            </if>
-            <if test="invoiceName != null">
-                invoiceName = #{invoiceName},
             </if>
             <if test="property != null">
                 property = #{property},
@@ -128,11 +120,11 @@
             <if test="invoiceRepoId != null">
                 invoiceRepoId = #{invoiceRepoId},
             </if>
-            <if test="pdfUrl != null">
-                pdfUrl = #{pdfUrl},
-            </if>
             <if test="spUrl != null">
                 spUrl = #{spUrl},
+            </if>
+            <if test="pdfUrl != null">
+                pdfUrl = #{pdfUrl},
             </if>
 
         </set>

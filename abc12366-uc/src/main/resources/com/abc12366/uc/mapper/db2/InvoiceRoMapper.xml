@@ -32,6 +32,7 @@
         <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
@@ -57,6 +58,8 @@
         <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
         <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
+                    select="getOrderProduct"></collection>
     </resultMap>
 
     <!--配送方式对象-->
@@ -77,6 +80,31 @@
         <result column="minInsuredFee" property="minInsuredFee" jdbcType="DOUBLE"/>
         <result column="areaFeeType" property="areaFeeType" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <!--订单和产品对应关系对象-->
+    <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.bo.OrderProductBO">
+        <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="VARCHAR"/>
+        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="discount" property="discount" jdbcType="DOUBLE"/>
+        <result column="dealPrice" property="dealPrice" jdbcType="DOUBLE"/>
+        <result column="name" property="name" jdbcType="INTEGER"/>
+        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <!--获取产品和订单对应关系信息-->
+    <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
+        SELECT
+        op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
+        op.createTime, op.lastUpdate
+        FROM uc_order_product op
+        WHERE op.orderNo = #{orderNo}
+    </select>
 
     <!--获取配送方式-->
     <select id="getDeliveryMethodBO" resultMap="deliveryMethodBOMap" parameterType="java.lang.String">
@@ -143,7 +171,7 @@
     <sql id="InvoiceBO_Column_List">
         i.id, i.userId, i.username, i.invoiceNo, i.invoiceCode, i.name, i.content, i.compName, i.amount, i.type,
         i.property, i.status, i.createTime, i.lastUpdate, i.nsrsbh, i.nsrmc, i.address, i.phone, i.bank, i.addressId,
-        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum,
+        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum,i.remark,
         u.username as username, a.name as consignee
     </sql>
 
