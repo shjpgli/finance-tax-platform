@@ -145,7 +145,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     public OrderExchange update(ExchangeApplicationBO data) {
         exchangeCheck(data);
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
-        if (oe != null) {
+        if (oe != null && "5".equals(oe.getStatus())) {
             List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
             if (dataList.size() == 0) {
                 oe.setReason(data.getReason());
@@ -163,6 +163,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             } else {
                 throw new ServiceException(4950);
             }
+        } else {
+            throw new ServiceException(4962);
         }
         return oe;
     }
