@@ -23,11 +23,21 @@ import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.web.pay.AliPayController;
 import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.github.pagehelper.PageHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +45,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +59,7 @@ import java.util.List;
 @Service
 public class OrderExchangeServiceImpl implements OrderExchangeService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderExchangeServiceImpl.class);
     @Autowired
     private OrderExchangeMapper orderExchangeMapper;
 
@@ -76,6 +89,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private PointsLogService pointsLogService;
+    @Autowired
+	private TradeLogService tradeLogService;
 
     @Transactional("db1TxManager")
     @Override
@@ -301,7 +316,54 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         refund.setRefund_amount(String.valueOf(data.getAmount()));
                         refund.setRefund_reason(data.getAdminRemark());
                         refund.setOut_request_no(Utils.uuid());
-                        ResponseEntity re = aliPayController.aliPayRefund(refund);
+                        
+                        try {
+							AlipayClient alipayClient = AliPayConfig.getInstance();
+							AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+							request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
+							AlipayTradeRefundResponse response = alipayClient.execute(request);
+							LOGGER.info("支付宝退款支付宝返回信息{}",JSON.toJSONString(response));
+							if(response.isSuccess()){
+								
+								JSONObject object = JSON.parseObject(response.getBody());
+								RefundRes refundRes=JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
+								
+								LOGGER.info("支付宝退款成功,插入退款流水记录");
+								TradeLog tradeLog=new TradeLog();
+								tradeLog.setId(Utils.uuid());
+								tradeLog.setOrderNo(refundRes.getOut_trade_no());
+								tradeLog.setAliTrandeNo(refundRes.getTrade_no());
+								tradeLog.setTradeStatus("1");
+								tradeLog.setTradeType("2");
+								tradeLog.setAmount(Double.parseDouble("-"+refundRes.getRefund_fee()));
+								tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
+								Timestamp now = new Timestamp(new Date().getTime());
+								tradeLog.setCreateTime(now);
+								tradeLog.setLastUpdate(now);
+								tradeLog.setPayMethod("ALIPAY");
+								tradeLogService.insertTradeLog(tradeLog);
+								
+								oe.setStatus("8");
+	                            oe.setAdminRemark(data.getAdminRemark());
+	                            oe.setLastUpdate(new Timestamp(new Date().getTime()));
+	                            orderExchangeMapper.update(oe);
+	                            // 插入订单日志-已退款
+	                            insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark());
+	                            // 插入订单日志-已完成
+	                            insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
+								
+								
+								return ResponseEntity.ok(Utils.kv("data", refundRes));
+							}else{
+								return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
+							}
+						}  catch (Exception e) {
+							LOGGER.error("支付宝退款失败：",e);
+						}
+                        
+                        
+                        
+                        /*ResponseEntity re = aliPayController.aliPayRefund(refund);
                         RefundRes res = JSON.parseObject(re.getBody().toString(), RefundRes.class);
                         if ("2000".equals(res.getCode())) { // 退款成功
                             oe.setStatus("8");
@@ -313,7 +375,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                             // 插入订单日志-已完成
                             insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
                         }
-                        return re;
+                        return re;*/
                     }
                 }
             }
