@@ -149,6 +149,11 @@ public class Invoice implements Serializable {
      */
     private String waybillNum;
 
+    /**
+     * 备注
+     */
+    private String remark;
+
     public String getId() {
         return this.id;
     }
@@ -372,5 +377,13 @@ public class Invoice implements Serializable {
 
     public void setWaybillNum(String waybillNum) {
         this.waybillNum = waybillNum;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

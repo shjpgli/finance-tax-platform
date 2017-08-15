@@ -12,7 +12,8 @@
             resultType="com.abc12366.uc.model.OrderExchange">
         select e.id, e.userId, e.orderNo, e.name, q.imageUrl, q.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
         e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
-        from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo) c
+        from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from
+        uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo where a.userId = b.userId) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
         left join (select o.id, p.imageUrl, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) q
         on e.productId = q.id
@@ -40,7 +41,8 @@
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
         select e.id, e.orderNo, e.name, q.imageUrl, q.goodsType, e.username, e.num, e.orderTime, e.type, e.reason,
         e.userRemark, e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
-        from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo) c
+        from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from
+        uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo where a.userId = b.userId) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
         left join (select o.id, p.imageUrl, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) q on e.productId = q.id
         WHERE e.id = #{id}
@@ -79,11 +81,12 @@
 
     <select id="selectCompletedOrder" resultType="com.abc12366.uc.model.bo.ExchangeCompletedOrderBO"
             parameterType="java.lang.String">
-        select orderNo, c.productId, goodsType, createTime, lastUpdate from
-        (select a.orderNo, a.createTime, a.lastUpdate, b.productId from uc_order a left join uc_order_product b on a.orderNo = b.orderNo
-        where a.orderStatus = '6') c
+        select orderNo, giftPoints, createTime, lastUpdate, userId, points, e.productId, goodsType from
+        (select c.*, d.points from
+        (select a.orderNo, a.userId, a.giftPoints, a.createTime, a.lastUpdate, b.productId from uc_order a left join uc_order_product b on a.orderNo = b.orderNo where a.orderStatus = '6') c
+        left join uc_user d on c.userId = d.id) e
         left join
-        (select o.id as productId, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) d on c.productId = d.productId
+        (select o.id as productId, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) f on e.productId = f.productId
         where orderNo = #{orderNo}
     </select>
 

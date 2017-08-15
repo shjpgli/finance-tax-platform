@@ -71,6 +71,8 @@ public class InvoiceBO implements Serializable {
 	 */
 	private String waybillNum;
 
+	private String remark;
+
 	public String getId() {
 		return this.id;
 	}
@@ -381,5 +383,13 @@ public class InvoiceBO implements Serializable {
 
 	public void setWaybillNum(String waybillNum) {
 		this.waybillNum = waybillNum;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

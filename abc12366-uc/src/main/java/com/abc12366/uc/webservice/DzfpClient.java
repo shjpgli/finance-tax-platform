@@ -17,6 +17,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
@@ -46,7 +47,8 @@ public class DzfpClient {
 	
 	public static final String XSF_YHZH="";
 	
-	private static String ssl_store = "C:/cer/testclient.truststore";//证书地址
+	//"C:/cer/testclient.truststore";//证书地址
+	private static String ssl_store ="";
 	
 	private static String ssl_pwd = "123456";//证书密码
 	
@@ -62,6 +64,7 @@ public class DzfpClient {
 	@SuppressWarnings("rawtypes")
 	public static Object doSender(String interfaceCode,String content,Class _class) throws Exception{
 		
+		ssl_store = ResourceUtils.getFile("classpath:cer/testclient.truststore").getAbsolutePath();
 		
 		SSLIgnoreErrorProtocolSocketFactory socketfactory = new SSLIgnoreErrorProtocolSocketFactory(ssl_store,ssl_pwd);
 

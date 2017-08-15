@@ -235,19 +235,12 @@ public class OrderServiceImpl implements OrderService {
         // 查询用户信息
         User user = userRoMapper.selectOne(orderBO.getUserId());
         orderProductBO.setOrderNo(orderBO.getOrderNo());
-        OrderProduct orderProduct = new OrderProduct();
-        BeanUtils.copyProperties(orderProductBO, orderProduct);
 
-        int opInsert = orderProductMapper.insert(orderProduct);
-        if (opInsert != 1) {
-            LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
-            throw new ServiceException(4167);
-        }
         //减去Product库存数量
         int num = orderProductBO.getNum();
         int stock = prBO.getStock() - num;
         if (stock < 0) {
-            LOGGER.info("库存不足,请联系管理员：{}", orderProduct);
+            LOGGER.info("库存不足,请联系管理员：{}", stock);
             throw new ServiceException(4905);
         }
         prBO.setStock(stock);
@@ -285,6 +278,11 @@ public class OrderServiceImpl implements OrderService {
         }else{
             giftPoints = goodsBO.getGiftPoints();
         }
+        double discount = 0;
+        //查找对应的折扣
+        if(uvipPrice != null && uvipPrice.getDiscount() != null){
+            discount = uvipPrice.getDiscount();
+        }
         //加入订单信息
         orderBO.setOrderStatus(orderStatus);
         orderBO.setIsInvoice(false);
@@ -298,6 +296,25 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
+        orderProductBO.setSellingPrice(totalPrice);
+        orderProductBO.setUnitPrice(prBO.getMarketPrice());
+        orderProductBO.setNum(num);
+        orderProductBO.setDiscount(discount);
+        orderProductBO.setDealPrice(totalPrice);
+        orderProductBO.setName(goodsBO.getName());
+        orderProductBO.setCategoryId(goodsBO.getCategoryId());
+        orderProductBO.setCategory(goodsBO.getCategoryName());
+        orderProductBO.setCreateTime(date);
+        orderProductBO.setLastUpdate(date);
+        OrderProduct orderProduct = new OrderProduct();
+        BeanUtils.copyProperties(orderProductBO, orderProduct);
+
+        int opInsert = orderProductMapper.insert(orderProduct);
+        if (opInsert != 1) {
+            LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
+            throw new ServiceException(4167);
+        }
+
         //加入订单与规格对应关系
         List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
         if(orderProductSpecList != null && orderProductSpecList.size() != 0){
@@ -312,18 +329,11 @@ public class OrderServiceImpl implements OrderService {
         // 查询用户信息
         User user = userRoMapper.selectOne(orderBO.getUserId());
         orderProductBO.setOrderNo(orderBO.getOrderNo());
-        OrderProduct orderProduct = new OrderProduct();
-        BeanUtils.copyProperties(orderProductBO, orderProduct);
-        int opInsert = orderProductMapper.insert(orderProduct);
-        if (opInsert != 1) {
-            LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
-            throw new ServiceException(4167);
-        }
         //减去Product库存数量
         int num = orderProductBO.getNum();
         int stock = prBO.getStock() - num;
         if(stock < 0){
-            LOGGER.info("库存不足,请联系管理员：{}", orderProduct);
+            LOGGER.info("库存不足,请联系管理员：{}", stock);
             throw new ServiceException(4905);
         }
         prBO.setStock(stock);
@@ -377,6 +387,23 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
+        orderProductBO.setSellingPrice(totalPrice);
+        orderProductBO.setUnitPrice(prBO.getMarketPrice());
+        orderProductBO.setNum(num);
+        orderProductBO.setDealPrice(totalPrice);
+        orderProductBO.setName(goodsBO.getName());
+        orderProductBO.setCategoryId(goodsBO.getCategoryId());
+        orderProductBO.setCategory(goodsBO.getCategoryName());
+        orderProductBO.setCreateTime(date);
+        orderProductBO.setLastUpdate(date);
+        OrderProduct orderProduct = new OrderProduct();
+        BeanUtils.copyProperties(orderProductBO, orderProduct);
+
+        int opInsert = orderProductMapper.insert(orderProduct);
+        if (opInsert != 1) {
+            LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
+            throw new ServiceException(4167);
+        }
         //加入订单与规格对应关系
         List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
         if(orderProductSpecList != null && orderProductSpecList.size() != 0){
@@ -391,18 +418,11 @@ public class OrderServiceImpl implements OrderService {
         // 查询用户积分
         User user = userRoMapper.selectOne(orderBO.getUserId());
         orderProductBO.setOrderNo(orderBO.getOrderNo());
-        OrderProduct orderProduct = new OrderProduct();
-        BeanUtils.copyProperties(orderProductBO, orderProduct);
-        int opInsert = orderProductMapper.insert(orderProduct);
-        if (opInsert != 1) {
-            LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
-            throw new ServiceException(4167);
-        }
         //减去Product库存数量
         int num = orderProductBO.getNum();
         int stock = prBO.getStock() - num;
         if(stock < 0){
-            LOGGER.info("库存不足,请联系管理员：{}", orderProduct);
+            LOGGER.info("库存不足,请联系管理员：{}", stock);
             throw new ServiceException(4905);
         }
         prBO.setStock(stock);
@@ -476,6 +496,23 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
+
+        orderProductBO.setUnitPrice(prBO.getMarketPrice());
+        orderProductBO.setNum(num);
+        orderProductBO.setName(goodsBO.getName());
+        orderProductBO.setCategoryId(goodsBO.getCategoryId());
+        orderProductBO.setCategory(goodsBO.getCategoryName());
+        orderProductBO.setCreateTime(date);
+        orderProductBO.setLastUpdate(date);
+        OrderProduct orderProduct = new OrderProduct();
+        BeanUtils.copyProperties(orderProductBO, orderProduct);
+
+        int opInsert = orderProductMapper.insert(orderProduct);
+        if (opInsert != 1) {
+            LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
+            throw new ServiceException(4167);
+        }
+
         //加入订单与规格对应关系
         List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
         if(orderProductSpecList != null && orderProductSpecList.size() != 0){

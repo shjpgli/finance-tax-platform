@@ -103,6 +103,9 @@
             <if test="waybillNum != null">
                 waybillNum,
             </if>
+            <if test="remark != null">
+                remark,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -189,6 +192,9 @@
             </if>
             <if test="waybillNum!=null">
                 #{waybillNum},
+            </if>
+            <if test="remark!=null">
+                #{remark},
             </if>
         </trim>
     </insert>
@@ -277,6 +283,9 @@
             </if>
             <if test="waybillNum != null">
                 waybillNum = #{waybillNum},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
             </if>
 
         </set>
