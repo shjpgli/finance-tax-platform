@@ -378,7 +378,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         if (oe != null) {
             Timestamp now = new Timestamp(new Date().getTime());
             oe.setExpressNo(data.getExpressNo());
-            oe.setExpressComp(data.getExpressNo());
+            oe.setExpressComp(data.getExpressComp());
             oe.setAdminRemark(data.getAdminRemark());
             oe.setLastUpdate(now);
             oe.setStatus("6");
