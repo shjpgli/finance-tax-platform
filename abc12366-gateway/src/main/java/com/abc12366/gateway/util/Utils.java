@@ -2,6 +2,10 @@ package com.abc12366.gateway.util;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
+import com.alibaba.druid.support.http.StatViewServlet;
+import com.alibaba.druid.support.http.WebStatFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -82,15 +86,16 @@ public class Utils {
         }
         return body;
     }
-    
+
     /**
      * 返回第三方错误信息
+     *
      * @param code
      * @param message
      * @return
      */
-    public static BodyStatus bodyStatus(int code,String message){
-    	BodyStatus body = new BodyStatus();
+    public static BodyStatus bodyStatus(int code, String message) {
+        BodyStatus body = new BodyStatus();
         body.setCode(String.valueOf(code));
         body.setMessage(message);
         return body;
@@ -98,17 +103,18 @@ public class Utils {
 
     /**
      * 返回第三方错误信息
+     *
      * @param code
      * @param message
      * @return
      */
-    public static BodyStatus bodyStatus(String code,String message){
+    public static BodyStatus bodyStatus(String code, String message) {
         BodyStatus body = new BodyStatus();
         body.setCode(String.valueOf(code));
         body.setMessage(message);
         return body;
     }
-    
+
 
     /**
      * md5字符串
@@ -209,5 +215,39 @@ public class Utils {
             throw new ServiceException(4193);
         }
         return userId;
+    }
+
+    public static ServletRegistrationBean getServletRegistrationBean() throws IOException {
+        ServletRegistrationBean reg = new ServletRegistrationBean();
+        reg.setServlet(new StatViewServlet());
+        String mapperings = PropertiesUtil.getValue("druid.url.mappings");
+        String allow = PropertiesUtil.getValue("druid.ip.allow");
+        String deny = PropertiesUtil.getValue("druid.ip.deny");
+        String username = PropertiesUtil.getValue("druid.login.username");
+        String password = PropertiesUtil.getValue("druid.login.password");
+        if (!StringUtils.isEmpty(mapperings)) {
+            reg.addUrlMappings(mapperings);
+        }
+        if (!StringUtils.isEmpty(allow)) {
+            reg.addInitParameter("allow", allow);
+        }
+        if (!StringUtils.isEmpty(deny)) {
+            reg.addInitParameter("deny", deny);
+        }
+        if (!StringUtils.isEmpty(username)) {
+            reg.addInitParameter("loginUsername", username);
+        }
+        if (!StringUtils.isEmpty(password)) {
+            reg.addInitParameter("loginPassword", password);
+        }
+        return reg;
+    }
+
+    public static FilterRegistrationBean getFilterRegistrationBean() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(new WebStatFilter());
+        filterRegistrationBean.addUrlPatterns("/*");
+        filterRegistrationBean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
+        return filterRegistrationBean;
     }
 }
