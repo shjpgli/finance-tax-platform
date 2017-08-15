@@ -76,7 +76,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
-        //exchangeCheck(ra);
+        exchangeCheck(ra);
 
         OrderExchange data = new OrderExchange();
         BeanUtils.copyProperties(ra, data);
@@ -92,8 +92,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.insert(data);
 
             // 插入订单日志
-//            insertLog(data.getOrderNo(), "1", userId, data.getUserRemark());
-            insertLog(data.getOrderNo(), "1", Utils.getAdminId(), data.getUserRemark());
+            insertLog(data.getOrderNo(), "1", userId, data.getUserRemark());
         } else {
             throw new ServiceException(4950);
         }
@@ -133,7 +132,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public OrderExchange update(ExchangeApplicationBO data) {
-//        exchangeCheck(data);
+        exchangeCheck(data);
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
         if (oe != null) {
             List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
@@ -149,8 +148,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 orderExchangeMapper.update(oe);
 
                 // 插入订单日志
-//                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
-                insertLog(oe.getOrderNo(), "1", Utils.getAdminId(), oe.getUserRemark());
+                insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
             } else {
                 throw new ServiceException(4950);
             }
