@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagMapper;
+import com.abc12366.bangbang.mapper.db1.KnowledgeTagRelMapper;
 import com.abc12366.bangbang.model.KnowledgeTag;
 import com.abc12366.bangbang.service.KnowledgeTagService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -25,6 +26,9 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
 
     @Autowired
     private KnowledgeTagMapper knowledgeTagMapper;
+
+    @Autowired
+    private KnowledgeTagRelMapper knowledgeTagRelMapper;
 
     @Override
     public List<KnowledgeTag> selectList(String keywords) {
@@ -92,9 +96,22 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     @Override
     public void delete(String id) {
         try {
+            knowledgeTagRelMapper.deleteByTagId(id);
             knowledgeTagMapper.deleteByPrimaryKey(id);
         }catch (Exception e){
             LOGGER.error("KnowledgeTagServiceImpl.delete()", e);
+            throw new ServiceException(4515);
+        }
+    }
+
+    @Override
+    public void delete(List<String> ids) {
+
+        try {
+            knowledgeTagRelMapper.deleteByTagIds(ids);
+            knowledgeTagMapper.deleteByPrimaryKeys(ids);
+        }catch (Exception e){
+            LOGGER.error("KnowledgeTagServiceImpl.delete(List<String> ids)", e);
             throw new ServiceException(4515);
         }
     }
