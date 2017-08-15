@@ -5,10 +5,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.DateUtil;
-import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
-import com.abc12366.uc.mapper.db1.OrderExchangeMapper;
-import com.abc12366.uc.mapper.db1.OrderLogMapper;
-import com.abc12366.uc.mapper.db1.OrderMapper;
+import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.DictRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
 import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
@@ -22,6 +19,7 @@ import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
+import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.web.pay.AliPayController;
@@ -74,6 +72,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Autowired
     private InvoiceDetailRoMapper invoiceDetailRoMapper;
 
+    private PointsLogService pointsLogService;
+
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
@@ -105,6 +105,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         if (bo == null) { // 是否为已完成订单
             throw new ServiceException(4951);
         }
+        if (!Utils.getUserId().equals(bo.getUserId())) {
+            throw new ServiceException(4961);
+        }
         if ("1".equals(ra.getType())) { // 换货
             if (!"2".equals(bo.getGoodsType())) { // 是否为实物商品换货
                 throw new ServiceException(4952);
@@ -118,9 +121,13 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             if ("1".equals(bo.getGoodsType())) { // 虚拟商品暂时不支持退货
                 throw new ServiceException(4954);
             }
-            // 是否在换货日期之内
+            // 是否在退货日期之内
             if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant.ORDER_BACK_DAYS))) {
                 throw new ServiceException(4953);
+            }
+            // 用户现有积分是否达到购买是赠送的积分
+            if (bo.getPoints() < bo.getGiftPoints()) {
+                throw new ServiceException(4960);
             }
             // 查询发票申请是否结束状态
             List<ExchangeOrderInvoiceBO> dataList = orderExchangeRoMapper.selectOrderInvoice(ra.getOrderNo());
@@ -192,6 +199,20 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             oe.setLastUpdate(new Timestamp(new Date().getTime()));
             oe.setStatus("7");
             orderExchangeMapper.update(oe);
+
+            // 退积分
+            ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
+            if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
+                PointsLogBO pointsLog = new PointsLogBO();
+                pointsLog.setRuleId(oe.getOrderNo());
+                pointsLog.setOutgo(eco.getGiftPoints());
+                pointsLog.setUserId(eco.getUserId());
+                pointsLog.setRemark("用户退单");
+                pointsLog.setType("ORDER_BACK");
+                pointsLogService.insert(pointsLog);
+            } else {
+                throw new ServiceException(4960);
+            }
 
             // 更新订单状态：已退单
             Order order = new Order();

@@ -11,11 +11,22 @@ import java.sql.Timestamp;
  */
 public class ExchangeCompletedOrderBO {
 
+    // 订单号
     private String orderNo;
-    private String productId;
-    private String goodsType;
+    // 订单赠送积分
+    private Integer giftPoints;
+    // 订单创建时间
     private Timestamp createTime;
+    // 订单修改时间
     private Timestamp lastUpdate;
+    // 用户ID
+    private String userId;
+    // 用户现有积分
+    private Integer points;
+    // 产品ID
+    private String productId;
+    // 产品类型
+    private String goodsType;
 
     public String getOrderNo() {
         return orderNo;
@@ -57,14 +68,41 @@ public class ExchangeCompletedOrderBO {
         this.lastUpdate = lastUpdate;
     }
 
+    public Integer getGiftPoints() {
+        return giftPoints;
+    }
+
+    public void setGiftPoints(Integer giftPoints) {
+        this.giftPoints = giftPoints;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
     @Override
     public String toString() {
         return "ExchangeCompletedOrderBO{" +
                 "orderNo='" + orderNo + '\'' +
-                ", productId='" + productId + '\'' +
-                ", goodsType='" + goodsType + '\'' +
+                ", giftPoints=" + giftPoints +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", userId='" + userId + '\'' +
+                ", points=" + points +
+                ", productId='" + productId + '\'' +
+                ", goodsType='" + goodsType + '\'' +
                 '}';
     }
 }
