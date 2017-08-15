@@ -32,6 +32,8 @@ public class Feedback{
 	/**联系电话**/
 	private String contactNumber;
 
+	/** 该条反馈的回复信息 **/
+	private String replyMsg;
 
 
 	public void setId(String id){
@@ -98,4 +100,12 @@ public class Feedback{
 		return this.contactNumber;
 	}
 
+	public String getReplyMsg() {
+		return replyMsg;
+	}
+
+	public Feedback setReplyMsg(String replyMsg) {
+		this.replyMsg = replyMsg;
+		return this;
+	}
 }

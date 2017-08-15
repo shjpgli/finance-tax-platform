@@ -31,6 +31,9 @@ public class KnowledgeVoteLogBO {
     /**创建时间**/
     private java.util.Date createTime;
 
+    /** 该条投票的回复信息 **/
+    private String replyMsg;
+
 
 
     public void setId(String id){
@@ -95,5 +98,14 @@ public class KnowledgeVoteLogBO {
 
     public void setKnowledgeSubject(String knowledgeSubject) {
         this.knowledgeSubject = knowledgeSubject;
+    }
+
+    public String getReplyMsg() {
+        return replyMsg;
+    }
+
+    public KnowledgeVoteLogBO setReplyMsg(String replyMsg) {
+        this.replyMsg = replyMsg;
+        return this;
     }
 }
