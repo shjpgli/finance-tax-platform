@@ -286,7 +286,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             // 查询交易日志中支付成功的订单
             TradeLog log = new TradeLog();
             log.setOrderNo(oe.getOrderNo());
-            log.setTradeStatus("2");
+            log.setTradeStatus("1");
             log.setPayMethod("ALIPAY");
             List<TradeLog> logList = tradeLogRoMapper.selectList(log);
 
