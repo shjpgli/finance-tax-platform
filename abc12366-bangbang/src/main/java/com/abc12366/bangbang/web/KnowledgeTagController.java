@@ -53,6 +53,16 @@ public class KnowledgeTagController {
                 ResponseEntity.ok(Utils.kv("dataList", list));
     }
 
+    /*
+    *  知识库标签
+    *  根据知识库id 查询
+    */
+    @GetMapping(path = "/{id}")
+    public ResponseEntity view(@PathVariable String id) {
+        KnowledgeTag tag = knowledgeTagService.selectByPk(id);
+        return ResponseEntity.ok(Utils.kv("data", tag));
+    }
+
 
     /**
      * 添加知识库标签 接口

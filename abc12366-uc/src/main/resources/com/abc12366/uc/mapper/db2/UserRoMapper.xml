@@ -60,7 +60,7 @@
     <select id="selectByUsernameOrPhone" resultType="com.abc12366.uc.model.User"
             parameterType="com.abc12366.uc.model.bo.LoginBO">
         select id, username, password, phone, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
-        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel
+        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp, vipLevel,usernameModifiedTimes
         from uc_user
         <where>
             <if test="usernameOrPhone != null">

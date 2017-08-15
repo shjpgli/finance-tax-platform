@@ -39,7 +39,7 @@ public class VipLevelController {
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}", level, status, page, size);
-        PageHelper.offsetPage(page, size, true).pageSizeZero(true).reasonable(true);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         Map<String, Object> map = new HashMap<>();
         if (level != null && StringUtils.isEmpty(level)) {
             level = null;

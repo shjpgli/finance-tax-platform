@@ -41,6 +41,11 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     }
 
     @Override
+    public KnowledgeTag selectByPk(String id) {
+        return knowledgeTagMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public List<KnowledgeTag> addBatch(List<KnowledgeTag> knowledgeTags) {
         for (KnowledgeTag tag: knowledgeTags){
             tag.setId(Utils.uuid());

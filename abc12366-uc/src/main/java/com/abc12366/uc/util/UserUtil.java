@@ -47,4 +47,14 @@ public class UserUtil {
         BeanUtils.copyProperties(user,admin);
         return admin;
     }
+
+    public static com.abc12366.uc.model.User getUserInfo() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        com.abc12366.uc.model.User user = (com.abc12366.uc.model.User) request.getAttribute(Constant.USER_INFO);
+        if (StringUtils.isEmpty(user)) {
+            throw new ServiceException(4130);
+        }
+        return user;
+    }
 }

@@ -2,6 +2,7 @@ package com.abc12366.uc.model.bo;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -13,7 +14,6 @@ public class PointsLogBO {
     private String id;
     @NotEmpty
     private String userId;
-    @NotEmpty
     private String ruleId;
     private String name;
     private String code;
@@ -22,6 +22,10 @@ public class PointsLogBO {
     private int outgo;
     private int usablePoints;
     private Date createTime;
+    @Size(max = 20)
+    private String logType;
+    @Size(max = 200)
+    private String remark;
 
     public PointsLogBO() {
     }
@@ -38,6 +42,22 @@ public class PointsLogBO {
         this.outgo = outgo;
         this.usablePoints = usablePoints;
         this.createTime = createTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public String getLogType() {
+        return logType;
+    }
+
+    public void setLogType(String logType) {
+        this.logType = logType;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getId() {
