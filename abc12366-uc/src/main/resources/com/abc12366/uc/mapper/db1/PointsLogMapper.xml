@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.PointsLogMapper">
 
     <insert id="insert" parameterType="com.abc12366.uc.model.PointsLog">
-        insert into uc_upoints_log(id,userId,ruleId,income,outgo,usablePoints,createTime)
-        values(#{id}, #{userId}, #{ruleId}, #{income}, #{outgo}, #{usablePoints}, #{createTime})
+        insert into uc_upoints_log(id,userId,ruleId,income,outgo,usablePoints,createTime,logType,remark)
+        values(#{id}, #{userId}, #{ruleId}, #{income}, #{outgo}, #{usablePoints}, #{createTime}, #{logType}, #{remark})
     </insert>
 </mapper>

@@ -63,7 +63,7 @@
   </binding>
   <service name="AcceptService">
     <port name="accept" binding="tns:AcceptServiceSoap">
-      <soap:address location="http://dzsb.abc12366.cn/tdps-accept/services/AcceptService/"/>
+      <soap:address location="http://testhn.abc12366.cn:5100/tdps-accept/services/AcceptService/"/>
     </port>
   </service>
 </definitions>
