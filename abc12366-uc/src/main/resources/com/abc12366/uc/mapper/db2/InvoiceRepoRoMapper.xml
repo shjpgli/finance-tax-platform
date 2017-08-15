@@ -90,6 +90,8 @@
         <where>
             1=1
             <if test="invoiceCode != null  and invoiceCode!=''">AND invoiceCode = #{invoiceCode}</if>
+            <if test="status != null  and status!=''">AND status = #{status}</if>
+            <if test="invoiceTypeCode != null  and invoiceTypeCode!=''">AND invoiceTypeCode = #{invoiceTypeCode}</if>
         </where>
     </select>
 
