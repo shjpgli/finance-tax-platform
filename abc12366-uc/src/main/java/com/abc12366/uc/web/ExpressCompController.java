@@ -125,7 +125,7 @@ public class ExpressCompController {
                     file.transferTo(new File(path));
                 }
             }
-            String keyValue = "订单号:userOrderNo,运单号:expressNo";
+            String keyValue = "订单号:invoiceOrderNo,运单号:expressNo";
 
             try {
                 expressBOList = ExcelUtil.readXls(FileUtils.getDefaultFolder() + "//" + fileName, ExcelUtil.getMap
@@ -138,7 +138,7 @@ public class ExpressCompController {
                 System.out.println(expressBOList.size());
                 for (ExpressBO expressBO : expressBOList) {
                     bo = new ExpressBO();
-                    System.out.println("订单号:" + expressBO.getUserOrderNo() + "  运单号:" + expressBO.getExpressNo());
+                    System.out.println("订单号:" + expressBO.getInvoiceOrderNo() + "  运单号:" + expressBO.getExpressNo());
                     bo = expressService.importExpress(expressBO);
                     if (bo == null) {
                         orderNumList.add(expressBO);

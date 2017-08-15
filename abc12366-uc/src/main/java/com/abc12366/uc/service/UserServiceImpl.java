@@ -89,6 +89,12 @@ public class UserServiceImpl implements UserService {
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
         User user = userRoMapper.selectOne(userUpdateBO.getId());
+        //普通用户只允许修改一次用户名
+        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) && user.getUsernameModifiedTimes() >= 1) {
+            throw new ServiceException(4037);
+        }
+        String str = "";
+        str.contains("");
         if (user == null) {
             LOGGER.warn("修改失败");
             throw new ServiceException(4018);
@@ -122,6 +128,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userUpdateBO, user);
 
         user.setLastUpdate(new Date());
+        user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
         int result = userMapper.update(user);
         if (result != 1) {
             LOGGER.warn("修改失败");

@@ -51,7 +51,7 @@ public class TradeLogServiceImpl implements TradeLogService {
         if (dataList.size() > 0) {
             for (TradeBillBO data: dataList) {
                 TradeLog log = selectOne(data.getTradeNo());
-                if (log.getOrderNo().equals(data.getOrderNo())
+                if (log != null && log.getOrderNo().equals(data.getOrderNo())
                         && log.getAmount() == data.getAmount()) {
                     log.setCompareStatus("1");
                     log.setCompareTime(new Date());

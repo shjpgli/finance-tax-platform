@@ -136,4 +136,16 @@ public class CurriculumController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 批量删除课程信息
+     */
+    @PostMapping(path = "/deletelist")
+    public ResponseEntity deleteList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
+        //批量删除课程信息
+        String rtn = curriculumService.deleteList(idsBo.getIds());
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
+    }
+
 }

@@ -79,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
         taskBo1.setTaskId(taskBo.getTaskId());
         int cnt = taskRoMapper.selectCnt(taskBo1);
         if (cnt > 0) {
-            throw new ServiceException(4302);
+            throw new ServiceException(5000);
         }
         //更新模型信息
         Task task = new Task();
