@@ -3,6 +3,8 @@ package com.abc12366.uc.model.bo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 退款BO
  *
@@ -17,9 +19,11 @@ public class ExchangeRefundBO {
     @NotEmpty
     @Length(min = 1, max = 10)
     private String refundType;
+
     // 退款金额
-    @NotEmpty
+    @NotNull
     private Double amount;
+
     // 备注
     @NotEmpty
     @Length(max = 500)
@@ -55,5 +59,15 @@ public class ExchangeRefundBO {
 
     public void setAdminRemark(String adminRemark) {
         this.adminRemark = adminRemark;
+    }
+
+    @Override
+    public String toString() {
+        return "ExchangeRefundBO{" +
+                "id='" + id + '\'' +
+                ", refundType='" + refundType + '\'' +
+                ", amount=" + amount +
+                ", adminRemark='" + adminRemark + '\'' +
+                '}';
     }
 }
