@@ -26,7 +26,7 @@ public class CurriculumCourseware implements Serializable {
 	private String title;
 
 	/**上传方式**tinyint(1)**/
-	private Integer UploadWay;
+	private Integer uploadWay;
 
 	/**视频链接**varchar(200)**/
 	private String link;
@@ -103,15 +103,15 @@ public class CurriculumCourseware implements Serializable {
 		return this.title;
 	}
 
-	public void setUploadWay(Integer UploadWay){
-		this.UploadWay = UploadWay;
-	}
+    public Integer getUploadWay() {
+        return uploadWay;
+    }
 
-	public Integer getUploadWay(){
-		return this.UploadWay;
-	}
+    public void setUploadWay(Integer uploadWay) {
+        this.uploadWay = uploadWay;
+    }
 
-	public void setLink(String link){
+    public void setLink(String link){
 		this.link = link;
 	}
 

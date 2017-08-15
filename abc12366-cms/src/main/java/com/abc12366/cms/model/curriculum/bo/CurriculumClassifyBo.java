@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 
- * 课程收藏表
+ * 课程分类表
  * 
  **/
 @SuppressWarnings("serial")

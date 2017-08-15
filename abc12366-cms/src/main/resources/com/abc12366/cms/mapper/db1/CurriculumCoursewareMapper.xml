@@ -24,9 +24,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.cms.model.curriculum.CurriculumCourseware">
 		 INSERT INTO cms_curriculum_courseware
- 		(coursewareId,curriculumId,chapterId,type,title,UploadWay,link,fileName,fileSite,fileSize,duration,isDownload,coursewareSeq,createrId,createrName,createTime,updateTime)
+ 		(coursewareId,curriculumId,chapterId,type,title,uploadWay,link,fileName,fileSite,fileSize,duration,isDownload,coursewareSeq,createrId,createrName,createTime,updateTime)
 		 VALUES 
- 		(#{coursewareId},#{curriculumId},#{chapterId},#{type},#{title},#{UploadWay},#{link},#{fileName},#{fileSite},#{fileSize},#{duration},#{isDownload},#{coursewareSeq},#{createrId},#{createrName},#{createTime},#{updateTime})
+ 		(#{coursewareId},#{curriculumId},#{chapterId},#{type},#{title},#{uploadWay},#{link},#{fileName},#{fileSite},#{fileSize},#{duration},#{isDownload},#{coursewareSeq},#{createrId},#{createrName},#{createTime},#{updateTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -48,8 +48,8 @@
 			<if test="title != null">
 				 title,
 			</if>
-			<if test="UploadWay != null">
-				 UploadWay,
+			<if test="uploadWay != null">
+				  uploadWay,
 			</if>
 			<if test="link != null">
 				 link,
@@ -102,8 +102,8 @@
 			<if test="title!=null">
 				 #{title},
 			</if>
-			<if test="UploadWay!=null">
-				 #{UploadWay},
+			<if test="uploadWay!=null">
+				 #{uploadWay},
 			</if>
 			<if test="link!=null">
 				 #{link},
@@ -157,8 +157,8 @@
 			<if test="title != null">
 				 title = #{title},
 			</if>
-			<if test="UploadWay != null">
-				 UploadWay = #{UploadWay},
+			<if test="uploadWay != null">
+				 uploadWay = #{uploadWay},
 			</if>
 			<if test="link != null">
 				 link = #{link},
@@ -206,7 +206,7 @@
 			 chapterId = #{chapterId},
 			 type = #{type},
 			 title = #{title},
-			 UploadWay = #{UploadWay},
+			 uploadWay = #{uploadWay},
 			 link = #{link},
 			 fileName = #{fileName},
 			 fileSite = #{fileSite},
