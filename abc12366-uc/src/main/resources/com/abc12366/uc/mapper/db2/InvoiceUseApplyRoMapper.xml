@@ -88,6 +88,7 @@
         <result column="repoNum" property="repoNum" jdbcType="INTEGER"/>
         <result column="applyNum" property="applyNum" jdbcType="INTEGER"/>
         <result column="realNum" property="realNum" jdbcType="INTEGER"/>
+        <result column="checkBook" property="checkBook" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
     </resultMap>
@@ -113,7 +114,7 @@
     <!-- 查询（发票领用明细表） -->
     <select id="getInvoiceUseDetailBO" resultMap="invoiceUseDetailMap" parameterType="java.lang.String">
         SELECT
-        d.useId,	d.invoiceTypeCode,	d.repoNum,	d.applyNum,d.	realNum,	d.remark,t.fieldKey as fieldKey
+        d.useId,	d.invoiceTypeCode,	d.repoNum,	d.applyNum,d.	realNum,d.checkBook,	d.remark,t.fieldKey as fieldKey
         FROM uc_invoice_use_detail d
         LEFT JOIN uc_dict t on t.id = d.invoiceTypeCode
 		WHERE d.useId = #{useId}

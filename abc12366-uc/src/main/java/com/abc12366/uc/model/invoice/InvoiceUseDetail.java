@@ -25,6 +25,9 @@ public class InvoiceUseDetail implements Serializable {
 	/**实发数量**/
 	private Integer realNum;
 
+	/**审批本数**/
+	private Integer checkBook;
+
 	/**备注**/
 	private String remark;
 
@@ -78,4 +81,11 @@ public class InvoiceUseDetail implements Serializable {
 		return this.remark;
 	}
 
+	public Integer getCheckBook() {
+		return checkBook;
+	}
+
+	public void setCheckBook(Integer checkBook) {
+		this.checkBook = checkBook;
+	}
 }
