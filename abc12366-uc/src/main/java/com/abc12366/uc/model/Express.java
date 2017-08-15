@@ -15,9 +15,9 @@ public class Express implements Serializable {
     private String id;
 
     /**
-     * 用户订单号
+     * 发票订单号
      **/
-    private String userOrderNo;
+    private String invoiceOrderNo;
 
     /**
      * 用户ID
@@ -51,14 +51,6 @@ public class Express implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUserOrderNo() {
-        return this.userOrderNo;
-    }
-
-    public void setUserOrderNo(String userOrderNo) {
-        this.userOrderNo = userOrderNo;
     }
 
     public String getUserId() {
@@ -109,4 +101,11 @@ public class Express implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getInvoiceOrderNo() {
+        return invoiceOrderNo;
+    }
+
+    public void setInvoiceOrderNo(String invoiceOrderNo) {
+        this.invoiceOrderNo = invoiceOrderNo;
+    }
 }

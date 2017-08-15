@@ -2,10 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.InvoiceBack;
-import com.abc12366.uc.model.bo.InvoiceBO;
-import com.abc12366.uc.model.bo.InvoiceBackBO;
-import com.abc12366.uc.model.bo.InvoiceCheckBO;
-import com.abc12366.uc.model.bo.InvoiceExcel;
+import com.abc12366.uc.model.bo.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +29,7 @@ public interface InvoiceService {
      * @param invoice
      * @return
      */
-    List<InvoiceExcel> selectInvoiceExcelList(InvoiceBO invoice);
+    List<InvoiceExcel> selectInvoicePrintExcelList(InvoiceBO invoice);
 
     InvoiceBackBO refund(InvoiceBackBO invoiceBackBO);
 
@@ -45,4 +42,8 @@ public interface InvoiceService {
     InvoiceBO selectUserInvoice(Invoice invoice);
 
     void billing(InvoiceCheckBO invoiceCheckBO);
+
+    List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice);
+
+    void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList);
 }

@@ -34,10 +34,6 @@ public class InvoiceBO implements Serializable {
 	private String phone;
 	private String bank;
 	private String addressId;
-	/**
-	 * 用户订单号(运单号)
-	 **/
-	private String userOrderNo;
 	private String deliveryMethod;
 	private Integer isShipping;
 	private Integer isFreeShipping;
@@ -54,7 +50,7 @@ public class InvoiceBO implements Serializable {
 	private String[] orderNos;
 	private java.util.Date startTime;
 	private java.util.Date endTime;
-	private UserAddress userAddress;
+	private UserAddressBO userAddressBO;
 	private DeliveryMethodBO deliveryMethodBO;
 
 	private InvoiceDetail invoiceDetail;
@@ -69,6 +65,11 @@ public class InvoiceBO implements Serializable {
 	 * 是否同意开票
 	 **/
 	private Boolean isBilling;
+
+	/**
+	 * 运单号
+	 */
+	private String waybillNum;
 
 	public String getId() {
 		return this.id;
@@ -222,14 +223,6 @@ public class InvoiceBO implements Serializable {
 		this.addressId = addressId;
 	}
 
-	public String getUserOrderNo() {
-		return this.userOrderNo;
-	}
-
-	public void setUserOrderNo(String userOrderNo) {
-		this.userOrderNo = userOrderNo;
-	}
-
 	public String getUsername() {
 		return username;
 	}
@@ -334,14 +327,6 @@ public class InvoiceBO implements Serializable {
 		this.orderBOList = orderBOList;
 	}
 
-	public UserAddress getUserAddress() {
-		return userAddress;
-	}
-
-	public void setUserAddress(UserAddress userAddress) {
-		this.userAddress = userAddress;
-	}
-
 	public DeliveryMethodBO getDeliveryMethodBO() {
 		return deliveryMethodBO;
 	}
@@ -380,5 +365,21 @@ public class InvoiceBO implements Serializable {
 
 	public void setIsBilling(Boolean isBilling) {
 		this.isBilling = isBilling;
+	}
+
+	public UserAddressBO getUserAddressBO() {
+		return userAddressBO;
+	}
+
+	public void setUserAddressBO(UserAddressBO userAddressBO) {
+		this.userAddressBO = userAddressBO;
+	}
+
+	public String getWaybillNum() {
+		return waybillNum;
+	}
+
+	public void setWaybillNum(String waybillNum) {
+		this.waybillNum = waybillNum;
 	}
 }

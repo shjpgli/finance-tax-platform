@@ -203,21 +203,15 @@ public class OrderServiceImpl implements OrderService {
 
                 String goodsType = goodsBO.getGoodsType();
                 if ("RMB".equals(goodsBO.getTradeMethod())) {
-                    if ("1".equals(goodsType)) {
-                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
-                    } else if ("2".equals(goodsType)) {
-                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
-                    } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
-                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
-                    } else if("5".equals(goodsType)){
+                    if ("5".equals(goodsType)) {
                         //会员充值
                         operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2");
+                    } else{
+                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
                     }
                 } else if ("POINTS".equals(goodsBO.getTradeMethod())) {
                     //订单状态，1：新订单，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
-                    if ("1".equals(goodsType)) {
-                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"1");
-                    } else if ("2".equals(goodsType)) {
+                    if ("1".equals(goodsType) || "2".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4");
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");

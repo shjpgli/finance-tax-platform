@@ -100,6 +100,9 @@
             <if test="payMethod != null">
                 payMethod,
             </if>
+            <if test="waybillNum != null">
+                waybillNum,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -183,6 +186,9 @@
             </if>
             <if test="payMethod!=null">
                 #{payMethod},
+            </if>
+            <if test="waybillNum!=null">
+                #{waybillNum},
             </if>
         </trim>
     </insert>
@@ -268,6 +274,9 @@
             </if>
             <if test="payMethod != null">
                 payMethod = #{payMethod},
+            </if>
+            <if test="waybillNum != null">
+                waybillNum = #{waybillNum},
             </if>
 
         </set>
