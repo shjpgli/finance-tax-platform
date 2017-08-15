@@ -11,11 +11,16 @@
 	<!-- 列表查询 -->
 	<select id="selectList" resultType="knowledgeVoteLogBO"
 			parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
-		SELECT t_votelog.*,t_user.username AS userName, t_base.subject AS knowledgeSubject
+		SELECT t_votelog.*,t_user.username AS userName, t_base.subject AS knowledgeSubject,t_vote_msg.content as replyMsg
 		FROM
 		bb_knowledge_vote_log t_votelog
 		LEFT JOIN abc12366_uc.uc_user t_user ON t_votelog.userId = t_user.id
 		LEFT JOIN bb_knowledge_base  t_base ON t_votelog.knowledgeId = t_base.id
+		LEFT JOIN
+		(
+			SELECT a.* FROM abc12366_message.msg_business_message a WHERE TYPE = 'KNOWLEDGE_VOTE' GROUP BY businessId
+		) t_vote_msg
+		ON t_votelog.id = t_vote_msg.businessId
 		WHERE 1=1
 		<if test="categoryCode != null and categoryCode !=''">
 			AND t_base.categoryCode LIKE CONCAT(#{categoryCode},'%')

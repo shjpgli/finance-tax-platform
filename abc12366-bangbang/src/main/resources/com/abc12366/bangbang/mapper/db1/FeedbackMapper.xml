@@ -3,17 +3,22 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db1.FeedbackMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	sourceType,	feedbackUserId,	feedbackType,	feedbackTime,	opinionDesc,	contactNumber
-	</sql>
-
 	<!-- 查询列表 -->
 	<select id="selectList" resultType="feedback" parameterType="com.abc12366.bangbang.model.bo.FeedbackParamBO">
 		SELECT
-		t1.*, t2.username as feedbackUserName
-		FROM bb_feedback t1 LEFT JOIN abc12366_uc.uc_user t2
-		ON t1.feedbackUserId = t2.id
+		t1.*, t2.username as feedbackUserName, t3.content as replyMsg
+		FROM bb_feedback t1
+		LEFT JOIN abc12366_uc.uc_user t2 ON t1.feedbackUserId = t2.id
+		LEFT JOIN
+		(
+			SELECT a.* FROM abc12366_message.msg_business_message a
+			WHERE TYPE = 'FEEDBACK'AND
+			createTime =
+			(SELECT MAX(createTime)
+			FROM abc12366_message.msg_business_message
+			WHERE TYPE = 'FEEDBACK'AND businessId = a.businessId)
+		)  t3
+		ON t1.id = t3.businessId
 		WHERE 1=1
 		<if test="sourceType != null and sourceType!=''">
 			AND t1.sourceType = #{sourceType}
@@ -21,6 +26,7 @@
 		<if test="feedbackType != null and feedbackType!=''">
 			AND t1.feedbackType = #{feedbackType}
 		</if>
+		ORDER BY t1.feedbackTime DESC
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
