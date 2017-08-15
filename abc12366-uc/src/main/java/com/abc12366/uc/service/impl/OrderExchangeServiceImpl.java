@@ -309,7 +309,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             if (logList.size() > 0) {
                 for (int i = 0; i < logList.size(); i++) {
-                    if (logList.get(i).getAmount() > data.getAmount()) {
+                    if (logList.get(i).getAmount() >= data.getAmount()) {
                         AliRefund refund = new AliRefund();
                         refund.setOut_trade_no(logList.get(i).getOrderNo());
                         refund.setTrade_no(logList.get(i).getAliTrandeNo());
@@ -359,6 +359,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 							}
 						}  catch (Exception e) {
 							LOGGER.error("支付宝退款失败：",e);
+							return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
 						}
                         
                         
