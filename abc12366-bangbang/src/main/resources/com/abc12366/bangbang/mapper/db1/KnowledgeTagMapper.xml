@@ -23,6 +23,7 @@
         <if test="keywords != null and keywords!=''">
             WHERE name LIKE CONCAT('%',#{keywords},'%')
         </if>
+        ORDER BY updateTime DESC
     </select>
     <!-- 查询列表 -->
     <select id="selectRelatedTags" resultType="knowledgeTag" parameterType="java.lang.String">
