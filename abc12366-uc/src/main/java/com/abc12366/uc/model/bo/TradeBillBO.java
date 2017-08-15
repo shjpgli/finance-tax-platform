@@ -46,4 +46,13 @@ public class TradeBillBO {
     public void setAmount(Double amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "TradeBillBO{" +
+                "orderNo='" + orderNo + '\'' +
+                ", tradeNo='" + tradeNo + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

@@ -44,7 +44,6 @@ public class TradeLogServiceImpl implements TradeLogService {
         return tradeLogRoMapper.selectOne(tradeNo);
     }
 
-    @Transactional("db1TxManager")
     @Override
     public List<TradeBillBO> bill(List<TradeBillBO> dataList) {
         List<TradeBillBO> undoneList = new ArrayList<>();
