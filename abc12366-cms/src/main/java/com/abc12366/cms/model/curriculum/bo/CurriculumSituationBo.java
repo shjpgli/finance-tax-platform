@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * 
- * 课程表
+ * 课程授课情况
  * 
  **/
 @SuppressWarnings("serial")
