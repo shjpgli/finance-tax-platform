@@ -37,7 +37,7 @@ public class TradeLogController {
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @PathVariable(value = "orderNo", required = false) String orderNo) {
+                                     @RequestParam(value = "orderNo", required = false) String orderNo) {
         LOGGER.info("{},{},{}", orderNo, pageNum, pageSize);
         TradeLog tradeLog = new TradeLog();
 
