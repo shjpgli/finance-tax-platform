@@ -318,7 +318,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         refund.setTrade_no(logList.get(i).getAliTrandeNo());
                         refund.setRefund_amount(String.valueOf(data.getAmount()));
                         refund.setRefund_reason(data.getAdminRemark());
-                        refund.setOut_request_no(Utils.uuid());
+                        String out_request_no=Utils.uuid();
+                        refund.setOut_request_no(out_request_no);
                         
                         try {
 							AlipayClient alipayClient = AliPayConfig.getInstance();
@@ -334,7 +335,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 								LOGGER.info("支付宝退款成功,插入退款流水记录");
 								TradeLog tradeLog=new TradeLog();
 								tradeLog.setId(Utils.uuid());
-								tradeLog.setOrderNo(refundRes.getOut_trade_no());
+								tradeLog.setOrderNo(out_request_no);
 								tradeLog.setAliTrandeNo(refundRes.getTrade_no());
 								tradeLog.setTradeStatus("1");
 								tradeLog.setTradeType("2");
