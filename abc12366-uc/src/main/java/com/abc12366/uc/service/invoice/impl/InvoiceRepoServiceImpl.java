@@ -5,11 +5,15 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
 import com.abc12366.uc.mapper.db1.InvoiceRepoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
+import com.abc12366.uc.mapper.db2.InvoiceDistributeRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.InvoiceDistribute;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
+import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +44,9 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Autowired
     private InvoiceDetailMapper invoiceDetailMapper;
+
+    @Autowired
+    private InvoiceDistributeRoMapper invoiceDistributeRoMapper;
 
     @Override
     public List<InvoiceRepoBO> selectList(InvoiceRepoBO invoiceRepoBO) {
@@ -130,15 +137,9 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     }
 
     @Override
-    public String selectRepoId(String invoiceTypeCode) {
-        String repoId;
+    public InvoiceRepo selectRepoId(String invoiceTypeCode) {
         InvoiceRepo invoiceRepo = invoiceRepoRoMapper.selectRepoId(invoiceTypeCode);
-        if(invoiceRepo == null){
-            repoId = invoiceTypeCode;
-        }else{
-            repoId = invoiceRepo.getInvoiceTypeCode();
-        }
-        return repoId;
+        return invoiceRepo;
     }
 
     @Override
@@ -184,8 +185,11 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     }
 
     @Override
-    public InvoiceDetail selectInvoiceDetail() {
-        return invoiceDetailRoMapper.selectInvoiceDetail();
+    public InvoiceDetailBO selectInvoiceDistributeByInv(String invoiceTypeCode) {
+        InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
+        invoiceDistribute.setSignUser(UserUtil.getAdminId());
+        invoiceDistribute.setInvoiceTypeCode(invoiceTypeCode);
+        return invoiceDetailRoMapper.selectInvoiceDetail(invoiceDistribute);
     }
 
     @Override

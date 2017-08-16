@@ -28,4 +28,6 @@ public interface InvoiceDistributeRoMapper {
 	InvoiceDistributeBO selectInvoiceDistribute(String id);
 
 	List<InvoiceDistribute> selectInvoiceDistributeList(String useId);
+
+	InvoiceDistributeBO selectInvoiceDistributeByInv(InvoiceDistribute invoiceDistribute);
 }

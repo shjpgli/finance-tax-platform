@@ -61,7 +61,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice_repo
-        where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0) desc LIMIT 1;
+        where invoiceTypeCode = #{invoiceTypeCode} ORDER BY (id) desc LIMIT 1;
     </select>
     <!-- 查询主键ID -->
     <select id="selectInvoiceRepoNum" resultType="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO" parameterType="java.lang.String">

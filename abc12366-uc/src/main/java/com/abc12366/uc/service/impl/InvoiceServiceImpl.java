@@ -441,6 +441,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     public void billing(InvoiceCheckBO invoiceCheckBO) {
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceCheckBO, invoice);
+        String invoiceNo = null;
+        String invoiceCode = null;
         if (invoiceCheckBO.getIsBilling()) {
             InvoiceBO invoiceBO = invoiceRoMapper.selectById(invoiceCheckBO.getId());
             //电子发票直接把发票信息插入
@@ -462,7 +464,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     List<OrderProductBO> orderProductBOList = orderBO.getOrderProductBOList();
                     for (OrderProductBO orderProductBO:orderProductBOList){
                         invoiceXm = new InvoiceXm();
-                        //商品名称
+                        //商品名称，
                         invoiceXm.setXmmc(orderProductBO.getProductBO().getInvoiceContentDetail());
                         //商品编码
                         invoiceXm.setSpbm("1010105000000000000");
@@ -479,7 +481,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     dzfpGetReq.setGmf_mc("个人");
                     //dzfpGetReq.setGmf_nsrsbh("110109500321655");
                 }else if("2".equals(invoiceBO.getName())){
-                    dzfpGetReq.setGmf_mc(invoiceBO.getCompName());
+                    dzfpGetReq.setGmf_mc(invoiceBO.getNsrmc());
                     dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
                 }
                 dzfpGetReq.setInvoiceXms(invoiceXmList);
@@ -502,19 +504,35 @@ public class InvoiceServiceImpl implements InvoiceService {
                 tail.setSpUrl(einvocie.getSP_URL());
                 tail.setPdfUrl(einvocie.getPDF_URL());
                 //根据发票号码和发票代码查找发票详细信息表
-                InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
-                if (detail == null) {
-                    LOGGER.info("发票详情信息不能为空：{}", detail);
-                    throw new ServiceException(4186);
-                }
-                BeanUtils.copyProperties(tail,detail);
+//                InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
+//                if (detail == null) {
+//                    LOGGER.info("发票详情信息不能为空：{}", detail);
+//                    throw new ServiceException(4186);
+//                }
+
+                InvoiceDetail detail = new InvoiceDetail();
+                tail.setId(Utils.uuid());
+                tail.setProperty("2");
+                Date date = new Date();
+                tail.setCreateTime(date);
+                tail.setLastUpdate(date);
+                BeanUtils.copyProperties(tail, detail);
                 detail.setStatus("2");
-                int dUpdate = invoiceDetailMapper.update(detail);
+                //TODO 暂时先入库
+                int insert = invoiceDetailMapper.insert(detail);
+                if (insert != 1) {
+                    LOGGER.info("新增失败：{}", detail);
+                    throw new ServiceException(4101);
+                }
+                invoiceNo = detail.getInvoiceNo();
+                invoiceCode = detail.getInvoiceCode();
+                /*int dUpdate = invoiceDetailMapper.update(detail);
                 if (dUpdate != 1) {
                     LOGGER.info("发票详情信息修改失败：{}", detail);
                     throw new ServiceException(4187);
-                }
+                }*/
             }else {
+
                 InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
                 if(invoiceDetail == null){
                     LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
@@ -526,6 +544,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                     LOGGER.info("发票详情信息修改失败：{}", invoiceDetail);
                     throw new ServiceException(4187);
                 }
+                invoiceNo = invoiceDetail.getInvoiceNo();
+                invoiceCode = invoiceDetail.getInvoiceCode();
             }
             invoice.setStatus("2");
         } else {
@@ -549,6 +569,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         invoice.setRemark(invoiceCheckBO.getRemark());
         invoice.setLastUpdate(new Date());
+        invoice.setInvoiceNo(invoiceNo);
+        invoice.setInvoiceCode(invoiceCode);
         int update = invoiceMapper.update(invoice);
         if (update != 1) {
             LOGGER.info("修改失败：{}", invoice);

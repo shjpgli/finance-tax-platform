@@ -91,11 +91,13 @@
         </where>
     </select>
 
-    <select id="selectInvoiceDetail" resultType="com.abc12366.uc.model.invoice.InvoiceDetail">
+    <select id="selectInvoiceDetail" resultType="com.abc12366.uc.model.invoice.bo.InvoiceDetailBO" parameterType="com.abc12366.uc.model.invoice.InvoiceDistribute">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_invoice_detail
-        where status = '0' and property = '1' order by (invoiceNo+0) asc,createTime asc LIMIT 1
+        d.id, d.invoiceNo, d.invoiceCode, d.property, d.status, d.createTime, d.lastUpdate, d.remark,d.invoiceRepoId,d.pdfUrl,d.spUrl
+        FROM uc_invoice_detail d
+        LEFT JOIN uc_invoice_distribute b on b.invoiceRepoId = d.invoiceRepoId
+        where b.signUser = #{signUser} and d.status = '0' and d.property = '2'
+        and b.invoiceTypeCode= #{invoiceTypeCode} order by d.invoiceNo asc LIMIT 1
     </select>
 
 
