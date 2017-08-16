@@ -39,7 +39,7 @@
     <!-- 查询最新课程 -->
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,browseNum,watchNum,cover,classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
+        curriculumId,title,browseNum,watchNum,cover,issueTime,isFree,freeMember,curriculumidIntro
         FROM bb_curriculum
         WHERE 1=1 and status = 1
         <if test="label != null and label != ''">
