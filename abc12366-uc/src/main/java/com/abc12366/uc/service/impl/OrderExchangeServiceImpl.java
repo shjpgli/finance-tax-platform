@@ -79,9 +79,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     private TradeLogRoMapper tradeLogRoMapper;
 
     @Autowired
-    private AliPayController aliPayController;
-
-    @Autowired
     private InvoiceDetailMapper invoiceDetailMapper;
 
     @Autowired
@@ -249,7 +246,13 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 List<InvoiceXm> dataList = new ArrayList<>();
                 for (ExchangeOrderInvoiceBO eoi : orderInvoiceBOList) {
                     if ("1".equals(eoi.getProperty())) { // 纸质发票
-                        // todo
+                        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNo(eoi.getInvoiceNo());
+                        if (invoiceDetail != null) {
+                            // 更新发票状态：3-已作废
+                            invoiceDetail.setStatus("3");
+                            invoiceDetail.setLastUpdate(new Date());
+                            invoiceDetailMapper.update(invoiceDetail);
+                        }
                     } else if ("2".equals(eoi.getProperty())) { // 电子发票
                         if ("1".equals(eoi.getName())) { // 个人发票
                             req.setGmf_mc(eoi.getNsrmc());
@@ -268,8 +271,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         InvoiceXm xm = new InvoiceXm();
                         xm.setFphxz("0");
                         xm.setXmmc(selectFieldValue("invoicecontent", eoi.getContent()));
-                        xm.setXmsl(1.00);
-                        xm.setTotalAmt(eoi.getAmount());
+                        xm.setXmsl(-1.00);
+                        xm.setTotalAmt(-eoi.getAmount());
                         dataList.add(xm);
 
                         req.setInvoiceXms(dataList);
@@ -315,7 +318,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         refund.setTrade_no(logList.get(i).getAliTrandeNo());
                         refund.setRefund_amount(String.valueOf(data.getAmount()));
                         refund.setRefund_reason(data.getAdminRemark());
-                        refund.setOut_request_no(Utils.uuid());
+                        String out_request_no=log.getOrderNo()+"_"+logList.size();
+                        refund.setOut_request_no(out_request_no);
                         
                         try {
 							AlipayClient alipayClient = AliPayConfig.getInstance();
@@ -331,7 +335,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 								LOGGER.info("支付宝退款成功,插入退款流水记录");
 								TradeLog tradeLog=new TradeLog();
 								tradeLog.setId(Utils.uuid());
-								tradeLog.setOrderNo(refundRes.getOut_trade_no());
+								tradeLog.setOrderNo(out_request_no);
 								tradeLog.setAliTrandeNo(refundRes.getTrade_no());
 								tradeLog.setTradeStatus("1");
 								tradeLog.setTradeType("2");
@@ -352,6 +356,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 	                            // 插入订单日志-已完成
 	                            insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
 								
+	                            //TODO 待加入积分扣除
 								
 								return ResponseEntity.ok(Utils.kv("data", refundRes));
 							}else{

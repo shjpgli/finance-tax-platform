@@ -83,14 +83,12 @@
     </select>
     <!-- 发票领用明细表对象-->
     <resultMap id="invoiceApprovalLogMap" type="com.abc12366.uc.model.invoice.bo.InvoiceApprovalLogBO">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
         <result column="useId" property="useId" jdbcType="VARCHAR"/>
-        <result column="invoiceTypeCode" property="invoiceTypeCode" jdbcType="VARCHAR"/>
-        <result column="repoNum" property="repoNum" jdbcType="INTEGER"/>
-        <result column="applyNum" property="applyNum" jdbcType="INTEGER"/>
-        <result column="realNum" property="realNum" jdbcType="INTEGER"/>
-        <result column="checkBook" property="checkBook" jdbcType="INTEGER"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
+        <result column="approvalResult" property="approvalResult" jdbcType="VARCHAR"/>
+        <result column="approvalOpinions" property="approvalOpinions" jdbcType="VARCHAR"/>
+        <result column="approver" property="approver" jdbcType="VARCHAR"/>
+        <result column="approverTime" property="approverTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!-- 查询（发票分发信息对象） -->
@@ -106,7 +104,7 @@
     <!-- 查询（发票领用日志） -->
     <select id="getInvoiceApprovalLogBO" resultMap="invoiceApprovalLogMap" parameterType="java.lang.String">
         SELECT
-        id,	useId,	approvalResult,	approvalOpinions,	approver,	approverTime
+        id,	useId,	approvalResult,	approvalOpinions,	approver,	approverTime,nickName
         FROM uc_invoice_approval_log
         WHERE useId = #{useId}
     </select>

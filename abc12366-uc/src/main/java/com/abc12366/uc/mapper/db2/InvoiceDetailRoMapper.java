@@ -1,7 +1,9 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.InvoiceDistribute;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
+import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public interface InvoiceDetailRoMapper {
 
     List<InvoiceDetail> selectByIdAndStatus(String id);
 
-    InvoiceDetail selectInvoiceDetail();
+    InvoiceDetailBO selectInvoiceDetail(InvoiceDistribute invoiceDistribute);
 
     List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail);
 

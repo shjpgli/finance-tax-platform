@@ -1,7 +1,6 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.TY11Response.JBXXCX;
@@ -14,6 +13,8 @@ import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
+import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
 import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
@@ -92,7 +93,7 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("nsrsbh", userDzsbInsertBO.getNsrsbhOrShxydm());
         Map<String, String> resMap = client.process(map);
         System.out.println(resMap);
-        UserDzsb userDzsbTemp = analyzeXml(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
+        UserDzsb userDzsbTemp = analyzeXmlTY11(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
 
 
         //查看是否重复绑定
@@ -118,6 +119,9 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setShxydm(userDzsbTemp.getShxydm());
         userDzsb.setSwjgMc(userDzsbTemp.getSwjgMc());
         userDzsb.setSwjgDm(userDzsbTemp.getSwjgDm());
+        userDzsb.setExpireTime(userDzsbTemp.getExpireTime());
+        userDzsb.setFrmc(userDzsbTemp.getFrmc());
+        userDzsb.setFrzjh(userDzsbTemp.getFrzjh());
         int result = userBindMapper.dzsbBind(userDzsb);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());
@@ -338,20 +342,32 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException {
+    public BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
         //1.验证码校验
-        VerifyingCodeBO param = new VerifyingCodeBO();
-        param.setPhone(data.getPhone());
-        param.setType(data.getType());
-        param.setCode(data.getCode());
-        authService.verifyCode(param, request);
+//        VerifyingCodeBO param = new VerifyingCodeBO();
+//        param.setPhone(data.getPhone());
+//        param.setType(data.getType());
+//        param.setCode(data.getCode());
+//        authService.verifyCode(param, request);
 
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY12");
         map.put("NSRSBH", data.getNsrsbh());
         Map respMap = client.process(map);
+        analyzeXmlTY12(respMap, data.getNsrsbh());
         BaseObject response = new BaseObject();
         return null;
+    }
+
+    private void analyzeXmlTY12(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null || !resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException(4629);
+        }
+
+        NSRMMGX nsrmmgx = (NSRMMGX) XmlJavaParser.parseXmlToObject(NSRMMGX.class, String.valueOf(resMap.get("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")));
+        if (nsrmmgx.getCLJG().trim().equals("0")) {
+
+        }
     }
 
     @Override
@@ -365,7 +381,7 @@ public class UserBindServiceImpl implements UserBindService {
         return null;
     }
 
-    public UserDzsb analyzeXml(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    public UserDzsb analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
         if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
             throw new ServiceException(4629);
         }
@@ -391,9 +407,22 @@ public class UserBindServiceImpl implements UserBindService {
                 if ("SWJGDM".equals(mx.getCODE())) {
                     userDzsbTemp.setSwjgDm(mx.getVALUE());
                 }
+                if ("FRXM".equals(mx.getCODE())) {
+                    userDzsbTemp.setFrmc(mx.getVALUE());
+                }
+                if ("FRZJH".equals(mx.getCODE())) {
+                    userDzsbTemp.setFrzjh(mx.getVALUE());
+                }
+                if ("RJDQR".equals(mx.getCODE())) {
+                    userDzsbTemp.setExpireTime(DateUtils.StrToDate(mx.getVALUE()));
+                }
+                if ("RJYQDQR".equals(mx.getCODE())) {
+                    userDzsbTemp.setExpandExpireTime(DateUtils.StrToDate(mx.getVALUE()));
+                }
             }
         } else {
-            throw new ServiceException(4629);
+            String msg = jbxxcx.getCWYY();
+            throw new ServiceException(cxjg, msg);
         }
         return userDzsbTemp;
     }
@@ -417,29 +446,4 @@ public class UserBindServiceImpl implements UserBindService {
         return encodedCode;
     }
 
-    private void testPost() {
-        String url = "http://localhost:9100/uc/app/register";
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(Constant.VERSION_HEAD, Constant.VERSION_1);
-        headers.add("Content-Type", "application/json");
-
-        Map<String, Object> requestBody = new HashMap<>();
-        String name = "abc_test";
-        String password = "12345678";
-        requestBody.put("name", name);
-        requestBody.put("password", password);
-        requestBody.put("status", true);
-//        String requestBody = "{\"name\":\"abc-test\",\"password\":\"12345678\",\"status\":\"true\"}";
-
-//        String requestBody = "{\"appId\":\"ETAX_PC\",\"secret\":\"3A6ABF6B62EA0190E053550C483DD05A\"}";
-
-        HttpEntity requestEntity = new HttpEntity(requestBody, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-//        if (soaUtil.isExchangeSuccessful(responseEntity)) {
-//            return JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsAppLoginResponse.class);
-//        }
-//        return null;
-        System.out.println("" + responseEntity);
-    }
 }

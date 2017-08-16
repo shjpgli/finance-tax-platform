@@ -35,7 +35,7 @@ public interface UserBindService {
 
     NsrLoginResponse nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception;
 
-    BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException;
+    BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException;
 
     BaseObject updatePassword(UpdatePwd data);
 }

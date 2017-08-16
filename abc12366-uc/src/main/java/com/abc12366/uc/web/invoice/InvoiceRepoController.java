@@ -3,7 +3,10 @@ package com.abc12366.uc.web.invoice;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.InvoiceDistribute;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
+import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
+import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
 import com.github.pagehelper.Page;
@@ -69,7 +72,7 @@ public class InvoiceRepoController {
      */
     @GetMapping(path = "/invoice/repo/code/{code}")
     public ResponseEntity selectRepoId(@PathVariable("code") String code) {
-        String repoId = invoiceRepoService.selectRepoId(code);
+        InvoiceRepo repoId = invoiceRepoService.selectRepoId(code);
         LOGGER.info("{}", repoId);
         return ResponseEntity.ok(Utils.kv("data", repoId));
     }
@@ -180,15 +183,15 @@ public class InvoiceRepoController {
 
 
     /**
-     * 获取一张发票
+     * 获取该管理员领用表中的一张发票
      *
      * @return
      */
     @GetMapping(path = "/invoice/detail/select")
-    public ResponseEntity selectInvoiceDetail() {
-        InvoiceDetail invoiceDetail = invoiceRepoService.selectInvoiceDetail();
-        LOGGER.info("{}", invoiceDetail);
-        return ResponseEntity.ok(Utils.kv("data", invoiceDetail));
+    public ResponseEntity selectInvoiceDetail(@RequestParam(value = "invoiceTypeCode", required = false) String invoiceTypeCode) {
+        InvoiceDetailBO invoiceDetailBO = invoiceRepoService.selectInvoiceDistributeByInv(invoiceTypeCode);
+        LOGGER.info("{}", invoiceDetailBO);
+        return ResponseEntity.ok(Utils.kv("data", invoiceDetailBO));
     }
 
     /**

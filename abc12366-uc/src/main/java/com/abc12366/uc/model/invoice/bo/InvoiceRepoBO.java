@@ -19,6 +19,8 @@ public class InvoiceRepoBO implements Serializable {
 	/**发票种类代码，字典表ID**/
 	private String invoiceTypeCode;
 
+	private String invoiceTypeName;
+
 	/**发票代码**/
 	private String invoiceCode;
 
@@ -165,5 +167,13 @@ public class InvoiceRepoBO implements Serializable {
 
 	public void setInvoiceDetailBOList(List<InvoiceDetailBO> invoiceDetailBOList) {
 		this.invoiceDetailBOList = invoiceDetailBOList;
+	}
+
+	public String getInvoiceTypeName() {
+		return invoiceTypeName;
+	}
+
+	public void setInvoiceTypeName(String invoiceTypeName) {
+		this.invoiceTypeName = invoiceTypeName;
 	}
 }

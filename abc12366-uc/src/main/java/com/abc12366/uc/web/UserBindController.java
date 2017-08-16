@@ -131,7 +131,7 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/shb/resetpassword")
-    public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request) throws IOException {
+    public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
         LOGGER.info("{}", data);
         BaseObject response = userBindService.resetPassword(data, request);
         return ResponseEntity.ok(Utils.kv());

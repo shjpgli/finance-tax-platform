@@ -32,13 +32,13 @@ public class PkgUtil extends BaseObject{
 //            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
         if(serviceId.equalsIgnoreCase("TY20")){
-            result = makeTiripPackageBytdps(makeTY20(map), serviceId, "CSZJ");
+            result = makeTiripPackageBytdps(makeTY20(map), serviceId, "ABC_4000");
         }
         if(serviceId.equalsIgnoreCase("TY12")){
-            result = makeTiripPackageBytdps(makeTY12(map), serviceId, "CSZJ");
+            result = makeTiripPackageBytdps(makeTY12(map), serviceId, "ABC_4000");
         }
         if(serviceId.equalsIgnoreCase("TY21")){
-            result = makeTiripPackageBytdps(makeTY21(map), serviceId, "CSZJ");
+            result = makeTiripPackageBytdps(makeTY21(map), serviceId, "ABC_4000");
         }
 
         return result;

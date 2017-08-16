@@ -24,6 +24,7 @@ public class ProductBO implements Serializable {
     private String goodsName;
     /**
      * 发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费
+     *
      * @return
      */
     private String invoiceContent;
@@ -37,6 +38,7 @@ public class ProductBO implements Serializable {
 
     private Integer startRepo;
     private Integer endRepo;
+    private String goodsType;
 
     public String getId() {
         return this.id;
@@ -172,5 +174,13 @@ public class ProductBO implements Serializable {
 
     public void setInvoiceContentDetail(String invoiceContentDetail) {
         this.invoiceContentDetail = invoiceContentDetail;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
     }
 }

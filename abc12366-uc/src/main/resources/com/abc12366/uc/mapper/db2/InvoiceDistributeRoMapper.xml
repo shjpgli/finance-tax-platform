@@ -24,6 +24,7 @@
         <result column="signUser" property="signUser" jdbcType="VARCHAR"/>
         <result column="signTime" property="signTime" jdbcType="TIMESTAMP"/>
         <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
+
     </resultMap>
 
     <!-- 查询（根据主键ID查询） -->
@@ -52,4 +53,5 @@
         LEFT JOIN uc_dict dt on dt.id = te.invoiceTypeCode
         WHERE te.useId = #{useId}
     </select>
+    <!--获取该管理员领用表中的一张发票-->
 </mapper>

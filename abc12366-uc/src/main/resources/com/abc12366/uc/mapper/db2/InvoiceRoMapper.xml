@@ -39,6 +39,40 @@
                     select="getOrderBO"></collection>
     </resultMap>
 
+    <resultMap id="invoiceBOListResultMap" type="com.abc12366.uc.model.bo.InvoiceBO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="invoiceNo" property="invoiceNo" jdbcType="VARCHAR"/>
+        <result column="invoiceCode" property="invoiceCode" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="compName" property="compName" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="DOUBLE"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="property" property="property" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="nsrsbh" property="nsrsbh" jdbcType="VARCHAR"/>
+        <result column="nsrmc" property="nsrmc" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="bank" property="bank" jdbcType="VARCHAR"/>
+        <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="VARCHAR"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="VARCHAR"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="VARCHAR"/>
+        <result column="isInsured" property="isInsured" jdbcType="VARCHAR"/>
+        <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <association property="userAddressBO" column="addressId" select="getUserAddress"/>
+        <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
+    </resultMap>
+
     <resultMap id="oneOrderBOMap" type="com.abc12366.uc.model.bo.OrderBO">
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
@@ -96,7 +130,35 @@
         <result column="weight" property="weight" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
+                     select="getProductBO"></association>
     </resultMap>
+
+    <!--产品对象-->
+    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
+        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="costPrice" property="costPrice" jdbcType="DOUBLE"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+        <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="invoiceContent" property="invoiceContent" jdbcType="VARCHAR"/>
+        <result column="invoiceContentDetail" property="invoiceContentDetail" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--获取产品信息-->
+    <select id="getProductBO" parameterType="java.lang.String" resultMap="productResultMap">
+        SELECT
+        p.id, p.goodsId, p.marketPrice, p.sellingPrice, p.costPrice, p.createTime, p.lastUpdate,p.stock,g.name as goodsName,g.invoiceContent as invoiceContent,d.fieldKey as invoiceContentDetail
+        FROM uc_product p
+        LEFT JOIN uc_goods g ON p.goodsId = g.id
+        LEFT JOIN uc_dict d ON d.dictId='invoicecontent' and d.fieldValue= g.invoiceContent
+        WHERE p.id = #{productId}
+    </select>
+
     <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
@@ -142,15 +204,17 @@
     <sql id="Base_Column_List">
         id, userId, username, invoiceNo, invoiceCode, name, content, compName, amount, type, property, status,
         createTime, lastUpdate, nsrsbh, nsrmc, address, phone, bank, addressId, deliveryMethod, isShipping,
-        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum
+        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum,remark
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultMap="invoiceBOResultMap" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_invoice
-        WHERE id = #{id}
+        <include refid="InvoiceBO_Column_List"/>
+        FROM uc_invoice i
+        LEFT JOIN uc_user u ON u.id = i.userId
+        LEFT JOIN uc_user_address a ON a.id = i.addressId
+        WHERE i.id = #{id}
     </select>
 
     <!-- 查询（根据主键ID和UserId查询） -->

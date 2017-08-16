@@ -5,17 +5,22 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
 import com.abc12366.uc.mapper.db1.InvoiceRepoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
+import com.abc12366.uc.mapper.db2.InvoiceDistributeRoMapper;
 import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.InvoiceDistribute;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
+import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +45,9 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Autowired
     private InvoiceDetailMapper invoiceDetailMapper;
+
+    @Autowired
+    private InvoiceDistributeRoMapper invoiceDistributeRoMapper;
 
     @Override
     public List<InvoiceRepoBO> selectList(InvoiceRepoBO invoiceRepoBO) {
@@ -70,47 +78,80 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
         Date date = new Date();
         invoiceRepoBO.setCreateTime(date);
-        int length = invoiceRepoBO.getInvoiceNoStart().length();
+        int startLength = invoiceRepoBO.getInvoiceNoStart().length();
+        int endLength = invoiceRepoBO.getInvoiceNoEnd().length();
+        if(startLength != endLength){
+            LOGGER.warn("发票起止长度必须保持一致{}{}：" + startLength+endLength);
+            throw new ServiceException(4910);
+        }
+
         int start = Integer.parseInt(invoiceRepoBO.getInvoiceNoStart());
         int end = Integer.parseInt(invoiceRepoBO.getInvoiceNoEnd());
-        int count = invoiceRepoBO.getShare();
         String ids[] = invoiceRepoBO.getId().split("-");
-        int repoId = Integer.parseInt(ids[1]);
-        int num = 0;
-        for(int i = start;i < end; i ++ ){
-            if(i % count == 0){
-                System.out.println("号码起："+i+"   号码止："+(i + count - 1)+"  Id = "+(ids[0]+repoId));
-                invoiceRepoBO.setId(ids[0]+repoId);
+        int book = invoiceRepoBO.getBook();
+        int startId = Integer.parseInt(ids[1]);
+        int endId = Integer.parseInt(ids[2]);
+        if(book != (endId - startId +1)){
+            LOGGER.warn("编号的起止号码+1，必须等于本数{}{}：",startId,endId);
+            throw new ServiceException(4911);
+        }
 
-                invoiceRepoBO.setInvoiceNoStart(autoGenericCode(i,length));
-                num = (i + count - 1);
-                InvoiceRepo invoiceRepo = new InvoiceRepo();
-                BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = start; i <= end; i++) {
+            list.add(i);
+        }
 
-                int insert = invoiceRepoMapper.insert(invoiceRepo);
-                if(insert != 1){
+        int pageSize = invoiceRepoBO.getShare();
+        int totalCount = list.size();
+        int m = totalCount % pageSize;
+        System.out.println(m);
+        if(m != 0){
+            LOGGER.warn("必须要整本的加入{}{}：", m);
+            throw new ServiceException(4912);
+        }
+        int pageCount = totalCount / pageSize;
+        int endCount=0;
+        int startCount=0;
+        String invoiceTypeCode = invoiceRepoBO.getInvoiceTypeCode();
+        boolean isIndex = true;
+        for(int i = 1; i <= pageCount; i++) {
+            List<Integer> subList = list.subList((i - 1) * pageSize, pageSize * (i));
+            invoiceRepoBO.setId(invoiceTypeCode+startId);
+            InvoiceRepo invoiceRepo = new InvoiceRepo();
+            isIndex = true;
+            for(Integer j:subList){
+                if(isIndex){
+                    startCount = j;
+                    isIndex = false;
+                }
+                InvoiceDetail invoiceDetail = new InvoiceDetail();
+                invoiceDetail.setId(Utils.uuid());
+                invoiceDetail.setCreateTime(date);
+                invoiceDetail.setLastUpdate(date);
+                invoiceDetail.setProperty(invoiceRepoBO.getProperty());
+                invoiceDetail.setInvoiceNo(autoGenericCode(j,endLength));
+                invoiceDetail.setInvoiceCode(invoiceRepoBO.getInvoiceCode());
+                invoiceDetail.setInvoiceRepoId(invoiceTypeCode+startId);
+                invoiceDetail.setStatus("0");
+                int dInsert = invoiceDetailMapper.insert(invoiceDetail);
+                if(dInsert != 1){
                     LOGGER.warn("新增失败，参数{}：" + invoiceRepoBO);
                     throw new ServiceException(4101);
                 }
-                invoiceRepoBO.setInvoiceNoEnd(autoGenericCode((num),length));
-                for(int j = i;j <= num;j++){
-                    InvoiceDetail invoiceDetail = new InvoiceDetail();
-                    invoiceDetail.setId(Utils.uuid());
-                    invoiceDetail.setCreateTime(date);
-                    invoiceDetail.setLastUpdate(date);
-                    invoiceDetail.setInvoiceNo(autoGenericCode(j,length));
-                    invoiceDetail.setInvoiceCode(invoiceRepoBO.getInvoiceCode());
-                    invoiceDetail.setInvoiceRepoId(ids[0]+repoId);
-                    int dInsert = invoiceDetailMapper.insert(invoiceDetail);
-                    if(dInsert != 1){
-                        LOGGER.warn("新增失败，参数{}：" + invoiceRepoBO);
-                        throw new ServiceException(4101);
-                    }
-                }
-                repoId ++;
+                endCount = j;
             }
-        }
+            invoiceRepoBO.setInvoiceNoStart(autoGenericCode(startCount,endLength));
+            invoiceRepoBO.setInvoiceNoEnd(autoGenericCode(endCount,endLength));
+            invoiceRepoBO.setStatus("0");
+            BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
+            int insert = invoiceRepoMapper.insert(invoiceRepo);
+            if(insert != 1){
+                LOGGER.warn("新增失败，参数{}：" + invoiceRepoBO);
+                throw new ServiceException(4101);
+            }
+            startId ++;
 
+        }
         return invoiceRepoBO;
     }
 
@@ -130,15 +171,9 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     }
 
     @Override
-    public String selectRepoId(String invoiceTypeCode) {
-        String repoId;
+    public InvoiceRepo selectRepoId(String invoiceTypeCode) {
         InvoiceRepo invoiceRepo = invoiceRepoRoMapper.selectRepoId(invoiceTypeCode);
-        if(invoiceRepo == null){
-            repoId = invoiceTypeCode;
-        }else{
-            repoId = invoiceRepo.getInvoiceTypeCode();
-        }
-        return repoId;
+        return invoiceRepo;
     }
 
     @Override
@@ -184,8 +219,11 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     }
 
     @Override
-    public InvoiceDetail selectInvoiceDetail() {
-        return invoiceDetailRoMapper.selectInvoiceDetail();
+    public InvoiceDetailBO selectInvoiceDistributeByInv(String invoiceTypeCode) {
+        InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
+        invoiceDistribute.setSignUser(UserUtil.getAdminId());
+        invoiceDistribute.setInvoiceTypeCode(invoiceTypeCode);
+        return invoiceDetailRoMapper.selectInvoiceDetail(invoiceDistribute);
     }
 
     @Override

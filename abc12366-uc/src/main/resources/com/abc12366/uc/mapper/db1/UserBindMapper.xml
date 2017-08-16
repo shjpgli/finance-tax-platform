@@ -4,10 +4,10 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.UserBindMapper">
 
     <insert id="dzsbBind" parameterType="com.abc12366.uc.model.UserDzsb">
-        insert into uc_user_dzsb(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime,
-        lastUpdate)
+        insert into uc_user_dzsb(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status,
+        createTime,lastUpdate,expireTime,expandExpireTime,frmc,frzjh)
         values (#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm}, #{status},
-        #{createTime}, #{lastUpdate})
+        #{createTime}, #{lastUpdate}, #{expireTime}, #{expandExpireTime}, #{frmc},#{frzjh})
     </insert>
 
     <update id="dzsbUnbind">

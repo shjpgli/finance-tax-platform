@@ -10,6 +10,10 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class InvoiceUseDetailBO implements Serializable {
 
+	/**
+	 * PK
+	 */
+	private String id;
 	/****/
 	private String useId;
 
@@ -110,5 +114,13 @@ public class InvoiceUseDetailBO implements Serializable {
 
 	public void setInvoiceRepoIds(String[] invoiceRepoIds) {
 		this.invoiceRepoIds = invoiceRepoIds;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

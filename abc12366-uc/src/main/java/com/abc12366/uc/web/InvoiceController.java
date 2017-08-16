@@ -202,11 +202,9 @@ public class InvoiceController {
      * @return
      */
     @GetMapping(path = "/export/print")
-    public ResponseEntity exportInvoicePrint(/*@RequestParam(value = "startTime", defaultValue = "") String startTime,
-                                        @RequestParam(value = "endTime", defaultValue = "") String endTime,*/
-                                        @RequestParam(value = "status", required = false) String status) {
+    public ResponseEntity exportInvoicePrint() {
         InvoiceBO invoice = new InvoiceBO();
-        invoice.setStatus(status);
+        invoice.setStatus("2");
         /*Date date = new Date();
         if (startTime == null || "".equals(startTime)) {
             invoice.setStartTime(Constant.getToday(date));

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.SystemRecordRoMapper">
+
+    <select id="selectList" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO" parameterType="java.util.Map">
+        SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,pageUrl
+        ,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime
+        from bb_system_record 
+        <where>
+            <if test="userId!=null">
+                userId=#{userId}
+            </if>
+            <if test="ip!=null">
+                and ip=#{ip}
+            </if>
+        </where>
+        ORDER BY createTime DESC
+    </select>
+
+    <select id="selectOne" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO" parameterType="java.lang.String">
+        SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,
+        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime 
+        from bb_system_record
+        where id=#{id}
+    </select>
+
+</mapper>
