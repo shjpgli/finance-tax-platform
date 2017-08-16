@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.CurriculumClassifyRoMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 classifyId,parentId,classifyName,priority,isDisplay
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.curriculum.CurriculumClassify" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_curriculum_classify
+		 WHERE classifyId = #{classifyId}
+	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_curriculum_classify
+        WHERE 1=1
+        <if test="parentId != null and parentId != ''">
+            AND parentId = #{parentId}
+        </if>
+        <if test="classifyId != null and classifyId != ''">
+            AND classifyId = #{classifyId}
+        </if>
+    </select>
+
+
+</mapper>
