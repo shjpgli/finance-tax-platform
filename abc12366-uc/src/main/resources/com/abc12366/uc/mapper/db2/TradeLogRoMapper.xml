@@ -29,7 +29,7 @@
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
         <where>
-            <if test="orderNo != null and orderNo != ''"> orderNo = #{orderNo}</if>
+            <if test="orderNo != null and orderNo != ''"> orderNo like CONCAT('%',#{orderNo},'%')</if>
             <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
             <if test="payMethod != null and payMethod != ''">AND payMethod = #{payMethod}</if>
         </where>
