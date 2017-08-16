@@ -19,8 +19,29 @@
         on e.productId = q.id
         <where>
             <if test="type != null and type !=''">type = #{type}</if>
+            <if test="username != null and username !=''">and username = #{username}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
+            <if test="lastUpdate != null and lastUpdate !=''">and lastUpdate >= #{lastUpdate}</if>
+            <if test="userId != null and userId !=''">and userId = #{userId}</if>
+            <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
+        </where>
+        ORDER BY e.createTime DESC
+    </select>
+
+    <select id="selectListForFinance" parameterType="com.abc12366.uc.model.OrderExchange"
+            resultType="com.abc12366.uc.model.OrderExchange">
+        select e.id, e.userId, e.orderNo, e.name, q.imageUrl, q.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
+        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate
+        from (select c.*, d.productId, d.num, d.name from (select b.username, b.createTime as orderTime, a.* from
+        uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo where a.userId = b.userId) c
+        left join uc_order_product d on c.orderNo = d.orderNo) e
+        left join (select o.id, p.imageUrl, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) q
+        on e.productId = q.id
+        <where>
+            (status = '4' or status = '8')
+            <if test="type != null and type !=''">and type = #{type}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
+            <if test="username != null and username !=''">and username = #{username}</if>
             <if test="lastUpdate != null and lastUpdate !=''">and lastUpdate >= #{lastUpdate}</if>
             <if test="userId != null and userId !=''">and userId = #{userId}</if>
             <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
