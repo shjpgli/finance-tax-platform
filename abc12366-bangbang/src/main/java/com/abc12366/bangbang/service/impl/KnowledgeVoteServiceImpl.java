@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeVoteLogMapper;
 import com.abc12366.bangbang.model.KnowledgeVoteLog;
@@ -43,6 +44,7 @@ public class KnowledgeVoteServiceImpl implements KnowledgeVoteService {
             }else{
                 knowledgeBaseMapper.addUselessVoteByPK(knowledgeId);
             }
+            knowledgeVoteLog.setUserId(UcUserCommon.getUserIdTwo());
             knowledgeVoteLog.setId(Utils.uuid());
             knowledgeVoteLogMapper.insert(knowledgeVoteLog);
         }catch (Exception e){

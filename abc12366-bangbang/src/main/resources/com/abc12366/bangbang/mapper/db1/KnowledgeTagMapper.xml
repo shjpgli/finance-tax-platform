@@ -8,6 +8,15 @@
         id, name, description, status, createTime, updateTime, createUser, updateUser
     </sql>
 
+
+    <!-- 查询关联问题最多的标签名 -->
+    <select id="selectHotTag" resultType="java.lang.String" parameterType="java.lang.Integer">
+          SELECT name FROM bb_knowledge_tag WHERE id IN (
+            SELECT * FROM (
+              SELECT tagId FROM bb_knowledge_tag_rel GROUP BY tagId ORDER BY COUNT(1) DESC LIMIT #{num}
+            )AS t
+          )
+    </select>
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="knowledgeTag" parameterType="java.lang.String">
         SELECT

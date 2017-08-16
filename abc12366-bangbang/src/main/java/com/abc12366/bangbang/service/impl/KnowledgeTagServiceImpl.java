@@ -31,6 +31,11 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     private KnowledgeTagRelMapper knowledgeTagRelMapper;
 
     @Override
+    public List<String> selectHotTag(Integer num) {
+        return knowledgeTagMapper.selectHotTag(num);
+    }
+
+    @Override
     public List<KnowledgeTag> selectList(String keywords) {
         return knowledgeTagMapper.selectList(keywords);
     }

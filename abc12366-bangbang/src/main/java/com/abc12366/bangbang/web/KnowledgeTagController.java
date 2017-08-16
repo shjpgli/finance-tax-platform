@@ -25,6 +25,18 @@ public class KnowledgeTagController {
     private KnowledgeTagService knowledgeTagService;
 
     /*
+    *  查询关联问题最多的标签
+    */
+    @GetMapping(path = "/listHot")
+    public ResponseEntity selectHotTagName(@RequestParam(value = "num", defaultValue = "5") int num) {
+
+        List<String> list = knowledgeTagService.selectHotTag(num);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", list));
+    }
+
+    /*
     *  知识库标签 分页查询
     *  支持 关键字查询
     */

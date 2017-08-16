@@ -42,4 +42,10 @@ public class UcUserCommon {
         return userId;
     }
 
+    public static String getUserIdTwo(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        return (String) request.getAttribute(Constant.USER_ID);
+    }
+
 }
