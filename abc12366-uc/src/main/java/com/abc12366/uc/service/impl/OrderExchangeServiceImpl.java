@@ -318,7 +318,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         refund.setTrade_no(logList.get(i).getAliTrandeNo());
                         refund.setRefund_amount(String.valueOf(data.getAmount()));
                         refund.setRefund_reason(data.getAdminRemark());
-                        String out_request_no=Utils.uuid();
+                        String out_request_no=log.getOrderNo()+"_"+logList.size();
                         refund.setOut_request_no(out_request_no);
                         
                         try {
