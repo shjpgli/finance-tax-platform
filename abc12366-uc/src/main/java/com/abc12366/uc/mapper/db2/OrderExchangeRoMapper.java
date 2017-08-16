@@ -16,6 +16,8 @@ import java.util.List;
 public interface OrderExchangeRoMapper {
     List<OrderExchange> selectList(OrderExchange oe);
 
+    List<OrderExchange> selectListForFinance(OrderExchange oe);
+
     List<OrderExchange> selectUndoneList(String orderNo);
 
     OrderExchange selectOne(String id);

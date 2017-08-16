@@ -67,6 +67,34 @@ public class OrderExchangeController {
     }
 
     /**
+     * 退换货列表-财务
+     */
+    @GetMapping("/finance")
+    public ResponseEntity selectListForFinance(
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "orderNo", required = false) String orderNo,
+                                     @RequestParam(value = "username", required = false) String username,
+                                     @RequestParam(value = "type", required = false) String type,
+                                     @RequestParam(value = "status", required = false) String status) {
+        OrderExchange oe = new OrderExchange.Builder()
+                .orderNo(orderNo)
+                .username(username)
+                .type(type)
+                .status(status)
+                .build();
+        LOGGER.info("{}", oe);
+
+        List<OrderExchange> exchangeList = orderExchangeService.selectListForFinance(oe, pageNum, pageSize);
+        PageInfo<OrderExchange> pageInfo = new PageInfo<>(exchangeList);
+
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo
+                .getTotal()));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
      * 退换货列表
      */
     @GetMapping("/record")

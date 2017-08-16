@@ -16,6 +16,8 @@ public interface OrderExchangeService {
 
     List<OrderExchange> selectList(OrderExchange oe, int pageNum, int pageSize);
 
+    List<OrderExchange> selectListForFinance(OrderExchange oe, int pageNum, int pageSize);
+
     OrderExchange disagree(ExchangeAdminBO data);
 
     OrderExchange selectOne(String id);

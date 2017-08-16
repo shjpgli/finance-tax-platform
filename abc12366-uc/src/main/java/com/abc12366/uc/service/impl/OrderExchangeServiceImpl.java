@@ -419,6 +419,12 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         return orderExchangeRoMapper.selectList(oe);
     }
 
+    @Override
+    public List<OrderExchange> selectListForFinance(OrderExchange oe, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return orderExchangeRoMapper.selectListForFinance(oe);
+    }
+
     @Transactional("db1TxManager")
     @Override
     public OrderExchange disagree(ExchangeAdminBO data) {
