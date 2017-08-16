@@ -356,6 +356,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 	                            // 插入订单日志-已完成
 	                            insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
 								
+	                            //TODO 待加入积分扣除
 								
 								return ResponseEntity.ok(Utils.kv("data", refundRes));
 							}else{
