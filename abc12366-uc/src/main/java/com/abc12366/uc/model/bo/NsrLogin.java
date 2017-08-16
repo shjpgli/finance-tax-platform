@@ -1,32 +1,27 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-11
  * Time: 16:20
  */
 public class NsrLogin {
-    private String nsrsbh;
+    @NotEmpty
+    private String nsrsbhOrShxydm;
+    @NotEmpty
     private String fwmm;
-    private String shxydm;
 
     public NsrLogin() {
     }
 
-    public String getShxydm() {
-        return shxydm;
+    public String getNsrsbhOrShxydm() {
+        return nsrsbhOrShxydm;
     }
 
-    public void setShxydm(String shxydm) {
-        this.shxydm = shxydm;
-    }
-
-    public String getNsrsbh() {
-        return nsrsbh;
-    }
-
-    public void setNsrsbh(String nsrsbh) {
-        this.nsrsbh = nsrsbh;
+    public void setNsrsbhOrShxydm(String nsrsbhOrShxydm) {
+        this.nsrsbhOrShxydm = nsrsbhOrShxydm;
     }
 
     public String getFwmm() {
@@ -36,5 +31,4 @@ public class NsrLogin {
     public void setFwmm(String fwmm) {
         this.fwmm = fwmm;
     }
-
 }

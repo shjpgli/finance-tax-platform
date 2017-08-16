@@ -27,18 +27,18 @@ public class PkgUtil extends BaseObject{
     public String generatorPkgStrbyTdps(final Map<String, String> map) throws Exception {
         String result = null;
         String serviceId = map.get("serviceid").toUpperCase();
-        if(serviceId.equalsIgnoreCase("TY11")){//�ӵ����걨��ȡ��˰�˻�����Ϣ��ѯ
+        if(serviceId.equalsIgnoreCase("TY11")){
             result = makeTiripPackageBytdps(makeTY11(map), serviceId, "ABC_4000");
 //            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
         if(serviceId.equalsIgnoreCase("TY20")){
-            result = makeTiripPackageBytdps(makeTY20(map), serviceId, "ABC_4000");
+            result = makeTiripPackageBytdps(makeTY20(map), serviceId, "CSZJ_NEW");
         }
         if(serviceId.equalsIgnoreCase("TY12")){
             result = makeTiripPackageBytdps(makeTY12(map), serviceId, "ABC_4000");
         }
         if(serviceId.equalsIgnoreCase("TY21")){
-            result = makeTiripPackageBytdps(makeTY21(map), serviceId, "ABC_4000");
+            result = makeTiripPackageBytdps(makeTY21(map), serviceId, "CSZJ_NEW");
         }
 
         return result;
@@ -301,19 +301,19 @@ public class PkgUtil extends BaseObject{
     private static String makeTY20(final Map<String, String> map){
         //com.abc12366.uc.tdps.vo.nsraqxxSzRequest.
         com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
-        request.setNSRSBH(map.get("NSRSBH"));
+        request.setNSRSBH(map.get("nsrsbh"));
         com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX nsrjbxx=new  com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx2=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx3=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         mxxx.setCODE("NSRSBH");
-        mxxx.setVALUE(map.get("NSRSBH"));
+        mxxx.setVALUE(map.get("nsrsbh"));
         nsrjbxx.addMXXX(mxxx);
         mxxx2.setCODE("USERID");
-        mxxx2.setVALUE(map.get("USERID"));
+        mxxx2.setVALUE(map.get("userid"));
         nsrjbxx.addMXXX(mxxx2);
         mxxx3.setCODE("FWMM");
-        mxxx3.setVALUE(map.get("FWMM"));
+        mxxx3.setVALUE(map.get("fwmm"));
         nsrjbxx.addMXXX(mxxx3);
         request.setNSRJBXX(nsrjbxx);
         try {
@@ -358,20 +358,21 @@ public class PkgUtil extends BaseObject{
     }
 
     private static String makeTY21(final Map<String, String> map){
+        //com.abc12366.uc.tdps.vo.nsraqxxSzRequest.
         com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
-        request.setNSRSBH(map.get("NSRSBH"));
+        request.setNSRSBH(map.get("nsrsbh"));
         com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX nsrjbxx=new  com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx2=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx3=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         mxxx.setCODE("NSRSBH");
-        mxxx.setVALUE(map.get("NSRSBH"));
+        mxxx.setVALUE(map.get("nsrsbh"));
         nsrjbxx.addMXXX(mxxx);
-        mxxx2.setCODE("OLD_PWD");
-        mxxx2.setVALUE(map.get("OLD_PWD"));
+        mxxx2.setCODE("USERID");
+        mxxx2.setVALUE(map.get("userid"));
         nsrjbxx.addMXXX(mxxx2);
-        mxxx3.setCODE("NEW_PWD");
-        mxxx3.setVALUE(map.get("NEW_PWD"));
+        mxxx3.setCODE("FWMM");
+        mxxx3.setVALUE(map.get("fwmm"));
         nsrjbxx.addMXXX(mxxx3);
         request.setNSRJBXX(nsrjbxx);
         try {

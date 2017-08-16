@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Time: 16:22
  */
 public interface UserBindService {
-    UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws MarshalException, ValidationException;
+    UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception;
 
     boolean dzsbUnbind(String id);
 
@@ -33,7 +34,7 @@ public interface UserBindService {
 
     List<UserHndsBO> getUserhndsBind(String userId);
 
-    NsrLoginResponse nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception;
+    TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception;
 
     BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException;
 
