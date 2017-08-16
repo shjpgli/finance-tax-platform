@@ -21,27 +21,27 @@ public class UserDzsb {
     private String swjgDm;
     private Date createTime;
     private Date lastUpdate;
-    private Timestamp expireTime;
-    private Timestamp expandExpireTime;
+    private Date expireTime;
+    private Date expandExpireTime;
     private String frmc;
     private String frzjh;
 
     public UserDzsb() {
     }
 
-    public Timestamp getExpireTime() {
+    public Date getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(Timestamp expireTime) {
+    public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
     }
 
-    public Timestamp getExpandExpireTime() {
+    public Date getExpandExpireTime() {
         return expandExpireTime;
     }
 
-    public void setExpandExpireTime(Timestamp expandExpireTime) {
+    public void setExpandExpireTime(Date expandExpireTime) {
         this.expandExpireTime = expandExpireTime;
     }
 

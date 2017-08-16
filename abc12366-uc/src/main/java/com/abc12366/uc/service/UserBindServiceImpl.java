@@ -14,6 +14,7 @@ import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
 import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
@@ -118,6 +119,9 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setShxydm(userDzsbTemp.getShxydm());
         userDzsb.setSwjgMc(userDzsbTemp.getSwjgMc());
         userDzsb.setSwjgDm(userDzsbTemp.getSwjgDm());
+        userDzsb.setExpireTime(userDzsbTemp.getExpireTime());
+        userDzsb.setFrmc(userDzsbTemp.getFrmc());
+        userDzsb.setFrzjh(userDzsbTemp.getFrzjh());
         int result = userBindMapper.dzsbBind(userDzsb);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());
@@ -391,9 +395,22 @@ public class UserBindServiceImpl implements UserBindService {
                 if ("SWJGDM".equals(mx.getCODE())) {
                     userDzsbTemp.setSwjgDm(mx.getVALUE());
                 }
+                if ("FRXM".equals(mx.getCODE())) {
+                    userDzsbTemp.setFrmc(mx.getVALUE());
+                }
+                if ("FRZJH".equals(mx.getCODE())) {
+                    userDzsbTemp.setFrzjh(mx.getVALUE());
+                }
+                if ("RJDQR".equals(mx.getCODE())) {
+                    userDzsbTemp.setExpireTime(DateUtils.StrToDate(mx.getVALUE()));
+                }
+                if ("RJYQDQR".equals(mx.getCODE())) {
+                    userDzsbTemp.setExpandExpireTime(DateUtils.StrToDate(mx.getVALUE()));
+                }
             }
         } else {
-            throw new ServiceException(4629);
+            String msg = jbxxcx.getCWYY();
+            throw new ServiceException(cxjg, msg);
         }
         return userDzsbTemp;
     }
