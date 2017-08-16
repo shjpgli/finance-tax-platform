@@ -79,9 +79,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     private TradeLogRoMapper tradeLogRoMapper;
 
     @Autowired
-    private AliPayController aliPayController;
-
-    @Autowired
     private InvoiceDetailMapper invoiceDetailMapper;
 
     @Autowired
@@ -249,7 +246,13 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 List<InvoiceXm> dataList = new ArrayList<>();
                 for (ExchangeOrderInvoiceBO eoi : orderInvoiceBOList) {
                     if ("1".equals(eoi.getProperty())) { // 纸质发票
-                        // todo
+                        InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNo(eoi.getInvoiceNo());
+                        if (invoiceDetail != null) {
+                            // 更新发票状态：3-已作废
+                            invoiceDetail.setStatus("3");
+                            invoiceDetail.setLastUpdate(new Date());
+                            invoiceDetailMapper.update(invoiceDetail);
+                        }
                     } else if ("2".equals(eoi.getProperty())) { // 电子发票
                         if ("1".equals(eoi.getName())) { // 个人发票
                             req.setGmf_mc(eoi.getNsrmc());
