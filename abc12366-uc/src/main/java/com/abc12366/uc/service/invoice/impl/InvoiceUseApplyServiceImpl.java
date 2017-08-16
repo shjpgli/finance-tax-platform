@@ -2,11 +2,9 @@ package com.abc12366.uc.service.invoice.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db1.InvoiceApprovalLogMapper;
-import com.abc12366.uc.mapper.db1.InvoiceDistributeMapper;
-import com.abc12366.uc.mapper.db1.InvoiceUseApplyMapper;
-import com.abc12366.uc.mapper.db1.InvoiceUseDetailMapper;
+import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
+import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.invoice.*;
 import com.abc12366.uc.model.invoice.bo.*;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
@@ -38,6 +36,8 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     @Autowired
     private InvoiceRepoRoMapper invoiceRepoRoMapper;
 
+    @Autowired
+    private InvoiceDetailMapper invoiceDetailMapper;
     @Autowired
     private InvoiceUseDetailMapper invoiceUseDetailMapper;
 
@@ -176,14 +176,23 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             LOGGER.warn("修改失败，参数{}：" + invoiceUseCheckBO);
             throw new ServiceException(4102);
         }
+
         String check = invoiceUseCheckBO.getExamineStatus();
         /**审批状态，0：待审核，1：审核通过，2：审核不通过，3：草稿**/
         if(check.equals("1")){
-//            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核通过");
+            List<InvoiceUseDetailBO> boList = invoiceUseCheckBO.getInvoiceUseDetailBOList();
+            for(InvoiceUseDetailBO bo:boList){
+                InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
+                BeanUtils.copyProperties(bo,invoiceUseDetail);
+                int dUpdate = invoiceUseDetailMapper.update(invoiceUseDetail);
+                if(dUpdate != 1){
+                    LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
+                    throw new ServiceException(4102);
+                }
+            }
             insertLog(invoiceUseApply.getId(),"审批", UserUtil.getAdminInfo().getNickname(),"审核通过");
         }else if(check.equals("2")){
             insertLog(invoiceUseApply.getId(),"审批", UserUtil.getAdminInfo().getNickname(),"审核不通过");
-//            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核不通过");
         }
         //加入日志
     }
@@ -235,17 +244,22 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     }
 
     @Override
-    public void signUseApply(InvoiceDistributeBO invoiceDistributeBO) {
-        List<InvoiceDistribute> invoiceDistributeList = invoiceDistributeRoMapper.selectInvoiceDistributeList(invoiceDistributeBO.getUseId());
+    public void signUseApply(String id) {
+        List<InvoiceDistribute> invoiceDistributeList = invoiceDistributeRoMapper.selectInvoiceDistributeList(id);
         for(InvoiceDistribute invoiceDistribute:invoiceDistributeList){
             invoiceDistribute.setStatus("1");
             invoiceDistribute.setSignTime(new Date());
-            invoiceDistribute.setSignUser(invoiceDistributeBO.getSignUser());
+            invoiceDistribute.setSignUser(UserUtil.getAdminId());
             int update = invoiceDistributeMapper.update(invoiceDistribute);
             if(update != 1){
                 LOGGER.warn("修改失败，参数{}：" + invoiceDistribute);
                 throw new ServiceException(4102);
             }
+            //更新发票明细的状态
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
+            invoiceDetail.setStatus("1");
+            invoiceDetailMapper.update(invoiceDetail);
         }
     }
 

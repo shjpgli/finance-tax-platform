@@ -95,6 +95,7 @@
             <if test="status != null  and status!=''">AND r.status = #{status}</if>
             <if test="invoiceTypeCode != null  and invoiceTypeCode!=''">AND r.invoiceTypeCode = #{invoiceTypeCode}</if>
         </where>
+        order by r.createTime desc;
     </select>
 
     <!-- 查询列表 -->
@@ -107,6 +108,7 @@
             1=1
             <if test="invoiceCode != null  and invoiceCode!=''">AND invoiceCode = #{invoiceCode}</if>
         </where>
+        order by createTime desc;
     </select>
 
 </mapper>

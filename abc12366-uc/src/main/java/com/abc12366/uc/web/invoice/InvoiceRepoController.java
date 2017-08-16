@@ -105,6 +105,20 @@ public class InvoiceRepoController {
     }
 
     /**
+     * 发票仓库新增
+     *
+     * @return
+     */
+    @PutMapping(path = "/invoice/repo/{id}")
+    public ResponseEntity updateInvoiceRepo(@Valid @RequestBody InvoiceRepoBO invoiceRepoBO,@PathVariable("id") String id) {
+        LOGGER.info("{}", invoiceRepoBO);
+        invoiceRepoBO.setId(id);
+        InvoiceRepoBO bo = invoiceRepoService.update(invoiceRepoBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
      * 发票仓库删除
      *
      * @return

@@ -19,6 +19,10 @@ public class InvoiceExcel implements Serializable {
      * 纳税人识别号
      **/
     private String nsrsbh;
+    /**
+     * 纳税人名称
+     **/
+    private String nsrmc;
 
     /**
      * 时间
@@ -137,5 +141,13 @@ public class InvoiceExcel implements Serializable {
 
     public void setRemark(Integer remark) {
         this.remark = remark;
+    }
+
+    public String getNsrmc() {
+        return nsrmc;
+    }
+
+    public void setNsrmc(String nsrmc) {
+        this.nsrmc = nsrmc;
     }
 }

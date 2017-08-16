@@ -74,7 +74,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="update" parameterType="invoiceUseDetail">
+	<update id="update" parameterType="com.abc12366.uc.model.invoice.InvoiceUseDetail">
 		UPDATE uc_invoice_use_detail
 		<set>
 			<if test="useId != null">

@@ -247,6 +247,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
                 excel.setInvoiceOrderNo(bo.getId());
                 excel.setNsrsbh(bo.getNsrsbh());
+                excel.setNsrmc(bo.getNsrmc());
                 excel.setCreateTime(bo.getCreateTime());
                 excel.setContent(bo.getContent());
                 excel.setNum(1);

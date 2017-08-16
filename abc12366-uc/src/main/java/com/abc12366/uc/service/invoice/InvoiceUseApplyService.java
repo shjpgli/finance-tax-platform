@@ -29,7 +29,7 @@ public interface InvoiceUseApplyService {
 
     void distributeUseApply(InvoiceUseCheckBO invoiceUseCheckBO);
 
-    void signUseApply(InvoiceDistributeBO invoiceDistributeBO);
+    void signUseApply(String id);
 
     InvoiceUseDetailBO selectInvoiceRepoNum(String code);
 }
