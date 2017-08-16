@@ -3,6 +3,7 @@ package com.abc12366.bangbang.web.curriculum;
 import com.abc12366.bangbang.model.bo.IdsBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo;
+import com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumSituationBo;
 import com.abc12366.bangbang.service.CurriculumService;
 import com.abc12366.gateway.util.Constant;
@@ -52,6 +53,23 @@ public class CurriculumController {
         dataMap.put("classify", classify);//课程分类
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumListBo> dataList = curriculumService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 最新课程查询
+     */
+    @GetMapping(path = "/selectListNew")
+    public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "label", required = false) String label,
+                                     @RequestParam(value = "classify", required = false) String classify) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("label", label);//标签
+        dataMap.put("classify", classify);//课程分类
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CurriculumListsyBo> dataList = curriculumService.selectListNew(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

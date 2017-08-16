@@ -2,6 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.curriculum.Curriculum;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo;
+import com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumSituationBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,6 +29,11 @@ public interface CurriculumRoMapper {
      * 查询(根据查询条件查询)
      **/
     List<CurriculumListBo> selectList(Map<String, Object> map);
+
+    /**
+     * 查询最新课程
+     **/
+    List<CurriculumListsyBo> selectListNew(Map<String, Object> map);
 
     /**
      * 查询推荐课程
