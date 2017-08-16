@@ -10,6 +10,7 @@ import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.invoice.*;
 import com.abc12366.uc.model.invoice.bo.*;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -72,7 +73,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
         }
-        invoiceUseDetailMapper.delete(id);
+        invoiceUseDetailMapper.deleteByUseId(id);
         invoiceApprovalLogMapper.deleteByUseId(id);
     }
 
@@ -99,6 +100,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             throw new ServiceException(4906);
         }
         for (InvoiceUseDetailBO detailBO:invoiceUseDetailBOList){
+            detailBO.setId(Utils.uuid());
             detailBO.setUseId(id);
             InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
             BeanUtils.copyProperties(detailBO,invoiceUseDetail);
@@ -110,14 +112,15 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         }
 
         //加入日志
-        insertLog(id,"","已提交");
+        insertLog(id,"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
         return invoiceUseApplyBO;
     }
 
-    private void insertLog(String id,String opinions,String result) {
+    private void insertLog(String id,String opinions,String nickName,String result) {
         InvoiceApprovalLog log = new InvoiceApprovalLog();
         log.setId(Utils.uuid());
         log.setUseId(id);
+        log.setApprover(nickName);
         log.setApprovalOpinions(opinions);
         log.setApprovalResult(result);
         invoiceApprovalLogMapper.insert(log);
@@ -153,7 +156,8 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             }
         }
         //加入日志
-        insertLog(invoiceUseApply.getId(),invoiceUseApply.getRemark(),"已修改");
+//        insertLog(invoiceUseApply.getId(),invoiceUseApply.getRemark(),"已修改");
+        insertLog(invoiceUseApply.getId(),"修改", UserUtil.getAdminInfo().getNickname(),"已修改");
         return invoiceUseApplyBO;
     }
 
@@ -175,9 +179,11 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         String check = invoiceUseCheckBO.getExamineStatus();
         /**审批状态，0：待审核，1：审核通过，2：审核不通过，3：草稿**/
         if(check.equals("1")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核通过");
+//            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核通过");
+            insertLog(invoiceUseApply.getId(),"审批", UserUtil.getAdminInfo().getNickname(),"审核通过");
         }else if(check.equals("2")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核不通过");
+            insertLog(invoiceUseApply.getId(),"审批", UserUtil.getAdminInfo().getNickname(),"审核不通过");
+//            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getRemark(),"审核不通过");
         }
         //加入日志
     }

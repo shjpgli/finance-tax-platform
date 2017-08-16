@@ -77,5 +77,4 @@ public class InvoiceApprovalLogBO implements Serializable {
 	public java.util.Date getApproverTime(){
 		return this.approverTime;
 	}
-
 }

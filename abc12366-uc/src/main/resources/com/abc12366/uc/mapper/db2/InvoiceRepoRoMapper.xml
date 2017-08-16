@@ -85,13 +85,15 @@
     <select id="selectList" resultType="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO"
             parameterType="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_invoice_repo
+        r.id,	r.invoiceTypeCode,	r.invoiceCode,	r.invoiceNoStart,	r.invoiceNoEnd,	r.property,	r.share,
+        r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,d.fieldKey as invoiceTypeName
+        FROM uc_invoice_repo r
+        LEFT JOIN uc_dict d on d.fieldValue =  r.invoiceTypeCode
         <where>
-            1=1
-            <if test="invoiceCode != null  and invoiceCode!=''">AND invoiceCode = #{invoiceCode}</if>
-            <if test="status != null  and status!=''">AND status = #{status}</if>
-            <if test="invoiceTypeCode != null  and invoiceTypeCode!=''">AND invoiceTypeCode = #{invoiceTypeCode}</if>
+             1=1  and d.dictId = 'invoicetype'
+            <if test="invoiceCode != null  and invoiceCode!=''">AND r.invoiceCode = #{invoiceCode}</if>
+            <if test="status != null  and status!=''">AND r.status = #{status}</if>
+            <if test="invoiceTypeCode != null  and invoiceTypeCode!=''">AND r.invoiceTypeCode = #{invoiceTypeCode}</if>
         </where>
     </select>
 

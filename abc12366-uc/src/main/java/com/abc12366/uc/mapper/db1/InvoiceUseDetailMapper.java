@@ -15,10 +15,16 @@ public interface InvoiceUseDetailMapper{
 
 	/**
 	 * 
-	 * 删除（根据主键ID删除）
-	 * 
+	 *
 	 **/
-	int delete(@Param("useId") String useId);
+	int deleteByUseId(@Param("useId") String useId);
+
+	/**
+	 *
+	 * 删除（根据主键ID删除）
+	 *
+	 **/
+	int delete(@Param("id") String id);
 
 	/**
 	 * 

@@ -6,6 +6,12 @@
 	<!--删除：根据主键ID删除-->
 	<delete id="delete" parameterType="java.lang.String">
 		DELETE FROM uc_invoice_use_detail
+		WHERE id = #{id}
+	</delete>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByUseId" parameterType="java.lang.String">
+		DELETE FROM uc_invoice_use_detail
 		WHERE useId = #{useId}
 	</delete>
 
@@ -13,6 +19,9 @@
 	<insert id="insert" parameterType="com.abc12366.uc.model.invoice.InvoiceUseDetail">
 		INSERT INTO uc_invoice_use_detail
 		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				id,
+			</if>
 			<if test="useId != null">
 				useId,
 			</if>
@@ -37,6 +46,9 @@
 
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				#{id},
+			</if>
 			<if test="useId!=null">
 				#{useId},
 			</if>
@@ -65,6 +77,9 @@
 	<update id="update" parameterType="invoiceUseDetail">
 		UPDATE uc_invoice_use_detail
 		<set>
+			<if test="useId != null">
+				useId = #{useId},
+			</if>
 			<if test="invoiceTypeCode != null">
 				invoiceTypeCode = #{invoiceTypeCode},
 			</if>
@@ -85,7 +100,7 @@
 			</if>
 
 		</set>
-		WHERE useId = #{useId}
+		WHERE id = #{id}
 	</update>
 
 </mapper>

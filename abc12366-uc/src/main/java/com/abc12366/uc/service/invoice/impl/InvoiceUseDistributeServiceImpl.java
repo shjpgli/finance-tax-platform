@@ -53,16 +53,21 @@ public class InvoiceUseDistributeServiceImpl implements InvoiceDistributeService
 
     @Override
     public void delete(String id) {
+        InvoiceDistribute invoiceDistribute = invoiceDistributeRoMapper.selectByPrimaryKey(id);
+        if(invoiceDistribute == null){
+            LOGGER.warn("删除失败，参数{}：" + invoiceDistribute);
+            throw new ServiceException(4103);
+        }
         int delete = invoiceDistributeMapper.delete(id);
         if(delete != 1){
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
         }
-        int dDelete = invoiceUseDetailMapper.delete(id);
-        if(dDelete != 1){
-            LOGGER.warn("删除失败，参数{}：" + id);
-            throw new ServiceException(4103);
-        }
+        invoiceUseDetailMapper.deleteByUseId(invoiceDistribute.getUseId());
+//        if(dDelete != 1){
+//            LOGGER.warn("删除失败，参数{}：" + id);
+//            throw new ServiceException(4103);
+//        }
     }
 
     @Override
