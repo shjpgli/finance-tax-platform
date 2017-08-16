@@ -490,8 +490,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                     einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
                 } catch (Exception e) {
                     LOGGER.error("电子发票webservice调用异常,原因：",e);
+                    throw new ServiceException(4908);
                 }
-                if(!einvocie.getReturnCode().equals("0000")){
+                if(!"0000".equals(einvocie.getReturnCode())){
                     LOGGER.error("发票开票异常：{}", einvocie);
                     throw new ServiceException(4908);
                 }
@@ -531,23 +532,26 @@ public class InvoiceServiceImpl implements InvoiceService {
                     LOGGER.info("发票详情信息修改失败：{}", detail);
                     throw new ServiceException(4187);
                 }*/
+                invoice.setStatus("5");
             }else {
-
-                InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
-                if(invoiceDetail == null){
-                    LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
-                    throw new ServiceException(4186);
+                if(invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())){
+                    InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
+                    if(invoiceDetail == null){
+                        LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
+                        throw new ServiceException(4186);
+                    }
+                    invoiceDetail.setStatus("2");
+                    int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+                    if (dUpdate != 1) {
+                        LOGGER.info("发票详情信息修改失败：{}", invoiceDetail);
+                        throw new ServiceException(4187);
+                    }
+                    invoiceNo = invoiceDetail.getInvoiceNo();
+                    invoiceCode = invoiceDetail.getInvoiceCode();
                 }
-                invoiceDetail.setStatus("2");
-                int dUpdate = invoiceDetailMapper.update(invoiceDetail);
-                if (dUpdate != 1) {
-                    LOGGER.info("发票详情信息修改失败：{}", invoiceDetail);
-                    throw new ServiceException(4187);
-                }
-                invoiceNo = invoiceDetail.getInvoiceNo();
-                invoiceCode = invoiceDetail.getInvoiceCode();
+                invoice.setStatus("2");
             }
-            invoice.setStatus("2");
+
         } else {
             List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoiceCheckBO.getId());
             Order order = null;
