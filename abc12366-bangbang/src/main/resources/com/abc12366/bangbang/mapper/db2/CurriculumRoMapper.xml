@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.CurriculumRoMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 curriculumId,title,browseNum,watchNum,classify,	recommend,	teachingMethod,	trainTimeBegin,	trainTimeEnd,	isApply,	applyTimeBegin,	applyTimeEnd,	applyPay,	isSign,	signTimeBegin,	signTimeEnd,	issueTime,	peopleLimit,	trainSite,	cover,	label,	issueScope,	isFree,	originalPrice,	preferentialPrice,	integralOriginalPrice,	integralPreferentialPrice,	freeMember,	lecturerId,	lecturerName,	lecturerPicture,	curriculumidIntro,	status,	createrId,	createrName,	createrTime,	updateTime
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.curriculum.Curriculum" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_curriculum
+		 WHERE curriculumId = #{curriculumId}
+	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo" parameterType="java.util.Map">
+        SELECT
+          curriculumId,title,browseNum,watchNum,cover,classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
+        FROM bb_curriculum
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="label != null and label != ''">
+            AND label like CONCAT('%',#{label},'%')
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="classify != null and classify != ''">
+            AND classify = #{classify}
+        </if>
+    </select>
+
+    <!-- 查询最新课程 -->
+    <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
+        SELECT
+        curriculumId,title,browseNum,watchNum,cover,issueTime,isFree,freeMember,curriculumidIntro
+        FROM bb_curriculum
+        WHERE 1=1 and status = 1
+        <if test="label != null and label != ''">
+            AND label like CONCAT('%',#{label},'%')
+        </if>
+        <if test="classify != null and classify != ''">
+            AND classify = #{classify}
+        </if>
+    </select>
+
+    <!-- 查询推荐课程 -->
+    <select id="selectRecommend" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo" parameterType="java.lang.String">
+        SELECT
+        curriculumId,title,cover,browseNum,watchNum,issueTime
+        FROM bb_curriculum
+    </select>
+
+    <!-- 查询授课情况 -->
+    <select id="selectSituation" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumSituationBo" parameterType="java.lang.String">
+        SELECT
+            curriculumId,title,browseNum,watchNum,teachingMethod,peopleLimit,applyTimeBegin,applyTimeEnd,signTimeBegin,signTimeEnd,
+            (SELECT ifnull(sum(orderId),0) FROM abc12366_cms.cms_curriculum_order where curriculumId = c.curriculumId) orderNum,
+            (SELECT ifnull(sum(orderPrice),0) FROM abc12366_cms.cms_curriculum_order where curriculumId = c.curriculumId) generalIncome,
+            (SELECT ifnull(sum(orderIntegral),0) FROM abc12366_cms.cms_curriculum_order where curriculumId = c.curriculumId) aggregateScore,
+			(SELECT ifnull(sum(applyId),0) FROM abc12366_cms.cms_curriculum_apply where curriculumId = c.curriculumId) applyNum,
+            (SELECT ifnull(sum(applyId),0) FROM abc12366_cms.cms_curriculum_apply where curriculumId = c.curriculumId and signTime is not null) signNum
+        FROM bb_curriculum c
+        WHERE curriculumId = #{curriculumId}
+    </select>
+
+
+</mapper>

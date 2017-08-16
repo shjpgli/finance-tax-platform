@@ -271,8 +271,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         InvoiceXm xm = new InvoiceXm();
                         xm.setFphxz("0");
                         xm.setXmmc(selectFieldValue("invoicecontent", eoi.getContent()));
-                        xm.setXmsl(1.00);
-                        xm.setTotalAmt(eoi.getAmount());
+                        xm.setXmsl(-1.00);
+                        xm.setTotalAmt(-eoi.getAmount());
                         dataList.add(xm);
 
                         req.setInvoiceXms(dataList);

@@ -11,6 +11,10 @@ import java.util.List;
  */
 public interface KnowledgeTagService {
 
+
+    /* 查询关联问题最多的标签 */
+    List<String> selectHotTag(Integer num);
+
     /* 知识库标签查询 */
     List<KnowledgeTag> selectList(String keywords);
 

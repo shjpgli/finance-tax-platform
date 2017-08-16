@@ -11,6 +11,10 @@ import java.util.List;
 
 public interface KnowledgeTagMapper {
 
+    /**
+     * 查询关联问题最多的标签名
+     **/
+    List<String> selectHotTag(Integer num);
 
     /**
      * 查询（根据主键ID查询）
