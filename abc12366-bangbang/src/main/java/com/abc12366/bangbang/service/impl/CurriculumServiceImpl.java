@@ -89,11 +89,24 @@ public class CurriculumServiceImpl implements CurriculumService {
     }
 
     @Override
-    public List<CurriculumListBo> selectRecommend() {
-        List<CurriculumListBo> curriculumListBoList;
+    public List<CurriculumListsyBo> selectListWatch(Map<String,Object> map) {
+        List<CurriculumListsyBo> curriculumListBoList;
+        try {
+            //查询最热课程列表
+            curriculumListBoList = curriculumRoMapper.selectListWatch(map);
+        } catch (Exception e) {
+            LOGGER.error("查询课程列表信息异常：{}", e);
+            throw new ServiceException(4320);
+        }
+        return curriculumListBoList;
+    }
+
+    @Override
+    public List<CurriculumListsyBo> selectRecommend(Map<String,Object> map) {
+        List<CurriculumListsyBo> curriculumListBoList;
         try {
             //查询推荐课程
-            curriculumListBoList = curriculumRoMapper.selectRecommend();
+            curriculumListBoList = curriculumRoMapper.selectRecommend(map);
         } catch (Exception e) {
             LOGGER.error("查询课程列表信息异常：{}", e);
             throw new ServiceException(4320);

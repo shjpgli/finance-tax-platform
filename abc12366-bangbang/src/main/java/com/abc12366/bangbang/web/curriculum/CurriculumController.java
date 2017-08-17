@@ -64,12 +64,37 @@ public class CurriculumController {
     public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "label", required = false) String label,
-                                     @RequestParam(value = "classify", required = false) String classify) {
+                                     @RequestParam(value = "classify", required = false) String classify,
+                                        @RequestParam(value = "freeMember", required = false) String freeMember,
+                                        @RequestParam(value = "isFree", required = false) String isFree) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("label", label);//标签
         dataMap.put("classify", classify);//课程分类
+        dataMap.put("freeMember", freeMember);//会员等级
+        dataMap.put("isFree", isFree);//是否免费
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumListsyBo> dataList = curriculumService.selectListNew(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 最热课程查询
+     */
+    @GetMapping(path = "/selectListWatch")
+    public ResponseEntity selectListWatch(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "label", required = false) String label,
+                                        @RequestParam(value = "classify", required = false) String classify,
+                                        @RequestParam(value = "freeMember", required = false) String freeMember,
+                                        @RequestParam(value = "isFree", required = false) String isFree) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("label", label);//标签
+        dataMap.put("classify", classify);//课程分类
+        dataMap.put("freeMember", freeMember);//会员等级
+        dataMap.put("isFree", isFree);//是否免费
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CurriculumListsyBo> dataList = curriculumService.selectListWatch(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -79,10 +104,18 @@ public class CurriculumController {
      */
     @GetMapping(path = "/selectRecommend")
     public ResponseEntity selectRecommend(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                          @RequestParam(value = "label", required = false) String label,
+                                          @RequestParam(value = "classify", required = false) String classify,
+                                          @RequestParam(value = "freeMember", required = false) String freeMember,
+                                          @RequestParam(value = "isFree", required = false) String isFree) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("label", label);//标签
+        dataMap.put("classify", classify);//课程分类
+        dataMap.put("freeMember", freeMember);//会员等级
+        dataMap.put("isFree", isFree);//是否免费
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<CurriculumListBo> dataList = curriculumService.selectRecommend();
+        List<CurriculumListsyBo> dataList = curriculumService.selectRecommend(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
