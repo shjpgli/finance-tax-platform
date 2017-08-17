@@ -21,5 +21,5 @@ public interface ExpressRoMapper {
 
     List<ExpressBO> selectList(ExpressBO expressBO);
 
-    List<Express> selectbyInvoiceOrderNo(String invoiceOrderNo);
+    Express selectbyInvoiceOrderNo(String invoiceOrderNo);
 }

@@ -9,6 +9,11 @@
         WHERE id = #{id}
     </delete>
 
+    <delete id="deleteByInvoiceOrderNo" parameterType="java.lang.String">
+        DELETE FROM uc_express
+        WHERE invoiceOrderNo = #{invoiceOrderNo}
+    </delete>
+
     <!-- 添加 （匹配有值的字段）-->
     <insert id="insert" parameterType="com.abc12366.uc.model.Express">
         INSERT INTO uc_express

@@ -16,6 +16,15 @@ public class InvoiceExcel implements Serializable {
     private String invoiceOrderNo;
 
     /**
+     * 发票号码
+     **/
+    private String invoiceNo;
+
+    /**
+     * 发票代码
+     **/
+    private String invoiceCode;
+    /**
      * 纳税人识别号
      **/
     private String nsrsbh;
@@ -149,5 +158,21 @@ public class InvoiceExcel implements Serializable {
 
     public void setNsrmc(String nsrmc) {
         this.nsrmc = nsrmc;
+    }
+
+    public String getInvoiceNo() {
+        return invoiceNo;
+    }
+
+    public void setInvoiceNo(String invoiceNo) {
+        this.invoiceNo = invoiceNo;
+    }
+
+    public String getInvoiceCode() {
+        return invoiceCode;
+    }
+
+    public void setInvoiceCode(String invoiceCode) {
+        this.invoiceCode = invoiceCode;
     }
 }

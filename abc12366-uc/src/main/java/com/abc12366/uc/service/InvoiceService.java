@@ -46,4 +46,6 @@ public interface InvoiceService {
     List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice);
 
     void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList);
+
+    void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList);
 }

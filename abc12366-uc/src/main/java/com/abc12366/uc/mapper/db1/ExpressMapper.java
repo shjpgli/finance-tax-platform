@@ -25,4 +25,5 @@ public interface ExpressMapper {
      **/
     int update(Express record);
 
+    int deleteByInvoiceOrderNo(@Param("invoiceOrderNo") String invoiceOrderNo);
 }
