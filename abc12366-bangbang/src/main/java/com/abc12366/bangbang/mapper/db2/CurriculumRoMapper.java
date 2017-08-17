@@ -36,9 +36,14 @@ public interface CurriculumRoMapper {
     List<CurriculumListsyBo> selectListNew(Map<String, Object> map);
 
     /**
+     * 查询最热课程
+     **/
+    List<CurriculumListsyBo> selectListWatch(Map<String, Object> map);
+
+    /**
      * 查询推荐课程
      **/
-    List<CurriculumListBo> selectRecommend();
+    List<CurriculumListsyBo> selectRecommend(Map<String, Object> map);
 
     /**
      * 查询课程授课信息

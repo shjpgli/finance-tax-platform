@@ -196,12 +196,12 @@ public class DzfpClient {
 		 
 		DzfpGetReq dzfpGetReq=new DzfpGetReq();
 		dzfpGetReq.setZsfs("0"); //
-		dzfpGetReq.setKplx("1"); //开票0，退票1
-		dzfpGetReq.setYfp_dm("050003523333"); //退票必填
-		dzfpGetReq.setYfp_hm("21120084"); //退票必填
+		dzfpGetReq.setKplx("0"); //开票0，退票1
+		//dzfpGetReq.setYfp_dm("050003523333"); //退票必填
+		//dzfpGetReq.setYfp_hm("21120084"); //退票必填
 		dzfpGetReq.setGmf_mc("王毅");
 		dzfpGetReq.setGmf_nsrsbh("110109500321655");
-		
+		dzfpGetReq.setGmf_dzyx("xg214zs@163.com");
 		dzfpGetReq.setKpr("小帅哥");
 		dzfpGetReq.setHylx("0");
 		
@@ -212,8 +212,8 @@ public class DzfpClient {
 		invoiceXm1.setSpbm("1010105000000000000");
 		invoiceXm1.setFphxz("0");
 		invoiceXm1.setYhzcbs("0");
-		invoiceXm1.setTotalAmt(-260.00);
-		invoiceXm1.setXmsl(-1.00);
+		invoiceXm1.setTotalAmt(260.00);
+		invoiceXm1.setXmsl(1.00);
 		invocieXms.add(invoiceXm1);
 		
 		InvoiceXm invoiceXm2=new InvoiceXm();
@@ -221,8 +221,8 @@ public class DzfpClient {
 		invoiceXm2.setSpbm("1010105000000000000");
 		invoiceXm2.setFphxz("0");
 		invoiceXm2.setYhzcbs("0");
-		invoiceXm2.setTotalAmt(-400.00);
-		invoiceXm2.setXmsl(-1.00);
+		invoiceXm2.setTotalAmt(400.00);
+		invoiceXm2.setXmsl(1.00);
 		invocieXms.add(invoiceXm2);
 		
 		dzfpGetReq.setInvoiceXms(invocieXms);

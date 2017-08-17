@@ -6,6 +6,7 @@ import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindService;
+import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.exolab.castor.xml.MarshalException;
@@ -125,7 +126,7 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/nsrlogin/shb")
-    public ResponseEntity nsrLogin(@Valid @RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
+    public ResponseEntity nsrLoginShb(@Valid @RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
         TY21Xml2Object loginResponse = userBindService.nsrLogin(login, request);
         return ResponseEntity.ok(Utils.kv("data", loginResponse));
@@ -143,5 +144,12 @@ public class UserBindController {
         LOGGER.info("{}", data);
         userBindService.updatePassword(data);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    @PostMapping(path = "/nsrlogin/dzsj")
+    public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", login);
+        HngsNsrLoginResponse loginResponse = userBindService.loginWsbsHngs(login, request);
+        return ResponseEntity.ok(Utils.kv("data", loginResponse));
     }
 }
