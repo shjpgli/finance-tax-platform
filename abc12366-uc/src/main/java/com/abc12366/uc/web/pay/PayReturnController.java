@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
 import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.bo.ExchangeCompletedOrderBO;
 import com.abc12366.uc.model.bo.OrderPayBO;
+import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.alibaba.fastjson.JSON;
@@ -41,6 +45,10 @@ public class PayReturnController {
 	private TradeLogService tradeLogService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+    private OrderExchangeRoMapper orderExchangeRoMapper;
+	@Autowired
+    private PointsLogService pointsLogService;
 	
 	
 	@SuppressWarnings("rawtypes")
@@ -125,7 +133,18 @@ public class PayReturnController {
 						orderPayBO.setIsPay(2);
 						orderPayBO.setPayMethod("ALIPAY");
 						orderService.paymentOrder(orderPayBO,"");
+						
+						ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(out_trade_no);
+						PointsLogBO pointsLog = new PointsLogBO();
+				        pointsLog.setRuleId(out_trade_no);
+				        pointsLog.setIncome(eco.getGiftPoints());
+				        pointsLog.setUserId(eco.getUserId());
+				        pointsLog.setRemark("用户下单单");
+				        pointsLog.setLogType("ORDER_INCOME");
+				        pointsLogService.insert(pointsLog);
 					}
+					
+					
 				}
 				return ResponseEntity.ok(Utils.kv("data", "OK"));
 //			} else {// 验证失败

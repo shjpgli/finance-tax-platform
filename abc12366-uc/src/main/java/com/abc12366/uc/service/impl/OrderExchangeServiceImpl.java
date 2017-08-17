@@ -299,8 +299,24 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public ResponseEntity refund(ExchangeRefundBO data) {
+    	OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
+    	// 退积分
+        ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
+        if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
+            PointsLogBO pointsLog = new PointsLogBO();
+            pointsLog.setRuleId(oe.getOrderNo());
+            pointsLog.setOutgo(eco.getGiftPoints());
+            pointsLog.setUserId(eco.getUserId());
+            pointsLog.setRemark("用户退单");
+            pointsLog.setLogType("ORDER_BACK");
+            pointsLogService.insert(pointsLog);
+        } else {
+            throw new ServiceException(4960);
+        }
+    	
+    	
         if ("1".equals(data.getRefundType())) {
-            OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
+            
 
             // 查询交易日志中支付成功的订单
             TradeLog log = new TradeLog();
@@ -308,6 +324,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             log.setTradeStatus("1");
             log.setPayMethod("ALIPAY");
             List<TradeLog> logList = tradeLogRoMapper.selectList(log);
+            
+            
+            
 
             if (logList.size() > 0) {
                 for (int i = 0; i < logList.size(); i++) {
@@ -353,19 +372,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 	                            // 插入订单日志-已退款
 	                            insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark());
 
-                                // 退积分
-                                ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
-                                if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
-                                    PointsLogBO pointsLog = new PointsLogBO();
-                                    pointsLog.setRuleId(oe.getOrderNo());
-                                    pointsLog.setOutgo(eco.getGiftPoints());
-                                    pointsLog.setUserId(eco.getUserId());
-                                    pointsLog.setRemark("用户退单");
-                                    pointsLog.setLogType("ORDER_BACK");
-                                    pointsLogService.insert(pointsLog);
-                                } else {
-                                    throw new ServiceException(4960);
-                                }
+                                
                                 // 插入订单日志-已完成
                                 insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
 								

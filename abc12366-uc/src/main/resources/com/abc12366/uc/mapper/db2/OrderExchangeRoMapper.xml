@@ -104,7 +104,7 @@
             parameterType="java.lang.String">
         select orderNo, giftPoints, createTime, lastUpdate, userId, points, e.productId, goodsType from
         (select c.*, d.points from
-        (select a.orderNo, a.userId, a.giftPoints, a.createTime, a.lastUpdate, b.productId from uc_order a left join uc_order_product b on a.orderNo = b.orderNo where a.orderStatus = '6') c
+        (select a.orderNo, a.userId, a.giftPoints, a.createTime, a.lastUpdate, b.productId from uc_order a left join uc_order_product b on a.orderNo = b.orderNo) c
         left join uc_user d on c.userId = d.id) e
         left join
         (select o.id as productId, p.goodsType from uc_product o left join uc_goods p on o.goodsId = p.id) f on e.productId = f.productId
