@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.curriculum.Curriculum">
 		 INSERT INTO bb_curriculum
- 		(curriculumId,title,classify,recommend,teachingMethod,trainTimeBegin,trainTimeEnd,isApply,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,issueTime,peopleLimit,trainSite,cover,label,issueScope,isFree,originalPrice,preferentialPrice,integralOriginalPrice,integralPreferentialPrice,freeMember,lecturerId,lecturerName,lecturerPicture,curriculumidIntro,status,createrId,createrName,createrTime,updateTime)
+ 		(curriculumId,title,classify,goodsId,recommend,teachingMethod,trainTimeBegin,trainTimeEnd,isApply,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,issueTime,peopleLimit,trainSite,cover,label,issueScope,isFree,originalPrice,preferentialPrice,integralOriginalPrice,integralPreferentialPrice,freeMember,lecturerId,lecturerName,lecturerPicture,curriculumidIntro,status,createrId,createrName,createrTime,updateTime)
 		 VALUES 
- 		(#{curriculumId},#{title},#{classify},#{recommend},#{teachingMethod},#{trainTimeBegin},#{trainTimeEnd},#{isApply},#{applyTimeBegin},#{applyTimeEnd},#{applyPay},#{isSign},#{signTimeBegin},#{signTimeEnd},#{issueTime},#{peopleLimit},#{trainSite},#{cover},#{label},#{issueScope},#{isFree},#{originalPrice},#{preferentialPrice},#{integralOriginalPrice},#{integralPreferentialPrice},#{freeMember},#{lecturerId},#{lecturerName},#{lecturerPicture},#{curriculumidIntro},#{status},#{createrId},#{createrName},#{createrTime},#{updateTime})
+ 		(#{curriculumId},#{title},#{classify},#{goodsId},#{recommend},#{teachingMethod},#{trainTimeBegin},#{trainTimeEnd},#{isApply},#{applyTimeBegin},#{applyTimeEnd},#{applyPay},#{isSign},#{signTimeBegin},#{signTimeEnd},#{issueTime},#{peopleLimit},#{trainSite},#{cover},#{label},#{issueScope},#{isFree},#{originalPrice},#{preferentialPrice},#{integralOriginalPrice},#{integralPreferentialPrice},#{freeMember},#{lecturerId},#{lecturerName},#{lecturerPicture},#{curriculumidIntro},#{status},#{createrId},#{createrName},#{createrTime},#{updateTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -30,6 +30,9 @@
 			<if test="classify != null">
 				 classify,
 			</if>
+             <if test="goodsId != null">
+                 goodsId,
+             </if>
 			<if test="recommend != null">
 				 recommend,
 			</if>
@@ -138,6 +141,9 @@
 			<if test="classify!=null">
 				 #{classify},
 			</if>
+             <if test="goodsId!=null">
+                 #{goodsId},
+             </if>
 			<if test="recommend!=null">
 				 #{recommend},
 			</if>
@@ -247,6 +253,9 @@
 			<if test="classify != null">
 				 classify = #{classify},
 			</if>
+             <if test="goodsId != null">
+                 goodsId = #{goodsId},
+             </if>
 			<if test="recommend != null">
 				 recommend = #{recommend},
 			</if>
@@ -353,6 +362,7 @@
 		 UPDATE bb_curriculum
 		 SET title = #{title},
 			 classify = #{classify},
+			 goodsId = #{goodsId},
 			 recommend = #{recommend},
 			 teachingMethod = #{teachingMethod},
 			 trainTimeBegin = #{trainTimeBegin},

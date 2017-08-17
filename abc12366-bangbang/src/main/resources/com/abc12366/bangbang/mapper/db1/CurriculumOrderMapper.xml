@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumOrder">
 		 INSERT INTO bb_curriculum_order
- 		(orderId,curriculumId,userId,nickname,username,memberGrade,orderName,orderPrice,orderIntegral,isIntegral,orderTime,phone,visitIP,visitSite,orderStatus)
+ 		(orderId,curriculumId,userId,goodsId,nickname,username,memberGrade,orderName,orderPrice,orderIntegral,isIntegral,orderTime,phone,visitIP,visitSite,orderStatus)
 		 VALUES 
- 		(#{orderId},#{curriculumId},#{userId},#{nickname},#{username},#{memberGrade},#{orderName},#{orderPrice},#{orderIntegral},#{isIntegral},#{orderTime},#{phone},#{visitIP},#{visitSite},#{orderStatus})
+ 		(#{orderId},#{curriculumId},#{userId},#{goodsId},#{nickname},#{username},#{memberGrade},#{orderName},#{orderPrice},#{orderIntegral},#{isIntegral},#{orderTime},#{phone},#{visitIP},#{visitSite},#{orderStatus})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -30,6 +30,9 @@
 			<if test="userId != null">
 				 userId,
 			</if>
+             <if test="goodsId != null">
+                 goodsId,
+             </if>
 			<if test="nickname != null">
 				 nickname,
 			</if>
@@ -78,6 +81,9 @@
 			<if test="userId!=null">
 				 #{userId},
 			</if>
+             <if test="goodsId!=null">
+                 #{goodsId},
+             </if>
 			<if test="nickname!=null">
 				 #{nickname},
 			</if>
@@ -127,6 +133,9 @@
 			<if test="userId != null">
 				 userId = #{userId},
 			</if>
+             <if test="goodsId != null">
+                 goodsId = #{goodsId},
+             </if>
 			<if test="nickname != null">
 				 nickname = #{nickname},
 			</if>
@@ -174,6 +183,7 @@
 		 SET 
 			 curriculumId = #{curriculumId},
 			 userId = #{userId},
+			 goodsId = #{goodsId},
 			 nickname = #{nickname},
 			 username = #{username},
 			 memberGrade = #{memberGrade},

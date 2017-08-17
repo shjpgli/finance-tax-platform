@@ -28,5 +28,12 @@ public interface CurriculumClassifyRoMapper {
      **/
     List<CurriculumClassifyBo> selectList(Map<String, Object> map);
 
+    /**
+     *
+     * 查询分类ID是否已存在
+     *
+     **/
+    int selectClassifyCnt(@Param("classifyId") String classifyId);
+
 
 }

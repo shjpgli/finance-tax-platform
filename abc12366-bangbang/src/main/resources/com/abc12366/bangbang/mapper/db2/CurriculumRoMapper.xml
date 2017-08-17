@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 curriculumId,title,browseNum,watchNum,classify,	recommend,	teachingMethod,	trainTimeBegin,	trainTimeEnd,	isApply,	applyTimeBegin,	applyTimeEnd,	applyPay,	isSign,	signTimeBegin,	signTimeEnd,	issueTime,	peopleLimit,	trainSite,	cover,	label,	issueScope,	isFree,	originalPrice,	preferentialPrice,	integralOriginalPrice,	integralPreferentialPrice,	freeMember,	lecturerId,	lecturerName,	lecturerPicture,	curriculumidIntro,	status,	createrId,	createrName,	createrTime,	updateTime
+		 curriculumId,title,browseNum,watchNum,classify,goodsId,	recommend,	teachingMethod,	trainTimeBegin,	trainTimeEnd,	isApply,	applyTimeBegin,	applyTimeEnd,	applyPay,	isSign,	signTimeBegin,	signTimeEnd,	issueTime,	peopleLimit,	trainSite,	cover,	label,	issueScope,	isFree,	originalPrice,	preferentialPrice,	integralOriginalPrice,	integralPreferentialPrice,	freeMember,	lecturerId,	lecturerName,	lecturerPicture,	curriculumidIntro,	status,	createrId,	createrName,	createrTime,	updateTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -39,7 +39,7 @@
     <!-- 查询最新课程 -->
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,browseNum,watchNum,cover,issueTime,isFree,freeMember,curriculumidIntro
+        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro
         FROM bb_curriculum
         WHERE 1=1 and status = 1
         <if test="label != null and label != ''">

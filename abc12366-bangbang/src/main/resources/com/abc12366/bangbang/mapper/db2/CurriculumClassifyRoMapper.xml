@@ -30,5 +30,13 @@
         </if>
     </select>
 
+    <!-- 查询分类ID是否已存在 -->
+    <select id="selectClassifyCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+           count(classifyId) cnt
+        FROM bb_curriculum_classify
+        WHERE classifyId = #{classifyId}
+    </select>
+
 
 </mapper>
