@@ -1,7 +1,7 @@
 package com.abc12366.uc.model.invoice.bo;
-import com.abc12366.uc.model.invoice.InvoiceDetail;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 
@@ -53,6 +53,11 @@ public class InvoiceRepoBO implements Serializable {
 
 	/**修改人**/
 	private String updateUser;
+
+	private String noStart;
+	private String noEnd;
+	private Date startTime;
+	private Date endTime;
 
 	private List<InvoiceDetailBO> invoiceDetailBOList;
 
@@ -175,5 +180,37 @@ public class InvoiceRepoBO implements Serializable {
 
 	public void setInvoiceTypeName(String invoiceTypeName) {
 		this.invoiceTypeName = invoiceTypeName;
+	}
+
+	public String getNoStart() {
+		return noStart;
+	}
+
+	public void setNoStart(String noStart) {
+		this.noStart = noStart;
+	}
+
+	public String getNoEnd() {
+		return noEnd;
+	}
+
+	public void setNoEnd(String noEnd) {
+		this.noEnd = noEnd;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 }

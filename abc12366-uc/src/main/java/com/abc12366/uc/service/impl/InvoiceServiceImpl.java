@@ -525,7 +525,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
                 if(!"0000".equals(einvocie.getReturnCode())){
                     LOGGER.error("发票开票异常：{}", einvocie);
-                    throw new ServiceException(4908);
+                    throw new ServiceException(4908,einvocie.getReturnMessage());
                 }
                 invoiceBO.setInvoiceNo(einvocie.getFP_HM());
                 invoiceBO.setInvoiceCode(einvocie.getFP_DM());

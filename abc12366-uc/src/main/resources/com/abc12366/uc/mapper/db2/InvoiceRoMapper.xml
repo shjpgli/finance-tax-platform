@@ -215,8 +215,8 @@
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
         LEFT JOIN uc_user_address a ON a.id = i.addressId
-        LEFT JOIN uc_dict t on t.fieldValue = i.content
-        WHERE i.id = #{id} and t.dictId = 'invoicecontent'
+        LEFT JOIN uc_dict t on t.fieldValue = i.content and t.dictId = 'invoicecontent'
+        WHERE i.id = #{id}
     </select>
 
     <!-- 查询（根据主键ID和UserId查询） -->
@@ -248,9 +248,9 @@
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
         LEFT JOIN uc_user_address a ON a.id = i.addressId
-        LEFT JOIN uc_dict t on t.fieldValue = i.content
+        LEFT JOIN uc_dict t on t.fieldValue = i.content and t.dictId = 'invoicecontent'
         <where>
-            1 = 1 and t.dictId = 'invoicecontent'
+            1 = 1
             <if test=" username != null and username != '' ">
                 and u.username = #{username}
             </if>

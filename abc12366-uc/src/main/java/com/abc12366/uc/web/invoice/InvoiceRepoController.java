@@ -9,6 +9,7 @@ import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
+import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -50,6 +51,12 @@ public class InvoiceRepoController {
     public ResponseEntity selectInvoiceRepoList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                                 @RequestParam(value = "status", required = false) String status,
+                                                @RequestParam(value = "noStart", required = false) String noStart,
+                                                @RequestParam(value = "noEnd", required = false) String noEnd,
+                                                @RequestParam(value = "invoiceNoStart", required = false) String invoiceNoStart,
+                                                @RequestParam(value = "invoiceNoEnd", required = false) String invoiceNoEnd,
+                                                @RequestParam(value = "startTime", required = false) String startTime,
+                                                @RequestParam(value = "endTime", required = false) String endTime,
                                                 @RequestParam(value = "invoiceTypeCode", required = false) String invoiceTypeCode,
                                                 @RequestParam(value = "invoiceCode", required = false) String invoiceCode) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -57,6 +64,16 @@ public class InvoiceRepoController {
         invoiceRepo.setStatus(status);
         invoiceRepo.setInvoiceCode(invoiceCode);
         invoiceRepo.setInvoiceTypeCode(invoiceTypeCode);
+        invoiceRepo.setNoStart(noStart);
+        invoiceRepo.setNoEnd(noEnd);
+        invoiceRepo.setInvoiceNoStart(invoiceNoStart);
+        invoiceRepo.setInvoiceNoEnd(invoiceNoEnd);
+        if (startTime != null && !"".equals(startTime)) {
+            invoiceRepo.setStartTime(DataUtils.StrToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            invoiceRepo.setEndTime(DataUtils.StrToDate(endTime));
+        }
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<InvoiceRepoBO> invoiceList = invoiceRepoService.selectList(invoiceRepo);
         LOGGER.info("{}", invoiceList);

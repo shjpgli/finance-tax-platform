@@ -88,12 +88,37 @@
         r.id,	r.invoiceTypeCode,	r.invoiceCode,	r.invoiceNoStart,	r.invoiceNoEnd,	r.property,	r.share,
         r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,d.fieldKey as invoiceTypeName
         FROM uc_invoice_repo r
-        LEFT JOIN uc_dict d on d.fieldValue =  r.invoiceTypeCode
+        LEFT JOIN uc_dict d on d.fieldValue =  r.invoiceTypeCode and d.dictId = 'invoicetype'
         <where>
-             1=1  and d.dictId = 'invoicetype'
+             1=1
             <if test="invoiceCode != null  and invoiceCode!=''">AND r.invoiceCode = #{invoiceCode}</if>
             <if test="status != null  and status!=''">AND r.status = #{status}</if>
             <if test="invoiceTypeCode != null  and invoiceTypeCode!=''">AND r.invoiceTypeCode = #{invoiceTypeCode}</if>
+            <if test="noStart != null  and noStart!=''">
+                <![CDATA[
+                  AND r.id >= #{noStart}
+                ]]>
+            </if>
+            <if test="noEnd != null  and noEnd != ''">
+                <![CDATA[
+                  AND r.id <= #{noEnd}
+                ]]>
+            </if>
+            <if test="invoiceNoStart != null  and invoiceNoStart!='' and invoiceNoEnd != null  and invoiceNoEnd!=''">
+                <![CDATA[
+                  AND (r.invoiceNoStart >= #{invoiceNoStart} and r.invoiceNoStart <= #{invoiceNoStart}) or (r.invoiceNoEnd >= #{invoiceNoEnd} and r.invoiceNoEnd <= #{invoiceNoEnd})
+                ]]>
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(r.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(r.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
+            </if>
         </where>
         order by r.createTime desc
     </select>

@@ -88,6 +88,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         String ids[] = invoiceRepoBO.getId().split("-");
         int book = invoiceRepoBO.getBook();
         int startId = Integer.parseInt(ids[1]);
+        int startIdLength = ids[1].length();
         int endId = Integer.parseInt(ids[2]);
         if(book != (endId - startId +1)){
             LOGGER.warn("编号的起止号码+1，必须等于本数{}{}：",startId,endId);
@@ -114,7 +115,8 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         boolean isIndex = true;
         for(int i = 1; i <= pageCount; i++) {
             List<Integer> subList = list.subList((i - 1) * pageSize, pageSize * (i));
-            invoiceRepoBO.setId(invoiceTypeCode+startId);
+            String repoId = invoiceTypeCode+autoGenericCode(startId,startIdLength);
+            invoiceRepoBO.setId(repoId);
             InvoiceRepo invoiceRepo = new InvoiceRepo();
             isIndex = true;
             for(Integer j:subList){
@@ -129,7 +131,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
                 invoiceDetail.setProperty(invoiceRepoBO.getProperty());
                 invoiceDetail.setInvoiceNo(autoGenericCode(j,endLength));
                 invoiceDetail.setInvoiceCode(invoiceRepoBO.getInvoiceCode());
-                invoiceDetail.setInvoiceRepoId(invoiceTypeCode+startId);
+                invoiceDetail.setInvoiceRepoId(repoId);
                 invoiceDetail.setStatus("0");
                 int dInsert = invoiceDetailMapper.insert(invoiceDetail);
                 if(dInsert != 1){
@@ -160,7 +162,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
      * @return
      */
     private static String autoGenericCode(int code, int num) {
-        return String.format("%0" + num + "d", code + 1);
+        return String.format("%0" + num + "d", code);
     }
 
     @Override
