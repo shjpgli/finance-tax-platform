@@ -178,6 +178,11 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             LOGGER.warn("发票起止长度必须保持一致{}{}：" + startLength+endLength);
             throw new ServiceException(4910);
         }
+        int rInsert = invoiceRepoMapper.update(invoiceRepo);
+        if(rInsert != 1){
+            LOGGER.warn("修改失败，参数{}：" + invoiceRepo);
+            throw new ServiceException(4102);
+        }
         //删除发票详情表数据
         invoiceDetailMapper.deleteByInvoiceRepoId(invoiceRepoBO.getId());
         //插入发票详情数据

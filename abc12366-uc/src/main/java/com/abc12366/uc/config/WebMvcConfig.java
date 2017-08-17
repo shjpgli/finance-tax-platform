@@ -67,6 +67,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
+                .excludePathPatterns("/goods/user/**")
                 .excludePathPatterns("/appsetting/**")
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")

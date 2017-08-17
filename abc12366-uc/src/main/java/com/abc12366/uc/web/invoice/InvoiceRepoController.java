@@ -106,7 +106,7 @@ public class InvoiceRepoController {
     }
 
     /**
-     * 发票仓库新增
+     * 发票仓库修改
      *
      * @return
      */

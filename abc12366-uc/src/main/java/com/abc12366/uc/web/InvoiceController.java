@@ -218,7 +218,7 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/import/print")
-    public ResponseEntity insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList) {
+    public ResponseEntity insertInvoicePrintExcelList(@Valid @RequestBody List<InvoiceExcel> invoiceList) {
         LOGGER.info("{}", invoiceList);
         invoiceService.insertInvoicePrintExcelList(invoiceList);
         return ResponseEntity.ok(Utils.kv());
@@ -246,7 +246,7 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/import/express")
-    public ResponseEntity insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList) {
+    public ResponseEntity insertInvoiceExpressExcelList(@Valid @RequestBody List<InvoiceExpressExcel> expressExcelList) {
         LOGGER.info("{}", expressExcelList);
         invoiceService.insertInvoiceExpressExcelList(expressExcelList);
         return ResponseEntity.ok(Utils.kv());
