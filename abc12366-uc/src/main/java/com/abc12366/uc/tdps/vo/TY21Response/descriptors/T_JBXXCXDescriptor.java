@@ -239,7 +239,8 @@ public class T_JBXXCXDescriptor extends org.exolab.castor.xml.util.XMLClassDescr
         desc.setSchemaType("com.abc12366.uc.tdps.vo.TY21Response.MXXXS");
         desc.setHandler(handler);
         desc.setNameSpaceURI("http://www.chinatax.gov.cn/dataspec/");
-        desc.setRequired(true);
+        //desc.setRequired(true);
+        desc.setRequired(false);
         desc.setMultivalued(false);
         addFieldDescriptor(desc);
         addSequenceElement(desc);

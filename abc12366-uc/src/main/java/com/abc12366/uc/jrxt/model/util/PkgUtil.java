@@ -28,14 +28,14 @@ public class PkgUtil extends BaseObject{
         String result = null;
         String serviceId = map.get("serviceid").toUpperCase();
         if(serviceId.equalsIgnoreCase("TY11")){
-            result = makeTiripPackageBytdps(makeTY11(map), serviceId, "ABC_4000");
+            result = makeTiripPackageBytdps(makeTY11(map), serviceId, "CSZJ_NEW");
 //            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
-        if(serviceId.equalsIgnoreCase("TY20")){
-            result = makeTiripPackageBytdps(makeTY20(map), serviceId, "CSZJ_NEW");
+        if(serviceId.equalsIgnoreCase("TY03")){
+            result = makeTiripPackageBytdpsTY03(makeTY03(map), serviceId, "CSZJ_NEW");
         }
         if(serviceId.equalsIgnoreCase("TY12")){
-            result = makeTiripPackageBytdps(makeTY12(map), serviceId, "ABC_4000");
+            result = makeTiripPackageBytdps(makeTY12(map), serviceId, "CSZJ_NEW");
         }
         if(serviceId.equalsIgnoreCase("TY21")){
             result = makeTiripPackageBytdps(makeTY21(map), serviceId, "CSZJ_NEW");
@@ -206,6 +206,78 @@ public class PkgUtil extends BaseObject{
         return xml;
     }
 
+    public String makeTiripPackageBytdpsTY03(String contentStr, String serviceId, String yhmc) throws Exception {
+        _log.info("subPackage: \n" + contentStr);
+        String mm=CommonUtils.getRandom();
+        //���ܺ������
+        String jmmm=cryptutiltdps.b64AsymmetricEncrypt(mm);
+        String content = processBusinessPkgBytdps(contentStr, "abc",mm);
+        TiripPackage tiripPackage = new TiripPackage();
+
+        // make Identity
+        Identity identity = new Identity();
+        identity.setServiceId(serviceId);
+        identity.setChannelId(yhmc);
+        //identity.setPassword("qqqqqq");
+        //identity.setPassword(processBusinessPkgBytdps("qqqqqq", "abc",mm));
+        identity.setPassword(codeUtiltdps.encodeContent(cryptutiltdps.encryptContent("qqqqqq".getBytes(), mm.getBytes())));
+        tiripPackage.setIdentity(identity);
+
+        // make ContentControl
+        ContentControl contentControl = new ContentControl();
+        Control control1 = new Control();
+        control1.setId("1");
+        control1.setType("zip");
+        control1.setImpl("Zlib");
+        contentControl.addControl(control1);
+
+        Control control2 = new Control();
+        control2.setId("2");
+        control2.setType("crypt");
+        control2.setImpl("SBMMJM");
+        contentControl.addControl(control2);
+
+        Control control3 = new Control();
+        control3.setId("3");
+        control3.setType("code");
+        control3.setImpl("Base64");
+        contentControl.addControl(control3);
+        tiripPackage.setContentControl(contentControl);
+
+        //make RouterSession
+        RouterSession routerSession = new RouterSession();
+        ParamList paramList = new ParamList();
+        paramList.setName("MM");
+        paramList.setValue(jmmm);
+        routerSession.addParamList(paramList);
+        tiripPackage.setRouterSession(routerSession);
+
+        // make BussinessContent
+        BusinessContent businessContent =  new BusinessContent();
+        SubPackage subPackage = new SubPackage();
+        subPackage.setId("1");
+        subPackage.setContent(content);
+        businessContent.addSubPackage(subPackage);
+        tiripPackage.setBusinessContent(businessContent);
+        tiripPackage.setVersion("1.0");
+        String xml = null;
+        try {
+            xml = XmlJavaParser.parseObjectToXml(tiripPackage);
+        } catch (IOException e) {
+            _log.error("IOException: " + e);
+            e.printStackTrace();
+        } catch (MarshalException e) {
+            _log.error("MarshalException: " + e);
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            _log.error("ValidationException: " + e);
+            e.printStackTrace();
+        }
+        _log.info("tiripPackage:\n" + xml);
+        return xml;
+    }
+
+
     private static String processBusinessPkg(String pkgStr, String name){
         HashMap<String, String> map = new HashMap<String, String>();
         map.put(name, pkgStr);
@@ -298,7 +370,7 @@ public class PkgUtil extends BaseObject{
         return map;
     }
 
-    private static String makeTY20(final Map<String, String> map){
+    private static String makeTY03(final Map<String, String> map){
         //com.abc12366.uc.tdps.vo.nsraqxxSzRequest.
         com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
         request.setNSRSBH(map.get("nsrsbh"));
@@ -307,13 +379,13 @@ public class PkgUtil extends BaseObject{
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx2=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx3=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         mxxx.setCODE("NSRSBH");
-        mxxx.setVALUE(map.get("nsrsbh"));
+        mxxx.setVALUE(map.get("NSRSBH"));
         nsrjbxx.addMXXX(mxxx);
-        mxxx2.setCODE("USERID");
-        mxxx2.setVALUE(map.get("userid"));
+        mxxx2.setCODE("OLD_PWD");
+        mxxx2.setVALUE(map.get("OLD_PWD"));
         nsrjbxx.addMXXX(mxxx2);
-        mxxx3.setCODE("FWMM");
-        mxxx3.setVALUE(map.get("fwmm"));
+        mxxx3.setCODE("NEW_PWD");
+        mxxx3.setVALUE(map.get("NEW_PWD"));
         nsrjbxx.addMXXX(mxxx3);
         request.setNSRJBXX(nsrjbxx);
         try {

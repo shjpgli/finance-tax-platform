@@ -5,12 +5,12 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id, name, url, link, sort, showName, status, createTime, lastUpdate
+		id, name, url, link,style, sort, showName, status, createTime, lastUpdate
 	</sql>
 
     <insert id="insert" parameterType="com.abc12366.cms.model.bo.AdPageBO">
         INSERT INTO cms_adpage(<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{name}, #{url}, #{link}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate})
+        VALUES (#{id}, #{name}, #{url}, #{link}, #{style}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
     <update id="update" parameterType="com.abc12366.cms.model.bo.AdPageBO">
@@ -19,6 +19,7 @@
             <if test="name != null">name = #{name},</if>
             <if test="url != null">url = #{url},</if>
             <if test="link != null">link = #{link},</if>
+            <if test="style != null">style = #{style},</if>
             <if test="sort != null">sort = #{sort},</if>
             <if test="status != null">status = #{status},</if>
             <if test="showName != null">showName = #{showName},</if>

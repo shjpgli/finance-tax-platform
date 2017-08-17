@@ -23,6 +23,11 @@ public class AdPageBO {
     @Size(max = 128)
     private String link;
 
+
+
+    @Size(max = 50)
+    private String style;
+
     private Integer sort;
     @NotNull
     private Boolean showName;
@@ -93,7 +98,13 @@ public class AdPageBO {
     public Boolean getShowName() {
         return showName;
     }
+    public String getStyle() {
+        return style;
+    }
 
+    public void setStyle(String style) {
+        this.style = style;
+    }
     public void setShowName(Boolean showName) {
         this.showName = showName;
     }

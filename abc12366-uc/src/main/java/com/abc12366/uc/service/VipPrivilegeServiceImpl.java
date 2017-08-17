@@ -63,11 +63,6 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
                     returnStr = "名称(name)违反唯一性约束";
 
                 }
-                //sort唯一
-                if (vipPrivilegeBO.getSort() == obj.getSort()) {
-                    returnStr = "排序(sort)违反唯一性约束";
-
-                }
                 //图标唯一
                 if (vipPrivilegeBO.getIcon().equals(obj.getIcon())) {
                     returnStr = "图标(icon)违反唯一性约束";

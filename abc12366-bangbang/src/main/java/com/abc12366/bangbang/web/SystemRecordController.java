@@ -23,13 +23,14 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-///////////////////////
 @RestController
 @RequestMapping(path = "/system/record", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class SystemRecordController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemRecordController.class);
-    //
+
     @Autowired
     private SystemRecordService systemRecordService;
 
@@ -66,13 +67,16 @@ public class SystemRecordController {
         return ResponseEntity.ok(Utils.kv("data", systemRecordBO));
     }
 
-    //异步新增 返回的数据是null
+    /**
+     * 异步新增
+     */
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody SystemRecordInsertBO systemRecordInsertBO) {
+    public ResponseEntity insert(@Valid @RequestBody SystemRecordInsertBO systemRecordInsertBO) throws ExecutionException, InterruptedException {
         LOGGER.info("{}", systemRecordInsertBO);
-        SystemRecordBO systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO);
-        LOGGER.info("{}", systemRecordBOReturn);
-        return ResponseEntity.ok(Utils.kv("data", systemRecordBOReturn));
+        CompletableFuture<SystemRecordBO> systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO);
+        CompletableFuture.allOf(systemRecordBOReturn);
+        LOGGER.info("{}", systemRecordBOReturn.get());
+        return ResponseEntity.ok(Utils.kv("data", systemRecordBOReturn.get()));
     }
 
 }

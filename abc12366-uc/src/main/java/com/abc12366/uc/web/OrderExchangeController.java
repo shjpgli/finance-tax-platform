@@ -164,7 +164,7 @@ public class OrderExchangeController {
     }
 
     /**
-     * 确认收货
+     * 操作员确认收货
      */
     @PutMapping(path = "/confirm/{id}")
     public ResponseEntity confirm(@PathVariable("id") String id, @Valid @RequestBody ExchangeConfirmBO data) {
@@ -172,6 +172,20 @@ public class OrderExchangeController {
         data.setId(id);
         LOGGER.info("{}", data);
         OrderExchange oe = orderExchangeService.confirm(data);
+
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 用户确认收货
+     */
+    @PutMapping(path = "/receive/{id}")
+    public ResponseEntity receive(@PathVariable("id") String id) {
+
+        LOGGER.info("{}", id);
+        OrderExchange oe = orderExchangeService.receive(id);
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));
         LOGGER.info("{}", responseEntity);

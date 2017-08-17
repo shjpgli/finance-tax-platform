@@ -4,7 +4,6 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
-import com.abc12366.uc.tdps.vo.TY21Response.JBXXCX;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
@@ -376,7 +375,7 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public BaseObject updatePassword(UpdatePwd data) {
         Map<String, String> map = new HashMap<>();
-        map.put("serviceid", "TY21");
+        map.put("serviceid", "TY03");
         map.put("NSRSBH", data.getNsrsbh());
         map.put("OLD_PWD", data.getOldpwd());
         map.put("NEW_PWD", data.getNewpwd());
@@ -389,8 +388,14 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4629);
         }
         TY21Xml2Object object = new TY21Xml2Object();
-
-        JBXXCX jbxxcx = (JBXXCX) XmlJavaParser.parseXmlToObject(JBXXCX.class, String.valueOf(resMap.get("taxML_SSHDXX_" + nsrsbh + ".xml")));
+        com.abc12366.uc.tdps.vo.TY21Response.JBXXCX jbxxcx = new com.abc12366.uc.tdps.vo.TY21Response.JBXXCX();
+        String xml = String.valueOf(resMap.get("taxML_SSHDXX_" + nsrsbh + ".xml"));
+        try {
+            jbxxcx = (com.abc12366.uc.tdps.vo.TY21Response.JBXXCX) XmlJavaParser.parseXmlToObject(com.abc12366.uc.tdps.vo.TY21Response.JBXXCX.class, String.valueOf(resMap.get("taxML_SSHDXX_" + nsrsbh + ".xml")));
+        }catch (org.exolab.castor.xml.MarshalException e){
+            e.printStackTrace();
+            throw new ServiceException(4633);
+        }
         String cxjg = jbxxcx.getCXJG();
         if ("1".equals(cxjg)) {
             com.abc12366.uc.tdps.vo.TY21Response.MXXX[] mxxxes = jbxxcx.getMXXXS().getMXXX();

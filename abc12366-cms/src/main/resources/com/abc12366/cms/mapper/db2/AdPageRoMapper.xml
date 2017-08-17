@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, name, url, link, sort, showName, status, createTime, lastUpdate,startTime,endTime
+        id, name, url, link,style, sort, showName, status, createTime, lastUpdate,startTime,endTime
     </sql>
 
     <select id="selectList" resultType="com.abc12366.cms.model.bo.AdPageBO"
