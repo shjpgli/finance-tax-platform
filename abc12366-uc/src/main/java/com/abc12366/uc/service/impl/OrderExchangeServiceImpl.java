@@ -4,15 +4,11 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.jrxt.model.util.DateUtil;
 import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
 import com.abc12366.uc.mapper.db1.OrderExchangeMapper;
 import com.abc12366.uc.mapper.db1.OrderLogMapper;
 import com.abc12366.uc.mapper.db1.OrderMapper;
-import com.abc12366.uc.mapper.db2.DictRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceDetailRoMapper;
-import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
-import com.abc12366.uc.mapper.db2.TradeLogRoMapper;
+import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
@@ -26,16 +22,13 @@ import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.UserUtil;
-import com.abc12366.uc.web.pay.AliPayController;
 import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.github.pagehelper.PageHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -45,7 +38,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,6 +66,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private OrderMapper orderMapper;
+    
+    @Autowired
+    private OrderRoMapper orderRoMapper;
 
     @Autowired
     private TradeLogRoMapper tradeLogRoMapper;
@@ -109,10 +104,26 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             // 插入订单日志
             insertLog(data.getOrderNo(), "1", userId, data.getUserRemark());
+            // 更新订单状态
+            changeOrderStatus(data.getOrderNo());
         } else {
             throw new ServiceException(4950);
         }
         return data;
+    }
+
+    private void changeOrderStatus(String orderNo) {
+        Order order = new Order();
+        order.setOrderNo(orderNo);
+        order.setOrderStatus("6");
+        order = orderRoMapper.selectOne(order);
+        if (order != null) {
+            order.setOrderStatus("10");
+            order.setLastUpdate(new Date());
+            orderMapper.update(order);
+
+            insertLog(order.getOrderNo(), "orderStatus", "10", Utils.getUserId(), "用户提交退换货申请");
+        }
     }
 
     private void exchangeCheck(ExchangeApplicationBO ra) {
@@ -172,6 +183,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
                 // 插入订单日志
                 insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark());
+                // 更新订单状态
+                changeOrderStatus(data.getOrderNo());
             } else {
                 throw new ServiceException(4950);
             }
@@ -216,20 +229,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             oe.setLastUpdate(new Timestamp(new Date().getTime()));
             oe.setStatus("7");
             orderExchangeMapper.update(oe);
-
-            // 退积分
-            ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
-            if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
-                PointsLogBO pointsLog = new PointsLogBO();
-                pointsLog.setRuleId(oe.getOrderNo());
-                pointsLog.setOutgo(eco.getGiftPoints());
-                pointsLog.setUserId(eco.getUserId());
-                pointsLog.setRemark("用户退单");
-                pointsLog.setLogType("ORDER_BACK");
-                pointsLogService.insert(pointsLog);
-            } else {
-                throw new ServiceException(4960);
-            }
 
             // 更新订单状态：已退单
             Order order = new Order();
@@ -353,10 +352,22 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 	                            orderExchangeMapper.update(oe);
 	                            // 插入订单日志-已退款
 	                            insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark());
-	                            // 插入订单日志-已完成
-	                            insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
-								
-	                            //TODO 待加入积分扣除
+
+                                // 退积分
+                                ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
+                                if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
+                                    PointsLogBO pointsLog = new PointsLogBO();
+                                    pointsLog.setRuleId(oe.getOrderNo());
+                                    pointsLog.setOutgo(eco.getGiftPoints());
+                                    pointsLog.setUserId(eco.getUserId());
+                                    pointsLog.setRemark("用户退单");
+                                    pointsLog.setLogType("ORDER_BACK");
+                                    pointsLogService.insert(pointsLog);
+                                } else {
+                                    throw new ServiceException(4960);
+                                }
+                                // 插入订单日志-已完成
+                                insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
 								
 								return ResponseEntity.ok(Utils.kv("data", refundRes));
 							}else{
@@ -366,22 +377,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 							LOGGER.error("支付宝退款失败：",e);
 							return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
 						}
-                        
-                        
-                        
-                        /*ResponseEntity re = aliPayController.aliPayRefund(refund);
-                        RefundRes res = JSON.parseObject(re.getBody().toString(), RefundRes.class);
-                        if ("2000".equals(res.getCode())) { // 退款成功
-                            oe.setStatus("8");
-                            oe.setAdminRemark(data.getAdminRemark());
-                            oe.setLastUpdate(new Timestamp(new Date().getTime()));
-                            orderExchangeMapper.update(oe);
-                            // 插入订单日志-已退款
-                            insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark());
-                            // 插入订单日志-已完成
-                            insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成");
-                        }
-                        return re;*/
                     }
                 }
             }
@@ -400,21 +395,44 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 .lastUpdate(now)
                 .build();
         List<OrderExchange> dataList = orderExchangeRoMapper.selectList(oe);
-        for (OrderExchange data : dataList) {
-            if (data.getLastUpdate().after(DateUtil.addDays(new Date(), -Constant.ORDER_EXCHANGE_RECEIPT_DAYS))) {
-                data.setStatus("4");
-                data.setLastUpdate(now);
-                orderExchangeMapper.update(data);
+        // 更新退换货状态
+        dataList.stream().filter(data -> data.getLastUpdate().after(DateUtils.addDays(new Date(), -Constant
+                .ORDER_EXCHANGE_RECEIPT_DAYS))).forEach(data -> {
+            data.setStatus("4");
+            data.setLastUpdate(now);
+            orderExchangeMapper.update(data);
 
-                // 插入订单日志
-                insertLog(data.getOrderNo(), "4", "", "系统自动完成收货");
+            // 更新订单状态
+            Order order = new Order();
+            order.setOrderNo(data.getOrderNo());
+            order.setOrderStatus("10");
+            order = orderRoMapper.selectOne(order);
+            if (order != null) {
+                order.setOrderStatus("6");
+                order.setLastUpdate(new Date());
+                orderMapper.update(order);
             }
-        }
+            // 插入订单日志
+            insertLog(data.getOrderNo(), "4", "", "系统自动完成收货");
+        });
     }
 
     @Override
     public List<ExchangeOrderInvoiceBO> selectInvoice(String orderNo) {
         return orderExchangeRoMapper.selectInvoice(orderNo);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public OrderExchange receive(String id) {
+        OrderExchange oe = orderExchangeRoMapper.selectById(id);
+        oe.setStatus("4");
+        oe.setLastUpdate(new Timestamp(new Date().getTime()));
+        orderExchangeMapper.update(oe);
+
+        // 插入订单日志
+        insertLog(oe.getOrderNo(), "4", Utils.getUserId(), "用户确认收货");
+        return oe;
     }
 
 
@@ -513,6 +531,19 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 .createUser(userId)
                 .remark(remark)
                 .build();
+        orderLogMapper.insert(ol);
+    }
+    
+    private void insertLog(String orderNo, String dictId, String status, String userId, String remark) {
+        // 插入订单日志
+        OrderLog ol = new OrderLog.Builder()
+            .id(Utils.uuid())
+            .orderNo(orderNo)
+            .action(selectFieldValue(dictId, status))
+            .createTime(new Timestamp(new Date().getTime()))
+            .createUser(userId)
+            .remark(remark)
+            .build();
         orderLogMapper.insert(ol);
     }
 }

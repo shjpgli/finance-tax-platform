@@ -20,6 +20,8 @@ public interface OrderRoMapper {
      **/
     Order selectByPrimaryKey(@Param("id") String id);
 
+    Order selectOne(Order order);
+
     List<OrderBO> selectList(OrderBO order);
 
     OrderBO selectById(String orderNo);

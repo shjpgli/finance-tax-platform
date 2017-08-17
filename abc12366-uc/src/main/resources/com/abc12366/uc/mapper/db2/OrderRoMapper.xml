@@ -399,6 +399,18 @@
         WHERE orderNo = #{orderNo}
     </select>
 
+    <select id="selectOne" resultType="com.abc12366.uc.model.Order" parameterType="com.abc12366.uc.model.Order">
+        SELECT
+        orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
+        isShipping, isFreeShipping, deliveryFee,
+        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId
+        FROM uc_order
+        <where>
+            <if test="orderNo != null">orderNo = #{orderNo}</if>
+            <if test="orderStatus != null">AND orderStatus = #{orderStatus}</if>
+        </where>
+    </select>
+
     <!-- 查询（根据主键ID查询） -->
     <select id="selectReceiptOrderByDate" resultType="com.abc12366.uc.model.Order" parameterType="java.util.Date">
         SELECT

@@ -82,4 +82,9 @@ public interface OrderExchangeService {
      * 根据订单号查询发票信息
      */
     List<ExchangeOrderInvoiceBO> selectInvoice(String orderNo);
+
+    /**
+     * 用户确认收货
+     */
+    OrderExchange receive(String id);
 }
