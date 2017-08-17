@@ -25,7 +25,7 @@ public class AdPageBO {
 
 
 
-    @Size(max = 128)
+    @Size(max = 50)
     private String style;
 
     private Integer sort;

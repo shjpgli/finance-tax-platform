@@ -199,4 +199,34 @@ public class SystemRecordBO {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
+	@Override
+	public String toString() {
+		return "SystemRecordBO{" +
+				"id='" + id + '\'' +
+				", userId='" + userId + '\'' +
+				", sessionId='" + sessionId + '\'' +
+				", browseDate=" + browseDate +
+				", year='" + year + '\'' +
+				", month='" + month + '\'' +
+				", week='" + week + '\'' +
+				", day='" + day + '\'' +
+				", hour='" + hour + '\'' +
+				", minute='" + minute + '\'' +
+				", pageTitle='" + pageTitle + '\'' +
+				", pageUrl='" + pageUrl + '\'' +
+				", referer='" + referer + '\'' +
+				", stayLong='" + stayLong + '\'' +
+				", feature='" + feature + '\'' +
+				", appName='" + appName + '\'' +
+				", ip='" + ip + '\'' +
+				", location='" + location + '\'' +
+				", browseType='" + browseType + '\'' +
+				", browseVersion='" + browseVersion + '\'' +
+				", os='" + os + '\'' +
+				", device='" + device + '\'' +
+				", remark='" + remark + '\'' +
+				", createTime=" + createTime +
+				'}';
+	}
 }

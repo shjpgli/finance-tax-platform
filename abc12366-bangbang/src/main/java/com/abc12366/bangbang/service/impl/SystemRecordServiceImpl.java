@@ -1,6 +1,7 @@
-package com.abc12366.bangbang.service;
+package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
+import com.abc12366.bangbang.service.SystemRecordService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.bangbang.mapper.db1.SystemRecordMapper;
@@ -14,14 +15,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Admin: lingsuzhi <554600654@qq.com.com> Date: 2017-08-16
@@ -31,10 +29,10 @@ public class SystemRecordServiceImpl implements SystemRecordService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemRecordServiceImpl.class);
 
-    @Resource
+    @Autowired
     private SystemRecordRoMapper SystemRecordRoMapper;
 
-    @Resource
+    @Autowired
     private SystemRecordMapper SystemRecordMapper;
 
     @Override
@@ -47,16 +45,14 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         return SystemRecordRoMapper.selectOne(id);
     }
 
-    //异步新增
+    /**异步新增*/
     @Async
     @Override
-    public SystemRecordBO insert(SystemRecordInsertBO SystemRecordInsertBO) {
+    public CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO SystemRecordInsertBO) {
         if (SystemRecordInsertBO == null) {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
         }
-
-
         SystemRecord SystemRecord = new SystemRecord();
         BeanUtils.copyProperties(SystemRecordInsertBO, SystemRecord);
         Date date = new Date();
@@ -70,10 +66,12 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         }
         SystemRecordBO SystemRecordBOReturn = new SystemRecordBO();
         BeanUtils.copyProperties(SystemRecord, SystemRecordBOReturn);
-        return SystemRecordBOReturn;
+        return CompletableFuture.completedFuture(SystemRecordBOReturn);
     }
 
-    //  年、月、日。。。是根据浏览日期算出来的，新增的时候不需要用户传过来
+    /**
+     *  年、月、日。。。是根据浏览日期算出来的，新增的时候不需要用户传过来
+      */
     private void SystemRecordSetDate(SystemRecord systemRecord) {
         Date date = systemRecord.getBrowseDate();
         if (date == null) return;
