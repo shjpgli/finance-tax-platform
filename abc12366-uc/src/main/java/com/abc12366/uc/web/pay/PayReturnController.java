@@ -139,7 +139,7 @@ public class PayReturnController {
 				        pointsLog.setRuleId(out_trade_no);
 				        pointsLog.setIncome(eco.getGiftPoints());
 				        pointsLog.setUserId(eco.getUserId());
-				        pointsLog.setRemark("用户下单单");
+				        pointsLog.setRemark("用户下单");
 				        pointsLog.setLogType("ORDER_INCOME");
 				        pointsLogService.insert(pointsLog);
 					}
