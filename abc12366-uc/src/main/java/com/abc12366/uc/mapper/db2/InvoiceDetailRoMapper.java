@@ -34,4 +34,6 @@ public interface InvoiceDetailRoMapper {
     List<InvoiceDetail> selectInvoiceDetailListByInvoice(InvoiceDetail invoiceDetail);
 
     InvoiceDetail selectByInvoiceNoAndCode(InvoiceDetail tail);
+
+    InvoiceDetail selectByInvoiceNoAndStatus(String invoiceNo);
 }

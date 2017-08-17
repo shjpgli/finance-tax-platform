@@ -40,4 +40,5 @@ public interface InvoiceUseDetailMapper{
 	 * 
 	 **/
 	int update(InvoiceUseDetail record);
+
 }

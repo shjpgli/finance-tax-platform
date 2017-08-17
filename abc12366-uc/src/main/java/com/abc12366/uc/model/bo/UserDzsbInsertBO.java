@@ -10,8 +10,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class UserDzsbInsertBO {
     @NotEmpty
     private String nsrsbhOrShxydm;
+    @NotEmpty
+    private String fwmm;
 
     public UserDzsbInsertBO() {
+    }
+
+    public String getFwmm() {
+        return fwmm;
+    }
+
+    public void setFwmm(String fwmm) {
+        this.fwmm = fwmm;
     }
 
     public String getNsrsbhOrShxydm() {

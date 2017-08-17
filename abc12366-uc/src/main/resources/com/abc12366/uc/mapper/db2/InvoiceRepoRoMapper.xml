@@ -61,14 +61,14 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice_repo
-        where invoiceTypeCode = #{invoiceTypeCode} ORDER BY (id) desc LIMIT 1;
+        where invoiceTypeCode = #{invoiceTypeCode} ORDER BY (id) desc LIMIT 1
     </select>
     <!-- 查询主键ID -->
     <select id="selectInvoiceRepoNum" resultType="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO" parameterType="java.lang.String">
         SELECT
         sum(book) as repoBook,sum(share) as usableShare,id
         FROM uc_invoice_repo
-        where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
+        where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0)
     </select>
 
     <!-- 查询列表 -->
@@ -95,6 +95,7 @@
             <if test="status != null  and status!=''">AND r.status = #{status}</if>
             <if test="invoiceTypeCode != null  and invoiceTypeCode!=''">AND r.invoiceTypeCode = #{invoiceTypeCode}</if>
         </where>
+        order by r.createTime desc
     </select>
 
     <!-- 查询列表 -->
@@ -107,6 +108,7 @@
             1=1
             <if test="invoiceCode != null  and invoiceCode!=''">AND invoiceCode = #{invoiceCode}</if>
         </where>
+        order by createTime desc
     </select>
 
 </mapper>

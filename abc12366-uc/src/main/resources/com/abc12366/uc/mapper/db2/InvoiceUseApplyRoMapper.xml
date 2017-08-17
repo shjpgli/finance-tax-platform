@@ -169,6 +169,7 @@
               ]]>
             </if>
         </where>
+        ORDER BY a.distributeTime DESC
     </select>
 
     <!-- 查询（根据主键ID查询） -->

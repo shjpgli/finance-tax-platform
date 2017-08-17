@@ -23,6 +23,13 @@
         WHERE invoiceNo = #{invoiceNo}
     </select>
 
+    <select id="selectByInvoiceNoAndStatus" resultType="com.abc12366.uc.model.invoice.InvoiceDetail" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_invoice_detail
+        WHERE invoiceNo = #{invoiceNo} and status = '0'
+    </select>
+
     <!-- 查询（根据主键ID查询） -->
     <select id="selectInvoiceRepo" resultType="com.abc12366.uc.model.invoice.InvoiceDetail" parameterType="java.lang.String">
         SELECT

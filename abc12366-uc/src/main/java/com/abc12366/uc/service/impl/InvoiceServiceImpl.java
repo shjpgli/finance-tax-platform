@@ -235,18 +235,21 @@ public class InvoiceServiceImpl implements InvoiceService {
             for (InvoiceBO bo : invoiceBOList) {
                 excel = new InvoiceExcel();
                 //导出之前，生成订单表数据，及订单表与快递关系表数据
-                express = new Express();
-                express.setInvoiceOrderNo(invoice.getId());
-                express.setUserId(bo.getUserId());
-                express.setCreateTime(new Date());
-
-                int insertExpress = expressMapper.insert(express);
-                if (insertExpress != 1) {
-                    LOGGER.info("生成订单表数据失败：{}", express);
-                    throw new ServiceException(4142);
-                }
+//                express = new Express();
+//                express.setId(Utils.uuid());
+//                express.setInvoiceOrderNo(bo.getId());
+//                express.setUserId(bo.getUserId());
+//                express.setCreateTime(new Date());
+                //Express exp = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
+//                expressMapper.deleteByInvoiceOrderNo(bo.getId());
+//                int insertExpress = expressMapper.insert(express);
+//                if (insertExpress != 1) {
+//                    LOGGER.info("生成订单表数据失败：{}", express);
+//                    throw new ServiceException(4142);
+//                }
                 excel.setInvoiceOrderNo(bo.getId());
                 excel.setNsrsbh(bo.getNsrsbh());
+                excel.setNsrmc(bo.getNsrmc());
                 excel.setCreateTime(bo.getCreateTime());
                 excel.setContent(bo.getContent());
                 excel.setNum(1);
@@ -271,7 +274,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoiceExpressExcel excel = null;
             for (InvoiceBO bo : invoiceBOList) {
                 excel = new InvoiceExpressExcel();
-                List<Express> exList = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
+                //List<Express> exList = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
                 excel.setInvoiceOrderNo(bo.getId());
                 //收货地址
                 UserAddressBO userAddress = bo.getUserAddressBO();
@@ -339,6 +342,27 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoice.setStatus("4");
             invoice.setId(expressExcel.getInvoiceOrderNo());
             invoice.setWaybillNum(expressExcel.getWaybillNum());
+            int insert = invoiceMapper.insert(invoice);
+            if(insert != 1){
+                LOGGER.info("新增失败：{}", invoice);
+                throw new ServiceException(4101);
+            }
+        }
+    }
+
+    @Override
+    public void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList) {
+        for(InvoiceExcel invoiceExcel:invoiceList){
+            InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndStatus(invoiceExcel.getInvoiceNo());
+            if(invoiceDetail == null){
+                LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
+                throw new ServiceException(4913);
+            }
+            Invoice invoice = new Invoice();
+            invoice.setStatus("7");
+            invoice.setId(invoiceExcel.getInvoiceOrderNo());
+            invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
+            invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
             int insert = invoiceMapper.insert(invoice);
             if(insert != 1){
                 LOGGER.info("新增失败：{}", invoice);

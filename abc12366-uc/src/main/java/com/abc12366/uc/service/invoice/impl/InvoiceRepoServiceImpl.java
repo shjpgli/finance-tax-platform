@@ -61,7 +61,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Override
     public void delete(String id) {
-        int delete = invoiceRepoMapper.delete(id);
+        int delete = invoiceRepoMapper.deleteByPrimaryKey(id);
         if(delete != 1){
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
@@ -167,7 +167,44 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Override
     public InvoiceRepoBO update(InvoiceRepoBO invoiceRepoBO) {
-        return null;
+        Date date = new Date();
+        invoiceRepoBO.setLastUpdate(date);
+        InvoiceRepo invoiceRepo = new InvoiceRepo();
+        BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
+
+        int startLength = invoiceRepoBO.getInvoiceNoStart().length();
+        int endLength = invoiceRepoBO.getInvoiceNoEnd().length();
+        if(startLength != endLength){
+            LOGGER.warn("发票起止长度必须保持一致{}{}：" + startLength+endLength);
+            throw new ServiceException(4910);
+        }
+        //删除发票详情表数据
+        invoiceDetailMapper.deleteByInvoiceRepoId(invoiceRepoBO.getId());
+        //插入发票详情数据
+        int start = Integer.parseInt(invoiceRepoBO.getInvoiceNoStart());
+        int end = Integer.parseInt(invoiceRepoBO.getInvoiceNoEnd());
+
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = start; i <= end; i++) {
+            list.add(i);
+        }
+        for(Integer j:list){
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            invoiceDetail.setId(Utils.uuid());
+            invoiceDetail.setCreateTime(date);
+            invoiceDetail.setLastUpdate(date);
+            invoiceDetail.setProperty(invoiceRepoBO.getProperty());
+            invoiceDetail.setInvoiceNo(autoGenericCode(j,endLength));
+            invoiceDetail.setInvoiceCode(invoiceRepoBO.getInvoiceCode());
+            invoiceDetail.setInvoiceRepoId(invoiceRepoBO.getId());
+            invoiceDetail.setStatus("0");
+            int dInsert = invoiceDetailMapper.insert(invoiceDetail);
+            if(dInsert != 1){
+                LOGGER.warn("新增失败，参数{}：" + invoiceRepoBO);
+                throw new ServiceException(4101);
+            }
+        }
+        return invoiceRepoBO;
     }
 
     @Override

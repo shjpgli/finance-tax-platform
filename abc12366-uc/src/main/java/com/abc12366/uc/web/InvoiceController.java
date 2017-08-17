@@ -205,13 +205,6 @@ public class InvoiceController {
     public ResponseEntity exportInvoicePrint() {
         InvoiceBO invoice = new InvoiceBO();
         invoice.setStatus("2");
-        /*Date date = new Date();
-        if (startTime == null || "".equals(startTime)) {
-            invoice.setStartTime(Constant.getToday(date));
-        }
-        if (endTime == null || "".equals(endTime)) {
-            invoice.setEndTime(Constant.getToday(date));
-        }*/
         List<InvoiceExcel> invoiceList = invoiceService.selectInvoicePrintExcelList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
@@ -224,9 +217,22 @@ public class InvoiceController {
      *
      * @return
      */
+    @PostMapping(path = "/import/print")
+    public ResponseEntity insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList) {
+        LOGGER.info("{}", invoiceList);
+        invoiceService.insertInvoicePrintExcelList(invoiceList);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 发票导出寄送信息
+     *
+     * @return
+     */
     @GetMapping(path = "/export/express")
     public ResponseEntity exportInvoice() {
         InvoiceBO invoice = new InvoiceBO();
+        invoice.setStatus("7");
         List<InvoiceExpressExcel> invoiceList = invoiceService.selectInvoiceExpressExcelList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
@@ -240,7 +246,7 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/import/express")
-    public ResponseEntity importInvoice(List<InvoiceExpressExcel> expressExcelList) {
+    public ResponseEntity insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList) {
         LOGGER.info("{}", expressExcelList);
         invoiceService.insertInvoiceExpressExcelList(expressExcelList);
         return ResponseEntity.ok(Utils.kv());

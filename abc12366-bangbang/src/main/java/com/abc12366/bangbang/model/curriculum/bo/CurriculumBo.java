@@ -30,6 +30,9 @@ public class CurriculumBo implements Serializable {
 	/**课程分类**varchar(64)**/
 	private String classify;
 
+    /**商品ID**varchar(64)**/
+    private String goodsId;
+
 	/**课程推荐**varchar(64)**/
 	private String recommend;
 
@@ -177,7 +180,15 @@ public class CurriculumBo implements Serializable {
 		return this.classify;
 	}
 
-	public void setRecommend(String recommend){
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public void setRecommend(String recommend){
 		this.recommend = recommend;
 	}
 

@@ -177,10 +177,10 @@ public class InvoiceUseApplayController {
      *
      * @return
      */
-    @PostMapping(path = "/invoice/dist/sign")
-    public ResponseEntity signUseApply(@Valid @RequestBody InvoiceDistributeBO invoiceDistributeBO) {
-        LOGGER.info("{}", invoiceDistributeBO);
-        invoiceUseApplyService.signUseApply(invoiceDistributeBO);
+    @PostMapping(path = "/invoice/dist/sign/{id}")
+    public ResponseEntity signUseApply(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        invoiceUseApplyService.signUseApply(id);
         return ResponseEntity.ok(Utils.kv());
     }
 
