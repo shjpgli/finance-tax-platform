@@ -1,7 +1,8 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
- 
+import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
+
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,6 @@ public interface SystemRecordService {
 
     SystemRecordBO selectOne(String id);
 
-    SystemRecordBO insert(SystemRecordBO SystemRecordInsertBO);
+    SystemRecordBO insert(SystemRecordInsertBO SystemRecordInsertBO);
  
 }

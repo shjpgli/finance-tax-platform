@@ -15,7 +15,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * ���ͼƬ���������
  *
  * @author yuanluo <ljun51@outlook.com>
  * @create 2017-07-26 4:02 PM
