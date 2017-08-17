@@ -36,7 +36,7 @@ public interface UserBindService {
 
     TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception;
 
-    BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException;
+    void resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException;
 
-    BaseObject updatePassword(UpdatePwd data);
+    void updatePassword(UpdatePwd data) throws MarshalException, ValidationException;
 }

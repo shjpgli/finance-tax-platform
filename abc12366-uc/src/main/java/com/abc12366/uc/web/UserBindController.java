@@ -134,14 +134,14 @@ public class UserBindController {
     @PostMapping(path = "/shb/resetpassword")
     public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
         LOGGER.info("{}", data);
-        BaseObject response = userBindService.resetPassword(data, request);
-        return ResponseEntity.ok(Utils.kv());
+        userBindService.resetPassword(data, request);
+        return ResponseEntity.ok(Utils.kv("code","2000","message","您的申报服务密码已重置为'88888888',请尽快修改密码！"));
     }
 
     @PostMapping(path = "/shb/updatepassword")
-    public ResponseEntity updatePassword(@RequestBody UpdatePwd data){
+    public ResponseEntity updatePassword(@RequestBody UpdatePwd data) throws MarshalException, ValidationException {
         LOGGER.info("{}", data);
-        BaseObject response = userBindService.updatePassword(data);
+        userBindService.updatePassword(data);
         return ResponseEntity.ok(Utils.kv());
     }
 }
