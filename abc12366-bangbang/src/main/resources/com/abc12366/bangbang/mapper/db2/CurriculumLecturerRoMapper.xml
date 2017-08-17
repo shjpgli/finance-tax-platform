@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 lecturerId,	userId,	lecturerName,	intro,	phone,	company,	lecturerQQ,	lecturerEmail,	lecturerPicture
+		 lecturerId,	userId,	lecturerName,createTime,updateTime,	intro,	phone,	company,	lecturerQQ,	lecturerEmail,	lecturerPicture
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

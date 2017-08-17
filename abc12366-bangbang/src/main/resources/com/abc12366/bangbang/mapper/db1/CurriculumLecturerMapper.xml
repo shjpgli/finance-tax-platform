@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumLecturer">
 		 INSERT INTO bb_curriculum_lecturer
- 		(lecturerId,userId,lecturerName,intro,phone,company,lecturerQQ,lecturerEmail,lecturerPicture) 
+ 		(lecturerId,userId,lecturerName,createTime,updateTime,intro,phone,company,lecturerQQ,lecturerEmail,lecturerPicture)
 		 VALUES 
- 		(#{lecturerId},#{userId},#{lecturerName},#{intro},#{phone},#{company},#{lecturerQQ},#{lecturerEmail},#{lecturerPicture}) 
+ 		(#{lecturerId},#{userId},#{lecturerName},#{createTime},#{updateTime},#{intro},#{phone},#{company},#{lecturerQQ},#{lecturerEmail},#{lecturerPicture})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -30,6 +30,12 @@
 			<if test="lecturerName != null">
 				 lecturerName,
 			</if>
+             <if test="createTime != null">
+                 createTime,
+             </if>
+             <if test="updateTime != null">
+                 updateTime,
+             </if>
 			<if test="intro != null">
 				 intro,
 			</if>
@@ -60,6 +66,12 @@
 			<if test="lecturerName!=null">
 				 #{lecturerName},
 			</if>
+             <if test="createTime!=null">
+                 #{createTime},
+             </if>
+             <if test="updateTime!=null">
+                 #{updateTime},
+             </if>
 			<if test="intro!=null">
 				 #{intro},
 			</if>
@@ -91,6 +103,12 @@
 			<if test="lecturerName != null">
 				 lecturerName = #{lecturerName},
 			</if>
+             <if test="createTime != null">
+                 createTime = #{createTime},
+             </if>
+             <if test="updateTime != null">
+                 updateTime = #{updateTime},
+             </if>
 			<if test="intro != null">
 				 intro = #{intro},
 			</if>
@@ -120,6 +138,8 @@
 		 SET 
 			 userId = #{userId},
 			 lecturerName = #{lecturerName},
+			 createTime = #{createTime},
+			 updateTime = #{updateTime},
 			 intro = #{intro},
 			 phone = #{phone},
 			 company = #{company},
