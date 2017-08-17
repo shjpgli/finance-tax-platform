@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service;
 
+import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.bangbang.mapper.db1.SystemRecordMapper;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +50,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
     //异步新增
     @Async
     @Override
-    public SystemRecordBO insert(SystemRecordBO SystemRecordInsertBO) {
+    public SystemRecordBO insert(SystemRecordInsertBO SystemRecordInsertBO) {
         if (SystemRecordInsertBO == null) {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
@@ -59,7 +62,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         Date date = new Date();
         SystemRecord.setId(Utils.uuid());
         SystemRecord.setCreateTime(date);
- 
+        SystemRecordSetDate(SystemRecord);
         int result = SystemRecordMapper.insert(SystemRecord);
         if (result != 1) {
             LOGGER.warn("新增失败，参数：" + SystemRecord);
@@ -69,4 +72,19 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         BeanUtils.copyProperties(SystemRecord, SystemRecordBOReturn);
         return SystemRecordBOReturn;
     }
+
+    //  年、月、日。。。是根据浏览日期算出来的，新增的时候不需要用户传过来
+    private void SystemRecordSetDate(SystemRecord systemRecord) {
+        Date date = systemRecord.getBrowseDate();
+        if (date == null) return;
+        Calendar now = Calendar.getInstance();
+        now.setTime(date);
+        systemRecord.setWeek(String.valueOf(now.get(Calendar.DAY_OF_WEEK) - 1));
+        systemRecord.setYear(String.valueOf(now.get(Calendar.YEAR)));
+        systemRecord.setMonth(String.valueOf(now.get(Calendar.MONTH) + 1));
+        systemRecord.setDay(String.valueOf(now.get(Calendar.DAY_OF_MONTH)));
+        systemRecord.setHour(String.valueOf(now.get(Calendar.HOUR_OF_DAY)));
+        systemRecord.setMinute(String.valueOf(now.get(Calendar.MINUTE)));
+    }
+
 }

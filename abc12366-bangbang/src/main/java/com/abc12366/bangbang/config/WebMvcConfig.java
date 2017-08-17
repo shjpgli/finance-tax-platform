@@ -72,8 +72,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/test")
                         //获取最新课程
                 .excludePathPatterns("/curriculum/selectListNew")
+                        //获取课程详情信息
+                .excludePathPatterns("/curriculum/selectCurriculum/**")
                 .excludePathPatterns("/hotspot/**")
-                .excludePathPatterns("/knowledgeBase/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**",
+                .excludePathPatterns("/knowledgeBase/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",
                         "/KnowledgeTag/listHot/**","/KnowledgeTag/listHot");
 

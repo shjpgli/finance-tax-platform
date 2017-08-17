@@ -67,6 +67,11 @@ public class VipPrivilegeController {
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody VipPrivilegeInsertAndUpdateBO vipPrivilegeInsertBO) {
         LOGGER.info("{}", vipPrivilegeInsertBO);
+
+        String checkUpStr = vipPrivilegeService.checkUp(vipPrivilegeInsertBO, null);
+        if (!checkUpStr.isEmpty()) {
+            return ResponseEntity.ok(Utils.bodyStatus(9999, checkUpStr));
+        }
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.insert(vipPrivilegeInsertBO);
         LOGGER.info("{}", vipPrivilegeBOReturn);
         return ResponseEntity.ok(Utils.kv("data", vipPrivilegeBOReturn));
@@ -76,6 +81,10 @@ public class VipPrivilegeController {
     public ResponseEntity update(@Valid @RequestBody VipPrivilegeInsertAndUpdateBO vipPrivilegeUpdateBO,
                                  @PathVariable String id) {
         LOGGER.info("{}", vipPrivilegeUpdateBO);
+        String checkUpStr = vipPrivilegeService.checkUp(vipPrivilegeUpdateBO, id);
+        if (!checkUpStr.isEmpty()) {
+            return ResponseEntity.ok(Utils.bodyStatus(9999, checkUpStr));
+        }
         VipPrivilegeBO vipPrivilegeBOReturn = vipPrivilegeService.update(vipPrivilegeUpdateBO, id);
         LOGGER.info("{}", vipPrivilegeBOReturn);
         return ResponseEntity.ok(Utils.kv("data", vipPrivilegeBOReturn));

@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.model.curriculum;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -36,6 +37,12 @@ public class CurriculumLecturer implements Serializable {
 
 	/**讲师图片**varchar(200)**/
 	private String lecturerPicture;
+
+    /**创建时间**datetime**/
+    private java.util.Date createTime;
+
+    /**修改时间**datetime**/
+    private java.util.Date updateTime;
 
 
 
@@ -111,4 +118,19 @@ public class CurriculumLecturer implements Serializable {
 		return this.lecturerPicture;
 	}
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }

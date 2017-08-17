@@ -35,6 +35,7 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
     private VipPrivilegeMapper vipPrivilegeMapper;
     @Autowired
     private VipPrivilegeLevelService vipPrivilegeLevelService;
+
     @Override
     public List<VipPrivilegeBO> selectList(Map map) {
         return vipPrivilegeRoMapper.selectList(map);
@@ -46,21 +47,42 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
     }
 
     @Override
+    public String checkUp(VipPrivilegeInsertAndUpdateBO obj, String id) {
+        //特权名称唯一性校验
+        String returnStr = "";
+        List<VipPrivilegeBO> vipPrivilegeBOList = vipPrivilegeRoMapper.selectList(null);
+        //这条数据本身不计入校验数据
+        for (int i = 0; i < vipPrivilegeBOList.size(); i++) {
+            if ((vipPrivilegeBOList.get(i)).getId().equals(id)) {
+                vipPrivilegeBOList.remove(i);
+            }
+        }
+        if (obj.getName() != null) {
+            for (VipPrivilegeBO vipPrivilegeBO : vipPrivilegeBOList) {
+                if (vipPrivilegeBO.getName().equals(obj.getName())) {
+                    returnStr = "名称(name)违反唯一性约束";
+
+                }
+                //sort唯一
+                if (vipPrivilegeBO.getSort() == obj.getSort()) {
+                    returnStr = "排序(sort)违反唯一性约束";
+
+                }
+                //图标唯一
+                if (vipPrivilegeBO.getIcon().equals(obj.getIcon())) {
+                    returnStr = "图标(icon)违反唯一性约束";
+
+                }
+            }
+        }
+        return returnStr;
+    }
+
+    @Override
     public VipPrivilegeBO insert(VipPrivilegeInsertAndUpdateBO vipPrivilegeInsertBO) {
         if (vipPrivilegeInsertBO == null) {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
-        }
-
-        //特权名称唯一性校验
-        List<VipPrivilegeBO> vipPrivilegeBOList = vipPrivilegeRoMapper.selectList(null);
-        if (vipPrivilegeInsertBO.getName() != null) {
-            for (VipPrivilegeBO vipPrivilegeBO : vipPrivilegeBOList) {
-                if (vipPrivilegeBO.getName().equals(vipPrivilegeInsertBO.getName())) {
-                    LOGGER.warn("新增失败，参数：{}", vipPrivilegeInsertBO);
-                    throw new ServiceException(4605);
-                }
-            }
         }
 
         VipPrivilege vipPrivilege = new VipPrivilege();
@@ -89,22 +111,6 @@ public class VipPrivilegeServiceImpl implements VipPrivilegeService {
             throw new ServiceException(4102);
         }
 
-        //特权名称唯一性校验
-        List<VipPrivilegeBO> vipPrivilegeBOList = vipPrivilegeRoMapper.selectList(null);
-        //这条数据本身不计入校验数据
-        for (int i = 0; i < vipPrivilegeBOList.size(); i++) {
-            if ((vipPrivilegeBOList.get(i)).getId().equals(id)) {
-                vipPrivilegeBOList.remove(i);
-            }
-        }
-        if (vipPrivilegeUpdateBO.getName() != null) {
-            for (VipPrivilegeBO vipPrivilegeBO : vipPrivilegeBOList) {
-                if (vipPrivilegeBO.getName().equals(vipPrivilegeUpdateBO.getName())) {
-                    LOGGER.warn("修改失败，参数：{}", vipPrivilegeUpdateBO);
-                    throw new ServiceException(4605);
-                }
-            }
-        }
 
         VipPrivilegeBO vipPrivilegeQuery = vipPrivilegeRoMapper.selectOne(id);
         if (vipPrivilegeQuery == null) {

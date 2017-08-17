@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -53,6 +54,7 @@ public class LecturerServiceImpl implements LecturerService {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             CurriculumLecturer lecturer = new CurriculumLecturer();
             lecturerBo.setLecturerId(uuid);
+            lecturerBo.setCreateTime(new Date());
             BeanUtils.copyProperties(lecturerBo, lecturer);
             lecturerMapper.insert(lecturer);
         } catch (Exception e) {
@@ -85,6 +87,7 @@ public class LecturerServiceImpl implements LecturerService {
         try {
             JSONObject jsonStu = JSONObject.fromObject(lecturerBo);
             LOGGER.info("更新讲师信息:{}", jsonStu.toString());
+            lecturerBo.setUpdateTime(new Date());
             BeanUtils.copyProperties(lecturerBo, lecturer);
             lecturerMapper.updateByPrimaryKeySelective(lecturer);
         } catch (Exception e) {

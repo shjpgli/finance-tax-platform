@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface VipPrivilegeService {
     List<VipPrivilegeBO> selectList(Map map);
-
+    String checkUp(VipPrivilegeInsertAndUpdateBO obj,String id);
     VipPrivilegeBO selectOne(String id);
 
     VipPrivilegeBO insert(VipPrivilegeInsertAndUpdateBO vipPrivilegeInsertBO);

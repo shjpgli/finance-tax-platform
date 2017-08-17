@@ -118,6 +118,16 @@ public class CurriculumController {
     }
 
     /**
+     * 查询单个课程详情信息(前端用)
+     */
+    @GetMapping(path = "/selectCurriculum/{curriculumId}")
+    public ResponseEntity selectCurriculum(@PathVariable String curriculumId) {
+        //查询课程信息
+        CurriculumBo curriculumBo = curriculumService.selectCurriculum(curriculumId);
+        return ResponseEntity.ok(Utils.kv("data", curriculumBo));
+    }
+
+    /**
      * 更新课程信息
      */
     @PutMapping(path = "/{curriculumId}")
