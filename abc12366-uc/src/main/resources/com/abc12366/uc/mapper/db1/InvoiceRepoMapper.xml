@@ -49,6 +49,9 @@
             <if test="updateUser != null">
                 updateUser,
             </if>
+            <if test="status != null">
+                status,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -87,6 +90,9 @@
             </if>
             <if test="updateUser!=null">
                 #{updateUser},
+            </if>
+            <if test="status!=null">
+                #{status},
             </if>
         </trim>
     </insert>
@@ -127,6 +133,9 @@
             </if>
             <if test="updateUser != null">
                 updateUser = #{updateUser},
+            </if>
+            <if test="status != null">
+                status = #{status},
             </if>
 
         </set>
