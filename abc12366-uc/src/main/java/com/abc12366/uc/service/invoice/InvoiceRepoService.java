@@ -43,4 +43,6 @@ public interface InvoiceRepoService {
     InvoiceRepoBO selectInvoiceRepoNum(String code);
 
     InvoiceDetail selectInvoiceDetailByInvoice(InvoiceDetail invoiceDetail);
+
+    boolean validateInvoice(InvoiceRepo invoiceRepo);
 }

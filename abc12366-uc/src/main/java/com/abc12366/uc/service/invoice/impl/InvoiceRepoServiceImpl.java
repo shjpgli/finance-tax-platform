@@ -20,9 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @create 2017-05-15 10:17 AM
@@ -214,7 +212,10 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Override
     public InvoiceRepo selectRepoId(String invoiceTypeCode) {
-        InvoiceRepo invoiceRepo = invoiceRepoRoMapper.selectRepoId(invoiceTypeCode);
+        Map map = new HashMap();
+        map.put("codeLength",invoiceTypeCode.length());
+        map.put("invoiceTypeCode",invoiceTypeCode);
+        InvoiceRepo invoiceRepo = invoiceRepoRoMapper.selectRepoId(map);
         return invoiceRepo;
     }
 
@@ -263,6 +264,33 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     @Override
     public InvoiceDetail selectInvoiceDetailByInvoice(InvoiceDetail invoiceDetail) {
         return invoiceDetailRoMapper.selectInvoiceDetailByInvoice(invoiceDetail);
+    }
+
+    @Override
+    public boolean validateInvoice(InvoiceRepo invoiceRepo) {
+        int startLength = invoiceRepo.getInvoiceNoStart().length();
+        int endLength = invoiceRepo.getInvoiceNoEnd().length();
+        if(startLength != endLength){
+            LOGGER.warn("发票起止长度必须保持一致{}{}：" + startLength+endLength);
+            throw new ServiceException(4910);
+        }
+        int start = Integer.parseInt(invoiceRepo.getInvoiceNoStart());
+        int end = Integer.parseInt(invoiceRepo.getInvoiceNoEnd());
+
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = start; i <= end; i++) {
+            list.add(i);
+        }
+        for(Integer j:list){
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            invoiceDetail.setInvoiceCode(invoiceRepo.getInvoiceCode());
+            invoiceDetail.setInvoiceNo(autoGenericCode(j,endLength));
+            InvoiceDetail temp  = invoiceDetailRoMapper.selectByInvoiceNoAndCode(invoiceDetail);
+            if(temp != null){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

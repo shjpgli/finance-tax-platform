@@ -93,6 +93,24 @@ public class InvoiceRepoController {
     }
 
     /**
+     * 发票仓库-验证唯一性，根据no和code
+     *
+     * @return
+     */
+    @GetMapping(path = "/invoice/repo/validate")
+    public ResponseEntity validateInvoice(@RequestParam(value = "invoiceCode", required = false) String invoiceCode,
+                                          @RequestParam(value = "invoiceNoStart", required = false) String invoiceNoStart,
+                                          @RequestParam(value = "invoiceNoEnd", required = false) String invoiceNoEnd) {
+        InvoiceRepo invoiceRepo = new InvoiceRepo();
+        invoiceRepo.setInvoiceCode(invoiceCode);
+        invoiceRepo.setInvoiceNoStart(invoiceNoStart);
+        invoiceRepo.setInvoiceNoEnd(invoiceNoEnd);
+        boolean isVal = invoiceRepoService.validateInvoice(invoiceRepo);
+        LOGGER.info("{}", isVal);
+        return ResponseEntity.ok(Utils.kv("data", isVal));
+    }
+
+    /**
      * 发票仓库新增
      *
      * @return

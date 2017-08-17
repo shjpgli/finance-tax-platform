@@ -357,7 +357,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList) {
         for(InvoiceExcel invoiceExcel:invoiceList){
-            InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndStatus(invoiceExcel.getInvoiceNo());
+            InvoiceDetail temp = new InvoiceDetail();
+            temp.setInvoiceNo(invoiceExcel.getInvoiceNo());
+            temp.setInvoiceCode(invoiceExcel.getInvoiceCode());
+            InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(temp);
             if(invoiceDetail == null){
                 LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
                 throw new ServiceException(4913);

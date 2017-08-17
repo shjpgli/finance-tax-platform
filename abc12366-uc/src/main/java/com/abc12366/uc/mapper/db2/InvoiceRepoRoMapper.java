@@ -5,6 +5,7 @@ import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * InvoiceRepoMapper数据库操作接口类
@@ -24,7 +25,7 @@ public interface InvoiceRepoRoMapper {
 
     InvoiceRepoBO selectInvoiceRepo(String id);
 
-    InvoiceRepo selectRepoId(String invoiceTypeCode);
+    InvoiceRepo selectRepoId(Map invoiceTypeCode);
 
     InvoiceRepoBO selectInvoiceRepoNum(String code);
 }

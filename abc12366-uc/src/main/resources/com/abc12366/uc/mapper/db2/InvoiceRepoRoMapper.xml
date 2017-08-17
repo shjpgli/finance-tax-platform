@@ -57,11 +57,11 @@
     </select>
 
     <!-- 查询主键ID -->
-    <select id="selectRepoId" resultType="com.abc12366.uc.model.invoice.InvoiceRepo" parameterType="java.lang.String">
+    <select id="selectRepoId" resultType="com.abc12366.uc.model.invoice.InvoiceRepo" parameterType="java.util.Map">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice_repo
-        where invoiceTypeCode = #{invoiceTypeCode} ORDER BY (id) desc LIMIT 1
+        where invoiceTypeCode = #{invoiceTypeCode} ORDER BY substring(id,#{codeLength})*1 asc LIMIT 1
     </select>
     <!-- 查询主键ID -->
     <select id="selectInvoiceRepoNum" resultType="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO" parameterType="java.lang.String">
