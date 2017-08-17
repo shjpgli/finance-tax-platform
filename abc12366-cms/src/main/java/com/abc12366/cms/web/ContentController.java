@@ -273,11 +273,13 @@ public class ContentController {
     public ResponseEntity contentList(@RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime,
                                       @RequestParam(value = "tplContent", required = false) String tplContent,
+                                      @RequestParam(value = "status", required = false) String status,
                                       @RequestParam(value = "channelId", required = false) String channelId) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("tplContent", tplContent);
         dataMap.put("channelId", channelId);
+        dataMap.put("status", status);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (startTime != null && !"".equals(startTime)) {

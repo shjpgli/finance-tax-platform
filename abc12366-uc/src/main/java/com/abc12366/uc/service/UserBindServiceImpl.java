@@ -14,6 +14,8 @@ import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
+import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
+import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
@@ -344,7 +346,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public BaseObject resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
+    public void resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
         //1.验证码校验
 //        VerifyingCodeBO param = new VerifyingCodeBO();
 //        param.setPhone(data.getPhone());
@@ -357,42 +359,63 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("NSRSBH", data.getNsrsbh());
         Map respMap = client.process(map);
         analyzeXmlTY12(respMap, data.getNsrsbh());
-        BaseObject response = new BaseObject();
-        return null;
+
     }
 
     private void analyzeXmlTY12(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null || !resMap.get("rescode").equals("00000000")) {
+        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null) {
             throw new ServiceException(4629);
         }
 
-        NSRMMGX nsrmmgx = (NSRMMGX) XmlJavaParser.parseXmlToObject(NSRMMGX.class, String.valueOf(resMap.get("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")));
-        if (nsrmmgx.getCLJG().trim().equals("0")) {
-
+        if (!resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
         }
+        if(!resMap.containsKey("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")){
+            throw new ServiceException(4634);
+        }
+
+        try {
+            NSRMMGX nsrmmgx = (NSRMMGX) XmlJavaParser.parseXmlToObject(NSRMMGX.class, String.valueOf(resMap.get("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")));
+            if (nsrmmgx == null || nsrmmgx.getCLJG() == null) {
+                throw new ServiceException(4633);
+            }
+            if (nsrmmgx.getCLJG() != null && !nsrmmgx.getCLJG().trim().equals("0")) {
+                throw new ServiceException(nsrmmgx.getCLJG(), nsrmmgx.getCWYY());
+            }
+        } catch (org.exolab.castor.xml.MarshalException e) {
+            e.printStackTrace();
+            throw new ServiceException(4633);
+        }
+
     }
 
     @Override
-    public BaseObject updatePassword(UpdatePwd data) {
+    public void updatePassword(UpdatePwd data) throws MarshalException, ValidationException {
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY03");
         map.put("NSRSBH", data.getNsrsbh());
-        map.put("OLD_PWD", data.getOldpwd());
-        map.put("NEW_PWD", data.getNewpwd());
+        map.put("OLDPASS", data.getOldpwd());
+        map.put("NEWPASS", data.getNewpwd());
         Map respMap = client.process(map);
-        return null;
+        analyzeXmlTY03(respMap, data.getNsrsbh());
+        System.out.println(respMap);
     }
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000") ) {
             throw new ServiceException(4629);
         }
+        if (!resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
+        }
+        if (!resMap.containsKey("taxML_SSHDXX_" + nsrsbh + ".xml")) {
+            throw new ServiceException(4634);
+        }
         TY21Xml2Object object = new TY21Xml2Object();
-        com.abc12366.uc.tdps.vo.TY21Response.JBXXCX jbxxcx = new com.abc12366.uc.tdps.vo.TY21Response.JBXXCX();
-        String xml = String.valueOf(resMap.get("taxML_SSHDXX_" + nsrsbh + ".xml"));
+        com.abc12366.uc.tdps.vo.TY21Response.JBXXCX jbxxcx;
         try {
             jbxxcx = (com.abc12366.uc.tdps.vo.TY21Response.JBXXCX) XmlJavaParser.parseXmlToObject(com.abc12366.uc.tdps.vo.TY21Response.JBXXCX.class, String.valueOf(resMap.get("taxML_SSHDXX_" + nsrsbh + ".xml")));
-        }catch (org.exolab.castor.xml.MarshalException e){
+        } catch (org.exolab.castor.xml.MarshalException e) {
             e.printStackTrace();
             throw new ServiceException(4633);
         }
@@ -467,4 +490,31 @@ public class UserBindServiceImpl implements UserBindService {
         return second_gssbmm;
     }
 
+    private void analyzeXmlTY03(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null) {
+            throw new ServiceException(4629);
+        }
+        if (!resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
+        }
+        if (!resMap.containsKey("taxML_NSRAQSZ_" + nsrsbh + ".xml")) {
+            throw new ServiceException(4634);
+        }
+
+        try {
+            XGJGS xgjgs = (XGJGS) XmlJavaParser.parseXmlToObject(XGJGS.class, String.valueOf(resMap.get("taxML_NSRAQSZ_" + nsrsbh + ".xml")));
+            if (xgjgs == null || xgjgs.getXGJG() == null) {
+                throw new ServiceException(4633);
+            }
+            for (XGJG xgjg : xgjgs.getXGJG()) {
+                if (xgjg.getGSCG() != "0") {
+                    throw new ServiceException(xgjg.getGSCG(), xgjg.getCWYY());
+                }
+            }
+        } catch (org.exolab.castor.xml.MarshalException e) {
+            e.printStackTrace();
+            throw new ServiceException(4633);
+        }
+
+    }
 }

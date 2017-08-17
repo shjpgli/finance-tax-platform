@@ -12,12 +12,7 @@ public class NsrResetPwd {
     private String nsrsbh;
     private String frmc;
     private String frzjh;
-    @NotEmpty
-    private String phone;
-    @NotEmpty
-    private String type;
-    @NotEmpty
-    private String code;
+
 
     public NsrResetPwd() {
     }
@@ -36,30 +31,6 @@ public class NsrResetPwd {
 
     public void setFrzjh(String frzjh) {
         this.frzjh = frzjh;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getNsrsbh() {
