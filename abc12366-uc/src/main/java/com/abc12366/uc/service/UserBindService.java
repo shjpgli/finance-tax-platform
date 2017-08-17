@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
+import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 
@@ -39,4 +40,6 @@ public interface UserBindService {
     void resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException;
 
     void updatePassword(UpdatePwd data) throws MarshalException, ValidationException;
+
+    HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request)throws Exception;
 }

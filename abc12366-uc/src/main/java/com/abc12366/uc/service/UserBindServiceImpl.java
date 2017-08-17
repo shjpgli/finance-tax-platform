@@ -137,7 +137,8 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     //登录网上报税接口
-    private HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws
+    @Override
+    public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws
             Exception {
         HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
         if (hngsAppLoginResponse != null) {
