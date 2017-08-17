@@ -154,6 +154,11 @@ public class Invoice implements Serializable {
      */
     private String remark;
 
+    /**
+     * 邮箱
+     */
+    private String email;
+
     public String getId() {
         return this.id;
     }
@@ -385,5 +390,13 @@ public class Invoice implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

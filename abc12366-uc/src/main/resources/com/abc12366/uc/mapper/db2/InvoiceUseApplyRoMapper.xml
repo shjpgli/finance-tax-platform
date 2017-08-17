@@ -65,6 +65,7 @@
 
     <!-- 发票领用明细表对象-->
     <resultMap id="invoiceUseDetailMap" type="com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
         <result column="useId" property="useId" jdbcType="VARCHAR"/>
         <result column="invoiceTypeCode" property="invoiceTypeCode" jdbcType="VARCHAR"/>
         <result column="repoNum" property="repoNum" jdbcType="INTEGER"/>
@@ -112,7 +113,7 @@
     <!-- 查询（发票领用明细表） -->
     <select id="getInvoiceUseDetailBO" resultMap="invoiceUseDetailMap" parameterType="java.lang.String">
         SELECT
-        d.useId,	d.invoiceTypeCode,	d.repoNum,	d.applyNum,d.	realNum,d.checkBook,	d.remark,t.fieldKey as fieldKey
+        d.id,d.useId,	d.invoiceTypeCode,	d.repoNum,	d.applyNum,d.	realNum,d.checkBook,	d.remark,t.fieldKey as fieldKey
         FROM uc_invoice_use_detail d
         LEFT JOIN uc_dict t on t.id = d.invoiceTypeCode
 		WHERE d.useId = #{useId}
@@ -169,7 +170,7 @@
               ]]>
             </if>
         </where>
-        ORDER BY a.distributeTime DESC
+        ORDER BY a.applyTime DESC
     </select>
 
     <!-- 查询（根据主键ID查询） -->

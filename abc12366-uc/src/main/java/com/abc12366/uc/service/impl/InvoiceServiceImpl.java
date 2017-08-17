@@ -249,7 +249,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 //                }
                 excel.setInvoiceOrderNo(bo.getId());
                 excel.setNsrsbh(bo.getNsrsbh());
-                excel.setNsrmc(bo.getNsrmc());
+                if("1".equals(bo.getName())){
+                    excel.setNsrmc("个人");
+                }else{
+                    excel.setNsrmc(bo.getNsrmc());
+                }
                 excel.setCreateTime(bo.getCreateTime());
                 excel.setContent(bo.getContent());
                 excel.setNum(1);
@@ -342,10 +346,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoice.setStatus("4");
             invoice.setId(expressExcel.getInvoiceOrderNo());
             invoice.setWaybillNum(expressExcel.getWaybillNum());
-            int insert = invoiceMapper.insert(invoice);
-            if(insert != 1){
-                LOGGER.info("新增失败：{}", invoice);
-                throw new ServiceException(4101);
+            int update = invoiceMapper.update(invoice);
+            if(update != 1){
+                LOGGER.info("修改失败：{}", invoice);
+                throw new ServiceException(4102);
             }
         }
     }
@@ -363,10 +367,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoice.setId(invoiceExcel.getInvoiceOrderNo());
             invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
             invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
-            int insert = invoiceMapper.insert(invoice);
-            if(insert != 1){
-                LOGGER.info("新增失败：{}", invoice);
-                throw new ServiceException(4101);
+            int update = invoiceMapper.update(invoice);
+            if(update != 1){
+                LOGGER.info("修改失败：{}", invoice);
+                throw new ServiceException(4102);
             }
         }
     }

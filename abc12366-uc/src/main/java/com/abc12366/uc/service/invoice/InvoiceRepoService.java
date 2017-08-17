@@ -41,4 +41,6 @@ public interface InvoiceRepoService {
     void invalidInvoiceDetail(String id);
 
     InvoiceRepoBO selectInvoiceRepoNum(String code);
+
+    InvoiceDetail selectInvoiceDetailByInvoice(InvoiceDetail invoiceDetail);
 }

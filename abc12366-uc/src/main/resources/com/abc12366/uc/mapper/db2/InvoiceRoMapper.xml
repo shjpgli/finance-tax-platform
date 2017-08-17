@@ -33,6 +33,7 @@
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
         <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
@@ -204,7 +205,7 @@
     <sql id="Base_Column_List">
         id, userId, username, invoiceNo, invoiceCode, name, content, compName, amount, type, property, status,
         createTime, lastUpdate, nsrsbh, nsrmc, address, phone, bank, addressId, deliveryMethod, isShipping,
-        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum,remark
+        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum,remark,email
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -214,7 +215,8 @@
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
         LEFT JOIN uc_user_address a ON a.id = i.addressId
-        WHERE i.id = #{id}
+        LEFT JOIN uc_dict t on t.fieldValue = i.content
+        WHERE i.id = #{id} and t.dictId = 'invoicecontent'
     </select>
 
     <!-- 查询（根据主键ID和UserId查询） -->
@@ -235,8 +237,8 @@
     <sql id="InvoiceBO_Column_List">
         i.id, i.userId, i.username, i.invoiceNo, i.invoiceCode, i.name, i.content, i.compName, i.amount, i.type,
         i.property, i.status, i.createTime, i.lastUpdate, i.nsrsbh, i.nsrmc, i.address, i.phone, i.bank, i.addressId,
-        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum,i.remark,
-        u.username as username, a.name as consignee
+        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum,i.remark,i.email,
+        u.username as username, a.name as consignee,t.fieldKey as contentDetail
     </sql>
 
     <!-- 后台查询（根据条件查询） -->
@@ -246,8 +248,9 @@
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
         LEFT JOIN uc_user_address a ON a.id = i.addressId
+        LEFT JOIN uc_dict t on t.fieldValue = i.content
         <where>
-            1 = 1
+            1 = 1 and t.dictId = 'invoicecontent'
             <if test=" username != null and username != '' ">
                 and u.username = #{username}
             </if>

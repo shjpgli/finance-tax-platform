@@ -65,6 +65,7 @@ public class InvoiceRepoController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
     }
 
+
     /**
      * 根据发票种类代码，获取发票仓库ID
      *
@@ -78,7 +79,7 @@ public class InvoiceRepoController {
     }
 
     /**
-     * 发票仓库列表
+     * 发票仓库详情查看
      *
      * @return
      */
@@ -165,6 +166,21 @@ public class InvoiceRepoController {
 
     /**
      * 根据发票号码，获取发票仓库详情信息
+     *
+     * @param invoiceNo
+     * @return
+     */
+    @GetMapping(path = "/invoice/detail/no")
+    public ResponseEntity selectInvoiceDetailByInvoice(@RequestParam(value = "invoiceNo", required = true) String invoiceNo) {
+        InvoiceDetail invoiceDetail = new InvoiceDetail();
+        invoiceDetail.setInvoiceNo(invoiceNo);
+        InvoiceDetail invoiceDetail1 = invoiceRepoService.selectInvoiceDetailByInvoice(invoiceDetail);
+        LOGGER.info("{}", invoiceDetail1);
+        return ResponseEntity.ok(Utils.kv("data",invoiceDetail1));
+    }
+
+    /**
+     * 根据发票号码，获取发票仓库详情信息列表
      *
      * @param invoiceNo
      * @return

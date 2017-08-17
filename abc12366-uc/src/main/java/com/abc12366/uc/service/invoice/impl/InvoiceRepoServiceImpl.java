@@ -256,6 +256,11 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     }
 
     @Override
+    public InvoiceDetail selectInvoiceDetailByInvoice(InvoiceDetail invoiceDetail) {
+        return invoiceDetailRoMapper.selectInvoiceDetailByInvoice(invoiceDetail);
+    }
+
+    @Override
     public InvoiceDetailBO selectInvoiceDistributeByInv(String invoiceTypeCode) {
         InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
         invoiceDistribute.setSignUser(UserUtil.getAdminId());

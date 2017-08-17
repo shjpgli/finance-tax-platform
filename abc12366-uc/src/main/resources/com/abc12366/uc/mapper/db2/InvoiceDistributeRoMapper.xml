@@ -52,6 +52,7 @@
         FROM uc_invoice_distribute te
         LEFT JOIN uc_dict dt on dt.id = te.invoiceTypeCode
         WHERE te.useId = #{useId}
+        order by te.createTime desc
     </select>
     <!--获取该管理员领用表中的一张发票-->
 </mapper>

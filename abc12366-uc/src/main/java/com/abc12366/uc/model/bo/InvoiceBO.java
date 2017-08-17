@@ -21,6 +21,8 @@ public class InvoiceBO implements Serializable {
 	private String invoiceCode;
 	private String name;
 	private String content;
+	/**内容详情**/
+	private String contentDetail;
 	private String compName;
 	private Double amount;
 	private String type;
@@ -72,6 +74,11 @@ public class InvoiceBO implements Serializable {
 	private String waybillNum;
 
 	private String remark;
+
+    /**
+     * 邮箱
+     */
+    private String email;
 
 	public String getId() {
 		return this.id;
@@ -392,4 +399,20 @@ public class InvoiceBO implements Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+	public String getContentDetail() {
+		return contentDetail;
+	}
+
+	public void setContentDetail(String contentDetail) {
+		this.contentDetail = contentDetail;
+	}
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

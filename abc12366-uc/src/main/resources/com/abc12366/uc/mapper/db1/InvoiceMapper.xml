@@ -106,6 +106,9 @@
             <if test="remark != null">
                 remark,
             </if>
+            <if test="email != null">
+                email,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -195,6 +198,9 @@
             </if>
             <if test="remark!=null">
                 #{remark},
+            </if>
+            <if test="email!=null">
+                #{email},
             </if>
         </trim>
     </insert>
@@ -286,6 +292,9 @@
             </if>
             <if test="remark != null">
                 remark = #{remark},
+            </if>
+            <if test="email != null">
+                email = #{email},
             </if>
 
         </set>

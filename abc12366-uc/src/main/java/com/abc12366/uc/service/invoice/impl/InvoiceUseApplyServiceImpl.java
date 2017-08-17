@@ -255,11 +255,18 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
                 LOGGER.warn("修改失败，参数{}：" + invoiceDistribute);
                 throw new ServiceException(4102);
             }
+            //更新发票领用申请表状态
+            InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
+            invoiceUseApply.setId(invoiceDistribute.getUseId());
+            invoiceUseApply.setIssueStatus("1");
+            invoiceUseApplyMapper.update(invoiceUseApply);
             //更新发票明细的状态
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
             invoiceDetail.setStatus("1");
             invoiceDetailMapper.update(invoiceDetail);
+
+
         }
     }
 
