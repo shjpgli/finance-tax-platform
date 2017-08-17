@@ -4,6 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -37,7 +38,7 @@ public class UserBindController {
 
     @PostMapping(path = "/bind/dzsb")
     public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest
-            request) throws MarshalException, ValidationException {
+            request) throws Exception {
         LOGGER.info("{}:{}", userDzsbInsertBO, request);
         UserDzsbBO user_dzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
         LOGGER.info("{}", user_dzsb);
@@ -124,9 +125,9 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/nsrlogin/shb")
-    public ResponseEntity nsrLogin(@RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
+    public ResponseEntity nsrLogin(@Valid @RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
-        NsrLoginResponse loginResponse = userBindService.nsrLogin(login, request);
+        TY21Xml2Object loginResponse = userBindService.nsrLogin(login, request);
         return ResponseEntity.ok(Utils.kv("data", loginResponse));
     }
 

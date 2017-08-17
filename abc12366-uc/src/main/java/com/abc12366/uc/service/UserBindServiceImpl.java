@@ -3,7 +3,8 @@ package com.abc12366.uc.service;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.jrxt.model.TY11Response.JBXXCX;
+import com.abc12366.uc.model.tdps.TY21Xml2Object;
+import com.abc12366.uc.tdps.vo.TY21Response.JBXXCX;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
@@ -70,7 +71,7 @@ public class UserBindServiceImpl implements UserBindService {
     private AuthService authService;
 
     @Override
-    public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws MarshalException, ValidationException {
+    public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
         if (userDzsbInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
@@ -89,17 +90,18 @@ public class UserBindServiceImpl implements UserBindService {
 
         //调外系统接口获取电子申报绑定信息
         Map<String, String> map = new HashMap<>();
-        map.put("serviceid", "TY11");
+        map.put("serviceid", "TY21");
         map.put("nsrsbh", userDzsbInsertBO.getNsrsbhOrShxydm());
+        map.put("fwmm", fwmmEncode(userDzsbInsertBO.getFwmm()));
+        map.put("userid", userId);
         Map<String, String> resMap = client.process(map);
-        System.out.println(resMap);
-        UserDzsb userDzsbTemp = analyzeXmlTY11(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
+        TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
 
 
         //查看是否重复绑定
         queryParam.setUserId(userId);
-        queryParam.setNsrsbh(userDzsbTemp.getNsrsbh());
-        queryParam.setShxydm(userDzsbTemp.getShxydm());
+        queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
+        queryParam.setShxydm(ty21Object.getSHXYDM());
         List<NSRXXBO> nsrxxboList2 = userBindRoMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
         if (nsrxxboList2 != null && nsrxxboList2.size() >= 1) {
             throw new ServiceException(4632);
@@ -113,15 +115,16 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setLastUpdate(date);
         userDzsb.setStatus(true);
         userDzsb.setUserId(userId);
-        userDzsb.setDjxh(userDzsbTemp.getDjxh());
-        userDzsb.setNsrsbh(userDzsbTemp.getNsrsbh());
-        userDzsb.setNsrmc(userDzsbTemp.getNsrmc());
-        userDzsb.setShxydm(userDzsbTemp.getShxydm());
-        userDzsb.setSwjgMc(userDzsbTemp.getSwjgMc());
-        userDzsb.setSwjgDm(userDzsbTemp.getSwjgDm());
-        userDzsb.setExpireTime(userDzsbTemp.getExpireTime());
-        userDzsb.setFrmc(userDzsbTemp.getFrmc());
-        userDzsb.setFrzjh(userDzsbTemp.getFrzjh());
+        userDzsb.setDjxh(ty21Object.getDJXH());
+        userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
+        userDzsb.setNsrmc(ty21Object.getNSRMC());
+        userDzsb.setShxydm(ty21Object.getSHXYDM());
+        userDzsb.setSwjgMc(ty21Object.getSWJGMC());
+        userDzsb.setSwjgDm(ty21Object.getSWJGDM());
+        userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+        userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+        userDzsb.setFrmc(ty21Object.getFRXM());
+        userDzsb.setFrzjh(ty21Object.getFRZJH());
         int result = userBindMapper.dzsbBind(userDzsb);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());
@@ -327,18 +330,18 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public NsrLoginResponse nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception {
+    public TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
-        Map<String, String> map = new HashMap<>();
-        map.put("serviceid", "TY20");
-        map.put("NSRSBH", login.getNsrsbh());
         String userId = UserUtil.getUserId(request);
-        map.put("USERID", userId);
-        map.put("FWMM", fwmmEncode(login.getFwmm()));
-        Map respMap = client.process(map);
-        NsrLoginResponse response = new NsrLoginResponse();
-        response.setLoginToken(Utils.uuid());
-        return response;
+        Map<String, String> map = new HashMap<>();
+        map.put("serviceid", "TY21");
+        map.put("nsrsbh", login.getNsrsbhOrShxydm());
+        map.put("fwmm", fwmmEncode(login.getFwmm()));
+        map.put("userid", userId);
+        Map<String, String> resMap = client.process(map);
+
+        TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
+        return ty21Object;
     }
 
     @Override
@@ -381,69 +384,82 @@ public class UserBindServiceImpl implements UserBindService {
         return null;
     }
 
-    public UserDzsb analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
         if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
             throw new ServiceException(4629);
         }
-        JBXXCX jbxxcx = (JBXXCX) XmlJavaParser.parseXmlToObject(JBXXCX.class, String.valueOf(resMap.get("taxML_CRM_NSRXXCX_" + nsrsbh + ".xml")));
+        TY21Xml2Object object = new TY21Xml2Object();
+
+        JBXXCX jbxxcx = (JBXXCX) XmlJavaParser.parseXmlToObject(JBXXCX.class, String.valueOf(resMap.get("taxML_SSHDXX_" + nsrsbh + ".xml")));
         String cxjg = jbxxcx.getCXJG();
-        UserDzsb userDzsbTemp = new UserDzsb();
         if ("1".equals(cxjg)) {
-            com.abc12366.uc.jrxt.model.TY11Response.MXXX[] mxxxes = jbxxcx.getMXXXS().getMXXX();
-            for (com.abc12366.uc.jrxt.model.TY11Response.MXXX mx : mxxxes) {
-                if ("DJXH".equals(mx.getCODE())) {
-                    userDzsbTemp.setDjxh(mx.getVALUE());
+            com.abc12366.uc.tdps.vo.TY21Response.MXXX[] mxxxes = jbxxcx.getMXXXS().getMXXX();
+            for (com.abc12366.uc.tdps.vo.TY21Response.MXXX mx : mxxxes) {
+                if ("LOGINTOKEN".equals(mx.getCODE())) {
+                    object.setLOGINTOKEN(mx.getVALUE());
                 }
-                userDzsbTemp.setNsrmc(jbxxcx.getNSRMC());
+                if ("DLSJ".equals(mx.getCODE())) {
+                    object.setDLSJ(mx.getVALUE());
+                }
                 if ("Y_NSRSBH".equals(mx.getCODE())) {
-                    userDzsbTemp.setNsrsbh(mx.getVALUE());
+                    object.setY_NSRSBH(mx.getVALUE());
+                }
+                if ("NSRMC".equals(mx.getCODE())) {
+                    object.setNSRMC(mx.getVALUE());
                 }
                 if ("SHXYDM".equals(mx.getCODE())) {
-                    userDzsbTemp.setShxydm(mx.getVALUE());
-                }
-                if ("SWJGMC".equals(mx.getCODE())) {
-                    userDzsbTemp.setSwjgMc(mx.getVALUE());
+                    object.setSHXYDM(mx.getVALUE());
                 }
                 if ("SWJGDM".equals(mx.getCODE())) {
-                    userDzsbTemp.setSwjgDm(mx.getVALUE());
+                    object.setSWJGDM(mx.getVALUE());
+                }
+                if ("SWJGMC".equals(mx.getCODE())) {
+                    object.setSWJGMC(mx.getVALUE());
+                }
+                if ("DJXH".equals(mx.getCODE())) {
+                    object.setDJXH(mx.getVALUE());
                 }
                 if ("FRXM".equals(mx.getCODE())) {
-                    userDzsbTemp.setFrmc(mx.getVALUE());
+                    object.setFRXM(mx.getVALUE());
                 }
                 if ("FRZJH".equals(mx.getCODE())) {
-                    userDzsbTemp.setFrzjh(mx.getVALUE());
+                    object.setFRZJH(mx.getVALUE());
                 }
                 if ("RJDQR".equals(mx.getCODE())) {
-                    userDzsbTemp.setExpireTime(DateUtils.StrToDate(mx.getVALUE()));
+                    object.setRJDQR(mx.getVALUE());
                 }
-                if ("RJYQDQR".equals(mx.getCODE())) {
-                    userDzsbTemp.setExpandExpireTime(DateUtils.StrToDate(mx.getVALUE()));
+                if ("YQDQR".equals(mx.getCODE())) {
+                    object.setYQDQR(mx.getVALUE());
                 }
             }
         } else {
             String msg = jbxxcx.getCWYY();
             throw new ServiceException(cxjg, msg);
         }
-        return userDzsbTemp;
+        return object;
     }
 
     public String fwmmEncode(String code) throws Exception {
-        String appointCode = "";
-        String encodedCode = "";
+//        String appointCode = "abchngs";
+//        String encodedCode = "";
         //1.先BASE64编码，
-        encodedCode = Utils.encode(code);
+//        encodedCode = Utils.encode(code);
         //2.编码串MD5，
-        encodedCode = Utils.md5(encodedCode);
+//        encodedCode = Utils.md5(encodedCode);
         //3.统一转成大写，
-        encodedCode = encodedCode.toUpperCase();
+//        encodedCode = encodedCode.toUpperCase();
         //4.生成的字符串加一串约定码，
-        encodedCode = encodedCode + appointCode;
+//        encodedCode = encodedCode + appointCode;
         //5.再进行MD5，
-        encodedCode = Utils.md5(encodedCode);
+//        encodedCode = Utils.md5(encodedCode);
         //6.再转一次大写
-        encodedCode = encodedCode.toUpperCase();
+//        encodedCode = encodedCode.toUpperCase();
 
-        return encodedCode;
+//        return encodedCode;
+
+        String frist_sbmm = new MD5(code).compute().toUpperCase();
+        String second_gssbmm = new MD5(frist_sbmm + "abchngs").compute().toUpperCase();
+        return second_gssbmm;
     }
 
 }

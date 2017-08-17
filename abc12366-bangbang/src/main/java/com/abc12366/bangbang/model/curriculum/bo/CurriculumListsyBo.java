@@ -23,6 +23,9 @@ public class CurriculumListsyBo implements Serializable {
     /**观看数**tinyint(11)**/
     private Integer watchNum;
 
+    /**商品ID**varchar(64)**/
+    private String goodsId;
+
     /**课程封面**varchar(200)**/
     private String cover;
 
@@ -66,6 +69,14 @@ public class CurriculumListsyBo implements Serializable {
 
     public void setWatchNum(Integer watchNum) {
         this.watchNum = watchNum;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 
     public String getCover() {

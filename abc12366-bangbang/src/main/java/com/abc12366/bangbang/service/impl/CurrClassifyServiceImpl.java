@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -51,7 +52,22 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
             JSONObject jsonStu = JSONObject.fromObject(classifyBo);
             LOGGER.info("新增课程分类信息:{}", jsonStu.toString());
             //保存课程分类信息
-            String uuid = UUID.randomUUID().toString().replace("-", "");
+//            String uuid = UUID.randomUUID().toString().replace("-", "");
+
+            String uuid = "";
+            String code = "";
+
+            String parentId = classifyBo.getParentId();
+
+            for(int i=0;i<20;i++){
+                code = this.genCodes(6);
+                uuid = parentId + code;
+                int cnt = classifyRoMapper.selectClassifyCnt(uuid);
+                if(cnt ==0){
+                    break;
+                }
+            }
+
             CurriculumClassify classify = new CurriculumClassify();
             classifyBo.setClassifyId(uuid);
             BeanUtils.copyProperties(classifyBo, classify);
@@ -129,6 +145,29 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
             throw new ServiceException(4304);
         }
         return "";
+    }
+
+    public String genCodes(int length){
+
+        String val = "";
+        Random random = new Random();
+        for(int i = 0; i < length; i++)
+        {
+            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; // 输出字母还是数字
+
+            if("char".equalsIgnoreCase(charOrNum)) // 字符串
+            {
+                int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; //取得大写字母还是小写字母
+                val += (char) (choice + random.nextInt(26));
+            }
+            else if("num".equalsIgnoreCase(charOrNum)) // 数字
+            {
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+        val=val.toLowerCase();
+
+        return val;
     }
 
 }

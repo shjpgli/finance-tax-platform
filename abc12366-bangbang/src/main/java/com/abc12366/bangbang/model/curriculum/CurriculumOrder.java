@@ -16,6 +16,9 @@ public class CurriculumOrder implements Serializable {
 	/**课程ID**varchar(64)**/
 	private String curriculumId;
 
+    /**商品ID**varchar(64)**/
+    private String goodsId;
+
 	/**用户ID**varchar(64)**/
 	private String userId;
 
@@ -73,7 +76,15 @@ public class CurriculumOrder implements Serializable {
 		return this.curriculumId;
 	}
 
-	public void setUserId(String userId){
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public void setUserId(String userId){
 		this.userId = userId;
 	}
 
