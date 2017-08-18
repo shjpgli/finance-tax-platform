@@ -46,6 +46,19 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
+    public List<CurriculumLecturerBo> selectListByCurr(String curriculumId) {
+        List<CurriculumLecturerBo> lecturerBoList;
+        try {
+            //查询讲师列表
+            lecturerBoList = lecturerRoMapper.selectListByCurr(curriculumId);
+        } catch (Exception e) {
+            LOGGER.error("查询讲师列表信息异常：{}", e);
+            throw new ServiceException(4350);
+        }
+        return lecturerBoList;
+    }
+
+    @Override
     public CurriculumLecturerBo save(CurriculumLecturerBo lecturerBo) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(lecturerBo);

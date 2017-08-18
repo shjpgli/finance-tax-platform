@@ -70,6 +70,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
+                        //根据课程ID获取讲师信息
+                .excludePathPatterns("/lecturer/selectListByCurr")
                         //获取课程分类
                 .excludePathPatterns("/classify/selectListsy")
                         //获取最新课程
