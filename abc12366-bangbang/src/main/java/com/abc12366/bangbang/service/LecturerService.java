@@ -10,6 +10,8 @@ public interface LecturerService {
 
     List<CurriculumLecturerBo> selectList(Map<String, Object> map);
 
+    List<CurriculumLecturerBo> selectListByCurr(String curriculumId);
+
     CurriculumLecturerBo save(CurriculumLecturerBo lecturerBo);
 
     CurriculumLecturerBo selectLecturer(String lecturerId);

@@ -37,7 +37,7 @@
                 lastUser,
             </if>
             <if test="sort != null">
-                lastUser,
+                sort
             </if>
 
         </trim>
@@ -73,7 +73,7 @@
                 #{lastUser},
             </if>
             <if test="sort!=null">
-                #{lastUser},
+                #{sort}
             </if>
         </trim>
     </insert>

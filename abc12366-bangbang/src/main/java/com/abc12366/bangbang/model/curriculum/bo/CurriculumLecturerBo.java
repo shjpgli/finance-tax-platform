@@ -38,6 +38,18 @@ public class CurriculumLecturerBo implements Serializable {
 	/**讲师图片**varchar(200)**/
 	private String lecturerPicture;
 
+    /**好评数**int**/
+    private Integer praiseNum;
+
+    /**评论数**int**/
+    private Integer evaluateNum;
+
+    /**课程数**int**/
+    private Integer currNum;
+
+    /**学生数**int**/
+    private Integer studentNum;
+
     /**创建时间**datetime**/
     private java.util.Date createTime;
 
@@ -117,6 +129,38 @@ public class CurriculumLecturerBo implements Serializable {
 	public String getLecturerPicture(){
 		return this.lecturerPicture;
 	}
+
+    public Integer getPraiseNum() {
+        return praiseNum;
+    }
+
+    public void setPraiseNum(Integer praiseNum) {
+        this.praiseNum = praiseNum;
+    }
+
+    public Integer getEvaluateNum() {
+        return evaluateNum;
+    }
+
+    public void setEvaluateNum(Integer evaluateNum) {
+        this.evaluateNum = evaluateNum;
+    }
+
+    public Integer getCurrNum() {
+        return currNum;
+    }
+
+    public void setCurrNum(Integer currNum) {
+        this.currNum = currNum;
+    }
+
+    public Integer getStudentNum() {
+        return studentNum;
+    }
+
+    public void setStudentNum(Integer studentNum) {
+        this.studentNum = studentNum;
+    }
 
     public Date getCreateTime() {
         return createTime;

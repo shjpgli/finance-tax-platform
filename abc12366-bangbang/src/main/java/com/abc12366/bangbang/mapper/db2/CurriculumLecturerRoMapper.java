@@ -28,5 +28,12 @@ public interface CurriculumLecturerRoMapper {
      **/
     List<CurriculumLecturerBo> selectList(Map<String, Object> map);
 
+    /**
+     *
+     * 根据课程查询讲师信息
+     *
+     **/
+    List<CurriculumLecturerBo>  selectListByCurr(@Param("curriculumId") String curriculumId);
+
 
 }

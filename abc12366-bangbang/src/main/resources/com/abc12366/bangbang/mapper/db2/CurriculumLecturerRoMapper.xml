@@ -19,9 +19,27 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_lecturer
+            lecturerId,	userId,	lecturerName,createTime,updateTime,	intro,
+            phone,	company,	lecturerQQ,	lecturerEmail,	lecturerPicture,
+            (select count(curriculumId) from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId) currNum,
+            (SELECT count(studyId) FROM bb_curriculum_study where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) studentNum,
+            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) evaluateNum,
+            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) praiseNum
+        FROM bb_curriculum_lecturer l
         WHERE 1=1
+    </select>
+
+    <!-- 根据课程查询讲师 -->
+    <select id="selectListByCurr" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo" parameterType="java.lang.String">
+        SELECT
+            l.lecturerId,	userId,	lecturerName,createTime,updateTime,	intro,
+            phone,	company,	lecturerQQ,	lecturerEmail,	lecturerPicture,
+            (select count(curriculumId) from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId) currNum,
+            (SELECT count(studyId) FROM bb_curriculum_study where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) studentNum,
+            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) evaluateNum,
+            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) praiseNum
+        FROM bb_curriculum_lecturer_gx l left join bb_curriculum_lecturer lect on l.lecturerId = lect.lecturerId
+        WHERE l.curriculumId = #{curriculumId}
     </select>
 
 

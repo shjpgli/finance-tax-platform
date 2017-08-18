@@ -4,6 +4,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,10 +35,15 @@ public class QuartzConfig {
     @Value("${spring.datasource.db1.maxActive}")
     private String maxConnections;
 
+    @Autowired
+    private QuartzJobFactory quartzJobFactory;
+
     @Bean
     public Scheduler scheduler() throws IOException, SchedulerException {
         SchedulerFactory schedulerFactory = new StdSchedulerFactory(quartzProperties());
         Scheduler scheduler = schedulerFactory.getScheduler();
+        scheduler.setJobFactory(quartzJobFactory);
+        scheduler.startDelayed(3);
         scheduler.start();
         return scheduler;
     }

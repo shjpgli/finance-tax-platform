@@ -46,6 +46,16 @@ public class LecturerController {
     }
 
     /**
+     * 根据课程Id查询讲师信息
+     */
+    @GetMapping(path = "/selectListByCurr")
+    public ResponseEntity selectListByCurr(@RequestParam(value = "curriculumId", required = false) String curriculumId) {
+        List<CurriculumLecturerBo> dataList = lecturerService.selectListByCurr(curriculumId);
+        return ResponseEntity.ok(Utils.kv("dataList",dataList));
+
+    }
+
+    /**
      * 讲师新增
      */
     @PostMapping

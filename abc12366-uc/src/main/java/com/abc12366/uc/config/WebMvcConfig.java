@@ -80,6 +80,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //第三方交易毁回调地址
                 .excludePathPatterns("/payreturn/**")
                 //微信服务回调地址
-                .excludePathPatterns("/wechatserver/*");
+                .excludePathPatterns("/wechatserver/*")
+                //用户等级接口地址
+                .excludePathPatterns("/uvip/level/**");
     }
 }
