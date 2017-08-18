@@ -8,6 +8,7 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -349,6 +350,10 @@ public class OrderServiceImpl implements OrderService {
         repo.setStock(stock);
         repo.setCreateTime(date);
         repo.setLastUpdate(date);
+        repo.setRemark(orderBO.getOrderNo());
+        repo.setOptionUser(orderBO.getUserId());
+        repo.setRemark(orderBO.getOrderNo());
+        repo.setOptionUser(orderBO.getUserId());
         productRepoMapper.insert(repo);
 
 
@@ -438,6 +443,8 @@ public class OrderServiceImpl implements OrderService {
         repo.setStock(stock);
         repo.setCreateTime(date);
         repo.setLastUpdate(date);
+        repo.setRemark(orderBO.getOrderNo());
+        repo.setOptionUser(orderBO.getUserId());
         productRepoMapper.insert(repo);
 
         //消费积分
@@ -727,6 +734,8 @@ public class OrderServiceImpl implements OrderService {
                 repo.setStock(stock);
                 repo.setCreateTime(date);
                 repo.setLastUpdate(date);
+                repo.setRemark(orderBack.getOrderNo());
+                repo.setOptionUser(orderBack.getUserId());
                 productRepoMapper.insert(repo);
             }
 

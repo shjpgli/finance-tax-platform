@@ -365,6 +365,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
                 throw new ServiceException(4913);
             }
+            //修改库存信息表
+
             Invoice invoice = new Invoice();
             invoice.setStatus("7");
             invoice.setId(invoiceExcel.getInvoiceOrderNo());
@@ -606,6 +608,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setLastUpdate(new Date());
         invoice.setInvoiceNo(invoiceNo);
         invoice.setInvoiceCode(invoiceCode);
+        invoice.setType(invoiceCheckBO.getType());
         int update = invoiceMapper.update(invoice);
         if (update != 1) {
             LOGGER.info("修改失败：{}", invoice);

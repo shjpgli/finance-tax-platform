@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id,	invoiceTypeCode,	invoiceCode,	invoiceNoStart,	invoiceNoEnd,	property,	share,	book,	createTime,	lastUpdate,	createUser,	updateUser,status
+        id,	invoiceTypeCode,	invoiceCode,	invoiceNoStart,	invoiceNoEnd,	property,	share,	book,	createTime,	lastUpdate,	createUser,	updateUser,status,remark
     </sql>
 
     <resultMap id="invoiceRepoMap" type="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO">
@@ -21,6 +21,8 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="createUser" property="createUser" jdbcType="VARCHAR"/>
         <result column="updateUser" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="fieldKey" property="fieldKey" jdbcType="VARCHAR"/>
         <collection property="invoiceDetailBOList" ofType="com.abc12366.uc.model.invoice.bo.InvoiceDetailBO" column="id"
                     select="getInvoiceDetailBO">
@@ -75,7 +77,7 @@
     <select id="selectInvoiceRepo" resultMap="invoiceRepoMap" parameterType="java.lang.String">
         SELECT
         r.id,	r.invoiceTypeCode,	r.invoiceCode,	r.invoiceNoStart,	r.invoiceNoEnd,	r.property,	r.share,
-        r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,dt.fieldKey as fieldKey
+        r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,r.remark,dt.fieldKey as fieldKey
         FROM uc_invoice_repo r
          LEFT JOIN uc_dict dt on dt.id = r.invoiceTypeCode
          WHERE r.id = #{id}
@@ -86,7 +88,7 @@
             parameterType="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO">
         SELECT
         r.id,	r.invoiceTypeCode,	r.invoiceCode,	r.invoiceNoStart,	r.invoiceNoEnd,	r.property,	r.share,
-        r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,d.fieldKey as invoiceTypeName
+        r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,r.remark,d.fieldKey as invoiceTypeName
         FROM uc_invoice_repo r
         LEFT JOIN uc_dict d on d.fieldValue =  r.invoiceTypeCode and d.dictId = 'invoicetype'
         <where>

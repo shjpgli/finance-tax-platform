@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.ProductRepoRoMapper">
 
     <sql id="Base_Column_List">
-        id, goodsId, productId, income, outcome, stock, remark, createTime, lastUpdate
+        id, goodsId, productId, income, outcome, stock, remark, createTime, lastUpdate,optionUser
     </sql>
 
     <resultMap id="productRepoBOResultMap" type="com.abc12366.uc.model.bo.ProductRepoBO">
@@ -15,6 +15,7 @@
         <result column="outcome" property="outcome" jdbcType="INTEGER"/>
         <result column="stock" property="stock" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="optionUser" property="optionUser" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <association property="goods" javaType="com.abc12366.uc.model.Goods">
@@ -37,7 +38,7 @@
 
     <select id="selectList" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.ProductRepo">
         SELECT
-        r.id, r.goodsId, r.productId, r.income, r.outcome, r.stock, r.remark, r.createTime, r.lastUpdate
+        r.id, r.goodsId, r.productId, r.income, r.outcome, r.stock, r.remark, r.createTime, r.lastUpdate,r.optionUser
 
         FROM uc_product_repo r
         LEFT JOIN uc_goods g ON g.id = r.goodsId

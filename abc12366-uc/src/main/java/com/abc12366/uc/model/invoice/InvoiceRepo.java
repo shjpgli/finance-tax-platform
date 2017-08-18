@@ -49,6 +49,9 @@ public class InvoiceRepo implements Serializable {
 	/**修改人**/
 	private String updateUser;
 
+	/**备注**/
+	private String remark;
+
 
 
 	public void setId(String id){
@@ -154,4 +157,12 @@ public class InvoiceRepo implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

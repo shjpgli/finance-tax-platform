@@ -9,6 +9,7 @@ import com.abc12366.uc.model.Product;
 import com.abc12366.uc.model.ProductRepo;
 import com.abc12366.uc.model.bo.ProductRepoBO;
 import com.abc12366.uc.service.ProductRepoService;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -63,6 +64,8 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setCreateTime(date);
         productRepoBO.setLastUpdate(date);
         productRepoBO.setStock(stock);
+        productRepoBO.setRemark(UserUtil.getAdminInfo().getNickname()+"-操作入库");
+        productRepoBO.setOptionUser(UserUtil.getAdminId());
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);
@@ -91,6 +94,8 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setCreateTime(date);
         productRepoBO.setLastUpdate(date);
         productRepoBO.setStock(stock);
+        productRepoBO.setRemark(UserUtil.getAdminInfo().getNickname()+"-操作出库");
+        productRepoBO.setOptionUser(UserUtil.getAdminId());
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);

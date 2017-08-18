@@ -26,6 +26,12 @@ public class ProductRepoBO implements Serializable {
     private Integer option;
     private Goods goods;
 
+    /**
+     * 操作用户
+     */
+    private String optionUser;
+
+
     public String getId() {
         return this.id;
     }
@@ -128,5 +134,13 @@ public class ProductRepoBO implements Serializable {
 
     public void setOption(Integer option) {
         this.option = option;
+    }
+
+    public String getOptionUser() {
+        return optionUser;
+    }
+
+    public void setOptionUser(String optionUser) {
+        this.optionUser = optionUser;
     }
 }

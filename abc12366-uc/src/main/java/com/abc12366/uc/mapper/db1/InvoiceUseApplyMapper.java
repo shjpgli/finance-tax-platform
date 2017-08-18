@@ -35,4 +35,5 @@ public interface InvoiceUseApplyMapper{
 	int update(InvoiceUseApply record);
 
 
+	int updateByUseId(InvoiceUseApply invoiceUseApply);
 }

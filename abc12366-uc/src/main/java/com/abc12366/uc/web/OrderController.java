@@ -126,7 +126,7 @@ public class OrderController {
     }
 
     /**
-     * 用户所有订单查询
+     * 用户所有订单查询，未开票的订单
      *
      * @param pageNum
      * @param pageSize
@@ -149,6 +149,37 @@ public class OrderController {
         goodsBO.setName(name);
         order.setGoodsBO(goodsBO);
         order.setIsInvoice(false);
+        List<OrderBO> orderBOs = orderService.selectUserAllOrderList(order, pageNum, pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
+        LOGGER.info("{}", orderBOs);
+        return (orderBOs == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户所有订单查询,未开票和已开票的订单
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param name
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/user/all/invoice")
+    public ResponseEntity selectOrderListByInvoice(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                 @RequestParam(value = "name", required = false) String name,
+                                                 @RequestParam(value = "userId", required = true) String userId) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        OrderBO order = new OrderBO();
+        User user = new User();
+        user.setId(userId);
+        order.setUser(user);
+
+        GoodsBO goodsBO = new GoodsBO();
+        goodsBO.setName(name);
+        order.setGoodsBO(goodsBO);
         List<OrderBO> orderBOs = orderService.selectUserAllOrderList(order, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
         LOGGER.info("{}", orderBOs);

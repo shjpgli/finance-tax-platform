@@ -29,4 +29,6 @@ public interface InvoiceDetailMapper {
      * 修改 （匹配有值的字段）
      **/
     int update(InvoiceDetail record);
+
+    int updateByRepoId(InvoiceDetail invoiceDetail);
 }

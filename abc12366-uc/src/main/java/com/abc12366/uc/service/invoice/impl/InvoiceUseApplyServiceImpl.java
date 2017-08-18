@@ -259,12 +259,14 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
             invoiceUseApply.setId(invoiceDistribute.getUseId());
             invoiceUseApply.setIssueStatus("1");
+            invoiceUseApply.setSignTime(new Date());
+            invoiceUseApply.setSignUser(UserUtil.getAdminId());
             invoiceUseApplyMapper.update(invoiceUseApply);
             //更新发票明细的状态
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
             invoiceDetail.setStatus("1");
-            invoiceDetailMapper.update(invoiceDetail);
+            invoiceDetailMapper.updateByRepoId(invoiceDetail);
 
 
         }

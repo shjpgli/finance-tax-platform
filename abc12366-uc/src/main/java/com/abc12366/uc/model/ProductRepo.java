@@ -50,6 +50,11 @@ public class ProductRepo implements Serializable {
     /****/
     private java.util.Date lastUpdate;
 
+    /**
+     * 操作用户
+     */
+    private String optionUser;
+
     public String getId() {
         return this.id;
     }
@@ -120,5 +125,13 @@ public class ProductRepo implements Serializable {
 
     public void setLastUpdate(java.util.Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public String getOptionUser() {
+        return optionUser;
+    }
+
+    public void setOptionUser(String optionUser) {
+        this.optionUser = optionUser;
     }
 }

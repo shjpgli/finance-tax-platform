@@ -10,7 +10,7 @@
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="invoiceRepo">
+    <insert id="insert" parameterType="com.abc12366.uc.model.invoice.InvoiceRepo">
         INSERT INTO uc_invoice_repo
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null">
@@ -51,6 +51,9 @@
             </if>
             <if test="status != null">
                 status,
+            </if>
+            <if test="remark != null">
+                remark,
             </if>
 
         </trim>
@@ -94,11 +97,14 @@
             <if test="status!=null">
                 #{status},
             </if>
+            <if test="remark!=null">
+                #{remark},
+            </if>
         </trim>
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="invoiceRepo">
+    <update id="update" parameterType="com.abc12366.uc.model.invoice.InvoiceRepo">
         UPDATE uc_invoice_repo
         <set>
             <if test="invoiceTypeCode != null">
@@ -136,6 +142,9 @@
             </if>
             <if test="status != null">
                 status = #{status},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
             </if>
 
         </set>

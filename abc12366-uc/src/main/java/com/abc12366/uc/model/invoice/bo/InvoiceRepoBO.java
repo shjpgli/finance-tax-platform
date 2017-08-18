@@ -61,6 +61,9 @@ public class InvoiceRepoBO implements Serializable {
 
 	private List<InvoiceDetailBO> invoiceDetailBOList;
 
+	/**备注**/
+	private String remark;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -212,5 +215,13 @@ public class InvoiceRepoBO implements Serializable {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

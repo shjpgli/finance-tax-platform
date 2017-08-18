@@ -15,6 +15,11 @@ public class InvoiceCheckBO implements Serializable {
 	 **/
 	private Boolean isBilling;
 
+	/**
+	 * 发票类型代码
+	 */
+	private String type;
+
 	/**发票详情ID**/
 	private String detailId;
 
@@ -50,5 +55,13 @@ public class InvoiceCheckBO implements Serializable {
 
 	public void setDetailId(String detailId) {
 		this.detailId = detailId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }
