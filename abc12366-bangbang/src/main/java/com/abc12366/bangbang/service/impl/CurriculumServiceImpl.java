@@ -42,6 +42,9 @@ public class CurriculumServiceImpl implements CurriculumService {
     private CurriculumLecturerGxMapper curriculumLecturerGxMapper;
 
     @Autowired
+    private CurriculumLecturerRoMapper lecturerRoMapper;
+
+    @Autowired
     private CurriculumLabelRoMapper curriculumLabelRoMapper;
 
     @Autowired
@@ -211,6 +214,60 @@ public class CurriculumServiceImpl implements CurriculumService {
             }
 
             curriculumBo.setChapterBoList(chapterBoList);
+
+
+        } catch (Exception e) {
+            LOGGER.error("查询单个课程信息异常：{}", e);
+            throw new ServiceException(4321);
+        }
+        return curriculumBo;
+    }
+
+    @Override
+    public CurriculumsyBo selectCurriculumsy(String curriculumId) {
+        CurriculumsyBo curriculumBo;
+        try {
+            LOGGER.info("查询单个课程信息:{}", curriculumId);
+            //查询模型信息
+            curriculumBo = curriculumRoMapper.selectCurriculum(curriculumId);
+
+            //标签
+            List<CurriculumLabel> curriculumLabelList = curriculumLabelRoMapper.selectList(curriculumId);
+
+            curriculumBo.setLabelList(curriculumLabelList);
+
+            //会员等级
+            List<CurriculumMembergrade> curriculumMembergradeList = curriculumMembergradeRoMapper.selectList(curriculumId);
+
+            curriculumBo.setMembergradeList(curriculumMembergradeList);
+
+            //讲师
+            List<CurriculumLecturerBo> lecturerBoList =lecturerRoMapper.selectListByCurr(curriculumId);
+
+            curriculumBo.setLecturerList(lecturerBoList);
+
+
+            Map<String, Object> dataMap1 = new HashMap<>();
+            dataMap1.put("curriculumId",curriculumId);
+            //查询章节列表
+            List<CurriculumChapterBo> chapterBoList = chapterRoMapper.selectList(dataMap1);
+
+            for(CurriculumChapterBo chapterBo : chapterBoList){
+                String chapterId =chapterBo.getChapterId();
+                Map<String, Object> dataMap2 = new HashMap<>();
+                dataMap2.put("chapterId",chapterId);
+                //查询课件
+                List<CurriculumCoursewareBo> coursewareBoList = coursewareRoMapper.selectList(dataMap2);
+                chapterBo.setCoursewareList(coursewareBoList);
+            }
+
+            curriculumBo.setChapterBoList(chapterBoList);
+
+            List<CurriculumListsyBo> curriculumListBoList;
+            //查询相关课程列表
+            curriculumListBoList = curriculumRoMapper.selectListxgNew(curriculumId);
+
+            curriculumBo.setCurriculumListBoList(curriculumListBoList);
 
 
         } catch (Exception e) {

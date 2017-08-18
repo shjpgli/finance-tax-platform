@@ -1,9 +1,7 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.curriculum.Curriculum;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumSituationBo;
+import com.abc12366.bangbang.model.curriculum.bo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -36,6 +34,11 @@ public interface CurriculumRoMapper {
     List<CurriculumListsyBo> selectListNew(Map<String, Object> map);
 
     /**
+     * 查询相关课程
+     **/
+    List<CurriculumListsyBo> selectListxgNew(@Param("curriculumId") String curriculumId);
+
+    /**
      * 查询最热课程
      **/
     List<CurriculumListsyBo> selectListWatch(Map<String, Object> map);
@@ -49,6 +52,11 @@ public interface CurriculumRoMapper {
      * 查询课程授课信息
      **/
     CurriculumSituationBo selectSituation(@Param("curriculumId") String curriculumId);
+
+    /**
+     * 查询课程信息(前端用)
+     **/
+    CurriculumsyBo selectCurriculum(@Param("curriculumId") String curriculumId);
 
 
 }

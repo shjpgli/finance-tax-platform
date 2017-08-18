@@ -1,10 +1,7 @@
 package com.abc12366.bangbang.service;
 
 
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumSituationBo;
+import com.abc12366.bangbang.model.curriculum.bo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +21,8 @@ public interface CurriculumService {
     CurriculumBo save(CurriculumBo curriculumBo);
 
     CurriculumBo selectCurriculum(String curriculumId);
+
+    CurriculumsyBo selectCurriculumsy(String curriculumId);
 
     CurriculumBo update(CurriculumBo curriculumBo);
 

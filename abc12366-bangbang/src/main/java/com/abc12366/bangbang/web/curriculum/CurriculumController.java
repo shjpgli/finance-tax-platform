@@ -1,10 +1,7 @@
 package com.abc12366.bangbang.web.curriculum;
 
 import com.abc12366.bangbang.model.bo.IdsBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumSituationBo;
+import com.abc12366.bangbang.model.curriculum.bo.*;
 import com.abc12366.bangbang.service.CurriculumService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -156,7 +153,7 @@ public class CurriculumController {
     @GetMapping(path = "/selectCurriculum/{curriculumId}")
     public ResponseEntity selectCurriculum(@PathVariable String curriculumId) {
         //查询课程信息
-        CurriculumBo curriculumBo = curriculumService.selectCurriculum(curriculumId);
+        CurriculumsyBo curriculumBo = curriculumService.selectCurriculumsy(curriculumId);
         return ResponseEntity.ok(Utils.kv("data", curriculumBo));
     }
 
