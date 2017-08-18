@@ -21,7 +21,7 @@
             <if test="type != null and type !=''">type = #{type}</if>
             <if test="username != null and username !=''">and username = #{username}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
-            <if test="lastUpdate != null and lastUpdate !=''">and lastUpdate >= #{lastUpdate}</if>
+            <if test="lastUpdate != null">and lastUpdate >= #{lastUpdate}</if>
             <if test="userId != null and userId !=''">and userId = #{userId}</if>
             <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
         </where>
@@ -42,7 +42,7 @@
             <if test="type != null and type !=''">and type = #{type}</if>
             <if test="status != null and status !=''">and status = #{status}</if>
             <if test="username != null and username !=''">and username = #{username}</if>
-            <if test="lastUpdate != null and lastUpdate !=''">and lastUpdate >= #{lastUpdate}</if>
+            <if test="lastUpdate != null">and lastUpdate >= #{lastUpdate}</if>
             <if test="userId != null and userId !=''">and userId = #{userId}</if>
             <if test="orderNo != null and orderNo !=''">and orderNo = #{orderNo}</if>
         </where>
