@@ -55,9 +55,6 @@ public class CurriculumsyBo implements Serializable {
     /**总评论数**int**/
     private Integer evaluateNum;
 
-    /**是否收藏**int**/
-    private Integer iscollect;
-
     //标签
     private List<CurriculumLabel> labelList;
 
@@ -175,14 +172,6 @@ public class CurriculumsyBo implements Serializable {
 
     public void setEvaluateNum(Integer evaluateNum) {
         this.evaluateNum = evaluateNum;
-    }
-
-    public Integer getIscollect() {
-        return iscollect;
-    }
-
-    public void setIscollect(Integer iscollect) {
-        this.iscollect = iscollect;
     }
 
     public List<CurriculumLabel> getLabelList() {
