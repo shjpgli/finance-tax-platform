@@ -27,7 +27,7 @@ public interface InvoiceDistributeRoMapper {
 
 	InvoiceDistributeBO selectInvoiceDistribute(String id);
 
-	List<InvoiceDistribute> selectInvoiceDistributeList(String useId);
-
 	InvoiceDistributeBO selectInvoiceDistributeByInv(InvoiceDistribute invoiceDistribute);
+
+	List<InvoiceDistribute> selectInvoiceDistributeListByUseId(@Param("useId")String useId);
 }

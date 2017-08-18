@@ -36,12 +36,12 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectInvoiceDistributeList" resultType="com.abc12366.uc.model.invoice.InvoiceDistribute"
+    <select id="selectInvoiceDistributeListByUseId" resultType="com.abc12366.uc.model.invoice.InvoiceDistribute"
             parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice_distribute
-        WHERE id = #{id}
+        WHERE useId = #{useId}
     </select>
 
     <select id="selectList" resultMap="invoiceDistributeBOMap"

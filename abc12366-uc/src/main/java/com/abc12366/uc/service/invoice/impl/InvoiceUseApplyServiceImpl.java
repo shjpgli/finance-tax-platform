@@ -245,7 +245,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
 
     @Override
     public void signUseApply(String id) {
-        List<InvoiceDistribute> invoiceDistributeList = invoiceDistributeRoMapper.selectInvoiceDistributeList(id);
+        List<InvoiceDistribute> invoiceDistributeList = invoiceDistributeRoMapper.selectInvoiceDistributeListByUseId(id);
         for(InvoiceDistribute invoiceDistribute:invoiceDistributeList){
             invoiceDistribute.setStatus("1");
             invoiceDistribute.setSignTime(new Date());
