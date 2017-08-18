@@ -19,9 +19,15 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.CurriculumLabel" parameterType="java.lang.String">
         SELECT
-            l.curriculumId,	l.labelId,t.name
+            l.curriculumId,	l.labelId,t.name labelName
         FROM bb_curriculum_label l LEFT JOIN bb_knowledge_tag t ON l.labelId = t.id
         WHERE curriculumId = #{curriculumId}
+    </select>
+
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectLabelList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLabelBo" parameterType="java.lang.String">
+        select a.labelId,b.name labelName from (SELECT labelId FROM bb_curriculum_label group by labelId) a left join bb_knowledge_tag b on a.labelId = b.id
     </select>
 
 

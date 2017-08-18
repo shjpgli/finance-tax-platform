@@ -131,6 +131,19 @@ public class CurriculumServiceImpl implements CurriculumService {
     }
 
     @Override
+    public List<CurriculumLabelBo> selectLabelList() {
+        List<CurriculumLabelBo> CurriculumLabelBoList;
+        try {
+            //查询课程标签列表
+            CurriculumLabelBoList = curriculumLabelRoMapper.selectLabelList();
+        } catch (Exception e) {
+            LOGGER.error("查询课程标签信息异常：{}", e);
+            throw new ServiceException(5000);
+        }
+        return CurriculumLabelBoList;
+    }
+
+    @Override
     public CurriculumBo save(CurriculumBo curriculumBo) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(curriculumBo);

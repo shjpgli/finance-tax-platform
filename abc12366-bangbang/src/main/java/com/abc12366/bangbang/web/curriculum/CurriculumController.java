@@ -118,6 +118,16 @@ public class CurriculumController {
     }
 
     /**
+     * 查询课程标签列表(前端用)
+     */
+    @GetMapping(path = "/selectLabelList")
+    public ResponseEntity selectLabelList() {
+        //查询课程标签列表信息
+        List<CurriculumLabelBo> dataList = curriculumService.selectLabelList();
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
+    /**
      * 查询单个课程授课信息
      */
     @GetMapping(path = "/selectSituation/{curriculumId}")

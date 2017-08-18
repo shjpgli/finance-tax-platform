@@ -16,6 +16,8 @@ public interface CurriculumService {
 
     List<CurriculumListsyBo> selectRecommend(Map<String, Object> map);
 
+    List<CurriculumLabelBo> selectLabelList();
+
     CurriculumSituationBo selectSituation(String curriculumId);
 
     CurriculumBo save(CurriculumBo curriculumBo);

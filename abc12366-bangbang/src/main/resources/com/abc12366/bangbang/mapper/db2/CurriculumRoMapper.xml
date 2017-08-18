@@ -118,8 +118,7 @@
         (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId =c.curriculumId) evaluateNum,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId =c.curriculumId) evaluateNum45,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(2,3) and curriculumId =c.curriculumId) evaluateNum23,
-            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade = 1 and curriculumId =c.curriculumId) evaluateNum1,
-            (SELECT count(*) FROM bb_curriculum_collect where curriculumId =c.curriculumId) iscollect
+            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade = 1 and curriculumId =c.curriculumId) evaluateNum1
         FROM bb_curriculum c
         WHERE curriculumId = #{curriculumId}
     </select>
