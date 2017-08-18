@@ -45,6 +45,20 @@ public class CurrClassifyController {
     }
 
     /**
+     * 课程分类列表查询(供前端使用)
+     */
+    @GetMapping(path = "/selectListsy")
+    public ResponseEntity selectListsy(@RequestParam(value = "classifyId", required = false) String classifyId,
+                                     @RequestParam(value = "parentId", required = false) String parentId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("classifyId",classifyId);//分类ID
+        dataMap.put("parentId",parentId);//父ID
+        List<CurriculumClassifyBo> dataList = classifyService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+
+    }
+
+    /**
      * 课程分类新增
      */
     @PostMapping
