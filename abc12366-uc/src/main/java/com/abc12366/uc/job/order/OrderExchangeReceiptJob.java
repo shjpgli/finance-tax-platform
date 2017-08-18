@@ -23,7 +23,7 @@ public class OrderExchangeReceiptJob implements Job{
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        LOGGER.info("JobName2: {}", context.getJobDetail().getKey().getName());
+        LOGGER.info("JobName: {}", context.getJobDetail().getKey().getName());
         try {
             orderExchangeService.automaticReceipt();
         } catch (Exception e) {
