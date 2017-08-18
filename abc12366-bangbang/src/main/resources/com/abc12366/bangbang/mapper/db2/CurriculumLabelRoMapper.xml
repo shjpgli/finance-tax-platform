@@ -19,8 +19,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.CurriculumLabel" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_label
+            l.curriculumId,	l.labelId,t.name
+        FROM bb_curriculum_label l LEFT JOIN bb_knowledge_tag t ON l.labelId = t.id
         WHERE curriculumId = #{curriculumId}
     </select>
 

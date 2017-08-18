@@ -21,7 +21,7 @@
         <include refid="Base_Column"/>
         FROM msg_business_message
         WHERE userId = #{userId}
-        AND type = #{type}
+        <if test="type!=null">AND type = #{type}</if>
         AND status != '0'
         AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
         ORDER BY createTime DESC

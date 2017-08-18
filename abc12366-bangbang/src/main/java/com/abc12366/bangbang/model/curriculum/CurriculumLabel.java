@@ -16,6 +16,9 @@ public class CurriculumLabel implements Serializable {
 	/**标签ID**varchar(64)**/
 	private String labelId;
 
+    /**标签ID**varchar(30)**/
+    private String labelName;
+
 
 
 	public void setCurriculumId(String curriculumId){
@@ -34,4 +37,11 @@ public class CurriculumLabel implements Serializable {
 		return this.labelId;
 	}
 
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
 }

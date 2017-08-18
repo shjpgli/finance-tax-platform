@@ -50,6 +50,9 @@ public class MessageController {
 
         request.setAttribute("page", page);
         request.setAttribute("size", size);
+        if (type != null && type.equals("")) {
+            type = null;
+        }
 
         if (!StringUtils.isEmpty(userId)) {
             MessageListBO data = messageService.selectList(type, page, size, request);

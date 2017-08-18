@@ -38,7 +38,10 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageListBO selectList(String type, int page, int size, HttpServletRequest request) throws IOException {
         LOGGER.info("{},{}:{}:{}", type, page, size, request);
-        String url = properties.getValue("chabc.soa.message.url") + "/business?type=" + type;
+        String url = properties.getValue("chabc.soa.message.url") + "/business?";
+        if (type != null && !type.equals("")) {
+            url = url + "type=" + type;
+        }
         if (!StringUtils.isEmpty(request.getAttribute("page"))) {
             url += "&page=" + request.getAttribute("page");
             if (!StringUtils.isEmpty(request.getAttribute("size"))) {
