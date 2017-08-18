@@ -258,7 +258,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             //更新发票领用申请表状态
             InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
             invoiceUseApply.setId(invoiceDistribute.getUseId());
-            invoiceUseApply.setIssueStatus("1");
+            invoiceUseApply.setIssueStatus("2");
             invoiceUseApply.setSignTime(new Date());
             invoiceUseApply.setSignUser(UserUtil.getAdminId());
             invoiceUseApplyMapper.update(invoiceUseApply);

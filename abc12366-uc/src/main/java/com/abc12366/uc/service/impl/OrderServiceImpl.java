@@ -261,7 +261,8 @@ public class OrderServiceImpl implements OrderService {
 
         //商品价格
         double totalPrice;
-        int giftPoints;
+        int giftPoints; //赠送积分
+//        int consumePoints;
         //根据用户等级查找该等级下赠送的积分，没有则设置为goods中设置的赠送积分
         UvipPrice uvip = new UvipPrice();
         uvip.setProductId(prBO.getId());
@@ -447,30 +448,36 @@ public class OrderServiceImpl implements OrderService {
         repo.setOptionUser(orderBO.getUserId());
         productRepoMapper.insert(repo);
 
-        //消费积分
-        int outPoints = (int) prBO.getSellingPrice().doubleValue();
-        //收入积分
-        int giftPoints;
-
+        //商品价格
+        double totalPrice;
+        int giftPoints; //赠送积分
         //根据用户等级查找该等级下赠送的积分，没有则设置为goods中设置的赠送积分
         UvipPrice uvip = new UvipPrice();
-        uvip.setProductId(product.getId());
+        uvip.setProductId(prBO.getId());
         uvip.setVipLevel(user.getVipLevel());
         UvipPrice uvipPrice = uvipPriceRoMapper.selectByLevel(uvip);
+        //查找对应的金额
+        if(uvipPrice != null && uvipPrice.getTradePrice() != null && !"".equals(uvipPrice.getTradePrice())){
+            totalPrice = uvipPrice.getTradePrice();
+        }else{
+            totalPrice = prBO.getSellingPrice();
+        }
+        //查找对应的积分
         if(uvipPrice != null && uvipPrice.getGiftPoints() != null && !"".equals(uvipPrice.getGiftPoints())){
             giftPoints = uvipPrice.getGiftPoints();
         }else{
             giftPoints = goodsBO.getGiftPoints();
         }
+
         int userPoints = user.getPoints();
         //比较用户积分是否足够
-        if (user != null && userPoints < outPoints) {
+        if (user != null && userPoints < totalPrice) {
             LOGGER.info("用户积分不足，请充值：{}", user);
             throw new ServiceException(4904);
         }
 
         //可用积分=上一次的可用积分+|-本次收入|支出
-        int usablePoints = userPoints + (giftPoints * num) - (outPoints * num);
+        int usablePoints = (int) (userPoints + (giftPoints * num) - (totalPrice * num));
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
         int userUpdateResult = userMapper.update(user);
@@ -483,9 +490,10 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setUserId(orderBO.getUserId());
         pointsLog.setId(Utils.uuid());
         pointsLog.setIncome(giftPoints);
-        pointsLog.setOutgo(outPoints);
+        pointsLog.setOutgo((int) totalPrice);
         pointsLog.setCreateTime(new Date());
         pointsLog.setUsablePoints(usablePoints);
+        pointsLog.setRemark("积分兑换");
         int result = pointsLogMapper.insert(pointsLog);
         if (result != 1) {
             LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
@@ -497,6 +505,7 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setNowVipLevel(user.getVipLevel());
         orderBO.setUsername(user.getUsername());
         orderBO.setGiftPoints(giftPoints);
+        orderBO.setTotalPrice(totalPrice);
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {
