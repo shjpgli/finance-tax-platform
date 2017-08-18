@@ -207,6 +207,13 @@
             <artifactId>javax.mail</artifactId>
             <version>1.5.3</version>
         </dependency>
+        <!-- 20170818下午发现com.abc12366.uc.configQuartzJobFactory缺乏依赖，新加一下依赖https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.3.6.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <build>
