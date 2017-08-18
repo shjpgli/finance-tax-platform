@@ -13,6 +13,15 @@ public class DictUpdateBO implements Serializable {
     private String fieldKey;
     private String fieldValue;
     private boolean status;
+    private Integer sort;
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
 
     public String getDictName() {
         return dictName;
