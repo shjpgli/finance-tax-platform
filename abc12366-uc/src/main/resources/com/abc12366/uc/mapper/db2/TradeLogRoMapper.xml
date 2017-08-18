@@ -16,11 +16,11 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectOne" resultType="com.abc12366.uc.model.TradeLog" parameterType="java.lang.String">
+    <select id="selectOne" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.bo.TradeBillBO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
-        WHERE aliTrandeNo = #{tradeNo}
+        WHERE aliTrandeNo = #{tradeNo} and orderNo=#{orderNo}
     </select>
 
     <!-- 查询（根据主键orderNo查询） -->

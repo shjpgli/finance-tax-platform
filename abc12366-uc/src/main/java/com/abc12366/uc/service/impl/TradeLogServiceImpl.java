@@ -40,8 +40,8 @@ public class TradeLogServiceImpl implements TradeLogService {
 		return tradeLogMapper.insertTradeLog(tradeLog);
 	}
 
-    public TradeLog selectOne(String tradeNo) {
-        return tradeLogRoMapper.selectOne(tradeNo);
+    public TradeLog selectOne(TradeBillBO data) {
+        return tradeLogRoMapper.selectOne(data);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class TradeLogServiceImpl implements TradeLogService {
         List<TradeBillBO> undoneList = new ArrayList<>();
         if (dataList.size() > 0) {
             for (TradeBillBO data: dataList) {
-                TradeLog log = selectOne(data.getTradeNo());
+                TradeLog log = selectOne(data);
                 if (log != null && log.getOrderNo().equals(data.getOrderNo())
                         && log.getAmount().equals(data.getAmount())) {
                     log.setCompareStatus("1");
