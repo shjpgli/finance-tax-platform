@@ -346,6 +346,17 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoice.setStatus("4");
             invoice.setId(expressExcel.getInvoiceOrderNo());
             invoice.setWaybillNum(expressExcel.getWaybillNum());
+
+            Invoice ce = new Invoice();
+            ce.setId(expressExcel.getInvoiceOrderNo());
+            ce.setStatus("7");
+            //查询发票信息表状态
+            Invoice invoiceTemp = invoiceRoMapper.selectByInvoiceOrderNo(ce);
+            if(invoiceTemp != null){
+                LOGGER.info("发票不存在或发票已被使用：{}", expressExcel);
+                throw new ServiceException(4913,"只有在已开票状态，该张发票才能被导入"+expressExcel.getInvoiceOrderNo());
+            }
+
             int update = invoiceMapper.update(invoice);
             if(update != 1){
                 LOGGER.info("修改失败：{}", invoice);
@@ -365,8 +376,16 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
                 throw new ServiceException(4913);
             }
+            Invoice ce = new Invoice();
+            ce.setId(invoiceExcel.getInvoiceOrderNo());
+            ce.setStatus("2");
+            //查询发票信息表状态
+            Invoice invoiceTemp = invoiceRoMapper.selectByInvoiceOrderNo(ce);
+            if(invoiceTemp != null){
+                LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
+                throw new ServiceException(4913,"只有在已审批状态，该张发票才能被导入"+invoiceExcel.getInvoiceOrderNo());
+            }
             //修改库存信息表
-
             Invoice invoice = new Invoice();
             invoice.setStatus("7");
             invoice.setId(invoiceExcel.getInvoiceOrderNo());
@@ -409,7 +428,9 @@ public class InvoiceServiceImpl implements InvoiceService {
             LOGGER.info("发票快递单信息查询错误：{}", invoiceBack);
             throw new ServiceException(4145);
         }
-        Invoice invoice = invoiceRoMapper.selectByInvoiceOrderNo(express.getInvoiceOrderNo());
+        Invoice temp = new Invoice();
+        temp.setId(express.getInvoiceOrderNo());
+        Invoice invoice = invoiceRoMapper.selectByInvoiceOrderNo(temp);
         if (invoice == null) {
             LOGGER.info("发票信息查询错误：{}", invoiceBack);
             throw new ServiceException(4146);
