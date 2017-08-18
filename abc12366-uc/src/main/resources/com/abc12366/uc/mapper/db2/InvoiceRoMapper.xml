@@ -209,6 +209,20 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
+    <select id="selectByInvoiceOrderNo" resultType="com.abc12366.uc.model.Invoice" parameterType="com.abc12366.uc.model.Invoice">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_invoice
+        WHERE id = #{id}
+        <where>
+            1 = 1
+            <if test=" status != null and status != '' ">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultMap="invoiceBOResultMap" parameterType="java.lang.String">
         SELECT
         <include refid="InvoiceBO_Column_List"/>
