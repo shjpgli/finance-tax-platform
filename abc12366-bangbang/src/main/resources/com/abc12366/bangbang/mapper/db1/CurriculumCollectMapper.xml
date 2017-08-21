@@ -4,9 +4,9 @@
 <mapper namespace="com.abc12366.bangbang.mapper.db1.CurriculumCollectMapper">
 
 	<!--删除：根据主键ID删除-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+	<delete id="delete" parameterType="java.util.Map">
 		 DELETE FROM bb_curriculum_collect
-		 WHERE collectId = #{collectId}
+		 WHERE curriculumId = #{curriculumId} and userId = #{userId}
 	</delete>
 
 	<!-- 添加 -->
@@ -16,57 +16,5 @@
 		 VALUES 
  		(#{collectId},#{curriculumId},#{userId}) 
 	</insert>
-
-	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumCollect">
-		 INSERT INTO bb_curriculum_collect
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="collectId != null">
-				 collectId,
-			</if>
-			<if test="curriculumId != null">
-				 curriculumId,
-			</if>
-			<if test="userId != null">
-				 userId,
-			</if>
-
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="collectId!=null">
-				 #{collectId},
-			</if>
-			<if test="curriculumId!=null">
-				 #{curriculumId},
-			</if>
-			<if test="userId!=null">
-				 #{userId},
-			</if>
-		 </trim>
-	</insert>
-
-	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumCollect">
-		 UPDATE bb_curriculum_collect
- 		 <set> 
-			<if test="curriculumId != null">
-				 curriculumId = #{curriculumId},
-			</if>
-			<if test="userId != null">
-				 userId = #{userId},
-			</if>
-
- 		 </set>
-		 WHERE collectId = #{collectId}
-	</update>
-
-	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumCollect">
-		 UPDATE bb_curriculum_collect
-		 SET 
-			 curriculumId = #{curriculumId},
-			 userId = #{userId}
-		 WHERE collectId = #{collectId}
-	</update>
 
 </mapper>

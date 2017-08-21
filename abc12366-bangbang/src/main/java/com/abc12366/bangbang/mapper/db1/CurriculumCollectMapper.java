@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.curriculum.CurriculumCollect;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 /**
  * 
  * CurriculumCollectMapper数据库操作接口类
@@ -11,14 +13,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface CurriculumCollectMapper{
 
-
-	/**
-	 * 
-	 * 删除（根据主键ID删除）
-	 * 
-	 **/
-	int deleteByPrimaryKey(@Param("collectId") String collectId);
-
 	/**
 	 * 
 	 * 添加
@@ -26,25 +20,7 @@ public interface CurriculumCollectMapper{
 	 **/
 	int insert(CurriculumCollect record);
 
-	/**
-	 * 
-	 * 添加 （匹配有值的字段）
-	 * 
-	 **/
-	int insertSelective(CurriculumCollect record);
+    void delete(Map map);
 
-	/**
-	 * 
-	 * 修改 （匹配有值的字段）
-	 * 
-	 **/
-	int updateByPrimaryKeySelective(CurriculumCollect record);
-
-	/**
-	 * 
-	 * 修改（根据主键ID修改）
-	 * 
-	 **/
-	int updateByPrimaryKey(CurriculumCollect record);
 
 }

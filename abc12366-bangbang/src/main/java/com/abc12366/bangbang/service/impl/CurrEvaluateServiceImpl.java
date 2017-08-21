@@ -46,6 +46,19 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
     }
 
     @Override
+    public List<CurriculumEvaluateBo> selectListBycurrId(Map<String,Object> map) {
+        List<CurriculumEvaluateBo> evaluateBoList;
+        try {
+            //查询课程评价列表
+            evaluateBoList = evaluateRoMapper.selectListBycurrId(map);
+        } catch (Exception e) {
+            LOGGER.error("查询课程评价列表信息异常：{}", e);
+            throw new ServiceException(4310);
+        }
+        return evaluateBoList;
+    }
+
+    @Override
     public CurriculumEvaluateBo save(CurriculumEvaluateBo evaluateBo) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(evaluateBo);

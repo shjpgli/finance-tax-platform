@@ -8,20 +8,20 @@
 		 collectId,	curriculumId,	userId
 	</sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.curriculum.CurriculumCollect" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_curriculum_collect
-		 WHERE collectId = #{collectId}
-	</select>
-
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo" parameterType="java.util.Map">
+    <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List" />
         FROM bb_curriculum_collect
-        WHERE 1=1
+        WHERE userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectExist" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT
+          count(1)
+        FROM bb_curriculum_collect
+        WHERE curriculumId = #{curriculumId} and userId = #{userId}
     </select>
 
 

@@ -46,6 +46,23 @@ public class CurrEvaluateController {
     }
 
     /**
+     * 课程评价列表查询
+     */
+    @GetMapping(path = "/selectListBycurrId")
+    public ResponseEntity selectListBycurrId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                             @RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                             @RequestParam(value = "grade", required = false) String grade) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId", curriculumId);//课程ID
+        dataMap.put("grade", grade);//评价等级
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CurriculumEvaluateBo> dataList = currEvaluateService.selectListBycurrId(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 课程评价新增
      */
     @PostMapping

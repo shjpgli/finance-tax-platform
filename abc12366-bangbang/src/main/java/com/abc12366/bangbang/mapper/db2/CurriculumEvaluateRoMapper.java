@@ -28,5 +28,10 @@ public interface CurriculumEvaluateRoMapper {
      **/
     List<CurriculumEvaluateBo> selectList(Map<String, Object> map);
 
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    List<CurriculumEvaluateBo> selectListBycurrId(Map<String, Object> map);
+
 
 }

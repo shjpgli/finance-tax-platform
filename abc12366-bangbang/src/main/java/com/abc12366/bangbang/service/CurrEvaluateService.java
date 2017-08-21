@@ -10,6 +10,8 @@ public interface CurrEvaluateService {
 
     List<CurriculumEvaluateBo> selectList(Map<String, Object> map);
 
+    List<CurriculumEvaluateBo> selectListBycurrId(Map<String, Object> map);
+
     CurriculumEvaluateBo save(CurriculumEvaluateBo curriculumEvaluateBo);
 
     CurriculumEvaluateBo selectEvaluate(String evaluateId);
