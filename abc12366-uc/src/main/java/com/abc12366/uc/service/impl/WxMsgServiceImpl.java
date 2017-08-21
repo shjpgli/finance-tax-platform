@@ -12,6 +12,7 @@ import com.abc12366.uc.service.IWxMsgService;
 import com.abc12366.uc.util.wx.MsgMap;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -58,6 +59,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
     public String exec(HttpServletRequest request) {
         try {
             Map<String, String> map = parseXml(request);
+            LOGGER.info("微信服务器推送信息:"+JSON.toJSONString(map));
             int msgCode = MsgMap.getMsgType(map.get("MsgType"));
             switch (msgCode) {
                 case 0://文本

@@ -56,6 +56,7 @@ public class ReturnMsg {
             buffer.append("</Articles>");
         }
         buffer.append("</xml>");
+        System.out.println("回复微信服务器信息:"+buffer.toString());
         return buffer.toString();
     }
 
