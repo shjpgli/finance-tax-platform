@@ -148,4 +148,13 @@ public class UserController {
         LOGGER.info("{}", message);
         return ResponseEntity.ok(Utils.kv("data", message));
     }
+    /**
+     * 启用、禁用
+     */
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
+        LOGGER.info("{}:{}", id, status);
+        userService.enableOrDisable(id, status);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

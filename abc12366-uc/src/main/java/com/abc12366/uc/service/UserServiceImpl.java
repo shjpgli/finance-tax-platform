@@ -84,7 +84,25 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
+    @Override
+    public void enableOrDisable(String id, String status) {
+        LOGGER.info("{}:{}", id, status);
+        if ((!status.equals("true")) && (!status.equals("false"))) {
+            throw new ServiceException(4614);
+        }
+        boolean modifyStatus = status.equals("true");
+        User obj = new User();
+        obj.setId(id);
+        obj.setStatus(modifyStatus);
+        obj.setLastUpdate(new Date());
+        int result = userMapper.update(obj);
+        if (result < 1) {
+            if (modifyStatus) {
+                throw new ServiceException(4623);
+            }
+            throw new ServiceException(4624);
+        }
+    }
     @Override
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
