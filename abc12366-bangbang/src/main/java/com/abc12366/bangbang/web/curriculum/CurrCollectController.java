@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
+ * 课程收藏管理
  * User: xieyanmao
  * Date: 2017-08-21
  * Time: 17:23
@@ -31,6 +32,9 @@ public class CurrCollectController {
     @Autowired
     private CurrCollectService collectService;
 
+    /**
+     * 新增课程收藏
+     */
     @PostMapping(path = "/{curriculumId}")
     public ResponseEntity insert(@PathVariable String curriculumId, HttpServletRequest request) {
         LOGGER.info("{}:{}", curriculumId, request);
@@ -38,6 +42,9 @@ public class CurrCollectController {
         return ResponseEntity.ok(Utils.kv("data", collectBO));
     }
 
+    /**
+     * 删除课程收藏
+     */
     @DeleteMapping(path = "/{curriculumId}")
     public ResponseEntity delete(@PathVariable String curriculumId, HttpServletRequest request) {
         LOGGER.info("{}:{}", curriculumId, request);
@@ -45,6 +52,9 @@ public class CurrCollectController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 查询课程收藏列表
+     */
     @GetMapping(path = "/{userId}")
     public ResponseEntity selectList(@PathVariable String userId,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -58,6 +68,9 @@ public class CurrCollectController {
                         ()));
     }
 
+    /**
+     * 查询课程是否已收藏
+     */
     @GetMapping(path = "/count/{curriculumId}")
     public ResponseEntity selectExist(@PathVariable String curriculumId,HttpServletRequest request) {
         LOGGER.info("{}", curriculumId);

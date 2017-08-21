@@ -55,7 +55,7 @@ public class CurriculumController {
     }
 
     /**
-     * 最新课程查询
+     * 最新课程查询(前端用无需登录)
      */
     @GetMapping(path = "/selectListNew")
     public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -76,7 +76,7 @@ public class CurriculumController {
     }
 
     /**
-     * 最热课程查询
+     * 最热课程查询(前端用无需登录)
      */
     @GetMapping(path = "/selectListWatch")
     public ResponseEntity selectListWatch(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -97,7 +97,7 @@ public class CurriculumController {
     }
 
     /**
-     * 推荐课程查询
+     * 推荐课程查询(前端用无需登录)
      */
     @GetMapping(path = "/selectRecommend")
     public ResponseEntity selectRecommend(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -118,7 +118,7 @@ public class CurriculumController {
     }
 
     /**
-     * 查询课程标签列表(前端用)
+     * 查询课程标签列表(前端用无需登录)
      */
     @GetMapping(path = "/selectLabelList")
     public ResponseEntity selectLabelList() {
@@ -158,7 +158,7 @@ public class CurriculumController {
     }
 
     /**
-     * 查询单个课程详情信息(前端用)
+     * 查询单个课程详情信息(前端用无需登录)
      */
     @GetMapping(path = "/selectCurriculum/{curriculumId}")
     public ResponseEntity selectCurriculum(@PathVariable String curriculumId) {

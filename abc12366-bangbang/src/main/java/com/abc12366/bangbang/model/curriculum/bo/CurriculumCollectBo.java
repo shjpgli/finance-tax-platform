@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.model.curriculum.bo;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -18,6 +19,9 @@ public class CurriculumCollectBo implements Serializable {
 
 	/**用户ID**varchar(64)**/
 	private String userId;
+
+    /**收藏时间**data**/
+    private java.util.Date collectTime;
 
 
 
@@ -45,4 +49,12 @@ public class CurriculumCollectBo implements Serializable {
 		return this.userId;
 	}
 
+
+    public Date getCollectTime() {
+        return collectTime;
+    }
+
+    public void setCollectTime(Date collectTime) {
+        this.collectTime = collectTime;
+    }
 }

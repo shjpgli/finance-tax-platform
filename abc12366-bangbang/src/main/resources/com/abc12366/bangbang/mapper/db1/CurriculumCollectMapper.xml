@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumCollect">
 		 INSERT INTO bb_curriculum_collect
- 		(collectId,curriculumId,userId) 
+ 		(collectId,curriculumId,userId,collectTime)
 		 VALUES 
- 		(#{collectId},#{curriculumId},#{userId}) 
+ 		(#{collectId},#{curriculumId},#{userId},#{collectTime})
 	</insert>
 
 </mapper>

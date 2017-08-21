@@ -16,7 +16,7 @@ public class CurriculumLabelBo implements Serializable {
 	/**标签ID**varchar(64)**/
 	private String labelId;
 
-    /**标签ID**varchar(30)**/
+    /**标签名称**varchar(30)**/
     private String labelName;
 
 

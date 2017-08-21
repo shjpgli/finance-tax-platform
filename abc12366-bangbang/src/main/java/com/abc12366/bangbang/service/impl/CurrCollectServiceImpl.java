@@ -47,6 +47,13 @@ public class CurrCollectServiceImpl implements CurrCollectService {
 
         CurriculumCollect collect = new CurriculumCollect();
         Date date = new Date();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        collect.setCollectId(uuid);
+        collect.setCurriculumId(curriculumId);
+        collect.setUserId(userId);
+
+        Map map = MapUtil.kv("curriculumId", curriculumId, "userId", userId);
+        collectMapper.delete(map);
 
         int result = collectMapper.insert(collect);
 
