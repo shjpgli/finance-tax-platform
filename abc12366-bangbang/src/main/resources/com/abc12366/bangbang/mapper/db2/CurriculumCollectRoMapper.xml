@@ -17,9 +17,9 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectExist" resultType="java.lang.String" parameterType="java.util.Map">
+    <select id="selectExist" resultType="java.lang.Integer" parameterType="java.util.Map">
         SELECT
-          count(1)
+          count(collectId)
         FROM bb_curriculum_collect
         WHERE curriculumId = #{curriculumId} and userId = #{userId}
     </select>

@@ -53,7 +53,11 @@ public class CurrCollectServiceImpl implements CurrCollectService {
         collect.setUserId(userId);
 
         Map map = MapUtil.kv("curriculumId", curriculumId, "userId", userId);
-        collectMapper.delete(map);
+        int cnt =  collectRoMapper.selectExist(map);
+
+        if(cnt >0){
+            throw new ServiceException(4325);
+        }
 
         int result = collectMapper.insert(collect);
 
@@ -81,7 +85,8 @@ public class CurrCollectServiceImpl implements CurrCollectService {
         LOGGER.info("{}", curriculumId);
         String userId = UcUserCommon.getUserId(request);
         Map map = MapUtil.kv("curriculumId", curriculumId, "userId", userId);
-        return collectRoMapper.selectExist(map);
+        String cnt = collectRoMapper.selectExist(map)+"";
+        return cnt;
     }
 
 }

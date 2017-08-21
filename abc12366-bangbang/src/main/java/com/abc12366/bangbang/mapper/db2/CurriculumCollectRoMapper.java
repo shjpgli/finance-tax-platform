@@ -19,7 +19,7 @@ public interface CurriculumCollectRoMapper {
 
     List<CurriculumCollectBo> selectList(String userId);
 
-    String selectExist(Map map);
+    int selectExist(Map map);
 
 
 }
