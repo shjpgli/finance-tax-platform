@@ -9,13 +9,13 @@
     </sql>
 
     <insert id="savePerson" parameterType="com.abc12366.uc.model.weixin.bo.person.WxPerson">
-        INSERT INTO cszj_wxuser(<include refid="Base_Column_List"/>)
+        INSERT INTO uc_wxuser(<include refid="Base_Column_List"/>)
         VALUES (#{subscribe}, #{openid}, #{nickname}, #{sex}, #{language}, #{city}, #{province}, #{country},
         #{headimgurl}, #{subscribe_time}, #{remark}, #{groupid}, #{unionid},#{lastupdate},#{userid})
     </insert>
 
     <update id="updatePerson" parameterType="com.abc12366.uc.model.weixin.bo.person.WxPerson">
-        UPDATE cszj_wxuser
+        UPDATE uc_wxuser
         <set>
             <if test="subscribe != null">subscribe = #{subscribe},</if>
             <if test="nickname != null">nickname = #{nickname},</if>
