@@ -65,7 +65,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
                 case 0://文本
                     ReturnMsg keymsg = getReMsgOneBykeyString(map.get("Content"));
                     if (keymsg != null) {
-                        return keymsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System
+                        return keymsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System
                                 .currentTimeMillis());
                     }
                 case 1://图片消息
@@ -76,7 +76,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
                 case 6://链接
                     ReturnMsg remsg = getReMsgOneBysetting("1");
                     if (remsg != null) {
-                        return remsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System.currentTimeMillis
+                        return remsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System.currentTimeMillis
 								());
                     }
                 case 7:
@@ -85,7 +85,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
                         case 0://关注
                             ReturnMsg newmsg = getReMsgOneBysetting("0");
                             if (newmsg != null) {
-                                return newmsg.toWxXml(map.get("ToUserName"), map.get("FromUserName"), System
+                                return newmsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System
 										.currentTimeMillis());
                             }
                         case 1://取消关注

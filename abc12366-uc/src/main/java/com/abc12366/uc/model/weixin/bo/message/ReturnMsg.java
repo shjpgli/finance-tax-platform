@@ -34,23 +34,23 @@ public class ReturnMsg {
         this.fromUserName = fromUserName;
         this.createTime = createTime;
         StringBuffer buffer = new StringBuffer("<xml>");
-        buffer.append("<ToUserName><![CDATA[>").append(this.toUserName).append("]]></ToUserName>");
-        buffer.append("<FromUserName><![CDATA[>").append(this.fromUserName).append("]]></FromUserName>");
-        buffer.append("<CreateTime><![CDATA[>").append(this.createTime).append("]]></CreateTime>");
-        buffer.append("<MsgType><![CDATA[>").append(this.msgType).append("]]></MsgType>");
+        buffer.append("<ToUserName><![CDATA[").append(this.toUserName).append("]]></ToUserName>");
+        buffer.append("<FromUserName><![CDATA[").append(this.fromUserName).append("]]></FromUserName>");
+        buffer.append("<CreateTime><![CDATA[").append(this.createTime).append("]]></CreateTime>");
+        buffer.append("<MsgType><![CDATA[").append(this.msgType).append("]]></MsgType>");
         if ("text".equals(this.msgType)) {
-            buffer.append("<Content><![CDATA[>").append(this.content).append("]]></Content>");
+            buffer.append("<Content><![CDATA[").append(this.content).append("]]></Content>");
         } else if ("image".equals(this.msgType)) {
-            buffer.append("<Image><MediaId><![CDATA[>").append(this.mediaId).append("]]></MediaId></Image>");
+            buffer.append("<Image><MediaId><![CDATA[").append(this.mediaId).append("]]></MediaId></Image>");
         } else {
-            buffer.append("<ArticleCount><![CDATA[>").append(this.news.getArticleCount()).append
+            buffer.append("<ArticleCount><![CDATA[").append(this.news.getArticleCount()).append
                     ("]]></ArticleCount><Articles>");
             for (Article article : this.news.getArticles()) {
                 buffer.append("<item>");
-                buffer.append("<Title><![CDATA[>").append(article.getTitle()).append("]]></Title>");
-                buffer.append("<Description><![CDATA[>").append(article.getDescription()).append("]]></Description>");
-                buffer.append("<PicUrl><![CDATA[>").append(article.getPicUrl()).append("]]></PicUrl>");
-                buffer.append("<Url><![CDATA[>").append(article.getUrl()).append("]]></Url>");
+                buffer.append("<Title><![CDATA[").append(article.getTitle()).append("]]></Title>");
+                buffer.append("<Description><![CDATA[").append(article.getDescription()).append("]]></Description>");
+                buffer.append("<PicUrl><![CDATA[").append(article.getPicUrl()).append("]]></PicUrl>");
+                buffer.append("<Url><![CDATA[").append(article.getUrl()).append("]]></Url>");
                 buffer.append("</item>");
             }
             buffer.append("</Articles>");
