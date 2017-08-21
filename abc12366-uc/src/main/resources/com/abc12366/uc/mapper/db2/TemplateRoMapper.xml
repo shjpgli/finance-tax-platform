@@ -11,7 +11,7 @@
             parameterType="com.abc12366.uc.model.weixin.bo.template.Template">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM cszj_template
+        FROM uc_wxtemplate
         <where>
             1 = 1
             <if test="title != null">and title like CONCAT('%',#{title},'%')</if>
@@ -25,7 +25,7 @@
             parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM cszj_template
+        FROM uc_wxtemplate
         WHERE template_id = #{id}
     </select>
 </mapper>

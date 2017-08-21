@@ -5,18 +5,18 @@
 
 
     <insert id="insert" parameterType="com.abc12366.uc.model.weixin.bo.template.Template">
-        INSERT INTO cszj_template(template_id,title,primary_industry,deputy_industry,content,example,lastupdate)
+        INSERT INTO uc_wxtemplate(template_id,title,primary_industry,deputy_industry,content,example,lastupdate)
         VALUES (#{template_id}, #{title}, #{primary_industry}, #{deputy_industry}, #{content}, #{example},
         #{lastupdate})
     </insert>
 
 
     <delete id="delete" parameterType="java.lang.String">
-        DELETE FROM cszj_template WHERE template_id = #{template_id}
+        DELETE FROM uc_wxtemplate WHERE template_id = #{template_id}
     </delete>
 
     <delete id="deleteAll" parameterType="java.lang.String">
-        DELETE FROM cszj_template
+        DELETE FROM uc_wxtemplate
     </delete>
 
 </mapper>
