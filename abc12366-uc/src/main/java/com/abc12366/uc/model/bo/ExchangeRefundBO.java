@@ -25,7 +25,7 @@ public class ExchangeRefundBO {
     private Double amount;
 
     // 备注
-    @NotEmpty
+    //@NotEmpty
     @Length(max = 500)
     private String adminRemark;
 
