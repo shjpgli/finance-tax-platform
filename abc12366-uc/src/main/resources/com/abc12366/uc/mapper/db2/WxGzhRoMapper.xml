@@ -11,7 +11,7 @@
             parameterType="com.abc12366.uc.model.weixin.bo.gzh.GzhInfo">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM uc_gzh
+        FROM uc_wxgzh
         <where>
             1 = 1
             <if test="gzhName != null">and gzhName = #{gzhName}</if>
@@ -23,12 +23,12 @@
     <select id="selectOne" resultType="com.abc12366.uc.model.weixin.bo.gzh.GzhInfo" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM uc_gzh
+        FROM uc_wxgzh
         WHERE id = #{id}
     </select>
     
     <select id="selectUserToken" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT userToken from uc_gzh where appid =  #{appid}
+        SELECT userToken from uc_wxgzh where appid =  #{appid}
     </select>
     
 </mapper>

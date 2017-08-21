@@ -8,12 +8,12 @@
     </sql>
 
     <insert id="insert" parameterType="com.abc12366.uc.model.weixin.bo.gzh.GzhInfo">
-        INSERT INTO uc_gzh(<include refid="Base_Column_List"/>)
+        INSERT INTO uc_wxgzh(<include refid="Base_Column_List"/>)
         VALUES (#{id}, #{gzhName}, #{appid}, #{secret}, #{tokenStr}, #{serverUrl}, #{creatDate}, #{lastupdate})
     </insert>
 
     <update id="update" parameterType="com.abc12366.uc.model.weixin.bo.gzh.GzhInfo">
-        UPDATE uc_gzh
+        UPDATE uc_wxgzh
         <set>
             <if test="gzhName != null">gzhName = #{gzhName},</if>
             <if test="appid != null">appid = #{appid},</if>
@@ -26,13 +26,13 @@
     </update>
     
     <update id="updateUserToken" parameterType="com.abc12366.uc.model.weixin.bo.gzh.GzhInfo">
-        UPDATE uc_gzh
+        UPDATE uc_wxgzh
         set userToken = #{userToken}
         WHERE appid = #{appid}
     </update>
 
     <delete id="delete" parameterType="java.lang.String">
-        DELETE FROM uc_gzh WHERE id = #{id}
+        DELETE FROM uc_wxgzh WHERE id = #{id}
     </delete>
 
 </mapper>
