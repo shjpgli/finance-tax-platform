@@ -162,21 +162,33 @@ public class CurriculumServiceImpl implements CurriculumService {
 
             List<CurriculumLabel> labelList = curriculumBo.getLabelList();
 
-            for(CurriculumLabel label :labelList){
-                curriculumLabelMapper.insert(label);
+            if(labelList != null){
+                for(CurriculumLabel label :labelList){
+                    label.setCurriculumId(uuid);
+                    curriculumLabelMapper.insert(label);
+                }
             }
+
 
             List<CurriculumMembergrade> membergradeList = curriculumBo.getMembergradeList();
 
-            for(CurriculumMembergrade grade : membergradeList){
-                curriculumMembergradeMapper.insert(grade);
+            if(membergradeList != null){
+                for(CurriculumMembergrade grade : membergradeList){
+                    grade.setCurriculumId(uuid);
+                    curriculumMembergradeMapper.insert(grade);
+                }
             }
+
 
             List<CurriculumLecturerGx> lecturerGxList = curriculumBo.getLecturerGxList();
 
-            for(CurriculumLecturerGx lecturerGx : lecturerGxList){
-                curriculumLecturerGxMapper.insert(lecturerGx);
+            if(lecturerGxList != null){
+                for(CurriculumLecturerGx lecturerGx : lecturerGxList){
+                    lecturerGx.setCurriculumId(uuid);
+                    curriculumLecturerGxMapper.insert(lecturerGx);
+                }
             }
+
 
         } catch (Exception e) {
             LOGGER.error("新增课程信息异常：{}", e);
@@ -309,24 +321,31 @@ public class CurriculumServiceImpl implements CurriculumService {
             String curriculumId = curriculumBo.getCurriculumId();
 
             curriculumLabelMapper.deleteByPrimaryKey(curriculumId);
-            for(CurriculumLabel label :labelList){
-                curriculumLabelMapper.insert(label);
+            if(labelList != null){
+                for(CurriculumLabel label :labelList){
+                    curriculumLabelMapper.insert(label);
+                }
             }
+
 
             List<CurriculumMembergrade> membergradeList = curriculumBo.getMembergradeList();
 
             curriculumMembergradeMapper.deleteByPrimaryKey(curriculumId);
-            for(CurriculumMembergrade grade : membergradeList){
-                curriculumMembergradeMapper.insert(grade);
+            if(membergradeList != null){
+                for(CurriculumMembergrade grade : membergradeList){
+                    curriculumMembergradeMapper.insert(grade);
+                }
             }
+
 
             List<CurriculumLecturerGx> lecturerGxList = curriculumBo.getLecturerGxList();
 
             curriculumLecturerGxMapper.deleteByPrimaryKey(curriculumId);
-            for(CurriculumLecturerGx lecturerGx : lecturerGxList){
-                curriculumLecturerGxMapper.insert(lecturerGx);
+            if(lecturerGxList != null){
+                for(CurriculumLecturerGx lecturerGx : lecturerGxList){
+                    curriculumLecturerGxMapper.insert(lecturerGx);
+                }
             }
-
 
 
         } catch (Exception e) {
