@@ -107,7 +107,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 
     private ReturnMsg getReMsgOneBykeyString(String key) {
         try {
-            return msgRoMapper.getReMsgOneBysetting(key);
+            return msgRoMapper.getReMsgOneBykeyString(key);
         } catch (Exception e) {
             LOGGER.error("查询单个关键字类型信息失败：{}", e);
             throw null;

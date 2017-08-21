@@ -17,4 +17,6 @@ public interface WxMsgRoMapper {
 
     News selectOne(String id);
 
+	ReturnMsg getReMsgOneBykeyString(String key);
+
 }

@@ -26,7 +26,7 @@ public class WxIndexController {
     @Autowired
     private IWxMsgService iWxMsgService;
 
-    @RequestMapping("/init")
+    @RequestMapping(value="/init",produces = "application/json; charset=utf-8")
     public @ResponseBody String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
     	LOGGER.info("微信服务器回调!-----------");
         boolean isGet = request.getMethod().toLowerCase().equals("get");
