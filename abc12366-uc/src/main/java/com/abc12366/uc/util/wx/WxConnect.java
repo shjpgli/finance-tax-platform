@@ -84,7 +84,11 @@ public class WxConnect<T> {
                 requestUrl = url.toString();
             }
             if (bodyparamters != null) {
-                this.outputStr = JSON.toJSONString(bodyparamters);
+            	if(bodyparamters instanceof String){
+            		this.outputStr = (String) bodyparamters;
+            	}else{
+            		this.outputStr = JSON.toJSONString(bodyparamters);
+            	}
             }
         } catch (Exception e) {
 //            this.setJsonStr("{\"errcode\":\"-999\",\"errmsg\":\"组装微信请求参数异常，请联系管理员\"}");

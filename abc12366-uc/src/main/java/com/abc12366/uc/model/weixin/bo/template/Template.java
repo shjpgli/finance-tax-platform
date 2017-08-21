@@ -2,6 +2,9 @@ package com.abc12366.uc.model.weixin.bo.template;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class Template implements Serializable {
     /**
@@ -16,6 +19,31 @@ public class Template implements Serializable {
     private String example;//示例
 
     private Date lastupdate; //同步时间
+    
+    
+    public String toSendJson(Map<String,String> dataList){
+    	String[] keys=StringUtils.substringsBetween(this.content,"{{", ".DATA}}");
+    	StringBuffer json = new StringBuffer();
+		json.append("{");
+		json.append("\"touser\":\""+dataList.get("openId")+"\",");
+		json.append("\"template_id\":\""+this.template_id+"\",");
+		json.append("\"url\":\""+dataList.get("url")+"\",");
+		json.append("\"data\": {");
+		int i = 0;
+		for(String key:keys){
+			if(i>0){
+				json.append(",");
+			}
+			json.append("\""+key+"\":{");
+			json.append("\"value\":\""+dataList.get(key)+"\",");
+			json.append("\"color\":\""+(StringUtils.isEmpty(dataList.get(key+"Color"))?"#0000FF":dataList.get(key+"Color"))+"\"");
+			json.append("}");
+			i++;
+		}
+		
+		json.append("}}");
+		return json.toString();
+    }
 
     public String getTemplate_id() {
         return template_id;

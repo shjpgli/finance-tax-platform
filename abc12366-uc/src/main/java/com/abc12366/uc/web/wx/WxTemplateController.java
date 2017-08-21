@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 微信模板消息
@@ -86,8 +87,10 @@ public class WxTemplateController {
 
     //模板消息发送
     @SuppressWarnings("rawtypes")
-    @DeleteMapping("/wxTemplate/send")
-    public ResponseEntity templateSend() {
-        return null;
+    @PostMapping("/wxTemplate/send/{temp_id}")
+    public ResponseEntity templateSend(@PathVariable("temp_id") String temp_id,
+    		@RequestBody Map<String,String> dataList) {
+        return templateService.templateSend(temp_id,dataList);
     }
+   
 }

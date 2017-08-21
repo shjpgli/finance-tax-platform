@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.TemplateMapper;
 import com.abc12366.uc.mapper.db2.TemplateRoMapper;
@@ -12,9 +13,11 @@ import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.github.pagehelper.PageHelper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,13 +60,15 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
 
     @Transactional("db1TxManager")
     public void delete(String id) {
-        templateMapper.delete(id);
         Map<String, String> headparamters = new HashMap<String, String>();
         headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
-        BaseWxRespon baseWxRespon = WxConnectFactory.get(WechatUrl.TEMPLATEMSG_LIST, headparamters, null,
+        BaseWxRespon baseWxRespon = WxConnectFactory.post(WechatUrl.TEMPLATEMSG_DEL, headparamters, 
+        		"{\"template_id\" : \""+id+"\"}",
                 BaseWxRespon.class);
         if (baseWxRespon.getErrcode() != 0) {
-            throw new ServiceException(4012);
+            throw new ServiceException(9999,baseWxRespon.getErrmsg());
+        }else{
+        	templateMapper.delete(id);
         }
     }
 
@@ -75,7 +80,7 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
             info = templateRoMapper.selectOne(id);
         } catch (Exception e) {
             LOGGER.error("查询单个模板消息异常：{}", e);
-            throw new ServiceException(4234);
+            throw new ServiceException(9999,"查询单个模板消息异常");
         }
         return info;
     }
@@ -87,4 +92,24 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
         return templates;
     }
 
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity templateSend(String temp_id, Map<String, String> dataList) {
+		Template info=templateRoMapper.selectOne(temp_id);
+		if(info==null){
+			return ResponseEntity.ok(Utils.bodyStatus(9999, "没有找到对应的模板消息!"));
+		}else{
+			Map<String, String> headparamters = new HashMap<String, String>();
+			headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+			BaseWxRespon wxRespon=WxConnectFactory.post(WechatUrl.TEMPLATEMSG_SEND, headparamters,
+					info.toSendJson(dataList), BaseWxRespon.class);
+			if(wxRespon.getErrcode()!=0){
+				return ResponseEntity.ok(Utils.bodyStatus(9999, wxRespon.getErrmsg()));
+			}else{
+				return ResponseEntity.ok(Utils.kv());
+			}
+		}
+		
+	}
+
+	
 }

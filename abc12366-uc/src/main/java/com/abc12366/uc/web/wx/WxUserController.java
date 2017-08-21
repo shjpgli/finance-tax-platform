@@ -1,7 +1,6 @@
 package com.abc12366.uc.web.wx;
 
 
-import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.weixin.bo.person.WxPerson;
@@ -38,7 +37,7 @@ public class WxUserController {
         if (iWxPersonService.startUsersynchro()) {
             return ResponseEntity.ok(Utils.kv());
         } else {
-            throw new ServiceException(4117);
+        	return ResponseEntity.ok(Utils.bodyStatus(9999, "同步微信用户失败"));
         }
     }
 

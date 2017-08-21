@@ -1,6 +1,5 @@
 package com.abc12366.uc.web.wx;
 
-import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.menu.Button;
@@ -113,7 +112,7 @@ public class WxMenuController {
         if (0 == result.getErrcode()) {
             return ResponseEntity.ok(Utils.kv());
         } else {
-            throw new ServiceException(result.getErrcode());
+        	return ResponseEntity.ok(Utils.bodyStatus(9999, result.getErrmsg()));
         }
     }
 
@@ -125,7 +124,7 @@ public class WxMenuController {
         if (0 == result.getErrcode()) {
             return ResponseEntity.ok(Utils.kv());
         } else {
-            throw new ServiceException(result.getErrcode());
+        	return ResponseEntity.ok(Utils.bodyStatus(9999, result.getErrmsg()));
         }
     }
 }
