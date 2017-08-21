@@ -10,6 +10,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +20,7 @@ import java.util.Map;
  *
  * @author zhushuai 2017-7-27
  */
-
+@Component
 public class WxUserTokenJob implements Job{
 
     public static WxUseToken token = null;
