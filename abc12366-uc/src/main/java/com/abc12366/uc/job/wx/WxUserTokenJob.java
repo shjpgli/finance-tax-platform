@@ -6,10 +6,8 @@ import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -21,7 +19,7 @@ import java.util.Map;
  * @author zhushuai 2017-7-27
  */
 @Component
-public class WxUserTokenJob implements Job{
+public class WxUserTokenJob{
 
     public static WxUseToken token = null;
     @Autowired
@@ -31,10 +29,9 @@ public class WxUserTokenJob implements Job{
 
     public static GzhInfo gzhInfo = null;
 
-	@Override
-	public void execute(JobExecutionContext jobexecutioncontext)
-			throws JobExecutionException {
-		System.out.println("------------------------------------------");
+    @Scheduled(fixedRate=55*60*1000)
+	public void execute(){
+			
         if (gzhInfo == null) {
             gzhInfo = iWxGzhService.wxgzhList(new GzhInfo(), 0, 1).get(0);
         }
