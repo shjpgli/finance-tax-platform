@@ -41,10 +41,10 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
         Map<String, String> headparamters = new HashMap<String, String>();
         headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
         WxTemplates listRs = WxConnectFactory.get(WechatUrl.TEMPLATEMSG_LIST, headparamters, null, WxTemplates.class);
-        templateMapper.deleteAll();
         if (listRs.getErrcode() != 0) {
             return false;
         } else {
+        	templateMapper.deleteAll();
             for (int i = 0; i < listRs.getTemplate_list().size(); i++) {
                 Template template = listRs.getTemplate_list().get(i);
                 template.setLastupdate(new Timestamp(new Date().getTime()));
