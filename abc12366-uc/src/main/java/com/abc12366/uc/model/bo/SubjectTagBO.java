@@ -11,6 +11,16 @@ public class SubjectTagBO {
     private String id;
     private String userId;
     private String subjectId;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     private String tagId;
     private String type;
     private Date createTime;

@@ -16,4 +16,5 @@ public interface SubjectTagRoMapper {
     List<SubjectTagBO> selectListByTagIdsAndSubjectIds(Map<String, String> map);
 
     List<SubjectTagBO> selectExist(Map<String, String> map);
+    List<SubjectTagBO> getSubjectIdsCategorys(Map<String, String> map);
 }

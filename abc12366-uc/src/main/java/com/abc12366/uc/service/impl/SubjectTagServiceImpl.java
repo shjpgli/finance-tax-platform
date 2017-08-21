@@ -51,7 +51,10 @@ public class SubjectTagServiceImpl implements SubjectTagService {
             LOGGER.warn("{}:{}", tagId, id);
             throw new ServiceException(4612);
         }
-
+        if (isExistEx(tagId, id)) {
+            LOGGER.warn("{}:{}", tagId, id);
+            throw new ServiceException(9999,"同类标签不可重复");
+        }
         //判断被打标签对象和标签类型是否匹配
         if (!isObjectTagMatch(subject, tagId)) {
             throw new ServiceException(4627);
@@ -197,6 +200,23 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         map.put("tagIds", tagIds);
         map.put("subjectIds", subjectIds);
         return subjectTagRoMapper.selectListByTagIdsAndSubjectIds(map);
+    }
+    private boolean isExistEx(String tagId, String subjectId) {
+        Map<String, String> map = new HashMap<>();
+        //map.put("tagId", tagId);
+        map.put("subjectId", subjectId);
+        List<SubjectTagBO> objs = subjectTagRoMapper.getSubjectIdsCategorys(map);
+
+
+        TagBO tagBO= tagRoMapper.selectOne(tagId);
+        if(tagBO == null)return false;
+        for (SubjectTagBO obj:objs) {
+            if(tagBO.getCategory().equals(obj.getCategory())){
+                return true;
+            }
+        }
+        return false;
+
     }
 
     public boolean isExist(String tagId, String subjectId) {

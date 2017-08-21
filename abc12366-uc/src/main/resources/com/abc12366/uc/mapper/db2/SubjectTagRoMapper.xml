@@ -18,6 +18,13 @@
         and subjectId in (#{subjectIds})
     </select>
 
+    <select id="getSubjectIdsCategorys" resultType="com.abc12366.uc.model.bo.SubjectTagBO"
+            parameterType="java.util.HashMap">
+        SELECT z.id,z.userId,z.subjectId,z.tagId,z.type,z.createTime,
+             (select a.category from uc_tag a where a.id=z.tagId) as category
+        from uc_subject_tag z
+        where z.subjectId =#{subjectId}
+    </select>
     <select id="selectExist" resultType="com.abc12366.uc.model.bo.SubjectTagBO" parameterType="java.util.HashMap">
         SELECT id,userId,subjectId,tagId,type,createTime
         from uc_subject_tag
