@@ -18,6 +18,7 @@ import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
+import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
 import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
@@ -178,7 +179,20 @@ public class UserBindServiceImpl implements UserBindService {
             HttpEntity requestEntity = new HttpEntity(requestBody, headers);
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
             if (soaUtil.isExchangeSuccessful(responseEntity)) {
-                return JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+                HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+//                if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
+//                    List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
+//                    System.out.println("-----------size:" +authList.size());
+//                    for (int i = 0; i < authList.size(); i++) {
+//                        AuthorizationDto auth = authList.get(i);
+//                        if (!auth.getYyfwDm().trim().startsWith("FU")) {
+//                            authList.remove(i);
+//                        }
+//                    }
+//                    System.out.println("=============size:" +authList.size());
+//                    nsrLoginResponse.setMenuList(authList);
+//                }
+                return nsrLoginResponse;
             }
         }
         return null;
@@ -370,7 +384,7 @@ public class UserBindServiceImpl implements UserBindService {
         if (!resMap.get("rescode").equals("00000000")) {
             throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
         }
-        if(!resMap.containsKey("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")){
+        if (!resMap.containsKey("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")) {
             throw new ServiceException(4634);
         }
 
@@ -402,7 +416,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000") ) {
+        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
             throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {

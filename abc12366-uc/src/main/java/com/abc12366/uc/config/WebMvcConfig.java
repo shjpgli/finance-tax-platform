@@ -82,6 +82,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*")
                 //用户等级接口地址
-                .excludePathPatterns("/uvip/level/**");
+                .excludePathPatterns("/uvip/level/**")
+                //用户签到排行榜
+                .excludePathPatterns("/check/rank");
     }
 }

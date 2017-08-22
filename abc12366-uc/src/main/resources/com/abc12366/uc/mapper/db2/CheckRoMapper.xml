@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.CheckRoMapper">
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		 id, userId,	createTime,	checkDate,	orderby, isReCheck
+	</sql>
+
+    <select id="selectByOrder" resultType="com.abc12366.uc.model.Check" parameterType="com.abc12366.uc.model.Check">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_check
+        WHERE userId = #{userId}
+        and orderby = #{orderby}
+        and createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
+        and createTime &lt;(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
+    </select>
+
+    <select id="selectCheckListDesc" parameterType="java.lang.String" resultType="com.abc12366.uc.model.Check">
+        select
+        <include refid="Base_Column_List"/>
+        from uc_check
+        where userId = #{userId}
+        order by lastUpdate desc
+    </select>
+
+    <select id="selectRecheck" resultType="com.abc12366.uc.model.Check" parameterType="com.abc12366.uc.model.Check">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_check
+        WHERE userId = #{userId}
+        and isReCheck = 1
+        and createTime &gt;=(SELECT CURDATE())
+        and createTime &lt;(SELECT CURDATE()+1)
+    </select>
+
+
+
+
+    <select id="selectRankList" resultType="com.abc12366.uc.model.CheckRank">
+        select ucc.id, ucc.userId,(select uu.nickname from uc_user uu where uu.id=ucc.userId) nickname, ucc.lastUpdate, ucc.count
+        from uc_continuing_check ucc
+        order by count desc
+    </select>
+
+    <select id="selectOneRank" resultType="com.abc12366.uc.model.CheckRank">
+        select id, userId, lastUpdate, count
+        from uc_continuing_check
+        where userId=#{userId}
+    </select>
+</mapper>
