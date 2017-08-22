@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.uc.mapper.GoodsLogMapper">
+<mapper namespace="com.abc12366.uc.mapper.db2.GoodsLogRoMapper">
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="goodsLog" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.GoodsLog" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM uc_goods_log
@@ -17,10 +17,11 @@
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectGoodsLogList" resultType="goodsLog" parameterType="java.lang.String">
+	<select id="selectGoodsLogList" resultType="com.abc12366.uc.model.bo.GoodsLogBO" parameterType="java.lang.String">
 		SELECT
-		<include refid="Base_Column_List" />
-		FROM uc_goods_log
-		WHERE goodsId = #{goodsId}
+		l.id,	l.goodsId,	l.action,	l.createTime,	l.createUser,	l.remark,u.nickname as createUserName
+		FROM uc_goods_log l
+		LEFT JOIN uc_user_admin u ON u.id = l.createUser
+		WHERE l.goodsId = #{goodsId}
 	</select>
 </mapper>

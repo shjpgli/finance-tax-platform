@@ -25,6 +25,8 @@ public class GoodsLogBO implements Serializable {
 	/**创建用户**/
 	private String createUser;
 
+	private String createUserName;
+
 	/**备注**/
 	private String remark;
 
@@ -78,4 +80,11 @@ public class GoodsLogBO implements Serializable {
 		return this.remark;
 	}
 
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
 }
