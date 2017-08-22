@@ -108,7 +108,7 @@
             </if>
             <if test="invoiceNoStart != null  and invoiceNoStart!='' and invoiceNoEnd != null  and invoiceNoEnd!=''">
                 <![CDATA[
-                  AND (r.invoiceNoStart >= #{invoiceNoStart} and r.invoiceNoStart <= #{invoiceNoStart}) or (r.invoiceNoEnd >= #{invoiceNoEnd} and r.invoiceNoEnd <= #{invoiceNoEnd})
+                  AND (r.invoiceNoStart <= #{invoiceNoStart} and r.invoiceNoEnd >= #{invoiceNoStart}) or (r.invoiceNoStart <= #{invoiceNoEnd} and r.invoiceNoEnd >= #{invoiceNoEnd})
                 ]]>
             </if>
             <if test="startTime != null">

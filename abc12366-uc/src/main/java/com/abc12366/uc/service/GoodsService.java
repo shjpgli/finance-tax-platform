@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.GoodsCheckBO;
+import com.abc12366.uc.model.bo.GoodsLogBO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,4 +36,6 @@ public interface GoodsService {
     GoodsBO selectUserGoods(String id);
 
     List<GoodsBO> selectGoodsBOList(Goods goods);
+
+    List<GoodsLogBO> selectGoodsLogList(String id);
 }
