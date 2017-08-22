@@ -26,8 +26,17 @@ public class UserHngsBO {
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String roleId;
 
     public UserHngsBO() {
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
     public String getId() {

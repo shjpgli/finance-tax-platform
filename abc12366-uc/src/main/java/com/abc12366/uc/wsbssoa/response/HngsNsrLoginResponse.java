@@ -26,6 +26,7 @@ public class HngsNsrLoginResponse extends BaseResponse implements java.io.Serial
     private String zgswjDm; //主管税务局代码
 
     private String zgswskfjDm;     //根据该值判断是否做了管户分配，   该值为空的，说明纳税人未作管户分配
+    private String zgswjmc;//税务机关名称
 
     public HngsNsrLoginResponse() {
         super();
@@ -33,6 +34,14 @@ public class HngsNsrLoginResponse extends BaseResponse implements java.io.Serial
 
     public HngsNsrLoginResponse(String code, String msg) {
         super(code, msg);
+    }
+
+    public String getZgswjmc() {
+        return zgswjmc;
+    }
+
+    public void setZgswjmc(String zgswjmc) {
+        this.zgswjmc = zgswjmc;
     }
 
     public String getNsrmc() {

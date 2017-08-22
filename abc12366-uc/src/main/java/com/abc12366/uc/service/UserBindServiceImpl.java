@@ -68,9 +68,6 @@ public class UserBindServiceImpl implements UserBindService {
     @Autowired
     private AcceptClient client;
 
-    @Autowired
-    private AuthService authService;
-
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
         if (userDzsbInsertBO == null) {
@@ -180,18 +177,17 @@ public class UserBindServiceImpl implements UserBindService {
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
             if (soaUtil.isExchangeSuccessful(responseEntity)) {
                 HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
-//                if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
-//                    List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
-//                    System.out.println("-----------size:" +authList.size());
-//                    for (int i = 0; i < authList.size(); i++) {
-//                        AuthorizationDto auth = authList.get(i);
-//                        if (!auth.getYyfwDm().trim().startsWith("FU")) {
-//                            authList.remove(i);
-//                        }
-//                    }
-//                    System.out.println("=============size:" +authList.size());
-//                    nsrLoginResponse.setMenuList(authList);
-//                }
+                if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
+                    List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
+                    List<AuthorizationDto> filteredAuthList = new ArrayList<>();
+                    for (int i = 0; i < authList.size(); i++) {
+                        AuthorizationDto auth = authList.get(i);
+                        if (auth.getYyfwDm().trim().startsWith("FU")) {
+                            filteredAuthList.add(auth);
+                        }
+                    }
+                    nsrLoginResponse.setMenuList(filteredAuthList);
+                }
                 return nsrLoginResponse;
             }
         }
@@ -244,6 +240,12 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4101);
         }
 
+        //查看是否重复绑定
+        List<UserHngs> userHngsList = userBindRoMapper.userHngsListExist(userHngsInsertBO);
+        if (userHngsList != null && userHngsList.size() >= 1) {
+            throw new ServiceException(4632);
+        }
+
         //访问网上报税系统
         HngsNsrLoginResponse hngsNsrLoginResponse = loginWsbsHngs(userHngsInsertBO, request);
         if (hngsNsrLoginResponse == null || !hngsNsrLoginResponse.isSuccess()) {
@@ -256,7 +258,7 @@ public class UserBindServiceImpl implements UserBindService {
         userHngs.setBsy(userHngsInsertBO.getBsy());
         userHngs.setNsrmc(hngsNsrLoginResponse.getNsrmc());
         userHngs.setShxydm(hngsNsrLoginResponse.getNsrsbh());
-        userHngs.setSwjgMc("网上报税接口暂时不返回这个字段。");
+        userHngs.setSwjgMc(hngsNsrLoginResponse.getZgswjmc());
         userHngs.setSwjgDm(hngsNsrLoginResponse.getZgswjDm());
         Date date = new Date();
         userHngs.setId(Utils.uuid());
@@ -265,6 +267,7 @@ public class UserBindServiceImpl implements UserBindService {
         userHngs.setCreateTime(date);
         userHngs.setLastUpdate(date);
         userHngs.setUserId(UserUtil.getUserId(request));
+        userHngs.setRoleId(hngsNsrLoginResponse.getRoleId());
         int result = userBindMapper.hngsBind(userHngs);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userHngs.toString());

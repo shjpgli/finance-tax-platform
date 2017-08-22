@@ -21,9 +21,9 @@
 
     <insert id="hngsBind" parameterType="com.abc12366.uc.model.UserHngs">
         insert into uc_user_hngs(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, bsy, smrzzt, status,
-        createTime, lastUpdate)
+        createTime, lastUpdate,roleId)
         values(#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm},#{bsy},#{smrzzt},
-        #{status}, #{createTime}, #{lastUpdate})
+        #{status}, #{createTime}, #{lastUpdate}, #{roleId})
     </insert>
 
     <update id="hngsUnbind">

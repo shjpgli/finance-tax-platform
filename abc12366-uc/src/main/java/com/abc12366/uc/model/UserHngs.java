@@ -21,25 +21,17 @@ public class UserHngs {
     private boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String roleId;
 
     public UserHngs() {
     }
 
-    public UserHngs(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc,
-                    String swjgDm, String bsy, boolean smrzzt, boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.userId = userId;
-        this.djxh = djxh;
-        this.nsrsbh = nsrsbh;
-        this.nsrmc = nsrmc;
-        this.shxydm = shxydm;
-        this.swjgMc = swjgMc;
-        this.swjgDm = swjgDm;
-        this.bsy = bsy;
-        this.smrzzt = smrzzt;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
     public String getId() {
