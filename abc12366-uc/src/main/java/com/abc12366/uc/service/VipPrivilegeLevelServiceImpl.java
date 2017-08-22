@@ -130,6 +130,17 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
 
         return vipPrivilegeLevelRoMapper.selectList(levelId);
     }
+    @Override
+    public List<VipPrivilegeLevelBO> selectListByLevelName(String levelname){
+
+        VipLevelBO obj =vipLevelRoMapper.selectByLevel(levelname);
+
+        if (obj.getId()==null || obj.getId().isEmpty()){
+            LOGGER.warn("操作失败，参数：" + levelname);
+            throw new ServiceException(4101);
+        }
+        return selectListByLevelId(obj.getId());
+    }
 
     @Override
     public List<VipPrivilegeLevelBO> selectListN(Map map) {

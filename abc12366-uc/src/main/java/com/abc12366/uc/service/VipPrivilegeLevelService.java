@@ -23,6 +23,8 @@ public interface VipPrivilegeLevelService {
 
     VipPrivilegeLevelBO addOrUpdate(VipPrivilegeLevelBO obj);
     List<VipPrivilegeLevelBO> selectListByLevelId(String levelId);
+    List<VipPrivilegeLevelBO> selectListByLevelName(String levelname);
+
     List<List<VipPrivilegeLevelBO>> selectList();
     VipPrivilegeLevelBO selectOne(String id);
     VipPrivilegeLevelBO selectOneN(String id);

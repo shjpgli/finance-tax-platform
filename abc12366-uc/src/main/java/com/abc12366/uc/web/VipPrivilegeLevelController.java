@@ -67,6 +67,21 @@ public class VipPrivilegeLevelController {
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelService.selectLevelIdPrivilegeId(obj );
         return ResponseEntity.ok(Utils.kv("data",   findObj));
     }
+
+    /**
+     *    查询指定会员名称对应的权益
+     */
+    @GetMapping(path="/levelname")
+    public ResponseEntity selectLevelname(@RequestParam(required = true) String levelname) {
+        LOGGER.info("{}",  levelname);
+
+
+        List<VipPrivilegeLevelBO> privilegeList = vipPrivilegeLevelService.selectListByLevelName(levelname);
+        LOGGER.info("{}", privilegeList);
+        return (privilegeList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", privilegeList, "total",privilegeList.size()));
+    }
     //查询指定会员对应的权益
       @GetMapping(path="/level")
     public ResponseEntity selectList(@RequestParam(required = true) String level,
