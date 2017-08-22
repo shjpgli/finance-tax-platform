@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.SubjectTag;
+import com.abc12366.uc.model.bo.SubjectTagBO;
 
 import java.util.Map;
 
@@ -14,5 +15,7 @@ public interface SubjectTagMapper {
 
     int delete(Map map);
 
+    int update(SubjectTagBO subjectTagBO);
     int deleteByTagId(String tagId);
+    int deleteById(String id);
 }

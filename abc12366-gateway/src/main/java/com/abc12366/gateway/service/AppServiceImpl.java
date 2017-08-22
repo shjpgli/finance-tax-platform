@@ -159,7 +159,7 @@ public class AppServiceImpl implements AppService {
         long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
         long currentTime = System.currentTimeMillis();
         if (currentTime > lastTime) {
-            LOGGER.warn("APP登录已过期，请重新登录：{}", app);
+             LOGGER.warn("APP登录已过期，请重新登录：{}", app);
             throw new ServiceException(4025);
         }
         //判断app是否已过期

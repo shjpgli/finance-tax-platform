@@ -17,4 +17,16 @@
         delete from uc_subject_tag
         where tagId=#{id}
     </delete>
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete from uc_subject_tag
+        where id=#{id}
+    </delete>
+    <update id="update" parameterType="com.abc12366.uc.model.bo.SubjectTagBO">
+        update uc_subject_tag
+        <set>
+            <if test="subjectId!=null">subjectId=#{subjectId},</if>
+            <if test="tagId!=null">tagId=#{tagId},</if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

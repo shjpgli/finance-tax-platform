@@ -51,7 +51,7 @@ public class SubjectTagServiceImpl implements SubjectTagService {
             LOGGER.warn("{}:{}", tagId, id);
             throw new ServiceException(4612);
         }
-        if (isExistEx(tagId, id)) {
+        if (ExistEx(tagId, id) != null) {
             LOGGER.warn("{}:{}", tagId, id);
             throw new ServiceException(9999,"同类标签不可重复");
         }
@@ -186,8 +186,21 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         for (int i = 0; i < tagIdList.size(); i++) {
             for (int j = 0; j < subjectIdList.size(); j++) {
                 //判断是否标签标记已存在,不存在才允许打标签
-                if (!isExist(tagIdList.get(i), subjectIdList.get(j))) {
-                    insert(subject, subjectIdList.get(j), tagIdList.get(i), request);
+                String tagId = tagIdList.get(i);
+                SubjectTagBO obj = ExistEx(tagId, subjectIdList.get(j));
+                //存在同类标签
+                if (obj != null) {
+                    String id = obj.getId();
+                    if (id == null || id.isEmpty()) {
+                        LOGGER.warn("batchInsert2 参数：" + id);
+                        throw new ServiceException(4101);
+                    }
+                    obj.setTagId(tagId);
+                    int returnI = subjectTagMapper.update(obj );
+
+                } else{
+                        insert(subject, subjectIdList.get(j), tagIdList.get(i), request);
+
                 }
             }
         }
@@ -201,7 +214,12 @@ public class SubjectTagServiceImpl implements SubjectTagService {
         map.put("subjectIds", subjectIds);
         return subjectTagRoMapper.selectListByTagIdsAndSubjectIds(map);
     }
-    private boolean isExistEx(String tagId, String subjectId) {
+
+    /**
+     *
+     * 查找是否有同类标签，没有返回null
+     */
+    private SubjectTagBO ExistEx(String tagId, String subjectId) {
         Map<String, String> map = new HashMap<>();
         //map.put("tagId", tagId);
         map.put("subjectId", subjectId);
@@ -209,13 +227,15 @@ public class SubjectTagServiceImpl implements SubjectTagService {
 
 
         TagBO tagBO= tagRoMapper.selectOne(tagId);
-        if(tagBO == null)return false;
+        if(tagBO == null)return null;
+        //循环判断此标签的类别  是否重复
         for (SubjectTagBO obj:objs) {
             if(tagBO.getCategory().equals(obj.getCategory())){
-                return true;
+                return obj;
+
             }
         }
-        return false;
+        return null;
 
     }
 

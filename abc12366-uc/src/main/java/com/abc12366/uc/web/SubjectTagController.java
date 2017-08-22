@@ -56,6 +56,14 @@ public class SubjectTagController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", subjectTagBOList, "total", subjectTagBOList.size()));
     }*/
+
+    /**
+     * 批量大
+     * @param subject
+     * @param batchTagInsertBO
+     * @param request
+     * @return
+     */
     @PostMapping(path = "/batch/{subject}")
     public ResponseEntity batchInsert(@PathVariable String subject, @RequestBody BatchTagInsertBO batchTagInsertBO,
                                       HttpServletRequest request) {
