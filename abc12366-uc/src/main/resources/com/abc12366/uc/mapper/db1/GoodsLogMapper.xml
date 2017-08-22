@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.GoodsLogMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	goodsId,	action,	createTime,	createUser,	remark
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="goodsLog" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM uc_goods_log
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM uc_goods_log
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="goodsLog">
+		 INSERT INTO uc_goods_log
+ 		(id,goodsId,action,createTime,createUser,remark) 
+		 VALUES 
+ 		(#{id},#{goodsId},#{action},#{createTime},#{createUser},#{remark}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="goodsLog">
+		 INSERT INTO uc_goods_log
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="goodsId != null">
+				 goodsId,
+			</if>
+			<if test="action != null">
+				 action,
+			</if>
+			<if test="createTime != null">
+				 createTime,
+			</if>
+			<if test="createUser != null">
+				 createUser,
+			</if>
+			<if test="remark != null">
+				 remark,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="goodsId!=null">
+				 #{goodsId},
+			</if>
+			<if test="action!=null">
+				 #{action},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="createUser!=null">
+				 #{createUser},
+			</if>
+			<if test="remark!=null">
+				 #{remark},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="goodsLog">
+		 UPDATE uc_goods_log
+ 		 <set> 
+			<if test="goodsId != null">
+				 goodsId = #{goodsId},
+			</if>
+			<if test="action != null">
+				 action = #{action},
+			</if>
+			<if test="createTime != null">
+				 createTime = #{createTime},
+			</if>
+			<if test="createUser != null">
+				 createUser = #{createUser},
+			</if>
+			<if test="remark != null">
+				 remark = #{remark},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="goodsLog">
+		 UPDATE uc_goods_log
+		 SET 
+			 goodsId = #{goodsId},
+			 action = #{action},
+			 createTime = #{createTime},
+			 createUser = #{createUser},
+			 remark = #{remark}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
