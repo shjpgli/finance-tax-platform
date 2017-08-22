@@ -46,11 +46,11 @@ public class CurrCollectServiceImpl implements CurrCollectService {
 
 
         CurriculumCollect collect = new CurriculumCollect();
-        Date date = new Date();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         collect.setCollectId(uuid);
         collect.setCurriculumId(curriculumId);
         collect.setUserId(userId);
+        collect.setCollectTime(new Date());
 
         Map map = MapUtil.kv("curriculumId", curriculumId, "userId", userId);
         int cnt =  collectRoMapper.selectExist(map);
