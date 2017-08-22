@@ -49,6 +49,7 @@
             </if>
         </where>
         ) a
+        order by createTime desc
     </select>
 
     <select id="selectDzsb" resultType="com.abc12366.uc.model.bo.UserDzsbBO" parameterType="java.lang.String">
