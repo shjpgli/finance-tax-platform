@@ -4,6 +4,7 @@ import com.abc12366.uc.model.Check;
 import com.abc12366.uc.model.CheckRank;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -15,9 +16,9 @@ public interface CheckRoMapper {
 
     List<Check> selectRecheck(Check checkTmp);
 
-    List<CheckRank> selectRankList();
+    List<CheckRank> selectRankList(String year);
 
-    List<CheckRank> selectOneRank(String userId);
+    List<CheckRank> selectOneRank(Map<String, String> map);
 
-    List<Check> selectCheckListDesc(String userId);
+    List<Check> selectIsRecheck(Check check);
 }

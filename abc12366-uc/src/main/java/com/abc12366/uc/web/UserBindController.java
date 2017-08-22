@@ -150,6 +150,6 @@ public class UserBindController {
     public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
         HngsNsrLoginResponse loginResponse = userBindService.loginWsbsHngs(login, request);
-        return ResponseEntity.ok(Utils.kv("data", loginResponse));
+        return ResponseEntity.ok(loginResponse);
     }
 }

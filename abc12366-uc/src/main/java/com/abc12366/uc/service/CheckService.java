@@ -16,5 +16,5 @@ public interface CheckService {
 
     void reCheck(ReCheck check);
 
-    List<CheckRank> rank();
+    List<CheckRank> rank(String year);
 }

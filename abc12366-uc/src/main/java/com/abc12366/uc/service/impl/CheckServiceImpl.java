@@ -15,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -43,6 +42,8 @@ public class CheckServiceImpl implements CheckService {
         Calendar now = Calendar.getInstance();
         int day = now.get(Calendar.DAY_OF_MONTH);
         check.setOrderby(String.valueOf(day));
+        check.setCheckDate(DateUtils.StrToDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
+
         //判断当天是否已经签到过
         if (isExist(check)) {
             throw new ServiceException(4850);
@@ -63,10 +64,10 @@ public class CheckServiceImpl implements CheckService {
                 }
             }
             //连续签到统计表
-            continuingCheck(check.getUserId());
+//            continuingCheck(check.getUserId());
             //积分日志
-            pointsLog(check.getUserId(), points);
-            return;
+//            pointsLog(check.getUserId(), points);
+//            return;
         }
 
         //签到统计
@@ -78,15 +79,19 @@ public class CheckServiceImpl implements CheckService {
     @Transactional("db1TxManager")
     @Override
     public void reCheck(ReCheck recheck) {
+        Date date = DateUtils.StrToDate(recheck.getDate());
         //每天只能补签三次
         Check checkTmp = new Check();
         checkTmp.setUserId(recheck.getUserId());
+        checkTmp.setCheckDate(date);
         List<Check> checkList = checkRoMapper.selectRecheck(checkTmp);
         if (checkList != null && checkList.size() >= 3) {
             throw new ServiceException(4851);
         }
 
-        Date date = DateUtils.StrToDate(recheck.getDate());
+        if (isRecheckExist(checkTmp)) {
+            throw new ServiceException(4852);
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         Check check = new Check();
@@ -96,21 +101,23 @@ public class CheckServiceImpl implements CheckService {
         check.setCheckDate(date);
         check.setOrderby(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         check.setIsReCheck(true);
-        if (isExist(check)) {
-            throw new ServiceException(4852);
-        }
 
         recheckInsert(check);
         int points = -20;
         //签到统计
-        continuingCheck(recheck.getUserId());
+        continuingCheck(recheck.getUserId(), calendar);
         //记日志
         recheckPointsLog(recheck.getUserId(), points);
     }
 
     @Override
-    public List<CheckRank> rank() {
-        return checkRoMapper.selectRankList();
+    public List<CheckRank> rank(String yearTemp) {
+        String year = yearTemp;
+        if (yearTemp == null || yearTemp.trim().equals("")) {
+            Calendar calendar = Calendar.getInstance();
+            year = String.valueOf(calendar.get(Calendar.YEAR));
+        }
+        return checkRoMapper.selectRankList(year);
     }
 
     private void pointsLog(String userId, int points) {
@@ -157,6 +164,14 @@ public class CheckServiceImpl implements CheckService {
         Check check = new Check();
         check.setUserId(userId);
         check.setOrderby(String.valueOf(order));
+        //时间格式转换，为了数据库时间的比较
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), order);
+        Date date = calendar.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = format.format(date);
+        Date checkDate = DateUtils.StrToDate(dateStr);
+        check.setCheckDate(checkDate);
         return isExist(check);
     }
 
@@ -169,10 +184,15 @@ public class CheckServiceImpl implements CheckService {
     }
 
     public void continuingCheck(String userId) {
-        List<CheckRank> checkRankList = checkRoMapper.selectOneRank(userId);
+        Map<String, String> map = new HashMap<>();
+        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        map.put("userId", userId);
+        map.put("year", year);
+        List<CheckRank> checkRankList = checkRoMapper.selectOneRank(map);
         CheckRank checkRank = new CheckRank();
         checkRank.setUserId(userId);
         checkRank.setLastUpdate(new Date());
+        checkRank.setYear(year);
         if (checkRankList == null || checkRankList.size() < 1) {
             checkRank.setId(Utils.uuid());
             checkRank.setCount(1);
@@ -184,4 +204,32 @@ public class CheckServiceImpl implements CheckService {
         checkMapper.updateRank(checkRank);
     }
 
+    public void continuingCheck(String userId, Calendar calendar) {
+        Map<String, String> map = new HashMap<>();
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+        map.put("userId", userId);
+        map.put("year", year);
+        List<CheckRank> checkRankList = checkRoMapper.selectOneRank(map);
+        CheckRank checkRank = new CheckRank();
+        checkRank.setUserId(userId);
+        checkRank.setLastUpdate(new Date());
+        checkRank.setYear(year);
+        if (checkRankList == null || checkRankList.size() < 1) {
+            checkRank.setId(Utils.uuid());
+            checkRank.setCount(1);
+            checkMapper.insertRank(checkRank);
+            return;
+        }
+        CheckRank checkRankTmp = checkRankList.get(0);
+        checkRank.setCount(checkRankTmp.getCount() + 1);
+        checkMapper.updateRank(checkRank);
+    }
+
+    public boolean isRecheckExist(Check check) {
+        List<Check> checkList = checkRoMapper.selectIsRecheck(check);
+        if (checkList == null || checkList.size() <= 0) {
+            return false;
+        }
+        return true;
+    }
 }
