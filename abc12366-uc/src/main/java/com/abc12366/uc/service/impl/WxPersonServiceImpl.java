@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.WxPersonMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.mapper.db2.WxPersonRoMapper;
@@ -10,6 +9,7 @@ import com.abc12366.uc.model.weixin.bo.person.WxPerson;
 import com.abc12366.uc.service.IWxPersonService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
+import com.abc12366.uc.util.wx.WxGzhClient;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class WxPersonServiceImpl implements IWxPersonService {
     @Transactional("db1TxManager")
     public WxPerson synchroOne(String openid) {
         Map<String, String> tks1 = new HashMap<String, String>();
-        tks1.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        tks1.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         tks1.put("openid", openid);
         WxPerson person = WxConnectFactory.get(WechatUrl.WXUSEINFO, tks1, null, WxPerson.class);
         person.setLastupdate(new Timestamp(new Date().getTime()));
@@ -94,13 +94,13 @@ public class WxPersonServiceImpl implements IWxPersonService {
             boolean isFirst = personRoMapper.countPersonNum(new WxPerson()) > 0 ? false : true;
             Map<String, String> headparamters = new HashMap<String, String>();
             while (true) {
-                headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+                headparamters.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
                 headparamters.put("next_openid", "");
                 OpenIdRs listRs = WxConnectFactory.get(WechatUrl.WXUSELIST, headparamters, null, OpenIdRs.class);
                 String[] ids = listRs.getData().getOpenid();
                 for (int i = 0; i < ids.length; i++) {
                     Map<String, String> tks1 = new HashMap<String, String>();
-                    tks1.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+                    tks1.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
                     tks1.put("openid", ids[i]);
                     WxPerson person = WxConnectFactory.get(WechatUrl.WXUSEINFO, tks1, null, WxPerson.class);
                     if (0 == person.getErrcode() && (isFirst ||

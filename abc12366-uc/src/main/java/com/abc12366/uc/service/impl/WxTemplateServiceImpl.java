@@ -2,7 +2,6 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.TemplateMapper;
 import com.abc12366.uc.mapper.db2.TemplateRoMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
@@ -12,6 +11,7 @@ import com.abc12366.uc.model.weixin.bo.template.WxTemplates;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
+import com.abc12366.uc.util.wx.WxGzhClient;
 import com.github.pagehelper.PageHelper;
 
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
     public boolean synchroTemplate() {
         LOGGER.info("开始同步微信模板消息数据.......");
         Map<String, String> headparamters = new HashMap<String, String>();
-        headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        headparamters.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         WxTemplates listRs = WxConnectFactory.get(WechatUrl.TEMPLATEMSG_LIST, headparamters, null, WxTemplates.class);
         if (listRs.getErrcode() != 0) {
             return false;
@@ -61,7 +61,7 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
     @Transactional("db1TxManager")
     public void delete(String id) {
         Map<String, String> headparamters = new HashMap<String, String>();
-        headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        headparamters.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         BaseWxRespon baseWxRespon = WxConnectFactory.post(WechatUrl.TEMPLATEMSG_DEL, headparamters, 
         		"{\"template_id\" : \""+id+"\"}",
                 BaseWxRespon.class);
@@ -99,7 +99,7 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "没有找到对应的模板消息!"));
 		}else{
 			Map<String, String> headparamters = new HashMap<String, String>();
-			headparamters.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+			headparamters.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
 			BaseWxRespon wxRespon=WxConnectFactory.post(WechatUrl.TEMPLATEMSG_SEND, headparamters,
 					info.toSendJson(dataList), BaseWxRespon.class);
 			if(wxRespon.getErrcode()!=0){

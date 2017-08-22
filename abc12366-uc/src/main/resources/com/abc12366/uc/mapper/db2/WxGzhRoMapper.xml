@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.WxGzhRoMapper">
 
     <sql id="Base_Column_List">
-        id, gzhName, appid, secret, tokenStr, serverUrl, creatDate,lastupdate
+        id, gzhName, appid, secret, tokenStr, serverUrl, creatDate,lastupdate,userTokenUpdate,userToken
     </sql>
 
     <select id="selectList" resultType="com.abc12366.uc.model.weixin.bo.gzh.GzhInfo"

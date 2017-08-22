@@ -2,7 +2,6 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.WxMenuMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.mapper.db2.WxMenuRoMapper;
@@ -12,6 +11,8 @@ import com.abc12366.uc.model.weixin.bo.menu.WxMenu;
 import com.abc12366.uc.service.IWxMenuService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
+import com.abc12366.uc.util.wx.WxGzhClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class WxMenuServiceImpl implements IWxMenuService {
     @Override
     public BaseWxRespon creatWxMenu(WxMenu wxMenu) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         BaseWxRespon respon = WxConnectFactory.post(WechatUrl.WXMENUCREATE, tks, wxMenu, BaseWxRespon.class);
         return respon;
     }
@@ -45,14 +46,14 @@ public class WxMenuServiceImpl implements IWxMenuService {
     @Override
     public WxMenu getWxMenu() {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         return WxConnectFactory.get(WechatUrl.WXMENUQUERY, tks, null, WxMenu.class);
     }
 
     @Override
     public BaseWxRespon delWxMenu() {
         Map<String, String> tks1 = new HashMap<String, String>();
-        tks1.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        tks1.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         BaseWxRespon respon = WxConnectFactory.get(WechatUrl.WXMENUDEL, tks1, null, BaseWxRespon.class);
         return respon;
     }

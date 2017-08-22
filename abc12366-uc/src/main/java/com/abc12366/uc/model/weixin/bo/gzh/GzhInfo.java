@@ -29,6 +29,7 @@ public class GzhInfo implements Serializable {
     private String serverUrl;
     
     private String userToken;//usertoken
+    private Date userTokenUpdate;//token更新时间
     
     private Date creatDate;
     private Date lastupdate;
@@ -103,6 +104,14 @@ public class GzhInfo implements Serializable {
 
 	public void setUserToken(String userToken) {
 		this.userToken = userToken;
+	}
+
+	public Date getUserTokenUpdate() {
+		return userTokenUpdate;
+	}
+
+	public void setUserTokenUpdate(Date userTokenUpdate) {
+		this.userTokenUpdate = userTokenUpdate;
 	}
 
 

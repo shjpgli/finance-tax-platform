@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-@Service
+@Service("iWxGzhService")
 public class WxGzhServiceimpl implements IWxGzhService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WxGzhServiceimpl.class);

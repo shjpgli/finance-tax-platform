@@ -2,7 +2,6 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.job.wx.WxUserTokenJob;
 import com.abc12366.uc.mapper.db1.WxMsgMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.mapper.db2.WxMsgRoMapper;
@@ -12,6 +11,7 @@ import com.abc12366.uc.service.IWxMsgService;
 import com.abc12366.uc.util.wx.MsgMap;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
+import com.abc12366.uc.util.wx.WxGzhClient;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import org.dom4j.Document;
@@ -51,7 +51,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
     @Override
     public ImgMaterial uploadWxImag(FileContent fileContent) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         return WxConnectFactory.postFile(WechatUrl.MATERIAL_NEWSIMG, tks, null,
                 ImgMaterial.class, fileContent);
     }
@@ -135,14 +135,14 @@ public class WxMsgServiceImpl implements IWxMsgService {
     @Override
     public WxNews add_news(WxNews news) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         return WxConnectFactory.post(WechatUrl.MATERIAL_ADDNEWS, tks, news, WxNews.class);
     }
 
     @Override
     public ImgMaterial add_img(FileContent fileContent) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken(WxUserTokenJob.gzhInfo.getAppid()));
+        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
         tks.put("type", "image");
         return WxConnectFactory.postFile(WechatUrl.MATERIAL_ADDMATE, tks, null,
                 ImgMaterial.class, fileContent);
