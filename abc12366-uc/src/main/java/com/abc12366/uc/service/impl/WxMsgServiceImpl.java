@@ -51,7 +51,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
     @Override
     public ImgMaterial uploadWxImag(FileContent fileContent) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
+        tks.put("access_token", WxGzhClient.getInstanceToken());
         return WxConnectFactory.postFile(WechatUrl.MATERIAL_NEWSIMG, tks, null,
                 ImgMaterial.class, fileContent);
     }
@@ -135,14 +135,14 @@ public class WxMsgServiceImpl implements IWxMsgService {
     @Override
     public WxNews add_news(WxNews news) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
+        tks.put("access_token", WxGzhClient.getInstanceToken());
         return WxConnectFactory.post(WechatUrl.MATERIAL_ADDNEWS, tks, news, WxNews.class);
     }
 
     @Override
     public ImgMaterial add_img(FileContent fileContent) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
+        tks.put("access_token", WxGzhClient.getInstanceToken());
         tks.put("type", "image");
         return WxConnectFactory.postFile(WechatUrl.MATERIAL_ADDMATE, tks, null,
                 ImgMaterial.class, fileContent);
