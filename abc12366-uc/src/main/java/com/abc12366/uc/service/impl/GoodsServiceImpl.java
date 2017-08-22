@@ -2,19 +2,15 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db1.GoodsMapper;
-import com.abc12366.uc.mapper.db1.ProductMapper;
-import com.abc12366.uc.mapper.db1.ProductSpecMapper;
-import com.abc12366.uc.mapper.db1.UvipPriceMapper;
+import com.abc12366.uc.mapper.db1.*;
+import com.abc12366.uc.mapper.db2.GoodsLogRoMapper;
 import com.abc12366.uc.mapper.db2.GoodsRoMapper;
 import com.abc12366.uc.mapper.db2.OrderProductRoMapper;
 import com.abc12366.uc.mapper.db2.ProductRoMapper;
 import com.abc12366.uc.model.*;
-import com.abc12366.uc.model.bo.DictBO;
-import com.abc12366.uc.model.bo.GoodsBO;
-import com.abc12366.uc.model.bo.GoodsCheckBO;
-import com.abc12366.uc.model.bo.ProductBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.GoodsService;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -65,6 +61,12 @@ public class GoodsServiceImpl implements GoodsService {
     public GoodsBO selectOne(String id) {
         return null;
     }
+
+    @Autowired
+    private GoodsLogRoMapper goodsLogRoMapper;
+
+    @Autowired
+    private GoodsLogMapper goodsLogMapper;
 
     @Transactional("db1TxManager")
     @Override
@@ -137,8 +139,21 @@ public class GoodsServiceImpl implements GoodsService {
             productBOs.add(productBO);
         }
         bo.setProductBOList(productBOs);
+        insertGoodsLog(goodsBO.getId(), goodsBO.toString(), "新增商品");
         return bo;
     }
+
+    private void insertGoodsLog(String goodsId, String remark, String action) {
+        GoodsLog goodsLog = new GoodsLog();
+        goodsLog.setId(Utils.uuid());
+        goodsLog.setGoodsId(goodsId);
+        goodsLog.setCreateUser(UserUtil.getAdminId());
+        goodsLog.setCreateTime(new Date());
+        goodsLog.setAction(action);
+        goodsLog.setRemark(remark);
+        goodsLogMapper.insert(goodsLog);
+    }
+
 
     @Transactional("db1TxManager")
     @Override
@@ -221,6 +236,7 @@ public class GoodsServiceImpl implements GoodsService {
             productBOs.add(productBO);
         }
         bo.setProductBOList(productBOs);
+        insertGoodsLog(goodsBO.getId(), goodsBO.toString(), "修改商品");
         return bo;
     }
 
@@ -274,6 +290,7 @@ public class GoodsServiceImpl implements GoodsService {
             LOGGER.info("删除产品失败：{}", id);
             throw new ServiceException(4103);
         }
+        insertGoodsLog(goods.getId(), goods.toString(), "删除商品");
     }
 
     @Override
@@ -289,5 +306,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<GoodsBO> selectGoodsBOList(Goods goods) {
         return goodsRoMapper.selectGoodsBOList(goods);
+    }
+
+    @Override
+    public List<GoodsLogBO> selectGoodsLogList(String id) {
+        return goodsLogRoMapper.selectGoodsLogList(id);
     }
 }

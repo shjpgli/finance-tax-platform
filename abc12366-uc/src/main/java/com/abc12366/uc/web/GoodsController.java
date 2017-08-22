@@ -4,9 +4,11 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.GoodsCategory;
+import com.abc12366.uc.model.GoodsLog;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.GoodsCategoryBO;
 import com.abc12366.uc.model.bo.GoodsCheckBO;
+import com.abc12366.uc.model.bo.GoodsLogBO;
 import com.abc12366.uc.service.GoodsCategoryService;
 import com.abc12366.uc.service.GoodsService;
 import com.github.pagehelper.Page;
@@ -276,5 +278,24 @@ public class GoodsController {
         LOGGER.info("{}", id);
         goodsCategoryService.delete(id);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping(path = "/log")
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "id", required = true) String id) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<GoodsLogBO> goodsList = goodsService.selectGoodsLogList(id);
+        LOGGER.info("{}", goodsList);
+        return (goodsList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 }

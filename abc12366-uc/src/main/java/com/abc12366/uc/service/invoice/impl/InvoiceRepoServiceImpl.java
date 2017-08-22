@@ -64,7 +64,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             LOGGER.warn("删除失败，参数{}：" + id);
             throw new ServiceException(4103);
         }
-        invoiceDetailMapper.delete(id);
+        invoiceDetailMapper.deleteByInvoiceRepoId(id);
     }
 
     @Override

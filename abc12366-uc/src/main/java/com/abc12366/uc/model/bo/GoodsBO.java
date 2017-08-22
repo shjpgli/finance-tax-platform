@@ -264,4 +264,36 @@ public class GoodsBO implements Serializable {
     public void setInvoiceContent(String invoiceContent) {
         this.invoiceContent = invoiceContent;
     }
+
+    @Override
+    public String toString() {
+        return "GoodsBO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", details='" + details + '\'' +
+                ", categoryId='" + categoryId + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", giftPoints=" + giftPoints +
+                ", sort=" + sort +
+                ", unit='" + unit + '\'' +
+                ", recommendType='" + recommendType + '\'' +
+                ", isShipping=" + isShipping +
+                ", isFreeShipping=" + isFreeShipping +
+                ", tradeMethod='" + tradeMethod + '\'' +
+                ", productBOList=" + productBOList +
+                ", totalStock=" + totalStock +
+                ", totalPrice=" + totalPrice +
+                ", goodsType='" + goodsType + '\'' +
+                ", productBO=" + productBO +
+                ", sellingPrice=" + sellingPrice +
+                ", startRepo=" + startRepo +
+                ", endRepo=" + endRepo +
+                ", invoiceContent='" + invoiceContent + '\'' +
+                '}';
+    }
 }

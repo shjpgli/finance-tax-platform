@@ -203,18 +203,21 @@ public class OrderServiceImpl implements OrderService {
                 //1：实物，2：虚拟物品，3：服务，4：会员服务，5：会员充值
 
                 String goodsType = goodsBO.getGoodsType();
-                if ("RMB".equals(goodsBO.getTradeMethod())) {
+                if ("RMB".equals(orderBO.getTradeMethod())) {
                     if ("5".equals(goodsType)) {
                         //会员充值
                         operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2");
                     } else{
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
                     }
-                } else if ("POINTS".equals(goodsBO.getTradeMethod())) {
+                } else if ("POINTS".equals(orderBO.getTradeMethod())) {
                     //订单状态，1：新订单，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
                     if ("1".equals(goodsType) || "2".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4");
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
+                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
+                        //TODO 还差开通服务接口调用
+                    }else if ("6".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
                         //TODO 还差开通服务接口调用
                     }
@@ -461,6 +464,10 @@ public class OrderServiceImpl implements OrderService {
             totalPrice = uvipPrice.getTradePrice();
         }else{
             totalPrice = prBO.getSellingPrice();
+        }
+        //判断是正常积分兑换，还是RMB转积分兑换
+        if(orderBO.getTotalPrice() != null && !"".equals(orderBO.getTotalPrice())){
+            totalPrice = orderBO.getTotalPrice();
         }
         //查找对应的积分
         if(uvipPrice != null && uvipPrice.getGiftPoints() != null && !"".equals(uvipPrice.getGiftPoints())){
