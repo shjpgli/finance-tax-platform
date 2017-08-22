@@ -17,8 +17,17 @@ public class NsrBindQueryBO {
     private boolean status;
     private Date lastUpdate;
     private String bindType;
+    private Date createTime;
 
     public NsrBindQueryBO() {
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getUsername() {

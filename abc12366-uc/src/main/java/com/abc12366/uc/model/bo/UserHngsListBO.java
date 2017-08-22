@@ -22,8 +22,17 @@ public class UserHngsListBO {
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String roleId;
 
     public UserHngsListBO() {
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
     public String getSmrzzt() {

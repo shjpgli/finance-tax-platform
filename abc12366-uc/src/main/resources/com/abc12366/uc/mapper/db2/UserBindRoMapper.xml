@@ -27,13 +27,13 @@
     <select id="userHngsListExist" resultType="com.abc12366.uc.model.UserHngs" parameterType="com.abc12366.uc.model.bo.UserHngsInsertBO">
         select id,userId,djxh,nsrsbh,nsrmc,shxydm,swjgMc,swjgDm,bsy,smrzzt,status,createTime,lastUpdate,roleId
         from uc_user_hngs
-        where nsrsbh=#{bsy}
-        or shxydm=#{bsy}
+        where (nsrsbh=#{bsy} or shxydm=#{bsy})
+        and roleId=#{role}
     </select>
 
     <select id="getUserhngsBind" resultType="com.abc12366.uc.model.bo.UserHngsListBO" parameterType="java.lang.String">
         select
-        uuh.id,uuh.userId,uuh.djxh,uuh.nsrsbh,uuh.nsrmc,uuh.shxydm,uuh.swjgMc,uuh.swjgDm,uuh.bsy,uuh.smrzzt,uuh.status,uuh.createTime,uuh.lastUpdate
+        uuh.id,uuh.userId,uuh.djxh,uuh.nsrsbh,uuh.nsrmc,uuh.shxydm,uuh.swjgMc,uuh.swjgDm,uuh.bsy,uuh.smrzzt,uuh.status,uuh.createTime,uuh.lastUpdate,uuh.roleId
         from uc_user_hngs uuh
         where uuh.userId=#{userId}
         and status=1
