@@ -54,7 +54,7 @@ public class KnowledgeBaseController {
                                   @RequestParam(value = "KnowledgeRecommend", defaultValue = "hot") String KnowledgeRecommend){
         KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(KnowledgePageSize, KnowledgeType, KnowledgeRecommend);
         List<KnowledgeBase> list = knowledgeBaseService.hotUnClassifyMap(param);
-        return ResponseEntity.ok(Utils.kv("data",list));
+        return ResponseEntity.ok(Utils.kv("dataList",list));
     }
 
     /*
