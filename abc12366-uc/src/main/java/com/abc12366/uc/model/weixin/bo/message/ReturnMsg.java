@@ -12,6 +12,8 @@ public class ReturnMsg {
     @NotEmpty
     private String setting; //0:添加消息,1:回复消息,2:关键字消息
     private String keyString;//关键字
+    private String searchTp;//匹配类型
+    private Integer sort;//排序
     @NotEmpty
     private String msgType;//text,image,news
 
@@ -29,7 +31,8 @@ public class ReturnMsg {
     private Date createDate;
     private Date lastUpdate;
 
-    public String toWxXml(String toUserName, String fromUserName, long createTime) {
+
+	public String toWxXml(String toUserName, String fromUserName, long createTime) {
         this.toUserName = toUserName;
         this.fromUserName = fromUserName;
         this.createTime = createTime;
@@ -59,6 +62,24 @@ public class ReturnMsg {
         System.out.println("回复微信服务器信息:"+buffer.toString());
         return buffer.toString();
     }
+	
+    
+    
+    public String getSearchTp() {
+		return searchTp;
+	}
+
+	public void setSearchTp(String searchTp) {
+		this.searchTp = searchTp;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 
     public String getId() {
         return id;

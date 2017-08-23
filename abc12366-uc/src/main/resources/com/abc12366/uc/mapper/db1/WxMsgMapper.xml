@@ -28,15 +28,15 @@
     </delete>
 
     <insert id="insertRemsg" parameterType="com.abc12366.uc.model.weixin.bo.message.ReturnMsg">
-        INSERT INTO uc_wxremsg(id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate)
+        INSERT INTO uc_wxremsg(id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate,searchTp,sort)
         VALUES (#{id}, #{setting}, #{keyString}, #{msgType}, #{content}, #{mediaId}, #{imgurl}, #{newsId},
-        #{createDate}, #{lastUpdate})
+        #{createDate}, #{lastUpdate},#{searchTp},#{sort})
     </insert>
 
     <update id="updateRemsg" parameterType="com.abc12366.uc.model.weixin.bo.message.ReturnMsg">
         UPDATE uc_wxremsg
         set setting=#{setting},keyString=#{keyString},msgType=#{msgType},content=#{content},
-        mediaId=#{mediaId},imgurl=#{imgurl},newsId=#{newsId},lastUpdate=#{lastUpdate}
+        mediaId=#{mediaId},imgurl=#{imgurl},newsId=#{newsId},lastUpdate=#{lastUpdate},searchTp=#{searchTp},sort=#{sort}
         where id=#{id}
     </update>
 
