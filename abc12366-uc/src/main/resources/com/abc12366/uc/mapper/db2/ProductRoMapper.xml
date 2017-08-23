@@ -72,6 +72,7 @@
         FROM uc_view_sys_dict d
         LEFT JOIN uc_product_spec s ON s.specId = d.id
         WHERE s.productId = #{productId}
+        order by d.createTime desc
     </select>
 
     <!-- 查询（根据主键ID查询） -->
@@ -101,6 +102,7 @@
             <if test="category != null and category!=''">and category = #{category}</if>
             <if test="vipLevel != null and vipLevel!=''">AND vipLevel = #{vipLevel}</if>
         </where>
+        order by createTime desc
     </select>
 
     <!-- 查询条件根据） -->
@@ -140,6 +142,7 @@
                 ]]>
             </if>
         </where>
+        order by p.createTime desc
     </select>
     <!-- 查询条件根据） -->
     <select id="selectBOById" resultMap="productResultMap" parameterType="java.lang.String">

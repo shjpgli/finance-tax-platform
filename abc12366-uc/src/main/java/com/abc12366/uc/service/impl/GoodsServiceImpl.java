@@ -162,14 +162,14 @@ public class GoodsServiceImpl implements GoodsService {
         Goods goods = new Goods();
         BeanUtils.copyProperties(goodsBO, goods);
         //先判断商品是否有被卖出，被卖出不能修改
-        List<Product> pBOList = productRoMapper.selectByGoodsId(goodsBO.getId());
+        /*List<Product> pBOList = productRoMapper.selectByGoodsId(goodsBO.getId());
         for (Product product : pBOList) {
             OrderProduct orderProduct = orderProductRoMapper.selectByProductId(product.getId());
             if (orderProduct != null) {
                 LOGGER.info("商品有被卖出，被卖出不能修改：{}", product);
                 throw new ServiceException(4162);
             }
-        }
+        }*/
         //修改产品信息
         Date date = new Date();
         goods.setLastUpdate(date);
