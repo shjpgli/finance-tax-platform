@@ -240,6 +240,7 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4101);
         }
 
+        userHngsInsertBO.setUserId(UserUtil.getUserId(request));
         //查看是否重复绑定
         List<UserHngs> userHngsList = userBindRoMapper.userHngsListExist(userHngsInsertBO);
         if (userHngsList != null && userHngsList.size() >= 1) {
