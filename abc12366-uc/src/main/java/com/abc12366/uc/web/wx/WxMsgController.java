@@ -159,7 +159,7 @@ public class WxMsgController {
         return responseEntity;
     }
 
-    // 自动回复消息查询 1：被关注 2：自动回复
+    // 自动回复消息查询 0：被关注 1：自动回复
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxremsg/db/get")
     public ResponseEntity wxremsgGet(@RequestParam("setting") String setting) {
@@ -171,6 +171,18 @@ public class WxMsgController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+    
+    //按照ID查询消息
+    @SuppressWarnings("rawtypes")
+	@GetMapping("/wxremsg/db/get/{id}")
+    public ResponseEntity wxremsgGetId(@RequestParam("id") String id) {
+        ReturnMsg v  = iWxMsgService.selectOneWxremsg(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+    
+    
 
     // 关键字消息列表
     @SuppressWarnings("rawtypes")

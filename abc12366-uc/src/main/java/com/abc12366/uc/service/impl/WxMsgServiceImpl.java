@@ -282,4 +282,5 @@ public class WxMsgServiceImpl implements IWxMsgService {
         return info;
     }
 
+	
 }
