@@ -55,6 +55,12 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     }
 
     @Override
+    public List<KnowledgeBase> hotUnClassifyMap(KnowledgeBaseHotParamBO paramBO) {
+        List<KnowledgeBase> list = knowledgeBaseMapper.hotUnClassifyList(paramBO);
+        return list;
+    }
+
+    @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
         return knowledgeBaseMapper.selectList(param);
     }
