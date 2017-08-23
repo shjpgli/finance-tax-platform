@@ -38,7 +38,7 @@ public class WxMenuServiceImpl implements IWxMenuService {
     @Override
     public BaseWxRespon creatWxMenu(WxMenu wxMenu) {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
+        tks.put("access_token", WxGzhClient.getInstanceToken());
         BaseWxRespon respon = WxConnectFactory.post(WechatUrl.WXMENUCREATE, tks, wxMenu, BaseWxRespon.class);
         return respon;
     }
@@ -46,14 +46,14 @@ public class WxMenuServiceImpl implements IWxMenuService {
     @Override
     public WxMenu getWxMenu() {
         Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
+        tks.put("access_token", WxGzhClient.getInstanceToken());
         return WxConnectFactory.get(WechatUrl.WXMENUQUERY, tks, null, WxMenu.class);
     }
 
     @Override
     public BaseWxRespon delWxMenu() {
         Map<String, String> tks1 = new HashMap<String, String>();
-        tks1.put("access_token", gzhRoMapper.selectUserToken( WxGzhClient.getInstanceToken()));
+        tks1.put("access_token", WxGzhClient.getInstanceToken());
         BaseWxRespon respon = WxConnectFactory.get(WechatUrl.WXMENUDEL, tks1, null, BaseWxRespon.class);
         return respon;
     }

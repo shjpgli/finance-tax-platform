@@ -13,8 +13,17 @@ public class CheckRank {
     private String nickname;
     private Date lastUpdate;
     private Integer count;
+    private String year;
 
     public CheckRank() {
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getId() {

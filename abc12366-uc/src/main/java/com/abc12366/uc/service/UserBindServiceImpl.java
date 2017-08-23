@@ -117,10 +117,17 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
         userDzsb.setNsrmc(ty21Object.getNSRMC());
         userDzsb.setShxydm(ty21Object.getSHXYDM());
+        if(ty21Object.getSHXYDM()==null||ty21Object.getSHXYDM().trim().equals("")){
+            userDzsb.setShxydm(ty21Object.getY_NSRSBH());
+        }
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
         userDzsb.setSwjgDm(ty21Object.getSWJGDM());
-        userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
-        userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+        if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {
+            userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+        }
+        if (ty21Object.getYQDQR() != null && !ty21Object.getYQDQR().trim().equals("")) {
+            userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+        }
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());
         int result = userBindMapper.dzsbBind(userDzsb);
@@ -240,6 +247,7 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4101);
         }
 
+        userHngsInsertBO.setUserId(UserUtil.getUserId(request));
         //查看是否重复绑定
         List<UserHngs> userHngsList = userBindRoMapper.userHngsListExist(userHngsInsertBO);
         if (userHngsList != null && userHngsList.size() >= 1) {

@@ -45,10 +45,11 @@ public class CheckController {
     }
 
     @GetMapping(path = "/check/rank")
-    public ResponseEntity rankingList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+    public ResponseEntity rankingList(@RequestParam(required = false) String year,
+                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<CheckRank> rankList = checkService.rank();
+        List<CheckRank> rankList = checkService.rank(year);
         return (rankList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) rankList, "total", ((Page) rankList).getTotal()));

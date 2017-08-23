@@ -13,9 +13,8 @@
         <include refid="Base_Column_List"/>
         FROM uc_check
         WHERE userId = #{userId}
-        and orderby = #{orderby}
-        and createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
-        and createTime &lt;(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
+        and checkDate = #{checkDate}
+
     </select>
 
     <select id="selectCheckListDesc" parameterType="java.lang.String" resultType="com.abc12366.uc.model.Check">
@@ -36,18 +35,26 @@
         and createTime &lt;(SELECT CURDATE()+1)
     </select>
 
+    <select id="selectIsRecheck" resultType="com.abc12366.uc.model.Check" parameterType="com.abc12366.uc.model.Check">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_check
+        WHERE userId = #{userId}
+        and checkDate = #{checkDate}
+    </select>
 
 
-
-    <select id="selectRankList" resultType="com.abc12366.uc.model.CheckRank">
-        select ucc.id, ucc.userId,(select uu.nickname from uc_user uu where uu.id=ucc.userId) nickname, ucc.lastUpdate, ucc.count
+    <select id="selectRankList" resultType="com.abc12366.uc.model.CheckRank" parameterType="java.lang.String">
+        select ucc.id, ucc.userId,(select uu.nickname from uc_user uu where uu.id=ucc.userId) nickname, ucc.lastUpdate, ucc.count,ucc.year
         from uc_continuing_check ucc
+        where year = #{year}
         order by count desc
     </select>
 
-    <select id="selectOneRank" resultType="com.abc12366.uc.model.CheckRank">
-        select id, userId, lastUpdate, count
+    <select id="selectOneRank" resultType="com.abc12366.uc.model.CheckRank" parameterType="java.util.Map">
+        select id, userId, lastUpdate, count, year
         from uc_continuing_check
         where userId=#{userId}
+        and year=#{year}
     </select>
 </mapper>

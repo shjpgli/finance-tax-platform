@@ -30,8 +30,9 @@ public class WxGzhClient {
 	}
     
     public static String getInstanceToken(){
-    	GzhInfo temp=iWxGzhService.selectOne(gzhInfo.getAppid());
-    	if(temp.getUserTokenUpdate()==null || isAfter(temp.getUserTokenUpdate())){
+    	String id=getInstance().getId();
+    	GzhInfo temp=iWxGzhService.selectOne(id);
+    	if(temp.getUserTokenUpdate()==null || isBefore(temp.getUserTokenUpdate())){
     		 Map<String, String> tks = new HashMap<String, String>();
              tks.put("grant_type", "client_credential");
              tks.put("appid", gzhInfo.getAppid());
@@ -45,13 +46,13 @@ public class WxGzhClient {
             	 return token.getAccess_token();
              }
     	}
-    	return temp.getTokenStr();
+    	return temp.getUserToken();
     }
     
-    private static boolean isAfter(Date date){
+    private static boolean isBefore(Date date){
     	Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -1);
-        return date.after(calendar.getTime());
+        calendar.add(Calendar.HOUR, -1);
+        return date.before(calendar.getTime());
     }
 }

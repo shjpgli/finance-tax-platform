@@ -27,7 +27,8 @@
     <select id="userHngsListExist" resultType="com.abc12366.uc.model.UserHngs" parameterType="com.abc12366.uc.model.bo.UserHngsInsertBO">
         select id,userId,djxh,nsrsbh,nsrmc,shxydm,swjgMc,swjgDm,bsy,smrzzt,status,createTime,lastUpdate,roleId
         from uc_user_hngs
-        where (nsrsbh=#{bsy} or shxydm=#{bsy})
+        where userId=#{userId}
+        and (nsrsbh=#{bsy} or shxydm=#{bsy})
         and roleId=#{role}
     </select>
 
