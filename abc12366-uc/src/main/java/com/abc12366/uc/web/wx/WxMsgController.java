@@ -175,7 +175,7 @@ public class WxMsgController {
     //按照ID查询消息
     @SuppressWarnings("rawtypes")
 	@GetMapping("/wxremsg/db/get/{id}")
-    public ResponseEntity wxremsgGetId(@RequestParam("id") String id) {
+    public ResponseEntity wxremsgGetId(@PathVariable("id") String id) {
         ReturnMsg v  = iWxMsgService.selectOneWxremsg(id);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
         LOGGER.info("{}", responseEntity);
