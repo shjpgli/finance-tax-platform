@@ -117,6 +117,9 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
         userDzsb.setNsrmc(ty21Object.getNSRMC());
         userDzsb.setShxydm(ty21Object.getSHXYDM());
+        if(ty21Object.getSHXYDM()==null||ty21Object.getSHXYDM().trim().equals("")){
+            userDzsb.setShxydm(ty21Object.getY_NSRSBH());
+        }
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
         userDzsb.setSwjgDm(ty21Object.getSWJGDM());
         if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {

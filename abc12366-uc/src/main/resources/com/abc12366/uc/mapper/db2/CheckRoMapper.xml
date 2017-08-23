@@ -45,9 +45,9 @@
 
 
     <select id="selectRankList" resultType="com.abc12366.uc.model.CheckRank" parameterType="java.lang.String">
-        select ucc.id, ucc.userId,(select uu.nickname from uc_user uu where uu.id=ucc.userId) nickname, ucc.lastUpdate, ucc.count
+        select ucc.id, ucc.userId,(select uu.nickname from uc_user uu where uu.id=ucc.userId) nickname, ucc.lastUpdate, ucc.count,ucc.year
         from uc_continuing_check ucc
-        <if test="year!=null">where year = #{year}</if>
+        where year = #{year}
         order by count desc
     </select>
 
