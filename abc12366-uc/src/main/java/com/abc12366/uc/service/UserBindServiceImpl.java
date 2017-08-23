@@ -119,8 +119,12 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setShxydm(ty21Object.getSHXYDM());
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
         userDzsb.setSwjgDm(ty21Object.getSWJGDM());
-        userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
-        userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+        if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {
+            userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+        }
+        if (ty21Object.getYQDQR() != null && !ty21Object.getYQDQR().trim().equals("")) {
+            userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+        }
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());
         int result = userBindMapper.dzsbBind(userDzsb);
