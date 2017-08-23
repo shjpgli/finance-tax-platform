@@ -61,6 +61,9 @@ public class CurriculumCoursewareBo implements Serializable {
 	/**修改时间**datetime**/
 	private java.util.Date updateTime;
 
+    /**课程收费**tinyint(1)**/
+    private Integer isFree;
+
 
 
 	public void setCoursewareId(String coursewareId){
@@ -199,4 +202,12 @@ public class CurriculumCoursewareBo implements Serializable {
 		return this.updateTime;
 	}
 
+
+    public Integer getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(Integer isFree) {
+        this.isFree = isFree;
+    }
 }

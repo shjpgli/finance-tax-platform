@@ -55,6 +55,39 @@ public class CurriculumsyBo implements Serializable {
     /**总评论数**int**/
     private Integer evaluateNum;
 
+
+    /**培训时间起**datetime**/
+    private java.util.Date trainTimeBegin;
+
+    /**培训时间止**datetime**/
+    private java.util.Date trainTimeEnd;
+
+    /**是否需要报名**tinyint(1)**/
+    private Integer isApply;
+
+    /**人数限制**int(11)**/
+    private Integer peopleLimit;
+
+    /**报名时间起**datetime**/
+    private java.util.Date applyTimeBegin;
+
+    /**报名时间止**datetime**/
+    private java.util.Date applyTimeEnd;
+
+    /**报名时交费**tinyint(1)**/
+    private Integer applyPay;
+
+    /**是否需要签到**tinyint(1)**/
+    private Integer isSign;
+
+    /**签到时间起**datetime**/
+    private java.util.Date signTimeBegin;
+
+    /**签到时间止**datetime**/
+    private java.util.Date signTimeEnd;
+
+
+
     //标签
     private List<CurriculumLabel> labelList;
 
@@ -172,6 +205,87 @@ public class CurriculumsyBo implements Serializable {
 
     public void setEvaluateNum(Integer evaluateNum) {
         this.evaluateNum = evaluateNum;
+    }
+
+
+    public Date getTrainTimeBegin() {
+        return trainTimeBegin;
+    }
+
+    public void setTrainTimeBegin(Date trainTimeBegin) {
+        this.trainTimeBegin = trainTimeBegin;
+    }
+
+    public Date getTrainTimeEnd() {
+        return trainTimeEnd;
+    }
+
+    public void setTrainTimeEnd(Date trainTimeEnd) {
+        this.trainTimeEnd = trainTimeEnd;
+    }
+
+    public Integer getIsApply() {
+        return isApply;
+    }
+
+    public void setIsApply(Integer isApply) {
+        this.isApply = isApply;
+    }
+
+    public Integer getPeopleLimit() {
+        return peopleLimit;
+    }
+
+    public void setPeopleLimit(Integer peopleLimit) {
+        this.peopleLimit = peopleLimit;
+    }
+
+    public Date getApplyTimeBegin() {
+        return applyTimeBegin;
+    }
+
+    public void setApplyTimeBegin(Date applyTimeBegin) {
+        this.applyTimeBegin = applyTimeBegin;
+    }
+
+    public Date getApplyTimeEnd() {
+        return applyTimeEnd;
+    }
+
+    public void setApplyTimeEnd(Date applyTimeEnd) {
+        this.applyTimeEnd = applyTimeEnd;
+    }
+
+    public Integer getApplyPay() {
+        return applyPay;
+    }
+
+    public void setApplyPay(Integer applyPay) {
+        this.applyPay = applyPay;
+    }
+
+    public Integer getIsSign() {
+        return isSign;
+    }
+
+    public void setIsSign(Integer isSign) {
+        this.isSign = isSign;
+    }
+
+    public Date getSignTimeBegin() {
+        return signTimeBegin;
+    }
+
+    public void setSignTimeBegin(Date signTimeBegin) {
+        this.signTimeBegin = signTimeBegin;
+    }
+
+    public Date getSignTimeEnd() {
+        return signTimeEnd;
+    }
+
+    public void setSignTimeEnd(Date signTimeEnd) {
+        this.signTimeEnd = signTimeEnd;
     }
 
     public List<CurriculumLabel> getLabelList() {
