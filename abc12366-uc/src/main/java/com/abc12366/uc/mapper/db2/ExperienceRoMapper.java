@@ -1,6 +1,9 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.bo.ExpCodex;
 import com.abc12366.uc.model.bo.MyExperienceBO;
+
+import java.util.List;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -9,4 +12,6 @@ import com.abc12366.uc.model.bo.MyExperienceBO;
  */
 public interface ExperienceRoMapper {
     MyExperienceBO getMyExperience(String userId);
+
+    List<ExpCodex> codexList(String uexpruleId);
 }

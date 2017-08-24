@@ -52,9 +52,9 @@ public class CurrOrderServiceImpl implements CurrOrderService {
             LOGGER.info("新增课程订单信息:{}", jsonStu.toString());
             orderBo.setOrderTime(new Date());
             //保存课程订单信息
-            String uuid = UUID.randomUUID().toString().replace("-", "");
+//            String uuid = UUID.randomUUID().toString().replace("-", "");
             CurriculumOrder order = new CurriculumOrder();
-            orderBo.setOrderId(uuid);
+//            orderBo.setOrderId(uuid);
             BeanUtils.copyProperties(orderBo, order);
             orderMapper.insert(order);
         } catch (Exception e) {

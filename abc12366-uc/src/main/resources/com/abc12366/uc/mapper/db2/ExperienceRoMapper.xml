@@ -21,4 +21,10 @@
         where uu.id=#{userId}
     </select>
 
+    <select id="codexList" resultType="com.abc12366.uc.model.bo.ExpCodex" parameterType="java.lang.String">
+        select id,uexpruleId,clientType,uexp,period,degree,remark
+        from uc_uexp_codex
+        where uexpruleId=#{uexpruleId}
+    </select>
+
 </mapper>
