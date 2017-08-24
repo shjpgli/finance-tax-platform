@@ -1,19 +1,39 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-23
  * Time: 20:00
  */
 public class ExpCodex {
+    private String id;
+    @NotEmpty
     private String uexpruleId;//经验值规则ID
+    @NotEmpty
     private String clientType;//客户端类型
+    @NotNull
     private Integer uexp; //经验值
+    @NotEmpty
+    @Size(min = 1,max = 1)
     private String period;//周期 A:无周期,Y:年,M:月,D:日, H:小时
+    @NotNull
     private Integer degree;//周期内次数,0无限次
-    private String reamrk;//备注
+    private String remark;//备注
 
     public ExpCodex() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUexpruleId() {
@@ -56,11 +76,11 @@ public class ExpCodex {
         this.degree = degree;
     }
 
-    public String getReamrk() {
-        return reamrk;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setReamrk(String reamrk) {
-        this.reamrk = reamrk;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
