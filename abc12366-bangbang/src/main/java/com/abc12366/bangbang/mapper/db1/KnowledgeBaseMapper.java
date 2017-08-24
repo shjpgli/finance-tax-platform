@@ -37,10 +37,17 @@ public interface KnowledgeBaseMapper {
 
     /*
     *
-    * 首页热点推荐查询
+    * 帮助中心首页热点推荐查询
     *
     **/
     List<KnowledgeBase> hotList(KnowledgeBaseHotParamBO param);
+
+    /*
+    *
+    * 财税网首页热点推荐查询
+    *
+    **/
+    List<KnowledgeBase> hotUnClassifyList(KnowledgeBaseHotParamBO param);
 
     /*
     *

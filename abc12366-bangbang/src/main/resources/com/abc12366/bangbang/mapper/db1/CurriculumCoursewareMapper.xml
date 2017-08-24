@@ -24,9 +24,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumCourseware">
 		 INSERT INTO bb_curriculum_courseware
- 		(coursewareId,curriculumId,chapterId,type,title,uploadWay,link,fileName,fileSite,fileSize,duration,isDownload,coursewareSeq,createrId,createrName,createTime,updateTime)
+ 		(coursewareId,curriculumId,isFree,chapterId,type,title,uploadWay,link,fileName,fileSite,fileSize,duration,isDownload,coursewareSeq,createrId,createrName,createTime,updateTime)
 		 VALUES 
- 		(#{coursewareId},#{curriculumId},#{chapterId},#{type},#{title},#{uploadWay},#{link},#{fileName},#{fileSite},#{fileSize},#{duration},#{isDownload},#{coursewareSeq},#{createrId},#{createrName},#{createTime},#{updateTime})
+ 		(#{coursewareId},#{curriculumId},#{isFree},#{chapterId},#{type},#{title},#{uploadWay},#{link},#{fileName},#{fileSite},#{fileSize},#{duration},#{isDownload},#{coursewareSeq},#{createrId},#{createrName},#{createTime},#{updateTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -39,6 +39,9 @@
 			<if test="curriculumId != null">
 				 curriculumId,
 			</if>
+             <if test="isFree != null">
+                 isFree,
+             </if>
              <if test="chapterId != null">
                  chapterId,
              </if>
@@ -93,6 +96,9 @@
 			<if test="curriculumId!=null">
 				 #{curriculumId},
 			</if>
+             <if test="isFree!=null">
+                 #{isFree},
+             </if>
              <if test="chapterId!=null">
                  #{chapterId},
              </if>
@@ -148,6 +154,9 @@
 			<if test="curriculumId != null">
 				 curriculumId = #{curriculumId},
 			</if>
+             <if test="isFree != null">
+                 isFree = #{isFree},
+             </if>
              <if test="chapterId != null">
                  chapterId = #{chapterId},
              </if>
@@ -203,6 +212,7 @@
 		 UPDATE bb_curriculum_courseware
 		 SET 
 			 curriculumId = #{curriculumId},
+			 isFree = #{isFree},
 			 chapterId = #{chapterId},
 			 type = #{type},
 			 title = #{title},

@@ -38,6 +38,9 @@ public class CurriculumListsyBo implements Serializable {
     /**课程简介**longtext**/
     private String curriculumidIntro;
 
+    /**课件数**tinyint(10)**/
+    private Integer coursewareNum;
+
 
     public String getCurriculumId() {
         return curriculumId;
@@ -109,5 +112,13 @@ public class CurriculumListsyBo implements Serializable {
 
     public void setCurriculumidIntro(String curriculumidIntro) {
         this.curriculumidIntro = curriculumidIntro;
+    }
+
+    public Integer getCoursewareNum() {
+        return coursewareNum;
+    }
+
+    public void setCoursewareNum(Integer coursewareNum) {
+        this.coursewareNum = coursewareNum;
     }
 }

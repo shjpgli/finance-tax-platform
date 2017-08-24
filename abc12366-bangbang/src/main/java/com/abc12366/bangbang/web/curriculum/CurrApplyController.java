@@ -52,6 +52,25 @@ public class CurrApplyController {
     }
 
     /**
+     * 课程报名人数查询
+     */
+    @GetMapping(path = "/selectApplyCnt")
+    public ResponseEntity selectApplyCnt(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                     @RequestParam(value = "userId", required = false) String userId,
+                                     @RequestParam(value = "begintime", required = false) String begintime,
+                                     @RequestParam(value = "endtime", required = false) String endtime) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId",curriculumId);
+        dataMap.put("userId",userId);
+        dataMap.put("begintime", begintime);//开始时间
+        dataMap.put("endtime", endtime);//结束时间
+        int cnt = currApplyService.selectApplyCnt(dataMap);
+        return ResponseEntity.ok(Utils.kv("data", cnt));
+    }
+
+    /**
      * 课程报名签到新增
      */
     @PostMapping

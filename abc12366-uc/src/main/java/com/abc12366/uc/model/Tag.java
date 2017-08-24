@@ -16,7 +16,7 @@ public class Tag {
     private String category;
     private String description;
     private String rule;
-    private int weight;
+    private Double weight;
     private String type;
 
     public Tag() {
@@ -94,11 +94,11 @@ public class Tag {
         this.rule = rule;
     }
 
-    public int getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 

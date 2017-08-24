@@ -46,6 +46,19 @@ public class CurrApplyServiceImpl implements CurrApplyService {
     }
 
     @Override
+    public int selectApplyCnt(Map<String,Object> map) {
+        int cnt = 0;
+        try {
+            //查询课程报名人数
+            cnt = applyRoMapper.selectApplyCnt(map);
+        } catch (Exception e) {
+            LOGGER.error("查询课程报名人数信息异常：{}", e);
+            throw new ServiceException(4370);
+        }
+        return cnt;
+    }
+
+    @Override
     public CurriculumApplyBo save(CurriculumApplyBo applyBo) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(applyBo);

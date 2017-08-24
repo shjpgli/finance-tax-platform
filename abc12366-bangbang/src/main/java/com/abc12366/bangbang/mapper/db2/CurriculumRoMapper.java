@@ -58,5 +58,10 @@ public interface CurriculumRoMapper {
      **/
     CurriculumsyBo selectCurriculum(@Param("curriculumId") String curriculumId);
 
+    /**
+     * 查询课程信息(前端用)
+     **/
+    CurriculumEvaluateTjBo selectEvaluateTj(@Param("curriculumId") String curriculumId);
+
 
 }

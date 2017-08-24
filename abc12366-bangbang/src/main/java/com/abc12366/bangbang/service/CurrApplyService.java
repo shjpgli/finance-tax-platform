@@ -10,6 +10,8 @@ public interface CurrApplyService {
 
     List<CurriculumApplyBo> selectList(Map<String, Object> map);
 
+    int selectApplyCnt(Map<String, Object> map);
+
     CurriculumApplyBo save(CurriculumApplyBo curriculumApplyBo);
 
     CurriculumApplyBo selectApply(String applyId);

@@ -17,17 +17,17 @@ public class TagBO {
     private String description;
     private String rule;
     private String tagedCount;
-    private int weight;
+    private Double weight;
     private String type;
 
     public TagBO() {
     }
 
-    public int getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 

@@ -28,5 +28,10 @@ public interface CurriculumApplyRoMapper {
      **/
     List<CurriculumApplyBo> selectList(Map<String, Object> map);
 
+    /**
+     * 查询报名人数
+     **/
+    int selectApplyCnt(Map<String, Object> map);
+
 
 }

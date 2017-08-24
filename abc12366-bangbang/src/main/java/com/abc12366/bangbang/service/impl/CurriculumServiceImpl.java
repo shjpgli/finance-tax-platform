@@ -253,7 +253,7 @@ public class CurriculumServiceImpl implements CurriculumService {
         CurriculumsyBo curriculumBo;
         try {
             LOGGER.info("查询单个课程信息:{}", curriculumId);
-            //查询模型信息
+            //查询课程信息
             curriculumBo = curriculumRoMapper.selectCurriculum(curriculumId);
 
             //标签
@@ -300,6 +300,21 @@ public class CurriculumServiceImpl implements CurriculumService {
             throw new ServiceException(4321);
         }
         return curriculumBo;
+    }
+
+    @Override
+    public CurriculumEvaluateTjBo selectEvaluateTj(String curriculumId) {
+        CurriculumEvaluateTjBo evaluateTjBo;
+        try {
+            LOGGER.info("查询单个课程评价统计信息:{}", curriculumId);
+            //查询课程评价统计信息
+            evaluateTjBo = curriculumRoMapper.selectEvaluateTj(curriculumId);
+
+        } catch (Exception e) {
+            LOGGER.error("查询单个课程评价统计信息异常：{}", e);
+            throw new ServiceException(4321);
+        }
+        return evaluateTjBo;
     }
 
     @Override

@@ -168,6 +168,16 @@ public class CurriculumController {
     }
 
     /**
+     * 查询单个课程评价统计(前端用无需登录)
+     */
+    @GetMapping(path = "/selectEvaluateTj/{curriculumId}")
+    public ResponseEntity selectEvaluateTj(@PathVariable String curriculumId) {
+        //查询课程评价统计信息
+        CurriculumEvaluateTjBo evaluateTjBo = curriculumService.selectEvaluateTj(curriculumId);
+        return ResponseEntity.ok(Utils.kv("data", evaluateTjBo));
+    }
+
+    /**
      * 更新课程信息
      */
     @PutMapping(path = "/{curriculumId}")

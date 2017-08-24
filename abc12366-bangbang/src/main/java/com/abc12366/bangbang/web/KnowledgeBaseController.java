@@ -43,6 +43,21 @@ public class KnowledgeBaseController {
     }
 
     /*
+    *
+    * 首页 热点问题、热点知识，不分小类
+    *
+    */
+    @GetMapping(path = "/hotUnClassifyList")
+    public ResponseEntity hotUnClassifyList(
+                                  @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
+                                  @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType,
+                                  @RequestParam(value = "KnowledgeRecommend", defaultValue = "hot") String KnowledgeRecommend){
+        KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(KnowledgePageSize, KnowledgeType, KnowledgeRecommend);
+        List<KnowledgeBase> list = knowledgeBaseService.hotUnClassifyMap(param);
+        return ResponseEntity.ok(Utils.kv("dataList",list));
+    }
+
+    /*
     *  知识库 分页查询
     *  支持 分类,类别 和 关键字查询
     */

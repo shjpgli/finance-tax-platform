@@ -39,8 +39,9 @@
     <!-- 查询最新课程 -->
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro
-        FROM bb_curriculum
+        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
+        FROM bb_curriculum c
         WHERE 1=1 and status = 1
         <if test="label != null and label != ''">
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
@@ -60,8 +61,9 @@
     <!-- 查询热播课程 -->
     <select id="selectListWatch" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro
-        FROM bb_curriculum
+        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
+        FROM bb_curriculum c
         WHERE 1=1 and status = 1
         <if test="label != null and label != ''">
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
@@ -81,8 +83,9 @@
     <!-- 查询推荐课程 -->
     <select id="selectRecommend" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.lang.String">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro
-        FROM bb_curriculum
+        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
+        FROM bb_curriculum c
         WHERE 1=1 and status = 1 and recommend = 1
         <if test="label != null and label != ''">
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
@@ -115,10 +118,22 @@
     <select id="selectCurriculum" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumsyBo" parameterType="java.lang.String">
         SELECT
         curriculumId,title,browseNum,watchNum,goodsId,issueTime,cover,isFree,curriculumidIntro,
+        trainTimeBegin,trainTimeEnd,isApply,peopleLimit,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,
         (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId =c.curriculumId) evaluateNum,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId =c.curriculumId) evaluateNum45,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(2,3) and curriculumId =c.curriculumId) evaluateNum23,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade = 1 and curriculumId =c.curriculumId) evaluateNum1
+        FROM bb_curriculum c
+        WHERE curriculumId = #{curriculumId}
+    </select>
+
+    <!-- 查询课程评价统计信息(前端用) -->
+    <select id="selectEvaluateTj" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateTjBo" parameterType="java.lang.String">
+        SELECT
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId =c.curriculumId) evaluateNum,
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId =c.curriculumId) evaluateNum45,
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(2,3) and curriculumId =c.curriculumId) evaluateNum23,
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade = 1 and curriculumId =c.curriculumId) evaluateNum1
         FROM bb_curriculum c
         WHERE curriculumId = #{curriculumId}
     </select>

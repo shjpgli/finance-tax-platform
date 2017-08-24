@@ -39,7 +39,7 @@
         </if>
     </select>
 
-    <!-- 首页热点问题查询 -->
+    <!-- 帮助中心首页热点问题查询 -->
     <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
         SELECT t.*,t1.name AS categoryName FROM
         (
@@ -62,6 +62,17 @@
             #{KnowledgePageSize} > (SELECT COUNT(*) FROM bb_knowledge_base WHERE categoryCode = a.categoryCode AND pv > a.pv)
         ) AS t JOIN bb_knowledge_category t1
         WHERE t.categoryCode = t1.code;
+    </select>
+
+    <!-- 财税网首页热点问题查询 -->
+    <select id="hotUnClassifyList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
+
+        SELECT a.* FROM bb_knowledge_base a
+        WHERE
+        TYPE = #{KnowledgeType} AND recommend = #{KnowledgeRecommend}
+        AND STATUS = 1 AND isOpen = 1 AND (activeTime IS NULL OR activeTime > NOW())
+        ORDER BY a.pv DESC LIMIT #{KnowledgePageSize}
+
     </select>
 
 

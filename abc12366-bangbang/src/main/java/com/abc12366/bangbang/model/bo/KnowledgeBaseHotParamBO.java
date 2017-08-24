@@ -26,6 +26,11 @@ public class KnowledgeBaseHotParamBO {
         KnowledgePageSize = knowledgePageSize;
         KnowledgeRecommend = knowledgeRecommend;
     }
+    public KnowledgeBaseHotParamBO(int knowledgePageSize, String knowledgeType, String knowledgeRecommend) {
+        KnowledgeType = knowledgeType;
+        KnowledgePageSize = knowledgePageSize;
+        KnowledgeRecommend = knowledgeRecommend;
+    }
 
     public int getCategoryNum() {
         return categoryNum;

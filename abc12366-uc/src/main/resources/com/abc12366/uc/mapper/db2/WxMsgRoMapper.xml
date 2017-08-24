@@ -28,13 +28,15 @@
         <result column="mediaId" property="mediaId" jdbcType="VARCHAR"/>
         <result column="imgurl" property="imgurl" jdbcType="VARCHAR"/>
         <result column="newsId" property="newsId" jdbcType="VARCHAR"/>
+        <result column="searchTp" property="searchTp" jdbcType="VARCHAR"/>
+        <result column="sort" property="sort" jdbcType="INTEGER"/>
         <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <association property="news" column="newsId" select="getNewsById"/>
     </resultMap>
 
     <select id="selectList" resultMap="reMsgMap" parameterType="com.abc12366.uc.model.weixin.bo.message.ReturnMsg">
-        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate,searchTp,sort
         from uc_wxremsg
         <where>
             setting= #{setting}
@@ -43,17 +45,17 @@
     </select>
 
     <select id="selectOneWxremsg" resultMap="reMsgMap" parameterType="java.lang.String">
-        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate,searchTp,sort
         from uc_wxremsg where id= #{id}
     </select>
 
     <select id="getReMsgOneBysetting" resultMap="reMsgMap" parameterType="java.lang.String">
-        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate,searchTp,sort
         from uc_wxremsg where setting= #{setting}
     </select>
 
     <select id="getReMsgOneBykeyString" resultMap="reMsgMap" parameterType="java.lang.String">
-        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate
+        SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate,searchTp,sort
         from uc_wxremsg where keyString= #{keyString} limit 1
     </select>
 
