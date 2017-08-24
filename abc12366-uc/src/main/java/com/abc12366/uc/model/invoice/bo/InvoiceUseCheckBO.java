@@ -41,6 +41,9 @@ public class InvoiceUseCheckBO implements Serializable {
 	/**备注**/
 	private String remark;
 
+	/**审核意见**/
+	private String checkOpinion;
+
 	private List<InvoiceUseDetailBO> invoiceUseDetailBOList;
 
 	public void setId(String id){
@@ -129,5 +132,13 @@ public class InvoiceUseCheckBO implements Serializable {
 
 	public void setInvoiceUseDetailBOList(List<InvoiceUseDetailBO> invoiceUseDetailBOList) {
 		this.invoiceUseDetailBOList = invoiceUseDetailBOList;
+	}
+
+	public String getCheckOpinion() {
+		return checkOpinion;
+	}
+
+	public void setCheckOpinion(String checkOpinion) {
+		this.checkOpinion = checkOpinion;
 	}
 }

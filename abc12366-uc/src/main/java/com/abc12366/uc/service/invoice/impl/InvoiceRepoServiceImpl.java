@@ -134,7 +134,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
                 invoiceDetail.setInvoiceNo(autoGenericCode(j,endLength));
                 invoiceDetail.setInvoiceCode(invoiceRepoBO.getInvoiceCode());
                 invoiceDetail.setInvoiceRepoId(repoId);
-                invoiceDetail.setStatus("0");
+                invoiceDetail.setStatus("1");
                 int dInsert = invoiceDetailMapper.insert(invoiceDetail);
                 if(dInsert != 1){
                     LOGGER.warn("新增失败，参数{}：" + invoiceRepoBO);

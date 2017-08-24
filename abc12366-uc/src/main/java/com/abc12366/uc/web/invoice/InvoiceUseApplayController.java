@@ -161,7 +161,7 @@ public class InvoiceUseApplayController {
     }
 
     /**
-     * 发票领用申请分发
+     * 发票领用申请，分发
      *
      * @return
      */

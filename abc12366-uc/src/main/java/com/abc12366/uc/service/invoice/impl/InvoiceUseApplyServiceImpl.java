@@ -37,6 +37,9 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     private InvoiceRepoRoMapper invoiceRepoRoMapper;
 
     @Autowired
+    private InvoiceRepoMapper invoiceRepoMapper;
+
+    @Autowired
     private InvoiceDetailMapper invoiceDetailMapper;
     @Autowired
     private InvoiceUseDetailMapper invoiceUseDetailMapper;
@@ -123,6 +126,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         log.setApprover(nickName);
         log.setApprovalOpinions(opinions);
         log.setApprovalResult(result);
+        log.setApproverTime(new Date());
         invoiceApprovalLogMapper.insert(log);
     }
 
@@ -190,9 +194,9 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
                     throw new ServiceException(4102);
                 }
             }
-            insertLog(invoiceUseApply.getId(),"审批", UserUtil.getAdminInfo().getNickname(),"审核通过");
+            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核通过");
         }else if(check.equals("2")){
-            insertLog(invoiceUseApply.getId(),"审批", UserUtil.getAdminInfo().getNickname(),"审核不通过");
+            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核不通过");
         }
         //加入日志
     }
@@ -201,6 +205,9 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     public void distributeUseApply(InvoiceUseCheckBO invoiceUseCheckBO) {
         InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
         BeanUtils.copyProperties(invoiceUseCheckBO,invoiceUseApply);
+        invoiceUseApply.setDistributeTime(new Date());
+        invoiceUseApply.setDistributeUser(UserUtil.getAdminId());
+        invoiceUseApply.setIssueStatus("1");
         int aUpdate = invoiceUseApplyMapper.update(invoiceUseApply);
         if(aUpdate != 1){
             LOGGER.warn("修改失败，参数{}：" + invoiceUseCheckBO);
@@ -228,12 +235,14 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
                 invoiceDistribute.setInvoiceCode(repoBO.getInvoiceCode());
                 invoiceDistribute.setInvoiceNoStart(repoBO.getInvoiceNoStart());
                 invoiceDistribute.setInvoiceNoEnd(repoBO.getInvoiceNoEnd());
-                invoiceDistribute.setStatus("0");
+                invoiceDistribute.setShare(repoBO.getShare());
+                invoiceDistribute.setStatus("1");
                 invoiceDistribute.setBook(repoBO.getBook());
                 invoiceDistribute.setInvoiceTypeCode(repoBO.getInvoiceTypeCode());
                 invoiceDistribute.setDistributeUser(invoiceUseCheckBO.getDistributeUser());
                 invoiceDistribute.setDistributeTime(new Date());
                 invoiceDistribute.setUseId(invoiceUseCheckBO.getId());
+                invoiceDistribute.setRemark(invoiceUseCheckBO.getRemark());
                 int insert = invoiceDistributeMapper.insert(invoiceDistribute);
                 if(insert != 1){
                     LOGGER.warn("新增失败，参数{}：" + invoiceDistribute);
@@ -246,9 +255,10 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     @Override
     public void signUseApply(String id) {
         List<InvoiceDistribute> invoiceDistributeList = invoiceDistributeRoMapper.selectInvoiceDistributeListByUseId(id);
+        Date date = new Date();
         for(InvoiceDistribute invoiceDistribute:invoiceDistributeList){
-            invoiceDistribute.setStatus("1");
-            invoiceDistribute.setSignTime(new Date());
+            invoiceDistribute.setStatus("2");
+            invoiceDistribute.setSignTime(date);
             invoiceDistribute.setSignUser(UserUtil.getAdminId());
             int update = invoiceDistributeMapper.update(invoiceDistribute);
             if(update != 1){
@@ -259,13 +269,22 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
             invoiceUseApply.setId(invoiceDistribute.getUseId());
             invoiceUseApply.setIssueStatus("2");
-            invoiceUseApply.setSignTime(new Date());
+            invoiceUseApply.setSignTime(date);
             invoiceUseApply.setSignUser(UserUtil.getAdminId());
             invoiceUseApplyMapper.update(invoiceUseApply);
+
+            //更新发票库存状态
+            InvoiceRepo invoiceRepo = new InvoiceRepo();
+            invoiceRepo.setUpdateUser(UserUtil.getAdminId());
+            invoiceRepo.setLastUpdate(date);
+            invoiceRepo.setId(invoiceDistribute.getInvoiceRepoId());
+            invoiceRepo.setStatus("1");
+            invoiceRepoMapper.update(invoiceRepo);
             //更新发票明细的状态
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
-            invoiceDetail.setStatus("1");
+            invoiceDetail.setLastUpdate(date);
+            invoiceDetail.setStatus("0");
             invoiceDetailMapper.updateByRepoId(invoiceDetail);
 
 

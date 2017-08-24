@@ -98,7 +98,7 @@
         te.id,	te.invoiceRepoId,	te.invoiceCode,	te.invoiceNoStart,	te.invoiceNoEnd,	te.status,	te.share,	te.book,
         te.remark,	te.useId,	te.invoiceTypeCode,	te.distributeUser,	te.distributeTime,	te.signUser,	te.signTime,dt.fieldKey as fieldKey
         FROM uc_invoice_distribute te
-        LEFT JOIN uc_dict dt on dt.id = te.invoiceTypeCode
+        LEFT JOIN uc_dict dt on dt.fieldValue = te.invoiceTypeCode and dt.dictId='ptfp'
         WHERE te.useId = #{useId}
     </select>
 
