@@ -24,6 +24,8 @@ public class OrderProductSpec implements Serializable {
      **/
     private String specId;
 
+    private String specName;
+
     public String getProductId() {
         return this.productId;
     }
@@ -46,5 +48,13 @@ public class OrderProductSpec implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 }

@@ -86,9 +86,13 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         int stock = 0;
         ProductRepoBO temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
         if (temp == null) {
-            stock = productRepoBO.getIncome();
+            stock = 0 - productRepoBO.getOutcome();
         } else {
             stock = temp.getStock() - productRepoBO.getOutcome();
+        }
+        if(stock < 0){
+            LOGGER.info("库存不能为负数:{}", stock);
+            throw new ServiceException(4914);
         }
         Date date = new Date();
         productRepoBO.setCreateTime(date);

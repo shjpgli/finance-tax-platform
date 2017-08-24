@@ -76,6 +76,8 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
         Date date = new Date();
         invoiceRepoBO.setCreateTime(date);
+        invoiceRepoBO.setCreateUser(UserUtil.getAdminId());
+        invoiceRepoBO.setLastUpdate(date);
         int startLength = invoiceRepoBO.getInvoiceNoStart().length();
         int endLength = invoiceRepoBO.getInvoiceNoEnd().length();
         if(startLength != endLength){
@@ -169,6 +171,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     public InvoiceRepoBO update(InvoiceRepoBO invoiceRepoBO) {
         Date date = new Date();
         invoiceRepoBO.setLastUpdate(date);
+        invoiceRepoBO.setUpdateUser(UserUtil.getAdminId());
         InvoiceRepo invoiceRepo = new InvoiceRepo();
         BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
 

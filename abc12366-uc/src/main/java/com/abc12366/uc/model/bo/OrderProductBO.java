@@ -26,6 +26,12 @@ public class OrderProductBO implements Serializable {
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
 
+    /**FK，商品ID**/
+    private String goodsId;
+
+    /**规格信息**/
+    private String specInfo;
+
     private ProductBO productBO;
     private List<OrderProductspecBO> orderProductspecBOList;
 
@@ -147,5 +153,21 @@ public class OrderProductBO implements Serializable {
 
     public void setOrderProductspecBOList(List<OrderProductspecBO> orderProductspecBOList) {
         this.orderProductspecBOList = orderProductspecBOList;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getSpecInfo() {
+        return specInfo;
+    }
+
+    public void setSpecInfo(String specInfo) {
+        this.specInfo = specInfo;
     }
 }

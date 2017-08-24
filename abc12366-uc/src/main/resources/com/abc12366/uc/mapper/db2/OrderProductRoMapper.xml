@@ -22,7 +22,9 @@
         <result column="weight" property="weight" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO">
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="specInfo" property="specInfo" jdbcType="VARCHAR"/>
+        <!--<association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO">
             <id column="id" property="id" jdbcType="VARCHAR"/>
             <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
             <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
@@ -31,7 +33,7 @@
             <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
             <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
             <result column="stock" property="stock" jdbcType="INTEGER"/>
-        </association>
+        </association>-->
     </resultMap>
     <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.OrderProduct" parameterType="java.lang.String">
         SELECT
@@ -50,10 +52,17 @@
     <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.bo.OrderProductBO">
         SELECT
         op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name,
+        op.categoryId, op.category, op.weight, op.createTime, op.lastUpdate,op.goodsId,op.specInfo
+        FROM uc_order_product op
+        WHERE op.orderNo = #{orderNo}
+    </select>
+<!--    <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.bo.OrderProductBO">
+        SELECT
+        op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name,
         op.categoryId, op.category, op.weight, op.createTime, op.lastUpdate,
         p.id, p.goodsId, p.marketPrice, p.sellingPrice, p.costPrice, p.createTime, p.lastUpdate,p.stock
         FROM uc_order_product op
         LEFT JOIN uc_product p ON p.id = op.productId
         WHERE op.orderNo = #{orderNo}
-    </select>
+    </select>-->
 </mapper>

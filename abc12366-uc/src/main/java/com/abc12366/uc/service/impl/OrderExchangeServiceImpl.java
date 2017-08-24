@@ -48,7 +48,7 @@ import java.util.List;
  * @create 2017-08-10 10:27 AM
  * @since 1.0.0
  */
-@Service
+@Service("orderExchangeService")
 public class OrderExchangeServiceImpl implements OrderExchangeService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderExchangeServiceImpl.class);

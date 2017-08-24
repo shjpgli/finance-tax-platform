@@ -59,6 +59,7 @@
                 and status = #{status}
             </if>
         </where>
+        order by invoiceNo*1 asc
     </select>
 
     <!-- 查询（根据InvoiceNo，status条件查询） -->

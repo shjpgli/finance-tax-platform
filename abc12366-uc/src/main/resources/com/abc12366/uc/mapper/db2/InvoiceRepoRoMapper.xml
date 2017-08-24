@@ -88,9 +88,12 @@
             parameterType="com.abc12366.uc.model.invoice.bo.InvoiceRepoBO">
         SELECT
         r.id,	r.invoiceTypeCode,	r.invoiceCode,	r.invoiceNoStart,	r.invoiceNoEnd,	r.property,	r.share,
-        r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,r.remark,d.fieldKey as invoiceTypeName
+        r.book,	r.createTime,	r.lastUpdate,	r.createUser,	r.updateUser,r.status,r.remark,d.fieldKey as invoiceTypeName,
+        a.nickname as createUserName,b.nickname as updateUserName
         FROM uc_invoice_repo r
         LEFT JOIN uc_dict d on d.fieldValue =  r.invoiceTypeCode and d.dictId = 'invoicetype'
+        LEFT JOIN uc_admin a on a.id = r.createUser
+        LEFT JOIN uc_admin b on b.id = r.updateUser
         <where>
              1=1
             <if test="invoiceCode != null  and invoiceCode!=''">AND r.invoiceCode = #{invoiceCode}</if>

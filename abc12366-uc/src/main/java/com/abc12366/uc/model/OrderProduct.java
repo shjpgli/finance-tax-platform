@@ -72,6 +72,12 @@ public class OrderProduct implements Serializable {
     /****/
     private java.util.Date lastUpdate;
 
+    /**FK，商品ID**/
+    private String goodsId;
+
+    /**规格信息**/
+    private String specInfo;
+
     public String getProductId() {
         return this.productId;
     }
@@ -174,5 +180,21 @@ public class OrderProduct implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getSpecInfo() {
+        return specInfo;
+    }
+
+    public void setSpecInfo(String specInfo) {
+        this.specInfo = specInfo;
     }
 }

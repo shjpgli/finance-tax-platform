@@ -8,7 +8,6 @@
         WHERE orderNo = #{orderNo}
     </delete>
 
-
     <insert id="insert" parameterType="com.abc12366.uc.model.OrderProduct">
         INSERT INTO uc_order_product
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -50,6 +49,12 @@
             </if>
             <if test="lastUpdate != null">
                 lastUpdate,
+            </if>
+            <if test="goodsId != null">
+                goodsId,
+            </if>
+            <if test="specInfo != null">
+                specInfo,
             </if>
 
         </trim>
@@ -93,6 +98,12 @@
             <if test="lastUpdate!=null">
                 #{lastUpdate},
             </if>
+            <if test="goodsId!=null">
+                #{goodsId},
+            </if>
+            <if test="specInfo!=null">
+                #{specInfo},
+            </if>
         </trim>
     </insert>
 
@@ -134,6 +145,12 @@
             </if>
             <if test="lastUpdate != null">
                 lastUpdate = #{lastUpdate},
+            </if>
+            <if test="goodsId != null">
+                goodsId = #{goodsId},
+            </if>
+            <if test="specInfo != null">
+                specInfo = #{specInfo},
             </if>
 
         </set>

@@ -1,5 +1,8 @@
 package com.abc12366.uc.job.order;
 
+import com.abc12366.uc.config.SpringCtxHolder;
+import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
+import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.OrderService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -18,11 +21,18 @@ public class OrderCancelJob implements Job{
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderCancelJob.class);
 
     @Autowired
-    private OrderService orderService;
+    private static OrderService orderService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("JobName2: {}", context.getJobDetail().getKey().getName());
+        initService();
         orderService.automaticCancel();
+    }
+
+    public static void initService(){
+        synchronized(OrderCancelJob.class){
+            orderService=(OrderService) SpringCtxHolder.getApplicationContext().getBean("orderService");
+        }
     }
 }

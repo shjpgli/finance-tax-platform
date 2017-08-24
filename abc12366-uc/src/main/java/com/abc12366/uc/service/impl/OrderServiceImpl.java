@@ -25,7 +25,7 @@ import java.util.List;
  * @create 2017-05-15 10:17 AM
  * @since 1.0.0
  */
-@Service
+@Service("orderService")
 public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
@@ -295,6 +295,7 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setUsername(user.getUsername());
         orderBO.setGiftPoints(giftPoints);
         orderBO.setTotalPrice(totalPrice);
+
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {
@@ -311,6 +312,8 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setCategory(goodsBO.getCategoryName());
         orderProductBO.setCreateTime(date);
         orderProductBO.setLastUpdate(date);
+        orderProductBO.setGoodsId(goodsBO.getId());
+
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -414,10 +417,10 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4167);
         }
         //加入订单与规格对应关系
-        List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
+        /*List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
         if(orderProductSpecList != null && orderProductSpecList.size() != 0){
             orderProductSpecList.forEach(orderProductspecMapper::insert);
-        }
+        }*/
     }
 
     /**
@@ -537,10 +540,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //加入订单与规格对应关系
-        List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
+        /*List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
         if(orderProductSpecList != null && orderProductSpecList.size() != 0){
             orderProductSpecList.forEach(orderProductspecMapper::insert);
-        }
+        }*/
     }
 
 

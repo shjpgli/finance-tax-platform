@@ -51,8 +51,12 @@ public class InvoiceRepoBO implements Serializable {
 	/**创建人**/
 	private String createUser;
 
+	private String createUserName;
+
 	/**修改人**/
 	private String updateUser;
+
+	private String updateUserName;
 
 	private String noStart;
 	private String noEnd;
@@ -223,5 +227,21 @@ public class InvoiceRepoBO implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getUpdateUserName() {
+		return updateUserName;
+	}
+
+	public void setUpdateUserName(String updateUserName) {
+		this.updateUserName = updateUserName;
+	}
+
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
 	}
 }

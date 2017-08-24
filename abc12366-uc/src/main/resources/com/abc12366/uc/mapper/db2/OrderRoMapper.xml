@@ -270,10 +270,12 @@
         <result column="weight" property="weight" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="specInfo" property="specInfo" jdbcType="VARCHAR"/>
+        <!--<association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
                      select="getProductBO"></association>
         <association property="orderProductspecBOList" column="{productId=productId,orderNo=orderNo}"
-                     select="getOrderProductspecBO"></association>
+                     select="getOrderProductspecBO"></association>-->
     </resultMap>
 
     <!--订单日志对象-->
