@@ -312,8 +312,7 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setCategory(goodsBO.getCategoryName());
         orderProductBO.setCreateTime(date);
         orderProductBO.setLastUpdate(date);
-        orderProductBO.setGoodsId(goodsBO.getId());
-
+        orderProductBO.setGoodsId(orderBO.getGoodsId());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -324,10 +323,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //加入订单与规格对应关系
-        List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
+        /*List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
         if(orderProductSpecList != null && orderProductSpecList.size() != 0){
             orderProductSpecList.forEach(orderProductspecMapper::insert);
-        }
+        }*/
     }
 
     /**
@@ -408,6 +407,7 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setCategory(goodsBO.getCategoryName());
         orderProductBO.setCreateTime(date);
         orderProductBO.setLastUpdate(date);
+        orderProductBO.setGoodsId(orderBO.getGoodsId());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -530,6 +530,7 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setCategory(goodsBO.getCategoryName());
         orderProductBO.setCreateTime(date);
         orderProductBO.setLastUpdate(date);
+        orderProductBO.setGoodsId(orderBO.getGoodsId());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
