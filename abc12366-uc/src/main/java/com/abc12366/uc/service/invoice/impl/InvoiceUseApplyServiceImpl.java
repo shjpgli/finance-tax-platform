@@ -242,7 +242,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
                 invoiceDistribute.setDistributeUser(invoiceUseCheckBO.getDistributeUser());
                 invoiceDistribute.setDistributeTime(new Date());
                 invoiceDistribute.setUseId(invoiceUseCheckBO.getId());
-                invoiceDistribute.setRemark(invoiceUseCheckBO.getRemark());
+                invoiceDistribute.setRemark(detailBO.getRemark());
                 int insert = invoiceDistributeMapper.insert(invoiceDistribute);
                 if(insert != 1){
                     LOGGER.warn("新增失败，参数{}：" + invoiceDistribute);
