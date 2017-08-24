@@ -35,12 +35,22 @@
         and createTime &lt;(SELECT CURDATE()+1)
     </select>
 
+    <select id="selectCheckList" resultType="com.abc12366.uc.model.Check" parameterType="com.abc12366.uc.model.bo.CheckListParam">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_check
+        WHERE userId = #{userId}
+        and checkDate &gt;= #{startDate}
+        and checkDate &lt; #{endDate}
+    </select>
+
     <select id="selectIsRecheck" resultType="com.abc12366.uc.model.Check" parameterType="com.abc12366.uc.model.Check">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_check
         WHERE userId = #{userId}
         and checkDate = #{checkDate}
+        order by orderby asc
     </select>
 
 

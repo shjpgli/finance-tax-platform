@@ -19,8 +19,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo" parameterType="java.util.Map">
         SELECT
-          curriculumId,title,browseNum,watchNum,cover,classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
-        FROM bb_curriculum
+          curriculumId,title,browseNum,watchNum,cover,cl.classifyName classify,teachingMethod,issueTime,isFree,status,createrName,updateTime
+        FROM bb_curriculum c LEFT JOIN bb_curriculum_classify cl ON c.classify = cl.classifyId
         WHERE 1=1
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')

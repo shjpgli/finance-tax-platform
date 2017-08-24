@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.Check;
 import com.abc12366.uc.model.CheckRank;
+import com.abc12366.uc.model.bo.CheckListParam;
 
 import java.util.List;
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface CheckRoMapper {
     List<CheckRank> selectOneRank(Map<String, String> map);
 
     List<Check> selectIsRecheck(Check check);
+
+    List<Check> selectCheckList(CheckListParam c);
 }

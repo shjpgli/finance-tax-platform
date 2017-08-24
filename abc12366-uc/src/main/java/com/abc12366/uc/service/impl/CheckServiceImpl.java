@@ -7,14 +7,18 @@ import com.abc12366.uc.mapper.db2.CheckRoMapper;
 import com.abc12366.uc.model.Check;
 import com.abc12366.uc.model.CheckRank;
 import com.abc12366.uc.model.ReCheck;
+import com.abc12366.uc.model.bo.CheckListBO;
+import com.abc12366.uc.model.bo.CheckListParam;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.service.CheckService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,7 +42,7 @@ public class CheckServiceImpl implements CheckService {
 
     @Transactional("db1TxManager")
     @Override
-    public void check(Check check) {
+    public int check(Check check) {
         Calendar now = Calendar.getInstance();
         int day = now.get(Calendar.DAY_OF_MONTH);
         check.setOrderby(String.valueOf(day));
@@ -74,6 +78,8 @@ public class CheckServiceImpl implements CheckService {
         continuingCheck(check.getUserId());
         //记日志
         pointsLog(check.getUserId(), points);
+
+        return points;
     }
 
     @Transactional("db1TxManager")
@@ -118,6 +124,49 @@ public class CheckServiceImpl implements CheckService {
             year = String.valueOf(calendar.get(Calendar.YEAR));
         }
         return checkRoMapper.selectRankList(year);
+    }
+
+    @Override
+    public List<CheckListBO> checklist(String yearMonth, HttpServletRequest request) {
+        String userId = UserUtil.getUserId(request);
+
+        String[] timeArray = yearMonth.trim().split("-");
+        int year = Integer.parseInt(timeArray[0]);
+        int month = Integer.parseInt(timeArray[1]);
+        int days = getDaysByYearMonth(year, month);
+
+        Date startDate = DateUtils.StrToDate(yearMonth + "-01");
+        Date endDate = DateUtils.StrToDate(year + "-" + (month + 1) + "-01");
+        Map<String, Object> map = new HashMap<>();
+        CheckListParam checkListParam = new CheckListParam();
+        checkListParam.setUserId(userId);
+        checkListParam.setStartDate(startDate);
+        checkListParam.setEndDate(endDate);
+        map.put("userId", userId);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        List<Check> checkList = checkRoMapper.selectCheckList(checkListParam);
+
+        List<CheckListBO> checkListBOs = new ArrayList<>();
+
+        //判断用户该月每天签到情况
+        for (int i = 1; i <= days; i++) {
+            CheckListBO checkListBO = new CheckListBO();
+            String iExtend = String.valueOf(i);
+            if (i < 10) {
+                iExtend = "0" + i;
+            }
+            for (int j = 0; j < checkList.size(); j++) {
+                Check check = checkList.get(j);
+                Date checkDate = DateUtils.StrToDate(yearMonth + "-" + iExtend);
+                checkListBO.setDate(checkDate);
+                if (check.getCheckDate().equals(checkDate)) {
+                    checkListBO.setIsCheck(true);
+                }
+            }
+            checkListBOs.add(checkListBO);
+        }
+        return checkListBOs;
     }
 
     private void pointsLog(String userId, int points) {
@@ -166,7 +215,7 @@ public class CheckServiceImpl implements CheckService {
         check.setOrderby(String.valueOf(order));
         //时间格式转换，为了数据库时间的比较
         Calendar calendar = Calendar.getInstance();
-        calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), order);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), order);
         Date date = calendar.getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = format.format(date);
@@ -231,5 +280,15 @@ public class CheckServiceImpl implements CheckService {
             return false;
         }
         return true;
+    }
+
+    public int getDaysByYearMonth(int year, int month) {
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.YEAR, year);
+        a.set(Calendar.MONTH, month - 1);
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
     }
 }
