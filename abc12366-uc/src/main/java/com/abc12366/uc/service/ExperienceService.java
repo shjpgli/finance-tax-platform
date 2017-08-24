@@ -13,7 +13,7 @@ import java.util.List;
 public interface ExperienceService {
     MyExperienceBO getMyExperience(String userId);
 
-    ExpCodex codex(ExpCodex codex);
+    List<ExpCodex> codex(String uexpruleId, List<ExpCodex> codex);
 
     int deleteCodex(String id);
 

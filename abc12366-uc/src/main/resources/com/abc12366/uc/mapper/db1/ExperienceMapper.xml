@@ -12,4 +12,8 @@
         delete from uc_uexp_codex where id=#{id}
     </delete>
 
+    <delete id="deleteByRuleId" parameterType="java.lang.String">
+        delete from uc_uexp_codex where uexpruleId=#{uexpruleId}
+    </delete>
+
 </mapper>

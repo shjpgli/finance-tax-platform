@@ -31,8 +31,8 @@
         FROM uc_check
         WHERE userId = #{userId}
         and isReCheck = 1
-        and createTime &gt;=(SELECT CURDATE())
-        and createTime &lt;(SELECT CURDATE()+1)
+        and createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
+        and createTime &lt;(SELECT DATE_ADD(CURDATE() -DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
     </select>
 
     <select id="selectCheckList" resultType="com.abc12366.uc.model.Check" parameterType="com.abc12366.uc.model.bo.CheckListParam">

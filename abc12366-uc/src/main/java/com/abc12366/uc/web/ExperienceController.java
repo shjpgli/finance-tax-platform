@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -33,11 +34,11 @@ public class ExperienceController {
         return ResponseEntity.ok(Utils.kv("data", myExperienceBO));
     }
 
-    @PostMapping(path = "/codex")
-    public ResponseEntity codex(@RequestBody ExpCodex codex ) {
-        LOGGER.info("{}", codex);
-        ExpCodex expCodex = experienceService.codex(codex);
-        return ResponseEntity.ok(Utils.kv("data", expCodex));
+    @PostMapping(path = "/codex/{uexpruleId}")
+    public ResponseEntity codex(@PathVariable String uexpruleId,@Valid @RequestBody List<ExpCodex> codexList ) {
+        LOGGER.info("{}:{}", uexpruleId, codexList);
+        List<ExpCodex> expCodexList = experienceService.codex(uexpruleId, codexList);
+        return ResponseEntity.ok(Utils.kv("dataList", expCodexList));
     }
 
     @DeleteMapping(path = "/codex/{id}")
@@ -52,5 +53,10 @@ public class ExperienceController {
         LOGGER.info("{}", uexpruleId);
         List<ExpCodex> codexList = experienceService.codexList(uexpruleId);
         return ResponseEntity.ok(Utils.kv("dataList", codexList));
+    }
+
+    @PostMapping
+    public ResponseEntity expCompute(){
+        return ResponseEntity.ok(null);
     }
 }

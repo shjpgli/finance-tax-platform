@@ -8,9 +8,11 @@ import com.abc12366.uc.model.bo.MyExperienceBO;
 import com.abc12366.uc.service.ExperienceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,11 +37,21 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public ExpCodex codex(ExpCodex codex) {
-        LOGGER.info("{}", codex);
-        codex.setId(Utils.uuid());
-        experienceMapper.insert(codex);
-        return codex;
+    public List<ExpCodex> codex(String uexpruleId, List<ExpCodex> codexList) {
+        LOGGER.info("{}:{}", uexpruleId, codexList);
+        //先批量删除
+        experienceMapper.deleteByRuleId(uexpruleId);
+
+        //再批量新增
+        List<ExpCodex> expCodexList = new ArrayList<>();
+        for(int i=0; i<codexList.size();i++){
+            ExpCodex codex = new ExpCodex();
+            BeanUtils.copyProperties(codexList.get(i), codex);
+            codex.setId(Utils.uuid());
+            experienceMapper.insert(codex);
+            expCodexList.add(codex);
+        }
+        return expCodexList;
     }
 
     @Override

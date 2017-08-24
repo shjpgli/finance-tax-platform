@@ -11,4 +11,6 @@ public interface ExperienceMapper {
     int insert(ExpCodex codex);
 
     int delete(String id);
+
+    int deleteByRuleId(String uexpruleId);
 }
