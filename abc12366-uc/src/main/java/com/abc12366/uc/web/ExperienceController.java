@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
@@ -43,5 +45,12 @@ public class ExperienceController {
         LOGGER.info("{}", id);
         experienceService.deleteCodex(id);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    @GetMapping(path = "/codex/{uexpruleId}")
+    public ResponseEntity codexList(@PathVariable String uexpruleId) {
+        LOGGER.info("{}", uexpruleId);
+        List<ExpCodex> codexList = experienceService.codexList(uexpruleId);
+        return ResponseEntity.ok(Utils.kv("dataList", codexList));
     }
 }

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-25
@@ -44,5 +46,10 @@ public class ExperienceServiceImpl implements ExperienceService {
     public int deleteCodex(String id) {
         experienceMapper.delete(id);
         return 1;
+    }
+
+    @Override
+    public List<ExpCodex> codexList(String uexpruleId) {
+        return experienceRoMapper.codexList(uexpruleId);
     }
 }
