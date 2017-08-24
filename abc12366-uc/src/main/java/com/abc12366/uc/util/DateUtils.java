@@ -26,4 +26,27 @@ public class DateUtils {
         }
         return date;
     }
+
+    public static Date StrToDateFormat(String str) {
+        if (str == null || str.trim().equals("")) {
+            throw new ServiceException(4804);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            throw new ServiceException(4804);
+        }
+        return date;
+    }
+
+    public static String dateToString(Date date) {
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
 }

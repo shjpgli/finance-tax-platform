@@ -5,6 +5,7 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Check;
 import com.abc12366.uc.model.CheckRank;
 import com.abc12366.uc.model.ReCheck;
+import com.abc12366.uc.model.bo.CheckListBO;
 import com.abc12366.uc.service.CheckService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -33,8 +35,8 @@ public class CheckController {
     @PostMapping(path = "/check")
     public ResponseEntity check(@Valid @RequestBody Check check){
         LOGGER.info("{}", check);
-        checkService.check(check);
-        return ResponseEntity.ok(Utils.kv());
+        int points = checkService.check(check);
+        return ResponseEntity.ok(Utils.kv("data", points));
     }
 
     @PostMapping(path = "/recheck")
@@ -53,5 +55,12 @@ public class CheckController {
         return (rankList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) rankList, "total", ((Page) rankList).getTotal()));
+    }
+
+    @GetMapping(path = "/check/list")
+    public ResponseEntity checklist(@RequestParam(required = true) String yearMonth,
+                                    HttpServletRequest request){
+        List<CheckListBO> checkList = checkService.checklist(yearMonth, request);
+        return ResponseEntity.ok(Utils.kv("dataList", checkList));
     }
 }

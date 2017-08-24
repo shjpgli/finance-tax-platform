@@ -117,7 +117,7 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
         userDzsb.setNsrmc(ty21Object.getNSRMC());
         userDzsb.setShxydm(ty21Object.getSHXYDM());
-        if(ty21Object.getSHXYDM()==null||ty21Object.getSHXYDM().trim().equals("")){
+        if (ty21Object.getSHXYDM() == null || ty21Object.getSHXYDM().trim().equals("")) {
             userDzsb.setShxydm(ty21Object.getY_NSRSBH());
         }
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
@@ -256,8 +256,12 @@ public class UserBindServiceImpl implements UserBindService {
 
         //访问网上报税系统
         HngsNsrLoginResponse hngsNsrLoginResponse = loginWsbsHngs(userHngsInsertBO, request);
-        if (hngsNsrLoginResponse == null || !hngsNsrLoginResponse.isSuccess()) {
+        if (hngsNsrLoginResponse == null) {
             throw new ServiceException(4840);
+        } else {
+            if (!hngsNsrLoginResponse.isSuccess()) {
+                throw new ServiceException(hngsNsrLoginResponse.getCode(), hngsNsrLoginResponse.getMsg());
+            }
         }
 
         UserHngs userHngs = new UserHngs();

@@ -29,7 +29,6 @@
         from uc_user_hngs
         where userId=#{userId}
         and (nsrsbh=#{bsy} or shxydm=#{bsy})
-        and roleId=#{role}
     </select>
 
     <select id="getUserhngsBind" resultType="com.abc12366.uc.model.bo.UserHngsListBO" parameterType="java.lang.String">
