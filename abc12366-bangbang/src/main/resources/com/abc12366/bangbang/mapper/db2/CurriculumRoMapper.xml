@@ -11,8 +11,8 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.curriculum.Curriculum" parameterType="java.lang.String">
 		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_curriculum
+             curriculumId,title,browseNum,watchNum,classify,cl.classifyName,goodsId,	recommend,	teachingMethod,	trainTimeBegin,	trainTimeEnd,	isApply,	applyTimeBegin,	applyTimeEnd,	applyPay,	isSign,	signTimeBegin,	signTimeEnd,	issueTime,	peopleLimit,	trainSite,	cover,	label,	issueScope,	isFree,	originalPrice,	preferentialPrice,	integralOriginalPrice,	integralPreferentialPrice,	freeMember,	lecturerId,	lecturerName,	lecturerPicture,	curriculumidIntro,	status,	createrId,	createrName,	createrTime,	updateTime
+        FROM bb_curriculum c LEFT JOIN bb_curriculum_classify cl ON c.classify = cl.classifyId
 		 WHERE curriculumId = #{curriculumId}
 	</select>
 
