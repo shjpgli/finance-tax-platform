@@ -785,7 +785,7 @@ public class OrderServiceImpl implements OrderService {
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
 
             for(OrderProductBO orderProductBO:orderProductBOs){
-                String goodsId = orderProductBO.getProductBO().getGoodsId();
+                String goodsId = orderProductBO.getGoodsId();
                 GoodsBO goodsBO = goodsRoMapper.selectGoods(goodsId);
                 goodsType = goodsBO.getGoodsType();
                 //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单

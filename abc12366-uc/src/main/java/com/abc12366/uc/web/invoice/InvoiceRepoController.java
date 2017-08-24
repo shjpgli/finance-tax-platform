@@ -115,10 +115,12 @@ public class InvoiceRepoController {
      * @return
      */
     @GetMapping(path = "/invoice/repo/validate")
-    public ResponseEntity validateInvoice(@RequestParam(value = "invoiceCode", required = false) String invoiceCode,
+    public ResponseEntity validateInvoice(@RequestParam(value = "id", required = false) String id,
+                                          @RequestParam(value = "invoiceCode", required = false) String invoiceCode,
                                           @RequestParam(value = "invoiceNoStart", required = false) String invoiceNoStart,
                                           @RequestParam(value = "invoiceNoEnd", required = false) String invoiceNoEnd) {
         InvoiceRepo invoiceRepo = new InvoiceRepo();
+        invoiceRepo.setId(id);
         invoiceRepo.setInvoiceCode(invoiceCode);
         invoiceRepo.setInvoiceNoStart(invoiceNoStart);
         invoiceRepo.setInvoiceNoEnd(invoiceNoEnd);

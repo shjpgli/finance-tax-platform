@@ -273,6 +273,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Override
     public boolean validateInvoice(InvoiceRepo invoiceRepo) {
+        String id = invoiceRepo.getId();
         int startLength = invoiceRepo.getInvoiceNoStart().length();
         int endLength = invoiceRepo.getInvoiceNoEnd().length();
         if(startLength != endLength){
@@ -291,7 +292,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             invoiceDetail.setInvoiceCode(invoiceRepo.getInvoiceCode());
             invoiceDetail.setInvoiceNo(autoGenericCode(j,endLength));
             InvoiceDetail temp  = invoiceDetailRoMapper.selectByInvoiceNoAndCode(invoiceDetail);
-            if(temp != null){
+            if(temp != null && !temp.getInvoiceRepoId().equals(id)){
                 return false;
             }
         }
