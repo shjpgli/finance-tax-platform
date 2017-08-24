@@ -39,6 +39,7 @@ public class CurrOrderController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                     @RequestParam(value = "userId", required = false) String userId,
                                      @RequestParam(value = "begintime", required = false) String begintime,
                                      @RequestParam(value = "endtime", required = false) String endtime) {
         Map<String, Object> dataMap = new HashMap<>();

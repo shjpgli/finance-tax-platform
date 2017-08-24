@@ -40,6 +40,12 @@ public class CurriculumApply implements Serializable {
 	/**签到地点**varchar(50)**/
 	private String signSite;
 
+    /**工作单位**varchar(100)**/
+    private String company;
+
+    /**职位**varchar(64)**/
+    private String position;
+
 
 
 	public void setApplyId(String applyId){
@@ -122,4 +128,19 @@ public class CurriculumApply implements Serializable {
 		return this.signSite;
 	}
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
 }
