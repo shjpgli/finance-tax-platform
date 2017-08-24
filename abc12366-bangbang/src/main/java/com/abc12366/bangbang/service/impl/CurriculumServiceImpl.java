@@ -420,4 +420,30 @@ public class CurriculumServiceImpl implements CurriculumService {
         return "";
     }
 
+    @Override
+    public List<CurrMyStudyBo> selectStudyHistory(Map<String,Object> map) {
+        List<CurrMyStudyBo> currMyStudyBoList;
+        try {
+            //查询课程学习历史
+            currMyStudyBoList = curriculumRoMapper.selectStudyHistory(map);
+        } catch (Exception e) {
+            LOGGER.error("查询课程列表信息异常：{}", e);
+            throw new ServiceException(4320);
+        }
+        return currMyStudyBoList;
+    }
+
+    @Override
+    public List<CurriculumListsyBo> selectListCollect(Map<String,Object> map) {
+        List<CurriculumListsyBo> curriculumListBoList;
+        try {
+            //查询收藏课程列表
+            curriculumListBoList = curriculumRoMapper.selectListCollect(map);
+        } catch (Exception e) {
+            LOGGER.error("查询课程列表信息异常：{}", e);
+            throw new ServiceException(4320);
+        }
+        return curriculumListBoList;
+    }
+
 }

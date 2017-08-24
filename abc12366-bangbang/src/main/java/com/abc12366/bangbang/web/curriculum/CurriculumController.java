@@ -223,4 +223,34 @@ public class CurriculumController {
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
+    /**
+     * 查询课程学习历史
+     */
+    @GetMapping(path = "/selectStudyHistory")
+    public ResponseEntity selectStudyHistory(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                          @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//用户ID
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CurrMyStudyBo> dataList = curriculumService.selectStudyHistory(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 最新课程查询(前端用无需登录)
+     */
+    @GetMapping(path = "/selectListCollect")
+    public ResponseEntity selectListCollect(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//用户ID
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CurriculumListsyBo> dataList = curriculumService.selectListCollect(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
 }

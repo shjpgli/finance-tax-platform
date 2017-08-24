@@ -63,5 +63,15 @@ public interface CurriculumRoMapper {
      **/
     CurriculumEvaluateTjBo selectEvaluateTj(@Param("curriculumId") String curriculumId);
 
+    /**
+     * 查询课程学习历史
+     **/
+    List<CurrMyStudyBo> selectStudyHistory(Map<String, Object> map);
+
+    /**
+     * 查询收藏课程
+     **/
+    List<CurriculumListsyBo> selectListCollect(Map<String, Object> map);
+
 
 }

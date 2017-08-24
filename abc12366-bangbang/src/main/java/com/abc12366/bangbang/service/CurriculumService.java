@@ -36,4 +36,8 @@ public interface CurriculumService {
 
     String deleteList(String[] curriculumIds);
 
+    List<CurrMyStudyBo> selectStudyHistory(Map<String, Object> map);
+
+    List<CurriculumListsyBo> selectListCollect(Map<String, Object> map);
+
 }
