@@ -45,6 +45,7 @@ public class InvoiceUseApplyBO implements Serializable {
      * 分发人
      **/
     private String distributeUser;
+    private String distributeUserName;
 
     /**
      * 分发时间
@@ -209,5 +210,13 @@ public class InvoiceUseApplyBO implements Serializable {
 
     public void setSignUserName(String signUserName) {
         this.signUserName = signUserName;
+    }
+
+    public String getDistributeUserName() {
+        return distributeUserName;
+    }
+
+    public void setDistributeUserName(String distributeUserName) {
+        this.distributeUserName = distributeUserName;
     }
 }
