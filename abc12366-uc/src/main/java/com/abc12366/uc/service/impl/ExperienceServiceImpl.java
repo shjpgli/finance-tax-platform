@@ -1,10 +1,16 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
+import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.ExpCodex;
+import com.abc12366.uc.model.bo.ExpComputeBO;
+import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.MyExperienceBO;
+import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.ExperienceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +36,12 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Autowired
     private ExperienceMapper experienceMapper;
 
+    @Autowired
+    private UserRoMapper userRoMapper;
+
+    @Autowired
+    private ExperienceLogService experienceLogService;
+
     @Override
     public MyExperienceBO getMyExperience(String userId) {
         LOGGER.info("{}", userId);
@@ -44,7 +56,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         //再批量新增
         List<ExpCodex> expCodexList = new ArrayList<>();
-        for(int i=0; i<codexList.size();i++){
+        for (int i = 0; i < codexList.size(); i++) {
             ExpCodex codex = new ExpCodex();
             BeanUtils.copyProperties(codexList.get(i), codex);
             codex.setId(Utils.uuid());
@@ -63,5 +75,41 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Override
     public List<ExpCodex> codexList(String uexpruleId) {
         return experienceRoMapper.codexList(uexpruleId);
+    }
+
+    @Override
+    public void compute(ExpComputeBO expComputeBO) {
+        List<ExpCodex> expCodexes = experienceRoMapper.selectOne(expComputeBO);
+        if (expCodexes == null || expCodexes.size() < 1) {
+            throw new ServiceException(4853);
+        }
+        ExpCodex codex = expCodexes.get(0);
+        if(codex.getUexp()==null||codex.getUexp().toString().equals("")){
+            throw new ServiceException(4854);
+        }
+
+        //查看获取经验值次数是否允许范围内
+
+
+        User user = userRoMapper.selectOne(expComputeBO.getUserId());
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+
+
+
+
+        //经验值日志,同时修改用户经验值
+        ExperienceLogBO experienceLog = new ExperienceLogBO();
+        experienceLog.setUserId(expComputeBO.getUserId());
+        if (codex.getUexp() < 0) {
+            experienceLog.setIncome(0);
+            experienceLog.setOutgo(-codex.getUexp());
+        }else{
+            experienceLog.setIncome(codex.getUexp());
+            experienceLog.setOutgo(0);
+        }
+        experienceLogService.insert(experienceLog);
+
     }
 }

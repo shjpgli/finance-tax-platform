@@ -27,4 +27,11 @@
         where uexpruleId=#{uexpruleId}
     </select>
 
+    <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExpCodex" parameterType="com.abc12366.uc.model.bo.ExpComputeBO">
+        select id,uexpruleId,clientType,uexp,period,degree,remark
+        from uc_uexp_codex
+        where uexpruleId=#{uexpruleId}
+        and clientType=#{clientType}
+    </select>
+
 </mapper>

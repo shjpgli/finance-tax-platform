@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.ExpCodex;
+import com.abc12366.uc.model.bo.ExpComputeBO;
 import com.abc12366.uc.model.bo.MyExperienceBO;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface ExperienceService {
     int deleteCodex(String id);
 
     List<ExpCodex> codexList(String uexpruleId);
+
+    void compute(ExpComputeBO expComputeBO);
 }
