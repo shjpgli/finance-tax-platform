@@ -139,7 +139,7 @@ public class GoodsServiceImpl implements GoodsService {
             productBOs.add(productBO);
         }
         bo.setProductBOList(productBOs);
-        insertGoodsLog(goodsBO.getId(), goodsBO.toString(), "新增商品");
+        insertGoodsLog(bo.getId(), goodsBO.toString(), "新增商品");
         return bo;
     }
 
