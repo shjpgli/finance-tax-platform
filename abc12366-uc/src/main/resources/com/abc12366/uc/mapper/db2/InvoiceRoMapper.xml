@@ -270,6 +270,9 @@
             <if test=" username != null and username != '' ">
                 and u.username = #{username}
             </if>
+            <if test=" waybillNum != null and waybillNum != '' ">
+                and u.waybillNum = #{waybillNum}
+            </if>
             <if test=" consignee != null and consignee != '' ">
                 and a.name = #{consignee}
             </if>

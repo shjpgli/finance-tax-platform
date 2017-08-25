@@ -42,12 +42,6 @@ public class OrderBO implements Serializable {
     private Boolean isInvoice;
     private GoodsBO goodsBO;
 
-    /**是否可退货，0，可退，1，不可退**/
-    private String isReturn;
-
-    /**是否可换货，0：可换，1：不可换**/
-    private String isExchange;
-
     private User user;
     private UserAddressBO userAddressBO;
 
@@ -344,19 +338,4 @@ public class OrderBO implements Serializable {
         this.userAddressBO = userAddressBO;
     }
 
-    public String getIsReturn() {
-        return isReturn;
-    }
-
-    public void setIsReturn(String isReturn) {
-        this.isReturn = isReturn;
-    }
-
-    public String getIsExchange() {
-        return isExchange;
-    }
-
-    public void setIsExchange(String isExchange) {
-        this.isExchange = isExchange;
-    }
 }

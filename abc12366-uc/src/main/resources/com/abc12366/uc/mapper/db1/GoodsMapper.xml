@@ -64,6 +64,15 @@
             <if test="goodsType != null">
                 goodsType,
             </if>
+            <if test="invoiceContent != null">
+                invoiceContent,
+            </if>
+            <if test="isReturn != null">
+                isReturn,
+            </if>
+            <if test="isExchange != null">
+                isExchange,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -117,6 +126,15 @@
             </if>
             <if test="goodsType!=null">
                 #{goodsType},
+            </if>
+            <if test="invoiceContent!=null">
+                #{invoiceContent},
+            </if>
+            <if test="isReturn!=null">
+                #{isReturn},
+            </if>
+            <if test="isExchange!=null">
+                #{isExchange},
             </if>
         </trim>
     </insert>
@@ -172,6 +190,15 @@
             </if>
             <if test="goodsType != null">
                 goodsType = #{goodsType},
+            </if>
+            <if test="invoiceContent != null">
+                invoiceContent = #{invoiceContent},
+            </if>
+            <if test="isReturn != null">
+                isReturn = #{isReturn},
+            </if>
+            <if test="isExchange != null">
+                isExchange = #{isExchange},
             </if>
 
         </set>

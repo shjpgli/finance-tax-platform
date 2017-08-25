@@ -56,6 +56,7 @@ public class InvoiceUseApplyBO implements Serializable {
      **/
     private String signUser;
 
+    private String signUserName;
     /**
      * 签收时间
      **/
@@ -202,4 +203,11 @@ public class InvoiceUseApplyBO implements Serializable {
         this.invoiceUseDetailBOList = invoiceUseDetailBOList;
     }
 
+    public String getSignUserName() {
+        return signUserName;
+    }
+
+    public void setSignUserName(String signUserName) {
+        this.signUserName = signUserName;
+    }
 }

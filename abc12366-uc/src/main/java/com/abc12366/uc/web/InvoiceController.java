@@ -54,6 +54,7 @@ public class InvoiceController {
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "invoiceNo", required = false) String invoiceNo,
                                      @RequestParam(value = "property", required = false) String property,
+                                     @RequestParam(value = "waybillNum", required = false) String waybillNum,
                                      @RequestParam(value = "startTime", required = false) String startTime,
                                      @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -63,6 +64,7 @@ public class InvoiceController {
         invoice.setUsername(username);
         invoice.setInvoiceNo(invoiceNo);
         invoice.setProperty(property);
+        invoice.setWaybillNum(waybillNum);
         if (startTime != null && !"".equals(startTime)) {
             invoice.setStartTime(DataUtils.StrToDate(startTime));
         }

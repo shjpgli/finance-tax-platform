@@ -5,7 +5,7 @@
 
     <sql id="Base_Column_List">
         orderNo, productId, sellingPrice, unitPrice, num, discount, dealPrice, name, categoryId, category, weight,
-        createTime, lastUpdate
+        createTime, lastUpdate,isReturn,isExchange,imageUrl,goodsType
     </sql>
 
     <resultMap type="com.abc12366.uc.model.bo.OrderProductBO" id="orderProductRoMap">
@@ -24,6 +24,10 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="specInfo" property="specInfo" jdbcType="VARCHAR"/>
+        <result column="isReturn" property="isReturn" jdbcType="VARCHAR"/>
+        <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
         <!--<association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO">
             <id column="id" property="id" jdbcType="VARCHAR"/>
             <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
@@ -52,7 +56,7 @@
     <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.bo.OrderProductBO">
         SELECT
         op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name,
-        op.categoryId, op.category, op.weight, op.createTime, op.lastUpdate,op.goodsId,op.specInfo
+        op.categoryId, op.category, op.weight, op.createTime, op.lastUpdate,op.goodsId,op.specInfo,op.isReturn,op.isExchange,op.imageUrl,op.goodsType
         FROM uc_order_product op
         WHERE op.orderNo = #{orderNo}
     </select>

@@ -78,6 +78,20 @@ public class OrderProduct implements Serializable {
     /**规格信息**/
     private String specInfo;
 
+    /**是否可退货，0，可退，1，不可退**/
+    private String isReturn;
+
+    /**是否可换货，0：可换，1：不可换**/
+    private String isExchange;
+
+    /**展示图片URL**/
+    private String imageUrl;
+
+    /**
+     * 商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值，6.学堂服务
+     **/
+    private String goodsType;
+
     public String getProductId() {
         return this.productId;
     }
@@ -196,5 +210,37 @@ public class OrderProduct implements Serializable {
 
     public void setSpecInfo(String specInfo) {
         this.specInfo = specInfo;
+    }
+
+    public String getIsReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(String isReturn) {
+        this.isReturn = isReturn;
+    }
+
+    public String getIsExchange() {
+        return isExchange;
+    }
+
+    public void setIsExchange(String isExchange) {
+        this.isExchange = isExchange;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
     }
 }
