@@ -52,4 +52,6 @@ public interface UserAddressService {
     UserAddressBO addUserAddress(UserAddressBO userAddressBO);
 
     UserAddressUpdateBO setDefaultAddrees(UserAddressUpdateBO userAddressBO);
+
+    List<UserAddressBO> selectBOList(String userId);
 }

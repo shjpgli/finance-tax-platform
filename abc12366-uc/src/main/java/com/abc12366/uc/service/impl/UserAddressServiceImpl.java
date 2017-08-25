@@ -114,4 +114,9 @@ public class UserAddressServiceImpl implements UserAddressService {
         }
         return userAddressBO;
     }
+
+    @Override
+    public List<UserAddressBO> selectBOList(String userId) {
+        return userAddressRoMapper.selectBOList(userId);
+    }
 }
