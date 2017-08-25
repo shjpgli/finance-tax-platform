@@ -25,6 +25,9 @@ public class Curriculum implements Serializable {
 	/**课程分类**varchar(64)**/
 	private String classify;
 
+    /**分类名称**varchar(100)**/
+    private String classifyName;
+
     /**商品ID**varchar(64)**/
     private String goodsId;
 
@@ -165,6 +168,14 @@ public class Curriculum implements Serializable {
 	public String getClassify(){
 		return this.classify;
 	}
+
+    public String getClassifyName() {
+        return classifyName;
+    }
+
+    public void setClassifyName(String classifyName) {
+        this.classifyName = classifyName;
+    }
 
     public String getGoodsId() {
         return goodsId;

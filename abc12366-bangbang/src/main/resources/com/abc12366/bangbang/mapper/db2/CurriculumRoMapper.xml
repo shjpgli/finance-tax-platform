@@ -11,8 +11,8 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.curriculum.Curriculum" parameterType="java.lang.String">
 		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_curriculum
+             curriculumId,title,browseNum,watchNum,classify,cl.classifyName,goodsId,	recommend,	teachingMethod,	trainTimeBegin,	trainTimeEnd,	isApply,	applyTimeBegin,	applyTimeEnd,	applyPay,	isSign,	signTimeBegin,	signTimeEnd,	issueTime,	peopleLimit,	trainSite,	cover,	label,	issueScope,	isFree,	originalPrice,	preferentialPrice,	integralOriginalPrice,	integralPreferentialPrice,	freeMember,	lecturerId,	lecturerName,	lecturerPicture,	curriculumidIntro,	status,	createrId,	createrName,	createrTime,	updateTime
+        FROM bb_curriculum c LEFT JOIN bb_curriculum_classify cl ON c.classify = cl.classifyId
 		 WHERE curriculumId = #{curriculumId}
 	</select>
 
@@ -146,6 +146,33 @@
         WHERE 1=1 and status = 1 and curriculumId != #{curriculumId}
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId in(select labelId from bb_curriculum_label where curriculumId = #{curriculumId}))
         ORDER BY issueTime DESC limit 4
+    </select>
+
+    <!-- 查询课程学习历史 -->
+    <select id="selectStudyHistory" resultType="com.abc12366.bangbang.model.curriculum.bo.CurrMyStudyBo" parameterType="java.util.Map">
+        select s.curriculumId,s.userId,orderTime,orderPrice,orderIntegral,isIntegral,orderStatus,c.title,c.cover,c.isFree,
+            (select studyTime from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) studyTime,
+            (select coursewareId from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) coursewareId
+            from (SELECT curriculumId,userId FROM bb_curriculum_study group by curriculumId,userId order by studyTime desc) s
+            left join bb_curriculum_order o on (s.curriculumId = o.curriculumId and s.userId = o.userId)
+            left join bb_curriculum c on s.curriculumId = c.curriculumId
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND s.userId = #{userId}
+        </if>
+    </select>
+
+    <!-- 查询收藏课程 -->
+    <select id="selectListCollect" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
+        SELECT
+        col.curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
+        FROM bb_curriculum_collect col left join bb_curriculum c on col.curriculumId = c.curriculumId
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND col.userId = #{userId}
+        </if>
+        ORDER BY collectTime DESC
     </select>
 
 
