@@ -446,4 +446,24 @@ public class CurriculumServiceImpl implements CurriculumService {
         return curriculumListBoList;
     }
 
+    @Override
+    public CurrMyStudyNumBo selectStudyNum(Map<String,Object> map) {
+        CurrMyStudyNumBo currMyStudyNumBo = new CurrMyStudyNumBo();
+        try {
+            //查询本月学习课程数
+            int cnt1 = curriculumRoMapper.selectStudyNumByMonth(map);
+            currMyStudyNumBo.setStudyNumMonth(cnt1);
+            //查询本年学习课程数
+            int cnt2 = curriculumRoMapper.selectStudyNumByYear(map);
+            currMyStudyNumBo.setStudyNumYear(cnt2);
+            //查询学习勤奋榜
+            String cnt3 = curriculumRoMapper.selectStudyQfb(map);
+            currMyStudyNumBo.setStudyQfb(cnt3);
+        } catch (Exception e) {
+            LOGGER.error("查询课程信息异常：{}", e);
+            throw new ServiceException(4323);
+        }
+        return currMyStudyNumBo;
+    }
+
 }

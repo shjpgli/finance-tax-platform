@@ -253,4 +253,16 @@ public class CurriculumController {
 
     }
 
+    /**
+     * 查询学习课程数
+     */
+    @GetMapping(path = "/selectStudyNum")
+    public ResponseEntity selectStudyNum(@RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//用户ID
+        CurrMyStudyNumBo data = curriculumService.selectStudyNum(dataMap);
+        return ResponseEntity.ok(Utils.kv("data", data));
+
+    }
+
 }

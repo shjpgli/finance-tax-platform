@@ -40,4 +40,6 @@ public interface CurriculumService {
 
     List<CurriculumListsyBo> selectListCollect(Map<String, Object> map);
 
+    CurrMyStudyNumBo selectStudyNum(Map<String, Object> map);
+
 }

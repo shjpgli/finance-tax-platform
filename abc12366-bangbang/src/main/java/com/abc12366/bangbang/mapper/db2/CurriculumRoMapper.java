@@ -80,5 +80,20 @@ public interface CurriculumRoMapper {
      **/
     List<CurriculumListsyBo> selectListCollect(Map<String, Object> map);
 
+    /**
+     * 查询本月学习课程数
+     **/
+    int selectStudyNumByMonth(Map<String, Object> map);
+
+    /**
+     * 查询本年学习课程数
+     **/
+    int selectStudyNumByYear(Map<String, Object> map);
+
+    /**
+     * 查询学习勤奋榜
+     **/
+    String selectStudyQfb(Map<String, Object> map);
+
 
 }

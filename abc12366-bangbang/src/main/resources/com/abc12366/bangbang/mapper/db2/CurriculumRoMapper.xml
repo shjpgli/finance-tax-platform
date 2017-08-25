@@ -164,12 +164,46 @@
         select s.curriculumId,s.userId,orderTime,orderPrice,orderIntegral,isIntegral,orderStatus,c.title,c.cover,c.isFree,
             (select studyTime from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) studyTime,
             (select coursewareId from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) coursewareId
-            from (SELECT curriculumId,userId FROM bb_curriculum_study group by curriculumId,userId order by studyTime desc) s
+            from (SELECT curriculumId,userId FROM bb_curriculum_study
+            WHERE 1=1
+            <if test="userId != null and userId != ''">
+                AND userId = #{userId}
+            </if>
+            group by curriculumId,userId order by studyTime desc) s
             left join bb_curriculum_order o on (s.curriculumId = o.curriculumId and s.userId = o.userId)
             left join bb_curriculum c on s.curriculumId = c.curriculumId
         WHERE 1=1
+
+    </select>
+
+    <!-- 查询本月学习课程数 -->
+    <select id="selectStudyNumByMonth" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(1) FROM bb_curriculum_study
+        WHERE 1=1
         <if test="userId != null and userId != ''">
-            AND s.userId = #{userId}
+            AND userId = #{userId}
+        </if>
+        and date_format(studyTime,'%Y-%m')=date_format(now(),'%Y-%m')
+        group by curriculumId
+    </select>
+
+    <!-- 查询本年学习课程数 -->
+    <select id="selectStudyNumByYear" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(1) FROM bb_curriculum_study
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId}
+        </if>
+        and YEAR(studyTime)=YEAR(NOW())
+        group by curriculumId
+    </select>
+
+    <!-- 查询学习勤奋榜 -->
+    <select id="selectStudyQfb" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT ranking FROM bb_curriculum_study_qfb
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId}
         </if>
     </select>
 
