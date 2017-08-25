@@ -25,6 +25,13 @@ public interface CurriculumRoMapper {
 
     /**
      *
+     * 查询是否已存在
+     *
+     **/
+    int selectCurrCntByGoodsId(@Param("goodsId") String goodsId);
+
+    /**
+     *
      * 根据课程分类查询课程数
      *
      **/
