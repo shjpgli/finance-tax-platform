@@ -4,6 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.ExpCodex;
 import com.abc12366.uc.model.bo.MyExperienceBO;
+import com.abc12366.uc.model.bo.ExpComputeBO;
 import com.abc12366.uc.service.ExperienceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +56,10 @@ public class ExperienceController {
         return ResponseEntity.ok(Utils.kv("dataList", codexList));
     }
 
-    @PostMapping
-    public ResponseEntity expCompute(){
-        return ResponseEntity.ok(null);
+    @PostMapping(path = "/compute")
+    public ResponseEntity expCompute(@Valid @RequestBody ExpComputeBO expComputeBO){
+        LOGGER.info("{}", expComputeBO);
+        experienceService.compute(expComputeBO);
+        return ResponseEntity.ok(Utils.kv());
     }
 }
