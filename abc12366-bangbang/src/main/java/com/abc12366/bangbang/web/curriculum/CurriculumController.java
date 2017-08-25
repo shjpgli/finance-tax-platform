@@ -239,7 +239,7 @@ public class CurriculumController {
     }
 
     /**
-     * 最新课程查询(前端用无需登录)
+     * 查询课程收藏列表
      */
     @GetMapping(path = "/selectListCollect")
     public ResponseEntity selectListCollect(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -250,6 +250,18 @@ public class CurriculumController {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumListsyBo> dataList = curriculumService.selectListCollect(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 查询学习课程数
+     */
+    @GetMapping(path = "/selectStudyNum")
+    public ResponseEntity selectStudyNum(@RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//用户ID
+        CurrMyStudyNumBo data = curriculumService.selectStudyNum(dataMap);
+        return ResponseEntity.ok(Utils.kv("data", data));
 
     }
 

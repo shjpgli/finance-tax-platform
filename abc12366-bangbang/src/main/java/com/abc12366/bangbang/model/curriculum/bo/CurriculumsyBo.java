@@ -86,6 +86,9 @@ public class CurriculumsyBo implements Serializable {
     /**签到时间止**datetime**/
     private java.util.Date signTimeEnd;
 
+    /**授课方式**varchar(64)**/
+    private String teachingMethod;
+
 
 
     //标签
@@ -286,6 +289,15 @@ public class CurriculumsyBo implements Serializable {
 
     public void setSignTimeEnd(Date signTimeEnd) {
         this.signTimeEnd = signTimeEnd;
+    }
+
+
+    public String getTeachingMethod() {
+        return teachingMethod;
+    }
+
+    public void setTeachingMethod(String teachingMethod) {
+        this.teachingMethod = teachingMethod;
     }
 
     public List<CurriculumLabel> getLabelList() {
