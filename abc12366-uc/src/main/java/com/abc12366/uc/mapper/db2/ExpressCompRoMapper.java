@@ -19,4 +19,8 @@ public interface ExpressCompRoMapper {
 
 
     List<ExpressComp> selectList(ExpressComp expressComp);
+
+    ExpressComp selectByCompName(@Param("compName")String compName);
+
+    ExpressComp selectByCompCode(@Param("compCode")String compCode);
 }
