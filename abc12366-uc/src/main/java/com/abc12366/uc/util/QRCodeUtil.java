@@ -22,8 +22,9 @@ public class QRCodeUtil {
 	public static String getCreatQRcodeString(String content,int qrCodeSize,String formatName){
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
 		try {
-			 Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();  
-	         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");  
+			 Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>(); 
+			 hints.put(EncodeHintType.CHARACTER_SET, "utf-8");  
+		     hints.put(EncodeHintType.MARGIN, 0);  
 	         BitMatrix bitMatrix = new MultiFormatWriter().encode(content,  
 	                 BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize, hints);
 	         MatrixToImageWriter.writeToStream(bitMatrix, formatName, baos);
