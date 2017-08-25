@@ -311,7 +311,11 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setCategory(goodsBO.getCategoryName());
         orderProductBO.setCreateTime(date);
         orderProductBO.setLastUpdate(date);
-        orderProductBO.setGoodsId(orderBO.getGoodsId());
+        orderProductBO.setGoodsId(goodsBO.getId());
+        orderProductBO.setIsExchange(goodsBO.getIsExchange());
+        orderProductBO.setIsReturn(goodsBO.getIsReturn());
+        orderProductBO.setImageUrl(goodsBO.getImageUrl());
+        orderProductBO.setGoodsType(goodsBO.getGoodsType());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -320,12 +324,6 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
             throw new ServiceException(4167);
         }
-
-        //加入订单与规格对应关系
-        /*List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
-        if(orderProductSpecList != null && orderProductSpecList.size() != 0){
-            orderProductSpecList.forEach(orderProductspecMapper::insert);
-        }*/
     }
 
     /**
@@ -361,25 +359,6 @@ public class OrderServiceImpl implements OrderService {
         repo.setOptionUser(orderBO.getUserId());
         productRepoMapper.insert(repo);
 
-
-        //根据用户等级查找该等级下赠送的积分，没有则设置为goods中设置的赠送积分
-        /*UvipPrice uvip = new UvipPrice();
-        uvip.setProductId(prBO.getId());
-        uvip.setVipLevel(user.getVipLevel());
-        UvipPrice uvipPrice = uvipPriceRoMapper.selectByLevel(uvip);
-        //查找对应的金额
-        if(uvipPrice != null && uvipPrice.getTradePrice() != null && !"".equals(uvipPrice.getTradePrice())){
-            totalPrice = uvipPrice.getTradePrice();
-        }else{
-            totalPrice = goodsBO.getSellingPrice();
-        }
-        //查找对应的积分
-        if(uvipPrice != null && uvipPrice.getGiftPoints() != null && !"".equals(uvipPrice.getGiftPoints())){
-            giftPoints = (int) (uvipPrice.getGiftPoints()+(uvipPrice.getGiftPoints() * 0.1)) * 1000;
-        }else{
-            giftPoints = (int) (goodsBO.getGiftPoints()+(goodsBO.getGiftPoints() * 0.1)) * 1000;
-        }*/
-
         //商品价格
         double totalPrice = orderBO.getTotalPrice();
         int giftPoints = (int) (totalPrice+(totalPrice * 0.1)) * 1000;
@@ -406,7 +385,11 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setCategory(goodsBO.getCategoryName());
         orderProductBO.setCreateTime(date);
         orderProductBO.setLastUpdate(date);
-        orderProductBO.setGoodsId(orderBO.getGoodsId());
+        orderProductBO.setGoodsId(goodsBO.getId());
+        orderProductBO.setIsExchange(goodsBO.getIsExchange());
+        orderProductBO.setIsReturn(goodsBO.getIsReturn());
+        orderProductBO.setImageUrl(goodsBO.getImageUrl());
+        orderProductBO.setGoodsType(goodsBO.getGoodsType());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -415,11 +398,6 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
             throw new ServiceException(4167);
         }
-        //加入订单与规格对应关系
-        /*List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
-        if(orderProductSpecList != null && orderProductSpecList.size() != 0){
-            orderProductSpecList.forEach(orderProductspecMapper::insert);
-        }*/
     }
 
     /**
@@ -529,7 +507,11 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setCategory(goodsBO.getCategoryName());
         orderProductBO.setCreateTime(date);
         orderProductBO.setLastUpdate(date);
-        orderProductBO.setGoodsId(orderBO.getGoodsId());
+        orderProductBO.setGoodsId(goodsBO.getId());
+        orderProductBO.setIsExchange(goodsBO.getIsExchange());
+        orderProductBO.setIsReturn(goodsBO.getIsReturn());
+        orderProductBO.setImageUrl(goodsBO.getImageUrl());
+        orderProductBO.setGoodsType(goodsBO.getGoodsType());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -538,12 +520,6 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
             throw new ServiceException(4167);
         }
-
-        //加入订单与规格对应关系
-        /*List<OrderProductSpec> orderProductSpecList = orderBO.getOrderProductSpecList();
-        if(orderProductSpecList != null && orderProductSpecList.size() != 0){
-            orderProductSpecList.forEach(orderProductspecMapper::insert);
-        }*/
     }
 
 

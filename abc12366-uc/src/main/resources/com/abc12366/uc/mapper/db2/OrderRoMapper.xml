@@ -127,29 +127,6 @@
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="goodsMap" type="com.abc12366.uc.model.bo.GoodsBO">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
-        <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
-        <result column="details" property="details" jdbcType="VARCHAR"/>
-        <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
-        <result column="categoryName" property="categoryName" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
-        <result column="sort" property="sort" jdbcType="INTEGER"/>
-        <result column="unit" property="unit" jdbcType="VARCHAR"/>
-        <result column="recommendType" property="recommendType" jdbcType="VARCHAR"/>
-        <result column="totalStock" property="totalStock" jdbcType="DOUBLE"/>
-        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
-        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
-        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
-        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
-        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
-    </resultMap>
-
     <!--配送方式对象-->
     <resultMap id="deliveryMethodBOMap" type="com.abc12366.uc.model.bo.DeliveryMethodBO">
         <id column="deliveryId" property="id"/>
@@ -174,7 +151,7 @@
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
-        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.isReturn,g.isExchange,g.imageUrl
         FROM uc_goods g where g.id = #{id}
 
     </select>
@@ -272,6 +249,10 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="specInfo" property="specInfo" jdbcType="VARCHAR"/>
+        <result column="isReturn" property="isReturn" jdbcType="VARCHAR"/>
+        <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
         <association property="goodsBO" column="goodsId" select="getGoodsBOList"/>
     </resultMap>
 
@@ -352,7 +333,7 @@
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
         op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
-        op.createTime, op.lastUpdate,op.goodsId,op.specInfo
+        op.createTime, op.lastUpdate,op.goodsId,op.specInfo,op.isReturn,op.isExchange,op.imageUrl,op.goodsType
         FROM uc_order_product op
         WHERE op.orderNo = #{orderNo}
     </select>
