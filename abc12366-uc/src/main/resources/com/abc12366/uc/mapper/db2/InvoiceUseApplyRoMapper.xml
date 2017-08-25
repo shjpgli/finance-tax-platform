@@ -179,7 +179,7 @@
     <select id="selectInvoiceUseApply" resultMap="invoiceUseApplyMap" parameterType="com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO">
         SELECT
         a.id,	a.applyUser,	a.applyTime,	a.issueStatus,	a.examineStatus,	a.distributeUser,
-        a.distributeTime,	a.signUser,	a.signTime,	a.remark,m.nickname as applyUserName,n.nickname as signUserName,n.nickname as distributeUserName
+        a.distributeTime,	a.signUser,	a.signTime,	a.remark,m.nickname as applyUserName,n.nickname as signUserName,u.nickname as distributeUserName
         FROM uc_invoice_use_apply a
         LEFT JOIN uc_admin u on u.id = a.distributeUser
         LEFT JOIN uc_admin n on n.id = a.signUser
