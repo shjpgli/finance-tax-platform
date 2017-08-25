@@ -239,7 +239,7 @@ public class CurriculumController {
     }
 
     /**
-     * 最新课程查询(前端用无需登录)
+     * 查询课程收藏列表
      */
     @GetMapping(path = "/selectListCollect")
     public ResponseEntity selectListCollect(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
