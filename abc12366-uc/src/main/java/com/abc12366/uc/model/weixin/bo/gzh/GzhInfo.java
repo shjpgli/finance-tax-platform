@@ -31,10 +31,31 @@ public class GzhInfo implements Serializable {
     private String userToken;//usertoken
     private Date userTokenUpdate;//token更新时间
     
+    private String jsapi_ticket;
+    private Date jsapiTicketUpdate;
+    
     private Date creatDate;
     private Date lastupdate;
 
-    public String getId() {
+    
+    
+    public String getJsapi_ticket() {
+		return jsapi_ticket;
+	}
+
+	public void setJsapi_ticket(String jsapi_ticket) {
+		this.jsapi_ticket = jsapi_ticket;
+	}
+
+	public Date getJsapiTicketUpdate() {
+		return jsapiTicketUpdate;
+	}
+
+	public void setJsapiTicketUpdate(Date jsapiTicketUpdate) {
+		this.jsapiTicketUpdate = jsapiTicketUpdate;
+	}
+
+	public String getId() {
         return id;
     }
 

@@ -12,4 +12,6 @@ public interface WxGzhMapper {
 
 	void updateUserToken(GzhInfo gzhInfo);
 
+	void updatejsapiTicket(GzhInfo gzhInfo);
+
 }

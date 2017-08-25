@@ -31,6 +31,13 @@
         userTokenUpdate = #{userTokenUpdate}
         WHERE appid = #{appid}
     </update>
+    
+    <update id="updatejsapiTicket" parameterType="com.abc12366.uc.model.weixin.bo.gzh.GzhInfo">
+        UPDATE uc_wxgzh
+        set jsapi_ticket = #{jsapi_ticket},
+        jsapiTicketUpdate = #{jsapiTicketUpdate}
+        WHERE appid = #{appid}
+    </update>
 
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM uc_wxgzh WHERE id = #{id}

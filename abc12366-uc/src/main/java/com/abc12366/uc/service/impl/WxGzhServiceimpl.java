@@ -92,4 +92,10 @@ public class WxGzhServiceimpl implements IWxGzhService {
     public String getUserToken(String appid){
     	return wxGzhRoMapper.selectUserToken(appid);
     }
+
+
+    @Transactional("db1TxManager")
+	public void updatejsapiTicket(GzhInfo gzhInfo) {
+    	wxGzhMapper.updatejsapiTicket(gzhInfo);
+    }
 }

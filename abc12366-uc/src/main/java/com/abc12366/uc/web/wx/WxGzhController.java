@@ -3,7 +3,10 @@ package com.abc12366.uc.web.wx;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
+import com.abc12366.uc.model.weixin.bo.gzh.WxJsConfig;
 import com.abc12366.uc.service.IWxGzhService;
+import com.abc12366.uc.util.wx.SignUtil;
+import com.abc12366.uc.util.wx.WxGzhClient;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,4 +99,11 @@ public class WxGzhController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+    
+    @RequestMapping("/wxgzh/getwxJsConfig")
+    public @ResponseBody WxJsConfig getwxJsConfig(@RequestBody String url){
+    	return SignUtil.jsign(WxGzhClient.getInstance().getAppid(), WxGzhClient.getInstanceJstiket(), url);
+    }
+    
+    
 }

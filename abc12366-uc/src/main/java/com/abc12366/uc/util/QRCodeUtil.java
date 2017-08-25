@@ -2,14 +2,9 @@ package com.abc12366.uc.util;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.castor.core.util.Base64Decoder;
 
 import sun.misc.BASE64Encoder;
 import com.google.zxing.BarcodeFormat;
