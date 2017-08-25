@@ -32,7 +32,18 @@
             AND status = #{status}
         </if>
         <if test="classify != null and classify != ''">
-            AND classify = #{classify}
+            AND classify like CONCAT(#{classify},'%')
+        </if>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCurrCntByClassify" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+          COUNT(curriculumId)
+        FROM bb_curriculum
+        WHERE 1=1
+        <if test="classify != null and classify != ''">
+            AND classify like CONCAT(#{classify},'%')
         </if>
     </select>
 
@@ -47,7 +58,7 @@
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
         </if>
         <if test="classify != null and classify != ''">
-            AND classify = #{classify}
+            AND classify like CONCAT(#{classify},'%')
         </if>
         <if test="freeMember != null and freeMember != ''">
             AND curriculumId in (select curriculumId from bb_curriculum_membergrade where memberGrade = #{freeMember})
@@ -69,7 +80,7 @@
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
         </if>
         <if test="classify != null and classify != ''">
-            AND classify = #{classify}
+            AND classify like CONCAT(#{classify},'%')
         </if>
         <if test="freeMember != null and freeMember != ''">
             AND curriculumId in (select curriculumId from bb_curriculum_membergrade where memberGrade = #{freeMember})
@@ -91,7 +102,7 @@
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
         </if>
         <if test="classify != null and classify != ''">
-            AND classify = #{classify}
+            AND classify like CONCAT(#{classify},'%')
         </if>
         <if test="freeMember != null and freeMember != ''">
             AND curriculumId in (select curriculumId from bb_curriculum_membergrade where memberGrade = #{freeMember})
