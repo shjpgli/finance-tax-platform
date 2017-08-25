@@ -40,10 +40,13 @@ public class CurrOrderController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "curriculumId", required = false) String curriculumId,
                                      @RequestParam(value = "userId", required = false) String userId,
+                                     @RequestParam(value = "orderStatus", required = false) String orderStatus,
                                      @RequestParam(value = "begintime", required = false) String begintime,
                                      @RequestParam(value = "endtime", required = false) String endtime) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("curriculumId",curriculumId);
+        dataMap.put("userId",userId);
+        dataMap.put("orderStatus",orderStatus);
         dataMap.put("begintime", begintime);//开始时间
         dataMap.put("endtime", endtime);//结束时间
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);

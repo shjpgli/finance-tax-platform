@@ -32,6 +32,9 @@
               and date_format(orderTime, '%Y%m%d') <= date_format(#{endtime}, '%Y%m%d')
               ]]>
         </if>
+        <if test="orderStatus != null and orderStatus != ''">
+            AND orderStatus = #{orderStatus}
+        </if>
         <if test="userId != null and userId != ''">
             AND userId = #{userId}
         </if>
