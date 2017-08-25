@@ -11,6 +11,7 @@ import com.abc12366.uc.config.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.bo.WxUseToken;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.service.IWxGzhService;
+import com.alibaba.fastjson.JSON;
 
 @Component
 public class WxGzhClient {
@@ -52,6 +53,7 @@ public class WxGzhClient {
     public static String getInstanceJstiket(){
     	String id=getInstance().getId();
     	GzhInfo temp=iWxGzhService.selectOne(id);
+    	System.out.println(JSON.toJSONString(temp));
     	if(temp.getJsapiTicketUpdate()==null || isBefore(temp.getJsapiTicketUpdate())){
     		 Map<String, String> tks = new HashMap<String, String>();
              tks.put("access_token", getInstanceToken());

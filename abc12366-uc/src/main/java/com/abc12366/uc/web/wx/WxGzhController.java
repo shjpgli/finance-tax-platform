@@ -101,8 +101,8 @@ public class WxGzhController {
     }
     
     @RequestMapping("/wxgzh/getwxJsConfig")
-    public @ResponseBody WxJsConfig getwxJsConfig(@RequestBody String url){
-    	return SignUtil.jsign(WxGzhClient.getInstance().getAppid(), WxGzhClient.getInstanceJstiket(), url);
+    public @ResponseBody WxJsConfig getwxJsConfig(@RequestBody WxJsConfig config){
+    	return SignUtil.jsign(WxGzhClient.getInstance().getAppid(), WxGzhClient.getInstanceJstiket(), config.getUrl());
     }
     
     
