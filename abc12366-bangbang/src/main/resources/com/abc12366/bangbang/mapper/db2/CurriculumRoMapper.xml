@@ -129,7 +129,7 @@
     <select id="selectCurriculum" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumsyBo" parameterType="java.lang.String">
         SELECT
         curriculumId,title,browseNum,watchNum,goodsId,issueTime,cover,isFree,curriculumidIntro,
-        trainTimeBegin,trainTimeEnd,isApply,peopleLimit,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,
+        trainTimeBegin,trainTimeEnd,isApply,peopleLimit,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,teachingMethod,
         (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId =c.curriculumId) evaluateNum,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId =c.curriculumId) evaluateNum45,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(2,3) and curriculumId =c.curriculumId) evaluateNum23,
