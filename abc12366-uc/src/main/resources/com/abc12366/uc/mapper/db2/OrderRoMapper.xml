@@ -494,6 +494,24 @@
 
     </select>
 
+    <!--根据GoodsId和UserId查询订单信息-->
+    <select id="selectOrderByGoodsIdAndUserId" resultType="com.abc12366.uc.model.bo.OrderBO" parameterType="com.abc12366.uc.model.Order">
+        SELECT
+        <include refid="Base_Column_BO_List"/>
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        LEFT JOIN uc_order_product p on p.orderNo = o.orderNo
+        <where>
+            orderStatus = '6'
+            <if test=" userId != null and userId != '' ">
+                and o.userId = #{userId}
+            </if>
+            <if test=" goodsId != null and goodsId != '' ">
+                and p.goodsId = #{goodsId}
+            </if>
+        </where>
+    </select>
+
 
     <!-- 前台查询（根据条件查询） -->
     <select id="selectOrderList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">

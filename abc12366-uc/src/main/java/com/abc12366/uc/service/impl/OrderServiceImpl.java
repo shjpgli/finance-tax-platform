@@ -932,4 +932,9 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public OrderBO selectOrderByGoodsIdAndUserId(Order order) {
+        return orderRoMapper.selectOrderByGoodsIdAndUserId(order);
+    }
+
 }
