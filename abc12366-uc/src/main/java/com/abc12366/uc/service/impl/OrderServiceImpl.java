@@ -8,7 +8,6 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -739,7 +738,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4167);
                 }*/
                 //增加Product库存数量
-                ProductBO productBO = orderProductBO.getProductBO();
+                ProductBO productBO = new ProductBO();
                 int stock = productBO.getStock() + orderProductBO.getNum();
                 productBO.setStock(stock);
                 Product product = new Product();
@@ -877,12 +876,13 @@ public class OrderServiceImpl implements OrderService {
                 List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
                 for(OrderProductBO orderProductBO:orderProductBOList){
                     goodsName.append(orderProductBO.getName());
-                    List<OrderProductspecBO> orderProductspecBOs = orderProductBO.getOrderProductspecBOList();
-                    if(orderProductspecBOs != null){
+                    //List<OrderProductspecBO> orderProductspecBOs = orderProductBO.getOrderProductspecBOList();
+                    /*if(orderProductspecBOs != null){
                         for (OrderProductspecBO specBO:orderProductspecBOs){
                             goodsName.append("  "+specBO.getFieldKey());
                         }
-                    }
+                    }*/
+                    goodsName.append(orderProductBO.getName()+"  "+orderProductBO.getSpecInfo());
                 }
                 orderListBO.setGoodsName(goodsName.toString());
             }

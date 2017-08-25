@@ -127,7 +127,7 @@
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="goodsBoMap" type="com.abc12366.uc.model.bo.GoodsBO">
+    <resultMap id="goodsMap" type="com.abc12366.uc.model.bo.GoodsBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
@@ -170,12 +170,12 @@
     </resultMap>
 
     <!-- 获取商品信息-->
-    <select id="selectGoodsBOList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.Goods">
+    <select id="getGoodsBOList" resultType="com.abc12366.uc.model.bo.GoodsBO" parameterType="java.lang.String">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
         g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType
-        FROM uc_goods g
+        FROM uc_goods g where g.id = #{id}
 
     </select>
 
@@ -272,10 +272,7 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="specInfo" property="specInfo" jdbcType="VARCHAR"/>
-        <!--<association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
-                     select="getProductBO"></association>
-        <association property="orderProductspecBOList" column="{productId=productId,orderNo=orderNo}"
-                     select="getOrderProductspecBO"></association>-->
+        <association property="goodsBO" column="goodsId" select="getGoodsBOList"/>
     </resultMap>
 
     <!--订单日志对象-->
@@ -341,15 +338,6 @@
         WHERE p.id = #{productId}
     </select>
 
-    <!--获取订单与产品对应规格信息-->
-    <select id="getOrderProductspecBO" parameterType="java.util.Map" resultMap="orderProducctspecResultMap">
-        SELECT
-        p.orderNo, p.productId, p.specId,d.fieldValue,d.fieldKey
-        FROM uc_order_product_spec p
-        LEFT JOIN uc_dict d on d.id = p.specId
-        WHERE p.orderNo = #{orderNo} and p.productId = #{productId}
-    </select>
-
     <!--获取字典信息-->
     <select id="getDictBO" parameterType="java.lang.String" resultMap="oneDictBO">
         SELECT
@@ -364,7 +352,7 @@
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
         op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
-        op.createTime, op.lastUpdate
+        op.createTime, op.lastUpdate,op.goodsId,op.specInfo
         FROM uc_order_product op
         WHERE op.orderNo = #{orderNo}
     </select>
@@ -387,7 +375,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
+        orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
         isShipping, isFreeShipping, deliveryFee,
         isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId
     </sql>

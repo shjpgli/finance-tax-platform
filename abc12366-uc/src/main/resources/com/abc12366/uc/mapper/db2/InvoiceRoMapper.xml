@@ -131,8 +131,10 @@
         <result column="weight" property="weight" jdbcType="DOUBLE"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
-                     select="getProductBO"></association>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="specInfo" property="specInfo" jdbcType="VARCHAR"/>
+        <!--<association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
+                     select="getProductBO"></association>-->
     </resultMap>
 
     <!--产品对象-->
@@ -164,7 +166,7 @@
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
         op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
-        op.createTime, op.lastUpdate
+        op.createTime, op.lastUpdate,op.goodsId,op.specInfo
         FROM uc_order_product op
         WHERE op.orderNo = #{orderNo}
     </select>

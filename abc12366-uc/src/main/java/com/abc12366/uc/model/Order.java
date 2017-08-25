@@ -119,6 +119,12 @@ public class Order implements Serializable {
      **/
     private String goodsId;
 
+    /**是否可退货，0，可退，1，不可退**/
+    private String isReturn;
+
+    /**是否可换货，0：可换，1：不可换**/
+    private String isExchange;
+
     public String getOrderNo() {
         return this.orderNo;
     }
@@ -301,5 +307,21 @@ public class Order implements Serializable {
 
     public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public String getIsReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(String isReturn) {
+        this.isReturn = isReturn;
+    }
+
+    public String getIsExchange() {
+        return isExchange;
+    }
+
+    public void setIsExchange(String isExchange) {
+        this.isExchange = isExchange;
     }
 }

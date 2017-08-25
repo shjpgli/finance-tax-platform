@@ -32,8 +32,7 @@ public class OrderProductBO implements Serializable {
     /**规格信息**/
     private String specInfo;
 
-    private ProductBO productBO;
-    private List<OrderProductspecBO> orderProductspecBOList;
+    private GoodsBO goodsBO;
 
     public String getProductId() {
         return this.productId;
@@ -131,28 +130,12 @@ public class OrderProductBO implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
-    public ProductBO getProductBO() {
-        return productBO;
-    }
-
-    public void setProductBO(ProductBO productBO) {
-        this.productBO = productBO;
-    }
-
     public String getOrderNo() {
         return orderNo;
     }
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
-    }
-
-    public List<OrderProductspecBO> getOrderProductspecBOList() {
-        return orderProductspecBOList;
-    }
-
-    public void setOrderProductspecBOList(List<OrderProductspecBO> orderProductspecBOList) {
-        this.orderProductspecBOList = orderProductspecBOList;
     }
 
     public String getGoodsId() {
@@ -169,5 +152,13 @@ public class OrderProductBO implements Serializable {
 
     public void setSpecInfo(String specInfo) {
         this.specInfo = specInfo;
+    }
+
+    public GoodsBO getGoodsBO() {
+        return goodsBO;
+    }
+
+    public void setGoodsBO(GoodsBO goodsBO) {
+        this.goodsBO = goodsBO;
     }
 }

@@ -519,7 +519,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     for (OrderProductBO orderProductBO:orderProductBOList){
                         invoiceXm = new InvoiceXm();
                         //商品名称，
-                        invoiceXm.setXmmc(orderProductBO.getProductBO().getInvoiceContentDetail());
+                        invoiceXm.setXmmc(orderProductBO.getGoodsBO().getInvoiceContentDetail());
                         //商品编码
                         invoiceXm.setSpbm("1010105000000000000");
                         //价格
