@@ -124,7 +124,7 @@ public class InvoiceUseApplayController {
     }
 
     /**
-     * 发票领用申请新增
+     * 发票领用申请修改
      *
      * @return
      */

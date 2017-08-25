@@ -17,10 +17,11 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectList" resultType="com.abc12366.uc.model.OrderLog" parameterType="com.abc12366.uc.model.OrderLog">
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.GoodsLogBO" parameterType="com.abc12366.uc.model.OrderLog">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_order_log
-        WHERE orderNo = #{orderNo}
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as createUserName
+        FROM uc_order_log o
+        LEFT JOIN uc_user_admin u ON o.createUser = u.id
+        WHERE o.orderNo = #{orderNo}
     </select>
 </mapper>
