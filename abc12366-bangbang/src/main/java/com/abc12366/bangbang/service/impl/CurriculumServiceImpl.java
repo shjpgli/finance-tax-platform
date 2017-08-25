@@ -144,7 +144,26 @@ public class CurriculumServiceImpl implements CurriculumService {
     }
 
     @Override
+    public int selectCurrCntByGoodsId(String goodsId) {
+        int cnt=0;
+        try {
+            //查询课程
+            cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
+        } catch (Exception e) {
+            LOGGER.error("查询课程信息异常：{}", e);
+            throw new ServiceException(4321);
+        }
+        return cnt;
+    }
+
+    @Override
     public CurriculumBo save(CurriculumBo curriculumBo) {
+        String goodsId = curriculumBo.getGoodsId();
+        int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
+        if(cnt>0){
+            //该商品已被课程使用，请重新选择商品
+            throw new ServiceException(4326);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(curriculumBo);
             LOGGER.info("新增课程信息:{}", jsonStu.toString());
@@ -155,6 +174,7 @@ public class CurriculumServiceImpl implements CurriculumService {
             curriculumBo.setUpdateTime(new Date());
             //保存课程信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
+
             Curriculum curriculum = new Curriculum();
             curriculumBo.setCurriculumId(uuid);
             BeanUtils.copyProperties(curriculumBo, curriculum);
@@ -203,7 +223,7 @@ public class CurriculumServiceImpl implements CurriculumService {
         CurriculumBo curriculumBo = new CurriculumBo();
         try {
             LOGGER.info("查询单个课程信息:{}", curriculumId);
-            //查询模型信息
+            //查询课程信息
             Curriculum curriculum = curriculumRoMapper.selectByPrimaryKey(curriculumId);
 
             BeanUtils.copyProperties(curriculum, curriculumBo);
@@ -319,11 +339,22 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     @Override
     public CurriculumBo update(CurriculumBo curriculumBo) {
+        String curriculumId = curriculumBo.getCurriculumId();
+        String goodsId = curriculumBo.getGoodsId();
+
+        //查询课程信息
+        Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
+
+        if(!"0".equals(curriculumBo.getStatus()) && !goodsId.equals(curriculum1.getGoodsId())){
+            //商品不能修改
+            throw new ServiceException(4327);
+        }
         //更新模型信息
         Curriculum curriculum = new Curriculum();
         try {
             JSONObject jsonStu = JSONObject.fromObject(curriculumBo);
             LOGGER.info("更新课程信息:{}", jsonStu.toString());
+
             if(1==curriculumBo.getStatus()){
                 curriculumBo.setIssueTime(new Date());
             }
@@ -333,11 +364,10 @@ public class CurriculumServiceImpl implements CurriculumService {
 
             List<CurriculumLabel> labelList = curriculumBo.getLabelList();
 
-            String curriculumId = curriculumBo.getCurriculumId();
-
             curriculumLabelMapper.deleteByPrimaryKey(curriculumId);
             if(labelList != null){
                 for(CurriculumLabel label :labelList){
+                    label.setCurriculumId(curriculumId);
                     curriculumLabelMapper.insert(label);
                 }
             }
@@ -348,6 +378,7 @@ public class CurriculumServiceImpl implements CurriculumService {
             curriculumMembergradeMapper.deleteByPrimaryKey(curriculumId);
             if(membergradeList != null){
                 for(CurriculumMembergrade grade : membergradeList){
+                    grade.setCurriculumId(curriculumId);
                     curriculumMembergradeMapper.insert(grade);
                 }
             }
@@ -358,6 +389,7 @@ public class CurriculumServiceImpl implements CurriculumService {
             curriculumLecturerGxMapper.deleteByPrimaryKey(curriculumId);
             if(lecturerGxList != null){
                 for(CurriculumLecturerGx lecturerGx : lecturerGxList){
+                    lecturerGx.setCurriculumId(curriculumId);
                     curriculumLecturerGxMapper.insert(lecturerGx);
                 }
             }

@@ -158,6 +158,16 @@ public class CurriculumController {
     }
 
     /**
+     * 查询商品是否已存在
+     */
+    @GetMapping(path = "/selectCurrCntByGoodsId/{goodsId}")
+    public ResponseEntity selectCurrCntByGoodsId(@PathVariable String goodsId) {
+        //查询课程信息
+        int cnt = curriculumService.selectCurrCntByGoodsId(goodsId);
+        return ResponseEntity.ok(Utils.kv("data", cnt));
+    }
+
+    /**
      * 查询单个课程详情信息(前端用无需登录)
      */
     @GetMapping(path = "/selectCurriculum/{curriculumId}")
