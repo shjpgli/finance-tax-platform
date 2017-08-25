@@ -7,6 +7,7 @@ import com.abc12366.uc.model.weixin.bo.gzh.WxJsConfig;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.abc12366.uc.util.wx.WxGzhClient;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,9 +101,10 @@ public class WxGzhController {
         return responseEntity;
     }
     
-    @RequestMapping("/wxgzh/getwxJsConfig")
-    public @ResponseBody WxJsConfig getwxJsConfig(@RequestBody String url){
-    	return SignUtil.jsign(WxGzhClient.getInstance().getAppid(), WxGzhClient.getInstanceJstiket(), url);
+    @PostMapping("/wxgzh/getwxJsConfig")
+    public @ResponseBody WxJsConfig getwxJsConfig(@RequestBody WxJsConfig config){
+    	LOGGER.info(JSON.toJSONString(config));
+    	return SignUtil.jsign(WxGzhClient.getInstance().getAppid(), WxGzhClient.getInstanceJstiket(), config.getUrl());
     }
     
     
