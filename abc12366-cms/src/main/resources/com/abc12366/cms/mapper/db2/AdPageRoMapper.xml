@@ -12,7 +12,8 @@
             parameterType="com.abc12366.cms.model.bo.AdPageBO">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM cms_adpage
+        ,  (select count(*) from cms_adpage_log a where a.adPageId=z.id) as openCount
+        FROM cms_adpage z
         <where>
             <if test="name != null">name like CONCAT('%',#{name},'%')</if>
         </where>

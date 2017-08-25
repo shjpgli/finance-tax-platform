@@ -6,11 +6,8 @@
 SELECT  id,adPageId,userId,ip,createTime
  from cms_adpage_log 
 <where>
-<if test="name!=null">
-name=#{name}
-</if>
-<if test="status!=null">
-and status=#{status}
+<if test="adPageId!=null">
+ adPageId=#{adPageId}
 </if>
 </where>
 ORDER BY createTime DESC

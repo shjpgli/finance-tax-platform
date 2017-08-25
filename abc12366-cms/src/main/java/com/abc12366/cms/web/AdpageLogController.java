@@ -31,9 +31,13 @@ public class AdpageLogController {
     private AdpageLogService adpageLogService;
             
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+    public ResponseEntity selectList(@RequestParam(value = "adpageid", required = false) String adpageid,
+                                     @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
+        if(adpageid != null && !adpageid.isEmpty()) {
+            map.put("adPageId", adpageid);
+        }
       PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
       List<AdpageLogBO> list = adpageLogService.selectList(map);
       LOGGER.info("{}", list);
