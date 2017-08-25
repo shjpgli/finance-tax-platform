@@ -14,6 +14,10 @@ public class WxJsConfig implements Serializable {
     private String signature;
     private String url;
     
+    public WxJsConfig(){
+    	
+    }
+    
     public WxJsConfig(String appId,String timestamp,String nonceStr,String signature,String url){
     	this.appId=appId;
     	this.timestamp=timestamp;
