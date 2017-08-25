@@ -47,7 +47,7 @@ public class UserAddressController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<UserAddress> userAddressList = userAddressService.selectList(userId);
+        List<UserAddressBO> userAddressList = userAddressService.selectBOList(userId);
         LOGGER.info("{}", userAddressList);
         return (userAddressList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
