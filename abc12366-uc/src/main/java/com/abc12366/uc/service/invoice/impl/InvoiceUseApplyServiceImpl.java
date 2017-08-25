@@ -89,6 +89,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         String id = Utils.uuid();
         invoiceUseApplyBO.setId(id);
         Date date = new Date();
+        invoiceUseApplyBO.setApplyUser(UserUtil.getAdminId());
         invoiceUseApplyBO.setApplyTime(date);
         InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
         BeanUtils.copyProperties(invoiceUseApplyBO,invoiceUseApply);
