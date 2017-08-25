@@ -49,6 +49,26 @@ public class WxGzhClient {
     	return temp.getUserToken();
     }
     
+    public static String getInstanceJstiket(){
+    	String id=getInstance().getId();
+    	GzhInfo temp=iWxGzhService.selectOne(id);
+    	if(temp.getJsapiTicketUpdate()==null || isBefore(temp.getJsapiTicketUpdate())){
+    		 Map<String, String> tks = new HashMap<String, String>();
+             tks.put("access_token", getInstanceToken());
+             tks.put("type", "jsapi");
+             WxUseToken token = WxConnectFactory.get(WechatUrl.WXJSTIECK_GET, tks, null,
+                     WxUseToken.class);
+             if (0 == token.getErrcode()) {
+            	 gzhInfo.setJsapi_ticket(token.getTicket());
+            	 gzhInfo.setJsapiTicketUpdate(new Date());
+            	 iWxGzhService.updatejsapiTicket(gzhInfo);
+            	 return token.getTicket();
+             }
+    	}
+    	return temp.getJsapi_ticket();
+    }
+    
+    
     private static boolean isBefore(Date date){
     	Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());

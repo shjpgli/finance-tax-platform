@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CurriculumClassifyMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumClassifyRoMapper;
+import com.abc12366.bangbang.mapper.db2.CurriculumRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumClassify;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo;
 import com.abc12366.bangbang.service.CurrClassifyService;
@@ -31,6 +32,9 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
 
     @Autowired
     private CurriculumClassifyRoMapper classifyRoMapper;
+
+    @Autowired
+    private CurriculumRoMapper curriculumRoMapper;
 
     @Override
     public List<CurriculumClassifyBo> selectList(Map<String,Object> map) {
@@ -137,8 +141,12 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String classifyId) {
+        LOGGER.info("删除课程分类信息:{}", classifyId);
+        int cnt = curriculumRoMapper.selectCurrCntByClassify(classifyId);
+        if(cnt > 0){
+            throw new ServiceException(4305);
+        }
         try {
-            LOGGER.info("删除课程分类信息:{}", classifyId);
             classifyMapper.deleteByPrimaryKey(classifyId);
         } catch (Exception e) {
             LOGGER.error("删除课程分类异常：{}", e);

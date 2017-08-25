@@ -6,7 +6,7 @@
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM bb_curriculum_classify
-		 WHERE classifyId = #{classifyId}
+		 WHERE classifyId like CONCAT(#{classifyId},'%')
 	</delete>
 
 	<!-- 添加 -->

@@ -17,7 +17,7 @@ public enum WechatUrl {
     TEMPLATEMSG_LIST("获取模板列表", "/cgi-bin/template/get_all_private_template"),
     TEMPLATEMSG_DEL("删除模板", "/cgi-bin/template/del_private_template"),
     TEMPLATEMSG_SEND("发送模板", "/cgi-bin/message/template/send"),
-
+    WXJSTIECK_GET("获取微信JSticket","/cgi-bin/ticket/getticket"),
     MATERIAL_COUNT("素材总数", "/cgi-bin/get_materialcount"),
     MATERIAL_LIST("素材列表", "/cgi-bin/material/batchget_material"),
     MATERIAL_ADDNEWS("添加图文素材", "/cgi-bin/material/add_news"),

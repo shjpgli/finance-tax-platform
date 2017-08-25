@@ -28,6 +28,18 @@
         <if test="chapterId != null and chapterId != ''">
             AND chapterId = #{chapterId}
         </if>
+        <if test="fileName != null and fileName != ''">
+            AND fileName like CONCAT('%',#{fileName},'%')
+        </if>
+        <if test="title != null and title != ''">
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
+        <if test="ploadWay != null and ploadWay != ''">
+            AND ploadWay = #{ploadWay}
+        </if>
     </select>
 
 

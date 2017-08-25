@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import sun.misc.BASE64Encoder;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -36,4 +37,5 @@ public class QRCodeUtil {
 		}
 		
 	}
+
 }

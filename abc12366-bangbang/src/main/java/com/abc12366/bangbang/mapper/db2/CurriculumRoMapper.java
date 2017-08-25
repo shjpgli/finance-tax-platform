@@ -24,6 +24,13 @@ public interface CurriculumRoMapper {
 	Curriculum  selectByPrimaryKey(@Param("curriculumId") String curriculumId);
 
     /**
+     *
+     * 根据课程分类查询课程数
+     *
+     **/
+    int selectCurrCntByClassify(@Param("classify") String classify);
+
+    /**
      * 查询(根据查询条件查询)
      **/
     List<CurriculumListBo> selectList(Map<String, Object> map);
