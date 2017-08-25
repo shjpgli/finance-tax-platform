@@ -236,7 +236,7 @@ public class GoodsServiceImpl implements GoodsService {
             productBOs.add(productBO);
         }
         bo.setProductBOList(productBOs);
-        insertGoodsLog(goodsBO.getId(), goodsBO.toString(), "修改商品");
+        insertGoodsLog(bo.getId(), goodsBO.toString(), "修改商品");
         return bo;
     }
 

@@ -432,5 +432,21 @@ public class OrderController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 根据GoodsId和UserId查询订单信息
+     *
+     * @return
+     */
+    @GetMapping(path = "/goods")
+    public ResponseEntity selectOrderByGoodsIdAndUserId(@RequestParam(value = "goodsId", required = true) String goodsId,
+                                                        @RequestParam(value = "userId", required = true) String userId) {
+        Order order = new Order();
+        order.setGoodsId(goodsId);
+        order.setUserId(userId);
+        LOGGER.info("{}", order);
+        OrderBO bo = orderService.selectOrderByGoodsIdAndUserId(order);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
 
 }

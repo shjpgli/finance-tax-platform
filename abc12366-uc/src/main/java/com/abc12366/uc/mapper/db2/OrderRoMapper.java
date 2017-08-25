@@ -41,4 +41,6 @@ public interface OrderRoMapper {
     List<Order> selectCancelOrderByDate(@Param("date")Date date);
 
     List<OrderBO> selectByOrderNos(@Param("orderNos") String[] orderNos);
+
+    OrderBO selectOrderByGoodsIdAndUserId(Order order);
 }
