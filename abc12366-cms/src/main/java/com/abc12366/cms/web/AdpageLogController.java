@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/adpage/log", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/adpagelog", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AdpageLogController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdpageLogController.class);
 //
