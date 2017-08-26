@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/8/11.
@@ -60,9 +57,19 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 
     @Override
     public CurriculumApplyBo save(CurriculumApplyBo applyBo) {
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId",applyBo.getCurriculumId());
+        dataMap.put("userId",applyBo.getUserId());
+        int cnt = selectApplyCnt(dataMap);
+        if(cnt >0){
+            //不能重复报名
+            throw new ServiceException(4375);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(applyBo);
             LOGGER.info("新增课程报名签到信息:{}", jsonStu.toString());
+
             applyBo.setApplyTime(new Date());
             //保存课程报名签到信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
