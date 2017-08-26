@@ -91,6 +91,20 @@ public class CurrApplyController {
     }
 
     /**
+     * 课程报名签到查询
+     */
+    @GetMapping(path = "/selectCurrApply")
+    public ResponseEntity selectCurrApply(@RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                     @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId",curriculumId);//课程ID
+        dataMap.put("userId", userId);//用户ID
+        CurriculumApplyBo applyBo = currApplyService.selectCurrApply(dataMap);
+        return ResponseEntity.ok(Utils.kv("data", applyBo));
+
+    }
+
+    /**
      * 更新课程报名签到信息
      */
     @PutMapping(path = "/{applyId}")

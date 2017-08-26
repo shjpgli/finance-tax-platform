@@ -94,6 +94,19 @@ public class CurrApplyServiceImpl implements CurrApplyService {
     }
 
     @Override
+    public CurriculumApplyBo selectCurrApply(Map<String,Object> map) {
+        CurriculumApplyBo applyBo;
+        try {
+            //查询课程报名签到列表
+            applyBo = applyRoMapper.selectCurrApply(map);
+        } catch (Exception e) {
+            LOGGER.error("查询课程报名签到信息异常：{}", e);
+            throw new ServiceException(4371);
+        }
+        return applyBo;
+    }
+
+    @Override
     public CurriculumApplyBo update(CurriculumApplyBo applyBo) {
         //更新课程报名签到信息
         CurriculumApply apply = new CurriculumApply();

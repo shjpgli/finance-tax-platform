@@ -37,6 +37,20 @@
         </if>
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCurrApply" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumApplyBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_curriculum_apply
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId}
+        </if>
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId = #{curriculumId}
+        </if>
+    </select>
+
     <!-- 查询报名人数 -->
     <select id="selectApplyCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
         SELECT
