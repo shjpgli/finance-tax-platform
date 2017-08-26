@@ -37,6 +37,14 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
+    <select id="selectCurrCntByGoodsId" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        COUNT(curriculumId)
+        FROM bb_curriculum
+        WHERE goodsId = #{goodsId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
     <select id="selectCurrCntByClassify" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT
           COUNT(curriculumId)

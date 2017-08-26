@@ -73,6 +73,11 @@ public class GoodsController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) goodsList, "total", ((Page) goodsList).getTotal()));
     }
 
+    /**
+     * 根据商品名称查询商品
+     * @param name
+     * @return
+     */
     @GetMapping(path = "/name")
     public ResponseEntity selectListByName(@RequestParam(value = "name", required = false) String name) {
         LOGGER.info("{}", name);

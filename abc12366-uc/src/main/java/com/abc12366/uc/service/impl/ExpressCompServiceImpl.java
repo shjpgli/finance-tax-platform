@@ -4,6 +4,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExpressCompMapper;
 import com.abc12366.uc.mapper.db2.ExpressCompRoMapper;
+import com.abc12366.uc.model.Express;
 import com.abc12366.uc.model.ExpressComp;
 import com.abc12366.uc.model.bo.ExpressCompBO;
 import com.abc12366.uc.service.ExpressCompService;
@@ -45,6 +46,16 @@ public class ExpressCompServiceImpl implements ExpressCompService {
         Date date = new Date();
         expressComp.setCreateTime(date);
         expressComp.setLastUpdate(date);
+        ExpressComp comp1 = expressCompRoMapper.selectByCompCode(expressCompBO.getCompCode());
+        if (comp1 != null){
+            LOGGER.info("{物流公司代号不能重复}", expressComp);
+            throw new ServiceException(4915);
+        }
+        ExpressComp comp = expressCompRoMapper.selectByCompName(expressCompBO.getCompName());
+        if (comp != null){
+            LOGGER.info("{物流公司名称不能重复}", expressComp);
+            throw new ServiceException(4916);
+        }
         int insert = expressCompMapper.insert(expressComp);
         if (insert != 1) {
             LOGGER.info("{新增物流公司失败}", expressComp);
@@ -62,6 +73,17 @@ public class ExpressCompServiceImpl implements ExpressCompService {
         BeanUtils.copyProperties(expressCompBO, expressComp);
         Date date = new Date();
         expressComp.setLastUpdate(date);
+
+        ExpressComp comp1 = expressCompRoMapper.selectByCompCode(expressCompBO.getCompCode());
+        if (comp1 != null && !comp1.getId().equals(expressCompBO.getId())){
+            LOGGER.info("{物流公司代号不能重复}", expressComp);
+            throw new ServiceException(4915);
+        }
+        ExpressComp comp = expressCompRoMapper.selectByCompName(expressCompBO.getCompName());
+        if (comp != null && !comp.getId().equals(expressCompBO.getId())){
+            LOGGER.info("{物流公司名称不能重复}", expressComp);
+            throw new ServiceException(4916);
+        }
         int update = expressCompMapper.update(expressComp);
         if (update != 1) {
             LOGGER.info("{修改物流公司失败}", expressComp);

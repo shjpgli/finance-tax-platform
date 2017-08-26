@@ -20,6 +20,8 @@ public interface CurriculumService {
 
     CurriculumSituationBo selectSituation(String curriculumId);
 
+    int selectCurrCntByGoodsId(String goodsId);
+
     CurriculumBo save(CurriculumBo curriculumBo);
 
     CurriculumBo selectCurriculum(String curriculumId);

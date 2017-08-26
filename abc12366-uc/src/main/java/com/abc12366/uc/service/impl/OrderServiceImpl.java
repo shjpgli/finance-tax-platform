@@ -782,37 +782,17 @@ public class OrderServiceImpl implements OrderService {
                     if(goodsType.equals("1") || goodsType.equals("2")){
                         order.setOrderStatus("4");
                         orderMapper.update(order);
+                        insertPoints(orderBO);
                     }else if(goodsType.equals("3") || goodsType.equals("4")){
                         order.setOrderStatus("6");
                         orderMapper.update(order);
+                        insertPoints(orderBO);
                         //TODO 开通服务
-                    }else if(goodsType.equals("5")){
+                    }else if(goodsType.equals("5") || goodsType.equals("6")){
                         order.setOrderStatus("6");
                         orderMapper.update(order);
-                        //加入积分
-                        //可用积分=上一次的可用积分+|-本次收入|支出
-                        User user = userRoMapper.selectOne(orderBO.getUserId());
-                        int userPoints = user.getPoints();
-                        int giftPoints = orderBO.getGiftPoints();
-                        int usablePoints = userPoints + giftPoints;
-                        //uc_user的points字段和uc_point_log的usablePoints字段都要更新
-                        user.setPoints(usablePoints);
-                        int userUpdateResult = userMapper.update(user);
-                        if (userUpdateResult != 1) {
-                            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
-                            throw new ServiceException(4101);
-                        }
-                        PointsLog pointsLog = new PointsLog();
-                        pointsLog.setUserId(orderBO.getUserId());
-                        pointsLog.setId(Utils.uuid());
-                        pointsLog.setIncome(giftPoints);
-                        pointsLog.setCreateTime(new Date());
-                        pointsLog.setUsablePoints(usablePoints);
-                        int result = pointsLogMapper.insert(pointsLog);
-                        if(result != 1){
-                            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
-                            throw new ServiceException(4101);
-                        }
+                        insertPoints(orderBO);
+
                     }
                 }else if(isPay == 3){
                     order.setOrderStatus("2");
@@ -822,7 +802,38 @@ public class OrderServiceImpl implements OrderService {
             }
 
         }
-        return null;
+        return orderBO;
+    }
+
+    /**
+     * 插入可获得的积分
+     * @param orderBO
+     */
+    private void insertPoints(OrderBO orderBO) {
+        //加入积分
+        //可用积分=上一次的可用积分+|-本次收入|支出
+        User user = userRoMapper.selectOne(orderBO.getUserId());
+        int userPoints = user.getPoints();
+        int giftPoints = orderBO.getGiftPoints();
+        int usablePoints = userPoints + giftPoints;
+        //uc_user的points字段和uc_point_log的usablePoints字段都要更新
+        user.setPoints(usablePoints);
+        int userUpdateResult = userMapper.update(user);
+        if (userUpdateResult != 1) {
+            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
+            throw new ServiceException(4101);
+        }
+        PointsLog pointsLog = new PointsLog();
+        pointsLog.setUserId(orderBO.getUserId());
+        pointsLog.setId(Utils.uuid());
+        pointsLog.setIncome(giftPoints);
+        pointsLog.setCreateTime(new Date());
+        pointsLog.setUsablePoints(usablePoints);
+        int result = pointsLogMapper.insert(pointsLog);
+        if(result != 1){
+            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
+            throw new ServiceException(4101);
+        }
     }
 
     @Override
@@ -930,6 +941,11 @@ public class OrderServiceImpl implements OrderService {
             orderMapper.update(order);
             insertOrderLog("",order.getOrderNo(),date,"系统自动取消订单");
         }
+    }
+
+    @Override
+    public OrderBO selectOrderByGoodsIdAndUserId(Order order) {
+        return orderRoMapper.selectOrderByGoodsIdAndUserId(order);
     }
 
 }

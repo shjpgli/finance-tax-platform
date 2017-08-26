@@ -122,4 +122,6 @@ public interface OrderService {
      * 自动取消订单
      */
     void automaticCancel();
+
+    OrderBO selectOrderByGoodsIdAndUserId(Order order);
 }
