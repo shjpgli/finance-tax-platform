@@ -1,4 +1,4 @@
-package com.abc12366.message.config;
+package com.abc12366.gateway.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

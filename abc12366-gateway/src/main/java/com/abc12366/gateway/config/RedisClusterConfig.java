@@ -1,4 +1,4 @@
-package com.abc12366.message.config;
+package com.abc12366.gateway.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
