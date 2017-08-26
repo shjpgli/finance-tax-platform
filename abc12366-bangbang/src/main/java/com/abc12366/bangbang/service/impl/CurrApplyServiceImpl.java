@@ -120,6 +120,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
         try {
             JSONObject jsonStu = JSONObject.fromObject(applyBo);
             LOGGER.info("更新课程报名签到信息:{}", jsonStu.toString());
+            applyBo.setSignTime(new Date());
             BeanUtils.copyProperties(applyBo, apply);
             applyMapper.updateByPrimaryKeySelective(apply);
         } catch (Exception e) {
