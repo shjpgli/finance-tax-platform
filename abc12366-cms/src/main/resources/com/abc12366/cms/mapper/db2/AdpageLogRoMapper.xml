@@ -4,7 +4,9 @@
 <mapper namespace="com.abc12366.cms.mapper.db2.AdpageLogRoMapper">
 <select id="selectList" resultType="com.abc12366.cms.model.bo.AdpageLogBO" parameterType="java.util.Map">
 SELECT  id,adPageId,userId,ip,createTime
- from cms_adpage_log 
+ ,  (select name from cms_adpage a where a.id=z.adPageId) as adPageName
+ ,  (select username from abc12366_uc.uc_user b where b.id=z.userId) as userName
+ from cms_adpage_log  z
 <where>
 <if test="adPageId!=null">
  adPageId=#{adPageId}
