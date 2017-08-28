@@ -389,7 +389,7 @@
         FROM uc_order
         WHERE orderStatus = '5'
               <![CDATA[
-                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                and date_format(createTime, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
                 ]]>
     </select>
 
@@ -398,9 +398,9 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order
-        WHERE orderStatus = '2'
+        WHERE orderStatus = '2' or orderStatus = '3'
               <![CDATA[
-                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                and date_format(createTime, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
                 ]]>
     </select>
 

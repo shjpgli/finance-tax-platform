@@ -93,6 +93,11 @@ public class DataUtils {
         return String.valueOf(number);
     }
 
+    /**
+     * 日期往后加num天
+     * @param num
+     * @return
+     */
     public static Date getAddDate(int num){
         Date date = new Date();//取时间
         Calendar calendar = new GregorianCalendar();
@@ -100,6 +105,21 @@ public class DataUtils {
         calendar.add(calendar.DATE,num);//把日期往后增加一天.整数往后推,负数往前移动
         date=calendar.getTime();   //这个时间就是日期往后推一天的结果
         return date;
+    }
+
+    /**
+     * 日期往后加num天
+     * @param num
+     * @return
+     */
+    public static Date getAddTime(int num){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        Calendar ca=Calendar.getInstance();
+        ca.setTime(date);
+        ca.add(Calendar.HOUR_OF_DAY, num);
+        System.out.println(sdf.format(ca.getTime()));
+        return ca.getTime();
     }
 
     /**
@@ -123,9 +143,9 @@ public class DataUtils {
     public static void main(String[] args) {
 
         Date date = new Date();
-        System.out.println("日期转字符串：" + dateToStr(date));
-        System.out.println("字符串转日期：" + StrToDate("2017-07-30"));
-
+//        System.out.println("日期转字符串：" + dateToStr(date));
+//        System.out.println("字符串转日期：" + StrToDate("2017-07-30"));
+        System.out.println(dateToStr(getAddTime(3)));
     }
 
 }
