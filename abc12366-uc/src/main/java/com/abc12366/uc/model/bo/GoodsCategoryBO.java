@@ -19,6 +19,7 @@ public class GoodsCategoryBO implements Serializable {
     @Size(min = 2, max = 16)
     private String category;
     private String parentId;
+    private String parentName;
     private Integer sort;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
@@ -78,5 +79,13 @@ public class GoodsCategoryBO implements Serializable {
 
     public void setNodes(List<GoodsCategoryBO> nodes) {
         this.nodes = nodes;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

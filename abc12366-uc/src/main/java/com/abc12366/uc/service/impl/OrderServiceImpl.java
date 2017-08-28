@@ -294,6 +294,8 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setUsername(user.getUsername());
         orderBO.setGiftPoints(giftPoints);
         orderBO.setTotalPrice(totalPrice);
+        orderBO.setIsShipping(goodsBO.getIsShipping());
+        orderBO.setIsFreeShipping(goodsBO.getIsFreeShipping());
 
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
@@ -370,6 +372,8 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setUsername(user.getUsername());
         orderBO.setGiftPoints(giftPoints);
         //orderBO.setTotalPrice(totalPrice);
+        orderBO.setIsShipping(goodsBO.getIsShipping());
+        orderBO.setIsFreeShipping(goodsBO.getIsFreeShipping());
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {
@@ -493,6 +497,9 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setUsername(user.getUsername());
         orderBO.setGiftPoints(giftPoints);
         orderBO.setTotalPrice(totalPrice);
+        orderBO.setIsShipping(goodsBO.getIsShipping());
+        orderBO.setIsFreeShipping(goodsBO.getIsFreeShipping());
+
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {

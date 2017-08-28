@@ -131,12 +131,12 @@
         <where>
             1=1
             <if test="goodsName != null  and goodsName!=''">AND g.name LIKE CONCAT('%',#{goodsName},'%')</if>
-            <if test="startRepo != null  and startRepo!=''">
+            <if test="startRepo != null">
                 <![CDATA[
                   AND p.stock >= #{startRepo}
                 ]]>
             </if>
-            <if test="endRepo != null  and endRepo!=''">
+            <if test="endRepo != null">
                 <![CDATA[
                   AND p.stock <= #{endRepo}
                 ]]>
