@@ -199,14 +199,14 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4903);
                 }
                 GoodsBO goodsBO = goodsRoMapper.selectGoods(orderBO.getGoodsId());
-                //1：实物，2：虚拟物品，3：服务，4：会员服务，5：会员充值
+                //1：实物，2：虚拟物品，3：服务，4：会员服务，5：会员充值，6：学堂服务
 
                 String goodsType = goodsBO.getGoodsType();
                 if ("RMB".equals(orderBO.getTradeMethod())) {
                     if ("5".equals(goodsType)) {
                         //会员充值
                         operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2");
-                    } else{
+                    }else{
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
                     }
                 } else if ("POINTS".equals(orderBO.getTradeMethod())) {
