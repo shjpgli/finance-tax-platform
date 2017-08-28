@@ -345,7 +345,7 @@ public class CurriculumServiceImpl implements CurriculumService {
         //查询课程信息
         Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
 
-        if(!"0".equals(curriculumBo.getStatus()) && !goodsId.equals(curriculum1.getGoodsId())){
+        if(curriculumBo.getStatus() != 0 && !goodsId.equals(curriculum1.getGoodsId())){
             //商品不能修改
             throw new ServiceException(4327);
         }
