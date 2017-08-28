@@ -940,8 +940,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void automaticCancel() {
-        Date date = DataUtils.getAddDate(15);
-        //查询15天之前未确认的订单
+        Date date = DataUtils.getAddTime(3);
+        //查询两个小时未支付的订单，自动取消
         List<Order> orderList = orderRoMapper.selectCancelOrderByDate(date);
         for(Order order:orderList){
             order.setOrderStatus("7");

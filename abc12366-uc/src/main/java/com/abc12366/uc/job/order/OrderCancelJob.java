@@ -25,7 +25,7 @@ public class OrderCancelJob implements Job{
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        LOGGER.info("JobName2: {}", context.getJobDetail().getKey().getName());
+        LOGGER.info("OrderCancelJob: {}", context.getJobDetail().getKey().getName());
         initService();
         orderService.automaticCancel();
     }
