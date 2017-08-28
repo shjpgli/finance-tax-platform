@@ -21,17 +21,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -58,6 +62,11 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserExtendMapper userExtendMapper;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
 
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
@@ -212,6 +221,10 @@ public class AuthServiceImpl implements AuthService {
         map.put("token", userToken);
         map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
         map.put("user", userBO);
+
+        // 用户信息写入redis
+        valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS/2,
+                TimeUnit.SECONDS);
         return map;
     }
 
@@ -361,6 +374,8 @@ public class AuthServiceImpl implements AuthService {
     public void logout(String token) {
         LOGGER.info("{}", token);
         int result = tokenMapper.delete(token);
+        // 用户信息从redis删除
+        redisTemplate.delete(token);
         if (result < 1) {
             throw new ServiceException(4022);
         }

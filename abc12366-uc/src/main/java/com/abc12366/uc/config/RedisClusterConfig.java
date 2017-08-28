@@ -1,4 +1,4 @@
-package com.abc12366.gateway.config;
+package com.abc12366.uc.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
