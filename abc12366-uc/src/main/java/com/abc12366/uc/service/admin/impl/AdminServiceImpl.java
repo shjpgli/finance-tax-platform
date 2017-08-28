@@ -20,9 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +64,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminExtendMapper adminExtendMapper;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
 
     @Override
     public Admin selectUserByLoginName(String username) {
@@ -395,6 +404,8 @@ public class AdminServiceImpl implements AdminService {
         //退出时，重置token
         LoginInfo temp = loginInfoRoMapper.selectInfoByToken(loginInfo);
         if (temp != null) {
+            // delete app token in redis
+            redisTemplate.delete(token);
             try {
                 String newToken = Utils.md5(Utils.uuid());
                 temp.setToken(newToken);
