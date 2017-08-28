@@ -27,6 +27,7 @@ public class UCUserBO {
     private int exp;
     private String vipLevel;
     private String realName;
+    private Integer usernameModifiedTimes;
 
     public UCUserBO() {
     }
@@ -181,6 +182,14 @@ public class UCUserBO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public Integer getUsernameModifiedTimes() {
+        return usernameModifiedTimes;
+    }
+
+    public void setUsernameModifiedTimes(Integer usernameModifiedTimes) {
+        this.usernameModifiedTimes = usernameModifiedTimes;
     }
 
     @Override
