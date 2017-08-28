@@ -159,11 +159,16 @@ public class CurriculumServiceImpl implements CurriculumService {
     @Override
     public CurriculumBo save(CurriculumBo curriculumBo) {
         String goodsId = curriculumBo.getGoodsId();
-        int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
-        if(cnt>0){
-            //该商品已被课程使用，请重新选择商品
-            throw new ServiceException(4326);
+        if(0 == curriculumBo.getIsFree()){
+            curriculumBo.setGoodsId("");
+        }else{
+            int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
+            if(cnt>0){
+                //该商品已被课程使用，请重新选择商品
+                throw new ServiceException(4326);
+            }
         }
+
         try {
             JSONObject jsonStu = JSONObject.fromObject(curriculumBo);
             LOGGER.info("新增课程信息:{}", jsonStu.toString());
@@ -345,10 +350,25 @@ public class CurriculumServiceImpl implements CurriculumService {
         //查询课程信息
         Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
 
-        if(curriculumBo.getStatus() != 0 && !goodsId.equals(curriculum1.getGoodsId())){
-            //商品不能修改
-            throw new ServiceException(4327);
+        if(curriculumBo.getStatus() == 0){
+            if(0 == curriculum1.getIsFree()){
+                curriculumBo.setGoodsId("");
+            }else{
+                if(!goodsId.equals(curriculum1.getGoodsId())){
+                    int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
+                    if(cnt>0){
+                        //该商品已被课程使用，请重新选择商品
+                        throw new ServiceException(4326);
+                    }
+                }
+            }
+        }else{
+            if(!goodsId.equals(curriculum1.getGoodsId())){
+                //商品不能修改
+                throw new ServiceException(4327);
+            }
         }
+
         //更新模型信息
         Curriculum curriculum = new Curriculum();
         try {
