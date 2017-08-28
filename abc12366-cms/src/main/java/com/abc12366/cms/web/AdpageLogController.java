@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/adpage/log", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/adpagelog", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class AdpageLogController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdpageLogController.class);
 //
@@ -31,9 +31,13 @@ public class AdpageLogController {
     private AdpageLogService adpageLogService;
             
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+    public ResponseEntity selectList(@RequestParam(value = "adpageid", required = false) String adpageid,
+                                     @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
+        if(adpageid != null && !adpageid.isEmpty()) {
+            map.put("adPageId", adpageid);
+        }
       PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
       List<AdpageLogBO> list = adpageLogService.selectList(map);
       LOGGER.info("{}", list);

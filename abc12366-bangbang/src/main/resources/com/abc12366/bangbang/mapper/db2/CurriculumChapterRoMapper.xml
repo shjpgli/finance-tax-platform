@@ -28,6 +28,7 @@
         <if test="chapterId != null and chapterId != ''">
             AND chapterId = #{chapterId}
         </if>
+        ORDER BY chapterSeq ASC
     </select>
 
 

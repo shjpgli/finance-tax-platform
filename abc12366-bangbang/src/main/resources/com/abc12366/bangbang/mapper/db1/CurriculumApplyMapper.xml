@@ -102,31 +102,7 @@
 	<!-- 修 改-->
 	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.curriculum.CurriculumApply">
 		 UPDATE bb_curriculum_apply
- 		 <set> 
-			<if test="curriculumId != null">
-				 curriculumId = #{curriculumId},
-			</if>
-			<if test="userId != null">
-				 userId = #{userId},
-			</if>
-             <if test="company != null">
-                 company = #{company},
-             </if>
-             <if test="position != null">
-                 position = #{position},
-             </if>
-			<if test="nickname != null">
-				 nickname = #{nickname},
-			</if>
-			<if test="username != null">
-				 username = #{username},
-			</if>
-			<if test="applyTime != null">
-				 applyTime = #{applyTime},
-			</if>
-			<if test="phone != null">
-				 phone = #{phone},
-			</if>
+ 		 <set>
 			<if test="signTime != null">
 				 signTime = #{signTime},
 			</if>
@@ -136,9 +112,8 @@
 			<if test="signSite != null">
 				 signSite = #{signSite},
 			</if>
-
  		 </set>
-		 WHERE applyId = #{applyId}
+		 WHERE curriculumId = #{curriculumId} and userId = #{userId}
 	</update>
 
 	<!-- 修 改-->

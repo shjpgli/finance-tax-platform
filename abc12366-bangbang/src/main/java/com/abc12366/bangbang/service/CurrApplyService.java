@@ -16,6 +16,8 @@ public interface CurrApplyService {
 
     CurriculumApplyBo selectApply(String applyId);
 
+    CurriculumApplyBo selectCurrApply(Map<String, Object> map);
+
     CurriculumApplyBo update(CurriculumApplyBo curriculumApplyBo);
 
     String updateStatus(String applyId, String status);

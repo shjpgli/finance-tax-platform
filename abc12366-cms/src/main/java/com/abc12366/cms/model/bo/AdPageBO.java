@@ -7,7 +7,6 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
- * ���ͼƬ����
  * User: yuanluo<435720953@qq.com.com>
  * Date: 2017-07-26
  * Time: 11:06
@@ -27,7 +26,8 @@ public class AdPageBO {
 
     @Size(max = 50)
     private String style;
-
+    /** 访问总数 */
+    private Integer openCount;
     private Integer sort;
     @NotNull
     private Boolean showName;
@@ -48,6 +48,14 @@ public class AdPageBO {
 
 
     public AdPageBO() {
+    }
+
+    public Integer getOpenCount() {
+        return openCount;
+    }
+
+    public void setOpenCount(Integer openCount) {
+        this.openCount = openCount;
     }
 
     public AdPageBO(String id, String name, String url, String link, Integer sort, Boolean showName, Boolean status,

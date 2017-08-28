@@ -27,6 +27,9 @@
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) praiseNum
         FROM bb_curriculum_lecturer l
         WHERE 1=1
+        <if test="lecturerName != null and lecturerName != ''">
+            AND lecturerName like CONCAT('%',#{lecturerName},'%')
+        </if>
     </select>
 
     <!-- 根据课程查询讲师 -->

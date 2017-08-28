@@ -19,8 +19,26 @@ private String userId;
 private String ip;
  /** 创建时间 */
 private Date createTime;
+    public String  adPageName;
+    public String    userName;
 
-public String getId(){
+    public String getAdPageName() {
+        return adPageName;
+    }
+
+    public void setAdPageName(String adPageName) {
+        this.adPageName = adPageName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getId(){
     return id;
 }
 public void setId(String id){

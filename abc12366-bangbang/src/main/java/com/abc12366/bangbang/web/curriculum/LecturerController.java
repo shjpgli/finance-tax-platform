@@ -37,8 +37,10 @@ public class LecturerController {
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "lecturerName", required = false) String lecturerName) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("lecturerName", lecturerName);//讲师姓名
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumLecturerBo> dataList = lecturerService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
