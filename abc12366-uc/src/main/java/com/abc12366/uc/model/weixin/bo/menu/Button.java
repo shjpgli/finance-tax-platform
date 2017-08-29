@@ -20,7 +20,6 @@ public class Button implements Serializable {
     private String id;//id
 
     private String parentId;//父菜单id
-    @NotEmpty
     private Integer sort;//序号
     private String type;//菜单类型
     @NotEmpty
