@@ -29,7 +29,7 @@ public class User {
     private Integer points;
     private Integer exp;
     private String vipLevel;
-    private int usernameModifiedTimes;
+    private Integer usernameModifiedTimes;
 
     public User() {
     }
@@ -178,11 +178,11 @@ public class User {
         this.vipLevel = vipLevel;
     }
 
-    public int getUsernameModifiedTimes() {
+    public Integer getUsernameModifiedTimes() {
         return usernameModifiedTimes;
     }
 
-    public void setUsernameModifiedTimes(int usernameModifiedTimes) {
+    public void setUsernameModifiedTimes(Integer usernameModifiedTimes) {
         this.usernameModifiedTimes = usernameModifiedTimes;
     }
 }
