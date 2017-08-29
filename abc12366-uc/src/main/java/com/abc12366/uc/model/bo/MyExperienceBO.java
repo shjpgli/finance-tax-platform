@@ -11,6 +11,7 @@ public class MyExperienceBO {
     private int outgoMonth;
     private int incomeYear;
     private int outgoYear;
+    private String medalIcon;
 
     public MyExperienceBO() {
     }
@@ -53,5 +54,13 @@ public class MyExperienceBO {
 
     public void setOutgoYear(int outgoYear) {
         this.outgoYear = outgoYear;
+    }
+
+    public String getMedalIcon() {
+        return medalIcon;
+    }
+
+    public void setMedalIcon(String medalIcon) {
+        this.medalIcon = medalIcon;
     }
 }
