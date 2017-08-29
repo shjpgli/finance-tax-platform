@@ -28,6 +28,12 @@ public class ExchangeBackBO {
     @Length(max = 500)
     private String adminRemark;
 
+    /**
+     * 管理员确认备注
+     */
+    @Length(max = 500)
+    private String adminConfirmRemark;
+
     public String getId() {
         return id;
     }
@@ -68,5 +74,13 @@ public class ExchangeBackBO {
                 ", expressComp='" + expressComp + '\'' +
                 ", adminRemark='" + adminRemark + '\'' +
                 '}';
+    }
+
+    public String getAdminConfirmRemark() {
+        return adminConfirmRemark;
+    }
+
+    public void setAdminConfirmRemark(String adminConfirmRemark) {
+        this.adminConfirmRemark = adminConfirmRemark;
     }
 }

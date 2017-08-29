@@ -59,6 +59,11 @@ public class OrderExchange implements Serializable {
      **/
     private String status;
 
+    /**
+     * 管理员确认退单备注
+     */
+    private String adminConfirmRemark;
+
     /****/
     private Timestamp createTime;
 
@@ -305,6 +310,14 @@ public class OrderExchange implements Serializable {
                 ", orderTime=" + orderTime +
                 ", num=" + num +
                 '}';
+    }
+
+    public String getAdminConfirmRemark() {
+        return adminConfirmRemark;
+    }
+
+    public void setAdminConfirmRemark(String adminConfirmRemark) {
+        this.adminConfirmRemark = adminConfirmRemark;
     }
 
     public static final class Builder {
