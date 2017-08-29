@@ -61,6 +61,9 @@ public class PointsLogServiceImpl implements PointsLogService {
         }
         //可用积分=上一次的可用积分+|-本次收入|支出
         int usablePoints = user.getPoints() + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
+        if (usablePoints < 0) {
+            throw new ServiceException(4635);
+        }
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
         int userUpdateResult = userMapper.update(user);
