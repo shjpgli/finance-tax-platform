@@ -110,6 +110,7 @@
         id,	useId,	approvalResult,	approvalOpinions,	approver,	approverTime,nickName
         FROM uc_invoice_approval_log
         WHERE useId = #{useId}
+        order by approverTime asc
     </select>
 
     <!-- 查询（发票领用明细表） -->

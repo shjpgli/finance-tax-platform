@@ -162,7 +162,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         }
         //加入日志
 //        insertLog(invoiceUseApply.getId(),invoiceUseApply.getRemark(),"已修改");
-        insertLog(invoiceUseApply.getId(),"修改", UserUtil.getAdminInfo().getNickname(),"已修改");
+//        insertLog(invoiceUseApply.getId(),"修改", UserUtil.getAdminInfo().getNickname(),"已修改");
         return invoiceUseApplyBO;
     }
 
@@ -184,17 +184,17 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
 
         String check = invoiceUseCheckBO.getExamineStatus();
         /**审批状态，0：待审核，1：审核通过，2：审核不通过，3：草稿**/
-        if(check.equals("1")){
-            List<InvoiceUseDetailBO> boList = invoiceUseCheckBO.getInvoiceUseDetailBOList();
-            for(InvoiceUseDetailBO bo:boList){
-                InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
-                BeanUtils.copyProperties(bo,invoiceUseDetail);
-                int dUpdate = invoiceUseDetailMapper.update(invoiceUseDetail);
-                if(dUpdate != 1){
-                    LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
-                    throw new ServiceException(4102);
-                }
+        List<InvoiceUseDetailBO> boList = invoiceUseCheckBO.getInvoiceUseDetailBOList();
+        for(InvoiceUseDetailBO bo:boList){
+            InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
+            BeanUtils.copyProperties(bo,invoiceUseDetail);
+            int dUpdate = invoiceUseDetailMapper.update(invoiceUseDetail);
+            if(dUpdate != 1){
+                LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
+                throw new ServiceException(4102);
             }
+        }
+        if(check.equals("1")){
             insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核通过");
         }else if(check.equals("2")){
             insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核不通过");
