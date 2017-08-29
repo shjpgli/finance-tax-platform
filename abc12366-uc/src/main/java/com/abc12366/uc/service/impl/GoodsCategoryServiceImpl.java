@@ -4,7 +4,10 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.GoodsCategoryMapper;
 import com.abc12366.uc.mapper.db2.GoodsCategoryRoMapper;
+import com.abc12366.uc.mapper.db2.GoodsRoMapper;
+import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.GoodsCategory;
+import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.GoodsCategoryBO;
 import com.abc12366.uc.service.GoodsCategoryService;
 import org.slf4j.Logger;
@@ -29,6 +32,9 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     @Autowired
     private GoodsCategoryRoMapper goodsCategoryRoMapper;
+
+    @Autowired
+    private GoodsRoMapper goodsRoMapper;
 
     @Autowired
     private GoodsCategoryMapper goodsCategoryMapper;
@@ -123,6 +129,13 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     @Override
     public void delete(String id) {
+        Goods goods = new Goods();
+        goods.setCategoryId(id);
+        List<GoodsBO> goodsBOs = goodsRoMapper.selectGoodsBOList(goods);
+        if(goodsBOs != null && goodsBOs.size() > 0){
+            LOGGER.info("该商品分类下存在商品，不能删除：{}", goodsBOs);
+            throw new ServiceException(4917);
+        }
         deleteTree(id);
     }
 

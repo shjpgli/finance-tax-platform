@@ -21,6 +21,6 @@
 		SELECT
 		sum(book) as repoNum,sum(share) as usableShare
 		FROM uc_invoice_repo
-		where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
+		where status = '0' and  invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
 	</select>
 </mapper>
