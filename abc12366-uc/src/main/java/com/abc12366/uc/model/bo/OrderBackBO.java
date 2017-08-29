@@ -22,10 +22,16 @@ public class OrderBackBO implements Serializable {
     private String status;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
+
     /**
      * 操作人员ID
      **/
     private String operatorUser;
+
+    /**
+     * 管理员确认备注
+     */
+    private String adminConfirmRemark;
 
     private User user;
 
@@ -131,5 +137,13 @@ public class OrderBackBO implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getAdminConfirmRemark() {
+        return adminConfirmRemark;
+    }
+
+    public void setAdminConfirmRemark(String adminConfirmRemark) {
+        this.adminConfirmRemark = adminConfirmRemark;
     }
 }

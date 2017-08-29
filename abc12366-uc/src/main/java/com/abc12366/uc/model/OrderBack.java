@@ -65,6 +65,11 @@ public class OrderBack implements Serializable {
      **/
     private String operatorUser;
 
+    /**
+     * 管理员确认备注
+     */
+    private String adminConfirmRemark;
+
     public String getId() {
         return this.id;
     }
@@ -159,5 +164,13 @@ public class OrderBack implements Serializable {
 
     public void setAdminRemark(String adminRemark) {
         this.adminRemark = adminRemark;
+    }
+
+    public String getAdminConfirmRemark() {
+        return adminConfirmRemark;
+    }
+
+    public void setAdminConfirmRemark(String adminConfirmRemark) {
+        this.adminConfirmRemark = adminConfirmRemark;
     }
 }
