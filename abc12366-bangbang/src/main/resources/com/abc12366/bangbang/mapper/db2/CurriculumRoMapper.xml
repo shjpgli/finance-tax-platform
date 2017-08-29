@@ -105,7 +105,7 @@
         curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
-        WHERE 1=1 and status = 1 and recommend = 1
+        WHERE 1=1 and status = 1 and recommend = 'recommend'
         <if test="label != null and label != ''">
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
         </if>
@@ -118,6 +118,7 @@
         <if test="isFree != null and isFree != ''">
             AND isFree = #{isFree}
         </if>
+        ORDER BY watchNum,issueTime DESC
     </select>
 
     <!-- 查询授课情况 -->
