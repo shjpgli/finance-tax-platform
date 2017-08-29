@@ -19,16 +19,16 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_evaluate
+          evaluateId,	curriculumId,	grade,	studyFeel,	userId,nickname,userPicturePath,evaluateTime
+        FROM bb_curriculum_evaluate e LEFT JOIN bb_user u ON e.userId = u.id
         WHERE 1=1
     </select>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectListBycurrId" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_evaluate
+          evaluateId,	curriculumId,	grade,	studyFeel,	userId,nickname,userPicturePath,evaluateTime
+        FROM bb_curriculum_evaluate e LEFT JOIN bb_user u ON e.userId = u.id
         WHERE 1=1
         <if test="grade == 1">
             AND grade in(4,5)
