@@ -48,12 +48,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请列表管理
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param startTime
-     * @param endTime
-     * @return
      */
     @GetMapping(path = "/invoice/use")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -85,8 +79,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 根据发票种类代码，获取发票仓库库存数，可用份数
-     *
-     * @return
      */
     @GetMapping(path = "/invoice/use/num/{code}")
     public ResponseEntity selectInvoiceRepoNum(@PathVariable("code") String code) {
@@ -97,8 +89,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请详情查看
-     *
-     * @return
      */
     @GetMapping(path = "/invoice/use/{id}")
     public ResponseEntity selectInvoiceUseApply(@PathVariable("id") String id) {
@@ -112,8 +102,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请新增
-     *
-     * @return
      */
     @PostMapping(path = "/invoice/use")
     public ResponseEntity add(@Valid @RequestBody InvoiceUseApplyBO invoiceUseApplyBO) {
@@ -125,8 +113,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请修改
-     *
-     * @return
      */
     @PutMapping(path = "/invoice/use")
     public ResponseEntity update(@Valid @RequestBody InvoiceUseApplyBO invoiceUseApplyBO) {
@@ -138,8 +124,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请删除
-     *
-     * @return
      */
     @DeleteMapping(path = "/invoice/use/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
@@ -150,8 +134,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请审核
-     *
-     * @return
      */
     @PostMapping(path = "/invoice/use/check/{id}")
     public ResponseEntity checkUseApplay(@Valid @RequestBody InvoiceUseCheckBO invoiceUseCheckBO) {
@@ -162,8 +144,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请，分发
-     *
-     * @return
      */
     @PostMapping(path = "/invoice/dist/send")
     public ResponseEntity distributeUseApply(@Valid @RequestBody InvoiceUseCheckBO invoiceUseCheckBO) {
@@ -174,8 +154,6 @@ public class InvoiceUseApplayController {
 
     /**
      * 发票领用申请分发后，签收
-     *
-     * @return
      */
     @PostMapping(path = "/invoice/dist/sign/{id}")
     public ResponseEntity signUseApply(@PathVariable("id") String id) {
