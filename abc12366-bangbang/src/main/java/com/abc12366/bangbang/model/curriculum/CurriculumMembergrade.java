@@ -16,6 +16,9 @@ public class CurriculumMembergrade implements Serializable {
 	/**会员等级**varchar(64)**/
 	private String memberGrade;
 
+    /**会员等级名称****/
+    private String memberGradeName;
+
 
 
 	public void setCurriculumId(String curriculumId){
@@ -34,4 +37,11 @@ public class CurriculumMembergrade implements Serializable {
 		return this.memberGrade;
 	}
 
+    public String getMemberGradeName() {
+        return memberGradeName;
+    }
+
+    public void setMemberGradeName(String memberGradeName) {
+        this.memberGradeName = memberGradeName;
+    }
 }

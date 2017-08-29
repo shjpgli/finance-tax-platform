@@ -19,8 +19,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.CurriculumMembergrade" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_membergrade
+            curriculumId,	memberGrade,l.level memberGradeName
+        FROM bb_curriculum_membergrade m LEFT JOIN bb_uvip_level l ON m.memberGrade = l.levelCode
         WHERE curriculumId = #{curriculumId}
     </select>
 

@@ -25,6 +25,12 @@ public class CurriculumEvaluateBo implements Serializable {
 	/**用户ID**varchar(64)**/
 	private String userId;
 
+    /**用户姓名**/
+    private String nickname;
+
+    /**用户图片**/
+    private String userPicturePath;
+
 	/**评价时间**datetime**/
 	private java.util.Date evaluateTime;
 
@@ -70,7 +76,23 @@ public class CurriculumEvaluateBo implements Serializable {
 		return this.userId;
 	}
 
-	public void setEvaluateTime(java.util.Date evaluateTime){
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
+    }
+
+    public void setEvaluateTime(java.util.Date evaluateTime){
 		this.evaluateTime = evaluateTime;
 	}
 
