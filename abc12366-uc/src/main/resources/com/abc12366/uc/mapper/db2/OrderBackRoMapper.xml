@@ -20,6 +20,7 @@
         <result column="expressComp" property="expressComp" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="operatorUser" property="operatorUser" jdbcType="VARCHAR"/>
+        <result column="adminConfirmRemark" property="adminConfirmRemark" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <association property="user" javaType="com.abc12366.uc.model.User">
@@ -66,7 +67,7 @@
 
     <select id="selectOrderBackList" resultMap="orderBackBOMap" parameterType="com.abc12366.uc.model.OrderBack">
         SELECT
-        b.id, b.userId, b.orderNo, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime, b.lastUpdate,
+        b.id, b.userId, b.orderNo, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime, b.lastUpdate,b.adminConfirmRemark,
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime,
         o.lastUpdate, o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
