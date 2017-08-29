@@ -70,6 +70,8 @@ public class Constant {
 
     // 淘宝IP地址库（http://ip.taobao.com）查询接口，每个用户的访问频率需小于10qps
     public final static String IP_QUERY_URL = "http://ip.taobao.com/service/getIpInfo.php?ip={ip}";
+    // 获取微信二维码图片地址
+    public final static String WEIXIN_QRCODE = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=";
 
     //用户初始会员等级
     public final static String USER_ORIGINAL_LEVEL = "LV0";
