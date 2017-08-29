@@ -8,11 +8,11 @@ import org.hibernate.validator.constraints.NotEmpty;
  * Time: 17:02
  */
 public class UserHngsInsertBO {
-    @NotEmpty
+    @NotEmpty(message = "纳税人识别号不能为空！")
     private String bsy;
-    @NotEmpty
+    @NotEmpty(message = "服务密码不能为空！")
     private String password;
-    @NotEmpty
+    @NotEmpty(message = "办税员子账号不能为空！")
     private String role;
 
     private String userId;
