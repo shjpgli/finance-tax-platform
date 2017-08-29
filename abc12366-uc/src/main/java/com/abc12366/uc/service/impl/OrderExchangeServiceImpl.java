@@ -228,6 +228,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             oe.setAdminRemark(data.getAdminRemark());
             oe.setLastUpdate(new Timestamp(new Date().getTime()));
             oe.setStatus("7");
+            oe.setAdminConfirmRemark(data.getAdminConfirmRemark());
             orderExchangeMapper.update(oe);
 
             // 更新订单状态：已退单
