@@ -1,5 +1,6 @@
 package com.abc12366.uc.util;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public class UcRestTemplateUtil {
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
         } catch (RestClientException e) {
-            LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity != null ? responseEntity.getBody() : null;
@@ -80,7 +81,7 @@ public class UcRestTemplateUtil {
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
         } catch (RestClientException e) {
-            LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity;
@@ -108,11 +109,9 @@ public class UcRestTemplateUtil {
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
         } catch (RestClientException e) {
-            LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity != null ? responseEntity.getBody() : null;
     }
-
-
 }

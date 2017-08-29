@@ -61,6 +61,7 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
 
         //uc_user的exp字段和uc_uexp_log的usableExp字段都要更新
         user.setExp(usableExp);
+        user.setLastUpdate(new Date());
         int userUpdateResult = userMapper.update(user);
         if (userUpdateResult != 1) {
             LOGGER.warn("新增失败,更新用户表经验值失败,参数为：userId=" + experienceLogBO.getUserId());

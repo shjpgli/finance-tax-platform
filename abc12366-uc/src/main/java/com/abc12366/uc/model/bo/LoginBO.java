@@ -13,7 +13,6 @@ import java.io.Serializable;
 public class LoginBO implements Serializable {
 
     @NotEmpty
-    @Size(min = 6, max = 32)
     private String usernameOrPhone;
 
     @NotEmpty

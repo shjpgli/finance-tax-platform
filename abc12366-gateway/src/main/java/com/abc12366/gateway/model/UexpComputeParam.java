@@ -1,18 +1,16 @@
-package com.abc12366.uc.model.bo;
-
-import org.hibernate.validator.constraints.NotEmpty;
+package com.abc12366.gateway.model;
 
 /**
  * User: liuguiyao<435720953@qq.com>
- * Date: 2017-08-25
- * Time: 10:29
+ * Date: 2017-08-26
+ * Time: 14:38
  */
-public class ExpComputeBO {
+public class UexpComputeParam {
     private String userId;
-    private String uri;
     private String clientType;
+    private String uri;
 
-    public ExpComputeBO() {
+    public UexpComputeParam() {
     }
 
     public String getUserId() {

@@ -1,5 +1,6 @@
 package com.abc12366.gateway.util;
 
+import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,42 @@ public class RestTemplateUtil {
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
         } catch (RestClientException e) {
-            LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity != null ? responseEntity.getBody() : null;
+    }
+
+    public String exchange(String url, HttpMethod method, Object o, HttpServletRequest request) {
+        //请求头设置
+        HttpHeaders httpHeaders = getHeaders(request);
+
+        HttpEntity requestEntity = new HttpEntity(o, httpHeaders);
+        LOGGER.info("Request: {}, {}", url, requestEntity);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
+        } catch (RestClientException e) {
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
+        }
+        LOGGER.info("Response: {}, {}", url, responseEntity);
+        return responseEntity != null ? responseEntity.getBody() : null;
+    }
+
+    public HttpHeaders getHeaders(HttpServletRequest request){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        if (!StringUtils.isEmpty(request.getHeader(Constant.APP_TOKEN_HEAD))) {
+            httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+        }
+        if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
+            httpHeaders.add(Constant.ADMIN_TOKEN_HEAD, request.getHeader(Constant.ADMIN_TOKEN_HEAD));
+        }
+        if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
+            httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
+        }
+        if (!StringUtils.isEmpty(request.getHeader(Constant.VERSION_HEAD))) {
+            httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+        }
+        return httpHeaders;
     }
 }

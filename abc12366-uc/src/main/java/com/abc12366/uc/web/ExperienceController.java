@@ -57,7 +57,7 @@ public class ExperienceController {
     }
 
     @PostMapping(path = "/compute")
-    public ResponseEntity expCompute(@Valid @RequestBody ExpComputeBO expComputeBO){
+    public ResponseEntity expCompute(@RequestBody ExpComputeBO expComputeBO){
         LOGGER.info("{}", expComputeBO);
         experienceService.compute(expComputeBO);
         return ResponseEntity.ok(Utils.kv());

@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.bo.ExpCodex;
+import com.abc12366.uc.model.bo.ExpComputeLog;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -13,4 +14,6 @@ public interface ExperienceMapper {
     int delete(String id);
 
     int deleteByRuleId(String uexpruleId);
+
+    int insertComputeLog(ExpComputeLog expComputeLog);
 }

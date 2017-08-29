@@ -3,13 +3,13 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceMapper;
+import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
+import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.ExperienceLog;
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.ExpCodex;
-import com.abc12366.uc.model.bo.ExpComputeBO;
-import com.abc12366.uc.model.bo.ExperienceLogBO;
-import com.abc12366.uc.model.bo.MyExperienceBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.ExperienceService;
 import org.slf4j.Logger;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +42,12 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Autowired
     private ExperienceLogService experienceLogService;
+
+    @Autowired
+    private ExperienceLogRoMapper experienceLogRoMapper;
+
+    @Autowired
+    ExperienceLevelRoMapper experienceLevelRoMapper;
 
     @Override
     public MyExperienceBO getMyExperience(String userId) {
@@ -79,37 +86,76 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public void compute(ExpComputeBO expComputeBO) {
+
         List<ExpCodex> expCodexes = experienceRoMapper.selectOne(expComputeBO);
         if (expCodexes == null || expCodexes.size() < 1) {
+//            return;
             throw new ServiceException(4853);
         }
         ExpCodex codex = expCodexes.get(0);
-        if(codex.getUexp()==null||codex.getUexp().toString().equals("")){
+        if (codex.getUexp() == null || codex.getUexp().toString().equals("")) {
+//            return;
             throw new ServiceException(4854);
         }
 
         //查看获取经验值次数是否允许范围内
+        String startTime = "";
+        String endTime = "";
 
+        String period = codex.getPeriod().toUpperCase();
+        if (period != null && !period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
+            switch (codex.getPeriod().toUpperCase()) {
+                case "D":
+                    startTime = "(SELECT CURDATE())";
+                    endTime = "(SELECT CURDATE()+1)";
+                    break;
+                case "M":
+                    startTime = "(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))";
+                    endTime = "(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))";
+                    break;
+                case "Y":
+                    startTime = "(SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))";
+                    endTime = "(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))";
+                    break;
+            }
+            ExpComputeLogParam param = new ExpComputeLogParam();
+            param.setUserId(expComputeBO.getUserId());
+            param.setTimeType(codex.getPeriod().toUpperCase());
+            param.setUexpCodexId(codex.getId());
+            param.setStarTime(startTime);
+            param.setEndTime(endTime);
+            List<ExpComputeLog> computeLogList = experienceRoMapper.selectExpComputeLog(param);
+            if (computeLogList != null && computeLogList.size() >= codex.getDegree()) {
+                return;
+            }
+        }
 
+        //经验值日志,同时修改用户经验值
         User user = userRoMapper.selectOne(expComputeBO.getUserId());
         if (user == null) {
+//            return;
             throw new ServiceException(4018);
         }
 
-
-
-
-        //经验值日志,同时修改用户经验值
         ExperienceLogBO experienceLog = new ExperienceLogBO();
         experienceLog.setUserId(expComputeBO.getUserId());
         if (codex.getUexp() < 0) {
             experienceLog.setIncome(0);
             experienceLog.setOutgo(-codex.getUexp());
-        }else{
+        } else {
             experienceLog.setIncome(codex.getUexp());
             experienceLog.setOutgo(0);
         }
         experienceLogService.insert(experienceLog);
+
+        //记录用户特定行为升级用户等级日志
+        ExpComputeLog expComputeLog = new ExpComputeLog();
+        expComputeLog.setId(Utils.uuid());
+        expComputeLog.setUserId(expComputeBO.getUserId());
+        expComputeLog.setUexpCodexId(codex.getId());
+        expComputeLog.setTimeType(codex.getPeriod().toUpperCase());
+        expComputeLog.setCreateTime(new Date());
+        experienceMapper.insertComputeLog(expComputeLog);
 
     }
 }

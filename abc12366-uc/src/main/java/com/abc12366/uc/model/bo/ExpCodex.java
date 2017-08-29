@@ -16,6 +16,8 @@ public class ExpCodex {
     private String uexpruleId;//经验值规则ID
     @NotEmpty
     private String clientType;//客户端类型
+    @NotEmpty
+    private String uri;
     @NotNull
     private Integer uexp; //经验值
     @NotEmpty
@@ -82,5 +84,13 @@ public class ExpCodex {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 }

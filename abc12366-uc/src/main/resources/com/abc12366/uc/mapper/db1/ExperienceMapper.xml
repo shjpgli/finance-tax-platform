@@ -16,4 +16,9 @@
         delete from uc_uexp_codex where uexpruleId=#{uexpruleId}
     </delete>
 
+    <insert id="insertComputeLog" parameterType="com.abc12366.uc.model.bo.ExpComputeLog">
+        insert into uc_uexp_compute_log (id,userId,uexpCodexId,timeType,createTime)
+        values(#{id},#{userId},#{uexpCodexId},#{timeType},#{createTime})
+    </insert>
+
 </mapper>

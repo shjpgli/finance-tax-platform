@@ -15,7 +15,7 @@ public class UserUpdateBO {
 
     private String id;
     @Size(min = 6, max = 32)
-    @Pattern(regexp = "^[a-zA-Z0-9]{6,32}$")
+    @Pattern(regexp = "^[a-zA-Z0-9]{6,32}$", message = "用户名只能为数字字母组合！")
     private String username;
     @Pattern(regexp = "^\\d{11}$")
     @Size(min = 11, max = 11)

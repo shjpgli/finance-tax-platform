@@ -158,6 +158,10 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
             throw new ServiceException(4018);
         }
+        //无效用户不允许登录
+        if(!user.getStatus()){
+            throw new ServiceException(4038);
+        }
         String password;
         try {
             //登录密码进行处理，与表中的加密密码进行比对
@@ -288,6 +292,11 @@ public class AuthServiceImpl implements AuthService {
         if (user == null) {
             LOGGER.warn("登录失败，该用户不存在，参数:{}:{}", loginBO.toString(), appToken);
             throw new ServiceException(4018);
+        }
+
+        //无效用户不允许登录
+        if(!user.getStatus()){
+            throw new ServiceException(4038);
         }
 
         String userToken;

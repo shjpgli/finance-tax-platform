@@ -65,6 +65,9 @@ public class Constant {
     // 客户端用户代理
     public final static String CLIENT_USER_AGENT = "Client-User-Agent";
 
+    //前台传递终端类型：做经验值计算时用
+    public final static String CLIENT_TYPE = "Client_Type";
+
     // 淘宝IP地址库（http://ip.taobao.com）查询接口，每个用户的访问频率需小于10qps
     public final static String IP_QUERY_URL = "http://ip.taobao.com/service/getIpInfo.php?ip={ip}";
 

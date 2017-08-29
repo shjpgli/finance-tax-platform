@@ -3,6 +3,7 @@ package com.abc12366.uc.config;
 import com.abc12366.gateway.component.AppInterceptor;
 import com.abc12366.gateway.component.LogInterceptor;
 import com.abc12366.gateway.component.TokenInterceptor;
+import com.abc12366.gateway.component.UexpInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -51,6 +52,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new TokenInterceptor();
     }
 
+    @Bean
+    public UexpInterceptor uexpInterceptor(){
+        return new UexpInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 前置日志、黑名单、后置日志、接口计数拦截
@@ -97,6 +103,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //用户等级接口地址
                 .excludePathPatterns("/uvip/level/**")
                 //用户签到排行榜
-                .excludePathPatterns("/check/rank");
+                .excludePathPatterns("/check/rank")
+                //计算用户经验值接口
+                .excludePathPatterns("/experience/compute");
+
+        //用户操作导致经验值更新，拦截器拦截处理
+//        registry.addInterceptor(uexpInterceptor())
+//                .addPathPatterns("/user/test");
     }
 }

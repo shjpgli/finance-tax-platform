@@ -1,8 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.bo.ExpCodex;
-import com.abc12366.uc.model.bo.ExpComputeBO;
-import com.abc12366.uc.model.bo.MyExperienceBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
@@ -17,4 +15,6 @@ public interface ExperienceRoMapper {
     List<ExpCodex> codexList(String uexpruleId);
 
     List<ExpCodex> selectOne(ExpComputeBO expComputeBO);
+
+    List<ExpComputeLog> selectExpComputeLog( ExpComputeLogParam param);
 }

@@ -157,4 +157,9 @@ public class UserController {
         userService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    @PostMapping(path = "/test")
+    public ResponseEntity test(){
+        return ResponseEntity.ok(Utils.kv());
+    }
 }
