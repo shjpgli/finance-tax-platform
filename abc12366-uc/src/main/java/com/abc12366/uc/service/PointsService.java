@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 
+import com.abc12366.uc.model.bo.PointComputeBO;
 import com.abc12366.uc.model.bo.PointsBO;
 
 /**
@@ -10,4 +11,6 @@ import com.abc12366.uc.model.bo.PointsBO;
  */
 public interface PointsService {
     PointsBO selectOne(String userId);
+
+    void compute(PointComputeBO pointComputeBO);
 }

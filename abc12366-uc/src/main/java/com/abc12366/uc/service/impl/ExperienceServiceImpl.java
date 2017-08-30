@@ -7,7 +7,6 @@ import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.ExperienceLog;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +55,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         return experienceRoMapper.getMyExperience(userId);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public List<ExpCodex> codex(String uexpruleId, List<ExpCodex> codexList) {
         LOGGER.info("{}:{}", uexpruleId, codexList);
