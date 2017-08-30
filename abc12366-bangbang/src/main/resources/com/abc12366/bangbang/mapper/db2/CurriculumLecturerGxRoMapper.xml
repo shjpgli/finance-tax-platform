@@ -19,7 +19,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.CurriculumLecturerGx" parameterType="java.lang.String">
         SELECT
-            a.curriculumId,a.lecturerId,b.lecturerName,	b.lecturerPicture
+            a.curriculumId,a.lecturerId,b.lecturerName,(select lecturerPicture from  bb_user where id = b.userId ) 	lecturerPicture
         FROM bb_curriculum_lecturer_gx a LEFT JOIN bb_curriculum_lecturer b on a.lecturerId = b.lecturerId
         WHERE curriculumId = #{curriculumId}
     </select>

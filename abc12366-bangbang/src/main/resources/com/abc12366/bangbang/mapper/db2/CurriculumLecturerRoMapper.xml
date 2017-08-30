@@ -36,7 +36,7 @@
     <select id="selectListByCurr" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo" parameterType="java.lang.String">
         SELECT
             l.lecturerId,	userId,	lecturerName,createTime,updateTime,	intro,
-            phone,	company,	lecturerQQ,	lecturerEmail,	lecturerPicture,
+            phone,	company,	lecturerQQ,	lecturerEmail,(select lecturerPicture from  bb_user where id = lect.userId ) lecturerPicture,
             (select count(curriculumId) from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId) currNum,
             (SELECT count(studyId) FROM bb_curriculum_study where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) studentNum,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) evaluateNum,
