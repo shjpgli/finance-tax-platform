@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -141,8 +142,10 @@ public class CurriculumController {
      * 课程新增
      */
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody CurriculumBo curriculumBo) {
+    public ResponseEntity save(@Valid @RequestBody CurriculumBo curriculumBo,HttpServletRequest request) {
         //新增课程信息
+        String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
+        curriculumBo.setCreaterId(userId);
         curriculumBo = curriculumService.save(curriculumBo);
         return ResponseEntity.ok(Utils.kv("data", curriculumBo));
     }
