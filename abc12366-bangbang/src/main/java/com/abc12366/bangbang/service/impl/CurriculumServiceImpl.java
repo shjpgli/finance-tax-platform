@@ -513,7 +513,7 @@ public class CurriculumServiceImpl implements CurriculumService {
             currMyStudyNumBo.setStudyQfb(cnt3);
         } catch (Exception e) {
             LOGGER.error("查询课程信息异常：{}", e);
-            throw new ServiceException(4323);
+            throw new ServiceException(4321);
         }
         return currMyStudyNumBo;
     }

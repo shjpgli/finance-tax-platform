@@ -187,24 +187,22 @@
 
     <!-- 查询本月学习课程数 -->
     <select id="selectStudyNumByMonth" resultType="java.lang.Integer" parameterType="java.util.Map">
-        SELECT COUNT(1) FROM bb_curriculum_study
+        SELECT count(distinct curriculumId) FROM bb_curriculum_study
         WHERE 1=1
         <if test="userId != null and userId != ''">
             AND userId = #{userId}
         </if>
         and date_format(studyTime,'%Y-%m')=date_format(now(),'%Y-%m')
-        group by curriculumId
     </select>
 
     <!-- 查询本年学习课程数 -->
     <select id="selectStudyNumByYear" resultType="java.lang.Integer" parameterType="java.util.Map">
-        SELECT COUNT(1) FROM bb_curriculum_study
+        SELECT count(distinct curriculumId) FROM bb_curriculum_study
         WHERE 1=1
         <if test="userId != null and userId != ''">
             AND userId = #{userId}
         </if>
         and YEAR(studyTime)=YEAR(NOW())
-        group by curriculumId
     </select>
 
     <!-- 查询学习勤奋榜 -->
