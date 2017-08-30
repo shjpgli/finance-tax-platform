@@ -22,6 +22,9 @@
         <include refid="Base_Column_List" />
         FROM bb_curriculum_study
         WHERE 1=1
+        <if test="nickname != null and nickname != ''">
+            AND nickname like CONCAT('%',#{nickname},'%')
+        </if>
         <if test="begintime != null">
             <![CDATA[
               and date_format(studyTime, '%Y%m%d') >= date_format(#{begintime}, '%Y%m%d')
