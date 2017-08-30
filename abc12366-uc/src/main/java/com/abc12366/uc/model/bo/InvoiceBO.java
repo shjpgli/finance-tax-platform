@@ -3,7 +3,9 @@ package com.abc12366.uc.model.bo;
 import com.abc12366.uc.model.InvoiceLog;
 import com.abc12366.uc.model.UserAddress;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,22 +21,44 @@ public class InvoiceBO implements Serializable {
 	private String username;
 	private String invoiceNo;
 	private String invoiceCode;
+
+	@NotEmpty
+	@Size(max = 1)
 	private String name;
 	private String content;
 	/**内容详情**/
 	private String contentDetail;
 	private String compName;
 	private Double amount;
+
+	@NotEmpty
+	@Size(max = 1)
 	private String type;
+
+	@NotEmpty
+	@Size(max = 1)
 	private String property;
 	private String status;
 	private java.util.Date createTime;
 	private java.util.Date lastUpdate;
+
+	@Size(min = 0,max = 32)
 	private String nsrsbh;
+
+	@Size(min = 0,max = 300)
 	private String nsrmc;
+
+	@Size(min = 0,max = 200)
 	private String address;
+
+	@Size(min = 0,max = 20)
 	private String phone;
+
+	@Size(min = 0,max = 100)
 	private String bank;
+
+	@NotEmpty
+	@Size(min = 1,max = 64)
 	private String addressId;
 	private String deliveryMethod;
 	private Integer isShipping;

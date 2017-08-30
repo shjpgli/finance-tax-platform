@@ -135,8 +135,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             throw new ServiceException(4961);
         }
         if ("1".equals(ra.getType())) { // 换货
-            if (!"2".equals(bo.getGoodsType())) { // 是否为实物商品换货
-                throw new ServiceException(4952);
+            if ("1".equals(bo.getIsExchange())) { // 是否为实物商品换货
+                throw new ServiceException(4952,"订单中<"+bo.getName()+">商品，不能换货");
             }
             // 是否在换货日期之内
             if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant
@@ -144,8 +144,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(4953);
             }
         } else { // 退货
-            if ("1".equals(bo.getGoodsType())) { // 虚拟商品暂时不支持退货
-                throw new ServiceException(4954);
+            if ("1".equals(bo.getIsReturn())) { // 虚拟商品暂时不支持退货
+                throw new ServiceException(4953,"订单中<"+bo.getName()+">商品，不能退货");
             }
             // 是否在退货日期之内
             if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant.ORDER_BACK_DAYS))) {

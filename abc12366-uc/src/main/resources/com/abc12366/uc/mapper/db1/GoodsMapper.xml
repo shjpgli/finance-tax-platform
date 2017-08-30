@@ -73,6 +73,9 @@
             <if test="isExchange != null">
                 isExchange,
             </if>
+            <if test="memberLevel != null">
+                memberLevel,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -135,6 +138,9 @@
             </if>
             <if test="isExchange!=null">
                 #{isExchange},
+            </if>
+            <if test="memberLevel!=null">
+                #{memberLevel},
             </if>
         </trim>
     </insert>
@@ -199,6 +205,9 @@
             </if>
             <if test="isExchange != null">
                 isExchange = #{isExchange},
+            </if>
+            <if test="memberLevel != null">
+                memberLevel = #{memberLevel},
             </if>
 
         </set>

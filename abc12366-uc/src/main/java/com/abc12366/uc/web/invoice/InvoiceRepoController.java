@@ -3,10 +3,8 @@ package com.abc12366.uc.web.invoice;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
-import com.abc12366.uc.model.invoice.InvoiceDistribute;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
 import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
 import com.abc12366.uc.util.DataUtils;
@@ -18,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -68,12 +67,20 @@ public class InvoiceRepoController {
         invoiceRepo.setNoEnd(noEnd);
         invoiceRepo.setInvoiceNoStart(invoiceNoStart);
         invoiceRepo.setInvoiceNoEnd(invoiceNoEnd);
+
         if (startTime != null && !"".equals(startTime)) {
             invoiceRepo.setStartTime(DataUtils.StrToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
             invoiceRepo.setEndTime(DataUtils.StrToDate(endTime));
         }
+        //获取发票类型编码长度，用户排序
+        if(StringUtils.isEmpty(invoiceTypeCode)){
+            invoiceRepo.setCodeLength(0);
+        }else {
+            invoiceRepo.setCodeLength(invoiceTypeCode.length());
+        }
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<InvoiceRepoBO> invoiceList = invoiceRepoService.selectList(invoiceRepo);
         LOGGER.info("{}", invoiceList);

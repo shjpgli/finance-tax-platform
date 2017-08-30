@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.bo;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
@@ -13,6 +14,7 @@ public class InvoiceCheckBO implements Serializable {
 	/**
 	 * 是否同意开票
 	 **/
+	@NotNull
 	private Boolean isBilling;
 
 	/**

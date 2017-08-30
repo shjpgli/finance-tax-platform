@@ -20,7 +20,7 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         (#{id}, #{userId}, #{orderNo}, #{reason}, #{adminRemark}, #{userRemark}, #{expressNo}, #{expressComp},
-         #{status},#{createTime},#{lastUpdate}, #{toExpressNo}, #{type}),#{adminConfirmRemark}
+         #{status},#{createTime},#{lastUpdate}, #{toExpressNo}, #{type},#{adminConfirmRemark})
     </insert>
 
     <!-- 修 改-->
