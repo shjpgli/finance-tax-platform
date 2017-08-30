@@ -1,5 +1,9 @@
 package com.abc12366.uc.model.invoice.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -17,29 +21,45 @@ public class InvoiceRepoBO implements Serializable {
 	private String id;
 
 	/**发票种类代码，字典表ID**/
+    @NotEmpty
+    @Size(min = 1, max = 64)
 	private String invoiceTypeCode;
 
 	private String invoiceTypeName;
 
 	/**发票代码**/
+    @NotEmpty
+    @Size(min = 1, max = 16)
 	private String invoiceCode;
 
 	/**发票号码起**/
+    @NotEmpty
+    @Size(min = 1, max = 16)
 	private String invoiceNoStart;
 
 	/**发票号码止**/
+    @NotEmpty
+    @Size(min = 1, max = 16)
 	private String invoiceNoEnd;
 
 	/**发票性质：1.纸质发票 2.电子发票**/
+    @NotEmpty
+    @Size(max = 1)
 	private String property;
 
 	/**发票库存状态，0：可使用，1：已分发，2：已作废**/
+    @NotEmpty
+    @Size(max = 1)
 	private String status;
 
 	/**每本份数**/
+    @NotNull
+    @Size(min = 1, max = 11)
 	private Integer share;
 
 	/**本数**/
+    @NotNull
+    @Size(min = 1, max = 11)
 	private Integer book;
 
 	/**创建时间**/
