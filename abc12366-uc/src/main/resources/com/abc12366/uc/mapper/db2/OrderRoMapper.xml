@@ -27,6 +27,7 @@
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
         <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
+        <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.User">
@@ -71,6 +72,7 @@
         <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
         <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
+        <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.User">
@@ -358,7 +360,7 @@
     <sql id="Base_Column_List">
         orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
         isShipping, isFreeShipping, deliveryFee,
-        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId
+        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser
     </sql>
 
 
@@ -374,7 +376,7 @@
         SELECT
         orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
         isShipping, isFreeShipping, deliveryFee,
-        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId
+        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser
         FROM uc_order
         <where>
             <if test="orderNo != null">orderNo = #{orderNo}</if>
@@ -427,7 +429,7 @@
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,u.id as
+        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,u.id as
         userId,u.username,u.phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *
- * 发票操作日志记录
+ * 产品操作日志记录
  *
  **/
 @SuppressWarnings("serial")

@@ -119,6 +119,9 @@ public class Order implements Serializable {
      **/
     private String goodsId;
 
+    /**推荐人姓名**/
+    private String recommendUser;
+
     public String getOrderNo() {
         return this.orderNo;
     }
@@ -303,4 +306,11 @@ public class Order implements Serializable {
         this.goodsId = goodsId;
     }
 
+    public String getRecommendUser() {
+        return recommendUser;
+    }
+
+    public void setRecommendUser(String recommendUser) {
+        this.recommendUser = recommendUser;
+    }
 }

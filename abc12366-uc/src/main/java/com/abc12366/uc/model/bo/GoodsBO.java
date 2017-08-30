@@ -1,5 +1,9 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,22 +15,45 @@ import java.util.List;
 public class GoodsBO implements Serializable {
 
     private String id;
+    @NotEmpty
+    @Size(min = 1, max = 200)
     private String name;
+
+    @Size(min = 1, max = 200)
     private String imageUrl;
+
+    @Size(min = 1, max = 2000)
     private String introduction;
+
+    @Size(min = 1, max = 4000)
     private String details;
+
+    @NotEmpty
+    @Size(min = 1, max = 64)
     private String categoryId;
     //分类名称
     private String categoryName;
+    @NotEmpty
     private Boolean status;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
+
+    @NotNull
     private Integer giftPoints;
+
+    @NotNull
     private Integer sort;
     private String unit;
+
+    @NotNull
     private String recommendType;
+
+    @NotNull
     private Integer isShipping;
+    @NotNull
     private Integer isFreeShipping;
+
+    @NotEmpty
     private String tradeMethod;
     private List<ProductBO> productBOList;
     private Double totalStock;
@@ -34,6 +61,7 @@ public class GoodsBO implements Serializable {
     /**
      * 商品类型
      **/
+    @NotEmpty
     private String goodsType;
 
     private ProductBO productBO;
@@ -55,14 +83,17 @@ public class GoodsBO implements Serializable {
      * 发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费
      * @return
      */
+    @NotEmpty
     private String invoiceContent;
 
     private String invoiceContentDetail;
 
     /**是否可退货，0，可退，1，不可退**/
+    @NotEmpty
     private String isReturn;
 
     /**是否可换货，0：可换，1：不可换**/
+    @NotEmpty
     private String isExchange;
 
     public String getId() {
