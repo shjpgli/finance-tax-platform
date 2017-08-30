@@ -49,6 +49,7 @@ public class InvoiceBO implements Serializable {
 	private String consignee;
 
 	private List<OrderBO> orderBOList;
+
 	private String[] orderNos;
 	private java.util.Date startTime;
 	private java.util.Date endTime;

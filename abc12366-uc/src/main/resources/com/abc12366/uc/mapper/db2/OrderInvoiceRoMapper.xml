@@ -23,4 +23,12 @@
         WHERE invoiceId = #{invoiceId}
     </select>
 
+    <!-- 查询，根据 orderNo 查找 -->
+    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.OrderInvoice" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_order_invoice
+        WHERE orderNo = #{orderNo}
+    </select>
+
 </mapper>

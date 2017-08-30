@@ -18,4 +18,6 @@ public interface OrderInvoiceRoMapper {
     OrderInvoice selectById(@Param("id") String id);
 
     List<OrderInvoice> selectByInvoiceId(String id);
+
+    OrderInvoice selectByOrderNo(@Param("orderNo") String orderNo);
 }

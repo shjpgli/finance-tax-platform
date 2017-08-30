@@ -33,7 +33,7 @@ public class GoodsBO implements Serializable {
     private String categoryId;
     //分类名称
     private String categoryName;
-    @NotEmpty
+    @NotNull
     private Boolean status;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
