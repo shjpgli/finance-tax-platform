@@ -43,8 +43,13 @@ public class CurrStudyController {
                                      @RequestParam(value = "endtime", required = false) String endtime) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("curriculumId",curriculumId);
-        dataMap.put("begintime", begintime);//开始时间
-        dataMap.put("endtime", endtime);//结束时间
+        if(begintime != null && !"".equals(begintime)){
+            dataMap.put("begintime", begintime);//开始时间
+        }
+        if(endtime != null && !"".equals(endtime)){
+            dataMap.put("endtime", endtime);//结束时间
+        }
+
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumStudyBo> dataList = currStudyService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
