@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.abc4000;
 
+import java.util.Date;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-10
@@ -14,6 +16,7 @@ public class NSRXX {
     private String swjgmc;
     private String swjgdm;
     private String yqdqr;
+    private Date dqxtsj;
 
     public NSRXX() {
     }
@@ -80,5 +83,13 @@ public class NSRXX {
 
     public void setYqdqr(String yqdqr) {
         this.yqdqr = yqdqr;
+    }
+
+    public Date getDqxtsj() {
+        return dqxtsj;
+    }
+
+    public void setDqxtsj(Date dqxtsj) {
+        this.dqxtsj = dqxtsj;
     }
 }

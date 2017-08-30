@@ -30,13 +30,14 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     @Autowired
     private UserBindMapper userBindMapper;
 
-    @Autowired
-    private TokenMapper tokenMapper;
-
     @Override
     public ResponseForAbc4000 selectList(String userId) {
         LOGGER.info("{}", userId);
         List<NSRXX> nsrxxList = userBindRoMapper.selectListByUserId(userId);
+        Date date = new Date();
+        for (int i = 0; i < nsrxxList.size(); i++) {
+            nsrxxList.get(i).setDqxtsj(date);
+        }
         ResponseForAbc4000 response = new ResponseForAbc4000();
         response.setT_nsrxx(nsrxxList);
         response.setSuccess(true);
