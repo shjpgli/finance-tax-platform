@@ -38,7 +38,6 @@ public class OrderBO implements Serializable {
     private String cancelId;
     private String goodsId;
     /**推荐人姓名**/
-    @Size(min = 1,max = 64)
     private String recommendUser;
     /**
      * 是否已开发票，true：是，false：否

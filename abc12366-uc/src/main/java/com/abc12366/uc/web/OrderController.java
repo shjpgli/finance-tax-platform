@@ -233,9 +233,6 @@ public class OrderController {
 
     /**
      * 用户下单
-     *
-     * @param userId
-     * @return
      */
     @PostMapping(path = "/submit/{userId}")
     public ResponseEntity submitOrder(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId) {
@@ -247,9 +244,19 @@ public class OrderController {
     }
 
     /**
+     * 用户修改订单
+     */
+    @PostMapping(path = "/update/{userId}")
+    public ResponseEntity updateOrder(@Valid @RequestBody OrderUpdateBO orderUpdateBO, @PathVariable("userId") String userId) {
+        LOGGER.info("{}", orderUpdateBO);
+        orderUpdateBO.setUserId(userId);
+        OrderUpdateBO bo = orderService.updateOrder(orderUpdateBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
      * 用户将订单改为支付中，虚拟订单
-     *
-     * @return
      */
     @PostMapping(path = "/payment")
     public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO) {

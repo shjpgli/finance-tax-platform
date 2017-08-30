@@ -955,4 +955,18 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectOrderByGoodsIdAndUserId(order);
     }
 
+    @Override
+    public OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO) {
+        Order order = new Order();
+        order.setOrderNo(orderUpdateBO.getOrderNo());
+        order.setUserId(orderUpdateBO.getUserId());
+        order.setRecommendUser(orderUpdateBO.getRecommendUser());
+        int update = orderMapper.update(order);
+        if(update != 1){
+            LOGGER.warn("修改失败，参数：{}", order);
+            throw new ServiceException(4102);
+        }
+        return orderUpdateBO;
+    }
+
 }
