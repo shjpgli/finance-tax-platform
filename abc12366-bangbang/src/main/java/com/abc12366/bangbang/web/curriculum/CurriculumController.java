@@ -275,4 +275,14 @@ public class CurriculumController {
 
     }
 
+    /**
+     * 更新课程浏览量
+     */
+    @PutMapping(path = "/updateBrowsesDay/{curriculumId}")
+    public ResponseEntity updateBrowsesDay(@PathVariable String curriculumId) {
+        //更新课程浏览量
+        String rtn = curriculumService.updateBrowsesDay(curriculumId);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.mapper.db1.CurriculumMapper;
 import com.abc12366.bangbang.mapper.db1.CurriculumStudyMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumStudyRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumStudy;
@@ -32,6 +33,9 @@ public class CurrStudyServiceImpl implements CurrStudyService {
     @Autowired
     private CurriculumStudyRoMapper studyRoMapper;
 
+    @Autowired
+    private CurriculumMapper curriculumMapper;
+
     @Override
     public List<CurriculumStudyBo> selectList(Map<String,Object> map) {
         List<CurriculumStudyBo> studyBoList;
@@ -57,6 +61,7 @@ public class CurrStudyServiceImpl implements CurrStudyService {
             studyBo.setStudyId(uuid);
             BeanUtils.copyProperties(studyBo, study);
             studyMapper.insert(study);
+            curriculumMapper.updateWatchsDay(studyBo.getCurriculumId());
         } catch (Exception e) {
             LOGGER.error("新增课程学习信息异常：{}", e);
             throw new ServiceException(4362);

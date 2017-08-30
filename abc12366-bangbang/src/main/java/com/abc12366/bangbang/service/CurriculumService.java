@@ -44,4 +44,7 @@ public interface CurriculumService {
 
     CurrMyStudyNumBo selectStudyNum(Map<String, Object> map);
 
+    String updateBrowsesDay(String curriculumId);
+
+
 }

@@ -407,4 +407,22 @@
         WHERE curriculumId = #{curriculumId}
     </update>
 
+    <!-- 修 改 浏览量-->
+    <update id="updateBrowsesDay" parameterType="java.lang.String">
+        UPDATE bb_curriculum
+        <set>
+            browseNum = browseNum + 1,
+        </set>
+        WHERE curriculumId = #{curriculumId}
+    </update>
+
+    <!-- 修 改 观看量-->
+    <update id="updateWatchsDay" parameterType="java.lang.String">
+        UPDATE bb_curriculum
+        <set>
+            watchNum = watchNum + 1,
+        </set>
+        WHERE curriculumId = #{curriculumId}
+    </update>
+
 </mapper>

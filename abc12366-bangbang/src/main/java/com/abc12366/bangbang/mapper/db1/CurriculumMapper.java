@@ -54,4 +54,18 @@ public interface CurriculumMapper{
      **/
     int updateStatus(Curriculum record);
 
+    /**
+     *
+     * 更新浏览量
+     *
+     **/
+    int updateBrowsesDay(@Param("curriculumId") String curriculumId);
+
+    /**
+     *
+     * 更新观看量
+     *
+     **/
+    int updateWatchsDay(@Param("curriculumId") String curriculumId);
+
 }
