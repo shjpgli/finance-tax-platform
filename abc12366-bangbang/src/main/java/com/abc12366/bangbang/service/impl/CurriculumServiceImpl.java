@@ -352,7 +352,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 
         if(curriculumBo.getStatus() == 0){
-            if(1 == curriculum1.getIsFree()){
+            if(1 == curriculumBo.getIsFree()){
                 curriculumBo.setGoodsId("");
             }else{
                 if(!goodsId.equals(curriculum1.getGoodsId())){
