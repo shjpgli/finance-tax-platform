@@ -97,9 +97,9 @@
 
     <select id="selectCompletedOrder" resultType="com.abc12366.uc.model.bo.ExchangeCompletedOrderBO"
             parameterType="java.lang.String">
-        select orderNo, giftPoints, createTime, lastUpdate, userId, points, e.productId, goodsType,isReturn,isExchange from
+        select orderNo, giftPoints, createTime, lastUpdate, userId, points, e.productId, goodsType,isReturn,isExchange,name from
         (select c.*, d.points from
-        (select a.orderNo, a.userId, a.giftPoints, a.createTime, a.lastUpdate,b.goodsType,b.isExchange,b.isReturn, b.productId from uc_order a left join uc_order_product b on a.orderNo = b.orderNo) c
+        (select a.orderNo, a.userId, a.giftPoints, a.createTime, a.lastUpdate,b.goodsType,b.isExchange,b.isReturn, b.productId,b.name from uc_order a left join uc_order_product b on a.orderNo = b.orderNo) c
         left join uc_user d on c.userId = d.id) e
         where orderNo = #{orderNo}
     </select>
