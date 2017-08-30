@@ -350,6 +350,7 @@ public class CurriculumServiceImpl implements CurriculumService {
         //查询课程信息
         Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
 
+
         if(curriculumBo.getStatus() == 0){
             if(1 == curriculum1.getIsFree()){
                 curriculumBo.setGoodsId("");
