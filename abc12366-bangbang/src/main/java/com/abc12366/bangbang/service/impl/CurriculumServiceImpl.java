@@ -159,7 +159,7 @@ public class CurriculumServiceImpl implements CurriculumService {
     @Override
     public CurriculumBo save(CurriculumBo curriculumBo) {
         String goodsId = curriculumBo.getGoodsId();
-        if(0 == curriculumBo.getIsFree()){
+        if(1 == curriculumBo.getIsFree()){
             curriculumBo.setGoodsId("");
         }else{
             int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
@@ -351,7 +351,7 @@ public class CurriculumServiceImpl implements CurriculumService {
         Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
 
         if(curriculumBo.getStatus() == 0){
-            if(0 == curriculum1.getIsFree()){
+            if(1 == curriculum1.getIsFree()){
                 curriculumBo.setGoodsId("");
             }else{
                 if(!goodsId.equals(curriculum1.getGoodsId())){
