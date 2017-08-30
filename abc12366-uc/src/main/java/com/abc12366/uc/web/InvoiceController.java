@@ -83,15 +83,12 @@ public class InvoiceController {
     /**
      * 前台，历史发票列表管理
      *
-     * @param pageNum
-     * @param pageSize
-     * @return
      */
     @GetMapping(path = "/history")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "userId", required = true) String userId,
-                                     @RequestParam(value = "status", required = true) String status) {
+                                     @RequestParam(value = "status", required = false) String status) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         InvoiceBO invoice = new InvoiceBO();
         invoice.setStatus(status);
@@ -106,9 +103,6 @@ public class InvoiceController {
 
     /**
      * 前台，票详情查看
-     *
-     * @param invoiceId
-     * @return
      */
     @GetMapping(path = "/user/{invoiceId}/{userId}")
     public ResponseEntity userInvoice(@PathVariable("invoiceId") String invoiceId, @PathVariable("userId") String
