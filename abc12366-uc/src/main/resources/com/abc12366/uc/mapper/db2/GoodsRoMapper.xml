@@ -6,7 +6,7 @@
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
         id, name, imageUrl, introduction, details, categoryId, status, createTime, lastUpdate, giftPoints, sort, unit,
-        recommendType, isShipping, isFreeShipping, tradeMethod
+        recommendType, isShipping, isFreeShipping, tradeMethod,memberLevel
     </sql>
 
     <resultMap id="goodsBoResultMap" type="com.abc12366.uc.model.bo.GoodsBO">
@@ -34,6 +34,7 @@
         <result column="invoiceContent" property="invoiceContent" jdbcType="VARCHAR"/>
         <result column="isReturn" property="isReturn" jdbcType="VARCHAR"/>
         <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
+        <result column="memberLevel" property="memberLevel" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--根据goodsId查询产品-->
@@ -42,7 +43,7 @@
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
         g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType, gc.category as
-        categoryName,g.isExchange,g.isReturn,g.invoiceContent
+        categoryName,g.isExchange,g.isReturn,g.invoiceContent,g.memberLevel
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
         WHERE g.id = #{id}
@@ -52,7 +53,7 @@
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
-        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.isExchange,g.isReturn,g.invoiceContent, gc.category as
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.isExchange,g.isReturn,g.invoiceContent,g.memberLevel, gc.category as
         categoryName,
         up.sellingPrice,up.totalStock
         FROM uc_goods g
@@ -97,6 +98,7 @@
         <result column="invoiceContent" property="invoiceContent" jdbcType="VARCHAR"/>
         <result column="isReturn" property="isReturn" jdbcType="VARCHAR"/>
         <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
+        <result column="memberLevel" property="memberLevel" jdbcType="VARCHAR"/>
         <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="{goodsId=id}"
                     select="getProductBO"></collection>
     </resultMap>
@@ -163,7 +165,7 @@
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
-        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn, gc.category as
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn,g.memberLevel, gc.category as
         categoryName,#{endRepo} as endRepo,#{startRepo} as startRepo
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
@@ -177,7 +179,7 @@
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
-        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn, gc.category as
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn,g.memberLevel, gc.category as
         categoryName,
         up.sellingPrice,up.totalStock
         FROM uc_goods g
@@ -202,7 +204,7 @@
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
-        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn, gc.category as
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn,g.memberLevel, gc.category as
         categoryNam
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
@@ -213,7 +215,7 @@
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
-        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn, gc.category as
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn,g.memberLevel, gc.category as
         categoryName
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId
@@ -303,7 +305,7 @@
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
-        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn, gc.category as
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn,g.memberLevel, gc.category as
         categoryName
         FROM uc_goods g
         left JOIN uc_goods_category gc on gc.id = g.categoryId

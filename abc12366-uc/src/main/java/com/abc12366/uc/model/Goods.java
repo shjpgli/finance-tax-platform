@@ -100,6 +100,9 @@ public class Goods implements Serializable {
     /**是否可换货，0：可换，1：不可换**/
     private String isExchange;
 
+    /**会员等级**/
+    private String memberLevel;
+
     public String getId() {
         return this.id;
     }
@@ -258,5 +261,13 @@ public class Goods implements Serializable {
 
     public void setIsExchange(String isExchange) {
         this.isExchange = isExchange;
+    }
+
+    public String getMemberLevel() {
+        return memberLevel;
+    }
+
+    public void setMemberLevel(String memberLevel) {
+        this.memberLevel = memberLevel;
     }
 }

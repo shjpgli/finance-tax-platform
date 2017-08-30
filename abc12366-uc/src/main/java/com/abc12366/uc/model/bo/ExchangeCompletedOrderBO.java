@@ -27,6 +27,12 @@ public class ExchangeCompletedOrderBO {
     private String productId;
     // 产品类型
     private String goodsType;
+    //是否可退货，0，可退，1，不可退
+    private String isReturn;
+    //是否可换货，0：可换，1：不可换
+    private String isExchange;
+    //商品名称
+    private String name;
 
     public String getOrderNo() {
         return orderNo;
@@ -103,6 +109,33 @@ public class ExchangeCompletedOrderBO {
                 ", points=" + points +
                 ", productId='" + productId + '\'' +
                 ", goodsType='" + goodsType + '\'' +
+                ", isReturn='" + isReturn + '\'' +
+                ", isExchange='" + isExchange + '\'' +
+                ", name='" + name + '\'' +
                 '}';
+    }
+
+    public String getIsReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(String isReturn) {
+        this.isReturn = isReturn;
+    }
+
+    public String getIsExchange() {
+        return isExchange;
+    }
+
+    public void setIsExchange(String isExchange) {
+        this.isExchange = isExchange;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
