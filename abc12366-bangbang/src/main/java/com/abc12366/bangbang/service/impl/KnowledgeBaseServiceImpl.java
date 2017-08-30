@@ -223,7 +223,27 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
                 }
             }
         }
+        for (String key : map.keySet()) {
+            sort(map.get(key));
+        }
         return map;
     }
+
+    private void sort(List<KnowledgeBase> list){
+        Collections.sort(list, new Comparator<KnowledgeBase>() {
+            public int compare(KnowledgeBase n1, KnowledgeBase n2) {
+                long pv1 = n1.getPv();
+                long pv2 = n2.getPv();
+                if (pv1 < pv2) {
+                    return 1;
+                } else if (pv1 == pv2) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
+    }
+
 
 }
