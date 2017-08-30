@@ -4,6 +4,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.VipLevelMapper;
 import com.abc12366.uc.mapper.db2.VipLevelRoMapper;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.VipLevel;
 import com.abc12366.uc.model.bo.VipLevelBO;
 import com.abc12366.uc.model.bo.VipLevelInsertBO;
@@ -32,7 +33,8 @@ public class VipLevelServiceImpl implements VipLevelService {
 
     @Autowired
     private VipLevelRoMapper vipLevelRoMapper;
-//    @Autowired
+
+    //    @Autowired
 //    private VipPrivilegeLevelService vipPrivilegeLevelService;
     @Override
     public List<VipLevelBO> selectList(Map map) {
@@ -129,6 +131,12 @@ public class VipLevelServiceImpl implements VipLevelService {
     @Override
     public int delete(String id) {
         LOGGER.info("{}", id);
+        //已经被使用的用户等级数据不允许删除
+        List<User> userList = vipLevelRoMapper.selectUserByVipLevelCode(id);
+        if (userList != null && userList.size() > 0) {
+            throw new ServiceException(4636);
+        }
+
         int result = vipLevelMapper.delete(id);
         if (result != 1) {
             LOGGER.warn("删除失败，参数为：id=" + id);

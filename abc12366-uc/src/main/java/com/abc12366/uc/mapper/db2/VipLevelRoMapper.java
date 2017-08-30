@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.VipLevelBO;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface VipLevelRoMapper {
     VipLevelBO selectByLevel(String level);
 
     VipLevelBO selectByLevelCode(String levelCode);
+
+    List<User> selectUserByVipLevelCode(String id);
 }

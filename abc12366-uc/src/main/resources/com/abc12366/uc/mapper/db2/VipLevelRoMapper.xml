@@ -33,4 +33,14 @@
         from uc_uvip_level
         where levelCode = #{levelCode}
     </select>
+
+    <select id="selectUserByVipLevelCode" parameterType="java.lang.String" resultType="com.abc12366.uc.model.User">
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel
+        from uc_user uu
+        inner join uc_uvip_level uul
+        on uu.vipLevel = uul.levelCode
+        where uul.id =#{id}
+    </select>
 </mapper>
