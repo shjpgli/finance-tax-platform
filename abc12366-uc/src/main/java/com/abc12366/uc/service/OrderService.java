@@ -13,104 +13,112 @@ public interface OrderService {
 
     /**
      * 查询订单列表信息
-     *
-     * @param orderBO
-     * @param pageNum
-     * @param pageSize @return
      */
     List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize);
 
     /**
      * 查询订单信息
-     *
-     * @return
      */
     OrderBO selectByOrderNo(String orderNo);
 
     /**
      * 加入购物车
-     *
-     * @param orderBO
-     * @return
      */
     OrderBO joinCart(OrderBO orderBO);
 
     /**
      * 修改购物车
-     *
-     * @param orderBO
-     * @return
      */
     OrderBO updateCart(OrderBO orderBO);
 
     /**
      * 查询列表
-     *
-     * @param order
-     * @param pageNum
-     * @param pageSize @return
      */
     List<OrderBO> selectOrderList(OrderBO order, int pageNum, int pageSize);
 
     /**
      * 删除购物车
-     *
-     * @param orderBO
      */
     void deleteCart(OrderBO orderBO);
 
     /**
      * 用户直接提交订单
-     *
-     * @param orderBO
-     * @return
      */
     OrderBO submitOrder(OrderBO orderBO);
 
     /**
      * 查询购物车列表
-     *
-     * @param order
-     * @return
      */
     List<OrderBO> selectCartList(OrderBO order);
 
     /**
      * 购物车中提交订单
-     *
-     * @param order
      */
     void submitCart(Order order);
 
     /**
      * 删除订单
-     *
-     * @param orderBO
      */
     void deleteOrder(OrderBO orderBO);
 
+    /**
+     * 订单反馈
+     */
     OrderBO feedback(OrderBO orderBO);
 
+    /**
+     * 取消订单
+     */
     OrderBO cancelOrder(OrderCancelBO orderCancelBO);
 
+    /**
+     * 前台用户，查询所有订单
+     */
     List<OrderBO> selectUserAllOrderList(OrderBO order, int pageNum, int pageSize);
 
+    /**
+     * 申请退单
+     */
     OrderBack applyBackOrder(OrderBack orderBack);
 
+    /**
+     * 提交退单申请
+     */
     OrderBack submitBackOrder(OrderBack orderBack);
 
+    /**
+     * 管理员同意退单
+     */
     OrderBack backCheckOrder(OrderBack orderBack);
 
+    /**
+     * 查询退单列表
+     */
     List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO);
 
+    /**
+     * 修改支付状态
+     */
     OrderBO paymentOrder(OrderPayBO orderPayBO, String goodsType);
 
+    /**
+     * 查询导出订单
+     */
     List<OrderListBO> selectExprotOrder(Order order);
 
+    /**
+     * 查询导入订单
+     */
     void selectImprotOrder(List<OrderBO> orderBOList);
 
+    /**
+     * 订单发货
+     */
     void sendOrder(OrderOperationBO orderOperationBO);
 
+    /**
+     * 订单作废
+     */
     void invalidOrder(OrderOperationBO orderOperationBO);
 
     /**
@@ -124,4 +132,10 @@ public interface OrderService {
     void automaticCancel();
 
     OrderBO selectOrderByGoodsIdAndUserId(Order order);
+
+    /**
+     * 用户修改订单
+     */
+    OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO);
+
 }
