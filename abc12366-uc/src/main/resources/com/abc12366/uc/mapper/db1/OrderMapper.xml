@@ -85,6 +85,9 @@
             <if test="cancelId != null">
                 cancelId,
             </if>
+            <if test="recommendUser != null">
+                recommendUser,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -154,6 +157,10 @@
             <if test="cancelId!=null">
                 #{cancelId},
             </if>
+            <if test="recommendUser!=null">
+                #{recommendUser},
+            </if>
+
         </trim>
     </insert>
 
@@ -226,6 +233,9 @@
             </if>
             <if test="cancelId != null">
                 cancelId = #{cancelId},
+            </if>
+            <if test="recommendUser != null">
+                recommendUser = #{recommendUser},
             </if>
 
         </set>

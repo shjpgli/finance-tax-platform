@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 
 /**
- * 产品表
+ * 产品审核BO
  **/
 @SuppressWarnings("serial")
 public class GoodsCheckBO implements Serializable {

@@ -3,6 +3,7 @@ package com.abc12366.uc.model.bo;
 import com.abc12366.uc.model.OrderProductSpec;
 import com.abc12366.uc.model.User;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,9 @@ public class OrderBO implements Serializable {
     private String tradeMethod;
     private String cancelId;
     private String goodsId;
+    /**推荐人姓名**/
+    @Size(min = 1,max = 64)
+    private String recommendUser;
     /**
      * 是否已开发票，true：是，false：否
      **/
@@ -338,4 +342,11 @@ public class OrderBO implements Serializable {
         this.userAddressBO = userAddressBO;
     }
 
+    public String getRecommendUser() {
+        return recommendUser;
+    }
+
+    public void setRecommendUser(String recommendUser) {
+        this.recommendUser = recommendUser;
+    }
 }

@@ -2,6 +2,7 @@ package com.abc12366.uc.model.bo;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,8 +19,13 @@ public class GoodsCategoryBO implements Serializable {
     @NotEmpty
     @Size(min = 2, max = 16)
     private String category;
+
+    @NotEmpty
+    @Size(min = 1, max = 64)
     private String parentId;
     private String parentName;
+
+    @NotNull
     private Integer sort;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;

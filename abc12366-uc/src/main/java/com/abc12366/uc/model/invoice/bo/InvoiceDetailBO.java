@@ -16,23 +16,15 @@ public class InvoiceDetailBO implements Serializable {
 	private String id;
 
 	/**发票号码**/
-    @NotNull
-    @Size(min = 1, max = 16)
 	private String invoiceNo;
 
 	/**发票代码**/
-    @NotNull
-    @Size(min = 1, max = 16)
 	private String invoiceCode;
 
 	/**发票性质：1.纸质发票 2.电子发票**/
-    @NotNull
-    @Size(max = 1)
 	private String property;
 
 	/**发票状态：0.未使用 1.分配中 2.已使用 3.已作废**/
-    @NotNull
-    @Size(max = 1)
 	private String status;
 
 	/****/
@@ -42,12 +34,9 @@ public class InvoiceDetailBO implements Serializable {
 	private java.util.Date lastUpdate;
 
 	/**备注**/
-    @Size(min = 0, max = 2000)
 	private String remark;
 
 	/**发票编号(FK)**/
-    @NotNull
-    @Size(min = 1, max = 64)
 	private String invoiceRepoId;
 
 	/**收票地址**/

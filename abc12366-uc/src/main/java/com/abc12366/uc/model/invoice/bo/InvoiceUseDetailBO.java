@@ -1,4 +1,7 @@
 package com.abc12366.uc.model.invoice.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -24,6 +27,8 @@ public class InvoiceUseDetailBO implements Serializable {
 	private Integer repoNum;
 
 	/**申请数量**/
+    @NotEmpty
+    @Size(min = 1, max = 11)
 	private Integer applyNum;
 
 	/**实发数量**/
