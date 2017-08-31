@@ -16,7 +16,7 @@ public interface KnowledgeTagService {
     List<String> selectHotTag(Integer num);
 
     /* 知识库标签查询 */
-    List<KnowledgeTag> selectList(String keywords);
+    List<KnowledgeTag> selectList(String keywords, Boolean status);
 
     /* 知识库关联标签查询 */
     List<KnowledgeTag> selectRelatedTags(String knowledgeId);

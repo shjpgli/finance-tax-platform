@@ -29,7 +29,7 @@ public interface KnowledgeTagMapper {
     /**
      * 查询列表
      **/
-    List<KnowledgeTag> selectList(@Param("keywords") String keywords);
+    List<KnowledgeTag> selectList(@Param("keywords") String keywords, @Param("status") Boolean status);
 
     /**
      * 查询相关联的标签

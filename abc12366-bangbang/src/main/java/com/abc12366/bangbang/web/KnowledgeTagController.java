@@ -43,10 +43,11 @@ public class KnowledgeTagController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "keywords", required = false) String keywords) {
+                                     @RequestParam(value = "keywords", required = false) String keywords,
+                                     @RequestParam(value = "status", required = false) Boolean status) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
-        List<KnowledgeTag> list = knowledgeTagService.selectList(keywords);
+        List<KnowledgeTag> list = knowledgeTagService.selectList(keywords, status);
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));

@@ -36,8 +36,8 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     }
 
     @Override
-    public List<KnowledgeTag> selectList(String keywords) {
-        return knowledgeTagMapper.selectList(keywords);
+    public List<KnowledgeTag> selectList(String keywords, Boolean status) {
+        return knowledgeTagMapper.selectList(keywords, status);
     }
 
     @Override
