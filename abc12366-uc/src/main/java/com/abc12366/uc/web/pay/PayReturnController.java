@@ -1,11 +1,19 @@
 package com.abc12366.uc.web.pay;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
+import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.bo.ExchangeCompletedOrderBO;
+import com.abc12366.uc.model.bo.OrderPayBO;
+import com.abc12366.uc.model.bo.PointsLogBO;
+import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.VipLogService;
+import com.abc12366.uc.util.AliPayConfig;
+import com.alibaba.fastjson.JSON;
+import com.alipay.api.AlipayApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,62 +22,54 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
-import com.abc12366.uc.model.TradeLog;
-import com.abc12366.uc.model.bo.ExchangeCompletedOrderBO;
-import com.abc12366.uc.model.bo.OrderPayBO;
-import com.abc12366.uc.model.bo.PointsLogBO;
-import com.abc12366.uc.service.OrderService;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.TradeLogService;
-import com.abc12366.uc.util.AliPayConfig;
-import com.alibaba.fastjson.JSON;
-import com.alipay.api.AlipayApiException;
+
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 支付接口回调地址
- * 
+ *
  * @author zhushuai 2017-8-4
- * 
  */
 @Controller
 @RequestMapping(path = "/payreturn")
 public class PayReturnController {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PayReturnController.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(PayReturnController.class);
 
-	@Autowired
-	private TradeLogService tradeLogService;
-	@Autowired
-	private OrderService orderService;
-	@Autowired
+    @Autowired
+    private TradeLogService tradeLogService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
     private OrderExchangeRoMapper orderExchangeRoMapper;
-	@Autowired
+    @Autowired
     private PointsLogService pointsLogService;
-	
-	
-	@SuppressWarnings("rawtypes")
-	@PostMapping("/validate")
-	public ResponseEntity validate(@RequestBody Map<String, String> params){
-		 LOGGER.info("验证回调信息签名:", JSON.toJSONString(params));
-		 try {
-			 return ResponseEntity.ok(Utils.kv("data", AliPayConfig.rsaCheckV1(params)));
-		 } catch (AlipayApiException e) {
-			 LOGGER.error("验证回调信息签名异常,原因:", e);
-			 return ResponseEntity.ok(Utils.bodyStatus(9999, "验证回调信息签名异常:"+e.getMessage()));
-		 }
-	}
-	
-	
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping("/alipay")
-	public ResponseEntity aliPayReturn(HttpServletRequest request) {
-		LOGGER.info("{}", request);
-		try {
+    @Autowired
+    private VipLogService vipLogService;
+
+    @SuppressWarnings("rawtypes")
+    @PostMapping("/validate")
+    public ResponseEntity validate(@RequestBody Map<String, String> params) {
+        LOGGER.info("验证回调信息签名:", JSON.toJSONString(params));
+        try {
+            return ResponseEntity.ok(Utils.kv("data", AliPayConfig.rsaCheckV1(params)));
+        } catch (AlipayApiException e) {
+            LOGGER.error("验证回调信息签名异常,原因:", e);
+            return ResponseEntity.ok(Utils.bodyStatus(9999, "验证回调信息签名异常:" + e.getMessage()));
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping("/alipay")
+    public ResponseEntity aliPayReturn(HttpServletRequest request) {
+        LOGGER.info("{}", request);
+        try {
 //			Map<String, String> params = new HashMap<String, String>();
 //			Map<String, String[]> requestParams = request.getParameterMap();
 //			for (Iterator<String> iter = requestParams.keySet().iterator(); iter
@@ -89,72 +89,77 @@ public class PayReturnController {
 //			LOGGER.info("支付宝回调信息:", JSON.toJSONString(params));
 //			boolean signVerified = AliPayConfig.rsaCheckV1(params); // 调用SDK验证签名
 //			if (signVerified) {// 验证成功
-				LOGGER.info("支付宝回调信息:验证签名成功");
-				// 商户订单号
-				String out_trade_no = new String(request.getParameter(
-						"out_trade_no").getBytes("utf-8"), "UTF-8");
+            LOGGER.info("支付宝回调信息:验证签名成功");
+            // 商户订单号
+            String out_trade_no = new String(request.getParameter(
+                    "out_trade_no").getBytes("utf-8"), "UTF-8");
 
-				// 支付宝交易号
-				String trade_no = new String(request.getParameter("trade_no")
-						.getBytes("utf-8"), "UTF-8");
+            // 支付宝交易号
+            String trade_no = new String(request.getParameter("trade_no")
+                    .getBytes("utf-8"), "UTF-8");
 
-				// 交易状态
-				String trade_status = new String(request.getParameter(
-						"trade_status").getBytes("utf-8"), "UTF-8");
+            // 交易状态
+            String trade_status = new String(request.getParameter(
+                    "trade_status").getBytes("utf-8"), "UTF-8");
 
-				String total_amount = new String(request.getParameter(
-						"total_amount").getBytes("utf-8"), "UTF-8");
+            String total_amount = new String(request.getParameter(
+                    "total_amount").getBytes("utf-8"), "UTF-8");
 
-				String date = new String(request.getParameter("gmt_payment")
-						.getBytes("utf-8"), "UTF-8");
+            String date = new String(request.getParameter("gmt_payment")
+                    .getBytes("utf-8"), "UTF-8");
 
-				if (trade_status.equals("TRADE_FINISHED")) {// 交易结束
+            if (trade_status.equals("TRADE_FINISHED")) {// 交易结束
 
-				} else if (trade_status.equals("TRADE_SUCCESS")) {// 交易成功,插入交易记录
-					LOGGER.info("支付宝回调信息:交易成功,插入支付流水记录");
+            } else if (trade_status.equals("TRADE_SUCCESS")) {// 交易成功,插入交易记录
+                LOGGER.info("支付宝回调信息:交易成功,插入支付流水记录");
 
-					TradeLog tradeLog = new TradeLog();
-					tradeLog.setId(Utils.uuid());
-					tradeLog.setOrderNo(out_trade_no);
-					tradeLog.setAliTrandeNo(trade_no);
-					tradeLog.setTradeStatus("1");
-					tradeLog.setTradeType("1");
-					tradeLog.setAmount(Double.parseDouble(total_amount));
-					tradeLog.setTradeTime(new SimpleDateFormat(
-							"yyyy-MM-dd HH:mm:ss").parse(date));
-					Timestamp now = new Timestamp(new Date().getTime());
-					tradeLog.setCreateTime(now);
-					tradeLog.setLastUpdate(now);
-					tradeLog.setPayMethod("ALIPAY");
-					if (tradeLogService.insertTradeLog(tradeLog) == 1) {
-						LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
-						OrderPayBO orderPayBO = new OrderPayBO();
-						orderPayBO.setOrderNo(out_trade_no);
-						orderPayBO.setIsPay(2);
-						orderPayBO.setPayMethod("ALIPAY");
-						orderService.paymentOrder(orderPayBO,"");
-						
-						ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(out_trade_no);
-						PointsLogBO pointsLog = new PointsLogBO();
-				        pointsLog.setRuleId(out_trade_no);
-				        pointsLog.setIncome(eco.getGiftPoints());
-				        pointsLog.setUserId(eco.getUserId());
-				        pointsLog.setRemark("用户下单");
-				        pointsLog.setLogType("ORDER_INCOME");
-				        pointsLogService.insert(pointsLog);
-					}
-					
-					
-				}
-				return ResponseEntity.ok(Utils.kv("data", "OK"));
+                TradeLog tradeLog = new TradeLog();
+                tradeLog.setId(Utils.uuid());
+                tradeLog.setOrderNo(out_trade_no);
+                tradeLog.setAliTrandeNo(trade_no);
+                tradeLog.setTradeStatus("1");
+                tradeLog.setTradeType("1");
+                tradeLog.setAmount(Double.parseDouble(total_amount));
+                tradeLog.setTradeTime(new SimpleDateFormat(
+                        "yyyy-MM-dd HH:mm:ss").parse(date));
+                Timestamp now = new Timestamp(new Date().getTime());
+                tradeLog.setCreateTime(now);
+                tradeLog.setLastUpdate(now);
+                tradeLog.setPayMethod("ALIPAY");
+                if (tradeLogService.insertTradeLog(tradeLog) == 1) {
+                    LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
+                    OrderPayBO orderPayBO = new OrderPayBO();
+                    orderPayBO.setOrderNo(out_trade_no);
+                    orderPayBO.setIsPay(2);
+                    orderPayBO.setPayMethod("ALIPAY");
+                    orderService.paymentOrder(orderPayBO, "");
+
+                    ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(out_trade_no);
+                    PointsLogBO pointsLog = new PointsLogBO();
+                    pointsLog.setRuleId(out_trade_no);
+                    pointsLog.setIncome(eco.getGiftPoints());
+                    pointsLog.setUserId(eco.getUserId());
+                    pointsLog.setRemark("用户下单");
+                    pointsLog.setLogType("ORDER_INCOME");
+                    pointsLogService.insert(pointsLog);
+
+                    // 查询是否为会员服务订单，支付成功则更新会员状态
+                    VipLogBO vipLogBO = orderService.updateVipLevel(out_trade_no);
+                    // 更新会员日志
+                    if (vipLogBO != null) {
+                        vipLogService.insert(vipLogBO);
+                    }
+                }
+            }
+            return ResponseEntity.ok(Utils.kv("data", "OK"));
 //			} else {// 验证失败
 //				LOGGER.info("支付宝回调信息:验证签名失败");
 //				return ("fail");
 //			}
 
-		} catch (Exception e) {
-			LOGGER.error("支付宝回调处理异常,原因:", e);
-			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝回调处理异常,原因:"+e.getMessage()));
-		}
-	}
+        } catch (Exception e) {
+            LOGGER.error("支付宝回调处理异常,原因:", e);
+            return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝回调处理异常,原因:" + e.getMessage()));
+        }
+    }
 }

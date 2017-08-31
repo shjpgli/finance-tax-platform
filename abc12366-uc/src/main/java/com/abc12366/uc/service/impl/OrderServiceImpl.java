@@ -7,6 +7,8 @@ import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.PointsService;
 import com.abc12366.uc.util.DataUtils;
 import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.PageHelper;
@@ -73,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
     private UserRoMapper userRoMapper;
 
     @Autowired
-    private PointsLogMapper pointsLogMapper;
+    private PointsLogService pointsLogService;
 
     @Autowired
     private UvipPriceRoMapper uvipPriceRoMapper;
@@ -210,7 +212,7 @@ public class OrderServiceImpl implements OrderService {
                     }else if ("4".equals(goodsType)) {
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
                         //修改用户信息，开通会员服务
-                        updateUserVipLevel(orderBO, goodsBO);
+                        //updateUserVipLevel(orderBO.getUserId(), goodsBO.getMemberLevel());
                     } else if ("3".equals(goodsType)) {
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
                     } else{
@@ -222,7 +224,7 @@ public class OrderServiceImpl implements OrderService {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4");
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
-                        updateUserVipLevel(orderBO, goodsBO);
+                        //updateUserVipLevel(orderBO.getUserId(), goodsBO.getMemberLevel());
                     }else if ("6".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
                     }
@@ -237,10 +239,40 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    private void updateUserVipLevel(OrderBO orderBO, GoodsBO goodsBO) {
+    /**
+     * 更新会员等级
+     *
+     * @param orderNo 订单号
+     * @return 会员日志信息
+     */
+    @Override
+    public VipLogBO updateVipLevel(String orderNo) {
+        OrderProductBO bo = new OrderProductBO();
+        bo.setOrderNo(orderNo);
+        List<OrderProductBO> orderProductList = orderProductRoMapper.selectByOrderNo(bo);
+        if (orderProductList != null && orderProductList.size() > 0) {
+            for (OrderProductBO orderProductBO : orderProductList) {
+                if ("4".equals(orderProductBO.getGoodsType())) {
+                    OrderBO orderBO = selectByOrderNo(orderNo);
+                    GoodsBO goodsBO = goodsRoMapper.selectGoods(orderBO.getGoodsId());
+                    updateUserVipLevel(orderBO.getUserId(), goodsBO.getMemberLevel());
+
+                    VipLogBO vipLogBO = new VipLogBO();
+                    vipLogBO.setLevelId(goodsBO.getMemberLevel());
+                    vipLogBO.setSource(orderNo);
+                    vipLogBO.setUserId(orderBO.getUserId());
+                    return vipLogBO;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void updateUserVipLevel(String userId, String vipLevel) {
         User user = new User();
-        user.setId(orderBO.getUserId());
-        user.setVipLevel(goodsBO.getMemberLevel());
+        user.setId(userId);
+        user.setVipLevel(vipLevel);
+        user.setLastUpdate(new Date());
         int uUpdate = userMapper.update(user);
         if(uUpdate != 1){
             LOGGER.info("修改用户失败：{}", user);
@@ -494,19 +526,15 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4101);
         }
 
-        PointsLog pointsLog = new PointsLog();
+        // 积分日志
+        PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setId(Utils.uuid());
+        pointsLog.setRuleId(orderBO.getOrderNo());
         pointsLog.setIncome(giftPoints);
-        pointsLog.setOutgo((int) totalPrice);
-        pointsLog.setCreateTime(new Date());
-        pointsLog.setUsablePoints(usablePoints);
+        pointsLog.setLogType("POINTS_RECHARGE");
         pointsLog.setRemark("积分兑换");
-        int result = pointsLogMapper.insert(pointsLog);
-        if (result != 1) {
-            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
-            throw new ServiceException(4101);
-        }
+        pointsLogService.insert(pointsLog);
+
         //加入订单信息,
         orderBO.setOrderStatus(orderStatus);
         orderBO.setIsInvoice(false);
@@ -834,30 +862,13 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void insertPoints(OrderBO orderBO) {
-        //加入积分
-        //可用积分=上一次的可用积分+|-本次收入|支出
-        User user = userRoMapper.selectOne(orderBO.getUserId());
-        int userPoints = user.getPoints();
-        int giftPoints = orderBO.getGiftPoints();
-        int usablePoints = userPoints + giftPoints;
-        //uc_user的points字段和uc_point_log的usablePoints字段都要更新
-        user.setPoints(usablePoints);
-        int userUpdateResult = userMapper.update(user);
-        if (userUpdateResult != 1) {
-            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
-            throw new ServiceException(4101);
-        }
-        PointsLog pointsLog = new PointsLog();
+        PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setId(Utils.uuid());
-        pointsLog.setIncome(giftPoints);
-        pointsLog.setCreateTime(new Date());
-        pointsLog.setUsablePoints(usablePoints);
-        int result = pointsLogMapper.insert(pointsLog);
-        if(result != 1){
-            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
-            throw new ServiceException(4101);
-        }
+        pointsLog.setIncome(orderBO.getGiftPoints());
+        pointsLog.setRuleId(orderBO.getOrderNo());
+        pointsLog.setLogType("GIFT_POINTS");
+        pointsLog.setRemark("积分赠送");
+        pointsLogService.insert(pointsLog);
     }
 
     @Override
