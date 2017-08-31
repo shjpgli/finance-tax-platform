@@ -119,7 +119,7 @@
         <if test="siteId != null and siteId != ''">
             AND a.siteId = #{siteId}
         </if>
-        ORDER BY e.views DESC
+        ORDER BY a.topLevel,e.views DESC
     </select>
 
 	<!-- 查询（根据查询条件查询） -->

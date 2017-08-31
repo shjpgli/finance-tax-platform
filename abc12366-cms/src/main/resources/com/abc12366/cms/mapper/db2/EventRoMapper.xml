@@ -28,8 +28,10 @@
     <!-- 查询（根据条件查询） -->
     <select id="selectList" resultType="com.abc12366.cms.model.bo.EventListBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM cms_event
+        eventId, category, shape, title, p.province province, c.city city, address, picture, createtime, updatetime, begintime, endtime,
+        tag, summary, description, peoppleNum, isCheck, isUserGrade, userGrade, sponsorId,bmendtime, status
+        FROM cms_event e left join abc12366_uc.uc_province p on e.province = p.provinceId
+        left join abc12366_uc.uc_city c on e.city = c.cityId
         WHERE 1=1
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
