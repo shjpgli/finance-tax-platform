@@ -86,6 +86,7 @@
         a.userid userid,
         a.username username,
         b.title title,
+        b.shortTitle,
         a.contentType,
         b.titleImg,
         b.origin,
@@ -160,6 +161,7 @@
         a.userid userid,
         a.username username,
 		b.title title,
+        b.shortTitle,
 		a.contentType,
 		b.titleImg,
         b.origin,
@@ -258,6 +260,7 @@
         a.userid userid,
         a.username username,
 		b.title title,
+        b.shortTitle,
 		a.contentType,
 		b.titleImg,
         b.origin,
@@ -316,6 +319,7 @@
         a.userid userid,
         a.username username,
         b.title title,
+        b.shortTitle,
         a.contentType,
         b.titleImg,
         b.origin,
@@ -354,6 +358,7 @@
         a.userid userid,
         a.username username,
 		b.title title,
+        b.shortTitle,
 		a.contentType,
 		b.titleImg,
         b.origin,
@@ -403,14 +408,14 @@
 
 	<!-- 查询（根据ReleaseDate查询下一篇） -->
 	<select id="selectByReleaseDateAsc" resultType="com.abc12366.cms.model.bo.ContentudBo" parameterType="java.util.Map">
-		SELECT a.contentId,b.title,c.channelPath,d.sitePath,'down' upordown FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		SELECT a.contentId,b.title,b.shortTitle,c.channelPath,d.sitePath,'down' upordown FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 			LEFT JOIN cms_channel c ON a.channelId = c.channelId LEFT JOIN cms_site d ON a.siteId = d.siteId
 		WHERE UNIX_TIMESTAMP(b.releaseDate) &gt; #{releaseDate} AND a.channelId = #{channelId} ORDER BY UNIX_TIMESTAMP(b.releaseDate) ASC LIMIT 1
 	</select>
 
 	<!-- 查询（根据ReleaseDate查询上一篇） -->
 	<select id="selectByReleaseDateDesc" resultType="com.abc12366.cms.model.bo.ContentudBo" parameterType="java.util.Map">
-		SELECT a.contentId,b.title,c.channelPath,d.sitePath,d.domain domain,'up' upordown FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		SELECT a.contentId,b.title,b.shortTitle,c.channelPath,d.sitePath,d.domain domain,'up' upordown FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId LEFT JOIN cms_site d ON a.siteId = d.siteId
 		WHERE UNIX_TIMESTAMP(b.releaseDate) &lt; #{releaseDate} AND a.channelId = #{channelId} ORDER BY UNIX_TIMESTAMP(b.releaseDate) DESC LIMIT 1
 	</select>
