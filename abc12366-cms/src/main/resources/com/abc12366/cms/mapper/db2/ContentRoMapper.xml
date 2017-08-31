@@ -377,23 +377,11 @@
 		LEFT JOIN cms_site d ON a.siteId = d.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
 		WHERE a.status = 2 and f.isDisplay != 0 and d.siteStatus != 0
-		<if test="typeId != null and typeId != ''">
-			AND a.typeId = #{typeId}
-		</if>
 		<if test="topicId != null and topicId != ''">
 			AND c.topicId = #{topicId}
 		</if>
-		<if test="tplContent != null and tplContent != ''">
-			AND b.tplContent = #{tplContent}
-		</if>
-		<if test="needRegenerate != null and needRegenerate != ''">
-			AND b.needRegenerate = #{needRegenerate}
-		</if>
-		<if test="startTime!=null and startTime!=''">
-			AND UNIX_TIMESTAMP(b.releaseDate) &gt;= #{startTime}
-		</if>
-		<if test="endTime!=null and endTime!=''">
-			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
+		<if test="channelName != null and channelName != ''">
+			AND f.channelName = #{channelName}
 		</if>
 		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
 	</select>

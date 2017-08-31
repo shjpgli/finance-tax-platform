@@ -306,26 +306,24 @@ public class ContentController {
      * 根据专题ID查找内容信息
      */
     @GetMapping(path = "/selectListBytopicId")
-    public ResponseEntity selectListBytopicId(@RequestParam(value = "startTime", required = false) String startTime,
-                                              @RequestParam(value = "endTime", required = false) String endTime,
-                                              @RequestParam(value = "tplContent", required = false) String tplContent,
+    public ResponseEntity selectListBytopicId(@RequestParam(value = "channelName", required = false) String channelName,
                                               @RequestParam(value = "topicId", required = false) String topicId) {
         //查询模型项
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("tplContent", tplContent);
+        dataMap.put("channelName", channelName);
         dataMap.put("topicId", topicId);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            if (startTime != null && !"".equals(startTime)) {
-                Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime() / 1000);
-            } else {
-                dataMap.put("needRegenerate", "0");
-            }
-        } catch (ParseException e) {
-            LOGGER.error("时间类转换异常：{}", e);
-            throw new RuntimeException("时间类型转换异常：{}", e);
-        }
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        try {
+//            if (startTime != null && !"".equals(startTime)) {
+//                Date startTime1 = sdf.parse(startTime);
+//                dataMap.put("startTime", startTime1.getTime() / 1000);
+//            } else {
+//                dataMap.put("needRegenerate", "0");
+//            }
+//        } catch (ParseException e) {
+//            LOGGER.error("时间类转换异常：{}", e);
+//            throw new RuntimeException("时间类型转换异常：{}", e);
+//        }
         List<ContentsListBo> contentBoList = contentService.selectListBytopicId(dataMap);
 //        List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
 //        for (ContentsListBo contentBo : contentBoList) {
