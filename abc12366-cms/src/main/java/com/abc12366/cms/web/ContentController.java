@@ -327,13 +327,13 @@ public class ContentController {
             throw new RuntimeException("时间类型转换异常：{}", e);
         }
         List<ContentsListBo> contentBoList = contentService.selectListBytopicId(dataMap);
-        List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
-        for (ContentsListBo contentBo : contentBoList) {
-            ContentSaveBo contentSaveBo = contentService.selectContent(contentBo.getContentId());
-            dataList.add(contentSaveBo);
-        }
-        LOGGER.info("{}", dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+//        List<ContentSaveBo> dataList = new ArrayList<ContentSaveBo>();
+//        for (ContentsListBo contentBo : contentBoList) {
+//            ContentSaveBo contentSaveBo = contentService.selectContent(contentBo.getContentId());
+//            dataList.add(contentSaveBo);
+//        }
+//        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", contentBoList));
     }
 
     /**
