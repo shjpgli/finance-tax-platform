@@ -22,6 +22,11 @@ public interface KnowledgeTagMapper {
     KnowledgeTag selectByPrimaryKey(@Param("id") String id);
 
     /**
+     * 查询（根据标签名称查询）
+     **/
+    KnowledgeTag selectByName(@Param("name") String name);
+
+    /**
      * 查询列表
      **/
     List<KnowledgeTag> selectList(@Param("keywords") String keywords);

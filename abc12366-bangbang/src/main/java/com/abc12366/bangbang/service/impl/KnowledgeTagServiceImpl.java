@@ -63,6 +63,13 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
 
     @Override
     public KnowledgeTag add(KnowledgeTag knowledgeTag) {
+        KnowledgeTag tag = knowledgeTagMapper.selectByName(knowledgeTag.getName());
+        if(tag != null && tag.getStatus()){
+            throw new ServiceException(4520);
+        }
+        if(tag != null && !tag.getStatus()){
+            throw new ServiceException(4521);
+        }
         try {
             knowledgeTag.setId(Utils.uuid());
             knowledgeTag.setCreateUser(UcUserCommon.getAdminId());
