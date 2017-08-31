@@ -31,8 +31,6 @@ public class InvoiceBO implements Serializable {
 	private String compName;
 	private Double amount;
 
-	@NotEmpty
-	@Size(max = 1)
 	private String type;
 
 	@NotEmpty

@@ -26,4 +26,5 @@ public interface UvipPriceMapper {
      **/
     int update(UvipPrice record);
 
+    int deleteByProductId(String productId);
 }

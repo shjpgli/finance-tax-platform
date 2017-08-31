@@ -25,4 +25,5 @@ public interface ProductSpecMapper {
      **/
     int update(ProductSpec record);
 
+    int deleteByProductId(String productId);
 }

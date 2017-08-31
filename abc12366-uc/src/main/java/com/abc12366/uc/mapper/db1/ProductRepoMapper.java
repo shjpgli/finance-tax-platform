@@ -25,4 +25,7 @@ public interface ProductRepoMapper {
      **/
     int update(ProductRepo record);
 
+    int deleteByGoodsId(@Param("goodsId") String goodsId);
+
+    int deleteByProductId(String delId);
 }

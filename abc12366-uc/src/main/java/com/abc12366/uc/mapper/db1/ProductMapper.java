@@ -29,4 +29,5 @@ public interface ProductMapper {
     int update(Product record);
 
 
+    int deleteById(String delId);
 }
