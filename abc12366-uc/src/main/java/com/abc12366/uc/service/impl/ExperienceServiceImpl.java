@@ -108,7 +108,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             switch (codex.getPeriod().toUpperCase()) {
                 case "D":
                     startTime = "(SELECT CURDATE())";
-                    endTime = "(SELECT CURDATE()+1)";
+                    endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
                     break;
                 case "M":
                     startTime = "(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))";

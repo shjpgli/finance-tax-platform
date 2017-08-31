@@ -74,7 +74,7 @@ public class Constant {
     public final static String WEIXIN_QRCODE = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=";
 
     //用户初始会员等级
-    public final static String USER_ORIGINAL_LEVEL = "LV0";
+    public final static String USER_ORIGINAL_LEVEL = "LV1";
 
     // 订单退货期限，单位：天
     public final static Integer ORDER_BACK_DAYS = 7;
