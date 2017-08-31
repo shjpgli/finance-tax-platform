@@ -13,6 +13,7 @@ import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.BaseObject;
+import com.abc12366.uc.model.PointsLog;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
@@ -249,10 +250,42 @@ public class AuthServiceImpl implements AuthService {
 
     private void computePoint(String userId) {
         Map<String, String> map = new HashMap<>();
+        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY)";
+        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
         map.put("userId", userId);
-        map.put("startTime", "");
-        map.put("endTime", "");
-        List<UcUserLoginLog> logList = loginLogRoMapper.selectListToday(map);
+        map.put("startTime", startTime);
+        map.put("endTime", endTime);
+        List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
+        //今日第一次登录才能获取经验值
+        if (logList == null || logList.size() < 1) {
+            //判断用户连续登录情况
+            int exp = 3;
+            if (isContinueLogin(userId, 1)) {
+                exp = 5;
+                if (isContinueLogin(userId, 2)) {
+                    exp = 8;
+                    if (isContinueLogin(userId, 3)) {
+                        exp = 10;
+                    }
+                }
+            }
+
+            PointsLog pointsLog = new PointsLog();
+        }
+    }
+
+    private boolean isContinueLogin(String userId, int i) {
+        Map<String, String> map = new HashMap<>();
+        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL" + i + "DAY)";
+        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL" + (i - 1) + "DAY)";
+        map.put("userId", userId);
+        map.put("startTime", startTime);
+        map.put("endTime", endTime);
+        List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
+        if (logList != null && logList.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
     private void insertLoginLog(String userId) {

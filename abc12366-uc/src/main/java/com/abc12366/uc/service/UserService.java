@@ -35,5 +35,5 @@ public interface UserService {
     void enableOrDisable(String id, String status);
     //String login(LoginBO loginBO, String token) throws Exception;
 
-    public void updateUserVipInfo(String userId, String vipLevel);
+    void updateUserVipInfo(String userId, String vipLevel);
 }
