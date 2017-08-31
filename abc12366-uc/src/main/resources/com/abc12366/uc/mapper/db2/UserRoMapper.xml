@@ -16,7 +16,7 @@
         select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
-        uu.vipLevel,usernameModifiedTimes,vipExpireDate
+        uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         (select uue.realName from uc_user_extend uue where uue.userId=uu.id) realName,
         (select uul.name from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
         levelName,
