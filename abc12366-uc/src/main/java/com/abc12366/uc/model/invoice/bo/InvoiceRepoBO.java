@@ -54,12 +54,10 @@ public class InvoiceRepoBO implements Serializable {
 
 	/**每本份数**/
     @NotNull
-    @Size(min = 1, max = 11)
 	private Integer share;
 
 	/**本数**/
     @NotNull
-    @Size(min = 1, max = 11)
 	private Integer book;
 
 	/**创建时间**/
@@ -88,6 +86,7 @@ public class InvoiceRepoBO implements Serializable {
 	/**备注**/
 	private String remark;
 
+    private Integer codeLength;
 
 	public void setId(String id){
 		this.id = id;
@@ -264,4 +263,12 @@ public class InvoiceRepoBO implements Serializable {
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName;
 	}
+
+    public Integer getCodeLength() {
+        return codeLength;
+    }
+
+    public void setCodeLength(Integer codeLength) {
+        this.codeLength = codeLength;
+    }
 }

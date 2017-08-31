@@ -96,6 +96,9 @@ public class GoodsBO implements Serializable {
     @NotEmpty
     private String isExchange;
 
+    /**会员等级**/
+    private String memberLevel;
+
     public String getId() {
         return this.id;
     }
@@ -358,5 +361,13 @@ public class GoodsBO implements Serializable {
 
     public void setIsExchange(String isExchange) {
         this.isExchange = isExchange;
+    }
+
+    public String getMemberLevel() {
+        return memberLevel;
+    }
+
+    public void setMemberLevel(String memberLevel) {
+        this.memberLevel = memberLevel;
     }
 }
