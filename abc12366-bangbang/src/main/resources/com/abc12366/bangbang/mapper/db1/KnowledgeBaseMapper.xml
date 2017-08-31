@@ -98,7 +98,7 @@
             </if>
             <if test="keywords != null and keywords !=''">
                     AND (
-                        t_base.subject LIKE CONCAT('%',#{keywords},'%')
+                        UPPER(t_base.subject) LIKE CONCAT('%',#{keywords},'%')
                         OR MATCH(t_base.content) AGAINST(#{keywords})
                         OR
                         t_base.id IN(

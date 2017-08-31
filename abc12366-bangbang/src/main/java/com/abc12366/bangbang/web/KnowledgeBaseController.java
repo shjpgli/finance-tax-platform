@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.web;
 
+import com.abc12366.bangbang.common.StringUtil;
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
@@ -9,6 +10,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +70,9 @@ public class KnowledgeBaseController {
                                      @RequestParam(value = "keywords", required = false) String keywords,
                                      @RequestParam(value = "type", required = false) String type) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-
+        if(!StringUtils.isEmpty(keywords)){
+            keywords = keywords.toUpperCase();
+        }
         KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, true, true);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
@@ -91,7 +95,9 @@ public class KnowledgeBaseController {
                                      @RequestParam(value = "isOpen", required = false) Boolean isOpen,
                                      @RequestParam(value = "status", required = false) Boolean status) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-
+        if(!StringUtils.isEmpty(keywords)){
+            keywords = keywords.toUpperCase();
+        }
         KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
