@@ -261,7 +261,7 @@ public class OrderServiceImpl implements OrderService {
             for (OrderProductBO orderProductBO : orderProductList) {
                 if ("4".equals(orderProductBO.getGoodsType())) {
                     OrderBO orderBO = selectByOrderNo(orderNo);
-                    GoodsBO goodsBO = goodsRoMapper.selectGoods(orderBO.getGoodsId());
+                    GoodsBO goodsBO = goodsRoMapper.selectGoods(orderProductBO.getGoodsId());
                     userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
 
                     VipLogBO vipLogBO = new VipLogBO();
