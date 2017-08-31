@@ -143,9 +143,9 @@ public class PayReturnController {
                     pointsLog.setLogType("ORDER_INCOME");
                     pointsLogService.insert(pointsLog);
 
-                    // 查询是否为会员服务订单，支付成功则更新会员状态
+                    LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", out_trade_no);
                     VipLogBO vipLogBO = orderService.updateVipLevel(out_trade_no);
-                    // 更新会员日志
+                    LOGGER.info("更新会员日志: {}", out_trade_no);
                     if (vipLogBO != null) {
                         vipLogService.insert(vipLogBO);
                     }
