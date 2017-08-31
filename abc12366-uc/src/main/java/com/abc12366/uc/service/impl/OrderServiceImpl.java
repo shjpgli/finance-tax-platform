@@ -206,7 +206,13 @@ public class OrderServiceImpl implements OrderService {
                     if ("5".equals(goodsType)) {
                         //会员充值
                         operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2");
-                    }else{
+                    }else if ("4".equals(goodsType)) {
+                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
+                        //修改用户信息，开通会员服务
+                        updateUserVipLevel(orderBO, goodsBO);
+                    } else if ("3".equals(goodsType)) {
+                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
+                    } else{
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
                     }
                 } else if ("POINTS".equals(orderBO.getTradeMethod())) {
@@ -215,10 +221,9 @@ public class OrderServiceImpl implements OrderService {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4");
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
-                        //TODO 还差开通服务接口调用
+                        updateUserVipLevel(orderBO, goodsBO);
                     }else if ("6".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
-                        //TODO 还差开通服务接口调用
                     }
                 }
             }
@@ -229,6 +234,17 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(order, temp);
         return temp;
 
+    }
+
+    private void updateUserVipLevel(OrderBO orderBO, GoodsBO goodsBO) {
+        User user = new User();
+        user.setId(orderBO.getUserId());
+        user.setVipLevel(goodsBO.getMemberLevel());
+        int uUpdate = userMapper.update(user);
+        if(uUpdate != 1){
+            LOGGER.info("修改用户失败：{}", user);
+            throw new ServiceException(4102);
+        }
     }
 
     /**

@@ -8,6 +8,11 @@
         WHERE id = #{id}
     </delete>
 
+    <delete id="deleteByProductId" parameterType="java.lang.String">
+        DELETE FROM uc_uvip_price
+        WHERE productId = #{productId}
+    </delete>
+
     <insert id="insert" parameterType="com.abc12366.uc.model.UvipPrice">
         INSERT INTO uc_uvip_price
         <trim prefix="(" suffix=")" suffixOverrides=",">
