@@ -199,7 +199,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("修改失败：{}", order);
                 throw new ServiceException(4102);
             }
-            amount = amount + order.getTotalPrice();
+            OrderBO orderBO = orderRoMapper.selectById(orderNo);
+            if(orderBO != null){
+                amount = amount + orderBO.getTotalPrice();
+            }
         }
         invoiceBO.setAmount(amount);
         Invoice invoice = new Invoice();

@@ -199,12 +199,14 @@ public class OrderServiceImpl implements OrderService {
             for (OrderProductBO orderProductBO : orderProductBOs) {
                 //查询产品库存信息
                 ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
-                List<DictBO> dictList  = orderProductBO.getProductBO().getDictList();
                 StringBuffer specInfo = new StringBuffer();
-                if(dictList != null && dictList.size() > 0){
-                    for(DictBO dictBO:dictList){
-                        specInfo.append(dictBO.getDictName()+"  ");
-                        specInfo.append(dictBO.getFieldValue());
+                if(orderProductBO.getProductBO() != null){
+                    List<DictBO> dictList  = orderProductBO.getProductBO().getDictList();
+                    if(dictList != null && dictList.size() > 0){
+                        for(DictBO dictBO:dictList){
+                            specInfo.append(dictBO.getDictName()+"  ");
+                            specInfo.append(dictBO.getFieldValue());
+                        }
                     }
                 }
 
