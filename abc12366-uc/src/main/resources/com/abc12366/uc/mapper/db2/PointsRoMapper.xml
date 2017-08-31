@@ -11,5 +11,20 @@
         where uu.id = #{userId}
     </select>
 
+    <select id="selectPointComputeLog" resultType="com.abc12366.uc.model.bo.PointComputeLogParam" parameterType="com.abc12366.uc.model.bo.PointComputeBO">
+        select id,userId,upointCodexId,timeType,createTime
+        from uc_upoint_compute_log
+        where userId=#{userId}
+        and upointCodexId=#{upointCodexId}
+        and timeType=#{timeType}
+        and createTime &gt;= #{startTime}
+        and createTime &lt; #{endTime}
+    </select>
+    <select id="selectCodexList" parameterType="com.abc12366.uc.model.bo.PointComputeBO" resultType="com.abc12366.uc.model.bo.PointCodex" >
+        select id,upointruleCode,clientType,upoint,period,degree,remark
+        from uc_upoints_codex
+        where uri=#{uri}
+        and clientType=#{clientType}
+    </select>
 
 </mapper>

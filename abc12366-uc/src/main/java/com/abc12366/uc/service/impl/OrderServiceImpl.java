@@ -8,9 +8,8 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.PointsService;
+import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +69,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UserRoMapper userRoMapper;
@@ -255,7 +257,7 @@ public class OrderServiceImpl implements OrderService {
                 if ("4".equals(orderProductBO.getGoodsType())) {
                     OrderBO orderBO = selectByOrderNo(orderNo);
                     GoodsBO goodsBO = goodsRoMapper.selectGoods(orderBO.getGoodsId());
-                    updateUserVipLevel(orderBO.getUserId(), goodsBO.getMemberLevel());
+                    userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
 
                     VipLogBO vipLogBO = new VipLogBO();
                     vipLogBO.setLevelId(goodsBO.getMemberLevel());
@@ -266,18 +268,6 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return null;
-    }
-
-    private void updateUserVipLevel(String userId, String vipLevel) {
-        User user = new User();
-        user.setId(userId);
-        user.setVipLevel(vipLevel);
-        user.setLastUpdate(new Date());
-        int uUpdate = userMapper.update(user);
-        if(uUpdate != 1){
-            LOGGER.info("修改用户失败：{}", user);
-            throw new ServiceException(4102);
-        }
     }
 
     /**

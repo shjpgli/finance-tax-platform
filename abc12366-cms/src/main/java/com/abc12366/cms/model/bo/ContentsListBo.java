@@ -32,6 +32,11 @@ public class ContentsListBo implements Serializable {
     private String title;
 
     /**
+     * 简短标题
+     **/
+    private String shortTitle;
+
+    /**
      * 标题颜色**varchar(10)
      **/
     private String titleColor;
@@ -157,6 +162,14 @@ public class ContentsListBo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getShortTitle() {
+        return shortTitle;
+    }
+
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public String getTitleColor() {

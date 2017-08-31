@@ -30,6 +30,8 @@ public class UserListBO {
     private String levelName;
     private String medal;
     private String medalIcon;
+    private Integer usernameModifiedTimes;
+    private Date vipExpireDate;
 
     public UserListBO() {
     }
@@ -208,5 +210,21 @@ public class UserListBO {
 
     public void setMedalIcon(String medalIcon) {
         this.medalIcon = medalIcon;
+    }
+
+    public Integer getUsernameModifiedTimes() {
+        return usernameModifiedTimes;
+    }
+
+    public void setUsernameModifiedTimes(Integer usernameModifiedTimes) {
+        this.usernameModifiedTimes = usernameModifiedTimes;
+    }
+
+    public Date getVipExpireDate() {
+        return vipExpireDate;
+    }
+
+    public void setVipExpireDate(Date vipExpireDate) {
+        this.vipExpireDate = vipExpireDate;
     }
 }

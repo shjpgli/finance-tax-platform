@@ -2,6 +2,8 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.ExpCodex;
+import com.abc12366.uc.model.bo.PointCodex;
 import com.abc12366.uc.model.bo.PointComputeBO;
 import com.abc12366.uc.model.bo.PointsBO;
 import com.abc12366.uc.service.PointsService;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -27,7 +30,7 @@ public class PointsController {
     @Autowired
     private PointsService pointsService;
 
-    //根据用户ID查询用户
+    //根据用户ID查询用户积分情况
     @GetMapping(path = "/{userId}")
     public ResponseEntity selectOne(@PathVariable String userId) {
         LOGGER.info("{}", userId);
@@ -40,5 +43,26 @@ public class PointsController {
     public ResponseEntity compute(@Valid @RequestBody PointComputeBO pointComputeBO){
         pointsService.compute(pointComputeBO);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    @PostMapping(path = "/codex/{upointCodexId}")
+    public ResponseEntity codex(@PathVariable String upointCodexId,@Valid @RequestBody List<PointCodex> codexList ) {
+        LOGGER.info("{}:{}", upointCodexId, codexList);
+        List<PointCodex> pointCodexList = pointsService.codex(upointCodexId, codexList);
+        return ResponseEntity.ok(Utils.kv("dataList", pointCodexList));
+    }
+
+    @DeleteMapping(path = "/codex/{id}")
+    public ResponseEntity deleteCodex(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        pointsService.deleteCodex(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    @GetMapping(path = "/codex/{upointCodexId}")
+    public ResponseEntity codexList(@PathVariable String upointCodexId) {
+        LOGGER.info("{}", upointCodexId);
+        List<PointCodex> codexList = pointsService.codexList(upointCodexId);
+        return ResponseEntity.ok(Utils.kv("dataList", codexList));
     }
 }

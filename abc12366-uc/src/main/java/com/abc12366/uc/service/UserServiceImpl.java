@@ -260,4 +260,20 @@ public class UserServiceImpl implements UserService {
         }
         return list;
     }
+
+    @Override
+    public void updateUserVipInfo(String userId, String vipLevel){
+        //会员到期日为明年的今天
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 1); // 年份加1
+        calendar.add(Calendar.MONTH, 0);// 月份不变
+        calendar.add(Calendar.DATE, 0);// 日期不变
+
+        User user = new User();
+        user.setId(userId);
+        user.setVipLevel(vipLevel);
+        user.setVipExpireDate(calendar.getTime());
+        user.setLastUpdate(new Date());
+        userMapper.update(user);
+    }
 }
