@@ -30,6 +30,7 @@ public class User {
     private Integer exp;
     private String vipLevel;
     private Integer usernameModifiedTimes;
+    private Date vipExpireDate;
 
     public User() {
     }
@@ -184,5 +185,13 @@ public class User {
 
     public void setUsernameModifiedTimes(Integer usernameModifiedTimes) {
         this.usernameModifiedTimes = usernameModifiedTimes;
+    }
+
+    public Date getVipExpireDate() {
+        return vipExpireDate;
+    }
+
+    public void setVipExpireDate(Date vipExpireDate) {
+        this.vipExpireDate = vipExpireDate;
     }
 }

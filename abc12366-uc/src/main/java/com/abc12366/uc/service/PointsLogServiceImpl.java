@@ -56,8 +56,7 @@ public class PointsLogServiceImpl implements PointsLogService {
         }
         User user = userRoMapper.selectOne(pointsLogBO.getUserId());
         if (user == null) {
-            LOGGER.warn("新增失败,userId为不存在用户的id,参数为：userId=" + pointsLogBO.getUserId());
-            throw new ServiceException(4101);
+            throw new ServiceException(4018);
         }
         //可用积分=上一次的可用积分+|-本次收入|支出
         int usablePoints = user.getPoints() + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
@@ -66,6 +65,7 @@ public class PointsLogServiceImpl implements PointsLogService {
         }
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
+        user.setLastUpdate(new Date());
         int userUpdateResult = userMapper.update(user);
         if (userUpdateResult != 1) {
             LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + pointsLogBO.getUserId());

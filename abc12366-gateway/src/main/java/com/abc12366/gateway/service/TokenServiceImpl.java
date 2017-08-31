@@ -109,35 +109,53 @@ public class TokenServiceImpl implements TokenService {
     private boolean userTokenAuth(String userToken, HttpServletRequest request) {
         LOGGER.info("{}:{}", userToken, request);
         boolean isAuth = false;
-        if (redisTemplate.hasKey(userToken)) {
-            String userInfo = valueOperations.get(userToken);
-            UCUserBO user = JSON.parseObject(userInfo, UCUserBO.class);
-            if (user != null) {
-                isAuth = true;
-                // 设置USER_ID，USER_INFO
-                request.setAttribute(Constant.USER_ID, user.getId());
-                request.setAttribute(Constant.USER_INFO, user);
-            }
-        } else {
-            try {
-                //调用uc的token校验接口，如果校验通过刷新token并返回true
-                String abc12366_uc = PropertiesUtil.getValue("abc12366.uc.url");
-                String check_url = "/user/token/" + userToken;
-                String body = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.GET, request);
-                if (body != null) {
-                    UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
-                    LOGGER.info("{}", userResponseBO);
-                    if (userResponseBO.getData() != null) {
-                        isAuth = true;
-                        // 设置USER_ID，USER_INFO
-                        request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
-                        request.setAttribute(Constant.USER_INFO, userResponseBO.getData());
-                    }
+        try {
+            //调用uc的token校验接口，如果校验通过刷新token并返回true
+            String abc12366_uc = PropertiesUtil.getValue("abc12366.uc.url");
+            String check_url = "/user/token/" + userToken;
+            String body = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.GET, request);
+            if (body != null) {
+                UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
+                LOGGER.info("{}", userResponseBO);
+                if (userResponseBO.getData() != null) {
+                    isAuth = true;
+                    // 设置USER_ID，USER_INFO
+                    request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
+                    request.setAttribute(Constant.USER_INFO, userResponseBO.getData());
                 }
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
             }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
         }
+//        if (redisTemplate.hasKey(userToken)) {
+//            String userInfo = valueOperations.get(userToken);
+//            UCUserBO user = JSON.parseObject(userInfo, UCUserBO.class);
+//            if (user != null) {
+//                isAuth = true;
+//                // 设置USER_ID，USER_INFO
+//                request.setAttribute(Constant.USER_ID, user.getId());
+//                request.setAttribute(Constant.USER_INFO, user);
+//            }
+//        } else {
+//            try {
+//                //调用uc的token校验接口，如果校验通过刷新token并返回true
+//                String abc12366_uc = PropertiesUtil.getValue("abc12366.uc.url");
+//                String check_url = "/user/token/" + userToken;
+//                String body = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.GET, request);
+//                if (body != null) {
+//                    UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
+//                    LOGGER.info("{}", userResponseBO);
+//                    if (userResponseBO.getData() != null) {
+//                        isAuth = true;
+//                        // 设置USER_ID，USER_INFO
+//                        request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
+//                        request.setAttribute(Constant.USER_INFO, userResponseBO.getData());
+//                    }
+//                }
+//            } catch (IOException e) {
+//                LOGGER.error(e.getMessage(), e);
+//            }
+//        }
         LOGGER.info("校验uc的token状态为: {}", isAuth);
         return isAuth;
     }

@@ -47,6 +47,11 @@ public interface OrderService {
     OrderBO submitOrder(OrderBO orderBO);
 
     /**
+     * 修改用户等级服务
+     */
+    VipLogBO updateVipLevel(String orderNo);
+
+    /**
      * 查询购物车列表
      */
     List<OrderBO> selectCartList(OrderBO order);
@@ -138,4 +143,5 @@ public interface OrderService {
      */
     OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO);
 
+    void confirmOrder(Order order);
 }

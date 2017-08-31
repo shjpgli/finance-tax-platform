@@ -170,17 +170,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         Date date = new Date();
         invoiceBO.setCreateTime(date);
         invoiceBO.setLastUpdate(date);
-        Invoice invoice = new Invoice();
-        BeanUtils.copyProperties(invoiceBO, invoice);
-        int ins = invoiceMapper.insert(invoice);
 
-        if (ins != 1) {
-            LOGGER.info("新增失败：{}", invoice);
-            throw new ServiceException(4101);
-        }
         String[] orderNos = invoiceBO.getOrderNos();
         OrderInvoice orderInvoice = new OrderInvoice();
-
+        Double amount = 0.0;
         for (String orderNo : orderNos) {
             orderInvoice.setId(Utils.uuid());
             orderInvoice.setInvoiceId(invoiceId);
@@ -189,12 +182,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             orderInvoice.setLastUpdate(date);
             OrderInvoice oInvoice = orderInvoiceRoMapper.selectByOrderNo(orderNo);
             if(oInvoice != null){
-                LOGGER.info("订单已开发票：{}", invoice);
                 throw new ServiceException(41999,"该订单"+orderNo+"已开发票");
             }
             int oInsert = orderInvoiceMapper.insert(orderInvoice);
             if (oInsert != 1) {
-                LOGGER.info("新增失败：{}", invoice);
+                LOGGER.info("新增失败：{}", orderInvoice);
                 throw new ServiceException(4101);
             }
             //修改订单是否已开发票状态
@@ -207,6 +199,16 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("修改失败：{}", order);
                 throw new ServiceException(4102);
             }
+            amount = amount + order.getTotalPrice();
+        }
+        invoiceBO.setAmount(amount);
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(invoiceBO, invoice);
+        int ins = invoiceMapper.insert(invoice);
+
+        if (ins != 1) {
+            LOGGER.info("新增失败：{}", invoice);
+            throw new ServiceException(4101);
         }
         insertInvoiceLog(invoiceId, invoiceBO.getUserId(), "索要发票");
 
@@ -524,11 +526,11 @@ public class InvoiceServiceImpl implements InvoiceService {
                     for (OrderProductBO orderProductBO:orderProductBOList){
                         invoiceXm = new InvoiceXm();
                         //商品名称，
-                        invoiceXm.setXmmc(orderProductBO.getGoodsBO().getInvoiceContentDetail());
+                        invoiceXm.setXmmc(orderProductBO.getSpecInfo());
                         //商品编码
                         invoiceXm.setSpbm("1010105000000000000");
                         //价格
-                        invoiceXm.setTotalAmt(orderProductBO.getSellingPrice());
+                        invoiceXm.setTotalAmt(invoiceBO.getAmount());
                         //数量
                         invoiceXm.setXmsl(Double.valueOf(orderProductBO.getNum()));
                         invoiceXm.setFphxz("0");

@@ -30,7 +30,8 @@
             <if test="points != null">points = #{points},</if>
             <if test="exp != null">exp = #{exp},</if>
             <if test="vipLevel != null">vipLevel = #{vipLevel},</if>
-            <if test="usernameModifiedTimes != null">usernameModifiedTimes = #{usernameModifiedTimes}</if>
+            <if test="usernameModifiedTimes != null">usernameModifiedTimes = #{usernameModifiedTimes},</if>
+            <if test="vipExpireDate != null">vipExpireDate = #{vipExpireDate}</if>
         </set>
         where id=#{id}
     </update>

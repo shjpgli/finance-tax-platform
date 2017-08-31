@@ -30,6 +30,7 @@ public class UserBO {
     private String vipLevel;
     private String realName;
     private Integer usernameModifiedTimes;
+    private Date vipExpireDate;
 
     public UserBO() {
     }
@@ -192,5 +193,13 @@ public class UserBO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public Date getVipExpireDate() {
+        return vipExpireDate;
+    }
+
+    public void setVipExpireDate(Date vipExpireDate) {
+        this.vipExpireDate = vipExpireDate;
     }
 }

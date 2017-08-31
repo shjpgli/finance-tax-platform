@@ -41,18 +41,9 @@
         d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate,
         d.lastUser,d.sort
         FROM
-        (
-        SELECT
-        specId,
-        COUNT(specId) counts
-        FROM
-        (
-        SELECT
-        id
-        FROM
-        uc_product
-        WHERE
-        goodsId = #{goodsId}
+        ( SELECT  specId, COUNT(specId) counts FROM (
+            SELECT id FROM uc_product WHERE
+            goodsId = #{goodsId}
         ) a
         LEFT JOIN uc_product_spec b ON a.id = b.productId
         GROUP BY

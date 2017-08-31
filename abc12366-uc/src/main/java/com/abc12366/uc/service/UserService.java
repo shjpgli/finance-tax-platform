@@ -34,4 +34,6 @@ public interface UserService {
     Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request);
     void enableOrDisable(String id, String status);
     //String login(LoginBO loginBO, String token) throws Exception;
+
+    void updateUserVipInfo(String userId, String vipLevel);
 }

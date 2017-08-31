@@ -8,6 +8,16 @@
         WHERE id = #{id}
     </delete>
 
+    <delete id="deleteByGoodsId" parameterType="java.lang.String">
+        DELETE FROM uc_product_repo
+        WHERE goodsId = #{goodsId}
+    </delete>
+
+    <delete id="deleteByProductId" parameterType="java.lang.String">
+        DELETE FROM uc_product_repo
+        WHERE productId = #{productId}
+    </delete>
+
     <insert id="insert" parameterType="com.abc12366.uc.model.ProductRepo">
         INSERT INTO uc_product_repo
         <trim prefix="(" suffix=")" suffixOverrides=",">

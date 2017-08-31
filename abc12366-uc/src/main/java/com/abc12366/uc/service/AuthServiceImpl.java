@@ -7,11 +7,13 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
-import com.abc12366.uc.mapper.db1.UserExtendMapper;
+import com.abc12366.uc.mapper.db1.UcUserLoginLogMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
+import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.BaseObject;
+import com.abc12366.uc.model.PointsLog;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
@@ -34,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +49,9 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
+
     private static Properties properties = new Properties("application.properties");
+
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -59,14 +64,18 @@ public class AuthServiceImpl implements AuthService {
     private TokenRoMapper tokenRoMapper;
     @Autowired
     private TokenMapper tokenMapper;
-    @Autowired
-    private UserExtendMapper userExtendMapper;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOperations;
+
+    @Autowired
+    private UcUserLoginLogMapper loginLogMapper;
+
+    @Autowired
+    private UcUserLoginLogRoMapper loginLogRoMapper;
 
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
@@ -159,12 +168,13 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4018);
         }
         //无效用户不允许登录
-        if(!user.getStatus()){
+        if (!user.getStatus()) {
             throw new ServiceException(4038);
         }
+
+        //登录密码进行处理，与表中的加密密码进行比对
         String password;
         try {
-            //登录密码进行处理，与表中的加密密码进行比对
             password = Utils.md5(Utils.md5(loginBO.getPassword()) + user.getSalt());
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
@@ -194,7 +204,7 @@ public class AuthServiceImpl implements AuthService {
 
         Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
         int result02;
-        //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
+        //假如uc_token表有记录（根据userId和appId），则更新，没有则新增
         String userToken = Utils.token(Utils.uuid());
         if (queryToken != null) {
             queryToken.setLastTokenResetTime(new Date());
@@ -217,6 +227,12 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
             throw new ServiceException(4021);
         }
+
+        //计算用户登录积分变化
+        computePoint(user.getId());
+        //记用户登录日志
+        insertLoginLog(user.getId());
+
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
         userBO.setPassword(null);
@@ -227,9 +243,57 @@ public class AuthServiceImpl implements AuthService {
         map.put("user", userBO);
 
         // 用户信息写入redis
-        valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS/2,
+        valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
                 TimeUnit.SECONDS);
         return map;
+    }
+
+    private void computePoint(String userId) {
+        Map<String, String> map = new HashMap<>();
+        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY)";
+        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
+        map.put("userId", userId);
+        map.put("startTime", startTime);
+        map.put("endTime", endTime);
+        List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
+        //今日第一次登录才能获取经验值
+        if (logList == null || logList.size() < 1) {
+            //判断用户连续登录情况
+            int exp = 3;
+            if (isContinueLogin(userId, 1)) {
+                exp = 5;
+                if (isContinueLogin(userId, 2)) {
+                    exp = 8;
+                    if (isContinueLogin(userId, 3)) {
+                        exp = 10;
+                    }
+                }
+            }
+
+            PointsLog pointsLog = new PointsLog();
+        }
+    }
+
+    private boolean isContinueLogin(String userId, int i) {
+        Map<String, String> map = new HashMap<>();
+        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL" + i + "DAY)";
+        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL" + (i - 1) + "DAY)";
+        map.put("userId", userId);
+        map.put("startTime", startTime);
+        map.put("endTime", endTime);
+        List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
+        if (logList != null && logList.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private void insertLoginLog(String userId) {
+        UcUserLoginLog loginLog = new UcUserLoginLog();
+        loginLog.setId(Utils.uuid());
+        loginLog.setUserId(userId);
+        loginLog.setCreateTime(new Date());
+        loginLogMapper.insert(loginLog);
     }
 
     @Override
@@ -295,7 +359,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         //无效用户不允许登录
-        if(!user.getStatus()){
+        if (!user.getStatus()) {
             throw new ServiceException(4038);
         }
 
