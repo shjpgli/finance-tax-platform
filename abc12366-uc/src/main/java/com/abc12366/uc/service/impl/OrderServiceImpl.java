@@ -8,6 +8,7 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -928,6 +929,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.warn("修改失败，参数：{}", order);
             throw new ServiceException(4102);
         }
+        insertOrderLog(Utils.getAdminId(), order.getOrderNo(), new Date(), "管理员已发货");
     }
 
     @Override

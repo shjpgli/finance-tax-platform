@@ -1,5 +1,8 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 
@@ -27,6 +30,8 @@ public class OrderOperationBO implements Serializable {
     /**
      * 备注
      */
+    @NotEmpty
+    @Length(max = 100)
     private String remark;
 
     /**
