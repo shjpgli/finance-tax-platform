@@ -104,6 +104,7 @@ public class PointsServiceImpl implements PointsService {
 
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(pointComputeBO.getUserId());
+        pointsLog.setRemark(pointCodex.getRemark());
         if (pointCodex.getUpoint() < 0) {
             pointsLog.setIncome(0);
             pointsLog.setOutgo(-pointCodex.getUpoint());

@@ -77,6 +77,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private UcUserLoginLogRoMapper loginLogRoMapper;
 
+    @Autowired
+    private ExperienceLogService experienceLogService;
+
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
      * 3、用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
@@ -249,15 +252,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void computePoint(String userId) {
-        Map<String, String> map = new HashMap<>();
-        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY)";
-        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
-        map.put("userId", userId);
-        map.put("startTime", startTime);
-        map.put("endTime", endTime);
-        List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
+//        Map<String, String> map = new HashMap<>();
+//        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY)";
+//        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
+//        map.put("userId", userId);
+//        map.put("startTime", startTime);
+//        map.put("endTime", endTime);
+//        List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
+
         //今日第一次登录才能获取经验值
-        if (logList == null || logList.size() < 1) {
+        if (!isContinueLogin(userId, 0)) {
             //判断用户连续登录情况
             int exp = 3;
             if (isContinueLogin(userId, 1)) {
@@ -270,14 +274,20 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
 
-            PointsLog pointsLog = new PointsLog();
+            ExperienceLogBO logBO = new ExperienceLogBO();
+            logBO.setId(Utils.uuid());
+            logBO.setIncome(exp);
+            logBO.setUserId(userId);
+            logBO.setOutgo(0);
+            logBO.setCreateTime(new Date());
+            experienceLogService.insert(logBO);
         }
     }
 
     private boolean isContinueLogin(String userId, int i) {
         Map<String, String> map = new HashMap<>();
-        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL" + i + "DAY)";
-        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL" + (i - 1) + "DAY)";
+        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + i + " DAY)";
+        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + (i - 1) + " DAY)";
         map.put("userId", userId);
         map.put("startTime", startTime);
         map.put("endTime", endTime);
