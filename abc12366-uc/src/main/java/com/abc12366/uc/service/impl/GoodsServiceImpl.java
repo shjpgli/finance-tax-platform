@@ -203,135 +203,132 @@ public class GoodsServiceImpl implements GoodsService {
                 newIds.add(productBO.getId());
             }
         }
-        Collection exists=new ArrayList<String>(newIds);
+        //获取老的ID，并且新ID中不存在的
+        /*Collection exists=new ArrayList<String>(newIds);
         Collection notexists=new ArrayList<String>(newIds);
         exists.removeAll(oldIds);
         //获取新的ID，并且老ID中不存在的
         List<String> addIds = new ArrayList<>();
         List<String> updateIds = new ArrayList<>();
-        List<String> delIds = new ArrayList<>();
         addIds.addAll(exists);
         //获取新的ID，并且老ID中存在的
         notexists.removeAll(exists);
-        updateIds.addAll(notexists);
-        //获取老的ID，并且新ID中不存在的
+        updateIds.addAll(notexists);*/
+        List<String> delIds = new ArrayList<>();
         Collection fExists=new ArrayList<String>(oldIds);
         fExists.removeAll(newIds);
         delIds.addAll(fExists);
+
+        List<ProductBO> productBOs = new ArrayList<ProductBO>();
+        int pInsert = 0;
+        for (ProductBO pBO : productList) {
+            if(pBO.getId() == null && "".equals(pBO.getId())){ //新增产品
+                ProductBO productBO = new ProductBO();
+                Product product = new Product();
+                BeanUtils.copyProperties(pBO, product);
+                String productId = Utils.uuid();
+                product.setId(productId);
+                product.setGoodsId(goodsId);
+                product.setCreateTime(date);
+                product.setLastUpdate(date);
+                //新增产品参数
+                pInsert = productMapper.insert(product);
+                if (pInsert != 1) {
+                    LOGGER.info("新增产品参数失败：{}", product);
+                    throw new ServiceException(4101);
+                }
+                BeanUtils.copyProperties(product, productBO);
+                //新增规格信息与产品对应关系
+                List<DictBO> dictList = pBO.getDictList();
+                for (DictBO dictBO : dictList) {
+                    ProductSpec productSpec = new ProductSpec();
+                    productSpec.setId(Utils.uuid());
+                    productSpec.setProductId(productId);
+                    productSpec.setSpecId(dictBO.getId());
+                    int sInsert = productSpecMapper.insert(productSpec);
+                    if (sInsert != 1) {
+                        LOGGER.info("新增产品规格信息失败：{}", productSpec);
+                        throw new ServiceException(4160);
+                    }
+                }
+                //新增产品会员价格
+                List<UvipPrice> uvipPriceList = pBO.getUvipPriceList();
+                List<UvipPrice> uvipList = new ArrayList<>();
+                for (UvipPrice uvipPrice : uvipPriceList) {
+                    String uvipPriceId = Utils.uuid();
+                    uvipPrice.setId(uvipPriceId);
+                    uvipPrice.setProductId(productId);
+                    uvipPrice.setCreateTime(date);
+                    uvipPrice.setLastUpdate(date);
+                    int sInsert = uvipPriceMapper.insert(uvipPrice);
+                    if (sInsert != 1) {
+                        LOGGER.info("新增产品单个规格会员价格失败：{}", uvipPrice);
+                        throw new ServiceException(4161);
+                    }
+                    uvipList.add(uvipPrice);
+                }
+                productBO.setUvipPriceList(uvipPriceList);
+                productBOs.add(productBO);
+            }else{
+                ProductBO productBO = new ProductBO();
+                Product product = new Product();
+                BeanUtils.copyProperties(pBO, product);
+                String productId = pBO.getId();
+                product.setId(productId);
+                product.setGoodsId(goodsId);
+                product.setCreateTime(date);
+                product.setLastUpdate(date);
+                //新增产品参数
+                int update = productMapper.update(product);
+                if (update != 1) {
+                    LOGGER.info("修改产品参数失败：{}", product);
+                    throw new ServiceException(4102);
+                }
+                BeanUtils.copyProperties(product, productBO);
+                //删除规格信息与产品对应关系
+                productSpecMapper.deleteByProductId(productId);
+                //新增规格信息与产品对应关系
+                List<DictBO> dictList = pBO.getDictList();
+                for (DictBO dictBO : dictList) {
+                    ProductSpec productSpec = new ProductSpec();
+                    productSpec.setId(Utils.uuid());
+                    productSpec.setProductId(productId);
+                    productSpec.setSpecId(dictBO.getId());
+                    int sInsert = productSpecMapper.insert(productSpec);
+                    if (sInsert != 1) {
+                        LOGGER.info("新增产品规格信息失败：{}", productSpec);
+                        throw new ServiceException(4160);
+                    }
+                }
+
+                //删除规格信息与产品对应关系
+                uvipPriceMapper.deleteByProductId(productId);
+                //新增产品会员价格
+                List<UvipPrice> uvipPriceList = pBO.getUvipPriceList();
+                List<UvipPrice> uvipList = new ArrayList<>();
+                for (UvipPrice uvipPrice : uvipPriceList) {
+                    String uvipPriceId = Utils.uuid();
+                    uvipPrice.setId(uvipPriceId);
+                    uvipPrice.setProductId(productId);
+                    uvipPrice.setCreateTime(date);
+                    uvipPrice.setLastUpdate(date);
+                    int sInsert = uvipPriceMapper.insert(uvipPrice);
+                    if (sInsert != 1) {
+                        LOGGER.info("新增产品单个规格会员价格失败：{}", uvipPrice);
+                        throw new ServiceException(4161);
+                    }
+                    uvipList.add(uvipPrice);
+                }
+                productBO.setUvipPriceList(uvipPriceList);
+                productBOs.add(productBO);
+            }
+        }
+
         for (String delId : delIds){//需要删除的数据
             productMapper.deleteById(delId);
             productSpecMapper.deleteByProductId(delId);
             uvipPriceMapper.deleteByProductId(delId);
             productRepoMapper.deleteByProductId(delId);
-        }
-        List<ProductBO> productBOs = new ArrayList<ProductBO>();
-        int pInsert = 0;
-        for (ProductBO pBO : productList) {
-            for (String addId : addIds){ //需要新增的数据
-                if(pBO.getId().equals(addId)){
-                    ProductBO productBO = new ProductBO();
-                    Product product = new Product();
-                    BeanUtils.copyProperties(pBO, product);
-                    String productId = Utils.uuid();
-                    product.setId(productId);
-                    product.setGoodsId(goodsId);
-                    product.setCreateTime(date);
-                    product.setLastUpdate(date);
-                    //新增产品参数
-                    pInsert = productMapper.insert(product);
-                    if (pInsert != 1) {
-                        LOGGER.info("新增产品参数失败：{}", product);
-                        throw new ServiceException(4101);
-                    }
-                    BeanUtils.copyProperties(product, productBO);
-                    //新增规格信息与产品对应关系
-                    List<DictBO> dictList = pBO.getDictList();
-                    for (DictBO dictBO : dictList) {
-                        ProductSpec productSpec = new ProductSpec();
-                        productSpec.setId(Utils.uuid());
-                        productSpec.setProductId(productId);
-                        productSpec.setSpecId(dictBO.getId());
-                        int sInsert = productSpecMapper.insert(productSpec);
-                        if (sInsert != 1) {
-                            LOGGER.info("新增产品规格信息失败：{}", productSpec);
-                            throw new ServiceException(4160);
-                        }
-                    }
-                    //新增产品会员价格
-                    List<UvipPrice> uvipPriceList = pBO.getUvipPriceList();
-                    List<UvipPrice> uvipList = new ArrayList<>();
-                    for (UvipPrice uvipPrice : uvipPriceList) {
-                        String uvipPriceId = Utils.uuid();
-                        uvipPrice.setId(uvipPriceId);
-                        uvipPrice.setProductId(productId);
-                        uvipPrice.setCreateTime(date);
-                        uvipPrice.setLastUpdate(date);
-                        int sInsert = uvipPriceMapper.insert(uvipPrice);
-                        if (sInsert != 1) {
-                            LOGGER.info("新增产品单个规格会员价格失败：{}", uvipPrice);
-                            throw new ServiceException(4161);
-                        }
-                        uvipList.add(uvipPrice);
-                    }
-                    productBO.setUvipPriceList(uvipPriceList);
-                    productBOs.add(productBO);
-                }
-            }
-            for (String updateId : updateIds){ //需要修改的数据
-                if(pBO.getId().equals(updateId)){
-                    ProductBO productBO = new ProductBO();
-                    Product product = new Product();
-                    BeanUtils.copyProperties(pBO, product);
-                    String productId = updateId;
-                    product.setId(productId);
-                    product.setGoodsId(goodsId);
-                    product.setCreateTime(date);
-                    product.setLastUpdate(date);
-                    //新增产品参数
-                    int update = productMapper.update(product);
-                    if (update != 1) {
-                        LOGGER.info("修改产品参数失败：{}", product);
-                        throw new ServiceException(4102);
-                    }
-                    BeanUtils.copyProperties(product, productBO);
-                    //删除规格信息与产品对应关系
-                    productSpecMapper.deleteByProductId(productId);
-                    //新增规格信息与产品对应关系
-                    List<DictBO> dictList = pBO.getDictList();
-                    for (DictBO dictBO : dictList) {
-                        ProductSpec productSpec = new ProductSpec();
-                        productSpec.setId(Utils.uuid());
-                        productSpec.setProductId(productId);
-                        productSpec.setSpecId(dictBO.getId());
-                        int sInsert = productSpecMapper.insert(productSpec);
-                        if (sInsert != 1) {
-                            LOGGER.info("新增产品规格信息失败：{}", productSpec);
-                            throw new ServiceException(4160);
-                        }
-                    }
-
-                    //删除规格信息与产品对应关系
-                    uvipPriceMapper.deleteByProductId(productId);
-                    //新增产品会员价格
-                    List<UvipPrice> uvipPriceList = pBO.getUvipPriceList();
-                    List<UvipPrice> uvipList = new ArrayList<>();
-                    for (UvipPrice uvipPrice : uvipPriceList) {
-                        String uvipPriceId = Utils.uuid();
-                        uvipPrice.setId(uvipPriceId);
-                        uvipPrice.setProductId(productId);
-                        uvipPrice.setCreateTime(date);
-                        uvipPrice.setLastUpdate(date);
-                        int sInsert = uvipPriceMapper.insert(uvipPrice);
-                        if (sInsert != 1) {
-                            LOGGER.info("新增产品单个规格会员价格失败：{}", uvipPrice);
-                            throw new ServiceException(4161);
-                        }
-                        uvipList.add(uvipPrice);
-                    }
-                    productBO.setUvipPriceList(uvipPriceList);
-                    productBOs.add(productBO);
-                }
-            }
         }
 
         bo.setProductBOList(productBOs);

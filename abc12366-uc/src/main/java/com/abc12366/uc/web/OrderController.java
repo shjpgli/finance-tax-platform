@@ -268,6 +268,19 @@ public class OrderController {
 
 
     /**
+     * 用户将订单改为支付中，虚拟订单
+     */
+    @PostMapping(path = "/confirm/{orderNo}/{userId}")
+    public ResponseEntity confirmOrder(@PathVariable("orderNo") String orderNo,@PathVariable("userId") String userId) {
+        LOGGER.info("{}{}", orderNo,userId);
+        Order order = new Order();
+        order.setOrderNo(orderNo);
+        order.setUserId(userId);
+        orderService.confirmOrder(order);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
      * 订单发货
      *
      * @return
@@ -345,7 +358,7 @@ public class OrderController {
      * @param userId
      * @param id
      * @return
-     */
+     *//*
     @DeleteMapping(path = "/{userId}/{id}")
     public ResponseEntity deleteCart(@PathVariable("userId") String userId, @PathVariable("id") String id) {
         OrderBO orderBO = new OrderBO();
@@ -353,13 +366,10 @@ public class OrderController {
         orderBO.setUserId(userId);
         orderService.deleteCart(orderBO);
         return ResponseEntity.ok(Utils.kv("data", orderBO));
-    }
+    }*/
 
     /**
      * 反馈虚拟产品订单信息
-     *
-     * @param orderBO
-     * @return
      */
     @PutMapping(path = "/feedback")
     public ResponseEntity feedback(@Valid @RequestBody OrderBO orderBO) {

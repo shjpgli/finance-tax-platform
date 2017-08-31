@@ -1,12 +1,7 @@
 package com.abc12366.uc.model.bo;
 
-import com.abc12366.uc.model.OrderProductSpec;
-import com.abc12366.uc.model.User;
-
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 
 /**

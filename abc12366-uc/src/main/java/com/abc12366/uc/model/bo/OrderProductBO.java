@@ -48,6 +48,8 @@ public class OrderProductBO implements Serializable {
 
     private GoodsBO goodsBO;
 
+    private ProductBO productBO;
+
     public String getProductId() {
         return this.productId;
     }
@@ -206,5 +208,13 @@ public class OrderProductBO implements Serializable {
 
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
+    }
+
+    public ProductBO getProductBO() {
+        return productBO;
+    }
+
+    public void setProductBO(ProductBO productBO) {
+        this.productBO = productBO;
     }
 }

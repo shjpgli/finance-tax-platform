@@ -125,7 +125,7 @@
               ]]>
             </if>
         </where>
-        order by  substring(r.id,#{codeLength})*1 desc,r.createTime desc
+        order by  substring(r.id,length(r.invoiceTypeCode))*1 desc,r.createTime desc
     </select>
 
     <!-- 查询列表 -->
