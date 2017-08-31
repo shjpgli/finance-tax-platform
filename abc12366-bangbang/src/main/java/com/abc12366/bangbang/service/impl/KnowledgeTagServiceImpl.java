@@ -87,7 +87,7 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
         try {
             knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
             knowledgeTag.setUpdateTime(new Date());
-            knowledgeTagMapper.updateByPrimaryKey(knowledgeTag);
+            knowledgeTagMapper.updateByPrimaryKeySelective(knowledgeTag);
             return knowledgeTag;
         }catch (Exception e){
             LOGGER.error("KnowledgeTagServiceImpl.modify()", e);
