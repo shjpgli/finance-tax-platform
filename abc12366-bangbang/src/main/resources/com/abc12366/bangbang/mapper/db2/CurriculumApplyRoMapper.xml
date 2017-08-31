@@ -19,8 +19,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumApplyBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_apply
+          applyId,	curriculumId,	a.userId,company,position,	u.username,	u.nickname,	applyTime,	a.phone,	signTime,	signIP,	signSite
+        FROM bb_curriculum_apply a left join bb_user u on a.userId = u.id
         WHERE 1=1
         <if test="nickname != null and nickname != ''">
             AND nickname like CONCAT('%',#{nickname},'%')

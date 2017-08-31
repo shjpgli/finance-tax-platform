@@ -19,11 +19,11 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumStudyBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_study
+        studyId,	curriculumId,	coursewareId,	s.userId,	u.username,	u.nickname,	(select l.level from bb_uvip_level l WHERE s.memberGrade = l.levelCode) memberGrade,	studyTime,	studyDuration,	coursewareDuration,	visitIP,	visitSite
+        FROM bb_curriculum_study s left join bb_user u on s.userId = u.id
         WHERE 1=1
         <if test="nickname != null and nickname != ''">
-            AND nickname like CONCAT('%',#{nickname},'%')
+            AND u.nickname like CONCAT('%',#{nickname},'%')
         </if>
         <if test="begintime != null">
             <![CDATA[
