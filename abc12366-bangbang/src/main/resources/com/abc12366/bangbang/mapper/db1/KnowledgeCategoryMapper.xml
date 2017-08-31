@@ -13,6 +13,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_category
+        ORDER BY SORT ASC
     </select>
     <!-- 查询（根据CODE查询） -->
     <select id="selectByCode" resultType="knowledgeCategory" parameterType="java.lang.String">
