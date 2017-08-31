@@ -76,7 +76,7 @@
 		<if test="channelId != null and channelId != ''">
 			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
-		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
 	</select>
 
     <!-- 查询（根据查询条件查询） -->
@@ -119,7 +119,7 @@
         <if test="siteId != null and siteId != ''">
             AND a.siteId = #{siteId}
         </if>
-        ORDER BY a.topLevel,e.views DESC
+        ORDER BY a.topLevel DESC,e.views DESC
     </select>
 
 	<!-- 查询（根据查询条件查询） -->
@@ -150,7 +150,7 @@
 		<if test="endTime!=null and endTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
 		</if>
-		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
@@ -248,7 +248,7 @@
 		<if test="endTime!=null and endTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
 		</if>
-		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
@@ -306,7 +306,7 @@
 		<if test="endTime!=null and endTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
 		</if>
-		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
 	</select>
 
     <!-- 查询财税资讯网 -->
@@ -343,7 +343,7 @@
         <if test="siteId != null and siteId != ''">
             AND d.siteId = #{siteId}
         </if>
-        ORDER BY a.topLevel,b.releaseDate DESC
+        ORDER BY a.topLevel DESC,b.releaseDate DESC
     </select>
 
 
@@ -383,7 +383,7 @@
 		<if test="channelName != null and channelName != ''">
 			AND f.channelName = #{channelName}
 		</if>
-		ORDER BY a.topLevel,a.recommendLevel,b.releaseDate DESC
+		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
 	</select>
 
 
