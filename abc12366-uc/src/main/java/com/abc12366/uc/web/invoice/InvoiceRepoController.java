@@ -76,7 +76,7 @@ public class InvoiceRepoController {
         }
         //获取发票类型编码长度，用户排序
         if(StringUtils.isEmpty(invoiceTypeCode)){
-            invoiceRepo.setCodeLength(0);
+            invoiceRepo.setCodeLength(5);
         }else {
             invoiceRepo.setCodeLength(invoiceTypeCode.length());
         }

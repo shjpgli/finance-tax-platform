@@ -138,4 +138,5 @@ public interface OrderService {
      */
     OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO);
 
+    void confirmOrder(Order order);
 }

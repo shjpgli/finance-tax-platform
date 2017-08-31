@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -73,6 +74,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private PointsLogMapper pointsLogMapper;
+
+    @Autowired
+    private PointsLogService pointsLogService;
 
     @Autowired
     private UvipPriceRoMapper uvipPriceRoMapper;
@@ -194,6 +198,15 @@ public class OrderServiceImpl implements OrderService {
             for (OrderProductBO orderProductBO : orderProductBOs) {
                 //查询产品库存信息
                 ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+                List<DictBO> dictList  = orderProductBO.getProductBO().getDictList();
+                StringBuffer specInfo = new StringBuffer();
+                if(dictList != null && dictList.size() > 0){
+                    for(DictBO dictBO:dictList){
+                        specInfo.append(dictBO.getDictName()+"  ");
+                        specInfo.append(dictBO.getFieldValue());
+                    }
+                }
+
                 if (prBO != null && prBO.getStock() < orderProductBO.getNum()) {
                     LOGGER.info("商品库存不足：{}", prBO);
                     throw new ServiceException(4903);
@@ -205,25 +218,19 @@ public class OrderServiceImpl implements OrderService {
                 if ("RMB".equals(orderBO.getTradeMethod())) {
                     if ("5".equals(goodsType)) {
                         //会员充值
-                        operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2");
-                    }else if ("4".equals(goodsType)) {
-                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
-                        //修改用户信息，开通会员服务
-                        updateUserVipLevel(orderBO, goodsBO);
-                    } else if ("3".equals(goodsType)) {
-                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
-                    } else{
-                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2");
+                        operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2",specInfo.toString());
+                    }else{
+                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2",specInfo.toString());
                     }
                 } else if ("POINTS".equals(orderBO.getTradeMethod())) {
                     //订单状态，1：新订单，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
                     if ("1".equals(goodsType) || "2".equals(goodsType)) {
-                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4");
+                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4",specInfo.toString());
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
-                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
+                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
                         updateUserVipLevel(orderBO, goodsBO);
                     }else if ("6".equals(goodsType)) {
-                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6");
+                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
                     }
                 }
             }
@@ -250,7 +257,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理人民币购买服务
      */
-    private void operationMoneyServiceOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus) {
+    private void operationMoneyServiceOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
         // 查询用户信息
         User user = userRoMapper.selectOne(orderBO.getUserId());
         orderProductBO.setOrderNo(orderBO.getOrderNo());
@@ -334,6 +341,7 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setIsReturn(goodsBO.getIsReturn());
         orderProductBO.setImageUrl(goodsBO.getImageUrl());
         orderProductBO.setGoodsType(goodsBO.getGoodsType());
+        orderProductBO.setSpecInfo(specInfo);
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -347,7 +355,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理人民币充值积分订单
      */
-    private void operationMoneyRechargeOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus) {
+    private void operationMoneyRechargeOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
         // 查询用户信息
         User user = userRoMapper.selectOne(orderBO.getUserId());
         orderProductBO.setOrderNo(orderBO.getOrderNo());
@@ -410,6 +418,7 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setIsReturn(goodsBO.getIsReturn());
         orderProductBO.setImageUrl(goodsBO.getImageUrl());
         orderProductBO.setGoodsType(goodsBO.getGoodsType());
+        orderProductBO.setSpecInfo(specInfo);
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -423,7 +432,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理积分订单
      */
-    private void operationPointsOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus) {
+    private void operationPointsOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
         // 查询用户积分
         User user = userRoMapper.selectOne(orderBO.getUserId());
         orderProductBO.setOrderNo(orderBO.getOrderNo());
@@ -535,6 +544,7 @@ public class OrderServiceImpl implements OrderService {
         orderProductBO.setIsReturn(goodsBO.getIsReturn());
         orderProductBO.setImageUrl(goodsBO.getImageUrl());
         orderProductBO.setGoodsType(goodsBO.getGoodsType());
+        orderProductBO.setSpecInfo(specInfo);
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -811,6 +821,8 @@ public class OrderServiceImpl implements OrderService {
                         orderMapper.update(order);
                         insertPoints(orderBO);
                         //TODO 开通服务
+                        //修改用户信息，开通会员服务
+                        updateUserVipLevel(orderBO, goodsBO);
                     }else if(goodsType.equals("5") || goodsType.equals("6")){
                         order.setOrderStatus("6");
                         orderMapper.update(order);
@@ -839,24 +851,14 @@ public class OrderServiceImpl implements OrderService {
         int userPoints = user.getPoints();
         int giftPoints = orderBO.getGiftPoints();
         int usablePoints = userPoints + giftPoints;
-        //uc_user的points字段和uc_point_log的usablePoints字段都要更新
-        user.setPoints(usablePoints);
-        int userUpdateResult = userMapper.update(user);
-        if (userUpdateResult != 1) {
-            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
-            throw new ServiceException(4101);
-        }
-        PointsLog pointsLog = new PointsLog();
+
+        PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
         pointsLog.setId(Utils.uuid());
         pointsLog.setIncome(giftPoints);
         pointsLog.setCreateTime(new Date());
         pointsLog.setUsablePoints(usablePoints);
-        int result = pointsLogMapper.insert(pointsLog);
-        if(result != 1){
-            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
-            throw new ServiceException(4101);
-        }
+        pointsLogService.insert(pointsLog);
     }
 
     @Override
@@ -983,6 +985,16 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4102);
         }
         return orderUpdateBO;
+    }
+
+    @Override
+    public void confirmOrder(Order order) {
+        order.setOrderStatus("6");
+        int update = orderMapper.update(order);
+        if(update != 1){
+            LOGGER.warn("修改失败，参数：{}", order);
+            throw new ServiceException(4102);
+        }
     }
 
 }
