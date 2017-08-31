@@ -57,6 +57,29 @@ public class EventController {
     }
 
     /**
+     * 查询活动列表信息
+     */
+    @GetMapping(path = "/selectEventList")
+    public ResponseEntity selectEventList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "category", required = false) String category,
+                                     @RequestParam(value = "begintime", required = false) String begintime,
+                                     @RequestParam(value = "endtime", required = false) String endtime,
+                                     @RequestParam(value = "status", required = false) String status) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//标题
+        dataMap.put("status", status);//状态
+        dataMap.put("category", category);//活动分类
+        dataMap.put("begintime", begintime);//开始时间
+        dataMap.put("endtime", endtime);//结束时间
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<EventListBo> dataList = eventService.selectList(dataMap);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
+
+    /**
      * 新增活动
      */
     @PostMapping
