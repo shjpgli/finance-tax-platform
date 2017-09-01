@@ -819,7 +819,8 @@ public class OrderServiceImpl implements OrderService {
                 Order order = new Order();
                 order.setOrderNo(orderNo);
                 order.setPayMethod(orderPayBO.getPayMethod());
-                order.setUserId(orderPayBO.getUserId());
+                //order.setUserId(orderPayBO.getUserId());
+                Order tempOrder = orderRoMapper.selectByPrimaryKey(orderNo);
                 if(isPay == 1){
                     order.setOrderStatus("3");
                     int update = orderMapper.update(order);
@@ -827,27 +828,32 @@ public class OrderServiceImpl implements OrderService {
                         LOGGER.warn("修改失败，参数：{}", order);
                         throw new ServiceException(4102);
                     }
+
+                    insertOrderLog(tempOrder.getUserId(),orderNo,new Date(),"订单支付中");
                 }else if(isPay == 2){
                     //查询商品类型，商品类型，1.虚拟，2.实物，3.服务，4.会员服务，5.会员充值，6.学堂服务
                     if(goodsType.equals("1") || goodsType.equals("2")){
                         order.setOrderStatus("4");
                         orderMapper.update(order);
                         insertPoints(orderBO);
+                        insertOrderLog(tempOrder.getUserId(),orderNo,new Date(),"订单支付成功，等待发货");
                     }else if(goodsType.equals("3") || goodsType.equals("4")){
                         order.setOrderStatus("6");
                         orderMapper.update(order);
                         insertPoints(orderBO);
                         //修改用户信息，开通会员服务
                         userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
+                        insertOrderLog(tempOrder.getUserId(),orderNo,new Date(),"订单支付成功，已完成");
                     }else if(goodsType.equals("5") || goodsType.equals("6")){
                         order.setOrderStatus("6");
                         orderMapper.update(order);
                         insertPoints(orderBO);
-
+                        insertOrderLog(tempOrder.getUserId(),orderNo,new Date(),"订单支付成功，已完成");
                     }
                 }else if(isPay == 3){
                     order.setOrderStatus("2");
                     orderMapper.update(order);
+                    insertOrderLog(tempOrder.getUserId(),orderNo,new Date(),"订单支付失败，请重新支付");
                 }
 
             }
@@ -922,7 +928,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void selectImprotOrder(List<OrderBO> orderBOList) {
+    public void selectImportOrder(List<OrderBO> orderBOList) {
         for(OrderBO bo:orderBOList){
             Order order = new Order();
             BeanUtils.copyProperties(bo,order);

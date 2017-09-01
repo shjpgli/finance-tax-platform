@@ -226,7 +226,7 @@ public class OrderController {
     @PostMapping(path = "/import")
     public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList) {
         LOGGER.info("{}", orderBOList);
-        orderService.selectImprotOrder(orderBOList);
+        orderService.selectImportOrder(orderBOList);
         return ResponseEntity.ok(Utils.kv());
     }
 
