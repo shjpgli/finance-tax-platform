@@ -6,6 +6,9 @@ import com.abc12366.uc.mapper.db1.WxGzhMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.service.IWxGzhService;
+import com.abc12366.uc.util.wx.WechatUrl;
+import com.abc12366.uc.util.wx.WxConnectFactory;
+import com.abc12366.uc.util.wx.WxGzhClient;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("iWxGzhService")
 public class WxGzhServiceimpl implements IWxGzhService {
@@ -98,4 +104,15 @@ public class WxGzhServiceimpl implements IWxGzhService {
 	public void updatejsapiTicket(GzhInfo gzhInfo) {
     	wxGzhMapper.updatejsapiTicket(gzhInfo);
     }
+
+
+	@Override
+	public String getWxDownFilePath(String mediaId) {
+		Map<String, String> tks = new HashMap<String, String>();
+        tks.put("access_token", WxGzhClient.getInstanceToken());
+        tks.put("media_id", mediaId);
+        InputStream inputStream=WxConnectFactory.getWXFile(WechatUrl.WXIMG_DOWN, tks);
+        
+		return null;
+	}
 }

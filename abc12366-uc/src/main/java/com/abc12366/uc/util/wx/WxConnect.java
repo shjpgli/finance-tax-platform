@@ -128,16 +128,7 @@ public class WxConnect<T> {
             OutputStream out = new DataOutputStream(conn.getOutputStream());
             // 输出表头
             out.write(head);
-
-	        /*DataInputStream in = new DataInputStream(new FileInputStream(new File
-	        ("D:\\hurocms\\Tomcat\\webapps\\huro_cms\\images\\1.png")));
-	        int bytes = 0;
-	        byte[] bufferOut = new byte[1024];
-	        while ((bytes = in.read(bufferOut)) != -1) {
-	           out.write(bufferOut, 0, bytes);
-	        }
-	        in.close();*/
-
+            
             byte[] buff = listToByteArray(this.file.getFileContent());
             out.write(buff);
             // 结尾部分
@@ -241,6 +232,31 @@ public class WxConnect<T> {
 
         }
     }
+    
+    public InputStream getWxFile(){
+    	try {
+    		TrustManager[] tm = {new MyX509TrustManager()};
+            SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
+            sslContext.init(null, tm, new java.security.SecureRandom());
+            SSLSocketFactory ssf = sslContext.getSocketFactory();
+			URL url = new URL(requestUrl);
+			HttpsURLConnection http = (HttpsURLConnection) url.openConnection(); 
+			http.setSSLSocketFactory(ssf);
+			http.setRequestMethod(requestMethod);
+			http.setRequestProperty("Content-Type","application/x-www-form-urlencoded"); 
+			http.setDoOutput(true); 
+			http.setDoInput(true);
+			http.setConnectTimeout(10000);
+			http.setReadTimeout(30000);
+			http.connect(); 
+			InputStream is = http.getInputStream();
+			return is;
+		}  catch (Exception e) {
+			LOGGER.error("微信服务器下载文件异常", e);
+			return null;
+		}
+    }
+    
 
     @SuppressWarnings("unchecked")
     T parseObject() {
