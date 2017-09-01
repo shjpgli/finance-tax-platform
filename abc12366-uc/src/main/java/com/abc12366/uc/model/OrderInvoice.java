@@ -30,6 +30,8 @@ public class OrderInvoice implements Serializable {
     /****/
     private java.util.Date lastUpdate;
 
+    private Boolean status;
+
     public String getId() {
         return this.id;
     }
@@ -70,4 +72,11 @@ public class OrderInvoice implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }
