@@ -45,13 +45,6 @@ public class PayReturnController {
     private TradeLogService tradeLogService;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private OrderExchangeRoMapper orderExchangeRoMapper;
-    @Autowired
-    private PointsLogService pointsLogService;
-
-    @Autowired
-    private VipLogService vipLogService;
 
     @SuppressWarnings("rawtypes")
     @PostMapping("/validate")
@@ -132,23 +125,7 @@ public class PayReturnController {
                     orderPayBO.setOrderNo(out_trade_no);
                     orderPayBO.setIsPay(2);
                     orderPayBO.setPayMethod("ALIPAY");
-                    orderService.paymentOrder(orderPayBO, "");
-
-                    ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(out_trade_no);
-                    PointsLogBO pointsLog = new PointsLogBO();
-                    pointsLog.setRuleId(out_trade_no);
-                    pointsLog.setIncome(eco.getGiftPoints());
-                    pointsLog.setUserId(eco.getUserId());
-                    pointsLog.setRemark("用户下单");
-                    pointsLog.setLogType("ORDER_INCOME");
-                    pointsLogService.insert(pointsLog);
-
-                    LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", out_trade_no);
-                    VipLogBO vipLogBO = orderService.updateVipLevel(out_trade_no);
-                    LOGGER.info("更新会员日志: {}", out_trade_no);
-                    if (vipLogBO != null) {
-                        vipLogService.insert(vipLogBO);
-                    }
+                    orderService.paymentOrder(orderPayBO);
                 }
             }
             return ResponseEntity.ok(Utils.kv("data", "OK"));

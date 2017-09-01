@@ -261,7 +261,7 @@ public class OrderController {
     @PostMapping(path = "/payment")
     public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"");
+        OrderBO bo = orderService.paymentOrder(orderPayBO);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
