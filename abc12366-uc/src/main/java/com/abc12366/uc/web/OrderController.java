@@ -268,7 +268,7 @@ public class OrderController {
 
 
     /**
-     * 用户将订单改为支付中，虚拟订单
+     * 用户确认收货
      */
     @PostMapping(path = "/confirm/{orderNo}/{userId}")
     public ResponseEntity confirmOrder(@PathVariable("orderNo") String orderNo,@PathVariable("userId") String userId) {

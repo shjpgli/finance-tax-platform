@@ -189,7 +189,7 @@
         iv.deliveryFee, iv.isInsured, iv.insuredFee, iv.payMethod
         FROM uc_invoice iv
         LEFT JOIN uc_order_invoice uoi ON uoi.invoiceId = iv.id
-        WHERE uoi.orderNo = #{orderNo}
+        WHERE  uoi.status = true and uoi.orderNo = #{orderNo}
     </select>
 
     <!--获取订单日志-->
