@@ -4,9 +4,10 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.VipLogRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLogListBO" parameterType="java.lang.String">
-        SELECT uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level, uulo.createTime
+        SELECT uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level,
+        (select vipExpireDate from uc_user uu where uu.id=uulo.userId) createTime
         from uc_uvip_log uulo left join uc_uvip_level uule
-        ON uulo.levelId = uule.Id
+        ON uulo.levelId = uule.levelCode
         where uulo.userId = #{userId}
         ORDER BY createTime DESC
     </select>
