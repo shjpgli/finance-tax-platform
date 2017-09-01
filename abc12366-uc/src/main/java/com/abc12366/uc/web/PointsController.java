@@ -2,7 +2,6 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.bo.ExpCodex;
 import com.abc12366.uc.model.bo.PointCodex;
 import com.abc12366.uc.model.bo.PointComputeBO;
 import com.abc12366.uc.model.bo.PointsBO;

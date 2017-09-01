@@ -286,13 +286,6 @@ public class AuthServiceImpl implements AuthService {
         calendar2.set(Calendar.SECOND,0);
         calendar2.set(Calendar.MINUTE,0);
 
-
-//        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + i + " DAY)";
-//        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + (i - 1) + " DAY)";
-        System.out.println("-----------------" + calendar1.getTime());
-        System.out.println("+++++++++++++++++" +calendar2.getTime());
-
-
         map.put("userId", userId);
         map.put("startTime", calendar1.getTime());
         map.put("endTime", calendar2.getTime());
@@ -420,6 +413,11 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
             throw new ServiceException(4101);
         }
+
+        //计算用户登录经验值变化
+        computeExp(user.getId());
+        //记用户登录日志
+        insertLoginLog(user.getId());
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);

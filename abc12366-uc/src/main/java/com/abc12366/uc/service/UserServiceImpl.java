@@ -146,7 +146,9 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userUpdateBO, user);
 
         user.setLastUpdate(new Date());
-        user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
+        if(user.getUsername()!=null){
+            user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
+        }
         int result = userMapper.update(user);
         if (result != 1) {
             LOGGER.warn("修改失败");
