@@ -136,10 +136,10 @@ public class WxGzhServiceimpl implements IWxGzhService {
 			String password = "hngs_123";
 			
 			ChannelSftp sftp = sf.connect(host, port, username, password);
-			Map<String, String> map = sf.uploadByByte("images/"+userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);
+			Map<String, String> map = sf.uploadByByte(userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);
 			sftp.disconnect();
 			sftp.exit();
-			return map.get("filePath");
+			return "/images"+map.get("filePath");
 		} catch (Exception e) {
 			LOGGER.info("下载微信服务器文件失败",e);
 			throw new ServiceException(9999,"下载微信服务器文件失败");
