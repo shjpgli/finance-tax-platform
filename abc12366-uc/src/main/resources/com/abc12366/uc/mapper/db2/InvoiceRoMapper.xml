@@ -200,7 +200,7 @@
         o.expressNo, o.remark
         FROM uc_order o
         LEFT JOIN uc_order_invoice uoi ON uoi.orderNo = o.orderNo
-        WHERE uoi.invoiceId = #{invoiceId}
+        WHERE uoi.status = true and uoi.invoiceId = #{invoiceId}
     </select>
 
     <!-- 通用查询结果列-->
@@ -304,7 +304,7 @@
             </if>
         </where>
 
-        order by i.status ASC
+        order by i.createTime desc,i.status ASC
 
     </select>
 

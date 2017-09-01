@@ -100,7 +100,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 
     /**
-     * 修改购物车
+     * 修改发票申请
      *
      * @param invoiceBO
      * @return
@@ -138,7 +138,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     /**
-     * 根据订单ID和用户ID删除购物车
+     * 根据订单ID和用户ID删除发票订单
      *
      * @param invoiceBO
      * @return
@@ -451,7 +451,6 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("发票信息修改错误：{}", invoice);
                 throw new ServiceException(4147);
             }
-
         }
         //退票状态=4：已收货时，修改订单状态
         if (invoiceBack.getStatus() != null && "4".equals(invoiceBack.getStatus())) {
@@ -469,8 +468,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                     throw new ServiceException(4148);
                 }
             }
-            //删除订单和发票对应关系
-            orderInvoiceMapper.deleteByInvoiceId(invoice.getId());
+            //修改订单和发票对应关系
+            //orderInvoiceMapper.deleteByInvoiceId(invoice.getId());
+            orderInvoiceMapper.updateByInvoiceId(invoice.getId());
 
         }
         invoiceBack.setLastUpdate(new Date());
@@ -632,8 +632,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
             }
             invoice.setStatus("3");
-            //删除订单和发票对应关系
-            orderInvoiceMapper.deleteByInvoiceId(invoiceCheckBO.getId());
+            //修改订单和发票对应关系
+            orderInvoiceMapper.updateByInvoiceId(invoiceCheckBO.getId());
         }
         invoice.setRemark(invoiceCheckBO.getRemark());
         invoice.setLastUpdate(new Date());

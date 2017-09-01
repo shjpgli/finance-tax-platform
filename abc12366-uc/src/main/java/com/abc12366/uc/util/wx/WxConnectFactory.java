@@ -1,6 +1,8 @@
 package com.abc12366.uc.util.wx;
 
 import com.abc12366.uc.model.weixin.bo.message.FileContent;
+
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -30,6 +32,13 @@ public class WxConnectFactory {
         connect.initJson();
         connect.httpPostFile();
         return connect.parseObject();
+    }
+    
+    
+    public static InputStream getWXFile(WechatUrl url, Map<String, String> headparamters){
+    	WxConnect<Object> connect = new WxConnect<Object>(url, HTTP_GET, headparamters, null, null);
+    	connect.initJson();
+    	return connect.getWxFile();
     }
 
 

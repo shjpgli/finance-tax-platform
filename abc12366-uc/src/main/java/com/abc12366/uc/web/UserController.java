@@ -7,6 +7,7 @@ import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
 import com.abc12366.uc.service.AuthService;
+import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.UserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -41,6 +42,23 @@ public class UserController {
 
     @Autowired
     private AuthService authService;
+    
+    @Autowired
+    private IWxGzhService iWxGzhService;
+    
+    @SuppressWarnings("rawtypes")
+	@PutMapping("/changeheadbywx/{userid}/{mediaid}")
+    public ResponseEntity changeHeadByWx(@PathVariable("userid")String userid,@PathVariable("mediaid")String mediaid){
+    	String filePath=iWxGzhService.getWxDownFilePath(userid, mediaid);
+    	
+    	UserUpdateBO userUpdateDTO=new UserUpdateBO();
+    	userUpdateDTO.setId(userid);
+    	userUpdateDTO.setUserPicturePath(filePath);
+    	UserBO user = userService.update(userUpdateDTO);
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
+    }
+    
 
     //查询用户列表，支持多标签查询
     @GetMapping
@@ -163,9 +181,9 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @PutMapping(path = "/updatevip")
-    public ResponseEntity updateVip(){
-        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
-        return ResponseEntity.ok(Utils.kv());
-    }
+//    @PutMapping(path = "/updatevip")
+//    public ResponseEntity updateVip(){
+//        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
+//        return ResponseEntity.ok(Utils.kv());
+//    }
 }

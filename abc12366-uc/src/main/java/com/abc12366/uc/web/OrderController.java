@@ -226,7 +226,7 @@ public class OrderController {
     @PostMapping(path = "/import")
     public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList) {
         LOGGER.info("{}", orderBOList);
-        orderService.selectImprotOrder(orderBOList);
+        orderService.selectImportOrder(orderBOList);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -261,14 +261,14 @@ public class OrderController {
     @PostMapping(path = "/payment")
     public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"");
+        OrderBO bo = orderService.paymentOrder(orderPayBO);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
 
     /**
-     * 用户将订单改为支付中，虚拟订单
+     * 用户确认收货
      */
     @PostMapping(path = "/confirm/{orderNo}/{userId}")
     public ResponseEntity confirmOrder(@PathVariable("orderNo") String orderNo,@PathVariable("userId") String userId) {

@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
     @Override
     public void enableOrDisable(String id, String status) {
         LOGGER.info("{}:{}", id, status);
@@ -103,6 +104,7 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4624);
         }
     }
+
     @Override
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
@@ -146,7 +148,9 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userUpdateBO, user);
 
         user.setLastUpdate(new Date());
-        user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
+        if (user.getUsername() != null) {
+            user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
+        }
         int result = userMapper.update(user);
         if (result != 1) {
             LOGGER.warn("修改失败");
@@ -262,16 +266,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserVipInfo(String userId, String vipLevel){
+    public void updateUserVipInfo(String userId, String vipLevel) {
         //会员到期日为明年的今天
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 1); // 年份加1
         calendar.add(Calendar.MONTH, 0);// 月份不变
         calendar.add(Calendar.DATE, 0);// 日期不变
 
+        User userTmp = userRoMapper.selectOne(userId);
+        if (userTmp == null) {
+            throw new ServiceException(4018);
+        }
+
+        //用户会员等级发生变化，则会员有效时间直接覆盖原有的，否则延长一年
+        if(vipLevel.trim().toUpperCase().equals(userTmp.getVipLevel())){
+            calendar.setTime(userTmp.getVipExpireDate());
+            calendar.add(Calendar.YEAR, 1); // 年份加1
+        }
         User user = new User();
         user.setId(userId);
-        user.setVipLevel(vipLevel);
+        user.setVipLevel(vipLevel.trim().toUpperCase());
         user.setVipExpireDate(calendar.getTime());
         user.setLastUpdate(new Date());
         userMapper.update(user);

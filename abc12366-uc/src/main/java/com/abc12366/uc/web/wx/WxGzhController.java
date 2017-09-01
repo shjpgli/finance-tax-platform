@@ -44,7 +44,6 @@ public class WxGzhController {
         PageInfo<GzhInfo> pageInfo = new PageInfo<GzhInfo>(dataList);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
                 "total", pageInfo.getTotal()));
-
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }

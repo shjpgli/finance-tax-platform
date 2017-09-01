@@ -26,4 +26,6 @@ public interface OrderInvoiceMapper {
     int update(OrderInvoice record);
 
     int deleteByInvoiceId(@Param("invoiceId") String invoiceId);
+
+    int updateByInvoiceId(@Param("invoiceId") String invoiceId);
 }

@@ -13,6 +13,7 @@ public class VipLogBO {
     private String source;
     private String levelId;
     private Date createTime;
+    private Date vipExpireDate;
 
     public VipLogBO() {
     }
@@ -58,14 +59,11 @@ public class VipLogBO {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "VipLogBO{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", source='" + source + '\'' +
-                ", levelId='" + levelId + '\'' +
-                ", createTime=" + createTime +
-                '}';
+    public Date getVipExpireDate() {
+        return vipExpireDate;
+    }
+
+    public void setVipExpireDate(Date vipExpireDate) {
+        this.vipExpireDate = vipExpireDate;
     }
 }
