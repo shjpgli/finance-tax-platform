@@ -20,6 +20,6 @@ public interface IWxGzhService {
 
 	void updatejsapiTicket(GzhInfo gzhInfo);
 	
-	String getWxDownFilePath(String mediaId);
+	String getWxDownFilePath(String userId,String mediaId);
 
 }

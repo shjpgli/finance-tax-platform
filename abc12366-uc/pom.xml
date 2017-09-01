@@ -217,6 +217,11 @@
             <artifactId>spring-context-support</artifactId>
             <version>4.3.6.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.42</version>
+        </dependency>
 
     </dependencies>
 

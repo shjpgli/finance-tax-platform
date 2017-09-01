@@ -6,18 +6,24 @@ import com.abc12366.uc.mapper.db1.WxGzhMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.service.IWxGzhService;
+import com.abc12366.uc.util.SFTPUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxGzhClient;
 import com.github.pagehelper.PageHelper;
+import com.jcraft.jsch.ChannelSftp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -106,13 +112,48 @@ public class WxGzhServiceimpl implements IWxGzhService {
     }
 
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String getWxDownFilePath(String mediaId) {
-		Map<String, String> tks = new HashMap<String, String>();
-        tks.put("access_token", WxGzhClient.getInstanceToken());
-        tks.put("media_id", mediaId);
-        InputStream inputStream=WxConnectFactory.getWXFile(WechatUrl.WXIMG_DOWN, tks);
-        
-		return null;
+	public String getWxDownFilePath(String userId,String mediaId) {
+		try {
+			Map<String, String> tks = new HashMap<String, String>();
+			tks.put("access_token", WxGzhClient.getInstanceToken());
+			tks.put("media_id", mediaId);
+			InputStream inputStream=WxConnectFactory.getWXFile(WechatUrl.WXIMG_DOWN, tks);
+			
+			ByteArrayOutputStream content=new ByteArrayOutputStream();
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = inputStream.read(buffer)) > 0) {
+				content.write(buffer, 0, len);
+			}
+			inputStream.close();
+
+			SFTPUtil sf = new SFTPUtil();
+			String host = "118.118.116.202";
+			int port = 22;
+			String username = "root";
+			String password = "hngs_123";
+			
+			ChannelSftp sftp = sf.connect(host, port, username, password);
+			Map<String, String> map = sf.uploadByByte("images/"+userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);
+			sftp.disconnect();
+			sftp.exit();
+			return map.get("filePath");
+		} catch (Exception e) {
+			LOGGER.info("下载微信服务器文件失败",e);
+			throw new ServiceException(9999,"下载微信服务器文件失败");
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private static List fileBytesToList(byte[] bytes) throws Exception {
+		Byte[] newBytes = new Byte[bytes.length];
+		List list = null;
+		for (int i = 0; i < bytes.length; i++) {
+			newBytes[i] = bytes[i];
+		}
+		list = Arrays.asList(newBytes);
+		return list;
 	}
 }
