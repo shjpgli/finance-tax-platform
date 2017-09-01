@@ -517,30 +517,30 @@ public class InvoiceServiceImpl implements InvoiceService {
 //                List<OrderBO> orderBOList = orderRoMapper.selectByOrderNos(orderNos);
                 List<OrderBO> orderBOList = invoiceBO.getOrderBOList();
                 List<InvoiceXm> invoiceXmList=new ArrayList<InvoiceXm>();
-                InvoiceXm invoiceXm = null;
+                InvoiceXm invoiceXm = new InvoiceXm();
                 //发票信息填充
                 DzfpGetReq dzfpGetReq=new DzfpGetReq();
                 dzfpGetReq.setZsfs("0"); //
                 dzfpGetReq.setKplx("0"); //开票0，退票1
                 dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
-                for(OrderBO orderBO:orderBOList){
-
-                    List<OrderProductBO> orderProductBOList = orderBO.getOrderProductBOList();
-                    for (OrderProductBO orderProductBO:orderProductBOList){
-                        invoiceXm = new InvoiceXm();
+//                for(OrderBO orderBO:orderBOList){
+//
+//                    List<OrderProductBO> orderProductBOList = orderBO.getOrderProductBOList();
+//                    for (OrderProductBO orderProductBO:orderProductBOList){
+//                        invoiceXm = new InvoiceXm();
                         //商品名称，
-                        invoiceXm.setXmmc(orderProductBO.getSpecInfo());
+                        invoiceXm.setXmmc(invoiceBO.getContentDetail());
                         //商品编码
                         invoiceXm.setSpbm("1010105000000000000");
                         //价格
                         invoiceXm.setTotalAmt(invoiceBO.getAmount());
                         //数量
-                        invoiceXm.setXmsl(Double.valueOf(orderProductBO.getNum()));
+                        invoiceXm.setXmsl(Double.valueOf(1));
                         invoiceXm.setFphxz("0");
                         invoiceXm.setYhzcbs("0");
                         invoiceXmList.add(invoiceXm);
-                    }
-                }
+//                    }
+//                }
                 if("1".equals(invoiceBO.getName())){
                     dzfpGetReq.setGmf_mc("个人");
                     //dzfpGetReq.setGmf_nsrsbh("110109500321655");
