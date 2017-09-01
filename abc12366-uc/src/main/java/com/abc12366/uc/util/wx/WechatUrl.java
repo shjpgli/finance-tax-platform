@@ -23,7 +23,9 @@ public enum WechatUrl {
     MATERIAL_ADDNEWS("添加图文素材", "/cgi-bin/material/add_news"),
     MATERIAL_ADDMATE("添加素材", "/cgi-bin/material/add_material"),
     MATERIAL_NEWSIMG("添加图文素材图片", "/cgi-bin/media/uploadimg"),
-    WXQRCODE_TICKET("获取二维码ticket", "/cgi-bin/qrcode/create");
+    WXQRCODE_TICKET("获取二维码ticket", "/cgi-bin/qrcode/create"),
+    WXIMG_DOWN("素材下载","/cgi-bin/media/get");
+    
 
     public String describe;
 
