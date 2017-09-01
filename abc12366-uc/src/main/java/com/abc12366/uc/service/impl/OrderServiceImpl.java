@@ -199,12 +199,14 @@ public class OrderServiceImpl implements OrderService {
             for (OrderProductBO orderProductBO : orderProductBOs) {
                 //查询产品库存信息
                 ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
-                List<DictBO> dictList  = orderProductBO.getProductBO().getDictList();
                 StringBuffer specInfo = new StringBuffer();
-                if(dictList != null && dictList.size() > 0){
-                    for(DictBO dictBO:dictList){
-                        specInfo.append(dictBO.getDictName()+"  ");
-                        specInfo.append(dictBO.getFieldValue());
+                if(orderProductBO.getProductBO() != null){
+                    List<DictBO> dictList  = orderProductBO.getProductBO().getDictList();
+                    if(dictList != null && dictList.size() > 0){
+                        for(DictBO dictBO:dictList){
+                            specInfo.append(dictBO.getDictName()+"  ");
+                            specInfo.append(dictBO.getFieldValue());
+                        }
                     }
                 }
 
@@ -259,7 +261,7 @@ public class OrderServiceImpl implements OrderService {
             for (OrderProductBO orderProductBO : orderProductList) {
                 if ("4".equals(orderProductBO.getGoodsType())) {
                     OrderBO orderBO = selectByOrderNo(orderNo);
-                    GoodsBO goodsBO = goodsRoMapper.selectGoods(orderBO.getGoodsId());
+                    GoodsBO goodsBO = goodsRoMapper.selectGoods(orderProductBO.getGoodsId());
                     userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
 
                     VipLogBO vipLogBO = new VipLogBO();

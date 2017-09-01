@@ -168,9 +168,6 @@
     <update id="update" parameterType="com.abc12366.uc.model.Order">
         UPDATE uc_order
         <set>
-            <if test="orderNo != null">
-                orderNo = #{orderNo},
-            </if>
             <if test="userId != null">
                 userId = #{userId},
             </if>

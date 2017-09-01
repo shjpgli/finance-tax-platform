@@ -11,5 +11,5 @@ import java.util.Map;
  * Time: 16:04
  */
 public interface UcUserLoginLogRoMapper {
-    List<UcUserLoginLog> selectLoginLogList(Map<String, String> map);
+    List<UcUserLoginLog> selectLoginLogList(Map<String, Object> map);
 }

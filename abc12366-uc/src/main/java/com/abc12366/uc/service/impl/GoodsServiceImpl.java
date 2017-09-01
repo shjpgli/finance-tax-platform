@@ -222,7 +222,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<ProductBO> productBOs = new ArrayList<ProductBO>();
         int pInsert = 0;
         for (ProductBO pBO : productList) {
-            if(pBO.getId() == null && "".equals(pBO.getId())){ //新增产品
+            if(pBO.getId() == null || "".equals(pBO.getId())){ //新增产品
                 ProductBO productBO = new ProductBO();
                 Product product = new Product();
                 BeanUtils.copyProperties(pBO, product);
