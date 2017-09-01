@@ -11,6 +11,7 @@ import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.service.VipLogService;
 import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1042,6 +1043,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.warn("修改失败，参数：{}", order);
             throw new ServiceException(4102);
         }
+        insertOrderLog(UserUtil.getUserInfo().getId(), order.getOrderNo(), "6" ,"用户确认收货");
     }
 
 }

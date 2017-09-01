@@ -145,6 +145,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             invoiceRepoBO.setInvoiceNoStart(autoGenericCode(startCount,endLength));
             invoiceRepoBO.setInvoiceNoEnd(autoGenericCode(endCount,endLength));
             invoiceRepoBO.setStatus("0");
+            invoiceRepoBO.setBook(1);
             BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
             int insert = invoiceRepoMapper.insert(invoiceRepo);
             if(insert != 1){
