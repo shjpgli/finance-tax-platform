@@ -70,9 +70,14 @@
             <if test="lastUpdate != null">
                 lastUpdate = #{lastUpdate},
             </if>
-
         </set>
         WHERE id = #{id}
     </update>
 
+    <!-- 修 改-->
+    <update id="updateByInvoiceId" parameterType="java.lang.String">
+        UPDATE uc_order_invoice
+        set status = false
+        WHERE invoiceId = #{invoiceId}
+    </update>
 </mapper>

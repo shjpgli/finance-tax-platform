@@ -952,7 +952,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.warn("修改失败，参数：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(Utils.getAdminId(), order.getOrderNo(), new Date(), "管理员已发货");
+        insertOrderLog(Utils.getAdminId(), order.getOrderNo(), new Date(), orderOperationBO.getRemark());
     }
 
     @Override
