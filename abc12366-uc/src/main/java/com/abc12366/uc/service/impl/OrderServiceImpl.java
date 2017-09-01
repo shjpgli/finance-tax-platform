@@ -229,23 +229,27 @@ public class OrderServiceImpl implements OrderService {
                     if ("5".equals(goodsType)) {
                         //会员充值
                         operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2",specInfo.toString());
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单");
                     }else{
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2",specInfo.toString());
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单");
                     }
                 } else if ("POINTS".equals(orderBO.getTradeMethod())) {
                     //订单状态，1：新订单，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
                     if ("1".equals(goodsType) || "2".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4",specInfo.toString());
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "4", "用户新增订单");
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
                         userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单");
                     }else if ("6".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单");
                     }
                 }
             }
         }
-        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单");
 
         OrderBO temp = new OrderBO();
         BeanUtils.copyProperties(order, temp);
