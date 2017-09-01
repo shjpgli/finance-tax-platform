@@ -104,7 +104,7 @@ public interface OrderService {
     /**
      * 修改支付状态
      */
-    OrderBO paymentOrder(OrderPayBO orderPayBO, String goodsType);
+    OrderBO paymentOrder(OrderPayBO orderPayBO);
 
     /**
      * 查询导出订单
