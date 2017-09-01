@@ -181,9 +181,9 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @PutMapping(path = "/updatevip")
-    public ResponseEntity updateVip(){
-        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
-        return ResponseEntity.ok(Utils.kv());
-    }
+//    @PutMapping(path = "/updatevip")
+//    public ResponseEntity updateVip(){
+//        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
+//        return ResponseEntity.ok(Utils.kv());
+//    }
 }
