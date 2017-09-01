@@ -389,8 +389,15 @@ public class GoodsServiceImpl implements GoodsService {
             LOGGER.info("删除产品失败：{}", id);
             throw new ServiceException(4103);
         }
+        for (Product prod : pBOList) {
+            productMapper.deleteById(prod.getId());
+            productSpecMapper.deleteByProductId(prod.getId());
+            uvipPriceMapper.deleteByProductId(prod.getId());
+            productRepoMapper.deleteByProductId(prod.getId());
+        }
+
         //删除商品库存
-        productRepoMapper.deleteByGoodsId(id);
+        //productRepoMapper.deleteByGoodsId(id);
         insertGoodsLog(goods.getId(), goods.toString(), "删除商品");
     }
 
