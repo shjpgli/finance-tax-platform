@@ -4,9 +4,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.Role;
-import com.abc12366.uc.model.admin.bo.RoleBO;
-import com.abc12366.uc.model.admin.bo.RoleMenuBO;
-import com.abc12366.uc.model.admin.bo.UserRoleBO;
+import com.abc12366.uc.model.admin.bo.*;
 import com.abc12366.uc.service.admin.RoleService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -114,6 +112,16 @@ public class RoleController {
     public ResponseEntity deleteRoleById(@PathVariable("id") String id) {
         int del = roleService.deleteRoleById(id);
         LOGGER.info("{}", del);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 角色启用、禁用
+     */
+    @PutMapping(path = "/enable")
+    public ResponseEntity enable(@Valid @RequestBody RoleUpdateBO roleUpdateBO) {
+        LOGGER.info("{}", roleUpdateBO);
+        roleService.enable(roleUpdateBO);
         return ResponseEntity.ok(Utils.kv());
     }
 
