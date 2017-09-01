@@ -218,7 +218,13 @@ public class OrderServiceImpl implements OrderService {
                     }
                 }
 
-                if (prBO != null && prBO.getStock() < orderProductBO.getNum()) {
+                if(prBO == null){
+                    throw new ServiceException(4903,"商品信息错误");
+                }
+                if(prBO.getStock() == null){
+                    throw new ServiceException(4903,"商品库存信息异常");
+                }
+                if (prBO.getStock() < orderProductBO.getNum()) {
                     LOGGER.info("商品库存不足：{}", prBO);
                     throw new ServiceException(4903);
                 }

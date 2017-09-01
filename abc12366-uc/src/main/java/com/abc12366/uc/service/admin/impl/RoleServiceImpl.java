@@ -12,6 +12,7 @@ import com.abc12366.uc.model.admin.Role;
 import com.abc12366.uc.model.admin.RoleMenu;
 import com.abc12366.uc.model.admin.UserRole;
 import com.abc12366.uc.model.admin.bo.RoleBO;
+import com.abc12366.uc.model.admin.bo.RoleUpdateBO;
 import com.abc12366.uc.model.admin.bo.UserRoleBO;
 import com.abc12366.uc.service.admin.RoleService;
 import org.slf4j.Logger;
@@ -91,6 +92,10 @@ public class RoleServiceImpl implements RoleService {
             logger.warn("删除失败，id：{}", id);
             throw new ServiceException(4103);
         }
+        //删除用户和角色对应关系
+        userRoleMapper.deleteByRoleId(id);
+        //删除角色和权限对应关系
+        roleMenuMapper.deleteByRoleId(id);
         return del;
     }
 
@@ -232,5 +237,17 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         return bo;
+    }
+
+    @Override
+    public void enable(RoleUpdateBO roleUpdateBO) {
+        Role role = new Role();
+        role.setId(roleUpdateBO.getId());
+        role.setStatus(roleUpdateBO.getStatus());
+        int update = roleMapper.updateRole(role);
+        if(update != 1){
+            logger.warn("修改失败参数：{}", role);
+            throw new ServiceException(4101);
+        }
     }
 }

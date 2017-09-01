@@ -103,6 +103,7 @@ public class GoodsServiceImpl implements GoodsService {
             product.setGoodsId(goodsId);
             product.setCreateTime(date);
             product.setLastUpdate(date);
+            product.setStock(0);
             //新增产品参数
             pInsert = productMapper.insert(product);
             if (pInsert != 1) {
@@ -231,6 +232,7 @@ public class GoodsServiceImpl implements GoodsService {
                 product.setGoodsId(goodsId);
                 product.setCreateTime(date);
                 product.setLastUpdate(date);
+                product.setStock(0);
                 //新增产品参数
                 pInsert = productMapper.insert(product);
                 if (pInsert != 1) {
@@ -278,6 +280,7 @@ public class GoodsServiceImpl implements GoodsService {
                 product.setGoodsId(goodsId);
                 product.setCreateTime(date);
                 product.setLastUpdate(date);
+                product.setStock(null);
                 //新增产品参数
                 int update = productMapper.update(product);
                 if (update != 1) {

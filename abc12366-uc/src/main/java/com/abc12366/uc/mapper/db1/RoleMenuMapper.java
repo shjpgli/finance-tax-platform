@@ -37,4 +37,6 @@ public interface RoleMenuMapper {
 
 
     void deleteById(String roleMenuId);
+
+    int deleteByRoleId(String id);
 }
