@@ -55,7 +55,6 @@ public class InvoiceBO implements Serializable {
 	@Size(min = 0,max = 100)
 	private String bank;
 
-	@NotEmpty
 	@Size(min = 1,max = 64)
 	private String addressId;
 	private String deliveryMethod;

@@ -209,7 +209,7 @@ public class InvoiceController {
     }
 
     /**
-     * 发票导出寄送信息
+     * 发票导入打印收的信息
      *
      * @return
      */
@@ -221,7 +221,7 @@ public class InvoiceController {
     }
 
     /**
-     * 发票导出寄送信息
+     * 发票导入寄送信息
      *
      * @return
      */
