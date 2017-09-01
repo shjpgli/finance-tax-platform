@@ -61,8 +61,32 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     }
 
     @Override
+    public List<KnowledgeBase> selectUCList(KnowledgeBaseParamBO param) {
+        return knowledgeBaseMapper.selectUCList(param);
+    }
+
+    @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
-        return knowledgeBaseMapper.selectList(param);
+        List<KnowledgeBase> list = knowledgeBaseMapper.selectList(param);
+        if(!list.isEmpty()){
+            Date now = new Date();
+            List<String> ids = new ArrayList<>();
+            for (KnowledgeBase know: list){
+                if(Boolean.TRUE == know.getStatus()){
+                    if(know.getActiveTime() != null && know.getActiveTime().before(now)){
+                        know.setStatus(Boolean.FALSE);//修改知识状态
+                        ids.add(know.getId());
+                    }
+                }
+            }
+            if(!ids.isEmpty()){
+                knowledgeBaseMapper.updateStatusByPKs(new HashMap<String, Object>(){{
+                        put("ids",ids);
+                        put("status",Boolean.FALSE);
+                }});
+            }
+        }
+        return list;
     }
 
     @Override

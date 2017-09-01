@@ -51,6 +51,13 @@ public interface KnowledgeBaseMapper {
 
     /*
     *
+    * UC列表查询
+    *
+    **/
+    List<KnowledgeBase> selectUCList(KnowledgeBaseParamBO param);
+
+    /*
+    *
     * 列表查询
     *
     **/

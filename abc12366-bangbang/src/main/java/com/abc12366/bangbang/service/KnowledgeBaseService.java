@@ -23,6 +23,9 @@ public interface KnowledgeBaseService {
     /* 财税网首页 热点问题，词条，不分小类 */
     List<KnowledgeBase> hotUnClassifyMap(KnowledgeBaseHotParamBO paramBO);
 
+    /* UC知识库列表查询数据*/
+    List<KnowledgeBase> selectUCList(KnowledgeBaseParamBO param);
+
     /* 知识库列表查询数据*/
     List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
 

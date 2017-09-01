@@ -74,7 +74,7 @@ public class KnowledgeBaseController {
             keywords = keywords.toUpperCase();
         }
         KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, true, true);
-        List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
+        List<KnowledgeBase> list = knowledgeBaseService.selectUCList(param);
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :

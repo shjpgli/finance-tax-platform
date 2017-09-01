@@ -76,6 +76,34 @@
     </select>
 
 
+    <!-- UC列表查询 -->
+    <select id="selectUCList" resultType="knowledgeBase"
+            parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
+        SELECT t_base.id, t_base.subject
+        FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
+        WHERE t_base.categoryCode = t_category.code
+        <if test="categoryCode != null and categoryCode !=''">
+            AND t_base.categoryCode LIKE CONCAT(#{categoryCode},'%')
+        </if>
+        <if test="type != null and type !=''">
+            AND t_base.type = #{type}
+        </if>
+        AND t_base.isOpen = TRUE AND t_base.status = TRUE AND (t_base.activeTime IS NULL OR t_base.activeTime > NOW())
+        <if test="keywords != null and keywords !=''">
+            AND (
+            UPPER(t_base.subject) LIKE CONCAT('%',#{keywords},'%')
+            OR MATCH(t_base.content) AGAINST(#{keywords})
+            OR
+            t_base.id IN(
+            SELECT DISTINCT t1.knowledgeId
+            FROM
+            bb_knowledge_tag_rel t1
+            LEFT JOIN bb_knowledge_tag t2 ON t1.tagId = t2.id
+            WHERE t2.name LIKE CONCAT('%',#{keywords},'%')
+            )
+            )
+        </if>
+    </select>
 
     <!-- 列表查询 -->
     <select id="selectList" resultType="knowledgeBase"
