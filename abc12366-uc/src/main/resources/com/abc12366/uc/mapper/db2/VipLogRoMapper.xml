@@ -5,11 +5,9 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLogListBO" parameterType="java.lang.String">
         SELECT uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level, uulo.createTime
-        from uc_uvip_log uulo, uc_uvip_level uule
-        <where>
-            uulo.userId = #{userId}
-            and uulo.levelId = uule.Id
-        </where>
+        from uc_uvip_log uulo left join uc_uvip_level uule
+        ON uulo.levelId = uule.Id
+        where uulo.userId = #{userId}
         ORDER BY createTime DESC
     </select>
 

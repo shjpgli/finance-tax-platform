@@ -109,7 +109,6 @@ public class TokenServiceImpl implements TokenService {
     private boolean userTokenAuth(String userToken, HttpServletRequest request) {
         LOGGER.info("{}:{}", userToken, request);
         boolean isAuth = false;
-
         if (redisTemplate.hasKey(userToken)) {
             String userInfo = valueOperations.get(userToken);
             UCUserBO user = JSON.parseObject(userInfo, UCUserBO.class);

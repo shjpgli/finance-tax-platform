@@ -13,7 +13,6 @@ import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.BaseObject;
-import com.abc12366.uc.model.PointsLog;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
@@ -34,10 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -231,8 +227,8 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4021);
         }
 
-        //计算用户登录积分变化
-        computePoint(user.getId());
+        //计算用户登录经验值变化
+        computeExp(user.getId());
         //记用户登录日志
         insertLoginLog(user.getId());
 
@@ -251,15 +247,7 @@ public class AuthServiceImpl implements AuthService {
         return map;
     }
 
-    private void computePoint(String userId) {
-//        Map<String, String> map = new HashMap<>();
-//        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY)";
-//        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
-//        map.put("userId", userId);
-//        map.put("startTime", startTime);
-//        map.put("endTime", endTime);
-//        List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
-
+    private void computeExp(String userId) {
         //今日第一次登录才能获取经验值
         if (!isContinueLogin(userId, 0)) {
             //判断用户连续登录情况
@@ -285,12 +273,29 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private boolean isContinueLogin(String userId, int i) {
-        Map<String, String> map = new HashMap<>();
-        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + i + " DAY)";
-        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + (i - 1) + " DAY)";
+        Map<String, Object> map = new HashMap<>();
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.add(Calendar.DATE, -i);
+        calendar1.set(Calendar.HOUR_OF_DAY, 0);
+        calendar1.set(Calendar.SECOND,0);
+        calendar1.set(Calendar.MINUTE,0);
+
+        calendar2.add(Calendar.DATE, -(i-1));
+        calendar2.set(Calendar.HOUR_OF_DAY, 0);
+        calendar2.set(Calendar.SECOND,0);
+        calendar2.set(Calendar.MINUTE,0);
+
+
+//        String startTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + i + " DAY)";
+//        String endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL " + (i - 1) + " DAY)";
+        System.out.println("-----------------" + calendar1.getTime());
+        System.out.println("+++++++++++++++++" +calendar2.getTime());
+
+
         map.put("userId", userId);
-        map.put("startTime", startTime);
-        map.put("endTime", endTime);
+        map.put("startTime", calendar1.getTime());
+        map.put("endTime", calendar2.getTime());
         List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
         if (logList != null && logList.size() > 0) {
             return true;
