@@ -20,7 +20,6 @@ public class NoticeBO {
     private String title;
     @Size(max = 64)
     private String author;
-    @Size(max = 1000)
     private String content;
     /*0�ѷ�����1�ݸ�*/
     @NotNull
