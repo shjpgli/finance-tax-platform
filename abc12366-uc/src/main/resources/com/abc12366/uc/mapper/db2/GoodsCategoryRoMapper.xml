@@ -39,6 +39,7 @@
         FROM uc_goods_category g
         LEFT JOIN uc_goods_category p on p.id = g.parentId
         WHERE g.parentId = #{parentId}
+        ORDER BY  g.sort asc
     </select>
 
     <!-- 查询顶级父节点 -->

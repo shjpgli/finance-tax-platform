@@ -23,6 +23,6 @@
         FROM uc_order_log o
         LEFT JOIN uc_user_admin u ON o.createUser = u.id
         WHERE o.orderNo = #{orderNo}
-        ORDER BY o.createUser asc
+        ORDER BY o.createTime asc
     </select>
 </mapper>
