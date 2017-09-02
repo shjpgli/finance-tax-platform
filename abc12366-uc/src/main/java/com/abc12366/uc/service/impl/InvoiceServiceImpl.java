@@ -383,19 +383,22 @@ public class InvoiceServiceImpl implements InvoiceService {
             temp.setInvoiceCode(invoiceExcel.getInvoiceCode());
             InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(temp);
             if(invoiceDetail == null){
-                LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
+                LOGGER.info("发票不存在：{}", invoiceDetail);
                 throw new ServiceException(4913);
+            }
+            if(!"0".equals(invoiceDetail.getStatus())){
+                throw new ServiceException(4913,"发票号码："+invoiceExcel.getInvoiceNo()+"不可用或已使用");
             }
             Invoice ce = new Invoice();
             ce.setId(invoiceExcel.getInvoiceOrderNo());
             ce.setStatus("2");
             //查询发票信息表状态
             Invoice invoiceTemp = invoiceRoMapper.selectByInvoiceOrderNo(ce);
-            if(invoiceTemp != null){
-                LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
+            if(invoiceTemp == null){
+                LOGGER.info("只有在已审批状态，该张发票才能被导入：{}", invoiceDetail);
                 throw new ServiceException(4913,"只有在已审批状态，该张发票才能被导入"+invoiceExcel.getInvoiceOrderNo());
             }
-            //修改库存信息表
+
             Invoice invoice = new Invoice();
             invoice.setStatus("7");
             invoice.setId(invoiceExcel.getInvoiceOrderNo());
@@ -405,6 +408,12 @@ public class InvoiceServiceImpl implements InvoiceService {
             if(update != 1){
                 LOGGER.info("修改失败：{}", invoice);
                 throw new ServiceException(4102);
+            }
+            //修改发票详情表
+            invoiceDetail.setStatus("2");
+            int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+            if(dUpdate != 1){
+                throw new ServiceException(4102,"修改发票详情失败");
             }
         }
     }

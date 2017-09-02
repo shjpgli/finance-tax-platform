@@ -1049,7 +1049,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.warn("修改失败，参数：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(UserUtil.getUserInfo().getId(), order.getOrderNo(), "6" ,"用户确认收货");
+        insertOrderLog(order.getUserId(), order.getOrderNo(), "6" ,"用户确认收货");
     }
 
 }
