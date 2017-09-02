@@ -446,7 +446,7 @@ public class AdminServiceImpl implements AdminService {
     public int resetUserPwd(String id) {
         String newPassword;
         try {
-            newPassword = Utils.md5(Constant.defaultPwd);
+            newPassword = Utils.md5(Utils.md5(Constant.defaultPwd));
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException(4106);
