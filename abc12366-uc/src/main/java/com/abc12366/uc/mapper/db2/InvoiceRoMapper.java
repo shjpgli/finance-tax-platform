@@ -21,7 +21,7 @@ public interface InvoiceRoMapper {
 
     List<InvoiceBO> selectList(InvoiceBO invoice);
 
-    Invoice selectByInvoiceOrderNo(@Param("id") Invoice invoice);
+    Invoice selectByInvoiceOrderNo(Invoice invoice);
 
     Invoice selectAvailableInvoice();
 

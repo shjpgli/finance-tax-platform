@@ -3,7 +3,9 @@ package com.abc12366.uc.service.admin.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.OrganizationMapper;
+import com.abc12366.uc.mapper.db2.AdminRoMapper;
 import com.abc12366.uc.mapper.db2.OrganizationRoMapper;
+import com.abc12366.uc.model.admin.Admin;
 import com.abc12366.uc.model.admin.Organization;
 import com.abc12366.uc.model.admin.bo.OrganizationBO;
 import com.abc12366.uc.model.admin.bo.OrganizationUpdateBO;
@@ -28,6 +30,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     private OrganizationRoMapper organizationRoMapper;
+
+    @Autowired
+    private AdminRoMapper adminRoMapper;
 
     @Override
     public List<OrganizationBO> selectList(Organization organization) {
@@ -138,8 +143,21 @@ public class OrganizationServiceImpl implements OrganizationService {
         organization.setLastUpdate(new Date());
         for (String orgId : idArray) {
             organization.setId(orgId);
+            //查询是否存在该部门
+            OrganizationBO organizationBO = organizationRoMapper.selectOrganizationById(orgId);
+            if(organizationBO == null){
+                throw new ServiceException(4999,"部门不存在");
+            }
             Boolean status = updateBO.getStatus();
             organization.setStatus(status);
+            //停用时
+            if(!status){
+                //查询部门下所有的用户
+                List<Admin> admins = adminRoMapper.selectAdminByOrgId(orgId);
+                if(admins != null && admins.size() > 0){
+                    throw new ServiceException(4999,"需要先停用"+organizationBO.getName()+"部门下的用户，再停用该部门");
+                }
+            }
             int update = organizationMapper.update(organization);
             if (update != 1) {
                 LOGGER.warn("修改失败，id：{}", organization.toString());
