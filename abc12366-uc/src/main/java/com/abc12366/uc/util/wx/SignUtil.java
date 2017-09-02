@@ -65,7 +65,7 @@ public class SignUtil {
         String timestamp = create_timestamp();
         String string1;
         String signature = "";
-        charge=(charges=="null"?"false":charges);
+        charge=(charges==null?"false":charges);
 
         //注意这里参数名必须全部小写，且必须有序
         string1 = "jsapi_ticket=" + jsapi_ticket +
