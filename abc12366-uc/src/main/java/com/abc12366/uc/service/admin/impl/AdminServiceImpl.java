@@ -277,8 +277,10 @@ public class AdminServiceImpl implements AdminService {
             List<Role> roles = adminBO.getRolesList();
             for (Role role : roles) {
                 if(Boolean.TRUE == role.getStatus()){
-                    List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
-                    menuMap.put(role.getId(), menus);
+                    if(role.getId() != null && !"".equals(role.getId())){
+                        List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
+                        menuMap.put(role.getId(), menus);
+                    }
                 }
             }
             adminBO.setMenuMap(menuMap);

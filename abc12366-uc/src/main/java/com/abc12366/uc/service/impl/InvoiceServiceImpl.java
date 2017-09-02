@@ -362,7 +362,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             ce.setStatus("7");
             //查询发票信息表状态
             Invoice invoiceTemp = invoiceRoMapper.selectByInvoiceOrderNo(ce);
-            if(invoiceTemp != null){
+            if(invoiceTemp == null){
                 LOGGER.info("发票不存在或发票已被使用：{}", expressExcel);
                 throw new ServiceException(4913,"只有在已开票状态，该张发票才能被导入"+expressExcel.getInvoiceOrderNo());
             }
@@ -383,8 +383,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             temp.setInvoiceCode(invoiceExcel.getInvoiceCode());
             InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(temp);
             if(invoiceDetail == null){
-                LOGGER.info("发票不存在：{}", invoiceDetail);
-                throw new ServiceException(4913);
+                LOGGER.info("发票订单不存在：{}", invoiceDetail);
+                throw new ServiceException(4913,"发票订单不存在");
             }
             if(!"0".equals(invoiceDetail.getStatus())){
                 throw new ServiceException(4913,"发票号码："+invoiceExcel.getInvoiceNo()+"不可用或已使用");
