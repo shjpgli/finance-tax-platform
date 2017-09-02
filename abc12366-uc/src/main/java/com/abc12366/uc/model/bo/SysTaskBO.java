@@ -21,17 +21,17 @@ public class SysTaskBO {
     private String imageUrl;
     private String ruleName;
     private String ruleCode;
-    private int count;
+    private Integer count;
     private String skipURL;
 
     public SysTaskBO() {
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 

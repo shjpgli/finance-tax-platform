@@ -5,6 +5,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
+import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
@@ -31,6 +32,8 @@ public class UserExtendController {
 
     @Autowired
     private UserExtendService userExtendService;
+    @Autowired
+    private IWxGzhService iWxGzhService;
 
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
@@ -59,6 +62,34 @@ public class UserExtendController {
     public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String
             userId, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", userExtendUpdateBO, userId, request);
+        if (!userId.trim().equals(UserUtil.getUserId(request))) {
+            throw new ServiceException(4190);
+        }
+        userExtendUpdateBO.setUserId(userId.trim());
+        UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO);
+        LOGGER.info("{}", user_extend);
+        return ResponseEntity.ok(Utils.kv("data", user_extend));
+    }
+    
+    /**
+     * 微信实名认证审核
+     * @param userExtendUpdateBO
+     * @param userId
+     * @param request
+     * @return
+     */
+    @PutMapping(path = "/wx/{userId}")
+    public ResponseEntity updateWx(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String
+            userId, HttpServletRequest request) {
+        LOGGER.info("{}:{}:{}", userExtendUpdateBO, userId, request);
+        
+        userExtendUpdateBO.setUserId(userId);
+        String filePath1=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getFrontImage());
+        userExtendUpdateBO.setFrontImage(filePath1);
+        
+        String filePath2=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getBackImage());
+        userExtendUpdateBO.setFrontImage(filePath2);
+        
         if (!userId.trim().equals(UserUtil.getUserId(request))) {
             throw new ServiceException(4190);
         }
