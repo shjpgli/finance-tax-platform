@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * User: yuanluo<435720953@qq.com.com>
@@ -34,17 +35,17 @@ public class AdPageBO {
     @NotNull
     private Boolean status;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp createTime;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp lastUpdate;
+    private Date createTime;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp startTime;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp endTime;
+    private Date lastUpdate;
+
+
+    private Date startTime;
+
+
+    private Date endTime;
 
 
     public AdPageBO() {
@@ -59,7 +60,7 @@ public class AdPageBO {
     }
 
     public AdPageBO(String id, String name, String url, String link, Integer sort, Boolean showName, Boolean status,
-                    Timestamp createTime, Timestamp lastUpdate) {
+                    Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.url = url;
@@ -117,19 +118,19 @@ public class AdPageBO {
         this.showName = showName;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(Timestamp lastUpdate) {
+    public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -164,19 +165,19 @@ public class AdPageBO {
                 '}';
     }
 
-    public Timestamp getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 }
