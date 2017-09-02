@@ -391,8 +391,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             ce.setStatus("2");
             //查询发票信息表状态
             Invoice invoiceTemp = invoiceRoMapper.selectByInvoiceOrderNo(ce);
-            if(invoiceTemp != null){
-                LOGGER.info("发票不存在或发票已被使用：{}", invoiceDetail);
+            if(invoiceTemp == null){
+                LOGGER.info("只有在已审批状态，该张发票才能被导入：{}", invoiceDetail);
                 throw new ServiceException(4913,"只有在已审批状态，该张发票才能被导入"+invoiceExcel.getInvoiceOrderNo());
             }
             //修改库存信息表
