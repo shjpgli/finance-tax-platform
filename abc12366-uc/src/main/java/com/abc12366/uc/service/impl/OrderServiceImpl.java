@@ -249,10 +249,10 @@ public class OrderServiceImpl implements OrderService {
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
                         userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单");
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功");
                     }else if ("6".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单");
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功");
                     }
                 }
             }
@@ -874,13 +874,13 @@ public class OrderServiceImpl implements OrderService {
                         LOGGER.info("插入会员日志: {}", orderNo);
                         insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "完成订单");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单");
                     } else if (goodsType.equals("5") || goodsType.equals("6")) {
                         order.setOrderStatus("6");
                         orderMapper.update(order);
 
                         insertPoints(orderBO);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "完成订单");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单");
                     }
                 } else if (isPay == 3) {
                     order.setOrderStatus("2");
