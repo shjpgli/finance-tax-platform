@@ -34,19 +34,10 @@ public class AdPageBO {
     private Boolean showName;
     @NotNull
     private Boolean status;
-
-
     private Date createTime;
-
-
     private Date lastUpdate;
-
-
     private Date startTime;
-
-
     private Date endTime;
-
 
     public AdPageBO() {
     }
