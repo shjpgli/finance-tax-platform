@@ -215,9 +215,11 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
-        WHERE id = #{id}
         <where>
             1 = 1
+            <if test=" id != null and id != '' ">
+                and id = #{id}
+            </if>
             <if test=" status != null and status != '' ">
                 and status = #{status}
             </if>

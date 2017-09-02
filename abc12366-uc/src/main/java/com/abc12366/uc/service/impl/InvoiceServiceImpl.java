@@ -523,6 +523,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dzfpGetReq.setZsfs("0"); //
                 dzfpGetReq.setKplx("0"); //开票0，退票1
                 dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
+//                dzfpGetReq.setKpr("JAVA123");
 //                for(OrderBO orderBO:orderBOList){
 //
 //                    List<OrderProductBO> orderProductBOList = orderBO.getOrderProductBOList();
@@ -569,13 +570,13 @@ public class InvoiceServiceImpl implements InvoiceService {
                 tail.setSpUrl(einvocie.getSP_URL());
                 tail.setPdfUrl(einvocie.getPDF_URL());
                 //根据发票号码和发票代码查找发票详细信息表
-//                InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
-//                if (detail == null) {
-//                    LOGGER.info("发票详情信息不能为空：{}", detail);
-//                    throw new ServiceException(4186);
-//                }
+                InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
+                if (detail == null) {
+                    LOGGER.info("发票仓库未存在该发票，请先入库：{}", detail);
+                    throw new ServiceException(4186,"发票仓库未存在该发票，请先入库");
+                }
 
-                InvoiceDetail detail = new InvoiceDetail();
+                /*InvoiceDetail detail = new InvoiceDetail();
                 tail.setId(Utils.uuid());
                 tail.setProperty("2");
                 Date date = new Date();
@@ -588,14 +589,14 @@ public class InvoiceServiceImpl implements InvoiceService {
                 if (insert != 1) {
                     LOGGER.info("新增失败：{}", detail);
                     throw new ServiceException(4101);
-                }
+                }*/
                 invoiceNo = detail.getInvoiceNo();
                 invoiceCode = detail.getInvoiceCode();
-                /*int dUpdate = invoiceDetailMapper.update(detail);
+                int dUpdate = invoiceDetailMapper.update(detail);
                 if (dUpdate != 1) {
                     LOGGER.info("发票详情信息修改失败：{}", detail);
                     throw new ServiceException(4187);
-                }*/
+                }
                 invoice.setStatus("5");
             }else {
                 if(invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())){

@@ -30,4 +30,6 @@ public interface AdminRoMapper {
     List<AdminBO> selectList(Admin admin);
 
     AdminBO selectOne(@Param("id") String id);
+
+    List<Admin> selectAdminByOrgId(@Param("orgId") String orgId);
 }
