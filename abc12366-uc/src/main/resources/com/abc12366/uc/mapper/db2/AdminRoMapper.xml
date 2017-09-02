@@ -159,5 +159,15 @@
         </where>
     </select>
 
+    <select id="selectAdminByOrgId" resultMap="userBoResultMap" parameterType="java.lang.String">
+        SELECT
+        t.id, t.username, t.password, t.nickname,  t.status, t.createTime, t.lastUpdate, e.userId,
+        e.job, e.phone, e.address, e.orgId, s.name AS orgName
+        FROM
+        uc_admin t
+        LEFT JOIN uc_admin_extend e ON e.userId = t.id
+        LEFT JOIN uc_organization s ON s.id = e.orgId
+        where t.status = true and e.orgId = #{orgId}
+    </select>
 
 </mapper>
