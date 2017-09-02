@@ -16,7 +16,7 @@ import java.util.UUID;
  * @author zhushuai 2017-7-26
  */
 public class SignUtil {
-    //private static String token = "wechatShuaiGe";
+    private static String charge = "false";
 
 
     public static boolean checkSignature(String signature, String timestamp,
@@ -60,11 +60,12 @@ public class SignUtil {
     }
     
     
-    public static WxJsConfig jsign(String appid,String jsapi_ticket, String url){
+    public static WxJsConfig jsign(String appid,String jsapi_ticket, String url, String charges){
     	String nonce_str = create_nonce_str();
         String timestamp = create_timestamp();
         String string1;
         String signature = "";
+        charge=(charges=="null"?"false":charges);
 
         //注意这里参数名必须全部小写，且必须有序
         string1 = "jsapi_ticket=" + jsapi_ticket +
@@ -86,7 +87,7 @@ public class SignUtil {
         {
             e.printStackTrace();
         }
-        return new WxJsConfig(appid,timestamp,nonce_str,signature,url);
+        return new WxJsConfig(appid,timestamp,nonce_str,signature,url,charge);
     }
     
     
