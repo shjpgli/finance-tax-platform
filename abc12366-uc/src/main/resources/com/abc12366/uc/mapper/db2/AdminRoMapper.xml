@@ -20,6 +20,7 @@
         <collection property="rolesList" ofType="com.abc12366.uc.model.admin.Role">
             <id column="roleId" property="id"/>
             <result column="roleName" property="roleName"/>
+            <result column="status" property="status"/>
         </collection>
     </resultMap>
 
@@ -111,7 +112,8 @@
         e.orgId,
         s.name AS orgName,
         o.id AS roleId,
-        o.roleName AS roleName
+        o.roleName AS roleName,
+        o.status as status
         FROM
         uc_admin t
         LEFT JOIN uc_user_role r ON t.id = r.userId
