@@ -88,7 +88,7 @@ public class UserExtendController {
         userExtendUpdateBO.setFrontImage(filePath1);
         
         String filePath2=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getBackImage());
-        userExtendUpdateBO.setFrontImage(filePath2);
+        userExtendUpdateBO.setBackImage(filePath2);
         
         if (!userId.trim().equals(UserUtil.getUserId(request))) {
             throw new ServiceException(4190);
