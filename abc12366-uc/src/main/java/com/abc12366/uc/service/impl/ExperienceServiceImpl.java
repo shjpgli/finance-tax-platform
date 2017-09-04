@@ -84,8 +84,8 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public List<ExpCodex> codexList(String uexpruleId) {
-        return experienceRoMapper.codexList(uexpruleId);
+    public List<ExpCodex> codexList() {
+        return experienceRoMapper.codexList();
     }
 
     @Override

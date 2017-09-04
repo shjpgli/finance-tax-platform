@@ -17,5 +17,5 @@ public interface PointsRoMapper {
 
     List<PointComputeLog> selectPointComputeLog(PointComputeLogParam param);
 
-    List<PointCodex> codexList(String upointCodexId);
+    List<PointCodex> codexList();
 }

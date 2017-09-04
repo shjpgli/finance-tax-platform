@@ -22,10 +22,9 @@
         where uu.id=#{userId}
     </select>
 
-    <select id="codexList" resultType="com.abc12366.uc.model.bo.ExpCodex" parameterType="java.lang.String">
-        select id,uexpruleId,clientType,uexp,period,degree,remark
+    <select id="codexList" resultType="com.abc12366.uc.model.bo.ExpCodex" >
+        select id,uexpruleId,clientType,uri,uexp,period,degree,remark
         from uc_uexp_codex
-        where uexpruleId=#{uexpruleId}
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExpCodex" parameterType="com.abc12366.uc.model.bo.ExpComputeBO">

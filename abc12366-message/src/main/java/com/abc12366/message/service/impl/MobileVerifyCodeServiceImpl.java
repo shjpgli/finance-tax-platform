@@ -98,15 +98,31 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCode.setType(type);
             phoneCodeMapper.insert(phoneCode);
         }
-        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, type, code);
 
-        //调用网易短信接口不成功，则换调用又拍云短信接口
-        if (!sendCodeThroghNetease) {
-            boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, type, code);
-            if (!sendCodeThroghUpyun) {
-                throw new ServiceException(4204);
+        //随机使用两个通道中的一个发送短信
+        if(Math.random()>0.5){
+            if(!sendNeteaseTemplate(phone, type, code)){
+                if(sendYoupaiTemplate(phone, type, code)){
+                    throw new ServiceException(4204);
+                }
+            }
+        }else{
+            if(!sendYoupaiTemplate(phone, type, code)){
+                if(sendNeteaseTemplate(phone, type, code)){
+                    throw new ServiceException(4204);
+                }
             }
         }
+
+//        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, type, code);
+
+        //调用网易短信接口不成功，则换调用又拍云短信接口
+//        if (!sendCodeThroghNetease) {
+//            boolean sendCodeThroghUpyun = sendYoupaiTemplate(phone, type, code);
+//            if (!sendCodeThroghUpyun) {
+//                throw new ServiceException(4204);
+//            }
+//        }
 
     }
 

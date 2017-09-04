@@ -27,4 +27,11 @@
         and clientType=#{clientType}
     </select>
 
+    <select id="codexList" resultType="com.abc12366.uc.model.bo.PointCodex" >
+        select id,upointruleCode,clientType,uri,upoint,period,degree,remark
+        from uc_upoints_codex
+
+    </select>
+
+
 </mapper>

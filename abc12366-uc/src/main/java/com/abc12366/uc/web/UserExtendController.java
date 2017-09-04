@@ -81,7 +81,7 @@ public class UserExtendController {
      */
     @PutMapping(path = "/wx/{userId}")
     public ResponseEntity updateWx(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String
-            userId, HttpServletRequest request) {
+            userId, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}:{}", userExtendUpdateBO, userId, request);
         
         userExtendUpdateBO.setUserId(userId);
@@ -95,7 +95,7 @@ public class UserExtendController {
             throw new ServiceException(4190);
         }
         userExtendUpdateBO.setUserId(userId.trim());
-        UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO);
+        UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO, request);
         LOGGER.info("{}", user_extend);
         return ResponseEntity.ok(Utils.kv("data", user_extend));
     }

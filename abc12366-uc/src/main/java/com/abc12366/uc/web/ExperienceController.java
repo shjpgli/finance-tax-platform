@@ -49,10 +49,9 @@ public class ExperienceController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @GetMapping(path = "/codex/{uexpruleId}")
-    public ResponseEntity codexList(@PathVariable String uexpruleId) {
-        LOGGER.info("{}", uexpruleId);
-        List<ExpCodex> codexList = experienceService.codexList(uexpruleId);
+    @GetMapping(path = "/codex")
+    public ResponseEntity codexList() {
+        List<ExpCodex> codexList = experienceService.codexList();
         return ResponseEntity.ok(Utils.kv("dataList", codexList));
     }
 

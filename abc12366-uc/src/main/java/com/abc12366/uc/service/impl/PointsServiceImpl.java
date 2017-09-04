@@ -150,7 +150,7 @@ public class PointsServiceImpl implements PointsService {
     }
 
     @Override
-    public List<PointCodex> codexList(String upointCodexId) {
-        return pointsRoMapper.codexList(upointCodexId);
+    public List<PointCodex> codexList() {
+        return pointsRoMapper.codexList();
     }
 }

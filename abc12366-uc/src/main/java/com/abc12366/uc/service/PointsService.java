@@ -21,5 +21,5 @@ public interface PointsService {
 
     void deleteCodex(String id);
 
-    List<PointCodex> codexList(String upointCodexId);
+    List<PointCodex> codexList();
 }

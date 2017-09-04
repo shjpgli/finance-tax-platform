@@ -58,10 +58,9 @@ public class PointsController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @GetMapping(path = "/codex/{upointCodexId}")
-    public ResponseEntity codexList(@PathVariable String upointCodexId) {
-        LOGGER.info("{}", upointCodexId);
-        List<PointCodex> codexList = pointsService.codexList(upointCodexId);
+    @GetMapping(path = "/codex")
+    public ResponseEntity codexList() {
+        List<PointCodex> codexList = pointsService.codexList();
         return ResponseEntity.ok(Utils.kv("dataList", codexList));
     }
 }

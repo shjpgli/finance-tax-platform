@@ -18,7 +18,7 @@ public interface ExperienceService {
 
     int deleteCodex(String id);
 
-    List<ExpCodex> codexList(String uexpruleId);
+    List<ExpCodex> codexList();
 
     void compute(ExpComputeBO expComputeBO);
 }

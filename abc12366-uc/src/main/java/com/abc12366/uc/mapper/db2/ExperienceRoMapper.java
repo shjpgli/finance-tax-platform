@@ -12,7 +12,7 @@ import java.util.List;
 public interface ExperienceRoMapper {
     MyExperienceBO getMyExperience(String userId);
 
-    List<ExpCodex> codexList(String uexpruleId);
+    List<ExpCodex> codexList();
 
     List<ExpCodex> selectOne(ExpComputeBO expComputeBO);
 
