@@ -27,7 +27,8 @@
     <select id="selectList" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.TradeLog">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM uc_trade_log
+        FROM uc_trade_log 
+        where payMethod is not null
         <where>
             <if test="orderNo != null and orderNo != ''"> orderNo like CONCAT('%',#{orderNo},'%')</if>
             <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
