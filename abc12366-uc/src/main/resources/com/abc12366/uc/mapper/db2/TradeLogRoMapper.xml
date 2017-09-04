@@ -28,8 +28,8 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log 
-        where payMethod is not null
         <where>
+            payMethod is not null 
             <if test="orderNo != null and orderNo != ''"> orderNo like CONCAT('%',#{orderNo},'%')</if>
             <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
             <if test="payMethod != null and payMethod != ''">AND payMethod = #{payMethod}</if>
