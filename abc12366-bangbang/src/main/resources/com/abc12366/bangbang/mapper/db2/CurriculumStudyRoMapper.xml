@@ -37,7 +37,7 @@
               ]]>
         </if>
         <if test="curriculumId != null and curriculumId != ''">
-            AND curriculumId = #{curriculumId}
+            AND s.curriculumId = #{curriculumId}
         </if>
     </select>
 
