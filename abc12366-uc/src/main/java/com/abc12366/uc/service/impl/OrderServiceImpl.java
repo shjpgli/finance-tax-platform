@@ -550,7 +550,8 @@ public class OrderServiceImpl implements OrderService {
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
         pointsLog.setRuleId(orderBO.getOrderNo());
-        pointsLog.setIncome(giftPoints);
+        pointsLog.setIncome(giftPoints * num);
+        pointsLog.setOutgo((int)totalPrice * num);
         pointsLog.setLogType("POINTS_RECHARGE");
         pointsLog.setRemark("积分兑换");
         pointsLogService.insert(pointsLog);

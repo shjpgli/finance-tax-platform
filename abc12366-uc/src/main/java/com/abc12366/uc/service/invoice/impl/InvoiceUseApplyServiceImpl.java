@@ -56,9 +56,6 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
     @Autowired
     private InvoiceApprovalLogMapper invoiceApprovalLogMapper;
 
-    @Autowired
-    private InvoiceApprovalLogRoMapper invoiceApprovalLogRoMapper;
-
     @Override
     public List<InvoiceUseApplyBO> selectList(InvoiceUseApplyBO applyBO) {
         return invoiceUseApplyRoMapper.selectList(applyBO);
@@ -115,8 +112,10 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             }
         }
 
-        //加入日志
-        insertLog(id,"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
+        //加入日志，草稿状态不需要记录日志
+        if(!"3".equals(invoiceUseApplyBO.getExamineStatus())){
+            insertLog(id,"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
+        }
         return invoiceUseApplyBO;
     }
 
@@ -151,18 +150,24 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             LOGGER.warn("数据错误{}：" + null);
             throw new ServiceException(4906);
         }
+        //根据UseId删除申请详情日志
+        invoiceUseDetailMapper.deleteByUseId(invoiceUseApplyBO.getId());
+
         for (InvoiceUseDetailBO detailBO:invoiceUseDetailBOList){
+            detailBO.setId(Utils.uuid());
+            detailBO.setUseId(invoiceUseApplyBO.getId());
             InvoiceUseDetail invoiceUseDetail = new InvoiceUseDetail();
             BeanUtils.copyProperties(detailBO,invoiceUseDetail);
-            int dUpdate = invoiceUseDetailMapper.update(invoiceUseDetail);
-            if(dUpdate != 1){
-                LOGGER.warn("修改失败，参数{}：" + invoiceUseDetail);
-                throw new ServiceException(4102);
+            int dInsert = invoiceUseDetailMapper.insert(invoiceUseDetail);
+            if(dInsert != 1){
+                LOGGER.warn("新增失败，参数{}：" + invoiceUseDetail);
+                throw new ServiceException(4101);
             }
         }
-        //加入日志
-//        insertLog(invoiceUseApply.getId(),invoiceUseApply.getRemark(),"已修改");
-//        insertLog(invoiceUseApply.getId(),"修改", UserUtil.getAdminInfo().getNickname(),"已修改");
+        //加入日志，草稿状态不需要记录日志
+        if(!"3".equals(invoiceUseApplyBO.getExamineStatus())){
+            insertLog(invoiceUseApply.getId(),"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
+        }
         return invoiceUseApplyBO;
     }
 
