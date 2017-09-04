@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import java.util.Date;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-25
@@ -9,8 +11,8 @@ public class ExpComputeLogParam {
     private String userId;
     private String uexpCodexId;
     private String timeType;
-    private String starTime;
-    private String endTime;
+    private Date starTime;
+    private Date endTime;
 
     public ExpComputeLogParam() {
     }
@@ -39,19 +41,19 @@ public class ExpComputeLogParam {
         this.timeType = timeType;
     }
 
-    public String getStarTime() {
+    public Date getStarTime() {
         return starTime;
     }
 
-    public void setStarTime(String starTime) {
+    public void setStarTime(Date starTime) {
         this.starTime = starTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 }

@@ -5,9 +5,10 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.ExperienceLogQueryBO" parameterType="java.util.Map">
         SELECT uul.id,uul.userId,uul.ruleId,uur.name,uur.code,uur.type,uul.income,uul.outgo,uul.usableExp,uul.createTime
-        from uc_uexp_log uul, uc_uexp_rule uur
+        from uc_uexp_log uul
+        LEFT JOIN uc_uexp_rule uur
+        ON (uul.ruleId = uur.id OR uul.ruleId = uur.code)
         <where>
-            uul.ruleId = uur.id
             <if test="name!=null">
                 and name=#{name}
             </if>
@@ -32,11 +33,11 @@
     </select>
     <select id="selectListByUser" resultType="com.abc12366.uc.model.bo.ExpLogUcBO" parameterType="java.util.Map">
         SELECT uul.id id,
-        (SELECT uur.name FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId) channel,
-        (SELECT uur.exp FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId) EXP,
+        (SELECT uur.name FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) channel,
+        (SELECT uur.exp FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) EXP,
         (SELECT SUM(uu.income)-SUM(uu.outgo) sums FROM uc_uexp_log uu WHERE uu.userId=uul.userId) sums,
         uul.createTime createTime,
-        (SELECT uur.description FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId) remark
+        (SELECT uur.description FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) remark
         FROM uc_uexp_log uul
         <where>
             and uul.userId=#{userId}

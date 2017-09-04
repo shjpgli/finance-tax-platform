@@ -9,6 +9,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.PointsService;
+import com.abc12366.uc.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -65,21 +66,21 @@ public class PointsServiceImpl implements PointsService {
             return;
         }
         if (!period.trim().equals("A")) {
-            String startTime = "";
-            String endTime = "";
+            Date startTime = new Date();
+            Date endTime = new Date();
             if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
                 switch (pointCodex.getPeriod().toUpperCase()) {
                     case "D":
-                        startTime = "(SELECT CURDATE())";
-                        endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
+                        startTime = DateUtils.getFirstHourOfDay();
+                        endTime = DateUtils.getFirstHourOfLastDay();
                         break;
                     case "M":
-                        startTime = "(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))";
-                        endTime = "(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))";
+                        startTime = DateUtils.getFirstDayOfMonth();
+                        endTime = DateUtils.getFirstDayOfLastMonth();
                         break;
                     case "Y":
-                        startTime = "(SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))";
-                        endTime = "(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))";
+                        startTime = DateUtils.getFirstMonthOfYear();
+                        endTime = DateUtils.getFirstMonthOfLastYear();
                         break;
                 }
 
@@ -104,6 +105,7 @@ public class PointsServiceImpl implements PointsService {
 
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(pointComputeBO.getUserId());
+        pointsLog.setRuleId(pointCodex.getUpointruleCode());
         pointsLog.setRemark(pointCodex.getRemark());
         if (pointCodex.getUpoint() < 0) {
             pointsLog.setIncome(0);

@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import java.util.Date;
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-25
@@ -9,8 +11,8 @@ public class PointComputeLogParam {
     private String userId;
     private String upointCodexId;
     private String timeType;
-    private String startTime;
-    private String endTime;
+    private Date startTime;
+    private Date endTime;
 
     public PointComputeLogParam() {
     }
@@ -39,19 +41,19 @@ public class PointComputeLogParam {
         this.timeType = timeType;
     }
 
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 }

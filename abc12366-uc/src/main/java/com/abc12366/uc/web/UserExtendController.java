@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 /**
  * 用户扩展信息控制器
@@ -44,9 +45,9 @@ public class UserExtendController {
     }
 
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody UserExtendBO userExtendBO) {
+    public ResponseEntity insert(@Valid @RequestBody UserExtendBO userExtendBO, HttpServletRequest request) throws IOException {
         LOGGER.info("{}", userExtendBO);
-        UserExtendBO user_extend = userExtendService.insert(userExtendBO);
+        UserExtendBO user_extend = userExtendService.insert(userExtendBO, request);
         LOGGER.info("{}", user_extend);
         return ResponseEntity.ok(Utils.kv("data", user_extend));
     }
@@ -60,13 +61,13 @@ public class UserExtendController {
 
     @PutMapping(path = "/{userId}")
     public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String
-            userId, HttpServletRequest request) {
+            userId, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}:{}", userExtendUpdateBO, userId, request);
         if (!userId.trim().equals(UserUtil.getUserId(request))) {
             throw new ServiceException(4190);
         }
         userExtendUpdateBO.setUserId(userId.trim());
-        UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO);
+        UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO,request);
         LOGGER.info("{}", user_extend);
         return ResponseEntity.ok(Utils.kv("data", user_extend));
     }

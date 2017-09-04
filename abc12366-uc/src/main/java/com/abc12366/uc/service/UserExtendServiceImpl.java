@@ -13,7 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -35,6 +38,9 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Autowired
     private UserRoMapper userRoMapper;
 
+    @Autowired
+    private UserBindService userBindService;
+
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
@@ -48,8 +54,9 @@ public class UserExtendServiceImpl implements UserExtendService {
         return userExtendBO;
     }
 
+    @Transactional("db1TxManager")
     @Override
-    public UserExtendBO insert(UserExtendBO userExtendBO) {
+    public UserExtendBO insert(UserExtendBO userExtendBO, HttpServletRequest request) throws IOException {
         if (userExtendBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
@@ -78,6 +85,21 @@ public class UserExtendServiceImpl implements UserExtendService {
                 LOGGER.warn("新增失败，参数：{}" + userExtend.toString());
                 throw new ServiceException(4112);
             }
+
+
+            //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
+            String sfzjhm = userExtendBO.getIdcard();
+            String xm = userExtendBO.getRealName();
+            if (sfzjhm != null && !sfzjhm.trim().equals("")
+                    && xm != null && !xm.trim().equals("")) {
+                boolean isDzsjValidated = userBindService.isRealNameValidatedDzsj(sfzjhm, xm, request);
+                if(isDzsjValidated){
+                    userExtend.setValidStatus("2");
+                    userExtend.setLastUpdate(new Date());
+                }
+                userExtendMapper.update(userExtend);
+            }
+
             UserExtendBO userExtendBO1 = new UserExtendBO();
             BeanUtils.copyProperties(userExtend, userExtendBO1);
             LOGGER.info("{}", userExtendBO1);
@@ -106,7 +128,7 @@ public class UserExtendServiceImpl implements UserExtendService {
     }
 
     @Override
-    public UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO) {
+    public UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO, HttpServletRequest request) throws IOException {
         LOGGER.info("{}", userExtendUpdateBO);
         if (userExtendUpdateBO == null) {
             LOGGER.warn("修改失败，参数：{}" + null);
@@ -117,7 +139,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             if (userExtend == null) {
                 UserExtendBO userExtendBO = new UserExtendBO();
                 BeanUtils.copyProperties(userExtendUpdateBO, userExtendBO);
-                UserExtendBO userExtendBOReturn = insert(userExtendBO);
+                UserExtendBO userExtendBOReturn = insert(userExtendBO, request);
                 return userExtendBOReturn;
             }
             UserExtend userExtend1 = new UserExtend();

@@ -73,12 +73,10 @@ public class MainServiceImpl implements MainService {
      */
     private RSAPkResponse getRSAPublicKeyStr(HttpServletRequest request) throws IOException {
         String url = properties.getValue("wsbssoa.hngs.url") + "/pk";
-        System.out.println("---------------------url="+ url);
         HttpHeaders headers = new HttpHeaders();
         headers.add("accessToken", (String) request.getAttribute("accessToken"));
         HttpEntity requestEntity = new HttpEntity(null, headers);
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-        System.out.println("=============================json body:"+ responseEntity.getBody());
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
             RSAPkResponse obj = JSON.parseObject(String.valueOf(responseEntity.getBody()), RSAPkResponse.class);
             return obj;

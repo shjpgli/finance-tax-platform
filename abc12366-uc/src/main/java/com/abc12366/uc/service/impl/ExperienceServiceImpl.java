@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.jrxt.model.util.DateUtil;
 import com.abc12366.uc.mapper.db1.ExperienceMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
@@ -11,6 +12,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.ExperienceService;
+import com.abc12366.uc.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -100,23 +103,25 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         //查看获取经验值次数是否允许范围内
-        String startTime = "";
-        String endTime = "";
+        Date startTime = new Date();
+        Date endTime = new Date();
+
+
 
         String period = codex.getPeriod().toUpperCase();
-        if (period != null && !period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
+        if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
             switch (codex.getPeriod().toUpperCase()) {
                 case "D":
-                    startTime = "(SELECT CURDATE())";
-                    endTime = "SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)";
+                    startTime = DateUtils.getFirstHourOfDay();
+                    endTime = DateUtils.getFirstHourOfLastDay();
                     break;
                 case "M":
-                    startTime = "(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))";
-                    endTime = "(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))";
+                    startTime = DateUtils.getFirstDayOfMonth();
+                    endTime = DateUtils.getFirstDayOfLastMonth();
                     break;
                 case "Y":
-                    startTime = "(SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))";
-                    endTime = "(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))";
+                    startTime = DateUtils.getFirstMonthOfYear();
+                    endTime = DateUtils.getFirstMonthOfLastYear();
                     break;
             }
             ExpComputeLogParam param = new ExpComputeLogParam();
@@ -140,6 +145,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         ExperienceLogBO experienceLog = new ExperienceLogBO();
         experienceLog.setUserId(expComputeBO.getUserId());
+        experienceLog.setRuleId(codex.getUexpruleId());
         if (codex.getUexp() < 0) {
             experienceLog.setIncome(0);
             experienceLog.setOutgo(-codex.getUexp());

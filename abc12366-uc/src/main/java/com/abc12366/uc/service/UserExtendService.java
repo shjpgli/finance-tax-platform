@@ -3,6 +3,9 @@ package com.abc12366.uc.service;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
 /**
  * @author liuguiyao
  * @create 2017-05-05 10:08 AM
@@ -11,9 +14,9 @@ import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 public interface UserExtendService {
     UserExtendBO selectOne(String userId);
 
-    UserExtendBO insert(UserExtendBO userExtendBO);
+    UserExtendBO insert(UserExtendBO userExtendBO, HttpServletRequest request) throws IOException;
 
     UserExtendBO delete(String userId);
 
-    UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO);
+    UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO, HttpServletRequest request) throws IOException;
 }

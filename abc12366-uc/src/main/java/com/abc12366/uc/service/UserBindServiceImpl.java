@@ -3,6 +3,8 @@ package com.abc12366.uc.service;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
+import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
@@ -37,6 +39,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,12 +71,18 @@ public class UserBindServiceImpl implements UserBindService {
     @Autowired
     private AcceptClient client;
 
+    @Autowired
+    private UserExtendRoMapper userExtendRoMapper;
+
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
         if (userDzsbInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
+
+        //是否已实名认证，未认证不允许做绑定
+        isRealnameValidated(request);
 
         //查看是否重复绑定
         String userId = UserUtil.getUserId(request);
@@ -201,7 +210,8 @@ public class UserBindServiceImpl implements UserBindService {
         return null;
     }
 
-    private HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
+    @Override
+    public HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
         String url = properties.getValue("wsbssoa.hngs.app.login.url");
         HttpHeaders headers = new HttpHeaders();
 
@@ -226,6 +236,27 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
+    public boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request) throws IOException {
+        HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
+        if (hngsAppLoginResponse != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("accessToken", (String) request.getAttribute("accessToken"));
+            headers.add("Content-Type", "application/json");
+            String url = properties.getValue("wsbssoa.hngs.url") + "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
+            HttpEntity requestEntity = new HttpEntity(null, headers);
+            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+                DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
+                if (dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean dzsbUnbind(String id) {
         UserDzsb userDzsb = userBindRoMapper.userDzsbSelectById(id);
         if (userDzsb == null) {
@@ -246,6 +277,9 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
+
+        //是否已实名认证，未认证不允许做绑定
+        isRealnameValidated(request);
 
         userHngsInsertBO.setUserId(UserUtil.getUserId(request));
         //查看是否重复绑定
@@ -311,6 +345,10 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
+
+        //是否已实名认证，未认证不允许做绑定
+        isRealnameValidated(request);
+
         UserHnds userHnds = new UserHnds();
         //BeanUtils.copyProperties(userHndsInsertBO, userHnds);
         Date date = new Date();
@@ -545,5 +583,13 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4633);
         }
 
+    }
+
+    private void isRealnameValidated(HttpServletRequest request){
+        String userId = UserUtil.getUserId(request);
+        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        if (userExtend == null || StringUtils.isEmpty(userExtend.getValidStatus()) || !userExtend.getValidStatus().trim().equals("2")) {
+            throw new ServiceException(4712);
+        }
     }
 }
