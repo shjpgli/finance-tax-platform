@@ -182,7 +182,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             orderInvoice.setLastUpdate(date);
             OrderInvoice oInvoice = orderInvoiceRoMapper.selectByOrderNo(orderNo);
             if(oInvoice != null){
-                throw new ServiceException(41999,"该订单"+orderNo+"已开发票");
+//                throw new ServiceException(41999,"该订单"+orderNo+"已开发票");
+                throw new ServiceException(41999,"已开发票");
             }
             int oInsert = orderInvoiceMapper.insert(orderInvoice);
             if (oInsert != 1) {

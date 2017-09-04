@@ -175,7 +175,11 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         invoiceRepoBO.setUpdateUser(UserUtil.getAdminId());
         InvoiceRepo invoiceRepo = new InvoiceRepo();
         BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
-
+        //已出库的发票仓库不能进行修改
+        InvoiceRepoBO tempRepo = invoiceRepoRoMapper.selectInvoiceRepo(invoiceRepoBO.getId());
+        if(tempRepo != null && "1".equals(tempRepo.getStatus())){
+            throw new ServiceException(4911,"已出库的仓库数据，不能进行修改");
+        }
         int startLength = invoiceRepoBO.getInvoiceNoStart().length();
         int endLength = invoiceRepoBO.getInvoiceNoEnd().length();
         if(startLength != endLength){
