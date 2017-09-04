@@ -124,8 +124,8 @@ public class CurriculumServiceImpl implements CurriculumService {
             //查询课程授课信息
             curriculumSituationBo = curriculumRoMapper.selectSituation(curriculumId);
         } catch (Exception e) {
-            LOGGER.error("新增课程授课信息异常：{}", e);
-            throw new ServiceException(4322);
+            LOGGER.error("查询课程授课信息异常：{}", e);
+            throw new ServiceException(4321);
         }
         return curriculumSituationBo;
     }
