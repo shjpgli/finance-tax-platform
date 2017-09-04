@@ -558,8 +558,8 @@ public class OrderServiceImpl implements OrderService {
         //加入交易日志
         TradeLog tradeLog=new TradeLog();
         tradeLog.setId(Utils.uuid());
-        tradeLog.setOrderNo(order.getOrderNo());
-        tradeLog.setAliTrandeNo(order.getOrderNo());
+        tradeLog.setOrderNo(orderBO.getOrderNo());
+        tradeLog.setAliTrandeNo(orderBO.getOrderNo());
         tradeLog.setTradeStatus("1");
         tradeLog.setTradeType("2");
         tradeLog.setAmount(Double.parseDouble("-"+totalPrice));
