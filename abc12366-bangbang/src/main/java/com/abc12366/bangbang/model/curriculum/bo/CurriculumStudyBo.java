@@ -19,6 +19,9 @@ public class CurriculumStudyBo implements Serializable {
 	/**课件ID**varchar(64)**/
 	private String coursewareId;
 
+    /**课件名称**varchar(64)**/
+    private String coursewareName;
+
 	/**用户ID**varchar(64)**/
 	private String userId;
 
@@ -72,7 +75,16 @@ public class CurriculumStudyBo implements Serializable {
 		return this.coursewareId;
 	}
 
-	public void setUserId(String userId){
+
+    public String getCoursewareName() {
+        return coursewareName;
+    }
+
+    public void setCoursewareName(String coursewareName) {
+        this.coursewareName = coursewareName;
+    }
+
+    public void setUserId(String userId){
 		this.userId = userId;
 	}
 
