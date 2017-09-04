@@ -230,6 +230,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
                     LOGGER.warn("发票不存在{}：" + repoBO);
                     throw new ServiceException(4907);
                 }
+                Date date = new Date();
                 InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
                 invoiceDistribute.setId(Utils.uuid());
                 invoiceDistribute.setInvoiceRepoId(repoBO.getId());
@@ -241,7 +242,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
                 invoiceDistribute.setBook(repoBO.getBook());
                 invoiceDistribute.setInvoiceTypeCode(repoBO.getInvoiceTypeCode());
                 invoiceDistribute.setDistributeUser(invoiceUseCheckBO.getDistributeUser());
-                invoiceDistribute.setDistributeTime(new Date());
+                invoiceDistribute.setDistributeTime(date);
                 invoiceDistribute.setUseId(invoiceUseCheckBO.getId());
                 invoiceDistribute.setRemark(detailBO.getRemark());
                 int insert = invoiceDistributeMapper.insert(invoiceDistribute);
@@ -249,6 +250,21 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
                     LOGGER.warn("新增失败，参数{}：" + invoiceDistribute);
                     throw new ServiceException(4101);
                 }
+
+                //更新发票库存状态
+                InvoiceRepo invoiceRepo = new InvoiceRepo();
+                invoiceRepo.setUpdateUser(UserUtil.getAdminId());
+                invoiceRepo.setLastUpdate(date);
+                invoiceRepo.setId(invoiceDistribute.getInvoiceRepoId());
+                invoiceRepo.setStatus("1");
+                invoiceRepoMapper.update(invoiceRepo);
+                //更新发票明细的状态
+                InvoiceDetail invoiceDetail = new InvoiceDetail();
+                invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
+                invoiceDetail.setLastUpdate(date);
+                invoiceDetail.setStatus("0");
+                invoiceDetailMapper.updateByRepoId(invoiceDetail);
+
             }
         }
     }
@@ -273,22 +289,6 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             invoiceUseApply.setSignTime(date);
             invoiceUseApply.setSignUser(UserUtil.getAdminId());
             invoiceUseApplyMapper.update(invoiceUseApply);
-
-            //更新发票库存状态
-            InvoiceRepo invoiceRepo = new InvoiceRepo();
-            invoiceRepo.setUpdateUser(UserUtil.getAdminId());
-            invoiceRepo.setLastUpdate(date);
-            invoiceRepo.setId(invoiceDistribute.getInvoiceRepoId());
-            invoiceRepo.setStatus("1");
-            invoiceRepoMapper.update(invoiceRepo);
-            //更新发票明细的状态
-            InvoiceDetail invoiceDetail = new InvoiceDetail();
-            invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
-            invoiceDetail.setLastUpdate(date);
-            invoiceDetail.setStatus("0");
-            invoiceDetailMapper.updateByRepoId(invoiceDetail);
-
-
         }
     }
 
