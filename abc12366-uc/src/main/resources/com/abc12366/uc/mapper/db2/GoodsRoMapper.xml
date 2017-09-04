@@ -150,6 +150,7 @@
                 ]]>
             </if>
         </where>
+        order by sellingPrice asc
     </select>
 
     <select id="getDictBO" parameterType="java.lang.String" resultMap="dictBOMap">

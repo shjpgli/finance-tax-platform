@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,6 +108,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private DictRoMapper dictRoMapper;
+
+    @Autowired
+    private TradeLogMapper tradeLogMapper;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -532,14 +537,14 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //可用积分=上一次的可用积分+|-本次收入|支出
-        int usablePoints = (int) (userPoints + (giftPoints * num) - (totalPrice * num));
+//        int usablePoints = (int) (userPoints + (giftPoints * num) - (totalPrice * num));
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
-        user.setPoints(usablePoints);
-        int userUpdateResult = userMapper.update(user);
-        if (userUpdateResult != 1) {
-            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
-            throw new ServiceException(4101);
-        }
+//        user.setPoints(usablePoints);
+//        int userUpdateResult = userMapper.update(user);
+//        if (userUpdateResult != 1) {
+//            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + orderBO.getUserId());
+//            throw new ServiceException(4101);
+//        }
 
         // 积分日志
         PointsLogBO pointsLog = new PointsLogBO();
@@ -549,6 +554,21 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setLogType("POINTS_RECHARGE");
         pointsLog.setRemark("积分兑换");
         pointsLogService.insert(pointsLog);
+
+        //加入交易日志
+        TradeLog tradeLog=new TradeLog();
+        tradeLog.setId(Utils.uuid());
+        tradeLog.setOrderNo(order.getOrderNo());
+        tradeLog.setAliTrandeNo(order.getOrderNo());
+        tradeLog.setTradeStatus("1");
+        tradeLog.setTradeType("2");
+        tradeLog.setAmount(Double.parseDouble("-"+totalPrice));
+        Timestamp now = new Timestamp(new Date().getTime());
+        tradeLog.setTradeTime(now);
+        tradeLog.setCreateTime(now);
+        tradeLog.setLastUpdate(now);
+        //tradeLog.setPayMethod("ALIPAY");
+        tradeLogMapper.insertTradeLog(tradeLog);
 
         //加入订单信息,
         orderBO.setOrderStatus(orderStatus);
