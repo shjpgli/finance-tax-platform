@@ -33,6 +33,9 @@ public class NoticeBO {
 
     private Integer count;
 
+    //来源
+    private String comefrom;
+
 
     public NoticeBO() {
     }
@@ -123,5 +126,13 @@ public class NoticeBO {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public String getComefrom() {
+        return comefrom;
+    }
+
+    public void setComefrom(String comefrom) {
+        this.comefrom = comefrom;
     }
 }
