@@ -53,6 +53,13 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     @Override
     public List<KnowledgeTag> addBatch(List<KnowledgeTag> knowledgeTags) {
         for (KnowledgeTag tag: knowledgeTags){
+            KnowledgeTag tag1 = knowledgeTagMapper.selectByName(tag.getName());
+            if(tag1 != null && tag1.getStatus()){
+                throw new ServiceException(4520);
+            }
+            if(tag1 != null && !tag1.getStatus()){
+                throw new ServiceException(4521);
+            }
             tag.setId(Utils.uuid());
             tag.setCreateUser(UcUserCommon.getAdminId());
             tag.setUpdateUser(UcUserCommon.getAdminId());
@@ -84,6 +91,13 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
 
     @Override
     public KnowledgeTag modify(KnowledgeTag knowledgeTag) {
+        KnowledgeTag tag = knowledgeTagMapper.selectByName(knowledgeTag.getName());
+        if(tag != null && tag.getStatus()){
+            throw new ServiceException(4520);
+        }
+        if(tag != null && !tag.getStatus()){
+            throw new ServiceException(4521);
+        }
         try {
             knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
             knowledgeTag.setUpdateTime(new Date());
