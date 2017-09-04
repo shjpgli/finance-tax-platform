@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, title, author, content, status, createTime, lastUpdate,count
+        id, title, author, content, status, createTime, lastUpdate,count,comefrom
     </sql>
 
     <select id="selectList" resultType="com.abc12366.cms.model.bo.NoticeBO"
