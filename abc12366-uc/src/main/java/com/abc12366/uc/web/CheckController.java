@@ -57,6 +57,12 @@ public class CheckController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) rankList, "total", ((Page) rankList).getTotal()));
     }
 
+    /**
+     * 获取用户的签到情况
+     * @param yearMonth
+     * @param request
+     * @return
+     */
     @GetMapping(path = "/check/list")
     public ResponseEntity checklist(@RequestParam(required = true) String yearMonth,
                                     HttpServletRequest request){

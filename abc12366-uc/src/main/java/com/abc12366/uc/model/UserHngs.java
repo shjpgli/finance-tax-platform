@@ -17,7 +17,7 @@ public class UserHngs {
     private String swjgMc;
     private String swjgDm;
     private String bsy;
-    private boolean smrzzt;
+    private String smrzzt;
     private boolean status;
     private Date createTime;
     private Date lastUpdate;
@@ -106,11 +106,11 @@ public class UserHngs {
         this.bsy = bsy;
     }
 
-    public boolean isSmrzzt() {
+    public String getSmrzzt() {
         return smrzzt;
     }
 
-    public void setSmrzzt(boolean smrzzt) {
+    public void setSmrzzt(String smrzzt) {
         this.smrzzt = smrzzt;
     }
 

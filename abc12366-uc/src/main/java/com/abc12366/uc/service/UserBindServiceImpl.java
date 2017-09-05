@@ -297,18 +297,36 @@ public class UserBindServiceImpl implements UserBindService {
                 throw new ServiceException(hngsNsrLoginResponse.getCode(), hngsNsrLoginResponse.getMsg());
             }
         }
+        //办税员角色
+        String bsyjs = "";
+        switch (userHngsInsertBO.getRole().trim().toUpperCase()) {
+            case "R0001":
+                bsyjs = "办税员01";
+                break;
+            case "R0002":
+                bsyjs = "办税员02";
+                break;
+            case "R0003":
+                bsyjs = "办税员03";
+                break;
+        }
 
         UserHngs userHngs = new UserHngs();
         userHngs.setDjxh(hngsNsrLoginResponse.getDjxh());
         userHngs.setNsrsbh(hngsNsrLoginResponse.getNsrsbh());
-        userHngs.setBsy(userHngsInsertBO.getBsy());
+        userHngs.setBsy(bsyjs);
         userHngs.setNsrmc(hngsNsrLoginResponse.getNsrmc());
         userHngs.setShxydm(hngsNsrLoginResponse.getNsrsbh());
         userHngs.setSwjgMc(hngsNsrLoginResponse.getZgswjmc());
         userHngs.setSwjgDm(hngsNsrLoginResponse.getZgswjDm());
         Date date = new Date();
         userHngs.setId(Utils.uuid());
-        userHngs.setSmrzzt(false);
+        if ((hngsNsrLoginResponse.getGxruuid() != null && !hngsNsrLoginResponse.getGxruuid().trim().equals(""))) {
+            userHngs.setSmrzzt("已认证");
+        } else {
+            userHngs.setSmrzzt("未认证");
+        }
+
         userHngs.setStatus(true);
         userHngs.setCreateTime(date);
         userHngs.setLastUpdate(date);
@@ -585,7 +603,7 @@ public class UserBindServiceImpl implements UserBindService {
 
     }
 
-    private void isRealnameValidated(HttpServletRequest request){
+    private void isRealnameValidated(HttpServletRequest request) {
         String userId = UserUtil.getUserId(request);
         UserExtend userExtend = userExtendRoMapper.selectOne(userId);
         if (userExtend == null || StringUtils.isEmpty(userExtend.getValidStatus()) || !userExtend.getValidStatus().trim().equals("2")) {

@@ -21,7 +21,7 @@ public class UserHngsBO {
     private String swjgMc;
     private String swjgDm;
     private String bsy;
-    private Boolean smrzzt;
+    private String smrzzt;
     @NotNull
     private Boolean status;
     private Date createTime;
@@ -111,11 +111,11 @@ public class UserHngsBO {
         this.bsy = bsy;
     }
 
-    public Boolean getSmrzzt() {
+    public String getSmrzzt() {
         return smrzzt;
     }
 
-    public void setSmrzzt(Boolean smrzzt) {
+    public void setSmrzzt(String smrzzt) {
         this.smrzzt = smrzzt;
     }
 

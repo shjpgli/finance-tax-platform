@@ -266,6 +266,7 @@ public class AuthServiceImpl implements AuthService {
             logBO.setId(Utils.uuid());
             logBO.setIncome(exp);
             logBO.setUserId(userId);
+            logBO.setRuleId("E-Login");
             logBO.setOutgo(0);
             logBO.setCreateTime(new Date());
             experienceLogService.insert(logBO);
