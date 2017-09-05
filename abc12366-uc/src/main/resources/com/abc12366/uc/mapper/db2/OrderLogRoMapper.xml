@@ -24,7 +24,7 @@
         LEFT JOIN uc_user_admin u ON o.createUser = u.id
         <where>
             1=1
-            <if test="orderNo != null">o.orderNo = #{orderNo}</if>
+            <if test="orderNo != null">and o.orderNo = #{orderNo}</if>
             <if test="logType != null">AND o.logType = #{logType}</if>
         </where>
         ORDER BY o.createTime desc
