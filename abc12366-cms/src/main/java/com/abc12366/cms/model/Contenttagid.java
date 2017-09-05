@@ -19,6 +19,8 @@ public class Contenttagid implements Serializable {
      **/
     private String tagId;
 
+    private String tagName;
+
     /**
      * priority**int(11)
      **/
@@ -38,6 +40,15 @@ public class Contenttagid implements Serializable {
 
     public void setTagId(String tagId) {
         this.tagId = tagId;
+    }
+
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
     public Integer getPriority() {

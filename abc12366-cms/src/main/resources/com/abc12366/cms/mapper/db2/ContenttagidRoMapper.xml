@@ -11,7 +11,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Contenttagid" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List"/>
+        contentId, tagId, priority
         FROM cms_contenttagid
         WHERE contentId = #{contentId}
     </select>
@@ -19,8 +19,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.cms.model.Contenttagid" parameterType="java.lang.String">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM cms_contenttagid
+        contentId, tagId, priority,t.name
+        FROM cms_contenttagid c left join abc12366_bangbang.bb_knowledge_tag t on c.tagId = t.id
         WHERE contentId = #{contentId}
     </select>
 

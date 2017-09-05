@@ -206,9 +206,9 @@
 
 	<!-- 查询（根据channelId查询） -->
 	<select id="selectContentType" resultType="com.abc12366.cms.model.bo.ContenttagidBo" parameterType="java.util.Map">
-		SELECT
-		a.tagId,COUNT(a.tagId) priority
-		FROM cms_contenttagid a LEFT JOIN cms_content b ON a.contentId = b.contentId
+        SELECT
+        a.tagId,COUNT(a.tagId) priority,(select name from abc12366_bangbang.bb_knowledge_tag where id = a.tagId) tagName
+        FROM cms_contenttagid a LEFT JOIN cms_content b ON a.contentId = b.contentId
 		WHERE 1=1
 		<if test="siteId != null and siteId != ''">
 			AND b.siteId = #{siteId}
