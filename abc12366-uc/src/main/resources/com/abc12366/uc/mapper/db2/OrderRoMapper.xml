@@ -199,7 +199,7 @@
         l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark,l.logType,a.username as createUserName
         FROM uc_order_log l
         LEFT JOIN uc_admin a on a.id = l.createUser
-        WHERE l.logType = '0' and  l.orderNo = #{orderNo}
+        WHERE l.orderNo = #{orderNo}
         ORDER BY l.createTime DESC
     </select>
 
