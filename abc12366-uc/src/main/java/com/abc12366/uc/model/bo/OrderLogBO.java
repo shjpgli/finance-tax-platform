@@ -16,6 +16,8 @@ public class OrderLogBO implements Serializable {
     private String createUser;
     private String remark;
     private String createUserName;
+    /**订单日志类型，0：订购日志，1：退单日志**/
+    private String logType;
 
     public String getId() {
         return this.id;
@@ -71,5 +73,13 @@ public class OrderLogBO implements Serializable {
 
     public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
+    }
+
+    public String getLogType() {
+        return logType;
+    }
+
+    public void setLogType(String logType) {
+        this.logType = logType;
     }
 }

@@ -38,6 +38,10 @@ public class OrderLog implements Serializable {
      **/
     private String remark;
 
+    /**订单日志类型，0：订购日志，1：退单日志**/
+    private String logType;
+
+
     public OrderLog() {
     }
 
@@ -48,6 +52,7 @@ public class OrderLog implements Serializable {
         setCreateTime(builder.createTime);
         setCreateUser(builder.createUser);
         setRemark(builder.remark);
+        setLogType(builder.logType);
     }
 
     public String getId() {
@@ -98,6 +103,14 @@ public class OrderLog implements Serializable {
         this.remark = remark;
     }
 
+    public String getLogType() {
+        return logType;
+    }
+
+    public void setLogType(String logType) {
+        this.logType = logType;
+    }
+
 
     public static final class Builder {
         private String id;
@@ -106,6 +119,7 @@ public class OrderLog implements Serializable {
         private Date createTime;
         private String createUser;
         private String remark;
+        private String logType;
 
         public Builder() {
         }
@@ -137,6 +151,11 @@ public class OrderLog implements Serializable {
 
         public Builder remark(String val) {
             remark = val;
+            return this;
+        }
+
+        public Builder logType(String val) {
+            logType = val;
             return this;
         }
 

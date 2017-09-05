@@ -50,7 +50,7 @@ public class Constant {
     public final static String pageSize = "10";
 
     //系统设置默认密码
-    public final static String defaultPwd = "ABC12306";
+    public final static String defaultPwd = "abc@12366";
     //时间-当前日期
     public final static String startTime = getTodaySting();
 

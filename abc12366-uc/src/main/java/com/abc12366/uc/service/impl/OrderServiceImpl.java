@@ -241,23 +241,23 @@ public class OrderServiceImpl implements OrderService {
                     if ("5".equals(goodsType)) {
                         //会员充值
                         operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2",specInfo.toString());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单");
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
                     }else{
                         operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2",specInfo.toString());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单");
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
                     }
                 } else if ("POINTS".equals(orderBO.getTradeMethod())) {
                     //订单状态，1：新订单，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
                     if ("1".equals(goodsType) || "2".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4",specInfo.toString());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "4", "用户新增订单");
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "4", "用户新增订单","0");
                     } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
                         userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功");
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功","0");
                     }else if ("6".equals(goodsType)) {
                         operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功");
+                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功","0");
                     }
                 }
             }
@@ -551,7 +551,7 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setUserId(orderBO.getUserId());
         pointsLog.setRuleId(orderBO.getOrderNo());
         pointsLog.setIncome(giftPoints * num);
-        pointsLog.setOutgo((int)totalPrice * num);
+        pointsLog.setOutgo((int) totalPrice * num);
         pointsLog.setLogType("POINTS_RECHARGE");
         pointsLog.setRemark("积分兑换");
         pointsLogService.insert(pointsLog);
@@ -612,7 +612,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    private void insertOrderLog(String userId, String orderNo, String status, String remark) {
+    private void insertOrderLog(String userId, String orderNo, String status, String remark,String logType) {
         //加入订单日志信息
         OrderLog orderLog = new OrderLog();
         orderLog.setId(Utils.uuid());
@@ -621,6 +621,7 @@ public class OrderServiceImpl implements OrderService {
         orderLog.setCreateTime(new Date());
         orderLog.setCreateUser(userId);
         orderLog.setRemark(remark);
+        orderLog.setLogType(selectFieldValue("orderLogType", logType));
         int logInsert = orderLogMapper.insert(orderLog);
         if (logInsert != 1) {
             LOGGER.info("订单日志新增失败：{}", orderLog);
@@ -685,7 +686,7 @@ public class OrderServiceImpl implements OrderService {
                     orderProductspecMapper.deleteByOrderNo(orderProductBO.getOrderNo());
                 }
             }
-            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "7", "用户删除订单");
+            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "7", "用户删除订单","0");
         }else{
             LOGGER.info("订单只有在未付款或已结束可以删除：{}", orderBO);
             throw new ServiceException(4140);
@@ -725,7 +726,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单");
+        insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单","0");
         return bo;
     }
 
@@ -752,7 +753,7 @@ public class OrderServiceImpl implements OrderService {
         orderBack.setCreateTime(date);
         orderBack.setLastUpdate(date);
         orderBackMap.insert(orderBack);
-        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "10", "用户申请退单");
+        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "1", "用户提交退单","1");
         return orderBack;
     }
 
@@ -775,7 +776,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "7", "用户填写快递号");
+        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "7", "用户填写快递号","1");
         return orderBack;
     }
 
@@ -796,7 +797,7 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderNo(orderNo);
             order.setOrderStatus("6");
             orderMapper.update(order);
-            insertOrderLog(orderBack.getUserId(), orderNo, "6", "管理员允许退单");
+            insertOrderLog(orderBack.getUserId(), orderNo, "6", "管理员允许退单","1");
 
             //获取订单和产品关系信息
             OrderProductBO pBO = new OrderProductBO();
@@ -838,7 +839,7 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderNo(orderBack.getOrderNo());
             order.setOrderStatus("6");
             orderMapper.update(order);
-            insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "6", "管理员不允许退单");
+            insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "6", "管理员不允许退单","1");
         }
         return orderBack;
     }
@@ -875,7 +876,7 @@ public class OrderServiceImpl implements OrderService {
                         LOGGER.warn("修改失败，参数：{}", order);
                         throw new ServiceException(4102);
                     }
-                    insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中");
+                    insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中","0");
                 } else if (isPay == 2) {
                     //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
                     if (goodsType.equals("1") || goodsType.equals("2")) {
@@ -883,7 +884,7 @@ public class OrderServiceImpl implements OrderService {
                         orderMapper.update(order);
 
                         insertPoints(orderBO);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功","0");
                     } else if (goodsType.equals("3") || goodsType.equals("4")) {
                         order.setOrderStatus("6");
                         orderMapper.update(order);
@@ -895,18 +896,18 @@ public class OrderServiceImpl implements OrderService {
                         LOGGER.info("插入会员日志: {}", orderNo);
                         insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
                     } else if (goodsType.equals("5") || goodsType.equals("6")) {
                         order.setOrderStatus("6");
                         orderMapper.update(order);
 
                         insertPoints(orderBO);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
                     }
                 } else if (isPay == 3) {
                     order.setOrderStatus("2");
                     orderMapper.update(order);
-                    insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款");
+                    insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款","0");
                 }
             }
         }
@@ -989,7 +990,7 @@ public class OrderServiceImpl implements OrderService {
                 LOGGER.warn("修改失败，参数：{}", order);
                 throw new ServiceException(4102);
             }
-            insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货");
+            insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货","0");
         }
     }
 
@@ -1004,7 +1005,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.warn("修改失败，参数：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark());
+        insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(),"0");
     }
 
     @Override
@@ -1027,7 +1028,7 @@ public class OrderServiceImpl implements OrderService {
         for(Order order:orderList){
             order.setOrderStatus("6");
             orderMapper.update(order);
-            insertOrderLog("", order.getOrderNo(), "6", "系统自动确认收货");
+            insertOrderLog("", order.getOrderNo(), "6", "系统自动确认收货","0");
         }
     }
 
@@ -1039,7 +1040,7 @@ public class OrderServiceImpl implements OrderService {
         for(Order order:orderList){
             order.setOrderStatus("7");
             orderMapper.update(order);
-            insertOrderLog("", order.getOrderNo(), "7" ,"系统自动取消订单");
+            insertOrderLog("", order.getOrderNo(), "7" ,"系统自动取消订单","0");
         }
     }
 
@@ -1070,7 +1071,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.warn("修改失败，参数：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(order.getUserId(), order.getOrderNo(), "6" ,"用户确认收货");
+        insertOrderLog(order.getUserId(), order.getOrderNo(), "6" ,"用户确认收货","0");
     }
 
 }
