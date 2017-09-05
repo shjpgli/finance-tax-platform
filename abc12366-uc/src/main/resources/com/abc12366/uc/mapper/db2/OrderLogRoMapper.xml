@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, orderNo, action, createTime, createUser, remark
+        id, orderNo, action, createTime, createUser, remark,logType
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -19,10 +19,14 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.uc.model.bo.GoodsLogBO" parameterType="com.abc12366.uc.model.OrderLog">
         SELECT
-        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as createUserName
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as createUserName,o.logType
         FROM uc_order_log o
         LEFT JOIN uc_user_admin u ON o.createUser = u.id
-        WHERE o.orderNo = #{orderNo}
+        <where>
+            1=1
+            <if test="orderNo != null">o.orderNo = #{orderNo}</if>
+            <if test="logType != null">AND o.logType = #{logType}</if>
+        </where>
         ORDER BY o.createTime desc
     </select>
 </mapper>

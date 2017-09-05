@@ -366,11 +366,11 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 	                            oe.setLastUpdate(new Timestamp(new Date().getTime()));
 	                            orderExchangeMapper.update(oe);
 	                            // 插入订单日志-已退款
-	                            insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
+	                           // insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
 
                                 
                                 // 插入订单日志-已完成
-                                insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "系统自动完成","1");
+                                insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款","1");
 								
 								return ResponseEntity.ok(Utils.kv("data", refundRes));
 							}else{

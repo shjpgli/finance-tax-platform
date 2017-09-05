@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,11 +32,12 @@ public class OrderLogController {
     /**
      * 订单日志列表查询
      */
-    @GetMapping(path = "/{orderNo}")
-    public ResponseEntity selectList(@PathVariable("orderNo") String orderNo) {
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(value = "orderNo", required = true) String orderNo,
+                                     @RequestParam(value = "logType", required = true) String logType) {
         OrderLog orderLog = new OrderLog();
-
         orderLog.setOrderNo(orderNo);
+        orderLog.setLogType(logType);
         List<OrderLog> orderLogList = orderLogService.selectList(orderLog);
         LOGGER.info("{}", orderLogList);
         return (orderLogList == null) ?
