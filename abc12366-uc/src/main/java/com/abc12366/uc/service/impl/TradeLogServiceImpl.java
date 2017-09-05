@@ -53,11 +53,12 @@ public class TradeLogServiceImpl implements TradeLogService {
                 if (log != null && log.getOrderNo().equals(data.getOrderNo())
                         && log.getAmount().equals(data.getAmount())) {
                     log.setCompareStatus("1");
-                    log.setCompareTime(new Date());
-                    tradeLogMapper.update(log);
                 } else {
+                    log.setCompareStatus("0");
                     undoneList.add(data);
                 }
+                log.setCompareTime(new Date());
+                tradeLogMapper.update(log);
             }
         }
         return undoneList;
