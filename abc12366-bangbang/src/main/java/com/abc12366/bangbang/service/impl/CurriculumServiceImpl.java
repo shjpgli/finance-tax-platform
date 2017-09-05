@@ -159,6 +159,9 @@ public class CurriculumServiceImpl implements CurriculumService {
     @Override
     public CurriculumBo save(CurriculumBo curriculumBo) {
         String goodsId = curriculumBo.getGoodsId();
+        if(goodsId == null){
+            goodsId = "";
+        }
         if(1 == curriculumBo.getIsFree()){
             curriculumBo.setGoodsId("");
         }else{
@@ -346,6 +349,9 @@ public class CurriculumServiceImpl implements CurriculumService {
     public CurriculumBo update(CurriculumBo curriculumBo) {
         String curriculumId = curriculumBo.getCurriculumId();
         String goodsId = curriculumBo.getGoodsId();
+        if(goodsId == null){
+            goodsId = "";
+        }
 
         //查询课程信息
         Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
