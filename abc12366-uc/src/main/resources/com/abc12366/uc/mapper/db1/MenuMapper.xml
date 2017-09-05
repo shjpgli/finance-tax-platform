@@ -73,19 +73,38 @@
     </insert>
 
     <update id="update" parameterType="com.abc12366.uc.model.admin.Menu">
-        update uc_menu
+        UPDATE uc_menu
         <set>
-            <if test="menuName != null">menuName = #{menuName},</if>
-            <if test="menuUrl != null">menuUrl = #{menuUrl},</if>
-            <if test="parentId != null">parentId = #{parentId},</if>
-            <if test="perms != null">perms = #{perms},</if>
-            <if test="type != null">type = #{type},</if>
-            <if test="icon != null">icon = #{icon},</if>
-            <if test="sort != null">sort = #{sort},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="remark != null">remark = #{remark}</if>
+            <if test="menuName != null">
+                menuName = #{menuName},
+            </if>
+            <if test="menuUrl != null">
+                menuUrl = #{menuUrl},
+            </if>
+            <if test="parentId != null">
+                parentId = #{parentId},
+            </if>
+            <if test="perms != null">
+                perms = #{perms},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="icon != null">
+                icon = #{icon},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+
         </set>
-        where menuId=#{menuId}
+        WHERE menuId = #{menuId}
     </update>
 
     <delete id="delete">
