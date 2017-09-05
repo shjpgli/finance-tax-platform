@@ -33,6 +33,9 @@
             <if test="lastUpdate != null">
                 lastUpdate,
             </if>
+            <if test="status != null">
+                status,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -50,6 +53,9 @@
             </if>
             <if test="lastUpdate!=null">
                 #{lastUpdate},
+            </if>
+            <if test="status!=null">
+                #{status},
             </if>
         </trim>
     </insert>
@@ -69,6 +75,9 @@
             </if>
             <if test="lastUpdate != null">
                 lastUpdate = #{lastUpdate},
+            </if>
+            <if test="status != null">
+                status = #{status},
             </if>
         </set>
         WHERE id = #{id}

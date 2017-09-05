@@ -115,7 +115,7 @@
             resultType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO">
         select c.invoiceNo, c.invoiceCode, c.name, c.content, c.amount, c.type, c.property, c.status,
         c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank, d.isInvoice, d.orderNo from
-        (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId) c
+        (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId and b.status = true ) c
         left join uc_order d on c.orderNo = d.orderNo
         WHERE c.status <![CDATA[!=]]> '3' and c.status <![CDATA[!=]]> '5' and c.status <![CDATA[!=]]> '6'
         and c.orderNo = #{orderNo}
@@ -125,7 +125,7 @@
             resultType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO">
         select c.invoiceNo, c.invoiceCode, c.name, c.content, c.amount, c.type, c.property, c.status,
         c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank, d.isInvoice, d.orderNo from
-        (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId) c
+        (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId and b.status = true ) c
         left join uc_order d on c.orderNo = d.orderNo
         where c.status = '6'
         and c.orderNo = #{orderNo}

@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderInvoiceRoMapper">
 
     <sql id="Base_Column_List">
-        id, orderNo, invoiceId, createTime, lastUpdate
+        id, orderNo, invoiceId, createTime, lastUpdate,status
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
