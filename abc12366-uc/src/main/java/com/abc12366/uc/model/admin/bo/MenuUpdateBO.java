@@ -17,7 +17,7 @@ public class MenuUpdateBO implements Serializable {
     private String perms;
     private String type;
     private String icon;
-    private int sort;
+    private Integer sort;
     private Boolean status;
     private String remark;
 
@@ -27,7 +27,7 @@ public class MenuUpdateBO implements Serializable {
     }
 
     public MenuUpdateBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type,
-                        String icon, int sort, Boolean status, String remark) {
+                        String icon, Integer sort, Boolean status, String remark) {
         this.menuId = menuId;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
@@ -100,7 +100,7 @@ public class MenuUpdateBO implements Serializable {
         return sort;
     }
 
-    public void setSort(int sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
     }
 
