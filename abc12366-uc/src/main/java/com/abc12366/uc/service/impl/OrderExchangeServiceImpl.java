@@ -123,7 +123,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             order.setLastUpdate(new Date());
             orderMapper.update(order);
 
-            insertLog(order.getOrderNo(), "orderStatus", "10", Utils.getUserId(), "用户提交退换货申请","1");
+            //insertLog(order.getOrderNo(), "orderStatus", "10", Utils.getUserId(), "用户提交退换货申请","1");
         }
     }
 
@@ -287,7 +287,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
             }
             // 插入订单日志
-            insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminRemark(),"1");
+            insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminConfirmRemark(),"1");
         }
         return oe;
     }
@@ -538,7 +538,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         orderLogMapper.insert(ol);
     }
     
-    private void insertLog(String orderNo, String dictId, String status, String userId, String remark,String logType) {
+    /*private void insertLog(String orderNo, String dictId, String status, String userId, String remark,String logType) {
         // 插入订单日志
         OrderLog ol = new OrderLog.Builder()
             .id(Utils.uuid())
@@ -550,5 +550,5 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             .logType(selectFieldValue("exchange_status", logType))
             .build();
         orderLogMapper.insert(ol);
-    }
+    }*/
 }
