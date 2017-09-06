@@ -621,7 +621,7 @@ public class OrderServiceImpl implements OrderService {
         orderLog.setCreateTime(new Date());
         orderLog.setCreateUser(userId);
         orderLog.setRemark(remark);
-        orderLog.setLogType(selectFieldValue("orderLogType", logType));
+        orderLog.setLogType(logType);
         int logInsert = orderLogMapper.insert(orderLog);
         if (logInsert != 1) {
             LOGGER.info("订单日志新增失败：{}", orderLog);

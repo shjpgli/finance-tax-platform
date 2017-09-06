@@ -144,12 +144,9 @@
             parameterType="com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO">
         SELECT
         a.id,	a.applyUser,	a.applyTime,	a.issueStatus,	a.examineStatus,	a.distributeUser,
-        a.distributeTime,	a.signUser,	a.signTime,	a.remark,u.nickname as applyUserName,
-        d.useId as useId,	d.invoiceTypeCode,	d.repoNum,	d.applyNum,d.realNum,	d.remark as detailRemark,t.fieldKey as fieldKey
+        a.distributeTime,	a.signUser,	a.signTime,	a.remark,u.nickname as applyUserName
         FROM uc_invoice_use_apply a
         LEFT JOIN uc_admin u on u.id = a.applyUser
-        LEFT JOIN uc_invoice_use_detail d on d.useId = a.id
-        LEFT JOIN uc_dict t on t.id = d.invoiceTypeCode
         <where>
             1 = 1
             <if test=" issueStatus != null and issueStatus != '' ">
