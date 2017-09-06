@@ -17,6 +17,9 @@ public class CurriculumLecturer implements Serializable {
 	/**讲师用户ID**varchar(64)**/
 	private String userId;
 
+	/**讲师用户名称**varchar(64)**/
+	private String username;
+
 	/**讲师姓名**varchar(30)**/
 	private String lecturerName;
 
@@ -44,7 +47,14 @@ public class CurriculumLecturer implements Serializable {
     /**修改时间**datetime**/
     private java.util.Date updateTime;
 
+	public String getUsername() {
+		return username;
+	}
 
+	public CurriculumLecturer setUsername(String username) {
+		this.username = username;
+		return this;
+	}
 
 	public void setLecturerId(String lecturerId){
 		this.lecturerId = lecturerId;
