@@ -78,7 +78,7 @@
         <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
 
-        <association property="user" javaType="com.abc12366.uc.model.User">
+        <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
             <id column="userId" property="id"/>
             <result column="username" property="username"/>
             <result column="nickname" property="nickname"/>
@@ -118,7 +118,7 @@
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
 
-        <association property="user" javaType="com.abc12366.uc.model.User">
+        <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
             <id column="userId" property="id"/>
             <result column="username" property="username"/>
             <result column="nickname" property="nickname"/>
