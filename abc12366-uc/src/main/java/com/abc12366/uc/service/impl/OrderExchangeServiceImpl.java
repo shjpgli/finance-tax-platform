@@ -533,7 +533,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 .createTime(new Timestamp(new Date().getTime()))
                 .createUser(userId)
                 .remark(remark)
-                .logType(selectFieldValue("exchange_status", logType))
+                .logType(logType)
                 .build();
         orderLogMapper.insert(ol);
     }
@@ -547,7 +547,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             .createTime(new Timestamp(new Date().getTime()))
             .createUser(userId)
             .remark(remark)
-            .logType(selectFieldValue("exchange_status", logType))
+            .logType(logType)
             .build();
         orderLogMapper.insert(ol);
     }*/
