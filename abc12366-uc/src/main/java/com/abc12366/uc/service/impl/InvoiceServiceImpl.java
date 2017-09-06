@@ -219,6 +219,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceBO;
     }
 
+    @Transactional("db1TxManager")
     private void insertInvoiceLog(String invoiceId, String userId, String opertion) {
         //加入发票操作日志
         InvoiceLog invoiceLog = new InvoiceLog();
@@ -350,6 +351,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return excelList;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList) {
         for (InvoiceExpressExcel expressExcel:expressExcelList){
@@ -376,6 +378,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList) {
         for(InvoiceExcel invoiceExcel:invoiceList){

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,6 +69,7 @@ public class DictServiceImpl implements DictService {
         return dictBO;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public DictBO insert(DictBO dictBO) {
         //dictId，fieldKey确定数据唯一性
@@ -88,6 +90,7 @@ public class DictServiceImpl implements DictService {
         return dictBO;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public DictBO update(DictUpdateBO dictUpdateBO) {
         Dict dict = new Dict();
@@ -102,6 +105,7 @@ public class DictServiceImpl implements DictService {
         return dictBO;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public int delete(String id) {
 
@@ -122,6 +126,7 @@ public class DictServiceImpl implements DictService {
         return dictRoMapper.selectDictList(dict);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void batchDelete(Dict bo) {
         String id = bo.getId();

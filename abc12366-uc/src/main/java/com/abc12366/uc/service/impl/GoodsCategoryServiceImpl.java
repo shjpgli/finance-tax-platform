@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,6 +72,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         return node;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public GoodsCategory add(GoodsCategoryBO goodsCategoryBO) {
         GoodsCategory goodsCategory = new GoodsCategory();
@@ -97,6 +99,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         return goodsCategory;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public GoodsCategoryBO update(GoodsCategoryBO goodsCategoryBO) {
         String id = goodsCategoryBO.getId();
@@ -127,6 +130,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         return goodsCategoryRoMapper.selectByPrimaryKey(id);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void delete(String id) {
         Goods goods = new Goods();

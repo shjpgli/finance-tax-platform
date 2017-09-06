@@ -124,6 +124,7 @@ public class MenuServiceImpl implements MenuService {
         return menuBOs;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void enable(MenuUpdateBO updateBO) {
         String[] idArray = updateBO.getMenuId().split(",");
@@ -151,6 +152,7 @@ public class MenuServiceImpl implements MenuService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void disableAll() {
         Menu menu = new Menu();

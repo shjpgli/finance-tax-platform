@@ -50,6 +50,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         return productRepoRoMapper.selectById(id);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ProductRepoBO income(ProductRepoBO productRepoBO) {
         productRepoBO.setId(Utils.uuid());

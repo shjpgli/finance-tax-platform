@@ -91,6 +91,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public UserAddressUpdateBO setDefaultAddrees(UserAddressUpdateBO userAddressBO) {
         UserAddress userAddress = new UserAddress();

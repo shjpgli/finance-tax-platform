@@ -401,6 +401,7 @@ public class AdminServiceImpl implements AdminService {
         return temp;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void logout(String token) {
         LoginInfo loginInfo = new LoginInfo();
@@ -421,6 +422,7 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
+    @Transactional("db1TxManager")
     @Override
     public int updateUserPwd(UserPasswordBO userPasswordBO) {
 
@@ -444,6 +446,7 @@ public class AdminServiceImpl implements AdminService {
         return update;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public int resetUserPwd(String id) {
         String newPassword;
@@ -460,6 +463,7 @@ public class AdminServiceImpl implements AdminService {
         return update;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void enable(AdminUpdateBO adminUpdateBO) {
         String[] idArray = adminUpdateBO.getId().split(",");
@@ -476,6 +480,7 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public Boolean checkToken(String token) {
 
@@ -497,6 +502,7 @@ public class AdminServiceImpl implements AdminService {
         return true;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public Boolean refreshToken(String token) {
         LoginInfo loginInfo = new LoginInfo();
@@ -517,6 +523,7 @@ public class AdminServiceImpl implements AdminService {
         return true;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public LoginInfoBO selectLoginInfoByToken(String token) {
         LoginInfo loginInfo = new LoginInfo();
@@ -545,6 +552,7 @@ public class AdminServiceImpl implements AdminService {
         return loginInfoRoMapper.selectLoginInfoByToken(token);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void disableAll() {
         Admin admin = new Admin();
@@ -560,6 +568,7 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    @Transactional("db1TxManager")
     private LoginInfo getLoginInfo(AdminBO user, String userToken, App app) {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setUserId(user.getId());
