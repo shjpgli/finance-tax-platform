@@ -46,6 +46,11 @@ public class TradeLogServiceImpl implements TradeLogService {
     }
 
     @Override
+    public void update(TradeLog tradeLogUpdate) {
+        tradeLogMapper.update(tradeLogUpdate);
+    }
+
+    @Override
     public List<TradeBillBO> bill(List<TradeBillBO> dataList) {
         try {
 			List<TradeBillBO> undoneList = new ArrayList<>();
@@ -71,7 +76,7 @@ public class TradeLogServiceImpl implements TradeLogService {
     }
 
     @Override
-    public TradeLog update(TradeLog log) {
+    public TradeLog updateCompare(TradeLog log) {
         TradeLog tradeLog = tradeLogRoMapper.selectByPrimaryKey(log.getId());
         tradeLog.setCompareStatus(log.getCompareStatus());
         tradeLog.setCompareTime(new Date());
