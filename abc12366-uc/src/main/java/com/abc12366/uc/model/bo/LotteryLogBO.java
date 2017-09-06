@@ -23,8 +23,31 @@ private Integer upoint;
 private String state;
  /** 创建时间 */
 private Date createTime;
+private String username;
 
-public String getId(){
+    @Override
+    public String toString() {
+        return "LotteryLogBO{" +
+                "id='" + id + '\'' +
+                ", lotteryId='" + lotteryId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", notluck=" + notluck +
+                ", upoint=" + upoint +
+                ", state='" + state + '\'' +
+                ", createTime=" + createTime +
+                ", username='" + username + '\'' +
+                '}';
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getId(){
     return id;
 }
 public void setId(String id){
@@ -67,15 +90,4 @@ public void setCreateTime(Date createTime){
    this.createTime = createTime;
 }
 
-@Override
-public String toString() {
-return "LotteryLog {\r\n"+
-"\""+"id"+"\""+":"+"\""+id+"\""+",\r\n"+
-"\""+"lotteryId"+"\""+":"+"\""+lotteryId+"\""+",\r\n"+
-"\""+"userId"+"\""+":"+"\""+userId+"\""+",\r\n"+
-"\""+"notluck"+"\""+":"+"\""+notluck+"\""+",\r\n"+
-"\""+"upoint"+"\""+":"+"\""+upoint+"\""+",\r\n"+
-"\""+"state"+"\""+":"+"\""+state+"\""+",\r\n"+
-"\""+"createTime"+"\""+":"+"\""+createTime+"\""+"}";
-}
 }
