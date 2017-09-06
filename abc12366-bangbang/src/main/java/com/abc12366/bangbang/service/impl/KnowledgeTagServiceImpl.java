@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.UcUserCommon;
+import com.abc12366.bangbang.mapper.db1.CurriculumLabelMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagRelMapper;
 import com.abc12366.bangbang.model.KnowledgeTag;
@@ -11,12 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * @Author liuqi
+ * @Author liuQi
  * @Date 2017/8/4 16:08
  */
 @Service
@@ -29,6 +31,9 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
 
     @Autowired
     private KnowledgeTagRelMapper knowledgeTagRelMapper;
+
+    @Autowired
+    private CurriculumLabelMapper curriculumLabelMapper;
 
     @Override
     public List<String> selectHotTag(Integer num) {
@@ -124,9 +129,11 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void delete(String id) {
         try {
+            curriculumLabelMapper.deleteByLableId(id);
             knowledgeTagRelMapper.deleteByTagId(id);
             knowledgeTagMapper.deleteByPrimaryKey(id);
         }catch (Exception e){
@@ -135,10 +142,11 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void delete(List<String> ids) {
-
         try {
+            curriculumLabelMapper.deleteByLableIds(ids);
             knowledgeTagRelMapper.deleteByTagIds(ids);
             knowledgeTagMapper.deleteByPrimaryKeys(ids);
         }catch (Exception e){

@@ -41,7 +41,7 @@
         DELETE FROM bb_knowledge_tag_rel
         WHERE tagId = #{tagId}
     </delete>
-    <!--删除：根据KnowledgeIds批量删除-->
+    <!--删除：根据tagIds批量删除-->
     <delete id="deleteByTagIds" parameterType="java.util.List">
         DELETE FROM bb_knowledge_tag_rel
         WHERE tagId IN

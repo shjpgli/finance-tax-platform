@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.curriculum.CurriculumLabel;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * CurriculumLabelMapper数据库操作接口类
@@ -46,5 +48,19 @@ public interface CurriculumLabelMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(CurriculumLabel record);
+
+	/**
+	 *
+	 * 删除（根据LableId删除）
+	 *
+	 **/
+	int deleteByLableId(@Param("lableId") String lableId);
+
+	/**
+	 *
+	 * 删除（根据LableId批量删除）
+	 *
+	 **/
+	int deleteByLableIds(List<String> lableIds);
 
 }
