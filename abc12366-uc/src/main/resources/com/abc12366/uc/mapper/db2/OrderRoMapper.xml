@@ -74,7 +74,6 @@
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
         <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
-        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.User">
             <id column="userId" property="id"/>
@@ -399,11 +398,7 @@
         op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
         op.createTime, op.lastUpdate,op.goodsId,op.specInfo,op.isReturn,op.isExchange,op.imageUrl,op.goodsType
         FROM uc_order_product op
-        <where>
-            1=1
-            <if test="orderNo != null">and op.orderNo = #{orderNo}</if>
-            <if test="orderStatus != null">AND op.goodsType = #{goodsType}</if>
-        </where>
+        WHERE op.orderNo = #{orderNo}
     </select>
 
     <!--获取订单操作日志信息-->
