@@ -31,6 +31,9 @@
             <if test="remark != null">
                 remark,
             </if>
+            <if test="logType != null">
+                logType,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -51,6 +54,9 @@
             </if>
             <if test="remark!=null">
                 #{remark},
+            </if>
+            <if test="logType!=null">
+                #{logType},
             </if>
         </trim>
     </insert>
@@ -73,6 +79,9 @@
             </if>
             <if test="remark != null">
                 remark = #{remark},
+            </if>
+            <if test="logType != null">
+                logType = #{logType},
             </if>
 
         </set>
