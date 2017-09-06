@@ -18,7 +18,9 @@ public interface TradeLogService {
 
     List<TradeBillBO> bill(List<TradeBillBO> dataList);
 
-    TradeLog update(TradeLog log);
+    TradeLog updateCompare(TradeLog log);
 
     TradeLog selectOne(TradeBillBO log);
+
+    void update(TradeLog tradeLogUpdate);
 }

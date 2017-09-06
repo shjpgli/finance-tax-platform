@@ -74,7 +74,7 @@ public class TradeLogController {
         TradeLog log = new TradeLog();
         log.setId(id);
         log.setCompareStatus("3");
-        TradeLog data = tradeLogService.update(log);
+        TradeLog data = tradeLogService.updateCompare(log);
 
         ResponseEntity re = ResponseEntity.ok(Utils.kv("data", data));
         LOGGER.info("{}", re);
@@ -91,7 +91,7 @@ public class TradeLogController {
         TradeLog log = new TradeLog();
         log.setId(id);
         log.setCompareStatus("2");
-        TradeLog data = tradeLogService.update(log);
+        TradeLog data = tradeLogService.updateCompare(log);
 
         ResponseEntity re = ResponseEntity.ok(Utils.kv("data", data));
         LOGGER.info("{}", re);

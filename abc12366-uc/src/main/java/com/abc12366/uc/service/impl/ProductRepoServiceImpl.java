@@ -123,6 +123,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         product.setGoodsId(productRepoBO.getGoodsId());
         product.setId(productRepoBO.getProductId());
         product.setStock(stock);
+        product.setLastUpdate(new Date());
         int pUpdate = productMapper.update(product);
         if (pUpdate != 1) {
             LOGGER.info("产品库存修改失败:{}", product);

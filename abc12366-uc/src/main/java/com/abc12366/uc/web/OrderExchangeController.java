@@ -204,7 +204,7 @@ public class OrderExchangeController {
 
         if (StringUtils.isEmpty(data.getExpressNo()) && StringUtils.isEmpty(data.getExpressComp())) {
             OrderExchange orderExchange = orderExchangeService.selectOne(id);
-            if ("2".equals(orderExchange.getGoodsType())) {
+            if ("1".equals(orderExchange.getGoodsType())) {
                 return ResponseEntity.ok(Utils.bodyStatus(4958));
             }
             List<ExchangeOrderInvoiceBO> dataList = orderExchangeService.selectInvoice(orderExchange.getOrderNo());

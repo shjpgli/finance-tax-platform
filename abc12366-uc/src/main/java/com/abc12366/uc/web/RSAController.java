@@ -25,8 +25,6 @@ import java.security.interfaces.RSAPublicKey;
 @RequestMapping(path = "/rsa", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class RSAController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RSAController.class);
-
     @GetMapping
     public ResponseEntity selectOne() {
         RSAResponse rsaResponse = new RSAResponse();
