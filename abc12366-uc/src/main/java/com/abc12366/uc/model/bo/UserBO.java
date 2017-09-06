@@ -29,6 +29,7 @@ public class UserBO {
     private Integer exp;
     private String vipLevel;
     private String realName;
+    private String level;
     private Integer usernameModifiedTimes;
     private Date vipExpireDate;
 
@@ -201,5 +202,13 @@ public class UserBO {
 
     public void setVipExpireDate(Date vipExpireDate) {
         this.vipExpireDate = vipExpireDate;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

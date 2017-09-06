@@ -59,7 +59,7 @@ public class OrderController {
                                      @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO orderBO = new OrderBO();
-        User user = new User();
+        UserBO user = new UserBO();
         user.setUsername(username);
         user.setPhone(phone);
         orderBO.setUser(user);
@@ -101,7 +101,7 @@ public class OrderController {
                                               @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
-        User user = new User();
+        UserBO user = new UserBO();
         user.setId(userId);
         order.setUser(user);
 
@@ -145,7 +145,7 @@ public class OrderController {
                                                  @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
-        User user = new User();
+        UserBO user = new UserBO();
         user.setId(userId);
         order.setUser(user);
 
@@ -186,7 +186,7 @@ public class OrderController {
                                                  @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
-        User user = new User();
+        UserBO user = new UserBO();
         user.setId(userId);
         order.setUser(user);
 

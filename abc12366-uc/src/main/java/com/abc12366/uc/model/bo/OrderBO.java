@@ -1,9 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 import com.abc12366.uc.model.OrderProductSpec;
-import com.abc12366.uc.model.User;
 
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +38,8 @@ public class OrderBO implements Serializable {
     /**推荐人姓名**/
     private String recommendUser;
 
+    private String nowVipLevelName;
+
     private String goodsType;
     /**
      * 是否已开发票，true：是，false：否
@@ -47,7 +47,7 @@ public class OrderBO implements Serializable {
     private Boolean isInvoice;
     private GoodsBO goodsBO;
 
-    private User user;
+    private UserBO user;
     private UserAddressBO userAddressBO;
 
     private List<OrderProductBO> orderProductBOList;
@@ -207,14 +207,6 @@ public class OrderBO implements Serializable {
         this.goodsBO = goodsBO;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
@@ -357,5 +349,21 @@ public class OrderBO implements Serializable {
 
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
+    }
+
+    public UserBO getUser() {
+        return user;
+    }
+
+    public void setUser(UserBO user) {
+        this.user = user;
+    }
+
+    public String getNowVipLevelName() {
+        return nowVipLevelName;
+    }
+
+    public void setNowVipLevelName(String nowVipLevelName) {
+        this.nowVipLevelName = nowVipLevelName;
     }
 }
