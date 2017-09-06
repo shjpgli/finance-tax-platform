@@ -181,7 +181,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             orderInvoice.setCreateTime(date);
             orderInvoice.setLastUpdate(date);
             OrderInvoice oInvoice = orderInvoiceRoMapper.selectByOrderNo(orderNo);
-            if(oInvoice != null && oInvoice.getStatus()){
+            if(oInvoice != null){
 //                throw new ServiceException(41999,"该订单"+orderNo+"已开发票");
                 throw new ServiceException(41999,"已开发票");
             }

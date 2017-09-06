@@ -28,7 +28,8 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_invoice
-        WHERE orderNo = #{orderNo}
+        WHERE status = true and orderNo = #{orderNo}
+
     </select>
 
 </mapper>
