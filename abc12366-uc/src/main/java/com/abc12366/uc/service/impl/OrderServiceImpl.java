@@ -739,7 +739,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectUserAllOrderList(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+        List<OrderBO> oList = orderRoMapper.selectUserAllOrderList(order);
         return oList;
     }
 

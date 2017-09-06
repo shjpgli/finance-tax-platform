@@ -43,4 +43,6 @@ public interface OrderRoMapper {
     List<OrderBO> selectByOrderNos(@Param("orderNos") String[] orderNos);
 
     OrderBO selectOrderByGoodsIdAndUserId(Order order);
+
+    List<OrderBO> selectUserAllOrderList(OrderBO order);
 }

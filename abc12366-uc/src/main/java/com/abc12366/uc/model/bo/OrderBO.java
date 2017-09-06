@@ -39,6 +39,8 @@ public class OrderBO implements Serializable {
     private String goodsId;
     /**推荐人姓名**/
     private String recommendUser;
+
+    private String goodsType;
     /**
      * 是否已开发票，true：是，false：否
      **/
@@ -347,5 +349,13 @@ public class OrderBO implements Serializable {
 
     public void setRecommendUser(String recommendUser) {
         this.recommendUser = recommendUser;
+    }
+
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
     }
 }
