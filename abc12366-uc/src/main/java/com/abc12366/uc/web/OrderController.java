@@ -181,7 +181,9 @@ public class OrderController {
     public ResponseEntity selectOrderListByInvoice(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                                  @RequestParam(value = "name", required = false) String name,
-                                                 @RequestParam(value = "userId", required = true) String userId) {
+                                                 @RequestParam(value = "userId", required = true) String userId,
+                                                 @RequestParam(value = "startTime", required = false) String startTime,
+                                                 @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
         User user = new User();
@@ -191,7 +193,14 @@ public class OrderController {
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
         order.setGoodsBO(goodsBO);
-        List<OrderBO> orderBOs = orderService.selectUserAllOrderList(order, pageNum, pageSize);
+        if (startTime != null && !"".equals(startTime)) {
+            order.setStartTime(DataUtils.StrToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            order.setEndTime(DataUtils.StrToDate(endTime));
+        }
+
+        List<OrderBO> orderBOs = orderService.selectOrderListByInvoice(order, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?

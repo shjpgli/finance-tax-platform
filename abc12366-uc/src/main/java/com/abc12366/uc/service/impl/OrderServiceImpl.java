@@ -1089,4 +1089,11 @@ public class OrderServiceImpl implements OrderService {
         insertOrderLog(order.getUserId(), order.getOrderNo(), "6" ,"用户确认收货","0");
     }
 
+    @Override
+    public List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+        return oList;
+    }
+
 }

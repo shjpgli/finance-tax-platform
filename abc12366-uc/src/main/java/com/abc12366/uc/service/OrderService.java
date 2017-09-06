@@ -144,4 +144,6 @@ public interface OrderService {
     OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO);
 
     void confirmOrder(Order order);
+
+    List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize);
 }
