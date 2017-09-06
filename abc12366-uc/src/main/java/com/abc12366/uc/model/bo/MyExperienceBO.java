@@ -13,6 +13,7 @@ public class MyExperienceBO {
     private int outgoYear;
     private String medalIcon;
     private String nextLevelExp;
+    private String medal;
 
     public MyExperienceBO() {
     }
@@ -71,5 +72,13 @@ public class MyExperienceBO {
 
     public void setNextLevelExp(String nextLevelExp) {
         this.nextLevelExp = nextLevelExp;
+    }
+
+    public String getMedal() {
+        return medal;
+    }
+
+    public void setMedal(String medal) {
+        this.medal = medal;
     }
 }

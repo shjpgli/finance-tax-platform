@@ -18,7 +18,8 @@
         DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY)) and uul.createTime &lt; (SELECT
         CONCAT(YEAR(NOW())+1,'-01-01'))) outgoYear,
         (select uul.medalIcon from uc_uexp_level uul where uul.status='1' and uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue limit 1 ) medalIcon,
-        (SELECT uul.minValue FROM uc_uexp_level uul WHERE uul.minValue>uu.exp ORDER BY uul.minValue ASC LIMIT 1 ) nextLevelExp
+        (SELECT uul.minValue FROM uc_uexp_level uul WHERE uul.minValue>uu.exp ORDER BY uul.minValue ASC LIMIT 1 ) nextLevelExp,
+        (select uul.medal from uc_uexp_level uul where uul.status='1' and uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue limit 1 ) medal
         from uc_user uu
         where uu.id=#{userId}
     </select>
