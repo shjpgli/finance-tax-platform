@@ -1034,7 +1034,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void automaticCancel() {
-        Date date = DataUtils.getAddTime(3);
+        Date date = DataUtils.getAddTime(2);
         //查询两个小时未支付的订单，自动取消
         List<Order> orderList = orderRoMapper.selectCancelOrderByDate(date);
         for(Order order:orderList){
