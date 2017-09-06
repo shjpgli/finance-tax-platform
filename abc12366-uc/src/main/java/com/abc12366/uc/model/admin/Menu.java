@@ -9,116 +9,121 @@ import java.io.Serializable;
  */
 public class Menu implements Serializable {
 
+    /**功能ID**/
     private String menuId;
+
+    /**功能名称**/
     private String menuName;
+
+    /**功能地址**/
     private String menuUrl;
+
+    /**父菜单ID**/
     private String parentId;
+
+    /**授权（多个用逗号分割，如：user:list,user:create)**/
     private String perms;
+
+    /**类型：1目录，2菜单，3按钮**/
     private String type;
+
+    /**图标样式**/
     private String icon;
-    private int sort;
+
+    /**排序**/
+    private Integer sort;
+
+    /**状态：0无效，1有效**/
     private Boolean status;
+
+    /**备注**/
     private String remark;
 
-    public Menu() {
-    }
 
-    public Menu(String menuName, String menuUrl, String parentId, String perms, String type, String icon, int sort,
-                Boolean status, String remark) {
-        this.menuName = menuName;
-        this.menuUrl = menuUrl;
-        this.parentId = parentId;
-        this.perms = perms;
-        this.type = type;
-        this.icon = icon;
-        this.sort = sort;
-        this.status = status;
-        this.remark = remark;
-    }
 
-    public String getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(String menuId) {
+    public void setMenuId(String menuId){
         this.menuId = menuId;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public String getMenuId(){
+        return this.menuId;
     }
 
-    public void setMenuName(String menuName) {
+    public void setMenuName(String menuName){
         this.menuName = menuName;
     }
 
-    public String getMenuUrl() {
-        return menuUrl;
+    public String getMenuName(){
+        return this.menuName;
     }
 
-    public void setMenuUrl(String menuUrl) {
+    public void setMenuUrl(String menuUrl){
         this.menuUrl = menuUrl;
     }
 
-    public String getParentId() {
-        return parentId;
+    public String getMenuUrl(){
+        return this.menuUrl;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(String parentId){
         this.parentId = parentId;
     }
 
-    public String getPerms() {
-        return perms;
+    public String getParentId(){
+        return this.parentId;
     }
 
-    public void setPerms(String perms) {
+    public void setPerms(String perms){
         this.perms = perms;
     }
 
-    public String getType() {
-        return type;
+    public String getPerms(){
+        return this.perms;
     }
 
-    public void setType(String type) {
+    public void setType(String type){
         this.type = type;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getType(){
+        return this.type;
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(String icon){
         this.icon = icon;
     }
 
-    public int getSort() {
-        return sort;
+    public String getIcon(){
+        return this.icon;
     }
 
-    public void setSort(int sort) {
+    public void setSort(Integer sort){
         this.sort = sort;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public Integer getSort(){
+        return this.sort;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Boolean status){
         this.status = status;
     }
 
-    public String getRemark() {
-        return remark;
+    public Boolean getStatus(){
+        return this.status;
     }
 
-    public void setRemark(String remark) {
+    public void setRemark(String remark){
         this.remark = remark;
+    }
+
+    public String getRemark(){
+        return this.remark;
     }
 
     @Override
     public String toString() {
-        return "WxMenu{" +
+        return "Menu{" +
                 "menuId='" + menuId + '\'' +
                 ", menuName='" + menuName + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +

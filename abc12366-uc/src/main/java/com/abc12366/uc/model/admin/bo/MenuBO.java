@@ -28,7 +28,7 @@ public class MenuBO implements Serializable {
     private String perms;
     private String type;
     private String icon;
-    private int sort;
+    private Integer sort;
     @NotNull
     private Boolean status;
     @Size(min = 0, max = 100)
@@ -40,7 +40,7 @@ public class MenuBO implements Serializable {
     }
 
     public MenuBO(String menuId, String menuName, String menuUrl, String parentId, String perms, String type, String
-            icon, int sort, Boolean status, String remark) {
+            icon, Integer sort, Boolean status, String remark) {
         this.menuId = menuId;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
@@ -113,7 +113,7 @@ public class MenuBO implements Serializable {
         return sort;
     }
 
-    public void setSort(int sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
     }
 

@@ -3,10 +3,7 @@ package com.abc12366.uc.web.pay;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
 import com.abc12366.uc.model.TradeLog;
-import com.abc12366.uc.model.bo.ExchangeCompletedOrderBO;
-import com.abc12366.uc.model.bo.OrderPayBO;
-import com.abc12366.uc.model.bo.PointsLogBO;
-import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TradeLogService;
@@ -106,26 +103,43 @@ public class PayReturnController {
             } else if (trade_status.equals("TRADE_SUCCESS")) {// 交易成功,插入交易记录
                 LOGGER.info("支付宝回调信息:交易成功,插入支付流水记录");
 
-                TradeLog tradeLog = new TradeLog();
-                tradeLog.setId(Utils.uuid());
-                tradeLog.setOrderNo(out_trade_no);
-                tradeLog.setAliTrandeNo(trade_no);
-                tradeLog.setTradeStatus("1");
-                tradeLog.setTradeType("1");
-                tradeLog.setAmount(Double.parseDouble(total_amount));
-                tradeLog.setTradeTime(new SimpleDateFormat(
-                        "yyyy-MM-dd HH:mm:ss").parse(date));
-                Timestamp now = new Timestamp(new Date().getTime());
-                tradeLog.setCreateTime(now);
-                tradeLog.setLastUpdate(now);
-                tradeLog.setPayMethod("ALIPAY");
-                if (tradeLogService.insertTradeLog(tradeLog) == 1) {
+                TradeBillBO tradeBillBO = new TradeBillBO();
+                tradeBillBO.setTradeNo(trade_no);
+                TradeLog tradeLogUpdate = tradeLogService.selectOne(tradeBillBO);
+                if (tradeLogUpdate != null) {
+                    tradeLogUpdate.setOrderNo(out_trade_no);
+                    tradeLogUpdate.setTradeStatus("1");
+                    tradeLogUpdate.setTradeType("1");
+                    tradeLogUpdate.setAmount(Double.parseDouble(total_amount));
+                    tradeLogUpdate.setTradeTime(new SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss").parse(date));
+                    Timestamp now = new Timestamp(new Date().getTime());
+                    tradeLogUpdate.setLastUpdate(now);
+                    tradeLogUpdate.setPayMethod("ALIPAY");
+                    tradeLogService.update(tradeLogUpdate);
+                } else {
+                    TradeLog tradeLog = new TradeLog();
+                    tradeLog.setId(Utils.uuid());
+                    tradeLog.setAliTrandeNo(trade_no);
+                    tradeLog.setOrderNo(out_trade_no);
+                    tradeLog.setTradeStatus("1");
+                    tradeLog.setTradeType("1");
+                    tradeLog.setAmount(Double.parseDouble(total_amount));
+                    tradeLog.setTradeTime(new SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss").parse(date));
+                    Timestamp now = new Timestamp(new Date().getTime());
+                    tradeLog.setCreateTime(now);
+                    tradeLog.setLastUpdate(now);
+                    tradeLog.setPayMethod("ALIPAY");
+                    tradeLogService.insertTradeLog(tradeLog);
                     LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
+
                     OrderPayBO orderPayBO = new OrderPayBO();
                     orderPayBO.setOrderNo(out_trade_no);
                     orderPayBO.setIsPay(2);
                     orderPayBO.setPayMethod("ALIPAY");
                     orderService.paymentOrder(orderPayBO);
+                    LOGGER.info("更新订单状态:{}", out_trade_no);
                 }
             }
             return ResponseEntity.ok(Utils.kv("data", "OK"));
