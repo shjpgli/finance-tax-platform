@@ -194,6 +194,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRoMapper.selectUserByRoleId(id);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public UserRoleBO updateUserRole(UserRoleBO userRoleBO) {
         UserRoleBO bo = new UserRoleBO();
@@ -239,6 +240,7 @@ public class RoleServiceImpl implements RoleService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void enable(RoleUpdateBO roleUpdateBO) {
         Role role = new Role();

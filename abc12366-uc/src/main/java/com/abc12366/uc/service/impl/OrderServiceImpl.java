@@ -275,6 +275,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderNo 订单号
      * @return 会员日志信息
      */
+    @Transactional("db1TxManager")
     @Override
     public VipLogBO updateVipLevel(String orderNo) {
         OrderProductBO bo = new OrderProductBO();
@@ -301,6 +302,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理人民币购买服务
      */
+    @Transactional("db1TxManager")
     private void operationMoneyServiceOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
         // 查询用户信息
         User user = userRoMapper.selectOne(orderBO.getUserId());
@@ -399,6 +401,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理人民币充值积分订单
      */
+    @Transactional("db1TxManager")
     private void operationMoneyRechargeOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
         // 查询用户信息
         User user = userRoMapper.selectOne(orderBO.getUserId());
@@ -642,6 +645,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectCartList(order);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void submitCart(Order order) {
         OrderBO temp = orderRoMapper.selectOrder(order);
@@ -693,6 +697,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public OrderBO feedback(OrderBO orderBO) {
         Order order = new Order();
@@ -707,6 +712,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectOrder(order);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public OrderBO cancelOrder(OrderCancelBO orderCancelBO) {
         OrderBO bo = orderRoMapper.selectById(orderCancelBO.getOrderNo());
@@ -737,6 +743,7 @@ public class OrderServiceImpl implements OrderService {
         return oList;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public OrderBack applyBackOrder(OrderBack orderBack) {
         OrderBO bo = orderRoMapper.selectById(orderBack.getOrderNo());
@@ -757,6 +764,7 @@ public class OrderServiceImpl implements OrderService {
         return orderBack;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public OrderBack submitBackOrder(OrderBack orderBack) {
         orderBack.setId(Utils.uuid());
@@ -849,6 +857,7 @@ public class OrderServiceImpl implements OrderService {
         return orderBackRoMap.selectOrderBackList(orderBackBO);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public OrderBO paymentOrder(OrderPayBO orderPayBO) {
         String orderNo = orderPayBO.getOrderNo();
@@ -994,6 +1003,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void sendOrder(OrderOperationBO orderOperationBO) {
         //订单状态，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
@@ -1008,6 +1018,7 @@ public class OrderServiceImpl implements OrderService {
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(),"0");
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void invalidOrder(OrderOperationBO orderOperationBO) {
         orderOperationBO.setOrderStatus("6");
@@ -1020,6 +1031,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void automaticReceipt() {
         Date date = DataUtils.getAddDate(15);
@@ -1032,6 +1044,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void automaticCancel() {
         Date date = DataUtils.getAddTime(2);
@@ -1049,6 +1062,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectOrderByGoodsIdAndUserId(order);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO) {
         Order order = new Order();
@@ -1063,6 +1077,7 @@ public class OrderServiceImpl implements OrderService {
         return orderUpdateBO;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void confirmOrder(Order order) {
         order.setOrderStatus("6");

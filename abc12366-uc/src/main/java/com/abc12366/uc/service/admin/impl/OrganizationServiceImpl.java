@@ -136,6 +136,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void enable(OrganizationUpdateBO updateBO) {
         String[] idArray = updateBO.getId().split(",");
@@ -188,6 +189,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationRoMapper.selectOrganizationByName(name);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void disableAll() {
         Organization organization = new Organization();

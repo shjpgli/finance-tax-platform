@@ -80,6 +80,7 @@ public class ExpressServiceImpl implements ExpressService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public ExpressBO importExpress(ExpressBO expressBO) {
         Express express = new Express();

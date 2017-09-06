@@ -148,6 +148,7 @@ public class GoodsServiceImpl implements GoodsService {
         return bo;
     }
 
+    @Transactional("db1TxManager")
     private void insertGoodsLog(String goodsId, String remark, String action) {
         GoodsLog goodsLog = new GoodsLog();
         goodsLog.setId(Utils.uuid());
@@ -366,6 +367,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void deleteGoods(String id) {
         //先判断商品是否有被卖出，被卖出不能删除

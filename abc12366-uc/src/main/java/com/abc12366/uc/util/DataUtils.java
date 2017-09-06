@@ -94,7 +94,7 @@ public class DataUtils {
     }
 
     /**
-     * 日期往后加num天
+     * 日期往后减去num天
      * @param num
      * @return
      */
@@ -102,13 +102,13 @@ public class DataUtils {
         Date date = new Date();//取时间
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
-        calendar.add(calendar.DATE,num);//把日期往后增加一天.整数往后推,负数往前移动
+        calendar.add(calendar.DATE,-num);//把日期往后增加一天.整数往后推,负数往前移动
         date=calendar.getTime();   //这个时间就是日期往后推一天的结果
         return date;
     }
 
     /**
-     * 日期往后加num天
+     * 日期往后减num个小时
      * @param num
      * @return
      */
@@ -117,7 +117,7 @@ public class DataUtils {
         Date date = new Date();
         Calendar ca=Calendar.getInstance();
         ca.setTime(date);
-        ca.add(Calendar.HOUR_OF_DAY, num);
+        ca.add(Calendar.HOUR_OF_DAY, -num);
         System.out.println(sdf.format(ca.getTime()));
         return ca.getTime();
     }

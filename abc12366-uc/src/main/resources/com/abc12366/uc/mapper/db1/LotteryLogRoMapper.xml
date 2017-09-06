@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.LotteryLogMapper">
+<insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
+insert into uc_lottery_log(
+id,lotteryId,userId,notluck,upoint,state,createTime
+)values(
+#{id},#{lotteryId},#{userId},#{notluck},#{upoint},#{state},#{createTime})
+</insert>
+<update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
+update  uc_lottery_log 
+<set>
+<if test="lotteryId!=null">lotteryId=#{lotteryId},</if>
+<if test="userId!=null">userId=#{userId},</if>
+<if test="notluck!=null">notluck=#{notluck},</if>
+<if test="upoint!=null">upoint=#{upoint},</if>
+<if test="state!=null">state=#{state},</if>
+<if test="createTime!=null">createTime=#{createTime},</if>
+</set>
+where id=#{id}
+</update>
+<delete id="delete" parameterType="java.lang.String">
+delete from uc_lottery_log 
+where id=#{id}
+</delete>
+</mapper>
