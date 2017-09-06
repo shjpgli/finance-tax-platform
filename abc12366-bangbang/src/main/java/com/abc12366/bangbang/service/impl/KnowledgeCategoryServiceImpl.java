@@ -64,7 +64,7 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
         try{
             knowledgeCategory.setUpdateUser(UcUserCommon.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
-            knowledgeCategoryMapper.updateByPrimaryKey(knowledgeCategory);
+            knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
             return knowledgeCategory;
         }catch (Exception e){
             LOGGER.error("KnowledgeCategoryServiceImpl.modify()", e);

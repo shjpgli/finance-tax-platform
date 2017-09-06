@@ -29,7 +29,6 @@ public class KnowledgeCategoryController {
     @Autowired
     private KnowledgeCategoryService knowledgeCategoryService;
 
-
     /* 查询所有分类 */
     @GetMapping("/listAll")
     public ResponseEntity listAll() {
@@ -45,7 +44,7 @@ public class KnowledgeCategoryController {
     }
 
     /* 修改分类 */
-    @PostMapping(path = "/modify")
+    @PutMapping(path = "/modify")
     public ResponseEntity modify(@RequestBody KnowledgeCategory record) {
         KnowledgeCategory rs = knowledgeCategoryService.modify(record);
         return ResponseEntity.ok(Utils.kv("data", rs));
