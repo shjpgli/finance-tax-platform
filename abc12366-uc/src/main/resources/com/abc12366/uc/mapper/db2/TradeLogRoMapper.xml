@@ -21,7 +21,7 @@
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
         <where>
-            <if test="aliTrandeNo != null and aliTrandeNo != ''">aliTrandeNo = #{tradeNo}</if>
+            <if test="tradeNo != null and tradeNo != ''">aliTrandeNo = #{tradeNo}</if>
             <if test="orderNo != null and orderNo != ''">AND orderNo = #{orderNo}</if>
         </where>
     </select>
