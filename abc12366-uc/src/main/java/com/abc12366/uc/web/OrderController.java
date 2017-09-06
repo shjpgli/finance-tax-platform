@@ -153,7 +153,7 @@ public class OrderController {
         goodsBO.setName(name);
         order.setGoodsBO(goodsBO);
         order.setIsInvoice(false);
-
+        order.setGoodsType(goodsType);
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DataUtils.StrToDate(startTime));
         }
