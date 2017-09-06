@@ -28,6 +28,7 @@
         <if test="classifyId != null and classifyId != ''">
             AND classifyId = #{classifyId}
         </if>
+        ORDER BY priority ASC
     </select>
 
     <!-- 查询分类ID是否已存在 -->
