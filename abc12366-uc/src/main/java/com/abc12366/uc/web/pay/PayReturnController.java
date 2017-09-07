@@ -132,15 +132,15 @@ public class PayReturnController {
                     tradeLog.setLastUpdate(now);
                     tradeLog.setPayMethod("ALIPAY");
                     tradeLogService.insertTradeLog(tradeLog);
-                }
-                LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
+                    LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
 
-                OrderPayBO orderPayBO = new OrderPayBO();
-                orderPayBO.setOrderNo(out_trade_no);
-                orderPayBO.setIsPay(2);
-                orderPayBO.setPayMethod("ALIPAY");
-                orderService.paymentOrder(orderPayBO);
-                LOGGER.info("更新订单状态:{}", out_trade_no);
+                    OrderPayBO orderPayBO = new OrderPayBO();
+                    orderPayBO.setOrderNo(out_trade_no);
+                    orderPayBO.setIsPay(2);
+                    orderPayBO.setPayMethod("ALIPAY");
+                    orderService.paymentOrder(orderPayBO);
+                    LOGGER.info("更新订单状态:{}", out_trade_no);
+                }
             }
             return ResponseEntity.ok(Utils.kv("data", "OK"));
 //			} else {// 验证失败
