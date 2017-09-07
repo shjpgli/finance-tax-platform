@@ -161,6 +161,7 @@ public class AuthServiceImpl implements AuthService {
         LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
 
         //根据用户名查看用户是否存在
+        loginBO.setUsernameOrPhone(loginBO.getUsernameOrPhone().trim());
         User user = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (user == null) {
             LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
@@ -359,7 +360,7 @@ public class AuthServiceImpl implements AuthService {
         }
         LoginBO loginBOQery = new LoginBO();
         if (!StringUtils.isEmpty(loginBO.getPhone())) {
-            loginBOQery.setUsernameOrPhone(loginBO.getPhone());
+            loginBOQery.setUsernameOrPhone(loginBO.getPhone().trim());
         }
         User user = userRoMapper.selectByUsernameOrPhone(loginBOQery);
         if (user == null) {
