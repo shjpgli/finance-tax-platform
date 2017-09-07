@@ -32,6 +32,7 @@ public class UserBO {
     private String level;
     private Integer usernameModifiedTimes;
     private Date vipExpireDate;
+    private String vipImage;
 
     public UserBO() {
     }
@@ -210,5 +211,13 @@ public class UserBO {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getVipImage() {
+        return vipImage;
+    }
+
+    public void setVipImage(String vipImage) {
+        this.vipImage = vipImage;
     }
 }

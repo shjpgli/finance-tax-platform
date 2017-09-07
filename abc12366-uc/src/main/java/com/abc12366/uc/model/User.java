@@ -31,6 +31,7 @@ public class User {
     private String vipLevel;
     private Integer usernameModifiedTimes;
     private Date vipExpireDate;
+    private String vipImage;
 
     public User() {
     }
@@ -193,5 +194,13 @@ public class User {
 
     public void setVipExpireDate(Date vipExpireDate) {
         this.vipExpireDate = vipExpireDate;
+    }
+
+    public String getVipImage() {
+        return vipImage;
+    }
+
+    public void setVipImage(String vipImage) {
+        this.vipImage = vipImage;
     }
 }

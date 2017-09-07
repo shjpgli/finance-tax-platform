@@ -51,25 +51,27 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-        select id, username, password, phone, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
-        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp,
-        vipLevel, usernameModifiedTimes,vipExpireDate
-        from uc_user
-        where id = #{id}
+       select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
+        from uc_user uu
+        where uu.id = #{id}
     </select>
 
     <select id="selectByUsernameOrPhone" resultType="com.abc12366.uc.model.User"
             parameterType="com.abc12366.uc.model.bo.LoginBO">
-        select id, username, password, phone, regMail, regIP, salt, nickname, status, createTime, lastUpdate,
-        userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath, points, exp,
-        vipLevel,usernameModifiedTimes,vipExpireDate
-        from uc_user
+        select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
+        from uc_user uu
         <where>
             <if test="usernameOrPhone != null">
-                username = #{usernameOrPhone}
+                uu.username = #{usernameOrPhone}
             </if>
             <if test="usernameOrPhone != null">
-                OR phone = #{usernameOrPhone}
+                OR uu.phone = #{usernameOrPhone}
             </if>
         </where>
     </select>
@@ -77,7 +79,8 @@
         select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime,
         uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
-        uu.vipLevel,usernameModifiedTimes,vipExpireDate
+        uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
         from uc_user uu, uc_token ut
         where uu.id=ut.userId
         and ut.token=#{userToken}
