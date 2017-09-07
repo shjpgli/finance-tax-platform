@@ -26,6 +26,7 @@
                 and uu.username like CONCAT('%',#{username},'%')
             </if>
         </where>
+        order by createTime desc
 
     </select>
 

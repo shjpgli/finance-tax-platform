@@ -109,7 +109,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //计算用户经验值接口
                 .excludePathPatterns("/experience/compute")
                 //
-                .excludePathPatterns("/rsa");
+                .excludePathPatterns("/rsa","/rsa/login");
 
         //用户业务操作导致经验值更新，拦截器拦截处理
 //        registry.addInterceptor(uexpInterceptor())

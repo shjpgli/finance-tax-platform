@@ -258,6 +258,12 @@ public class RSAUtil {
         String val = "1qazxsw2";
         byte[] bytes = encrypt(keyPair.getPublic(), val.getBytes());
         System.out.println(new String(decrypt(keyPair.getPrivate(), bytes), "utf-8"));
+
+        RSAPublicKey publicKey = RSA.getDefaultPublicKey();
+        RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
+        byte[] bytes2 = encrypt(publicKey, val.getBytes());
+        String str = new String(bytes2, "utf-8");
+        System.out.println(new String(decrypt(privateKey, str.getBytes()), "utf-8"));
     }
 
     public static synchronized BouncyCastleProvider getInstance() {

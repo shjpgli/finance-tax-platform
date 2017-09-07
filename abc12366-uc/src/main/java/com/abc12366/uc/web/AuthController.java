@@ -7,6 +7,7 @@ import com.abc12366.gateway.web.BaseController;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IpService;
+import com.abc12366.uc.wsbssoa.utils.RSA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 
 /**
@@ -128,6 +133,41 @@ public class AuthController extends BaseController {
         LOGGER.info("{}", token);
         authService.logout(token);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     *
+     * @param loginBO
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(path = "/rsa/login")
+    public ResponseEntity rsaLogin(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", loginBO);
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+        }
+        //将密码解密
+        loginBO.setPassword(decode(loginBO.getPassword()));
+
+        Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+        LOGGER.info("{}", token);
+        return ResponseEntity.ok(Utils.kv("data", token));
+    }
+
+    public String decode(String str) throws Exception {
+        RSAPublicKey publicKey = RSA.getDefaultPublicKey();
+        RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
+
+        byte[] bytes = RSA.encrypt(publicKey, str.getBytes());
+        String s = new BASE64Encoder().encode(bytes);
+        byte[] bytes2 = new BASE64Decoder().decodeBuffer(s);
+
+        String response2 = new String(RSA.decrypt(privateKey, bytes2));
+        System.out.println(response2);
+        return response2;
     }
 
 }
