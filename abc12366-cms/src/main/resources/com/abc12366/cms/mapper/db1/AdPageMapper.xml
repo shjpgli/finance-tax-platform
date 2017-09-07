@@ -10,7 +10,7 @@
 
     <insert id="insert" parameterType="com.abc12366.cms.model.bo.AdPageBO">
         INSERT INTO cms_adpage(<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{name}, #{url}, #{link}, #{style}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate})
+        VALUES (#{id}, #{name}, #{url}, #{link}, #{style}, #{sort}, #{showName}, #{status}, #{createTime}, #{lastUpdate}, #{startTime},#{endTime})
     </insert>
 
     <update id="update" parameterType="com.abc12366.cms.model.bo.AdPageBO">
