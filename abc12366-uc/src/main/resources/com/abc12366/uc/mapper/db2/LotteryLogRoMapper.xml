@@ -4,6 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.LotteryLogRoMapper">
 <select id="selectList" resultType="com.abc12366.uc.model.bo.LotteryLogBO" parameterType="java.util.Map">
 SELECT  id,lotteryId,userId,notluck,upoint,state,
+ (select b.name from uc_upoints_lottery b where b.id=z.lotteryId) as lotteryName,
  (select a.username from uc_user a where a.id=z.userId) as username,
  createTime
  from uc_lottery_log z
@@ -11,14 +12,15 @@ SELECT  id,lotteryId,userId,notluck,upoint,state,
 <if test="name!=null">
 name=#{name}
 </if>
-<if test="status!=null">
-and status=#{status}
+<if test="notluck!=null">
+and notluck=#{notluck}
 </if>
 </where>
 ORDER BY createTime DESC
 </select>
 <select id="selectOne" resultType="com.abc12366.uc.model.bo.LotteryLogBO" parameterType="java.lang.String">
 SELECT  id,lotteryId,userId,notluck,upoint,state,
+ (select b.name from uc_upoints_lottery b where b.id=z.lotteryId) as lotteryName,
  (select a.username from uc_user a where a.id=z.userId) as username,
  createTime
  from uc_lottery_log 

@@ -7,14 +7,14 @@ package com.abc12366.uc.service.impl;
 
 
 import com.abc12366.uc.model.UpointsLottery;
+import com.abc12366.uc.model.bo.LotteryLogBO;
 import com.abc12366.uc.model.bo.UpointsLotteryBO;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
+import java.util.*;
 
 import com.abc12366.uc.mapper.db1.UpointsLotteryMapper;
 import com.abc12366.uc.mapper.db2.UpointsLotteryRoMapper;
+import com.abc12366.uc.service.LotteryLogService;
 import com.abc12366.uc.service.UpointsLotteryService;
 
 import org.slf4j.Logger;
@@ -30,7 +30,8 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
     private UpointsLotteryMapper upointsLotteryMapper;
     @Autowired
     private UpointsLotteryRoMapper upointsLotteryRoMapper;
-
+    @Autowired
+    private LotteryLogService lotteryLogService;
     @Override
     public UpointsLotteryBO update(UpointsLotteryBO upointsLotteryBO, String id) {
         UpointsLottery obj = new UpointsLottery();
@@ -86,6 +87,71 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
            obj.setLuck(10.0);
            this.insert(obj );
         }
+    }
+    /**
+     * 获取随机数
+     */
+    @Override
+    synchronized public UpointsLotteryBO getval(String userId,Integer point){
+        UpointsLotteryBO obj = getvalEx();
+        //减库存 记日志
+        if(obj.getNotluck() !=1){
+            int stock = 0;
+            if(obj.getStock() != null){
+                stock = obj.getStock() - 1;
+            }
+            obj.setStock( stock);
+            this.update(obj,obj.getId());
+        }
+
+        LotteryLogBO lotteryLogBO = new LotteryLogBO();
+        lotteryLogBO.setLotteryId(obj.getId());
+        lotteryLogBO.setUserId(userId);
+        lotteryLogBO.setNotluck(obj.getNotluck());
+        lotteryLogBO.setUpoint(point);
+        lotteryLogService.insert(lotteryLogBO);
+        return obj;
+    }
+
+    public UpointsLotteryBO getvalEx(){
+        List<UpointsLotteryBO> list = this.selectList(null);
+
+        //把谢谢参与排除
+        List<UpointsLotteryBO> listLuck = new ArrayList<UpointsLotteryBO>() ;
+        List<UpointsLotteryBO> listNotluck = new ArrayList<UpointsLotteryBO>() ;
+        for (UpointsLotteryBO obj : list){
+            if(obj.getNotluck() == 1){
+                listNotluck.add(obj);
+            }else            {
+                listLuck.add(obj);
+            }
+        }
+        if (listNotluck.size() <= 0){
+            LOGGER.warn("必须拥有一个不中奖的值");
+            throw new RuntimeException("系统出现错误，请联系管理员");
+        }
+        Random random = new Random();
+        //对奖品生成随机
+        for (UpointsLotteryBO obj : listLuck){
+            Integer stock = obj.getStock();
+            if(stock>0){//假如有库存
+                if(obj.getLuck() != null) {
+                    Double tmpdbl = (obj.getLuck() * 100000);//考虑5位小数
+                    int luck = tmpdbl.intValue();
+                    //现在得到一个扩大10万倍的概率值   比如百分之10    就是100 0000  应该生成1000万内的随机数
+
+                    random.setSeed(System.currentTimeMillis());
+                    int rand = random.nextInt(10000000);
+                    if(rand < luck){//
+                        //中奖
+                        return obj;
+                    }
+                }
+            }
+        }
+        //这里是都没中奖的情况
+        int index = random.nextInt(listNotluck.size());
+        return listNotluck.get(index);
     }
     @Override
     public UpointsLotteryBO selectOne(String id) {

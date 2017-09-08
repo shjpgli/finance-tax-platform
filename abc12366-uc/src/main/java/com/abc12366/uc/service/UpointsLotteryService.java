@@ -19,5 +19,5 @@ public interface UpointsLotteryService {
     UpointsLotteryBO update(UpointsLotteryBO upointsLotteryBO, String id);
     boolean delete(String id);
     void inits( ) ;
-
+    UpointsLotteryBO getval(String userId,Integer point);
 }

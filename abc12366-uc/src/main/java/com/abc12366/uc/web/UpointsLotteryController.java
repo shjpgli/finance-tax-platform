@@ -77,4 +77,9 @@ public class UpointsLotteryController {
         upointsLotteryService.inits();
         return ResponseEntity.ok(Utils.kv());
     }
+    @GetMapping(path = "/getval/{userId}/{point}")
+    public ResponseEntity getval(@PathVariable String userId,@PathVariable Integer point) {
+        UpointsLotteryBO returnObj =upointsLotteryService.getval(userId,point);
+        return ResponseEntity.ok(Utils.kv("data", returnObj));
+    }
 }

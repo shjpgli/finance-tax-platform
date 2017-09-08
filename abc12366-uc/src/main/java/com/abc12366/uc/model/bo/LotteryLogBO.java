@@ -24,6 +24,15 @@ private String state;
  /** 创建时间 */
 private Date createTime;
 private String username;
+private String lotteryName;
+
+    public String getLotteryName() {
+        return lotteryName;
+    }
+
+    public void setLotteryName(String lotteryName) {
+        this.lotteryName = lotteryName;
+    }
 
     @Override
     public String toString() {
