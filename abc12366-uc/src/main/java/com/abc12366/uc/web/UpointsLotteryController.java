@@ -79,6 +79,9 @@ public class UpointsLotteryController {
     }
     @GetMapping(path = "/getval/{userId}/{point}")
     public ResponseEntity getval(@PathVariable String userId,@PathVariable Integer point) {
+        if(userId ==null || userId.isEmpty() || point==null || point ==0){
+            throw new RuntimeException("参数错误，请查正");
+        }
         UpointsLotteryBO returnObj =upointsLotteryService.getval(userId,point);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
