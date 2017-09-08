@@ -159,6 +159,9 @@ public class Invoice implements Serializable {
      */
     private String email;
 
+    /**物流公司ID**/
+    private String expressCompId;
+
     public String getId() {
         return this.id;
     }
@@ -398,5 +401,13 @@ public class Invoice implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getExpressCompId() {
+        return expressCompId;
+    }
+
+    public void setExpressCompId(String expressCompId) {
+        this.expressCompId = expressCompId;
     }
 }

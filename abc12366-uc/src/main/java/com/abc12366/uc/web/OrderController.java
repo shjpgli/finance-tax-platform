@@ -229,10 +229,10 @@ public class OrderController {
      * @return
      */
     @GetMapping(path = "/export")
-    public ResponseEntity exportOrder() {
+    public ResponseEntity exportOrder(@RequestParam(value = "expressCompId", required = true) String expressCompId) {
         Order order = new Order();
         order.setOrderStatus("4");
-        List<OrderListBO> orderListBOList = orderService.selectExprotOrder(order);
+        List<OrderListBO> orderListBOList = orderService.selectExprotOrder(order,expressCompId);
         LOGGER.info("{}", orderListBOList);
         return ResponseEntity.ok(Utils.kv("dataList", orderListBOList));
     }
@@ -242,10 +242,11 @@ public class OrderController {
      *
      * @return
      */
-    @PostMapping(path = "/import")
-    public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList) {
+    @PostMapping(path = "/import/{expressCompId}")
+    public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList,
+                                      @PathVariable("expressCompId") String expressCompId) {
         LOGGER.info("{}", orderBOList);
-        orderService.selectImportOrder(orderBOList);
+        orderService.selectImportOrder(orderBOList,expressCompId);
         return ResponseEntity.ok(Utils.kv());
     }
 

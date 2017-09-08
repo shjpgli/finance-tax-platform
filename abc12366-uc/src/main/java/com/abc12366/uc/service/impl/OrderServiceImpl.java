@@ -11,7 +11,6 @@ import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.service.VipLogService;
 import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -946,10 +944,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderListBO> selectExprotOrder(Order order) {
+    public List<OrderListBO> selectExprotOrder(Order order, String expressCompId) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
         List<OrderListBO> orderListBOList = new ArrayList<>();
         for(OrderBO bo:orderBOList){
+            Order data = new Order();
+            data.setOrderNo(bo.getOrderNo());
+            data.setLastUpdate(new Date());
+            data.setExpressCompId(expressCompId);
+            //修改订单信息，与物流公司关联
+            int upd = orderMapper.update(data);
+            if(upd != 1){
+                LOGGER.info("修改失败：{}", data);
+                throw new ServiceException(4102);
+            }
             OrderListBO orderListBO = new OrderListBO();
             orderListBO.setOrderNo(bo.getOrderNo());
             //收货地址
@@ -972,13 +980,7 @@ public class OrderServiceImpl implements OrderService {
                 List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
                 for(OrderProductBO orderProductBO:orderProductBOList){
                     goodsName.append(orderProductBO.getName());
-                    //List<OrderProductspecBO> orderProductspecBOs = orderProductBO.getOrderProductspecBOList();
-                    /*if(orderProductspecBOs != null){
-                        for (OrderProductspecBO specBO:orderProductspecBOs){
-                            goodsName.append("  "+specBO.getFieldKey());
-                        }
-                    }*/
-                    goodsName.append(orderProductBO.getName()+"  "+orderProductBO.getSpecInfo());
+                    goodsName.append("  "+orderProductBO.getSpecInfo());
                 }
                 orderListBO.setGoodsName(goodsName.toString());
             }
@@ -990,7 +992,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void selectImportOrder(List<OrderBO> orderBOList) {
+    public void selectImportOrder(List<OrderBO> orderBOList, String expressCompId) {
         for(OrderBO bo:orderBOList){
             Order order = new Order();
             BeanUtils.copyProperties(bo, order);

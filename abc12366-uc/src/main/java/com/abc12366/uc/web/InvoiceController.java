@@ -221,15 +221,15 @@ public class InvoiceController {
     }
 
     /**
-     * 发票导入寄送信息
+     * 发票导出寄送信息
      *
      * @return
      */
     @GetMapping(path = "/export/express")
-    public ResponseEntity exportInvoice() {
+    public ResponseEntity exportInvoice(@RequestParam(value = "expressCompId", required = true) String expressCompId) {
         InvoiceBO invoice = new InvoiceBO();
         invoice.setStatus("7");
-        List<InvoiceExpressExcel> invoiceList = invoiceService.selectInvoiceExpressExcelList(invoice);
+        List<InvoiceExpressExcel> invoiceList = invoiceService.selectInvoiceExpressExcelList(invoice,expressCompId);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
@@ -237,14 +237,15 @@ public class InvoiceController {
     }
 
     /**
-     * 发票导出寄送信息
+     * 发票导入寄送信息
      *
      * @return
      */
-    @PostMapping(path = "/import/express")
-    public ResponseEntity insertInvoiceExpressExcelList(@Valid @RequestBody List<InvoiceExpressExcel> expressExcelList) {
+    @PostMapping(path = "/import/express/{expressCompId}")
+    public ResponseEntity insertInvoiceExpressExcelList(@Valid @RequestBody List<InvoiceExpressExcel> expressExcelList,
+                                                        @PathVariable("expressCompId") String expressCompId) {
         LOGGER.info("{}", expressExcelList);
-        invoiceService.insertInvoiceExpressExcelList(expressExcelList);
+        invoiceService.insertInvoiceExpressExcelList(expressExcelList,expressCompId);
         return ResponseEntity.ok(Utils.kv());
     }
 

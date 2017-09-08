@@ -38,6 +38,9 @@ public class ExpressComp implements Serializable {
     /****/
     private java.util.Date lastUpdate;
 
+    /**模版下载地址**/
+    private String templateUrl;
+
     public String getId() {
         return this.id;
     }
@@ -94,4 +97,11 @@ public class ExpressComp implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getTemplateUrl() {
+        return templateUrl;
+    }
+
+    public void setTemplateUrl(String templateUrl) {
+        this.templateUrl = templateUrl;
+    }
 }

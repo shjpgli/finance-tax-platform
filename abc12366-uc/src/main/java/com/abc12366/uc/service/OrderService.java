@@ -109,12 +109,12 @@ public interface OrderService {
     /**
      * 查询导出订单
      */
-    List<OrderListBO> selectExprotOrder(Order order);
+    List<OrderListBO> selectExprotOrder(Order order, String expressCompId);
 
     /**
      * 查询导入订单
      */
-    void selectImportOrder(List<OrderBO> orderBOList);
+    void selectImportOrder(List<OrderBO> orderBOList, String expressCompId);
 
     /**
      * 订单发货

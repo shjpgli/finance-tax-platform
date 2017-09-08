@@ -102,6 +102,8 @@ public class InvoiceBO implements Serializable {
      */
     private String email;
 
+	private String expressCompId;
+
 	public String getId() {
 		return this.id;
 	}
@@ -437,4 +439,12 @@ public class InvoiceBO implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public String getExpressCompId() {
+		return expressCompId;
+	}
+
+	public void setExpressCompId(String expressCompId) {
+		this.expressCompId = expressCompId;
+	}
 }

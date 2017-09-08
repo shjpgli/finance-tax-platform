@@ -43,9 +43,9 @@ public interface InvoiceService {
 
     void billing(InvoiceCheckBO invoiceCheckBO);
 
-    List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice);
+    List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice, String expressCompId);
 
-    void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList);
+    void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId);
 
     void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList);
 }
