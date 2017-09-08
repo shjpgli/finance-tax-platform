@@ -109,6 +109,9 @@
             <if test="email != null">
                 email,
             </if>
+            <if test="expressCompId != null">
+                expressCompId,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -201,6 +204,9 @@
             </if>
             <if test="email!=null">
                 #{email},
+            </if>
+            <if test="expressCompId!=null">
+                #{expressCompId},
             </if>
         </trim>
     </insert>
@@ -295,6 +301,9 @@
             </if>
             <if test="email != null">
                 email = #{email},
+            </if>
+            <if test="expressCompId != null">
+                expressCompId = #{expressCompId},
             </if>
 
         </set>

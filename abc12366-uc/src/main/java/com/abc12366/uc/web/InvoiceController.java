@@ -221,7 +221,7 @@ public class InvoiceController {
     }
 
     /**
-     * 发票导入寄送信息
+     * 发票导出寄送信息
      *
      * @return
      */
@@ -237,14 +237,15 @@ public class InvoiceController {
     }
 
     /**
-     * 发票导出寄送信息
+     * 发票导入寄送信息
      *
      * @return
      */
-    @PostMapping(path = "/import/express")
-    public ResponseEntity insertInvoiceExpressExcelList(@Valid @RequestBody List<InvoiceExpressExcel> expressExcelList) {
+    @PostMapping(path = "/import/express/{expressCompId}")
+    public ResponseEntity insertInvoiceExpressExcelList(@Valid @RequestBody List<InvoiceExpressExcel> expressExcelList,
+                                                        @PathVariable("expressCompId") String expressCompId) {
         LOGGER.info("{}", expressExcelList);
-        invoiceService.insertInvoiceExpressExcelList(expressExcelList);
+        invoiceService.insertInvoiceExpressExcelList(expressExcelList,expressCompId);
         return ResponseEntity.ok(Utils.kv());
     }
 

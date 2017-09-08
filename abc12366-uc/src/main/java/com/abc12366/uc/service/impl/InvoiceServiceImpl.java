@@ -353,13 +353,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional("db1TxManager")
     @Override
-    public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList) {
+    public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId) {
         for (InvoiceExpressExcel expressExcel:expressExcelList){
             Invoice invoice = new Invoice();
             invoice.setStatus("4");
             invoice.setId(expressExcel.getInvoiceOrderNo());
             invoice.setWaybillNum(expressExcel.getWaybillNum());
-
+            invoice.setExpressCompId(expressCompId);
             Invoice ce = new Invoice();
             ce.setId(expressExcel.getInvoiceOrderNo());
             ce.setStatus("7");
@@ -387,8 +387,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             temp.setInvoiceCode(invoiceExcel.getInvoiceCode());
             InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(temp);
             if(invoiceDetail == null){
-                LOGGER.info("发票订单不存在：{}", invoiceDetail);
-                throw new ServiceException(4913,"发票订单不存在");
+                LOGGER.info("发票号码或发票代码不存在：{}", invoiceDetail);
+                throw new ServiceException(4913,"发票号码或发票代码不存在");
             }
             if(!"0".equals(invoiceDetail.getStatus())){
                 throw new ServiceException(4913,"发票号码："+invoiceExcel.getInvoiceNo()+"不可用或已使用");

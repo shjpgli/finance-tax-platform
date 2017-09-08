@@ -88,6 +88,9 @@
             <if test="recommendUser != null">
                 recommendUser,
             </if>
+            <if test="expressCompId != null">
+                expressCompId,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -159,6 +162,9 @@
             </if>
             <if test="recommendUser!=null">
                 #{recommendUser},
+            </if>
+            <if test="expressCompId!=null">
+                #{expressCompId},
             </if>
 
         </trim>
@@ -233,6 +239,9 @@
             </if>
             <if test="recommendUser != null">
                 recommendUser = #{recommendUser},
+            </if>
+            <if test="expressCompId != null">
+                expressCompId = #{expressCompId},
             </if>
 
         </set>

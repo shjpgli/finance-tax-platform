@@ -121,6 +121,8 @@ public class Order implements Serializable {
 
     /**推荐人姓名**/
     private String recommendUser;
+    /**物流公司ID**/
+    private String expressCompId;
 
     public String getOrderNo() {
         return this.orderNo;
@@ -312,5 +314,13 @@ public class Order implements Serializable {
 
     public void setRecommendUser(String recommendUser) {
         this.recommendUser = recommendUser;
+    }
+
+    public String getExpressCompId() {
+        return expressCompId;
+    }
+
+    public void setExpressCompId(String expressCompId) {
+        this.expressCompId = expressCompId;
     }
 }

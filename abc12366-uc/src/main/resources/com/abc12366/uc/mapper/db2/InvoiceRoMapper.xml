@@ -34,6 +34,7 @@
         <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
         <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
@@ -70,6 +71,7 @@
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
         <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
     </resultMap>
@@ -207,7 +209,7 @@
     <sql id="Base_Column_List">
         id, userId, username, invoiceNo, invoiceCode, name, content, compName, amount, type, property, status,
         createTime, lastUpdate, nsrsbh, nsrmc, address, phone, bank, addressId, deliveryMethod, isShipping,
-        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum,remark,email
+        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum,remark,email,expressCompId
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -255,7 +257,7 @@
     <sql id="InvoiceBO_Column_List">
         i.id, i.userId, i.username, i.invoiceNo, i.invoiceCode, i.name, i.content, i.compName, i.amount, i.type,
         i.property, i.status, i.createTime, i.lastUpdate, i.nsrsbh, i.nsrmc, i.address, i.phone, i.bank, i.addressId,
-        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum,i.remark,i.email,
+        i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum,i.remark,i.email,i.expressCompId
         u.username as username, a.name as consignee,t.fieldKey as contentDetail
     </sql>
 

@@ -40,6 +40,8 @@ public class OrderBO implements Serializable {
 
     private String nowVipLevelName;
 
+    private String expressCompId;
+
     private String goodsType;
     /**
      * 是否已开发票，true：是，false：否
@@ -365,5 +367,13 @@ public class OrderBO implements Serializable {
 
     public void setNowVipLevelName(String nowVipLevelName) {
         this.nowVipLevelName = nowVipLevelName;
+    }
+
+    public String getExpressCompId() {
+        return expressCompId;
+    }
+
+    public void setExpressCompId(String expressCompId) {
+        this.expressCompId = expressCompId;
     }
 }

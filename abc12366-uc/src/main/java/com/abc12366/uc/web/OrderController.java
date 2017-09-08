@@ -242,10 +242,11 @@ public class OrderController {
      *
      * @return
      */
-    @PostMapping(path = "/import")
-    public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList) {
+    @PostMapping(path = "/import/{expressCompId}")
+    public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList,
+                                      @PathVariable("expressCompId") String expressCompId) {
         LOGGER.info("{}", orderBOList);
-        orderService.selectImportOrder(orderBOList);
+        orderService.selectImportOrder(orderBOList,expressCompId);
         return ResponseEntity.ok(Utils.kv());
     }
 
