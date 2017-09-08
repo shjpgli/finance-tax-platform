@@ -127,8 +127,8 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public List<CheckListBO> checklist(String yearMonth, HttpServletRequest request) {
-        String userId = UserUtil.getUserId(request);
+    public List<CheckListBO> checklist(String yearMonth) {
+        String userId = Utils.getUserId();
 
         String[] timeArray = yearMonth.trim().split("-");
         int year = Integer.parseInt(timeArray[0]);

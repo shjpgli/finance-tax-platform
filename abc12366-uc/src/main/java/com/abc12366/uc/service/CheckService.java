@@ -20,5 +20,5 @@ public interface CheckService {
 
     List<CheckRank> rank(String year);
 
-    List<CheckListBO> checklist(String yearMonth, HttpServletRequest request);
+    List<CheckListBO> checklist(String yearMonth);
 }

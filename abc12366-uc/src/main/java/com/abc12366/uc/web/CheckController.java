@@ -64,9 +64,9 @@ public class CheckController {
      * @return
      */
     @GetMapping(path = "/check/list")
-    public ResponseEntity checklist(@RequestParam(required = true) String yearMonth,
-                                    HttpServletRequest request){
-        List<CheckListBO> checkList = checkService.checklist(yearMonth, request);
+    public ResponseEntity checklist(@RequestParam(required = true) String yearMonth){
+        LOGGER.info("{}", yearMonth);
+        List<CheckListBO> checkList = checkService.checklist(yearMonth);
         return ResponseEntity.ok(Utils.kv("dataList", checkList));
     }
 }

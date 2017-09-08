@@ -14,7 +14,7 @@ import java.util.Date;
 public class UserUpdateBO {
 
     private String id;
-    @Size(min = 6, max = 32)
+    @Size(min = 6, max = 32, message = "用户名长度只能在6到32之间")
     @Pattern(regexp = "^[a-zA-Z0-9]{6,32}$", message = "用户名只能为数字字母组合！")
     private String username;
     @Pattern(regexp = "^\\d{11}$")
