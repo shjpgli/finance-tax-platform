@@ -267,6 +267,18 @@ public class ContentController {
     }
 
     /**
+     * 查询单个内容(前端用)
+     */
+    @GetMapping(path = "/selectContent")
+    public ResponseEntity selectContent(@RequestParam(value = "contentId", required = true) String contentId) {
+        LOGGER.info("{}", contentId);
+        //根据内容ID查询内容信息
+        ContentSaveBo contentSaveBo = contentService.selectContent(contentId);
+        LOGGER.info("{}", contentSaveBo);
+        return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
+    }
+
+    /**
      * 根据栏目ID查找内容信息
      */
     @GetMapping(path = "/contentList")
