@@ -944,20 +944,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderListBO> selectExprotOrder(Order order, String expressCompId) {
+    public List<OrderListBO> selectExprotOrder(Order order) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
         List<OrderListBO> orderListBOList = new ArrayList<>();
         for(OrderBO bo:orderBOList){
-            Order data = new Order();
-            data.setOrderNo(bo.getOrderNo());
-            data.setLastUpdate(new Date());
-            data.setExpressCompId(expressCompId);
-            //修改订单信息，与物流公司关联
-            int upd = orderMapper.update(data);
-            if(upd != 1){
-                LOGGER.info("修改失败：{}", data);
-                throw new ServiceException(4102);
-            }
             OrderListBO orderListBO = new OrderListBO();
             orderListBO.setOrderNo(bo.getOrderNo());
             //收货地址
@@ -996,6 +986,9 @@ public class OrderServiceImpl implements OrderService {
         for(OrderBO bo:orderBOList){
             Order order = new Order();
             BeanUtils.copyProperties(bo, order);
+            order.setOrderStatus("5");
+            order.setExpressCompId(expressCompId);
+            order.setLastUpdate(new Date());
             int upd = orderMapper.update(order);
             if(upd != 1){
                 LOGGER.warn("修改失败，参数：{}", order);

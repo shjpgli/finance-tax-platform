@@ -226,10 +226,10 @@ public class InvoiceController {
      * @return
      */
     @GetMapping(path = "/export/express")
-    public ResponseEntity exportInvoice(@RequestParam(value = "expressCompId", required = true) String expressCompId) {
+    public ResponseEntity exportInvoice() {
         InvoiceBO invoice = new InvoiceBO();
         invoice.setStatus("7");
-        List<InvoiceExpressExcel> invoiceList = invoiceService.selectInvoiceExpressExcelList(invoice,expressCompId);
+        List<InvoiceExpressExcel> invoiceList = invoiceService.selectInvoiceExpressExcelList(invoice);
         LOGGER.info("{}", invoiceList);
         return (invoiceList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :

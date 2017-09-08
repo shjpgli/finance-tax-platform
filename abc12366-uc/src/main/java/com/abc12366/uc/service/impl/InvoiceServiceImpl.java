@@ -280,7 +280,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice, String expressCompId) {
+    public List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice) {
         //发票申请状态，1：待审批，2：已审批，3：已拒绝，4：已发货，5：已退票，6：已收货，7：待发货
         invoice.setStatus("7");
         List<InvoiceBO> invoiceBOList = invoiceRoMapper.selectList(invoice);
@@ -289,15 +289,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoiceBOList != null) {
             InvoiceExpressExcel excel = null;
             for (InvoiceBO bo : invoiceBOList) {
-                Invoice data = new Invoice();
-                data.setId(bo.getId());
-                data.setExpressCompId(expressCompId);
-                data.setLastUpdate(new Date());
-                int upd = invoiceMapper.update(data);
-                if(upd != 1){
-                    LOGGER.info("修改失败：{}", data);
-                    throw new ServiceException(4102);
-                }
                 excel = new InvoiceExpressExcel();
                 //List<Express> exList = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
                 excel.setInvoiceOrderNo(bo.getId());
@@ -368,7 +359,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoice.setStatus("4");
             invoice.setId(expressExcel.getInvoiceOrderNo());
             invoice.setWaybillNum(expressExcel.getWaybillNum());
-
+            invoice.setExpressCompId(expressCompId);
             Invoice ce = new Invoice();
             ce.setId(expressExcel.getInvoiceOrderNo());
             ce.setStatus("7");

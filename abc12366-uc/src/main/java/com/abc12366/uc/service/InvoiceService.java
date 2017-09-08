@@ -43,7 +43,7 @@ public interface InvoiceService {
 
     void billing(InvoiceCheckBO invoiceCheckBO);
 
-    List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice, String expressCompId);
+    List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice);
 
     void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId);
 

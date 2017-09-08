@@ -229,10 +229,10 @@ public class OrderController {
      * @return
      */
     @GetMapping(path = "/export")
-    public ResponseEntity exportOrder(@RequestParam(value = "expressCompId", required = true) String expressCompId) {
+    public ResponseEntity exportOrder() {
         Order order = new Order();
         order.setOrderStatus("4");
-        List<OrderListBO> orderListBOList = orderService.selectExprotOrder(order,expressCompId);
+        List<OrderListBO> orderListBOList = orderService.selectExprotOrder(order);
         LOGGER.info("{}", orderListBOList);
         return ResponseEntity.ok(Utils.kv("dataList", orderListBOList));
     }
