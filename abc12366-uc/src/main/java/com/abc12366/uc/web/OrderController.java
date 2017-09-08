@@ -281,7 +281,18 @@ public class OrderController {
     @PostMapping(path = "/payment")
     public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO);
+        OrderBO bo = orderService.paymentOrder(orderPayBO,"RMB");
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 用户交易积分订单
+     */
+    @PostMapping(path = "/paypoints")
+    public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO) {
+        LOGGER.info("{}{}", orderPayBO);
+        OrderBO bo = orderService.paymentOrder(orderPayBO,"POINTS");
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
