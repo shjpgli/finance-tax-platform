@@ -236,7 +236,11 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request) throws IOException {
+    public boolean isRealNameValidatedDzsj(String sfzjhm, String xm , HttpServletRequest request) throws IOException {
+        if(sfzjhm == null || sfzjhm.trim().equals("")
+                || xm == null || xm.trim().equals("")){
+            return false;
+        }
         HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
         if (hngsAppLoginResponse != null) {
             HttpHeaders headers = new HttpHeaders();

@@ -8,6 +8,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
+import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -80,24 +81,14 @@ public class UserExtendServiceImpl implements UserExtendService {
             if (userExtendBO.getValidStatus() == null || userExtendBO.getValidStatus().trim().equals("")) {
                 userExtend.setValidStatus("0");
             }
+            //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
+            if(userBindService.isRealNameValidatedDzsj(userExtendBO.getIdcard(), userExtendBO.getRealName(), request)){
+                userExtend.setValidStatus("2");
+            }
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {
                 LOGGER.warn("新增失败，参数：{}" + userExtend.toString());
                 throw new ServiceException(4112);
-            }
-
-
-            //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
-            String sfzjhm = userExtendBO.getIdcard();
-            String xm = userExtendBO.getRealName();
-            if (sfzjhm != null && !sfzjhm.trim().equals("")
-                    && xm != null && !xm.trim().equals("")) {
-                boolean isDzsjValidated = userBindService.isRealNameValidatedDzsj(sfzjhm, xm, request);
-                if(isDzsjValidated){
-                    userExtend.setValidStatus("2");
-                    userExtend.setLastUpdate(new Date());
-                }
-                userExtendMapper.update(userExtend);
             }
 
             UserExtendBO userExtendBO1 = new UserExtendBO();
@@ -134,6 +125,10 @@ public class UserExtendServiceImpl implements UserExtendService {
             LOGGER.warn("修改失败，参数：{}" + null);
             throw new ServiceException(4102);
         }
+        //不允许修改非当前登录用户数据
+        if(!userExtendUpdateBO.getUserId().trim().equals(UserUtil.getUserId(request).trim())){
+            throw new ServiceException(4190);
+        }
         if (!userExtendUpdateBO.getUserId().equals("")) {
             UserExtend userExtend = userExtendRoMapper.selectOne(userExtendUpdateBO.getUserId());
             if (userExtend == null) {
@@ -142,17 +137,21 @@ public class UserExtendServiceImpl implements UserExtendService {
                 UserExtendBO userExtendBOReturn = insert(userExtendBO, request);
                 return userExtendBOReturn;
             }
-            UserExtend userExtend1 = new UserExtend();
-            BeanUtils.copyProperties(userExtendUpdateBO, userExtend1);
-            userExtend1.setLastUpdate(new Date());
-            int result = userExtendMapper.update(userExtend1);
+            UserExtend userExtendSecond = new UserExtend();
+            BeanUtils.copyProperties(userExtendUpdateBO, userExtendSecond);
+            userExtendSecond.setLastUpdate(new Date());
+            //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
+            if(userBindService.isRealNameValidatedDzsj(userExtendUpdateBO.getIdcard(),userExtendUpdateBO.getRealName(), request)){
+                userExtendSecond.setValidStatus("2");
+            }
+            int result = userExtendMapper.update(userExtendSecond);
             UserExtendBO userExtendBO = new UserExtendBO();
 
             if (result < 1) {
                 LOGGER.warn("修改失败，参数：{}" + userExtendUpdateBO);
                 throw new ServiceException(4102);
             }
-            UserExtend userExtend2 = userExtendRoMapper.selectOne(userExtend1.getUserId());
+            UserExtend userExtend2 = userExtendRoMapper.selectOne(userExtendSecond.getUserId());
             BeanUtils.copyProperties(userExtend2, userExtendBO);
             LOGGER.info("{}", userExtendBO);
             return userExtendBO;
