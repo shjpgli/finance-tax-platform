@@ -396,8 +396,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             temp.setInvoiceCode(invoiceExcel.getInvoiceCode());
             InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(temp);
             if(invoiceDetail == null){
-                LOGGER.info("发票订单不存在：{}", invoiceDetail);
-                throw new ServiceException(4913,"发票订单不存在");
+                LOGGER.info("发票号码或发票代码不存在：{}", invoiceDetail);
+                throw new ServiceException(4913,"发票号码或发票代码不存在");
             }
             if(!"0".equals(invoiceDetail.getStatus())){
                 throw new ServiceException(4913,"发票号码："+invoiceExcel.getInvoiceNo()+"不可用或已使用");
