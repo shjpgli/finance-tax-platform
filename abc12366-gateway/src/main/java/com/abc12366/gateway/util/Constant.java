@@ -38,7 +38,7 @@ public class Constant {
 
 
     // Admin用户验证头
-    public final static String ADMIN_TOKEN_HEAD = "Admin-Token";
+    public final static String ADMIN_TOKEN_HEAD = "admin-token";
 
     // Admin用户token有效期：3600*2*1000毫秒
     public final static long ADMIN_USER_TOKEN_VALID_SECONDS = 3600 * 2 * 1000;
