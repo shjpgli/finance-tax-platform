@@ -37,8 +37,8 @@ public class RSAController {
      * 获取组装PublicKey对象（公钥）所需参数接口
      * @return
      */
-    @GetMapping
-    public ResponseEntity selectOne() {
+    @GetMapping(path = "/public")
+    public ResponseEntity selectPublic() {
         RSAResponse rsaResponse = new RSAResponse();
         try {
             RSAPublicKey publicKey = RSA.getDefaultPublicKey();
@@ -59,6 +59,33 @@ public class RSAController {
         return ResponseEntity.ok(rsaResponse);
     }
 
+
+    /**
+     * 获取组装PrivateKey对象（私钥）所需参数接口
+     * @return
+     */
+    @GetMapping(path = "/private")
+    public ResponseEntity selectPrivate() {
+        RSAResponse rsaResponse = new RSAResponse();
+        try {
+            RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
+            if (privateKey != null) {
+                rsaResponse.setCode("2000");
+                rsaResponse.setMessage("生成私钥成功");
+                rsaResponse.setFormat(privateKey.getFormat());
+                rsaResponse.setAlgorithm(privateKey.getAlgorithm());
+                rsaResponse.setModulus(new String(Hex.encodeHex(privateKey.getModulus().toByteArray())));
+                rsaResponse.setExponent(new String(Hex.encodeHex(privateKey.getPrivateExponent().toByteArray())));
+            } else {
+                rsaResponse.setCode("1000");
+                rsaResponse.setMessage("生成私钥失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(rsaResponse);
+    }
+
     @GetMapping(path = "/{str}")
     public ResponseEntity decode(@PathVariable String str) throws Exception {
         RSAPublicKey publicKey = RSA.getDefaultPublicKey();
@@ -72,19 +99,5 @@ public class RSAController {
         System.out.println(response2);
         return ResponseEntity.ok(response2);
     }
-
-    public String decode2(String str) throws Exception {
-        RSAPublicKey publicKey = RSA.getDefaultPublicKey();
-        RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
-
-        byte[] bytes = RSA.encrypt(publicKey, str.getBytes());
-        String s = new BASE64Encoder().encode(bytes);
-        byte[] bytes2 = new BASE64Decoder().decodeBuffer(s);
-
-        String response2 = new String(RSA.decrypt(privateKey, bytes2));
-        System.out.println(response2);
-        return response2;
-    }
-
 
 }

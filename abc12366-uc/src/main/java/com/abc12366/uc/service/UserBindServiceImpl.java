@@ -550,8 +550,7 @@ public class UserBindServiceImpl implements UserBindService {
                 }
             }
         } else {
-            String msg = jbxxcx.getCWYY();
-            throw new ServiceException(cxjg, msg);
+            throw new ServiceException(4637);
         }
         return object;
     }

@@ -161,13 +161,22 @@ public class AuthController extends BaseController {
         RSAPublicKey publicKey = RSA.getDefaultPublicKey();
         RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
 
-        byte[] bytes = RSA.encrypt(publicKey, str.getBytes());
-        String s = new BASE64Encoder().encode(bytes);
-        byte[] bytes2 = new BASE64Decoder().decodeBuffer(s);
+//        byte[] bytes = RSA.encrypt(publicKey, str.getBytes());
+//        String s = new BASE64Encoder().encode(bytes);
+//        byte[] bytes2 = new BASE64Decoder().decodeBuffer(s);
+//        byte[] bytes2 = new BASE64Decoder().decodeBuffer(str);
+//        String response2 = new String(RSA.decrypt(privateKey, bytes2));
+//        System.out.println(response2);
+//        return response2;
 
-        String response2 = new String(RSA.decrypt(privateKey, bytes2));
-        System.out.println(response2);
-        return response2;
+        byte[] bytes2 = new BASE64Decoder().decodeBuffer(str);
+        String newStr = new String(bytes2);
+        String []test=newStr.split(" ");
+        String json="";
+        for(String s : test){
+            json+= RSA.decryptStringByJs(s);
+        }
+        return json;
     }
 
 }
