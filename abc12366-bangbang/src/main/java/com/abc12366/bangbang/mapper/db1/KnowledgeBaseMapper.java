@@ -58,6 +58,13 @@ public interface KnowledgeBaseMapper {
 
     /*
     *
+    * 根据标签查询热点知识、问题
+    *
+    **/
+    List<KnowledgeBase> selectUCListBytag(KnowledgeBaseParamBO param);
+
+    /*
+    *
     * 列表查询
     *
     **/

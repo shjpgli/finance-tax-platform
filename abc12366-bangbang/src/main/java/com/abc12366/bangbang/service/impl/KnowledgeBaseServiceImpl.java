@@ -66,6 +66,11 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     }
 
     @Override
+    public List<KnowledgeBase> selectUCListByTag(KnowledgeBaseParamBO param) {
+        return knowledgeBaseMapper.selectUCListBytag(param);
+    }
+
+    @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
         List<KnowledgeBase> list = knowledgeBaseMapper.selectList(param);
         if(!list.isEmpty()){
