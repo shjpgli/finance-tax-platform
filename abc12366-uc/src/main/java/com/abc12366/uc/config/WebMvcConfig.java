@@ -116,7 +116,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 //                .addPathPatterns("/user/test");
 
         //用户业务操作导致积分值更新，拦截器处理
-//        registry.addInterceptor(upointInterceptor())
-//                .addPathPatterns("/user/test");
+       registry.addInterceptor(upointInterceptor())
+                .addPathPatterns("/user/test")
+               .addPathPatterns("/upointslottery/getval/**");
     }
 }
