@@ -93,6 +93,8 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
      */
     @Override
     synchronized public UpointsLotteryBO getval(String userId,Integer point){
+        //
+
         UpointsLotteryBO obj = getvalEx();
         //减库存 记日志
         if(obj.getNotluck() !=1){

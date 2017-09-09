@@ -25,6 +25,15 @@ private String state;
 private Date createTime;
 private String username;
 private String lotteryName;
+private String userPicturePath;
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
+    }
 
     public String getLotteryName() {
         return lotteryName;
