@@ -8,6 +8,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.uc.model.UpointsLottery;
 import com.abc12366.uc.model.bo.LotteryLogBO;
+import com.abc12366.uc.model.bo.PointCodex;
 import com.abc12366.uc.model.bo.UpointsLotteryBO;
 
 import java.util.*;
@@ -15,6 +16,7 @@ import java.util.*;
 import com.abc12366.uc.mapper.db1.UpointsLotteryMapper;
 import com.abc12366.uc.mapper.db2.UpointsLotteryRoMapper;
 import com.abc12366.uc.service.LotteryLogService;
+import com.abc12366.uc.service.PointsService;
 import com.abc12366.uc.service.UpointsLotteryService;
 
 import org.slf4j.Logger;
@@ -32,6 +34,8 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
     private UpointsLotteryRoMapper upointsLotteryRoMapper;
     @Autowired
     private LotteryLogService lotteryLogService;
+    @Autowired
+    private PointsService pointsService;
     @Override
     public UpointsLotteryBO update(UpointsLotteryBO upointsLotteryBO, String id) {
         UpointsLottery obj = new UpointsLottery();
@@ -92,9 +96,12 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
      * 获取随机数
      */
     @Override
-    synchronized public UpointsLotteryBO getval(String userId,Integer point){
+    synchronized public UpointsLotteryBO getval(String userId){
         //
+//        P-hycj
 
+        PointCodex pointCodex = pointsService.selectCodexByRuleCode("P-hycj");
+        Integer point = pointCodex.getUpoint();
         UpointsLotteryBO obj = getvalEx();
         //减库存 记日志
         if(obj.getNotluck() !=1){
