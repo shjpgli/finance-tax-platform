@@ -21,13 +21,6 @@ public class UpointInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private UpointService upointService;
 
-
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        uexpService.compute(request);
-        return true;
-    }
-
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         upointService.compute(request);

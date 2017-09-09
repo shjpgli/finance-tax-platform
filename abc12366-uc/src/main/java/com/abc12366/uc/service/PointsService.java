@@ -22,4 +22,6 @@ public interface PointsService {
     void deleteCodex(String id);
 
     List<PointCodex> codexList();
+
+    PointCodex selectCodexByRuleCode(String ruleCode);
 }

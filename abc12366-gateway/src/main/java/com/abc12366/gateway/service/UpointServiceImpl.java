@@ -34,10 +34,10 @@ public class UpointServiceImpl implements UpointService {
         String url = PropertiesUtil.getValue("abc12366.uc.url") + "/points/compute";
 
         Map<String, String> map = new HashMap<>();
-        map.put("userId", userId.trim());
-        map.put("clientType", clientType.trim());
+        map.put("userId", userId == null ? userId : userId.trim());
+        map.put("clientType", clientType == null ? clientType : clientType.trim());
         //map.put("clientType", "PCWEB");
-        map.put("uri", uri.trim());
+        map.put("uri", uri == null ? uri : uri.trim());
 
         restTemplate.exchange(url, HttpMethod.POST, map, request);
     }
