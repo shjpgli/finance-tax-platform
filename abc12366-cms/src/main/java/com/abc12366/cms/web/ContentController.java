@@ -146,6 +146,27 @@ public class ContentController {
     }
 
     /**
+     * 根据内容标签名称查询内容列表信息
+     */
+    @GetMapping(path = "/selectListByTagName")
+    public ResponseEntity selectListByTagName(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                          page,
+                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                          size,
+                                                  @RequestParam(value = "siteName", required = false) String siteName,
+                                                  @RequestParam(value = "tagName", required = false) String tagName,
+                                                  @RequestParam(value = "channelName", required = false) String channelName) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("tagName", tagName);//内容类型(标签)
+        dataMap.put("channelName", channelName);//栏目ID
+        dataMap.put("siteName", siteName);//站点ID
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        //查询内容列表
+        List<ContentsListBo> dataList = contentService.selectListByTagName(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
+
+    /**
      * 根据内容标签分组，获取内容标签列表
      */
     @GetMapping(path = "/selectContentType")
