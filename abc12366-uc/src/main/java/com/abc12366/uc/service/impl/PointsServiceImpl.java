@@ -49,10 +49,13 @@ public class PointsServiceImpl implements PointsService {
 
     @Override
     public void compute(PointComputeBO pointComputeBO) {
+        LOGGER.info("{}", pointComputeBO);
+        LOGGER.info("-----------" + pointComputeBO.toString());
         //查询出对应的积分规则
         List<PointCodex> pointCodexList = pointsRoMapper.selectCodexList(pointComputeBO);
         if (pointCodexList == null || pointCodexList.size() < 1) {
-            return;
+            //return;
+            throw new ServiceException("0000", "没有对应的积分规则");
         }
         PointCodex pointCodex = pointCodexList.get(0);
         if (pointCodex.getUpoint() == null || pointCodex.getUpoint().toString().equals("") || pointCodex.getPeriod() == null || pointCodex.getPeriod().trim().equals("")) {
