@@ -153,4 +153,10 @@ public class PointsServiceImpl implements PointsService {
     public List<PointCodex> codexList() {
         return pointsRoMapper.codexList();
     }
+
+    @Override
+    public PointCodex selectCodexByRuleCode(String ruleCode) {
+        LOGGER.info("{}", ruleCode);
+        return pointsRoMapper.selectCodexByRuleCode(ruleCode);
+    }
 }
