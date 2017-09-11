@@ -115,34 +115,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 //        registry.addInterceptor(uexpInterceptor())
 //                .addPathPatterns("/user/test");
         //用户业务操作导致积分值更新，拦截器处理
-       registry.addInterceptor(upointInterceptor())
-                //.addPathPatterns("/user/test")
-               //.addPathPatterns("/upointslottery/getval/**")
-                .excludePathPatterns("/points/compute")
-                .excludePathPatterns("/")
-                .excludePathPatterns("/app/**")
-                .excludePathPatterns("/goods/user/**")
-                .excludePathPatterns("/dict/**")
-                .excludePathPatterns("/appsetting/**")
-                .excludePathPatterns("/api/**")
-                .excludePathPatterns("/blacklist/**")
-                .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/test")
-                        // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
-                .excludePathPatterns("/login", "/verifylogin", "/logout/**", "/refresh", "/register", "/user/token/**", "/user/u/**")
-                        // 操作员登录、登出、token验证自动刷新
-                .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**")
-                        //第三方交易毁回调地址
-                .excludePathPatterns("/payreturn/**")
-                        //微信服务回调地址
-                .excludePathPatterns("/wechatserver/*")
-                        //用户等级接口地址
-                .excludePathPatterns("/uvip/level/**")
-                        //用户签到排行榜
-                .excludePathPatterns("/check/rank")
-                        //计算用户经验值接口
-                .excludePathPatterns("/experience/compute")
-                        //
-                .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login");
+//       registry.addInterceptor(upointInterceptor())
+//                //.addPathPatterns("/user/test")
+//               //.addPathPatterns("/upointslottery/getval/**");
+
     }
 }

@@ -76,6 +76,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private ExperienceLogService experienceLogService;
 
+    @Autowired
+    private RSAService rsaService;
+
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
      * 3、用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
@@ -175,7 +178,11 @@ public class AuthServiceImpl implements AuthService {
         //登录密码进行处理，与表中的加密密码进行比对
         String password;
         try {
-            password = Utils.md5(Utils.md5(loginBO.getPassword()) + user.getSalt());
+            //先前的加密版本
+            //password = Utils.md5(Utils.md5(loginBO.getPassword()) + user.getSalt());
+
+            //现在的加密版本
+            password = rsaService.decode(loginBO.getPassword());
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
             throw new ServiceException(4106);
