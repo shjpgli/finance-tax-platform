@@ -17,14 +17,15 @@ public class RSAServiceImpl implements RSAService {
 
     @Override
     public String decode(String str) {
-        String[] test = str.split(" ");
-        String json = "";
-        for (String s : test) {
-            json += RSA.decryptStringByJs(s);
-        }
         try {
             byte[] bytes = new BASE64Decoder().decodeBuffer(str);
-            return new String(bytes);
+            String base64 = new String(bytes);
+            String[] test = base64.split(" ");
+            String json = "";
+            for (String s : test) {
+                json += RSA.decryptStringByJs(s);
+            }
+            return json;
         } catch (IOException e) {
             e.printStackTrace();
         }
