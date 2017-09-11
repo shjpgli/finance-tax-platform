@@ -108,7 +108,7 @@
     <!-- 根据标签查询热点知识、问题 -->
     <select id="selectUCListBytag" resultType="knowledgeBase"
             parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
-        SELECT t_base.id, t_base.subject
+        SELECT t_base.id, t_base.subject ,t_base.content
         FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
         WHERE t_base.categoryCode = t_category.code
 
