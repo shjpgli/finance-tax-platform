@@ -60,15 +60,15 @@
 	</update>
 
 	<!--删除：根据标签ID删除-->
-	<delete id="deleteByLableId" parameterType="java.lang.String">
+	<delete id="deleteByLabelId" parameterType="java.lang.String">
 		DELETE FROM bb_curriculum_label
-		WHERE lableId = #{lableId}
+		WHERE labelId = #{lableId}
 	</delete>
 
 	<!--删除：根据tagIds批量删除-->
-	<delete id="deleteByLableIds" parameterType="java.util.List">
+	<delete id="deleteByLabelIds" parameterType="java.util.List">
 		DELETE FROM bb_curriculum_label
-		WHERE lableId IN
+		WHERE labelId IN
 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
 			#{item}
 		</foreach>
