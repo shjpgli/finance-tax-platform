@@ -183,6 +183,7 @@ public class AuthServiceImpl implements AuthService {
 
             //现在的加密版本
             password = rsaService.decode(loginBO.getPassword());
+            LOGGER.info("password:{}" , password);
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
             throw new ServiceException(4106);
