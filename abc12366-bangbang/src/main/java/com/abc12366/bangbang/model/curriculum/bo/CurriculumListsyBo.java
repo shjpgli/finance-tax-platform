@@ -32,6 +32,9 @@ public class CurriculumListsyBo implements Serializable {
 	/**发布时间**datetime**/
 	private Date issueTime;
 
+    /**收藏时间**datetime**/
+    private Date collectTime;
+
 	/**课程收费**tinyint(1)**/
 	private Integer isFree;
 
@@ -96,6 +99,14 @@ public class CurriculumListsyBo implements Serializable {
 
     public void setIssueTime(Date issueTime) {
         this.issueTime = issueTime;
+    }
+
+    public Date getCollectTime() {
+        return collectTime;
+    }
+
+    public void setCollectTime(Date collectTime) {
+        this.collectTime = collectTime;
     }
 
     public Integer getIsFree() {
