@@ -72,7 +72,7 @@
         FROM
             bb_curriculum_membergrade
         WHERE
-            curriculumId = #{coursewareId}
+            curriculumId = #{curriculumId}
                 AND memberGrade = (SELECT
                     vipLevel
                 FROM
