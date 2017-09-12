@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.bo;
 
+import com.abc12366.uc.model.ExpressComp;
 import com.abc12366.uc.model.OrderProductSpec;
 
 import java.io.Serializable;
@@ -64,6 +65,8 @@ public class OrderBO implements Serializable {
     private InvoiceBO invoiceBO;
 
     private DeliveryMethodBO deliveryMethodBO;
+
+    private ExpressComp expressComp;
 
     public String getOrderNo() {
         return this.orderNo;
@@ -375,5 +378,13 @@ public class OrderBO implements Serializable {
 
     public void setExpressCompId(String expressCompId) {
         this.expressCompId = expressCompId;
+    }
+
+    public ExpressComp getExpressComp() {
+        return expressComp;
+    }
+
+    public void setExpressComp(ExpressComp expressComp) {
+        this.expressComp = expressComp;
     }
 }

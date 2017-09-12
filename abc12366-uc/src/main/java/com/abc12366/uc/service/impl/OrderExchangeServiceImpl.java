@@ -91,9 +91,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
         OrderExchange data = new OrderExchange();
         BeanUtils.copyProperties(ra, data);
-        //List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
-        OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(data.getOrderNo());
-        if (orderExchange == null) {
+        List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
+        //OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(data.getOrderNo());
+        if (dataList == null) {
             String userId = Utils.getUserId();
             data.setId(Utils.uuid());
             data.setUserId(userId);

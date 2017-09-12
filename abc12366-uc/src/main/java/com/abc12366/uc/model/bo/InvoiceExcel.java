@@ -70,7 +70,7 @@ public class InvoiceExcel implements Serializable {
     /**
      * 备注
      **/
-    private Integer remark;
+    private String remark;
 
     public String getInvoiceOrderNo() {
         return invoiceOrderNo;
@@ -144,11 +144,11 @@ public class InvoiceExcel implements Serializable {
         this.drawer = drawer;
     }
 
-    public Integer getRemark() {
+    public String getRemark() {
         return remark;
     }
 
-    public void setRemark(Integer remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
