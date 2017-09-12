@@ -121,6 +121,7 @@ public class Order implements Serializable {
 
     /**推荐人姓名**/
     private String recommendUser;
+
     /**物流公司ID**/
     private String expressCompId;
 

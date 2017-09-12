@@ -273,9 +273,17 @@ public class InvoiceServiceImpl implements InvoiceService {
                 List<OrderBO> orderBOList = bo.getOrderBOList();
                 StringBuffer remark = new StringBuffer();
                 for(OrderBO orderBO : orderBOList){
-                    remark.append(orderBO.getOrderNo());
+                    remark.append("订单号："+orderBO.getOrderNo());
                     remark.append("  ");
-                    remark.append(orderBO.getPayMethod());
+                    remark.append("支付方式：");
+                    if("WEIXIN".equals(orderBO.getPayMethod())){
+                        remark.append("微信");
+                    }else if("ALIPAY".equals(orderBO.getPayMethod())){
+                        remark.append("支付宝");
+                    }else if("POINTS".equals(orderBO.getPayMethod())){
+                        remark.append("积分");
+                    }
+
                 }
                 excel.setRemark(remark.toString());
                 excelList.add(excel);
