@@ -8,9 +8,16 @@ package com.abc12366.uc.service;
 public interface RSAService {
 
     /**
-     * RSA解密方法
+     * RSA解密方法,前台java加密用此方法解密
      * @param str
      * @return
      */
     String decode(String str);
+
+    /**
+     * RSA解密方法,前台js加密用此方法解密
+     * @param str
+     * @return
+     */
+    String decodeStringFromJs(String str);
 }

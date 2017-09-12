@@ -95,7 +95,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
                         // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
-                .excludePathPatterns("/login", "/verifylogin", "/logout/**", "/refresh", "/register", "/user/token/**", "/user/u/**")
+                .excludePathPatterns("/login","/login/js", "/verifylogin", "/logout/**", "/refresh", "/register", "/user/token/**", "/user/u/**")
                         // 操作员登录、登出、token验证自动刷新
                 .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**")
                         //第三方交易毁回调地址

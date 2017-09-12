@@ -256,6 +256,104 @@ public class AuthServiceImpl implements AuthService {
         return map;
     }
 
+    @Transactional("db1TxManager")
+    @Override
+    public Map loginJs(LoginBO loginBO, String appToken) throws Exception {
+        LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
+
+        //根据用户名查看用户是否存在
+        loginBO.setUsernameOrPhone(loginBO.getUsernameOrPhone().trim());
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        if (user == null) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4018);
+        }
+        //无效用户不允许登录
+        if (!user.getStatus()) {
+            throw new ServiceException(4038);
+        }
+
+        //登录密码进行处理，与表中的加密密码进行比对
+        String password;
+        try {
+            //先前的加密版本
+            //password = Utils.md5(Utils.md5(loginBO.getPassword()) + user.getSalt());
+
+            //现在的加密版本
+            password = rsaService.decodeStringFromJs(loginBO.getPassword());
+            LOGGER.info("password:{}" , password);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage() + e);
+            throw new ServiceException(4106);
+        }
+        if (!user.getPassword().equals(password)) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4120);
+        }
+
+        user.setLastUpdate(new Date());
+        int result = userMapper.update(user);
+        if (result != 1) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4102);
+        }
+        //更新用户主表后再更新uc_token表
+        App appTemp = new App();
+        appTemp.setAccessToken(appToken);
+        appTemp.setStatus(true);
+        App app = appRoMapper.selectOne(appTemp);
+        //如果不存在有效的注册应用，则不允许登录
+        if (app == null) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4019);
+        }
+
+        Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
+        int result02;
+        //假如uc_token表有记录（根据userId和appId），则更新，没有则新增
+        String userToken = Utils.token(Utils.uuid());
+        if (queryToken != null) {
+            queryToken.setLastTokenResetTime(new Date());
+            userToken = queryToken.getToken();
+            result02 = tokenMapper.update(queryToken);
+        } else {
+            Token token = new Token();
+            token.setId(Utils.uuid());
+            if (app.getId() != null) {
+                token.setAppId(app.getId());
+            }
+            if (user.getId() != null) {
+                token.setUserId(user.getId());
+            }
+            token.setToken(userToken);
+            token.setLastTokenResetTime(new Date());
+            result02 = tokenMapper.insert(token);
+        }
+        if (result02 != 1) {
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            throw new ServiceException(4021);
+        }
+
+        //计算用户登录经验值变化
+        computeExp(user.getId());
+        //记用户登录日志
+        insertLoginLog(user.getId());
+
+        UserBO userBO = new UserBO();
+        BeanUtils.copyProperties(user, userBO);
+        userBO.setPassword(null);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", userToken);
+        map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
+        map.put("user", userBO);
+
+        // 用户信息写入redis
+        valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
+                TimeUnit.SECONDS);
+        return map;
+    }
+
     private void computeExp(String userId) {
         //今日第一次登录才能获取经验值
         if (!isContinueLogin(userId, 0)) {

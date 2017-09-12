@@ -33,4 +33,22 @@ public class RSAServiceImpl implements RSAService {
         }
         return null;
     }
+
+
+    @Override
+    public String decodeStringFromJs(String str) {
+        try {
+            byte[] bytes = new BASE64Decoder().decodeBuffer(str);
+            String base64 = new String(bytes);
+            String[] test = base64.split(" ");
+            String json = "";
+            for (String s : test) {
+                json += RSA.decryptStringByJs(s);
+            }
+            return json;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

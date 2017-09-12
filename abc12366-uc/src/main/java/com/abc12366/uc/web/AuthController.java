@@ -89,7 +89,7 @@ public class AuthController extends BaseController {
     }
 
     /*
-    用户登录方法：
+    用户登录方法：用于java做接口调用进行登录
         1.请求访问时获取token，token为空则需要用户名和密码登录
      */
     @PostMapping(path = "/login")
@@ -100,6 +100,22 @@ public class AuthController extends BaseController {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+        LOGGER.info("{}", token);
+        return ResponseEntity.ok(Utils.kv("data", token));
+    }
+
+    /*
+    用户登录方法：用于js做接口调用进行登录(此场景多用于移动客户端登录)
+        1.请求访问时获取token，token为空则需要用户名和密码登录
+     */
+    @PostMapping(path = "/login/js")
+    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", loginBO);
+        // 记录用户IP归属
+        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+        }
+        Map token = authService.loginJs(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
     }
