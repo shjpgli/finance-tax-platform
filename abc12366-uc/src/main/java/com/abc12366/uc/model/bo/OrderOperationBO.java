@@ -44,6 +44,14 @@ public class OrderOperationBO implements Serializable {
      **/
     private String deliveryMethod;
 
+    /**
+     * 运单号
+     **/
+    private String expressNo;
+
+    /**物流公司ID**/
+    private String expressCompId;
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -90,5 +98,21 @@ public class OrderOperationBO implements Serializable {
 
     public void setDeliveryMethod(String deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
+    }
+
+    public String getExpressNo() {
+        return expressNo;
+    }
+
+    public void setExpressNo(String expressNo) {
+        this.expressNo = expressNo;
+    }
+
+    public String getExpressCompId() {
+        return expressCompId;
+    }
+
+    public void setExpressCompId(String expressCompId) {
+        this.expressCompId = expressCompId;
     }
 }
