@@ -26,6 +26,9 @@ public interface KnowledgeBaseService {
     /* UC知识库列表查询数据*/
     List<KnowledgeBase> selectUCList(KnowledgeBaseParamBO param);
 
+    /* UC知识库列表查询数据*/
+    List<KnowledgeBase> selectUCListByTag(KnowledgeBaseParamBO param);
+
     /* 知识库列表查询数据*/
     List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
 

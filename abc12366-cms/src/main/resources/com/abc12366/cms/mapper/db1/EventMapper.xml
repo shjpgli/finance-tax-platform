@@ -18,7 +18,7 @@
     </insert>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insertSelective" parameterType="event">
+    <insert id="insertSelective" parameterType="com.abc12366.cms.model.Event">
         INSERT INTO cms_event
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="eventId != null">

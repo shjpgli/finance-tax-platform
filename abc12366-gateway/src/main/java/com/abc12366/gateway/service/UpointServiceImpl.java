@@ -27,17 +27,17 @@ public class UpointServiceImpl implements UpointService {
     @Override
     public void compute(HttpServletRequest request) throws IOException {
         String userId = Utils.getUserId(request);
-        String clientType = (String) request.getAttribute(Constant.CLIENT_TYPE);
+        String clientType = request.getHeader(Constant.CLIENT_TYPE);
         String uri = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping" +
                 ".bestMatchingPattern");
 
         String url = PropertiesUtil.getValue("abc12366.uc.url") + "/points/compute";
 
         Map<String, String> map = new HashMap<>();
-        map.put("userId", userId);
-//        map.put("clientType", clientType);
-        map.put("clientType", "PCWEB");
-        map.put("uri", uri);
+        map.put("userId", userId == null ? userId : userId.trim());
+        map.put("clientType", clientType == null ? clientType : clientType.trim());
+        //map.put("clientType", "PCWEB");
+        map.put("uri", uri == null ? uri : uri.trim());
 
         restTemplate.exchange(url, HttpMethod.POST, map, request);
     }

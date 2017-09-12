@@ -40,7 +40,7 @@
         (SELECT uur.description FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) remark
         FROM uc_uexp_log uul
         <where>
-            and uul.userId=#{userId}
+            uul.userId=#{userId}
             <if test="start!=null">and uul.createTime &gt;= #{start}</if>
             <if test="end!=null">and uul.createTime &lt; #{end}</if>
         </where>

@@ -36,4 +36,13 @@ public class PointComputeBO {
     public void setUri(String uri) {
         this.uri = uri;
     }
+
+    @Override
+    public String toString() {
+        return "PointComputeBO{" +
+                "userId='" + userId + '\'' +
+                ", uri='" + uri + '\'' +
+                ", clientType='" + clientType + '\'' +
+                '}';
+    }
 }

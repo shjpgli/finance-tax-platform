@@ -28,5 +28,29 @@ public interface CurriculumCoursewareRoMapper {
      **/
     List<CurriculumCoursewareBo> selectList(Map<String, Object> map);
 
+    /**
+     *
+     * 查询课程是否免费
+     *
+     **/
+    int  selectCurriculumisFree(@Param("coursewareId") String coursewareId);
+
+    /**
+     *
+     * 查询课件是否免费
+     *
+     **/
+    int  selectCoursewareisFree(@Param("coursewareId") String coursewareId);
+
+    /**
+     * 查询用户会员等级是否可观看
+     **/
+    int selectGradeWatch(Map<String, Object> map);
+
+    /**
+     * 查询用户是否已购买课程
+     **/
+    int selectIsBuy(Map<String, Object> map);
+
 
 }

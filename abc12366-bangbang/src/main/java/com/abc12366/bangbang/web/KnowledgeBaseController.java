@@ -83,6 +83,27 @@ public class KnowledgeBaseController {
 
 
     /*
+    *  知识库 根据标签查询
+    *  支持 分类,类别 和 标签查询
+    */
+    @GetMapping(path = "/uc/listbytag")
+    public ResponseEntity ucListBytag(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                 @RequestParam(value = "keywords", required = false) String keywords,
+                                 @RequestParam(value = "type", required = false) String type) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        if(!StringUtils.isEmpty(keywords)){
+            keywords = keywords.toUpperCase();
+        }
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO("", type, keywords, true, true);
+        List<KnowledgeBase> list = knowledgeBaseService.selectUCListByTag(param);
+
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /*
     *  知识库 分页查询
     *  支持 分类,类别 和 关键字查询
     */

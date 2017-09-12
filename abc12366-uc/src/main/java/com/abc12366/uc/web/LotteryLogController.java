@@ -35,7 +35,7 @@ public class LotteryLogController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) Integer notluck,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
-        map.put("notluck",notluck);
+        if(notluck != null)        map.put("notluck",notluck);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LotteryLogBO> list = lotteryLogService.selectList(map);
         LOGGER.info("selectList:{}", list);

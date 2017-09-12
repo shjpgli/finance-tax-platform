@@ -18,4 +18,6 @@ public interface PointsRoMapper {
     List<PointComputeLog> selectPointComputeLog(PointComputeLogParam param);
 
     List<PointCodex> codexList();
+
+    PointCodex selectCodexByRuleCode(String ruleCode);
 }

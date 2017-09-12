@@ -31,6 +31,8 @@ public interface ContentService {
 
     List<ContentsListBo> selectListByTplContent(Map<String, Object> map);
 
+    List<ContentsListBo> selectListByTagName(Map<String, Object> map);
+
     List<ModelItemBo> selectModeList(Map<String, Object> map);
 
     ContentSaveBo save(ContentSaveBo contentSaveBo);

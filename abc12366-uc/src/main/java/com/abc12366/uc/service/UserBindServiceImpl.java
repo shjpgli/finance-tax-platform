@@ -74,6 +74,9 @@ public class UserBindServiceImpl implements UserBindService {
     @Autowired
     private UserExtendRoMapper userExtendRoMapper;
 
+    @Autowired
+    private RSAService rsaService;
+
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
         if (userDzsbInsertBO == null) {
@@ -99,7 +102,7 @@ public class UserBindServiceImpl implements UserBindService {
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY21");
         map.put("nsrsbh", userDzsbInsertBO.getNsrsbhOrShxydm());
-        map.put("fwmm", fwmmEncode(userDzsbInsertBO.getFwmm()));
+        map.put("fwmm", rsaService.decode(fwmmEncode(userDzsbInsertBO.getFwmm())));
         map.put("userid", userId);
         Map<String, String> resMap = client.process(map);
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
@@ -550,8 +553,7 @@ public class UserBindServiceImpl implements UserBindService {
                 }
             }
         } else {
-            String msg = jbxxcx.getCWYY();
-            throw new ServiceException(cxjg, msg);
+            throw new ServiceException(4637);
         }
         return object;
     }

@@ -77,9 +77,13 @@ public class UpointsLotteryController {
         upointsLotteryService.inits();
         return ResponseEntity.ok(Utils.kv());
     }
-    @GetMapping(path = "/getval/{userId}/{point}")
-    public ResponseEntity getval(@PathVariable String userId,@PathVariable Integer point) {
-        UpointsLotteryBO returnObj =upointsLotteryService.getval(userId,point);
+    @GetMapping(path = "/getval/{userId}")
+    public ResponseEntity getval(@PathVariable String userId) {
+        if(userId ==null || userId.isEmpty()){
+            throw new RuntimeException("参数错误，请查正");
+        }
+
+        UpointsLotteryBO returnObj =upointsLotteryService.getval(userId);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
 }

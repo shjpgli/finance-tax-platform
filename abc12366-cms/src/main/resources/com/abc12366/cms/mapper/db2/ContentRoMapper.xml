@@ -312,6 +312,50 @@
 		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
 	</select>
 
+    <!-- 查询（根据查询条件查询） -->
+    <select id="selectListByTagName" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+        SELECT
+        a.contentId contentId,
+        a.userid userid,
+        a.username username,
+        b.title title,
+        b.shortTitle,
+        a.contentType,
+        b.titleImg,
+        b.origin,
+        b.description,
+        b.titleColor titleColor,
+        a.channelId channelId,
+        c.channelName channelName,
+        a.topLevel topLevel,
+        a.typeId typeId,
+        b.author author,
+        e.views views,
+        b.releaseDate releaseDate,
+        a.status STATUS,
+        b.needRegenerate needRegenerate,
+        a.recommendLevel recommendLevel,
+        b.staticLink,
+        d.siteName,
+        c.channelPath,d.sitePath,d.domain
+        FROM cms_content a LEFT JOIN cms_contenttagid t ON t.contentId = a.contentId
+        LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+        LEFT JOIN cms_channel c ON a.channelId = c.channelId
+        LEFT JOIN cms_site d ON a.siteId = d.siteId
+        LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+        WHERE a.status = 2 AND b.needRegenerate = 1 and c.isDisplay != 0 and d.siteStatus != 0
+        <if test="tagName != null and tagName != ''">
+            AND t.tagId in (select id from abc12366_bangbang.bb_knowledge_tag where name = #{tagName})
+        </if>
+        <if test="channelName != null and channelName != ''">
+            AND c.channelName = #{channelName}
+        </if>
+        <if test="siteName != null and siteName != ''">
+            AND d.siteName = #{siteName}
+        </if>
+        ORDER BY b.releaseDate DESC
+    </select>
+
     <!-- 查询财税资讯网 -->
     <select id="selectListcszxw" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
         SELECT
