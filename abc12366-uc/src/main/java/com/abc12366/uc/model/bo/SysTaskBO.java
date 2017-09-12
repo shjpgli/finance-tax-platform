@@ -13,7 +13,7 @@ public class SysTaskBO {
     private Date startTime;
     private Date endTime;
     private String rule;
-    private int points;
+    private Integer award;
     private String type;
     private boolean status;
     private Date createTime;
@@ -23,6 +23,7 @@ public class SysTaskBO {
     private String ruleCode;
     private Integer count;
     private String skipURL;
+    private String awardType;
 
     public SysTaskBO() {
     }
@@ -83,12 +84,12 @@ public class SysTaskBO {
         this.rule = rule;
     }
 
-    public int getPoints() {
-        return points;
+    public Integer getAward() {
+        return award;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setAward(Integer award) {
+        this.award = award;
     }
 
     public String getType() {
@@ -145,5 +146,13 @@ public class SysTaskBO {
 
     public void setRuleName(String ruleName) {
         this.ruleName = ruleName;
+    }
+
+    public String getAwardType() {
+        return awardType;
+    }
+
+    public void setAwardType(String awardType) {
+        this.awardType = awardType;
     }
 }
