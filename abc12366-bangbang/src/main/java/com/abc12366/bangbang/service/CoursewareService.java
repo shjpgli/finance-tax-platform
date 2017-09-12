@@ -14,6 +14,8 @@ public interface CoursewareService {
 
     CurriculumCoursewareBo selectCourseware(String coursewareId);
 
+    CurriculumCoursewareBo selectCoursewarebf(String coursewareId,String userId);
+
     CurriculumCoursewareBo update(CurriculumCoursewareBo curriculumCoursewareBo);
 
     String updateStatus(String coursewareId, String status);

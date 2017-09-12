@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/8/10.
@@ -79,6 +76,51 @@ public class CoursewareServiceImpl implements CoursewareService {
             throw new ServiceException(4331);
         }
         return coursewareBo;
+    }
+
+    @Override
+    public CurriculumCoursewareBo selectCoursewarebf(String coursewareId,String userId) {
+        CurriculumCoursewareBo coursewareBo = new CurriculumCoursewareBo();
+
+            LOGGER.info("查询单个课件信息:{}", coursewareId);
+            //查询用户是否有权限播放
+            CurriculumCourseware courseware = coursewareRoMapper.selectByPrimaryKey(coursewareId);
+            BeanUtils.copyProperties(courseware, coursewareBo);
+
+        try {
+
+
+        } catch (Exception e) {
+            LOGGER.error("查询单个课件信息异常：{}", e);
+            throw new ServiceException(4331);
+        }
+
+        //查询课程是否免费
+        int cnt1 = coursewareRoMapper.selectCurriculumisFree(coursewareId);
+        if(cnt1 == 1){
+            return coursewareBo;
+        }
+        //查询课件是否免费
+        int cnt2 = coursewareRoMapper.selectCoursewareisFree(coursewareId);
+        if(cnt2 == 1){
+            return coursewareBo;
+        }
+        //查询用户会员等级是否可观看
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("coursewareId", coursewareId);
+        dataMap.put("userId", userId);
+        int cnt3 = coursewareRoMapper.selectGradeWatch(dataMap);
+        if(cnt3 > 0){
+            return coursewareBo;
+        }
+        //查询用户是否已购买课程
+        int cnt4 = coursewareRoMapper.selectIsBuy(dataMap);
+        if(cnt4 > 0){
+            return coursewareBo;
+        }
+
+        //课程收费，请购买课程
+        throw new ServiceException(4339);
     }
 
     @Override
