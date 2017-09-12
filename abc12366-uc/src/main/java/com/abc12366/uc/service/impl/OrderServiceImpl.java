@@ -870,6 +870,7 @@ public class OrderServiceImpl implements OrderService {
                 Order order = new Order();
                 order.setOrderNo(orderNo);
                 order.setPayMethod(orderPayBO.getPayMethod());
+                order.setAddressId(orderPayBO.getAddressId());
                 order.setUserId(orderBO.getUserId());
                 if("RMB".equals(type)){
                     if (isPay == 1) {
