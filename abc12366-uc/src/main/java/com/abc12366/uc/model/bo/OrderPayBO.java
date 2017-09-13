@@ -20,6 +20,11 @@ public class OrderPayBO implements Serializable {
      **/
     private int isPay;
 
+    /**
+     * 配送地址ID
+     **/
+    private String addressId;
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -50,5 +55,13 @@ public class OrderPayBO implements Serializable {
 
     public void setPayMethod(String payMethod) {
         this.payMethod = payMethod;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 }

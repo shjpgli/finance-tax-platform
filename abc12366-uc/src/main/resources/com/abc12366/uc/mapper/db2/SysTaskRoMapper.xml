@@ -5,7 +5,7 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.util.Map">
         SELECT
-        id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL
+        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL
         from uc_sys_task
         <where>
             <if test="name!=null">
@@ -20,7 +20,7 @@
 
     <select id="selectDeployedList" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.util.Map">
         SELECT
-        id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL
+        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL,awardType
         from uc_sys_task
         <where>
             status=1
@@ -36,7 +36,7 @@
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">
         SELECT
-        id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL
+        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL
         from uc_sys_task
         where id = #{id}
     </select>
@@ -44,7 +44,7 @@
     <select id="selectDeployedListByType" resultType="com.abc12366.uc.model.bo.SysTaskListBO"
             parameterType="java.util.Map">
         SELECT
-        id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL,
+        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL,
         (select count(1) from uc_user_task uut where uut.userId=#{userId} and uut.taskId=ust.id and uut.status='1' and
         uut.createTime &gt;= (SELECT CURDATE()) and uut.createTime &lt; (SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))) finishedCount
         from uc_sys_task ust

@@ -41,6 +41,7 @@
             <result column="level" property="level"/>
             <result column="realName" property="realName"/>
         </association>
+        <association property="expressComp" column="expressCompId" select="getExpressComp"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
         <association property="userAddressBO" column="addressId" select="getUserAddress"/>
@@ -223,6 +224,14 @@
         g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.isReturn,g.isExchange,g.imageUrl
         FROM uc_goods g where g.id = #{id}
 
+    </select>
+
+    <!-- 获取物流公司信息-->
+    <select id="getExpressComp" resultType="com.abc12366.uc.model.ExpressComp" parameterType="java.lang.String">
+        SELECT
+        id, compCode, compName, compUrl, sort, createTime, lastUpdate,templateUrl
+        FROM uc_express_comp
+        WHERE id = #{id}
     </select>
 
     <!-- 查询用户地址信息 -->
@@ -686,13 +695,13 @@
         </foreach>
     </select>
     <!-- 查询未发货订单 -->
-    <select id="selectExprotOrder" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectExprotOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
-        where  o.orderStatus = #{orderStatus}
-
+        where  o.orderStatus = #{orderStatus} and
+            o.isShipping = 1
         order by o.lastUpdate desc
 
     </select>

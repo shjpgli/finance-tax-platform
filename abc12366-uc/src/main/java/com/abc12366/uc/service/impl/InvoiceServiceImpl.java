@@ -12,6 +12,7 @@ import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.slf4j.Logger;
@@ -65,22 +66,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private InvoiceBackRoMapper invoiceBackRoMapper;
 
-
-    @Autowired
-    private ExpressMapper expressMapper;
-
     @Autowired
     private ExpressRoMapper expressRoMapper;
 
-
-    @Autowired
-    private UserAddressRoMapper userAddressRoMapper;
-
-    @Autowired
-    private InvoiceLogRoMapper invoiceLogRoMapper;
-
     @Autowired
     private InvoiceLogMapper invoiceLogMapper;
+
+    @Autowired
+    private OrderExchangeRoMapper orderExchangeRoMapper;
 
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
@@ -182,9 +175,14 @@ public class InvoiceServiceImpl implements InvoiceService {
             orderInvoice.setLastUpdate(date);
             OrderInvoice oInvoice = orderInvoiceRoMapper.selectByOrderNo(orderNo);
             if(oInvoice != null){
-//                throw new ServiceException(41999,"该订单"+orderNo+"已开发票");
-                throw new ServiceException(41999,"已开发票");
+                throw new ServiceException(4199,"已开发票");
             }
+            OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(orderNo);
+            if(orderExchange != null){
+                LOGGER.info("发票在退换货中，不能开发票：{}", orderExchange);
+                throw new ServiceException(4918);
+            }
+
             int oInsert = orderInvoiceMapper.insert(orderInvoice);
             if (oInsert != 1) {
                 LOGGER.info("新增失败：{}", orderInvoice);
@@ -266,13 +264,30 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }else{
                     excel.setNsrmc(bo.getNsrmc());
                 }
-                excel.setCreateTime(bo.getCreateTime());
+
+                excel.setCreateTime(DateUtils.dateToString(bo.getCreateTime()));
                 excel.setContent(bo.getContentDetail());
                 excel.setNum(1);
                 excel.setAmount(bo.getAmount());
                 excel.setAmountBig(bo.getAmount());
                 excel.setAmountSmall(bo.getAmount());
                 excel.setDrawer(UserUtil.getAdminInfo().getNickname());
+                List<OrderBO> orderBOList = bo.getOrderBOList();
+                StringBuffer remark = new StringBuffer();
+                for(OrderBO orderBO : orderBOList){
+                    remark.append("订单号："+orderBO.getOrderNo());
+                    remark.append("  ");
+                    remark.append("支付方式：");
+                    if("WEIXIN".equals(orderBO.getPayMethod())){
+                        remark.append("微信");
+                    }else if("ALIPAY".equals(orderBO.getPayMethod())){
+                        remark.append("支付宝");
+                    }else if("POINTS".equals(orderBO.getPayMethod())){
+                        remark.append("积分");
+                    }
+
+                }
+                excel.setRemark(remark.toString());
                 excelList.add(excel);
             }
         }
@@ -391,13 +406,14 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4913,"发票号码或发票代码不存在");
             }
             if(!"0".equals(invoiceDetail.getStatus())){
-                throw new ServiceException(4913,"发票号码："+invoiceExcel.getInvoiceNo()+"不可用或已使用");
+                throw new ServiceException(4913,"发票号码："+invoiceExcel.getInvoiceNo()+"未出库或已使用");
             }
+
             Invoice ce = new Invoice();
             ce.setId(invoiceExcel.getInvoiceOrderNo());
             ce.setStatus("2");
             //查询发票信息表状态
-            Invoice invoiceTemp = invoiceRoMapper.selectByInvoiceOrderNo(ce);
+            InvoiceBO invoiceTemp = invoiceRoMapper.selectInvoice(ce);
             if(invoiceTemp == null){
                 LOGGER.info("只有在已审批状态，该张发票才能被导入：{}", invoiceDetail);
                 throw new ServiceException(4913,"只有在已审批状态，该张发票才能被导入"+invoiceExcel.getInvoiceOrderNo());
@@ -414,7 +430,14 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4102);
             }
             //修改发票详情表
+            List<OrderBO> orderBOList = invoiceTemp.getOrderBOList();
+            StringBuffer remark = new StringBuffer();
+            for(OrderBO orderBO : orderBOList){
+                remark.append(orderBO.getOrderNo());
+                remark.append("  ");
+            }
             invoiceDetail.setStatus("2");
+            invoiceDetail.setRemark(remark.toString());
             int dUpdate = invoiceDetailMapper.update(invoiceDetail);
             if(dUpdate != 1){
                 throw new ServiceException(4102,"修改发票详情失败");

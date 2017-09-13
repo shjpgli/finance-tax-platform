@@ -284,6 +284,10 @@ public class CurriculumServiceImpl implements CurriculumService {
             //查询课程信息
             curriculumBo = curriculumRoMapper.selectCurriculum(curriculumId);
 
+            if(curriculumBo == null){
+                return curriculumBo;
+            }
+
             //标签
             List<CurriculumLabel> curriculumLabelList = curriculumLabelRoMapper.selectList(curriculumId);
 

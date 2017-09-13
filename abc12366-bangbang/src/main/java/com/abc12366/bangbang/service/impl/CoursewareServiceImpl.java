@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/8/10.
@@ -79,6 +76,61 @@ public class CoursewareServiceImpl implements CoursewareService {
             throw new ServiceException(4331);
         }
         return coursewareBo;
+    }
+
+    @Override
+    public CurriculumCoursewareBo selectCoursewarebf(String coursewareId,String userId) {
+        CurriculumCoursewareBo coursewareBo = new CurriculumCoursewareBo();
+
+        LOGGER.info("查询单个课件信息:{}", coursewareId);
+        //查询用户是否有权限播放
+        CurriculumCourseware courseware = coursewareRoMapper.selectByPrimaryKey(coursewareId);
+        BeanUtils.copyProperties(courseware, coursewareBo);
+
+        int flag = 0;
+        //查询课程是否免费
+        int cnt1 = coursewareRoMapper.selectCurriculumisFree(coursewareId);
+        if(cnt1 == 1){
+            flag = 1;
+        }
+        //查询课件是否免费
+        if(flag == 0){
+            int cnt2 = coursewareRoMapper.selectCoursewareisFree(coursewareId);
+            if(cnt2 == 1){
+                flag = 1;
+            }
+        }
+
+        //查询用户会员等级是否可观看
+        if(flag == 0){
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("curriculumId", courseware.getCurriculumId());
+            dataMap.put("userId", userId);
+            int cnt3 = coursewareRoMapper.selectGradeWatch(dataMap);
+            if(cnt3 > 0){
+                flag = 1;
+            }
+        }
+
+        //查询用户是否已购买课程
+        if(flag == 0){
+            Map<String, Object> dataMap1 = new HashMap<>();
+            dataMap1.put("coursewareId", coursewareId);
+            dataMap1.put("userId", userId);
+            int cnt4 = coursewareRoMapper.selectIsBuy(dataMap1);
+            if(cnt4 > 0){
+                flag = 1;
+            }
+        }
+
+
+        if(flag == 0){
+            //课程收费，请购买课程
+            throw new ServiceException(4339);
+        }
+
+        return coursewareBo;
+
     }
 
     @Override

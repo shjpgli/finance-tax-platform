@@ -44,4 +44,59 @@
     </select>
 
 
+
+    <!-- 查询课程是否免费 -->
+    <select id="selectCurriculumisFree" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+            cm.isFree isFree
+        FROM
+            abc12366_bangbang.bb_curriculum cm
+                LEFT JOIN
+            bb_curriculum_courseware cs ON cm.curriculumId = cs.curriculumId
+        WHERE coursewareId = #{coursewareId}
+    </select>
+
+    <!-- 查询课件是否免费 -->
+    <select id="selectCoursewareisFree" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+            isFree
+        FROM
+            bb_curriculum_courseware
+        WHERE coursewareId = #{coursewareId}
+    </select>
+
+    <!-- 查询用户会员等级是否可观看 -->
+    <select id="selectGradeWatch" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+            COUNT(curriculumId)
+        FROM
+            bb_curriculum_membergrade
+        WHERE
+            curriculumId = #{curriculumId}
+                AND memberGrade = (SELECT
+                    vipLevel
+                FROM
+                    bb_user
+                WHERE
+                    id = #{userId})
+    </select>
+
+    <!-- 查询用户是否已购买课程 -->
+    <select id="selectIsBuy" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+            count(p.orderNo)
+        FROM
+            abc12366_uc.uc_order_product p,
+            abc12366_uc.uc_order o where p.orderNo = o.orderNo and o.orderStatus = 6
+        AND p.goodsId = (SELECT
+            cm.goodsId
+        FROM
+            abc12366_bangbang.bb_curriculum cm
+                LEFT JOIN
+            bb_curriculum_courseware cs ON cm.curriculumId = cs.curriculumId
+        WHERE
+            coursewareId = #{coursewareId})  and o.userId = #{userId}
+    </select>
+
+
 </mapper>

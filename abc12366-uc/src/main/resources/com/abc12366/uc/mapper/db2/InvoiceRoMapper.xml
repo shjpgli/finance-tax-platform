@@ -229,6 +229,22 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
+    <select id="selectInvoice" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.Invoice">
+        SELECT
+        <include refid="InvoiceBO_Column_List"/>
+        FROM uc_invoice
+        <where>
+            1 = 1
+            <if test=" id != null and id != '' ">
+                and id = #{id}
+            </if>
+            <if test=" status != null and status != '' ">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultMap="invoiceBOResultMap" parameterType="java.lang.String">
         SELECT
         <include refid="InvoiceBO_Column_List"/>

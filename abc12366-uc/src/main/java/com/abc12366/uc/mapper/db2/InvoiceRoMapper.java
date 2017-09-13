@@ -26,4 +26,6 @@ public interface InvoiceRoMapper {
     Invoice selectAvailableInvoice();
 
     InvoiceBO selectUserInvoice(Invoice invoice);
+
+    InvoiceBO selectInvoice(Invoice ce);
 }

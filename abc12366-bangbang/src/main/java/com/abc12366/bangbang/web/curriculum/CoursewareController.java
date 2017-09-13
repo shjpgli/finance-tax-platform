@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +110,17 @@ public class CoursewareController {
         //删除课件信息
         String rtn = coursewareService.delete(coursewareId);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 查询用户是否有权限播放
+     */
+    @GetMapping(path = "/selectCourseware/{coursewareId}")
+    public ResponseEntity selectCourseware(@PathVariable String coursewareId,HttpServletRequest request) {
+        //查询课件信息
+        String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
+        CurriculumCoursewareBo coursewareBo = coursewareService.selectCoursewarebf(coursewareId,userId);
+        return ResponseEntity.ok(Utils.kv("data", coursewareBo));
     }
 
 }

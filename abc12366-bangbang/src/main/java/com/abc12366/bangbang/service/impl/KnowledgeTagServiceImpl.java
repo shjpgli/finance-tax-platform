@@ -133,7 +133,7 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     @Override
     public void delete(String id) {
         try {
-            curriculumLabelMapper.deleteByLableId(id);
+            curriculumLabelMapper.deleteByLabelId(id);
             knowledgeTagRelMapper.deleteByTagId(id);
             knowledgeTagMapper.deleteByPrimaryKey(id);
         }catch (Exception e){
@@ -146,7 +146,7 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     @Override
     public void delete(List<String> ids) {
         try {
-            curriculumLabelMapper.deleteByLableIds(ids);
+            curriculumLabelMapper.deleteByLabelIds(ids);
             knowledgeTagRelMapper.deleteByTagIds(ids);
             knowledgeTagMapper.deleteByPrimaryKeys(ids);
         }catch (Exception e){

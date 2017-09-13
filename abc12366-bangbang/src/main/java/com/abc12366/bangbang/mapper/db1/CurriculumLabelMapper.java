@@ -54,13 +54,13 @@ public interface CurriculumLabelMapper{
 	 * 删除（根据LableId删除）
 	 *
 	 **/
-	int deleteByLableId(@Param("lableId") String lableId);
+	int deleteByLabelId(@Param("lableId") String lableId);
 
 	/**
 	 *
 	 * 删除（根据LableId批量删除）
 	 *
 	 **/
-	int deleteByLableIds(List<String> lableIds);
+	int deleteByLabelIds(List<String> lableIds);
 
 }

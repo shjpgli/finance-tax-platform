@@ -247,7 +247,7 @@ public class OrderServiceImpl implements OrderService {
                 } else if ("POINTS".equals(orderBO.getTradeMethod())) {
                     //订单状态，1：新订单，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
 //                    if ("1".equals(goodsType) || "2".equals(goodsType)) {
-                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"4",specInfo.toString());
+                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2",specInfo.toString());
                         insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
 //                    } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
 //                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
@@ -870,6 +870,7 @@ public class OrderServiceImpl implements OrderService {
                 Order order = new Order();
                 order.setOrderNo(orderNo);
                 order.setPayMethod(orderPayBO.getPayMethod());
+                order.setAddressId(orderPayBO.getAddressId());
                 order.setUserId(orderBO.getUserId());
                 if("RMB".equals(type)){
                     if (isPay == 1) {
@@ -982,7 +983,7 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setUserId(orderBO.getUserId());
         pointsLog.setId(Utils.uuid());
         pointsLog.setIncome(orderBO.getGiftPoints());
-        pointsLog.setRemark("用户下单");
+        pointsLog.setRemark("用户下单 - 订单号："+orderBO.getOrderNo());
         pointsLog.setLogType("ORDER_INCOME");
         pointsLogService.insert(pointsLog);
     }
@@ -998,7 +999,7 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setIncome(orderBO.getGiftPoints());
         pointsLog.setOutgo(orderBO.getTotalPrice().intValue());
         pointsLog.setLogType("POINTS_RECHARGE");
-        pointsLog.setRemark("积分兑换");
+        pointsLog.setRemark("积分兑换 - 订单号："+orderBO.getOrderNo());
         pointsLogService.insert(pointsLog);
     }
 
@@ -1043,6 +1044,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void selectImportOrder(List<OrderBO> orderBOList, String expressCompId) {
         for(OrderBO bo:orderBOList){
+            Order data = orderRoMapper.selectByPrimaryKey(bo.getOrderNo());
+            if(data == null){
+                LOGGER.warn("订单数据不存在：{}",bo);
+                throw new ServiceException(4102,"订单数据不存在");
+            }
+            if(data.getIsShipping() == 2){
+                LOGGER.warn("该订单不需要寄送：{}",bo);
+                throw new ServiceException(4102,bo.getOrderNo()+"该订单不需要寄送");
+            }
             Order order = new Order();
             BeanUtils.copyProperties(bo, order);
             order.setOrderStatus("5");

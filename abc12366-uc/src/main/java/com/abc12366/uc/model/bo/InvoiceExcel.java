@@ -36,7 +36,7 @@ public class InvoiceExcel implements Serializable {
     /**
      * 时间
      **/
-    private Date createTime;
+    private String createTime;
 
     /**
      * 产品名称
@@ -70,7 +70,7 @@ public class InvoiceExcel implements Serializable {
     /**
      * 备注
      **/
-    private Integer remark;
+    private String remark;
 
     public String getInvoiceOrderNo() {
         return invoiceOrderNo;
@@ -88,11 +88,11 @@ public class InvoiceExcel implements Serializable {
         this.nsrsbh = nsrsbh;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -144,11 +144,11 @@ public class InvoiceExcel implements Serializable {
         this.drawer = drawer;
     }
 
-    public Integer getRemark() {
+    public String getRemark() {
         return remark;
     }
 
-    public void setRemark(Integer remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 

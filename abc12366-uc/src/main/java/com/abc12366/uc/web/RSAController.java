@@ -1,27 +1,16 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.RSAResponse;
 import com.abc12366.uc.wsbssoa.utils.RSA;
-import com.abc12366.uc.wsbssoa.utils.RSAUtil;
 import org.apache.commons.codec.binary.Hex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Base64;
-import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -31,7 +20,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/rsa", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class RSAController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
     /**
      * 获取组装PublicKey对象（公钥）所需参数接口

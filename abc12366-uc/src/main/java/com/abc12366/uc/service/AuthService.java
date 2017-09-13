@@ -20,6 +20,8 @@ public interface AuthService {
 
     Map login(LoginBO loginBO, String token) throws Exception;
 
+    Map loginJs(LoginBO loginBO, String token) throws Exception;
+
     String refresh(String oldToken);
 
     boolean isAuthentication(String userToken, HttpServletRequest request);
