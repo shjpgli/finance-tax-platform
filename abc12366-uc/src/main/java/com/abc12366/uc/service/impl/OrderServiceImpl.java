@@ -983,7 +983,7 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setUserId(orderBO.getUserId());
         pointsLog.setId(Utils.uuid());
         pointsLog.setIncome(orderBO.getGiftPoints());
-        pointsLog.setRemark("用户下单");
+        pointsLog.setRemark("用户下单 - 订单号："+orderBO.getOrderNo());
         pointsLog.setLogType("ORDER_INCOME");
         pointsLogService.insert(pointsLog);
     }
@@ -999,7 +999,7 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setIncome(orderBO.getGiftPoints());
         pointsLog.setOutgo(orderBO.getTotalPrice().intValue());
         pointsLog.setLogType("POINTS_RECHARGE");
-        pointsLog.setRemark("积分兑换");
+        pointsLog.setRemark("积分兑换 - 订单号："+orderBO.getOrderNo());
         pointsLogService.insert(pointsLog);
     }
 

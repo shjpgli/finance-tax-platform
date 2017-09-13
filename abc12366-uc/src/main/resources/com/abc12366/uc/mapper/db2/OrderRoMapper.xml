@@ -695,7 +695,7 @@
         </foreach>
     </select>
     <!-- 查询未发货订单 -->
-    <select id="selectExprotOrder" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectExprotOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
