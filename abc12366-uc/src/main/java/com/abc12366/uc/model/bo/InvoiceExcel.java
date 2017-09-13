@@ -36,7 +36,7 @@ public class InvoiceExcel implements Serializable {
     /**
      * 时间
      **/
-    private Date createTime;
+    private String createTime;
 
     /**
      * 产品名称
@@ -88,11 +88,11 @@ public class InvoiceExcel implements Serializable {
         this.nsrsbh = nsrsbh;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

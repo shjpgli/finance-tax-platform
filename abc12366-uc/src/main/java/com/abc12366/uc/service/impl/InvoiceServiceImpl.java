@@ -12,6 +12,7 @@ import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.slf4j.Logger;
@@ -263,7 +264,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }else{
                     excel.setNsrmc(bo.getNsrmc());
                 }
-                excel.setCreateTime(bo.getCreateTime());
+
+                excel.setCreateTime(DateUtils.dateToString(bo.getCreateTime()));
                 excel.setContent(bo.getContentDetail());
                 excel.setNum(1);
                 excel.setAmount(bo.getAmount());
