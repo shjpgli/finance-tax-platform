@@ -18,7 +18,7 @@ public interface OrderRoMapper {
     /**
      * 查询（根据主键ID查询）
      **/
-    Order selectByPrimaryKey(@Param("id") String id);
+    Order selectByPrimaryKey(@Param("orderNo") String orderNo);
 
     Order selectOne(Order order);
 
