@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
@@ -1098,7 +1099,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticReceipt() {
-        Date date = DataUtils.getAddDate(15);
+        Date date = DataUtils.getAddDate(Constant.ORDER_BACK_DAYS);
         //查询15天之前未确认的订单
         List<Order> orderList = orderRoMapper.selectReceiptOrderByDate(date);
         for(Order order:orderList){
@@ -1111,7 +1112,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticCancel() {
-        Date date = DataUtils.getAddTime(2);
+        Date date = DataUtils.getAddTime(Constant.ORDER_CANCEL_TIME);
         //查询两个小时未支付的订单，自动取消
         List<Order> orderList = orderRoMapper.selectCancelOrderByDate(date);
         for(Order order:orderList){
