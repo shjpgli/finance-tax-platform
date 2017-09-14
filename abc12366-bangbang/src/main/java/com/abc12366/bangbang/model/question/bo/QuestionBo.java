@@ -1,4 +1,6 @@
 package com.abc12366.bangbang.model.question.bo;
+import com.abc12366.bangbang.model.question.QuestionTag;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Date;
