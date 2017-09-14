@@ -12,14 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 学堂课件管理模块
+ * 问题回复管理模块
  *
  * @author xieyanmao
  * @create 2017-08-10
@@ -34,7 +33,7 @@ public class QueAnswerController {
     private QueAnswerService queAnswerService;
 
     /**
-     * 课件列表查询
+     * 问题回复列表查询
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -49,56 +48,56 @@ public class QueAnswerController {
     }
 
     /**
-     * 课件新增
+     * 问题回复新增
      */
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody QuestionAnswerBo answerBo) {
-        //新增课件信息
+        //新增问题回复信息
         answerBo = queAnswerService.save(answerBo);
         return ResponseEntity.ok(Utils.kv("data", answerBo));
     }
 
     /**
-     * 查询单个课件信息
+     * 查询单个问题回复信息
      */
-    @GetMapping(path = "/{answerId}")
-    public ResponseEntity selectOne(@PathVariable String answerId) {
-        //查询课件信息
-        QuestionAnswerBo answerBo = queAnswerService.selectAnswer(answerId);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        //查询单个问题回复信息
+        QuestionAnswerBo answerBo = queAnswerService.selectAnswer(id);
         return ResponseEntity.ok(Utils.kv("data", answerBo));
     }
 
     /**
-     * 更新课件信息
+     * 更新问题回复信息
      */
-    @PutMapping(path = "/{answerId}")
-    public ResponseEntity update(@PathVariable String answerId,
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@PathVariable String id,
                                  @Valid @RequestBody QuestionAnswerBo answerBo) {
-        //更新课件信息
+        //更新问题回复信息
         answerBo = queAnswerService.update(answerBo);
         return ResponseEntity.ok(Utils.kv("data", answerBo));
     }
 
     /**
-     * 更新课件状态
+     * 更新问题回复状态
      *
      * @param status
-     * @param answerId
+     * @param id
      * @return
      */
-    @PutMapping(path = "/updateStatus/{answerId}")
-    public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("answerId") String answerId) {
-        queAnswerService.updateStatus(answerId, status);
-        return ResponseEntity.ok(Utils.kv("data", answerId));
+    @PutMapping(path = "/updateStatus/{id}")
+    public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("id") String id) {
+        queAnswerService.updateStatus(id, status);
+        return ResponseEntity.ok(Utils.kv("data", id));
     }
 
     /**
-     * 删除课件信息
+     * 删除问题回复信息
      */
-    @DeleteMapping(path = "/{answerId}")
-    public ResponseEntity delete(@PathVariable String answerId) {
-        //删除课件信息
-        String rtn = queAnswerService.delete(answerId);
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        //删除问题回复信息
+        String rtn = queAnswerService.delete(id);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 

@@ -47,4 +47,12 @@ public interface QuestionMapper{
 	 **/
 	int updateByPrimaryKey(Question record);
 
+	/**
+	 *
+	 * 清空推荐截止时间（根据主键IDS修改）
+	 *
+	 **/
+	int clearRecommendEndTimeByPks(String ids);
+
+
 }

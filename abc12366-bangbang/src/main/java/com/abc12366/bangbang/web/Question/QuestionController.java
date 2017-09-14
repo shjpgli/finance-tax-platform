@@ -82,22 +82,22 @@ public class QuestionController {
      * 更新问题状态
      *
      * @param status
-     * @param questionId
+     * @param id
      * @return
      */
-    @PutMapping(path = "/updateStatus/{questionId}")
-    public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("questionId") String questionId) {
-        questionService.updateStatus(questionId, status);
-        return ResponseEntity.ok(Utils.kv("data", questionId));
+    @PutMapping(path = "/updateStatus/{id}")
+    public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("id") String id) {
+        questionService.updateStatus(id, status);
+        return ResponseEntity.ok(Utils.kv("data", id));
     }
 
     /**
      * 删除问题信息
      */
-    @DeleteMapping(path = "/{questionId}")
-    public ResponseEntity delete(@PathVariable String questionId) {
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
         //删除问题信息
-        String rtn = questionService.delete(questionId);
+        String rtn = questionService.delete(id);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 

@@ -87,6 +87,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/content/selectRecommend")
                         //帮帮活动查询接口
                 .excludePathPatterns("/bangbang/event/**")
+                .excludePathPatterns("/bangbang/event/dateils/**")
                         // 财税专家客户端广告页、通知公告
                 .excludePathPatterns("/adpages", "adpages/**", "/notices", "/notices/**");
     }
