@@ -76,8 +76,11 @@ public class Constant {
     //用户初始会员等级
     public final static String USER_ORIGINAL_LEVEL = "VIP0";
 
+    // 订单自动取消时间：小时
+    public final static Integer ORDER_CANCEL_TIME = 2;
+
     // 订单退货期限，单位：天
-    public final static Integer ORDER_BACK_DAYS = 7;
+    public final static Integer ORDER_BACK_DAYS = 1;
     // 订单换货期限，单位：天
     public final static Integer ORDER_EXCHANGE_DAYS = 15;
     // 订单换货自动收货期限，单位：天

@@ -76,7 +76,7 @@
 		<if test="channelId != null and channelId != ''">
 			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
-		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
+		ORDER BY b.releaseDate DESC
 	</select>
 
     <!-- 查询（根据查询条件查询） -->

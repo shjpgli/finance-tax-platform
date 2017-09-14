@@ -30,6 +30,7 @@
         <if test="lecturerName != null and lecturerName != ''">
             AND lecturerName like CONCAT('%',#{lecturerName},'%')
         </if>
+        ORDER BY createTime DESC
     </select>
 
     <!-- 根据课程查询讲师 -->
