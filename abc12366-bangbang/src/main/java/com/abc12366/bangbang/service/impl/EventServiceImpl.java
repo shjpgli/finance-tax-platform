@@ -72,7 +72,7 @@ public class EventServiceImpl implements EventService {
         //String url = "http://118.118.116.132:9400/cms/bangbang/event/details/"+eventid;
         EventIdDataBo data= null;
         try {
-            String url = properties.getValue("chabc.soa.url") + "/cms/bangbang/event/dateils/"+eventid;
+            String url = properties.getValue("chabc.soa.url") + "/cms/bangbang/event/details/"+eventid;
             String str = bangbangRestTemplateUtil.send(url, HttpMethod.GET, request);
             data = JSON.parseObject(str,EventIdDataBo.class);
         } catch (Exception e) {
