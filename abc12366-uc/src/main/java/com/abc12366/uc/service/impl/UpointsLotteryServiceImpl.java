@@ -8,6 +8,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.uc.model.UpointsLottery;
 import com.abc12366.uc.model.bo.LotteryLogBO;
+import com.abc12366.uc.model.bo.LotteryTimeBO;
 import com.abc12366.uc.model.bo.PointCodex;
 import com.abc12366.uc.model.bo.UpointsLotteryBO;
 
@@ -16,6 +17,7 @@ import java.util.*;
 import com.abc12366.uc.mapper.db1.UpointsLotteryMapper;
 import com.abc12366.uc.mapper.db2.UpointsLotteryRoMapper;
 import com.abc12366.uc.service.LotteryLogService;
+import com.abc12366.uc.service.LotteryTimeService;
 import com.abc12366.uc.service.PointsService;
 import com.abc12366.uc.service.UpointsLotteryService;
 
@@ -36,6 +38,8 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
     private LotteryLogService lotteryLogService;
     @Autowired
     private PointsService pointsService;
+    @Autowired
+    private LotteryTimeService lotteryTimeService;
     @Override
     public UpointsLotteryBO update(UpointsLotteryBO upointsLotteryBO, String id) {
         UpointsLottery obj = new UpointsLottery();
@@ -104,19 +108,24 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
         Integer point = pointCodex.getUpoint();
         UpointsLotteryBO obj = getvalEx();
         //减库存 记日志
-        if(obj.getNotluck() !=1){
+        if(obj != null) {
             int stock = 0;
-            if(obj.getStock() != null){
+            if (obj.getStock() != null) {
                 stock = obj.getStock() - 1;
             }
-            obj.setStock( stock);
-            this.update(obj,obj.getId());
-        }
+            obj.setStock(stock);
+            this.update(obj, obj.getId());
 
+        }
         LotteryLogBO lotteryLogBO = new LotteryLogBO();
-        lotteryLogBO.setLotteryId(obj.getId());
         lotteryLogBO.setUserId(userId);
-        lotteryLogBO.setNotluck(obj.getNotluck());
+        if(obj != null) {
+            lotteryLogBO.setNotluck(0);
+            lotteryLogBO.setLotteryId(obj.getId());
+        }else{
+            lotteryLogBO.setNotluck(1);
+            lotteryLogBO.setLotteryId(null);
+        }
         lotteryLogBO.setUpoint(point);
         lotteryLogService.insert(lotteryLogBO);
         return obj;
@@ -125,42 +134,43 @@ public class UpointsLotteryServiceImpl implements UpointsLotteryService {
     public UpointsLotteryBO getvalEx(){
         List<UpointsLotteryBO> list = this.selectList(null);
 
-        //把谢谢参与排除
-        List<UpointsLotteryBO> listLuck = new ArrayList<UpointsLotteryBO>() ;
-        List<UpointsLotteryBO> listNotluck = new ArrayList<UpointsLotteryBO>() ;
-        for (UpointsLotteryBO obj : list){
-            if(obj.getNotluck() == 1){
-                listNotluck.add(obj);
-            }else            {
-                listLuck.add(obj);
-            }
-        }
-        if (listNotluck.size() <= 0){
-            LOGGER.warn("必须拥有一个不中奖的值");
+
+        if (list.size() <= 0){
+            LOGGER.warn("必须拥有一个奖品");
             throw new RuntimeException("系统出现错误，请联系管理员");
         }
         Random random = new Random();
         //对奖品生成随机
-        for (UpointsLotteryBO obj : listLuck){
-            Integer stock = obj.getStock();
-            if(stock>0){//假如有库存
-                if(obj.getLuck() != null) {
-                    Double tmpdbl = (obj.getLuck() * 100000);//考虑5位小数
-                    int luck = tmpdbl.intValue();
-                    //现在得到一个扩大10万倍的概率值   比如百分之10    就是100 0000  应该生成1000万内的随机数
-
-                    random.setSeed(System.currentTimeMillis());
-                    int rand = random.nextInt(10000000);
-                    if(rand < luck){//
-                        //中奖
-                        return obj;
-                    }
+        random.setSeed(System.currentTimeMillis());
+        int rand = random.nextInt(1000000);//100万
+        LotteryTimeBO lotteryTimeBO =lotteryTimeService.findbyTime(new Date( ));
+        int timeLuck = 100;
+        if (lotteryTimeBO != null ) {
+            timeLuck = lotteryTimeBO.getLuck();
+        }
+        if (timeLuck >100 || timeLuck<0){
+            timeLuck = 100;
+        }
+        rand = rand  * timeLuck /100;
+        //现在根据时间段平衡了 随机数
+        int oldLuck = 0;
+        for (UpointsLotteryBO obj :                list) {
+            Double tmpdbl = (obj.getLuck() * 10000);//考虑4位小数
+            int luck = tmpdbl.intValue();
+            if (luck + oldLuck >rand) {
+                Integer stock = obj.getStock();
+                if(stock>0) {//假如有库存
+                    return obj;
+                }else{
+                    return null;
                 }
             }
+            oldLuck +=luck;
         }
-        //这里是都没中奖的情况
-        int index = random.nextInt(listNotluck.size());
-        return listNotluck.get(index);
+
+//        UpointsLotteryBO upointsLotteryBO = new UpointsLotteryBO();
+//        upointsLotteryBO.set
+        return null;
     }
     @Override
     public UpointsLotteryBO selectOne(String id) {
