@@ -445,6 +445,15 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
+    @Override
+    public void confirmInvoice(Invoice invoice) {
+        int update = invoiceMapper.update(invoice);
+        if(update != 1){
+            LOGGER.info("确认收货失败：{}", invoice);
+            throw new ServiceException(4102,"确认收货失败");
+        }
+    }
+
     @Transactional("db1TxManager")
     @Override
     public InvoiceBackBO refund(InvoiceBackBO invoiceBackBO) {
