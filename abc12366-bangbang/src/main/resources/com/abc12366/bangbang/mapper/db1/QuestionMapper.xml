@@ -151,4 +151,13 @@
 		 WHERE id = #{id}
 	</update>
 
+	<!-- 清空 -->
+	<update id="clearRecommendEndTimeByPks">
+		UPDATE bb_question SET recommendEndTime = NULL
+		WHERE id IN
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
 </mapper>
