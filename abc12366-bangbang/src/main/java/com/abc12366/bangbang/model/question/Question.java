@@ -45,7 +45,7 @@ public class Question implements Serializable {
 	private Integer browseNum;
 
 	/**置顶截止时间**datetime**/
-	private java.util.Date stickEndTime;
+	private java.util.Date recommendEndTime;
 
 
 	public void setId(String id){
@@ -136,12 +136,12 @@ public class Question implements Serializable {
 		return this.browseNum;
 	}
 
-	public Date getStickEndTime() {
-		return stickEndTime;
+	public Date getRecommendEndTime() {
+		return recommendEndTime;
 	}
 
-	public Question setStickEndTime(Date stickEndTime) {
-		this.stickEndTime = stickEndTime;
+	public Question setRecommendEndTime(Date recommendEndTime) {
+		this.recommendEndTime = recommendEndTime;
 		return this;
 	}
 }
