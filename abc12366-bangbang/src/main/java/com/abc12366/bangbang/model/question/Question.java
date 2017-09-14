@@ -147,4 +147,12 @@ public class Question implements Serializable {
 		this.recommendEndTime = recommendEndTime;
 		return this;
 	}
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }
