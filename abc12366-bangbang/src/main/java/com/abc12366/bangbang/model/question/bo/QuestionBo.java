@@ -1,5 +1,8 @@
 package com.abc12366.bangbang.model.question.bo;
+import com.abc12366.bangbang.model.question.QuestionTag;
+
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -42,6 +45,8 @@ public class QuestionBo implements Serializable {
 
 	/**浏览量**int(11)**/
 	private Integer browseNum;
+
+    private List<QuestionTag> tagList;
 
 
 
@@ -133,4 +138,11 @@ public class QuestionBo implements Serializable {
 		return this.browseNum;
 	}
 
+    public List<QuestionTag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<QuestionTag> tagList) {
+        this.tagList = tagList;
+    }
 }

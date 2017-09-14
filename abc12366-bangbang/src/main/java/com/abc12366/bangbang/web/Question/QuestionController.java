@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 学堂课件管理模块
+ * 帮帮问题管理模块
  *
  * @author xieyanmao
  * @create 2017-08-10
@@ -33,7 +33,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     /**
-     * 课件列表查询
+     * 问题列表查询
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -48,38 +48,38 @@ public class QuestionController {
     }
 
     /**
-     * 课件新增
+     * 问题新增
      */
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody QuestionBo questionBo) {
-        //新增课件信息
+        //新增问题信息
         questionBo = questionService.save(questionBo);
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
 
     /**
-     * 查询单个课件信息
+     * 查询单个问题信息
      */
-    @GetMapping(path = "/{questionId}")
-    public ResponseEntity selectOne(@PathVariable String questionId) {
-        //查询课件信息
-        QuestionBo questionBo = questionService.selectQuestion(questionId);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        //查询问题信息
+        QuestionBo questionBo = questionService.selectQuestion(id);
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
 
     /**
-     * 更新课件信息
+     * 更新问题信息
      */
-    @PutMapping(path = "/{questionId}")
-    public ResponseEntity update(@PathVariable String questionId,
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@PathVariable String id,
                                  @Valid @RequestBody QuestionBo questionBo) {
-        //更新课件信息
+        //更新问题信息
         questionBo = questionService.update(questionBo);
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
 
     /**
-     * 更新课件状态
+     * 更新问题状态
      *
      * @param status
      * @param questionId
@@ -92,11 +92,11 @@ public class QuestionController {
     }
 
     /**
-     * 删除课件信息
+     * 删除问题信息
      */
     @DeleteMapping(path = "/{questionId}")
     public ResponseEntity delete(@PathVariable String questionId) {
-        //删除课件信息
+        //删除问题信息
         String rtn = questionService.delete(questionId);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
