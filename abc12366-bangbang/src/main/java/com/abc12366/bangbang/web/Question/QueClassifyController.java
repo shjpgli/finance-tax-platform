@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 课程分类管理模块
+ * 问题分类管理模块
  *
  * @author xieyanmao
  * @create 2017-08-14
