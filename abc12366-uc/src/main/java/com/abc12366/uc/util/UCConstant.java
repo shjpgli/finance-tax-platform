@@ -24,4 +24,10 @@ public class UCConstant {
     //uc用户任务状态：未完成状态
     public final static String TASK_FINISHED = "1";
 
+    // 订单自动确认收货，单位：天
+    public final static Integer ORDER_RECEIPT_DAYS = 15;
+
+    // 订单自动取消时间：小时
+    public final static Integer ORDER_CANCEL_TIME = 2;
+
 }

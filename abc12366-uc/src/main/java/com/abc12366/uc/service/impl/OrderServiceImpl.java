@@ -12,6 +12,7 @@ import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.service.VipLogService;
 import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.util.UCConstant;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1099,7 +1100,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticReceipt() {
-        Date date = DataUtils.getAddDate(Constant.ORDER_BACK_DAYS);
+        Date date = DataUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
         //查询15天之前未确认的订单
         List<Order> orderList = orderRoMapper.selectReceiptOrderByDate(date);
         for(Order order:orderList){
@@ -1112,7 +1113,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticCancel() {
-        Date date = DataUtils.getAddTime(Constant.ORDER_CANCEL_TIME);
+        Date date = DataUtils.getAddTime(UCConstant.ORDER_CANCEL_TIME);
         //查询两个小时未支付的订单，自动取消
         List<Order> orderList = orderRoMapper.selectCancelOrderByDate(date);
         for(Order order:orderList){
