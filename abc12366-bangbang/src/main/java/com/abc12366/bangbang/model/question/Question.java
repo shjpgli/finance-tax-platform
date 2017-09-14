@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.model.question;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -31,8 +32,7 @@ public class Question implements Serializable {
 	/**修改时间**datetime**/
 	private java.util.Date lastUpdate;
 
-	/**悬赏积分
-**int(11)**/
+	/**悬赏积分**int(11)**/
 	private Integer points;
 
 	/**是否解决：0/1**tinyint(4)**/
@@ -44,6 +44,8 @@ public class Question implements Serializable {
 	/**浏览量**int(11)**/
 	private Integer browseNum;
 
+	/**置顶截止时间**datetime**/
+	private java.util.Date stickEndTime;
 
 
 	public void setId(String id){
@@ -134,4 +136,12 @@ public class Question implements Serializable {
 		return this.browseNum;
 	}
 
+	public Date getStickEndTime() {
+		return stickEndTime;
+	}
+
+	public Question setStickEndTime(Date stickEndTime) {
+		this.stickEndTime = stickEndTime;
+		return this;
+	}
 }
