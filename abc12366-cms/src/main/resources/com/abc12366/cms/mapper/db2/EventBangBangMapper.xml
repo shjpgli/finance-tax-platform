@@ -29,7 +29,7 @@
 	</select>
 
 	<select id="selectEventId" resultType="com.abc12366.cms.model.event.EventIdBo" parameterType="java.util.Map">
-		SELECT eventid,title,province,city,address,picture,begintime,endtime,description,peoppleNum,usergrade,sponsorid,STATUS,bmendtime,isCheck,isUserGrade FROM `cms_event` a WHERE eventid=#{eventid}
+		SELECT eventid,title,province,city,address,picture,begintime,endtime,description,peoppleNum,usergrade,sponsorid,status,bmendtime,isCheck,isUserGrade FROM `cms_event` a WHERE eventid=#{eventid}
 	</select>
 
 	<select id="selectEventSponsor" parameterType="java.util.Map" resultType="com.abc12366.cms.model.event.EventSponsorBbBo">
@@ -38,5 +38,9 @@
 
 	<select id="selectEventApplyStatus" parameterType="java.util.Map" resultType="java.lang.Integer">
 		SELECT COUNT(applyid) `count` FROM `cms_event_apply` WHERE userid=#{userid} and eventid=#{eventid}
+	</select>
+
+	<select id="selectEventRelevant" parameterType="java.util.Map" resultType="com.abc12366.cms.model.event.EventIdBo">
+		SELECT eventid,title,province,city,address,picture,begintime,endtime,description,peoppleNum,usergrade,sponsorid,STATUS,bmendtime,isCheck,isUserGrade FROM cms_event WHERE STATUS=2 AND eventid!=#{eventid} ORDER BY createtime DESC
 	</select>
 </mapper>

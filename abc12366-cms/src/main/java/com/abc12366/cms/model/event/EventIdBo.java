@@ -18,6 +18,16 @@ public class EventIdBo  implements Serializable {
 
     private EventBrowseCountBo eventBrowseCountBo;
 
+    private List<EventIdBo> eventIdBoList;
+
+    public List<EventIdBo> getEventIdBoList() {
+        return eventIdBoList;
+    }
+
+    public void setEventIdBoList(List<EventIdBo> eventIdBoList) {
+        this.eventIdBoList = eventIdBoList;
+    }
+
     public EventBrowseCountBo getEventBrowseCountBo() {
         return eventBrowseCountBo;
     }
