@@ -17,8 +17,8 @@ public interface QuestionService {
 
     QuestionBo update(QuestionBo questionBo);
 
-    String updateStatus(String questionId, String status);
+    String updateStatus(String id, String status);
 
-    String delete(String questionId);
+    String delete(String id);
 
 }
