@@ -25,9 +25,6 @@ public interface InvoiceService {
 
     /**
      * 发票信息导出
-     *
-     * @param invoice
-     * @return
      */
     List<InvoiceExcel> selectInvoicePrintExcelList(InvoiceBO invoice);
 
@@ -48,4 +45,10 @@ public interface InvoiceService {
     void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId);
 
     void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList);
+
+    /**
+     * 确认收货
+     */
+    void confirmInvoice(Invoice invoice);
+
 }

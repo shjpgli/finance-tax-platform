@@ -35,6 +35,9 @@
             <if test="uri != null">
                 and uri = #{uri}
             </if>
+            <if test="appId != null">
+                and appId = #{appId}
+            </if>
             <if test="ip != null">
                 and ip = #{ip}
             </if>
