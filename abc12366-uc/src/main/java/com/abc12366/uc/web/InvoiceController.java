@@ -182,7 +182,7 @@ public class InvoiceController {
      * @return
      */
     @DeleteMapping(path = "/{userId}/{id}")
-    public ResponseEntity update(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+    public ResponseEntity delete(@PathVariable("userId") String userId, @PathVariable("id") String id) {
         InvoiceBO invoiceBO = new InvoiceBO();
         invoiceBO.setId(id);
         invoiceBO.setUserId(userId);
@@ -191,6 +191,19 @@ public class InvoiceController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 发票确认收货
+     */
+    @PostMapping(path = "/confirm/{userId}/{id}")
+    public ResponseEntity confirm(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+        LOGGER.info("{}{}", userId,id);
+        Invoice invoiceBO = new Invoice();
+        invoiceBO.setId(id);
+        invoiceBO.setUserId(userId);
+        invoiceBO.setStatus("6");
+        invoiceService.confirmInvoice(invoiceBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
 
     /**
      * 发票导出打印机列表
