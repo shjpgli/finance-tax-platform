@@ -1,5 +1,8 @@
 package com.abc12366.bangbang.model.question.bo;
+import com.abc12366.bangbang.model.question.QuestionTag;
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.Date;
 
 
@@ -45,7 +48,9 @@ public class QuestionBo implements Serializable {
 	private Integer browseNum;
 
 	/**置顶截止时间**datetime**/
-	private java.util.Date stickEndTime;
+	private java.util.Date recommendEndTime;
+    private List<QuestionTag> tagList;
+
 
 
 	public void setId(String id){
@@ -136,12 +141,20 @@ public class QuestionBo implements Serializable {
 		return this.browseNum;
 	}
 
-	public Date getStickEndTime() {
-		return stickEndTime;
+    public List<QuestionTag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<QuestionTag> tagList) {
+        this.tagList = tagList;
+    }
+
+	public Date getRecommendEndTime() {
+		return recommendEndTime;
 	}
 
-	public QuestionBo setStickEndTime(Date stickEndTime) {
-		this.stickEndTime = stickEndTime;
+	public QuestionBo setRecommendEndTime(Date recommendEndTime) {
+		this.recommendEndTime = recommendEndTime;
 		return this;
 	}
 }
