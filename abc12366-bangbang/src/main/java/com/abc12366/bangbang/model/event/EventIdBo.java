@@ -10,7 +10,16 @@ import java.util.List;
 public class EventIdBo implements Serializable {
     private String eventid;
     private String title;
-    private String provice;
+    private String province;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     private String city;
     private String address;
     private String picture;
@@ -62,13 +71,7 @@ public class EventIdBo implements Serializable {
         this.title = title;
     }
 
-    public String getProvice() {
-        return provice;
-    }
 
-    public void setProvice(String provice) {
-        this.provice = provice;
-    }
 
     public String getCity() {
         return city;
@@ -126,13 +129,6 @@ public class EventIdBo implements Serializable {
         this.peoppleNum = peoppleNum;
     }
 
-    public String getSergrade() {
-        return sergrade;
-    }
-
-    public void setSergrade(String sergrade) {
-        this.sergrade = sergrade;
-    }
 
     public String getSponsorid() {
         return sponsorid;
@@ -140,6 +136,14 @@ public class EventIdBo implements Serializable {
 
     public void setSponsorid(String sponsorid) {
         this.sponsorid = sponsorid;
+    }
+
+    public String getUsergrade() {
+        return usergrade;
+    }
+
+    public void setUsergrade(String usergrade) {
+        this.usergrade = usergrade;
     }
 
     public String getStatus() {
@@ -177,7 +181,7 @@ public class EventIdBo implements Serializable {
     private Date endtime;
     private String description;
     private int peoppleNum;
-    private String sergrade;
+    private String usergrade;
     private String sponsorid;
     private String status;
     private String bmendtime;
