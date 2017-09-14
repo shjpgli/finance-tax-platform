@@ -1,5 +1,8 @@
 package com.abc12366.bangbang.service;
 
+import com.abc12366.bangbang.model.event.EventApplyBbBo;
+import com.abc12366.bangbang.model.event.EventIdBo;
+import com.abc12366.bangbang.model.event.EventRecordBbBo;
 import com.abc12366.bangbang.model.event.SingleEventBo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,4 +16,10 @@ public interface EventService {
     SingleEventBo singleEvent(HttpServletRequest request);
 
     List<SingleEventBo> singleEventList(HttpServletRequest request);
+
+    EventIdBo saveeventrecord(HttpServletRequest request, String eventid);
+
+    EventRecordBbBo addEventRecord(HttpServletRequest request,EventRecordBbBo eventRecordBbBo);
+
+    EventApplyBbBo saveEventApply(HttpServletRequest request,EventApplyBbBo eventApplyBbBo);
 }
