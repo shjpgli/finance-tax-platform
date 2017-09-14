@@ -46,10 +46,8 @@ public class QuestionBo implements Serializable {
 
 	/**浏览量**int(11)**/
 	private Integer browseNum;
-
-	/**置顶截止时间**datetime**/
-	private java.util.Date stickEndTime;
-
+    
+	private java.util.Date recommendEndTime;
     private List<QuestionTag> tagList;
 
     /**标签**varchar(1000)**/
@@ -151,12 +149,13 @@ public class QuestionBo implements Serializable {
     public void setTagList(List<QuestionTag> tagList) {
         this.tagList = tagList;
     }
-	public Date getStickEndTime() {
-		return stickEndTime;
+
+	public Date getRecommendEndTime() {
+		return recommendEndTime;
 	}
 
-	public QuestionBo setStickEndTime(Date stickEndTime) {
-		this.stickEndTime = stickEndTime;
+	public QuestionBo setRecommendEndTime(Date recommendEndTime) {
+		this.recommendEndTime = recommendEndTime;
 		return this;
 	}
 

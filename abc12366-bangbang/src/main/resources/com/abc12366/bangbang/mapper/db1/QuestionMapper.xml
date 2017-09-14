@@ -136,7 +136,9 @@
 			<if test="browseNum != null">
 				 browseNum = #{browseNum},
 			</if>
-
+			<if test="recommendEndTime != null">
+				 recommendEndTime = #{recommendEndTime},
+			</if>
  		 </set>
 		 WHERE id = #{id}
 	</update>
