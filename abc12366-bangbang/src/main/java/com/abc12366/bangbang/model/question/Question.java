@@ -47,6 +47,9 @@ public class Question implements Serializable {
 	/**置顶截止时间**datetime**/
 	private java.util.Date recommendEndTime;
 
+    /**标签**varchar(1000)**/
+    private String tag;
+
 
 	public void setId(String id){
 		this.id = id;
