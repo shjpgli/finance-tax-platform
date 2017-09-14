@@ -43,4 +43,29 @@ public class RedisConfig {
         RedisMappingContext redisMappingContext = new RedisMappingContext();
         return new RedisKeyValueTemplate(redisKeyValueAdapter, redisMappingContext);
     }
+//    private static Logger logger = Logger.getLogger(RedisConfig.class);
+//
+//    @Bean
+//    @ConfigurationProperties(prefix="spring.redis")
+//    public JedisPoolConfig getRedisConfig(){
+//        JedisPoolConfig config = new JedisPoolConfig();
+//        return config;
+//    }
+//
+//    @Bean
+//    @ConfigurationProperties(prefix="spring.redis")
+//    public JedisConnectionFactory getConnectionFactory(){
+//        JedisConnectionFactory factory = new JedisConnectionFactory();
+//        JedisPoolConfig config = getRedisConfig();
+//        factory.setPoolConfig(config);
+//        logger.info("JedisConnectionFactory bean init success.");
+//        return factory;
+//    }
+//
+//
+//    @Bean
+//    public RedisTemplate<?, ?> getRedisTemplate(){
+//        RedisTemplate<?,?> template = new StringRedisTemplate(getConnectionFactory());
+//        return template;
+//    }
 }

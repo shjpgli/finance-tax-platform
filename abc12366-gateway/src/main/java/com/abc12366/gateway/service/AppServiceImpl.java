@@ -203,6 +203,8 @@ public class AppServiceImpl implements AppService {
                 apiLog.setUri(bestMatchingPattern);
                 apiLog.setStartTime(currentTime - (60 * 1000));
                 apiLog.setEndTime(currentTime);
+                apiLog.setYyyyMMdd(DateUtils.getDataString());
+                apiLog.setAppId(appId);
                 int minuteCount = apiLogRoMapper.selectApiLogCount(apiLog);
                 if(bo.getTimesPerMinute() != 0 && minuteCount > bo.getTimesPerMinute()){
                     LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
