@@ -4,9 +4,9 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.UpointsLotteryMapper">
 <insert id="insert" parameterType="com.abc12366.uc.model.UpointsLottery">
 insert into uc_upoints_lottery(
-id,orderId,name,description,stock,image,luck,notluck,createTime,lastUpdate
+id,orderId,name,description,stock,image,luck,notluck,createTime,lastUpdate,types,stockDay
 )values(
-#{id},#{orderId},#{name},#{description},#{stock},#{image},#{luck},#{notluck},#{createTime},#{lastUpdate})
+#{id},#{orderId},#{name},#{description},#{stock},#{image},#{luck},#{notluck},#{createTime},#{lastUpdate},#{types},#{stockDay})
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.UpointsLottery">
 update  uc_upoints_lottery 
@@ -20,6 +20,8 @@ update  uc_upoints_lottery
 <if test="notluck!=null">notluck=#{notluck},</if>
 <if test="createTime!=null">createTime=#{createTime},</if>
 <if test="lastUpdate!=null">lastUpdate=#{lastUpdate},</if>
+    <if test="stockDay!=null">stockDay=#{stockDay},</if>
+    <if test="types!=null">types=#{types}</if>
 </set>
 where id=#{id}
 </update>

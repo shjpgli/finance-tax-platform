@@ -29,8 +29,28 @@ private Integer notluck;
 private Date createTime;
  /** 修改时间 */
 private Date lastUpdate;
+    /**类别*/
+    private String types;
+/**每天数量*/
+    private Integer stockDay;
 
-public String getId(){
+    public String getTypes() {
+        return types;
+    }
+
+    public void setTypes(String types) {
+        this.types = types;
+    }
+
+    public Integer getStockDay() {
+        return stockDay;
+    }
+
+    public void setStockDay(Integer stockDay) {
+        this.stockDay = stockDay;
+    }
+
+    public String getId(){
     return id;
 }
 public void setId(String id){
