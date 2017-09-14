@@ -60,10 +60,7 @@
 	<!-- 修 改-->
 	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionClassify">
 		 UPDATE bb_question_classify
- 		 <set> 
-			<if test="parentCode != null">
-				 parentCode = #{parentCode},
-			</if>
+ 		 <set>
 			<if test="isDisplay != null">
 				 isDisplay = #{isDisplay},
 			</if>
@@ -77,8 +74,7 @@
 	<!-- 修 改-->
 	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionClassify">
 		 UPDATE bb_question_classify
-		 SET 
-			 parentCode = #{parentCode},
+		 SET
 			 isDisplay = #{isDisplay},
 			 classifyName = #{classifyName}
 		 WHERE classifyCode = #{classifyCode}

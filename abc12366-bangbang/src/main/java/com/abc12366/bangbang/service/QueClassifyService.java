@@ -11,12 +11,12 @@ public interface QueClassifyService {
 
     QuestionClassifyBo save(QuestionClassifyBo classifyBo);
 
-    QuestionClassifyBo selectClassify(String classifyId);
+    QuestionClassifyBo selectClassify(String classifyCode);
 
     QuestionClassifyBo update(QuestionClassifyBo classifyBo);
 
-    String updateStatus(String classifyId, String status);
+    String updateStatus(String classifyCode, String status);
 
-    String delete(String classifyId);
+    String delete(String classifyCode);
 
 }

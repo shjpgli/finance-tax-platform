@@ -40,7 +40,7 @@ public class QueClassifyServiceImpl implements QueClassifyService {
     public List<QuestionClassifyBo> selectList(Map<String,Object> map) {
         List<QuestionClassifyBo> classifyBoList;
         try {
-            //查询课程分类列表
+            //查询问题分类列表
             classifyBoList = classifyRoMapper.selectList(map);
 
         } catch (Exception e) {

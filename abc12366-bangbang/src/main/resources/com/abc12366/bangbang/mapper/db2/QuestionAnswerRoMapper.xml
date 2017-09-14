@@ -16,5 +16,16 @@
 		 WHERE id = #{id}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_question_answer
+        WHERE 1=1
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+    </select>
+
 
 </mapper>
