@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.model.question.bo;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -43,6 +44,8 @@ public class QuestionBo implements Serializable {
 	/**浏览量**int(11)**/
 	private Integer browseNum;
 
+	/**置顶截止时间**datetime**/
+	private java.util.Date stickEndTime;
 
 
 	public void setId(String id){
@@ -133,4 +136,12 @@ public class QuestionBo implements Serializable {
 		return this.browseNum;
 	}
 
+	public Date getStickEndTime() {
+		return stickEndTime;
+	}
+
+	public QuestionBo setStickEndTime(Date stickEndTime) {
+		this.stickEndTime = stickEndTime;
+		return this;
+	}
 }
