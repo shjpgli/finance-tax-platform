@@ -1,4 +1,4 @@
-package com.abc12366.bangbang.web.Question;
+package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
@@ -21,7 +21,7 @@ import java.util.Map;
  * 问题回复管理模块
  *
  * @author xieyanmao
- * @create 2017-08-10
+ * @create 2017-09-14
  * @since 1.0.0
  */
 @RestController
