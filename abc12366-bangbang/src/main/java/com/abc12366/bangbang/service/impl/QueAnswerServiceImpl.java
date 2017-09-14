@@ -33,76 +33,78 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
         List<QuestionAnswerBo> answerBoList;
         try {
-            //查询课件列表
+            //查询问题回复列表
             answerBoList = answerRoMapper.selectList(map);
         } catch (Exception e) {
-            LOGGER.error("查询课件列表信息异常：{}", e);
-            throw new ServiceException(4330);
+            LOGGER.error("查询问题回复列表信息异常：{}", e);
+            throw new ServiceException(4610);
         }
         return answerBoList;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public QuestionAnswerBo save(QuestionAnswerBo answerBo) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(answerBo);
-            LOGGER.info("新增课件信息:{}", jsonStu.toString());
+            LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
             answerBo.setCreateTime(new Date());
             answerBo.setLastUpdate(new Date());
-            //保存课件信息
+            //保存问题回复信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             QuestionAnswer answer = new QuestionAnswer();
             answerBo.setId(uuid);
             BeanUtils.copyProperties(answerBo, answer);
             answerMapper.insert(answer);
         } catch (Exception e) {
-            LOGGER.error("新增课件信息异常：{}", e);
-            throw new ServiceException(4332);
+            LOGGER.error("新增问题回复信息异常：{}", e);
+            throw new ServiceException(4612);
         }
 
         return answerBo;
     }
 
     @Override
-    public QuestionAnswerBo selectAnswer(String answerId) {
+    public QuestionAnswerBo selectAnswer(String id) {
         QuestionAnswerBo answerBo = new QuestionAnswerBo();
         try {
-            LOGGER.info("查询单个课件信息:{}", answerId);
-            //查询课件信息
-            QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(answerId);
-            BeanUtils.copyProperties(answerId, answerBo);
+            LOGGER.info("查询单个问题回复信息:{}", id);
+            //查询单个问题回复信息
+            QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+            BeanUtils.copyProperties(answer, answerBo);
         } catch (Exception e) {
-            LOGGER.error("查询单个课件信息异常：{}", e);
-            throw new ServiceException(4331);
+            LOGGER.error("查询单个问题回复信息异常：{}", e);
+            throw new ServiceException(4611);
         }
         return answerBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public QuestionAnswerBo update(QuestionAnswerBo answerBo) {
-        //更新课件信息
+        //更新问题回复信息
         QuestionAnswer answer = new QuestionAnswer();
         try {
             JSONObject jsonStu = JSONObject.fromObject(answerBo);
-            LOGGER.info("更新课件信息:{}", jsonStu.toString());
+            LOGGER.info("更新问题回复信息:{}", jsonStu.toString());
             answerBo.setLastUpdate(new Date());
             BeanUtils.copyProperties(answerBo, answer);
             answerMapper.updateByPrimaryKeySelective(answer);
         } catch (Exception e) {
-            LOGGER.error("更新课件信息异常：{}", e);
-            throw new ServiceException(4333);
+            LOGGER.error("更新问题回复信息异常：{}", e);
+            throw new ServiceException(4613);
         }
         return answerBo;
     }
 
     @Override
     public String updateStatus(String coursewareId,String status) {
-        //更新课件信息
+        //更新问题回复信息
         try {
 
         } catch (Exception e) {
-            LOGGER.error("更新课件信息异常：{}", e);
-            throw new ServiceException(4333);
+            LOGGER.error("更新问题回复信息异常：{}", e);
+            throw new ServiceException(4613);
         }
         return "";
     }
@@ -111,11 +113,11 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     @Override
     public String delete(String id) {
         try {
-            LOGGER.info("删除课件信息:{}", id);
+            LOGGER.info("删除问题回复信息:{}", id);
             answerMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
-            LOGGER.error("删除课件异常：{}", e);
-            throw new ServiceException(4334);
+            LOGGER.error("删除问题回复异常：{}", e);
+            throw new ServiceException(4614);
         }
         return "";
     }
