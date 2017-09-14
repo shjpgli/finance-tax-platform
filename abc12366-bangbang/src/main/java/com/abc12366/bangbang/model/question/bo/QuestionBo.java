@@ -49,8 +49,11 @@ public class QuestionBo implements Serializable {
 
 	/**置顶截止时间**datetime**/
 	private java.util.Date stickEndTime;
+
     private List<QuestionTag> tagList;
 
+    /**标签**varchar(1000)**/
+    private String tag;
 
 
 	public void setId(String id){
@@ -156,4 +159,12 @@ public class QuestionBo implements Serializable {
 		this.stickEndTime = stickEndTime;
 		return this;
 	}
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

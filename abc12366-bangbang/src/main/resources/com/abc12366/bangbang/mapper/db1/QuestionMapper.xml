@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.Question">
 		 INSERT INTO bb_question
- 		(id,userId,title,detail,status,createTime,lastUpdate,points,isSolve,classifyCode,browseNum) 
+ 		(id,userId,title,detail,status,tag,createTime,lastUpdate,points,isSolve,classifyCode,browseNum)
 		 VALUES 
- 		(#{id},#{userId},#{title},#{detail},#{status},#{createTime},#{lastUpdate},#{points},#{isSolve},#{classifyCode},#{browseNum}) 
+ 		(#{id},#{userId},#{title},#{detail},#{status},#{tag},#{createTime},#{lastUpdate},#{points},#{isSolve},#{classifyCode},#{browseNum})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -36,6 +36,9 @@
 			<if test="status != null">
 				 status,
 			</if>
+             <if test="tag != null">
+                 tag,
+             </if>
 			<if test="createTime != null">
 				 createTime,
 			</if>
@@ -72,6 +75,9 @@
 			<if test="status!=null">
 				 #{status},
 			</if>
+             <if test="tag!=null">
+                 #{tag},
+             </if>
 			<if test="createTime!=null">
 				 #{createTime},
 			</if>
@@ -109,6 +115,9 @@
 			<if test="status != null">
 				 status = #{status},
 			</if>
+             <if test="tag != null">
+                 tag = #{tag},
+             </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
 			</if>
@@ -140,6 +149,7 @@
 			 title = #{title},
 			 detail = #{detail},
 			 status = #{status},
+			 tag = #{tag},
 			 createTime = #{createTime},
 			 lastUpdate = #{lastUpdate},
 			 points = #{points},
