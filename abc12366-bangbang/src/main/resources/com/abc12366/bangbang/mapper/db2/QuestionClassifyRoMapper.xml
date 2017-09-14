@@ -17,7 +17,7 @@
 	</select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.QuestionClassifyBo" parameterType="java.util.Map">
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionClassifyBo" parameterType="java.util.Map">
         SELECT
         <include refid="Base_Column_List" />
         FROM bb_question_classify
@@ -31,7 +31,7 @@
         ORDER BY classifyCode ASC
     </select>
 
-    <!-- 查询分类Code是否已存在 -->
+    <!-- 查询分类代码是否已存在 -->
     <select id="selectClassifyCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT
         count(classifyCode) cnt
