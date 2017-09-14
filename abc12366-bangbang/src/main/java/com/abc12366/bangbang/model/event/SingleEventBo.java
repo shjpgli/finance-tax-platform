@@ -123,6 +123,16 @@ public class SingleEventBo implements Serializable {
      */
     private Date bmendtime;
 
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Date getBmendtime() {
         return bmendtime;
     }
