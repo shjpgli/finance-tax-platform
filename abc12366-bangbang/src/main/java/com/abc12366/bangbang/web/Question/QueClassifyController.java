@@ -19,11 +19,11 @@ import java.util.Map;
  * 问题分类管理模块
  *
  * @author xieyanmao
- * @create 2017-08-14
+ * @create 2017-09-14
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/Queclassify", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/queclassify", headers = Constant.VERSION_HEAD + "=1")
 public class QueClassifyController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QueClassifyController.class);
 

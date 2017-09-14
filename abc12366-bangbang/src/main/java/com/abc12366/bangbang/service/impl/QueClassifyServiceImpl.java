@@ -119,18 +119,7 @@ public class QueClassifyServiceImpl implements QueClassifyService {
     public String updateStatus(String classifyId,String status) {
         //更新课程分类信息
         try {
-//            LOGGER.info("更新课程状态信息:{}", ClassifyId+","+status);
-//            Question Question = new Question();
-//            Question.setQuestionId(QuestionId);
-//            Question.setStatus(Integer.parseInt(status));
-//            Question.setUpdateTime(new Date());
-//            //1为发布
-//            if("1".equals(status)){
-//                Question.setIssueTime(new Date());
-//            }else{
-//                Question.setIssueTime(null);
-//            }
-//            ClassifyMapper.updateStatus(Question);
+
         } catch (Exception e) {
             LOGGER.error("更新课程分类信息异常：{}", e);
             throw new ServiceException(4303);
@@ -142,10 +131,6 @@ public class QueClassifyServiceImpl implements QueClassifyService {
     @Override
     public String delete(String classifyCode) {
         LOGGER.info("删除课程分类信息:{}", classifyCode);
-//        int cnt = QuestionRoMapper.selectCurrCntByClassify(classifyCode);
-//        if(cnt > 0){
-//            throw new ServiceException(4305);
-//        }
         try {
             classifyMapper.deleteByPrimaryKey(classifyCode);
         } catch (Exception e) {
