@@ -1,8 +1,11 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.question.Question;
+import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -27,17 +30,23 @@ public class QuestionServiceImpl implements QuestionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionServiceImpl.class);
 
     @Autowired
-    private QuestionMapper answerMapper;
+    private QuestionMapper questionMapper;
 
     @Autowired
-    private QuestionRoMapper answerRoMapper;
+    private QuestionRoMapper questionRoMapper;
+
+    @Autowired
+    private QuestionTagMapper tagMapper;
+
+    @Autowired
+    private QuestionTagRoMapper tagRoMapper;
 
     @Override
     public List<QuestionBo> selectList(Map<String,Object> map) {
         List<QuestionBo> questionBoList;
         try {
             //查询课件列表
-            questionBoList = answerRoMapper.selectList(map);
+            questionBoList = questionRoMapper.selectList(map);
         } catch (Exception e) {
             LOGGER.error("查询课件列表信息异常：{}", e);
             throw new ServiceException(4330);
@@ -57,7 +66,20 @@ public class QuestionServiceImpl implements QuestionService {
             Question question = new Question();
             questionBo.setId(uuid);
             BeanUtils.copyProperties(questionBo, question);
-            answerMapper.insert(question);
+
+
+            List<QuestionTag> tagList = questionBo.getTagList();
+
+            if(tagList != null){
+                for(QuestionTag tag :tagList){
+                    tag.setId(UUID.randomUUID().toString().replace("-", ""));
+                    tag.setQuestionId(uuid);
+                    tagMapper.insert(tag);
+                }
+            }
+
+
+            questionMapper.insert(question);
         } catch (Exception e) {
             LOGGER.error("新增课件信息异常：{}", e);
             throw new ServiceException(4332);
@@ -72,8 +94,10 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             LOGGER.info("查询单个课件信息:{}", id);
             //查询课件信息
-            Question question = answerRoMapper.selectByPrimaryKey(id);
+            Question question = questionRoMapper.selectByPrimaryKey(id);
+            List<QuestionTag> tagList = tagRoMapper.selectList(id);
             BeanUtils.copyProperties(question, questionBo);
+            questionBo.setTagList(tagList);
         } catch (Exception e) {
             LOGGER.error("查询单个课件信息异常：{}", e);
             throw new ServiceException(4331);
@@ -90,7 +114,22 @@ public class QuestionServiceImpl implements QuestionService {
             LOGGER.info("更新课件信息:{}", jsonStu.toString());
             questionBo.setLastUpdate(new Date());
             BeanUtils.copyProperties(questionBo, question);
-            answerMapper.updateByPrimaryKeySelective(question);
+
+
+            List<QuestionTag> tagList = questionBo.getTagList();
+
+            tagMapper.deleteByPrimaryKey(questionBo.getId());
+
+            if(tagList != null){
+                for(QuestionTag tag :tagList){
+                    tag.setId(UUID.randomUUID().toString().replace("-", ""));
+                    tag.setQuestionId(questionBo.getId());
+                    tagMapper.insert(tag);
+                }
+            }
+
+
+            questionMapper.updateByPrimaryKeySelective(question);
         } catch (Exception e) {
             LOGGER.error("更新课件信息异常：{}", e);
             throw new ServiceException(4333);
@@ -115,7 +154,8 @@ public class QuestionServiceImpl implements QuestionService {
     public String delete(String id) {
         try {
             LOGGER.info("删除课件信息:{}", id);
-            answerMapper.deleteByPrimaryKey(id);
+            tagMapper.deleteByPrimaryKey(id);
+            questionMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
             LOGGER.error("删除课件异常：{}", e);
             throw new ServiceException(4334);
