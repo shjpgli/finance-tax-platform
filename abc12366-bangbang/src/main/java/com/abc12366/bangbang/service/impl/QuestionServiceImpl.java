@@ -45,23 +45,24 @@ public class QuestionServiceImpl implements QuestionService {
     public List<QuestionBo> selectList(Map<String,Object> map) {
         List<QuestionBo> questionBoList;
         try {
-            //查询课件列表
+            //查询问题列表
             questionBoList = questionRoMapper.selectList(map);
         } catch (Exception e) {
-            LOGGER.error("查询课件列表信息异常：{}", e);
-            throw new ServiceException(4330);
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
         }
         return questionBoList;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public QuestionBo save(QuestionBo questionBo) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(questionBo);
-            LOGGER.info("新增课件信息:{}", jsonStu.toString());
+            LOGGER.info("新增问题信息:{}", jsonStu.toString());
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
-            //保存课件信息
+            //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
             questionBo.setId(uuid);
@@ -81,8 +82,8 @@ public class QuestionServiceImpl implements QuestionService {
 
             questionMapper.insert(question);
         } catch (Exception e) {
-            LOGGER.error("新增课件信息异常：{}", e);
-            throw new ServiceException(4332);
+            LOGGER.error("新增问题信息异常：{}", e);
+            throw new ServiceException(6102);
         }
 
         return questionBo;
@@ -92,26 +93,27 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionBo selectQuestion(String id) {
         QuestionBo questionBo = new QuestionBo();
         try {
-            LOGGER.info("查询单个课件信息:{}", id);
-            //查询课件信息
+            LOGGER.info("查询单个问题信息:{}", id);
+            //查询问题信息
             Question question = questionRoMapper.selectByPrimaryKey(id);
             List<QuestionTag> tagList = tagRoMapper.selectList(id);
             BeanUtils.copyProperties(question, questionBo);
             questionBo.setTagList(tagList);
         } catch (Exception e) {
-            LOGGER.error("查询单个课件信息异常：{}", e);
-            throw new ServiceException(4331);
+            LOGGER.error("查询单个问题信息异常：{}", e);
+            throw new ServiceException(6101);
         }
         return questionBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public QuestionBo update(QuestionBo questionBo) {
-        //更新课件信息
+        //更新问题信息
         Question question = new Question();
         try {
             JSONObject jsonStu = JSONObject.fromObject(questionBo);
-            LOGGER.info("更新课件信息:{}", jsonStu.toString());
+            LOGGER.info("更新问题信息:{}", jsonStu.toString());
             questionBo.setLastUpdate(new Date());
             BeanUtils.copyProperties(questionBo, question);
 
@@ -131,8 +133,8 @@ public class QuestionServiceImpl implements QuestionService {
 
             questionMapper.updateByPrimaryKeySelective(question);
         } catch (Exception e) {
-            LOGGER.error("更新课件信息异常：{}", e);
-            throw new ServiceException(4333);
+            LOGGER.error("更新问题信息异常：{}", e);
+            throw new ServiceException(6103);
         }
         return questionBo;
     }
@@ -144,7 +146,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         } catch (Exception e) {
             LOGGER.error("更新课件信息异常：{}", e);
-            throw new ServiceException(4333);
+            throw new ServiceException(6103);
         }
         return "";
     }
@@ -153,12 +155,12 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public String delete(String id) {
         try {
-            LOGGER.info("删除课件信息:{}", id);
+            LOGGER.info("删除问题信息:{}", id);
             tagMapper.deleteByPrimaryKey(id);
             questionMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
-            LOGGER.error("删除课件异常：{}", e);
-            throw new ServiceException(4334);
+            LOGGER.error("删除问题信息异常：{}", e);
+            throw new ServiceException(6104);
         }
         return "";
     }
