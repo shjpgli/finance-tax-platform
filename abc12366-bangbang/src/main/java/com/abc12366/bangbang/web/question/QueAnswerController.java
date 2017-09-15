@@ -38,11 +38,28 @@ public class QueAnswerController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "id", required = false) String id) {
+                                     @RequestParam(value = "questionId", required = false) String questionId) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("id", id);//
+        dataMap.put("questionId", questionId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 问题回复评论列表查询
+     */
+    @GetMapping(path = "/selectListByParentId")
+    public ResponseEntity selectListByParentId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "questionId", required = false) String questionId,
+                                     @RequestParam(value = "parentId", required = false) String parentId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("questionId", questionId);//
+        dataMap.put("parentId", parentId);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectListByParentId(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

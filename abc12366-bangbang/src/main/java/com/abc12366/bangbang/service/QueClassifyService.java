@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
+import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ public interface QueClassifyService {
     QuestionClassifyBo save(QuestionClassifyBo classifyBo);
 
     QuestionClassifyBo selectClassify(String classifyCode);
+
+    List<QuestionClassifyTagBo> selectClassifyTagList(String classifyCode);
 
     QuestionClassifyBo update(QuestionClassifyBo classifyBo);
 

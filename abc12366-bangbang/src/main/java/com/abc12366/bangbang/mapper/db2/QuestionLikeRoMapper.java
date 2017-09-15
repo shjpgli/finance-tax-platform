@@ -1,7 +1,11 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionLike;
+import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -17,7 +21,11 @@ public interface QuestionLikeRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionLike  selectByPrimaryKey(@Param("id") Long id);
+	QuestionLike  selectByPrimaryKey(@Param("id") String id);
+
+    List<QuestionLikeBo> selectList(String userId);
+
+    int selectExist(Map map);
 
 
 }

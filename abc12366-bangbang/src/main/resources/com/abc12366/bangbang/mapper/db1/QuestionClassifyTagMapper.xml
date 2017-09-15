@@ -6,7 +6,7 @@
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM bb_question_classify_tag
-		 WHERE id = #{id}
+		 WHERE classifyId = #{classifyId}
 	</delete>
 
 	<!-- 添加 -->

@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.question.QuestionCollect;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 /**
  * 
  * QuestionCollectMapper数据库操作接口类
@@ -45,5 +47,7 @@ public interface QuestionCollectMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(QuestionCollect record);
+
+    void delete(Map map);
 
 }

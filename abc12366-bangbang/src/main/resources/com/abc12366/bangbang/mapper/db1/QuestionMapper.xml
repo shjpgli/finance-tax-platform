@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.Question">
 		 INSERT INTO bb_question
- 		(id,userId,title,detail,status,tag,createTime,lastUpdate,points,isSolve,classifyCode,browseNum)
+ 		(id,userId,title,detail,status,tag,ip,createTime,lastUpdate,points,isSolve,classifyCode,browseNum)
 		 VALUES 
- 		(#{id},#{userId},#{title},#{detail},#{status},#{tag},#{createTime},#{lastUpdate},#{points},#{isSolve},#{classifyCode},#{browseNum})
+ 		(#{id},#{userId},#{title},#{detail},#{status},#{tag},#{ip},#{createTime},#{lastUpdate},#{points},#{isSolve},#{classifyCode},#{browseNum})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -38,6 +38,9 @@
 			</if>
              <if test="tag != null">
                  tag,
+             </if>
+             <if test="ip != null">
+                 ip,
              </if>
 			<if test="createTime != null">
 				 createTime,
@@ -77,6 +80,9 @@
 			</if>
              <if test="tag!=null">
                  #{tag},
+             </if>
+             <if test="ip!=null">
+                 #{ip},
              </if>
 			<if test="createTime!=null">
 				 #{createTime},
@@ -118,6 +124,9 @@
              <if test="tag != null">
                  tag = #{tag},
              </if>
+             <if test="ip != null">
+                 ip = #{ip},
+             </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
 			</if>
@@ -152,6 +161,7 @@
 			 detail = #{detail},
 			 status = #{status},
 			 tag = #{tag},
+			 ip = #{ip},
 			 createTime = #{createTime},
 			 lastUpdate = #{lastUpdate},
 			 points = #{points},

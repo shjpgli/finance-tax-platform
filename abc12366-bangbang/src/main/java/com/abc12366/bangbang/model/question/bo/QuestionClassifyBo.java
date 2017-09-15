@@ -1,5 +1,8 @@
 package com.abc12366.bangbang.model.question.bo;
+import com.abc12366.bangbang.model.question.QuestionClassifyTag;
+
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -24,6 +27,8 @@ public class QuestionClassifyBo implements Serializable {
 
 	/**分类名称**varchar(100)**/
 	private String classifyName;
+
+    private List<QuestionClassifyTag> tagList;
 
 
 
@@ -67,4 +72,11 @@ public class QuestionClassifyBo implements Serializable {
 		return this.classifyName;
 	}
 
+    public List<QuestionClassifyTag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<QuestionClassifyTag> tagList) {
+        this.tagList = tagList;
+    }
 }

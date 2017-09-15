@@ -37,7 +37,20 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             answerBoList = answerRoMapper.selectList(map);
         } catch (Exception e) {
             LOGGER.error("查询问题回复列表信息异常：{}", e);
-            throw new ServiceException(4610);
+            throw new ServiceException(6110);
+        }
+        return answerBoList;
+    }
+
+    @Override
+    public List<QuestionAnswerBo> selectListByParentId(Map<String,Object> map) {
+        List<QuestionAnswerBo> answerBoList;
+        try {
+            //查询问题回复列表
+            answerBoList = answerRoMapper.selectListByParentId(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题回复列表信息异常：{}", e);
+            throw new ServiceException(6110);
         }
         return answerBoList;
     }
@@ -48,6 +61,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         try {
             JSONObject jsonStu = JSONObject.fromObject(answerBo);
             LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
+            if(answerBo.getParentId() == null){
+                answerBo.setParentId("");
+            }
             answerBo.setCreateTime(new Date());
             answerBo.setLastUpdate(new Date());
             //保存问题回复信息
@@ -58,7 +74,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             answerMapper.insert(answer);
         } catch (Exception e) {
             LOGGER.error("新增问题回复信息异常：{}", e);
-            throw new ServiceException(4612);
+            throw new ServiceException(6112);
         }
 
         return answerBo;
@@ -74,7 +90,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             BeanUtils.copyProperties(answer, answerBo);
         } catch (Exception e) {
             LOGGER.error("查询单个问题回复信息异常：{}", e);
-            throw new ServiceException(4611);
+            throw new ServiceException(6111);
         }
         return answerBo;
     }
@@ -92,7 +108,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             answerMapper.updateByPrimaryKeySelective(answer);
         } catch (Exception e) {
             LOGGER.error("更新问题回复信息异常：{}", e);
-            throw new ServiceException(4613);
+            throw new ServiceException(6113);
         }
         return answerBo;
     }
@@ -104,7 +120,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
         } catch (Exception e) {
             LOGGER.error("更新问题回复信息异常：{}", e);
-            throw new ServiceException(4613);
+            throw new ServiceException(6113);
         }
         return "";
     }
@@ -117,7 +133,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             answerMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
             LOGGER.error("删除问题回复异常：{}", e);
-            throw new ServiceException(4614);
+            throw new ServiceException(6114);
         }
         return "";
     }

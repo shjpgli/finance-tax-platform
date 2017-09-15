@@ -19,6 +19,8 @@ public class QuestionTagBo implements Serializable {
 	/**标签ID**varchar(64)**/
 	private String tagId;
 
+    /**标签名称**varchar(100)**/
+    private String tagName;
 
 
 	public void setId(String id){
@@ -45,4 +47,11 @@ public class QuestionTagBo implements Serializable {
 		return this.tagId;
 	}
 
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
 }

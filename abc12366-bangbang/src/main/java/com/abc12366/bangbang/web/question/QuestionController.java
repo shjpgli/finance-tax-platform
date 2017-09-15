@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -99,6 +101,16 @@ public class QuestionController {
         //删除问题信息
         String rtn = questionService.delete(id);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 根据热议标签
+     */
+    @GetMapping(path = "/selectTagList")
+    public ResponseEntity selectTagList() {
+        List<QuestionTagBo> dataList = questionService.selectTagList();
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+
     }
 
 

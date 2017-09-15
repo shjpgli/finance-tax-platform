@@ -53,6 +53,9 @@ public class QuestionBo implements Serializable {
     /**标签**varchar(1000)**/
     private String tag;
 
+    /**ip**varchar(45)**/
+    private String ip;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -165,5 +168,13 @@ public class QuestionBo implements Serializable {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }
