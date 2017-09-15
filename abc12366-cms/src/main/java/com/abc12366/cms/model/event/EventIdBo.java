@@ -193,4 +193,14 @@ public class EventIdBo  implements Serializable {
     private String bmendtime;
     private String isCheck;
     private String isUserGrade;
+
+    private int isApply;
+
+    public int getIsApply() {
+        return isApply;
+    }
+
+    public void setIsApply(int isApply) {
+        this.isApply = isApply;
+    }
 }
