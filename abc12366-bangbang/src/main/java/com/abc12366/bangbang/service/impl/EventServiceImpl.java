@@ -69,13 +69,11 @@ public class EventServiceImpl implements EventService {
     }
 
     public EventIdBo saveeventrecord(HttpServletRequest request, String eventid,String userid) {
-        //String url = "http://118.118.116.132:9400/cms/bangbang/event/details/"+eventid;
+        //String url = "http://118.118.116.132:9400/cms/bangbang/event/details?eventid="+eventid+"&userid="+userid;
         EventIdDataBo data= null;
         try {
-            String url = properties.getValue("chabc.soa.url") + "/cms/bangbang/event/details/"+eventid;
-            Map map=new HashMap();
-            map.put("userid",userid);
-            String str = bangbangRestTemplateUtil.send(url, HttpMethod.GET,map, request);
+            String url = properties.getValue("chabc.soa.url") + "/cms/bangbang/event/details/"+eventid+"?userid="+userid;
+            String str = bangbangRestTemplateUtil.send(url, HttpMethod.GET, request);
             data = JSON.parseObject(str,EventIdDataBo.class);
         } catch (Exception e) {
             throw new ServiceException(4821);
