@@ -71,6 +71,10 @@ public class EventBangBangServiceImpl implements EventBangBangService{
         event.setEventApplyFieldBoList(modelitem);
         EventBrowseCountBo browse = eventMapper.browseCount(map);
         event.setEventBrowseCountBo(browse);
+        List<EventIdBo> list = eventMapper.selectEventRelevant(map);
+        event.setEventIdBoList(list);
+        int count=eventMapper.selectEventApplyStatus(map);
+        event.setIsApply(count);
         return event;
     }
 

@@ -24,4 +24,6 @@ public interface EventBangBangMapper {
     EventSponsorBbBo selectEventSponsor(Map map);
 
     int selectEventApplyStatus(Map map);
+
+    List<EventIdBo> selectEventRelevant(Map map);
 }

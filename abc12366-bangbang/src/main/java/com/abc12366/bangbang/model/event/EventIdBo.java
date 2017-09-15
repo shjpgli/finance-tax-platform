@@ -11,21 +11,22 @@ public class EventIdBo implements Serializable {
     private String eventid;
     private String title;
     private String province;
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
     private String city;
     private String address;
     private String picture;
     private Date begintime;
 
     private EventBrowseCountBo eventBrowseCountBo;
+
+    private List<EventIdBo> eventIdBoList;
+
+    public List<EventIdBo> getEventIdBoList() {
+        return eventIdBoList;
+    }
+
+    public void setEventIdBoList(List<EventIdBo> eventIdBoList) {
+        this.eventIdBoList = eventIdBoList;
+    }
 
     public EventBrowseCountBo getEventBrowseCountBo() {
         return eventBrowseCountBo;
@@ -71,7 +72,13 @@ public class EventIdBo implements Serializable {
         this.title = title;
     }
 
+    public String getProvince() {
+        return province;
+    }
 
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
     public String getCity() {
         return city;
@@ -129,6 +136,13 @@ public class EventIdBo implements Serializable {
         this.peoppleNum = peoppleNum;
     }
 
+    public String getSergrade() {
+        return sergrade;
+    }
+
+    public void setSergrade(String sergrade) {
+        this.sergrade = sergrade;
+    }
 
     public String getSponsorid() {
         return sponsorid;
@@ -136,14 +150,6 @@ public class EventIdBo implements Serializable {
 
     public void setSponsorid(String sponsorid) {
         this.sponsorid = sponsorid;
-    }
-
-    public String getUsergrade() {
-        return usergrade;
-    }
-
-    public void setUsergrade(String usergrade) {
-        this.usergrade = usergrade;
     }
 
     public String getStatus() {
@@ -181,10 +187,19 @@ public class EventIdBo implements Serializable {
     private Date endtime;
     private String description;
     private int peoppleNum;
-    private String usergrade;
+    private String sergrade;
     private String sponsorid;
     private String status;
     private String bmendtime;
     private String isCheck;
     private String isUserGrade;
+    private int isApply;
+
+    public int getIsApply() {
+        return isApply;
+    }
+
+    public void setIsApply(int isApply) {
+        this.isApply = isApply;
+    }
 }
