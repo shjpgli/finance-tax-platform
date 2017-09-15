@@ -102,7 +102,10 @@ public class UserBindServiceImpl implements UserBindService {
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY21");
         map.put("nsrsbh", userDzsbInsertBO.getNsrsbhOrShxydm());
-        map.put("fwmm", fwmmEncode(rsaService.decodeStringFromJs(userDzsbInsertBO.getFwmm())));
+        String pwdDecode1 = rsaService.decodeStringFromJs(userDzsbInsertBO.getFwmm());
+        String pwdDecode2 = fwmmEncode(pwdDecode1);
+        map.put("fwmm", pwdDecode2);
+        //map.put("fwmm", fwmmEncode(rsaService.decodeStringFromJs(userDzsbInsertBO.getFwmm())));
         map.put("userid", userId);
         Map<String, String> resMap = client.process(map);
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
@@ -429,7 +432,9 @@ public class UserBindServiceImpl implements UserBindService {
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY21");
         map.put("nsrsbh", login.getNsrsbhOrShxydm());
-        map.put("fwmm", fwmmEncode(login.getFwmm()));
+        String pwdDecode1 = rsaService.decodeStringFromJs(login.getFwmm());
+        String pwdDecode2 = fwmmEncode(pwdDecode1);
+        map.put("fwmm", pwdDecode2);
         map.put("userid", userId);
         Map<String, String> resMap = client.process(map);
 
