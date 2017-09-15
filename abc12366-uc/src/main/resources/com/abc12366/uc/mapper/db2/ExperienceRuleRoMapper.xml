@@ -21,9 +21,16 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.ExperienceRuleBO" parameterType="java.lang.String">
-        SELECT id,name,code,exp,description,type,status,createTime,lastUpdate
+        SELECT id,name,code,exp,description,type,status,createTime,lastUpdate,period,degree
         from uc_uexp_rule
         where id=#{id}
+    </select>
+
+    <select id="selectValidOne" resultType="com.abc12366.uc.model.bo.ExperienceRuleBO" parameterType="java.lang.String">
+        SELECT id,name,code,exp,description,type,status,createTime,lastUpdate,period,degree
+        from uc_uexp_rule
+        where id=#{id}
+        and status = 1
     </select>
 
 </mapper>

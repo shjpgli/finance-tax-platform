@@ -25,18 +25,12 @@ public class ExperienceRuleInsertBO {
     private String type;
     @NotNull
     private Boolean status;
+    @NotEmpty
+    private String period;
+    @NotNull
+    private Integer degree;
 
     public ExperienceRuleInsertBO() {
-    }
-
-    public ExperienceRuleInsertBO(String name, String code, Integer exp, String description, String type, Boolean
-            status) {
-        this.name = name;
-        this.code = code;
-        this.exp = exp;
-        this.description = description;
-        this.type = type;
-        this.status = status;
     }
 
     public String getName() {
@@ -87,15 +81,19 @@ public class ExperienceRuleInsertBO {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "ExperienceRuleInsertBO{" +
-                "name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", exp=" + exp +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                ", status=" + status +
-                '}';
+    public Integer getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Integer degree) {
+        this.degree = degree;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 }

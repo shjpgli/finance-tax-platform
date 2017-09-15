@@ -13,6 +13,7 @@ public class PointComputeLogParam {
     private String timeType;
     private Date startTime;
     private Date endTime;
+    private String ruleId;
 
     public PointComputeLogParam() {
     }
@@ -55,5 +56,13 @@ public class PointComputeLogParam {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 }

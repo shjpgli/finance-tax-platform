@@ -69,4 +69,10 @@ public interface TodoTaskService {
     void computeAward(String userId, TodoTask todoTask);
 
     void generateAllTodoTaskList(LoginBO loginBO);
+
+    List<TodoTask> selectNormalTaskList(String userId);
+
+    List<TodoTask> selectOnetimeTaskList(String userId);
+
+    List<TodoTask> selectSpecialTaskList(String userId);
 }

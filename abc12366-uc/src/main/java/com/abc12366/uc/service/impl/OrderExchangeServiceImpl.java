@@ -202,6 +202,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 OrderExchange oe = new OrderExchange.Builder()
                         .orderNo(data.getOrderNo())
                         .toExpressNo(data.getExpressNo())
+                        .expressComp(data.getExpressComp())
                         .status("3")
                         .build();
                 orderExchangeMapper.update(oe);

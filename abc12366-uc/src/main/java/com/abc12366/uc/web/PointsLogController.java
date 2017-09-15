@@ -17,10 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 积分规则日志接口
@@ -99,7 +96,11 @@ public class PointsLogController {
             startDate = DateUtils.StrToDate(start);
         }
         if (end != null) {
-            endDate = DateUtils.StrToDate(end);
+            Date endDateTmp = DateUtils.StrToDate(end);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(endDateTmp);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            endDate = calendar.getTime();
         }
 
         map.put("userId", UserUtil.getUserId(request));

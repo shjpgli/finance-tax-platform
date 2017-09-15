@@ -13,6 +13,7 @@ public class PointComputeLog {
     private String upointCodexId;
     private String timeType;
     private Date createTime;
+    private String ruleId;
 
     public PointComputeLog() {
     }
@@ -55,5 +56,13 @@ public class PointComputeLog {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 }
