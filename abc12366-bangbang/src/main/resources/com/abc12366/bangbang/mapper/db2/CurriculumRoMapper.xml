@@ -30,7 +30,7 @@
             AND label like CONCAT('%',#{label},'%')
         </if>
         <if test="status != null and status != ''">
-            AND status = #{status}
+            AND c.status = #{status}
         </if>
         <if test="classify != null and classify != ''">
             AND classify like CONCAT(#{classify},'%')

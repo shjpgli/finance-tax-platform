@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CurriculumLecturerMapper;
+import com.abc12366.bangbang.mapper.db2.CurriculumLecturerGxRoMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumLecturerRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumLecturer;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo;
@@ -31,6 +32,9 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Autowired
     private CurriculumLecturerRoMapper lecturerRoMapper;
+
+    @Autowired
+    private CurriculumLecturerGxRoMapper lecturerGxRoMapper;
 
     @Override
     public List<CurriculumLecturerBo> selectList(Map<String,Object> map) {
@@ -153,8 +157,14 @@ public class LecturerServiceImpl implements LecturerService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String lecturerId) {
-        try {
+
             LOGGER.info("删除讲师信息:{}", lecturerId);
+            int cnt = lecturerGxRoMapper.selectLecturerCnt(lecturerId);
+            if(cnt > 0){
+                //该讲师名下有课程，不能删除
+                throw new ServiceException(4356);
+            }
+        try {
             lecturerMapper.deleteByPrimaryKey(lecturerId);
         } catch (Exception e) {
             LOGGER.error("删除讲师异常：{}", e);

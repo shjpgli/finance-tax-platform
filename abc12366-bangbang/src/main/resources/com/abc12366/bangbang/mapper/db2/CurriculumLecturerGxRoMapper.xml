@@ -24,5 +24,16 @@
         WHERE curriculumId = #{curriculumId}
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectLecturerCnt" resultType="java.lang.Integer"
+            parameterType="java.lang.String">
+        SELECT
+          count(c.curriculumId)
+        FROM bb_curriculum c,bb_curriculum_lecturer_gx l where l.curriculumId = c.curriculumId
+        <if test="lecturerId != null and lecturerId != ''">
+            AND lecturerId = #{lecturerId}
+        </if>
+    </select>
+
 
 </mapper>
