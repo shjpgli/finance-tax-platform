@@ -436,7 +436,7 @@ public class CurriculumServiceImpl implements CurriculumService {
     @Override
     public String updateStatus(String curriculumId,String status) {
         //更新模型信息
-        try {
+
             LOGGER.info("更新课程状态信息:{}", curriculumId+","+status);
             Curriculum curriculum = new Curriculum();
             curriculum.setCurriculumId(curriculumId);
@@ -445,9 +445,15 @@ public class CurriculumServiceImpl implements CurriculumService {
             //1为发布
             if("1".equals(status)){
                 curriculum.setIssueTime(new Date());
+                int cnt = curriculumRoMapper.selectCoursewareCnt(curriculumId);
+                if(cnt == 0){
+                    //该课程下没有添加课件，不能发布
+                    throw new ServiceException(4328);
+                }
             }else{
                 curriculum.setIssueTime(null);
             }
+        try {
             curriculumMapper.updateStatus(curriculum);
         } catch (Exception e) {
             LOGGER.error("更新课程信息异常：{}", e);

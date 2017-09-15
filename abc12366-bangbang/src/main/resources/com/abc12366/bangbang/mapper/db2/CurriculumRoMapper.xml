@@ -228,5 +228,14 @@
         ORDER BY collectTime DESC
     </select>
 
+    <!-- 查询课件是否免费 -->
+    <select id="selectCoursewareCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+          COUNT(coursewareId)
+        FROM
+        bb_curriculum_courseware
+        WHERE curriculumId = #{curriculumId}
+    </select>
+
 
 </mapper>

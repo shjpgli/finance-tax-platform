@@ -47,4 +47,20 @@
     </select>
 
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectLecturerCnt" resultType="java.lang.Integer"
+            parameterType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo">
+        SELECT
+        count(lecturerId) cnt
+        FROM bb_curriculum_lecturer
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId}
+        </if>
+        <if test="lecturerId != null and lecturerId != ''">
+            AND lecturerId != #{lecturerId}
+        </if>
+    </select>
+
+
 </mapper>

@@ -60,7 +60,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     public CurriculumLecturerBo save(CurriculumLecturerBo lecturerBo) {
-        try {
+
             JSONObject jsonStu = JSONObject.fromObject(lecturerBo);
             LOGGER.info("新增讲师信息:{}", jsonStu.toString());
             //保存讲师信息
@@ -68,6 +68,14 @@ public class LecturerServiceImpl implements LecturerService {
             CurriculumLecturer lecturer = new CurriculumLecturer();
             lecturerBo.setLecturerId(uuid);
             lecturerBo.setCreateTime(new Date());
+
+            int cnt = lecturerRoMapper.selectLecturerCnt(lecturerBo);
+            if(cnt >0){
+                //同一用户只能创建一位讲师信息
+                throw new ServiceException(4355);
+            }
+
+        try {
             BeanUtils.copyProperties(lecturerBo, lecturer);
             lecturerMapper.insert(lecturer);
         } catch (Exception e) {
@@ -97,10 +105,19 @@ public class LecturerServiceImpl implements LecturerService {
     public CurriculumLecturerBo update(CurriculumLecturerBo lecturerBo) {
         //更新讲师信息
         CurriculumLecturer lecturer = new CurriculumLecturer();
-        try {
+
             JSONObject jsonStu = JSONObject.fromObject(lecturerBo);
             LOGGER.info("更新讲师信息:{}", jsonStu.toString());
             lecturerBo.setUpdateTime(new Date());
+
+            int cnt = lecturerRoMapper.selectLecturerCnt(lecturerBo);
+            if(cnt >0){
+                //同一用户只能创建一位讲师信息
+                throw new ServiceException(4355);
+            }
+
+
+        try {
             BeanUtils.copyProperties(lecturerBo, lecturer);
             lecturerMapper.updateByPrimaryKeySelective(lecturer);
         } catch (Exception e) {

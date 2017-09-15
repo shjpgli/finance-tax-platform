@@ -39,5 +39,20 @@
         WHERE classifyId = #{classifyId}
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectClassifyNameCnt" resultType="java.lang.Integer"
+            parameterType="com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo">
+        SELECT
+        count(classifyId) cnt
+        FROM bb_curriculum_classify
+        WHERE 1=1
+        <if test="classifyName != null and classifyName != ''">
+            AND classifyName = #{classifyName}
+        </if>
+        <if test="classifyId != null and classifyId != ''">
+            AND classifyId != #{classifyId}
+        </if>
+    </select>
+
 
 </mapper>

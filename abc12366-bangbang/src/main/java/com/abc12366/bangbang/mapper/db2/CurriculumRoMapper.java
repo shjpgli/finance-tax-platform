@@ -103,4 +103,12 @@ public interface CurriculumRoMapper {
     String selectStudyQfb(Map<String, Object> map);
 
 
+    /**
+     *
+     * 查询课程下是否有课件
+     *
+     **/
+    int  selectCoursewareCnt(@Param("curriculumId") String curriculumId);
+
+
 }
