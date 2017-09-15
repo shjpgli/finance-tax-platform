@@ -181,7 +181,7 @@ public class AppServiceImpl implements AppService {
         appSettingBO.setAppId(appId);
         appSettingBO.setUri(bestMatchingPattern);
 
-        //TODO 目前只对微信API拦截,微信Access-Token 9456243d312aa16acf46cc988cf71755
+        //TODO 目前只对微信API拦截,微信appId=c1109d75-02b1-4c9b-83da-677f86182003
         if("c1109d75-02b1-4c9b-83da-677f86182003".equals(appId)){
             AppSettingBO bo = appSettingRoMapper.selectByAppId(appSettingBO);
             if(bo == null){
@@ -213,14 +213,14 @@ public class AppServiceImpl implements AppService {
                 //查询每小时访问的次数
                 apiLog.setStartTime(currentTime - (60 * 1000 * 60));
                 int hourCount = apiLogRoMapper.selectApiLogCount(apiLog);
-                if(bo.getTimesPerMinute() != 0 && hourCount > bo.getTimesPerHour()){
+                if(bo.getTimesPerHour() != 0 && hourCount > bo.getTimesPerHour()){
                     LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
                     throw new ServiceException(4032);
                 }
                 //查询每天访问的次数
                 apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
                 int dayCount = apiLogRoMapper.selectApiLogCount(apiLog);
-                if(bo.getTimesPerMinute() != 0 && dayCount > bo.getTimesPerDay()){
+                if(bo.getTimesPerDay() != 0 && dayCount > bo.getTimesPerDay()){
                     LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
                     throw new ServiceException(4033);
                 }
