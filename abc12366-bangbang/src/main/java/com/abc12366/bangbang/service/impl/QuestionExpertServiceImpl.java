@@ -8,6 +8,7 @@ import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @Author liuQi
  * @Date 2017/9/15 10:37
  */
+@Service
 public class QuestionExpertServiceImpl implements QuestionExpertService{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionExpertServiceImpl.class);
