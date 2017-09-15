@@ -17,6 +17,7 @@ import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.RandomNumber;
+import com.abc12366.uc.util.UCConstant;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +79,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private RSAService rsaService;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
 
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
@@ -240,6 +244,8 @@ public class AuthServiceImpl implements AuthService {
         computeExp(user.getId());
         //记用户登录日志
         insertLoginLog(user.getId());
+        //任务日志
+        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_ID);
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
@@ -373,7 +379,7 @@ public class AuthServiceImpl implements AuthService {
             logBO.setId(Utils.uuid());
             logBO.setIncome(exp);
             logBO.setUserId(userId);
-            logBO.setRuleId("E-Login");
+            logBO.setRuleId(UCConstant.SYS_TASK_LOGIN_ID);
             logBO.setOutgo(0);
             logBO.setCreateTime(new Date());
             experienceLogService.insert(logBO);

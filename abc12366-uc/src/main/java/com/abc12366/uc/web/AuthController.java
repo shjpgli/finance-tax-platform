@@ -7,6 +7,7 @@ import com.abc12366.gateway.web.BaseController;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IpService;
+import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.wsbssoa.utils.RSA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,9 @@ public class AuthController extends BaseController {
 
     @Autowired
     private IpService ipService;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
 
     public AuthController(RestTemplate restTemplate) {
         super(restTemplate);
@@ -99,6 +103,9 @@ public class AuthController extends BaseController {
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
+        //如果用户当天定时任务没有完成，就在登录的时候生成
+        todoTaskService.generateAllTodoTaskList(loginBO);
+
         Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
