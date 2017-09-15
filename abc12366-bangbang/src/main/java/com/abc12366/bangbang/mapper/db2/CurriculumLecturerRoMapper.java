@@ -40,5 +40,10 @@ public interface CurriculumLecturerRoMapper {
      **/
     int selectLecturerCnt(CurriculumLecturerBo record);
 
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    int selectStudentCnt(@Param("lecturerId") String lecturerId);
+
 
 }

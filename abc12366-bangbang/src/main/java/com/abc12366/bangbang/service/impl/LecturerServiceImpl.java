@@ -55,6 +55,12 @@ public class LecturerServiceImpl implements LecturerService {
         try {
             //查询讲师列表
             lecturerBoList = lecturerRoMapper.selectListByCurr(curriculumId);
+            if(lecturerBoList != null){
+                for(CurriculumLecturerBo lecturer : lecturerBoList){
+                    int cnt = lecturerRoMapper.selectStudentCnt(lecturer.getLecturerId());
+                    lecturer.setStudentNum(cnt);
+                }
+            }
         } catch (Exception e) {
             LOGGER.error("查询讲师列表信息异常：{}", e);
             throw new ServiceException(4350);

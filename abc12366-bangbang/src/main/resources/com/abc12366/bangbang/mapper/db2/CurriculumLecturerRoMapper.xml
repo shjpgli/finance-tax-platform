@@ -62,5 +62,25 @@
         </if>
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectStudentCnt" resultType="java.lang.Integer"
+            parameterType="java.lang.String">
+        SELECT
+        COUNT(*)
+        FROM
+        (SELECT
+        COUNT(studyId) cnt
+        FROM
+        bb_curriculum_study
+        WHERE
+        curriculumId IN (SELECT
+        curriculumId
+        FROM
+        bb_curriculum_lecturer_gx
+        WHERE
+        lecturerId = #{lecturerId})
+        GROUP BY userId , curriculumId) t
+    </select>
+
 
 </mapper>
