@@ -61,7 +61,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="invoiceApprovalLog">
+    <update id="update" parameterType="com.abc12366.uc.model.invoice.InvoiceApprovalLog">
         UPDATE uc_invoice_approval_log
         <set>
             <if test="useId != null">
