@@ -32,6 +32,9 @@ public class DictController {
     @Autowired
     private DictService dictService;
 
+    /**
+     * 列表查询
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
@@ -48,6 +51,9 @@ public class DictController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dictList, "total", ((Page) dictList).getTotal()));
     }
 
+    /**
+     * 详情查询
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectById(@PathVariable("id") String id) {
         Dict dict = dictService.selectById(id);
@@ -55,6 +61,9 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("data", dict));
     }
 
+    /**
+     * 根据字典名查找
+     */
     @GetMapping(path = "/name")
     public ResponseEntity selectListByDictName(@RequestParam(value = "dictName", required = false) String dictName) {
         Dict dict = new Dict();
@@ -64,6 +73,9 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("dataList", dictList));
     }
 
+    /**
+     * 查找第一级列表
+     */
     @GetMapping(path = "/firstLevel")
     public ResponseEntity selectFirstLevel() {
         List<DictBO> dictBOs = dictService.selectFirstLevel();
@@ -71,6 +83,9 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("dataList", dictBOs));
     }
 
+    /**
+     * 根据dictId查找
+     */
     @GetMapping(path = "/kv/{dictId}")
     public ResponseEntity selectDictList(@PathVariable("dictId") String dictId) {
         Dict dict = new Dict();
@@ -80,6 +95,9 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("dataList", dictBOList));
     }
 
+    /**
+     * 字典删除
+     */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
@@ -87,6 +105,9 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 字典修改
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody DictUpdateBO dictUpdateBO, @PathVariable("id") String id) {
         LOGGER.info("{}", dictUpdateBO, id);
@@ -96,6 +117,9 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("data", dictBO));
     }
 
+    /**
+     * 字典新增
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody DictBO bo) {
         LOGGER.info("{}", bo);
@@ -104,6 +128,9 @@ public class DictController {
         return ResponseEntity.ok(Utils.kv("data", dictBO));
     }
 
+    /**
+     * 字典批量删除
+     */
     @PostMapping(path = "/delete")
     public ResponseEntity batchDelete(@Valid @RequestBody Dict bo) {
         LOGGER.info("{}", bo);
