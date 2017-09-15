@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,12 +68,11 @@ public class EventServiceImpl implements EventService {
         return dataList.getDataList();
     }
 
-    @Override
-    public EventIdBo saveeventrecord(HttpServletRequest request, String eventid) {
-        //String url = "http://118.118.116.132:9400/cms/bangbang/event/details/"+eventid;
+    public EventIdBo saveeventrecord(HttpServletRequest request, String eventid,String userid) {
+        //String url = "http://118.118.116.132:9400/cms/bangbang/event/details?eventid="+eventid+"&userid="+userid;
         EventIdDataBo data= null;
         try {
-            String url = properties.getValue("chabc.soa.url") + "/cms/bangbang/event/details/"+eventid;
+            String url = properties.getValue("chabc.soa.url") + "/cms/bangbang/event/details/"+eventid+"?userid="+userid;
             String str = bangbangRestTemplateUtil.send(url, HttpMethod.GET, request);
             data = JSON.parseObject(str,EventIdDataBo.class);
         } catch (Exception e) {

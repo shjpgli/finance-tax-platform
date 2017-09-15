@@ -12,7 +12,7 @@
 	<select id="singleEventList" resultType="com.abc12366.cms.model.event.SingleEventBo" >
 		SELECT a.eventId,a.province,a.city,a.address,a.picture,a.begintime,a.endtime,a.peoppleNum,b.sponsorName,a.`bmendtime`,a.title,a.status
 		FROM `cms_event` a LEFT JOIN cms_event_sponsor b ON a.sponsorId = b.sponsorId
-		WHERE STATUS in (2,3) ORDER BY createtime DESC
+		WHERE STATUS in (2,3) ORDER BY status asc,createtime DESC
 	</select>
 
 	<select id="browseCount" parameterType="java.util.Map" resultType="com.abc12366.cms.model.event.EventBrowseCountBo">

@@ -36,6 +36,12 @@ public class SysTaskInsertAndUpdateBO {
     private Integer count;
     @Size(max = 50)
     private String skipURL;
+    private String awardType;
+    @NotEmpty
+    @Size(max = 64)
+    private String ruleId;
+    private String remark;
+    private String dateType;
 
     public SysTaskInsertAndUpdateBO() {
     }
@@ -138,5 +144,37 @@ public class SysTaskInsertAndUpdateBO {
 
     public void setRuleCode(String ruleCode) {
         this.ruleCode = ruleCode;
+    }
+
+    public String getAwardType() {
+        return awardType;
+    }
+
+    public void setAwardType(String awardType) {
+        this.awardType = awardType;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getDateType() {
+        return dateType;
+    }
+
+    public void setDateType(String dateType) {
+        this.dateType = dateType;
     }
 }

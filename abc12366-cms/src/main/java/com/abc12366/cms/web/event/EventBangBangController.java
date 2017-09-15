@@ -57,10 +57,12 @@ public class EventBangBangController {
 
 
     @GetMapping(path = "/details/{eventid}")
-    public ResponseEntity saveeventrecord( HttpServletRequest request,@PathVariable String eventid) {
+    public ResponseEntity saveeventrecord( HttpServletRequest request,@PathVariable String eventid,
+                                           @RequestParam(value = "userid", defaultValue = "") String userid) {
         LOGGER.info("{}", eventid);
         Map map=new HashMap();
         map.put("eventid",eventid);
+        map.put("userid",userid);
         EventIdBo event = eventService.selectEventId(map);
         return ResponseEntity.ok(Utils.kv("data", event));
     }
