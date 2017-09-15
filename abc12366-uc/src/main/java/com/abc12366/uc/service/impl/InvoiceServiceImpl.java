@@ -447,6 +447,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void confirmInvoice(Invoice invoice) {
+        Invoice data = invoiceRoMapper.selectByIdAndUserId(invoice);
+        if(data != null && !"4".equals(data.getStatus())){
+            LOGGER.info("发票订单只有在已经发货的情况下，才能确认收货：{}", invoice);
+            throw new ServiceException(4102,"发票订单只有在已经发货的情况下，才能确认收货");
+        }
         int update = invoiceMapper.update(invoice);
         if(update != 1){
             LOGGER.info("确认收货失败：{}", invoice);

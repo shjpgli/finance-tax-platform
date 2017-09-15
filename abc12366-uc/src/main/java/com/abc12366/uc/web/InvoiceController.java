@@ -39,12 +39,6 @@ public class InvoiceController {
 
     /**
      * 发票列表管理
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param startTime
-     * @param endTime
-     * @return
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -102,7 +96,7 @@ public class InvoiceController {
     }
 
     /**
-     * 前台，票详情查看
+     * 前台，发票详情查看
      */
     @GetMapping(path = "/user/{invoiceId}/{userId}")
     public ResponseEntity userInvoice(@PathVariable("invoiceId") String invoiceId, @PathVariable("userId") String
@@ -200,7 +194,7 @@ public class InvoiceController {
         Invoice invoiceBO = new Invoice();
         invoiceBO.setId(id);
         invoiceBO.setUserId(userId);
-        invoiceBO.setStatus("6");
+        invoiceBO.setStatus("5");
         invoiceService.confirmInvoice(invoiceBO);
         return ResponseEntity.ok(Utils.kv());
     }
