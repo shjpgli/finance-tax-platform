@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.question.QuestionExpert;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * QuestionExpertMapper数据库操作接口类
@@ -13,18 +15,25 @@ public interface QuestionExpertMapper{
 
 
 	/**
+	 *
+	 * 列表查询
+	 *
+	 **/
+	List<QuestionExpert> selectList();
+
+	/**
 	 * 
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionExpert selectByPrimaryKey(@Param("id") Long id);
+	QuestionExpert selectByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 

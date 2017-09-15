@@ -7,8 +7,7 @@ import java.io.Serializable;
  * 
  * 
  **/
-@SuppressWarnings("serial")
-public class QuestionExpert implements Serializable {
+public class QuestionExpert {
 
 	/**PK**/
 	private String id;
@@ -19,7 +18,7 @@ public class QuestionExpert implements Serializable {
 	/**专家头像**/
 	private String image;
 
-	/**擅长领域**/
+	/**擅长领域（对应字典表的bb_question_expert_expertise编码）**/
 	private String expertise;
 
 	/**权限（对应字典表的bb_question_expert_permission编码）**/
@@ -30,6 +29,9 @@ public class QuestionExpert implements Serializable {
 
 	/**修改时间**/
 	private java.util.Date updateTime;
+
+	/**对应uc_admin用户**/
+	private String createUser;
 
 
 
@@ -88,5 +90,14 @@ public class QuestionExpert implements Serializable {
 	public java.util.Date getUpdateTime(){
 		return this.updateTime;
 	}
+
+	public void setCreateUser(String createUser){
+		this.createUser = createUser;
+	}
+
+	public String getCreateUser(){
+		return this.createUser;
+	}
+
 
 }
