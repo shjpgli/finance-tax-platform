@@ -25,4 +25,5 @@ public interface EventBangBangService {
 
     int selectEventApplyStatus(Map map);
 
+
 }

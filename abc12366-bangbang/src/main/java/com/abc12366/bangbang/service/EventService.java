@@ -17,7 +17,7 @@ public interface EventService {
 
     List<SingleEventBo> singleEventList(HttpServletRequest request);
 
-    EventIdBo saveeventrecord(HttpServletRequest request, String eventid);
+    EventIdBo saveeventrecord(HttpServletRequest request, String eventid,String userid);
 
     EventRecordBbBo addEventRecord(HttpServletRequest request,EventRecordBbBo eventRecordBbBo);
 

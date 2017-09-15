@@ -10,13 +10,23 @@ import java.util.List;
 public class EventIdBo  implements Serializable {
     private String eventid;
     private String title;
-    private String provice;
+    private String province;
     private String city;
     private String address;
     private String picture;
     private Date begintime;
 
     private EventBrowseCountBo eventBrowseCountBo;
+
+    private List<EventIdBo> eventIdBoList;
+
+    public List<EventIdBo> getEventIdBoList() {
+        return eventIdBoList;
+    }
+
+    public void setEventIdBoList(List<EventIdBo> eventIdBoList) {
+        this.eventIdBoList = eventIdBoList;
+    }
 
     public EventBrowseCountBo getEventBrowseCountBo() {
         return eventBrowseCountBo;
@@ -62,12 +72,12 @@ public class EventIdBo  implements Serializable {
         this.title = title;
     }
 
-    public String getProvice() {
-        return provice;
+    public String getProvince() {
+        return province;
     }
 
-    public void setProvice(String provice) {
-        this.provice = provice;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getCity() {
@@ -183,4 +193,14 @@ public class EventIdBo  implements Serializable {
     private String bmendtime;
     private String isCheck;
     private String isUserGrade;
+
+    private int isApply;
+
+    public int getIsApply() {
+        return isApply;
+    }
+
+    public void setIsApply(int isApply) {
+        this.isApply = isApply;
+    }
 }

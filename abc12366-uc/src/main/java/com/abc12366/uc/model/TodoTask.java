@@ -19,6 +19,11 @@ public class TodoTask {
     private String status;
     private Date createTime;
     private Date lastUpdate;
+    private String skipUrl;
+    private String ruleId;
+    private Date startTime;
+    private Date endTime;
+    private String dateType;
 
     public String getId() {
         return id;
@@ -106,5 +111,45 @@ public class TodoTask {
 
     public void setAward(Integer award) {
         this.award = award;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public String getSkipUrl() {
+        return skipUrl;
+    }
+
+    public void setSkipUrl(String skipUrl) {
+        this.skipUrl = skipUrl;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getDateType() {
+        return dateType;
+    }
+
+    public void setDateType(String dateType) {
+        this.dateType = dateType;
     }
 }

@@ -11,8 +11,10 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
+import com.abc12366.uc.service.ExperienceRuleService;
 import com.abc12366.uc.service.ExperienceService;
 import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +54,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Autowired
     ExperienceLevelRoMapper experienceLevelRoMapper;
 
+    @Autowired
+    private ExperienceRuleService experienceRuleService;
+
     @Override
     public MyExperienceBO getMyExperience(String userId) {
         LOGGER.info("{}", userId);
@@ -90,7 +95,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public void compute(ExpComputeBO expComputeBO) {
-
+        //experienceRuleService.selectOne(UCConstant.)
         List<ExpCodex> expCodexes = experienceRoMapper.selectOne(expComputeBO);
         if (expCodexes == null || expCodexes.size() < 1) {
 //            return;
