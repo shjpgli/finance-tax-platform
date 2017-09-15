@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.curriculum.Curriculum;
@@ -183,8 +184,11 @@ public class CurriculumServiceImpl implements CurriculumService {
             //保存课程信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
 
+            String userId = UcUserCommon.getAdminId();
+
             Curriculum curriculum = new Curriculum();
             curriculumBo.setCurriculumId(uuid);
+            curriculumBo.setCreaterId(userId);
             BeanUtils.copyProperties(curriculumBo, curriculum);
             curriculumMapper.insert(curriculum);
 
