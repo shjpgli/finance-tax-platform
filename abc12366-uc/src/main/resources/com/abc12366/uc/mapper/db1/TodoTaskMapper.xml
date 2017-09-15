@@ -5,12 +5,23 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		id,userId,sysTaskId, allCount, finishedCount, awardType, award, status,createTime,lastUpdate
+		id,userId,sysTaskId, allCount, finishedCount, awardType, type,award, status,createTime,
+		lastUpdate,skipUrl,ruleId,dateType,startTime,endTime
 	</sql>
 
     <insert id="insert" parameterType="com.abc12366.uc.model.TodoTask">
         insert into uc_user_task_todo(<include refid="Base_Column_List"/>)
-        values(#{id},#{userId},#{sysTaskId},#{allCount},#{finishedCount},#{awardType},#{award},
-        #{status},#{createTime},#{lastUpdate})
+        values(#{id},#{userId},#{sysTaskId},#{allCount},#{finishedCount},#{awardType},#{type},#{award},
+        #{status},#{createTime},#{lastUpdate},#{skipUrl},#{ruleId},#{dateType},#{startTime},#{endTime})
     </insert>
+    
+    <update id="update" parameterType="com.abc12366.uc.model.TodoTask">
+        update uc_user_task_todo
+        <set>
+            <if test="finishedCount!=null">finishedCount=#{finishedCount},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="lastUpdate!=null">lastUpdate=#{lastUpdate},</if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>
