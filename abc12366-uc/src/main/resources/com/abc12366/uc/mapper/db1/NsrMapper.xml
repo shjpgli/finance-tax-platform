@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.NsrMapper">
-    <insert id="insert" parameterType="Nsr">
+    <insert id="insert" parameterType="com.abc12366.uc.model.Nsr">
         insert into uc_user_nsr (id, userId, djxh, nsrsbh, shxydm, status, createTime, lastUpdate)
         values (#{id}, #{userId}, #{djxh},#{nsrsbh}, #{shxydm}, #{status}, #{createTime}, #{lastUpdate})
     </insert>

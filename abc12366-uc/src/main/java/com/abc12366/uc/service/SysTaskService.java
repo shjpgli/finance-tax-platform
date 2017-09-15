@@ -15,6 +15,8 @@ import java.util.Map;
 public interface SysTaskService {
     List<SysTaskBO> selectList(Map<String, String> map);
 
+    List<SysTaskBO> selectListByDateType(String dateType);
+
     List<SysTaskBO> selectDeployedList(Map<String, String> map);
 
     SysTaskBO selectOne(String id);
@@ -26,4 +28,6 @@ public interface SysTaskService {
     boolean delete(String id);
 
     List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
+
+    List<SysTaskBO> selectListByType(String type);
 }
