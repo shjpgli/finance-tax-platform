@@ -263,6 +263,14 @@
         WHERE id = #{id} AND userId = #{userId}
     </select>
 
+    <!-- 查询（根据主键ID和UserId查询） -->
+    <select id="selectByIdAndUserId" resultType="com.abc12366.uc.model.Invoice" parameterType="com.abc12366.uc.model.Invoice">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_invoice
+        WHERE id = #{id} AND userId = #{userId}
+    </select>
+
     <select id="selectAvailableInvoice" resultType="com.abc12366.uc.model.Invoice">
         SELECT
         <include refid="Base_Column_List"/>

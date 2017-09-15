@@ -365,41 +365,6 @@ public class OrderController {
     }
 
     /**
-     * 修改订单
-     * @param orderBO
-     * @param userId
-     * @param id
-     * @return
-     */
-    /*
-    @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity update(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId,
-    @PathVariable("id") String id) {
-        LOGGER.info("{}", orderBO);
-        orderBO.setId(id);
-        orderBO.setUserId(userId);
-        OrderBO bo = orderService.updateCart(orderBO);
-        LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
-    }*/
-
-    /**
-     * 删除购物车订单
-     *
-     * @param userId
-     * @param id
-     * @return
-     *//*
-    @DeleteMapping(path = "/{userId}/{id}")
-    public ResponseEntity deleteCart(@PathVariable("userId") String userId, @PathVariable("id") String id) {
-        OrderBO orderBO = new OrderBO();
-        orderBO.setOrderNo(id);
-        orderBO.setUserId(userId);
-        orderService.deleteCart(orderBO);
-        return ResponseEntity.ok(Utils.kv("data", orderBO));
-    }*/
-
-    /**
      * 反馈虚拟产品订单信息
      */
     @PutMapping(path = "/feedback")

@@ -28,4 +28,6 @@ public interface InvoiceRoMapper {
     InvoiceBO selectUserInvoice(Invoice invoice);
 
     InvoiceBO selectInvoice(Invoice ce);
+
+    Invoice selectByIdAndUserId(Invoice id);
 }

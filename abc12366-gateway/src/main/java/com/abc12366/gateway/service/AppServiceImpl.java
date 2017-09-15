@@ -182,7 +182,7 @@ public class AppServiceImpl implements AppService {
         appSettingBO.setUri(bestMatchingPattern);
 
         //TODO 目前只对微信API拦截,微信Access-Token 9456243d312aa16acf46cc988cf71755
-        if("9456243d312aa16acf46cc988cf71755".equals(accessToken)){
+        if("c1109d75-02b1-4c9b-83da-677f86182003".equals(appId)){
             AppSettingBO bo = appSettingRoMapper.selectByAppId(appSettingBO);
             if(bo == null){
                 LOGGER.warn("API不存在或未授权：{}", app);

@@ -5,11 +5,18 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		id,	useId,	image,	expertise,	permission,	createTime,	updateTime
+		id,	useId,	image,	expertise,	permission,	createTime,	updateTime, createUser
 	</sql>
 
+	<!-- 查询列表 -->
+	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionExpert" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_question_expert
+	</select>
+
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="questionExpert" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionExpert" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_question_expert
@@ -23,15 +30,15 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionExpert">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionExpert">
 		INSERT INTO bb_question_expert
-		(id,useId,image,expertise,permission,createTime,updateTime)
+		(id,useId,image,expertise,permission,createTime,updateTime, createUser)
 		VALUES
-		(#{id},#{useId},#{image},#{expertise},#{permission},#{createTime},#{updateTime})
+		(#{id},#{useId},#{image},#{expertise},#{permission}, now(), now(),#{createUser})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="questionExpert">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionExpert">
 		INSERT INTO bb_question_expert
 		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -55,7 +62,9 @@
 			<if test="updateTime != null">
 				updateTime,
 			</if>
-
+			<if test="createUser != null">
+				createUser,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
@@ -79,11 +88,14 @@
 			<if test="updateTime!=null">
 				#{updateTime},
 			</if>
+			<if test="createUser!=null">
+				#{createUser},
+			</if>
 		</trim>
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="questionExpert">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionExpert">
 		UPDATE bb_question_expert
 		<set>
 			<if test="useId != null">
@@ -98,27 +110,24 @@
 			<if test="permission != null">
 				permission = #{permission},
 			</if>
-			<if test="createTime != null">
-				createTime = #{createTime},
+			<if test="createUser != null">
+				createUser = #{createUser},
 			</if>
-			<if test="updateTime != null">
-				updateTime = #{updateTime},
-			</if>
-
+			updateTime = now()
 		</set>
 		WHERE id = #{id}
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="questionExpert">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionExpert">
 		UPDATE bb_question_expert
 		SET
 		useId = #{useId},
 		image = #{image},
 		expertise = #{expertise},
 		permission = #{permission},
-		createTime = #{createTime},
-		updateTime = #{updateTime}
+		updateTime = now(),
+		createUser = #{createUser}
 		WHERE id = #{id}
 	</update>
 
