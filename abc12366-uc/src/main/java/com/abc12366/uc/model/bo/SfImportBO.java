@@ -18,6 +18,10 @@ public class SfImportBO {
     @Length(min=1, max = 100)
     private String expressNo;
 
+    @NotEmpty
+    @Length(min=6, max = 200)
+    private String expressComp;
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -40,5 +44,13 @@ public class SfImportBO {
                 "orderNo='" + orderNo + '\'' +
                 ", expressNo='" + expressNo + '\'' +
                 '}';
+    }
+
+    public String getExpressComp() {
+        return expressComp;
+    }
+
+    public void setExpressComp(String expressComp) {
+        this.expressComp = expressComp;
     }
 }
