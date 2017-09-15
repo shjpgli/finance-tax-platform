@@ -46,4 +46,14 @@
         and createTime &lt; #{endTime}
     </select>
 
+    <select id="selectCalculateLog" resultType="com.abc12366.uc.model.bo.ExpComputeLog" parameterType="com.abc12366.uc.model.bo.ExpComputeLogParam">
+        select id,userId,uexpCodexId,timeType,createTime
+        from uc_uexp_compute_log
+        where userId=#{userId}
+        and timeType=#{timeType}
+        and ruleId = #{ruleId}
+        and createTime &gt;= #{starTime}
+        and createTime &lt; #{endTime}
+    </select>
+
 </mapper>

@@ -13,6 +13,7 @@ public class ExpComputeLogParam {
     private String timeType;
     private Date starTime;
     private Date endTime;
+    private String ruleId;
 
     public ExpComputeLogParam() {
     }
@@ -55,5 +56,13 @@ public class ExpComputeLogParam {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 }

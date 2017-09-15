@@ -388,4 +388,19 @@ public class TodoTaskServiceImpl implements TodoTaskService {
             insert(todoTask);
         }
     }
+
+    @Override
+    public List<TodoTask> selectNormalTaskList(String userId) {
+        return todoTaskRoMapper.selectNormalTaskList(userId);
+    }
+
+    @Override
+    public List<TodoTask> selectSpecialTaskList(String userId) {
+        return todoTaskRoMapper.selectSpecialTaskList(userId);
+    }
+
+    @Override
+    public List<TodoTask> selectOnetimeTaskList(String userId) {
+        return todoTaskRoMapper.selectOnetimeTaskList(userId);
+    }
 }

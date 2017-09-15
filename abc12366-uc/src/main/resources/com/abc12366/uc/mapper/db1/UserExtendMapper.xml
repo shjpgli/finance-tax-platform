@@ -13,7 +13,7 @@
         #{careerDuration})
     </insert>
 
-    <update id="update">
+    <update id="update" parameterType="com.abc12366.uc.model.UserExtend">
         update uc_user_extend
         <set>
             <if test="signature != null">signature = #{signature},</if>
@@ -52,7 +52,7 @@
         where userId=#{userId}
     </update>
 
-    <delete id="delete">
+    <delete id="delete" parameterType="java.lang.String">
         delete from uc_user_extend
         where userId=#{userId}
     </delete>

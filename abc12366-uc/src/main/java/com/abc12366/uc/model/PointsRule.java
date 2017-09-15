@@ -17,21 +17,10 @@ public class PointsRule {
     private boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String period;
+    private Integer degree;
 
     public PointsRule() {
-    }
-
-    public PointsRule(String id, String name, String code, int points, String description, String type, boolean
-            status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.points = points;
-        this.description = description;
-        this.type = type;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
     }
 
     public String getId() {
@@ -106,18 +95,19 @@ public class PointsRule {
         this.lastUpdate = lastUpdate;
     }
 
-    @Override
-    public String toString() {
-        return "UPointsRule{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", points=" + points +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                '}';
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public Integer getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Integer degree) {
+        this.degree = degree;
     }
 }

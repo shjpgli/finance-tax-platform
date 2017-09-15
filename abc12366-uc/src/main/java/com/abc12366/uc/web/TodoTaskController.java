@@ -32,6 +32,39 @@ public class TodoTaskController {
         return ResponseEntity.ok(Utils.kv("dataList",taskList));
     }
 
+    /**
+     * 查询用户日常任务列表
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/normal/{userId}")
+    public ResponseEntity selectNormalTaskList(@PathVariable("userId") String userId){
+        List<TodoTask> taskList = todoTaskService.selectNormalTaskList(userId);
+        return ResponseEntity.ok(Utils.kv("dataList",taskList));
+    }
+
+    /**
+     * 查询用户一次性（多为成长任务）任务列表
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/onetime/{userId}")
+    public ResponseEntity selectOnetimeTaskList(@PathVariable("userId") String userId){
+        List<TodoTask> taskList = todoTaskService.selectOnetimeTaskList(userId);
+        return ResponseEntity.ok(Utils.kv("dataList",taskList));
+    }
+
+    /**
+     * 查询用户日常任务列表
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/special/{userId}")
+    public ResponseEntity selectSpecialTaskList(@PathVariable("userId") String userId){
+        List<TodoTask> taskList = todoTaskService.selectSpecialTaskList(userId);
+        return ResponseEntity.ok(Utils.kv("dataList",taskList));
+    }
+
     @PostMapping
     public ResponseEntity generateTodoTaskList(){
         String userId = Utils.getUserId();

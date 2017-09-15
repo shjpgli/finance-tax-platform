@@ -8,6 +8,7 @@ import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.ExperienceRule;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
@@ -94,6 +95,80 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
+    public void calculate(ExpCalculateBO expCalculateBO) {
+        ExperienceRuleBO experienceRule = experienceRuleService.selectValidOne(expCalculateBO.getRuleId());
+        if (experienceRule == null) {
+            return;
+        }
+        //查看获取经验值次数是否允许范围内
+        Date startTime = new Date();
+        Date endTime = new Date();
+
+
+        String period = experienceRule.getPeriod().toUpperCase();
+
+        if(!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A")){
+            return;
+        }
+        if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
+            switch (period) {
+                case "D":
+                    startTime = DateUtils.getFirstHourOfDay();
+                    endTime = DateUtils.getFirstHourOfLastDay();
+                    break;
+                case "M":
+                    startTime = DateUtils.getFirstDayOfMonth();
+                    endTime = DateUtils.getFirstDayOfLastMonth();
+                    break;
+                case "Y":
+                    startTime = DateUtils.getFirstMonthOfYear();
+                    endTime = DateUtils.getFirstMonthOfLastYear();
+                    break;
+            }
+            ExpComputeLogParam param = new ExpComputeLogParam();
+            param.setUserId(expCalculateBO.getUserId());
+            param.setTimeType(period);
+            //param.setUexpCodexId(codex.getId());
+            param.setStarTime(startTime);
+            param.setEndTime(endTime);
+            param.setRuleId(expCalculateBO.getRuleId());
+            List<ExpComputeLog> computeLogList = experienceRoMapper.selectCalculateLog(param);
+            if (computeLogList != null && computeLogList.size() >= experienceRule.getDegree()) {
+                return;
+            }
+        }
+
+        //经验值日志,同时修改用户经验值
+        User user = userRoMapper.selectValidOne(expCalculateBO.getUserId());
+        if (user == null) {
+//            return;
+            throw new ServiceException(4018);
+        }
+
+        ExperienceLogBO experienceLog = new ExperienceLogBO();
+        experienceLog.setUserId(expCalculateBO.getUserId());
+        experienceLog.setRuleId(expCalculateBO.getRuleId());
+        if (experienceRule.getExp() < 0) {
+            experienceLog.setIncome(0);
+            experienceLog.setOutgo(-experienceRule.getExp());
+        } else {
+            experienceLog.setIncome(experienceRule.getExp());
+            experienceLog.setOutgo(0);
+        }
+        experienceLogService.insert(experienceLog);
+
+        //记录用户特定行为升级用户等级日志
+        ExpComputeLog expComputeLog = new ExpComputeLog();
+        expComputeLog.setId(Utils.uuid());
+        expComputeLog.setUserId(expCalculateBO.getUserId());
+        //expComputeLog.setUexpCodexId(codex.getId());
+        expComputeLog.setTimeType(experienceRule.getPeriod().toUpperCase());
+        expComputeLog.setCreateTime(new Date());
+        expComputeLog.setRuleId(expCalculateBO.getRuleId());
+        experienceMapper.insertComputeLog(expComputeLog);
+    }
+
+    @Override
     public void compute(ExpComputeBO expComputeBO) {
         //experienceRuleService.selectOne(UCConstant.)
         List<ExpCodex> expCodexes = experienceRoMapper.selectOne(expComputeBO);
@@ -110,7 +185,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         //查看获取经验值次数是否允许范围内
         Date startTime = new Date();
         Date endTime = new Date();
-
 
 
         String period = codex.getPeriod().toUpperCase();

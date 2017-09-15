@@ -7,7 +7,7 @@
         values (#{id}, #{userId}, #{djxh},#{nsrsbh}, #{shxydm}, #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
-    <update id="update">
+    <update id="update" parameterType="com.abc12366.uc.model.Nsr">
         update uc_user_nsr
         <set>
             <if test="djxh != null">djxh = #{djxh},</if>
