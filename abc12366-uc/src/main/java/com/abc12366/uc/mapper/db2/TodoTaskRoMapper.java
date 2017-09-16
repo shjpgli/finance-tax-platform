@@ -26,7 +26,7 @@ public interface TodoTaskRoMapper {
 
     TodoTask selectOneByMonth(@Param("userId")String userId, @Param("sysTaskId")String sysTaskId);
 
-    List<TodoTask> selectListByMonth(@Param("userId")String userId, @Param("sysTaskId")String sysTaskId);
+    List<TodoTask> selectListByMonth(@Param("userId")String userId, @Param("dateType")String dateType);
 
     TodoTask selectOneByYear(@Param("userId")String userId, @Param("sysTaskId")String sysTaskId);
 
@@ -35,4 +35,10 @@ public interface TodoTaskRoMapper {
     TodoTask selectSpecial(Map map);
 
     TodoTask selectOneByDayBySysTaskId(@Param("userId")String userId, @Param("sysTaskId")String sysTaskId);
+
+    List<TodoTask> selectNormalTaskList(String userId);
+
+    List<TodoTask> selectOnetimeTaskList(String userId);
+
+    List<TodoTask> selectSpecialTaskList(String userId);
 }

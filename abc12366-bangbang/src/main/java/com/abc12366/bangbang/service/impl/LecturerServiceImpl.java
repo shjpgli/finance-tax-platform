@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CurriculumLecturerMapper;
+import com.abc12366.bangbang.mapper.db2.CurriculumLecturerGxRoMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumLecturerRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumLecturer;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo;
@@ -32,6 +33,9 @@ public class LecturerServiceImpl implements LecturerService {
     @Autowired
     private CurriculumLecturerRoMapper lecturerRoMapper;
 
+    @Autowired
+    private CurriculumLecturerGxRoMapper lecturerGxRoMapper;
+
     @Override
     public List<CurriculumLecturerBo> selectList(Map<String,Object> map) {
         List<CurriculumLecturerBo> lecturerBoList;
@@ -51,6 +55,12 @@ public class LecturerServiceImpl implements LecturerService {
         try {
             //查询讲师列表
             lecturerBoList = lecturerRoMapper.selectListByCurr(curriculumId);
+            if(lecturerBoList != null){
+                for(CurriculumLecturerBo lecturer : lecturerBoList){
+                    int cnt = lecturerRoMapper.selectStudentCnt(lecturer.getLecturerId());
+                    lecturer.setStudentNum(cnt);
+                }
+            }
         } catch (Exception e) {
             LOGGER.error("查询讲师列表信息异常：{}", e);
             throw new ServiceException(4350);
@@ -60,7 +70,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     public CurriculumLecturerBo save(CurriculumLecturerBo lecturerBo) {
-        try {
+
             JSONObject jsonStu = JSONObject.fromObject(lecturerBo);
             LOGGER.info("新增讲师信息:{}", jsonStu.toString());
             //保存讲师信息
@@ -68,6 +78,14 @@ public class LecturerServiceImpl implements LecturerService {
             CurriculumLecturer lecturer = new CurriculumLecturer();
             lecturerBo.setLecturerId(uuid);
             lecturerBo.setCreateTime(new Date());
+
+            int cnt = lecturerRoMapper.selectLecturerCnt(lecturerBo);
+            if(cnt >0){
+                //同一用户只能创建一位讲师信息
+                throw new ServiceException(4355);
+            }
+
+        try {
             BeanUtils.copyProperties(lecturerBo, lecturer);
             lecturerMapper.insert(lecturer);
         } catch (Exception e) {
@@ -97,10 +115,19 @@ public class LecturerServiceImpl implements LecturerService {
     public CurriculumLecturerBo update(CurriculumLecturerBo lecturerBo) {
         //更新讲师信息
         CurriculumLecturer lecturer = new CurriculumLecturer();
-        try {
+
             JSONObject jsonStu = JSONObject.fromObject(lecturerBo);
             LOGGER.info("更新讲师信息:{}", jsonStu.toString());
             lecturerBo.setUpdateTime(new Date());
+
+            int cnt = lecturerRoMapper.selectLecturerCnt(lecturerBo);
+            if(cnt >0){
+                //同一用户只能创建一位讲师信息
+                throw new ServiceException(4355);
+            }
+
+
+        try {
             BeanUtils.copyProperties(lecturerBo, lecturer);
             lecturerMapper.updateByPrimaryKeySelective(lecturer);
         } catch (Exception e) {
@@ -136,8 +163,14 @@ public class LecturerServiceImpl implements LecturerService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String lecturerId) {
-        try {
+
             LOGGER.info("删除讲师信息:{}", lecturerId);
+            int cnt = lecturerGxRoMapper.selectLecturerCnt(lecturerId);
+            if(cnt > 0){
+                //该讲师名下有课程，不能删除
+                throw new ServiceException(4356);
+            }
+        try {
             lecturerMapper.deleteByPrimaryKey(lecturerId);
         } catch (Exception e) {
             LOGGER.error("删除讲师异常：{}", e);

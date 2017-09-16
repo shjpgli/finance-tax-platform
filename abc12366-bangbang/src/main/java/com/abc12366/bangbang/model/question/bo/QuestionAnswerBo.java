@@ -40,6 +40,9 @@ public class QuestionAnswerBo implements Serializable {
 	/**是否采纳：1/0**tinyint(4)**/
 	private Integer isAccept;
 
+    /**ip**varchar(45)**/
+    private String ip;
+
 
 
 	public void setId(String id){
@@ -122,4 +125,11 @@ public class QuestionAnswerBo implements Serializable {
 		return this.isAccept;
 	}
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 }

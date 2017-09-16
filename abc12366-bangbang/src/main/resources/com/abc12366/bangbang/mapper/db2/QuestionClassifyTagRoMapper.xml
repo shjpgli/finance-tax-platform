@@ -16,5 +16,21 @@
 		 WHERE id = #{id}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionClassifyTag" parameterType="java.lang.String">
+        SELECT
+            c.id,	c.classifyId,	c.tagId,k.name tagName
+        FROM bb_question_classify_tag c left join bb_knowledge_tag k on c.tagId = k.id
+        WHERE c.classifyId = #{classifyId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectClassifyTagList" resultType="com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo" parameterType="java.lang.String">
+        SELECT
+            c.id,	c.classifyId,	c.tagId,k.name tagName
+        FROM bb_question_classify_tag c left join bb_knowledge_tag k on c.tagId = k.id
+        WHERE c.classifyId = #{classifyId}
+    </select>
+
 
 </mapper>

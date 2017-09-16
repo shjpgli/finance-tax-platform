@@ -35,5 +35,12 @@ public interface CurriculumClassifyRoMapper {
      **/
     int selectClassifyCnt(@Param("classifyId") String classifyId);
 
+    /**
+     *
+     * 查询分类名称是否已存在
+     *
+     **/
+    int selectClassifyNameCnt(CurriculumClassifyBo recod);
+
 
 }

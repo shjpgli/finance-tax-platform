@@ -8,6 +8,7 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.PointsService;
 import com.abc12366.uc.util.DateUtils;
 import org.slf4j.Logger;
@@ -42,6 +43,9 @@ public class PointsServiceImpl implements PointsService {
     @Autowired
     private PointMapper pointMapper;
 
+    @Autowired
+    private PointsRuleService pointsRuleService;
+
     @Override
     public PointsBO selectOne(String userId) {
         return pointsRoMapper.selectOne(userId);
@@ -49,8 +53,6 @@ public class PointsServiceImpl implements PointsService {
 
     @Override
     public void compute(PointComputeBO pointComputeBO) {
-        LOGGER.info("{}", pointComputeBO);
-        LOGGER.info("-----------" + pointComputeBO.toString());
         //查询出对应的积分规则
         List<PointCodex> pointCodexList = pointsRoMapper.selectCodexList(pointComputeBO);
         if (pointCodexList == null || pointCodexList.size() < 1) {
@@ -161,5 +163,81 @@ public class PointsServiceImpl implements PointsService {
     public PointCodex selectCodexByRuleCode(String ruleCode) {
         LOGGER.info("{}", ruleCode);
         return pointsRoMapper.selectCodexByRuleCode(ruleCode);
+    }
+
+    @Override
+    public void calculate(PointCalculateBO pointCalculateBO) {
+        //查询出对应的积分规则
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOne(pointCalculateBO.getRuleId());
+        if(pointsRuleBO==null){
+            return;
+        }
+
+        //查看获取经验值次数是否允许范围内
+        String period = pointsRuleBO.getPeriod().toUpperCase();
+        if (!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A")) {
+            return;
+        }
+        if (!period.trim().equals("A")) {
+            Date startTime = new Date();
+            Date endTime = new Date();
+            if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
+                switch (period) {
+                    case "D":
+                        startTime = DateUtils.getFirstHourOfDay();
+                        endTime = DateUtils.getFirstHourOfLastDay();
+                        break;
+                    case "M":
+                        startTime = DateUtils.getFirstDayOfMonth();
+                        endTime = DateUtils.getFirstDayOfLastMonth();
+                        break;
+                    case "Y":
+                        startTime = DateUtils.getFirstMonthOfYear();
+                        endTime = DateUtils.getFirstMonthOfLastYear();
+                        break;
+                }
+
+                PointComputeLogParam param = new PointComputeLogParam();
+                param.setUserId(pointCalculateBO.getUserId());
+                param.setTimeType(period);
+                //param.setUpointCodexId(pointCodex.getId());
+                param.setStartTime(startTime);
+                param.setEndTime(endTime);
+                param.setRuleId(pointCalculateBO.getRuleId());
+                List<PointComputeLog> computeLogList = pointsRoMapper.selectCalculateLog(param);
+                if (computeLogList != null && computeLogList.size() >= pointsRuleBO.getDegree()) {
+                    return;
+                }
+            }
+        }
+        //根据规则计算用户积分值变化
+        User user = userRoMapper.selectValidOne(pointCalculateBO.getUserId());
+        if (user == null) {
+//            return;
+            throw new ServiceException(4018);
+        }
+
+        PointsLogBO pointsLog = new PointsLogBO();
+        pointsLog.setUserId(pointCalculateBO.getUserId());
+        pointsLog.setRuleId(pointCalculateBO.getRuleId());
+        pointsLog.setRemark(pointsRuleBO.getDescription());
+        if (pointsRuleBO.getPoints() < 0) {
+            pointsLog.setIncome(0);
+            pointsLog.setOutgo(-pointsRuleBO.getPoints());
+        } else {
+            pointsLog.setIncome(pointsRuleBO.getPoints());
+            pointsLog.setOutgo(0);
+        }
+        pointsLogService.insert(pointsLog);
+
+        //记录用户特定行为升级用户等级日志
+        PointComputeLog pointComputeLog = new PointComputeLog();
+        pointComputeLog.setId(Utils.uuid());
+        pointComputeLog.setUserId(pointCalculateBO.getUserId());
+        //pointComputeLog.setUpointCodexId(pointCodex.getId());
+        pointComputeLog.setTimeType(period);
+        pointComputeLog.setCreateTime(new Date());
+        pointComputeLog.setRuleId(pointCalculateBO.getRuleId());
+        pointMapper.insertComputeLog(pointComputeLog);
     }
 }

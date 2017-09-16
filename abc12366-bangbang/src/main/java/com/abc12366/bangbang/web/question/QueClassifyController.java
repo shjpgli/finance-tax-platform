@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
+import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
 import com.abc12366.bangbang.service.QueClassifyService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -31,7 +32,7 @@ public class QueClassifyController {
     private QueClassifyService classifyService;
 
     /**
-     * 课程分类列表查询
+     * 问题分类列表查询
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "classifyCode", required = false) String classifyCode,
@@ -45,52 +46,48 @@ public class QueClassifyController {
     }
 
     /**
-     * 课程分类列表查询(供前端使用)
-     */
-    @GetMapping(path = "/selectListsy")
-    public ResponseEntity selectListsy(@RequestParam(value = "classifyCode", required = false) String classifyCode,
-                                     @RequestParam(value = "parentCode", required = false) String parentCode) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("classifyCode",classifyCode);//分类ID
-        dataMap.put("parentCode",parentCode);//父ID
-        List<QuestionClassifyBo> dataList = classifyService.selectList(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList));
-
-    }
-
-    /**
-     * 课程分类新增
+     * 问题分类新增
      */
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody QuestionClassifyBo classifyBo) {
-        //新增课程分类信息
+        //新增问题分类信息
         classifyBo = classifyService.save(classifyBo);
         return ResponseEntity.ok(Utils.kv("data", classifyBo));
     }
 
     /**
-     * 查询单个课程分类信息
+     * 查询单个问题分类信息
      */
     @GetMapping(path = "/{classifyCode}")
     public ResponseEntity selectOne(@PathVariable String classifyCode) {
-        //查询课程分类信息
+        //查询问题分类信息
         QuestionClassifyBo classifyBo = classifyService.selectClassify(classifyCode);
         return ResponseEntity.ok(Utils.kv("data", classifyBo));
     }
 
     /**
-     * 更新课程分类信息
+     * 更新问题分类信息
      */
     @PutMapping(path = "/{classifyCode}")
     public ResponseEntity update(@PathVariable String classifyCode,
                                  @Valid @RequestBody QuestionClassifyBo classifyBo) {
-        //更新课程分类信息
+        //更新问题分类信息
         classifyBo = classifyService.update(classifyBo);
         return ResponseEntity.ok(Utils.kv("data", classifyBo));
     }
 
     /**
-     * 更新课程分类状态
+     * 根据分类查询相关标签
+     */
+    @GetMapping(path = "/selectClassifyTagList")
+    public ResponseEntity selectClassifyTagList(@RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        List<QuestionClassifyTagBo> dataList = classifyService.selectClassifyTagList(classifyCode);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+
+    }
+
+    /**
+     * 更新问题分类状态
      *
      * @param status
      * @param classifyCode
@@ -103,11 +100,11 @@ public class QueClassifyController {
     }
 
     /**
-     * 删除课程分类信息
+     * 删除问题分类信息
      */
     @DeleteMapping(path = "/{classifyCode}")
     public ResponseEntity delete(@PathVariable String classifyCode) {
-        //删除课程分类信息
+        //删除问题分类信息
         String rtn = classifyService.delete(classifyCode);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

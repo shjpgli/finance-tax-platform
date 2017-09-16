@@ -7,6 +7,7 @@ import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
@@ -104,6 +105,19 @@ public class QuestionServiceImpl implements QuestionService {
             throw new ServiceException(6101);
         }
         return questionBo;
+    }
+
+    @Override
+    public List<QuestionTagBo> selectTagList() {
+        List<QuestionTagBo> tagList;
+        try {
+            //查询热议标签列表
+            tagList = tagRoMapper.selectTagList();
+        } catch (Exception e) {
+            LOGGER.error("查询热议标签列表信息异常：{}", e);
+            throw new ServiceException(6105);
+        }
+        return tagList;
     }
 
     @Transactional("db1TxManager")

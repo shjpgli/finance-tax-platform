@@ -23,4 +23,6 @@ public interface UserRoMapper {
     UserBO selectOneByToken(String userToken);
 
     List<UserBO> selectListExcludedId(String id);
+
+    User selectValidOne(String userId);
 }

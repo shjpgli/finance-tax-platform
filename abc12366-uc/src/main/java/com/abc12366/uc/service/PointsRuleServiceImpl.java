@@ -146,6 +146,11 @@ public class PointsRuleServiceImpl implements PointsRuleService {
     }
 
     @Override
+    public PointsRuleBO selectValidOne(String id) {
+        return uPointRuleRoMapper.selectValidOne(id);
+    }
+
+    @Override
     public void enableOrDisable(String id, String status) {
         LOGGER.info("{}:{}", id, status);
         if ((!status.equals("true")) && (!status.equals("false"))) {

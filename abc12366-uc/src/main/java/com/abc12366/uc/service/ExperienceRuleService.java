@@ -24,4 +24,6 @@ public interface ExperienceRuleService {
     int delete(String id);
 
     void enableOrDisable(String id, String status);
+
+    ExperienceRuleBO selectValidOne(String ruleId);
 }

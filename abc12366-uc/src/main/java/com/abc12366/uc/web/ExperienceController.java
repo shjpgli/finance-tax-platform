@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.ExpCalculateBO;
 import com.abc12366.uc.model.bo.ExpCodex;
 import com.abc12366.uc.model.bo.MyExperienceBO;
 import com.abc12366.uc.model.bo.ExpComputeBO;
@@ -59,6 +60,13 @@ public class ExperienceController {
     public ResponseEntity expCompute(@RequestBody ExpComputeBO expComputeBO){
         LOGGER.info("{}", expComputeBO);
         experienceService.compute(expComputeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    @PostMapping(path = "/calculate")
+    public ResponseEntity expCalculate(@RequestBody ExpCalculateBO expCalculateBO){
+        LOGGER.info("{}", expCalculateBO);
+        experienceService.calculate(expCalculateBO);
         return ResponseEntity.ok(Utils.kv());
     }
 }

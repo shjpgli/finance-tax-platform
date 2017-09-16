@@ -30,7 +30,7 @@
             AND label like CONCAT('%',#{label},'%')
         </if>
         <if test="status != null and status != ''">
-            AND status = #{status}
+            AND c.status = #{status}
         </if>
         <if test="classify != null and classify != ''">
             AND classify like CONCAT(#{classify},'%')
@@ -226,6 +226,15 @@
             AND col.userId = #{userId}
         </if>
         ORDER BY collectTime DESC
+    </select>
+
+    <!-- 查询课件是否免费 -->
+    <select id="selectCoursewareCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+          COUNT(coursewareId)
+        FROM
+        bb_curriculum_courseware
+        WHERE curriculumId = #{curriculumId}
     </select>
 
 

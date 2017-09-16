@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	id,	userId,	likeTime
+		 likeId,	id,	userId,	likeTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -15,6 +15,22 @@
 		 FROM bb_question_like
 		 WHERE likeId = #{likeId}
 	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionLikeBo" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_question_like
+        WHERE userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectExist" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(id)
+        FROM bb_question_like
+        WHERE id = #{id} and userId = #{userId}
+    </select>
 
 
 </mapper>

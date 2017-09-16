@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionTag;
+import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,6 +28,15 @@ public interface QuestionTagRoMapper {
      *
      **/
     List<QuestionTag> selectList(@Param("questionId") String questionId);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    List<QuestionTagBo> selectTagList();
+
+
 
 
 }

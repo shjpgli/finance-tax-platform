@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.question.QuestionLike;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 /**
  * 
  * QuestionLikeMapper数据库操作接口类
@@ -17,7 +19,7 @@ public interface QuestionLikeMapper{
 	 * 删除（根据主键ID删除）
 	 *
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("likeId") String likeId);
 
 	/**
 	 * 
@@ -46,5 +48,7 @@ public interface QuestionLikeMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(QuestionLike record);
+
+    void delete(Map map);
 
 }

@@ -17,8 +17,8 @@
     </delete>
 
     <insert id="insertComputeLog" parameterType="com.abc12366.uc.model.bo.PointComputeLogParam">
-        insert into uc_upoint_compute_log (id,userId,upointCodexId,timeType,createTime)
-        values(#{id},#{userId},#{upointCodexId},#{timeType},#{createTime})
+        insert into uc_upoint_compute_log (id,userId,upointCodexId,timeType,createTime,ruleId)
+        values(#{id},#{userId},#{upointCodexId},#{timeType},#{createTime},#{ruleId})
     </insert>
 
 </mapper>

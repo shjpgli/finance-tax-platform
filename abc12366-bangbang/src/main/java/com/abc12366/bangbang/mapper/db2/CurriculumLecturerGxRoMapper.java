@@ -26,5 +26,12 @@ public interface CurriculumLecturerGxRoMapper {
      **/
     List<CurriculumLecturerGx> selectList(@Param("curriculumId") String curriculumId);
 
+    /**
+     *
+     * 查询该讲师是否有课程
+     *
+     **/
+    int  selectLecturerCnt(@Param("lecturerId") String lecturerId);
+
 
 }

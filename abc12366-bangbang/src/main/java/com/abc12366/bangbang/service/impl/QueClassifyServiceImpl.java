@@ -1,10 +1,15 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionClassifyMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionClassifyTagMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionClassifyRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionClassifyTagRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
 import com.abc12366.bangbang.model.question.QuestionClassify;
+import com.abc12366.bangbang.model.question.QuestionClassifyTag;
+import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
+import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
 import com.abc12366.bangbang.service.QueClassifyService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
@@ -34,7 +39,10 @@ public class QueClassifyServiceImpl implements QueClassifyService {
     private QuestionClassifyRoMapper classifyRoMapper;
 
     @Autowired
-    private QuestionRoMapper QuestionRoMapper;
+    private QuestionClassifyTagMapper tagMapper;
+
+    @Autowired
+    private QuestionClassifyTagRoMapper tagRoMapper;
 
     @Override
     public List<QuestionClassifyBo> selectList(Map<String,Object> map) {
@@ -44,8 +52,8 @@ public class QueClassifyServiceImpl implements QueClassifyService {
             classifyBoList = classifyRoMapper.selectList(map);
 
         } catch (Exception e) {
-            LOGGER.error("查询课程分类信息异常：{}", e);
-            throw new ServiceException(4300);
+            LOGGER.error("查询问题分类信息异常：{}", e);
+            throw new ServiceException(6120);
         }
         return classifyBoList;
     }
@@ -54,14 +62,19 @@ public class QueClassifyServiceImpl implements QueClassifyService {
     public QuestionClassifyBo save(QuestionClassifyBo classifyBo) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(classifyBo);
-            LOGGER.info("新增课程分类信息:{}", jsonStu.toString());
-            //保存课程分类信息
+            LOGGER.info("新增问题分类信息:{}", jsonStu.toString());
+            //保存问题分类信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             String code = "";
 
             String classifyCode = "";
 
             String parentCode = classifyBo.getParentCode();
+
+            if(parentCode == null || "".equals(parentCode)){
+                parentCode = "1";
+                classifyBo.setParentCode("1");
+            }
 
             for(int i=0;i<20;i++){
                 code = this.genCodes(6);
@@ -74,11 +87,25 @@ public class QueClassifyServiceImpl implements QueClassifyService {
 
             QuestionClassify classify = new QuestionClassify();
             classifyBo.setClassifyId(uuid);
+            classifyBo.setClassifyCode(classifyCode);
             BeanUtils.copyProperties(classifyBo, classify);
+
+
+            List<QuestionClassifyTag> tagList = classifyBo.getTagList();
+
+            if(tagList != null){
+                for(QuestionClassifyTag tag :tagList){
+                    tag.setId(UUID.randomUUID().toString().replace("-", ""));
+                    tag.setClassifyId(classifyCode);
+                    tagMapper.insert(tag);
+                }
+            }
+
+
             classifyMapper.insert(classify);
         } catch (Exception e) {
-            LOGGER.error("新增课程分类信息异常：{}", e);
-            throw new ServiceException(4302);
+            LOGGER.error("新增问题分类信息异常：{}", e);
+            throw new ServiceException(6122);
         }
 
         return classifyBo;
@@ -88,41 +115,71 @@ public class QueClassifyServiceImpl implements QueClassifyService {
     public QuestionClassifyBo selectClassify(String classifyCode) {
         QuestionClassifyBo classifyBo = new QuestionClassifyBo();
         try {
-            LOGGER.info("查询单个课程分类信息:{}", classifyCode);
+            LOGGER.info("查询单个问题分类信息:{}", classifyCode);
             //查询课程分类信息
             QuestionClassify classify = classifyRoMapper.selectByPrimaryKey(classifyCode);
+            List<QuestionClassifyTag> tagList = tagRoMapper.selectList(classifyCode);
             BeanUtils.copyProperties(classify, classifyBo);
+            classifyBo.setTagList(tagList);
         } catch (Exception e) {
-            LOGGER.error("查询单个课程分类信息异常：{}", e);
-            throw new ServiceException(4301);
+            LOGGER.error("查询单个问题分类信息异常：{}", e);
+            throw new ServiceException(6121);
         }
         return classifyBo;
     }
 
     @Override
+    public List<QuestionClassifyTagBo> selectClassifyTagList(String classifyCode) {
+        List<QuestionClassifyTagBo> classifyTagBoList;
+        try {
+            LOGGER.info("查询单个问题分类标签信息:{}", classifyCode);
+            //查询课程分类标签信息
+            classifyTagBoList = tagRoMapper.selectClassifyTagList(classifyCode);
+        } catch (Exception e) {
+            LOGGER.error("查询单个问题分类标签信息异常：{}", e);
+            throw new ServiceException(6121);
+        }
+        return classifyTagBoList;
+    }
+
+    @Override
     public QuestionClassifyBo update(QuestionClassifyBo classifyBo) {
-        //更新课程分类信息
+        //更新问题分类信息
         QuestionClassify classify = new QuestionClassify();
         try {
             JSONObject jsonStu = JSONObject.fromObject(classifyBo);
-            LOGGER.info("更新课程分类信息:{}", jsonStu.toString());
+            LOGGER.info("更新问题分类信息:{}", jsonStu.toString());
             BeanUtils.copyProperties(classifyBo, classify);
+
+
+            tagMapper.deleteByPrimaryKey(classifyBo.getClassifyCode());
+
+            List<QuestionClassifyTag> tagList = classifyBo.getTagList();
+
+            if(tagList != null){
+                for(QuestionClassifyTag tag :tagList){
+                    tag.setId(UUID.randomUUID().toString().replace("-", ""));
+                    tag.setClassifyId(classifyBo.getClassifyCode());
+                    tagMapper.insert(tag);
+                }
+            }
+
             classifyMapper.updateByPrimaryKeySelective(classify);
         } catch (Exception e) {
-            LOGGER.error("更新课程分类信息异常：{}", e);
-            throw new ServiceException(4303);
+            LOGGER.error("更新问题分类信息异常：{}", e);
+            throw new ServiceException(6123);
         }
         return classifyBo;
     }
 
     @Override
     public String updateStatus(String classifyId,String status) {
-        //更新课程分类信息
+        //更新问题分类信息
         try {
 
         } catch (Exception e) {
-            LOGGER.error("更新课程分类信息异常：{}", e);
-            throw new ServiceException(4303);
+            LOGGER.error("更新问题分类信息异常：{}", e);
+            throw new ServiceException(6123);
         }
         return "";
     }
@@ -130,12 +187,13 @@ public class QueClassifyServiceImpl implements QueClassifyService {
     @Transactional("db1TxManager")
     @Override
     public String delete(String classifyCode) {
-        LOGGER.info("删除课程分类信息:{}", classifyCode);
+        LOGGER.info("删除问题分类信息:{}", classifyCode);
         try {
+            tagMapper.deleteByPrimaryKey(classifyCode);
             classifyMapper.deleteByPrimaryKey(classifyCode);
         } catch (Exception e) {
-            LOGGER.error("删除课程分类异常：{}", e);
-            throw new ServiceException(4304);
+            LOGGER.error("删除问题分类异常：{}", e);
+            throw new ServiceException(6124);
         }
         return "";
     }

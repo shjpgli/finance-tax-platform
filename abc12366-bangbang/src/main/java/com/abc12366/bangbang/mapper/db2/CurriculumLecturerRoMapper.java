@@ -35,5 +35,15 @@ public interface CurriculumLecturerRoMapper {
      **/
     List<CurriculumLecturerBo>  selectListByCurr(@Param("curriculumId") String curriculumId);
 
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    int selectLecturerCnt(CurriculumLecturerBo record);
+
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    int selectStudentCnt(@Param("lecturerId") String lecturerId);
+
 
 }

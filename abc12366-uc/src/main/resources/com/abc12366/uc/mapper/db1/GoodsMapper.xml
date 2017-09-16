@@ -10,7 +10,7 @@
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="goods">
+    <insert id="insert" parameterType="com.abc12366.uc.model.Goods">
         INSERT INTO uc_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -146,7 +146,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="goods">
+    <update id="update" parameterType="com.abc12366.uc.model.Goods">
         UPDATE uc_goods
         <set>
             <if test="name != null">
