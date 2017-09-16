@@ -43,7 +43,7 @@ public class CoursewareController {
                                      @RequestParam(value = "fileName", required = false) String fileName,
                                      @RequestParam(value = "title", required = false) String title,
                                      @RequestParam(value = "type", required = false) String type,
-                                     @RequestParam(value = "ploadWay", required = false) String ploadWay,
+                                     @RequestParam(value = "uploadWay", required = false) String uploadWay,
                                      @RequestParam(value = "chapterId", required = false) String chapterId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("curriculumId", curriculumId);//课程ID
@@ -51,7 +51,7 @@ public class CoursewareController {
         dataMap.put("fileName", fileName);//文件名称
         dataMap.put("title", title);//课件标题
         dataMap.put("type", type);//课件类型
-        dataMap.put("ploadWay", ploadWay);//上传方式
+        dataMap.put("uploadWay", uploadWay);//上传方式
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CurriculumCoursewareBo> dataList = coursewareService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
