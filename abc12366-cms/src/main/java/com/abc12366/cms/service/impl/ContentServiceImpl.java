@@ -223,7 +223,7 @@ public class ContentServiceImpl implements ContentService {
         //内容扩展属性
         List<ContentAttrBo> contentAttrList = contentSaveBo.getContentAttrList();
         JSONObject jsonObject = JSONObject.fromObject(contentAttrList);
-        LOGGER.debug(jsonObject.toString());
+        LOGGER.error("内容扩展属性："+jsonObject.toString());
         //内容图片
         List<ContentPictureBo> contentPictureList = contentSaveBo.getContentPictureList();
         //内容附件
