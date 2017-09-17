@@ -43,6 +43,9 @@
         <if test="status != null">
             AND status = #{status}
         </if>
+        <if test="tagType != null">
+            AND tagType LIKE CONCAT('%',#{tagType},'%')
+        </if>
         ORDER BY createTime DESC
     </select>
     <!-- 查询列表 -->
