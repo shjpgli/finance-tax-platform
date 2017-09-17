@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, name, description, status, createTime, updateTime, createUser, updateUser
+        id, name, description, status, createTime, updateTime, createUser, updateUser, tagType
     </sql>
 
 
