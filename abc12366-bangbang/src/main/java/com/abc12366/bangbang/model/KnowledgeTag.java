@@ -47,6 +47,8 @@ public class KnowledgeTag {
      **/
     private String updateUser;
 
+    private String tagType;
+
     public String getId() {
         return this.id;
     }
@@ -111,4 +113,11 @@ public class KnowledgeTag {
         this.updateUser = updateUser;
     }
 
+    public String getTagType() {
+        return tagType;
+    }
+
+    public void setTagType(String tagType) {
+        this.tagType = tagType;
+    }
 }
