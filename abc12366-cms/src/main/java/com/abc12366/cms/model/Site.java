@@ -169,6 +169,9 @@ public class Site implements Serializable {
      **/
     private String shareCode;
 
+    /**声明*/
+    private String statement;
+
     /**
      * 站点统计代码**varchar(500)
      **/
@@ -436,5 +439,13 @@ public class Site implements Serializable {
 
     public void setStatisticsCode(String statisticsCode) {
         this.statisticsCode = statisticsCode;
+    }
+
+    public String getStatement() {
+        return statement;
+    }
+
+    public void setStatement(String statement) {
+        this.statement = statement;
     }
 }
