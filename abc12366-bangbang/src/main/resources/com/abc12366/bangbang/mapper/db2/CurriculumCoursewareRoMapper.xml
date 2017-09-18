@@ -37,8 +37,8 @@
         <if test="type != null and type != ''">
             AND type = #{type}
         </if>
-        <if test="ploadWay != null and ploadWay != ''">
-            AND ploadWay = #{ploadWay}
+        <if test="uploadWay != null and uploadWay != ''">
+            AND uploadWay = #{uploadWay}
         </if>
         ORDER BY coursewareSeq ASC
     </select>

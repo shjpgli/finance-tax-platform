@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, name, description, status, createTime, updateTime, createUser, updateUser
+        id, name, description, status, createTime, updateTime, createUser, updateUser, tagType
     </sql>
 
 
@@ -43,6 +43,9 @@
         <if test="status != null">
             AND status = #{status}
         </if>
+        <if test="tagType != null">
+            AND tagType LIKE CONCAT('%',#{tagType},'%')
+        </if>
         ORDER BY createTime DESC
     </select>
     <!-- 查询列表 -->
@@ -72,18 +75,18 @@
     <!-- 添加 -->
     <insert id="insert" parameterType="knowledgeTag">
         INSERT INTO bb_knowledge_tag
-        (id,name,description,status,createTime,updateTime,createUser,updateUser)
+        (id,name,description,status,createTime,updateTime,createUser,updateUser,tagType)
         VALUES
-        (#{id},#{name},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
+        (#{id},#{name},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser},#{tagType})
     </insert>
 
     <!-- 批量添加 -->
     <insert id="insertBatch" parameterType="java.util.List">
         INSERT INTO bb_knowledge_tag
-        (id,name,description,status,createTime,updateTime,createUser,updateUser)
+        (id,name,description,status,createTime,updateTime,createUser,updateUser,tagType)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id},#{item.name},#{item.description},#{item.status},#{item.createTime},#{item.updateTime},#{item.createUser},#{item.updateUser})
+            (#{item.id},#{item.name},#{item.description},#{item.status},#{item.createTime},#{item.updateTime},#{item.createUser},#{item.updateUser},#{item.tagType})
         </foreach>
     </insert>
 
@@ -164,6 +167,9 @@
             <if test="updateUser != null">
                 updateUser = #{updateUser},
             </if>
+            <if test="tagType != null">
+                tagType = #{tagType},
+            </if>
 
         </set>
         WHERE id = #{id}
@@ -177,7 +183,8 @@
         description = #{description},
         status = #{status},
         updateTime = #{updateTime},
-        updateUser = #{updateUser}
+        updateUser = #{updateUser},
+        tagType = #{tagType}
         WHERE id = #{id}
     </update>
 
