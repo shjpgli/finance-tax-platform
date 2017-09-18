@@ -35,7 +35,7 @@
         <if test="classify != null and classify != ''">
             AND classify like CONCAT(#{classify},'%')
         </if>
-        ORDER BY updateTime
+        ORDER BY updateTime DESC
     </select>
 
     <!-- 查询（根据主键ID查询） -->
