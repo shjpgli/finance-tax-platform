@@ -56,7 +56,7 @@ public class CoursewareServiceImpl implements CoursewareService {
         dataMap2.put("curriculumId", coursewareBo.getCurriculumId());
         dataMap2.put("chapterId", coursewareBo.getChapterId());
         dataMap2.put("coursewareSeq", coursewareBo.getCoursewareSeq());
-        int cnt2 = coursewareRoMapper.selectCoursewareCnt(dataMap1);
+        int cnt2 = coursewareRoMapper.selectCoursewareCnt(dataMap2);
         if(cnt2 > 0){
             throw new ServiceException(4336);
         }
@@ -168,7 +168,7 @@ public class CoursewareServiceImpl implements CoursewareService {
         dataMap2.put("chapterId", coursewareBo.getChapterId());
         dataMap2.put("coursewareSeq", coursewareBo.getCoursewareSeq());
         dataMap2.put("coursewareId", coursewareBo.getCoursewareId());
-        int cnt2 = coursewareRoMapper.selectCoursewareCnt(dataMap1);
+        int cnt2 = coursewareRoMapper.selectCoursewareCnt(dataMap2);
         if(cnt2 > 0){
             throw new ServiceException(4336);
         }
