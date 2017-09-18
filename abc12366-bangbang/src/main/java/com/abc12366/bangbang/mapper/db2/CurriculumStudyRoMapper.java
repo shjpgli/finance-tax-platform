@@ -28,4 +28,9 @@ public interface CurriculumStudyRoMapper {
      **/
     List<CurriculumStudyBo> selectList(Map<String, Object> map);
 
+    /**
+    * 查询学习次数
+    **/
+    int selectStudyCnt(Map<String, Object> map);
+
 }

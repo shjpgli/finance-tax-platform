@@ -20,4 +20,6 @@ public interface CurrStudyService {
 
     String delete(String studyId);
 
+    int selectStudyCnt(Map<String, Object> map);
+
 }

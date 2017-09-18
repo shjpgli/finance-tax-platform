@@ -137,4 +137,17 @@ public class CurrStudyServiceImpl implements CurrStudyService {
         return "";
     }
 
+    @Override
+    public int selectStudyCnt(Map<String,Object> map) {
+        int cnt = 0;
+        try {
+            //查询学习次数
+            cnt = studyRoMapper.selectStudyCnt(map);
+        } catch (Exception e) {
+            LOGGER.error("查询学习次数信息异常：{}", e);
+            throw new ServiceException(4360);
+        }
+        return cnt;
+    }
+
 }
