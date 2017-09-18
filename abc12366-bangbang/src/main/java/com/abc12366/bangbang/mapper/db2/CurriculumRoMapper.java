@@ -110,5 +110,10 @@ public interface CurriculumRoMapper {
      **/
     int  selectCoursewareCnt(@Param("curriculumId") String curriculumId);
 
+    /**
+     * 查询课程标题是否重复
+     **/
+    int selectCurriculumCnt(Map<String, Object> map);
+
 
 }

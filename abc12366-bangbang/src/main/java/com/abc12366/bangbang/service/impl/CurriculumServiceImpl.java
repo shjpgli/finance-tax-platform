@@ -173,6 +173,13 @@ public class CurriculumServiceImpl implements CurriculumService {
             }
         }
 
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap1.put("title", curriculumBo.getTitle());
+        int cnt1 = curriculumRoMapper.selectCurriculumCnt(dataMap1);
+        if(cnt1 > 0){
+            throw new ServiceException(4329);
+        }
+
         try {
             JSONObject jsonStu = JSONObject.fromObject(curriculumBo);
             LOGGER.info("新增课程信息:{}", jsonStu.toString());
@@ -355,6 +362,13 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     @Override
     public CurriculumBo update(CurriculumBo curriculumBo) {
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap1.put("curriculumId", curriculumBo.getCurriculumId());
+        dataMap1.put("title", curriculumBo.getTitle());
+        int cnt1 = curriculumRoMapper.selectCurriculumCnt(dataMap1);
+        if(cnt1 > 0){
+            throw new ServiceException(4329);
+        }
         String curriculumId = curriculumBo.getCurriculumId();
         String goodsId = curriculumBo.getGoodsId();
         if(goodsId == null){

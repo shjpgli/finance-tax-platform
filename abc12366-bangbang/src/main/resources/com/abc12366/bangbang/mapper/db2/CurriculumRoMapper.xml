@@ -239,4 +239,20 @@
     </select>
 
 
+    <!-- 查询课程标题是否重复 -->
+    <select id="selectCurriculumCnt" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        count(curriculumId) cnt
+        FROM bb_curriculum
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title = #{title}
+        </if>
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId != #{curriculumId}
+        </if>
+    </select>
+
+
 </mapper>
