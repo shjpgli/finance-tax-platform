@@ -378,7 +378,7 @@ public class CurriculumServiceImpl implements CurriculumService {
                 }
             }
         }else{
-            if(!goodsId.equals(curriculum1.getGoodsId())){
+            if(!"".equals(curriculum1.getGoodsId()) && !goodsId.equals(curriculum1.getGoodsId())){
                 //商品不能修改
                 throw new ServiceException(4327);
             }
