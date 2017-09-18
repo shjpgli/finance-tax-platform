@@ -222,8 +222,6 @@ public class ContentServiceImpl implements ContentService {
         }
         //内容扩展属性
         List<ContentAttrBo> contentAttrList = contentSaveBo.getContentAttrList();
-        JSONObject jsonObject = JSONObject.fromObject(contentAttrList);
-        LOGGER.error("内容扩展属性："+jsonObject.toString());
         //内容图片
         List<ContentPictureBo> contentPictureList = contentSaveBo.getContentPictureList();
         //内容附件
@@ -525,12 +523,22 @@ public class ContentServiceImpl implements ContentService {
         //内容附件
         List<FileBo> fileList = contentSaveBo.getFileList();
 
+        LOGGER.info("准备插入内容扩展属性");
         if (contentAttrList != null) {
             for (ContentAttrBo contentAttrBo : contentAttrList) {
                 ContentAttr contentAttr = new ContentAttr();
                 try {
+
                     BeanUtils.copyProperties(contentAttrBo, contentAttr);
-                    contentAttrMapper.updateByPrimaryKeySelective(contentAttr);
+                    List<ContentAttr> contentAttrListFromDb = contentAttrMapper.selectContentAttr(contentAttr);
+                    if(contentAttrListFromDb==null || contentAttrListFromDb.size()==0) {
+                        contentAttrMapper.insert(contentAttr);
+                    }else if(contentAttrListFromDb!=null && contentAttrListFromDb.size()==1) {
+                        contentAttrMapper.updateByPrimaryKey(contentAttr);
+                    }else{
+                        LOGGER.error("内容扩展属性有重复:"+JSONObject.fromObject(contentAttr).toString());
+                        throw new ServiceException(4253);
+                    }
                 } catch (Exception e) {
                     LOGGER.error("更新文章信息异常：{}", e);
                     throw new ServiceException(4253);

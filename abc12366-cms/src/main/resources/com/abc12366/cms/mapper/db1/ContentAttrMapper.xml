@@ -69,4 +69,12 @@
         WHERE contentId = #{contentId} and attrName = #{attrName}
     </update>
 
+    <!--查询-->
+    <select id="selectContentAttr" resultType="com.abc12366.cms.model.ContentAttr" parameterType="com.abc12366.cms.model.ContentAttr">
+        SELECT
+        contentId, attrName, attrValue
+        FROM cms_content_attr
+        WHERE contentId = #{contentId} and attrName = #{attrName}
+    </select>
+
 </mapper>

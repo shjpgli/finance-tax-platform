@@ -5,6 +5,7 @@ import com.abc12366.uc.mapper.db1.TodoTaskMapper;
 import com.abc12366.uc.mapper.db2.TodoTaskRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.TodoTask;
+import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.LoginBO;
@@ -89,7 +90,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         TodoTask todoTask = selectOne(userId, sysTaskId);
 
         //如果该项任务已完成，则返回
-        if (todoTask==null||todoTask.getStatus().trim().equals(UCConstant.TASK_FINISHED)) {
+        if (todoTask == null || todoTask.getStatus().trim().equals(UCConstant.TASK_FINISHED)) {
             return;
         }
 
@@ -160,9 +161,9 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     private void generateSpecialTaskList(String userId) {
         String type = UCConstant.SPECIAL_TASK_TYPE;
         List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByType(type);
-        for(SysTaskBO sysTaskBO : sysTaskBOList){
+        for (SysTaskBO sysTaskBO : sysTaskBOList) {
             TodoTask todoTaskTmp = todoTaskRoMapper.selectOneByDayBySysTaskId(userId, sysTaskBO.getId());
-            if(todoTaskTmp==null){
+            if (todoTaskTmp == null) {
                 TodoTask todoTask = new TodoTask();
                 todoTask.setId(Utils.uuid());
                 todoTask.setUserId(userId);
@@ -390,17 +391,17 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     @Override
-    public List<TodoTask> selectNormalTaskList(String userId) {
+    public List<TodoTaskFront> selectNormalTaskList(String userId) {
         return todoTaskRoMapper.selectNormalTaskList(userId);
     }
 
     @Override
-    public List<TodoTask> selectSpecialTaskList(String userId) {
+    public List<TodoTaskFront> selectSpecialTaskList(String userId) {
         return todoTaskRoMapper.selectSpecialTaskList(userId);
     }
 
     @Override
-    public List<TodoTask> selectOnetimeTaskList(String userId) {
+    public List<TodoTaskFront> selectOnetimeTaskList(String userId) {
         return todoTaskRoMapper.selectOnetimeTaskList(userId);
     }
 }
