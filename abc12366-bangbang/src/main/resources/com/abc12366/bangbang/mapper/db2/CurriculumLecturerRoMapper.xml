@@ -12,7 +12,7 @@
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.curriculum.CurriculumLecturer" parameterType="java.lang.String">
 		 SELECT t1.*, t2.username
 		 FROM bb_curriculum_lecturer t1
-         JOIN abc12366_uc.uc_user t2 ON t1.userId = t2.id
+         LEFT JOIN abc12366_uc.uc_user t2 ON t1.userId = t2.id
 		 WHERE t1.lecturerId = #{lecturerId}
 	</select>
 
