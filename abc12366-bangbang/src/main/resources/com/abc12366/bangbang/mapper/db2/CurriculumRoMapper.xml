@@ -175,7 +175,7 @@
         select s.curriculumId,s.userId,orderTime,orderPrice,orderIntegral,isIntegral,orderStatus,c.title,c.cover,c.isFree,
             (select studyTime from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) studyTime,
             (select coursewareId from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) coursewareId,
-            (SELECT count(studyId) FROM bb_curriculum_study where curriculumId = s.curriculumId and userId = s.userId) studyNum
+            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId = s.curriculumId and userId = s.userId) evaluateNum
             from (SELECT curriculumId,userId FROM bb_curriculum_study
             WHERE 1=1
             <if test="userId != null and userId != ''">

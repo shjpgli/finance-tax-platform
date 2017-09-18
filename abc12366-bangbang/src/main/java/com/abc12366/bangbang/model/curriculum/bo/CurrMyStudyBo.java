@@ -47,8 +47,8 @@ public class CurrMyStudyBo implements Serializable {
     /**课件ID**/
     private String coursewareId;
 
-    /**学习次数**/
-    private int studyNum;
+    /**评价次数**/
+    private int evaluateNum;
 
     public String getCurriculumId() {
         return curriculumId;
@@ -146,11 +146,11 @@ public class CurrMyStudyBo implements Serializable {
         this.coursewareId = coursewareId;
     }
 
-    public int getStudyNum() {
-        return studyNum;
+    public int getEvaluateNum() {
+        return evaluateNum;
     }
 
-    public void setStudyNum(int studyNum) {
-        this.studyNum = studyNum;
+    public void setEvaluateNum(int evaluateNum) {
+        this.evaluateNum = evaluateNum;
     }
 }
