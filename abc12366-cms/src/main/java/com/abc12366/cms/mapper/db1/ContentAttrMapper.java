@@ -3,6 +3,8 @@ package com.abc12366.cms.mapper.db1;
 import com.abc12366.cms.model.ContentAttr;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * ContentAttrMapper数据库操作接口类
  **/
@@ -34,4 +36,11 @@ public interface ContentAttrMapper {
      **/
     int updateByPrimaryKey(ContentAttr record);
 
+
+    /**
+     * 查找指定 contentId、attrName 的记录
+     * @param record
+     * @return
+     */
+    List<ContentAttr> selectContentAttr(ContentAttr record);
 }
