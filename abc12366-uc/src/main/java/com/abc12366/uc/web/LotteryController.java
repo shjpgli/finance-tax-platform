@@ -7,10 +7,10 @@ package com.abc12366.uc.web;
 
 
 
-import com.abc12366.uc.model.bo.LotteryLogBO;
+import com.abc12366.uc.model.bo.LotteryBO;
 import java.util.List;
 import java.util.Map;
-import com.abc12366.uc.service.LotteryLogService;
+import com.abc12366.uc.service.LotteryService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,44 +24,44 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping(path = "/lotterylog", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
-public class LotteryLogController{
-private static final Logger LOGGER = LoggerFactory.getLogger(LotteryLogController.class);
+@RequestMapping(path = "/lottery", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class LotteryController{
+private static final Logger LOGGER = LoggerFactory.getLogger(LotteryController.class);
 @Autowired
-private LotteryLogService lotteryLogService;
+private LotteryService lotteryService;
 @GetMapping
 public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page,@RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
 Map<String, Object> map = new HashMap<>();
 PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-List<LotteryLogBO> list = lotteryLogService.selectList(map);
+List<LotteryBO> list = lotteryService.selectList(map);
 LOGGER.info("selectList:{}", list);
 return (list == null) ?
 ResponseEntity.ok(Utils.kv()) :
 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
 }
 @PostMapping
-public ResponseEntity insert(@RequestBody LotteryLogBO lotteryLogBO) {
-LOGGER.info("insert:{}", lotteryLogBO);
-LotteryLogBO returnObj = lotteryLogService.insert(lotteryLogBO);
+public ResponseEntity insert(@RequestBody LotteryBO lotteryBO) {
+LOGGER.info("insert:{}", lotteryBO);
+LotteryBO returnObj = lotteryService.insert(lotteryBO);
 return ResponseEntity.ok(Utils.kv("data", returnObj));
 }
 @PutMapping(path = "/{id}")
-public ResponseEntity update(@RequestBody LotteryLogBO lotteryLogBO,
+public ResponseEntity update(@RequestBody LotteryBO lotteryBO,
 @PathVariable String id) {
-LOGGER.info("update：{} id:{}", lotteryLogBO,id);
-LotteryLogBO returnObj = lotteryLogService.update(lotteryLogBO, id);
+LOGGER.info("update：{} id:{}", lotteryBO,id);
+LotteryBO returnObj = lotteryService.update(lotteryBO, id);
 LOGGER.info("{}", returnObj);
 return ResponseEntity.ok(Utils.kv("data", returnObj));
 }
 @DeleteMapping(path = "/{id}")
 public ResponseEntity delete(@PathVariable String id) {
 LOGGER.info("deleteDo:{}", id);
-lotteryLogService.delete(id);
+lotteryService.delete(id);
 return ResponseEntity.ok(Utils.kv());
 }
 @GetMapping(path = "/{id}")
 public ResponseEntity selectOne(@PathVariable String id) {
-LotteryLogBO returnObj = lotteryLogService.selectOne(id);
+LotteryBO returnObj = lotteryService.selectOne(id);
 return ResponseEntity.ok(Utils.kv("data", returnObj));
 }
 }
