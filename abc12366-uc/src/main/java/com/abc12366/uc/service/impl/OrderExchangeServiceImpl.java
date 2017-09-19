@@ -96,13 +96,13 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
-//        exchangeCheck(ra);
+        exchangeCheck(ra);
 
         OrderExchange data = new OrderExchange();
         BeanUtils.copyProperties(ra, data);
         List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
         //OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(data.getOrderNo());
-        if (dataList != null && dataList.size() >= 0) {
+        if (dataList != null && dataList.size() > 0) {
             throw new ServiceException(4950);
         } else {
             String userId = Utils.getUserId();
