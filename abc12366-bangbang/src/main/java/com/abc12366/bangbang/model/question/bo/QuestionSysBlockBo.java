@@ -9,6 +9,12 @@ public class QuestionSysBlockBo {
     /**PK**/
     private String id;
 
+    /**内容**/
+    private String content;
+
+    /**内容状态**/
+    private String status;
+
     /**来源id**/
     private String sourceId;
 
@@ -24,7 +30,23 @@ public class QuestionSysBlockBo {
     /**审核时间**/
     private java.util.Date updateTime;
 
+    public String getContent() {
+        return content;
+    }
 
+    public QuestionSysBlockBo setContent(String content) {
+        this.content = content;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public QuestionSysBlockBo setStatus(String status) {
+        this.status = status;
+        return this;
+    }
 
     public void setId(String id){
         this.id = id;

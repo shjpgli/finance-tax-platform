@@ -1,7 +1,10 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
+import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -11,20 +14,27 @@ import org.apache.ibatis.annotations.Param;
 
 public interface QuestionSysBlockMapper{
 
+	/**
+	 *
+	 * 列表查询
+	 *
+	 **/
+	List<QuestionSysBlockBo> selectList();
+
 
 	/**
 	 * 
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionSysBlock selectByPrimaryKey(@Param("id") Long id);
+	QuestionSysBlock selectByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 
 	 * 删除（根据主键ID删除）
 	 * 
 	 **/
-	int deleteByPrimaryKey(@Param("id") Long id);
+	int deleteByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 

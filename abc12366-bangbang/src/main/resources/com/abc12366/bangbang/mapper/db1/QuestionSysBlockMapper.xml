@@ -8,6 +8,19 @@
 		 id,	sourceId,	sourceType,	createTime,	updateAdmin, updateTime
 	</sql>
 
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo">
+		SELECT
+		t.*,
+		IF(t1.title IS NULL, t2.answer, CONCAT(t1.title,t1.detail)) content,
+		IF(t1.status IS NULL, t2.status, t1.status) STATUS
+		FROM bb_question_sys_block t
+		LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
+		LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
+	</select>
+
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="questionSysBlock" parameterType="java.lang.String">
 		 SELECT
