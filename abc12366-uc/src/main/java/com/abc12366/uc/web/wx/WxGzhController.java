@@ -120,7 +120,7 @@ public class WxGzhController {
     	Map<String, String> tks = new HashMap<String, String>();
         tks.put("appid", WxGzhClient.getInstance().getAppid());
         tks.put("secret", WxGzhClient.getInstance().getSecret());
-        tks.put("code", WxGzhClient.getInstanceToken());
+        tks.put("code", code);
         tks.put("grant_type","authorization_code");
         WxUseToken respon = WxConnectFactory.get(WechatUrl.WXIMG_JSTOKEN, tks, null, WxUseToken.class);
         if(respon.getErrcode()==0){
