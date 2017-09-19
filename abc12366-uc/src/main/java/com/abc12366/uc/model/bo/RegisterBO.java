@@ -21,7 +21,6 @@ public class RegisterBO implements Serializable {
     private String phone;
 
     @NotEmpty
-    @Size(min = 8, max = 64)
     private String password;
 
     @Email
