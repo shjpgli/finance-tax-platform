@@ -9,6 +9,7 @@ import com.abc12366.uc.model.bo.SysTaskBO;
 import com.abc12366.uc.model.bo.SysTaskInsertAndUpdateBO;
 import com.abc12366.uc.model.bo.SysTaskListBO;
 import com.abc12366.uc.service.SysTaskService;
+import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -67,6 +68,13 @@ public class SysTaskServiceImpl implements SysTaskService {
             if (sysTaskBO.getName().equals(sysTaskInsertBO.getName())) {
                 LOGGER.info("新增失败，参数为：{}", sysTaskInsertBO);
                 throw new ServiceException(4601);
+            }
+        }
+
+        //如果是特殊任务，则必须有开始和结束时间
+        if(sysTaskInsertBO.getType()!=null&&sysTaskInsertBO.getType().equals(UCConstant.SPECIAL_TASK_TYPE)){
+            if(sysTaskInsertBO.getStartTime()==null||sysTaskInsertBO.getEndTime()==null){
+                throw new ServiceException(4041);
             }
         }
 
