@@ -9,6 +9,7 @@ public enum WechatUrl {
     WXUSELIST("公众号关注列表", "/cgi-bin/user/get"),
     WXUSEBATCH("批量获取用户信息", "/cgi-bin/user/info/batchget"),
     WXUSEINFO("关注用户详细信息", "/cgi-bin/user/info"),
+    WXJSUSEINFO("用户详细信息", "/sns/userinfo"),
     WXMENUCREATE("自定义菜单创建", "/cgi-bin/menu/create"),
     WXMENUQUERY("自定义菜单查询", "/cgi-bin/menu/get"),
     WXMENUDEL("自定义菜单产删除", "/cgi-bin/menu/delete"),
@@ -24,7 +25,8 @@ public enum WechatUrl {
     MATERIAL_ADDMATE("添加素材", "/cgi-bin/material/add_material"),
     MATERIAL_NEWSIMG("添加图文素材图片", "/cgi-bin/media/uploadimg"),
     WXQRCODE_TICKET("获取二维码ticket", "/cgi-bin/qrcode/create"),
-    WXIMG_DOWN("素材下载","/cgi-bin/media/get");
+    WXIMG_DOWN("素材下载","/cgi-bin/media/get"),
+    WXIMG_JSTOKEN("JSTOKEN","/sns/oauth2/access_token");
     
 
     public String describe;
