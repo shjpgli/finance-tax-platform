@@ -22,32 +22,34 @@ public class SysTaskInsertAndUpdateBO {
     private Date endTime;
     @Size(max = 4000)
     private String rule;
-    private Integer points;
+    @NotNull
+    private Integer award;
+    @NotEmpty
     @Size(max = 1)
     private String type;
     @NotNull
     private Boolean status;
+    @NotEmpty
     @Size(max = 200)
     private String imageUrl;
     @Size(max = 20)
     private String ruleName;
     @Size(max = 20)
     private String ruleCode;
+    @NotNull
     private Integer count;
     @Size(max = 50)
     private String skipURL;
+    @NotEmpty
     private String awardType;
     @NotEmpty
     @Size(max = 64)
     private String ruleId;
     private String remark;
+    @NotEmpty
     private String dateType;
 
     public SysTaskInsertAndUpdateBO() {
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
     }
 
     public Integer getCount() {
@@ -98,12 +100,12 @@ public class SysTaskInsertAndUpdateBO {
         this.rule = rule;
     }
 
-    public int getPoints() {
-        return points;
+    public Integer getAward() {
+        return award;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setAward(Integer award) {
+        this.award = award;
     }
 
     public String getType() {

@@ -13,7 +13,7 @@ public class SysTask {
     private Date startTime;
     private Date endTime;
     private String rule;
-    private Integer points;
+    private Integer award;
     private String type;
     private Boolean status;
     private Date createTime;
@@ -23,6 +23,10 @@ public class SysTask {
     private String ruleCode;
     private Integer count;
     private String skipURL;
+    private String awardType;
+    private String ruleId;
+    private String remark;
+    private String dateType;
 
     public SysTask() {
     }
@@ -67,12 +71,12 @@ public class SysTask {
         this.rule = rule;
     }
 
-    public Integer getPoints() {
-        return points;
+    public Integer getAward() {
+        return award;
     }
 
-    public void setPoints(Integer points) {
-        this.points = points;
+    public void setAward(Integer award) {
+        this.award = award;
     }
 
     public String getType() {
@@ -145,5 +149,37 @@ public class SysTask {
 
     public void setSkipURL(String skipURL) {
         this.skipURL = skipURL;
+    }
+
+    public String getAwardType() {
+        return awardType;
+    }
+
+    public void setAwardType(String awardType) {
+        this.awardType = awardType;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getDateType() {
+        return dateType;
+    }
+
+    public void setDateType(String dateType) {
+        this.dateType = dateType;
     }
 }
