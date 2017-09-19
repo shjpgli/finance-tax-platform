@@ -17,4 +17,6 @@ public interface ExperienceRoMapper {
     List<ExpCodex> selectOne(ExpComputeBO expComputeBO);
 
     List<ExpComputeLog> selectExpComputeLog( ExpComputeLogParam param);
+
+    List<ExpComputeLog> selectCalculateLog(ExpComputeLogParam param);
 }

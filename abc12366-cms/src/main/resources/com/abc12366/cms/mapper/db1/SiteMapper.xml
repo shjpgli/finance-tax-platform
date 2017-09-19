@@ -12,9 +12,9 @@
     <!-- 添加 -->
     <insert id="insert" parameterType="com.abc12366.cms.model.Site">
         INSERT INTO cms_site
-        (siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description,siteLogo,siteLogoPath,copyrightExplain,recordNum,resourceSync,staticSync,staticIssue,shareCode,statisticsCode,siteStatus)
+        (siteId,domain,sitePath,siteName,shortName,protocol,dynamicSuffix,staticSuffix,staticDir,isIndexToRoot,isStaticIndex,localeAdmin,localeFront,tplSolution,finalStep,afterCheck,isRelativePath,isRecycleOn,domainAlias,domainRedirect,tplIndex,keywords,description,siteLogo,siteLogoPath,copyrightExplain,recordNum,resourceSync,staticSync,staticIssue,shareCode,statisticsCode,siteStatus, statement)
         VALUES
-        (#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description},#{siteLogo},#{siteLogoPath},#{copyrightExplain},#{recordNum},#{resourceSync},#{staticSync},#{staticIssue},#{shareCode},#{statisticsCode},#{siteStatus})
+        (#{siteId},#{domain},#{sitePath},#{siteName},#{shortName},#{protocol},#{dynamicSuffix},#{staticSuffix},#{staticDir},#{isIndexToRoot},#{isStaticIndex},#{localeAdmin},#{localeFront},#{tplSolution},#{finalStep},#{afterCheck},#{isRelativePath},#{isRecycleOn},#{domainAlias},#{domainRedirect},#{tplIndex},#{keywords},#{description},#{siteLogo},#{siteLogoPath},#{copyrightExplain},#{recordNum},#{resourceSync},#{staticSync},#{staticIssue},#{shareCode},#{statisticsCode},#{siteStatus},#{statement})
     </insert>
 
     <!-- 添加 （匹配有值的字段）-->
@@ -120,6 +120,9 @@
             <if test="siteStatus != null">
                 siteStatus,
             </if>
+            <if test="statement != null">
+                statement,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -221,6 +224,9 @@
             </if>
             <if test="siteStatus!=null">
                 #{siteStatus},
+            </if>
+            <if test="statement!=null">
+                #{statement},
             </if>
         </trim>
     </insert>
@@ -325,6 +331,9 @@
             <if test="siteStatus != null">
                 siteStatus = #{siteStatus},
             </if>
+            <if test="statement != null">
+                statement = #{statement},
+            </if>
 
         </set>
         WHERE siteId = #{siteId}
@@ -365,7 +374,8 @@
         staticIssue = #{staticIssue},
         shareCode = #{shareCode},
         statisticsCode = #{statisticsCode},
-        siteStatus = #{siteStatus}
+        siteStatus = #{siteStatus},
+        statement = #{statement}
         WHERE siteId = #{siteId}
     </update>
 

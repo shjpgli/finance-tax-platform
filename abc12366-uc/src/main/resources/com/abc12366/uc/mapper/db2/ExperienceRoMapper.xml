@@ -19,7 +19,8 @@
         CONCAT(YEAR(NOW())+1,'-01-01'))) outgoYear,
         (select uul.medalIcon from uc_uexp_level uul where uul.status='1' and uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue limit 1 ) medalIcon,
         (SELECT uul.minValue FROM uc_uexp_level uul WHERE uul.minValue>uu.exp ORDER BY uul.minValue ASC LIMIT 1 ) nextLevelExp,
-        (select uul.medal from uc_uexp_level uul where uul.status='1' and uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue limit 1 ) medal
+        (select uul.medal from uc_uexp_level uul where uul.status='1' and uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue limit 1 ) medal,
+        (select uul.name from uc_uexp_level uul where uul.status='1' and uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue limit 1 ) expLevel
         from uc_user uu
         where uu.id=#{userId}
     </select>
@@ -42,6 +43,16 @@
         where userId=#{userId}
         and uexpCodexId=#{uexpCodexId}
         and timeType=#{timeType}
+        and createTime &gt;= #{starTime}
+        and createTime &lt; #{endTime}
+    </select>
+
+    <select id="selectCalculateLog" resultType="com.abc12366.uc.model.bo.ExpComputeLog" parameterType="com.abc12366.uc.model.bo.ExpComputeLogParam">
+        select id,userId,uexpCodexId,timeType,createTime
+        from uc_uexp_compute_log
+        where userId=#{userId}
+        and timeType=#{timeType}
+        and ruleId = #{ruleId}
         and createTime &gt;= #{starTime}
         and createTime &lt; #{endTime}
     </select>

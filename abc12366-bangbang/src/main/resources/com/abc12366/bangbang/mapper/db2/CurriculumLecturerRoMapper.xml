@@ -12,7 +12,7 @@
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.curriculum.CurriculumLecturer" parameterType="java.lang.String">
 		 SELECT t1.*, t2.username
 		 FROM bb_curriculum_lecturer t1
-         JOIN abc12366_uc.uc_user t2 ON t1.userId = t2.id
+         LEFT JOIN abc12366_uc.uc_user t2 ON t1.userId = t2.id
 		 WHERE t1.lecturerId = #{lecturerId}
 	</select>
 
@@ -30,6 +30,7 @@
         <if test="lecturerName != null and lecturerName != ''">
             AND lecturerName like CONCAT('%',#{lecturerName},'%')
         </if>
+        ORDER BY createTime DESC
     </select>
 
     <!-- 根据课程查询讲师 -->
@@ -43,6 +44,42 @@
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = l.lecturerId)) praiseNum
         FROM bb_curriculum_lecturer_gx l left join bb_curriculum_lecturer lect on l.lecturerId = lect.lecturerId
         WHERE l.curriculumId = #{curriculumId}
+    </select>
+
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectLecturerCnt" resultType="java.lang.Integer"
+            parameterType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo">
+        SELECT
+        count(lecturerId) cnt
+        FROM bb_curriculum_lecturer
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId}
+        </if>
+        <if test="lecturerId != null and lecturerId != ''">
+            AND lecturerId != #{lecturerId}
+        </if>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectStudentCnt" resultType="java.lang.Integer"
+            parameterType="java.lang.String">
+        SELECT
+        COUNT(*)
+        FROM
+        (SELECT
+        COUNT(studyId) cnt
+        FROM
+        bb_curriculum_study
+        WHERE
+        curriculumId IN (SELECT
+        curriculumId
+        FROM
+        bb_curriculum_lecturer_gx
+        WHERE
+        lecturerId = #{lecturerId})
+        GROUP BY userId , curriculumId) t
     </select>
 
 

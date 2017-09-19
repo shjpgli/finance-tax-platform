@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	parentId,	questionId,	userId,	answerUserId,ip,	answer,	status,	createTime,	lastUpdate,	isAccept
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionAnswer" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_question_answer
+		 WHERE id = #{id}
+	</select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_question_answer
+        WHERE parentId=''
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectListByParentId" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_question_answer
+        WHERE 1=1
+        <if test="parentId != null and parentId != ''">
+            AND parentId = #{parentId}
+        </if>
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+    </select>
+
+
+</mapper>

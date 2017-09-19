@@ -52,7 +52,7 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
 
     @Override
     public CurriculumClassifyBo save(CurriculumClassifyBo classifyBo) {
-        try {
+
             JSONObject jsonStu = JSONObject.fromObject(classifyBo);
             LOGGER.info("新增课程分类信息:{}", jsonStu.toString());
             //保存课程分类信息
@@ -74,6 +74,15 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
 
             CurriculumClassify classify = new CurriculumClassify();
             classifyBo.setClassifyId(uuid);
+
+
+            int cnt1 = classifyRoMapper.selectClassifyNameCnt(classifyBo);
+            if(cnt1 >0){
+                //分类名称不能重复
+                throw new ServiceException(4306);
+            }
+
+        try {
             BeanUtils.copyProperties(classifyBo, classify);
             classifyMapper.insert(classify);
         } catch (Exception e) {
@@ -103,6 +112,11 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
     public CurriculumClassifyBo update(CurriculumClassifyBo classifyBo) {
         //更新课程分类信息
         CurriculumClassify classify = new CurriculumClassify();
+        int cnt1 = classifyRoMapper.selectClassifyNameCnt(classifyBo);
+        if(cnt1 >0){
+            //分类名称不能重复
+            throw new ServiceException(4306);
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(classifyBo);
             LOGGER.info("更新课程分类信息:{}", jsonStu.toString());

@@ -16,4 +16,6 @@ public interface PointsRuleRoMapper {
     PointsRuleBO selectOne(String id);
 
     PointsRuleBO selectByCode(String code);
+
+    PointsRuleBO selectValidOne(String id);
 }

@@ -12,7 +12,9 @@ import com.abc12366.uc.model.bo.CheckListParam;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.service.CheckService;
 import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UCConstant;
 import com.abc12366.uc.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,9 @@ public class CheckServiceImpl implements CheckService {
 
     @Autowired
     private PointsLogService pointsLogService;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
 
 
     @Transactional("db1TxManager")
@@ -78,6 +83,9 @@ public class CheckServiceImpl implements CheckService {
         continuingCheck(check.getUserId());
         //记日志
         pointsLog(check.getUserId(), points);
+
+        //完成任务埋点
+        todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_ID);
 
         return points;
     }

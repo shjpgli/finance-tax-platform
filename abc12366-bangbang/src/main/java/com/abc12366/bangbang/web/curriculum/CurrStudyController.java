@@ -112,4 +112,19 @@ public class CurrStudyController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 课程学习次数
+     */
+    @GetMapping(path = "/selectStudyCnt")
+    public ResponseEntity selectStudyCnt(@RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                     @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId",curriculumId);
+        dataMap.put("userId",userId);
+
+        int rtn = currStudyService.selectStudyCnt(dataMap);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+
+    }
+
 }

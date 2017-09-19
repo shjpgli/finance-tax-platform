@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -39,12 +40,6 @@ public class InvoiceController {
 
     /**
      * 发票列表管理
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param startTime
-     * @param endTime
-     * @return
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -102,7 +97,7 @@ public class InvoiceController {
     }
 
     /**
-     * 前台，票详情查看
+     * 前台，发票详情查看
      */
     @GetMapping(path = "/user/{invoiceId}/{userId}")
     public ResponseEntity userInvoice(@PathVariable("invoiceId") String invoiceId, @PathVariable("userId") String
@@ -151,9 +146,9 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/billing")
-    public ResponseEntity billing(@Valid @RequestBody InvoiceCheckBO invoiceCheckBO) {
+    public ResponseEntity billing(@Valid @RequestBody InvoiceCheckBO invoiceCheckBO,HttpServletRequest request) {
         LOGGER.info("{}", invoiceCheckBO);
-        invoiceService.billing(invoiceCheckBO);
+        invoiceService.billing(invoiceCheckBO,request);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -182,7 +177,7 @@ public class InvoiceController {
      * @return
      */
     @DeleteMapping(path = "/{userId}/{id}")
-    public ResponseEntity update(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+    public ResponseEntity delete(@PathVariable("userId") String userId, @PathVariable("id") String id) {
         InvoiceBO invoiceBO = new InvoiceBO();
         invoiceBO.setId(id);
         invoiceBO.setUserId(userId);
@@ -191,6 +186,19 @@ public class InvoiceController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 发票确认收货
+     */
+    @PostMapping(path = "/confirm/{userId}/{id}")
+    public ResponseEntity confirm(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+        LOGGER.info("{}{}", userId,id);
+        Invoice invoiceBO = new Invoice();
+        invoiceBO.setId(id);
+        invoiceBO.setUserId(userId);
+        invoiceBO.setStatus("5");
+        invoiceService.confirmInvoice(invoiceBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
 
     /**
      * 发票导出打印机列表

@@ -17,8 +17,8 @@
     </delete>
 
     <insert id="insertComputeLog" parameterType="com.abc12366.uc.model.bo.ExpComputeLog">
-        insert into uc_uexp_compute_log (id,userId,uexpCodexId,timeType,createTime)
-        values(#{id},#{userId},#{uexpCodexId},#{timeType},#{createTime})
+        insert into uc_uexp_compute_log (id,userId,uexpCodexId,timeType,createTime,ruleId)
+        values(#{id},#{userId},#{uexpCodexId},#{timeType},#{createTime},#{ruleId})
     </insert>
 
 </mapper>

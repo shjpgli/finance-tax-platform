@@ -41,6 +41,11 @@ public class SysTaskServiceImpl implements SysTaskService {
     }
 
     @Override
+    public List<SysTaskBO> selectListByDateType(String dateType) {
+        return sysTaskRoMapper.selectListByDateType(dateType);
+    }
+
+    @Override
     public List<SysTaskBO> selectDeployedList(Map<String, String> map) {
         return sysTaskRoMapper.selectDeployedList(map);
     }
@@ -142,6 +147,11 @@ public class SysTaskServiceImpl implements SysTaskService {
             throw new ServiceException(4103);
         }
         return true;
+    }
+
+    @Override
+    public List<SysTaskBO> selectListByType(String type) {
+        return sysTaskRoMapper.selectListByType(type);
     }
 
     @Override

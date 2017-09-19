@@ -24,4 +24,6 @@ public interface PointsRuleService {
     int delete(String id);
 
     void enableOrDisable(String id, String status);
+
+    PointsRuleBO selectValidOne(String ruleId);
 }

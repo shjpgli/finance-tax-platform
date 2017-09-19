@@ -71,6 +71,12 @@ public class ApiLog extends TableBO implements Serializable {
      **/
     private String message;
 
+    /**
+     * 接口方法
+     **/
+    private String method;
+
+
     private long startTime;
 
     private long endTime;
@@ -213,5 +219,13 @@ public class ApiLog extends TableBO implements Serializable {
 
     public void setDayCount(int dayCount) {
         this.dayCount = dayCount;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 }

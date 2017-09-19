@@ -21,7 +21,7 @@
         SELECT
           curriculumId,title,browseNum,watchNum,cover,cl.classifyName classify,teachingMethod,issueTime,isFree,c.status,nickname createrName,updateTime
         FROM bb_curriculum c LEFT JOIN bb_curriculum_classify cl ON c.classify = cl.classifyId
-        LEFT JOIN bb_user u ON c.createrId = u.id
+        LEFT JOIN abc12366_uc.uc_admin u ON c.createrId = u.id
         WHERE 1=1
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
@@ -30,11 +30,12 @@
             AND label like CONCAT('%',#{label},'%')
         </if>
         <if test="status != null and status != ''">
-            AND status = #{status}
+            AND c.status = #{status}
         </if>
         <if test="classify != null and classify != ''">
             AND classify like CONCAT(#{classify},'%')
         </if>
+        ORDER BY updateTime DESC
     </select>
 
     <!-- 查询（根据主键ID查询） -->
@@ -126,11 +127,11 @@
     <select id="selectSituation" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumSituationBo" parameterType="java.lang.String">
         SELECT
             curriculumId,title,browseNum,watchNum,teachingMethod,peopleLimit,applyTimeBegin,applyTimeEnd,signTimeBegin,signTimeEnd,
-            (SELECT ifnull(sum(orderId),0) FROM bb_curriculum_order where curriculumId = c.curriculumId) orderNum,
+            (SELECT ifnull(count(orderId),0) FROM bb_curriculum_order where curriculumId = c.curriculumId) orderNum,
             (SELECT ifnull(sum(orderPrice),0) FROM bb_curriculum_order where curriculumId = c.curriculumId) generalIncome,
             (SELECT ifnull(sum(orderIntegral),0) FROM bb_curriculum_order where curriculumId = c.curriculumId) aggregateScore,
-			(SELECT ifnull(sum(applyId),0) FROM bb_curriculum_apply where curriculumId = c.curriculumId) applyNum,
-            (SELECT ifnull(sum(applyId),0) FROM bb_curriculum_apply where curriculumId = c.curriculumId and signTime is not null) signNum
+			(SELECT ifnull(count(applyId),0) FROM bb_curriculum_apply where curriculumId = c.curriculumId) applyNum,
+            (SELECT ifnull(count(applyId),0) FROM bb_curriculum_apply where curriculumId = c.curriculumId and signTime is not null) signNum
         FROM bb_curriculum c
         WHERE curriculumId = #{curriculumId}
     </select>
@@ -173,7 +174,8 @@
     <select id="selectStudyHistory" resultType="com.abc12366.bangbang.model.curriculum.bo.CurrMyStudyBo" parameterType="java.util.Map">
         select s.curriculumId,s.userId,orderTime,orderPrice,orderIntegral,isIntegral,orderStatus,c.title,c.cover,c.isFree,
             (select studyTime from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) studyTime,
-            (select coursewareId from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) coursewareId
+            (select coursewareId from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) coursewareId,
+            (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId = s.curriculumId and userId = s.userId) evaluateNum
             from (SELECT curriculumId,userId FROM bb_curriculum_study
             WHERE 1=1
             <if test="userId != null and userId != ''">
@@ -226,6 +228,31 @@
             AND col.userId = #{userId}
         </if>
         ORDER BY collectTime DESC
+    </select>
+
+    <!-- 查询课件是否免费 -->
+    <select id="selectCoursewareCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+          COUNT(coursewareId)
+        FROM
+        bb_curriculum_courseware
+        WHERE curriculumId = #{curriculumId}
+    </select>
+
+
+    <!-- 查询课程标题是否重复 -->
+    <select id="selectCurriculumCnt" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        count(curriculumId) cnt
+        FROM bb_curriculum
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title = #{title}
+        </if>
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId != #{curriculumId}
+        </if>
     </select>
 
 

@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.PointCalculateBO;
 import com.abc12366.uc.model.bo.PointCodex;
 import com.abc12366.uc.model.bo.PointComputeBO;
 import com.abc12366.uc.model.bo.PointsBO;
@@ -41,6 +42,12 @@ public class PointsController {
     @PostMapping(path = "/compute")
     public ResponseEntity compute(@Valid @RequestBody PointComputeBO pointComputeBO){
         pointsService.compute(pointComputeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    @PostMapping(path = "/calculate")
+    public ResponseEntity calculate(@Valid @RequestBody PointCalculateBO pointCalculateBO){
+        pointsService.calculate(pointCalculateBO);
         return ResponseEntity.ok(Utils.kv());
     }
 

@@ -108,9 +108,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/check/rank")
                         //计算用户经验值接口
                 .excludePathPatterns("/experience/compute")
+                //根据省市区编号查询名称
+                .excludePathPatterns("/provinceorcityorarea")
+                //JS获取微信信息
+                .excludePathPatterns("/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig")
                         //
-                .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login");
-
+                .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
+                //好会计
+                .excludePathPatterns("/userhkj/token");
         //用户业务操作导致经验值更新，拦截器拦截处理
 //        registry.addInterceptor(uexpInterceptor())
 //                .addPathPatterns("/user/test");

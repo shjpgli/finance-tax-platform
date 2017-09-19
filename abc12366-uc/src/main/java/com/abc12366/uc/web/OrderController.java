@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -244,9 +245,10 @@ public class OrderController {
      */
     @PostMapping(path = "/import/{expressCompId}")
     public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList,
-                                      @PathVariable("expressCompId") String expressCompId) {
+                                      @PathVariable("expressCompId") String expressCompId,
+                                      HttpServletRequest request) {
         LOGGER.info("{}", orderBOList);
-        orderService.selectImportOrder(orderBOList,expressCompId);
+        orderService.selectImportOrder(orderBOList,expressCompId,request);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -279,9 +281,9 @@ public class OrderController {
      * 用户将订单改为支付中，虚拟订单
      */
     @PostMapping(path = "/payment")
-    public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO) {
+    public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO,HttpServletRequest request) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"RMB");
+        OrderBO bo = orderService.paymentOrder(orderPayBO,"RMB", request);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
@@ -290,9 +292,9 @@ public class OrderController {
      * 用户交易积分订单
      */
     @PostMapping(path = "/paypoints")
-    public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO) {
+    public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO,HttpServletRequest request) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"POINTS");
+        OrderBO bo = orderService.paymentOrder(orderPayBO,"POINTS",request);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
@@ -317,9 +319,9 @@ public class OrderController {
      * @return
      */
     @PostMapping(path = "/send")
-    public ResponseEntity sendOrder(@Valid @RequestBody OrderOperationBO orderOperationBO) {
+    public ResponseEntity sendOrder(@Valid @RequestBody OrderOperationBO orderOperationBO,HttpServletRequest request) {
         LOGGER.info("{}", orderOperationBO);
-        orderService.sendOrder(orderOperationBO);
+        orderService.sendOrder(orderOperationBO,request);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -363,41 +365,6 @@ public class OrderController {
         orderService.deleteOrder(orderBO);
         return ResponseEntity.ok(Utils.kv());
     }
-
-    /**
-     * 修改订单
-     * @param orderBO
-     * @param userId
-     * @param id
-     * @return
-     */
-    /*
-    @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity update(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId,
-    @PathVariable("id") String id) {
-        LOGGER.info("{}", orderBO);
-        orderBO.setId(id);
-        orderBO.setUserId(userId);
-        OrderBO bo = orderService.updateCart(orderBO);
-        LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
-    }*/
-
-    /**
-     * 删除购物车订单
-     *
-     * @param userId
-     * @param id
-     * @return
-     *//*
-    @DeleteMapping(path = "/{userId}/{id}")
-    public ResponseEntity deleteCart(@PathVariable("userId") String userId, @PathVariable("id") String id) {
-        OrderBO orderBO = new OrderBO();
-        orderBO.setOrderNo(id);
-        orderBO.setUserId(userId);
-        orderService.deleteCart(orderBO);
-        return ResponseEntity.ok(Utils.kv("data", orderBO));
-    }*/
 
     /**
      * 反馈虚拟产品订单信息

@@ -16,7 +16,7 @@
 
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="invoiceLog">
+    <insert id="insert" parameterType="com.abc12366.uc.model.InvoiceLog">
         INSERT INTO uc_invoice_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -62,7 +62,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="invoiceLog">
+    <update id="update" parameterType="com.abc12366.uc.model.InvoiceLog">
         UPDATE uc_invoice_log
         <set>
             <if test="invoiceId != null">

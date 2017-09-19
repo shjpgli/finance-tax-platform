@@ -101,7 +101,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
                 ".bestMatchingPattern");
         long inTime = (long) request.getAttribute("inTime");
         request.removeAttribute("inTime");
-
+        String method = request.getMethod();
         long outTime = System.currentTimeMillis();
         int status = response.getStatus();
         String appId = (String) request.getAttribute(Constant.APP_ID);
@@ -122,6 +122,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         log.setAppId(appId);
         log.setUserId(userId);
         log.setVersion(version);
+        log.setMethod(method);
         log.setYyyyMMdd(DateUtils.getDateFormat(new Date(), "yyyyMMdd"));
 
         // 5.访问计数

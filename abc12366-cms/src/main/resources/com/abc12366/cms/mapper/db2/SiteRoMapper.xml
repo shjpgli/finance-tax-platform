@@ -8,7 +8,7 @@
         siteId, domain, sitePath, siteName, shortName, protocol, dynamicSuffix, staticSuffix, staticDir, isIndexToRoot,
         isStaticIndex, localeAdmin, localeFront, tplSolution, finalStep, afterCheck, isRelativePath, isRecycleOn,
         domainAlias, domainRedirect, tplIndex, keywords, description, siteLogo,siteLogoPath, copyrightExplain,
-        recordNum, resourceSync, staticSync, staticIssue,shareCode,statisticsCode, siteStatus
+        recordNum, resourceSync, staticSync, staticIssue,shareCode,statisticsCode, siteStatus, statement
     </sql>
 
     <!-- 查询（根据主键ID查询） -->

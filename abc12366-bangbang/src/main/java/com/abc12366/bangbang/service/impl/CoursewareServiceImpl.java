@@ -44,9 +44,28 @@ public class CoursewareServiceImpl implements CoursewareService {
 
     @Override
     public CurriculumCoursewareBo save(CurriculumCoursewareBo coursewareBo) {
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap1.put("curriculumId", coursewareBo.getCurriculumId());
+        dataMap1.put("title", coursewareBo.getTitle());
+        int cnt1 = coursewareRoMapper.selectCoursewareCnt(dataMap1);
+        if(cnt1 > 0){
+            throw new ServiceException(4335);
+        }
+
+        Map<String, Object> dataMap2 = new HashMap<>();
+        dataMap2.put("curriculumId", coursewareBo.getCurriculumId());
+        dataMap2.put("chapterId", coursewareBo.getChapterId());
+        dataMap2.put("coursewareSeq", coursewareBo.getCoursewareSeq());
+        int cnt2 = coursewareRoMapper.selectCoursewareCnt(dataMap2);
+        if(cnt2 > 0){
+            throw new ServiceException(4336);
+        }
+
+
         try {
             JSONObject jsonStu = JSONObject.fromObject(coursewareBo);
             LOGGER.info("新增课件信息:{}", jsonStu.toString());
+
             coursewareBo.setCreateTime(new Date());
             coursewareBo.setUpdateTime(new Date());
             //保存课件信息
@@ -135,6 +154,24 @@ public class CoursewareServiceImpl implements CoursewareService {
 
     @Override
     public CurriculumCoursewareBo update(CurriculumCoursewareBo coursewareBo) {
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap1.put("curriculumId", coursewareBo.getCurriculumId());
+        dataMap1.put("title", coursewareBo.getTitle());
+        dataMap1.put("coursewareId", coursewareBo.getCoursewareId());
+        int cnt1 = coursewareRoMapper.selectCoursewareCnt(dataMap1);
+        if(cnt1 > 0){
+            throw new ServiceException(4335);
+        }
+
+        Map<String, Object> dataMap2 = new HashMap<>();
+        dataMap2.put("curriculumId", coursewareBo.getCurriculumId());
+        dataMap2.put("chapterId", coursewareBo.getChapterId());
+        dataMap2.put("coursewareSeq", coursewareBo.getCoursewareSeq());
+        dataMap2.put("coursewareId", coursewareBo.getCoursewareId());
+        int cnt2 = coursewareRoMapper.selectCoursewareCnt(dataMap2);
+        if(cnt2 > 0){
+            throw new ServiceException(4336);
+        }
         //更新课件信息
         CurriculumCourseware courseware = new CurriculumCourseware();
         try {

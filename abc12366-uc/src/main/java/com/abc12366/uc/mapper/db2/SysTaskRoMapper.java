@@ -19,4 +19,8 @@ public interface SysTaskRoMapper {
     SysTaskBO selectOne(String id);
 
     List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
+
+    List<SysTaskBO> selectListByDateType(String dateType);
+
+    List<SysTaskBO> selectListByType(String type);
 }

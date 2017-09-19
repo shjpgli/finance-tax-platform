@@ -24,6 +24,9 @@ public class SysTaskBO {
     private Integer count;
     private String skipURL;
     private String awardType;
+    private String remark;
+    private String dateType;
+    private String ruleId;
 
     public SysTaskBO() {
     }
@@ -154,5 +157,29 @@ public class SysTaskBO {
 
     public void setAwardType(String awardType) {
         this.awardType = awardType;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getDateType() {
+        return dateType;
+    }
+
+    public void setDateType(String dateType) {
+        this.dateType = dateType;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 }

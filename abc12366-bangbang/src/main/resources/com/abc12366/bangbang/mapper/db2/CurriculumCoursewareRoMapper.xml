@@ -37,8 +37,8 @@
         <if test="type != null and type != ''">
             AND type = #{type}
         </if>
-        <if test="ploadWay != null and ploadWay != ''">
-            AND ploadWay = #{ploadWay}
+        <if test="uploadWay != null and uploadWay != ''">
+            AND uploadWay = #{uploadWay}
         </if>
         ORDER BY coursewareSeq ASC
     </select>
@@ -96,6 +96,30 @@
             bb_curriculum_courseware cs ON cm.curriculumId = cs.curriculumId
         WHERE
             coursewareId = #{coursewareId})  and o.userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCoursewareCnt" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        count(coursewareId) cnt
+        FROM bb_curriculum_courseware
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title = #{title}
+        </if>
+        <if test="coursewareSeq != null and coursewareSeq != ''">
+            AND coursewareSeq = #{coursewareSeq}
+        </if>
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId = #{curriculumId}
+        </if>
+        <if test="chapterId != null and chapterId != ''">
+            AND chapterId = #{chapterId}
+        </if>
+        <if test="coursewareId != null and coursewareId != ''">
+            AND coursewareId != #{coursewareId}
+        </if>
     </select>
 
 

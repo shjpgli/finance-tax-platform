@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db2.ApiLogRoMapper">
     <select id="selectList" resultType="com.abc12366.gateway.model.ApiLog">
-        select id, uri, userAgent, userId, appId, ip, inTime, outTime, status, version
+        select id, uri, userAgent, userId, appId, ip, inTime, outTime, status, version,method
         from gw_api_log
     </select>
 
     <select id="selectListPage" resultType="com.abc12366.gateway.model.ApiLog">
-        select id, uri, userAgent, userId, appId, ip, inTime, outTime, status, version
+        select id, uri, userAgent, userId, appId, ip, inTime, outTime, status, version,method
         from gw_api_log
         <where>
             <if test="uri != null">
@@ -35,8 +35,14 @@
             <if test="uri != null">
                 and uri = #{uri}
             </if>
+            <if test="appId != null">
+                and appId = #{appId}
+            </if>
             <if test="ip != null">
                 and ip = #{ip}
+            </if>
+            <if test="method != null">
+                and method = #{method}
             </if>
         </where>
     </select>

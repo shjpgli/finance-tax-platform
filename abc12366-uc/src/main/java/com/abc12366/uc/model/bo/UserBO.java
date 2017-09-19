@@ -33,8 +33,37 @@ public class UserBO {
     private Integer usernameModifiedTimes;
     private Date vipExpireDate;
     private String vipImage;
+    private String wxopenid;
+    private String wxheadimg;
+    private String wxnickname;
+    
+    
 
-    public UserBO() {
+    public String getWxopenid() {
+		return wxopenid;
+	}
+
+	public void setWxopenid(String wxopenid) {
+		this.wxopenid = wxopenid;
+	}
+
+	public String getWxheadimg() {
+		return wxheadimg;
+	}
+
+	public void setWxheadimg(String wxheadimg) {
+		this.wxheadimg = wxheadimg;
+	}
+
+	public String getWxnickname() {
+		return wxnickname;
+	}
+
+	public void setWxnickname(String wxnickname) {
+		this.wxnickname = wxnickname;
+	}
+
+	public UserBO() {
     }
 
     public Integer getUsernameModifiedTimes() {

@@ -10,7 +10,7 @@
         #{createTime}, #{lastUpdate}, #{expireTime}, #{expandExpireTime}, #{frmc},#{frzjh})
     </insert>
 
-    <update id="dzsbUnbind">
+    <update id="dzsbUnbind" parameterType="java.lang.String">
         update uc_user_dzsb
         <set>
             status=FALSE,
@@ -26,7 +26,7 @@
         #{status}, #{createTime}, #{lastUpdate}, #{roleId})
     </insert>
 
-    <update id="hngsUnbind">
+    <update id="hngsUnbind" parameterType="java.lang.String">
         update uc_user_hngs
         <set>
             status=FALSE,
@@ -41,7 +41,7 @@
         #{status}, #{createTime}, #{lastUpdate})
     </insert>
 
-    <update id="hndsUnbind">
+    <update id="hndsUnbind" parameterType="java.lang.String">
         update uc_user_hnds
         <set>
             status=FALSE,

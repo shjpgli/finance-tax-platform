@@ -144,6 +144,12 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
     }
 
     @Override
+    public ExperienceRuleBO selectValidOne(String ruleId) {
+        LOGGER.info("{}", ruleId);
+        return experienceRuleRoMapper.selectValidOne(ruleId);
+    }
+
+    @Override
     public void enableOrDisable(String id, String status) {
         LOGGER.info("{}:{}", id, status);
         if ((!status.equals("true")) && (!status.equals("false"))) {

@@ -86,6 +86,8 @@ public class Constant {
     // 订单换货自动收货期限，单位：天
     public final static Integer ORDER_EXCHANGE_RECEIPT_DAYS = 15;
 
+    // 订单自动确认收货，单位：天
+    public final static Integer ORDER_RECEIPT_DAYS = 15;
 
     /**
      * 获取当前系统当天日期String

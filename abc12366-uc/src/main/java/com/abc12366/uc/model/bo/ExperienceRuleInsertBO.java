@@ -11,13 +11,13 @@ import javax.validation.constraints.Size;
  * Time: 11:06
  */
 public class ExperienceRuleInsertBO {
-    @NotEmpty
+    @NotEmpty(message = "规则名称不能为空")
     @Size(max = 32)
     private String name;
     @NotEmpty
     @Size(max = 10)
     private String code;
-    @NotNull
+    @NotNull(message = "经验数值不能为空")
     private Integer exp;
     @Size(max = 1000)
     private String description;
@@ -25,18 +25,12 @@ public class ExperienceRuleInsertBO {
     private String type;
     @NotNull
     private Boolean status;
+    @NotEmpty(message = "规则周期不能为空")
+    private String period;
+    @NotNull
+    private Integer degree;
 
     public ExperienceRuleInsertBO() {
-    }
-
-    public ExperienceRuleInsertBO(String name, String code, Integer exp, String description, String type, Boolean
-            status) {
-        this.name = name;
-        this.code = code;
-        this.exp = exp;
-        this.description = description;
-        this.type = type;
-        this.status = status;
     }
 
     public String getName() {
@@ -87,15 +81,19 @@ public class ExperienceRuleInsertBO {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "ExperienceRuleInsertBO{" +
-                "name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", exp=" + exp +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                ", status=" + status +
-                '}';
+    public Integer getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Integer degree) {
+        this.degree = degree;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 }

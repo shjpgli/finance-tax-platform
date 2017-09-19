@@ -24,9 +24,10 @@ public class PointsRuleInsertBO {
     private String type;
     @NotNull
     private Boolean status;
-
-    public PointsRuleInsertBO() {
-    }
+    @NotEmpty
+    private String period;
+    @NotNull
+    private Integer degree;
 
     public String getName() {
         return name;
@@ -44,11 +45,11 @@ public class PointsRuleInsertBO {
         this.code = code;
     }
 
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
@@ -74,5 +75,21 @@ public class PointsRuleInsertBO {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public Integer getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Integer degree) {
+        this.degree = degree;
     }
 }

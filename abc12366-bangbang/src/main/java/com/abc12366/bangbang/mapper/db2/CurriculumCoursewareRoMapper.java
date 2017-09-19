@@ -52,5 +52,10 @@ public interface CurriculumCoursewareRoMapper {
      **/
     int selectIsBuy(Map<String, Object> map);
 
+    /**
+     * 查询课件标题或者序号是否已存在
+     **/
+    int selectCoursewareCnt(Map<String, Object> map);
+
 
 }

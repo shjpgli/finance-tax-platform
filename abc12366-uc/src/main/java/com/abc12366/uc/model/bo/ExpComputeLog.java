@@ -13,6 +13,7 @@ public class ExpComputeLog {
     private String uexpCodexId;
     private String timeType;
     private Date createTime;
+    private String ruleId;
 
     public ExpComputeLog() {
     }
@@ -55,5 +56,13 @@ public class ExpComputeLog {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 }

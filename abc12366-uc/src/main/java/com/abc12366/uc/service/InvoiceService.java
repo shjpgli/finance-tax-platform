@@ -5,6 +5,7 @@ import com.abc12366.uc.model.InvoiceBack;
 import com.abc12366.uc.model.bo.*;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -25,9 +26,6 @@ public interface InvoiceService {
 
     /**
      * 发票信息导出
-     *
-     * @param invoice
-     * @return
      */
     List<InvoiceExcel> selectInvoicePrintExcelList(InvoiceBO invoice);
 
@@ -41,11 +39,21 @@ public interface InvoiceService {
 
     InvoiceBO selectUserInvoice(Invoice invoice);
 
-    void billing(InvoiceCheckBO invoiceCheckBO);
+    void billing(InvoiceCheckBO invoiceCheckBO, HttpServletRequest request);
 
     List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice);
 
     void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId);
 
     void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList);
+
+    /**
+     * 确认收货
+     */
+    void confirmInvoice(Invoice invoice);
+
+    /**
+     * 自动确认收货
+     */
+    void automaticReceiptInvoice();
 }

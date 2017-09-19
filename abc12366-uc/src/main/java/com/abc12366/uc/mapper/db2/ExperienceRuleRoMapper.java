@@ -14,4 +14,6 @@ public interface ExperienceRuleRoMapper {
     List<ExperienceRuleBO> selectList(Map<String, Object> map);
 
     ExperienceRuleBO selectOne(String id);
+
+    ExperienceRuleBO selectValidOne(String ruleId);
 }

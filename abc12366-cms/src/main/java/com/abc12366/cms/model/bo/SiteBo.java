@@ -114,6 +114,9 @@ public class SiteBo implements Serializable {
      **/
     private String statisticsCode;
 
+    /**声明*/
+    private String statement;
+
     public String getSiteId() {
         return siteId;
     }
@@ -248,5 +251,13 @@ public class SiteBo implements Serializable {
 
     public void setStatisticsCode(String statisticsCode) {
         this.statisticsCode = statisticsCode;
+    }
+
+    public String getStatement() {
+        return statement;
+    }
+
+    public void setStatement(String statement) {
+        this.statement = statement;
     }
 }

@@ -263,11 +263,29 @@
         WHERE id = #{id} AND userId = #{userId}
     </select>
 
+    <!-- 查询（根据主键ID和UserId查询） -->
+    <select id="selectByIdAndUserId" resultType="com.abc12366.uc.model.Invoice" parameterType="com.abc12366.uc.model.Invoice">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_invoice
+        WHERE id = #{id} AND userId = #{userId}
+    </select>
+
     <select id="selectAvailableInvoice" resultType="com.abc12366.uc.model.Invoice">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
         WHERE id = #{id}
+    </select>
+
+    <!--查询需要自动确认收货的发票订单-->
+    <select id="selectReceiptInvoiceByDate" resultType="com.abc12366.uc.model.Invoice" parameterType="java.util.Date">
+        <include refid="Base_Column_List"/>
+        FROM uc_invoice
+        WHERE status = '4'
+        <![CDATA[
+                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                ]]>
     </select>
 
     <sql id="InvoiceBO_Column_List">
