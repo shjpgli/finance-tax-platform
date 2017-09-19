@@ -113,7 +113,12 @@ public class AuthServiceImpl implements AuthService {
         String salt;
         try {
             //密码生产规则：前台传密码md5之后的值，后台用该值加上salt再md5 ，salt是随机生成的六位整数
-            password = Utils.md5(registerBO.getPassword());
+//            password = Utils.md5(registerBO.getPassword());
+//            salt = Utils.salt();
+//            encodePassword = Utils.md5(password + salt);
+
+            //新的密码规则
+            password = rsaService.decode(registerBO.getPassword());
             salt = Utils.salt();
             encodePassword = Utils.md5(password + salt);
         } catch (Exception e) {

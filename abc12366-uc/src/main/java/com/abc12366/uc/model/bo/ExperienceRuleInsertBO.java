@@ -11,13 +11,13 @@ import javax.validation.constraints.Size;
  * Time: 11:06
  */
 public class ExperienceRuleInsertBO {
-    @NotEmpty
+    @NotEmpty(message = "规则名称不能为空")
     @Size(max = 32)
     private String name;
     @NotEmpty
     @Size(max = 10)
     private String code;
-    @NotNull
+    @NotNull(message = "经验数值不能为空")
     private Integer exp;
     @Size(max = 1000)
     private String description;
@@ -25,7 +25,7 @@ public class ExperienceRuleInsertBO {
     private String type;
     @NotNull
     private Boolean status;
-    @NotEmpty
+    @NotEmpty(message = "规则周期不能为空")
     private String period;
     @NotNull
     private Integer degree;
