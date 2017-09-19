@@ -32,9 +32,9 @@
             <if test="vipLevel != null">vipLevel = #{vipLevel},</if>
             <if test="usernameModifiedTimes != null">usernameModifiedTimes = #{usernameModifiedTimes},</if>
             <if test="vipExpireDate != null">vipExpireDate = #{vipExpireDate},</if>
-            <if test="wxopenid != null and wxopenid !='' ">wxopenid = #{wxopenid},</if>
-            <if test="wxheadimg != null and wxheadimg !='' ">wxheadimg = #{wxheadimg},</if>
-            <if test="wxnickname != null and wxnickname !='' ">wxnickname = #{wxnickname}</if>
+            <if test="wxopenid != null">wxopenid = #{wxopenid},</if>
+            <if test="wxheadimg != null">wxheadimg = #{wxheadimg},</if>
+            <if test="wxnickname != null">wxnickname = #{wxnickname},</if>
         </set>
         where id=#{id}
     </update>
