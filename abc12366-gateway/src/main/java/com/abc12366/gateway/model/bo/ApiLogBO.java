@@ -69,6 +69,11 @@ public class ApiLogBO implements Serializable {
      **/
     private String message;
 
+    /**
+     * 接口方法
+     **/
+    private String method;
+
     public String getId() {
         return this.id;
     }
@@ -165,4 +170,11 @@ public class ApiLogBO implements Serializable {
         this.message = message;
     }
 
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 }

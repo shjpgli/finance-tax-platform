@@ -64,9 +64,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         // 前置日志、黑名单、后置日志、接口计数拦截
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**")
-                //第三方交易回调地址
+                        //第三方交易回调地址
                 .excludePathPatterns("/payreturn/**")
-                //微信服务回调地址
+                        //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
 
         // App验证、授权拦截
@@ -78,9 +78,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
-                //第三方交易回调地址
+                        //第三方交易回调地址
                 .excludePathPatterns("/payreturn/**")
-                //微信服务回调地址
+                .excludePathPatterns("/business/**")
+                        //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
 
         //前台用户访问拦截器迁移到网关后的
@@ -93,27 +94,27 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/business/**")
                 .excludePathPatterns("/test")
-                // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
-                .excludePathPatterns("/login", "/login/js", "/verifylogin", "/logout/**", "/refresh", "/register", "/user/token/**", "/user/u/**")
-                // 操作员登录、登出、token验证自动刷新
+                        // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
+                .excludePathPatterns("/login","/login/js", "/verifylogin", "/logout/**", "/refresh", "/register", "/user/token/**", "/user/u/**")
+                        // 操作员登录、登出、token验证自动刷新
                 .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**")
-                //第三方交易毁回调地址
+                        //第三方交易毁回调地址
                 .excludePathPatterns("/payreturn/**")
-                //微信服务回调地址
+                        //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*")
-                //用户等级接口地址
+                        //用户等级接口地址
                 .excludePathPatterns("/uvip/level/**")
-                //用户签到排行榜
+                        //用户签到排行榜
                 .excludePathPatterns("/check/rank")
-                //计算用户经验值接口
+                        //计算用户经验值接口
                 .excludePathPatterns("/experience/compute")
                 //根据省市区编号查询名称
                 .excludePathPatterns("/provinceorcityorarea")
-                //
-                .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
-                //好会计
-                .excludePathPatterns("/userhkj/token");
+                        //
+                .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login");
+
         //用户业务操作导致经验值更新，拦截器拦截处理
 //        registry.addInterceptor(uexpInterceptor())
 //                .addPathPatterns("/user/test");
