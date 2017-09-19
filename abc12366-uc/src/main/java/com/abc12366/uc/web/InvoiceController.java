@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -145,9 +146,9 @@ public class InvoiceController {
      * @return
      */
     @PostMapping(path = "/billing")
-    public ResponseEntity billing(@Valid @RequestBody InvoiceCheckBO invoiceCheckBO) {
+    public ResponseEntity billing(@Valid @RequestBody InvoiceCheckBO invoiceCheckBO,HttpServletRequest request) {
         LOGGER.info("{}", invoiceCheckBO);
-        invoiceService.billing(invoiceCheckBO);
+        invoiceService.billing(invoiceCheckBO,request);
         return ResponseEntity.ok(Utils.kv());
     }
 

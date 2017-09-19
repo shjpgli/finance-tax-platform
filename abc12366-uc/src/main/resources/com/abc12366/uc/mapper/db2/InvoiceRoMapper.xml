@@ -278,6 +278,16 @@
         WHERE id = #{id}
     </select>
 
+    <!--查询需要自动确认收货的发票订单-->
+    <select id="selectReceiptInvoiceByDate" resultType="com.abc12366.uc.model.Invoice" parameterType="java.util.Date">
+        <include refid="Base_Column_List"/>
+        FROM uc_invoice
+        WHERE status = '4'
+        <![CDATA[
+                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                ]]>
+    </select>
+
     <sql id="InvoiceBO_Column_List">
         i.id, i.userId, i.username, i.invoiceNo, i.invoiceCode, i.name, i.content, i.compName, i.amount, i.type,
         i.property, i.status, i.createTime, i.lastUpdate, i.nsrsbh, i.nsrmc, i.address, i.phone, i.bank, i.addressId,

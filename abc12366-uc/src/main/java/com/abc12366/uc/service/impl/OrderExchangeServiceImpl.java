@@ -21,6 +21,8 @@ import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
+import com.abc12366.uc.util.MessageConstant;
+import com.abc12366.uc.util.MessageSendUtil;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
@@ -37,6 +39,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,16 +87,24 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Autowired
 	private TradeLogService tradeLogService;
 
+    @Autowired
+    private ExpressCompRoMapper expressCompRoMapper;
+
+    @Autowired
+    private MessageSendUtil messageSendUtil;
+
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
-        exchangeCheck(ra);
+//        exchangeCheck(ra);
 
         OrderExchange data = new OrderExchange();
         BeanUtils.copyProperties(ra, data);
         List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
         //OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(data.getOrderNo());
-        if (dataList == null) {
+        if (dataList != null && dataList.size() >= 0) {
+            throw new ServiceException(4950);
+        } else {
             String userId = Utils.getUserId();
             data.setId(Utils.uuid());
             data.setUserId(userId);
@@ -107,8 +118,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             insertLog(data.getOrderNo(), "1", userId, data.getUserRemark(),"1");
             // 更新订单状态
             //changeOrderStatus(data.getOrderNo());
-        } else {
-            throw new ServiceException(4950);
         }
         return data;
     }
@@ -142,7 +151,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             // 是否在换货日期之内
             if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant
                     .ORDER_EXCHANGE_DAYS))) {
-                throw new ServiceException(4953);
+                throw new ServiceException(4953,"请确认订单换货日期之内，换货日期为："+Constant.ORDER_EXCHANGE_DAYS+"天");
             }
         } else { // 退货
             if ("1".equals(bo.getIsReturn())) { // 虚拟商品暂时不支持退货
@@ -150,7 +159,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }
             // 是否在退货日期之内
             if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant.ORDER_BACK_DAYS))) {
-                throw new ServiceException(4953);
+                throw new ServiceException(4953,"请确认订单退货日期之内，退货日期为："+Constant.ORDER_BACK_DAYS+"天");
             }
             // 用户现有积分是否达到购买是赠送的积分
             if (bo.getPoints() < bo.getGiftPoints()) {
@@ -196,7 +205,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Transactional("db1TxManager")
     @Override
-    public void importJson(List<SfImportBO> dataList) {
+    public void importJson(List<SfImportBO> dataList, HttpServletRequest request) {
         if (dataList.size() > 0) {
             for (SfImportBO data : dataList) {
                 OrderExchange oe = new OrderExchange.Builder()
@@ -208,13 +217,32 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 orderExchangeMapper.update(oe);
                 // 插入订单日志
                 insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark(),"1");
+
+
+                //发送消息
+                Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+                if(order != null){
+                    LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                    throw new ServiceException(4102,"订单信息查询失败");
+                }
+                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+                if(expressComp != null){
+                    LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                    throw new ServiceException(4102,"物流公司查询失败");
+                }
+                Message message = new Message();
+                message.setBusinessId(order.getOrderNo());
+                message.setType("SPDD");
+                message.setContent(MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
+                message.setUserId(order.getUserId());
+                messageSendUtil.sendMessage(message, request);
             }
         }
     }
 
     @Transactional("db1TxManager")
     @Override
-    public OrderExchange back(ExchangeBackBO data) throws Exception {
+    public OrderExchange back(ExchangeBackBO data, HttpServletRequest request) throws Exception {
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
@@ -289,13 +317,31 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }
             // 插入订单日志
             insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminConfirmRemark(),"1");
+
+            //发送消息
+            Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+            if(order != null){
+                LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102,"订单信息查询失败");
+            }
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+            if(expressComp != null){
+                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102,"物流公司查询失败");
+            }
+            Message message = new Message();
+            message.setBusinessId(oe.getOrderNo());
+            message.setType("SPDD");
+            message.setContent("您的宝贝已发出，运单号：（"+expressComp.getCompName()+"+"+order.getExpressNo()+"），如有疑问请联系客服咨询4008873133");
+            message.setUserId(order.getUserId());
+            messageSendUtil.sendMessage(message, request);
         }
         return oe;
     }
 
     @Transactional("db1TxManager")
     @Override
-    public ResponseEntity refund(ExchangeRefundBO data) {
+    public ResponseEntity refund(ExchangeRefundBO data, HttpServletRequest httpServletRequest) {
     	OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
     	// 退积分
         ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
@@ -372,11 +418,31 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                 
                                 // 插入订单日志-已完成
                                 insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款","1");
-								
+
+                                //发送消息
+                                Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+                                if(order != null){
+                                    LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                                    throw new ServiceException(4102,"订单信息查询失败");
+                                }
+                                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+                                if(expressComp != null){
+                                    LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                                    throw new ServiceException(4102,"物流公司查询失败");
+                                }
+                                //服务类型：1-换货 2-退货
+                                Message message = new Message();
+                                message.setBusinessId(oe.getOrderNo());
+                                message.setType(MessageConstant.SPDD);
+                                message.setContent(MessageConstant.REFUND_PREFIX+refundRes.getRefund_fee()+MessageConstant.REFUND_SUFFIX+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
+                                message.setUserId(order.getUserId());
+                                messageSendUtil.sendMessage(message, httpServletRequest);
+
 								return ResponseEntity.ok(Utils.kv("data", refundRes));
 							}else{
 								return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
 							}
+
 						}  catch (Exception e) {
 							LOGGER.error("支付宝退款失败：",e);
 							return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
@@ -384,6 +450,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     }
                 }
             }
+
         } else {
             throw new ServiceException(4956);
         }
@@ -454,7 +521,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderExchange disagree(ExchangeAdminBO data) {
+    public OrderExchange disagree(ExchangeAdminBO data, HttpServletRequest request) {
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
@@ -466,6 +533,34 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             // 插入订单日志
             insertLog(oe.getOrderNo(), "5", Utils.getAdminId(), oe.getAdminRemark(),"1");
+
+            //发送消息
+            Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+            if(order != null){
+                LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102,"订单信息查询失败");
+            }
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+            if(expressComp != null){
+                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102,"物流公司查询失败");
+            }
+            //服务类型：1-换货 2-退货
+            if("1".equals(oe.getType())){
+                Message message = new Message();
+                message.setBusinessId(oe.getOrderNo());
+                message.setType(MessageConstant.SPDD);
+                message.setContent(MessageConstant.RETREAT_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">查看详情</a>"+MessageConstant.SUFFIX);
+                message.setUserId(order.getUserId());
+                messageSendUtil.sendMessage(message, request);
+            }else if("2".equals(oe.getType())){
+                Message message = new Message();
+                message.setBusinessId(oe.getOrderNo());
+                message.setType(MessageConstant.SPDD);
+                message.setContent(MessageConstant.EXCHANGE_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
+                message.setUserId(order.getUserId());
+                messageSendUtil.sendMessage(message, request);
+            }
         }
         return oe;
     }
@@ -477,7 +572,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderExchange agree(ExchangeAdminBO data) {
+    public OrderExchange agree(ExchangeAdminBO data, HttpServletRequest request) {
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
@@ -489,6 +584,34 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             // 插入订单日志
             insertLog(oe.getOrderNo(), "2", Utils.getAdminId(), oe.getAdminRemark(),"1");
+
+            //发送消息
+            Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+            if(order != null){
+                LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102,"订单信息查询失败");
+            }
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+            if(expressComp != null){
+                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102,"物流公司查询失败");
+            }
+            //服务类型：1-换货 2-退货
+            if("1".equals(oe.getType())){
+                Message message = new Message();
+                message.setBusinessId(oe.getOrderNo());
+                message.setType(MessageConstant.SPDD);
+                message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
+                message.setUserId(order.getUserId());
+                messageSendUtil.sendMessage(message, request);
+            }else if("2".equals(oe.getType())){
+                Message message = new Message();
+                message.setBusinessId(oe.getOrderNo());
+                message.setType(MessageConstant.SPDD);
+                message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.RETREAT_CHECK_ADOPT+"</a>");
+                message.setUserId(order.getUserId());
+                messageSendUtil.sendMessage(message, request);
+            }
         }
         return oe;
     }
