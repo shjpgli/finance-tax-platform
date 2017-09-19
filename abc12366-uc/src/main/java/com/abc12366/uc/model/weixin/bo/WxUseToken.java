@@ -16,8 +16,26 @@ public class WxUseToken extends BaseWxRespon {
     private String access_token;
     private String ticket;
     private Integer expires_in;
+    private String openid;
+    private String scope;
 
-    public String getAccess_token() {
+    public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+
+	public String getAccess_token() {
         return access_token;
     }
 

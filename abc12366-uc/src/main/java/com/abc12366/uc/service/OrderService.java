@@ -4,6 +4,7 @@ import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.OrderBack;
 import com.abc12366.uc.model.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -104,7 +105,7 @@ public interface OrderService {
     /**
      * 修改支付状态
      */
-    OrderBO paymentOrder(OrderPayBO orderPayBO,String type);
+    OrderBO paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request);
 
     /**
      * 查询导出订单
@@ -114,12 +115,12 @@ public interface OrderService {
     /**
      * 查询导入订单
      */
-    void selectImportOrder(List<OrderBO> orderBOList, String expressCompId);
+    void selectImportOrder(List<OrderBO> orderBOList, String expressCompId, HttpServletRequest request);
 
     /**
      * 订单发货
      */
-    void sendOrder(OrderOperationBO orderOperationBO);
+    void sendOrder(OrderOperationBO orderOperationBO, HttpServletRequest request);
 
     /**
      * 订单作废

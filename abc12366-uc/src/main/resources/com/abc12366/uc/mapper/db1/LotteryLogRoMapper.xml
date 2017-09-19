@@ -4,19 +4,22 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryLogMapper">
 <insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
 insert into uc_lottery_log(
-id,lotteryId,userId,notluck,upoint,state,createTime
+id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip
 )values(
-#{id},#{lotteryId},#{userId},#{notluck},#{upoint},#{state},#{createTime})
+#{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip})
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
 update  uc_lottery_log 
 <set>
+<if test="activityId!=null">activityId=#{activityId},</if>
 <if test="lotteryId!=null">lotteryId=#{lotteryId},</if>
-<if test="userId!=null">userId=#{userId},</if>
-<if test="notluck!=null">notluck=#{notluck},</if>
-<if test="upoint!=null">upoint=#{upoint},</if>
-<if test="state!=null">state=#{state},</if>
 <if test="createTime!=null">createTime=#{createTime},</if>
+<if test="lotteryName!=null">lotteryName=#{lotteryName},</if>
+<if test="isluck!=null">isluck=#{isluck},</if>
+<if test="state!=null">state=#{state},</if>
+<if test="userId!=null">userId=#{userId},</if>
+<if test="upoint!=null">upoint=#{upoint},</if>
+<if test="ip!=null">ip=#{ip},</if>
 </set>
 where id=#{id}
 </update>

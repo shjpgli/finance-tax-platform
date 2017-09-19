@@ -1,13 +1,10 @@
 package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db2.OrderExchangeRoMapper;
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
-import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TradeLogService;
-import com.abc12366.uc.service.VipLogService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
@@ -138,7 +135,7 @@ public class PayReturnController {
                     orderPayBO.setOrderNo(out_trade_no);
                     orderPayBO.setIsPay(2);
                     orderPayBO.setPayMethod("ALIPAY");
-                    orderService.paymentOrder(orderPayBO,"RMB");
+                    orderService.paymentOrder(orderPayBO,"RMB", request);
                     LOGGER.info("更新订单状态:{}", out_trade_no);
                 }
             }
