@@ -25,4 +25,6 @@ public interface UserRoMapper {
     List<UserBO> selectListExcludedId(String id);
 
     User selectValidOne(String userId);
+
+	UserBO selectByopenid(String openid);
 }

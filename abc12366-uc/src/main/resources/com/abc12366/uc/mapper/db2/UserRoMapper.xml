@@ -7,9 +7,18 @@
         select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
-        uu.vipLevel,usernameModifiedTimes,vipExpireDate
+        uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname 
         from uc_user uu
         where uu.id != #{id}
+    </select>
+    
+    <select id="selectByopenid" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
+        uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname 
+        from uc_user uu
+        where uu.wxopenid != #{wxopenid}
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
@@ -54,6 +63,7 @@
        select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,
         (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
         from uc_user uu
         where uu.id = #{id}
@@ -64,6 +74,7 @@
         select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,
         (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
         from uc_user uu
         <where>
@@ -80,6 +91,7 @@
         uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,
         (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
         from uc_user uu, uc_token ut
         where uu.id=ut.userId
@@ -90,6 +102,7 @@
         select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,
         (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
         from uc_user uu
         where uu.id = #{id}

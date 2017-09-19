@@ -36,4 +36,6 @@ public interface UserService {
     //String login(LoginBO loginBO, String token) throws Exception;
 
     void updateUserVipInfo(String userId, String vipLevel);
+
+	UserBO selectByopenid(String openid);
 }

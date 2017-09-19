@@ -110,6 +110,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/experience/compute")
                 //根据省市区编号查询名称
                 .excludePathPatterns("/provinceorcityorarea")
+                //JS获取微信信息
+                .excludePathPatterns("/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig")
                         //
                 .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
                 //好会计

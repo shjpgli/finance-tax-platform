@@ -23,7 +23,13 @@
         FROM bb_question
         WHERE 1=1
         <if test="title != null and title != ''">
-            AND title = #{title}
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="tag != null and tag != ''">
+            AND tag like CONCAT('%',#{tag},'%')
+        </if>
+        <if test="classifyCode != null and classifyCode != ''">
+            AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
     </select>
 

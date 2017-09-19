@@ -50,6 +50,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TokenRoMapper tokenRoMapper;
 
+    @Autowired
+    private RSAService rsaService;
+
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
         //解析多标签名称参数
@@ -219,7 +222,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //判断是否有用户token请求头
-        String token = (String) request.getHeader(Constant.USER_TOKEN_HEAD);
+        String token = request.getHeader(Constant.USER_TOKEN_HEAD);
         if (token == null || token.equals("")) {
             throw new ServiceException(4199);
         }
@@ -236,7 +239,16 @@ public class UserServiceImpl implements UserService {
         }
 
         //密码加密
-        String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword(), userExist.getSalt());
+        //String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword(), userExist.getSalt());
+
+        //新的加密
+        String password = rsaService.decode(passwordUpdateBO.getPassword());
+        String encodePassword = PasswordUtils.encodeUpdatePassword(password, userExist.getSalt());
+
+        //修改密码不能为旧密码
+        if(encodePassword.equals(userExist.getPassword())){
+            throw new ServiceException(4040);
+        }
 
         //改库..
         User user = new User();
@@ -290,4 +302,9 @@ public class UserServiceImpl implements UserService {
         user.setLastUpdate(new Date());
         userMapper.update(user);
     }
+
+	@Override
+	public UserBO selectByopenid(String openid) {
+		return userRoMapper.selectByopenid(openid);
+	}
 }

@@ -26,8 +26,12 @@ public enum WechatUrl {
     MATERIAL_NEWSIMG("添加图文素材图片", "/cgi-bin/media/uploadimg"),
     WXQRCODE_TICKET("获取二维码ticket", "/cgi-bin/qrcode/create"),
     WXIMG_DOWN("素材下载","/cgi-bin/media/get"),
-    WXIMG_JSTOKEN("JSTOKEN","/sns/oauth2/access_token");
-    
+    WXIMG_JSTOKEN("JSTOKEN","/sns/oauth2/access_token"),
+    // 商户平台接口
+    SENDREDPACK("发放普通红包", "/mmpaymkttransfers/sendredpack"),
+    GETHBINFO("查询红包记录", "/mmpaymkttransfers/gethbinfo");
+
+
 
     public String describe;
 

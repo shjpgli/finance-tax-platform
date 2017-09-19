@@ -113,7 +113,12 @@ public class AuthServiceImpl implements AuthService {
         String salt;
         try {
             //密码生产规则：前台传密码md5之后的值，后台用该值加上salt再md5 ，salt是随机生成的六位整数
-            password = Utils.md5(registerBO.getPassword());
+//            password = Utils.md5(registerBO.getPassword());
+//            salt = Utils.salt();
+//            encodePassword = Utils.md5(password + salt);
+
+            //新的密码规则
+            password = rsaService.decode(registerBO.getPassword());
             salt = Utils.salt();
             encodePassword = Utils.md5(password + salt);
         } catch (Exception e) {
@@ -580,4 +585,65 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4022);
         }
     }
+
+	@Override
+	public Map loginByopenid(UserBO user, String appToken) throws Exception {
+		 //更新用户主表后再更新uc_token表
+        App appTemp = new App();
+        appTemp.setAccessToken(appToken);
+        appTemp.setStatus(true);
+        App app = appRoMapper.selectOne(appTemp);
+        //如果不存在有效的注册应用，则不允许登录
+        if (app == null) {
+            LOGGER.warn("登录失败，参数:{}:{}", user.toString(), appToken);
+            throw new ServiceException(4019);
+        }
+
+        Token queryToken = tokenRoMapper.selectOne(user.getId(), app.getId());
+        int result02;
+        //假如uc_token表有记录（根据userId和appId），则更新，没有则新增
+        String userToken = Utils.token(Utils.uuid());
+        if (queryToken != null) {
+            queryToken.setLastTokenResetTime(new Date());
+            userToken = queryToken.getToken();
+            result02 = tokenMapper.update(queryToken);
+        } else {
+            Token token = new Token();
+            token.setId(Utils.uuid());
+            if (app.getId() != null) {
+                token.setAppId(app.getId());
+            }
+            if (user.getId() != null) {
+                token.setUserId(user.getId());
+            }
+            token.setToken(userToken);
+            token.setLastTokenResetTime(new Date());
+            result02 = tokenMapper.insert(token);
+        }
+        if (result02 != 1) {
+            LOGGER.warn("登录失败，参数:{}:{}", user.toString(), appToken);
+            throw new ServiceException(4021);
+        }
+
+        //计算用户登录经验值变化
+        computeExp(user.getId());
+        //记用户登录日志
+        insertLoginLog(user.getId());
+        //任务日志
+        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_ID);
+
+        UserBO userBO = new UserBO();
+        BeanUtils.copyProperties(user, userBO);
+        userBO.setPassword(null);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", userToken);
+        map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
+        map.put("user", userBO);
+
+        // 用户信息写入redis
+        valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
+                TimeUnit.SECONDS);
+        return map;
+	}
 }
