@@ -43,6 +43,12 @@ public class QuestionAnswerBo implements Serializable {
     /**ip**varchar(45)**/
     private String ip;
 
+    /**评论次数**int(11)**/
+    private Integer answerNum;
+
+    /**点赞次数**int(11)**/
+    private Integer likeNum;
+
 
 
 	public void setId(String id){
@@ -131,5 +137,21 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+    }
+
+    public Integer getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(Integer likeNum) {
+        this.likeNum = likeNum;
     }
 }

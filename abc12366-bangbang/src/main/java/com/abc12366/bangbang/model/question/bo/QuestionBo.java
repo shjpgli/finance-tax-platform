@@ -56,6 +56,9 @@ public class QuestionBo implements Serializable {
     /**ip**varchar(45)**/
     private String ip;
 
+    /**回复次数**int(11)**/
+    private Integer answerNum;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -176,5 +179,13 @@ public class QuestionBo implements Serializable {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
     }
 }
