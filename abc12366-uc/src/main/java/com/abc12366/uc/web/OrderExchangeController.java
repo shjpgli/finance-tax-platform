@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -136,11 +137,11 @@ public class OrderExchangeController {
      * 同意换货
      */
     @PutMapping(path = "/agree/{id}")
-    public ResponseEntity agree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data) {
+    public ResponseEntity agree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data,HttpServletRequest request) {
 
         data.setId(id);
         LOGGER.info("{}", data);
-        OrderExchange oe = orderExchangeService.agree(data);
+        OrderExchange oe = orderExchangeService.agree(data,request);
         List<Dict> dataList = dictService.selectList("receive_info");
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe, "dataList", dataList));
@@ -152,11 +153,11 @@ public class OrderExchangeController {
      * 拒绝换货
      */
     @PutMapping(path = "/disagree/{id}")
-    public ResponseEntity disagree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data) {
+    public ResponseEntity disagree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data,HttpServletRequest request) {
 
         data.setId(id);
         LOGGER.info("{}", data);
-        OrderExchange oe = orderExchangeService.disagree(data);
+        OrderExchange oe = orderExchangeService.disagree(data,request);
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));
         LOGGER.info("{}", responseEntity);
@@ -196,7 +197,7 @@ public class OrderExchangeController {
      * 确认退货
      */
     @PutMapping(path = "/back/{id}")
-    public ResponseEntity back(@PathVariable("id") String id, @Valid @RequestBody ExchangeBackBO data) throws
+    public ResponseEntity back(@PathVariable("id") String id, @Valid @RequestBody ExchangeBackBO data,HttpServletRequest request) throws
             Exception {
 
         data.setId(id);
@@ -216,7 +217,7 @@ public class OrderExchangeController {
                 }
             }
         }
-        OrderExchange oe = orderExchangeService.back(data);
+        OrderExchange oe = orderExchangeService.back(data,request);
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", oe));
         LOGGER.info("{}", responseEntity);
@@ -227,11 +228,11 @@ public class OrderExchangeController {
      * 退款
      */
     @PutMapping(path = "/refund/{id}")
-    public ResponseEntity refund(@PathVariable("id") String id, @Valid @RequestBody ExchangeRefundBO data) {
+    public ResponseEntity refund(@PathVariable("id") String id, @Valid @RequestBody ExchangeRefundBO data,HttpServletRequest request) {
 
         data.setId(id);
         LOGGER.info("{}", data);
-        ResponseEntity responseEntity = orderExchangeService.refund(data);
+        ResponseEntity responseEntity = orderExchangeService.refund(data,request);
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;
@@ -293,9 +294,9 @@ public class OrderExchangeController {
      * 导入json
      */
     @PutMapping("/import")
-    public ResponseEntity importJson(@Valid @RequestBody List<SfImportBO> dataList) {
+    public ResponseEntity importJson(@Valid @RequestBody List<SfImportBO> dataList,HttpServletRequest request) {
         LOGGER.info("{}", dataList);
-        orderExchangeService.importJson(dataList);
+        orderExchangeService.importJson(dataList,request);
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
         LOGGER.info("{}", responseEntity);

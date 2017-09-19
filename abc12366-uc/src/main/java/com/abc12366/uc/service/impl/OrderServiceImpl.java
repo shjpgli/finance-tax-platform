@@ -1,18 +1,17 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.service.VipLogService;
-import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.UCConstant;
+import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @create 2017-05-15 10:17 AM
@@ -34,6 +32,11 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    private static com.abc12366.gateway.util.Properties properties = new com.abc12366.gateway.util.Properties("application.properties");
+
+    @Autowired
+    private UcRestTemplateUtil ucRestTemplateUtil;
 
     @Autowired
     private OrderRoMapper orderRoMapper;
@@ -57,9 +60,6 @@ public class OrderServiceImpl implements OrderService {
     private OrderBackRoMapper orderBackRoMap;
 
     @Autowired
-    private InvoiceRoMapper invoiceRoMapper;
-
-    @Autowired
     private GoodsRoMapper goodsRoMapper;
 
     @Autowired
@@ -70,9 +70,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductRepoMapper productRepoMapper;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private UserService userService;
@@ -86,22 +83,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private UvipPriceRoMapper uvipPriceRoMapper;
 
-
-    @Autowired
-    private OrderProductspecRoMapper orderProductspecRoMapper;
-
     @Autowired
     private OrderProductspecMapper orderProductspecMapper;
-
-    @Autowired
-    private CityRoMapper cityRoMapper;
-
-    @Autowired
-    private AreaRoMapper areaRoMapper;
-
-    @Autowired
-    private ProvinceRoMapper provinceRoMapper;
-
 
     @Autowired
     private VipLogService vipLogService;
@@ -111,6 +94,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private TradeLogMapper tradeLogMapper;
+
+    @Autowired
+    private ExpressCompRoMapper expressCompRoMapper;
+
+    @Autowired
+    private MessageSendUtil messageSendUtil;
+
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -854,7 +844,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderBO paymentOrder(OrderPayBO orderPayBO,String type) {
+    public OrderBO paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request) {
         String orderNo = orderPayBO.getOrderNo();
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
         if (orderBO != null) {
@@ -903,7 +893,17 @@ public class OrderServiceImpl implements OrderService {
                             insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
                             insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
-                        } else if (goodsType.equals("5") || goodsType.equals("6")) {
+                            //发送消息
+                            sendMemberMsg(orderProductBO, order);
+                        } else if (goodsType.equals("5")) {
+                            order.setOrderStatus("6");
+                            orderMapper.update(order);
+
+                            insertPoints(orderBO);
+                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            //发送消息
+                            sendPointsMsg(orderProductBO, order);
+                        }else if (goodsType.equals("6")) {
                             order.setOrderStatus("6");
                             orderMapper.update(order);
 
@@ -935,7 +935,8 @@ public class OrderServiceImpl implements OrderService {
                         insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
                         insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
-                    } else if (goodsType.equals("5") || goodsType.equals("6")) {
+                        sendMemberMsg(orderProductBO, order);
+                    }else if (goodsType.equals("6")) {
                         order.setOrderStatus("6");
                         orderMapper.update(order);
 
@@ -947,6 +948,31 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return orderBO;
+    }
+
+    /**
+     * 购买会员，消息发送
+     */
+    private void sendMemberMsg(OrderProductBO orderProductBO, Order order) {
+        Message message = new Message();
+        message.setBusinessId(order.getOrderNo());
+        message.setType(MessageConstant.SPDD);
+        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX+"。<a href=\""+MessageConstant.ABCUC_URL+"/member/member_rights.html\">会员权益详情查看</a>");
+        message.setUserId(order.getUserId());
+        messageSendUtil.sendMessage(message);
+    }
+
+    /**
+     * 积分充值，消息发送
+     */
+    private void sendPointsMsg(OrderProductBO orderProductBO, Order order) {
+        Message message = new Message();
+        message.setBusinessId(order.getOrderNo());
+        message.setType(MessageConstant.SPDD);
+        User user = userRoMapper.selectOne(order.getUserId());
+        message.setContent(MessageConstant.INTEGRAL_RECHARGE+orderProductBO.getName()+user.getPoints()+"。<a href=\""+MessageConstant.ABCUC_URL+"/pointsExchange/points.php\">查看积分明细</a>");
+        message.setUserId(order.getUserId());
+        messageSendUtil.sendMessage(message);
     }
 
     /**
@@ -1044,7 +1070,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void selectImportOrder(List<OrderBO> orderBOList, String expressCompId) {
+    public void selectImportOrder(List<OrderBO> orderBOList, String expressCompId, HttpServletRequest request) {
         for(OrderBO bo:orderBOList){
             Order data = orderRoMapper.selectByPrimaryKey(bo.getOrderNo());
             if(data == null){
@@ -1066,12 +1092,25 @@ public class OrderServiceImpl implements OrderService {
                 throw new ServiceException(4102);
             }
             insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货","0");
+
+            //发送消息
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+            if(expressComp != null){
+                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102,"物流公司查询失败");
+            }
+            Message message = new Message();
+            message.setBusinessId(order.getOrderNo());
+            message.setType(MessageConstant.SPDD);
+            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
+            message.setUserId(order.getUserId());
+            messageSendUtil.sendMessage(message, request);
         }
     }
 
     @Transactional("db1TxManager")
     @Override
-    public void sendOrder(OrderOperationBO orderOperationBO) {
+    public void sendOrder(OrderOperationBO orderOperationBO, HttpServletRequest request){
         //订单状态，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
         orderOperationBO.setOrderStatus("5");
         Order order = new Order();
@@ -1082,6 +1121,18 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4102);
         }
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(),"0");
+        //发送消息
+        ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+        if(expressComp != null){
+            LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+            throw new ServiceException(4102,"物流公司查询失败");
+        }
+        Message message = new Message();
+        message.setBusinessId(order.getOrderNo());
+        message.setType(MessageConstant.SPDD);
+        message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
+        message.setUserId(order.getUserId());
+        messageSendUtil.sendMessage(message, request);
     }
 
     @Transactional("db1TxManager")
@@ -1107,6 +1158,14 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus("6");
             orderMapper.update(order);
             insertOrderLog("", order.getOrderNo(), "6", "系统自动确认收货","0");
+
+            //发送消息
+//            Message message = new Message();
+//            message.setBusinessId(order.getOrderNo());
+//            message.setType(MessageConstant.SPDD);
+//            message.setContent(MessageConstant.AUTOMATIC_CONFIRMATION_RECEIPT+"<a href=\""+MessageConstant.ABCUC_URL+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
+//            message.setUserId(order.getUserId());
+//            messageSendUtil.sendMessage(message);
         }
     }
 

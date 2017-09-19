@@ -4,6 +4,7 @@ import com.abc12366.uc.model.OrderExchange;
 import com.abc12366.uc.model.bo.*;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public interface OrderExchangeService {
     /**
      * 拒绝退换货申请
      */
-    OrderExchange disagree(ExchangeAdminBO data);
+    OrderExchange disagree(ExchangeAdminBO data, HttpServletRequest request);
 
     /**
      * 查看退换货申请详情
@@ -41,7 +42,7 @@ public interface OrderExchangeService {
     /**
      * 同意退换货申请
      */
-    OrderExchange agree(ExchangeAdminBO data);
+    OrderExchange agree(ExchangeAdminBO data, HttpServletRequest request);
 
     /**
      * 换货申请确认收货
@@ -61,17 +62,17 @@ public interface OrderExchangeService {
     /**
      * 导入快递单号（顺丰模版）
      */
-    void importJson(List<SfImportBO> dataList);
+    void importJson(List<SfImportBO> dataList, HttpServletRequest request);
 
     /**
      * 退单申请中的确认退货，退票
      */
-    OrderExchange back(ExchangeBackBO data) throws Exception;
+    OrderExchange back(ExchangeBackBO data, HttpServletRequest request) throws Exception;
 
     /**
      * 退单申请中的退款、退积分处理
      */
-    ResponseEntity refund(ExchangeRefundBO data);
+    ResponseEntity refund(ExchangeRefundBO data, HttpServletRequest request);
 
     /**
      * 换货申请自动收货处理

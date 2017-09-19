@@ -46,6 +46,9 @@
             <if test="message != null">
                 message,
             </if>
+            <if test="method != null">
+                method,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -84,6 +87,9 @@
             </if>
             <if test="message!=null">
                 #{message},
+            </if>
+            <if test="method!=null">
+                #{method},
             </if>
         </trim>
     </insert>

@@ -4,6 +4,7 @@ import com.abc12366.uc.model.Invoice;
 import com.abc12366.uc.model.bo.InvoiceBO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,4 +31,6 @@ public interface InvoiceRoMapper {
     InvoiceBO selectInvoice(Invoice ce);
 
     Invoice selectByIdAndUserId(Invoice id);
+
+    List<Invoice> selectReceiptInvoiceByDate(@Param("date")Date date);
 }
