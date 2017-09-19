@@ -122,6 +122,18 @@ public class UserController {
         LOGGER.info("{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
+    
+    //
+    @GetMapping(path = "/u/openid/{openid}")
+    public ResponseEntity selectByopenid(@PathVariable String openid) {
+        LOGGER.info("{}", openid);
+        UserBO user = userService.selectByopenid(openid);
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
+    }
 
     //更新用户信息
     @PutMapping(path = "/{id}")
@@ -186,4 +198,7 @@ public class UserController {
 //        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
 //        return ResponseEntity.ok(Utils.kv());
 //    }
+    
+    
+    
 }

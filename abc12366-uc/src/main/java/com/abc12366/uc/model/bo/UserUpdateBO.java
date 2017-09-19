@@ -34,8 +34,36 @@ public class UserUpdateBO {
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String wxopenid;
+    private String wxheadimg;
+    private String wxnickname;
+    
+    
+    public String getWxopenid() {
+		return wxopenid;
+	}
 
-    public UserUpdateBO() {
+	public void setWxopenid(String wxopenid) {
+		this.wxopenid = wxopenid;
+	}
+
+	public String getWxheadimg() {
+		return wxheadimg;
+	}
+
+	public void setWxheadimg(String wxheadimg) {
+		this.wxheadimg = wxheadimg;
+	}
+
+	public String getWxnickname() {
+		return wxnickname;
+	}
+
+	public void setWxnickname(String wxnickname) {
+		this.wxnickname = wxnickname;
+	}
+
+	public UserUpdateBO() {
     }
 
     public String getId() {

@@ -290,4 +290,9 @@ public class UserServiceImpl implements UserService {
         user.setLastUpdate(new Date());
         userMapper.update(user);
     }
+
+	@Override
+	public UserBO selectByopenid(String openid) {
+		return userRoMapper.selectByopenid(openid);
+	}
 }
