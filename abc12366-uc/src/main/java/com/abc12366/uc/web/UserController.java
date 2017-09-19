@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
@@ -125,14 +126,21 @@ public class UserController {
     
     //
     @GetMapping(path = "/u/openid/{openid}")
-    public ResponseEntity selectByopenid(@PathVariable String openid) {
-        LOGGER.info("{}", openid);
-        UserBO user = userService.selectByopenid(openid);
-        if (user == null) {
-            throw new ServiceException(4018);
-        }
-        LOGGER.info("{}", user);
-        return ResponseEntity.ok(Utils.kv("data", user));
+    public ResponseEntity selectByopenid(@PathVariable String openid,HttpServletRequest request){
+        try {
+			LOGGER.info("{}", openid);
+			UserBO user = userService.selectByopenid(openid);
+			if (user == null) {
+			    throw new ServiceException(4018);
+			}else{
+				Map token = authService.loginByopenid(user, request.getHeader(Constant.APP_TOKEN_HEAD));
+				LOGGER.info("{}", user);
+				return ResponseEntity.ok(Utils.kv("data", token));
+			}
+			
+		} catch (Exception e) {
+			throw new ServiceException(4018);
+		}
     }
 
     //更新用户信息

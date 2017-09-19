@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.VerifyingCodeBO;
 import com.abc12366.uc.model.bo.RegisterBO;
 import com.abc12366.uc.model.bo.UserReturnBO;
@@ -33,4 +34,6 @@ public interface AuthService {
     boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException;
 
     void logout(String token);
+
+	Map loginByopenid(UserBO user, String header) throws Exception;
 }
