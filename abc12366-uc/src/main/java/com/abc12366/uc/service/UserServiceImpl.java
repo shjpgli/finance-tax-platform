@@ -242,8 +242,7 @@ public class UserServiceImpl implements UserService {
         //String encodePassword = PasswordUtils.encodePassword(passwordUpdateBO.getPassword(), userExist.getSalt());
 
         //新的加密
-        String password = rsaService.decode(passwordUpdateBO.getPassword());
-        String encodePassword = PasswordUtils.encodeUpdatePassword(password, userExist.getSalt());
+        String encodePassword = rsaService.decode(passwordUpdateBO.getPassword());
 
         //修改密码不能为旧密码
         if(encodePassword.equals(userExist.getPassword())){
