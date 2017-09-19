@@ -2,7 +2,6 @@ package com.abc12366.uc.web.wx;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.WxUseToken;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.model.weixin.bo.gzh.WxJsConfig;
