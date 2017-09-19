@@ -180,6 +180,7 @@ public class AppServiceImpl implements AppService {
         AppSettingBO appSettingBO = new AppSettingBO();
         appSettingBO.setAppId(appId);
         appSettingBO.setUri(bestMatchingPattern);
+        appSettingBO.setMethod(method);
 
         //TODO 目前只对微信API拦截,微信appId=c1109d75-02b1-4c9b-83da-677f86182003
         if("c1109d75-02b1-4c9b-83da-677f86182003".equals(appId)){
