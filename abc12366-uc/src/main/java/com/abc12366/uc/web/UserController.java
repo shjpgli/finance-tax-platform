@@ -172,6 +172,16 @@ public class UserController {
         LOGGER.info("{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
+    
+    //更新用户信息
+    @PutMapping(path = "/wx/{id}")
+    public ResponseEntity wxupdate(@Valid @RequestBody UserUpdateBO userUpdateDTO, @PathVariable String id) {
+        LOGGER.info("{}", userUpdateDTO);
+        userUpdateDTO.setId(id);
+        UserBO user = userService.update(userUpdateDTO);
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
+    }
 
     //删除用户
     @DeleteMapping(path = "/{userId}")
