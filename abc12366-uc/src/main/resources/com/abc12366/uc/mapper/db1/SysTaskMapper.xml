@@ -4,8 +4,10 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.SysTaskMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.SysTask">
         insert into
-        uc_sys_task(id,name,startTime,endTime,rule,points,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,count,skipURL)
-        values(#{id},#{name},#{startTime},#{endTime},#{rule},#{points},#{type},#{status},#{createTime},#{lastUpdate},#{imageUrl},#{ruleName},#{ruleCode},#{count},#{skipURL})
+        uc_sys_task(id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,
+        ruleName,ruleCode,count,skipURL,awardType,ruleId,remark,dateType)
+        values(#{id},#{name},#{startTime},#{endTime},#{rule},#{award},#{type},#{status},#{createTime},
+        #{lastUpdate},#{imageUrl},#{ruleName},#{ruleCode},#{count},#{skipURL},#{awardType},#{ruleId},#{remark},#{dateType})
     </insert>
     <update id="update" parameterType="com.abc12366.uc.model.SysTask">
         update uc_sys_task
@@ -14,7 +16,7 @@
             startTime=#{startTime},
             endTime=#{endTime},
             <if test="rule!=null">rule=#{rule},</if>
-            <if test="points!=null">points=#{points},</if>
+            <if test="award!=null">award=#{award},</if>
             <if test="type!=null">type=#{type},</if>
             <if test="status!=null">status=#{status},</if>
             <if test="lastUpdate!=null">lastUpdate=#{lastUpdate},</if>
@@ -22,7 +24,11 @@
             <if test="ruleName!=null">ruleName=#{ruleName},</if>
             <if test="ruleCode!=null">ruleCode=#{ruleCode},</if>
             <if test="count!=null">count=#{count},</if>
-            <if test="skipURL!=null">skipURL=#{skipURL}</if>
+            <if test="skipURL!=null">skipURL=#{skipURL},</if>
+            <if test="awardType!=null">awardType=#{awardType},</if>
+            <if test="ruleId!=null">ruleId=#{ruleId},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+            <if test="dateType!=null">dateType=#{dateType}</if>
         </set>
         where id=#{id}
     </update>

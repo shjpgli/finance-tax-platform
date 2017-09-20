@@ -17,7 +17,6 @@ public class PasswordUpdateBO {
     @Size(min = 11, max = 11)
     private String phone;
     @NotEmpty
-    @Size(min = 8, max = 32)
     private String password;
 
     public PasswordUpdateBO() {

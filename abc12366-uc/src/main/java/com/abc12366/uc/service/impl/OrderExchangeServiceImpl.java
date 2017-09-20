@@ -221,12 +221,12 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
                 //发送消息
                 Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-                if(order != null){
-                    LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                if(order == null){
+                    LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                     throw new ServiceException(4102,"订单信息查询失败");
                 }
                 ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-                if(expressComp != null){
+                if(expressComp == null){
                     LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
                     throw new ServiceException(4102,"物流公司查询失败");
                 }
@@ -320,12 +320,12 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             //发送消息
             Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-            if(order != null){
-                LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+            if(order == null){
+                LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                 throw new ServiceException(4102,"订单信息查询失败");
             }
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-            if(expressComp != null){
+            if(expressComp == null){
                 LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102,"物流公司查询失败");
             }
@@ -421,14 +421,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
                                 //发送消息
                                 Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-                                if(order != null){
-                                    LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                                if(order == null){
+                                    LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                                     throw new ServiceException(4102,"订单信息查询失败");
-                                }
-                                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-                                if(expressComp != null){
-                                    LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-                                    throw new ServiceException(4102,"物流公司查询失败");
                                 }
                                 //服务类型：1-换货 2-退货
                                 Message message = new Message();
@@ -536,14 +531,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             //发送消息
             Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-            if(order != null){
-                LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+            if(order == null){
+                LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                 throw new ServiceException(4102,"订单信息查询失败");
-            }
-            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-            if(expressComp != null){
-                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-                throw new ServiceException(4102,"物流公司查询失败");
             }
             //服务类型：1-换货 2-退货
             if("1".equals(oe.getType())){
@@ -587,14 +577,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             //发送消息
             Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-            if(order != null){
+            if(order == null){
                 LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102,"订单信息查询失败");
-            }
-            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-            if(expressComp != null){
-                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-                throw new ServiceException(4102,"物流公司查询失败");
             }
             //服务类型：1-换货 2-退货
             if("1".equals(oe.getType())){

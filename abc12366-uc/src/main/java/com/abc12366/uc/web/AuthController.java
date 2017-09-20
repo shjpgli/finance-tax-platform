@@ -122,6 +122,9 @@ public class AuthController extends BaseController {
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
+        //如果用户当天定时任务没有完成，就在登录的时候生成
+        todoTaskService.generateAllTodoTaskList(loginBO);
+
         Map token = authService.loginJs(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
@@ -140,6 +143,11 @@ public class AuthController extends BaseController {
         }
         //进行手机验证码验证
         if (authService.verifyCode(loginBO, request)) {
+            //如果用户当天定时任务没有完成，就在登录的时候生成
+            LoginBO login = new LoginBO();
+            login.setUsernameOrPhone(loginBO.getPhone());
+            todoTaskService.generateAllTodoTaskList(login);
+
             Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
             LOGGER.info("{}", token);
             return ResponseEntity.ok(Utils.kv("data", token));

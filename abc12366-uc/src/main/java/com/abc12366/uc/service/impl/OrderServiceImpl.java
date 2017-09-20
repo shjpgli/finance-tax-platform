@@ -1095,7 +1095,7 @@ public class OrderServiceImpl implements OrderService {
 
             //发送消息
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-            if(expressComp != null){
+            if(expressComp == null){
                 LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102,"物流公司查询失败");
             }
@@ -1123,7 +1123,7 @@ public class OrderServiceImpl implements OrderService {
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(),"0");
         //发送消息
         ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-        if(expressComp != null){
+        if(expressComp == null){
             LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
             throw new ServiceException(4102,"物流公司查询失败");
         }

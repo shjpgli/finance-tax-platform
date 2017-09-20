@@ -13,7 +13,7 @@ import java.util.Date;
  * Time: 10:26
  */
 public class SysTaskInsertAndUpdateBO {
-    @NotEmpty
+    @NotEmpty(message = "系统任务名称不能为空")
     @Size(max = 200)
     private String name;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -22,32 +22,34 @@ public class SysTaskInsertAndUpdateBO {
     private Date endTime;
     @Size(max = 4000)
     private String rule;
-    private Integer points;
+    @NotNull(message = "奖励参数不能为空")
+    private Integer award;
+    @NotEmpty(message = "系统任务类型不能为空")
     @Size(max = 1)
     private String type;
-    @NotNull
+    @NotNull(message = "系统任务状态不能为空")
     private Boolean status;
+    @NotEmpty(message = "图片地址不能为空")
     @Size(max = 200)
     private String imageUrl;
     @Size(max = 20)
     private String ruleName;
     @Size(max = 20)
     private String ruleCode;
+    @NotNull(message = "数量不能为空")
     private Integer count;
     @Size(max = 50)
     private String skipURL;
+    @NotEmpty(message = "奖励类型不能为空")
     private String awardType;
-    @NotEmpty
+    @NotEmpty(message = "规则ID不能为空")
     @Size(max = 64)
     private String ruleId;
     private String remark;
+    @NotEmpty(message = "系统任务周期不能为空")
     private String dateType;
 
     public SysTaskInsertAndUpdateBO() {
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
     }
 
     public Integer getCount() {
@@ -98,12 +100,12 @@ public class SysTaskInsertAndUpdateBO {
         this.rule = rule;
     }
 
-    public int getPoints() {
-        return points;
+    public Integer getAward() {
+        return award;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setAward(Integer award) {
+        this.award = award;
     }
 
     public String getType() {

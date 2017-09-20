@@ -111,6 +111,26 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("user", null, "user_extend", null)) :
                 ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
+    
+    @GetMapping(path = "/wx/{id}")
+    public ResponseEntity<?> selectOneByWx(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        Map map = userService.selectOne(id);
+        LOGGER.info("{}", map);
+        return (map == null) ?
+                ResponseEntity.ok(Utils.kv("user", null)) :
+                ResponseEntity.ok(Utils.kv("user", map.get("user")));
+    }
+    
+    @GetMapping(path = "/wx/openid/{openid}")
+    public ResponseEntity<?> selectByopenid(@PathVariable String openid) {
+    	UserBO user = userService.selectByopenid(openid);
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
+    }
 
     //根据用户名或者电话查询用户
     @GetMapping(path = "/u/{usernameOrPhone}")
@@ -126,7 +146,7 @@ public class UserController {
     
     //
     @GetMapping(path = "/u/openid/{openid}")
-    public ResponseEntity selectByopenid(@PathVariable String openid,HttpServletRequest request){
+    public ResponseEntity loginByopenid(@PathVariable String openid,HttpServletRequest request){
         try {
 			LOGGER.info("{}", openid);
 			UserBO user = userService.selectByopenid(openid);
@@ -146,6 +166,16 @@ public class UserController {
     //更新用户信息
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody UserUpdateBO userUpdateDTO, @PathVariable String id) {
+        LOGGER.info("{}", userUpdateDTO);
+        userUpdateDTO.setId(id);
+        UserBO user = userService.update(userUpdateDTO);
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
+    }
+    
+    //更新用户信息
+    @PutMapping(path = "/wx/{id}")
+    public ResponseEntity wxupdate(@Valid @RequestBody UserUpdateBO userUpdateDTO, @PathVariable String id) {
         LOGGER.info("{}", userUpdateDTO);
         userUpdateDTO.setId(id);
         UserBO user = userService.update(userUpdateDTO);

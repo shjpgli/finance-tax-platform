@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db1.QuestionTipOffMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	reason,	createUser,	createTime,	sourceId,	sourceType,	updateAdmin,	updateTime
+	</sql>
+
+
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionTipOffBo">
+		SELECT t.*,
+		IF(t1.title IS NULL, t2.answer, CONCAT(t1.title,t1.detail)) content,
+		IF(t1.status IS NULL, t2.status, t1.status) STATUS
+		FROM bb_question_tip_off t
+		LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
+		LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
+	</select>
+
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="questionTipOff" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_question_tip_off
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM bb_question_tip_off
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="questionTipOff">
+		 INSERT INTO bb_question_tip_off
+ 		(id,reason,createUser,createTime,sourceId,sourceType,updateAdmin,updateTime) 
+		 VALUES 
+ 		(#{id},#{reason},#{createUser},now(),#{sourceId},#{sourceType},#{updateAdmin},#{updateTime})
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="questionTipOff">
+		 INSERT INTO bb_question_tip_off
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="reason != null">
+				 reason,
+			</if>
+			<if test="createUser != null">
+				 createUser,
+			</if>
+			<if test="createTime != null">
+				 createTime,
+			</if>
+			<if test="sourceId != null">
+				 sourceId,
+			</if>
+			<if test="sourceType != null">
+				 sourceType,
+			</if>
+			<if test="updateAdmin != null">
+				 updateAdmin,
+			</if>
+			<if test="updateTime != null">
+				 updateTime,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="reason!=null">
+				 #{reason},
+			</if>
+			<if test="createUser!=null">
+				 #{createUser},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="sourceId!=null">
+				 #{sourceId},
+			</if>
+			<if test="sourceType!=null">
+				 #{sourceType},
+			</if>
+			<if test="updateAdmin!=null">
+				 #{updateAdmin},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="questionTipOff">
+		 UPDATE bb_question_tip_off
+ 		 <set> 
+			<if test="reason != null">
+				 reason = #{reason},
+			</if>
+			<if test="createUser != null">
+				 createUser = #{createUser},
+			</if>
+			<if test="sourceId != null">
+				 sourceId = #{sourceId},
+			</if>
+			<if test="sourceType != null">
+				 sourceType = #{sourceType},
+			</if>
+			<if test="updateAdmin != null">
+				 updateAdmin = #{updateAdmin},
+			</if>
+				 updateTime = now()
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="questionTipOff">
+		 UPDATE bb_question_tip_off
+		 SET 
+			 reason = #{reason},
+			 createUser = #{createUser},
+			 sourceId = #{sourceId},
+			 sourceType = #{sourceType},
+			 updateAdmin = #{updateAdmin},
+			 updateTime = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
