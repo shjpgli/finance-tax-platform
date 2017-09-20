@@ -349,6 +349,8 @@ public class AuthServiceImpl implements AuthService {
         computeExp(user.getId());
         //记用户登录日志
         insertLoginLog(user.getId());
+        //任务日志
+        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_ID);
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
