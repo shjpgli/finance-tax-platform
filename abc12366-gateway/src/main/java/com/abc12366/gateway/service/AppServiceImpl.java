@@ -175,7 +175,7 @@ public class AppServiceImpl implements AppService {
         // 设置appId，用于在业务中快速获取有效AppId，在AppInterceptor.postHandle中删除。
 
         request.setAttribute(Constant.APP_ID, appId);
-        String method = request.getMethod();
+        String method = request.getMethod().toUpperCase();
         String version = request.getHeader(Constant.VERSION_HEAD);
         AppSettingBO appSettingBO = new AppSettingBO();
         appSettingBO.setAppId(appId);
