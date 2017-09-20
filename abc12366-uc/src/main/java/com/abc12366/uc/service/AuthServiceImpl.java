@@ -163,6 +163,14 @@ public class AuthServiceImpl implements AuthService {
         }
         UserReturnBO userReturnBO = new UserReturnBO();
         BeanUtils.copyProperties(user, userReturnBO);
+
+        //首次绑定手机任务埋点
+        todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
+        if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
+            //首次上传用户头像任务埋点
+            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+        }
+
         LOGGER.info("{}", userReturnBO);
         return userReturnBO;
     }
@@ -192,7 +200,7 @@ public class AuthServiceImpl implements AuthService {
 
             //现在的加密版本
             password = rsaService.decode(loginBO.getPassword());
-            LOGGER.info("password:{}" , password);
+            LOGGER.info("password:{}", password);
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
             throw new ServiceException(4106);
@@ -292,7 +300,7 @@ public class AuthServiceImpl implements AuthService {
 
             //现在的加密版本
             password = rsaService.decodeStringFromJs(loginBO.getPassword());
-            LOGGER.info("password:{}" , password);
+            LOGGER.info("password:{}", password);
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
             throw new ServiceException(4106);
@@ -399,13 +407,13 @@ public class AuthServiceImpl implements AuthService {
         Calendar calendar2 = Calendar.getInstance();
         calendar1.add(Calendar.DATE, -i);
         calendar1.set(Calendar.HOUR_OF_DAY, 0);
-        calendar1.set(Calendar.SECOND,0);
-        calendar1.set(Calendar.MINUTE,0);
+        calendar1.set(Calendar.SECOND, 0);
+        calendar1.set(Calendar.MINUTE, 0);
 
-        calendar2.add(Calendar.DATE, -(i-1));
+        calendar2.add(Calendar.DATE, -(i - 1));
         calendar2.set(Calendar.HOUR_OF_DAY, 0);
-        calendar2.set(Calendar.SECOND,0);
-        calendar2.set(Calendar.MINUTE,0);
+        calendar2.set(Calendar.SECOND, 0);
+        calendar2.set(Calendar.MINUTE, 0);
 
         map.put("userId", userId);
         map.put("startTime", calendar1.getTime());
@@ -588,9 +596,9 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-	@Override
-	public Map loginByopenid(UserBO user, String appToken) throws Exception {
-		 //更新用户主表后再更新uc_token表
+    @Override
+    public Map loginByopenid(UserBO user, String appToken) throws Exception {
+        //更新用户主表后再更新uc_token表
         App appTemp = new App();
         appTemp.setAccessToken(appToken);
         appTemp.setStatus(true);
@@ -647,5 +655,5 @@ public class AuthServiceImpl implements AuthService {
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
                 TimeUnit.SECONDS);
         return map;
-	}
+    }
 }

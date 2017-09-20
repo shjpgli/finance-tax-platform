@@ -8,6 +8,8 @@ import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
+import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +37,9 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
 
     @Autowired
     private UserExtendMapper userExtendMapper;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
 
     @Override
     public List<UserExtendListBO> selectList(Map map) {
@@ -66,6 +71,10 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         if (result < 1) {
             throw new ServiceException();
         }
+
+        //首次实名认证任务埋点
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_ID);
+
         UserExtendBO userExtendBO = new UserExtendBO();
         UserExtend userExtend1 = userExtendRoMapper.selectOne(userExtendUpdate.getUserId());
         BeanUtils.copyProperties(userExtend1, userExtendBO);

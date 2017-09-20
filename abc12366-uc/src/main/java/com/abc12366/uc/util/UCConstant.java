@@ -47,7 +47,7 @@ public class UCConstant {
     //用户登录任务
     public final static String SYS_TASK_LOGIN_ID = "55fe8293-a53b-46a2-8a8e-1269339d888f";
     //用户签到任务
-    public final static String SYS_TASK_CHECK_ID = "a7668563-b70c-447e-9ddb-9dd63bf63282";
+    public final static String SYS_TASK_CHECK_ID = "8b125435-755a-4e9e-b1da-f92a17c736f6";
     //每日课程学习
     public final static String SYS_TASK_COURSE_LEARNING_ID = "76303795-aa1f-480b-94f4-51ac0deb3bb2";
     //每日分享
@@ -57,17 +57,20 @@ public class UCConstant {
     //每日评论
     public final static String SYS_TASK_COMMENT_ID = "";
     //每日浏览资讯
-    public final static String SYS_TASK_BROSE_NEWS_ID = "";
+    public final static String SYS_TASK_BROSE_NEWS_ID = "ebbe59c7-c597-4d96-ac19-b2a8554da53a";
 
     //首次消费
     public final static String SYS_TASK_FIRST_CONSUME_ID = "587748ea-05cd-4f60-9010-cb88786612a0";
     //首次手机认证
     public final static String SYS_TASK_FIRST_PHONE_VALIDATE_ID = "db7c37b6-00b8-4b29-9c31-dfd8f2b30322";
-    //首次邮箱认证
-    public final static String SYS_TASK_FIRST_MAIL_VALIDATE_ID = "";
+    //首次邮箱认证(暂不做)
+    public final static String SYS_TASK_FIRST_MAIL_VALIDATE_ID = "ac5c676e-80a6-4d49-b809-a24d49b997bf";
     //首次实名认证
-    public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_ID = "";
-
+    public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_ID = "99903d77-6197-44ef-86c6-df14aab9c269";
+    //首次修改登录密码
+    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_ID = "";
+    //首次上传用户头像图片
+    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "";
 
     //登录tdps密码加密约定码
     public final static String TDPS_LOGIN_PWD_APPOINT_CODE = "abchngs";

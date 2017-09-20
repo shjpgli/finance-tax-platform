@@ -15,6 +15,7 @@ import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
 import com.abc12366.uc.util.PasswordUtils;
+import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +53,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RSAService rsaService;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
 
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
@@ -159,6 +163,12 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn("修改失败");
             throw new ServiceException(4102);
         }
+
+        if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
+            //首次上传用户头像任务埋点
+            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+        }
+
         UserBO userDTO = new UserBO();
         BeanUtils.copyProperties(user, userDTO);
         userDTO.setPassword(null);
@@ -261,6 +271,9 @@ public class UserServiceImpl implements UserService {
         }
         //删除token
         tokenMapper.delete(token);
+
+        //首次修改密码任务埋点
+        todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_ID);
         return true;
     }
 
