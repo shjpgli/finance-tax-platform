@@ -176,7 +176,7 @@ public class AppServiceImpl implements AppService {
 
         request.setAttribute(Constant.APP_ID, appId);
         String method = request.getMethod().toUpperCase();
-        LOGGER.info("API METHOD:", method);
+        LOGGER.info("API METHOD:"+method);
         String version = request.getHeader(Constant.VERSION_HEAD);
         AppSettingBO appSettingBO = new AppSettingBO();
         appSettingBO.setAppId(appId);
