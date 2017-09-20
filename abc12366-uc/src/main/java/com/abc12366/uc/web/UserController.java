@@ -111,6 +111,16 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("user", null, "user_extend", null)) :
                 ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
+    
+    @GetMapping(path = "/wx/{id}")
+    public ResponseEntity<?> selectOneByWx(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        Map map = userService.selectOne(id);
+        LOGGER.info("{}", map);
+        return (map == null) ?
+                ResponseEntity.ok(Utils.kv("user", null)) :
+                ResponseEntity.ok(Utils.kv("user", map.get("user")));
+    }
 
     //根据用户名或者电话查询用户
     @GetMapping(path = "/u/{usernameOrPhone}")
