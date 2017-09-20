@@ -41,8 +41,8 @@ public class TodoTaskController {
      * @param userId
      * @return
      */
-    @GetMapping(path = "/normal/{userId}")
-    public ResponseEntity selectNormalTaskList(@PathVariable("userId") String userId,
+    @GetMapping(path = "/normal")
+    public ResponseEntity selectNormalTaskList(@RequestParam(value = "userId") String userId,
                                                @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
@@ -59,8 +59,8 @@ public class TodoTaskController {
      * @param userId
      * @return
      */
-    @GetMapping(path = "/onetime/{userId}")
-    public ResponseEntity selectOnetimeTaskList(@PathVariable("userId") String userId,
+    @GetMapping(path = "/onetime")
+    public ResponseEntity selectOnetimeTaskList(@RequestParam(value = "userId") String userId,
                                                 @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
@@ -77,8 +77,8 @@ public class TodoTaskController {
      * @param userId
      * @return
      */
-    @GetMapping(path = "/special/{userId}")
-    public ResponseEntity selectSpecialTaskList(@PathVariable("userId") String userId,
+    @GetMapping(path = "/special")
+    public ResponseEntity selectSpecialTaskList(@RequestParam(value = "userId") String userId,
                                                 @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
