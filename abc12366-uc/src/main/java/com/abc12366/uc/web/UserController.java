@@ -121,6 +121,16 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("user", null)) :
                 ResponseEntity.ok(Utils.kv("user", map.get("user")));
     }
+    
+    @GetMapping(path = "/wx/openid/{openid}")
+    public ResponseEntity<?> selectByopenid(@PathVariable String openid) {
+    	UserBO user = userService.selectByopenid(openid);
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
+    }
 
     //根据用户名或者电话查询用户
     @GetMapping(path = "/u/{usernameOrPhone}")
@@ -136,7 +146,7 @@ public class UserController {
     
     //
     @GetMapping(path = "/u/openid/{openid}")
-    public ResponseEntity selectByopenid(@PathVariable String openid,HttpServletRequest request){
+    public ResponseEntity loginByopenid(@PathVariable String openid,HttpServletRequest request){
         try {
 			LOGGER.info("{}", openid);
 			UserBO user = userService.selectByopenid(openid);
