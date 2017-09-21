@@ -179,7 +179,7 @@ public class CheckServiceImpl implements CheckService {
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setId(Utils.uuid());
         pointsLog.setCreateTime(new Date());
-        //pointsLog.setRuleId();
+        pointsLog.setRuleId(UCConstant.POINT_RULE_CHECK_ID);
         pointsLog.setUserId(userId);
         pointsLog.setIncome(points);
         pointsLog.setLogType("CHECK_IN");

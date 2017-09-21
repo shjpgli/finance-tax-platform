@@ -95,6 +95,8 @@ public class UCConstant {
 
 
     //积分计算规则ID
+    //签到
+    public final static String POINT_RULE_CHECK_ID = "d4aa8dca-d7e7-469f-93b4-764e35050a4f";
     //补签到
     public final static String POINT_RULE_RECHECK_ID = "003a6366-0bba-4a0b-8486-9b3c2805adeb";
     //积分兑换（该条规则不用于积分计算，仅用于展示）
