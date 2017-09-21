@@ -41,6 +41,9 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             record.setCreateUser(UcUserCommon.getAdminId());
             record.setUpdateUser(UcUserCommon.getAdminId());
             String parentCode = StringUtil.nullToString(record.getParentCode());
+            if("0".equals(parentCode)){
+                parentCode = "";
+            }
             String code = parentCode + genCodes(6);
             for (; ; ) {
                 KnowledgeCategory rs = knowledgeCategoryMapper.selectByCode(code);
