@@ -31,6 +31,8 @@
     <select id="selectListTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.util.Map">
         SELECT
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
+        (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
+
         (SELECT count(id) FROM bb_question where userId =#{userId}) questionNum,
 
         (SELECT count(id) FROM bb_question_answer where parentId = '' and userId =#{userId}) answerNum,
