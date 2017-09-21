@@ -1023,8 +1023,7 @@ public class OrderServiceImpl implements OrderService {
     private void insertDeductPoints(OrderBO orderBO) {
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setRuleId(orderBO.getOrderNo());
-        //pointsLog.setIncome(orderBO.getGiftPoints());
+        pointsLog.setRuleId(UCConstant.POINT_RULE_EXCHANGE_ID);
         pointsLog.setOutgo(orderBO.getTotalPrice().intValue());
         pointsLog.setLogType("POINTS_RECHARGE");
         pointsLog.setRemark("积分兑换 - 订单号："+orderBO.getOrderNo());

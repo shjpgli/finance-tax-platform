@@ -41,7 +41,7 @@ public class AppSettingController {
      */
     @GetMapping(path = "/appsetting")
     public ResponseEntity selectList(@RequestParam(value = "appId", required = true) String appId,
-                                     @RequestParam(value = "name", required = true) String name,
+                                     @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
