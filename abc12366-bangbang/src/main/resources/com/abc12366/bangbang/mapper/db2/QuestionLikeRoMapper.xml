@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 likeId,	id,	userId,	likeTime
+		 likeId,	id,questionId,	userId,	likeTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -30,6 +30,14 @@
         count(id)
         FROM bb_question_like
         WHERE id = #{id} and userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectLikeCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(likeId)
+        FROM bb_question_like
+        WHERE id = #{id}
     </select>
 
 

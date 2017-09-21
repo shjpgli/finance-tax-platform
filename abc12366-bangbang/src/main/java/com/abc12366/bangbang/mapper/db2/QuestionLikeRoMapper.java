@@ -27,5 +27,7 @@ public interface QuestionLikeRoMapper {
 
     int selectExist(Map map);
 
+    int selectLikeCnt(String id);
+
 
 }

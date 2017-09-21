@@ -18,9 +18,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionLike">
 		 INSERT INTO bb_question_like
- 		(likeId,id,userId,likeTime) 
+ 		(likeId,id,questionId,userId,likeTime)
 		 VALUES 
- 		(#{likeId},#{id},#{userId},#{likeTime}) 
+ 		(#{likeId},#{id},#{questionId},#{userId},#{likeTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -33,6 +33,9 @@
 			<if test="id != null">
 				 id,
 			</if>
+             <if test="questionId != null">
+                 questionId,
+             </if>
 			<if test="userId != null">
 				 userId,
 			</if>
@@ -48,6 +51,9 @@
 			<if test="id!=null">
 				 #{id},
 			</if>
+             <if test="questionId!=null">
+                 #{questionId},
+             </if>
 			<if test="userId!=null">
 				 #{userId},
 			</if>
@@ -64,6 +70,9 @@
 			<if test="id != null">
 				 id = #{id},
 			</if>
+             <if test="questionId != null">
+                 questionId = #{questionId},
+             </if>
 			<if test="userId != null">
 				 userId = #{userId},
 			</if>
@@ -80,6 +89,7 @@
 		 UPDATE bb_question_like
 		 SET 
 			 id = #{id},
+			 questionId = #{questionId},
 			 userId = #{userId},
 			 likeTime = #{likeTime}
 		 WHERE likeId = #{likeId}

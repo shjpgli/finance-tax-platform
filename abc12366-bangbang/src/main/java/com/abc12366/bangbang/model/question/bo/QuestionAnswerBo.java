@@ -52,6 +52,9 @@ public class QuestionAnswerBo implements Serializable {
     /**点赞次数**int(11)**/
     private Integer likeNum;
 
+    /**是否已点赞：1/0**tinyint(4)**/
+    private Integer isLike;
+
 
 
 
@@ -167,4 +170,11 @@ public class QuestionAnswerBo implements Serializable {
         this.questionTitle = questionTitle;
     }
 
+    public Integer getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(Integer isLike) {
+        this.isLike = isLike;
+    }
 }

@@ -33,4 +33,9 @@ public interface QuestionAnswerRoMapper {
      **/
     List<QuestionAnswerBo> selectListByParentId(Map<String, Object> map);
 
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    List<QuestionAnswerBo> selectListNew(Map<String, Object> map);
+
 }

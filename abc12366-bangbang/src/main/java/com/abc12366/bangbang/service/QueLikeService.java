@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface QueLikeService {
 
-    QuestionLikeBo insert(String id, HttpServletRequest request);
+    String insert(String id, HttpServletRequest request);
 
-    void delete(String id, HttpServletRequest request);
+    String delete(String id, HttpServletRequest request);
 
     List<QuestionLikeBo> selectList(String userId);
 
