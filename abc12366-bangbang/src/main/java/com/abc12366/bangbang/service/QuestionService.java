@@ -32,4 +32,6 @@ public interface QuestionService {
 
     List<QuestionTagBo> selectTagList();
 
+    String updateBrowseNum(String id);
+
 }

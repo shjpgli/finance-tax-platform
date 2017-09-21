@@ -180,4 +180,13 @@
 		</foreach>
 	</update>
 
+    <!-- 修 改 浏览量-->
+    <update id="updateBrowseNum" parameterType="java.lang.String">
+        UPDATE bb_question
+        <set>
+            browseNum = browseNum + 1,
+        </set>
+        WHERE id = #{id}
+    </update>
+
 </mapper>

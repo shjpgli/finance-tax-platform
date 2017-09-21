@@ -54,5 +54,10 @@ public interface QuestionMapper{
 	 **/
 	int clearRecommendEndTimeByPks(String ids);
 
+    /**
+     * 修改浏览量(根据主键ID)
+     **/
+    int updateBrowseNum(@Param("id") String id);
+
 
 }
