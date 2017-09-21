@@ -12,6 +12,12 @@ public interface QuestionService {
 
     List<QuestionBo> selectList(Map<String, Object> map);
 
+    List<QuestionBo> selectListByBrowseNum(Map<String, Object> map);
+
+    List<QuestionBo> selectListWait(Map<String, Object> map);
+
+    List<QuestionBo> selectListAccept(Map<String, Object> map);
+
     List<QuestionBo> selectListry(Map<String, Object> map);
 
     QuestionBo save(QuestionBo questionBo);

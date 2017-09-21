@@ -25,9 +25,24 @@ public interface QuestionRoMapper {
 	Question  selectByPrimaryKey(@Param("id") String id);
 
     /**
-     * 查询(根据查询条件查询)
+     * 查询最新问题
      **/
     List<QuestionBo> selectList(Map<String, Object> map);
+
+    /**
+     * 查询热门问题
+     **/
+    List<QuestionBo> selectListByBrowseNum(Map<String, Object> map);
+
+    /**
+     * 查询等你回答的问题
+     **/
+    List<QuestionBo> selectListWait(Map<String, Object> map);
+
+    /**
+     * 查询已解决的问题
+     **/
+    List<QuestionBo> selectListAccept(Map<String, Object> map);
 
     /**
      * 查询邦友热议
