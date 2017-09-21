@@ -5,12 +5,16 @@
 
     <sql id="Base_Column_List">
         id, name, description, startTime, endTime, ruleType, rule, amountType, amount,
-        probability, status, wishing, remark, num, createTime, lastUpdate
+        probability, status, wishing, remark, num, times, createTime, lastUpdate
     </sql>
 
     <sql id="Base_RedEnvelop_List">
         id, secret, createTime, activityId, startTime, endTime, amount, amountType, probability,
         sendAmount, sendStatus, sendTimes, sendTime, receiveStatus, receiveTime, ip, openId
+    </sql>
+
+    <sql id="Base_LotteryLog_List">
+        id, secret, activityId, openId, createTime
     </sql>
     <!--删除：根据主键ID删除-->
     <delete id="delete" parameterType="java.lang.String">
@@ -24,7 +28,7 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         (#{id},#{name},#{description},#{startTime},#{endTime},#{ruleType},#{rule},#{amountType},#{amount},
-        #{probability},#{status}, #{wishing}, #{remark}, #{num}, #{createTime},#{lastUpdate})
+        #{probability},#{status}, #{wishing}, #{remark}, #{num}, #{times}, #{createTime},#{lastUpdate})
     </insert>
 
     <update id="update">
@@ -43,6 +47,7 @@
             <if test="wishing != null">wishing = #{wishing},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="num != null">num = #{num},</if>
+            <if test="times != null">times = #{times},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
         </set>
         where id = #{id}
@@ -72,4 +77,11 @@
         </set>
         where id = #{id}
     </update>
+
+    <insert id="insertLotteryLog">
+        INSERT INTO uc_wxlotterylog
+        (<include refid="Base_LotteryLog_List"/>)
+        VALUES
+        (#{id}, #{secret}, #{activityId}, #{openId}, #{createTime})
+    </insert>
 </mapper>

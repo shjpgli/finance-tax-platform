@@ -58,6 +58,6 @@ public class WxConnectFactory {
     private static <T extends Object> T doConnect(WxConnect<T> connect) {
         connect.initJson();
         connect.httpsRequest();
-        return connect.parseObject();
+        return connect.parseXmlObject();
     }
 }

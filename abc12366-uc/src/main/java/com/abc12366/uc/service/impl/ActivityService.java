@@ -129,6 +129,9 @@ public class ActivityService implements IActivityService {
         LOGGER.info("查询今天参与次数,活动:{}, openId:{}", lotteryBO.getActivityId(), lotteryBO.getOpenId());
         List<WxLotteryLog> lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
         WxActivity activity = activityRoMapper.selectOne(lotteryBO.getActivityId());
+        if (activity == null) {
+            throw new ServiceException(6007);
+        }
         if (lotteryLogs.size() > activity.getTimes()) {
             throw new ServiceException(6006);
         }
@@ -204,7 +207,7 @@ public class ActivityService implements IActivityService {
                 .wxappid(SpringCtxHolder.getProperty("abc.appid"))
                 .send_name(SpringCtxHolder.getProperty("abc.send_name"))
                 .re_openid(lotteryBO.getOpenId())
-                .total_amount(Integer.parseInt(String.valueOf(redEnvelop.getSendAmount() * 100)))
+                .total_amount(yuan2cent(redEnvelop.getSendAmount()).intValue())
                 .total_num(1)
                 .wishing(activity.getWishing())
                 .client_ip(getAddress() != null ? getAddress().getHostAddress() : "127.0.0.1")
@@ -232,6 +235,13 @@ public class ActivityService implements IActivityService {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 元转成分
+     */
+    private Double yuan2cent(Double yuan) {
+        return yuan * 100;
     }
 
     /**
@@ -278,7 +288,7 @@ public class ActivityService implements IActivityService {
                     random = "0" + random;
                 }
             }
-            return random;
+            return rule + random;
         } else {
             // 规则2口令格式为：管理员自主输入的中文字符串，用#符号分割，
             // 如：艾博克#财税平台#爱我中华#美丽中国，只要匹配其中一个词即可
