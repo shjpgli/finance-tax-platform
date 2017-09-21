@@ -5,8 +5,8 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, name, description, startTime, endTime, ruleType, rule, amountType, minAmount, maxAmount,
-        probability, status, createTime, lastUpdate
+        id, name, description, startTime, endTime, ruleType, rule, amountType, amount,
+        probability, status, wishing, remark, num, times, createTime, lastUpdate
     </sql>
 
     <sql id="Base_RedEnvelop_List">
@@ -56,7 +56,7 @@
         <include refid="Base_RedEnvelop_List"/>
         FROM uc_wxredenvelop
         <where>
-            receiveStatus != '2' and receiveStatus != '3'
+            receiveStatus is null and sendStatus is null
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
             <if test="secret != null and secret != ''">and secret = #{secret}</if>
         </where>
@@ -64,13 +64,11 @@
 
     <!-- 查询某一活动已中奖数量 -->
     <select id="queryRedEnvelopCount" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT
-        <include refid="Base_RedEnvelop_List"/>
-        FROM uc_wxredenvelop
-        <where>
-            receiveStatus = '0' and receiveStatus = '1'
-            <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
-        </where>
+        SELECT count(id) FROM uc_wxredenvelop
+        WHERE
+        receiveStatus = '0'
+        and receiveStatus = '1'
+        and activityId = #{activityId}
     </select>
 
     <select id="selectLotteryLogList" parameterType="com.abc12366.uc.model.weixin.WxLotteryLog"
