@@ -353,7 +353,7 @@
         <if test="siteName != null and siteName != ''">
             AND d.siteName = #{siteName}
         </if>
-        ORDER BY b.releaseDate DESC
+        ORDER BY b.releaseDate DESC, a.topLevel DESC
     </select>
 
     <!-- 查询财税资讯网 -->
