@@ -1122,15 +1122,19 @@ public class OrderServiceImpl implements OrderService {
         }
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(),"0");
         //发送消息
-        ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-        if(expressComp == null){
-            LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-            throw new ServiceException(4102,"物流公司查询失败");
+        ExpressComp expressComp = null;
+        if(order.getExpressCompId() != null && !"".equals(order.getExpressCompId())){
+            expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
         }
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setType(MessageConstant.SPDD);
-        message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
+        if(expressComp != null){
+            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
+        }else{
+            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+order.getExpressNo()+MessageConstant.SUFFIX);
+        }
+
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message, request);
     }
