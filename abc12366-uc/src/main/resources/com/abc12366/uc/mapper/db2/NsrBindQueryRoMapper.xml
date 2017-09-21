@@ -37,7 +37,7 @@
                 and uuh.nsrsbh=#{nsrsbh}
             </if>
             <if test="status!=null">
-                and uud.status=#{status}
+                and uuh.status=#{status}
             </if>
         </where>
         UNION ALL
@@ -54,7 +54,7 @@
                 and uuh.nsrsbh=#{nsrsbh}
             </if>
             <if test="status!=null">
-                and uud.status=#{status}
+                and uuh.status=#{status}
             </if>
         </where>
         ) a
