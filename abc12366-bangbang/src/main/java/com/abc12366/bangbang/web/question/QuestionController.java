@@ -56,8 +56,8 @@ public class QuestionController {
     /**
      * 帮友热议列表查询
      */
-    @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+    @GetMapping(path = "/selectListry")
+    public ResponseEntity selectListry(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         Map<String, Object> dataMap = new HashMap<>();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
