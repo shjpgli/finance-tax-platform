@@ -54,6 +54,19 @@ public class QuestionController {
     }
 
     /**
+     * 帮友热议列表查询
+     */
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> dataMap = new HashMap<>();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListry(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 问题新增
      */
     @PostMapping
@@ -108,7 +121,7 @@ public class QuestionController {
     }
 
     /**
-     * 根据热议标签
+     * 查询热议标签
      */
     @GetMapping(path = "/selectTagList")
     public ResponseEntity selectTagList() {

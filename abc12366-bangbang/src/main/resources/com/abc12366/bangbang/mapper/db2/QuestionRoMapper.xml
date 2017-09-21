@@ -31,6 +31,17 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
+        ORDER BY createTime DESC
+    </select>
+
+    <!-- 查询帮友热议 -->
+    <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+        SELECT
+            id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+            (select count(id) from bb_question_answer where questionId = q.id and parentId != '') answerNum
+        FROM bb_question q
+        WHERE 1=1
+        ORDER BY answerNum DESC
     </select>
 
 

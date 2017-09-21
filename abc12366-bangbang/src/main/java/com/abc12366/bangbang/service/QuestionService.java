@@ -12,6 +12,8 @@ public interface QuestionService {
 
     List<QuestionBo> selectList(Map<String, Object> map);
 
+    List<QuestionBo> selectListry(Map<String, Object> map);
+
     QuestionBo save(QuestionBo questionBo);
 
     QuestionBo selectQuestion(String id);

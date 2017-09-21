@@ -29,4 +29,9 @@ public interface QuestionRoMapper {
      **/
     List<QuestionBo> selectList(Map<String, Object> map);
 
+    /**
+     * 查询邦友热议
+     **/
+    List<QuestionBo> selectListry(Map<String, Object> map);
+
 }

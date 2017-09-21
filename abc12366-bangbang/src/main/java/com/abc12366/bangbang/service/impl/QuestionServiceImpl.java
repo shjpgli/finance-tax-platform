@@ -55,6 +55,19 @@ public class QuestionServiceImpl implements QuestionService {
         return questionBoList;
     }
 
+    @Override
+    public List<QuestionBo> selectListry(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //查询帮友热议列表
+            questionBoList = questionRoMapper.selectListry(map);
+        } catch (Exception e) {
+            LOGGER.error("查询帮友热议列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
     @Transactional("db1TxManager")
     @Override
     public QuestionBo save(QuestionBo questionBo) {
