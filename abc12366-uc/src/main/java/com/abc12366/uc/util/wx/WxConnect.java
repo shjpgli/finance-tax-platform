@@ -4,6 +4,8 @@ import com.abc12366.uc.config.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.message.FileContent;
 import com.alibaba.fastjson.JSON;
+import net.sf.json.JSONObject;
+import net.sf.json.xml.XMLSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -306,6 +308,28 @@ public class WxConnect<T> {
             return (T) new BaseWxRespon("-999", "SOA返回数据格式异常，请联系管理员");
         }
 
+    }
+
+    T parseXmlObject() {
+        try {
+            T res = JSON.parseObject(xml2JSON(this.jsonStr), _class);
+            return res;
+        } catch (Exception e) {
+            LOGGER.error("微信服务器返回json格式异常", e);
+            e.printStackTrace();
+            return (T) new BaseWxRespon("-999", "SOA返回数据格式异常，请联系管理员");
+        }
+
+    }
+
+    public static String xml2JSON(String xml){
+        return new XMLSerializer().read(xml).toString();
+    }
+
+    public static String json2XML(String json){
+        JSONObject jobj = JSONObject.fromObject(json);
+        String xml =  new XMLSerializer().write(jobj);
+        return xml;
     }
 
     public String getJsonStr() {

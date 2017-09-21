@@ -2,7 +2,7 @@ package com.abc12366.uc.service.impl;
 
 /**
  * Admin: lingsuzhi <554600654@qq.com.com>
- * Date: 2017-09-18
+ * Date: 2017-09-19
  */
 
 
@@ -35,6 +35,7 @@ LotteryTemplate obj = new LotteryTemplate();
 BeanUtils.copyProperties(lotteryTemplateBO, obj);
 obj.setId(id);
 obj.setCreateTime(null);
+obj.setLastTime(new Date());
 int result = lotteryTemplateMapper.update(obj);
 if (result != 1) {
 LOGGER.warn("修改失败，参数：" + obj);
@@ -56,6 +57,7 @@ BeanUtils.copyProperties(lotteryTemplateBO, obj);
 Date date = new Date();
 obj.setId(java.util.UUID.randomUUID().toString());
 obj.setCreateTime(date);
+obj.setLastTime(date);
 int result = lotteryTemplateMapper.insert(obj);
 if (result != 1) {
 LOGGER.warn("新增失败，参数：" + obj);
