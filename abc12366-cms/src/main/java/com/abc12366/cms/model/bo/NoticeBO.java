@@ -29,13 +29,16 @@ public class NoticeBO {
     private Timestamp createTime;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp lastUpdate;
+    private Timestamp releaseTime;
 
     private Integer count;
 
     //来源
     private String comefrom;
 
+
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp lastUpdate;
 
     public NoticeBO() {
     }
@@ -134,5 +137,13 @@ public class NoticeBO {
 
     public void setComefrom(String comefrom) {
         this.comefrom = comefrom;
+    }
+
+    public Timestamp getReleaseTime() {
+        return releaseTime;
+    }
+
+    public void setReleaseTime(Timestamp releaseTime) {
+        this.releaseTime = releaseTime;
     }
 }
