@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * Admin: lingsuzhi <554600654@qq.com.com>
- * Date: 2017-09-18
+ * Date: 2017-09-19
  */
 
 
@@ -18,8 +18,8 @@ private String url;
  /** 模版类型 */
 private String types;
  /** 状态 */
-private Integer status;
- /** 创建时间 */
+private Boolean status;
+ /** 时间,create */
 private Date createTime;
  /** 修改时间 */
 private Date lastTime;
@@ -48,10 +48,10 @@ public String getTypes(){
 public void setTypes(String types){
    this.types = types;
 }
-public Integer getStatus(){
+public Boolean getStatus(){
     return status;
 }
-public void setStatus(Integer status){
+public void setStatus(Boolean status){
    this.status = status;
 }
 public Date getCreateTime(){

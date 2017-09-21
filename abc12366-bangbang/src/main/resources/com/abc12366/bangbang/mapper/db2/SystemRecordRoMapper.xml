@@ -24,5 +24,11 @@
         from bb_system_record
         where id=#{id}
     </select>
-
+    <select id="findStay" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO" parameterType="com.abc12366.bangbang.model.SystemRecord">
+        SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,
+        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime
+        from bb_system_record
+        where userId=#{userId} and sessionId=#{sessionId} and day=#{day}
+        ORDER BY createTime DESC
+    </select>
 </mapper>
