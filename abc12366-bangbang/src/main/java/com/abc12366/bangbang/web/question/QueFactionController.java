@@ -1,8 +1,6 @@
 package com.abc12366.bangbang.web.question;
 
-import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo;
+import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QueFactionMemberService;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.util.Constant;
@@ -36,7 +34,7 @@ public class QueFactionController {
     private QueFactionService queFactionService;
 
     /**
-     * 邦派列表查询
+     * 我管理的邦派列表查询
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -46,6 +44,21 @@ public class QueFactionController {
         dataMap.put("userId", userId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionBo> dataList = queFactionService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 我加入的邦派列表查询
+     */
+    @GetMapping(path = "/selectListTj")
+    public ResponseEntity selectListTj(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionListBo> dataList = queFactionService.selectListTj(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -67,6 +80,16 @@ public class QueFactionController {
     public ResponseEntity selectOne(@PathVariable String factionId) {
         //查询单个邦派信息
         QuestionFactionBo factionBo = queFactionService.selectQuestionFaction(factionId);
+        return ResponseEntity.ok(Utils.kv("data", factionBo));
+    }
+
+    /**
+     * 查询(我管理的邦派)单个邦派信息
+     */
+    @GetMapping(path = "/selectQuestionFactionTj")
+    public ResponseEntity selectQuestionFactionTj(@RequestParam(value = "factionId", required = false) String factionId) {
+        //查询单个邦派信息
+        QuestionFactionTjBo factionBo = queFactionService.selectQuestionFactionTj(factionId);
         return ResponseEntity.ok(Utils.kv("data", factionBo));
     }
 

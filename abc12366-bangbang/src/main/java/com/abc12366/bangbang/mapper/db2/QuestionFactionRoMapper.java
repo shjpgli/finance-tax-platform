@@ -3,6 +3,7 @@ package com.abc12366.bangbang.mapper.db2;
 import com.abc12366.bangbang.model.question.QuestionFaction;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,6 +32,13 @@ public interface QuestionFactionRoMapper {
      *
      **/
     List<QuestionFactionBo> selectList(Map<String, Object> map);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    List<QuestionFactionListBo> selectListTj(Map<String, Object> map);
 
     /**
      *

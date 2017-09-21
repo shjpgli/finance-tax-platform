@@ -16,18 +16,36 @@
 		 WHERE factionId = #{factionId}
 	</select>
 
-    <!-- 查询（根据主键ID查询） -->
+    <!-- 查询我管理的邦派列表 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
+        factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade
         FROM bb_question_faction
         WHERE 1=1
         <if test="userId != null and userId != ''">
-            AND userId = #{userId}
+            AND factionId in(SELECT factionId FROM abc12366_bangbang.bb_question_faction_member where userId = #{userId})
         </if>
     </select>
 
-    <!-- 查询邦派信息包括统计 -->
+    <!-- 查询我加入的邦派列表 -->
+    <select id="selectListTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.util.Map">
+        SELECT
+        factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
+        (SELECT count(id) FROM bb_question where userId =#{userId}) questionNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and userId =#{userId}) answerNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and userId =#{userId}) discussNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and isAccept = '1' and userId =#{userId}) adoptNum
+        FROM bb_question_faction
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND factionId in(SELECT factionId FROM abc12366_bangbang.bb_question_faction_member where userId = #{userId})
+        </if>
+    </select>
+
+    <!-- 查询我管理的邦派信息包括统计 -->
     <select id="selectFactionTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo" parameterType="java.lang.String">
         SELECT
           factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
@@ -57,6 +75,7 @@
         FROM bb_question_faction f
         WHERE factionId = #{factionId}
     </select>
+
 
 
     <!-- 查询邦派动态 -->

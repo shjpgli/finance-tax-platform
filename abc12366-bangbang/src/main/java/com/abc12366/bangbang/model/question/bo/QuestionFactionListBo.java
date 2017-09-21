@@ -9,11 +9,11 @@ import java.util.List;
 
 /**
  * 
- * 邦派统计表
+ * 邦派表
  * 
  **/
 @SuppressWarnings("serial")
-public class QuestionFactionTjBo implements Serializable {
+public class QuestionFactionListBo implements Serializable {
 
 	/**邦派ID**varchar(64)**/
 	private String factionId;
@@ -73,31 +73,16 @@ public class QuestionFactionTjBo implements Serializable {
     /**邦派荣誉值****/
     private String honor;
 
-    /**本月成员回答数****/
-    private Integer answerNumM;
+    /**提问数****/
+    private Integer questionNum;
 
-    /**本月成员讨论数****/
-    private Integer discussNumM;
-
-    /**本月成员采纳回答数****/
-    private Integer adoptNumM;
-
-    /**本年成员回答数****/
-    private Integer answerNumY;
-
-    /**本年成员讨论数****/
-    private Integer discussNumY;
-
-    /**本年成员采纳回答数****/
-    private Integer adoptNumY;
-
-    /**累计成员回答数****/
+    /**回答数****/
     private Integer answerNum;
 
-    /**累计成员讨论数****/
+    /**讨论数****/
     private Integer discussNum;
 
-    /**累计成员采纳回答数****/
+    /**采纳回答数****/
     private Integer adoptNum;
 
     public String getFactionId() {
@@ -260,52 +245,12 @@ public class QuestionFactionTjBo implements Serializable {
         this.honor = honor;
     }
 
-    public Integer getAnswerNumM() {
-        return answerNumM;
+    public Integer getQuestionNum() {
+        return questionNum;
     }
 
-    public void setAnswerNumM(Integer answerNumM) {
-        this.answerNumM = answerNumM;
-    }
-
-    public Integer getDiscussNumM() {
-        return discussNumM;
-    }
-
-    public void setDiscussNumM(Integer discussNumM) {
-        this.discussNumM = discussNumM;
-    }
-
-    public Integer getAdoptNumM() {
-        return adoptNumM;
-    }
-
-    public void setAdoptNumM(Integer adoptNumM) {
-        this.adoptNumM = adoptNumM;
-    }
-
-    public Integer getAnswerNumY() {
-        return answerNumY;
-    }
-
-    public void setAnswerNumY(Integer answerNumY) {
-        this.answerNumY = answerNumY;
-    }
-
-    public Integer getDiscussNumY() {
-        return discussNumY;
-    }
-
-    public void setDiscussNumY(Integer discussNumY) {
-        this.discussNumY = discussNumY;
-    }
-
-    public Integer getAdoptNumY() {
-        return adoptNumY;
-    }
-
-    public void setAdoptNumY(Integer adoptNumY) {
-        this.adoptNumY = adoptNumY;
+    public void setQuestionNum(Integer questionNum) {
+        this.questionNum = questionNum;
     }
 
     public Integer getAnswerNum() {

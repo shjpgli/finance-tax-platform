@@ -11,6 +11,8 @@ public interface QueFactionService {
 
     List<QuestionFactionBo> selectList(Map<String, Object> map);
 
+    List<QuestionFactionListBo> selectListTj(Map<String, Object> map);
+
     QuestionFactionBo save(QuestionFactionBo factionBo);
 
     QuestionFactionBo selectQuestionFaction(String factionId);

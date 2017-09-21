@@ -11,6 +11,7 @@ import com.abc12366.bangbang.model.question.QuestionFactionClassify;
 import com.abc12366.bangbang.model.question.QuestionFactionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -56,13 +57,26 @@ public class QueFactionServiceImpl implements QueFactionService {
     public List<QuestionFactionBo> selectList(Map<String,Object> map) {
         List<QuestionFactionBo> questionFactionBoList;
         try {
-            //查询邦派列表
+            //查询我管理的邦派列表
             questionFactionBoList = questionFactionRoMapper.selectList(map);
         } catch (Exception e) {
             LOGGER.error("查询邦派列表信息异常：{}", e);
             throw new ServiceException(6120);
         }
         return questionFactionBoList;
+    }
+
+    @Override
+    public List<QuestionFactionListBo> selectListTj(Map<String,Object> map) {
+        List<QuestionFactionListBo> QuestionFactionListBoList;
+        try {
+            //查询我加入的邦派列表
+            QuestionFactionListBoList = questionFactionRoMapper.selectListTj(map);
+        } catch (Exception e) {
+            LOGGER.error("查询邦派列表信息异常：{}", e);
+            throw new ServiceException(6120);
+        }
+        return QuestionFactionListBoList;
     }
 
     @Transactional("db1TxManager")
@@ -133,6 +147,7 @@ public class QueFactionServiceImpl implements QueFactionService {
     public QuestionFactionTjBo selectQuestionFactionTj(String factionId) {
         QuestionFactionTjBo questionFactionBo = new QuestionFactionTjBo();
         try {
+            //我管理的邦派信息
             LOGGER.info("查询单个邦派信息:{}", factionId);
             //查询邦派信息
             questionFactionBo = questionFactionRoMapper.selectFactionTj(factionId);
