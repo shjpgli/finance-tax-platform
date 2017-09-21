@@ -19,6 +19,9 @@ public class QuestionAnswerBo implements Serializable {
 	/**问题ID**varchar(64)**/
 	private String questionId;
 
+    /**问题标题**varchar(64)**/
+    private String questionTitle;
+
 	/**用户ID**varchar(64)**/
 	private String userId;
 
@@ -48,6 +51,10 @@ public class QuestionAnswerBo implements Serializable {
 
     /**点赞次数**int(11)**/
     private Integer likeNum;
+
+    /**是否已点赞：1/0**tinyint(4)**/
+    private Integer isLike;
+
 
 
 
@@ -153,5 +160,21 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setLikeNum(Integer likeNum) {
         this.likeNum = likeNum;
+    }
+
+    public String getQuestionTitle() {
+        return questionTitle;
+    }
+
+    public void setQuestionTitle(String questionTitle) {
+        this.questionTitle = questionTitle;
+    }
+
+    public Integer getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(Integer isLike) {
+        this.isLike = isLike;
     }
 }

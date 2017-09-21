@@ -175,11 +175,13 @@ public class AppServiceImpl implements AppService {
         // 设置appId，用于在业务中快速获取有效AppId，在AppInterceptor.postHandle中删除。
 
         request.setAttribute(Constant.APP_ID, appId);
-        String method = request.getMethod();
+        String method = request.getMethod().toUpperCase();
+        LOGGER.info("API METHOD:"+method);
         String version = request.getHeader(Constant.VERSION_HEAD);
         AppSettingBO appSettingBO = new AppSettingBO();
         appSettingBO.setAppId(appId);
         appSettingBO.setUri(bestMatchingPattern);
+        appSettingBO.setMethod(method);
 
         //TODO 目前只对微信API拦截,微信appId=c1109d75-02b1-4c9b-83da-677f86182003
         if("c1109d75-02b1-4c9b-83da-677f86182003".equals(appId)){

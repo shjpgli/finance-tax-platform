@@ -34,10 +34,8 @@ public class AppSettingServiceImpl implements AppSettingService {
     private AppSettingMapper appSettingMapper;
 
     @Override
-    public List<AppSettingBO> selectList(String appId) {
-        AppSettingBO bo = new AppSettingBO();
-        bo.setAppId(appId);
-        return appSettingRoMapper.selectList(bo);
+    public List<AppSettingBO> selectList(AppSettingBO appSettingBO) {
+        return appSettingRoMapper.selectList(appSettingBO);
     }
 
     @Transactional("db1TxManager")

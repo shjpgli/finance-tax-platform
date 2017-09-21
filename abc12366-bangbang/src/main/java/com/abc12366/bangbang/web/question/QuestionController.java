@@ -35,7 +35,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     /**
-     * 问题列表查询
+     * 问题列表查询(最新)
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -49,6 +49,78 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 查询热门问题
+     */
+    @GetMapping(path = "/selectListByBrowseNum")
+    public ResponseEntity selectListByBrowseNum(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListByBrowseNum(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 查询等你回答的问题
+     */
+    @GetMapping(path = "/selectListWait")
+    public ResponseEntity selectListWait(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                         @RequestParam(value = "userId", required = false) String userId,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("userId", userId);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListWait(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 查询已解决的问题
+     */
+    @GetMapping(path = "/selectListAccept")
+    public ResponseEntity selectListAccept(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListAccept(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 帮友热议列表查询
+     */
+    @GetMapping(path = "/selectListry")
+    public ResponseEntity selectListry(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> dataMap = new HashMap<>();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListry(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -108,13 +180,25 @@ public class QuestionController {
     }
 
     /**
-     * 根据热议标签
+     * 查询热议标签
      */
     @GetMapping(path = "/selectTagList")
     public ResponseEntity selectTagList() {
         List<QuestionTagBo> dataList = questionService.selectTagList();
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
 
+    }
+
+    /**
+     * 更新浏览量
+     */
+    @PutMapping(path = "/updateBrowseNum/{id}")
+    public ResponseEntity updateBrowseNum(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        //更新浏览量信息
+        String rtn = questionService.updateBrowseNum(id);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
 

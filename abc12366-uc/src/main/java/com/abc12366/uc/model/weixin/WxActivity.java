@@ -36,7 +36,7 @@ public class WxActivity {
     private String ruleType;
     // 生成规则定义
     @NotEmpty
-    @Length(min = 2, max = 50)
+    @Length(min = 1, max = 50)
     private String rule;
     // 固定金额／随机金额
     @NotEmpty
@@ -74,9 +74,9 @@ public class WxActivity {
     public WxActivity() {
     }
 
-    public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType, String
-            rule, String amountType, Double amount, String probability, Boolean status, String
-                              wishing, String remark, Integer num, Date createTime, Date lastUpdate, Integer times) {
+    public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType,
+                      String rule, String amountType, Double amount, String probability, Boolean status, String
+                              wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -91,9 +91,9 @@ public class WxActivity {
         this.wishing = wishing;
         this.remark = remark;
         this.num = num;
+        this.times = times;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
-        this.times = times;
     }
 
     private WxActivity(Builder builder) {
@@ -111,9 +111,9 @@ public class WxActivity {
         setWishing(builder.wishing);
         setRemark(builder.remark);
         setNum(builder.num);
+        setTimes(builder.times);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
-        setTimes(builder.times);
     }
 
     public String getId() {
@@ -193,7 +193,7 @@ public class WxActivity {
     }
 
     public void setProbability(String probability) {
-        probability = probability;
+        this.probability = probability;
     }
 
     public Boolean getStatus() {
@@ -202,22 +202,6 @@ public class WxActivity {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
 
     public String getWishing() {
@@ -252,9 +236,25 @@ public class WxActivity {
         this.times = times;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     @Override
     public String toString() {
-        return "Activity{" +
+        return "WxActivity{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
@@ -269,9 +269,9 @@ public class WxActivity {
                 ", wishing='" + wishing + '\'' +
                 ", remark='" + remark + '\'' +
                 ", num=" + num +
+                ", times=" + times +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
-                ", times=" + times +
                 '}';
     }
 
@@ -290,9 +290,9 @@ public class WxActivity {
         private String wishing;
         private String remark;
         private Integer num;
+        private Integer times;
         private Date createTime;
         private Date lastUpdate;
-        private Integer times;
 
         public Builder() {
         }
@@ -337,12 +337,12 @@ public class WxActivity {
             return this;
         }
 
-        public Builder Amount(Double val) {
+        public Builder amount(Double val) {
             amount = val;
             return this;
         }
 
-        public Builder Probability(String val) {
+        public Builder probability(String val) {
             probability = val;
             return this;
         }
@@ -367,6 +367,11 @@ public class WxActivity {
             return this;
         }
 
+        public Builder times(Integer val) {
+            times = val;
+            return this;
+        }
+
         public Builder createTime(Date val) {
             createTime = val;
             return this;
@@ -374,11 +379,6 @@ public class WxActivity {
 
         public Builder lastUpdate(Date val) {
             lastUpdate = val;
-            return this;
-        }
-
-        public Builder times(Integer val) {
-            times = val;
             return this;
         }
 

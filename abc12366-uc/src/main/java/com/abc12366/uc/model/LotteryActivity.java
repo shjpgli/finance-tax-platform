@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * Admin: lingsuzhi <554600654@qq.com.com>
- * Date: 2017-09-18
+ * Date: 2017-09-20
  */
 
 
@@ -13,24 +13,24 @@ public class LotteryActivity{
 private String id;
  /** 名称 */
 private String name;
- /** 奖品类别 */
+ /** 活动类型 */
 private String types;
  /** 描述 */
 private String description;
- /** 活动抽奖次数 */
+ /** 抽奖次数 */
 private Integer count;
  /** 标签 */
 private String label;
- /** 参与的用户等级 */
+ /** 用户等级 */
 private String userLevel;
- /** 活动发布链接 */
+ /** 发布链接 */
 private String url;
  /** 开始时间 */
 private Date startTime;
  /** 结束时间 */
 private Date endTime;
  /** 状态 */
-private Integer status;
+private Boolean status;
  /** 创建时间 */
 private Date createTime;
 
@@ -94,10 +94,10 @@ public Date getEndTime(){
 public void setEndTime(Date endTime){
    this.endTime = endTime;
 }
-public Integer getStatus(){
+public Boolean getStatus(){
     return status;
 }
-public void setStatus(Integer status){
+public void setStatus(Boolean status){
    this.status = status;
 }
 public Date getCreateTime(){

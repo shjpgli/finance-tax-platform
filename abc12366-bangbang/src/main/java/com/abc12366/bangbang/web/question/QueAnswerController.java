@@ -38,9 +38,13 @@ public class QueAnswerController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "questionId", required = false) String questionId) {
+                                     @RequestParam(value = "userId", required = false) String userId,
+                                     @RequestParam(value = "questionId", required = false) String questionId,
+                                     @RequestParam(value = "isAccept", required = false) String isAccept) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//
         dataMap.put("questionId", questionId);//
+        dataMap.put("isAccept", isAccept);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
@@ -53,13 +57,32 @@ public class QueAnswerController {
     @GetMapping(path = "/selectListByParentId")
     public ResponseEntity selectListByParentId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                               @RequestParam(value = "userId", required = false) String userId,
                                      @RequestParam(value = "questionId", required = false) String questionId,
                                      @RequestParam(value = "parentId", required = false) String parentId) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//
         dataMap.put("questionId", questionId);//
         dataMap.put("parentId", parentId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionAnswerBo> dataList = queAnswerService.selectListByParentId(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 最新回答
+     */
+    @GetMapping(path = "/selectListNew")
+    public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "questionId", required = false) String questionId,
+                                     @RequestParam(value = "isAccept", required = false) String isAccept) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("questionId", questionId);//
+        dataMap.put("isAccept", isAccept);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

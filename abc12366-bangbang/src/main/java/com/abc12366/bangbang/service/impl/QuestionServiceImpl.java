@@ -46,10 +46,62 @@ public class QuestionServiceImpl implements QuestionService {
     public List<QuestionBo> selectList(Map<String,Object> map) {
         List<QuestionBo> questionBoList;
         try {
-            //查询问题列表
+            //查询最新问题列表
             questionBoList = questionRoMapper.selectList(map);
         } catch (Exception e) {
             LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
+    @Override
+    public List<QuestionBo> selectListByBrowseNum(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //查询热门问题
+            questionBoList = questionRoMapper.selectListByBrowseNum(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
+    @Override
+    public List<QuestionBo> selectListWait(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //查询等你回答的问题
+            questionBoList = questionRoMapper.selectListWait(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
+    @Override
+    public List<QuestionBo> selectListAccept(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //查询已解决的问题
+            questionBoList = questionRoMapper.selectListAccept(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
+    @Override
+    public List<QuestionBo> selectListry(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //查询帮友热议列表
+            questionBoList = questionRoMapper.selectListry(map);
+        } catch (Exception e) {
+            LOGGER.error("查询帮友热议列表信息异常：{}", e);
             throw new ServiceException(6100);
         }
         return questionBoList;
@@ -63,6 +115,7 @@ public class QuestionServiceImpl implements QuestionService {
             LOGGER.info("新增问题信息:{}", jsonStu.toString());
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
+            questionBo.setBrowseNum(0);
             //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
@@ -176,6 +229,12 @@ public class QuestionServiceImpl implements QuestionService {
             LOGGER.error("删除问题信息异常：{}", e);
             throw new ServiceException(6104);
         }
+        return "";
+    }
+
+    @Override
+    public String updateBrowseNum(String id) {
+        questionMapper.updateBrowseNum(id);
         return "";
     }
 

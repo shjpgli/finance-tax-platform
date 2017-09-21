@@ -41,11 +41,15 @@ public class AppSettingController {
      */
     @GetMapping(path = "/appsetting")
     public ResponseEntity selectList(@RequestParam(value = "appId", required = true) String appId,
+                                     @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         LOGGER.info(appId);
-        List<AppSettingBO> dataList = appSettingService.selectList(appId);
+        AppSettingBO appSettingBO = new AppSettingBO();
+        appSettingBO.setAppId(appId);
+        appSettingBO.setName(name);
+        List<AppSettingBO> dataList = appSettingService.selectList(appSettingBO);
         PageInfo<AppSettingBO> pageInfo = new PageInfo<>(dataList);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));

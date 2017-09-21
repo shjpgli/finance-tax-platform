@@ -5,6 +5,8 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TodoTask;
 import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.service.TodoTaskService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +41,16 @@ public class TodoTaskController {
      * @param userId
      * @return
      */
-    @GetMapping(path = "/normal/{userId}")
-    public ResponseEntity selectNormalTaskList(@PathVariable("userId") String userId) {
+    @GetMapping(path = "/normal")
+    public ResponseEntity selectNormalTaskList(@RequestParam(value = "userId") String userId,
+                                               @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<TodoTaskFront> taskList = todoTaskService.selectNormalTaskList(userId);
-        return ResponseEntity.ok(Utils.kv("dataList", taskList));
+        return (taskList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
     }
 
     /**
@@ -51,10 +59,16 @@ public class TodoTaskController {
      * @param userId
      * @return
      */
-    @GetMapping(path = "/onetime/{userId}")
-    public ResponseEntity selectOnetimeTaskList(@PathVariable("userId") String userId) {
+    @GetMapping(path = "/onetime")
+    public ResponseEntity selectOnetimeTaskList(@RequestParam(value = "userId") String userId,
+                                                @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<TodoTaskFront> taskList = todoTaskService.selectOnetimeTaskList(userId);
-        return ResponseEntity.ok(Utils.kv("dataList", taskList));
+        return (taskList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
     }
 
     /**
@@ -63,16 +77,41 @@ public class TodoTaskController {
      * @param userId
      * @return
      */
-    @GetMapping(path = "/special/{userId}")
-    public ResponseEntity selectSpecialTaskList(@PathVariable("userId") String userId) {
+    @GetMapping(path = "/special")
+    public ResponseEntity selectSpecialTaskList(@RequestParam(value = "userId") String userId,
+                                                @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<TodoTaskFront> taskList = todoTaskService.selectSpecialTaskList(userId);
-        return ResponseEntity.ok(Utils.kv("dataList", taskList));
+        return (taskList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
     }
 
-    @PostMapping
-    public ResponseEntity generateTodoTaskList() {
-        String userId = Utils.getUserId();
-        todoTaskService.generateTodoTaskList(userId, "2");
+    /**
+     * 用户做任务接口：做任务并且计算奖励，用于用户业务操作任务埋点，
+     *
+     * @param userId
+     * @param sysTaskId
+     * @return
+     */
+    @PostMapping(path = "/do/award/{userId}/{sysTaskId}")
+    public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
+        todoTaskService.doTask(userId, sysTaskId);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 用户做任务接口：做任务不计算奖励，用于用户业务操作任务埋点，多用于奖励规则比较复杂需要单做的业务
+     *
+     * @param userId
+     * @param sysTaskId
+     * @return
+     */
+    @PostMapping(path = "/do/noaward/{userId}/{sysTaskId}")
+    public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
+        todoTaskService.doTaskWithouComputeAward(userId, sysTaskId);
         return ResponseEntity.ok(Utils.kv());
     }
 }

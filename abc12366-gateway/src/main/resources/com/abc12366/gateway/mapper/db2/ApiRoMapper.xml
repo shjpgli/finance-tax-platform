@@ -45,6 +45,7 @@
         LEFT JOIN gw_view_sys_dict d ON d.id = i.dictId
         WHERE
         (select count(1) as num from gw_app_setting sp where i.id = sp.apiId and sp.appId = #{appId}) = 0
+        and i.status = true
     </select>
 
     <select id="selectOne" resultMap="apiMap" parameterType="com.abc12366.gateway.model.Api">

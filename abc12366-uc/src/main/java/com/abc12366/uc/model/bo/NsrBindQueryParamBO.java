@@ -8,13 +8,15 @@ package com.abc12366.uc.model.bo;
 public class NsrBindQueryParamBO {
     private String username;
     private String nsrsbh;
+    private Boolean status;
 
     public NsrBindQueryParamBO() {
     }
 
-    public NsrBindQueryParamBO(String username, String nsrsbh) {
+    public NsrBindQueryParamBO(String username, String nsrsbh,Boolean status) {
         this.username = username;
         this.nsrsbh = nsrsbh;
+        this.status = status;
     }
 
     public String getUsername() {
@@ -32,4 +34,12 @@ public class NsrBindQueryParamBO {
     public void setNsrsbh(String nsrsbh) {
         this.nsrsbh = nsrsbh;
     }
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 }

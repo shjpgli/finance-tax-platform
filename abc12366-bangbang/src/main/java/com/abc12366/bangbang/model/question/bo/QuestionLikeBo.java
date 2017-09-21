@@ -22,6 +22,9 @@ public class QuestionLikeBo implements Serializable {
 	/**点赞时间**datetime**/
 	private java.util.Date likeTime;
 
+    /**问题ID**varchar(64)**/
+    private String questionId;
+
 
 
 	public void setLikeId(String likeId){
@@ -56,4 +59,12 @@ public class QuestionLikeBo implements Serializable {
 		return this.likeTime;
 	}
 
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
+    }
 }

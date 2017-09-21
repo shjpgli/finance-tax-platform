@@ -59,6 +59,9 @@ public class QuestionBo implements Serializable {
     /**回复次数**int(11)**/
     private Integer answerNum;
 
+    /**点赞次数**int(11)**/
+    private Integer likeNum;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -187,5 +190,13 @@ public class QuestionBo implements Serializable {
 
     public void setAnswerNum(Integer answerNum) {
         this.answerNum = answerNum;
+    }
+
+    public Integer getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(Integer likeNum) {
+        this.likeNum = likeNum;
     }
 }

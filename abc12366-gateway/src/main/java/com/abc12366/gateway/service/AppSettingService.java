@@ -11,7 +11,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface AppSettingService {
-    List<AppSettingBO> selectList(String appId);
+    List<AppSettingBO> selectList(AppSettingBO appSettingBO);
 
     AppSetting update(AppSettingBO appSettingBO);
 

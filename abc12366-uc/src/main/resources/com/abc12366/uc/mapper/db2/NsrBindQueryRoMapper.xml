@@ -19,6 +19,9 @@
             <if test="nsrsbh!=null">
                 and uud.nsrsbh=#{nsrsbh}
             </if>
+            <if test="status!=null">
+                and uud.status=#{status}
+            </if>
         </where>
         UNION ALL
         SELECT
@@ -33,6 +36,9 @@
             <if test="nsrsbh!=null">
                 and uuh.nsrsbh=#{nsrsbh}
             </if>
+            <if test="status!=null">
+                and uuh.status=#{status}
+            </if>
         </where>
         UNION ALL
         SELECT
@@ -46,6 +52,9 @@
             </if>
             <if test="nsrsbh!=null">
                 and uuh.nsrsbh=#{nsrsbh}
+            </if>
+            <if test="status!=null">
+                and uuh.status=#{status}
             </if>
         </where>
         ) a

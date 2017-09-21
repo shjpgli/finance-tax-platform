@@ -30,6 +30,7 @@ public class NsrBindQueryController {
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String username,
                                      @RequestParam(required = false) String nsrsbh,
+                                     @RequestParam(required = false) Boolean status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}", username, nsrsbh, page, size);
@@ -39,7 +40,7 @@ public class NsrBindQueryController {
         if (nsrsbh != null && nsrsbh.equals("")) {
             nsrsbh = null;
         }
-        NsrBindQueryParamBO nsrBindQueryParamBO = new NsrBindQueryParamBO(username, nsrsbh);
+        NsrBindQueryParamBO nsrBindQueryParamBO = new NsrBindQueryParamBO(username, nsrsbh,status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<NsrBindQueryBO> nsrBindQueryBOList = nsrBindQueryService.selectList(nsrBindQueryParamBO);
         return (nsrBindQueryBOList == null) ?

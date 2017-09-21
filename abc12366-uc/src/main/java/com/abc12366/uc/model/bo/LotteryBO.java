@@ -4,26 +4,27 @@ import java.util.Date;
 
 /**
  * Admin: lingsuzhi <554600654@qq.com.com>
- * Date: 2017-09-18
+ * Date: 2017-09-20
  */
 
 
 public class LotteryBO{
+
  /** key */
 private String id;
- /** 系号 */
-private Integer activityId;
+ /** 活动id */
+private String activityId;
  /** 奖项等级 */
 private Integer level;
  /** 奖品总数 */
 private Integer stock;
  /** 已发放数量 */
 private Integer count;
- /** 每个时段投放个数 */
+ /** 时段投放个数 */
 private String timeStockId;
  /** 时间段已发数量 */
 private Integer timeCount;
- /** 中奖限制，0标识不限制 */
+ /** 中奖限制,0标识不限制 */
 private Integer limits;
  /** 名称 */
 private String name;
@@ -44,20 +45,31 @@ private Double luck;
  /** 创建时间 */
 private Date createTime;
  /** 状态 */
-private Integer status;
- /** 是否需要邮寄 */
-private Integer send;
+private Boolean status;
+ /** 是否邮寄 */
+private Boolean send;
 
-public String getId(){
+    /** 活动名称 */
+private String activityName;
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public String getId(){
     return id;
 }
 public void setId(String id){
    this.id = id;
 }
-public Integer getActivityId(){
+public String getActivityId(){
     return activityId;
 }
-public void setActivityId(Integer activityId){
+public void setActivityId(String activityId){
    this.activityId = activityId;
 }
 public Integer getLevel(){
@@ -150,16 +162,16 @@ public Date getCreateTime(){
 public void setCreateTime(Date createTime){
    this.createTime = createTime;
 }
-public Integer getStatus(){
+public Boolean getStatus(){
     return status;
 }
-public void setStatus(Integer status){
+public void setStatus(Boolean status){
    this.status = status;
 }
-public Integer getSend(){
+public Boolean getSend(){
     return send;
 }
-public void setSend(Integer send){
+public void setSend(Boolean send){
    this.send = send;
 }
 

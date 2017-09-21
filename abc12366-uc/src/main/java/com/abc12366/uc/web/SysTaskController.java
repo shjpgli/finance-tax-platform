@@ -97,7 +97,7 @@ public class SysTaskController {
     }
 
     @PutMapping(path = "/task/{id}")
-    public ResponseEntity update(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String
+    public ResponseEntity update( @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String
             id) {
         LOGGER.info("{}:{}", sysTaskUpdateBO, id);
         SysTaskBO sysTaskBO = sysTaskService.update(sysTaskUpdateBO, id);

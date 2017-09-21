@@ -28,6 +28,7 @@ public class TodoTaskFront {
     private String name;
     private String remark;
     private String imageUrl;
+    private String rule;
 
     public String getImageUrl() {
         return imageUrl;
@@ -179,5 +180,13 @@ public class TodoTaskFront {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 }

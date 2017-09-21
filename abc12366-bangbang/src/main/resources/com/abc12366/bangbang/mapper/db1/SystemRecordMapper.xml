@@ -9,5 +9,12 @@
         ,#{minute},#{pageTitle},#{pageUrl},#{stayLong},#{feature},#{appName},#{ip}
         ,#{location},#{browseType},#{browseVersion},#{os},#{device},#{remark},#{createTime})
     </insert>
-     
+     <update id="updateStay" parameterType="com.abc12366.bangbang.model.bo.SystemRecordBO">
+         update bb_system_record
+         <set>
+             <if test="stayLong!=null">stayLong=#{stayLong}</if>
+         </set>
+         where
+         id=#{id}
+     </update>
 </mapper>

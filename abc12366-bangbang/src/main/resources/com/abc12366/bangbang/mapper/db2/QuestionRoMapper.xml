@@ -16,11 +16,13 @@
 		 WHERE id = #{id}
 	</select>
 
-    <!-- 查询（根据主键ID查询） -->
+    <!-- 最新问题 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_question
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        FROM bb_question q
         WHERE 1=1
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
@@ -31,6 +33,77 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
+        ORDER BY createTime DESC
+    </select>
+
+    <!-- 热门问题 -->
+    <select id="selectListByBrowseNum" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+        SELECT
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        FROM bb_question q
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="tag != null and tag != ''">
+            AND tag like CONCAT('%',#{tag},'%')
+        </if>
+        <if test="classifyCode != null and classifyCode != ''">
+            AND classifyCode like CONCAT(#{classifyCode},'%')
+        </if>
+        ORDER BY browseNum DESC
+    </select>
+
+    <!-- 等你回答问题 -->
+    <select id="selectListWait" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+        SELECT
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        FROM bb_question q
+        WHERE 1=1 and id not in(SELECT questionId FROM bb_question_answer where userId = #{userId})
+        <if test="title != null and title != ''">
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="tag != null and tag != ''">
+            AND tag like CONCAT('%',#{tag},'%')
+        </if>
+        <if test="classifyCode != null and classifyCode != ''">
+            AND classifyCode like CONCAT(#{classifyCode},'%')
+        </if>
+        ORDER BY createTime DESC
+    </select>
+
+    <!-- 已解决问题 -->
+    <select id="selectListAccept" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+        SELECT
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        FROM bb_question q
+        WHERE 1=1 and id in(SELECT questionId FROM bb_question_answer where isAccept = '1')
+        <if test="title != null and title != ''">
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="tag != null and tag != ''">
+            AND tag like CONCAT('%',#{tag},'%')
+        </if>
+        <if test="classifyCode != null and classifyCode != ''">
+            AND classifyCode like CONCAT(#{classifyCode},'%')
+        </if>
+        ORDER BY createTime DESC
+    </select>
+
+    <!-- 查询帮友热议 -->
+    <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+        SELECT
+            id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+            (select count(id) from bb_question_answer where questionId = q.id and parentId != '') answerNum
+        FROM bb_question q
+        WHERE 1=1
+        ORDER BY answerNum DESC
     </select>
 
 

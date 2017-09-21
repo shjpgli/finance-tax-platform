@@ -72,8 +72,8 @@ public class SysTaskServiceImpl implements SysTaskService {
         }
 
         //如果是特殊任务，则必须有开始和结束时间
-        if(sysTaskInsertBO.getType()!=null&&sysTaskInsertBO.getType().equals(UCConstant.SPECIAL_TASK_TYPE)){
-            if(sysTaskInsertBO.getStartTime()==null||sysTaskInsertBO.getEndTime()==null){
+        if (sysTaskInsertBO.getType() != null && sysTaskInsertBO.getType().equals(UCConstant.SPECIAL_TASK_TYPE)) {
+            if (sysTaskInsertBO.getStartTime() == null || sysTaskInsertBO.getEndTime() == null) {
                 throw new ServiceException(4041);
             }
         }
@@ -128,6 +128,13 @@ public class SysTaskServiceImpl implements SysTaskService {
             LOGGER.warn("修改失败，该任务已发布，撤销发布后才允许修改，参数为：id=" + id);
             throw new ServiceException(4600);
         }
+        //如果是特殊任务，则必须有开始和结束时间
+        if (sysTaskUpdateBO.getType() != null && sysTaskUpdateBO.getType().equals(UCConstant.SPECIAL_TASK_TYPE)) {
+            if (sysTaskUpdateBO.getStartTime() == null || sysTaskUpdateBO.getEndTime() == null) {
+                throw new ServiceException(4041);
+            }
+        }
+
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskUpdateBO, sysTask);
         sysTask.setId(id);
