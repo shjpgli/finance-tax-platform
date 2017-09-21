@@ -20,7 +20,7 @@ ORDER BY createTime DESC
 <select id="selectOne" resultType="com.abc12366.uc.model.bo.LotteryBO" parameterType="java.lang.String">
 SELECT   (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,
 id,activityId,level,stock,count,timeStockId,timeCount,limits,name,description,image,cost,types,startTime,endTime,luck,createTime,status,send
- from uc_lottery
+ from uc_lottery z
 where id=#{id}
 </select>
 
