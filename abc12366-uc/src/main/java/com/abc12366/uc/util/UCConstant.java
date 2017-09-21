@@ -78,7 +78,9 @@ public class UCConstant {
 
     //经验值计算规则ID
     //1.网上申报
-    public final static String EXP_RULE_WSSB_ID = "abchngs";
+    public final static String EXP_RULE_WSSB_ID = "";
+    //1.登录（此条规则并不起作用，只是勇于展现）
+    public final static String EXP_RULE_LOGIN_ID = "a9ac2dbd-61e6-411b-a59b-5f6f698b96f4";
 
 
     //用户实名认证状态
@@ -90,4 +92,9 @@ public class UCConstant {
     public final static String USER_REALNAME_VALIDATED= "2";
     //认证失败：3
     public final static String USER_REALNAME_FAIL_VALIDATE= "3";
+
+
+    //积分计算规则ID
+    //补签到
+    public final static String POINT_RULE_RECHECK_ID = "003a6366-0bba-4a0b-8486-9b3c2805adeb";
 }

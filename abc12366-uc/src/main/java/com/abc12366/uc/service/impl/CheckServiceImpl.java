@@ -15,12 +15,10 @@ import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UCConstant;
-import com.abc12366.uc.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -195,6 +193,7 @@ public class CheckServiceImpl implements CheckService {
         pointsLog.setCreateTime(new Date());
         pointsLog.setUserId(userId);
         pointsLog.setOutgo(-points);
+        pointsLog.setRuleId(UCConstant.POINT_RULE_RECHECK_ID);
         pointsLog.setLogType("RE_CHECK_IN");
         pointsLog.setRemark("用户补签消耗20积分");
         pointsLogService.insert(pointsLog);
