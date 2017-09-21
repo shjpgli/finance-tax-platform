@@ -151,7 +151,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             // 是否在换货日期之内
             if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant
                     .ORDER_EXCHANGE_DAYS))) {
-                throw new ServiceException(4953,"请确认订单换货日期之内，换货日期为："+Constant.ORDER_EXCHANGE_DAYS+"天");
+                throw new ServiceException(4953,"您的订单已超过"+Constant.ORDER_EXCHANGE_DAYS+"天的换货日，不支持换货");
             }
         } else { // 退货
             if ("1".equals(bo.getIsReturn())) { // 虚拟商品暂时不支持退货
@@ -159,7 +159,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }
             // 是否在退货日期之内
             if (new Date().after(DateUtils.addDays(new Date(bo.getLastUpdate().getTime()), Constant.ORDER_BACK_DAYS))) {
-                throw new ServiceException(4953,"请确认订单退货日期之内，退货日期为："+Constant.ORDER_BACK_DAYS+"天");
+                throw new ServiceException(4953,"您的订单已超过"+Constant.ORDER_BACK_DAYS+"天的退货日，不支持退货");
             }
             // 用户现有积分是否达到购买是赠送的积分
             if (bo.getPoints() < bo.getGiftPoints()) {
@@ -540,14 +540,14 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
-                message.setContent(MessageConstant.RETREAT_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">查看详情</a>"+MessageConstant.SUFFIX);
+                message.setContent(MessageConstant.EXCHANGE_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">查看详情</a>"+MessageConstant.SUFFIX);
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }else if("2".equals(oe.getType())){
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
-                message.setContent(MessageConstant.EXCHANGE_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
+                message.setContent(MessageConstant.RETREAT_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }

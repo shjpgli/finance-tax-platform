@@ -394,7 +394,7 @@ public class AuthServiceImpl implements AuthService {
             logBO.setId(Utils.uuid());
             logBO.setIncome(exp);
             logBO.setUserId(userId);
-            logBO.setRuleId(UCConstant.SYS_TASK_LOGIN_ID);
+            logBO.setRuleId(UCConstant.EXP_RULE_LOGIN_ID);
             logBO.setOutgo(0);
             logBO.setCreateTime(new Date());
             experienceLogService.insert(logBO);
@@ -547,6 +547,8 @@ public class AuthServiceImpl implements AuthService {
         computeExp(user.getId());
         //记用户登录日志
         insertLoginLog(user.getId());
+        //任务日志
+        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_ID);
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
