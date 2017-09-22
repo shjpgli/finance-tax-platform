@@ -397,8 +397,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
 
             //发送消息
-            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(invoiceTemp.getExpressCompId());
-            if(expressComp != null){
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
+            if(expressComp == null){
                 LOGGER.warn("物流公司查询失败：{}", invoiceTemp.getExpressCompId());
                 throw new ServiceException(4102,"物流公司查询失败");
             }
