@@ -20,8 +20,10 @@ private Integer level;
 private Integer stock;
  /** 已发放数量 */
 private Integer count;
- /** 时段投放个数 */
-private String timeStockId;
+ /** 时段投库存 */
+private Integer timeStock;
+    /** 时段段时间 */
+private Date timeDay;
  /** 时间段已发数量 */
 private Integer timeCount;
  /** 中奖限制,0标识不限制 */
@@ -51,6 +53,22 @@ private Boolean send;
 
     /** 活动名称 */
 private String activityName;
+
+    public Integer getTimeStock() {
+        return timeStock;
+    }
+
+    public void setTimeStock(Integer timeStock) {
+        this.timeStock = timeStock;
+    }
+
+    public Date getTimeDay() {
+        return timeDay;
+    }
+
+    public void setTimeDay(Date timeDay) {
+        this.timeDay = timeDay;
+    }
 
     public String getActivityName() {
         return activityName;
@@ -90,12 +108,7 @@ public Integer getCount(){
 public void setCount(Integer count){
    this.count = count;
 }
-public String getTimeStockId(){
-    return timeStockId;
-}
-public void setTimeStockId(String timeStockId){
-   this.timeStockId = timeStockId;
-}
+
 public Integer getTimeCount(){
     return timeCount;
 }
@@ -175,27 +188,4 @@ public void setSend(Boolean send){
    this.send = send;
 }
 
-@Override
-public String toString() {
-return "Lottery {\r\n"+
-"\""+"id"+"\""+":"+"\""+id+"\""+",\r\n"+
-"\""+"activityId"+"\""+":"+"\""+activityId+"\""+",\r\n"+
-"\""+"level"+"\""+":"+"\""+level+"\""+",\r\n"+
-"\""+"stock"+"\""+":"+"\""+stock+"\""+",\r\n"+
-"\""+"count"+"\""+":"+"\""+count+"\""+",\r\n"+
-"\""+"timeStockId"+"\""+":"+"\""+timeStockId+"\""+",\r\n"+
-"\""+"timeCount"+"\""+":"+"\""+timeCount+"\""+",\r\n"+
-"\""+"limits"+"\""+":"+"\""+limits+"\""+",\r\n"+
-"\""+"name"+"\""+":"+"\""+name+"\""+",\r\n"+
-"\""+"description"+"\""+":"+"\""+description+"\""+",\r\n"+
-"\""+"image"+"\""+":"+"\""+image+"\""+",\r\n"+
-"\""+"cost"+"\""+":"+"\""+cost+"\""+",\r\n"+
-"\""+"types"+"\""+":"+"\""+types+"\""+",\r\n"+
-"\""+"startTime"+"\""+":"+"\""+startTime+"\""+",\r\n"+
-"\""+"endTime"+"\""+":"+"\""+endTime+"\""+",\r\n"+
-"\""+"luck"+"\""+":"+"\""+luck+"\""+",\r\n"+
-"\""+"createTime"+"\""+":"+"\""+createTime+"\""+",\r\n"+
-"\""+"status"+"\""+":"+"\""+status+"\""+",\r\n"+
-"\""+"send"+"\""+":"+"\""+send+"\""+"}";
-}
 }
