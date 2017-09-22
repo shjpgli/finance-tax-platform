@@ -101,5 +101,7 @@ public class UCConstant {
     public final static String POINT_RULE_RECHECK_ID = "003a6366-0bba-4a0b-8486-9b3c2805adeb";
     //积分兑换（该条规则不用于积分计算，仅用于展示）
     public final static String POINT_RULE_EXCHANGE_ID = "9e945332-2001-431a-bbc7-e8c38b66572f";
+    //抽奖扣积分
+    public final static String POINT_RULE_LOTTERY_ID = "31428853-2339-4523-91db-32a182f4fbcf";
 
 }
