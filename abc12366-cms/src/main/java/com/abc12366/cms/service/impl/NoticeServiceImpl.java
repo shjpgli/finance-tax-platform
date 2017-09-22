@@ -61,9 +61,10 @@ public class NoticeServiceImpl implements NoticeService {
             //默认草稿状态
             notice.setStatus("0");
         }
-        if(status == "1"){
+        if("1".equals(status)){
             notice.setReleaseTime(now);
         }
+
         noticeMapper.insert(notice);
         return notice;
     }
@@ -107,7 +108,7 @@ public class NoticeServiceImpl implements NoticeService {
     public NoticeBO update(NoticeBO notice) {
         Timestamp now = new Timestamp(new Date().getTime());
         String status = notice.getStatus();
-        if(status == "1"){
+        if("1".equals(status)){
             notice.setReleaseTime(now);
         }
         notice.setLastUpdate(now);

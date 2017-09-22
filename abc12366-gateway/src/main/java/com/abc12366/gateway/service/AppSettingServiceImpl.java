@@ -87,9 +87,9 @@ public class AppSettingServiceImpl implements AppSettingService {
     @Override
     public List<AppSetting> insertList(String appId, List<AppSettingBO> appSettingBOList) {
         List<AppSetting> list = new ArrayList<>();
+        //根据appId删除授权信息
+        appSettingMapper.deleteByAppId(appId);
         if (appSettingBOList != null && appSettingBOList.size() != 0) {
-            //根据appId删除授权信息
-            appSettingMapper.deleteByAppId(appId);
             for (AppSettingBO bo : appSettingBOList) {
                 bo.setId(Utils.uuid());
                 Date date = new Date();

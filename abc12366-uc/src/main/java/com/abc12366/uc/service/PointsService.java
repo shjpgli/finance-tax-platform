@@ -29,6 +29,7 @@ public interface PointsService {
     /**
      * 根据积分规则根据用户的操作改变其积分值，并记日志
      * @param pointCalculateBO
+     * @return points
      */
-    void calculate(PointCalculateBO pointCalculateBO);
+    int calculate(PointCalculateBO pointCalculateBO);
 }
