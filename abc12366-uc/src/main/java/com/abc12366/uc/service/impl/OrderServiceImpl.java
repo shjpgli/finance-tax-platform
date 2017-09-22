@@ -305,7 +305,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("库存不足,请联系管理员：{}", stock);
             throw new ServiceException(4905);
         }
-        prBO.setStock(stock);
+        /*prBO.setStock(stock);
         Product product = new Product();
         BeanUtils.copyProperties(prBO, product);
         productMapper.update(product);
@@ -318,7 +318,7 @@ public class OrderServiceImpl implements OrderService {
         repo.setStock(stock);
         repo.setCreateTime(date);
         repo.setLastUpdate(date);
-        productRepoMapper.insert(repo);
+        productRepoMapper.insert(repo);*/
 
         //商品价格
         double totalPrice;
@@ -480,22 +480,6 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("库存不足,请联系管理员：{}", stock);
             throw new ServiceException(4905);
         }
-        prBO.setStock(stock);
-        Product product = new Product();
-        BeanUtils.copyProperties(prBO, product);
-        productMapper.update(product);
-        //库存表数据处理
-        ProductRepo repo = new ProductRepo();
-        repo.setId(Utils.uuid());
-        repo.setGoodsId(prBO.getGoodsId());
-        repo.setProductId(prBO.getId());
-        repo.setOutcome(num);
-        repo.setStock(stock);
-        repo.setCreateTime(date);
-        repo.setLastUpdate(date);
-        repo.setRemark(orderBO.getOrderNo());
-        repo.setOptionUser(orderBO.getUserId());
-        productRepoMapper.insert(repo);
 
         //商品价格
         double totalPrice;
@@ -864,6 +848,34 @@ public class OrderServiceImpl implements OrderService {
                 order.setPayMethod(orderPayBO.getPayMethod());
                 order.setAddressId(orderPayBO.getAddressId());
                 order.setUserId(orderBO.getUserId());
+
+                //查询产品库存信息
+                ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+                orderProductBO.setOrderNo(orderBO.getOrderNo());
+                //减去Product库存数量
+                int num = orderProductBO.getNum();
+                int stock = prBO.getStock() - num;
+                if(stock < 0){
+                    LOGGER.info("库存不足,请联系管理员：{}", stock);
+                    throw new ServiceException(4905);
+                }
+                prBO.setStock(stock);
+                Product product = new Product();
+                BeanUtils.copyProperties(prBO, product);
+                productMapper.update(product);
+                //库存表数据处理
+                Date date = new Date();
+                ProductRepo repo = new ProductRepo();
+                repo.setId(Utils.uuid());
+                repo.setGoodsId(prBO.getGoodsId());
+                repo.setProductId(prBO.getId());
+                repo.setOutcome(num);
+                repo.setStock(stock);
+                repo.setCreateTime(date);
+                repo.setLastUpdate(date);
+                repo.setRemark(orderBO.getOrderNo());
+                repo.setOptionUser(orderBO.getUserId());
+                productRepoMapper.insert(repo);
                 if("RMB".equals(type)){
                     if (isPay == 1) {
                         order.setOrderStatus("3");
@@ -1093,7 +1105,7 @@ public class OrderServiceImpl implements OrderService {
             insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货","0");
 
             //发送消息
-            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
             if(expressComp == null){
                 LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102,"物流公司查询失败");

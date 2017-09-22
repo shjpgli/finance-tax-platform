@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	parentId,	questionId,	userId,	answerUserId,ip,	answer,	status,	createTime,	lastUpdate,	isAccept
+		 id,	parentId,	questionId,factionId,	userId,	answerUserId,ip,	answer,	status,	createTime,	lastUpdate,	isAccept
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -60,6 +60,13 @@
         FROM bb_question_answer a LEFT JOIN bb_question q on a.questionId = q.id
         WHERE parentId=''
         ORDER BY createTime DESC
+    </select>
+
+
+    <!-- 查找邦派ID -->
+    <select id="selectfactionId" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT factionId FROM bb_question_faction_classify where factionId in(SELECT factionId FROM bb_question_faction_member where userId = #{userId})
+          and classifyId = (SELECT classifyCode FROM bb_question where id = #{questionId}) limit 1
     </select>
 
 

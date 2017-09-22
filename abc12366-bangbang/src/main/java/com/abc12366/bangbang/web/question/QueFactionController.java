@@ -64,6 +64,19 @@ public class QueFactionController {
     }
 
     /**
+     * 优秀邦派列表查询
+     */
+    @GetMapping(path = "/selectListExcellent")
+    public ResponseEntity selectListExcellent(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> dataMap = new HashMap<>();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionListBo> dataList = queFactionService.selectListExcellent(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 邦派新增
      */
     @PostMapping

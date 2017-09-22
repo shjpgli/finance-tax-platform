@@ -280,6 +280,7 @@
 
     <!--查询需要自动确认收货的发票订单-->
     <select id="selectReceiptInvoiceByDate" resultType="com.abc12366.uc.model.Invoice" parameterType="java.util.Date">
+        SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
         WHERE status = '4'
