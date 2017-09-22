@@ -33,13 +33,13 @@
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
         (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
 
-        (SELECT count(id) FROM bb_question where userId =#{userId}) questionNum,
+        (SELECT count(id) FROM bb_question where userId =#{userId} and factionId = f.factionId) questionNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId = '' and userId =#{userId}) answerNum,
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and userId =#{userId} and factionId = f.factionId) answerNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and userId =#{userId}) discussNum,
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and userId =#{userId} and factionId = f.factionId) discussNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and isAccept = '1' and userId =#{userId}) adoptNum
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId =#{userId} and factionId = f.factionId) adoptNum
         FROM bb_question_faction f
         WHERE 1=1
         <if test="userId != null and userId != ''">
@@ -54,24 +54,24 @@
 
         (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId = '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) answerNumM,
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) answerNumM,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) discussNumM,
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) discussNumM,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and isAccept = '1' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) adoptNumM,
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and isAccept = '1' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) adoptNumM,
 
-        (SELECT count(id) FROM bb_question_answer where parentId = '' and DATE_FORMAT( createTime, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) answerNumY,
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and DATE_FORMAT( createTime, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) answerNumY,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and DATE_FORMAT( createTime, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) discussNumY,
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and DATE_FORMAT( createTime, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' ) and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) discussNumY,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and DATE_FORMAT( createTime, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' ) and isAccept = '1' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) adoptNumY,
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and DATE_FORMAT( createTime, '%Y' ) = DATE_FORMAT( CURDATE( ) , '%Y' ) and isAccept = '1' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) adoptNumY,
 
 
-       (SELECT count(id) FROM bb_question_answer where parentId = '' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) answerNum,
+       (SELECT count(id) FROM bb_question_answer where parentId = '' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) answerNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) discussNum,
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) discussNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and isAccept = '1' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId)) adoptNum
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) adoptNum
 
 
         FROM bb_question_faction f

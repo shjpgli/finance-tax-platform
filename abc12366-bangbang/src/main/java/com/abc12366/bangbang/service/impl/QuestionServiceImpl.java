@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/9/14.
@@ -113,6 +110,16 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             JSONObject jsonStu = JSONObject.fromObject(questionBo);
             LOGGER.info("新增问题信息:{}", jsonStu.toString());
+
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("userId", questionBo.getUserId());
+            dataMap.put("classifyId", questionBo.getClassifyCode());
+            String factionId = questionRoMapper.selectfactionId(dataMap);
+            if(factionId == null){
+                factionId = "";
+            }
+            questionBo.setFactionId(factionId);
+
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
             questionBo.setBrowseNum(0);
@@ -181,6 +188,16 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             JSONObject jsonStu = JSONObject.fromObject(questionBo);
             LOGGER.info("更新问题信息:{}", jsonStu.toString());
+
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("userId", questionBo.getUserId());
+            dataMap.put("classifyId", questionBo.getClassifyCode());
+            String factionId = questionRoMapper.selectfactionId(dataMap);
+            if(factionId == null){
+                factionId = "";
+            }
+            questionBo.setFactionId(factionId);
+
             questionBo.setLastUpdate(new Date());
             BeanUtils.copyProperties(questionBo, question);
 

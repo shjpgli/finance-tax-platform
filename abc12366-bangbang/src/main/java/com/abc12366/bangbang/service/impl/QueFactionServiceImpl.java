@@ -72,6 +72,13 @@ public class QueFactionServiceImpl implements QueFactionService {
         try {
             //查询我加入的邦派列表
             QuestionFactionListBoList = questionFactionRoMapper.selectListTj(map);
+
+            for(QuestionFactionListBo questionFactionBo : QuestionFactionListBoList){
+                int honor = 2*questionFactionBo.getAnswerNum() + 1*questionFactionBo.getDiscussNum() + 7*questionFactionBo.getAdoptNum();
+
+                questionFactionBo.setHonor(honor+"");
+            }
+
         } catch (Exception e) {
             LOGGER.error("查询邦派列表信息异常：{}", e);
             throw new ServiceException(6120);
@@ -151,6 +158,11 @@ public class QueFactionServiceImpl implements QueFactionService {
             LOGGER.info("查询单个邦派信息:{}", factionId);
             //查询邦派信息
             questionFactionBo = questionFactionRoMapper.selectFactionTj(factionId);
+
+            int honor = 2*questionFactionBo.getAnswerNum() + 1*questionFactionBo.getDiscussNum() + 7*questionFactionBo.getAdoptNum();
+
+            questionFactionBo.setHonor(honor+"");
+
             List<QuestionFactionTag> tagList = tagRoMapper.selectList(factionId);
             List<QuestionFactionClassify> classifyList = classifyRoMapper.selectList(factionId);
             questionFactionBo.setTagList(tagList);

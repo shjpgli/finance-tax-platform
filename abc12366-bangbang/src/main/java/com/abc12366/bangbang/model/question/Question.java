@@ -53,6 +53,9 @@ public class Question implements Serializable {
     /**ip**varchar(45)**/
     private String ip;
 
+    /****varchar(64)**/
+    private String factionId;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -165,5 +168,13 @@ public class Question implements Serializable {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getFactionId() {
+        return factionId;
+    }
+
+    public void setFactionId(String factionId) {
+        this.factionId = factionId;
     }
 }

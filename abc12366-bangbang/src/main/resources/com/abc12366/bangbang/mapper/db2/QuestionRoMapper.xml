@@ -106,5 +106,10 @@
         ORDER BY answerNum DESC
     </select>
 
+    <!-- 查找邦派ID -->
+    <select id="selectfactionId" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT factionId FROM bb_question_faction_classify where factionId in(SELECT factionId FROM bb_question_faction_member where userId = #{userId})
+        and classifyId = #{classifyId} limit 1
+    </select>
 
 </mapper>
