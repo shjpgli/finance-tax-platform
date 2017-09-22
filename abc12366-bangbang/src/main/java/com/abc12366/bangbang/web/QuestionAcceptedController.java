@@ -37,7 +37,7 @@ public class QuestionAcceptedController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "sourceType", required = false) String sourceType,
+                                     @RequestParam(value = "phone", required = false) String phone,
                                      @RequestParam(value = "QuestionAcceptedType", required = false) String QuestionAcceptedType) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
