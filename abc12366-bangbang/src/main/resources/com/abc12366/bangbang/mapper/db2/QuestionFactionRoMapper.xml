@@ -88,4 +88,22 @@
         WHERE a.parentId = '' and a.userId in(SELECT userId FROM bb_question_faction_member where factionId = #{factionId}) order by a.createTime desc
     </select>
 
+    <!-- 查询优秀邦派 -->
+    <select id="selectListExcellent" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.util.Map">
+        SELECT
+        factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
+        (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
+
+        (SELECT count(id) FROM bb_question where userId =#{userId} and factionId = f.factionId) questionNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and userId =#{userId} and factionId = f.factionId) answerNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and userId =#{userId} and factionId = f.factionId) discussNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId =#{userId} and factionId = f.factionId) adoptNum
+        FROM bb_question_faction f
+        WHERE 1=1
+        order by 2*answerNum+discussNum+7*adoptNum desc
+    </select>
+
 </mapper>
