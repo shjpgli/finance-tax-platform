@@ -9,11 +9,13 @@ import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceRule;
+import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.ExperienceRuleService;
 import com.abc12366.uc.service.ExperienceService;
+import com.abc12366.uc.service.PrivilegeItemService;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
@@ -57,6 +59,9 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Autowired
     private ExperienceRuleService experienceRuleService;
+
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
 
     @Override
     public MyExperienceBO getMyExperience(String userId) {
@@ -107,7 +112,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         String period = experienceRule.getPeriod().toUpperCase();
 
-        if(!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A")){
+        if (!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A")) {
             return;
         }
         if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
@@ -229,7 +234,13 @@ public class ExperienceServiceImpl implements ExperienceService {
             experienceLog.setIncome(0);
             experienceLog.setOutgo(-codex.getUexp());
         } else {
-            experienceLog.setIncome(codex.getUexp());
+            //会员权限埋点（经验值加成）
+            float factor = 1.0F;
+            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(expComputeBO.getUserId());
+            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
+                factor = privilegeItem.getHyjyzjc();
+            }
+            experienceLog.setIncome((int) (codex.getUexp()*factor));
             experienceLog.setOutgo(0);
         }
         experienceLogService.insert(experienceLog);

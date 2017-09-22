@@ -1,13 +1,15 @@
-package com.abc12366.uc.model;
+package com.abc12366.uc.model.bo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-09-22
- * Time: 10:18
+ * Time: 14:10
  */
-public class PrivilegeItem {
+public class PrivilegeItemBO {
+    @NotEmpty
     private String levelId;
     //专享会员勋章：1：是，0：否
     private boolean zxhyxz;
