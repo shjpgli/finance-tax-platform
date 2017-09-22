@@ -1,0 +1,71 @@
+package com.abc12366.bangbang.web;
+
+import com.abc12366.bangbang.model.ReturnVisit;
+import com.abc12366.bangbang.model.bo.ReturnVisitBO;
+import com.abc12366.bangbang.service.ReturnVisitService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * @Author lizhongwei
+ * @Date 2017/9/21 13:39
+ */
+@RestController
+@RequestMapping(path = "/visit", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class ReturnVisitController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReturnVisitController.class);
+
+
+    @Autowired
+    private ReturnVisitService ReturnVisitService;
+
+
+    /**
+    *  回访记录 分页查询
+    *  支持 来源类型, 反馈类型 查询
+    */
+    @GetMapping(path = "/list")
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "sourceType", required = false) String sourceType,
+                                     @RequestParam(value = "ReturnVisitType", required = false) String ReturnVisitType) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+
+        ReturnVisitBO param = new ReturnVisitBO();
+        List<ReturnVisit> list = ReturnVisitService.selectList(param);
+
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+
+    /***
+     * 添加回访记录接口
+     */
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody ReturnVisit ReturnVisit) {
+        ReturnVisitService.add(ReturnVisit);
+        return ResponseEntity.ok(Utils.kv("data", ReturnVisit));
+    }
+
+    /**
+    * 删除回访记录 接口
+    */
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        ReturnVisitService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+}

@@ -22,8 +22,8 @@
             <if test="status != null">status = #{status},</if>
             <if test="count != null">count = #{count},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
-            <if test="createTime != null">createTime = #{createTime}</if>
-            <if test="comefrom != null">comefrom = #{comefrom}</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
+            <if test="comefrom != null">comefrom = #{comefrom},</if>
             <if test="releaseTime != null">releaseTime = #{releaseTime}</if>
         </set>
         WHERE id = #{id}

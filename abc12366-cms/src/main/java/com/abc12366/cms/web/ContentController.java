@@ -318,9 +318,10 @@ public class ContentController {
             if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime() / 1000);
-            } else {
-                dataMap.put("needRegenerate", "0");
             }
+//            else {
+//                dataMap.put("needRegenerate", "0");
+//            }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
             throw new RuntimeException("时间类型转换异常：{}", e);
