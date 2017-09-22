@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db1.QuestionFactionLevelMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	name,	honorValue,	createTime,	createAdmin,	updateTime,	updateAdmin
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectList" resultType="questionFactionLevel">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_question_fashion_level
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="questionFactionLevel" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_question_fashion_level
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM bb_question_fashion_level
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="questionFactionLevel">
+		 INSERT INTO bb_question_fashion_level
+ 		(id,name,honorValue,createTime,createAdmin,updateTime,updateAdmin) 
+		 VALUES 
+ 		(#{id},#{name},#{honorValue},now(),#{createAdmin},now(),#{updateAdmin})
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="questionFactionLevel">
+		 INSERT INTO bb_question_fashion_level
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="honorValue != null">
+				 honorValue,
+			</if>
+			<if test="createAdmin != null">
+				 createAdmin,
+			</if>
+			<if test="updateAdmin != null">
+				 updateAdmin,
+			</if>
+			 updateTime
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="honorValue!=null">
+				 #{honorValue},
+			</if>
+			<if test="createAdmin!=null">
+				 #{createAdmin},
+			</if>
+			<if test="updateAdmin!=null">
+				 #{updateAdmin},
+			</if>
+			now()
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="questionFactionLevel">
+		 UPDATE bb_question_fashion_level
+ 		 <set> 
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="honorValue != null">
+				 honorValue = #{honorValue},
+			</if>
+			<if test="createAdmin != null">
+				 createAdmin = #{createAdmin},
+			</if>
+			<if test="updateAdmin != null">
+				 updateAdmin = #{updateAdmin},
+			</if>
+			 updateTime = now()
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="questionFactionLevel">
+		 UPDATE bb_question_fashion_level
+		 SET 
+			 name = #{name},
+			 honorValue = #{honorValue},
+			 createAdmin = #{createAdmin},
+			 updateAdmin = #{updateAdmin}
+			 updateTime = now()
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
