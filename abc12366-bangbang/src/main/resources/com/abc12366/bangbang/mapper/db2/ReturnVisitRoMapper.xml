@@ -16,4 +16,35 @@
 		WHERE id = #{id}
 	</select>
 
+	<!-- 列表查询 -->
+	<select id="selectList" resultType="com.abc12366.bangbang.model.ReturnVisit" parameterType="com.abc12366.bangbang.model.bo.ReturnVisitBO">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_return_visit
+		<where>
+			1=1
+			<if test="phone != null and phone!=''">AND phone = #{phone}</if>
+			<if test="date != null and date!=''">
+				<![CDATA[
+                and date_format(visitDate, '%Y') = #{date}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 统计列表查询 -->
+	<select id="selectStatisList" resultType="com.abc12366.bangbang.model.bo.ReturnVisitBO" parameterType="com.abc12366.bangbang.model.bo.ReturnVisitBO">
+		select count(*) as total,date_format(visitDate, '%Y') as date from bb_return_visit
+		<where>
+			1=1
+			<if test="phone != null and phone!=''">AND phone = #{phone}</if>
+			<if test="date != null and date!=''">
+				<![CDATA[
+                and date_format(visitDate, '%Y') = #{date}
+                ]]>
+			</if>
+		</where>
+		group by date_format(visitDate, '%Y')
+	</select>
+
 </mapper>

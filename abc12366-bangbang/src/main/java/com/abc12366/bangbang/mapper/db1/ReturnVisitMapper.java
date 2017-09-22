@@ -37,6 +37,4 @@ public interface ReturnVisitMapper{
 	 **/
 	int update(ReturnVisit record);
 
-
-	List<ReturnVisit> selectList(ReturnVisitBO returnVisitBO);
 }

@@ -9,11 +9,42 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.ReturnVisit" parameterType="java.lang.Integer">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionAccepted" parameterType="java.lang.Integer">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_question_accepted
 		WHERE id = #{id}
+	</select>
+
+	<!-- 列表查询 -->
+	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionAccepted" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_question_accepted
+        <where>
+            1=1
+            <if test="phone != null and phone!=''">AND phone = #{phone}</if>
+            <if test="date != null and date!=''">
+                <![CDATA[
+                and date_format(visitDate, '%Y') = #{date}
+                ]]>
+            </if>
+        </where>
+	</select>
+
+	<!-- 统计列表查询 -->
+	<select id="selectStatisList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
+        select count(*) as total,date_format(visitDate, '%Y') as date from bb_question_accepted
+        <where>
+            1=1
+            <if test="phone != null and phone!=''">AND phone = #{phone}</if>
+            <if test="date != null and date!=''">
+                <![CDATA[
+                and date_format(visitDate, '%Y') = #{date}
+                ]]>
+            </if>
+        </where>
+        group by date_format(visitDate, '%Y')
 	</select>
 
 
