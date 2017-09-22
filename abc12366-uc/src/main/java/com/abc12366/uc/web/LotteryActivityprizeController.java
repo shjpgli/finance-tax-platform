@@ -2,15 +2,15 @@ package com.abc12366.uc.web;
 
 /**
  * Admin: lingsuzhi <554600654@qq.com.com>
- * Date: 2017-09-20
+ * Date: 2017-09-21
  */
 
+import com.abc12366.uc.model.bo.LotteryActivityprizeBO;
 
-
-import com.abc12366.uc.model.bo.LotteryBO;
 import java.util.List;
 import java.util.Map;
-import com.abc12366.uc.service.LotteryService;
+
+import com.abc12366.uc.service.LotteryActivityprizeService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,21 +21,24 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 
 @RestController
-@RequestMapping(path = "/lottery", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
-public class LotteryController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LotteryController.class);
+@RequestMapping(path = "/lotteryactivityprize", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class LotteryActivityprizeController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LotteryActivityprizeController.class);
     @Autowired
-    private LotteryService lotteryService;
+    private LotteryActivityprizeService lotteryActivityprizeService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+    public ResponseEntity selectList(@RequestParam(required = false)String activityId ,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
+        if(activityId != null && !activityId.isEmpty()){
+            map.put("activityId",activityId);
+        }
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<LotteryBO> list = lotteryService.selectList(map);
+        List<LotteryActivityprizeBO> list = lotteryActivityprizeService.selectList(map);
         LOGGER.info("selectList:{}", list);
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -43,17 +46,17 @@ public class LotteryController {
     }
 
     @PostMapping
-    public ResponseEntity insert(@RequestBody LotteryBO lotteryBO) {
-        LOGGER.info("insert:{}", lotteryBO);
-        LotteryBO returnObj = lotteryService.insert(lotteryBO);
+    public ResponseEntity insert(@RequestBody LotteryActivityprizeBO lotteryActivityprizeBO) {
+        LOGGER.info("insert:{}", lotteryActivityprizeBO);
+        LotteryActivityprizeBO returnObj = lotteryActivityprizeService.insert(lotteryActivityprizeBO);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody LotteryBO lotteryBO,
+    public ResponseEntity update(@RequestBody LotteryActivityprizeBO lotteryActivityprizeBO,
                                  @PathVariable String id) {
-        LOGGER.info("update：{} id:{}", lotteryBO, id);
-        LotteryBO returnObj = lotteryService.update(lotteryBO, id);
+        LOGGER.info("update：{} id:{}", lotteryActivityprizeBO, id);
+        LotteryActivityprizeBO returnObj = lotteryActivityprizeService.update(lotteryActivityprizeBO, id);
         LOGGER.info("{}", returnObj);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
@@ -61,14 +64,13 @@ public class LotteryController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("deleteDo:{}", id);
-        lotteryService.delete(id);
+        lotteryActivityprizeService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
-        LotteryBO returnObj = lotteryService.selectOne(id);
+        LotteryActivityprizeBO returnObj = lotteryActivityprizeService.selectOne(id);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
-
 }

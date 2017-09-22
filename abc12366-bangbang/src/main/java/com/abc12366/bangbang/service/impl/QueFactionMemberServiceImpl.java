@@ -49,8 +49,14 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
     public List<QuestionFactionMemberBo> selectListTj(String factionId) {
         List<QuestionFactionMemberBo> factionMemberBoList;
         try {
-            //查询邦派成员列表
+            //查询邦派成员列表(我管理的邦派)统计
             factionMemberBoList = memberRoMapper.selectListTj(factionId);
+
+            for(QuestionFactionMemberBo factionMemberBo : factionMemberBoList){
+                int honor = 2*factionMemberBo.getAnswerNum() + 1*factionMemberBo.getDiscussNum() + 7*factionMemberBo.getAdoptNum();
+                factionMemberBo.setHonor(honor+"");
+            }
+
         } catch (Exception e) {
             LOGGER.error("查询邦派成员列表信息异常：{}", e);
             throw new ServiceException(6130);

@@ -14,9 +14,9 @@ import java.util.Map;
 
 public interface LotteryService {
     List<LotteryBO> selectList(Map map);
+    List<LotteryBO> findLotteryByActivity(Map map);
     LotteryBO selectOne(String id);
     LotteryBO insert(LotteryBO lotteryBO);
     LotteryBO update(LotteryBO lotteryBO, String id);
     boolean delete(String id);
-
 }

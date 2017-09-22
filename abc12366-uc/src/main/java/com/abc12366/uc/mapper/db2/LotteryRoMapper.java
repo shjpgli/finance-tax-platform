@@ -12,5 +12,6 @@ import java.util.Map;
 
 public interface LotteryRoMapper {
     List<LotteryBO> selectList(Map map);
+    List<LotteryBO> findLotteryByActivity(Map map);
     LotteryBO selectOne(String id);
 }

@@ -13,6 +13,8 @@ public interface QueFactionService {
 
     List<QuestionFactionListBo> selectListTj(Map<String, Object> map);
 
+    List<QuestionFactionListBo> selectListExcellent(Map<String, Object> map);
+
     QuestionFactionBo save(QuestionFactionBo factionBo);
 
     QuestionFactionBo selectQuestionFaction(String factionId);

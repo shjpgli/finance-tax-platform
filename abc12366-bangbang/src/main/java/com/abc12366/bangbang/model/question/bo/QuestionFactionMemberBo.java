@@ -43,6 +43,12 @@ public class QuestionFactionMemberBo implements Serializable {
     /**贡献值****/
     private String honor;
 
+    /**成员讨论数****/
+    private Integer discussNum;
+
+    /**成员采纳回答数****/
+    private Integer adoptNum;
+
 
 
 	public void setMemberId(String memberId){
@@ -131,5 +137,21 @@ public class QuestionFactionMemberBo implements Serializable {
 
     public void setHonor(String honor) {
         this.honor = honor;
+    }
+
+    public Integer getDiscussNum() {
+        return discussNum;
+    }
+
+    public void setDiscussNum(Integer discussNum) {
+        this.discussNum = discussNum;
+    }
+
+    public Integer getAdoptNum() {
+        return adoptNum;
+    }
+
+    public void setAdoptNum(Integer adoptNum) {
+        this.adoptNum = adoptNum;
     }
 }

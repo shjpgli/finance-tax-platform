@@ -4,9 +4,9 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryActivityMapper">
 <insert id="insert" parameterType="com.abc12366.uc.model.LotteryActivity">
 insert into uc_lottery_activity(
-id,name,types,description,count,label,userLevel,url,startTime,endTime,status,createTime
+id,name,types,description,count,label,userLevel,url,startTime,endTime,status,templateId,createTime
 )values(
-#{id},#{name},#{types},#{description},#{count},#{label},#{userLevel},#{url},#{startTime},#{endTime},#{status},#{createTime})
+#{id},#{name},#{types},#{description},#{count},#{label},#{userLevel},#{url},#{startTime},#{endTime},#{status},#{templateId},#{createTime})
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.LotteryActivity">
 update  uc_lottery_activity 
@@ -21,6 +21,7 @@ update  uc_lottery_activity
 <if test="startTime!=null">startTime=#{startTime},</if>
 <if test="endTime!=null">endTime=#{endTime},</if>
 <if test="status!=null">status=#{status},</if>
+<if test="templateId!=null">templateId=#{templateId},</if>
 <if test="createTime!=null">createTime=#{createTime},</if>
 </set>
 where id=#{id}
