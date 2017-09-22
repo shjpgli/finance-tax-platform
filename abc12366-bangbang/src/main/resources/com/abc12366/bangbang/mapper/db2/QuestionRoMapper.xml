@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime
+		 id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, isRecommend
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -19,7 +19,7 @@
     <!-- 最新问题 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
-        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, isRecommend,
         (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q

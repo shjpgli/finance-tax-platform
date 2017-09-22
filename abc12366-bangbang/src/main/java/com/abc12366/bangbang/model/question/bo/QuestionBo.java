@@ -46,9 +46,11 @@ public class QuestionBo implements Serializable {
 
 	/**浏览量**int(11)**/
 	private Integer browseNum;
-    
-	private java.util.Date recommendEndTime;
-    private List<QuestionTag> tagList;
+
+	/**是否推荐**/
+	private Boolean isRecommend;
+
+	private List<QuestionTag> tagList;
 
     /**标签**varchar(1000)**/
     private String tag;
@@ -162,16 +164,16 @@ public class QuestionBo implements Serializable {
         this.tagList = tagList;
     }
 
-	public Date getRecommendEndTime() {
-		return recommendEndTime;
+	public Boolean getIsRecommend() {
+		return isRecommend;
 	}
 
-	public QuestionBo setRecommendEndTime(Date recommendEndTime) {
-		this.recommendEndTime = recommendEndTime;
+	public QuestionBo setIsRecommend(Boolean isRecommend) {
+		this.isRecommend = isRecommend;
 		return this;
 	}
 
-    public String getTag() {
+	public String getTag() {
         return tag;
     }
 
