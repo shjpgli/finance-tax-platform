@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.ReturnVisitMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	nsrsbh,	nsrmc,	productName,	name,	phone,	visitDate
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="returnVisit" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_return_visit
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM bb_return_visit
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="returnVisit">
+		 INSERT INTO bb_return_visit
+ 		(id,nsrsbh,nsrmc,productName,name,phone,visitDate) 
+		 VALUES 
+ 		(#{id},#{nsrsbh},#{nsrmc},#{productName},#{name},#{phone},#{visitDate}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="returnVisit">
+		 INSERT INTO bb_return_visit
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="nsrsbh != null">
+				 nsrsbh,
+			</if>
+			<if test="nsrmc != null">
+				 nsrmc,
+			</if>
+			<if test="productName != null">
+				 productName,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="phone != null">
+				 phone,
+			</if>
+			<if test="visitDate != null">
+				 visitDate,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="nsrsbh!=null">
+				 #{nsrsbh},
+			</if>
+			<if test="nsrmc!=null">
+				 #{nsrmc},
+			</if>
+			<if test="productName!=null">
+				 #{productName},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="phone!=null">
+				 #{phone},
+			</if>
+			<if test="visitDate!=null">
+				 #{visitDate},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="returnVisit">
+		 UPDATE bb_return_visit
+ 		 <set> 
+			<if test="nsrsbh != null">
+				 nsrsbh = #{nsrsbh},
+			</if>
+			<if test="nsrmc != null">
+				 nsrmc = #{nsrmc},
+			</if>
+			<if test="productName != null">
+				 productName = #{productName},
+			</if>
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="phone != null">
+				 phone = #{phone},
+			</if>
+			<if test="visitDate != null">
+				 visitDate = #{visitDate},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="returnVisit">
+		 UPDATE bb_return_visit
+		 SET 
+			 nsrsbh = #{nsrsbh},
+			 nsrmc = #{nsrmc},
+			 productName = #{productName},
+			 name = #{name},
+			 phone = #{phone},
+			 visitDate = #{visitDate}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>
