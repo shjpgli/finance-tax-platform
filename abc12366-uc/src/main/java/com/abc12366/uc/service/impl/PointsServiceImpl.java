@@ -166,17 +166,17 @@ public class PointsServiceImpl implements PointsService {
     }
 
     @Override
-    public void calculate(PointCalculateBO pointCalculateBO) {
+    public int calculate(PointCalculateBO pointCalculateBO) {
         //查询出对应的积分规则
         PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOne(pointCalculateBO.getRuleId());
         if(pointsRuleBO==null){
-            return;
+            return 0;
         }
 
         //查看获取经验值次数是否允许范围内
         String period = pointsRuleBO.getPeriod().toUpperCase();
         if (!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A")) {
-            return;
+            return 0;
         }
         if (!period.trim().equals("A")) {
             Date startTime = new Date();
@@ -206,7 +206,7 @@ public class PointsServiceImpl implements PointsService {
                 param.setRuleId(pointCalculateBO.getRuleId());
                 List<PointComputeLog> computeLogList = pointsRoMapper.selectCalculateLog(param);
                 if (computeLogList != null && computeLogList.size() >= pointsRuleBO.getDegree()) {
-                    return;
+                    return 0;
                 }
             }
         }
@@ -239,5 +239,7 @@ public class PointsServiceImpl implements PointsService {
         pointComputeLog.setCreateTime(new Date());
         pointComputeLog.setRuleId(pointCalculateBO.getRuleId());
         pointMapper.insertComputeLog(pointComputeLog);
+
+        return pointsRuleBO.getPoints();
     }
 }

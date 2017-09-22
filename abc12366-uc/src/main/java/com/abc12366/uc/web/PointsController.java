@@ -47,8 +47,8 @@ public class PointsController {
 
     @PostMapping(path = "/calculate")
     public ResponseEntity calculate(@Valid @RequestBody PointCalculateBO pointCalculateBO){
-        pointsService.calculate(pointCalculateBO);
-        return ResponseEntity.ok(Utils.kv());
+        int point = pointsService.calculate(pointCalculateBO);
+        return ResponseEntity.ok(Utils.kv("data", point));
     }
 
     @PostMapping(path = "/codex/{upointCodexId}")
