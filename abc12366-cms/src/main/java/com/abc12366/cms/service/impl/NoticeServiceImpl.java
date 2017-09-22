@@ -59,8 +59,12 @@ public class NoticeServiceImpl implements NoticeService {
         String status = notice.getStatus();
         if (status == null) {
             //默认草稿状态
-            notice.setStatus("1");
+            notice.setStatus("0");
         }
+        if("1".equals(status)){
+            notice.setReleaseTime(now);
+        }
+
         noticeMapper.insert(notice);
         return notice;
     }
@@ -103,6 +107,10 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public NoticeBO update(NoticeBO notice) {
         Timestamp now = new Timestamp(new Date().getTime());
+        String status = notice.getStatus();
+        if("1".equals(status)){
+            notice.setReleaseTime(now);
+        }
         notice.setLastUpdate(now);
         int update = noticeMapper.update(notice);
         if (update != 1) {

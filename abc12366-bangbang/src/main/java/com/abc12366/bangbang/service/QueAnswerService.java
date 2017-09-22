@@ -13,6 +13,8 @@ public interface QueAnswerService {
 
     List<QuestionAnswerBo> selectListByParentId(Map<String, Object> map);
 
+    List<QuestionAnswerBo> selectListNew(Map<String, Object> map);
+
     QuestionAnswerBo save(QuestionAnswerBo questionAnswerBo);
 
     QuestionAnswerBo selectAnswer(String id);

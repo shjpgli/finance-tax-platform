@@ -5,12 +5,12 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, title, author, content, status, createTime, lastUpdate,count,comefrom
+        id, title, author, content, status, createTime, lastUpdate,count,comefrom,releaseTime
     </sql>
 
     <insert id="insert" parameterType="com.abc12366.cms.model.bo.NoticeBO">
         INSERT INTO cms_notice(<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{title}, #{author}, #{content}, #{status}, #{createTime}, #{lastUpdate}, #{count},#{comefrom})
+        VALUES (#{id}, #{title}, #{author}, #{content}, #{status}, #{createTime}, #{lastUpdate}, #{count},#{comefrom},#{releaseTime})
     </insert>
 
     <update id="update" parameterType="com.abc12366.cms.model.bo.NoticeBO">
@@ -22,8 +22,9 @@
             <if test="status != null">status = #{status},</if>
             <if test="count != null">count = #{count},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
-            <if test="createTime != null">createTime = #{createTime}</if>
-            <if test="comefrom != null">comefrom = #{comefrom}</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
+            <if test="comefrom != null">comefrom = #{comefrom},</if>
+            <if test="releaseTime != null">releaseTime = #{releaseTime}</if>
         </set>
         WHERE id = #{id}
     </update>

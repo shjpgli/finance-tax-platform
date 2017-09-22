@@ -189,5 +189,17 @@ public class QuestionController {
 
     }
 
+    /**
+     * 更新浏览量
+     */
+    @PutMapping(path = "/updateBrowseNum/{id}")
+    public ResponseEntity updateBrowseNum(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        //更新浏览量信息
+        String rtn = questionService.updateBrowseNum(id);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
 
 }

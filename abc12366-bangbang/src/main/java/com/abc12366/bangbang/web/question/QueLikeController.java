@@ -36,8 +36,8 @@ public class QueLikeController {
     @PostMapping(path = "/{id}")
     public ResponseEntity insert(@PathVariable String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        QuestionLikeBo likeBO = likeService.insert(id, request);
-        return ResponseEntity.ok(Utils.kv("data", likeBO));
+        String likeCnt = likeService.insert(id, request);
+        return ResponseEntity.ok(Utils.kv("data", likeCnt));
     }
 
     /**
@@ -46,8 +46,8 @@ public class QueLikeController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        likeService.delete(id, request);
-        return ResponseEntity.ok(Utils.kv());
+        String likeCnt = likeService.delete(id, request);
+        return ResponseEntity.ok(Utils.kv("data", likeCnt));
     }
 
     /**

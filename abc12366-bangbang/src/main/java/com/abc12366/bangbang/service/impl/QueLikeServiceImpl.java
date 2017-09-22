@@ -35,7 +35,7 @@ public class QueLikeServiceImpl implements QueLikeService {
     private QuestionLikeRoMapper likeRoMapper;
 
     @Override
-    public QuestionLikeBo insert(String id, HttpServletRequest request) {
+    public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
 
@@ -53,17 +53,20 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         int result = likeMapper.insert(like);
 
-        QuestionLikeBo likeBO = new QuestionLikeBo();
-        BeanUtils.copyProperties(like, likeBO);
-        return likeBO;
+        int likeCnt = likeRoMapper.selectLikeCnt(id);
+
+        return likeCnt+"";
     }
 
     @Override
-    public void delete(String id, HttpServletRequest request) {
+    public String delete(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
         Map map = MapUtil.kv("id", id, "userId", userId);
         likeMapper.delete(map);
+        int likeCnt = likeRoMapper.selectLikeCnt(id);
+
+        return likeCnt+"";
     }
 
     @Override

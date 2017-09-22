@@ -115,6 +115,7 @@ public class QuestionServiceImpl implements QuestionService {
             LOGGER.info("新增问题信息:{}", jsonStu.toString());
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
+            questionBo.setBrowseNum(0);
             //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
@@ -228,6 +229,12 @@ public class QuestionServiceImpl implements QuestionService {
             LOGGER.error("删除问题信息异常：{}", e);
             throw new ServiceException(6104);
         }
+        return "";
+    }
+
+    @Override
+    public String updateBrowseNum(String id) {
+        questionMapper.updateBrowseNum(id);
         return "";
     }
 
