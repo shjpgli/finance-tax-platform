@@ -5,11 +5,13 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.PointMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.PointsService;
+import com.abc12366.uc.service.PrivilegeItemService;
 import com.abc12366.uc.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,9 @@ public class PointsServiceImpl implements PointsService {
 
     @Autowired
     private PointsRuleService pointsRuleService;
+
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
 
     @Override
     public PointsBO selectOne(String userId) {
@@ -225,7 +230,13 @@ public class PointsServiceImpl implements PointsService {
             pointsLog.setIncome(0);
             pointsLog.setOutgo(-pointsRuleBO.getPoints());
         } else {
-            pointsLog.setIncome(pointsRuleBO.getPoints());
+            //会员权限埋点（积分加成）
+            float factor = 1.0F;
+            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(pointCalculateBO.getUserId());
+            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
+                factor = privilegeItem.getHyjyzjc();
+            }
+            pointsLog.setIncome((int) (pointsRuleBO.getPoints()*factor));
             pointsLog.setOutgo(0);
         }
         pointsLogService.insert(pointsLog);

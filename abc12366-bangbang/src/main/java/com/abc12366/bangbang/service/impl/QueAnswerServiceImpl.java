@@ -77,6 +77,15 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             if(answerBo.getParentId() == null){
                 answerBo.setParentId("");
             }
+
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("userId", answerBo.getUserId());
+            dataMap.put("questionId", answerBo.getQuestionId());
+            String factionId = answerRoMapper.selectfactionId(dataMap);
+            if(factionId == null){
+                factionId = "";
+            }
+            answerBo.setFactionId(factionId);
             answerBo.setCreateTime(new Date());
             answerBo.setLastUpdate(new Date());
             //保存问题回复信息

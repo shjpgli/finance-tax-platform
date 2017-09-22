@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionAnswer">
 		 INSERT INTO bb_question_answer
- 		(id,parentId,questionId,userId,ip,answerUserId,answer,status,createTime,lastUpdate,isAccept)
+ 		(id,parentId,questionId,factionId,userId,ip,answerUserId,answer,status,createTime,lastUpdate,isAccept)
 		 VALUES 
- 		(#{id},#{parentId},#{questionId},#{userId},#{ip},#{answerUserId},#{answer},#{status},#{createTime},#{lastUpdate},#{isAccept})
+ 		(#{id},#{parentId},#{questionId},#{factionId},#{userId},#{ip},#{answerUserId},#{answer},#{status},#{createTime},#{lastUpdate},#{isAccept})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -30,6 +30,9 @@
 			<if test="questionId != null">
 				 questionId,
 			</if>
+             <if test="factionId != null">
+                 factionId,
+             </if>
 			<if test="userId != null">
 				 userId,
 			</if>
@@ -66,6 +69,9 @@
 			<if test="questionId!=null">
 				 #{questionId},
 			</if>
+             <if test="factionId!=null">
+                 #{factionId},
+             </if>
 			<if test="userId!=null">
 				 #{userId},
 			</if>
@@ -103,6 +109,9 @@
 			<if test="questionId != null">
 				 questionId = #{questionId},
 			</if>
+             <if test="factionId != null">
+                 factionId = #{factionId},
+             </if>
 			<if test="userId != null">
 				 userId = #{userId},
 			</if>
@@ -138,6 +147,7 @@
 		 SET 
 			 parentId = #{parentId},
 			 questionId = #{questionId},
+			 factionId = #{factionId},
 			 userId = #{userId},
 			 ip = #{ip},
 			 answerUserId = #{answerUserId},

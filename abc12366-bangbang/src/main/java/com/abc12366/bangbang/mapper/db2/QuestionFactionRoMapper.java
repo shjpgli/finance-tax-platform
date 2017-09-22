@@ -42,6 +42,13 @@ public interface QuestionFactionRoMapper {
 
     /**
      *
+     * 查询优秀邦派
+     *
+     **/
+    List<QuestionFactionListBo> selectListExcellent(Map<String, Object> map);
+
+    /**
+     *
      * 查询（根据主键ID查询）
      *
      **/

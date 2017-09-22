@@ -25,43 +25,50 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping(path = "/lottery", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
-public class LotteryController{
-private static final Logger LOGGER = LoggerFactory.getLogger(LotteryController.class);
-@Autowired
-private LotteryService lotteryService;
-@GetMapping
-public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page,@RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
-Map<String, Object> map = new HashMap<>();
-PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-List<LotteryBO> list = lotteryService.selectList(map);
-LOGGER.info("selectList:{}", list);
-return (list == null) ?
-ResponseEntity.ok(Utils.kv()) :
-ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
-}
-@PostMapping
-public ResponseEntity insert(@RequestBody LotteryBO lotteryBO) {
-LOGGER.info("insert:{}", lotteryBO);
-LotteryBO returnObj = lotteryService.insert(lotteryBO);
-return ResponseEntity.ok(Utils.kv("data", returnObj));
-}
-@PutMapping(path = "/{id}")
-public ResponseEntity update(@RequestBody LotteryBO lotteryBO,
-@PathVariable String id) {
-LOGGER.info("update：{} id:{}", lotteryBO,id);
-LotteryBO returnObj = lotteryService.update(lotteryBO, id);
-LOGGER.info("{}", returnObj);
-return ResponseEntity.ok(Utils.kv("data", returnObj));
-}
-@DeleteMapping(path = "/{id}")
-public ResponseEntity delete(@PathVariable String id) {
-LOGGER.info("deleteDo:{}", id);
-lotteryService.delete(id);
-return ResponseEntity.ok(Utils.kv());
-}
-@GetMapping(path = "/{id}")
-public ResponseEntity selectOne(@PathVariable String id) {
-LotteryBO returnObj = lotteryService.selectOne(id);
-return ResponseEntity.ok(Utils.kv("data", returnObj));
-}
+public class LotteryController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LotteryController.class);
+    @Autowired
+    private LotteryService lotteryService;
+
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> map = new HashMap<>();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<LotteryBO> list = lotteryService.selectList(map);
+        LOGGER.info("selectList:{}", list);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    @PostMapping
+    public ResponseEntity insert(@RequestBody LotteryBO lotteryBO) {
+        LOGGER.info("insert:{}", lotteryBO);
+        LotteryBO returnObj = lotteryService.insert(lotteryBO);
+        return ResponseEntity.ok(Utils.kv("data", returnObj));
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@RequestBody LotteryBO lotteryBO,
+                                 @PathVariable String id) {
+        LOGGER.info("update：{} id:{}", lotteryBO, id);
+        LotteryBO returnObj = lotteryService.update(lotteryBO, id);
+        LOGGER.info("{}", returnObj);
+        return ResponseEntity.ok(Utils.kv("data", returnObj));
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        LOGGER.info("deleteDo:{}", id);
+        lotteryService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        LotteryBO returnObj = lotteryService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data", returnObj));
+    }
+
 }

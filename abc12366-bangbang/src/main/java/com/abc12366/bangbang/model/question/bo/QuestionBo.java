@@ -62,6 +62,9 @@ public class QuestionBo implements Serializable {
     /**点赞次数**int(11)**/
     private Integer likeNum;
 
+    /****varchar(64)**/
+    private String factionId;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -198,5 +201,13 @@ public class QuestionBo implements Serializable {
 
     public void setLikeNum(Integer likeNum) {
         this.likeNum = likeNum;
+    }
+
+    public String getFactionId() {
+        return factionId;
+    }
+
+    public void setFactionId(String factionId) {
+        this.factionId = factionId;
     }
 }

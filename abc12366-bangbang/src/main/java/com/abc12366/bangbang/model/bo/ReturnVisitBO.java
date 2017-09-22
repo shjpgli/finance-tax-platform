@@ -31,6 +31,10 @@ public class ReturnVisitBO implements Serializable {
 	/**访问日期**/
 	private String visitDate;
 
+	//年份
+	private String date;
+	//总数
+	private String total;
 
 
 	public void setId(Integer id){
@@ -89,4 +93,19 @@ public class ReturnVisitBO implements Serializable {
 		return this.visitDate;
 	}
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
 }

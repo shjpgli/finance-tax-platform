@@ -9,6 +9,15 @@ import java.util.Date;
 
 
 public class LotteryLog{
+    private String remake;
+
+    public String getRemake() {
+        return remake;
+    }
+
+    public void setRemake(String remake) {
+        this.remake = remake;
+    }
  /** key */
 private String id;
  /** 活动id */

@@ -15,4 +15,6 @@ public interface QuestionAcceptedService {
     List<QuestionAccepted> selectList(QuestionAcceptedBO returnVisitBO);
 
     void delete(String id);
+
+    List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param);
 }

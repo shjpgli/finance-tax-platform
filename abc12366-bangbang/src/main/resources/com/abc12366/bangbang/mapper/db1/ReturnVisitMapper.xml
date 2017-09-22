@@ -1,125 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc12366.bangbang.mapper.ReturnVisitMapper">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db1.ReturnVisitMapper">
 
-	<!-- Í¨ÓÃ²éÑ¯½á¹ûÁÐ-->
-	<sql id="Base_Column_List">
-		 id,	nsrsbh,	nsrmc,	productName,	name,	phone,	visitDate
-	</sql>
 
-	<!-- ²éÑ¯£¨¸ù¾ÝÖ÷¼üID²éÑ¯£© -->
-	<select id="selectByPrimaryKey" resultType="returnVisit" parameterType="java.lang.Integer">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_return_visit
-		 WHERE id = #{id}
-	</select>
-
-	<!--É¾³ý£º¸ù¾ÝÖ÷¼üIDÉ¾³ý-->
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		 DELETE FROM bb_return_visit
-		 WHERE id = #{id}
+	<!--åˆ é™¤ï¼šæ ¹æ®ä¸»é”®IDåˆ é™¤-->
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE FROM bb_return_visit
+		WHERE id = #{id}
 	</delete>
 
-	<!-- Ìí¼Ó -->
-	<insert id="insert" parameterType="returnVisit">
-		 INSERT INTO bb_return_visit
- 		(id,nsrsbh,nsrmc,productName,name,phone,visitDate) 
-		 VALUES 
- 		(#{id},#{nsrsbh},#{nsrmc},#{productName},#{name},#{phone},#{visitDate}) 
-	</insert>
-
-	<!-- Ìí¼Ó £¨Æ¥ÅäÓÐÖµµÄ×Ö¶Î£©-->
-	<insert id="insertSelective" parameterType="returnVisit">
-		 INSERT INTO bb_return_visit
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
+	<!-- æ·»åŠ  ï¼ˆåŒ¹é…æœ‰å€¼çš„å­—æ®µï¼‰-->
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.ReturnVisit">
+		INSERT INTO bb_return_visit
+		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
-				 id,
+				id,
 			</if>
 			<if test="nsrsbh != null">
-				 nsrsbh,
+				nsrsbh,
 			</if>
 			<if test="nsrmc != null">
-				 nsrmc,
+				nsrmc,
 			</if>
 			<if test="productName != null">
-				 productName,
+				productName,
 			</if>
 			<if test="name != null">
-				 name,
+				name,
 			</if>
 			<if test="phone != null">
-				 phone,
+				phone,
 			</if>
 			<if test="visitDate != null">
-				 visitDate,
+				visitDate,
 			</if>
 
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
-				 #{id},
+				#{id},
 			</if>
 			<if test="nsrsbh!=null">
-				 #{nsrsbh},
+				#{nsrsbh},
 			</if>
 			<if test="nsrmc!=null">
-				 #{nsrmc},
+				#{nsrmc},
 			</if>
 			<if test="productName!=null">
-				 #{productName},
+				#{productName},
 			</if>
 			<if test="name!=null">
-				 #{name},
+				#{name},
 			</if>
 			<if test="phone!=null">
-				 #{phone},
+				#{phone},
 			</if>
 			<if test="visitDate!=null">
-				 #{visitDate},
+				#{visitDate},
 			</if>
-		 </trim>
+		</trim>
 	</insert>
 
-	<!-- ÐÞ ¸Ä-->
-	<update id="updateByPrimaryKeySelective" parameterType="returnVisit">
-		 UPDATE bb_return_visit
- 		 <set> 
+	<!-- ä¿® æ”¹-->
+	<update id="update" parameterType="com.abc12366.bangbang.model.ReturnVisit">
+		UPDATE bb_return_visit
+		<set>
 			<if test="nsrsbh != null">
-				 nsrsbh = #{nsrsbh},
+				nsrsbh = #{nsrsbh},
 			</if>
 			<if test="nsrmc != null">
-				 nsrmc = #{nsrmc},
+				nsrmc = #{nsrmc},
 			</if>
 			<if test="productName != null">
-				 productName = #{productName},
+				productName = #{productName},
 			</if>
 			<if test="name != null">
-				 name = #{name},
+				name = #{name},
 			</if>
 			<if test="phone != null">
-				 phone = #{phone},
+				phone = #{phone},
 			</if>
 			<if test="visitDate != null">
-				 visitDate = #{visitDate},
+				visitDate = #{visitDate},
 			</if>
 
- 		 </set>
-		 WHERE id = #{id}
-	</update>
-
-	<!-- ÐÞ ¸Ä-->
-	<update id="updateByPrimaryKey" parameterType="returnVisit">
-		 UPDATE bb_return_visit
-		 SET 
-			 nsrsbh = #{nsrsbh},
-			 nsrmc = #{nsrmc},
-			 productName = #{productName},
-			 name = #{name},
-			 phone = #{phone},
-			 visitDate = #{visitDate}
-		 WHERE id = #{id}
+		</set>
+		WHERE id = #{id}
 	</update>
 
 </mapper>

@@ -6,12 +6,14 @@ import com.abc12366.uc.mapper.db1.CheckMapper;
 import com.abc12366.uc.mapper.db2.CheckRoMapper;
 import com.abc12366.uc.model.Check;
 import com.abc12366.uc.model.CheckRank;
+import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.ReCheck;
 import com.abc12366.uc.model.bo.CheckListBO;
 import com.abc12366.uc.model.bo.CheckListParam;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.service.CheckService;
 import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.PrivilegeItemService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UCConstant;
@@ -41,6 +43,9 @@ public class CheckServiceImpl implements CheckService {
 
     @Autowired
     private TodoTaskService todoTaskService;
+
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
 
 
     @Transactional("db1TxManager")
@@ -76,6 +81,13 @@ public class CheckServiceImpl implements CheckService {
 //            pointsLog(check.getUserId(), points);
 //            return;
         }
+        //会员权限埋点（积分加成）
+        float factor = 1.0F;
+        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
+        if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
+            factor = privilegeItem.getHyjyzjc();
+        }
+        points = (int) (points * factor);
 
         //签到统计
         continuingCheck(check.getUserId());

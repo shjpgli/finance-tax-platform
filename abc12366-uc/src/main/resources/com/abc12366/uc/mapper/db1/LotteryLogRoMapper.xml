@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryLogMapper">
-<insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
+    <insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
 insert into uc_lottery_log(
-id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip
+id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake
 )values(
-#{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip})
+#{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip},#{remake})
 </insert>
-<update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
-update  uc_lottery_log 
-<set>
-<if test="activityId!=null">activityId=#{activityId},</if>
-<if test="lotteryId!=null">lotteryId=#{lotteryId},</if>
-<if test="createTime!=null">createTime=#{createTime},</if>
-<if test="lotteryName!=null">lotteryName=#{lotteryName},</if>
-<if test="isluck!=null">isluck=#{isluck},</if>
-<if test="state!=null">state=#{state},</if>
-<if test="userId!=null">userId=#{userId},</if>
-<if test="upoint!=null">upoint=#{upoint},</if>
-<if test="ip!=null">ip=#{ip},</if>
-</set>
-where id=#{id}
-</update>
-<delete id="delete" parameterType="java.lang.String">
+    <update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
+        update uc_lottery_log
+        <set>
+            <if test="activityId!=null">activityId=#{activityId},</if>
+            <if test="lotteryId!=null">lotteryId=#{lotteryId},</if>
+            <if test="createTime!=null">createTime=#{createTime},</if>
+            <if test="lotteryName!=null">lotteryName=#{lotteryName},</if>
+            <if test="isluck!=null">isluck=#{isluck},</if>
+            <if test="state!=null">state=#{state},</if>
+            <if test="userId!=null">userId=#{userId},</if>
+            <if test="upoint!=null">upoint=#{upoint},</if>
+            <if test="ip!=null">ip=#{ip},</if>
+            <if test="remake!=null">remake=#{remake}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="delete" parameterType="java.lang.String">
 delete from uc_lottery_log 
 where id=#{id}
 </delete>

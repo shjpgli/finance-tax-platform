@@ -13,6 +13,7 @@ import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.BaseObject;
+import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
@@ -82,6 +83,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private TodoTaskService todoTaskService;
+
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
 
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
@@ -168,7 +172,7 @@ public class AuthServiceImpl implements AuthService {
         todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         LOGGER.info("{}", userReturnBO);
@@ -388,6 +392,12 @@ public class AuthServiceImpl implements AuthService {
                         exp = 10;
                     }
                 }
+            }
+
+            //会员权限埋点（经验值加成）
+            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
+            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
+                exp = (int) (exp * privilegeItem.getHyjyzjc());
             }
 
             ExperienceLogBO logBO = new ExperienceLogBO();

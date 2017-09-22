@@ -31,7 +31,9 @@
     <select id="selectListTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo" parameterType="java.util.Map">
         SELECT
         memberId,	factionId,	userId,	username,	nickname,	status,duty,	createTime,	lastUpdate,
-        (SELECT count(*) FROM bb_question_answer where userId = m.userId and parentId = '') answerNum
+        (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId = '' and factionId = m.factionId) answerNum,
+        (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId != '' and factionId = m.factionId) discussNum,
+        (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId = '' and isAccept = '1' and factionId = m.factionId) adoptNum
         FROM bb_question_faction_member m
         WHERE 1=1
         <if test="factionId != null and factionId != ''">

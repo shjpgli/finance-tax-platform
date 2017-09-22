@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * Admin: lingsuzhi <554600654@qq.com.com>
- * Date: 2017-09-20
+ * Date: 2017-09-21
  */
 
 
@@ -31,6 +31,8 @@ private Date startTime;
 private Date endTime;
  /** 状态 */
 private Boolean status;
+ /** 模版id */
+private String templateId;
  /** 创建时间 */
 private Date createTime;
 
@@ -100,6 +102,12 @@ public Boolean getStatus(){
 public void setStatus(Boolean status){
    this.status = status;
 }
+public String getTemplateId(){
+    return templateId;
+}
+public void setTemplateId(String templateId){
+   this.templateId = templateId;
+}
 public Date getCreateTime(){
     return createTime;
 }
@@ -121,6 +129,7 @@ return "LotteryActivity {\r\n"+
 "\""+"startTime"+"\""+":"+"\""+startTime+"\""+",\r\n"+
 "\""+"endTime"+"\""+":"+"\""+endTime+"\""+",\r\n"+
 "\""+"status"+"\""+":"+"\""+status+"\""+",\r\n"+
+"\""+"templateId"+"\""+":"+"\""+templateId+"\""+",\r\n"+
 "\""+"createTime"+"\""+":"+"\""+createTime+"\""+"}";
 }
 }

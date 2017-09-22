@@ -9,7 +9,26 @@ import java.util.Date;
 
 
 public class LotteryLogBO{
- /** key */
+    private String remake;
+
+    public String getRemake() {
+        return remake;
+    }
+
+    public void setRemake(String remake) {
+        this.remake = remake;
+    }
+private String userName ;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /** key */
 private String id;
  /** 活动id */
 private String activityId;

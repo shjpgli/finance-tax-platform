@@ -1105,7 +1105,7 @@ public class OrderServiceImpl implements OrderService {
             insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货","0");
 
             //发送消息
-            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
             if(expressComp == null){
                 LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102,"物流公司查询失败");
