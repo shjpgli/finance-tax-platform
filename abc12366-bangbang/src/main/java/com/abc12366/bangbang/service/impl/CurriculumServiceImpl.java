@@ -392,10 +392,15 @@ public class CurriculumServiceImpl implements CurriculumService {
                 }
             }
         }else{
-            if(!"".equals(curriculum1.getGoodsId()) && !goodsId.equals(curriculum1.getGoodsId())){
-                //商品不能修改
-                throw new ServiceException(4327);
+            if(!"".equals(goodsId)){
+                if(!"".equals(curriculum1.getGoodsId()) && !goodsId.equals(curriculum1.getGoodsId())){
+                    //商品不能修改
+                    throw new ServiceException(4327);
+                }
+            }else{
+                curriculumBo.setGoodsId(curriculum1.getGoodsId());
             }
+
         }
 
         //更新模型信息
