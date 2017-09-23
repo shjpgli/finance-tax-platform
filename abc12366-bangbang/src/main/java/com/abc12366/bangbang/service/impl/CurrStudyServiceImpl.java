@@ -1,20 +1,25 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.CurriculumMapper;
 import com.abc12366.bangbang.mapper.db1.CurriculumStudyMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumStudyRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumStudy;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumStudyBo;
 import com.abc12366.bangbang.service.CurrStudyService;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +41,9 @@ public class CurrStudyServiceImpl implements CurrStudyService {
     @Autowired
     private CurriculumMapper curriculumMapper;
 
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+
     @Override
     public List<CurriculumStudyBo> selectList(Map<String,Object> map) {
         List<CurriculumStudyBo> studyBoList;
@@ -50,7 +58,7 @@ public class CurrStudyServiceImpl implements CurrStudyService {
     }
 
     @Override
-    public CurriculumStudyBo save(CurriculumStudyBo studyBo) {
+    public CurriculumStudyBo save(CurriculumStudyBo studyBo,HttpServletRequest request) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(studyBo);
             LOGGER.info("新增课程学习信息:{}", jsonStu.toString());
@@ -61,6 +69,14 @@ public class CurrStudyServiceImpl implements CurrStudyService {
             studyBo.setStudyId(uuid);
             BeanUtils.copyProperties(studyBo, study);
             studyMapper.insert(study);
+
+            String url = "http://118.118.116.202:9100/uc/todo/task/do/award/{userId}/{sysTaskId}";
+            String responseStr;
+            String userId = UcUserCommon.getUserId();
+            String sysTaskId = "76303795-aa1f-480b-94f4-51ac0deb3bb2";
+            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+//            System.out.println(responseStr);
+
             curriculumMapper.updateWatchsDay(studyBo.getCurriculumId());
         } catch (Exception e) {
             LOGGER.error("新增课程学习信息异常：{}", e);

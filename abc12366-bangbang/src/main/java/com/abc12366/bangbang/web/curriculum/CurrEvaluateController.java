@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +67,9 @@ public class CurrEvaluateController {
      * 课程评价新增
      */
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody CurriculumEvaluateBo evaluateBo) {
+    public ResponseEntity save(@Valid @RequestBody CurriculumEvaluateBo evaluateBo,HttpServletRequest request) {
         //新增课程评价信息
-        evaluateBo = currEvaluateService.save(evaluateBo);
+        evaluateBo = currEvaluateService.save(evaluateBo,request);
         return ResponseEntity.ok(Utils.kv("data", evaluateBo));
     }
 

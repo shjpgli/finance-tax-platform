@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.web.curriculum;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCoursewareBo;
 import com.abc12366.bangbang.service.CoursewareService;
 import com.abc12366.gateway.util.Constant;
@@ -118,7 +119,8 @@ public class CoursewareController {
     @GetMapping(path = "/selectCourseware/{coursewareId}")
     public ResponseEntity selectCourseware(@PathVariable String coursewareId,HttpServletRequest request) {
         //查询课件信息
-        String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
+        String userId = UcUserCommon.getUserId();
+
         CurriculumCoursewareBo coursewareBo = coursewareService.selectCoursewarebf(coursewareId,userId);
         return ResponseEntity.ok(Utils.kv("data", coursewareBo));
     }
