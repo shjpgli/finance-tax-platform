@@ -149,6 +149,20 @@
         WHERE curriculumId = #{curriculumId} and c.status = 1
     </select>
 
+    <!-- 查询课程信息(查询下架课程) -->
+    <select id="selectCurriculum2" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumsyBo" parameterType="java.lang.String">
+        SELECT
+        curriculumId,title,browseNum,watchNum,goodsId,issueTime,cover,isFree,curriculumidIntro,
+        trainTimeBegin,trainTimeEnd,isApply,peopleLimit,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,teachingMethod,
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId =c.curriculumId) evaluateNum,
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId =c.curriculumId) evaluateNum45,
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(2,3) and curriculumId =c.curriculumId) evaluateNum23,
+        (SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade = 1 and curriculumId =c.curriculumId) evaluateNum1
+        FROM bb_curriculum c
+        WHERE curriculumId = #{curriculumId}
+    </select>
+
+
     <!-- 查询课程评价统计信息(前端用) -->
     <select id="selectEvaluateTj" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateTjBo" parameterType="java.lang.String">
         SELECT
