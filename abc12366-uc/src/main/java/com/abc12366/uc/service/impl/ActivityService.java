@@ -1,8 +1,8 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.config.SpringCtxHolder;
 import com.abc12366.uc.mapper.db1.ActivityMapper;
 import com.abc12366.uc.mapper.db2.ActivityRoMapper;
 import com.abc12366.uc.model.weixin.WxActivity;
@@ -13,7 +13,6 @@ import com.abc12366.uc.service.IActivityService;
 import com.abc12366.uc.util.LocalIpAddressUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
-import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxMchConnectFactory;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -21,12 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;

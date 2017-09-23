@@ -1,6 +1,5 @@
 package com.abc12366.uc.util.wx;
 
-import com.abc12366.uc.model.weixin.bo.redpack.SendRedPack;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;

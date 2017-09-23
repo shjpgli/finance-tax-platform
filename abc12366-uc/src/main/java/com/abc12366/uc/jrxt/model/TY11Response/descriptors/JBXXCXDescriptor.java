@@ -11,8 +11,6 @@ package com.abc12366.uc.jrxt.model.TY11Response.descriptors;
  //- Imported classes and packages -/
 //---------------------------------/
 
-import com.abc12366.uc.jrxt.model.TY11Response.JBXXCX;
-
 /**
  * Class JBXXCXDescriptor.
  * 

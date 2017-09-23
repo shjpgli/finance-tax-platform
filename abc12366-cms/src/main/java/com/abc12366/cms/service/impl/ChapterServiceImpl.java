@@ -8,7 +8,6 @@ import com.abc12366.cms.model.curriculum.CurriculumChapter;
 import com.abc12366.cms.model.curriculum.bo.CurriculumChapterBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumCoursewareBo;
 import com.abc12366.cms.service.ChapterService;
-import com.abc12366.cms.service.ChapterService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -18,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by xieyanmao on 2017/8/11.

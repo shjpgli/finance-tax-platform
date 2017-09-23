@@ -1,6 +1,5 @@
 package com.abc12366.uc.service.impl;
 
-import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;

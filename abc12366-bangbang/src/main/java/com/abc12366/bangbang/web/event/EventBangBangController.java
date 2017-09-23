@@ -1,6 +1,9 @@
 package com.abc12366.bangbang.web.event;
 
-import com.abc12366.bangbang.model.event.*;
+import com.abc12366.bangbang.model.event.EventApplyBbBo;
+import com.abc12366.bangbang.model.event.EventIdBo;
+import com.abc12366.bangbang.model.event.EventRecordBbBo;
+import com.abc12366.bangbang.model.event.SingleEventBo;
 import com.abc12366.bangbang.service.EventService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -12,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by stuy on 2017/9/13.

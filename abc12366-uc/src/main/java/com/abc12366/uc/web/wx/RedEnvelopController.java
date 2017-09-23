@@ -2,7 +2,6 @@ package com.abc12366.uc.web.wx;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
 import com.abc12366.uc.model.weixin.bo.redpack.WxLotteryBO;
 import com.abc12366.uc.service.IActivityService;

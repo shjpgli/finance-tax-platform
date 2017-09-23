@@ -1,7 +1,7 @@
 package com.abc12366.uc.wsbssoa.service.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Properties;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
 import com.abc12366.uc.wsbssoa.response.RSAPkResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
@@ -32,8 +32,7 @@ import java.util.Map;
  */
 @Service
 public class MainServiceImpl implements MainService {
-    private static Properties properties = new Properties("application.properties");
-    protected Logger _log = LoggerFactory.getLogger(RSAUtil.class);
+    protected Logger _log = LoggerFactory.getLogger(MainServiceImpl.class);
     @Autowired
     private RestTemplate restTemplate;
 
@@ -72,7 +71,7 @@ public class MainServiceImpl implements MainService {
      * @return
      */
     private RSAPkResponse getRSAPublicKeyStr(HttpServletRequest request) throws IOException {
-        String url = properties.getValue("wsbssoa.hngs.url") + "/pk";
+        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/pk";
         HttpHeaders headers = new HttpHeaders();
         headers.add("accessToken", (String) request.getAttribute("accessToken"));
         HttpEntity requestEntity = new HttpEntity(null, headers);

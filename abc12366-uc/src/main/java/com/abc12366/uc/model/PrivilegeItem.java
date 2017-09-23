@@ -1,7 +1,5 @@
 package com.abc12366.uc.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-09-22

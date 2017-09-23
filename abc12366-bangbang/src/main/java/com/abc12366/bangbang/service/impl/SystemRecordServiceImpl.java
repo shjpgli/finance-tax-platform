@@ -1,14 +1,13 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
-import com.abc12366.bangbang.service.SystemRecordService;
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.bangbang.mapper.db1.SystemRecordMapper;
 import com.abc12366.bangbang.mapper.db2.SystemRecordRoMapper;
 import com.abc12366.bangbang.model.SystemRecord;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
-
+import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
+import com.abc12366.bangbang.service.SystemRecordService;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

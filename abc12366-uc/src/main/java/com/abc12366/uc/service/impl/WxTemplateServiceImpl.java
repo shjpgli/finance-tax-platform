@@ -13,7 +13,6 @@ import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxGzhClient;
 import com.github.pagehelper.PageHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

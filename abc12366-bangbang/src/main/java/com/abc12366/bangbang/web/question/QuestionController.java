@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.util.Constant;

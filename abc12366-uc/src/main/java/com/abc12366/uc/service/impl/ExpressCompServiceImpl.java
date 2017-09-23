@@ -4,7 +4,6 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExpressCompMapper;
 import com.abc12366.uc.mapper.db2.ExpressCompRoMapper;
-import com.abc12366.uc.model.Express;
 import com.abc12366.uc.model.ExpressComp;
 import com.abc12366.uc.model.bo.ExpressCompBO;
 import com.abc12366.uc.service.ExpressCompService;

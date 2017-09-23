@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.invoice;
 
 import com.abc12366.uc.model.invoice.InvoiceUseApply;
-import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;

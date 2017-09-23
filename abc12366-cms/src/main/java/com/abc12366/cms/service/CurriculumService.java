@@ -1,8 +1,6 @@
 package com.abc12366.cms.service;
 
 
-import com.abc12366.cms.model.bo.ModelBo;
-import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumListBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumSituationBo;

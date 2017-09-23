@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.web.Question;
 
-import com.abc12366.bangbang.model.question.QuestionExpert;
 import com.abc12366.bangbang.model.question.QuestionTeam;
 import com.abc12366.bangbang.service.QuestionTeamService;
 import com.abc12366.gateway.util.Constant;

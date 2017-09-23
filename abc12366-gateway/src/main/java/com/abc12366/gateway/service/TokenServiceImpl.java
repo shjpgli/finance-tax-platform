@@ -1,11 +1,11 @@
 package com.abc12366.gateway.service;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.model.bo.LoginInfoBO;
 import com.abc12366.gateway.model.bo.ResultLoginInfo;
 import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.model.bo.UserResponseBO;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.PropertiesUtil;
 import com.abc12366.gateway.util.RestTemplateUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -19,7 +19,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,7 +71,7 @@ public class TokenServiceImpl implements TokenService {
             }
         } else {
             try {
-                String abcAdmin = PropertiesUtil.getValue("abc12366.uc.url");
+                String abcAdmin = SpringCtxHolder.getProperty("abc12366.uc.url");
                 String checkUrl = "/admin/token/" + adminToken;
                 // 1.调用admin的token校验接口，如果校验通过直接返回true
                 String result = restTemplateUtil.send(abcAdmin + checkUrl, HttpMethod.GET, request);
@@ -91,7 +90,7 @@ public class TokenServiceImpl implements TokenService {
                             TimeUnit.SECONDS);
                     isAuth = true;
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
             }
         }
@@ -121,7 +120,7 @@ public class TokenServiceImpl implements TokenService {
         } else {
             try {
                 //调用uc的token校验接口，如果校验通过刷新token并返回true
-                String abc12366_uc = PropertiesUtil.getValue("abc12366.uc.url");
+                String abc12366_uc = SpringCtxHolder.getProperty("abc12366.uc.url");
                 String check_url = "/user/token/" + userToken;
                 String body = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.GET, request);
                 if (body != null) {
@@ -134,7 +133,7 @@ public class TokenServiceImpl implements TokenService {
                         request.setAttribute(Constant.USER_INFO, userResponseBO.getData());
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
             }
         }

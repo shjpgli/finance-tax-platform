@@ -2,7 +2,6 @@ package com.abc12366.uc.web.wx;
 
 import com.abc12366.uc.service.IWxMsgService;
 import com.abc12366.uc.util.wx.SignUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

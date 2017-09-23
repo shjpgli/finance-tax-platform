@@ -1,7 +1,7 @@
 package com.abc12366.uc.util.wx;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.uc.config.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.bo.message.FileContent;
 import com.alibaba.fastjson.JSON;
 import org.apache.http.HttpEntity;

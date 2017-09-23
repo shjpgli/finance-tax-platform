@@ -1,6 +1,6 @@
 package com.abc12366.uc.util.wx;
 
-import com.abc12366.uc.config.SpringCtxHolder;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.message.FileContent;
 import com.alibaba.fastjson.JSON;

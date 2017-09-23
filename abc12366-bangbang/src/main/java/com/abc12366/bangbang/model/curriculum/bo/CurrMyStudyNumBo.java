@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.model.curriculum.bo;
+
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**

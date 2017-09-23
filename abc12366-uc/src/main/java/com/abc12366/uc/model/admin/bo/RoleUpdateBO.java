@@ -1,13 +1,7 @@
 package com.abc12366.uc.model.admin.bo;
 
-import com.abc12366.uc.model.admin.Admin;
-import com.abc12366.uc.model.admin.Menu;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
 
 
 /**

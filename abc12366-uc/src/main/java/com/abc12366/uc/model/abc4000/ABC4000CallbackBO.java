@@ -3,7 +3,6 @@ package com.abc12366.uc.model.abc4000;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
 

@@ -1,6 +1,4 @@
 package com.abc12366.bangbang.model;
-import java.io.Serializable;
-
 
 /**
  * 知识库投票记录表

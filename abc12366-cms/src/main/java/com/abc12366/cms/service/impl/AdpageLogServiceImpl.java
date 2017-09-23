@@ -5,21 +5,21 @@ package com.abc12366.cms.service.impl;
  * Date: 2017-08-25
  */
 
-import com.abc12366.cms.model.AdpageLog;
-import com.abc12366.cms.model.bo.AdpageLogBO;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
 import com.abc12366.cms.mapper.db1.AdpageLogMapper;
 import com.abc12366.cms.mapper.db2.AdpageLogRoMapper;
+import com.abc12366.cms.model.AdpageLog;
+import com.abc12366.cms.model.bo.AdpageLogBO;
 import com.abc12366.cms.service.AdpageLogService;
-
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
  
 
 @Service

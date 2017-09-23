@@ -1,11 +1,7 @@
 package com.abc12366.cms.model.curriculum.bo;
-import com.abc12366.cms.model.curriculum.CurriculumLabel;
-import com.abc12366.cms.model.curriculum.CurriculumLecturerGx;
-import com.abc12366.cms.model.curriculum.CurriculumMembergrade;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 
 /**

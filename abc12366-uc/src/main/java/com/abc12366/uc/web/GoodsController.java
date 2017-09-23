@@ -4,7 +4,6 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Goods;
 import com.abc12366.uc.model.GoodsCategory;
-import com.abc12366.uc.model.GoodsLog;
 import com.abc12366.uc.model.bo.GoodsBO;
 import com.abc12366.uc.model.bo.GoodsCategoryBO;
 import com.abc12366.uc.model.bo.GoodsCheckBO;

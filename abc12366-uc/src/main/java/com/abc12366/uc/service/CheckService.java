@@ -5,7 +5,6 @@ import com.abc12366.uc.model.CheckRank;
 import com.abc12366.uc.model.ReCheck;
 import com.abc12366.uc.model.bo.CheckListBO;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

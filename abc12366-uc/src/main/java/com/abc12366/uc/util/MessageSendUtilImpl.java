@@ -1,5 +1,6 @@
 package com.abc12366.uc.util;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.Message;
@@ -18,7 +19,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,11 +26,9 @@ import java.util.Map;
  * Created by Administrator on 2017/9/18.
  */
 @Service("messageSendUtil")
-public class MessageSendUtilImpl implements  MessageSendUtil{
+public class MessageSendUtilImpl implements MessageSendUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageSendUtilImpl.class);
-
-    private static com.abc12366.gateway.util.Properties properties = new com.abc12366.gateway.util.Properties("application.properties");
 
     @Autowired
     private RestTemplate restTemplate;
@@ -39,14 +37,9 @@ public class MessageSendUtilImpl implements  MessageSendUtil{
      * 需要验证token的发送
      */
     @Override
-    public MessageBO sendMessage(Message message, HttpServletRequest request){
+    public MessageBO sendMessage(Message message, HttpServletRequest request) {
         LOGGER.info("{}:{}", message, request);
-        String url = null;
-        try {
-            url = properties.getValue("chabc.soa.message.url") + "/business";
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business";
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", message.getUserId());
@@ -101,14 +94,9 @@ public class MessageSendUtilImpl implements  MessageSendUtil{
      * 不需要验证token的发送
      */
     @Override
-    public MessageBO sendMessage(Message message){
+    public MessageBO sendMessage(Message message) {
         LOGGER.info("{}:{}", message);
-        String url = null;
-        try {
-            url = properties.getValue("chabc.soa.message.url") + "/business";
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business";
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", message.getUserId());
@@ -151,7 +139,8 @@ public class MessageSendUtilImpl implements  MessageSendUtil{
         Message message = new Message();
         message.setBusinessId("cs");
         message.setType(MessageConstant.SPDD);
-        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+MessageConstant.BUYING_MEMBERS_SUFFIX+"。<a href=\""+MessageConstant.ABCUC_URL+"/member/member_rights.html\">会员权益详情查看</a>");
+        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX + MessageConstant.BUYING_MEMBERS_SUFFIX + "。<a " +
+                "href=\"" + MessageConstant.ABCUC_URL + "/member/member_rights.html\">会员权益详情查看</a>");
         message.setUserId("cs");
         new MessageSendUtilImpl().sendMessage(message);
     }

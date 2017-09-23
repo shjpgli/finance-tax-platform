@@ -6,22 +6,20 @@ package com.abc12366.uc.service.impl;
  */
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.uc.model.LotteryActivity;
-import com.abc12366.uc.model.bo.*;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import com.abc12366.uc.mapper.db1.LotteryActivityMapper;
 import com.abc12366.uc.mapper.db2.LotteryActivityRoMapper;
+import com.abc12366.uc.model.LotteryActivity;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
-
 import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class LotteryActivityServiceImpl implements LotteryActivityService {

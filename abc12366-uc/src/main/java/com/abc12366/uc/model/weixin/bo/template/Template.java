@@ -1,10 +1,10 @@
 package com.abc12366.uc.model.weixin.bo.template;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
 
 public class Template implements Serializable {
     /**

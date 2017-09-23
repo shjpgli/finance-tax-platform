@@ -1,7 +1,5 @@
 package com.abc12366.uc.model;
 
-import java.util.Date;
-
 /**
  * 用户实体类
  *

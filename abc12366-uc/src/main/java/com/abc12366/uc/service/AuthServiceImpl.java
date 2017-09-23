@@ -1,10 +1,10 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UcUserLoginLogMapper;
@@ -26,7 +26,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -47,8 +50,6 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
-
-    private static Properties properties = new Properties("application.properties");
 
     @Autowired
     private RestTemplate restTemplate;
@@ -568,7 +569,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
-        String url = properties.getValue("chabc.soa.message.url") + "/verify";
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/verify";
 
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();

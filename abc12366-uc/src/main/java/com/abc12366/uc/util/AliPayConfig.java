@@ -1,13 +1,13 @@
 package com.abc12366.uc.util;
 
 
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+
+import java.util.Map;
 
 public class AliPayConfig {
 	

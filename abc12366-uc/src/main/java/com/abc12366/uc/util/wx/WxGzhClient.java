@@ -1,17 +1,16 @@
 package com.abc12366.uc.util.wx;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-
-import com.abc12366.uc.config.SpringCtxHolder;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.bo.WxUseToken;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.service.IWxGzhService;
 import com.alibaba.fastjson.JSON;
+import org.springframework.stereotype.Component;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class WxGzhClient {

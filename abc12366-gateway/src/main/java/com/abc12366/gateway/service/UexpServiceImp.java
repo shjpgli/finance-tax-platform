@@ -1,7 +1,7 @@
 package com.abc12366.gateway.service;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.PropertiesUtil;
 import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class UexpServiceImp implements UexpService {
         String uri = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping" +
                 ".bestMatchingPattern");
 
-        String url = PropertiesUtil.getValue("abc12366.uc.url") + "/experience/compute";
+        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/experience/compute";
 
         Map<String, String> map = new HashMap<>();
         map.put("userId", userId);

@@ -2,7 +2,6 @@ package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.curriculum.CurriculumCollect;
 import com.abc12366.cms.model.curriculum.bo.CurriculumCollectBo;
-import com.abc12366.cms.model.curriculum.bo.CurriculumLecturerBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

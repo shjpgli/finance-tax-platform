@@ -1,6 +1,5 @@
 package com.abc12366.gateway.component;
 
-import com.abc12366.gateway.service.UexpService;
 import com.abc12366.gateway.service.UpointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

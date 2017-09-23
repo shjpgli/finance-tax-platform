@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="AcceptService" targetNamespace="http://www.chabc.net/tdps/ws" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.chabc.net/tdps/ws" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/">
+<definitions name="AcceptService" targetNamespace="http://www.chabc.net/tdps/ws"
+             xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.chabc.net/tdps/ws"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <types>
     <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.chabc.net/tdps/ws" xmlns:tns="http://www.chabc.net/tdps/ws">
             <xsd:element name="acceptRequest">

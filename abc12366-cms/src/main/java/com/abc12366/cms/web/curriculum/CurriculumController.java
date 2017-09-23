@@ -1,13 +1,10 @@
 package com.abc12366.cms.web.curriculum;
 
 import com.abc12366.cms.model.bo.IdsBo;
-import com.abc12366.cms.model.bo.ModelBo;
-import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumListBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumSituationBo;
 import com.abc12366.cms.service.CurriculumService;
-import com.abc12366.cms.service.ModelService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;

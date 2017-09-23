@@ -1,6 +1,5 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;

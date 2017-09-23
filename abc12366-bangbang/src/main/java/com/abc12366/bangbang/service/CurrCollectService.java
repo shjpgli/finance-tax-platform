@@ -1,14 +1,10 @@
 package com.abc12366.bangbang.service;
 
 
-import com.abc12366.bangbang.model.bo.CollectBO;
-import com.abc12366.bangbang.model.bo.CollectListBO;
-import com.abc12366.bangbang.model.bo.MyCollectListBO;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 public interface CurrCollectService {
 

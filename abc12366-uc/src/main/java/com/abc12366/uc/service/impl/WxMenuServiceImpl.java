@@ -12,7 +12,6 @@ import com.abc12366.uc.service.IWxMenuService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxGzhClient;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

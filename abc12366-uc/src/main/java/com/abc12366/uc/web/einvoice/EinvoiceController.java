@@ -1,7 +1,8 @@
 package com.abc12366.uc.web.einvoice;
 
-import javax.validation.Valid;
-
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.dzfp.*;
+import com.abc12366.uc.service.einvoice.IEinvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,13 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.dzfp.DzfpDownloadReq;
-import com.abc12366.uc.model.dzfp.DzfpGetReq;
-import com.abc12366.uc.model.dzfp.DzfqQueryReq;
-import com.abc12366.uc.model.dzfp.Einvocie;
-import com.abc12366.uc.model.dzfp.EinvocieDown;
-import com.abc12366.uc.service.einvoice.IEinvoiceService;
+import javax.validation.Valid;
 
 /**
  * 电子发票接口

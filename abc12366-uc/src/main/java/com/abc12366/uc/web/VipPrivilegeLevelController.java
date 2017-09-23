@@ -1,13 +1,13 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelInsertBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelUpdateBO;
-
 import com.abc12366.uc.service.VipPrivilegeLevelService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,6 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 /**
  * Admin:lingsuzhi0 <554600654@qq.com.com>
  * Date: 2017-08-11

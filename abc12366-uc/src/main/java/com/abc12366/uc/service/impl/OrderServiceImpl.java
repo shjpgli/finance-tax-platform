@@ -1,11 +1,10 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.*;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
-import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.service.PointsLogService;
@@ -22,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @create 2017-05-15 10:17 AM
@@ -32,8 +33,6 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
-
-    private static com.abc12366.gateway.util.Properties properties = new com.abc12366.gateway.util.Properties("application.properties");
 
     @Autowired
     private UcRestTemplateUtil ucRestTemplateUtil;

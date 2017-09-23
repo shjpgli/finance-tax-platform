@@ -5,22 +5,20 @@ package com.abc12366.uc.service.impl;
  * Date: 2017-09-18
  */
 
-import com.abc12366.uc.model.LotteryLog;
-import com.abc12366.uc.model.bo.LotteryLogBO;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
-
 import com.abc12366.uc.mapper.db1.LotteryLogMapper;
 import com.abc12366.uc.mapper.db2.LotteryLogRoMapper;
+import com.abc12366.uc.model.LotteryLog;
+import com.abc12366.uc.model.bo.LotteryLogBO;
 import com.abc12366.uc.service.LotteryLogService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class LotteryLogServiceImpl implements LotteryLogService {

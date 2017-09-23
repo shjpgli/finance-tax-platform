@@ -6,9 +6,8 @@ package com.abc12366.uc.service;
  */
 
 
-
-import com.abc12366.uc.model.LotteryActivityprize;
 import com.abc12366.uc.model.bo.LotteryActivityprizeBO;
+
 import java.util.List;
 import java.util.Map;
 

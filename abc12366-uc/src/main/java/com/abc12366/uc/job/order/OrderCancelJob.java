@@ -1,8 +1,6 @@
 package com.abc12366.uc.job.order;
 
-import com.abc12366.uc.config.SpringCtxHolder;
-import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
-import com.abc12366.uc.service.IWxGzhService;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.service.OrderService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

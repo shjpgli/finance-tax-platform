@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.model.question;
+
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**

@@ -1,9 +1,9 @@
 package com.abc12366.uc.model.pay;
 
+import com.abc12366.uc.model.pay.PayqueryRes.Fundbill;
+
 import java.io.Serializable;
 import java.util.List;
-
-import com.abc12366.uc.model.pay.PayqueryRes.Fundbill;
 /**
  * 退款返回类
  * @author zhushuai 2017-8-5

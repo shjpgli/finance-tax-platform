@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.web;
 
-import com.abc12366.bangbang.common.StringUtil;
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;

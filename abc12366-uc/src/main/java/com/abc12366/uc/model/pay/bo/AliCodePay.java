@@ -1,11 +1,10 @@
 package com.abc12366.uc.model.pay.bo;
 
-import java.io.Serializable;
-import java.util.List;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 支付宝统一收单线下交易实体

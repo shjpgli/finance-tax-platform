@@ -1,11 +1,9 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
-import com.abc12366.bangbang.model.KnowledgeVoteLog;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
-import com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO;
 
 import java.util.List;
 import java.util.Map;

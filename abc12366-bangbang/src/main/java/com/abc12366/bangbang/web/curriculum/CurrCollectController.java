@@ -1,9 +1,6 @@
 package com.abc12366.bangbang.web.curriculum;
 
-import com.abc12366.bangbang.model.bo.CollectBO;
-import com.abc12366.bangbang.model.bo.CollectListBO;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo;
-import com.abc12366.bangbang.service.CollectService;
 import com.abc12366.bangbang.service.CurrCollectService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;

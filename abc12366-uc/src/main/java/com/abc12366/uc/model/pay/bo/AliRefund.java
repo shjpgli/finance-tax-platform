@@ -1,10 +1,9 @@
 package com.abc12366.uc.model.pay.bo;
 
-import java.io.Serializable;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import java.io.Serializable;
 
 /**
  * 支付宝退款实体类

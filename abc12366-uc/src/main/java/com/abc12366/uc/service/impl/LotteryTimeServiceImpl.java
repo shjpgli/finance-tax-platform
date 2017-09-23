@@ -5,24 +5,22 @@ package com.abc12366.uc.service.impl;
  * Date: 2017-09-13
  */
 
-import com.abc12366.uc.model.LotteryTime;
-import com.abc12366.uc.model.bo.LotteryTimeBO;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
-
 import com.abc12366.uc.mapper.db1.LotteryTimeMapper;
 import com.abc12366.uc.mapper.db2.LotteryTimeRoMapper;
+import com.abc12366.uc.model.LotteryTime;
+import com.abc12366.uc.model.bo.LotteryTimeBO;
 import com.abc12366.uc.service.LotteryTimeService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class LotteryTimeServiceImpl implements LotteryTimeService {

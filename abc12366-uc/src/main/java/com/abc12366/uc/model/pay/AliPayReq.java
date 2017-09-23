@@ -1,10 +1,9 @@
 package com.abc12366.uc.model.pay;
 
-import java.io.Serializable;
+import com.abc12366.uc.model.pay.bo.AliPagePayContent;
 
 import javax.validation.constraints.NotNull;
-
-import com.abc12366.uc.model.pay.bo.AliPagePayContent;
+import java.io.Serializable;
 /**
  *支付宝支付请求
  * @author zhushuai 2017-8-4

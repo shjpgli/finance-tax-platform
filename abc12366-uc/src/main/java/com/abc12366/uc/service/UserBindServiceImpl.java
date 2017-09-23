@@ -1,19 +1,19 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
-import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
+import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.UserDzsb;
+import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
@@ -57,7 +57,6 @@ import java.util.*;
 public class UserBindServiceImpl implements UserBindService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserBindServiceImpl.class);
-    private static Properties properties = new Properties("application.properties");
     @Autowired
     private UserBindMapper userBindMapper;
     @Autowired
@@ -161,7 +160,7 @@ public class UserBindServiceImpl implements UserBindService {
             Exception {
         HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
         if (hngsAppLoginResponse != null) {
-            String url = properties.getValue("wsbssoa.hngs.url") + "/login";
+            String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/login";
             HttpHeaders headers = new HttpHeaders();
             headers.add("accessToken", (String) request.getAttribute("accessToken"));
             headers.add("Content-Type", "application/json");
@@ -218,12 +217,12 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
-        String url = properties.getValue("wsbssoa.hngs.app.login.url");
+        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url");
         HttpHeaders headers = new HttpHeaders();
 
         Map<String, Object> requestBody = new HashMap<>();
-        String appId = properties.getValue("APPID");
-        String secret = properties.getValue("SECRET");
+        String appId = SpringCtxHolder.getProperty("APPID");
+        String secret = SpringCtxHolder.getProperty("SECRET");
         requestBody.put("appId", appId);
         requestBody.put("secret", secret);
 
@@ -231,7 +230,7 @@ public class UserBindServiceImpl implements UserBindService {
 
         HttpEntity requestEntity = new HttpEntity(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity responseEntity = restTemplate.exchange(url + "/app/login", HttpMethod.POST, requestEntity, String.class);
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
             HngsAppLoginResponse hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
                     HngsAppLoginResponse.class);
@@ -252,7 +251,7 @@ public class UserBindServiceImpl implements UserBindService {
             HttpHeaders headers = new HttpHeaders();
             headers.add("accessToken", (String) request.getAttribute("accessToken"));
             headers.add("Content-Type", "application/json");
-            String url = properties.getValue("wsbssoa.hngs.url") + "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
+            String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
             HttpEntity requestEntity = new HttpEntity(null, headers);
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
             if (soaUtil.isExchangeSuccessful(responseEntity)) {

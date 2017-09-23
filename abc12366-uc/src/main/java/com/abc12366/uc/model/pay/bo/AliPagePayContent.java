@@ -1,10 +1,9 @@
 package com.abc12366.uc.model.pay.bo;
 
-import java.util.List;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.List;
 
 /**
  * 支付宝发起页面支付实体类
