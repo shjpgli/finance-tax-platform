@@ -45,7 +45,23 @@ public class ActivityService implements IActivityService {
     @Override
     public List<WxActivity> selectList(WxActivity activity, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return activityRoMapper.selectList(activity);
+        List<WxActivity> dataList = activityRoMapper.selectList(activity);
+        if (dataList.size() > 0) {
+            dataList.stream().filter(wa -> wa.getStatus()).forEach(wa -> {
+                // 统计中奖人数、金额
+                SentReceived sr = activityRoMapper.selectSentReceivedCount(wa.getId());
+                wa.setSent(sr.getSent());
+                wa.setSentAmount(sr.getSentAmount());
+                wa.setReceived(sr.getReceived());
+                wa.setReceivedAmount(sr.getReceivedAmount());
+
+                // 统计参与人数
+                WxLotteryLog lotteryLog = new WxLotteryLog();
+                lotteryLog.setActivityId(wa.getId());
+                wa.setNop(activityRoMapper.selectLotteryLogList(lotteryLog).size());
+            });
+        }
+        return dataList;
     }
 
     @Override
@@ -146,7 +162,7 @@ public class ActivityService implements IActivityService {
             throw new ServiceException(6005);
         }
         String probabilityStr = redEnvelop.getProbability();
-        if(probabilityStr.contains("%")) {
+        if (probabilityStr.contains("%")) {
             probabilityStr = probabilityStr.replaceAll("%", "");
             Double probability = Double.valueOf(probabilityStr) / 100;
             LOGGER.info("开始抽奖");
@@ -156,11 +172,6 @@ public class ActivityService implements IActivityService {
 
                 redEnvelop.setSendStatus("0"); // 已中奖未发送
                 redEnvelop.setSendTime(new Date());
-                redEnvelop.setSendTimes(1);
-                redEnvelop.setReceiveStatus("SENDING"); // 发送中
-
-                LOGGER.info("发送微信红包");
-                sendRedPack(lotteryBO, activity, redEnvelop);
             } else { // 未中奖
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
@@ -168,6 +179,9 @@ public class ActivityService implements IActivityService {
             }
             redEnvelop.setOpenId(lotteryBO.getOpenId());
             activityMapper.updateRedEnvelop(redEnvelop);
+
+            LOGGER.info("发送微信红包");
+            sendRedPack(lotteryBO, activity, redEnvelop);
         } else {
             throw new ServiceException(5000);
         }
@@ -193,11 +207,17 @@ public class ActivityService implements IActivityService {
                     .build();
             grp.setSign(SignUtil.signKey(grp));
             GetRedPackResp rpp = WxMchConnectFactory.post(WechatUrl.GETHBINFO, null, grp, GetRedPackResp.class);
-            if (rpp != null && "SUCCESS".equals(rpp.getReturn_code())) { // 发送请求成功
-                if ("SUCCESS".equals(rpp.getResult_code())) { // 发红包成功
-                    redEnvelop.setReceiveStatus(rpp.getStatus()); // 发送成功
-                    redEnvelop.setReceiveTime(rpp.getRcv_time());
-                    activityMapper.updateRedEnvelop(redEnvelop);
+            if (rpp != null) {
+                if ("SUCCESS".equals(rpp.getReturn_code())) { // 发送请求成功
+                    if ("SUCCESS".equals(rpp.getResult_code())) { // 发红包成功
+                        redEnvelop.setReceiveStatus(rpp.getStatus()); // 发送成功
+                        redEnvelop.setReceiveTime(rpp.getRcv_time());
+                        activityMapper.updateRedEnvelop(redEnvelop);
+                    } else {
+                        throw new ServiceException(rpp.getResult_code(), rpp.getErr_code_des());
+                    }
+                } else {
+                    throw new ServiceException(rpp.getReturn_code(), rpp.getReturn_msg());
                 }
             }
         }
@@ -236,22 +256,28 @@ public class ActivityService implements IActivityService {
                         .resolveLocalAddress()) : "127.0.0.1")
                 .build();
         srp.setSign(SignUtil.signKey(srp));
-        for(int i = 1; i <= 4; i++) { // 重发3次
+        for (int i = 1; i <= 3; i++) { // 发送3次
             LOGGER.info("第{}次发送", i);
             ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);
-            if (rrp != null && "SUCCESS".equals(rrp.getReturn_code())) { // 发送请求成功
-                if ("SUCCESS".equals(rrp.getResult_code())) { // 发红包成功
-                    redEnvelop.setSendStatus("1"); // 发送成功
+            if (rrp != null) {
+                if ("SUCCESS".equals(rrp.getReturn_code())) { // 发送请求成功
+                    if ("SUCCESS".equals(rrp.getResult_code())) { // 发红包成功
+                        redEnvelop.setSendStatus("1"); // 发送成功
+                    } else {
+                        redEnvelop.setSendStatus("2"); // 发送失败
+                    }
                     redEnvelop.setSendTime(new Date());
                     redEnvelop.setSendTimes(i);
+                    activityMapper.updateRedEnvelop(redEnvelop);
+                    if (!"SUCCESS".equals(rrp.getReturn_code())) {
+                        throw new ServiceException(rrp.getResult_code(), rrp.getErr_code_des());
+                    }
+                    break;
                 } else {
-                    redEnvelop.setSendStatus("2"); // 发送失败
-                    redEnvelop.setSendTime(new Date());
-                    redEnvelop.setSendTimes(i);
+                    throw new ServiceException(rrp.getReturn_code(), rrp.getReturn_msg());
                 }
-                break;
             }
-            // 第一次过3s重发，第二次6s，第二次9s
+            // 第二次过3s重发，第三次6s
             try {
                 Thread.sleep(i * 3000L);
             } catch (InterruptedException e) {
@@ -271,7 +297,7 @@ public class ActivityService implements IActivityService {
      * 是否超出红包总数
      */
     private boolean isOverRedEnvelopCount(Integer num, String activityId) {
-         return num <= activityRoMapper.queryRedEnvelopCount(activityId);
+        return num <= activityRoMapper.queryRedEnvelopCount(activityId);
     }
 
     /**
@@ -291,10 +317,10 @@ public class ActivityService implements IActivityService {
             return amount;
         } else { // 随机金额
             if (amount.intValue() == amount) {
-                return (double) ThreadLocalRandom.current().nextInt(0, amount.intValue());
+                return (double) ThreadLocalRandom.current().nextInt(1, amount.intValue());
             } else {
                 DecimalFormat df = new DecimalFormat("#.##");
-                return Double.parseDouble(df.format(ThreadLocalRandom.current().nextDouble(0.01, amount)));
+                return Double.parseDouble(df.format(ThreadLocalRandom.current().nextDouble(1, amount)));
             }
         }
     }

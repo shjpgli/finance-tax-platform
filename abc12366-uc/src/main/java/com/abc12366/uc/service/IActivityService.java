@@ -33,7 +33,9 @@ public interface IActivityService {
     // 抽奖
     WxRedEnvelop lottery(WxLotteryBO lotteryBO);
 
+    // 抽奖列表明细
     List<WxRedEnvelop> selectRedEnvelopList(WxRedEnvelop redEnvelop, int page, int size);
 
+    // 查询微信红包信息
     WxRedEnvelop gethbinfo(String id);
 }
