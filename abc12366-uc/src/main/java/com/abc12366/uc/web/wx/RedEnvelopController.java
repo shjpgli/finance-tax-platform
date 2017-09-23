@@ -82,4 +82,14 @@ public class RedEnvelopController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+
+    @GetMapping("/gethbinfo/{id}")
+    public ResponseEntity gethbinfo(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        WxRedEnvelop data = iActivityService.gethbinfo(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
 }

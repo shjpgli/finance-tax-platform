@@ -23,4 +23,6 @@ public interface ActivityRoMapper {
     List<WxLotteryLog> selectLotteryLogList(WxLotteryLog lotteryLog);
 
     List<WxRedEnvelop> selectRedEnvelopList(WxRedEnvelop redEnvelop);
+
+    WxRedEnvelop selectRedEnvelopOne(String id);
 }

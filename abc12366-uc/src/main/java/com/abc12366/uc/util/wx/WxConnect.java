@@ -4,8 +4,6 @@ import com.abc12366.uc.config.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.message.FileContent;
 import com.alibaba.fastjson.JSON;
-import net.sf.json.JSONObject;
-import net.sf.json.xml.XMLSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +11,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import java.io.*;
 import java.net.URL;
 import java.util.List;
@@ -53,17 +48,6 @@ public class WxConnect<T> {
         //mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //mapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
         //this.requestUrl = SpringCtxHolder.getProperty("abc.wx-url") + wechatUrl.uri;
-    }
-
-    public WxConnect(String requestUrl, WechatUrl url, String requestMethod, Map<String, String> headparamters, Object
-            bodyparamters,
-                     Class<T> _class) {
-        this.wechatUrl = url;
-        this.requestMethod = requestMethod;
-        this.headparamters = headparamters;
-        this.bodyparamters = bodyparamters;
-        this._class = _class;
-        this.requestUrl = requestUrl + wechatUrl.uri;
     }
 
     public WxConnect(WechatUrl url, Map<String, String> headparamters, Object bodyparamters, Class<T> _class,
@@ -109,29 +93,6 @@ public class WxConnect<T> {
         } catch (Exception e) {
 //            this.setJsonStr("{\"errcode\":\"-999\",\"errmsg\":\"组装微信请求参数异常，请联系管理员\"}");
 //            LOGGER.info("组装微信请求[" + wechatUrl.describe + "]参数异常:{}", e);
-        }
-    }
-
-    public void initXml() {
-        if (bodyparamters != null) {
-            if (bodyparamters instanceof String) {
-                this.outputStr = (String) bodyparamters;
-            } else {
-                String xmlString = "";
-                try {
-                    JAXBContext context = JAXBContext.newInstance(Object.class);
-                    Marshaller m = context.createMarshaller();
-                    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); // To format XML
-
-                    StringWriter sw = new StringWriter();
-                    m.marshal(bodyparamters, sw);
-                    xmlString = sw.toString();
-
-                } catch (JAXBException e) {
-                    e.printStackTrace();
-                }
-                this.outputStr = xmlString;
-            }
         }
     }
 
@@ -308,28 +269,6 @@ public class WxConnect<T> {
             return (T) new BaseWxRespon("-999", "SOA返回数据格式异常，请联系管理员");
         }
 
-    }
-
-    T parseXmlObject() {
-        try {
-            T res = JSON.parseObject(xml2JSON(this.jsonStr), _class);
-            return res;
-        } catch (Exception e) {
-            LOGGER.error("微信服务器返回json格式异常", e);
-            e.printStackTrace();
-            return (T) new BaseWxRespon("-999", "SOA返回数据格式异常，请联系管理员");
-        }
-
-    }
-
-    public static String xml2JSON(String xml){
-        return new XMLSerializer().read(xml).toString();
-    }
-
-    public static String json2XML(String json){
-        JSONObject jobj = JSONObject.fromObject(json);
-        String xml =  new XMLSerializer().write(jobj);
-        return xml;
     }
 
     public String getJsonStr() {
