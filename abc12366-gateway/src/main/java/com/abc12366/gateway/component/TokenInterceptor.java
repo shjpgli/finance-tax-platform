@@ -44,7 +44,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-       /* if (!tokenService.isAuthentication(adminToken, userToken, request)) {
+       if (!tokenService.isAuthentication(adminToken, userToken, request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4194);
             response.setStatus(200);
             response.getWriter().write(JSON.toJSONString(bodyStatus));
@@ -52,7 +52,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             response.getWriter().close();
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
-        }*/
+        }
         return true;
     }
 }

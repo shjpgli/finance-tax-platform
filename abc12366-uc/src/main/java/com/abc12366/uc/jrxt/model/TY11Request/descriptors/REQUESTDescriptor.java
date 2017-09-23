@@ -11,8 +11,6 @@ package com.abc12366.uc.jrxt.model.TY11Request.descriptors;
  //- Imported classes and packages -/
 //---------------------------------/
 
-import com.abc12366.uc.jrxt.model.TY11Request.REQUEST;
-
 /**
  * Class REQUESTDescriptor.
  * 

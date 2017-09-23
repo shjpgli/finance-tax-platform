@@ -1,6 +1,5 @@
 package com.abc12366.cms.mapper.db1;
 
-import com.abc12366.cms.model.curriculum.CurriculumChapter;
 import com.abc12366.cms.model.curriculum.CurriculumClassify;
 import org.apache.ibatis.annotations.Param;
 

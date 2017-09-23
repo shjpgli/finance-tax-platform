@@ -1,6 +1,5 @@
 package com.abc12366.uc.service;
 
-import com.abc12366.uc.model.bo.VipLevelBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelInsertBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelUpdateBO;

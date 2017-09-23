@@ -1,7 +1,6 @@
 package com.abc12366.cms.service;
 
 
-import com.abc12366.cms.model.curriculum.bo.CurriculumChapterBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumLecturerBo;
 
 import java.util.List;

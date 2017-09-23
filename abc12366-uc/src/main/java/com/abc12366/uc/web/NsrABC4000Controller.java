@@ -1,13 +1,19 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.uc.model.abc4000.*;
+import com.abc12366.uc.model.abc4000.ABC4000CallbackBO;
+import com.abc12366.uc.model.abc4000.NsrbindListParam;
+import com.abc12366.uc.model.abc4000.ResponseForAbc4000;
+import com.abc12366.uc.model.abc4000.ResponseForAbc4000Simple;
 import com.abc12366.uc.service.NsrABC4000Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 

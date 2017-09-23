@@ -2,7 +2,6 @@ package com.abc12366.uc.model.bo;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * Created by lsz on 2017/8/10.

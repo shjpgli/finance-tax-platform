@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
-import com.abc12366.bangbang.service.CurrCollectService;
 import com.abc12366.bangbang.service.QueLikeService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;

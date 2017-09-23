@@ -34,4 +34,6 @@ public interface IActivityService {
     WxRedEnvelop lottery(WxLotteryBO lotteryBO);
 
     List<WxRedEnvelop> selectRedEnvelopList(WxRedEnvelop redEnvelop, int page, int size);
+
+    WxRedEnvelop gethbinfo(String id);
 }

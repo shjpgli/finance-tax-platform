@@ -1,6 +1,6 @@
 package com.abc12366.cms.model.curriculum;
+
 import java.io.Serializable;
-import java.util.DoubleSummaryStatistics;
 
 
 /**

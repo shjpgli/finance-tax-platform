@@ -2,6 +2,8 @@ package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.ReturnVisit;
 import com.abc12366.bangbang.model.bo.ReturnVisitBO;
+import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
+
 import java.util.List;
 
 /**
@@ -15,4 +17,6 @@ public interface ReturnVisitService {
     List<ReturnVisit> selectList(ReturnVisitBO returnVisitBO);
 
     void delete(String id);
+
+    List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param);
 }

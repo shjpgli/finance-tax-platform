@@ -145,8 +145,8 @@
 			<if test="browseNum != null">
 				 browseNum = #{browseNum},
 			</if>
-			<if test="recommendEndTime != null">
-				 recommendEndTime = #{recommendEndTime},
+			<if test="isRecommend != null">
+				isRecommend = #{isRecommend},
 			</if>
  		 </set>
 		 WHERE id = #{id}
@@ -169,15 +169,6 @@
 			 classifyCode = #{classifyCode},
 			 browseNum = #{browseNum}
 		 WHERE id = #{id}
-	</update>
-
-	<!-- 清空 -->
-	<update id="clearRecommendEndTimeByPks">
-		UPDATE bb_question SET recommendEndTime = NULL
-		WHERE id IN
-		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
-			#{item}
-		</foreach>
 	</update>
 
     <!-- 修 改 浏览量-->

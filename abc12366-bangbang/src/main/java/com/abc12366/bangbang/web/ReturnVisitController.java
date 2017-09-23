@@ -2,7 +2,9 @@ package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.ReturnVisit;
 import com.abc12366.bangbang.model.bo.ReturnVisitBO;
+import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import com.abc12366.bangbang.service.ReturnVisitService;
+import com.abc12366.bangbang.util.DateUtils;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,22 +30,27 @@ public class ReturnVisitController {
 
 
     @Autowired
-    private ReturnVisitService ReturnVisitService;
+    private ReturnVisitService returnVisitService;
 
 
     /**
     *  回访记录 分页查询
-    *  支持 来源类型, 反馈类型 查询
     */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "sourceType", required = false) String sourceType,
-                                     @RequestParam(value = "ReturnVisitType", required = false) String ReturnVisitType) {
+                                     @RequestParam(value = "phone", required = false) String phone,
+                                     @RequestParam(value = "date", required = false) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
         ReturnVisitBO param = new ReturnVisitBO();
-        List<ReturnVisit> list = ReturnVisitService.selectList(param);
+        if(date != null && !"".equals(date)) {
+            param.setDate(date);
+        }else{
+            param.setDate(DateUtils.dateYearToString(new Date()));
+        }
+        param.setPhone(phone);
+        List<ReturnVisit> list = returnVisitService.selectList(param);
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -50,12 +58,33 @@ public class ReturnVisitController {
     }
 
 
+    /**
+     *  回访记录 统计查询
+     */
+    @GetMapping(path = "/statis")
+    public ResponseEntity selectStatisList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                           @RequestParam(value = "phone", required = false) String phone,
+                                           @RequestParam(value = "date", required = false) String date) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        QuestionAcceptedBO param = new QuestionAcceptedBO();
+        if(date != null && !"".equals(date)) {
+            param.setDate(date);
+        }
+        param.setPhone(phone);
+        List<QuestionAcceptedBO> list = returnVisitService.selectStatisList(param);
+
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
     /***
      * 添加回访记录接口
      */
     @PostMapping(path = "/add")
     public ResponseEntity add(@RequestBody ReturnVisit ReturnVisit) {
-        ReturnVisitService.add(ReturnVisit);
+        returnVisitService.add(ReturnVisit);
         return ResponseEntity.ok(Utils.kv("data", ReturnVisit));
     }
 
@@ -64,7 +93,7 @@ public class ReturnVisitController {
     */
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity delete(@PathVariable String id) {
-        ReturnVisitService.delete(id);
+        returnVisitService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
 

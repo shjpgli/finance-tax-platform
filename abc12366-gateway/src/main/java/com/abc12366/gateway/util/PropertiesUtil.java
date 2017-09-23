@@ -5,7 +5,7 @@ import java.io.IOException;
 public class PropertiesUtil {
 
     static com.abc12366.gateway.util.Properties properties;
-    private static String GATEWAY_PROPERTIES = "application-gateway.properties";
+    private static String GATEWAY_PROPERTIES = "gateway.properties";
 
     static {
         try {

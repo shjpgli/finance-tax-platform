@@ -2,9 +2,7 @@ package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.CurriculumCoursewareMapper;
 import com.abc12366.cms.mapper.db2.CurriculumCoursewareRoMapper;
-import com.abc12366.cms.model.curriculum.Curriculum;
 import com.abc12366.cms.model.curriculum.CurriculumCourseware;
-import com.abc12366.cms.model.curriculum.bo.CurriculumBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumCoursewareBo;
 import com.abc12366.cms.service.CoursewareService;
 import com.abc12366.gateway.exception.ServiceException;

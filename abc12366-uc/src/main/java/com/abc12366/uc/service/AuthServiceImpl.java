@@ -1,10 +1,10 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UcUserLoginLogMapper;
@@ -13,6 +13,7 @@ import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.BaseObject;
+import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
@@ -25,7 +26,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -46,8 +50,6 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
-
-    private static Properties properties = new Properties("application.properties");
 
     @Autowired
     private RestTemplate restTemplate;
@@ -82,6 +84,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private TodoTaskService todoTaskService;
+
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
 
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
@@ -168,7 +173,7 @@ public class AuthServiceImpl implements AuthService {
         todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         LOGGER.info("{}", userReturnBO);
@@ -390,6 +395,12 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
 
+            //会员权限埋点（经验值加成）
+            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
+            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
+                exp = (int) (exp * privilegeItem.getHyjyzjc());
+            }
+
             ExperienceLogBO logBO = new ExperienceLogBO();
             logBO.setId(Utils.uuid());
             logBO.setIncome(exp);
@@ -558,7 +569,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
         //不变参数
-        String url = properties.getValue("chabc.soa.message.url") + "/verify";
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/verify";
 
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();

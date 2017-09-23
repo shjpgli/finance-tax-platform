@@ -4,7 +4,6 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.User;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.admin.Admin;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;

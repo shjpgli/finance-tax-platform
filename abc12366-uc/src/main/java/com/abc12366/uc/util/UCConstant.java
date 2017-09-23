@@ -50,12 +50,18 @@ public class UCConstant {
     public final static String SYS_TASK_CHECK_ID = "8b125435-755a-4e9e-b1da-f92a17c736f6";
     //每日课程学习
     public final static String SYS_TASK_COURSE_LEARNING_ID = "76303795-aa1f-480b-94f4-51ac0deb3bb2";
-    //每日分享
-    public final static String SYS_TASK_SHARE_ID = "";
-    //每日收藏
-    public final static String SYS_TASK_COLLECT_ID = "";
-    //每日评论
-    public final static String SYS_TASK_COMMENT_ID = "";
+    //每日课程分享
+    public final static String SYS_TASK_COURSE_SHARE_ID = "de72f594-7d03-4473-a50c-dfe72279e5d2";
+    //每日课程收藏
+    public final static String SYS_TASK_COURSE_COLLECT_ID = "f2a0a28c-8c10-4d33-b1b2-9ab10aff3e3f";
+    //每日课程评论
+    public final static String SYS_TASK_COURSE_COMMENT_ID = "1df0299f-cd25-4c02-9cdf-2160bae56884";
+    //每日问题分享
+    public final static String SYS_TASK_ASK_SHARE_ID = "22575ee9-b531-4089-8fb8-a7c5a0b48e22";
+    //每日问题收藏
+    public final static String SYS_TASK_ASK_COLLECT_ID = "a02d6429-3567-4c69-9fc3-dd4514df4260";
+    //每日问题评论
+    public final static String SYS_TASK_ASK_COMMENT_ID = "d2e76477-9452-4285-a747-bd49788bdabc";
     //每日浏览资讯
     public final static String SYS_TASK_BROSE_NEWS_ID = "ebbe59c7-c597-4d96-ac19-b2a8554da53a";
 

@@ -1,6 +1,5 @@
 package com.abc12366.uc.model;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 

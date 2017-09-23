@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.model.curriculum.bo;
+
 import com.abc12366.bangbang.model.curriculum.CurriculumLabel;
-import com.abc12366.bangbang.model.curriculum.CurriculumLecturerGx;
 import com.abc12366.bangbang.model.curriculum.CurriculumMembergrade;
 
 import java.io.Serializable;

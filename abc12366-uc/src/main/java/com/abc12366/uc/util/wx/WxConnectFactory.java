@@ -1,6 +1,5 @@
 package com.abc12366.uc.util.wx;
 
-import com.abc12366.uc.config.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.bo.message.FileContent;
 
 import java.io.InputStream;
@@ -26,13 +25,6 @@ public class WxConnectFactory {
         return doConect(connect);
     }
 
-    public static <T extends Object> T mch_post(WechatUrl url, Map<String, String> headparamters, Object bodyparamters,
-                                            Class<T> _class) {
-        String requestUrl = SpringCtxHolder.getProperty("abc.mch_url");
-        WxConnect<T> connect = new WxConnect<>(requestUrl, url, HTTP_POST, headparamters, bodyparamters, _class);
-        return doConnect(connect);
-    }
-
     public static <T extends Object> T postFile(WechatUrl url, Map<String, String> headparamters, Object
 			bodyparamters, Class<T> _class, FileContent file) {
         WxConnect<T> connect = new WxConnect<>(url, headparamters, bodyparamters, _class, file);
@@ -53,11 +45,5 @@ public class WxConnectFactory {
         connect.initJson();
         connect.httpsRequest();
         return connect.parseObject();
-    }
-
-    private static <T extends Object> T doConnect(WxConnect<T> connect) {
-        connect.initJson();
-        connect.httpsRequest();
-        return connect.parseXmlObject();
     }
 }

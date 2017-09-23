@@ -4,9 +4,6 @@ import com.abc12366.bangbang.common.MapUtil;
 import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.CurriculumCollectMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumCollectRoMapper;
-import com.abc12366.bangbang.model.Collect;
-import com.abc12366.bangbang.model.bo.CollectBO;
-import com.abc12366.bangbang.model.bo.CollectListBO;
 import com.abc12366.bangbang.model.curriculum.CurriculumCollect;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo;
 import com.abc12366.bangbang.service.CurrCollectService;
@@ -21,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.abc12366.uc.config;
+package com.abc12366.gateway.component;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

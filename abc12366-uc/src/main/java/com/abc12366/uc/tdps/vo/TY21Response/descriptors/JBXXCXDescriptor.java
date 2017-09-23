@@ -11,8 +11,6 @@ package com.abc12366.uc.tdps.vo.TY21Response.descriptors;
  //- Imported classes and packages -/
 //---------------------------------/
 
-import com.abc12366.uc.tdps.vo.TY21Response.JBXXCX;
-
 /**
  * Class JBXXCXDescriptor.
  * 

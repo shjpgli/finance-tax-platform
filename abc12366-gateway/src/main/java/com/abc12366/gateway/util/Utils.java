@@ -1,5 +1,6 @@
 package com.abc12366.gateway.util;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
 import com.alibaba.druid.support.http.StatViewServlet;

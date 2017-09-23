@@ -2,11 +2,8 @@ package com.abc12366.cms.web.curriculum;
 
 import com.abc12366.cms.model.curriculum.bo.CurriculumChapterBo;
 import com.abc12366.cms.service.ChapterService;
-import com.abc12366.cms.service.ChapterService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

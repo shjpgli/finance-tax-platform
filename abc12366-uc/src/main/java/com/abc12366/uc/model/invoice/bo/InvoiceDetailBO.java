@@ -1,6 +1,5 @@
 package com.abc12366.uc.model.invoice.bo;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
 import java.io.Serializable;
 
 

@@ -1,7 +1,6 @@
 package com.abc12366.uc.model.bo;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 退换货管理员操作

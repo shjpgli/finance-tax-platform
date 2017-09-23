@@ -1,9 +1,6 @@
 package com.abc12366.bangbang.model.bo;
 
-import com.abc12366.bangbang.model.BaseObject;
-
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * User: liuguiyao<435720953@qq.com>

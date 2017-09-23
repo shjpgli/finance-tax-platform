@@ -5,7 +5,10 @@ import com.abc12366.uc.model.bo.RSAResponse;
 import com.abc12366.uc.wsbssoa.utils.RSA;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 

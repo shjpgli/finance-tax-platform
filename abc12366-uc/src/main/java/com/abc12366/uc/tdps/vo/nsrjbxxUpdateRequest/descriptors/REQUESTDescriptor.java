@@ -11,8 +11,6 @@ package com.abc12366.uc.tdps.vo.nsrjbxxUpdateRequest.descriptors;
  //- Imported classes and packages -/
 //---------------------------------/
 
-import com.abc12366.uc.tdps.vo.nsrjbxxUpdateRequest.REQUEST;
-
 /**
  * Class REQUESTDescriptor.
  * 

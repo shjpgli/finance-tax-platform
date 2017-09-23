@@ -1,7 +1,8 @@
 package com.abc12366.message.service;
 
-import com.abc12366.gateway.util.Properties;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.model.bo.QueryStatusParam;
 import com.abc12366.message.model.bo.SendCodeParam;
 import com.abc12366.message.model.bo.SendTemplateParam;
@@ -32,40 +33,26 @@ import java.util.HashMap;
 public class SmsServiceImpl implements SmsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsServiceImpl.class);
-    private static Properties properties = new Properties("application.properties");
-    private static String appKey;
-    private static String appSecret;
-    private static String contentType;
-    private static String charset;
 
-    static {
-        try {
-            appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
-            appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
-            contentType = properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
-            charset = properties.getValue("message.netease.charset");//"utf-8";
-        } catch (IOException e) {
-            LOGGER.warn("网易短信服务接口参数加载异常！");
-            e.printStackTrace();
-        }
-    }
+    @Autowired
+    private ApplicationConfig config;
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
     public ResponseEntity sendCode(SendCodeParam sendCodeParam) throws IOException {
-        String url = properties.getValue("message.netease.api.url") + "/sendcode.action";//"https://api.netease.im/sms/sendcode.action";
+        String url = SpringCtxHolder.getProperty("message.netease.api.url") + "/sendcode.action";//"https://api.netease.im/sms/sendcode.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
+        String checkSum = CheckSumBuilder.getCheckSum(config.getAppSecret(), nonce, curTime);
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("appKey", appKey);
-        httpHeaders.add("appSecret", appSecret);
-        httpHeaders.add("Content-Type", contentType);
-        httpHeaders.add("charset", charset);
+        httpHeaders.add("appKey", config.getAppKey());
+        httpHeaders.add("appSecret", config.getAppSecret());
+        httpHeaders.add("Content-Type", config.getContentType());
+        httpHeaders.add("charset", config.getCharset());
         httpHeaders.add("Nonce", nonce);
         httpHeaders.add("CurTime", curTime);
         httpHeaders.add("CheckSum", checkSum);
@@ -90,17 +77,17 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity verify(VerifyCodeParam verifyCodeParam) throws IOException {
         //不变参数
-        String url = properties.getValue("message.netease.api.url") + "/verifycode.action";
+        String url = SpringCtxHolder.getProperty("message.netease.api.url") + "/verifycode.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
+        String checkSum = CheckSumBuilder.getCheckSum(config.getAppSecret(), nonce, curTime);
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("appKey", appKey);
-        httpHeaders.add("appSecret", appSecret);
-        httpHeaders.add("Content-Type", contentType);
-        httpHeaders.add("charset", charset);
+        httpHeaders.add("appKey", config.getAppKey());
+        httpHeaders.add("appSecret", config.getAppSecret());
+        httpHeaders.add("Content-Type", config.getContentType());
+        httpHeaders.add("charset", config.getCharset());
         httpHeaders.add("Nonce", nonce);
         httpHeaders.add("CurTime", curTime);
         httpHeaders.add("CheckSum", checkSum);
@@ -119,17 +106,17 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity sendTemplate(SendTemplateParam sendTemplateParam) throws IOException {
         //不变参数
-        String url = properties.getValue("message.netease.api.url") + "/sendtemplate.action";
+        String url = SpringCtxHolder.getProperty("message.netease.api.url") + "/sendtemplate.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
+        String checkSum = CheckSumBuilder.getCheckSum(config.getAppSecret(), nonce, curTime);
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("appKey", appKey);
-        httpHeaders.add("appSecret", appSecret);
-        httpHeaders.add("Content-Type", contentType);
-        httpHeaders.add("charset", charset);
+        httpHeaders.add("appKey", config.getAppKey());
+        httpHeaders.add("appSecret", config.getAppSecret());
+        httpHeaders.add("Content-Type", config.getContentType());
+        httpHeaders.add("charset", config.getCharset());
         httpHeaders.add("Nonce", nonce);
         httpHeaders.add("CurTime", curTime);
         httpHeaders.add("CheckSum", checkSum);
@@ -150,17 +137,17 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity queryStatus(QueryStatusParam queryStatusParam) throws IOException {
         //不变参数
-        String url = properties.getValue("message.netease.api.url") + "/querystatus.action";
+        String url = SpringCtxHolder.getProperty("message.netease.api.url") + "/querystatus.action";
         //可变参数
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
+        String checkSum = CheckSumBuilder.getCheckSum(config.getAppSecret(), nonce, curTime);
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("appKey", appKey);
-        httpHeaders.add("appSecret", appSecret);
-        httpHeaders.add("Content-Type", contentType);
-        httpHeaders.add("charset", charset);
+        httpHeaders.add("appKey", config.getAppKey());
+        httpHeaders.add("appSecret", config.getAppSecret());
+        httpHeaders.add("Content-Type", config.getContentType());
+        httpHeaders.add("charset", config.getCharset());
         httpHeaders.add("Nonce", nonce);
         httpHeaders.add("CurTime", curTime);
         httpHeaders.add("CheckSum", checkSum);

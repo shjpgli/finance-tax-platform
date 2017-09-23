@@ -6,232 +6,223 @@ package com.abc12366.uc.model;
  * Time: 10:18
  */
 public class PrivilegeItem {
-    private String id;
-    private String privilegeId;
+    private String levelId;
     //专享会员勋章：1：是，0：否
-    private int ZXHYXZ;
+    private boolean zxhyxz;
     //会员积分加成
-    private float HYJFJC;
+    private float hyjfjc;
     //会员经验值加成
-    private float HYJYZJC;
+    private float hyjyzjc;
     //用户升级奖励积分数
-    private int YHSJJL;
+    private int yhsjjl;
     //用户财税经验证明印制,单位：次/年
-    private int CSJYZMYZ_TIMES;
+    private int csjyzmyz_times;
     //用户财税经验证明印制,是否包邮
-    private int CSJYZMYZ_BAOYOU;
+    private boolean csjyzmyz_baoyou;
     //用户帐号合并特权\r\n,单位：个/年
-    private int YHZHHBTQ;
-    //在线课程培训\r\n:VIP1,VIP2,VIP3,VIP4
-    private String ZXKCPX;
+    private int yhzhhbtq;
+    //在线课程培训\r\n:vip1,vip2,vip3,vip4
+    private String zxkcpx;
     //线下课程培训，单位：次
-    private int XXKCPX;
+    private int xxkcpx;
     //线下会员活动，单位：次/年
-    private int XXHYHD;
+    private int xxhyhd;
     //线上会员日：享有/不享有
-    private int XSHYR;
+    private boolean xshyr;
     //个人帐号绑定企业户数,-1代表无限制
-    private int GRZHBDQYS;
+    private int grzhbdqys;
     //业务提醒-站内,是/否
-    private int YWTX_ZN;
+    private boolean ywtx_zn;
     //业务提醒-微信,是/否
-    private int YWTX_WX;
+    private boolean ywtx_wx;
     //发布求职信息，次/年
-    private int FBQZXX;
-    //生日礼包，VIP2，VIP3，VIP4
-    private String SRLB;
+    private int fbqzxx;
+    //生日礼包，vip2，vip3，vip4
+    private String srlb;
     //用户积分转让-次数
-    private int YHJFZR_CS;
+    private int yhjfzr_cs;
     //用户积分转让-上限
-    private int YHJFZR_SX;
+    private int yhjfzr_sx;
     //商品/发票免邮券,单位：张
-    private int SPFPMYQ;
+    private int spfpmyq;
     //专属客服经理,享有/不享有
-    private int ZSKFJL;
+    private boolean zskfjl;
     //财税期刊,享有/不享有
-    private int CSQK;
+    private boolean csqk;
 
-    public String getId() {
-        return id;
+    public String getLevelId() {
+        return levelId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setLevelId(String levelId) {
+        this.levelId = levelId;
     }
 
-    public String getPrivilegeId() {
-        return privilegeId;
+    public boolean isZxhyxz() {
+        return zxhyxz;
     }
 
-    public void setPrivilegeId(String privilegeId) {
-        this.privilegeId = privilegeId;
+    public void setZxhyxz(boolean zxhyxz) {
+        this.zxhyxz = zxhyxz;
     }
 
-    public int getZXHYXZ() {
-        return ZXHYXZ;
+    public float getHyjfjc() {
+        return hyjfjc;
     }
 
-    public void setZXHYXZ(int ZXHYXZ) {
-        this.ZXHYXZ = ZXHYXZ;
+    public void setHyjfjc(float hyjfjc) {
+        this.hyjfjc = hyjfjc;
     }
 
-    public float getHYJFJC() {
-        return HYJFJC;
+    public float getHyjyzjc() {
+        return hyjyzjc;
     }
 
-    public void setHYJFJC(float HYJFJC) {
-        this.HYJFJC = HYJFJC;
+    public void setHyjyzjc(float hyjyzjc) {
+        this.hyjyzjc = hyjyzjc;
     }
 
-    public float getHYJYZJC() {
-        return HYJYZJC;
+    public int getYhsjjl() {
+        return yhsjjl;
     }
 
-    public void setHYJYZJC(float HYJYZJC) {
-        this.HYJYZJC = HYJYZJC;
+    public void setYhsjjl(int yhsjjl) {
+        this.yhsjjl = yhsjjl;
     }
 
-    public int getYHSJJL() {
-        return YHSJJL;
+    public int getCsjyzmyz_times() {
+        return csjyzmyz_times;
     }
 
-    public void setYHSJJL(int YHSJJL) {
-        this.YHSJJL = YHSJJL;
+    public void setCsjyzmyz_times(int csjyzmyz_times) {
+        this.csjyzmyz_times = csjyzmyz_times;
     }
 
-    public int getCSJYZMYZ_TIMES() {
-        return CSJYZMYZ_TIMES;
+    public boolean isCsjyzmyz_baoyou() {
+        return csjyzmyz_baoyou;
     }
 
-    public void setCSJYZMYZ_TIMES(int CSJYZMYZ_TIMES) {
-        this.CSJYZMYZ_TIMES = CSJYZMYZ_TIMES;
+    public void setCsjyzmyz_baoyou(boolean csjyzmyz_baoyou) {
+        this.csjyzmyz_baoyou = csjyzmyz_baoyou;
     }
 
-    public int getCSJYZMYZ_BAOYOU() {
-        return CSJYZMYZ_BAOYOU;
+    public int getYhzhhbtq() {
+        return yhzhhbtq;
     }
 
-    public void setCSJYZMYZ_BAOYOU(int CSJYZMYZ_BAOYOU) {
-        this.CSJYZMYZ_BAOYOU = CSJYZMYZ_BAOYOU;
+    public void setYhzhhbtq(int yhzhhbtq) {
+        this.yhzhhbtq = yhzhhbtq;
     }
 
-    public int getYHZHHBTQ() {
-        return YHZHHBTQ;
+    public String getZxkcpx() {
+        return zxkcpx;
     }
 
-    public void setYHZHHBTQ(int YHZHHBTQ) {
-        this.YHZHHBTQ = YHZHHBTQ;
+    public void setZxkcpx(String zxkcpx) {
+        this.zxkcpx = zxkcpx;
     }
 
-    public String getZXKCPX() {
-        return ZXKCPX;
+    public int getXxkcpx() {
+        return xxkcpx;
     }
 
-    public void setZXKCPX(String ZXKCPX) {
-        this.ZXKCPX = ZXKCPX;
+    public void setXxkcpx(int xxkcpx) {
+        this.xxkcpx = xxkcpx;
     }
 
-    public int getXXKCPX() {
-        return XXKCPX;
+    public int getXxhyhd() {
+        return xxhyhd;
     }
 
-    public void setXXKCPX(int XXKCPX) {
-        this.XXKCPX = XXKCPX;
+    public void setXxhyhd(int xxhyhd) {
+        this.xxhyhd = xxhyhd;
     }
 
-    public int getXXHYHD() {
-        return XXHYHD;
+    public boolean isXshyr() {
+        return xshyr;
     }
 
-    public void setXXHYHD(int XXHYHD) {
-        this.XXHYHD = XXHYHD;
+    public void setXshyr(boolean xshyr) {
+        this.xshyr = xshyr;
     }
 
-    public int getXSHYR() {
-        return XSHYR;
+    public int getGrzhbdqys() {
+        return grzhbdqys;
     }
 
-    public void setXSHYR(int XSHYR) {
-        this.XSHYR = XSHYR;
+    public void setGrzhbdqys(int grzhbdqys) {
+        this.grzhbdqys = grzhbdqys;
     }
 
-    public int getGRZHBDQYS() {
-        return GRZHBDQYS;
+    public boolean isYwtx_zn() {
+        return ywtx_zn;
     }
 
-    public void setGRZHBDQYS(int GRZHBDQYS) {
-        this.GRZHBDQYS = GRZHBDQYS;
+    public void setYwtx_zn(boolean ywtx_zn) {
+        this.ywtx_zn = ywtx_zn;
     }
 
-    public int getYWTX_ZN() {
-        return YWTX_ZN;
+    public boolean isYwtx_wx() {
+        return ywtx_wx;
     }
 
-    public void setYWTX_ZN(int YWTX_ZN) {
-        this.YWTX_ZN = YWTX_ZN;
+    public void setYwtx_wx(boolean ywtx_wx) {
+        this.ywtx_wx = ywtx_wx;
     }
 
-    public int getYWTX_WX() {
-        return YWTX_WX;
+    public int getFbqzxx() {
+        return fbqzxx;
     }
 
-    public void setYWTX_WX(int YWTX_WX) {
-        this.YWTX_WX = YWTX_WX;
+    public void setFbqzxx(int fbqzxx) {
+        this.fbqzxx = fbqzxx;
     }
 
-    public int getFBQZXX() {
-        return FBQZXX;
+    public String getSrlb() {
+        return srlb;
     }
 
-    public void setFBQZXX(int FBQZXX) {
-        this.FBQZXX = FBQZXX;
+    public void setSrlb(String srlb) {
+        this.srlb = srlb;
     }
 
-    public String getSRLB() {
-        return SRLB;
+    public int getYhjfzr_cs() {
+        return yhjfzr_cs;
     }
 
-    public void setSRLB(String SRLB) {
-        this.SRLB = SRLB;
+    public void setYhjfzr_cs(int yhjfzr_cs) {
+        this.yhjfzr_cs = yhjfzr_cs;
     }
 
-    public int getYHJFZR_CS() {
-        return YHJFZR_CS;
+    public int getYhjfzr_sx() {
+        return yhjfzr_sx;
     }
 
-    public void setYHJFZR_CS(int YHJFZR_CS) {
-        this.YHJFZR_CS = YHJFZR_CS;
+    public void setYhjfzr_sx(int yhjfzr_sx) {
+        this.yhjfzr_sx = yhjfzr_sx;
     }
 
-    public int getYHJFZR_SX() {
-        return YHJFZR_SX;
+    public int getSpfpmyq() {
+        return spfpmyq;
     }
 
-    public void setYHJFZR_SX(int YHJFZR_SX) {
-        this.YHJFZR_SX = YHJFZR_SX;
+    public void setSpfpmyq(int spfpmyq) {
+        this.spfpmyq = spfpmyq;
     }
 
-    public int getSPFPMYQ() {
-        return SPFPMYQ;
+    public boolean isZskfjl() {
+        return zskfjl;
     }
 
-    public void setSPFPMYQ(int SPFPMYQ) {
-        this.SPFPMYQ = SPFPMYQ;
+    public void setZskfjl(boolean zskfjl) {
+        this.zskfjl = zskfjl;
     }
 
-    public int getZSKFJL() {
-        return ZSKFJL;
+    public boolean isCsqk() {
+        return csqk;
     }
 
-    public void setZSKFJL(int ZSKFJL) {
-        this.ZSKFJL = ZSKFJL;
-    }
-
-    public int getCSQK() {
-        return CSQK;
-    }
-
-    public void setCSQK(int CSQK) {
-        this.CSQK = CSQK;
+    public void setCsqk(boolean csqk) {
+        this.csqk = csqk;
     }
 }

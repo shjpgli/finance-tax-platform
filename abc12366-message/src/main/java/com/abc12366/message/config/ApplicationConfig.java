@@ -2,7 +2,6 @@ package com.abc12366.message.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 /**
  * 应用配置文件
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.PropertySource;
  * @since 1.0.0
  */
 @Configuration
-@PropertySource("classpath:application.properties")
 public class ApplicationConfig {
 
     // kafka服务器地址
@@ -22,6 +20,15 @@ public class ApplicationConfig {
     // kafka消费者group-id
     @Value("${spring.kafka.consumer.group-id}")
     public String consumer_group_id;
+
+    @Value("${message.netease.appKey}")
+    private String appKey;
+    @Value("${message.netease.appSecret}")
+    private String appSecret;
+    @Value("${message.netease.contentType}")
+    private String contentType;
+    @Value("${message.netease.charset}")
+    private String charset;
 
     public String getBootstrap_servers() {
         return bootstrap_servers;
@@ -37,5 +44,37 @@ public class ApplicationConfig {
 
     public void setConsumer_group_id(String consumer_group_id) {
         this.consumer_group_id = consumer_group_id;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
+
+    public String getAppSecret() {
+        return appSecret;
+    }
+
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
     }
 }

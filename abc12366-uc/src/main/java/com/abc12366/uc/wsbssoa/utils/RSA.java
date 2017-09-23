@@ -1,7 +1,7 @@
 package com.abc12366.uc.wsbssoa.utils;
 
 
-import com.abc12366.uc.config.SpringCtxHolder;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
@@ -11,8 +11,8 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ClassUtils;
 
+import javax.crypto.Cipher;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.*;
@@ -22,8 +22,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Date;
-
-import javax.crypto.Cipher;
 
 
 

@@ -11,8 +11,6 @@ package com.abc12366.uc.jrxt.model.tiripPackage.descriptors;
  //- Imported classes and packages -/
 //---------------------------------/
 
-import com.abc12366.uc.jrxt.model.tiripPackage.ParamList;
-
 /**
  * Class ParamListDescriptor.
  * 

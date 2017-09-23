@@ -2,17 +2,13 @@ package com.abc12366.uc.service.invoice.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db1.InvoiceApprovalLogMapper;
 import com.abc12366.uc.mapper.db1.InvoiceDistributeMapper;
 import com.abc12366.uc.mapper.db1.InvoiceUseDetailMapper;
 import com.abc12366.uc.mapper.db2.InvoiceDistributeRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseDetailRoMapper;
 import com.abc12366.uc.model.invoice.InvoiceApprovalLog;
 import com.abc12366.uc.model.invoice.InvoiceDistribute;
-import com.abc12366.uc.model.invoice.InvoiceUseDetail;
 import com.abc12366.uc.model.invoice.bo.InvoiceDistributeBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
-import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
 import com.abc12366.uc.service.invoice.InvoiceDistributeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

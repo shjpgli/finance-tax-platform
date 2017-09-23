@@ -1,8 +1,10 @@
 package com.abc12366.bangbang.service;
 
 
-
-import com.abc12366.bangbang.model.question.bo.*;
+import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 
 import java.util.List;
 import java.util.Map;

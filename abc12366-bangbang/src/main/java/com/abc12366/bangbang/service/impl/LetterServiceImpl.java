@@ -6,9 +6,9 @@ import com.abc12366.bangbang.model.bo.LetterListBO;
 import com.abc12366.bangbang.model.bo.LetterResponse;
 import com.abc12366.bangbang.service.LetterService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Properties;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +31,6 @@ import java.util.Map;
 public class LetterServiceImpl implements LetterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LetterServiceImpl.class);
 
-    private static Properties properties = new Properties("application.properties");
-
     @Autowired
     private LetterMapper letterMapper;
 
@@ -42,7 +40,7 @@ public class LetterServiceImpl implements LetterService {
     @Override
     public LetterResponse send(LetterInsertBO letterInsertBO, HttpServletRequest request) throws IOException {
         LOGGER.info("{}", letterInsertBO);
-        String url = properties.getValue("chabc.soa.url") + "/message/user";
+        String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/message/user";
         Map<String, Object> map = new HashMap<>();
         map.put("fromUserId", letterInsertBO.getFromUserId());
         map.put("toUserId", letterInsertBO.getToUserId());
@@ -72,7 +70,7 @@ public class LetterServiceImpl implements LetterService {
         //return letterRoMapper.selectList(toId);
 
         //新套路，调message接口
-        String url = properties.getValue("chabc.soa.url") + "/message/user";
+        String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/message/user";
         if (!StringUtils.isEmpty(request.getAttribute("page"))) {
             url += "?page=" + request.getAttribute("page");
             if (!StringUtils.isEmpty(request.getAttribute("size"))) {
@@ -95,7 +93,7 @@ public class LetterServiceImpl implements LetterService {
     @Override
     public LetterResponse read(String id, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}", id, request);
-        String url = properties.getValue("chabc.soa.url") + "/message/user/" + id;
+        String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/message/user/" + id;
 
         String responseStr;
         try {
@@ -113,7 +111,7 @@ public class LetterServiceImpl implements LetterService {
     @Override
     public LetterResponse update(String id, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}", id, request);
-        String url = properties.getValue("chabc.soa.url") + "/message/user/" + id;
+        String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/message/user/" + id;
 
         String responseStr;
         try {
@@ -131,7 +129,7 @@ public class LetterServiceImpl implements LetterService {
     @Override
     public LetterResponse delete(String id, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}", id, request);
-        String url = properties.getValue("chabc.soa.url") + "/message/user/" + id;
+        String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/message/user/" + id;
 
         String responseStr;
         LetterResponse response = null;

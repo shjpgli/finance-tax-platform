@@ -6,17 +6,14 @@ import com.abc12366.bangbang.mapper.db1.QuestionLikeMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
 import com.abc12366.bangbang.model.question.QuestionLike;
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
-import com.abc12366.bangbang.service.CurrCollectService;
 import com.abc12366.bangbang.service.QueLikeService;
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;

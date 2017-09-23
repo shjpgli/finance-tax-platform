@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionFactionClassify;
-import com.abc12366.bangbang.model.question.QuestionFactionTag;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

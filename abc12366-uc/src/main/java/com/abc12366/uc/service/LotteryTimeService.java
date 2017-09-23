@@ -6,8 +6,6 @@ package com.abc12366.uc.service;
  */
 
 
-
-import com.abc12366.uc.model.LotteryTime;
 import com.abc12366.uc.model.bo.LotteryTimeBO;
 
 import java.util.Date;

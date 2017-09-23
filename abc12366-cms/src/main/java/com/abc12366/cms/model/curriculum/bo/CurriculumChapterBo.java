@@ -1,5 +1,4 @@
 package com.abc12366.cms.model.curriculum.bo;
-import com.abc12366.cms.model.curriculum.CurriculumCourseware;
 
 import java.io.Serializable;
 import java.util.List;

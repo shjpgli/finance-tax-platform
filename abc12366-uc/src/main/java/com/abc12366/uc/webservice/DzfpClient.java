@@ -1,12 +1,9 @@
 package com.abc12366.uc.webservice;
 
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.namespace.QName;
+import com.abc12366.uc.model.dzfp.DzfpGetReq;
+import com.abc12366.uc.model.dzfp.Einvocie;
+import com.abc12366.uc.model.dzfp.InvoiceXm;
+import com.alibaba.fastjson.JSON;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.rpc.client.RPCServiceClient;
@@ -19,14 +16,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
-
-import com.abc12366.uc.model.dzfp.DzfpGetReq;
-import com.abc12366.uc.model.dzfp.Einvocie;
-import com.abc12366.uc.model.dzfp.InvoiceXm;
-import com.alibaba.fastjson.JSON;
-
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+
+import javax.xml.namespace.QName;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 电子发票客户端

@@ -1,6 +1,5 @@
 package com.abc12366.cms.mapper.db2;
 
-import com.abc12366.cms.model.bo.ModelBo;
 import com.abc12366.cms.model.curriculum.Curriculum;
 import com.abc12366.cms.model.curriculum.bo.CurriculumListBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumSituationBo;

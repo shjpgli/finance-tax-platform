@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeVoteLogMapper;
 import com.abc12366.bangbang.model.KnowledgeVoteLog;

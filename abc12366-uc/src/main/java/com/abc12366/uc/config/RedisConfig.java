@@ -1,7 +1,6 @@
 package com.abc12366.uc.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.keyvalue.core.KeyValueTemplate;
@@ -14,8 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.mapping.RedisMappingContext;
 import redis.clients.jedis.JedisPoolConfig;
-
-import java.util.logging.Logger;
 
 /**
  * Redis配置

@@ -2,7 +2,6 @@ package com.abc12366.bangbang.model.bo;
 
 import com.abc12366.bangbang.model.BaseListObject;
 
-import java.util.Date;
 import java.util.List;
 
 /**

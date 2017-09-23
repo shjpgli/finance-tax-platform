@@ -1,9 +1,8 @@
 package com.abc12366.uc.util.wx;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.config.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.bo.gzh.WxJsConfig;
-import com.abc12366.uc.model.weixin.bo.redpack.SendRedPack;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;

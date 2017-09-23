@@ -1,9 +1,9 @@
 package com.abc12366.gateway.web;
 
-import com.abc12366.gateway.mapper.util.DataUtils;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -110,10 +110,10 @@ public class AppController {
         AppBO appBO = new AppBO();
         appBO.setName(name);
         if (startTime != null && !"".equals(startTime)) {
-            appBO.setStartTime(DataUtils.StrToDate(startTime));
+            appBO.setStartTime(DateUtils.StrToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            appBO.setEndTime(DataUtils.StrToDate(endTime));
+            appBO.setEndTime(DateUtils.StrToDate(endTime));
         }
         appBO.setAccessToken(accessToken);
 //        appBO.setStartTime(start);

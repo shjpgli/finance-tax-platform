@@ -1,11 +1,12 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.ReturnVisitMapper;
+import com.abc12366.bangbang.mapper.db2.ReturnVisitRoMapper;
 import com.abc12366.bangbang.model.ReturnVisit;
 import com.abc12366.bangbang.model.bo.ReturnVisitBO;
+import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import com.abc12366.bangbang.service.ReturnVisitService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
     @Autowired
     private ReturnVisitMapper returnVisitMapper;
 
+    @Autowired
+    private ReturnVisitRoMapper returnVisitRoMapper;
+
+
     @Override
     public ReturnVisit add(ReturnVisit returnVisit) {
         try {
@@ -39,7 +44,7 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
 
     @Override
     public List<ReturnVisit> selectList(ReturnVisitBO returnVisitBO) {
-        return returnVisitMapper.selectList(returnVisitBO);
+        return returnVisitRoMapper.selectList(returnVisitBO);
     }
 
     @Override
@@ -50,6 +55,11 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
             LOGGER.error("ReturnVisitServiceImpl.delete()", e);
             throw new ServiceException(4519);
         }
+    }
+
+    @Override
+    public List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param) {
+        return returnVisitRoMapper.selectStatisList(param);
     }
 
 }

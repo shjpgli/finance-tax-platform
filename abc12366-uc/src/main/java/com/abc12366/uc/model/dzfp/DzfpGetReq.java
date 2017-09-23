@@ -1,14 +1,12 @@
 package com.abc12366.uc.model.dzfp;
 
+import com.abc12366.uc.webservice.DzfpClient;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.abc12366.uc.webservice.DzfpClient;
 
 
 /**

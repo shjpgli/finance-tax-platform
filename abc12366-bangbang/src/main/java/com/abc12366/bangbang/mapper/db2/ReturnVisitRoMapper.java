@@ -1,7 +1,11 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.ReturnVisit;
+import com.abc12366.bangbang.model.bo.ReturnVisitBO;
+import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -19,5 +23,9 @@ public interface ReturnVisitRoMapper {
 	 **/
 	ReturnVisit  selectByPrimaryKey(@Param("id") String id);
 
+
+	List<ReturnVisit> selectList(ReturnVisitBO returnVisitBO);
+
+	List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param);
 
 }

@@ -1,8 +1,9 @@
 package com.abc12366.message.service.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Properties;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.MessageSendLogMapper;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
 import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
@@ -40,24 +41,9 @@ import java.util.List;
 @Service
 public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MobileVerifyCodeServiceImpl.class);
-    private static Properties properties = new Properties("application.properties");
-    private static String appKey;
-    private static String appSecret;
-    private static String contentType;
-    private static String charset;
 
-    static {
-        try {
-            appKey = properties.getValue("message.netease.appKey");//"2dea65aed55012fd8e4686177392412e";
-            appSecret = properties.getValue("message.netease.appSecret");//"cf03fe4b439f";
-            contentType = properties.getValue("message.netease.contentType");//"application/x-www-form-urlencoded";
-            charset = properties.getValue("message.netease.charset");//"utf-8";
-        } catch (IOException e) {
-            LOGGER.warn("网易短信服务接口参数加载异常！");
-            throw new ServiceException(4802);
-        }
-    }
-
+    @Autowired
+    private ApplicationConfig config;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -161,13 +147,13 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     private HttpHeaders getHeader() {
         String nonce = Utils.uuid();
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
+        String checkSum = CheckSumBuilder.getCheckSum(config.getAppSecret(), nonce, curTime);
         //请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("appKey", appKey);
-        httpHeaders.add("appSecret", appSecret);
-        httpHeaders.add("Content-Type", contentType);
-        httpHeaders.add("charset", charset);
+        httpHeaders.add("appKey", config.getAppKey());
+        httpHeaders.add("appSecret", config.getAppSecret());
+        httpHeaders.add("Content-Type", config.getContentType());
+        httpHeaders.add("charset", config.getCharset());
         httpHeaders.add("Nonce", nonce);
         httpHeaders.add("CurTime", curTime);
         httpHeaders.add("CheckSum", checkSum);
@@ -176,8 +162,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
     private boolean sendNeteaseTemplate(String phone, String codeType, String code) throws IOException {
         //发送通知类短信接口地址
-        String url = properties.getValue("message.netease.api.url") + "/sendtemplate.action";
-        String templateId = properties.getValue("message.netease.templateid");
+        String url = SpringCtxHolder.getProperty("message.netease.api.url") + "/sendtemplate.action";
+        String templateId = SpringCtxHolder.getProperty("message.netease.templateid");
         //调用网易接口请求头设置
         HttpHeaders httpHeaders = getHeader();
         //调用网易接口请求体设置
@@ -220,7 +206,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
     private boolean queryNeteaseStatus(String obj) throws IOException {
         //调用网易接口查询发送信息状态
-        String neteaseQueryUrl = properties.getValue("message.netease.url.querystatus");
+        String neteaseQueryUrl = SpringCtxHolder.getProperty("message.netease.url.querystatus");
         MultiValueMap<String, Object> requestQueryBody = new LinkedMultiValueMap<>();
         requestQueryBody.add("sendid", obj);
 
@@ -261,15 +247,15 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
     private boolean sendYoupaiTemplate(String phone, String type, String code) throws IOException {
         //发送通知类短信接口地址
-        String url = properties.getValue("message.upyun.send.url");
+        String url = SpringCtxHolder.getProperty("message.upyun.send.url");
         //调用网易接口请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", contentType);
-        httpHeaders.add("Authorization", properties.getValue("message.upyun.auth"));
+        httpHeaders.add("Content-Type", config.getContentType());
+        httpHeaders.add("Authorization", SpringCtxHolder.getProperty("message.upyun.auth"));
         //调用网易接口请求体设置
         LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("mobile", phone);
-        requestBody.add("template_id", properties.getValue("message.upyun.templateid"));
+        requestBody.add("template_id", SpringCtxHolder.getProperty("message.upyun.templateid"));
         requestBody.add("vars", type + "|" + code);
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity responseEntity;

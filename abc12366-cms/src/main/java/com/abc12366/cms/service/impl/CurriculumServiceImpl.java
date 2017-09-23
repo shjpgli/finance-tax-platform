@@ -2,18 +2,13 @@ package com.abc12366.cms.service.impl;
 
 import com.abc12366.cms.mapper.db1.*;
 import com.abc12366.cms.mapper.db2.*;
-import com.abc12366.cms.model.Model;
-import com.abc12366.cms.model.bo.ModelBo;
-import com.abc12366.cms.model.bo.ModelListBo;
 import com.abc12366.cms.model.curriculum.Curriculum;
 import com.abc12366.cms.model.curriculum.CurriculumLabel;
 import com.abc12366.cms.model.curriculum.CurriculumLecturerGx;
 import com.abc12366.cms.model.curriculum.CurriculumMembergrade;
 import com.abc12366.cms.model.curriculum.bo.*;
 import com.abc12366.cms.service.CurriculumService;
-import com.abc12366.cms.service.ModelService;
 import com.abc12366.gateway.exception.ServiceException;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

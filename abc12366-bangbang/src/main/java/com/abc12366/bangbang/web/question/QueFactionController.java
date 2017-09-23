@@ -1,7 +1,9 @@
 package com.abc12366.bangbang.web.question;
 
-import com.abc12366.bangbang.model.question.bo.*;
-import com.abc12366.bangbang.service.QueFactionMemberService;
+import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;

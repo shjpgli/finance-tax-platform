@@ -1,13 +1,12 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Properties;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.MessageBO;
 import com.abc12366.uc.model.bo.MessageListBO;
 import com.abc12366.uc.service.MessageService;
 import com.abc12366.uc.util.UcRestTemplateUtil;
-import com.abc12366.uc.util.UserUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import java.util.Map;
  */
 @Service
 public class MessageServiceImpl implements MessageService {
-    private static Properties properties = new Properties("application.properties");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageServiceImpl.class);
 
@@ -38,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageListBO selectList(String type, int page, int size, HttpServletRequest request) throws IOException {
         LOGGER.info("{},{}:{}:{}", type, page, size, request);
-        String url = properties.getValue("chabc.soa.message.url") + "/business?";
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business?";
         if (type != null && !type.equals("")) {
             url = url + "type=" + type;
         }
@@ -65,7 +63,7 @@ public class MessageServiceImpl implements MessageService {
     public MessageBO insert(Message message, HttpServletRequest request) throws IOException {
         LOGGER.info("{}:{}", message, request);
 
-        String url = properties.getValue("chabc.soa.message.url") + "/business";
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business";
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", message.getUserId());
@@ -89,7 +87,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageBO selectOne(String id, HttpServletRequest request) throws IOException {
-        String url = properties.getValue("chabc.soa.message.url") + "/business/" + id;
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business/" + id;
 
         String responseStr;
         try {
@@ -106,7 +104,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageBO update(String id, HttpServletRequest request) throws IOException {
-        String url = properties.getValue("chabc.soa.message.url") + "/business/" + id;
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business/" + id;
 
         String responseStr;
         try {
@@ -123,7 +121,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageBO delete(String id, HttpServletRequest request) throws IOException {
-        String url = properties.getValue("chabc.soa.message.url") + "/business/" + id;
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business/" + id;
 
         String responseStr;
         try {

@@ -1,10 +1,7 @@
 package com.abc12366.bangbang.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import java.sql.Timestamp;
 
 /**
  * 用户消息对象

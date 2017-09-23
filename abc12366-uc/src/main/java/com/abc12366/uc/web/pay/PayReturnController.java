@@ -2,7 +2,8 @@ package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.OrderPayBO;
+import com.abc12366.uc.model.bo.TradeBillBO;
 import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;

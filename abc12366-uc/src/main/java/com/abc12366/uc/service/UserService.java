@@ -1,7 +1,6 @@
 package com.abc12366.uc.service;
 
 
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
