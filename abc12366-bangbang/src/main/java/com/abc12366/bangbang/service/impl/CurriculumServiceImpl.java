@@ -375,6 +375,19 @@ public class CurriculumServiceImpl implements CurriculumService {
             goodsId = "";
         }
 
+
+        //1为发布
+        if("1".equals(curriculumBo.getStatus())){
+            curriculumBo.setIssueTime(new Date());
+            int cnt = curriculumRoMapper.selectCoursewareCnt(curriculumId);
+            if(cnt == 0){
+                //该课程下没有添加课件，不能发布
+                throw new ServiceException(4328);
+            }
+        }else{
+            curriculumBo.setIssueTime(null);
+        }
+
         //查询课程信息
         Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
 
