@@ -31,6 +31,9 @@ public class RedEnvelopController {
     @Autowired
     private IActivityService iActivityService;
 
+    /**
+     * 抽奖记录列表
+     */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "activityId", required = false) String activityId,
                                      @RequestParam(value = "sendStatus", required = false) String sendStatus,
@@ -82,7 +85,10 @@ public class RedEnvelopController {
         return responseEntity;
     }
 
-    @GetMapping("/gethbinfo/{id}")
+    /**
+     * 查询微信红包信息
+     */
+    @GetMapping("/{id}")
     public ResponseEntity gethbinfo(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         WxRedEnvelop data = iActivityService.gethbinfo(id);

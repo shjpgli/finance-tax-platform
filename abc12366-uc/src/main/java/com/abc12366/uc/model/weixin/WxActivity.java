@@ -71,6 +71,20 @@ public class WxActivity {
     // 修改时间
     private Date lastUpdate;
 
+    // 已发送人数
+    private Integer sent;
+
+    // 已发送金额
+    private Double sentAmount;
+
+    // 已领取人数
+    private Integer received;
+
+    // 已领取金额
+    private Double receivedAmount;
+    // 活动参与人数
+    private Integer nop;
+
     public WxActivity() {
     }
 
@@ -250,6 +264,46 @@ public class WxActivity {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public Integer getSent() {
+        return sent;
+    }
+
+    public void setSent(Integer sent) {
+        this.sent = sent;
+    }
+
+    public Double getSentAmount() {
+        return sentAmount;
+    }
+
+    public void setSentAmount(Double sentAmount) {
+        this.sentAmount = sentAmount;
+    }
+
+    public Integer getReceived() {
+        return received;
+    }
+
+    public void setReceived(Integer received) {
+        this.received = received;
+    }
+
+    public Double getReceivedAmount() {
+        return receivedAmount;
+    }
+
+    public void setReceivedAmount(Double receivedAmount) {
+        this.receivedAmount = receivedAmount;
+    }
+
+    public Integer getNop() {
+        return nop;
+    }
+
+    public void setNop(Integer nop) {
+        this.nop = nop;
     }
 
     @Override
