@@ -312,6 +312,13 @@ public class CurriculumServiceImpl implements CurriculumService {
             //讲师
             List<CurriculumLecturerBo> lecturerBoList =lecturerRoMapper.selectListByCurr(curriculumId);
 
+            if(lecturerBoList != null){
+                for(CurriculumLecturerBo lecturer : lecturerBoList){
+                    int cnt = lecturerRoMapper.selectStudentCnt(lecturer.getLecturerId());
+                    lecturer.setStudentNum(cnt);
+                }
+            }
+
             curriculumBo.setLecturerList(lecturerBoList);
 
 
