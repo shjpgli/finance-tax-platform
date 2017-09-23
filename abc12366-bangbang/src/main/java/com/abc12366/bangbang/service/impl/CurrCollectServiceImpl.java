@@ -44,10 +44,12 @@ public class CurrCollectServiceImpl implements CurrCollectService {
     @Override
     public CurriculumCollectBo insert(String curriculumId, HttpServletRequest request) {
         LOGGER.info("{}:{}", curriculumId, request);
-        String userId = UcUserCommon.getUserId();
+
 
 
         CurriculumCollect collect = new CurriculumCollect();
+
+        String userId = UcUserCommon.getUserId();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         collect.setCollectId(uuid);
         collect.setCurriculumId(curriculumId);
