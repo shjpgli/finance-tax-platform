@@ -377,7 +377,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 
         //1为发布
-        if("1".equals(curriculumBo.getStatus())){
+        if(curriculumBo.getStatus() == 1){
             curriculumBo.setIssueTime(new Date());
             int cnt = curriculumRoMapper.selectCoursewareCnt(curriculumId);
             if(cnt == 0){
