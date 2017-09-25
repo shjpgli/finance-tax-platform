@@ -111,9 +111,13 @@ public class AppController {
         appBO.setName(name);
         if (startTime != null && !"".equals(startTime)) {
             appBO.setStartTime(DateUtils.StrToDate(startTime));
+        }else{
+            appBO.setStartTime(null);
         }
         if (endTime != null && !"".equals(endTime)) {
             appBO.setEndTime(DateUtils.StrToDate(endTime));
+        }else{
+            appBO.setEndTime(null);
         }
         appBO.setAccessToken(accessToken);
 //        appBO.setStartTime(start);

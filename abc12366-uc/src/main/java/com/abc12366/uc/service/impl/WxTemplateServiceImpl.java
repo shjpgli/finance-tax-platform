@@ -110,5 +110,18 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
 		
 	}
 
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity templateSend(String templatemsg) {
+		Map<String, String> headparamters = new HashMap<String, String>();
+		headparamters.put("access_token", WxGzhClient.getInstanceToken());
+		BaseWxRespon wxRespon=WxConnectFactory.post(WechatUrl.TEMPLATEMSG_SEND, headparamters,
+				templatemsg, BaseWxRespon.class);
+		if(wxRespon.getErrcode()!=0){
+			return ResponseEntity.ok(Utils.bodyStatus(9999, wxRespon.getErrmsg()));
+		}else{
+			return ResponseEntity.ok(Utils.kv());
+		}
+	}
+
 	
 }

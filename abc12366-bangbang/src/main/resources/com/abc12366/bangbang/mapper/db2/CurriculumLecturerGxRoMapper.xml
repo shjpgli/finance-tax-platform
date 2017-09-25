@@ -31,7 +31,7 @@
           count(c.curriculumId)
         FROM bb_curriculum c,bb_curriculum_lecturer_gx l where l.curriculumId = c.curriculumId
         <if test="lecturerId != null and lecturerId != ''">
-            AND c.lecturerId = #{lecturerId}
+            AND l.lecturerId = #{lecturerId}
         </if>
     </select>
 

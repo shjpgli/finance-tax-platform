@@ -35,6 +35,8 @@ public class PrivilegeItem {
     private boolean ywtx_zn;
     //业务提醒-微信,是/否
     private boolean ywtx_wx;
+    //业务提醒-短信,是/否
+    private boolean ywtx_dx;
     //发布求职信息，次/年
     private int fbqzxx;
     //生日礼包，vip2，vip3，vip4
@@ -168,6 +170,14 @@ public class PrivilegeItem {
 
     public void setYwtx_wx(boolean ywtx_wx) {
         this.ywtx_wx = ywtx_wx;
+    }
+
+    public boolean isYwtx_dx() {
+        return ywtx_dx;
+    }
+
+    public void setYwtx_dx(boolean ywtx_dx) {
+        this.ywtx_dx = ywtx_dx;
     }
 
     public int getFbqzxx() {

@@ -312,6 +312,78 @@ public class CurriculumServiceImpl implements CurriculumService {
             //讲师
             List<CurriculumLecturerBo> lecturerBoList =lecturerRoMapper.selectListByCurr(curriculumId);
 
+            if(lecturerBoList != null){
+                for(CurriculumLecturerBo lecturer : lecturerBoList){
+                    int cnt = lecturerRoMapper.selectStudentCnt(lecturer.getLecturerId());
+                    lecturer.setStudentNum(cnt);
+                }
+            }
+
+            curriculumBo.setLecturerList(lecturerBoList);
+
+
+            Map<String, Object> dataMap1 = new HashMap<>();
+            dataMap1.put("curriculumId",curriculumId);
+            //查询章节列表
+            List<CurriculumChapterBo> chapterBoList = chapterRoMapper.selectList(dataMap1);
+
+            for(CurriculumChapterBo chapterBo : chapterBoList){
+                String chapterId =chapterBo.getChapterId();
+                Map<String, Object> dataMap2 = new HashMap<>();
+                dataMap2.put("chapterId",chapterId);
+                //查询课件
+                List<CurriculumCoursewareBo> coursewareBoList = coursewareRoMapper.selectList(dataMap2);
+                chapterBo.setCoursewareList(coursewareBoList);
+            }
+
+            curriculumBo.setChapterBoList(chapterBoList);
+
+            List<CurriculumListsyBo> curriculumListBoList;
+            //查询相关课程列表
+            curriculumListBoList = curriculumRoMapper.selectListxgNew(curriculumId);
+
+            curriculumBo.setCurriculumListBoList(curriculumListBoList);
+
+
+        } catch (Exception e) {
+            LOGGER.error("查询单个课程信息异常：{}", e);
+            throw new ServiceException(4321);
+        }
+        return curriculumBo;
+    }
+
+    @Override
+    public CurriculumsyBo selectCurriculumsy2(String curriculumId) {
+        CurriculumsyBo curriculumBo;
+        try {
+            LOGGER.info("查询单个课程信息:{}", curriculumId);
+            //查询课程信息
+            curriculumBo = curriculumRoMapper.selectCurriculum2(curriculumId);
+
+            if(curriculumBo == null){
+                return curriculumBo;
+            }
+
+            //标签
+            List<CurriculumLabel> curriculumLabelList = curriculumLabelRoMapper.selectList(curriculumId);
+
+            curriculumBo.setLabelList(curriculumLabelList);
+
+            //会员等级
+            List<CurriculumMembergrade> curriculumMembergradeList = curriculumMembergradeRoMapper.selectList(curriculumId);
+
+            curriculumBo.setMembergradeList(curriculumMembergradeList);
+
+            //讲师
+            List<CurriculumLecturerBo> lecturerBoList =lecturerRoMapper.selectListByCurr(curriculumId);
+
+            if(lecturerBoList != null){
+                for(CurriculumLecturerBo lecturer : lecturerBoList){
+                    int cnt = lecturerRoMapper.selectStudentCnt(lecturer.getLecturerId());
+                    lecturer.setStudentNum(cnt);
+                }
+            }
+
             curriculumBo.setLecturerList(lecturerBoList);
 
 
@@ -377,7 +449,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 
         //1为发布
-        if("1".equals(curriculumBo.getStatus())){
+        if(curriculumBo.getStatus() == 1){
             curriculumBo.setIssueTime(new Date());
             int cnt = curriculumRoMapper.selectCoursewareCnt(curriculumId);
             if(cnt == 0){

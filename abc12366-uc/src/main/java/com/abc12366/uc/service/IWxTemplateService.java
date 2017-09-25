@@ -19,4 +19,6 @@ public interface IWxTemplateService {
 	@SuppressWarnings("rawtypes")
 	ResponseEntity templateSend(String temp_id, Map<String, String> dataList);
 
+	ResponseEntity templateSend(String templatemsg);
+
 }

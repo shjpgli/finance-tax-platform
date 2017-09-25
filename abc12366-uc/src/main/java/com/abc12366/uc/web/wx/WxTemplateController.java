@@ -92,5 +92,12 @@ public class WxTemplateController {
     		@RequestBody Map<String,String> dataList) {
         return templateService.templateSend(temp_id,dataList);
     }
+    
+  //模板消息发送
+    @SuppressWarnings("rawtypes")
+    @PostMapping("/wxTemplate/sendstr/")
+    public ResponseEntity templateSendstr(@RequestBody String templatemsg) {
+        return templateService.templateSend(templatemsg);
+    }
    
 }
