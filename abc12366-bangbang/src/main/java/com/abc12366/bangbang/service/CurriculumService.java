@@ -28,6 +28,8 @@ public interface CurriculumService {
 
     CurriculumsyBo selectCurriculumsy(String curriculumId);
 
+    CurriculumsyBo selectCurriculumsy2(String curriculumId);
+
     CurriculumEvaluateTjBo selectEvaluateTj(String curriculumId);
 
     CurriculumBo update(CurriculumBo curriculumBo);

@@ -50,7 +50,9 @@ public class BangbangRestTemplateUtil {
         ResponseEntity<String> responseEntity = null;
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
-        } catch (RestClientException e) {
+        } catch (Exception e) {
+            e.getMessage();
+            e.printStackTrace();
             LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);
@@ -108,6 +110,36 @@ public class BangbangRestTemplateUtil {
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
         } catch (RestClientException e) {
+            LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
+        }
+        LOGGER.info("Response: {}, {}", url, responseEntity);
+        return responseEntity != null ? responseEntity.getBody() : null;
+    }
+
+    public String send(String url, HttpMethod method, HttpServletRequest request,String userId,String sysTaskId) {
+        //请求头设置
+        HttpHeaders httpHeaders = new HttpHeaders();
+        if (!StringUtils.isEmpty(request.getHeader(Constant.APP_TOKEN_HEAD))) {
+            httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+        }
+        if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
+            httpHeaders.add(Constant.ADMIN_TOKEN_HEAD, request.getHeader(Constant.ADMIN_TOKEN_HEAD));
+        }
+        if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
+            httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
+        }
+        if (!StringUtils.isEmpty(request.getHeader(Constant.VERSION_HEAD))) {
+            httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+        }
+
+        HttpEntity requestEntity = new HttpEntity(null, httpHeaders);
+        LOGGER.info("Request: {}, {}", url, requestEntity);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, method, requestEntity, String.class,userId,sysTaskId);
+        } catch (Exception e) {
+            e.getMessage();
+            e.printStackTrace();
             LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);

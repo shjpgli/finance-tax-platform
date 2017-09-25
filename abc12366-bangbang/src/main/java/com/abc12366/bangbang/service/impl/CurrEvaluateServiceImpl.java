@@ -1,19 +1,24 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.CurriculumEvaluateMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumEvaluateRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumEvaluate;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateBo;
 import com.abc12366.bangbang.service.CurrEvaluateService;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +36,9 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
 
     @Autowired
     private CurriculumEvaluateRoMapper evaluateRoMapper;
+
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
     public List<CurriculumEvaluateBo> selectList(Map<String,Object> map) {
@@ -59,7 +67,7 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
     }
 
     @Override
-    public CurriculumEvaluateBo save(CurriculumEvaluateBo evaluateBo) {
+    public CurriculumEvaluateBo save(CurriculumEvaluateBo evaluateBo,HttpServletRequest request) {
         try {
             JSONObject jsonStu = JSONObject.fromObject(evaluateBo);
             LOGGER.info("新增课程评价信息:{}", jsonStu.toString());
@@ -70,6 +78,16 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
             evaluateBo.setEvaluateId(uuid);
             BeanUtils.copyProperties(evaluateBo, evaluate);
             evaluateMapper.insert(evaluate);
+
+
+            String url = "http://118.118.116.202:9100/uc/todo/task/do/award/{userId}/{sysTaskId}";
+            String responseStr;
+            String userId = UcUserCommon.getUserId();
+            String sysTaskId = "1df0299f-cd25-4c02-9cdf-2160bae56884";
+            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+//            System.out.println(responseStr);
+
+
         } catch (Exception e) {
             LOGGER.error("新增课程评价信息异常：{}", e);
             throw new ServiceException(4312);

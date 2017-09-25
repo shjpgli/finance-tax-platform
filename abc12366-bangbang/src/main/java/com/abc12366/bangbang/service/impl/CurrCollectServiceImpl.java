@@ -7,11 +7,16 @@ import com.abc12366.bangbang.mapper.db2.CurriculumCollectRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumCollect;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo;
 import com.abc12366.bangbang.service.CurrCollectService;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,13 +38,18 @@ public class CurrCollectServiceImpl implements CurrCollectService {
     @Autowired
     private CurriculumCollectRoMapper collectRoMapper;
 
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+
     @Override
     public CurriculumCollectBo insert(String curriculumId, HttpServletRequest request) {
         LOGGER.info("{}:{}", curriculumId, request);
-        String userId = UcUserCommon.getUserId(request);
+
 
 
         CurriculumCollect collect = new CurriculumCollect();
+
+        String userId = UcUserCommon.getUserId();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         collect.setCollectId(uuid);
         collect.setCurriculumId(curriculumId);
@@ -54,6 +64,13 @@ public class CurrCollectServiceImpl implements CurrCollectService {
         }
 
         int result = collectMapper.insert(collect);
+
+        String url = "http://118.118.116.202:9100/uc/todo/task/do/award/{userId}/{sysTaskId}";
+        String responseStr;
+        String sysTaskId = "f2a0a28c-8c10-4d33-b1b2-9ab10aff3e3f";
+        responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+//        System.out.println(responseStr);
+
 
         CurriculumCollectBo collectBO = new CurriculumCollectBo();
         BeanUtils.copyProperties(collect, collectBO);

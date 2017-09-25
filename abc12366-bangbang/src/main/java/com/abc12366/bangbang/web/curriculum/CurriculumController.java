@@ -181,6 +181,16 @@ public class CurriculumController {
     }
 
     /**
+     * 查询单个课程详情信息(查询下架课程)
+     */
+    @GetMapping(path = "/selectCurriculum2/{curriculumId}")
+    public ResponseEntity selectCurriculum2(@PathVariable String curriculumId) {
+        //查询课程信息
+        CurriculumsyBo curriculumBo = curriculumService.selectCurriculumsy2(curriculumId);
+        return ResponseEntity.ok(Utils.kv("data", curriculumBo));
+    }
+
+    /**
      * 查询单个课程评价统计(前端用无需登录)
      */
     @GetMapping(path = "/selectEvaluateTj/{curriculumId}")
