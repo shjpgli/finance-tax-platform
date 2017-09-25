@@ -71,6 +71,12 @@ public class QuestionBo implements Serializable {
     /****varchar(64)**/
     private String factionId;
 
+    /**用户昵称**varchar(64)**/
+    private String nickname;
+
+    /**用户图片**/
+    private String userPicturePath;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -224,5 +230,21 @@ public class QuestionBo implements Serializable {
 
     public void setFactionId(String factionId) {
         this.factionId = factionId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 }
