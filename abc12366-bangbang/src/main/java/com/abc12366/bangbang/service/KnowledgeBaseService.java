@@ -57,4 +57,6 @@ public interface KnowledgeBaseService {
     /*修改知识库数据 浏览量*/
     void addPV(String id);
 
+	List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param);
+
 }
