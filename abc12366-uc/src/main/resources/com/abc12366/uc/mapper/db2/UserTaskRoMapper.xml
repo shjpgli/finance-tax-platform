@@ -19,11 +19,10 @@
     <select id="selectMyTask" parameterType="java.lang.String" resultType="com.abc12366.uc.model.bo.MyTaskBO">
         SELECT
         uu.points currentPoints,
-        (SELECT SUM(ust.award) unReceivePoints FROM uc_sys_task ust, uc_user_task uut WHERE uut.status=0 AND ust.id =
-        uut.taskId AND uut.userId = uu.id) unReceivePoints,
+        (SELECT SUM(uutt.award) FROM uc_user_task_todo uutt WHERE uutt.status=0 AND uutt.userId=uu.id and uutt.awardType = '1') unReceivePoints,
         NULL taskRange,
-        (SELECT COUNT(1) finishedTaskCount FROM uc_user_task uut WHERE uut.status=1 AND uut.userId = uu.id AND
-        uut.createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uut.createTime &lt; (SELECT
+        (SELECT COUNT(1) finishedTaskCount FROM uc_user_task_todo uutt WHERE uutt.status=1 AND uutt.userId = uu.id AND
+        uutt.createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uutt.createTime &lt; (SELECT
         DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) finishedTaskCount
         FROM
         uc_user uu
