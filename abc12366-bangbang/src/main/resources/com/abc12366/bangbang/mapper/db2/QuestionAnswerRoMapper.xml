@@ -19,11 +19,11 @@
     <!-- 问题回复列表查询 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        id,	parentId,	questionId,	userId,	answerUserId,ip,	answer,	status,	createTime,	lastUpdate,	isAccept,
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,	answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike,
         (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where parentId = a.id) answerNum
-        FROM bb_question_answer a
+        FROM bb_question_answer a left join bb_user u on a.userId = u.id
         WHERE parentId=''
         <if test="questionId != null and questionId != ''">
             AND questionId = #{questionId}
@@ -36,10 +36,10 @@
     <!-- 问题回复评论列表查询 -->
     <select id="selectListByParentId" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        id,	parentId,	questionId,	userId,	answerUserId,ip,	answer,	status,	createTime,	lastUpdate,	isAccept,
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,	answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike,
         (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum
-        FROM bb_question_answer a
+        FROM bb_question_answer a left join bb_user u on a.userId = u.id
         WHERE 1=1
         <if test="parentId != null and parentId != ''">
             AND parentId = #{parentId}
@@ -53,11 +53,12 @@
     <!-- 最新回答 -->
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        a.id,	parentId,	questionId,	a.userId,	answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,	answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         (SELECT count(likeId) FROM bb_question_like where id = #{questionId}) likeNum,
         (SELECT count(id) FROM bb_question_answer where id = #{questionId}) answerNum,
         q.title questionTitle
         FROM bb_question_answer a LEFT JOIN bb_question q on a.questionId = q.id
+        left join bb_user u on a.userId = u.id
         WHERE parentId=''
         ORDER BY createTime DESC
     </select>

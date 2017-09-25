@@ -25,6 +25,12 @@ public class QuestionAnswerBo implements Serializable {
 	/**用户ID**varchar(64)**/
 	private String userId;
 
+    /**用户昵称**varchar(64)**/
+    private String nickname;
+
+    /**用户图片**/
+    private String userPicturePath;
+
 	/**回答用户ID**varchar(64)**/
 	private String answerUserId;
 
@@ -187,5 +193,21 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setFactionId(String factionId) {
         this.factionId = factionId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 }
