@@ -192,6 +192,9 @@
 		<if test="channelId != null and channelId != ''">
 			AND a.channelId like CONCAT(#{channelId},'%')
 		</if>
+		<if test="exceptChannelId != null and exceptChannelId != ''">
+			and a.channelId != #{exceptChannelId}
+		</if>
 		<if test="siteId != null and siteId != ''">
 			AND a.siteId = #{siteId}
 		</if>

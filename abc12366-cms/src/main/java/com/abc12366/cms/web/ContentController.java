@@ -111,7 +111,7 @@ public class ContentController {
     }
 
     /**
-     * 根据内容标签查询内容列表信息
+     * 根据内容标签查询内容列表信息，过滤掉指定栏目（exceptChannelId）的信息
      */
     @GetMapping(path = "/selectListByContentType")
     public ResponseEntity selectListByContentType(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
@@ -121,11 +121,13 @@ public class ContentController {
                                                   @RequestParam(value = "siteId", required = false) String siteId,
                                                   @RequestParam(value = "tagId", required = false) String tagId,
                                                   @RequestParam(value = "channelId", required = false) String channelId,
+                                                  @RequestParam(value = "exceptChannelId", required = false) String exceptChannelId,
                                                   @RequestParam(value = "startTime", required = false) String startTime,
                                                   @RequestParam(value = "endTime", required = false) String endTime) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("tagId", tagId);//内容类型(标签)
         dataMap.put("channelId", channelId);//栏目ID
+        dataMap.put("exceptChannelId", exceptChannelId);//过滤掉的栏目ID
         dataMap.put("siteId", siteId);//站点ID
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
