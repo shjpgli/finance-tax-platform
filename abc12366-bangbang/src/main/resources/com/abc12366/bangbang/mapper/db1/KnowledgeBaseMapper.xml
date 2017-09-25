@@ -74,6 +74,17 @@
         ORDER BY a.pv DESC LIMIT #{KnowledgePageSize}
 
     </select>
+    
+    <!-- 财税网首页热点问题查询 -->
+    <select id="wxhotUnClassifyMap" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
+
+        SELECT a.* FROM bb_knowledge_base a
+        WHERE
+        TYPE = #{KnowledgeType} AND recommend = #{KnowledgeRecommend}
+        AND STATUS = 1 AND isOpen = 1 AND (activeTime IS NULL OR activeTime > NOW())
+        ORDER BY a.pv DESC
+
+    </select>
 
 
     <!-- UC列表查询 -->

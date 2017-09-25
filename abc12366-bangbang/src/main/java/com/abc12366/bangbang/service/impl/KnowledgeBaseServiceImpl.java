@@ -272,5 +272,10 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         });
     }
 
+	@Override
+	public List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param) {
+		return knowledgeBaseMapper.wxhotUnClassifyMap(param);
+	}
+
 
 }
