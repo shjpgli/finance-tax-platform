@@ -57,6 +57,27 @@ public class KnowledgeBaseController {
         List<KnowledgeBase> list = knowledgeBaseService.hotUnClassifyMap(param);
         return ResponseEntity.ok(Utils.kv("dataList",list));
     }
+    
+    
+    /*
+    *
+    * 首页 热点问题、热点知识，不分小类
+    *
+    */
+    @GetMapping(path = "/wx/hotUnClassifyList")
+    public ResponseEntity wxhotUnClassifyList(
+    		                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                  @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType,
+                                  @RequestParam(value = "KnowledgeRecommend", defaultValue = "hot") String KnowledgeRecommend){
+    	PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(0, KnowledgeType, KnowledgeRecommend);
+        List<KnowledgeBase> list = knowledgeBaseService.wxhotUnClassifyMap(param);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+    
 
     /*
     *  知识库 分页查询

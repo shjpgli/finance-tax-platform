@@ -121,4 +121,7 @@ public interface KnowledgeBaseMapper {
      **/
     int addPVByPK(String id);
 
+
+	List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param);
+
 }
