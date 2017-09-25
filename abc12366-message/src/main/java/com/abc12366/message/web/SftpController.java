@@ -1,5 +1,6 @@
 package com.abc12366.message.web;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.bo.FjBo;
@@ -29,10 +30,14 @@ public class SftpController {
     public ResponseEntity upload(@Valid @RequestBody FjListBo fjListBo) {
         LOGGER.info("{}", fjListBo);
         SFTPUtil sf = new SFTPUtil();
-        String host = "118.118.116.202";
-        int port = 22;
-        String username = "root";
-        String password = "hngs_123";
+        String host = SpringCtxHolder.getProperty("sftp_host");
+        int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));
+        String username = SpringCtxHolder.getProperty("sftp_username");
+        String password = SpringCtxHolder.getProperty("sftp_password");
+
+
+
+
         String directory = fjListBo.getDirectory();
         List<FjBo> fjBoList = fjListBo.getFjBo();
         List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
