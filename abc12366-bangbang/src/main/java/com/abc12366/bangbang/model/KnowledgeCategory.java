@@ -28,6 +28,11 @@ public class KnowledgeCategory {
     private String parentCode;
 
     /**
+     * 父类标识名称
+     **/
+    private String parentName;
+
+    /**
      * 顺序
      **/
     private Integer sort;
@@ -82,6 +87,15 @@ public class KnowledgeCategory {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public KnowledgeCategory setParentName(String parentName) {
+        this.parentName = parentName;
+        return this;
     }
 
     public Integer getSort() {
