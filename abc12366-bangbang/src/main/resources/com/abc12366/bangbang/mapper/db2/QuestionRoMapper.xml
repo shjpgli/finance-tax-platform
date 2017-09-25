@@ -11,8 +11,9 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.Question" parameterType="java.lang.String">
 		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_question
+             id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, isRecommend
+	      (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+		 FROM bb_question q
 		 WHERE id = #{id}
 	</select>
 
