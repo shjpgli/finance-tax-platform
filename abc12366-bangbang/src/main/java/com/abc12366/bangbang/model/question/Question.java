@@ -60,6 +60,12 @@ public class Question implements Serializable {
     /****varchar(64)**/
     private String factionId;
 
+    /**回复数**int(11)**/
+    private Integer answerNum;
+
+    /**回复数**int(11)**/
+    private Integer likeNum;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -189,5 +195,21 @@ public class Question implements Serializable {
 
     public void setFactionId(String factionId) {
         this.factionId = factionId;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+    }
+
+    public Integer getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(Integer likeNum) {
+        this.likeNum = likeNum;
     }
 }
