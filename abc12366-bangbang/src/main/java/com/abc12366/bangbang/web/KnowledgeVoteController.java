@@ -50,8 +50,13 @@ public class KnowledgeVoteController {
      */
     @PostMapping(path = "/add")
     public ResponseEntity add(@RequestBody KnowledgeVoteLog knowledgeVoteLog) {
-        knowledgeVoteService.addVote(knowledgeVoteLog);
-        return ResponseEntity.ok(Utils.kv());
+    	KnowledgeVoteLog log =knowledgeVoteService.selectByUserVotedKnowledge(knowledgeVoteLog.getUserId(), knowledgeVoteLog.getKnowledgeId());
+    	if(log!=null){
+    		return ResponseEntity.ok(Utils.bodyStatus(9999, "您已经投票过，不能重复投票!"));
+    	}else{
+    		knowledgeVoteService.addVote(knowledgeVoteLog);
+            return ResponseEntity.ok(Utils.kv());
+    	}
     }
 
 
