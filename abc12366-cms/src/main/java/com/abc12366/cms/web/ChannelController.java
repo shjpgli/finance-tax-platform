@@ -61,11 +61,13 @@ public class ChannelController {
     @GetMapping(path = "/list")
     public ResponseEntity list(@RequestParam(value = "channelId", required = false) String channelId,
                                @RequestParam(value = "parentId", required = false) String parentId,
+                               @RequestParam(value = "isDisplay", required = false) String isDisplay,
                                @RequestParam(value = "channelName", required = false) String channelName) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("parentId", parentId);//父栏目ID
         dataMap.put("channelName", channelName);//栏目名称
+        dataMap.put("isDisplay", isDisplay);//栏目名称
         List<ChannelBo> dataList = channelService.selectLists(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
