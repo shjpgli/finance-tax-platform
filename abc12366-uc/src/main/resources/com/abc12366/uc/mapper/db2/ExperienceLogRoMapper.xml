@@ -34,8 +34,8 @@
     <select id="selectListByUser" resultType="com.abc12366.uc.model.bo.ExpLogUcBO" parameterType="java.util.Map">
         SELECT uul.id id,
         (SELECT uur.name FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) channel,
-        (SELECT uur.exp FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) EXP,
-        (SELECT SUM(uu.income)-SUM(uu.outgo) sums FROM uc_uexp_log uu WHERE uu.userId=uul.userId) sums,
+        (uul.income-uul.outgo) EXP,
+        (SELECT uu.exp FROM uc_user uu WHERE uu.id=uul.userId) sums,
         uul.createTime createTime,
         (SELECT uur.description FROM uc_uexp_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) remark
         FROM uc_uexp_log uul
