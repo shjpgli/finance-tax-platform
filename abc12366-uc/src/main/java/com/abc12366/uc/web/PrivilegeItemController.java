@@ -47,10 +47,10 @@ public class PrivilegeItemController {
         return ResponseEntity.ok(Utils.kv("data", privilegeItem));
     }
 
-    @DeleteMapping(path = "/{privilegeId}")
-    public ResponseEntity delete(@PathVariable("privilegeId") String privilegeId) {
-        LOGGER.info("{}", privilegeId);
-        int i = privilegeItemService.delete(privilegeId);
+    @DeleteMapping(path = "/{levelId}")
+    public ResponseEntity delete(@PathVariable("levelId") String levelId) {
+        LOGGER.info("{}", levelId);
+        int i = privilegeItemService.delete(levelId);
         return ResponseEntity.ok(Utils.kv("data", i));
     }
 

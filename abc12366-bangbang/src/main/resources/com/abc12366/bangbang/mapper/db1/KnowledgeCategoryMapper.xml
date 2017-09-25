@@ -5,15 +5,16 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, name, code, parentCode, sort, createTime, updateTime, createUser, updateUser
+        id, name, code, parentCode, parentName, sort, createTime, updateTime, createUser, updateUser
     </sql>
 
     <!-- 查询all -->
     <select id="selectAll" resultType="knowledgeCategory">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM bb_knowledge_category
-        ORDER BY SORT ASC
+        t1.*,t2.name as parentName
+        FROM bb_knowledge_category  t1
+        LEFT JOIN bb_knowledge_category  t2 ON t1.parentCode = t2.code
+        ORDER BY t1.SORT ASC;
     </select>
     <!-- 查询（根据CODE查询） -->
     <select id="selectByCode" resultType="knowledgeCategory" parameterType="java.lang.String">
