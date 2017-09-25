@@ -77,6 +77,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/content/selectContent")
                         //获取财税资讯网
                 .excludePathPatterns("/content/selectListcszxw")
+                        //根据栏目id获取财税资讯列表
+                .excludePathPatterns("/content/selectListByChannelId")
                         //获取最新的活动信息
                 .excludePathPatterns("/event/topone")
                         //获取活动列表信息
