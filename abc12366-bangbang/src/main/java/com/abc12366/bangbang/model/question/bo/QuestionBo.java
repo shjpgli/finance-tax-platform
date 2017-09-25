@@ -3,6 +3,7 @@ package com.abc12366.bangbang.model.question.bo;
 import com.abc12366.bangbang.model.question.QuestionTag;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 
@@ -49,6 +50,9 @@ public class QuestionBo implements Serializable {
 
 	/**是否推荐**/
 	private Boolean isRecommend;
+
+	/**推荐创建时间**/
+	private java.util.Date recommendTime;
 
 	private List<QuestionTag> tagList;
 
@@ -170,6 +174,15 @@ public class QuestionBo implements Serializable {
 
 	public QuestionBo setIsRecommend(Boolean isRecommend) {
 		this.isRecommend = isRecommend;
+		return this;
+	}
+
+	public Date getRecommendTime() {
+		return recommendTime;
+	}
+
+	public QuestionBo setRecommendTime(Date recommendTime) {
+		this.recommendTime = recommendTime;
 		return this;
 	}
 

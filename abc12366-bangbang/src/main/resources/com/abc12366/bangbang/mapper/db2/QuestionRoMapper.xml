@@ -39,7 +39,7 @@
     <!-- 热门问题 -->
     <select id="selectListByBrowseNum" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
-        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendTime,
         (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q
@@ -59,7 +59,7 @@
     <!-- 等你回答问题 -->
     <select id="selectListWait" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
-        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendTime,
         (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q
@@ -79,7 +79,7 @@
     <!-- 已解决问题 -->
     <select id="selectListAccept" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
-        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+        id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendTime,
         (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q
@@ -99,7 +99,7 @@
     <!-- 查询帮友热议 -->
     <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
-            id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendEndTime,
+            id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, recommendTime,
             (select count(id) from bb_question_answer where questionId = q.id and parentId != '') answerNum
         FROM bb_question q
         WHERE 1=1

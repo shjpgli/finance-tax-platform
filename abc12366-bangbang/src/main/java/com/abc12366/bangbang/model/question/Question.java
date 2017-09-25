@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.model.question;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -46,6 +47,9 @@ public class Question implements Serializable {
 
 	/**是否推荐**/
 	private Boolean isRecommend;
+
+	/**推荐创建时间**/
+	private java.util.Date recommendTime;
 
     /**标签**varchar(1000)**/
     private String tag;
@@ -151,6 +155,15 @@ public class Question implements Serializable {
 
 	public Question setIsRecommend(Boolean isRecommend) {
 		this.isRecommend = isRecommend;
+		return this;
+	}
+
+	public Date getRecommendTime() {
+		return recommendTime;
+	}
+
+	public Question setRecommendTime(Date recommendTime) {
+		this.recommendTime = recommendTime;
 		return this;
 	}
 
