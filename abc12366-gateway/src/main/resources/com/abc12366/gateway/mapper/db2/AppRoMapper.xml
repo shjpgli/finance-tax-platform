@@ -44,13 +44,13 @@
             <if test="status != null">
                 and status=#{status}
             </if>
-            <if test="startTime != null and startTime != ''">
+            <if test="startTime != null">
                 <![CDATA[
-              and date_format(startTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+              and date_format(startTime, '%Y-%m-%d') <= date_format(#{startTime}, '%Y-%m-%d')
               and date_format(endTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
                 ]]>
             </if>
-            <if test="endTime != null and endTime != ''">
+            <if test="endTime != null">
                 <![CDATA[
               and date_format(startTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
               and date_format(endTime, '%Y-%m-%d') >= date_format(#{endTime}, '%Y-%m-%d')

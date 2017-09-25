@@ -402,28 +402,28 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("库存不足,请联系管理员：{}", stock);
             throw new ServiceException(4905);
         }
-        prBO.setStock(stock);
-        Product product = new Product();
-        BeanUtils.copyProperties(prBO, product);
-        productMapper.update(product);
-        //库存表数据处理
-        ProductRepo repo = new ProductRepo();
-        repo.setId(Utils.uuid());
-        repo.setGoodsId(prBO.getGoodsId());
-        repo.setProductId(prBO.getId());
-        repo.setOutcome(num);
-        repo.setStock(stock);
-        repo.setCreateTime(date);
-        repo.setLastUpdate(date);
-        repo.setRemark(orderBO.getOrderNo());
-        repo.setOptionUser(orderBO.getUserId());
-        repo.setRemark(orderBO.getOrderNo());
-        repo.setOptionUser(orderBO.getUserId());
-        productRepoMapper.insert(repo);
+//        prBO.setStock(stock);
+//        Product product = new Product();
+//        BeanUtils.copyProperties(prBO, product);
+//        productMapper.update(product);
+//        //库存表数据处理
+//        ProductRepo repo = new ProductRepo();
+//        repo.setId(Utils.uuid());
+//        repo.setGoodsId(prBO.getGoodsId());
+//        repo.setProductId(prBO.getId());
+//        repo.setOutcome(num);
+//        repo.setStock(stock);
+//        repo.setCreateTime(date);
+//        repo.setLastUpdate(date);
+//        repo.setRemark(orderBO.getOrderNo());
+//        repo.setOptionUser(orderBO.getUserId());
+//        repo.setRemark(orderBO.getOrderNo());
+//        repo.setOptionUser(orderBO.getUserId());
+//        productRepoMapper.insert(repo);
 
         //商品价格
         double totalPrice = orderBO.getTotalPrice();
-        int giftPoints = (int) (totalPrice+(totalPrice * 0.1)) * 1000;
+        int giftPoints = (int) totalPrice * 1100;
 
         //加入订单信息
         orderBO.setOrderStatus(orderStatus);
@@ -848,33 +848,6 @@ public class OrderServiceImpl implements OrderService {
                 order.setAddressId(orderPayBO.getAddressId());
                 order.setUserId(orderBO.getUserId());
 
-                //查询产品库存信息
-                ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
-                orderProductBO.setOrderNo(orderBO.getOrderNo());
-                //减去Product库存数量
-                int num = orderProductBO.getNum();
-                int stock = prBO.getStock() - num;
-                if(stock < 0){
-                    LOGGER.info("库存不足,请联系管理员：{}", stock);
-                    throw new ServiceException(4905);
-                }
-                prBO.setStock(stock);
-                Product product = new Product();
-                BeanUtils.copyProperties(prBO, product);
-                productMapper.update(product);
-                //库存表数据处理
-                Date date = new Date();
-                ProductRepo repo = new ProductRepo();
-                repo.setId(Utils.uuid());
-                repo.setGoodsId(prBO.getGoodsId());
-                repo.setProductId(prBO.getId());
-                repo.setOutcome(num);
-                repo.setStock(stock);
-                repo.setCreateTime(date);
-                repo.setLastUpdate(date);
-                repo.setRemark(orderBO.getOrderNo());
-                repo.setOptionUser(orderBO.getUserId());
-                productRepoMapper.insert(repo);
                 if("RMB".equals(type)){
                     if (isPay == 1) {
                         order.setOrderStatus("3");
@@ -885,6 +858,8 @@ public class OrderServiceImpl implements OrderService {
                         }
                         insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中","0");
                     } else if (isPay == 2) {
+                        updateStock(orderBO, orderProductBO);
+
                         //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
                         if (goodsType.equals("1") || goodsType.equals("2")) {
                             order.setOrderStatus("4");
@@ -927,6 +902,7 @@ public class OrderServiceImpl implements OrderService {
                         insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款","0");
                     }
                 }else if("POINTS".equals(type)){
+                    updateStock(orderBO, orderProductBO);
                     //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
                     if (goodsType.equals("1") || goodsType.equals("2")) {
                         order.setOrderStatus("4");
@@ -959,6 +935,39 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return orderBO;
+    }
+
+    /**
+     * 修改库存
+     */
+    private void updateStock(OrderBO orderBO, OrderProductBO orderProductBO) {
+        //查询产品库存信息
+        ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+        orderProductBO.setOrderNo(orderBO.getOrderNo());
+        //减去Product库存数量
+        int num = orderProductBO.getNum();
+        int stock = prBO.getStock() - num;
+        if(stock < 0){
+            LOGGER.info("库存不足,请联系管理员：{}", stock);
+            throw new ServiceException(4905);
+        }
+        prBO.setStock(stock);
+        Product product = new Product();
+        BeanUtils.copyProperties(prBO, product);
+        productMapper.update(product);
+        //库存表数据处理
+        Date date = new Date();
+        ProductRepo repo = new ProductRepo();
+        repo.setId(Utils.uuid());
+        repo.setGoodsId(prBO.getGoodsId());
+        repo.setProductId(prBO.getId());
+        repo.setOutcome(num);
+        repo.setStock(stock);
+        repo.setCreateTime(date);
+        repo.setLastUpdate(date);
+        repo.setRemark(orderBO.getOrderNo());
+        repo.setOptionUser(orderBO.getUserId());
+        productRepoMapper.insert(repo);
     }
 
     /**
@@ -1020,6 +1029,7 @@ public class OrderServiceImpl implements OrderService {
     private void insertPoints(OrderBO orderBO) {
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
+        pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_ID);
         pointsLog.setId(Utils.uuid());
         pointsLog.setIncome(orderBO.getGiftPoints());
         pointsLog.setRemark("用户下单 - 订单号："+orderBO.getOrderNo());
