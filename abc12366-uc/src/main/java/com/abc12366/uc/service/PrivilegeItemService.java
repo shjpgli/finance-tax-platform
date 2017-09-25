@@ -11,10 +11,10 @@ import com.abc12366.uc.model.bo.PrivilegeItemBO;
 public interface PrivilegeItemService {
     /**
      * 获取用户会员的权益
-     * @param privilegeId
+     * @param levelId
      * @return
      */
-    PrivilegeItem selectOne(String privilegeId);
+    PrivilegeItem selectOne(String levelId);
 
     /**
      * 修改用户会员权益
@@ -32,10 +32,10 @@ public interface PrivilegeItemService {
 
     /**
      * 删除用户会员权益
-     * @param privilegeId
+     * @param levelId
      * @return
      */
-    int delete(String privilegeId);
+    int delete(String levelId);
 
     /**
      * 根据用户ID获取用户会员权益

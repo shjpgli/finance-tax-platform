@@ -111,5 +111,25 @@ public class UCConstant {
     public final static String POINT_RULE_LOTTERY_ID = "31428853-2339-4523-91db-32a182f4fbcf";
     //用户下单送积分
     public final static String POINT_RULE_ORDER_ID = "6ef5369f-bfb2-4a89-aa6a-d2c86751cbf0";
+    //用户等级升级奖励
+    public final static String POINT_RULE_EXP_UP_ID = "c10c55be-f01d-4e94-8a7b-5efc8eb8a96b";
 
+
+    //用户权益类型
+    //1.用户财税经验证明印制
+    public final static String PRIVILEGE_TYPE_CSJYZMYZ = "csjyzmyz";
+    //2.用户帐号合并特权
+    public final static String PRIVILEGE_TYPE_YHZHHBTQ = "yhzhhbtq";
+    //3.线下课程培训
+    public final static String PRIVILEGE_TYPE_XXKCPX = "xxkcpx";
+    //4.线下会员活动
+    public final static String PRIVILEGE_TYPE_XXHYHD = "xxhyhd";
+    //5.个人帐号绑定企业户数
+    public final static String PRIVILEGE_TYPE_GRZHBDQYS = "grzhbdqys";
+    //6.发布求职信息
+    public final static String PRIVILEGE_TYPE_FBQZXX = "fbqzxx";
+    //7.用户积分转让
+    public final static String PRIVILEGE_TYPE_YHJFZR = "yhjfzr";
+    //8.商品/发票免邮券
+    public final static String PRIVILEGE_TYPE_SPFPMYQ = "spfpmyq";
 }

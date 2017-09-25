@@ -42,8 +42,8 @@ public class PrivilegeItemServiceImpl implements PrivilegeItemService {
     }
 
     @Override
-    public int delete(String privilegeId) {
-        return privilegeMapper.delete(privilegeId);
+    public int delete(String levelId) {
+        return privilegeMapper.delete(levelId);
     }
 
     @Override
