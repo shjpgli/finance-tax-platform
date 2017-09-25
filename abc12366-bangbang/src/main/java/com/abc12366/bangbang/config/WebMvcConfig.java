@@ -103,11 +103,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //问题分类列表查询
                 .excludePathPatterns("/question/selectClassifyList")
                         //根据分类查询相关标签
-                .excludePathPatterns("/question/selectClassifyTagList")
+                .excludePathPatterns("/queclassify/selectClassifyTagList")
                         //问题回复列表查询
-                .excludePathPatterns("/question/selectListByQuestionId")
+                .excludePathPatterns("/queAnswer/selectListByQuestionId")
                         //问题回复评论列表查询
-                .excludePathPatterns("/question/selectListByParentId")
+                .excludePathPatterns("/queAnswer/selectListByParentId")
                         //最新回答
                 .excludePathPatterns("/question/selectListNew")
                         //查询单个问题
