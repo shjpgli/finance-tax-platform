@@ -42,7 +42,7 @@ public class AdminServUserServiceImpl implements AdminServUserService {
             adminServiceUserBoList = adminServUserRoMapper.selectList(map);
         } catch (Exception e) {
             LOGGER.error("查询客服经理关系列表信息异常：{}", e);
-            throw new ServiceException(4350);
+            throw new ServiceException(6360);
         }
         return adminServiceUserBoList;
     }
@@ -69,7 +69,7 @@ public class AdminServUserServiceImpl implements AdminServUserService {
             adminServUserMapper.insert(adminServUser);
         } catch (Exception e) {
             LOGGER.error("新增客服经理关系信息异常：{}", e);
-            throw new ServiceException(4352);
+            throw new ServiceException(6362);
         }
 
         return adminServUserBo;
@@ -85,7 +85,7 @@ public class AdminServUserServiceImpl implements AdminServUserService {
             BeanUtils.copyProperties(adminServUser, adminServUserBo);
         } catch (Exception e) {
             LOGGER.error("查询单个客服经理关系信息异常：{}", e);
-            throw new ServiceException(4351);
+            throw new ServiceException(6361);
         }
         return adminServUserBo;
     }
@@ -111,7 +111,7 @@ public class AdminServUserServiceImpl implements AdminServUserService {
             adminServUserMapper.updateByPrimaryKeySelective(adminServUser);
         } catch (Exception e) {
             LOGGER.error("更新客服经理关系信息异常：{}", e);
-            throw new ServiceException(4353);
+            throw new ServiceException(6363);
         }
         return adminServUserBo;
     }
@@ -130,7 +130,7 @@ public class AdminServUserServiceImpl implements AdminServUserService {
             adminServUserMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
             LOGGER.error("删除客服经理关系异常：{}", e);
-            throw new ServiceException(4354);
+            throw new ServiceException(6364);
         }
         return "";
     }
