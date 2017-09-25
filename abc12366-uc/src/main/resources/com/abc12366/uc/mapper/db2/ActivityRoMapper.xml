@@ -67,7 +67,7 @@
         <where>
             receiveStatus is null and sendStatus is null
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
-            <if test="secret != null and secret != ''">and secret = #{secret}</if>
+            <if test="secret != null and secret != ''">and secret LIKE CONCAT('%',#{secret},'%')</if>
         </where>
     </select>
 

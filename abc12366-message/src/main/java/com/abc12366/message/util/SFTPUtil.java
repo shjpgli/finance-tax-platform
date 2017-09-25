@@ -1,5 +1,6 @@
 package com.abc12366.message.util;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.jcraft.jsch.*;
 
 import java.io.*;
@@ -132,7 +133,9 @@ public class SFTPUtil {
     public Map<String, String> uploadByByte(String directory, List<Byte> content, String fileName, ChannelSftp sftp) {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            sftp.cd("/abc12366/images");
+            String imagesuri = SpringCtxHolder.getProperty("sftp_imagesuri");
+//            sftp.cd("/abc12366/images");
+            sftp.cd(imagesuri);
             if (isDirExist(directory, sftp)) {
                 sftp.cd(directory);
             } else {
@@ -142,7 +145,7 @@ public class SFTPUtil {
                 sftp.cd(directory);
             }
             String storeName = rename(fileName);
-            String filePath = "/abc12366/images/" + directory + "/" + storeName;
+            String filePath = imagesuri + "/" + directory + "/" + storeName;
             OutputStream outputStream = sftp.put(filePath);
             byte[] buffer = null;
             List<Byte> content1 = (List<Byte>) content;

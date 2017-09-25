@@ -38,4 +38,7 @@ public interface IActivityService {
 
     // 查询微信红包信息
     WxRedEnvelop gethbinfo(String id);
+
+    // 导入红包数据
+    void importJSON(List<WxRedEnvelop> redEnvelopList);
 }

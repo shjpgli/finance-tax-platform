@@ -1,5 +1,10 @@
 package com.abc12366.uc.model.weixin;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -13,20 +18,33 @@ public class WxRedEnvelop {
     // （主键）
     private String id;
     // 红包口令
+    @NotEmpty
+    @Length(min = 6, max = 32)
     private String secret;
     // 口令产生时间
+    @NotNull
     private Date createTime;
     // 红包活动编号（主键）
+    @NotEmpty
+    @Length(min = 16, max = 64)
     private String activityId;
     // 活动起始时间
+    @NotNull
     private Date startTime;
     // 活动截止时间
+    @NotNull
     private Date endTime;
     // 红包金额
+    @NotNull
+    @Min(1)
     private Double amount;
     // 红包发放模式（固定金额、随机金额）
+    @NotEmpty
+    @Length(min = 1, max = 1)
     private String amountType;
     // 中奖概率（1%-100%）
+    @NotEmpty
+    @Length(min = 2, max = 10)
     private String probability;
     // 红包中奖金额
     private Double sendAmount;

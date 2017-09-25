@@ -107,7 +107,7 @@ public class ActivityService implements IActivityService {
             }
             WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                     .id(Utils.uuid().replaceAll("-", ""))
-                    .secret(secretRule(activity.getRuleType(), activity.getRule()))
+                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId))
                     .createTime(new Date())
                     .activityId(activity.getId())
                     .startTime(activity.getStartTime())
@@ -224,6 +224,18 @@ public class ActivityService implements IActivityService {
         return redEnvelop;
     }
 
+    @Override
+    public void importJSON(List<WxRedEnvelop> redEnvelopList) {
+        if (redEnvelopList.size() > 0 && redEnvelopList.size() <= 500) {
+            for(WxRedEnvelop redEnvelop : redEnvelopList) {
+                redEnvelop.setId(Utils.uuid().replaceAll("-", ""));
+                activityMapper.generateSecret(redEnvelop);
+            }
+        } else {
+            throw new ServiceException(6008);
+        }
+    }
+
     /**
      * 查询未抽奖的口令，过滤已中奖、已抽奖的数据
      */
@@ -328,16 +340,27 @@ public class ActivityService implements IActivityService {
     /**
      * 口令生成规则
      */
-    private String secretRule(String ruleType, String rule) {
-        // 规则1口令格式为：2个大写字母+六位1至9个数字组合的随机字符串，总共8位长度
+    private String secretRule(String ruleType, String rule, String activityId) {
         if ("1".equals(ruleType)) {
-            String random = String.valueOf(new Random().nextInt(1000000));
-            if (random.length() < 6) { // 不足6位补0
-                for (int i = 0; i < 6 - random.length(); i++) {
-                    random = "0" + random;
-                }
+              // 2个大写字母+六位1至9个数字组合的随机字符串，总共8位长度
+//            String random = String.valueOf(new Random().nextInt(1000000));
+//            if (random.length() < 6) { // 不足6位补0
+//                for (int i = 0; i < 6 - random.length(); i++) {
+//                    random = "0" + random;
+//                }
+//            }
+//            return rule + random;
+
+            // 规则1口令格式为：大写字母+1至9个数字组合的随机字符串，总共8位长度
+            String candidateStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 8; i++) {
+                int selectedChar = ThreadLocalRandom.current().nextInt(0, candidateStr.length());
+                sb.append(candidateStr.charAt(selectedChar));
             }
-            return rule + random;
+            String secret = sb.toString();
+            List<WxRedEnvelop> dataList = selectRedEnvelop(activityId, secret);
+            return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId) : secret;
         } else {
             // 规则2口令格式为：管理员自主输入的中文字符串，用#符号分割，
             // 如：艾博克#财税平台#爱我中华#美丽中国，只要匹配其中一个词即可

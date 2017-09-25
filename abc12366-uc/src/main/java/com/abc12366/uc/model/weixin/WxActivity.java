@@ -3,6 +3,7 @@ package com.abc12366.uc.model.weixin;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -44,6 +45,7 @@ public class WxActivity {
     private String amountType;
     // 随机最大金额/固定金额
     @NotNull
+    @Min(1)
     private Double amount;
     // 中奖概率（1%-100%）
     @NotEmpty
