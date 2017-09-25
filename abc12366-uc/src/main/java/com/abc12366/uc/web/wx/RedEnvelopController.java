@@ -97,4 +97,17 @@ public class RedEnvelopController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+
+    /**
+     * 导入红包数据
+     */
+    @PostMapping("/import")
+    public ResponseEntity importJSON(@Valid @RequestBody List<WxRedEnvelop> redEnvelopList) {
+        LOGGER.info("{}", redEnvelopList);
+        iActivityService.importJSON(redEnvelopList);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
 }
