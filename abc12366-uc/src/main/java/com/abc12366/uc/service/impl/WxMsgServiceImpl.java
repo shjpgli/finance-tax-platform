@@ -93,7 +93,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
                         		String eventKey=map.get("EventKey");
                         		String[] infos=eventKey.split(",");
                         		LOGGER.info("用户扫码关注(EventKey):" +eventKey);
-                        		if("AA".equals(infos[0])){//用户关注以及自动绑定
+                        		if("qrscene_AA".equals(infos[0])){//用户关注以及自动绑定
                         			Map<String, String> tks1 = new HashMap<String, String>();
                         	        tks1.put("access_token", WxGzhClient.getInstanceToken());
                         	        tks1.put("openid", map.get("FromUserName"));
