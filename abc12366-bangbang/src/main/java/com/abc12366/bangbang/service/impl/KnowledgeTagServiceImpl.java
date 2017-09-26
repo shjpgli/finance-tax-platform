@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +71,39 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
             tag.setUpdateUser(UcUserCommon.getAdminId());
         }
         knowledgeTagMapper.insertBatch(knowledgeTags);
+        return knowledgeTags;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<KnowledgeTag> addBatchByOtherChannel(List<KnowledgeTag> knowledgeTags) {
+        List<KnowledgeTag> updateList = new ArrayList<>();
+        List<KnowledgeTag> insertList = new ArrayList<>();
+
+        for (KnowledgeTag tag: knowledgeTags){
+            KnowledgeTag tag1 = knowledgeTagMapper.selectByName(tag.getName());
+            if(tag1 != null && tag1.getTagType().indexOf(tag.getTagType()) > -1 && tag1.getStatus()){
+                throw new ServiceException(4520);
+            }
+            if(tag1 != null && tag1.getTagType().indexOf(tag.getTagType()) > -1 && !tag1.getStatus()){
+                throw new ServiceException(4521);
+            }
+            tag.setUpdateUser(UcUserCommon.getAdminId());
+            if(tag1 == null){
+                tag.setId(Utils.uuid());
+                tag.setCreateUser(UcUserCommon.getAdminId());
+                insertList.add(tag);
+            }else{
+                tag.setId(tag1.getId());
+                updateList.add(tag);
+            }
+        }
+        if(!insertList.isEmpty()){
+            knowledgeTagMapper.insertBatch(insertList);
+        }
+        if(!updateList.isEmpty()){
+            knowledgeTagMapper.batchUpdateTypeByName(updateList);
+        }
         return knowledgeTags;
     }
 
