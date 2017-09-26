@@ -70,8 +70,8 @@ public class QueClassifyServiceImpl implements QueClassifyService {
             String parentCode = classifyBo.getParentCode();
 
             if(parentCode == null || "".equals(parentCode)){
-                parentCode = "1";
-                classifyBo.setParentCode("1");
+                parentCode = "0";
+                classifyBo.setParentCode("0");
             }
 
             for(int i=0;i<20;i++){

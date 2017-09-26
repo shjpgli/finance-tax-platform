@@ -11,6 +11,7 @@ import com.abc12366.bangbang.model.curriculum.CurriculumClassify;
 import com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyTagBo;
+import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifysBo;
 import com.abc12366.bangbang.service.CurrClassifyService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
@@ -21,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/8/11.
@@ -64,6 +62,39 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
     }
 
     @Override
+    public List<CurriculumClassifysBo> selectClassifyListsy() {
+        List<CurriculumClassifysBo> classifysBoList;
+        try {
+            //查询课程分类列表
+            classifysBoList = classifyRoMapper.selectClassifyListsy();
+            if(classifysBoList != null){
+                for (CurriculumClassifysBo classifysBo : classifysBoList){
+                    String classifyId = classifysBo.getClassifyId();
+                    Map<String, Object> dataMap = new HashMap<>();
+                    dataMap.put("parentId",classifyId);//父ID
+                    //查询课程分类列表
+                    List<CurriculumClassifyBo> classifyBoList = classifyRoMapper.selectList(dataMap);
+
+                    if(classifyBoList != null){
+                        for(CurriculumClassifyBo classifyBo : classifyBoList){
+                            List<CurriculumClassifyTag> classifyTagBoList = tagRoMapper.selectList(classifyBo.getClassifyId());
+                            classifyBo.setTagList(classifyTagBoList);
+                        }
+                        classifysBo.setClassifyList(classifyBoList);
+                    }
+
+                }
+            }
+
+
+        } catch (Exception e) {
+            LOGGER.error("查询课程分类信息异常：{}", e);
+            throw new ServiceException(4300);
+        }
+        return classifysBoList;
+    }
+
+    @Override
     public CurriculumClassifyBo save(CurriculumClassifyBo classifyBo) {
 
             JSONObject jsonStu = JSONObject.fromObject(classifyBo);
@@ -75,6 +106,11 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
             String code = "";
 
             String parentId = classifyBo.getParentId();
+
+            if(parentId == null || "".equals(parentId)){
+                parentId = "0";
+                classifyBo.setParentId("0");
+            }
 
             for(int i=0;i<20;i++){
                 code = this.genCodes(6);

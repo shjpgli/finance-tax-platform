@@ -2,6 +2,7 @@ package com.abc12366.bangbang.web.curriculum;
 
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyTagBo;
+import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifysBo;
 import com.abc12366.bangbang.service.CurrClassifyService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -55,6 +56,16 @@ public class CurrClassifyController {
         dataMap.put("classifyId",classifyId);//分类ID
         dataMap.put("parentId",parentId);//父ID
         List<CurriculumClassifyBo> dataList = classifyService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+
+    }
+
+    /**
+     * 课程分类列表查询(查大类小类标签)(供前端使用)
+     */
+    @GetMapping(path = "/selectClassifyListsy")
+    public ResponseEntity selectClassifyListsy() {
+        List<CurriculumClassifysBo> dataList = classifyService.selectClassifyListsy();
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
 
     }
