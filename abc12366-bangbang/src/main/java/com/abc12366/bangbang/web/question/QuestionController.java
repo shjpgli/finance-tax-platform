@@ -34,10 +34,29 @@ public class QuestionController {
     private QuestionService questionService;
 
     /**
-     * 问题列表查询(最新)
+     * 问题列表查询
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 问题列表查询(最新)(无需登录)
+     */
+    @GetMapping(path = "/selectListNew")
+    public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "title", required = false) String title,
                                      @RequestParam(value = "tag", required = false) String tag,
@@ -139,6 +158,16 @@ public class QuestionController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
+        //查询问题信息
+        QuestionBo questionBo = questionService.selectQuestion(id);
+        return ResponseEntity.ok(Utils.kv("data", questionBo));
+    }
+
+    /**
+     * 查询单个问题信息(无需登录)
+     */
+    @GetMapping(path = "selectQuestion/{id}")
+    public ResponseEntity selectQuestion(@PathVariable String id) {
         //查询问题信息
         QuestionBo questionBo = questionService.selectQuestion(id);
         return ResponseEntity.ok(Utils.kv("data", questionBo));

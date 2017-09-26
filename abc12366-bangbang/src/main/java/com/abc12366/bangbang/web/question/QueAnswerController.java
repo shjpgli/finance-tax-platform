@@ -52,6 +52,25 @@ public class QueAnswerController {
     }
 
     /**
+     * 问题回复列表查询(无需登录)
+     */
+    @GetMapping(path = "/selectListByQuestionId")
+    public ResponseEntity selectListByQuestionId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "userId", required = false) String userId,
+                                     @RequestParam(value = "questionId", required = false) String questionId,
+                                     @RequestParam(value = "isAccept", required = false) String isAccept) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//
+        dataMap.put("questionId", questionId);//
+        dataMap.put("isAccept", isAccept);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 问题回复评论列表查询
      */
     @GetMapping(path = "/selectListByParentId")

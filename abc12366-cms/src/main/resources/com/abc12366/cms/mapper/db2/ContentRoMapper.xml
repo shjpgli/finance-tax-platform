@@ -180,7 +180,10 @@
 		b.staticLink,
         d.siteName,
 		c.channelPath,d.sitePath,d.domain
-		FROM cms_content a LEFT JOIN cms_contenttagid t ON t.contentId = a.contentId
+		FROM cms_content a
+		<if test="tagId != null and tagId != ''">
+			LEFT JOIN cms_contenttagid t ON t.contentId = a.contentId
+		</if>
         LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
 		LEFT JOIN cms_site d ON a.siteId = d.siteId

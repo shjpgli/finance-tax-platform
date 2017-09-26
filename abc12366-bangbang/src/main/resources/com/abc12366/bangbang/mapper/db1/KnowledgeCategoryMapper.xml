@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, name, code, parentCode, parentName, sort, createTime, updateTime, createUser, updateUser
+        id, name, code, parentCode, sort, createTime, updateTime, createUser, updateUser
     </sql>
 
     <!-- 查询all -->

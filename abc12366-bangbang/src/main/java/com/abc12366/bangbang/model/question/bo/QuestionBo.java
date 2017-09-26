@@ -3,6 +3,7 @@ package com.abc12366.bangbang.model.question.bo;
 import com.abc12366.bangbang.model.question.QuestionTag;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 
@@ -50,6 +51,9 @@ public class QuestionBo implements Serializable {
 	/**是否推荐**/
 	private Boolean isRecommend;
 
+	/**推荐创建时间**/
+	private java.util.Date recommendTime;
+
 	private List<QuestionTag> tagList;
 
     /**标签**varchar(1000)**/
@@ -66,6 +70,12 @@ public class QuestionBo implements Serializable {
 
     /****varchar(64)**/
     private String factionId;
+
+    /**用户昵称**varchar(64)**/
+    private String nickname;
+
+    /**用户图片**/
+    private String userPicturePath;
 
 
 	public void setId(String id){
@@ -173,6 +183,15 @@ public class QuestionBo implements Serializable {
 		return this;
 	}
 
+	public Date getRecommendTime() {
+		return recommendTime;
+	}
+
+	public QuestionBo setRecommendTime(Date recommendTime) {
+		this.recommendTime = recommendTime;
+		return this;
+	}
+
 	public String getTag() {
         return tag;
     }
@@ -211,5 +230,21 @@ public class QuestionBo implements Serializable {
 
     public void setFactionId(String factionId) {
         this.factionId = factionId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 }
