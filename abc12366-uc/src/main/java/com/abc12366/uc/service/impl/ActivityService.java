@@ -201,7 +201,7 @@ public class ActivityService implements IActivityService {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
         if (redEnvelop != null) {
             GetRedPack grp = new GetRedPack.Builder()
-                    .nonce_str(redEnvelop.getId())
+                    .nonce_str(redEnvelop.getId().replaceAll("-", ""))
                     .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
                     .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                     .appid(SpringCtxHolder.getProperty("abc.appid"))
@@ -254,7 +254,7 @@ public class ActivityService implements IActivityService {
      */
     private void sendRedPack(WxLotteryBO lotteryBO, WxActivity activity, WxRedEnvelop redEnvelop) {
         SendRedPack srp = new SendRedPack.Builder()
-                .nonce_str(redEnvelop.getId())
+                .nonce_str(redEnvelop.getId().replaceAll("-", ""))
                 .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
                 .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                 .wxappid(SpringCtxHolder.getProperty("abc.appid"))
