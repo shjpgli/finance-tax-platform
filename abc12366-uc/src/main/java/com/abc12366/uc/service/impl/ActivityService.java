@@ -50,15 +50,17 @@ public class ActivityService implements IActivityService {
             dataList.stream().filter(wa -> wa.getStatus()).forEach(wa -> {
                 // 统计中奖人数、金额
                 SentReceived sr = activityRoMapper.selectSentReceivedCount(wa.getId());
-                wa.setSent(sr.getSent());
-                wa.setSentAmount(sr.getSentAmount());
-                wa.setReceived(sr.getReceived());
-                wa.setReceivedAmount(sr.getReceivedAmount());
+                if (sr != null) {
+                    wa.setSent(sr.getSent());
+                    wa.setSentAmount(sr.getSentAmount());
+                    wa.setReceived(sr.getReceived());
+                    wa.setReceivedAmount(sr.getReceivedAmount());
 
-                // 统计参与人数
-                WxLotteryLog lotteryLog = new WxLotteryLog();
-                lotteryLog.setActivityId(wa.getId());
-                wa.setNop(activityRoMapper.selectLotteryLogList(lotteryLog).size());
+                    // 统计参与人数
+                    WxLotteryLog lotteryLog = new WxLotteryLog();
+                    lotteryLog.setActivityId(wa.getId());
+                    wa.setNop(activityRoMapper.selectLotteryLogList(lotteryLog).size());
+                }
             });
         }
         return dataList;
