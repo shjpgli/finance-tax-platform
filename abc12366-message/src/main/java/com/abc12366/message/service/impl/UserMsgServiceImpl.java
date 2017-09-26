@@ -56,7 +56,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         return data;
     }
 
-    @KafkaListener(topics = "user_message_topic")
+//    @KafkaListener(topics = "user_message_topic")
     public void handleUserMessage(ConsumerRecord<String, String> record) {
         LOGGER.info("user_message_topic: " + record.value());
         UserMessage data = JSON.parseObject(record.value(), UserMessage.class);

@@ -14,11 +14,11 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfig {
 
     // kafka服务器地址
-    @Value("${spring.kafka.bootstrap-servers}")
+//    @Value("${spring.kafka.bootstrap-servers}")
     public String bootstrap_servers;
 
     // kafka消费者group-id
-    @Value("${spring.kafka.consumer.group-id}")
+//    @Value("${spring.kafka.consumer.group-id}")
     public String consumer_group_id;
 
     @Value("${message.netease.appKey}")
