@@ -1247,4 +1247,10 @@ public class OrderServiceImpl implements OrderService {
         return oList;
     }
 
+    @Override
+    public List<OrderBO> selectCurriculumOrderList(OrderBO orderBO, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        return orderRoMapper.selectCurriculumOrderList(orderBO);
+    }
+
 }
