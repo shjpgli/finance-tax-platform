@@ -9,7 +9,7 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="knowledgeTagRel" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.KnowledgeTagRel" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_tag_rel
@@ -51,7 +51,7 @@
     </delete>
 
     <!-- 添加 -->
-    <insert id="insert" parameterType="knowledgeTagRel">
+    <insert id="insert" parameterType="com.abc12366.bangbang.model.KnowledgeTagRel">
         INSERT INTO bb_knowledge_tag_rel
         (id,knowledgeId,tagId)
         VALUES
@@ -70,7 +70,7 @@
 
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insertSelective" parameterType="knowledgeTagRel">
+    <insert id="insertSelective" parameterType="com.abc12366.bangbang.model.KnowledgeTagRel">
         INSERT INTO bb_knowledge_tag_rel
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -98,7 +98,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKeySelective" parameterType="knowledgeTagRel">
+    <update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.KnowledgeTagRel">
         UPDATE bb_knowledge_tag_rel
         <set>
             <if test="knowledgeId != null">
@@ -113,7 +113,7 @@
     </update>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKey" parameterType="knowledgeTagRel">
+    <update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.KnowledgeTagRel">
         UPDATE bb_knowledge_tag_rel
         SET
         knowledgeId = #{knowledgeId},

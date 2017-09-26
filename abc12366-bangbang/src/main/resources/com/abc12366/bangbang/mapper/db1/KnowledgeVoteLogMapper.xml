@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 列表查询 -->
-	<select id="selectList" resultType="knowledgeVoteLogBO"
+	<select id="selectList" resultType="com.abc12366.bangbang.model.bo.KnowledgeVoteLogBO"
 			parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
 		SELECT t_votelog.*,t_user.username AS userName, t_base.subject AS knowledgeSubject,t_vote_msg.content as replyMsg
 		FROM
@@ -45,14 +45,14 @@
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="knowledgeVoteLog" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.KnowledgeVoteLog" parameterType="java.lang.String">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_knowledge_vote_log
 		WHERE id = #{id}
 	</select>
 	<!-- 查询（根据查询） -->
-	<select id="selectByUserVotedKnowledge" resultType="knowledgeVoteLog">
+	<select id="selectByUserVotedKnowledge" resultType="com.abc12366.bangbang.model.KnowledgeVoteLog">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_knowledge_vote_log
@@ -82,7 +82,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="knowledgeVoteLog">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.KnowledgeVoteLog">
 		INSERT INTO bb_knowledge_vote_log
 		(id,userId,knowledgeId,isUseFull,sourceIP,createTime)
 		VALUES
@@ -90,7 +90,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="knowledgeVoteLog">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.KnowledgeVoteLog">
 		INSERT INTO bb_knowledge_vote_log
 		<trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -136,7 +136,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="knowledgeVoteLog">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.KnowledgeVoteLog">
 		UPDATE bb_knowledge_vote_log
 		<set>
 			<if test="userId != null">
@@ -160,7 +160,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="knowledgeVoteLog">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.KnowledgeVoteLog">
 		 UPDATE bb_knowledge_vote_log
 		 SET
 			 userId = #{userId},

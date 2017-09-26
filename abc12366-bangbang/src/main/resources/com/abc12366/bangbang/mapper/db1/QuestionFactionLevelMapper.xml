@@ -9,14 +9,14 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectList" resultType="questionFactionLevel">
+	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_question_fashion_level
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="questionFactionLevel" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionFactionLevel" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_fashion_level
@@ -30,7 +30,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionFactionLevel">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
 		 INSERT INTO bb_question_fashion_level
  		(id,name,honorValue,createTime,createAdmin,updateTime,updateAdmin) 
 		 VALUES 
@@ -38,7 +38,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="questionFactionLevel">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
 		 INSERT INTO bb_question_fashion_level
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -79,7 +79,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="questionFactionLevel">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
 		 UPDATE bb_question_fashion_level
  		 <set> 
 			<if test="name != null">
@@ -100,7 +100,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="questionFactionLevel">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
 		 UPDATE bb_question_fashion_level
 		 SET 
 			 name = #{name},
