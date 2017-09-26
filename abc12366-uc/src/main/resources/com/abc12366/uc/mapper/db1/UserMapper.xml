@@ -35,6 +35,7 @@
             <if test="wxopenid != null">wxopenid = #{wxopenid},</if>
             <if test="wxheadimg != null">wxheadimg = #{wxheadimg},</if>
             <if test="wxnickname != null">wxnickname = #{wxnickname},</if>
+            <if test="bdqudao != null">bdqudao = #{bdqudao},</if>
         </set>
         where id=#{id}
     </update>
