@@ -27,4 +27,13 @@
                              where uu.id=#{userId} limit 1) a
         on a.id = uupi.levelId limit 1
     </select>
+
+    <select id="selectOneByLevelCode" parameterType="java.lang.String" resultType="com.abc12366.uc.model.PrivilegeItem">
+        select uupi.levelId, uupi.zxhyxz, uupi.hyjfjc, uupi.hyjyzjc, uupi.yhsjjl, uupi.csjyzmyz_times,
+                uupi.csjyzmyz_baoyou, uupi.yhzhhbtq,uupi.zxkcpx, uupi.xxkcpx, uupi.xxhyhd, uupi.xshyr,
+                uupi.grzhbdqys, uupi.ywtx_zn, uupi.ywtx_wx, uupi.ywtx_dx, uupi.fbqzxx,uupi.srlb,
+                uupi.yhjfzr_cs,uupi.yhjfzr_sx, uupi.spfpmyq, uupi.zskfjl, uupi.csqk
+        from uc_uvip_privilege_item uupi join uc_uvip_level uul on uupi.levelId = uul.id
+        and uul.levelCode = #{levelCode}
+    </select>
 </mapper>

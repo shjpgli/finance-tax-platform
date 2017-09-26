@@ -11,4 +11,6 @@ public interface PrivilegeItemRoMapper {
     PrivilegeItem selectOne(String levelId);
 
     PrivilegeItem selecOneByUser(String userId);
+
+    PrivilegeItem selectOneByLevelCode(String userOriginalLevel);
 }
