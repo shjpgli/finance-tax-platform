@@ -21,7 +21,7 @@
         SELECT uul.id id,
         (SELECT uur.name FROM uc_upoints_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) channel,
         (uul.income-uul.outgo)  points,
-        (SELECT uu.points from uc_user uu where uu.id=uul.userId) sums,
+        uul.usablePoints sums,
         uul.createTime createTime,
         (SELECT uur.description FROM uc_upoints_rule uur WHERE uur.id = uul.ruleId or uur.code = uul.ruleId limit 1) remark
         FROM uc_upoints_log uul
