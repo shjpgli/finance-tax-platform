@@ -39,8 +39,10 @@
     <select id="selectRedEnvelopList" resultType="com.abc12366.uc.model.weixin.WxRedEnvelop"
             parameterType="com.abc12366.uc.model.weixin.WxRedEnvelop">
         SELECT
-        <include refid="Base_RedEnvelop_List"/>
-        FROM uc_wxredenvelop
+        r.id, r.secret, r.createTime, r.activityId, r.startTime, r.endTime, r.amount, r.amountType, r.probability,
+        r.sendAmount, r.sendStatus, r.sendTimes, r.sendTime, r.receiveStatus, r.receiveTime, r.ip, r.openId,a.name
+        FROM uc_wxredenvelop r
+        LEFT JOIN uc_wxactivity a ON a.id = r.activityId
         <where>
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
             <if test="receiveStatus != null and receiveStatus != ''">and receiveStatus = #{receiveStatus}</if>

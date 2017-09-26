@@ -63,6 +63,9 @@ public class WxRedEnvelop {
     // 用户OPENID
     private String openId;
 
+    //活动名称
+    private String name;
+
     public WxRedEnvelop() {
     }
 
@@ -266,6 +269,14 @@ public class WxRedEnvelop {
                 ", ip='" + ip + '\'' +
                 ", openId='" + openId + '\'' +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public static final class Builder {
