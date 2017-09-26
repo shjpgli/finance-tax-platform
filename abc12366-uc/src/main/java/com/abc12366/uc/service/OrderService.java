@@ -147,4 +147,6 @@ public interface OrderService {
     void confirmOrder(Order order);
 
     List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize);
+
+    List<OrderBO> selectCurriculumOrderList(OrderBO orderBO, int pageNum, int pageSize);
 }

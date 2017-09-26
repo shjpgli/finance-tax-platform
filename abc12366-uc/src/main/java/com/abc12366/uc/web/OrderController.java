@@ -4,6 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.OrderBack;
+import com.abc12366.uc.model.OrderProduct;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.OrderService;
@@ -209,6 +210,38 @@ public class OrderController {
                 ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
     }
 
+
+    /**
+     * 课程订单查询
+     *
+     */
+    @GetMapping(path = "/curriculum")
+    public ResponseEntity selectCurriculumOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                     @RequestParam(value = "goodsId", required = true) String goodsId,
+                                     @RequestParam(value = "nickname", required = false) String nickname,
+                                     @RequestParam(value = "startTime", required = false) String startTime,
+                                     @RequestParam(value = "endTime", required = false) String endTime) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        OrderBO orderBO = new OrderBO();
+        UserBO user = new UserBO();
+        user.setNickname(nickname);
+        orderBO.setUser(user);
+        orderBO.setGoodsId(goodsId);
+        if (startTime != null && !"".equals(startTime)) {
+            orderBO.setStartTime(DataUtils.StrToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            orderBO.setEndTime(DataUtils.StrToDate(endTime));
+        }
+
+        List<OrderBO> orderList = orderService.selectCurriculumOrderList(orderBO, pageNum, pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
+        LOGGER.info("{}", orderList);
+        return (orderList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
+    }
 
     /**
      * 查询订单详情
