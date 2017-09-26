@@ -1,4 +1,4 @@
-package com.abc12366.bangbang.web.Question;
+package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionFactionMemberLevel;
 import com.abc12366.bangbang.service.QuestionFactionMemberLevelService;
