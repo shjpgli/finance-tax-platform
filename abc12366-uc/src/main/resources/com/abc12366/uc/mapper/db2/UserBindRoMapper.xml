@@ -79,4 +79,36 @@
         and uud.status = '1'
         and (nsrsbh = #{nsrsbh} OR shxydm=#{shxydm})
     </select>
+
+    <select id="dzsbCount" resultType="com.abc12366.uc.model.UserDzsb">
+        select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
+        from uc_user_dzsb
+        where userId=#{userId}
+        and status=1
+    </select>
+
+    <select id="hngsCount" resultType="com.abc12366.uc.model.UserHngs">
+        select id,userId,djxh,nsrsbh,nsrmc,shxydm,swjgMc,swjgDm,bsy,smrzzt,status,createTime,lastUpdate,roleId
+        from uc_user_hngs
+        where userId=#{userId}
+        and status=1
+    </select>
+
+    <select id="hndsCount" resultType="com.abc12366.uc.model.UserHnds">
+        select id, userId, username, subuser, nsrmc, nsrsbh, djxh, shxydm, swjgMc, swjgDm, status, createTime,
+        lastUpdate
+        from uc_user_hnds
+        where userId=#{userId}
+        and status=1
+    </select>
+
+    <select id="bindCount" resultType="com.abc12366.uc.model.bo.ShxydmBO" parameterType="java.lang.String">
+        SELECT DISTINCT d.shxydm FROM (
+            SELECT a.shxydm FROM uc_user_dzsb a WHERE a.userId=#{userId} AND a.status=1
+            UNION
+            SELECT b.shxydm FROM uc_user_hngs b WHERE b.userId=#{userId} AND b.status=1
+            UNION
+            SELECT c.shxydm FROM uc_user_hnds c WHERE c.userId=#{userId} AND c.status=1
+        ) d
+    </select>
 </mapper>
