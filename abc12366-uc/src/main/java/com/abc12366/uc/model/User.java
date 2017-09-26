@@ -35,6 +35,7 @@ public class User {
     private String wxopenid;
     private String wxheadimg;
     private String wxnickname;
+    private String bdqudao;
     public String getWxopenid() {
 		return wxopenid;
 	}
@@ -229,4 +230,12 @@ public class User {
     public void setVipImage(String vipImage) {
         this.vipImage = vipImage;
     }
+
+	public String getBdqudao() {
+		return bdqudao;
+	}
+
+	public void setBdqudao(String bdqudao) {
+		this.bdqudao = bdqudao;
+	}
 }

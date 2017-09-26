@@ -53,7 +53,7 @@ public class QuestionController {
     }
 
     /**
-     * 问题列表查询(最新)(无需登录)
+     * 问题列表查询(最新)
      */
     @GetMapping(path = "/selectListNew")
     public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -83,7 +83,7 @@ public class QuestionController {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//
         dataMap.put("tag", tag);//
-        dataMap.put("classifyCode", classifyCode);//
+        dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectListByBrowseNum(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
@@ -164,7 +164,7 @@ public class QuestionController {
     }
 
     /**
-     * 查询单个问题信息(无需登录)
+     * 查询单个问题信息(
      */
     @GetMapping(path = "selectQuestion/{id}")
     public ResponseEntity selectQuestion(@PathVariable String id) {

@@ -37,7 +37,7 @@ public class Utils {
      * @return uuid
      */
     public static String uuid() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
     public static void main(String[] args) throws Exception {

@@ -20,4 +20,6 @@ public interface IWxQrcodeService {
     Qrcode update(Qrcode qrcode) throws UnsupportedEncodingException;
 
     void delete(String id);
+
+    String getWxQrcode(String codeStr) throws UnsupportedEncodingException;
 }

@@ -41,4 +41,28 @@
         </if>
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectMemberHonorList" resultType="com.abc12366.bangbang.model.question.QuestionMemberHonor" parameterType="java.lang.String">
+        SELECT
+            memberId,	userId,factionId,
+            (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId = '' AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') and factionId = m.factionId) answerNum,
+            (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId != '' AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') and factionId = m.factionId) discussNum,
+            (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId = '' AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') and isAccept = '1' and factionId = m.factionId) adoptNum
+        FROM bb_question_faction_member m
+            WHERE factionId = #{factionId}
+    </select>
+
+    <!-- 查询邦派精彩回答数 -->
+    <select id="selectSplendidNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from (SELECT
+            id,(SELECT count(id) FROM bb_question_answer where parentId != '' and parentId = a.id) plcnt,
+            (SELECT count(likeId) FROM bb_question_like where id = a.id) likecnt
+        FROM
+            bb_question_answer a
+        WHERE
+            parentId = '' and userId = #{userId}
+            AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+            AND factionId = #{factionId} ) b where b.plcnt >2 and b.likecnt >6;
+    </select>
+
 </mapper>

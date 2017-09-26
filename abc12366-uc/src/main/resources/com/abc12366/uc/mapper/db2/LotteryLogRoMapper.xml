@@ -5,6 +5,7 @@
     <select id="selectList" resultType="com.abc12366.uc.model.bo.LotteryLogBO" parameterType="java.util.Map">
         SELECT id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake
         ,(select a.username from uc_user a where a.id=z.userId) as userName
+        ,(select b.name from uc_lottery_activity b where b.id=z.activityId) as  activityName
         from uc_lottery_log z
         <where>
             <if test="isluck!=null">
@@ -19,6 +20,7 @@
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.LotteryLogBO" parameterType="java.lang.String">
 SELECT  id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake
  ,(select a.username from uc_user a where a.id=z.userId) as userName
+ ,(select b.name from uc_lottery_activity b where b.id=z.activityId) as  activityName
  from uc_lottery_log  z
 where id=#{id}
 </select>

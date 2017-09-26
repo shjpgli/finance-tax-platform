@@ -15,10 +15,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Date;
 
 /**
@@ -48,24 +50,9 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         String version = request.getHeader(Constant.VERSION_HEAD);
 
-//        try {
-//            request.setCharacterEncoding("UTF-8");
-//            int size = request.getContentLength();
-//            System.out.println(size);
-//
-//            InputStream is = request.getInputStream();
-//
-//            byte[] reqBodyBytes = readBytes(is, size);
-//
-//            String res = new String(reqBodyBytes);
-//
-//            System.out.println(res);
-//            response.setContentType("text/html;charset=UTF-8");
-//            response.setCharacterEncoding("UTF-8");
-//            response.getOutputStream().write(res.getBytes("utf-8"));
-//            response.flushBuffer();
-//        } catch (Exception e) {
-//        }
+        // body中前台传入的参数
+//        String bodyParam = getBodyString(request);
+//        System.out.println(bodyParam);
         LOGGER.info("URI:{}, Version:{}, IP:{}, User-Agent:{}", uri, version, addr, userAgent);
 
         // 版本头检查
@@ -151,34 +138,68 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         apiLogService.insert(log);
     }
 
-    public static final byte[] readBytes(InputStream is, int contentLen) {
-        if (contentLen > 0) {
-            int readLen = 0;
-
-            int readLengthThisTime = 0;
-
-            byte[] message = new byte[contentLen];
-
-            try {
-
-                while (readLen != contentLen) {
-
-                    readLengthThisTime = is.read(message, readLen, contentLen - readLen);
-
-                    if (readLengthThisTime == -1) {// Should not happen.
-                        break;
-                    }
-
-                    readLen += readLengthThisTime;
-                }
-
-                return message;
-            } catch (IOException e) {
-                // Ignore
-                // e.printStackTrace();
+    /**
+     * 获取请求Body
+     *
+     * @param request
+     * @return
+     */
+    public static String getBodyString(final ServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+        InputStream inputStream = null;
+        BufferedReader reader = null;
+        try {
+            inputStream = cloneInputStream(request.getInputStream());
+            reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
             }
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
 
-        return new byte[] {};
+    /**
+     * Description: 复制输入流</br>
+     *
+     * @param inputStream
+     * @return</br>
+     */
+    public static InputStream cloneInputStream(ServletInputStream inputStream) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        try {
+            while ((len = inputStream.read(buffer)) > -1) {
+                byteArrayOutputStream.write(buffer, 0, len);
+            }
+            byteArrayOutputStream.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        InputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+        return byteArrayInputStream;
     }
 }

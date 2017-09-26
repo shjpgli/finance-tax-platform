@@ -50,15 +50,17 @@ public class ActivityService implements IActivityService {
             dataList.stream().filter(wa -> wa.getStatus()).forEach(wa -> {
                 // 统计中奖人数、金额
                 SentReceived sr = activityRoMapper.selectSentReceivedCount(wa.getId());
-                wa.setSent(sr.getSent());
-                wa.setSentAmount(sr.getSentAmount());
-                wa.setReceived(sr.getReceived());
-                wa.setReceivedAmount(sr.getReceivedAmount());
+                if (sr != null) {
+                    wa.setSent(sr.getSent());
+                    wa.setSentAmount(sr.getSentAmount());
+                    wa.setReceived(sr.getReceived());
+                    wa.setReceivedAmount(sr.getReceivedAmount());
 
-                // 统计参与人数
-                WxLotteryLog lotteryLog = new WxLotteryLog();
-                lotteryLog.setActivityId(wa.getId());
-                wa.setNop(activityRoMapper.selectLotteryLogList(lotteryLog).size());
+                    // 统计参与人数
+                    WxLotteryLog lotteryLog = new WxLotteryLog();
+                    lotteryLog.setActivityId(wa.getId());
+                    wa.setNop(activityRoMapper.selectLotteryLogList(lotteryLog).size());
+                }
             });
         }
         return dataList;
@@ -199,7 +201,7 @@ public class ActivityService implements IActivityService {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
         if (redEnvelop != null) {
             GetRedPack grp = new GetRedPack.Builder()
-                    .nonce_str(redEnvelop.getId())
+                    .nonce_str(redEnvelop.getId().replaceAll("-", ""))
                     .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
                     .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                     .appid(SpringCtxHolder.getProperty("abc.appid"))
@@ -252,7 +254,7 @@ public class ActivityService implements IActivityService {
      */
     private void sendRedPack(WxLotteryBO lotteryBO, WxActivity activity, WxRedEnvelop redEnvelop) {
         SendRedPack srp = new SendRedPack.Builder()
-                .nonce_str(redEnvelop.getId())
+                .nonce_str(redEnvelop.getId().replaceAll("-", ""))
                 .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
                 .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                 .wxappid(SpringCtxHolder.getProperty("abc.appid"))

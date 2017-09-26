@@ -1,11 +1,16 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.mapper.db1.PrivilegeItemMapper;
 import com.abc12366.uc.mapper.db2.PrivilegeItemRoMapper;
+import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.PrivilegeItem;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PrivilegeItemBO;
+import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.PrivilegeItemService;
+import com.abc12366.uc.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +32,9 @@ public class PrivilegeItemServiceImpl implements PrivilegeItemService {
     @Autowired
     private PrivilegeItemRoMapper privilegeRoMapper;
 
+    @Autowired
+    private UserRoMapper userRoMapper;
+
     @Override
     public PrivilegeItem update(PrivilegeItemBO privilegeItemBO) {
         LOGGER.info("{}", privilegeItemBO);
@@ -38,6 +46,11 @@ public class PrivilegeItemServiceImpl implements PrivilegeItemService {
 
     @Override
     public PrivilegeItem selecOneByUser(String userId) {
+        User user = userRoMapper.selectOne(userId);
+        //会员过期了，则返回普通用户权益
+        if (user == null || user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
+            return privilegeRoMapper.selectOneByLevelCode(Constant.USER_ORIGINAL_LEVEL);
+        }
         return privilegeRoMapper.selecOneByUser(userId);
     }
 

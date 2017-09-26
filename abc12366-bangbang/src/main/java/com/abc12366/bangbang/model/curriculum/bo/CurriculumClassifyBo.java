@@ -1,5 +1,8 @@
 package com.abc12366.bangbang.model.curriculum.bo;
+import com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag;
+
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -27,6 +30,8 @@ public class CurriculumClassifyBo implements Serializable {
 
     /**是否显示**int**/
     private Integer isDisplay;
+
+    private List<CurriculumClassifyTag> tagList;
 
     public String getClassifyId() {
         return classifyId;
@@ -75,5 +80,13 @@ public class CurriculumClassifyBo implements Serializable {
     public CurriculumClassifyBo setParentName(String parentName) {
         this.parentName = parentName;
         return this;
+    }
+
+    public List<CurriculumClassifyTag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<CurriculumClassifyTag> tagList) {
+        this.tagList = tagList;
     }
 }

@@ -124,4 +124,27 @@ public class WxQrcodeService implements IWxQrcodeService {
         data.setLastUpdate(new Date());
         qrcodeMapper.update(data);
     }
+
+	@Override
+	public String getWxQrcode(String codeStr) throws UnsupportedEncodingException {
+		    Map<String, String> tks = new HashMap<>();
+	        tks.put("access_token", WxGzhClient.getInstanceToken());
+		    Scene scene = new Scene();
+	        scene.setScene_str(codeStr);
+
+	        Info action_info = new Info();
+	        action_info.setScene(scene);
+
+	        Action action = new Action();
+	        action.setAction_name("QR_STR_SCENE");
+	        action.setAction_info(action_info);
+	        action.setExpire_seconds(300000);
+
+	        TicketResp ticketResp = WxConnectFactory.post(WechatUrl.WXQRCODE_TICKET, tks, action, TicketResp.class);
+	        if (ticketResp != null && !StringUtils.isEmpty(ticketResp.getTicket())) {
+                return Constant.WEIXIN_QRCODE + URLEncoder.encode(ticketResp.getTicket(), "UTF-8");
+            }else{
+            	return null;
+            }
+	}
 }

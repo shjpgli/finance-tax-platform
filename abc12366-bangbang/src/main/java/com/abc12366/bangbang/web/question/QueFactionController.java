@@ -72,6 +72,7 @@ public class QueFactionController {
     public ResponseEntity selectListExcellent(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         Map<String, Object> dataMap = new HashMap<>();
+        queFactionService.autoCalculateFactionHonor();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionListBo> dataList = queFactionService.selectListExcellent(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
