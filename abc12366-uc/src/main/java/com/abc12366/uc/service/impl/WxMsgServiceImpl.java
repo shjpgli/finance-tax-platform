@@ -202,6 +202,15 @@ public class WxMsgServiceImpl implements IWxMsgService {
         String msgId = Utils.uuid();
         returnMsg.setId(msgId);
         returnMsg.setCreateDate(now);
+
+        ReturnMsg newMsg  = new ReturnMsg();
+        newMsg.setSetting(returnMsg.getSetting());
+        newMsg.setKeyString(returnMsg.getKeyString());
+        List<ReturnMsg>  list = msgRoMapper.selectList(newMsg);
+        if(list.size()>0){
+            LOGGER.info("名称不能重复");
+            throw new ServiceException(9999,"名称不能重复");
+        }
         msgMapper.insertRemsg(returnMsg);
         return returnMsg;
     }
