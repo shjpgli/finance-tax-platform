@@ -19,16 +19,17 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List" />
-        FROM bb_curriculum_classify
+        t1.*, t2.classifyName as parentName
+        FROM bb_curriculum_classify t1
+        LEFT JOIN bb_curriculum_classify t2 ON t1.parentId = t2.classifyId
         WHERE 1=1
         <if test="parentId != null and parentId != ''">
-            AND parentId = #{parentId}
+            AND t1.parentId = #{parentId}
         </if>
         <if test="classifyId != null and classifyId != ''">
-            AND classifyId = #{classifyId}
+            AND t1.classifyId = #{classifyId}
         </if>
-        ORDER BY priority ASC
+        ORDER BY t1.priority ASC
     </select>
 
     <!-- 查询分类ID是否已存在 -->
