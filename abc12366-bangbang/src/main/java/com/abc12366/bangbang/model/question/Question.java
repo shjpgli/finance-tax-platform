@@ -66,6 +66,12 @@ public class Question implements Serializable {
     /**回复数**int(11)**/
     private Integer likeNum;
 
+    /**用户昵称**varchar(64)**/
+    private String nickname;
+
+    /**用户图片**/
+    private String userPicturePath;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -211,5 +217,21 @@ public class Question implements Serializable {
 
     public void setLikeNum(Integer likeNum) {
         this.likeNum = likeNum;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
     }
 }

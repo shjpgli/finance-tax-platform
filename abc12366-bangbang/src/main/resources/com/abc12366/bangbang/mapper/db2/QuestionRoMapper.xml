@@ -11,11 +11,11 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.Question" parameterType="java.lang.String">
 		 SELECT
-             id,	userId,	title,	detail,	status,tag,ip,	createTime,	lastUpdate,	points,	isSolve,	classifyCode,	browseNum, isRecommend,
-	      (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+             q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
 	      (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
-		 FROM bb_question q
-		 WHERE id = #{id}
+		 FROM bb_question q left join bb_user u on q.userId = u.id
+		 WHERE q.id = #{id}
 	</select>
 
     <!-- 最新问题 -->
