@@ -108,7 +108,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
                         case 2://微信已关注公众号并扫码
                         	String eventKey=map.get("EventKey");
                         	String[] infos=eventKey.split(",");
-                        	if("qrscene_AA".equals(infos[0])){//用户关注以及自动绑定
+                        	if("qrscene_AA".equals(infos[0])){//用户已关注自动绑定
                     			smbd(map,infos);
                     		}
                         	break;
