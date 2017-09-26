@@ -31,4 +31,6 @@ public interface QueFactionService {
 
     String delete(String factionId);
 
+    void autoCalculateFactionHonor();
+
 }

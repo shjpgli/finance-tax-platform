@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionFactionMember;
+import com.abc12366.bangbang.model.question.QuestionMemberHonor;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,6 +37,20 @@ public interface QuestionFactionMemberRoMapper {
      *
      **/
     List<QuestionFactionMemberBo> selectListTj(@Param("factionId") String factionId);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    int selectSplendidNum(Map<String, Object> map);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    List<QuestionMemberHonor> selectMemberHonorList(@Param("factionId") String factionId);
 
 
 }
