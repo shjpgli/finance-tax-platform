@@ -88,7 +88,7 @@ public class RedEnvelopController {
     /**
      * 查询微信红包信息
      */
-    @GetMapping("/{id}")
+    @GetMapping("/hbinfo/{id}")
     public ResponseEntity gethbinfo(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         WxRedEnvelop data = iActivityService.gethbinfo(id);

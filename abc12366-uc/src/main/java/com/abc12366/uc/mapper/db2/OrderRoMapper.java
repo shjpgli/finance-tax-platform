@@ -44,4 +44,6 @@ public interface OrderRoMapper {
     OrderBO selectOrderByGoodsIdAndUserId(Order order);
 
     List<OrderBO> selectUserAllOrderList(OrderBO order);
+
+    List<OrderBO> selectCurriculumOrderList(OrderBO orderBO);
 }

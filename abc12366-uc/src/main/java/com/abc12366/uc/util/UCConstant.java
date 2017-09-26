@@ -74,7 +74,7 @@ public class UCConstant {
     //首次实名认证
     public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_ID = "99903d77-6197-44ef-86c6-df14aab9c269";
     //首次修改登录密码
-    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_ID = "";
+    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_ID = "4e36d694-cd02-4203-a44b-39eb4c2a4d73";
     //首次上传用户头像图片
     public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "a7668563-b70c-447e-9ddb-9dd63bf63282";
 
