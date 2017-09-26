@@ -96,6 +96,16 @@ public class KnowledgeTagController {
         return ResponseEntity.ok(Utils.kv("dataList",list));
     }
 
+    /**
+     * 通过知识库，课程页面 添加知识库标签 接口
+     */
+    @PostMapping(path = "/addByOtherChannel")
+    public ResponseEntity add(@RequestBody List<KnowledgeTag> knowledgeTags) {
+        List<KnowledgeTag> list = knowledgeTagService.addBatchByOtherChannel(knowledgeTags);
+        return ResponseEntity.ok(Utils.kv("dataList",list));
+    }
+
+
     /*
     * 修改知识库标签 接口
     */
