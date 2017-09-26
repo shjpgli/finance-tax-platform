@@ -8,6 +8,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
+import com.abc12366.uc.util.UCConstant;
 import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +43,19 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Autowired
     private UserBindService userBindService;
 
+    @Autowired
+    private TodoTaskService todoTaskService;
+
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
         UserExtend userExtend = userExtendRoMapper.selectOne(userId);
         if (userExtend == null) {
             return null;
+        }
+        if(userExtend.getValidStatus().equals(UCConstant.USER_REALNAME_VALIDATED)){
+            //首次实名认证任务埋点
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_ID);
         }
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);

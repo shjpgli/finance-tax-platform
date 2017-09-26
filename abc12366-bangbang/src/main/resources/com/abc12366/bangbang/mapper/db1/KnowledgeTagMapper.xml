@@ -18,21 +18,21 @@
           )
     </select>
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="knowledgeTag" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.KnowledgeTag" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_tag
         WHERE id = #{id}
     </select>
     <!-- 查询（根据name查询） -->
-    <select id="selectByName" resultType="knowledgeTag" parameterType="java.lang.String">
+    <select id="selectByName" resultType="com.abc12366.bangbang.model.KnowledgeTag" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_tag
         WHERE name = #{name}
     </select>
     <!-- 查询列表 -->
-    <select id="selectList" resultType="knowledgeTag" parameterType="java.lang.String">
+    <select id="selectList" resultType="com.abc12366.bangbang.model.KnowledgeTag" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_tag
@@ -49,7 +49,7 @@
         ORDER BY createTime DESC
     </select>
     <!-- 查询列表 -->
-    <select id="selectRelatedTags" resultType="knowledgeTag" parameterType="java.lang.String">
+    <select id="selectRelatedTags" resultType="com.abc12366.bangbang.model.KnowledgeTag" parameterType="java.lang.String">
         SELECT t2.* FROM
         bb_knowledge_tag_rel t1
         LEFT JOIN bb_knowledge_tag t2 ON t1.tagId = t2.id
@@ -73,7 +73,7 @@
 
 
     <!-- 添加 -->
-    <insert id="insert" parameterType="knowledgeTag">
+    <insert id="insert" parameterType="com.abc12366.bangbang.model.KnowledgeTag">
         INSERT INTO bb_knowledge_tag
         (id,name,description,status,createTime,updateTime,createUser,updateUser,tagType)
         VALUES
@@ -91,7 +91,7 @@
     </insert>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insertSelective" parameterType="knowledgeTag">
+    <insert id="insertSelective" parameterType="com.abc12366.bangbang.model.KnowledgeTag">
         INSERT INTO bb_knowledge_tag
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -149,7 +149,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKeySelective" parameterType="knowledgeTag">
+    <update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.KnowledgeTag">
         UPDATE bb_knowledge_tag
         <set>
             <if test="name != null">
@@ -176,7 +176,7 @@
     </update>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKey" parameterType="knowledgeTag">
+    <update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.KnowledgeTag">
         UPDATE bb_knowledge_tag
         SET
         name = #{name},

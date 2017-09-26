@@ -2,10 +2,13 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db1.WxMsgMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.mapper.db2.WxMsgRoMapper;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.weixin.bo.message.*;
+import com.abc12366.uc.model.weixin.bo.person.WxPerson;
 import com.abc12366.uc.model.weixin.bo.template.ImgMaterial;
 import com.abc12366.uc.service.IWxMsgService;
 import com.abc12366.uc.util.wx.MsgMap;
@@ -47,6 +50,9 @@ public class WxMsgServiceImpl implements IWxMsgService {
     
     @Autowired
     private WxGzhRoMapper gzhRoMapper;
+    
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public ImgMaterial uploadWxImag(FileContent fileContent) {
@@ -83,14 +89,29 @@ public class WxMsgServiceImpl implements IWxMsgService {
                     int eventCode = MsgMap.getEventType(map.get("Event"));
                     switch (eventCode) {
                         case 0://关注
-                            ReturnMsg newmsg = getReMsgOneBysetting("0");
-                            if (newmsg != null) {
-                                return newmsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System
-										.currentTimeMillis());
-                            }
+                        	if(map.get("Ticket")!=null){//扫公众号生成二维码关注
+                        		String eventKey=map.get("EventKey");
+                        		String[] infos=eventKey.split(",");
+                        		LOGGER.info("用户扫码关注(EventKey):" +eventKey);
+                        		if("qrscene_AA".equals(infos[0])){//用户关注以及自动绑定
+                        			smbd(map,infos);
+                        		}
+                        	}else{//其他渠道关注
+                        		ReturnMsg newmsg = getReMsgOneBysetting("0");
+                                if (newmsg != null) {
+                                    return newmsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System
+    										.currentTimeMillis());
+                                }
+                        	}
                         case 1://取消关注
 
-                        case 2:
+                        case 2://微信已关注公众号并扫码
+                        	String eventKey=map.get("EventKey");
+                        	String[] infos=eventKey.split(",");
+                        	if("qrscene_AA".equals(infos[0])){//用户已关注自动绑定
+                    			smbd(map,infos);
+                    		}
+                        	break;
                         case 3:
                         case 4:
                             break;
@@ -111,6 +132,29 @@ public class WxMsgServiceImpl implements IWxMsgService {
         } catch (Exception e) {
             LOGGER.error("查询单个关键字类型信息失败：{}", e);
             throw null;
+        }
+    }
+    
+    private void smbd(Map<String,String> map,String[] infos){
+    	Map<String, String> tks1 = new HashMap<String, String>();
+        tks1.put("access_token", WxGzhClient.getInstanceToken());
+        tks1.put("openid", map.get("FromUserName"));
+        WxPerson person = WxConnectFactory.get(WechatUrl.WXUSEINFO, tks1, null, WxPerson.class);
+        if (0 != person.getErrcode()) {
+            LOGGER.error("获取单个微信用户异常：{}", person.getErrmsg());
+            throw new ServiceException(person.getErrcode());
+        } else {
+        	User user=new User();
+        	user.setBdqudao(infos[1]);
+        	user.setId(infos[2]);
+        	user.setWxopenid(person.getOpenid());
+        	user.setWxheadimg(person.getHeadimgurl());
+        	user.setWxnickname(person.getNickname());
+        	int result = userMapper.update(user);
+            if (result != 1) {
+                LOGGER.warn("绑定用户失败!");
+                throw new ServiceException(4102);
+            }
         }
     }
 
@@ -202,6 +246,15 @@ public class WxMsgServiceImpl implements IWxMsgService {
         String msgId = Utils.uuid();
         returnMsg.setId(msgId);
         returnMsg.setCreateDate(now);
+
+        ReturnMsg newMsg  = new ReturnMsg();
+        newMsg.setSetting(returnMsg.getSetting());
+        newMsg.setKeyString(returnMsg.getKeyString());
+        List<ReturnMsg>  list = msgRoMapper.selectList(newMsg);
+        if(list.size()>0){
+            LOGGER.info("名称不能重复");
+            throw new ServiceException(9999,"名称不能重复");
+        }
         msgMapper.insertRemsg(returnMsg);
         return returnMsg;
     }

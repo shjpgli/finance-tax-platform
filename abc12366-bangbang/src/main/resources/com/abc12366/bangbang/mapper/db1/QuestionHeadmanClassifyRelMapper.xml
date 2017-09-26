@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="questionHeadmanClassifyRel" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionHeadmanClassifyRel" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_headman_classify_rel
@@ -39,7 +39,7 @@
 	</insert>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionHeadmanClassifyRel">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionHeadmanClassifyRel">
 		 INSERT INTO bb_question_headman_classify_rel
  		(id,headmanId,classifyId) 
 		 VALUES 
@@ -47,7 +47,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="questionHeadmanClassifyRel">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionHeadmanClassifyRel">
 		 INSERT INTO bb_question_headman_classify_rel
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -75,7 +75,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="questionHeadmanClassifyRel">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionHeadmanClassifyRel">
 		 UPDATE bb_question_headman_classify_rel
  		 <set> 
 			<if test="headmanId != null">
@@ -90,7 +90,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="questionHeadmanClassifyRel">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionHeadmanClassifyRel">
 		 UPDATE bb_question_headman_classify_rel
 		 SET 
 			 headmanId = #{headmanId},

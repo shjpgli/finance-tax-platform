@@ -32,8 +32,8 @@ public class MessageController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+//    @Autowired
+//    private KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
      * Kafka 用户消息生产者
@@ -44,19 +44,19 @@ public class MessageController {
     public ResponseEntity sendUserMessage(@Valid @RequestBody UserMessage data) {
         LOGGER.info("{}", data);
 
-        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("user_message_topic", data);
-        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                LOGGER.info("Failed user_message_topic: " + data);
-            }
-
-            @Override
-            public void onSuccess(SendResult<String, Object> result) {
-                LOGGER.info("Success user_message_topic: " + result.getProducerRecord().value());
-            }
-        });
+//        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("user_message_topic", data);
+//        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                LOGGER.info("Failed user_message_topic: " + data);
+//            }
+//
+//            @Override
+//            public void onSuccess(SendResult<String, Object> result) {
+//                LOGGER.info("Success user_message_topic: " + result.getProducerRecord().value());
+//            }
+//        });
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -69,19 +69,19 @@ public class MessageController {
     public ResponseEntity sendBusinessMessage(@Valid @RequestBody BusinessMessage data) {
         LOGGER.info("{}", data);
 
-        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("business_message_topic", data);
-        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                LOGGER.info("Failed business_message_topic: " + data);
-            }
-
-            @Override
-            public void onSuccess(SendResult<String, Object> result) {
-                LOGGER.info("Success business_message_topic: " + result.getProducerRecord().value());
-            }
-        });
+//        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("business_message_topic", data);
+//        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                LOGGER.info("Failed business_message_topic: " + data);
+//            }
+//
+//            @Override
+//            public void onSuccess(SendResult<String, Object> result) {
+//                LOGGER.info("Success business_message_topic: " + result.getProducerRecord().value());
+//            }
+//        });
         return ResponseEntity.ok(Utils.kv());
     }
 }

@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="questionHeadman" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionHeadman" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_headman
@@ -23,7 +23,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionHeadman">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionHeadman">
 		 INSERT INTO bb_question_headman
  		(id,name,phone,applyReason,createTime,userId,status,updateTime,updateAdmin) 
 		 VALUES 
@@ -31,7 +31,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="questionHeadman">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionHeadman">
 		 INSERT INTO bb_question_headman
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -84,7 +84,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="questionHeadman">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionHeadman">
 		 UPDATE bb_question_headman
  		 <set> 
 			<if test="name != null">
@@ -111,7 +111,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="questionHeadman">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionHeadman">
 		 UPDATE bb_question_headman
 		 SET 
 			 name = #{name},

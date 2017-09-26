@@ -9,7 +9,7 @@
     </sql>
 
     <!-- 查询all -->
-    <select id="selectAll" resultType="knowledgeCategory">
+    <select id="selectAll" resultType="com.abc12366.bangbang.model.KnowledgeCategory">
         SELECT
         t1.*,t2.name as parentName
         FROM bb_knowledge_category  t1
@@ -17,14 +17,14 @@
         ORDER BY t1.SORT ASC;
     </select>
     <!-- 查询（根据CODE查询） -->
-    <select id="selectByCode" resultType="knowledgeCategory" parameterType="java.lang.String">
+    <select id="selectByCode" resultType="com.abc12366.bangbang.model.KnowledgeCategory" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_category
         WHERE code = #{code}
     </select>
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="knowledgeCategory" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.KnowledgeCategory" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM bb_knowledge_category
@@ -38,7 +38,7 @@
     </delete>
 
     <!-- 添加 -->
-    <insert id="insert" parameterType="knowledgeCategory">
+    <insert id="insert" parameterType="com.abc12366.bangbang.model.KnowledgeCategory">
         INSERT INTO bb_knowledge_category
         (id,name,code,parentCode,sort,createTime,updateTime,createUser,updateUser)
         VALUES
@@ -46,7 +46,7 @@
     </insert>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insertSelective" parameterType="knowledgeCategory">
+    <insert id="insertSelective" parameterType="com.abc12366.bangbang.model.KnowledgeCategory">
         INSERT INTO bb_knowledge_category
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -110,7 +110,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKeySelective" parameterType="knowledgeCategory">
+    <update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.KnowledgeCategory">
         UPDATE bb_knowledge_category
         <set>
             <if test="name != null">
@@ -149,7 +149,7 @@
     </update>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKey" parameterType="knowledgeCategory">
+    <update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.KnowledgeCategory">
         UPDATE bb_knowledge_category
         SET
         name = #{name},

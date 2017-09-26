@@ -15,7 +15,15 @@ public class LotteryActivityprizeBO{
     public String getActivityName() {
         return activityName;
     }
+    private String lotteryImage;
 
+    public String getLotteryImage() {
+        return lotteryImage;
+    }
+
+    public void setLotteryImage(String lotteryImage) {
+        this.lotteryImage = lotteryImage;
+    }
     public void setActivityName(String activityName) {
         this.activityName = activityName;
     }

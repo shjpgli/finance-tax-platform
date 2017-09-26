@@ -56,7 +56,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         return data;
     }
 
-    @KafkaListener(topics = "business_message_topic")
+//    @KafkaListener(topics = "business_message_topic")
     public void handleUserMessage(ConsumerRecord<String, String> record) {
         LOGGER.info("business_message_topic: " + record.value());
         BusinessMessage data = JSON.parseObject(record.value(), BusinessMessage.class);

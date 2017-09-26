@@ -1,4 +1,4 @@
-package com.abc12366.bangbang.web.Question;
+package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionTeam;
 import com.abc12366.bangbang.service.QuestionTeamService;

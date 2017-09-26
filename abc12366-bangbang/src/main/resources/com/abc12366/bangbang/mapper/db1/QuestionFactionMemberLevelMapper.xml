@@ -10,14 +10,14 @@
 
 
 	<!-- 查询列表 -->
-	<select id="selectList" resultType="questionFactionMemberLevel">
+	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_question_faction_member_level
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="questionFactionMemberLevel" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_faction_member_level
@@ -31,7 +31,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionFactionMemberLevel">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 INSERT INTO bb_question_faction_member_level
  		(id,name,answers,discussions,adoptions,createTime,createAdmin,updateTime,updateAdmin) 
 		 VALUES 
@@ -39,7 +39,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="questionFactionMemberLevel">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 INSERT INTO bb_question_faction_member_level
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -97,7 +97,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="questionFactionMemberLevel">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 UPDATE bb_question_faction_member_level
  		 <set> 
 			<if test="name != null">
@@ -126,7 +126,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="questionFactionMemberLevel">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 UPDATE bb_question_faction_member_level
 		 SET 
 			 name = #{name},

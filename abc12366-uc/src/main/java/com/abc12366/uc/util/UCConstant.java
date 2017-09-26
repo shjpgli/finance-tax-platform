@@ -76,7 +76,7 @@ public class UCConstant {
     //首次修改登录密码
     public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_ID = "";
     //首次上传用户头像图片
-    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "";
+    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "a7668563-b70c-447e-9ddb-9dd63bf63282";
 
     //登录tdps密码加密约定码
     public final static String TDPS_LOGIN_PWD_APPOINT_CODE = "abchngs";
