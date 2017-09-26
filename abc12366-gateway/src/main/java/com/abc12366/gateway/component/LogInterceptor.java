@@ -17,6 +17,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -46,6 +48,24 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         String version = request.getHeader(Constant.VERSION_HEAD);
 
+//        try {
+//            request.setCharacterEncoding("UTF-8");
+//            int size = request.getContentLength();
+//            System.out.println(size);
+//
+//            InputStream is = request.getInputStream();
+//
+//            byte[] reqBodyBytes = readBytes(is, size);
+//
+//            String res = new String(reqBodyBytes);
+//
+//            System.out.println(res);
+//            response.setContentType("text/html;charset=UTF-8");
+//            response.setCharacterEncoding("UTF-8");
+//            response.getOutputStream().write(res.getBytes("utf-8"));
+//            response.flushBuffer();
+//        } catch (Exception e) {
+//        }
         LOGGER.info("URI:{}, Version:{}, IP:{}, User-Agent:{}", uri, version, addr, userAgent);
 
         // 版本头检查
@@ -129,5 +149,36 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         // 6.后置日志和日志表
         LOGGER.info("{}", log);
         apiLogService.insert(log);
+    }
+
+    public static final byte[] readBytes(InputStream is, int contentLen) {
+        if (contentLen > 0) {
+            int readLen = 0;
+
+            int readLengthThisTime = 0;
+
+            byte[] message = new byte[contentLen];
+
+            try {
+
+                while (readLen != contentLen) {
+
+                    readLengthThisTime = is.read(message, readLen, contentLen - readLen);
+
+                    if (readLengthThisTime == -1) {// Should not happen.
+                        break;
+                    }
+
+                    readLen += readLengthThisTime;
+                }
+
+                return message;
+            } catch (IOException e) {
+                // Ignore
+                // e.printStackTrace();
+            }
+        }
+
+        return new byte[] {};
     }
 }

@@ -19,6 +19,9 @@ public class CurriculumClassifyBo implements Serializable {
     /**分类名称**varchar(100)**/
     private String classifyName;
 
+    /*分类父名称*/
+    private String parentName;
+
 	/**排列顺序**int**/
 	private Integer priority;
 
@@ -63,5 +66,14 @@ public class CurriculumClassifyBo implements Serializable {
 
     public void setIsDisplay(Integer isDisplay) {
         this.isDisplay = isDisplay;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public CurriculumClassifyBo setParentName(String parentName) {
+        this.parentName = parentName;
+        return this;
     }
 }

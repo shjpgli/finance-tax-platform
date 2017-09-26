@@ -34,7 +34,7 @@
 
 	<!-- 统计列表查询 -->
 	<select id="selectStatisList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
-        select count(*) as total,date_format(visitDate, '%Y') as date from bb_question_accepted
+		select count(id) as total,(select count(id) from bb_question_accepted) as allCount,date_format(visitDate, '%Y') as date from bb_question_accepted
         <where>
             1=1
             <if test="phone != null and phone!=''">AND phone = #{phone}</if>
