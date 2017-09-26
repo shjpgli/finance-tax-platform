@@ -207,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
                     if(dictList != null && dictList.size() > 0){
                         for(DictBO dictBO:dictList){
                             specInfo.append(dictBO.getDictName()+"  ");
-                            specInfo.append(dictBO.getFieldValue());
+                            specInfo.append(dictBO.getFieldKey());
                         }
                     }
                 }
@@ -319,7 +319,7 @@ public class OrderServiceImpl implements OrderService {
         repo.setLastUpdate(date);
         productRepoMapper.insert(repo);*/
 
-        //商品价格
+        //交易价格
         double totalPrice;
         int giftPoints; //赠送积分
 //        int consumePoints;
@@ -361,7 +361,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
-        orderProductBO.setSellingPrice(totalPrice);
+        orderProductBO.setSellingPrice(prBO.getSellingPrice());
         orderProductBO.setUnitPrice(prBO.getMarketPrice());
         orderProductBO.setNum(num);
         orderProductBO.setDiscount(discount);
@@ -1054,14 +1054,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderListBO> selectExprotOrder(Order order) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
+        List<OrderBO> orderDataList = orderRoMapper.selectExprotOrder(order);
         List<OrderListBO> orderListBOList = new ArrayList<>();
+
         for(OrderBO bo:orderBOList){
             OrderListBO orderListBO = new OrderListBO();
             orderListBO.setOrderNo(bo.getOrderNo());
             //收货地址
+            StringBuffer address = new StringBuffer();
             if(bo.getUserAddressBO() != null){
                 UserAddressBO userAddress = bo.getUserAddressBO();
-                StringBuffer address = new StringBuffer();
                 address.append(userAddress.getProvinceName() + "-");
                 address.append(userAddress.getCityName() + "-");
                 address.append(userAddress.getAreaName() + "-");
