@@ -10,7 +10,7 @@
     </sql>
 
     <!-- 详情页查询感兴趣的知识 -->
-    <select id="interestedList" resultType="knowledgeBase">
+    <select id="interestedList" resultType="com.abc12366.bangbang.model.KnowledgeBase">
         SELECT * FROM bb_knowledge_base WHERE
         id IN(
             SELECT DISTINCT knowledgeId FROM bb_knowledge_tag_rel
@@ -28,7 +28,7 @@
         limit #{num}
     </select>
     <!-- 详情页查询关联问题的知识 -->
-    <select id="relatedList" resultType="knowledgeBase">
+    <select id="relatedList" resultType="com.abc12366.bangbang.model.KnowledgeBase">
         SELECT t_base.* FROM bb_knowledge_rel t_rel
         LEFT JOIN bb_knowledge_base t_base ON t_rel.relKnowledgeId = t_base.id
         WHERE
@@ -40,7 +40,7 @@
     </select>
 
     <!-- 帮助中心首页热点问题查询 -->
-    <select id="hotList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
+    <select id="hotList" resultType="com.abc12366.bangbang.model.KnowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
         SELECT t.*,t1.name AS categoryName FROM
         (
             SELECT * FROM bb_knowledge_base a
@@ -65,7 +65,7 @@
     </select>
 
     <!-- 财税网首页热点问题查询 -->
-    <select id="hotUnClassifyList" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
+    <select id="hotUnClassifyList" resultType="com.abc12366.bangbang.model.KnowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
 
         SELECT a.* FROM bb_knowledge_base a
         WHERE
@@ -76,7 +76,7 @@
     </select>
     
     <!-- 财税网首页热点问题查询 -->
-    <select id="wxhotUnClassifyMap" resultType="knowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
+    <select id="wxhotUnClassifyMap" resultType="com.abc12366.bangbang.model.KnowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
 
         SELECT a.* FROM bb_knowledge_base a
         WHERE
@@ -88,7 +88,7 @@
 
 
     <!-- UC列表查询 -->
-    <select id="selectUCList" resultType="knowledgeBase"
+    <select id="selectUCList" resultType="com.abc12366.bangbang.model.KnowledgeBase"
             parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
         SELECT t_base.id, t_base.subject
         FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
@@ -117,7 +117,7 @@
     </select>
 
     <!-- 根据标签查询热点知识、问题 -->
-    <select id="selectUCListBytag" resultType="knowledgeBase"
+    <select id="selectUCListBytag" resultType="com.abc12366.bangbang.model.KnowledgeBase"
             parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
         SELECT t_base.id, t_base.subject ,t_base.content
         FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
@@ -143,7 +143,7 @@
     </select>
 
     <!-- 列表查询 -->
-    <select id="selectList" resultType="knowledgeBase"
+    <select id="selectList" resultType="com.abc12366.bangbang.model.KnowledgeBase"
             parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
         SELECT
         t_base.*,t_category.name AS categoryName
@@ -180,7 +180,7 @@
 
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="knowledgeBase" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.KnowledgeBase" parameterType="java.lang.String">
         SELECT
         t_base.*,t_category.name AS categoryName
         FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
@@ -205,7 +205,7 @@
 
 
     <!-- 添加 -->
-    <insert id="insert" parameterType="knowledgeBase">
+    <insert id="insert" parameterType="com.abc12366.bangbang.model.KnowledgeBase">
         INSERT INTO bb_knowledge_base
         (id,categoryCode,type,recommend,subject,content,status,activeTime,source,isOpen,pv,usefulVotes,uselessVotes,shareNum,createTime,updateTime,createUser,updateUser)
         VALUES
@@ -213,7 +213,7 @@
     </insert>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insertSelective" parameterType="knowledgeBase">
+    <insert id="insertSelective" parameterType="com.abc12366.bangbang.model.KnowledgeBase">
         INSERT INTO bb_knowledge_base
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -331,7 +331,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKeySelective" parameterType="knowledgeBase">
+    <update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.KnowledgeBase">
         UPDATE bb_knowledge_base
         <set>
             <if test="categoryCode != null">
@@ -386,7 +386,7 @@
     </update>
 
     <!-- 修 改-->
-    <update id="updateByPrimaryKey" parameterType="knowledgeBase">
+    <update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.KnowledgeBase">
         UPDATE bb_knowledge_base
         SET
         categoryCode = #{categoryCode},

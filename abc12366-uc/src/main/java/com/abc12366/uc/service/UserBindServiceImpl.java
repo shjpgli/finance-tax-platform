@@ -7,10 +7,7 @@ import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
-import com.abc12366.uc.model.UserDzsb;
-import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.UserHnds;
-import com.abc12366.uc.model.UserHngs;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
@@ -76,6 +73,9 @@ public class UserBindServiceImpl implements UserBindService {
     @Autowired
     private RSAService rsaService;
 
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
+
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
         if (userDzsbInsertBO == null) {
@@ -86,8 +86,11 @@ public class UserBindServiceImpl implements UserBindService {
         //是否已实名认证，未认证不允许做绑定
         isRealnameValidated(request);
 
-        //查看是否重复绑定
+        //用户会员绑定企业数量限制
         String userId = UserUtil.getUserId(request);
+        bindLimit(userId);
+
+        //查看是否重复绑定
         UserDzsb queryParam = new UserDzsb();
         queryParam.setUserId(userId);
         queryParam.setNsrsbh(userDzsbInsertBO.getNsrsbhOrShxydm());
@@ -289,6 +292,10 @@ public class UserBindServiceImpl implements UserBindService {
 
         //是否已实名认证，未认证不允许做绑定
         isRealnameValidated(request);
+
+        //用户会员绑定企业数量限制
+        String userId = UserUtil.getUserId(request);
+        bindLimit(userId);
 
         userHngsInsertBO.setUserId(UserUtil.getUserId(request));
         //查看是否重复绑定
@@ -613,11 +620,24 @@ public class UserBindServiceImpl implements UserBindService {
 
     }
 
+    //用户是否实名制
     private void isRealnameValidated(HttpServletRequest request) {
         String userId = UserUtil.getUserId(request);
         UserExtend userExtend = userExtendRoMapper.selectOne(userId);
         if (userExtend == null || StringUtils.isEmpty(userExtend.getValidStatus()) || !userExtend.getValidStatus().trim().equals("2")) {
             throw new ServiceException(4712);
+        }
+    }
+
+    //用户会员绑定纳税人数量是否超过上限-以社会信用代码作为企业唯一标识
+    private void bindLimit(String userId){
+        List<ShxydmBO> list = userBindRoMapper.bindCount(userId);
+        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
+        int limit = privilegeItem.getGrzhbdqys();
+        if(limit!=-1){
+            if(list!=null&&list.size()>=limit){
+                throw new ServiceException(4043);
+            }
         }
     }
 }

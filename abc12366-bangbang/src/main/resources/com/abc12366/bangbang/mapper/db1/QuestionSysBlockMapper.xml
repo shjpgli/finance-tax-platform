@@ -22,7 +22,7 @@
 
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="questionSysBlock" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionSysBlock" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_sys_block
@@ -36,7 +36,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionSysBlock">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
 		 INSERT INTO bb_question_sys_block
  		(id,sourceId,sourceType,createTime,updateAdmin,updateTime) 
 		 VALUES 
@@ -44,7 +44,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="questionSysBlock">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
 		 INSERT INTO bb_question_sys_block
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -90,7 +90,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="questionSysBlock">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
 		 UPDATE bb_question_sys_block
  		 <set> 
 			<if test="sourceId != null">
@@ -111,7 +111,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="questionSysBlock">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
 		 UPDATE bb_question_sys_block
 		 SET 
 			 sourceId = #{sourceId},

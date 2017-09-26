@@ -22,7 +22,7 @@
 
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="questionTipOff" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionTipOff" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_tip_off
@@ -36,7 +36,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionTipOff">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionTipOff">
 		 INSERT INTO bb_question_tip_off
  		(id,reason,createUser,createTime,sourceId,sourceType,updateAdmin,updateTime) 
 		 VALUES 
@@ -44,7 +44,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="questionTipOff">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionTipOff">
 		 INSERT INTO bb_question_tip_off
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -102,7 +102,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="questionTipOff">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionTipOff">
 		 UPDATE bb_question_tip_off
  		 <set> 
 			<if test="reason != null">
@@ -126,7 +126,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="questionTipOff">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionTipOff">
 		 UPDATE bb_question_tip_off
 		 SET 
 			 reason = #{reason},

@@ -46,6 +46,20 @@ public class QueClassifyController {
     }
 
     /**
+     * 问题分类列表查询(无需登录)
+     */
+    @GetMapping(path = "/selectClassifyList")
+    public ResponseEntity selectClassifyList(@RequestParam(value = "classifyCode", required = false) String classifyCode,
+                                     @RequestParam(value = "parentCode", required = false) String parentCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("classifyCode",classifyCode);//分类ID
+        dataMap.put("parentCode",parentCode);//父ID
+        List<QuestionClassifyBo> dataList = classifyService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+
+    }
+
+    /**
      * 问题分类新增
      */
     @PostMapping

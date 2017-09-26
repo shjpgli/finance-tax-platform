@@ -7,7 +7,7 @@
         where userId = #{userId}
     </select>
 
-    <insert id="insert" parameterType="Authority">
+    <insert id="insert" parameterType="com.abc12366.uc.model.Authority">
         insert into authority (userId, authority)
         values (#{userId}, #{authority})
     </insert>

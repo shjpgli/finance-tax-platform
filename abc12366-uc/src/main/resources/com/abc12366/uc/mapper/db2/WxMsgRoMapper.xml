@@ -40,7 +40,8 @@
         from uc_wxremsg
         <where>
             setting= #{setting}
-            <if test="keyString != null">keyString id= #{keyString}</if>
+            <if test="keyString != null">and keyString = #{keyString}</if>
+            <if test="searchTp != null">and searchTp = #{searchTp}</if>
         </where>
     </select>
 

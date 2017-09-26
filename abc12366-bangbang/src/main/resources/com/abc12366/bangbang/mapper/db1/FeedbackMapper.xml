@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.bangbang.mapper.db1.FeedbackMapper">
 
 	<!-- 查询列表 -->
-	<select id="selectList" resultType="feedback" parameterType="com.abc12366.bangbang.model.bo.FeedbackParamBO">
+	<select id="selectList" resultType="com.abc12366.bangbang.model.Feedback" parameterType="com.abc12366.bangbang.model.bo.FeedbackParamBO">
 		SELECT
 		t1.*, t2.username as feedbackUserName, t3.content as replyMsg
 		FROM bb_feedback t1
@@ -30,7 +30,7 @@
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="feedback" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.Feedback" parameterType="java.lang.String">
 		 SELECT
 		 t1.*
 		 FROM bb_feedback t1 LEFT JOIN abc12366_uc.uc_user t2
@@ -53,7 +53,7 @@
 	</delete>
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="feedback">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.Feedback">
 		 INSERT INTO bb_feedback
  		(id,sourceType,feedbackUserId,feedbackType,feedbackTime,opinionDesc,contactNumber) 
 		 VALUES 
@@ -61,7 +61,7 @@
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="feedback">
+	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.Feedback">
 		 INSERT INTO bb_feedback
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
 			<if test="id != null">
@@ -113,7 +113,7 @@
 	</insert>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKeySelective" parameterType="feedback">
+	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.Feedback">
 		 UPDATE bb_feedback
  		 <set> 
 			<if test="sourceType != null">
@@ -140,7 +140,7 @@
 	</update>
 
 	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="feedback">
+	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.Feedback">
 		 UPDATE bb_feedback
 		 SET 
 			 sourceType = #{sourceType},
