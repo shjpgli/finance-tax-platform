@@ -244,6 +244,7 @@
 				LEFT JOIN uc_city c on c.cityId = a.city
 				LEFT JOIN uc_area e on e.areaId = a.area
         WHERE a.id = #{id}
+        order by a.province,a.city,a.area,a.detail asc
     </select>
 
     <!--获取配送方式-->
@@ -702,7 +703,7 @@
         LEFT JOIN uc_user u ON u.id = o.userId
         where  o.orderStatus = #{orderStatus} and
             o.isShipping = 1
-        order by o.lastUpdate desc
+        order by u.phone,o.lastUpdate desc
 
     </select>
 

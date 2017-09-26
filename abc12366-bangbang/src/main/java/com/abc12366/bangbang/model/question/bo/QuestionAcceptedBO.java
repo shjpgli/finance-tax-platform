@@ -36,9 +36,10 @@ public class QuestionAcceptedBO implements Serializable {
 
 	//年份
 	private String date;
-	//总数
+	//每年总数
 	private String total;
-
+	//所有总数
+	private String allCount;
 
 
 	public void setId(Integer id){
@@ -120,4 +121,12 @@ public class QuestionAcceptedBO implements Serializable {
 	public void setTotal(String total) {
 		this.total = total;
 	}
+
+    public String getAllCount() {
+        return allCount;
+    }
+
+    public void setAllCount(String allCount) {
+        this.allCount = allCount;
+    }
 }
