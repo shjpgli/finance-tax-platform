@@ -11,7 +11,7 @@ import java.util.List;
  * 
  **/
 @SuppressWarnings("serial")
-public class CurriculumClassifyBo implements Serializable {
+public class CurriculumClassifysBo implements Serializable {
 
 	/**分类ID**varchar(64)**/
 	private String classifyId;
@@ -31,7 +31,7 @@ public class CurriculumClassifyBo implements Serializable {
     /**是否显示**int**/
     private Integer isDisplay;
 
-    private List<CurriculumClassifyTag> tagList;
+    private List<CurriculumClassifyBo> classifyList;
 
     public String getClassifyId() {
         return classifyId;
@@ -77,16 +77,16 @@ public class CurriculumClassifyBo implements Serializable {
         return parentName;
     }
 
-    public CurriculumClassifyBo setParentName(String parentName) {
+    public CurriculumClassifysBo setParentName(String parentName) {
         this.parentName = parentName;
         return this;
     }
 
-    public List<CurriculumClassifyTag> getTagList() {
-        return tagList;
+    public List<CurriculumClassifyBo> getClassifyList() {
+        return classifyList;
     }
 
-    public void setTagList(List<CurriculumClassifyTag> tagList) {
-        this.tagList = tagList;
+    public void setClassifyList(List<CurriculumClassifyBo> classifyList) {
+        this.classifyList = classifyList;
     }
 }

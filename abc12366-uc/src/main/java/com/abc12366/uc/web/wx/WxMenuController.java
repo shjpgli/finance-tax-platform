@@ -5,6 +5,8 @@ import com.abc12366.uc.model.weixin.BaseWxRespon;
 import com.abc12366.uc.model.weixin.bo.menu.Button;
 import com.abc12366.uc.model.weixin.bo.menu.WxMenu;
 import com.abc12366.uc.service.IWxMenuService;
+import com.alibaba.fastjson.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +110,7 @@ public class WxMenuController {
     @PostMapping("/wxmenu/create")
     public ResponseEntity wxmenuCreate() {
         WxMenu wxMenu = iWxMenuService.getWxMenuDb();
+        LOGGER.info(JSONObject.toJSONString(wxMenu));
         BaseWxRespon result = iWxMenuService.creatWxMenu(wxMenu);
         if (0 == result.getErrcode()) {
             return ResponseEntity.ok(Utils.kv());

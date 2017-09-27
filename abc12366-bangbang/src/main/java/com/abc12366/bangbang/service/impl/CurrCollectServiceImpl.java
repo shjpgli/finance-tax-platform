@@ -8,6 +8,7 @@ import com.abc12366.bangbang.model.curriculum.CurriculumCollect;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo;
 import com.abc12366.bangbang.service.CurrCollectService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -65,7 +66,7 @@ public class CurrCollectServiceImpl implements CurrCollectService {
 
         int result = collectMapper.insert(collect);
 
-        String url = "http://118.118.116.202:9100/uc/todo/task/do/award/{userId}/{sysTaskId}";
+        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{sysTaskId}";
         String responseStr;
         String sysTaskId = "f2a0a28c-8c10-4d33-b1b2-9ab10aff3e3f";
         responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);

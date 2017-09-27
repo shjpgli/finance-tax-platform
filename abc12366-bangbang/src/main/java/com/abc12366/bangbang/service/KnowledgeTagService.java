@@ -27,6 +27,9 @@ public interface KnowledgeTagService {
     /* 批量新增标签 */
     List<KnowledgeTag> addBatch(List<KnowledgeTag> knowledgeTags);
 
+    /* 批量新增标签（通过知识库，课程页面添加） */
+    List<KnowledgeTag> addBatchByOtherChannel(List<KnowledgeTag> knowledgeTags);
+
     /* 新增标签 */
     KnowledgeTag add(KnowledgeTag knowledgeTag);
 
