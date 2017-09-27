@@ -6,10 +6,7 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.service.OrderService;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.service.VipLogService;
+import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -99,6 +96,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private MessageSendUtil messageSendUtil;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
+
+
 
 
     @Override
@@ -859,7 +861,7 @@ public class OrderServiceImpl implements OrderService {
                         insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中","0");
                     } else if (isPay == 2) {
                         updateStock(orderBO, orderProductBO);
-
+                        setTodoTask(order);
                         //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
                         if (goodsType.equals("1") || goodsType.equals("2")) {
                             order.setOrderStatus("4");
@@ -878,7 +880,7 @@ public class OrderServiceImpl implements OrderService {
                             LOGGER.info("插入会员日志: {}", orderNo);
                             insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单", "0");
                             //发送消息
                             sendMemberMsg(orderProductBO, order);
                         } else if (goodsType.equals("5")) {
@@ -899,7 +901,7 @@ public class OrderServiceImpl implements OrderService {
                     } else if (isPay == 3) {
                         order.setOrderStatus("2");
                         orderMapper.update(order);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款","0");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                     }
                 }else if("POINTS".equals(type)){
                     updateStock(orderBO, orderProductBO);
@@ -935,6 +937,25 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return orderBO;
+    }
+
+    /**
+     * 加入消费赠送积分规则
+     */
+    private void setTodoTask(Order order) {
+        double amount = order.getTotalPrice();
+        String userId = order.getUserId();
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_ID);
+        if(amount >= 1000 && amount< 3000){
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_1000_ID);
+        }
+
+        if(amount >= 3000 && amount < 5000){
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_3000_ID);
+        }
+        if(amount >= 5000){
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_5000_ID);
+        }
     }
 
     /**

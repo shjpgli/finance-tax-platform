@@ -42,6 +42,8 @@ public class UCConstant {
     public final static String AWARD_TYPE_EXP = "0";
     public final static String AWARD_TYPE_POINT = "1";
 
+    //会员时间，单位：年
+    public final static Integer USER_VIP_EXPIRE_DATE = 1;
 
     //系统任务ID
     //用户登录任务
