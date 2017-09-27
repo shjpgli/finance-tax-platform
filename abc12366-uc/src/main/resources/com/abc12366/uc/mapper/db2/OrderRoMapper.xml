@@ -610,8 +610,11 @@
             <if test=" user.id != null and user.id != '' ">
                 and u.id = #{user.id}
             </if>
-            <if test=" orderStatus != null and orderStatus != '' ">
-                and o.orderStatus = #{orderStatus}
+            <if test=" status != null ">
+                and o.orderStatus in
+                <foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test=" tradeMethod != null and tradeMethod != '' ">
                 and o.tradeMethod = #{tradeMethod}

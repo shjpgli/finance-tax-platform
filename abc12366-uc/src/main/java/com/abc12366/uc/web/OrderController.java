@@ -110,7 +110,9 @@ public class OrderController {
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
         order.setGoodsBO(goodsBO);
-        order.setOrderStatus(status);
+        String data[] = status.split(",");
+        order.setStatus(data);
+//        order.setOrderStatus(status);
         order.setTradeMethod(tradeMethod);
         order.setIsInvoice(isInvoice);
 

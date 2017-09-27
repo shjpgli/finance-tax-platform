@@ -3,7 +3,9 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserBO;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +29,6 @@ public interface UserRoMapper {
     User selectValidOne(String userId);
 
 	UserBO selectByopenid(String openid);
+
+    List<User> selectUserVipList(@Param("date")Date date);
 }
