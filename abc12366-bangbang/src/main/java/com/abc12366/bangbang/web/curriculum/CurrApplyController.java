@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -115,9 +116,9 @@ public class CurrApplyController {
      */
     @PutMapping(path = "/{applyId}")
     public ResponseEntity update(@PathVariable String applyId,
-                                 @Valid @RequestBody CurriculumApplyBo applyBo) {
+                                 @Valid @RequestBody CurriculumApplyBo applyBo,HttpServletRequest request) {
         //更新课程报名签到信息
-        applyBo = currApplyService.update(applyBo);
+        applyBo = currApplyService.update(applyBo,request);
         return ResponseEntity.ok(Utils.kv("data", applyBo));
     }
 

@@ -2,9 +2,12 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CurriculumApplyMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumApplyRoMapper;
+import com.abc12366.bangbang.model.Message;
 import com.abc12366.bangbang.model.curriculum.CurriculumApply;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumApplyBo;
 import com.abc12366.bangbang.service.CurrApplyService;
+import com.abc12366.bangbang.util.MessageConstant;
+import com.abc12366.bangbang.util.MessageSendUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -28,6 +32,9 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 
     @Autowired
     private CurriculumApplyRoMapper applyRoMapper;
+
+    @Autowired
+    private MessageSendUtil messageSendUtil;
 
     @Override
     public List<CurriculumApplyBo> selectList(Map<String,Object> map) {
@@ -114,7 +121,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
     }
 
     @Override
-    public CurriculumApplyBo update(CurriculumApplyBo applyBo) {
+    public CurriculumApplyBo update(CurriculumApplyBo applyBo,HttpServletRequest request) {
         //更新课程报名签到信息
         CurriculumApply apply = new CurriculumApply();
         try {
@@ -123,6 +130,16 @@ public class CurrApplyServiceImpl implements CurrApplyService {
             applyBo.setSignTime(new Date());
             BeanUtils.copyProperties(applyBo, apply);
             applyMapper.updateByPrimaryKeySelective(apply);
+
+            Message message = new Message();
+            message.setBusinessId(applyBo.getApplyId());
+            message.setType(MessageConstant.KCQD);
+//            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
+            message.setContent("您已成功签到X课程培训，赶紧参加培训吧！");
+            message.setUserId(applyBo.getUserId());
+            messageSendUtil.sendMessage(message, request);
+
+
         } catch (Exception e) {
             LOGGER.error("更新课程报名签到信息异常：{}", e);
             throw new ServiceException(4373);
