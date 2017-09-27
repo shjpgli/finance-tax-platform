@@ -184,7 +184,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
             OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(orderNo);
             if(orderExchange != null){
-                LOGGER.info("发票在退换货中，不能开发票：{}", orderExchange);
+                LOGGER.info("订单在退换货中，不能开发票：{}", orderExchange);
                 throw new ServiceException(4918);
             }
 
