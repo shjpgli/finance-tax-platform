@@ -14,12 +14,15 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.xml.namespace.QName;
+
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +66,8 @@ public class DzfpClient {
 	public static Object doSender(String interfaceCode,String content,Class _class) throws Exception{
 		
 		ssl_store = ResourceUtils.getFile("classpath:cer/testclient.truststore").getAbsolutePath();
+		
+		//ssl_store= new ClassPathResource("cer/testclient.truststore").getPath();
 		
 		SSLIgnoreErrorProtocolSocketFactory socketfactory = new SSLIgnoreErrorProtocolSocketFactory(ssl_store,ssl_pwd);
 
