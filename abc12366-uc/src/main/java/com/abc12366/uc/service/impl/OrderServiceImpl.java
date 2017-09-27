@@ -159,15 +159,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderList(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> orderBOList = new ArrayList<>();
-        if (order != null && !"".equals(order.getOrderStatus())) {
-            String status[] = order.getOrderStatus().split(",");
-            for (String st : status) {
-                order.setOrderStatus(st);
-                List<OrderBO> oList = orderRoMapper.selectOrderList(order);
-                orderBOList.addAll(oList);
-            }
-        }
+        List<OrderBO> orderBOList = orderRoMapper.selectOrderList(order);
+//        if (order != null && !"".equals(order.getOrderStatus())) {
+//            String status[] = order.getOrderStatus().split(",");
+//            for (String st : status) {
+//                order.setOrderStatus(st);
+//                List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+//                orderBOList.addAll(oList);
+//            }
+//        }
         return orderBOList;
     }
 
