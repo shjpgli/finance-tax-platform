@@ -50,15 +50,17 @@ public class ActivityService implements IActivityService {
             dataList.stream().filter(wa -> wa.getStatus()).forEach(wa -> {
                 // 统计中奖人数、金额
                 SentReceived sr = activityRoMapper.selectSentReceivedCount(wa.getId());
-                wa.setSent(sr.getSent());
-                wa.setSentAmount(sr.getSentAmount());
-                wa.setReceived(sr.getReceived());
-                wa.setReceivedAmount(sr.getReceivedAmount());
+                if (sr != null) {
+                    wa.setSent(sr.getSent());
+                    wa.setSentAmount(sr.getSentAmount());
+                    wa.setReceived(sr.getReceived());
+                    wa.setReceivedAmount(sr.getReceivedAmount());
 
-                // 统计参与人数
-                WxLotteryLog lotteryLog = new WxLotteryLog();
-                lotteryLog.setActivityId(wa.getId());
-                wa.setNop(activityRoMapper.selectLotteryLogList(lotteryLog).size());
+                    // 统计参与人数
+                    WxLotteryLog lotteryLog = new WxLotteryLog();
+                    lotteryLog.setActivityId(wa.getId());
+                    wa.setNop(activityRoMapper.selectLotteryLogList(lotteryLog).size());
+                }
             });
         }
         return dataList;
@@ -199,7 +201,7 @@ public class ActivityService implements IActivityService {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
         if (redEnvelop != null) {
             GetRedPack grp = new GetRedPack.Builder()
-                    .nonce_str(redEnvelop.getId())
+                    .nonce_str(redEnvelop.getId().replaceAll("-", ""))
                     .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
                     .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                     .appid(SpringCtxHolder.getProperty("abc.appid"))
@@ -236,6 +238,52 @@ public class ActivityService implements IActivityService {
         }
     }
 
+    @Override
+    public WxRedEnvelop resend(String id) {
+        WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
+        if (redEnvelop != null && "2".equals(redEnvelop.getSendStatus())) {// 发送失败的记录
+            WxActivity activity = selectOne(redEnvelop.getActivityId());
+            SendRedPack srp = new SendRedPack.Builder()
+                    .nonce_str(redEnvelop.getId())
+                    .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
+                    .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
+                    .wxappid(SpringCtxHolder.getProperty("abc.appid"))
+                    .send_name(SpringCtxHolder.getProperty("abc.send_name"))
+                    .re_openid(redEnvelop.getOpenId())
+                    .total_amount(yuan2cent(redEnvelop.getSendAmount()).intValue())
+                    .total_num(1)
+                    .wishing(activity.getWishing())
+                    .act_name(activity.getName())
+                    .remark(activity.getRemark())
+                    .scene_id("PRODUCT_2")
+                    .client_ip(LocalIpAddressUtil.resolveLocalAddress() != null ? String.valueOf(LocalIpAddressUtil
+                            .resolveLocalAddress()) : "127.0.0.1")
+                    .build();
+            srp.setSign(SignUtil.signKey(srp));
+
+            ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);
+            if (rrp != null) {
+                if ("SUCCESS".equals(rrp.getReturn_code())) { // 发送请求成功
+                    if ("SUCCESS".equals(rrp.getResult_code())) { // 发红包成功
+                        redEnvelop.setSendStatus("1"); // 发送成功
+                    } else {
+                        redEnvelop.setSendStatus("2"); // 发送失败
+                    }
+                    redEnvelop.setSendTime(new Date());
+                    activityMapper.updateRedEnvelop(redEnvelop);
+                    if (!"SUCCESS".equals(rrp.getReturn_code())) {
+                        throw new ServiceException(rrp.getResult_code(), rrp.getErr_code_des());
+                    }
+                } else {
+                    throw new ServiceException(rrp.getReturn_code(), rrp.getReturn_msg());
+                }
+            }
+        } else {
+            throw new ServiceException(6009);
+        }
+        return redEnvelop;
+    }
+
     /**
      * 查询未抽奖的口令，过滤已中奖、已抽奖的数据
      */
@@ -252,7 +300,7 @@ public class ActivityService implements IActivityService {
      */
     private void sendRedPack(WxLotteryBO lotteryBO, WxActivity activity, WxRedEnvelop redEnvelop) {
         SendRedPack srp = new SendRedPack.Builder()
-                .nonce_str(redEnvelop.getId())
+                .nonce_str(redEnvelop.getId().replaceAll("-", ""))
                 .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
                 .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                 .wxappid(SpringCtxHolder.getProperty("abc.appid"))
@@ -268,6 +316,7 @@ public class ActivityService implements IActivityService {
                         .resolveLocalAddress()) : "127.0.0.1")
                 .build();
         srp.setSign(SignUtil.signKey(srp));
+
         for (int i = 1; i <= 3; i++) { // 发送3次
             LOGGER.info("第{}次发送", i);
             ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);

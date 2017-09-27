@@ -10,7 +10,15 @@ import java.util.Date;
 
 public class LotteryLogBO{
     private String remake;
+    private String activityName;
 
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
     public String getRemake() {
         return remake;
     }

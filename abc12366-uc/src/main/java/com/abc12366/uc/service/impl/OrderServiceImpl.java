@@ -6,10 +6,7 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.service.OrderService;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.service.VipLogService;
+import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -100,6 +97,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MessageSendUtil messageSendUtil;
 
+    @Autowired
+    private TodoTaskService todoTaskService;
+
+
+
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -159,15 +161,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderList(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> orderBOList = new ArrayList<>();
-        if (order != null && !"".equals(order.getOrderStatus())) {
-            String status[] = order.getOrderStatus().split(",");
-            for (String st : status) {
-                order.setOrderStatus(st);
-                List<OrderBO> oList = orderRoMapper.selectOrderList(order);
-                orderBOList.addAll(oList);
-            }
-        }
+        List<OrderBO> orderBOList = orderRoMapper.selectOrderList(order);
+//        if (order != null && !"".equals(order.getOrderStatus())) {
+//            String status[] = order.getOrderStatus().split(",");
+//            for (String st : status) {
+//                order.setOrderStatus(st);
+//                List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+//                orderBOList.addAll(oList);
+//            }
+//        }
         return orderBOList;
     }
 
@@ -207,7 +209,7 @@ public class OrderServiceImpl implements OrderService {
                     if(dictList != null && dictList.size() > 0){
                         for(DictBO dictBO:dictList){
                             specInfo.append(dictBO.getDictName()+"  ");
-                            specInfo.append(dictBO.getFieldValue());
+                            specInfo.append(dictBO.getFieldKey());
                         }
                     }
                 }
@@ -319,7 +321,7 @@ public class OrderServiceImpl implements OrderService {
         repo.setLastUpdate(date);
         productRepoMapper.insert(repo);*/
 
-        //商品价格
+        //交易价格
         double totalPrice;
         int giftPoints; //赠送积分
 //        int consumePoints;
@@ -361,7 +363,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
-        orderProductBO.setSellingPrice(totalPrice);
+        orderProductBO.setSellingPrice(prBO.getSellingPrice());
         orderProductBO.setUnitPrice(prBO.getMarketPrice());
         orderProductBO.setNum(num);
         orderProductBO.setDiscount(discount);
@@ -859,7 +861,7 @@ public class OrderServiceImpl implements OrderService {
                         insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中","0");
                     } else if (isPay == 2) {
                         updateStock(orderBO, orderProductBO);
-
+                        setTodoTask(order);
                         //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
                         if (goodsType.equals("1") || goodsType.equals("2")) {
                             order.setOrderStatus("4");
@@ -878,7 +880,7 @@ public class OrderServiceImpl implements OrderService {
                             LOGGER.info("插入会员日志: {}", orderNo);
                             insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单", "0");
                             //发送消息
                             sendMemberMsg(orderProductBO, order);
                         } else if (goodsType.equals("5")) {
@@ -899,7 +901,7 @@ public class OrderServiceImpl implements OrderService {
                     } else if (isPay == 3) {
                         order.setOrderStatus("2");
                         orderMapper.update(order);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款","0");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                     }
                 }else if("POINTS".equals(type)){
                     updateStock(orderBO, orderProductBO);
@@ -935,6 +937,25 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return orderBO;
+    }
+
+    /**
+     * 加入消费赠送积分规则
+     */
+    private void setTodoTask(Order order) {
+        double amount = order.getTotalPrice();
+        String userId = order.getUserId();
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_ID);
+        if(amount >= 1000 && amount< 3000){
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_1000_ID);
+        }
+
+        if(amount >= 3000 && amount < 5000){
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_3000_ID);
+        }
+        if(amount >= 5000){
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_5000_ID);
+        }
     }
 
     /**
@@ -1054,39 +1075,81 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderListBO> selectExprotOrder(Order order) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
+        List<OrderBO> orderDataList = orderRoMapper.selectExprotOrder(order);
         List<OrderListBO> orderListBOList = new ArrayList<>();
+
         for(OrderBO bo:orderBOList){
             OrderListBO orderListBO = new OrderListBO();
             orderListBO.setOrderNo(bo.getOrderNo());
             //收货地址
+            StringBuffer address = new StringBuffer();
+            String phone = null;
             if(bo.getUserAddressBO() != null){
-                UserAddressBO userAddress = bo.getUserAddressBO();
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
+                UserAddressBO userAddress = setUserAddress(bo, address);
                 orderListBO.setAddress(address.toString());
-                orderListBO.setPhone(userAddress.getPhone());
+                phone = userAddress.getPhone();
+                orderListBO.setPhone(phone);
                 orderListBO.setFullName(userAddress.getName());
             }
+            boolean isAlike = false;
+            StringBuffer goodsName = new StringBuffer();
+            int num = 0;
+            if(address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
+                for(OrderBO data:orderDataList){
+                    StringBuffer addressBuffer = new StringBuffer();
+                    String phoneTemp = null;
+                    if(data.getUserAddressBO() != null){
+                        addressBuffer = new StringBuffer();
+                        UserAddressBO userAddressBO = setUserAddress(data, addressBuffer);
+                        phoneTemp = userAddressBO.getPhone();
+                    }
+                    //有地址和电话相同的
+                    if(address.toString().equals(addressBuffer.toString()) && phone.equals(phoneTemp)){
+                        isAlike = true;
+                        //寄托货物信息合并
+                        if(data.getOrderProductBOList() != null){
+                            List<OrderProductBO> orderProductBOList = data.getOrderProductBOList();
+                            for(OrderProductBO orderProductBO:orderProductBOList){
+                                goodsName.append(orderProductBO.getName());
+                                goodsName.append(" "+orderProductBO.getSpecInfo());
+                            }
+                            goodsName.append(";");
+                        }
+                        num++;
+                    }
+                }
+            }
+            //没有地址和电话相同的
+            if(!isAlike){
+                //寄托货物
+                if(bo.getOrderProductBOList() != null){
+                    List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
+                    for(OrderProductBO orderProductBO:orderProductBOList){
+                        goodsName.append(orderProductBO.getName());
+                        goodsName.append(" "+orderProductBO.getSpecInfo());
+                    }
+                    goodsName.append(";");
+                }
+            }
+            orderListBO.setGoodsName(goodsName.toString());
+            //寄托数量
+            orderListBO.setNum(num);
             //支付方式
             orderListBO.setPayMethod(bo.getPayMethod());
-            //寄托货物
-            StringBuffer goodsName = new StringBuffer();
-            if(bo.getOrderProductBOList() != null){
-                List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
-                for(OrderProductBO orderProductBO:orderProductBOList){
-                    goodsName.append(orderProductBO.getName());
-                    goodsName.append("  "+orderProductBO.getSpecInfo());
-                }
-                orderListBO.setGoodsName(goodsName.toString());
-            }
-            //寄托数量
-            orderListBO.setNum(1);
+
             orderListBOList.add(orderListBO);
         }
         return orderListBOList;
+    }
+
+    //拼接地址信息
+    private UserAddressBO setUserAddress(OrderBO bo, StringBuffer address) {
+        UserAddressBO userAddress = bo.getUserAddressBO();
+        address.append(userAddress.getProvinceName() + "-");
+        address.append(userAddress.getCityName() + "-");
+        address.append(userAddress.getAreaName() + "-");
+        address.append(userAddress.getDetail());
+        return userAddress;
     }
 
     @Override
@@ -1100,6 +1163,10 @@ public class OrderServiceImpl implements OrderService {
             if(data.getIsShipping() == 2){
                 LOGGER.warn("该订单不需要寄送：{}",bo);
                 throw new ServiceException(4102,bo.getOrderNo()+"该订单不需要寄送");
+            }
+            if(bo.getExpressNo() != null && CharUtil.isChinese(bo.getExpressNo())){
+                LOGGER.warn("运单号不能存在中文：{}",bo);
+                throw new ServiceException(4102,bo.getExpressNo() + "运单号不能存在中文");
             }
             Order order = new Order();
             BeanUtils.copyProperties(bo, order);
@@ -1153,6 +1220,7 @@ public class OrderServiceImpl implements OrderService {
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
         }else{
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+order.getExpressNo()+MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO+"<a href=\""+MessageConstant.ABCUC_URL+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
         }
 
         message.setUserId(order.getUserId());
@@ -1243,6 +1311,12 @@ public class OrderServiceImpl implements OrderService {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<OrderBO> oList = orderRoMapper.selectOrderList(order);
         return oList;
+    }
+
+    @Override
+    public List<OrderBO> selectCurriculumOrderList(OrderBO orderBO, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        return orderRoMapper.selectCurriculumOrderList(orderBO);
     }
 
 }

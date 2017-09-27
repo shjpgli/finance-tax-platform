@@ -2,7 +2,7 @@ package com.abc12366.uc.util;
 
 /**
  * User: liuguiyao<435720953@qq.com>
- * Date: 2017-09-12
+ * Date: 20170912
  * Time: 15:24
  */
 public class UCConstant {
@@ -42,41 +42,50 @@ public class UCConstant {
     public final static String AWARD_TYPE_EXP = "0";
     public final static String AWARD_TYPE_POINT = "1";
 
+    //会员时间，单位：年
+    public final static Integer USER_VIP_EXPIRE_DATE = 1;
 
     //系统任务ID
     //用户登录任务
-    public final static String SYS_TASK_LOGIN_ID = "55fe8293-a53b-46a2-8a8e-1269339d888f";
+    public final static String SYS_TASK_LOGIN_ID = "55fe8293a53b46a28a8e1269339d888f";
     //用户签到任务
-    public final static String SYS_TASK_CHECK_ID = "8b125435-755a-4e9e-b1da-f92a17c736f6";
+    public final static String SYS_TASK_CHECK_ID = "8b125435755a4e9eb1daf92a17c736f6";
     //每日课程学习
-    public final static String SYS_TASK_COURSE_LEARNING_ID = "76303795-aa1f-480b-94f4-51ac0deb3bb2";
+    public final static String SYS_TASK_COURSE_LEARNING_ID = "76303795aa1f480b94f451ac0deb3bb2";
     //每日课程分享
-    public final static String SYS_TASK_COURSE_SHARE_ID = "de72f594-7d03-4473-a50c-dfe72279e5d2";
+    public final static String SYS_TASK_COURSE_SHARE_ID = "de72f5947d034473a50cdfe72279e5d2";
     //每日课程收藏
-    public final static String SYS_TASK_COURSE_COLLECT_ID = "f2a0a28c-8c10-4d33-b1b2-9ab10aff3e3f";
+    public final static String SYS_TASK_COURSE_COLLECT_ID = "f2a0a28c8c104d33b1b29ab10aff3e3f";
     //每日课程评论
-    public final static String SYS_TASK_COURSE_COMMENT_ID = "1df0299f-cd25-4c02-9cdf-2160bae56884";
+    public final static String SYS_TASK_COURSE_COMMENT_ID = "1df0299fcd254c029cdf2160bae56884";
     //每日问题分享
-    public final static String SYS_TASK_ASK_SHARE_ID = "22575ee9-b531-4089-8fb8-a7c5a0b48e22";
+    public final static String SYS_TASK_ASK_SHARE_ID = "22575ee9b53140898fb8a7c5a0b48e22";
     //每日问题收藏
-    public final static String SYS_TASK_ASK_COLLECT_ID = "a02d6429-3567-4c69-9fc3-dd4514df4260";
+    public final static String SYS_TASK_ASK_COLLECT_ID = "a02d642935674c699fc3dd4514df4260";
     //每日问题评论
-    public final static String SYS_TASK_ASK_COMMENT_ID = "d2e76477-9452-4285-a747-bd49788bdabc";
+    public final static String SYS_TASK_ASK_COMMENT_ID = "d2e7647794524285a747bd49788bdabc";
     //每日浏览资讯
-    public final static String SYS_TASK_BROSE_NEWS_ID = "ebbe59c7-c597-4d96-ac19-b2a8554da53a";
+    public final static String SYS_TASK_BROSE_NEWS_ID = "ebbe59c7c5974d96ac19b2a8554da53a";
 
     //首次消费
-    public final static String SYS_TASK_FIRST_CONSUME_ID = "587748ea-05cd-4f60-9010-cb88786612a0";
+    public final static String SYS_TASK_FIRST_CONSUME_ID = "587748ea05cd4f609010cb88786612a0";
     //首次手机认证
-    public final static String SYS_TASK_FIRST_PHONE_VALIDATE_ID = "db7c37b6-00b8-4b29-9c31-dfd8f2b30322";
+    public final static String SYS_TASK_FIRST_PHONE_VALIDATE_ID = "db7c37b600b84b299c31dfd8f2b30322";
     //首次邮箱认证(暂不做)
-    public final static String SYS_TASK_FIRST_MAIL_VALIDATE_ID = "ac5c676e-80a6-4d49-b809-a24d49b997bf";
+    public final static String SYS_TASK_FIRST_MAIL_VALIDATE_ID = "ac5c676e80a64d49b809a24d49b997bf";
     //首次实名认证
-    public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_ID = "99903d77-6197-44ef-86c6-df14aab9c269";
+    public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_ID = "99903d77619744ef86c6df14aab9c269";
     //首次修改登录密码
-    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_ID = "";
+    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_ID = "4e36d694cd024203a44b39eb4c2a4d73";
     //首次上传用户头像图片
-    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "";
+    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "a7668563b70c447e9ddb9dd63bf63282";
+
+    //消费超过1000人民币
+    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_1000_ID = "2c205885f7eb4d309854a870f3540269";
+    //消费超过3000人民币
+    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_3000_ID = "f33a5d317b05408abdb2bec8ba76a224";
+    //消费超过5000人民币
+    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_5000_ID = "9b978d09120c43cfb5b55a52c6c9589a";
 
     //登录tdps密码加密约定码
     public final static String TDPS_LOGIN_PWD_APPOINT_CODE = "abchngs";
@@ -86,7 +95,7 @@ public class UCConstant {
     //1.网上申报
     public final static String EXP_RULE_WSSB_ID = "";
     //1.登录（此条规则并不起作用，只是勇于展现）
-    public final static String EXP_RULE_LOGIN_ID = "a9ac2dbd-61e6-411b-a59b-5f6f698b96f4";
+    public final static String EXP_RULE_LOGIN_ID = "a9ac2dbd61e6411ba59b5f6f698b96f4";
 
 
     //用户实名认证状态
@@ -102,17 +111,17 @@ public class UCConstant {
 
     //积分计算规则ID
     //签到
-    public final static String POINT_RULE_CHECK_ID = "d4aa8dca-d7e7-469f-93b4-764e35050a4f";
+    public final static String POINT_RULE_CHECK_ID = "d4aa8dcad7e7469f93b4764e35050a4f";
     //补签到
-    public final static String POINT_RULE_RECHECK_ID = "003a6366-0bba-4a0b-8486-9b3c2805adeb";
+    public final static String POINT_RULE_RECHECK_ID = "003a63660bba4a0b84869b3c2805adeb";
     //积分兑换（该条规则不用于积分计算，仅用于展示）
-    public final static String POINT_RULE_EXCHANGE_ID = "9e945332-2001-431a-bbc7-e8c38b66572f";
+    public final static String POINT_RULE_EXCHANGE_ID = "9e9453322001431abbc7e8c38b66572f";
     //抽奖扣积分
-    public final static String POINT_RULE_LOTTERY_ID = "31428853-2339-4523-91db-32a182f4fbcf";
+    public final static String POINT_RULE_LOTTERY_ID = "314288532339452391db32a182f4fbcf";
     //用户下单送积分
-    public final static String POINT_RULE_ORDER_ID = "6ef5369f-bfb2-4a89-aa6a-d2c86751cbf0";
+    public final static String POINT_RULE_ORDER_ID = "6ef5369fbfb24a89aa6ad2c86751cbf0";
     //用户等级升级奖励
-    public final static String POINT_RULE_EXP_UP_ID = "c10c55be-f01d-4e94-8a7b-5efc8eb8a96b";
+    public final static String POINT_RULE_EXP_UP_ID = "c10c55bef01d4e948a7b5efc8eb8a96b";
 
 
     //用户权益类型

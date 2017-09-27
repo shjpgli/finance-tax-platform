@@ -24,6 +24,9 @@ public class UserDzsb {
     private Date expandExpireTime;
     private String frmc;
     private String frzjh;
+    private Date lastLoginTime;
+    private String nsrlx;
+    private String sfgtjzh;
 
     public UserDzsb() {
     }
@@ -58,21 +61,6 @@ public class UserDzsb {
 
     public void setFrzjh(String frzjh) {
         this.frzjh = frzjh;
-    }
-
-    public UserDzsb(String id, String userId, String djxh, String nsrsbh, String nsrmc, String shxydm, String swjgMc,
-                    String swjgDm, boolean status, Date createTime, Date lastUpdate) {
-        this.id = id;
-        this.userId = userId;
-        this.djxh = djxh;
-        this.nsrsbh = nsrsbh;
-        this.nsrmc = nsrmc;
-        this.shxydm = shxydm;
-        this.swjgMc = swjgMc;
-        this.swjgDm = swjgDm;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
     }
 
     public String getId() {
@@ -163,10 +151,35 @@ public class UserDzsb {
         this.lastUpdate = lastUpdate;
     }
 
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getNsrlx() {
+        return nsrlx;
+    }
+
+    public void setNsrlx(String nsrlx) {
+        this.nsrlx = nsrlx;
+    }
+
+    public String getSfgtjzh() {
+        return sfgtjzh;
+    }
+
+    public void setSfgtjzh(String sfgtjzh) {
+        this.sfgtjzh = sfgtjzh;
+    }
+
     @Override
     public String toString() {
         return "UserDzsb{" +
-                "id='" + id + '\'' +
+                "status=" + status +
+                ", id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", djxh='" + djxh + '\'' +
                 ", nsrsbh='" + nsrsbh + '\'' +
@@ -174,9 +187,15 @@ public class UserDzsb {
                 ", shxydm='" + shxydm + '\'' +
                 ", swjgMc='" + swjgMc + '\'' +
                 ", swjgDm='" + swjgDm + '\'' +
-                ", status=" + status +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", expireTime=" + expireTime +
+                ", expandExpireTime=" + expandExpireTime +
+                ", frmc='" + frmc + '\'' +
+                ", frzjh='" + frzjh + '\'' +
+                ", lastLoginTime=" + lastLoginTime +
+                ", nsrlx='" + nsrlx + '\'' +
+                ", sfgtjzh='" + sfgtjzh + '\'' +
                 '}';
     }
 }

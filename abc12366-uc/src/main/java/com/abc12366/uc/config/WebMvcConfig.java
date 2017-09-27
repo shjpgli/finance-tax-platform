@@ -29,6 +29,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return slr;
     }
 
+   /* @Bean
+    public SessionFilter getSessionFilter() {
+        return new SessionFilter();
+    }*/
+
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -111,7 +116,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //根据省市区编号查询名称
                 .excludePathPatterns("/provinceorcityorarea")
                 //JS获取微信信息
-                .excludePathPatterns("/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**")
+                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**")
                         //
                 .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
                 //好会计

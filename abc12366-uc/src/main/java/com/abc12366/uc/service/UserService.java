@@ -37,4 +37,9 @@ public interface UserService {
     void updateUserVipInfo(String userId, String vipLevel);
 
 	UserBO selectByopenid(String openid);
+
+    /**
+     * 自动会员失效
+     */
+    void automaticUserCancel();
 }

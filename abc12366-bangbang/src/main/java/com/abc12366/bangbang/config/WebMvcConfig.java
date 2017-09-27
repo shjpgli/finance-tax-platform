@@ -78,6 +78,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/classify/selectListsy")
                         //获取课程标签列表
                 .excludePathPatterns("/curriculum/selectLabelList")
+                        //获取课程大类小类标签集合
+                .excludePathPatterns("/classify/selectClassifyListsy")
                         //获取最新课程
                 .excludePathPatterns("/curriculum/selectListNew")
                         //获取最热课程
@@ -114,6 +116,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/question/selectQuestion/**")
                         //问题更新浏览量
                 .excludePathPatterns("/question/updateBrowseNum/**")
+                        //优秀邦派列表查询
+                .excludePathPatterns("/queFaction/selectListExcellent")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",

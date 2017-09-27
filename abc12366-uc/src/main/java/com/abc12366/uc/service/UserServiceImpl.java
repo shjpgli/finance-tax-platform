@@ -14,6 +14,7 @@ import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.util.DataUtils;
 import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ import java.util.*;
  * @create 2017-02-22 10:17 AM
  * @since 1.0.0
  */
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -295,6 +296,10 @@ public class UserServiceImpl implements UserService {
         calendar.add(Calendar.YEAR, 1); // 年份加1
         calendar.add(Calendar.MONTH, 0);// 月份不变
         calendar.add(Calendar.DATE, 0);// 日期不变
+        //时分秒设为：23:59:59
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
 
         User userTmp = userRoMapper.selectOne(userId);
         if (userTmp == null) {
@@ -318,4 +323,14 @@ public class UserServiceImpl implements UserService {
 	public UserBO selectByopenid(String openid) {
 		return userRoMapper.selectByopenid(openid);
 	}
+
+    @Override
+    public void automaticUserCancel() {
+        Date date = DataUtils.getAddDate(UCConstant.USER_VIP_EXPIRE_DATE);
+        List<User> userList = userRoMapper.selectUserVipList(date);
+        for (User user : userList){
+            user.setStatus(false);
+            userMapper.update(user);
+        }
+    }
 }

@@ -8,6 +8,8 @@ import com.abc12366.bangbang.model.curriculum.CurriculumStudy;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumStudyBo;
 import com.abc12366.bangbang.service.CurrStudyService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.bangbang.util.UCConstant;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import net.sf.json.JSONObject;
@@ -69,11 +71,10 @@ public class CurrStudyServiceImpl implements CurrStudyService {
             studyBo.setStudyId(uuid);
             BeanUtils.copyProperties(studyBo, study);
             studyMapper.insert(study);
-
-            String url = "http://118.118.116.202:9100/uc/todo/task/do/award/{userId}/{sysTaskId}";
+            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{sysTaskId}";
             String responseStr;
             String userId = UcUserCommon.getUserId();
-            String sysTaskId = "76303795-aa1f-480b-94f4-51ac0deb3bb2";
+            String sysTaskId = UCConstant.SYS_TASK_COURSE_LEARNING_ID;
             responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 //            System.out.println(responseStr);
 

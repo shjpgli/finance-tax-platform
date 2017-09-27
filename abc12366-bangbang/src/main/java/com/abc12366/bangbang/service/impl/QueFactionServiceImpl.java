@@ -1,14 +1,11 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.mapper.db1.QuestionFactionClassifyMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionFactionMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionFactionTagMapper;
+import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionClassifyRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionFactionMemberRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionTagRoMapper;
-import com.abc12366.bangbang.model.question.QuestionFaction;
-import com.abc12366.bangbang.model.question.QuestionFactionClassify;
-import com.abc12366.bangbang.model.question.QuestionFactionTag;
+import com.abc12366.bangbang.model.question.*;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
@@ -23,15 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/9/14.
  */
-@Service
+@Service("factionService")
 public class QueFactionServiceImpl implements QueFactionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(QueFactionServiceImpl.class);
 
@@ -40,6 +34,9 @@ public class QueFactionServiceImpl implements QueFactionService {
 
     @Autowired
     private QuestionFactionRoMapper questionFactionRoMapper;
+
+    @Autowired
+    private QuestionFactionMemberRoMapper memberFactionRoMapper;
 
     @Autowired
     private QuestionFactionTagMapper tagMapper;
@@ -52,6 +49,12 @@ public class QueFactionServiceImpl implements QueFactionService {
 
     @Autowired
     private QuestionFactionClassifyRoMapper classifyRoMapper;
+
+    @Autowired
+    private QuestionFactionHonorMapper factionHonorMapper;
+
+    @Autowired
+    private QuestionMemberHonorMapper memberHonorMapper;
 
     @Override
     public List<QuestionFactionBo> selectList(Map<String,Object> map) {
@@ -278,6 +281,34 @@ public class QueFactionServiceImpl implements QueFactionService {
             throw new ServiceException(6124);
         }
         return "";
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public void autoCalculateFactionHonor() {
+        List<QuestionFactionHonor> questionFactionHonorList = questionFactionRoMapper.selectFactionHonorList();
+        for (QuestionFactionHonor factionHonor : questionFactionHonorList){
+            int splendidNum = questionFactionRoMapper.selectSplendidNumByFactionId(factionHonor.getFactionId());
+            factionHonor.setSplendidNum(splendidNum);
+            factionHonor.setId(UUID.randomUUID().toString().replace("-", ""));
+            factionHonor.setCreateTime(new Date());
+            factionHonor.setUpdateTime(new Date());
+
+            List<QuestionMemberHonor> questionMemberHonorList = memberFactionRoMapper.selectMemberHonorList(factionHonor.getFactionId());
+            for (QuestionMemberHonor memberHonor : questionMemberHonorList){
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("factionId", memberHonor.getFactionId());
+                dataMap.put("userId", memberHonor.getUserId());
+                int splendidNum1 = memberFactionRoMapper.selectSplendidNum(dataMap);
+                memberHonor.setSplendidNum(splendidNum1);
+                memberHonor.setId(UUID.randomUUID().toString().replace("-", ""));
+                memberHonor.setCreateTime(new Date());
+                memberHonor.setUpdateTime(new Date());
+                memberHonorMapper.insert(memberHonor);
+            }
+
+            factionHonorMapper.insert(factionHonor);
+        }
     }
 
 }

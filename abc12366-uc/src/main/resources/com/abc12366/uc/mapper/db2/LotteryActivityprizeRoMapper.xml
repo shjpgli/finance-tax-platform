@@ -6,6 +6,7 @@
         SELECT id,activityId,lotteryId,val1,description,status,createTime,
         (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,
         (select b.name from uc_lottery b where b.id=z.lotteryId) as lotteryName,
+        (select c.image from uc_lottery c where c.id=z.lotteryId) as lotteryImage,
         lastTime
         from uc_lottery_activityprize z
         <where>
@@ -24,6 +25,7 @@
 SELECT  id,activityId,lotteryId,val1,description,status,createTime,
 (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,
 (select b.name from uc_lottery b where b.id=z.lotteryId) as lotteryName,
+(select c.image from uc_lottery c where c.id=z.lotteryId) as lotteryImage,
 lastTime
  from uc_lottery_activityprize z
 where id=#{id}

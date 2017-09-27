@@ -29,6 +29,21 @@ public class WxQrcodeController {
 
     @Autowired
     IWxQrcodeService iWxQrcodeService;
+    
+    @GetMapping("/getcode")
+    private ResponseEntity getWxQrcode(@RequestParam String codeStr){
+    	try {
+			String url=iWxQrcodeService.getWxQrcode(codeStr);
+			if(url!=null){
+				return ResponseEntity.ok(Utils.kv("data", url));
+			}else{
+				return ResponseEntity.ok(Utils.bodyStatus(9999, "获取二维码异常"));
+			}
+		} catch (UnsupportedEncodingException e) {
+			return ResponseEntity.ok(Utils.bodyStatus(9999, "获取二维码异常"));
+		}
+    }
+    
 
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,

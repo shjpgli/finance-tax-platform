@@ -11,6 +11,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.crypto.Cipher;
 import java.io.*;
@@ -90,7 +91,8 @@ public class RSA {
             LOGGER.info("完整路径"+new File(urlPath).getParent()+RSA_PAIR_FILENAME);
             return (new File(urlPath).getParent() + RSA_PAIR_FILENAME);
         }else{
-            urlPath= SpringCtxHolder.getProperty("abc12366.uc.rsa.path");
+            //urlPath= SpringCtxHolder.getProperty("abc12366.uc.rsa.path");
+            urlPath = new ClassPathResource("RSAKey.txt").getPath();
             LOGGER.info("完整路径"+urlPath+RSA_PAIR_FILENAME);
             return (urlPath + RSA_PAIR_FILENAME);
         }

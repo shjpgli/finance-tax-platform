@@ -190,7 +190,7 @@ public class AppServiceImpl implements AppService {
                 LOGGER.warn("API不存在或未授权：{}", app);
                 throw new ServiceException(4027);
             }
-            if(bo.getIsValidate() == true){
+            //if(bo.getIsValidate() == true){
                 if(method != null && !method.equals(bo.getMethod())){
                     LOGGER.warn("API方法不正确：{}", app);
                     throw new ServiceException(4028);
@@ -227,7 +227,7 @@ public class AppServiceImpl implements AppService {
                     LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
                     throw new ServiceException(4033);
                 }
-            }
+//            }
         }
         return true;
     }
@@ -251,6 +251,14 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         BeanUtils.copyProperties(appBO, app);
         app.setLastUpdate(new Date());
+
+        //根据名称查询app
+        App temp = appRoMapper.selectByName(app.getName());
+        if (temp != null && !temp.getId().equals(app.getId())) {
+            LOGGER.warn("APP应用名称已存在{}", app);
+            throw new ServiceException(4095);
+        }
+
         int update = appMapper.update(app);
         if (update != 1) {
             LOGGER.warn("修改异常：{}", app);

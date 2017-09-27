@@ -6,7 +6,7 @@ package com.abc12366.uc.util;
 public class MessageConstant {
 
     //UC访问地址
-    public static final String ABCUC_URL = "http://testuc.abc12366.com/ABCUC";
+    public static final String ABCUC_URL = "https://testuc.abc12366.com/ABCUC";
     public static final String SPDD = "SPDD";//商品订单
     public static final String ZZFPDD = "ZZFPDD";//纸质发票订单
     public static final String DZFPDD = "DZFPDD";//电子发票订单
@@ -14,6 +14,7 @@ public class MessageConstant {
     /**实物商品**/
     //发货
     public static final String DELIVER_GOODS_PREFIX = "您的宝贝已发出，运单号：";
+    public static final String DELIVER_GOODS_PREFIX_NO = "您的宝贝已发出，订单号：";
     public static final String SUFFIX = "，如有疑问请联系客服咨询4008873133";
 
     //退货审核通过

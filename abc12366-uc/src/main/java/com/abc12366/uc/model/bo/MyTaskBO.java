@@ -7,7 +7,7 @@ package com.abc12366.uc.model.bo;
  */
 public class MyTaskBO {
     private String currentPoints;
-    private String unReceivePoints;
+    private int unReceivePoints;
     private String taskRange;
     private String finishedTaskCount;
 
@@ -22,11 +22,11 @@ public class MyTaskBO {
         this.currentPoints = currentPoints;
     }
 
-    public String getUnReceivePoints() {
+    public int getUnReceivePoints() {
         return unReceivePoints;
     }
 
-    public void setUnReceivePoints(String unReceivePoints) {
+    public void setUnReceivePoints(int unReceivePoints) {
         this.unReceivePoints = unReceivePoints;
     }
 

@@ -18,6 +18,8 @@ public class TY21Xml2Object {
     private String FRZJH;
     private String RJDQR;
     private String YQDQR;
+    private String NSRLX;
+    private String SFGTJZH;
 
     public TY21Xml2Object() {
     }
@@ -116,5 +118,41 @@ public class TY21Xml2Object {
 
     public void setYQDQR(String YQDQR) {
         this.YQDQR = YQDQR;
+    }
+
+    public String getNSRLX() {
+        return NSRLX;
+    }
+
+    public void setNSRLX(String NSRLX) {
+        this.NSRLX = NSRLX;
+    }
+
+    public String getSFGTJZH() {
+        return SFGTJZH;
+    }
+
+    public void setSFGTJZH(String SFGTJZH) {
+        this.SFGTJZH = SFGTJZH;
+    }
+
+    @Override
+    public String toString() {
+        return "TY21Xml2Object{" +
+                "LOGINTOKEN='" + LOGINTOKEN + '\'' +
+                ", DLSJ='" + DLSJ + '\'' +
+                ", Y_NSRSBH='" + Y_NSRSBH + '\'' +
+                ", NSRMC='" + NSRMC + '\'' +
+                ", SHXYDM='" + SHXYDM + '\'' +
+                ", SWJGDM='" + SWJGDM + '\'' +
+                ", SWJGMC='" + SWJGMC + '\'' +
+                ", DJXH='" + DJXH + '\'' +
+                ", FRXM='" + FRXM + '\'' +
+                ", FRZJH='" + FRZJH + '\'' +
+                ", RJDQR='" + RJDQR + '\'' +
+                ", YQDQR='" + YQDQR + '\'' +
+                ", NSRLX='" + NSRLX + '\'' +
+                ", SFGTJZH='" + SFGTJZH + '\'' +
+                '}';
     }
 }

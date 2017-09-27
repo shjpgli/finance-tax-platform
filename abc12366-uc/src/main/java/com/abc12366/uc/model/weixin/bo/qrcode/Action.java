@@ -9,6 +9,7 @@ public class Action {
 
     private String action_name;
     private Info action_info;
+    private long expire_seconds;
 
     public String getAction_name() {
         return action_name;
@@ -25,4 +26,12 @@ public class Action {
     public void setAction_info(Info action_info) {
         this.action_info = action_info;
     }
+
+	public long getExpire_seconds() {
+		return expire_seconds;
+	}
+
+	public void setExpire_seconds(long expire_seconds) {
+		this.expire_seconds = expire_seconds;
+	}
 }

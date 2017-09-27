@@ -108,6 +108,20 @@ public class DataUtils {
     }
 
     /**
+     * 日期往后减去num年
+     * @param num
+     * @return
+     */
+    public static Date getAddYear(int num){
+        Date date = new Date();//取时间
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.YEAR,-num);//把日期往后增加一年.整数往后推,负数往前移动
+        date=calendar.getTime();   //这个时间就是日期往后推一年的结果
+        return date;
+    }
+
+    /**
      * 日期往后减num个小时
      * @param num
      * @return

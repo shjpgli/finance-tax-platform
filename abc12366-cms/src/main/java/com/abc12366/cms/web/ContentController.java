@@ -89,11 +89,13 @@ public class ContentController {
                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                             @RequestParam(value = "tagId", required = false) String tagId,
                                             @RequestParam(value = "siteId", required = false) String siteId,
-                                            @RequestParam(value = "channelId", required = false) String channelId) {
+                                            @RequestParam(value = "channelId", required = false) String channelId,
+                                            @RequestParam(value = "exceptChannelId", required = false) String exceptChannelId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("tagId", tagId);//标签
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("siteId", siteId);//站点ID
+        dataMap.put("exceptChannelId", exceptChannelId);//过滤掉的栏目ID
 
         // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.
         // 当Service中有多条select语句时，建议放在Service中，这时需要将Page对象传递到Service实现方法，返回对象也是Page对象。
@@ -191,6 +193,7 @@ public class ContentController {
                                                 @RequestParam(value = "typeId", required = false) String typeId,
                                                 @RequestParam(value = "status", required = false) String status,
                                                 @RequestParam(value = "channelId", required = false) String channelId,
+                                                @RequestParam(value = "exceptChannelId", required = false) String exceptChannelId,
                                                 @RequestParam(value = "topicId", required = false) String topicId,
                                                 @RequestParam(value = "channelName", required = false) String
                                                             channelName,
@@ -204,6 +207,7 @@ public class ContentController {
         dataMap.put("status", status);//状态
         dataMap.put("channelId", channelId);//栏目ID
         dataMap.put("channelName", channelName);//栏目名称
+        dataMap.put("exceptChannelId", exceptChannelId);//过滤掉的栏目ID
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (startTime != null && !"".equals(startTime)) {

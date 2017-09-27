@@ -89,7 +89,7 @@
     </select>
 
     <!-- 查询优秀邦派 -->
-    <select id="selectListExcellent" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.util.Map">
+    <select id="selectListExcellent" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.lang.String">
         SELECT
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
         (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
@@ -104,6 +104,35 @@
         FROM bb_question_faction f
         WHERE 1=1
         order by 2*answerNum+discussNum+7*adoptNum desc
+    </select>
+
+
+    <!-- 查询邦派荣誉值 -->
+    <select id="selectFactionHonorList" resultType="com.abc12366.bangbang.model.question.QuestionFactionHonor" parameterType="java.util.Map">
+        SELECT
+        factionId,DATE_FORMAT( CURDATE( ) , '%Y%m' ) honorTime,
+        (SELECT count(id) FROM bb_question where DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and factionId = f.factionId) questionNum,
+
+        (SELECT count(id) FROM bb_question_answer where  parentId = '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )  and factionId = f.factionId) answerNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and factionId = f.factionId) discussNum,
+
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and DATE_FORMAT( createTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and isAccept = '1' and factionId = f.factionId) adoptNum
+
+        FROM bb_question_faction f
+    </select>
+
+    <!-- 查询邦派精彩回答数 -->
+    <select id="selectSplendidNumByFactionId" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(*) from (SELECT
+            id,(SELECT count(id) FROM bb_question_answer where parentId != '' and parentId = a.id) plcnt,
+            (SELECT count(likeId) FROM bb_question_like where id = a.id) likecnt
+        FROM
+            bb_question_answer a
+        WHERE
+            parentId = ''
+            AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+            AND factionId = #{factionId} ) b where b.plcnt >2 and b.likecnt >6
     </select>
 
 </mapper>

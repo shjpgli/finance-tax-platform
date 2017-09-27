@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionFaction;
+import com.abc12366.bangbang.model.question.QuestionFactionHonor;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
@@ -60,6 +61,20 @@ public interface QuestionFactionRoMapper {
      *
      **/
     List<QuestionAnswerBo> selectdtListByFactionId(@Param("factionId") String factionId);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    List<QuestionFactionHonor> selectFactionHonorList();
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    int selectSplendidNumByFactionId(@Param("factionId") String factionId);
 
 
 }

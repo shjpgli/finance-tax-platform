@@ -299,11 +299,22 @@ public class InvoiceServiceImpl implements InvoiceService {
         return excelList;
     }
 
+    //拼接地址信息
+    private UserAddressBO setUserAddress(InvoiceBO bo, StringBuffer address) {
+        UserAddressBO userAddress = bo.getUserAddressBO();
+        address.append(userAddress.getProvinceName() + "-");
+        address.append(userAddress.getCityName() + "-");
+        address.append(userAddress.getAreaName() + "-");
+        address.append(userAddress.getDetail());
+        return userAddress;
+    }
+
     @Override
     public List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice) {
         //发票申请状态，1：待审批，2：已审批，3：已拒绝，4：已发货，5：已退票，6：已收货，7：待发货
         invoice.setStatus("7");
         List<InvoiceBO> invoiceBOList = invoiceRoMapper.selectList(invoice);
+        List<InvoiceBO> invoiceDatas = invoiceRoMapper.selectList(invoice);
         List<InvoiceExpressExcel> excelList = new ArrayList<InvoiceExpressExcel>();
         Express express = null;
         if (invoiceBOList != null) {
@@ -313,58 +324,54 @@ public class InvoiceServiceImpl implements InvoiceService {
                 //List<Express> exList = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
                 excel.setInvoiceOrderNo(bo.getId());
                 //收货地址
-                UserAddressBO userAddress = bo.getUserAddressBO();
+                StringBuffer address = new StringBuffer();
+                String phone = null;
                 if(bo.getUserAddressBO() != null){
-                    StringBuffer address = new StringBuffer();
-                    address.append(userAddress.getProvinceName() + "-");
-                    address.append(userAddress.getCityName() + "-");
-                    address.append(userAddress.getAreaName() + "-");
-                    address.append(userAddress.getDetail());
+                    UserAddressBO userAddress = setUserAddress(bo, address);
+                    phone = userAddress.getPhone();
+                    excel.setPhone(phone);
                     excel.setAddress(address.toString());
+                    excel.setLinkman(userAddress.getName());
+                    excel.setPhone(userAddress.getPhone());
                 }else {
                     LOGGER.info("收货人地址信息异常：{}", bo);
                     throw new ServiceException(4909);
                 }
+                boolean isAlike = false;
+                StringBuffer invoiceNos = new StringBuffer();
+                int num = 0;
+                if(address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
+                    for (InvoiceBO data : invoiceDatas) {
+                        StringBuffer addressBuffer;
+                        String phoneTemp = null;
+                        if (data.getUserAddressBO() != null) {
+                            addressBuffer = new StringBuffer();
+                            UserAddressBO userAddressBO = setUserAddress(data, addressBuffer);
+                            phoneTemp = userAddressBO.getPhone();
+                        }else {
+                            LOGGER.info("收货人地址信息异常：{}", bo);
+                            throw new ServiceException(4909);
+                        }
+                        //有地址和电话相同的
+                        if (address.toString().equals(addressBuffer.toString()) && phone.equals(phoneTemp)) {
+                            isAlike = true;
+                            //寄托货物信息合并
+                            invoiceNos.append(data.getInvoiceNo());
+                            invoiceNos.append(";");
+                            num++;
+                        }
+                    }
+                    //没有地址和电话相同的
+                    if (!isAlike) {
+                        //寄托货物
+                        invoiceNos.append(bo.getInvoiceNo());
+                        invoiceNos.append(";");
+                    }
+                    excel.setCargoContent(invoiceNos.toString());
+                    //寄托数量
+                    excel.setCargoNum(num);
+                }
                 excel.setReceivingCompany(bo.getNsrmc());
-                excel.setLinkman(userAddress.getName());
-                excel.setPhone(userAddress.getPhone());
-                excel.setCargoContent(bo.getInvoiceNo());
-                excel.setCargoNum(1);
-//                //查询该快递单信息是否已经生成
-//                if (exList == null) {
-//                    //导出之前，生成订单表数据，及订单表与快递关系表数据
-//                    express = new Express();
-//                    express.setInvoiceOrderNo(invoice.getId());
-//                    express.setUserId(bo.getUserId());
-//                    express.setCreateTime(new Date());
-//
-//                    int insertExpress = expressMapper.insert(express);
-//                    if (insertExpress != 1) {
-//                        LOGGER.info("生成订单表数据失败：{}", express);
-//                        throw new ServiceException(4142);
-//                    }
-//                    excel.setReceivingCompany(bo.getNsrmc());
-//                    excel.setLinkman(userAddress.getName());
-//                    excel.setPhone(userAddress.getPhone());
-//                    excel.setCargoContent(bo.getInvoiceNo());
-//                    excel.setCargoNum(1);
-//                } else {
-//                    StringBuffer content = new StringBuffer();
-//                    int count = 0;
-//                    for (Express ex : exList) {
-//                        if (count == 0) {
-//                            content.append(ex.getExpressNo());
-//                        } else {
-//                            content.append("," + ex.getExpressNo());
-//                        }
-//                        count++;
-//                    }
-//                    excel.setReceivingCompany(bo.getNsrmc());
-//                    excel.setLinkman(userAddress.getName());
-//                    excel.setPhone(userAddress.getPhone());
-//                    excel.setCargoContent(bo.getInvoiceNo());
-//                    excel.setCargoNum(1);
-//                }
                 excelList.add(excel);
             }
         }
@@ -378,6 +385,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             Invoice invoice = new Invoice();
             invoice.setStatus("4");
             invoice.setId(expressExcel.getInvoiceOrderNo());
+            if(expressExcel.getWaybillNum() != null && CharUtil.isChinese(expressExcel.getWaybillNum())){
+                LOGGER.warn("运单号不能存在中文：{}",expressExcel);
+                throw new ServiceException(4102,expressExcel.getWaybillNum() + "运单号不能存在中文");
+            }
             invoice.setWaybillNum(expressExcel.getWaybillNum());
             invoice.setExpressCompId(expressCompId);
             Invoice ce = new Invoice();

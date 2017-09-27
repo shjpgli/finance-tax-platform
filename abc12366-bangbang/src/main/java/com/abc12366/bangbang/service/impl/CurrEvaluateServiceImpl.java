@@ -7,6 +7,8 @@ import com.abc12366.bangbang.model.curriculum.CurriculumEvaluate;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateBo;
 import com.abc12366.bangbang.service.CurrEvaluateService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.bangbang.util.UCConstant;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import net.sf.json.JSONObject;
@@ -80,10 +82,10 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
             evaluateMapper.insert(evaluate);
 
 
-            String url = "http://118.118.116.202:9100/uc/todo/task/do/award/{userId}/{sysTaskId}";
+            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{sysTaskId}";
             String responseStr;
             String userId = UcUserCommon.getUserId();
-            String sysTaskId = "1df0299f-cd25-4c02-9cdf-2160bae56884";
+            String sysTaskId = UCConstant.SYS_TASK_COURSE_COMMENT_ID;
             responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 //            System.out.println(responseStr);
 

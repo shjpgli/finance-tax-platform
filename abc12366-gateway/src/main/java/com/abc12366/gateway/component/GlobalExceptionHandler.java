@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity handle(Exception e) {
-        e.printStackTrace();
+        LOGGER.error("{}", e);
         BodyStatus bodyStatus;
         if (e instanceof ServiceException) {
             bodyStatus = ((ServiceException) e).getBodyStatus();

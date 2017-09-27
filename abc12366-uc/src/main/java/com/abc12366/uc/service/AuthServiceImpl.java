@@ -262,8 +262,18 @@ public class AuthServiceImpl implements AuthService {
         computeExp(user.getId());
         //记用户登录日志
         insertLoginLog(user.getId());
-        //任务日志
+        //登录任务日志
         todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_ID);
+
+        //首次绑定手机任务埋点
+        if (!StringUtils.isEmpty(user.getPhone())) {
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
+        }
+
+        if (!StringUtils.isEmpty(user.getUserPicturePath())) {
+            //首次上传用户头像任务埋点
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+        }
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
@@ -560,6 +570,16 @@ public class AuthServiceImpl implements AuthService {
         insertLoginLog(user.getId());
         //任务日志
         todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_ID);
+
+        //首次绑定手机任务埋点
+        if (!StringUtils.isEmpty(user.getPhone())) {
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
+        }
+
+        if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
+            //首次上传用户头像任务埋点
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+        }
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);

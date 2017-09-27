@@ -36,6 +36,7 @@ public class OrderBO implements Serializable {
     private String tradeMethod;
     private String cancelId;
     private String goodsId;
+    private String[] status;
     /**推荐人姓名**/
     private String recommendUser;
 
@@ -386,5 +387,13 @@ public class OrderBO implements Serializable {
 
     public void setExpressComp(ExpressComp expressComp) {
         this.expressComp = expressComp;
+    }
+
+    public String[] getStatus() {
+        return status;
+    }
+
+    public void setStatus(String[] status) {
+        this.status = status;
     }
 }
