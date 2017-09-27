@@ -110,4 +110,17 @@ public class RedEnvelopController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+
+    /**
+     * 对于发送失败的红包，重新发送
+     */
+    @PutMapping("/resend/{id}")
+    public ResponseEntity Resend(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        WxRedEnvelop data = iActivityService.resend(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
 }
