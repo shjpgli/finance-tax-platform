@@ -42,7 +42,7 @@
         INSERT INTO bb_knowledge_category
         (id,name,code,parentCode,sort,createTime,updateTime,createUser,updateUser)
         VALUES
-        (#{id},#{name},#{code},#{parentCode},#{sort},#{createTime},#{updateTime},#{createUser},#{updateUser})
+        (#{id},#{name},#{code},#{parentCode},#{sort},now(),now(),#{createUser},#{updateUser})
     </insert>
 
     <!-- 添加 （匹配有值的字段）-->
@@ -64,19 +64,14 @@
             <if test="sort != null">
                 sort,
             </if>
-            <if test="createTime != null">
-                createTime,
-            </if>
-            <if test="updateTime != null">
-                updateTime,
-            </if>
             <if test="createUser != null">
                 createUser,
             </if>
             <if test="updateUser != null">
                 updateUser,
             </if>
-
+            createTime,
+            updateTime
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -94,18 +89,13 @@
             <if test="sort!=null">
                 #{sort},
             </if>
-            <if test="createTime!=null">
-                #{createTime},
-            </if>
-            <if test="updateTime!=null">
-                #{updateTime},
-            </if>
             <if test="createUser!=null">
                 #{createUser},
             </if>
             <if test="updateUser!=null">
                 #{updateUser},
             </if>
+            now(),now()
         </trim>
     </insert>
 
@@ -125,19 +115,13 @@
             <if test="sort != null">
                 sort = #{sort},
             </if>
-            <if test="createTime != null">
-                createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                updateTime = #{updateTime},
-            </if>
             <if test="createUser != null">
                 createUser = #{createUser},
             </if>
             <if test="updateUser != null">
                 updateUser = #{updateUser},
             </if>
-
+            updateTime = now()
         </set>
         WHERE id = #{id}
     </update>
@@ -156,8 +140,7 @@
         code = #{code},
         parentCode = #{parentCode},
         sort = #{sort},
-        createTime = #{createTime},
-        updateTime = #{updateTime},
+        updateTime = now(),
         createUser = #{createUser},
         updateUser = #{updateUser}
         WHERE id = #{id}
