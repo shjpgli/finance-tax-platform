@@ -48,7 +48,7 @@ public class PrivilegeItemServiceImpl implements PrivilegeItemService {
     public PrivilegeItem selecOneByUser(String userId) {
         User user = userRoMapper.selectOne(userId);
         //会员过期了，则返回普通用户权益
-        if (user == null || user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
+        if (user == null || user.getVipExpireDate() == null || user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
             return privilegeRoMapper.selectOneByLevelCode(Constant.USER_ORIGINAL_LEVEL);
         }
         return privilegeRoMapper.selecOneByUser(userId);
