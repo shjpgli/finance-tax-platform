@@ -78,6 +78,13 @@ public class UCConstant {
     //首次上传用户头像图片
     public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "a7668563-b70c-447e-9ddb-9dd63bf63282";
 
+    //消费超过1000人民币
+    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_1000_ID = "2c205885-f7eb-4d30-9854-a870f3540269";
+    //消费超过3000人民币
+    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_3000_ID = "f33a5d31-7b05-408a-bdb2-bec8ba76a224";
+    //消费超过5000人民币
+    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_5000_ID = "9b978d09-120c-43cf-b5b5-5a52c6c9589a";
+
     //登录tdps密码加密约定码
     public final static String TDPS_LOGIN_PWD_APPOINT_CODE = "abchngs";
 

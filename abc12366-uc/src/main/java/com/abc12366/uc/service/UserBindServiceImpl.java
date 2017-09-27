@@ -104,10 +104,10 @@ public class UserBindServiceImpl implements UserBindService {
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY21");
         map.put("nsrsbh", userDzsbInsertBO.getNsrsbhOrShxydm());
-        String pwdDecode1 = rsaService.decodeStringFromJs(userDzsbInsertBO.getFwmm());
-        String pwdDecode2 = fwmmEncode(pwdDecode1);
+//        String pwdDecode1 = rsaService.decodeStringFromJs(userDzsbInsertBO.getFwmm());
+//        String pwdDecode2 = fwmmEncode(pwdDecode1);
+        String pwdDecode2 = fwmmEncode(userDzsbInsertBO.getFwmm());
         map.put("fwmm", pwdDecode2);
-        //map.put("fwmm", fwmmEncode(rsaService.decodeStringFromJs(userDzsbInsertBO.getFwmm())));
         map.put("userid", userId);
         Map<String, String> resMap = client.process(map);
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
@@ -134,6 +134,9 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
         userDzsb.setNsrmc(ty21Object.getNSRMC());
         userDzsb.setShxydm(ty21Object.getSHXYDM());
+        userDzsb.setLastLoginTime(DateUtils.GeneralStringToDate(ty21Object.getDLSJ(), "yyyy-MM-dd HH:mm:ss"));
+        userDzsb.setNsrlx(ty21Object.getNSRLX());
+        userDzsb.setSfgtjzh(ty21Object.getSFGTJZH());
         if (ty21Object.getSHXYDM() == null || ty21Object.getSHXYDM().trim().equals("")) {
             userDzsb.setShxydm(ty21Object.getY_NSRSBH());
         }
@@ -506,7 +509,7 @@ public class UserBindServiceImpl implements UserBindService {
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
         if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
-            throw new ServiceException(4629);
+            throw new ServiceException(4637);
         }
         if (!resMap.get("rescode").equals("00000000")) {
             throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
@@ -561,6 +564,12 @@ public class UserBindServiceImpl implements UserBindService {
                 }
                 if ("YQDQR".equals(mx.getCODE())) {
                     object.setYQDQR(mx.getVALUE());
+                }
+                if ("NSRLX".equals(mx.getCODE())) {
+                    object.setNSRLX(mx.getVALUE());
+                }
+                if ("SFGTJZH".equals(mx.getCODE())) {
+                    object.setSFGTJZH(mx.getVALUE());
                 }
             }
         } else {

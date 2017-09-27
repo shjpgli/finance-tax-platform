@@ -1,6 +1,7 @@
 package com.abc12366.uc.util;
 
 import com.abc12366.gateway.exception.ServiceException;
+import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -142,5 +143,20 @@ public class DateUtils {
         calendar.set(Calendar.MONTH, 0);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTime();
+    }
+
+    public static Date GeneralStringToDate(String str, String stand){
+        if (StringUtils.isEmpty(str)||StringUtils.isEmpty(stand)) {
+            throw new ServiceException(4805);
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat(stand);
+        Date date;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            throw new ServiceException(4805);
+        }
+        return date;
     }
 }

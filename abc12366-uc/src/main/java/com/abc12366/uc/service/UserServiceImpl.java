@@ -295,6 +295,10 @@ public class UserServiceImpl implements UserService {
         calendar.add(Calendar.YEAR, 1); // 年份加1
         calendar.add(Calendar.MONTH, 0);// 月份不变
         calendar.add(Calendar.DATE, 0);// 日期不变
+        //时分秒设为：23:59:59
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
 
         User userTmp = userRoMapper.selectOne(userId);
         if (userTmp == null) {
