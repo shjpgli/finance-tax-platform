@@ -270,9 +270,9 @@ public class AuthServiceImpl implements AuthService {
             todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
         }
 
-        if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
+        if (!StringUtils.isEmpty(user.getUserPicturePath())) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         UserBO userBO = new UserBO();
@@ -578,7 +578,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         UserBO userBO = new UserBO();
