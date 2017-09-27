@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * Created by xieyanmao on 2017/9/14.
  */
-@Service
+@Service("factionService")
 public class QueFactionServiceImpl implements QueFactionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(QueFactionServiceImpl.class);
 
