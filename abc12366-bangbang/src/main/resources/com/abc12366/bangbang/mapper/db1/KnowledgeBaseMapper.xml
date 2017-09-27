@@ -258,19 +258,13 @@
             <if test="shareNum != null">
                 shareNum,
             </if>
-            <if test="createTime != null">
-                createTime,
-            </if>
-            <if test="updateTime != null">
-                updateTime,
-            </if>
             <if test="createUser != null">
                 createUser,
             </if>
             <if test="updateUser != null">
                 updateUser,
             </if>
-
+            createTime,updateTime
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -315,18 +309,13 @@
             <if test="shareNum!=null">
                 #{shareNum},
             </if>
-            <if test="createTime!=null">
-                #{createTime},
-            </if>
-            <if test="updateTime!=null">
-                #{updateTime},
-            </if>
             <if test="createUser!=null">
                 #{createUser},
             </if>
             <if test="updateUser!=null">
                 #{updateUser},
             </if>
+            now(),now()
         </trim>
     </insert>
 
@@ -369,18 +358,13 @@
             <if test="shareNum != null">
                 shareNum = #{shareNum},
             </if>
-            <if test="createTime != null">
-                createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                updateTime = #{updateTime},
-            </if>
             <if test="createUser != null">
                 createUser = #{createUser},
             </if>
             <if test="updateUser != null">
                 updateUser = #{updateUser},
             </if>
+            updateTime = now()
         </set>
         WHERE id = #{id}
     </update>
@@ -402,8 +386,7 @@
         usefulVotes = #{usefulVotes},
         uselessVotes = #{uselessVotes},
         shareNum = #{shareNum},
-        createTime = #{createTime},
-        updateTime = #{updateTime},
+        updateTime = now(),
         createUser = #{createUser},
         updateUser = #{updateUser}
         WHERE id = #{id}

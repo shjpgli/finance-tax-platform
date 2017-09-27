@@ -86,7 +86,7 @@
 		INSERT INTO bb_knowledge_vote_log
 		(id,userId,knowledgeId,isUseFull,sourceIP,createTime)
 		VALUES
-		(#{id},#{userId},#{knowledgeId},#{isUseFull},#{sourceIP},#{createTime})
+		(#{id},#{userId},#{knowledgeId},#{isUseFull},#{sourceIP},now())
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -108,10 +108,7 @@
 			<if test="sourceIP != null">
 				sourceIP,
 			</if>
-			<if test="createTime != null">
-				createTime,
-			</if>
-
+			createTime
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
@@ -129,9 +126,7 @@
 			<if test="sourceIP!=null">
 				#{sourceIP},
 			</if>
-			<if test="createTime!=null">
-				#{createTime},
-			</if>
+				now()
 		</trim>
 	</insert>
 
@@ -151,10 +146,6 @@
 			<if test="sourceIP != null">
 				sourceIP = #{sourceIP},
 			</if>
-			<if test="createTime != null">
-				createTime = #{createTime},
-			</if>
-
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -166,8 +157,7 @@
 			 userId = #{userId},
 			 knowledgeId = #{knowledgeId},
 			 isUseFull = #{isUseFull},
-			 sourceIP = #{sourceIP},
-			 createTime = #{createTime}
+			 sourceIP = #{sourceIP}
 		 WHERE id = #{id}
 	</update>
 

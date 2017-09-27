@@ -21,7 +21,7 @@
     <select id="selecttopone" resultType="com.abc12366.cms.model.Event" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM cms_event
+        FROM cms_event where status = '2'
         ORDER BY createtime DESC LIMIT 1
     </select>
 
