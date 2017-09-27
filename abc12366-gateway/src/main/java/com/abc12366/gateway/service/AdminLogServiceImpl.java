@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -28,7 +29,7 @@ public class AdminLogServiceImpl implements AdminLogService {
     private AdminLogRoMapper adminLogRoMapper;
 
     @Override
-    public AdminLog insert(AdminLogBO bo) {
+    public CompletableFuture<AdminLog> insert(AdminLogBO bo) {
         Date now = new Date();
         AdminLog adminLog = new AdminLog.Builder()
                 .id(Utils.uuid())
@@ -45,7 +46,7 @@ public class AdminLogServiceImpl implements AdminLogService {
 
         adminLogMapper.create(adminLog);
         adminLogMapper.insert(adminLog);
-        return adminLog;
+        return CompletableFuture.completedFuture(adminLog);
     }
 
     @Override

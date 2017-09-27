@@ -4,6 +4,7 @@ import com.abc12366.gateway.model.AdminLog;
 import com.abc12366.gateway.model.bo.AdminLogBO;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 管理员操作日志
@@ -15,7 +16,7 @@ import java.util.List;
 public interface AdminLogService {
 
     // 新增操作员日志
-    AdminLog insert(AdminLogBO bo);
+    CompletableFuture<AdminLog> insert(AdminLogBO bo);
 
     // 查询
     List<AdminLog> selectList(int page, int size, AdminLog adminLog);
