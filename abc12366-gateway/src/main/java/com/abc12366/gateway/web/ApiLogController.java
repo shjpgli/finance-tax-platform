@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -37,6 +38,9 @@ public class ApiLogController {
     @Autowired
     private AdminLogService adminLogService;
 
+    /**
+     * 接口日志查询
+     */
     @GetMapping(path = "/log")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -47,6 +51,9 @@ public class ApiLogController {
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
+    /**
+     * 管理员操作日志查询
+     */
     @GetMapping(path = "/adminlog")
     public ResponseEntity selectList(@RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "nickname", required = false) String nickname,
@@ -79,11 +86,14 @@ public class ApiLogController {
         return re;
     }
 
+    /**
+     * 管理员操作日志新增
+     */
     @PostMapping(path = "/adminlog")
     public ResponseEntity insert(@Valid @RequestBody AdminLogBO bo) {
         LOGGER.info("{}", bo);
-        AdminLog data = adminLogService.insert(bo);
-
+        CompletableFuture<AdminLog> data = adminLogService.insert(bo);
+        CompletableFuture.allOf(data);
         ResponseEntity re = ResponseEntity.ok(Utils.kv("data", data));
         LOGGER.info("{}", re);
         return re;
