@@ -11,6 +11,7 @@ public class MessageConstant {
     public static final String ZZFPDD = "ZZFPDD";//纸质发票订单
     public static final String DZFPDD = "DZFPDD";//电子发票订单
 
+    public static final String KCBM = "KCBM";//课程报名
     public static final String KCQD = "KCQD";//课程签到
 
     /**实物商品**/

@@ -81,9 +81,9 @@ public class CurrApplyController {
      * 课程报名签到新增
      */
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody CurriculumApplyBo applyBo) {
+    public ResponseEntity save(@Valid @RequestBody CurriculumApplyBo applyBo,HttpServletRequest request) {
         //新增课程报名签到信息
-        applyBo = currApplyService.save(applyBo);
+        applyBo = currApplyService.save(applyBo,request);
         return ResponseEntity.ok(Utils.kv("data", applyBo));
     }
 

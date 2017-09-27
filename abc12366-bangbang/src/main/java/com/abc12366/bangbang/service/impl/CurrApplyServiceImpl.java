@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -68,7 +69,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
     }
 
     @Override
-    public CurriculumApplyBo save(CurriculumApplyBo applyBo) {
+    public CurriculumApplyBo save(CurriculumApplyBo applyBo,HttpServletRequest request) {
 
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("curriculumId",applyBo.getCurriculumId());
@@ -89,6 +90,39 @@ public class CurrApplyServiceImpl implements CurrApplyService {
             applyBo.setApplyId(uuid);
             BeanUtils.copyProperties(applyBo, apply);
             applyMapper.insert(apply);
+
+            Curriculum curriculum = curriculumRoMapper.selectByPrimaryKey(applyBo.getCurriculumId());
+
+            String curriculumTitle = "";
+            String time = "";
+            String site = "";
+            if(curriculum !=null){
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:ss");
+                curriculumTitle = curriculum.getTitle();
+                if("live".equals(curriculum.getTeachingMethod())){
+                    time = sdf.format(curriculum.getSignTimeBegin());
+                    Message message = new Message();
+                    message.setBusinessId(applyBo.getApplyId());
+                    message.setType(MessageConstant.KCBM);
+//            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
+                    message.setContent("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间登录系统准时参加，感谢您的参与！");
+                    message.setUserId(applyBo.getUserId());
+                    messageSendUtil.sendMessage(message, request);
+                }else if("face".equals(curriculum.getTeachingMethod())){
+                    time = sdf.format(curriculum.getSignTimeBegin());
+                    site = curriculum.getTrainSite();
+                    Message message = new Message();
+                    message.setBusinessId(applyBo.getApplyId());
+                    message.setType(MessageConstant.KCBM);
+//            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
+                    message.setContent("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间"+site+"地点系统准时参加，感谢您的参与！");
+                    message.setUserId(applyBo.getUserId());
+                    messageSendUtil.sendMessage(message, request);
+                }
+            }
+
+
+
         } catch (Exception e) {
             LOGGER.error("新增课程报名签到信息异常：{}", e);
             throw new ServiceException(4372);

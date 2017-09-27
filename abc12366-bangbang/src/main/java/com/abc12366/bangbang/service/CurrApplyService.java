@@ -13,7 +13,7 @@ public interface CurrApplyService {
 
     int selectApplyCnt(Map<String, Object> map);
 
-    CurriculumApplyBo save(CurriculumApplyBo curriculumApplyBo);
+    CurriculumApplyBo save(CurriculumApplyBo curriculumApplyBo,HttpServletRequest request);
 
     CurriculumApplyBo selectApply(String applyId);
 
