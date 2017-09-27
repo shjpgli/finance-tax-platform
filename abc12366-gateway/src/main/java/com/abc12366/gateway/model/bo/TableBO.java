@@ -23,6 +23,12 @@ public class TableBO {
         this.yyyyMMdd = yyyyMMdd;
     }
 
+    private TableBO(Builder builder) {
+        setYyyy(builder.yyyy);
+        setYyyyMM(builder.yyyyMM);
+        setYyyyMMdd(builder.yyyyMMdd);
+    }
+
     public String getYyyy() {
         return yyyy;
     }
@@ -54,5 +60,33 @@ public class TableBO {
                 ", yyyyMM='" + yyyyMM + '\'' +
                 ", yyyyMMdd='" + yyyyMMdd + '\'' +
                 '}';
+    }
+
+    public static final class Builder {
+        private String yyyy;
+        private String yyyyMM;
+        private String yyyyMMdd;
+
+        public Builder() {
+        }
+
+        public Builder yyyy(String val) {
+            yyyy = val;
+            return this;
+        }
+
+        public Builder yyyyMM(String val) {
+            yyyyMM = val;
+            return this;
+        }
+
+        public Builder yyyyMMdd(String val) {
+            yyyyMMdd = val;
+            return this;
+        }
+
+        public TableBO build() {
+            return new TableBO(this);
+        }
     }
 }
