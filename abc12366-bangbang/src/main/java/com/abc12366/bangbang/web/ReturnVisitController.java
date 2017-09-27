@@ -39,8 +39,8 @@ public class ReturnVisitController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "phone", required = false) String phone,
-                                     @RequestParam(value = "date", required = false) String date) {
+                                     @RequestParam(value = "phone", required = true) String phone,
+                                     @RequestParam(value = "date", required = true) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
         ReturnVisitBO param = new ReturnVisitBO();
@@ -64,8 +64,8 @@ public class ReturnVisitController {
     @GetMapping(path = "/statis")
     public ResponseEntity selectStatisList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                           @RequestParam(value = "phone", required = false) String phone,
-                                           @RequestParam(value = "date", required = false) String date) {
+                                           @RequestParam(value = "phone", required = true) String phone,
+                                           @RequestParam(value = "date", required = true) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         QuestionAcceptedBO param = new QuestionAcceptedBO();
         if(date != null && !"".equals(date)) {

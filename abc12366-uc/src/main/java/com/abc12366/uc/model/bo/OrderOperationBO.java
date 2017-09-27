@@ -30,7 +30,6 @@ public class OrderOperationBO implements Serializable {
     /**
      * 备注
      */
-    @NotEmpty
     @Length(max = 100)
     private String remark;
 

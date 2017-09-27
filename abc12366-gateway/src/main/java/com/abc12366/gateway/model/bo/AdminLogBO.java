@@ -1,5 +1,8 @@
 package com.abc12366.gateway.model.bo;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * 操作员日志
  *
@@ -9,14 +12,22 @@ package com.abc12366.gateway.model.bo;
  */
 public class AdminLogBO {
 
+    @NotEmpty
+    @Length(max = 255)
     private String businessUri;
     // 业务名称
+    @NotEmpty
+    @Length(max = 50)
     private String businessName;
     // 业务数据
+    @Length(max = 1000)
     private String businessData;
     // 操作类型：POST（新增）、PUT（修改）、GET（查询）、DELETE（删除）
+    @NotEmpty
+    @Length(max = 10)
     private String method;
     // 备注
+    @Length(max = 50)
     private String remark;
 
     public String getBusinessUri() {

@@ -19,7 +19,7 @@
 	<!-- 列表查询 -->
 	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionAccepted" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
 		SELECT
-		<include refid="Base_Column_List" />
+		id,	nsrsbh,	nsrmc,	productName,	type,	name,	phone,	date_format(visitDate, '%Y-%m-%d') as visitDate
 		FROM bb_question_accepted
         <where>
             1=1
