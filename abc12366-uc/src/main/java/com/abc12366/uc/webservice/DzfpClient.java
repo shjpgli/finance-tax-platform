@@ -65,9 +65,9 @@ public class DzfpClient {
 	@SuppressWarnings("rawtypes")
 	public static Object doSender(String interfaceCode,String content,Class _class) throws Exception{
 		
-		ssl_store = ResourceUtils.getFile("classpath:cer/testclient.truststore").getAbsolutePath();
+		//ssl_store = ResourceUtils.getFile("classpath:cer/testclient.truststore").getAbsolutePath();
 		
-		//ssl_store= new ClassPathResource("cer/testclient.truststore").getPath();
+		ssl_store= new ClassPathResource("cer/testclient.truststore").getPath();
 		
 		SSLIgnoreErrorProtocolSocketFactory socketfactory = new SSLIgnoreErrorProtocolSocketFactory(ssl_store,ssl_pwd);
 
