@@ -175,14 +175,15 @@ public class CurrApplyServiceImpl implements CurrApplyService {
             String curriculumTitle = "";
             if(curriculum !=null){
                 curriculumTitle = curriculum.getTitle();
-            }
-            Message message = new Message();
-            message.setBusinessId(applyBo.getApplyId());
-            message.setType(MessageConstant.KCQD);
+                Message message = new Message();
+                message.setBusinessId(applyBo.getApplyId());
+                message.setType(MessageConstant.KCQD);
 //            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
-            message.setContent("您已成功签到"+curriculumTitle+"课程培训，赶紧参加培训吧！");
-            message.setUserId(applyBo.getUserId());
-            messageSendUtil.sendMessage(message, request);
+                message.setContent("您已成功签到"+curriculumTitle+"课程培训，赶紧参加培训吧！");
+                message.setUserId(applyBo.getUserId());
+                messageSendUtil.sendMessage(message, request);
+            }
+
 
 
         } catch (Exception e) {
