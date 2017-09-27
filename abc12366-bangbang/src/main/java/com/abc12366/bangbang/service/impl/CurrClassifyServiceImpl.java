@@ -205,7 +205,6 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
                     tagMapper.insert(tag);
                 }
             }
-            classifyMapper.insert(classify);
             classifyMapper.updateByPrimaryKeySelective(classify);
         } catch (Exception e) {
             LOGGER.error("更新课程分类信息异常：{}", e);

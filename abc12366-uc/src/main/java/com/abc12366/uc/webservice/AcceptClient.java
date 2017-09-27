@@ -1,5 +1,6 @@
 package com.abc12366.uc.webservice;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.jrxt.model.tiripPackage.TiripPackage;
 import com.abc12366.uc.jrxt.model.util.PkgUtil;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
@@ -18,10 +19,10 @@ public class AcceptClient {
     @Autowired
     private PkgUtil pkgutil;
 
-    public Map<String, String> process(Map<String, String> map){
+    public Map<String, String> process(Map<String, String> map) {
         //String target = "http://dzsb.abc12366.cn/tdps-accept/services/AcceptService?wsdl";
 //        String target = "http://testhn.abc12366.cn/tdps-accept/services/AcceptService?wsdl";
-        String target = "http://118.118.116.126:6688/tdps-accept/services/AcceptService?wsdl";
+        String target = SpringCtxHolder.getProperty("tdps.api.url") + "/tdps-accept/services/AcceptService?wsdl";
 
         try {
             AcceptServiceStub.AcceptRequest request = new AcceptServiceStub.AcceptRequest();
@@ -34,13 +35,13 @@ public class AcceptClient {
             return pkgutil.processBackBusinessPkgBytdps(tiripPackage);
         } catch (AxisFault axisFault) {
             axisFault.printStackTrace();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             e.printStackTrace();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
 
 }
