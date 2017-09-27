@@ -14,6 +14,7 @@ public class MessageConstant {
     /**实物商品**/
     //发货
     public static final String DELIVER_GOODS_PREFIX = "您的宝贝已发出，运单号：";
+    public static final String DELIVER_GOODS_PREFIX_NO = "您的宝贝已发出，订单号：";
     public static final String SUFFIX = "，如有疑问请联系客服咨询4008873133";
 
     //退货审核通过
