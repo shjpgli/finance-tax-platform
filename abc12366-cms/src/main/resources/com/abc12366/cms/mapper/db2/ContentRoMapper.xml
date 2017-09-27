@@ -120,6 +120,9 @@
         <if test="siteId != null and siteId != ''">
             AND a.siteId = #{siteId}
         </if>
+		<if test="exceptChannelId != null and exceptChannelId != ''">
+			AND a.channelId != #{exceptChannelId}
+		</if>
         ORDER BY a.topLevel DESC,e.views DESC
     </select>
 
@@ -299,6 +302,9 @@
 		</if>
 		<if test="channelId != null and channelId != ''">
 			AND a.channelId like CONCAT(#{channelId},'%')
+		</if>
+		<if test="exceptChannelId != null and exceptChannelId != ''">
+			AND a.channelId != #{exceptChannelId}
 		</if>
 		<if test="tplContent != null and tplContent != ''">
 			AND b.tplContent = #{tplContent}
