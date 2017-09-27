@@ -2,7 +2,9 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CurriculumApplyMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumApplyRoMapper;
+import com.abc12366.bangbang.mapper.db2.CurriculumRoMapper;
 import com.abc12366.bangbang.model.Message;
+import com.abc12366.bangbang.model.curriculum.Curriculum;
 import com.abc12366.bangbang.model.curriculum.CurriculumApply;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumApplyBo;
 import com.abc12366.bangbang.service.CurrApplyService;
@@ -35,6 +37,9 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 
     @Autowired
     private MessageSendUtil messageSendUtil;
+
+    @Autowired
+    private CurriculumRoMapper curriculumRoMapper;
 
     @Override
     public List<CurriculumApplyBo> selectList(Map<String,Object> map) {
@@ -131,11 +136,17 @@ public class CurrApplyServiceImpl implements CurrApplyService {
             BeanUtils.copyProperties(applyBo, apply);
             applyMapper.updateByPrimaryKeySelective(apply);
 
+            Curriculum curriculum = curriculumRoMapper.selectByPrimaryKey(applyBo.getCurriculumId());
+
+            String curriculumTitle = "";
+            if(curriculum !=null){
+                curriculumTitle = curriculum.getTitle();
+            }
             Message message = new Message();
             message.setBusinessId(applyBo.getApplyId());
             message.setType(MessageConstant.KCQD);
 //            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
-            message.setContent("您已成功签到X课程培训，赶紧参加培训吧！");
+            message.setContent("您已成功签到"+curriculumTitle+"课程培训，赶紧参加培训吧！");
             message.setUserId(applyBo.getUserId());
             messageSendUtil.sendMessage(message, request);
 
