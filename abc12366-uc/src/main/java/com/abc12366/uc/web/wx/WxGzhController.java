@@ -138,5 +138,20 @@ public class WxGzhController {
         
     }
     
-    
+    @SuppressWarnings("rawtypes")
+	@GetMapping("/wxgzh/getuserid/{code}")
+    public ResponseEntity getuserid(@PathVariable("code") String code){
+    	Map<String, String> tks = new HashMap<String, String>();
+        tks.put("appid", WxGzhClient.getInstance().getAppid());
+        tks.put("secret", WxGzhClient.getInstance().getSecret());
+        tks.put("code", code);
+        tks.put("grant_type","authorization_code");
+        WxUseToken respon = WxConnectFactory.get(WechatUrl.WXIMG_JSTOKEN, tks, null, WxUseToken.class);
+        if(respon.getErrcode()==0){
+        	return ResponseEntity.ok(Utils.kv("data", respon));
+        }else{
+        	return ResponseEntity.ok(Utils.bodyStatus(9999, respon.getErrmsg()));
+        }
+        
+    }
 }
