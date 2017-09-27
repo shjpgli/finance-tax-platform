@@ -29,6 +29,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return slr;
     }
 
+   /* @Bean
+    public SessionFilter getSessionFilter() {
+        return new SessionFilter();
+    }*/
+
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

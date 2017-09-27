@@ -1103,6 +1103,10 @@ public class OrderServiceImpl implements OrderService {
                 LOGGER.warn("该订单不需要寄送：{}",bo);
                 throw new ServiceException(4102,bo.getOrderNo()+"该订单不需要寄送");
             }
+            if(bo.getExpressNo() != null && CharUtil.isChinese(bo.getExpressNo())){
+                LOGGER.warn("订单号不能存在中文：{}",bo);
+                throw new ServiceException(4102,bo.getExpressNo() + "订单号不能存在中文");
+            }
             Order order = new Order();
             BeanUtils.copyProperties(bo, order);
             order.setOrderStatus("5");
@@ -1155,6 +1159,7 @@ public class OrderServiceImpl implements OrderService {
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
         }else{
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+order.getExpressNo()+MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO+"<a href=\""+MessageConstant.ABCUC_URL+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
         }
 
         message.setUserId(order.getUserId());

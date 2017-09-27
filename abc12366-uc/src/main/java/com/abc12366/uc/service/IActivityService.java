@@ -41,4 +41,7 @@ public interface IActivityService {
 
     // 导入红包数据
     void importJSON(List<WxRedEnvelop> redEnvelopList);
+
+    // 对于发送失败的红包，重新发送
+    WxRedEnvelop resend(String id);
 }

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +30,19 @@ public class LotteryLogController {
     private LotteryLogService lotteryLogService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false) Integer isluck,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+    public ResponseEntity selectList(@RequestParam(required = false) String userName,
+                                     @RequestParam(required = false) String activityName,
+                                     @RequestParam(required = false) String startTime,
+                                     @RequestParam(required = false) String  endTime,
+                                     @RequestParam(required = false) Integer isluck,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
         map.put("isluck",isluck);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        if(userName != null && !userName.isEmpty())        map.put("userName",userName);
+        if(activityName != null && !activityName.isEmpty())        map.put("activityName",activityName);
+        if(startTime != null && !startTime.isEmpty())        map.put("startTime",startTime);
+        if(endTime != null && !endTime.isEmpty())        map.put("endTime",endTime);
+
+         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LotteryLogBO> list = lotteryLogService.selectList(map);
         LOGGER.info("selectList:{}", list);
         return (list == null) ?
