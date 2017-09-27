@@ -1062,33 +1062,73 @@ public class OrderServiceImpl implements OrderService {
             orderListBO.setOrderNo(bo.getOrderNo());
             //收货地址
             StringBuffer address = new StringBuffer();
+            String phone = null;
             if(bo.getUserAddressBO() != null){
-                UserAddressBO userAddress = bo.getUserAddressBO();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
+                UserAddressBO userAddress = setUserAddress(bo, address);
                 orderListBO.setAddress(address.toString());
-                orderListBO.setPhone(userAddress.getPhone());
+                phone = userAddress.getPhone();
+                orderListBO.setPhone(phone);
                 orderListBO.setFullName(userAddress.getName());
             }
+            boolean isAlike = false;
+            StringBuffer goodsName = new StringBuffer();
+            int num = 0;
+            if(address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
+                for(OrderBO data:orderDataList){
+                    StringBuffer addressBuffer = new StringBuffer();
+                    String phoneTemp = null;
+                    if(data.getUserAddressBO() != null){
+                        addressBuffer = new StringBuffer();
+                        UserAddressBO userAddressBO = setUserAddress(data, addressBuffer);
+                        phoneTemp = userAddressBO.getPhone();
+                    }
+                    //有地址和电话相同的
+                    if(address.toString().equals(addressBuffer.toString()) && phone.equals(phoneTemp)){
+                        isAlike = true;
+                        //寄托货物信息合并
+                        if(data.getOrderProductBOList() != null){
+                            List<OrderProductBO> orderProductBOList = data.getOrderProductBOList();
+                            for(OrderProductBO orderProductBO:orderProductBOList){
+                                goodsName.append(orderProductBO.getName());
+                                goodsName.append(" "+orderProductBO.getSpecInfo());
+                            }
+                            goodsName.append(";");
+                        }
+                        num++;
+                    }
+                }
+            }
+            //没有地址和电话相同的
+            if(!isAlike){
+                //寄托货物
+                if(bo.getOrderProductBOList() != null){
+                    List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
+                    for(OrderProductBO orderProductBO:orderProductBOList){
+                        goodsName.append(orderProductBO.getName());
+                        goodsName.append(" "+orderProductBO.getSpecInfo());
+                    }
+                    goodsName.append(";");
+                }
+            }
+            orderListBO.setGoodsName(goodsName.toString());
+            //寄托数量
+            orderListBO.setNum(num);
             //支付方式
             orderListBO.setPayMethod(bo.getPayMethod());
-            //寄托货物
-            StringBuffer goodsName = new StringBuffer();
-            if(bo.getOrderProductBOList() != null){
-                List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
-                for(OrderProductBO orderProductBO:orderProductBOList){
-                    goodsName.append(orderProductBO.getName());
-                    goodsName.append("  "+orderProductBO.getSpecInfo());
-                }
-                orderListBO.setGoodsName(goodsName.toString());
-            }
-            //寄托数量
-            orderListBO.setNum(1);
+
             orderListBOList.add(orderListBO);
         }
         return orderListBOList;
+    }
+
+    //拼接地址信息
+    private UserAddressBO setUserAddress(OrderBO bo, StringBuffer address) {
+        UserAddressBO userAddress = bo.getUserAddressBO();
+        address.append(userAddress.getProvinceName() + "-");
+        address.append(userAddress.getCityName() + "-");
+        address.append(userAddress.getAreaName() + "-");
+        address.append(userAddress.getDetail());
+        return userAddress;
     }
 
     @Override
@@ -1104,8 +1144,8 @@ public class OrderServiceImpl implements OrderService {
                 throw new ServiceException(4102,bo.getOrderNo()+"该订单不需要寄送");
             }
             if(bo.getExpressNo() != null && CharUtil.isChinese(bo.getExpressNo())){
-                LOGGER.warn("订单号不能存在中文：{}",bo);
-                throw new ServiceException(4102,bo.getExpressNo() + "订单号不能存在中文");
+                LOGGER.warn("运单号不能存在中文：{}",bo);
+                throw new ServiceException(4102,bo.getExpressNo() + "运单号不能存在中文");
             }
             Order order = new Order();
             BeanUtils.copyProperties(bo, order);

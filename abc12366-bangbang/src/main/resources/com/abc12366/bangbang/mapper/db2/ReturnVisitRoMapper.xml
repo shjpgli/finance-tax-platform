@@ -30,6 +30,7 @@
                 ]]>
 			</if>
 		</where>
+		order by visitDate desc
 	</select>
 
 	<!-- 统计列表查询 -->
