@@ -92,7 +92,7 @@
 
     <!-- 批量update -->
     <update id="batchUpdateTypeByName" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             UPDATE bb_knowledge_tag SET tagType = CONCAT(tagType,';', #{item.tagType}) WHERE id = #{item.id}
         </foreach>
     </update>
