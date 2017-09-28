@@ -209,7 +209,7 @@
         INSERT INTO bb_knowledge_base
         (id,categoryCode,type,recommend,subject,content,status,activeTime,source,isOpen,pv,usefulVotes,uselessVotes,shareNum,createTime,updateTime,createUser,updateUser)
         VALUES
-        (#{id},#{categoryCode},#{type},#{recommend},#{subject},#{content},#{status},#{activeTime},#{source},#{isOpen},#{pv},#{usefulVotes},#{uselessVotes},#{shareNum},#{createTime},#{updateTime},#{createUser},#{updateUser})
+        (#{id},#{categoryCode},#{type},#{recommend},#{subject},#{content},#{status},#{activeTime},#{source},#{isOpen},#{pv},#{usefulVotes},#{uselessVotes},#{shareNum},now(),now(),#{createUser},#{updateUser})
     </insert>
 
     <!-- 添加 （匹配有值的字段）-->
