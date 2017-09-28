@@ -508,7 +508,7 @@ public class UserBindServiceImpl implements UserBindService {
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
         if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
-            throw new ServiceException(4637);
+            throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {
             throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
@@ -572,7 +572,7 @@ public class UserBindServiceImpl implements UserBindService {
                 }
             }
         } else {
-            throw new ServiceException(4637);
+            throw new ServiceException("9999", jbxxcx.getCWYY());
         }
         return object;
     }
