@@ -849,7 +849,12 @@ public class OrderServiceImpl implements OrderService {
                 order.setPayMethod(orderPayBO.getPayMethod());
                 order.setAddressId(orderPayBO.getAddressId());
                 order.setUserId(orderBO.getUserId());
-
+                //实物订单，必须要先填写地址
+                if (goodsType.equals("1")){
+                    if(orderPayBO.getAddressId() == null || "".equals(orderPayBO.getAddressId())){
+                        throw new ServiceException(4999,"实物订单，必须要先填写地址");
+                    }
+                }
                 if("RMB".equals(type)){
                     if (isPay == 1) {
                         order.setOrderStatus("3");
