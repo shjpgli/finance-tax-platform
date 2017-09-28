@@ -746,7 +746,7 @@
                 o.orderStatus != '7'
               ]]>
             <if test=" user.nickname != null and user.nickname != '' ">
-                and u.nickname = LIKE CONCAT('%',#{nickname},'%')
+                and u.nickname LIKE CONCAT('%',#{nickname},'%')
             </if>
             <if test=" goodsId != null ">
                 and op.goodsId = #{goodsId}
