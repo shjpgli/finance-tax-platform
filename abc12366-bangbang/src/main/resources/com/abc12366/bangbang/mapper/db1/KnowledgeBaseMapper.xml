@@ -411,7 +411,7 @@
       UPDATE bb_knowledge_base SET pv = pv + 1 WHERE id = #{id}
     </update>
 
-    <select id="selectCntByCategoryId" parameterType="java.lang.String">
+    <select id="selectCntByCategoryId" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT COUNT(1) FROM bb_knowledge_base WHERE categorycode LIKE CONCAT((SELECT code  FROM  bb_knowledge_category WHERE id = #{ID}),'%')
     </select>
 </mapper>
