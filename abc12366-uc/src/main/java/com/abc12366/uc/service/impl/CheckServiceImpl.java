@@ -81,13 +81,6 @@ public class CheckServiceImpl implements CheckService {
 //            pointsLog(check.getUserId(), points);
 //            return;
         }
-        //会员权限埋点（积分加成）
-        float factor = 1.0F;
-        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
-        if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
-            factor = privilegeItem.getHyjyzjc();
-        }
-        points = (int) (points * factor);
 
         //签到统计
         continuingCheck(check.getUserId());

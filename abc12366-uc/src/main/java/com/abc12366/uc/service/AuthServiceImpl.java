@@ -403,12 +403,6 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
 
-            //会员权限埋点（经验值加成）
-            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
-            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
-                exp = (int) (exp * privilegeItem.getHyjyzjc());
-            }
-
             ExperienceLogBO logBO = new ExperienceLogBO();
             logBO.setId(Utils.uuid());
             logBO.setIncome(exp);
