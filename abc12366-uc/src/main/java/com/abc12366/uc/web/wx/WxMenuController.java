@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 微信自定义菜单
@@ -110,6 +112,17 @@ public class WxMenuController {
     @PostMapping("/wxmenu/create")
     public ResponseEntity wxmenuCreate() {
         WxMenu wxMenu = iWxMenuService.getWxMenuDb();
+
+        List<Button> list =new ArrayList<Button>();
+        for (Button btn:wxMenu.getButton()             ) {
+            if(btn.getWxStatus()==1){
+                list.add(btn );
+            }
+        }
+        int size = list.size();
+        Button[] arr = (Button[])list.toArray(new Button[size]);//使用了第二种接口，返回值和参数均为结果
+        wxMenu.setButton(arr);
+
         LOGGER.info(JSONObject.toJSONString(wxMenu));
         BaseWxRespon result = iWxMenuService.creatWxMenu(wxMenu);
         if (0 == result.getErrcode()) {

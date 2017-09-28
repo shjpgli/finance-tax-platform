@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.WxMenuRoMapper">
 
     <sql id="Base_Column_List">
-        id, parentId, sort, type, name, mkey as 'key', url, media_id, appid, pagepath, lastUpdate, createTime
+        id, parentId, sort, type, name, mkey as 'key', url, media_id, appid, pagepath, lastUpdate, createTime,wxStatus
     </sql>
 
     <select id="seletFisrt" resultType="com.abc12366.uc.model.weixin.bo.menu.Button">
