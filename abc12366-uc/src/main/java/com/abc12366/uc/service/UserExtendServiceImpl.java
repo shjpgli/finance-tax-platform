@@ -72,15 +72,11 @@ public class UserExtendServiceImpl implements UserExtendService {
         }
         LOGGER.info("{}", userExtendBO);
         if (userExtendBO.getUserId() != null && !userExtendBO.getUserId().equals("")) {
-            User user = userRoMapper.selectOne(userExtendBO.getUserId());
-            if (user == null) {
-                throw new ServiceException(4180);
-            }
-
             UserExtend userExtend = userExtendRoMapper.selectOne(userExtendBO.getUserId());
             if (userExtend != null) {
-                LOGGER.warn("新增失败，参数：{}" + userExtendBO.toString());
-                throw new ServiceException(4181);
+                UserExtendBO userExtendOld = new UserExtendBO();
+                BeanUtils.copyProperties(userExtend, userExtendOld);
+                return userExtendOld;
             }
             userExtend = new UserExtend();
             BeanUtils.copyProperties(userExtendBO, userExtend);
