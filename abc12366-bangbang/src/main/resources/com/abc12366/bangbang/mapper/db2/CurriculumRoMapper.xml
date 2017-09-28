@@ -80,7 +80,7 @@
     </select>
 
     <!-- 查询会员专享课程 -->
-    <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
+    <select id="selectListVIP" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
         curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
