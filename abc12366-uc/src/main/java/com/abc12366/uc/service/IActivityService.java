@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
+import com.abc12366.uc.model.weixin.bo.redpack.ActivityBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxLotteryBO;
 
 import java.util.List;
@@ -14,6 +15,9 @@ import java.util.List;
 public interface IActivityService {
     // 查看红包活动列表
     List<WxActivity> selectList(WxActivity activity, int page, int size);
+
+    // 查看活动简单信息
+    List<ActivityBO> selectSimpleList(int page, int size);
 
     // 查看红包活动
     WxActivity selectOne(String id);

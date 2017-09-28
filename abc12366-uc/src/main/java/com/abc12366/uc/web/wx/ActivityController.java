@@ -3,6 +3,7 @@ package com.abc12366.uc.web.wx;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.weixin.WxActivity;
+import com.abc12366.uc.model.weixin.bo.redpack.ActivityBO;
 import com.abc12366.uc.service.IActivityService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -39,6 +40,20 @@ public class ActivityController {
         List<WxActivity> dataList = iActivityService.selectList(activity, page, size);
 
         PageInfo<WxActivity> pageInfo = new PageInfo<>(dataList);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                "total", pageInfo.getTotal()));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    @GetMapping("/redpack")
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{},{}", page, size);
+        List<ActivityBO> dataList = iActivityService.selectSimpleList(page, size);
+
+        PageInfo<ActivityBO> pageInfo = new PageInfo<>(dataList);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
                 "total", pageInfo.getTotal()));
 
