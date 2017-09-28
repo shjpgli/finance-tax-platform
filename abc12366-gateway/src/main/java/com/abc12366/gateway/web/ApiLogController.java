@@ -63,10 +63,10 @@ public class ApiLogController {
                                      @RequestParam(value = "endDate", required = false) String endDate,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
-        if (startDate == null) {
+        if (startDate == null||"".equals(startDate)) {
             startDate = DateUtils.getDateFormat(new Date(), "yyyy-MM-dd");
         }
-        if (endDate == null) {
+        if (endDate == null||"".equals(endDate)) {
             endDate = DateUtils.getDateFormat(new Date(), "yyyy-MM-dd");
         }
         AdminLog adminLog = new AdminLog.Builder()
