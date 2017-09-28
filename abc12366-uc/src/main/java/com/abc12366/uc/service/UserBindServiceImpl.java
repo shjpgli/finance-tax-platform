@@ -246,26 +246,32 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public boolean isRealNameValidatedDzsj(String sfzjhm, String xm , HttpServletRequest request) throws IOException {
+    public boolean isRealNameValidatedDzsj(String sfzjhm, String xm , HttpServletRequest request){
         if(sfzjhm == null || sfzjhm.trim().equals("")
                 || xm == null || xm.trim().equals("")){
             return false;
         }
-        HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
-        if (hngsAppLoginResponse != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("accessToken", (String) request.getAttribute("accessToken"));
-            headers.add("Content-Type", "application/json");
-            String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
-            HttpEntity requestEntity = new HttpEntity(null, headers);
-            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-            if (soaUtil.isExchangeSuccessful(responseEntity)) {
-                DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
-                if (dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
-                    return true;
+        try{
+            HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
+            if (hngsAppLoginResponse != null) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("accessToken", (String) request.getAttribute("accessToken"));
+                headers.add("Content-Type", "application/json");
+                String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
+                HttpEntity requestEntity = new HttpEntity(null, headers);
+                ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+                if (soaUtil.isExchangeSuccessful(responseEntity)) {
+                    DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
+                    if (dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
+                        return true;
+                    }
                 }
             }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
+
 
         return false;
     }

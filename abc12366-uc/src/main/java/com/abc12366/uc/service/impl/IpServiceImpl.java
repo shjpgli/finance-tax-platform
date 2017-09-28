@@ -8,6 +8,7 @@ import com.abc12366.uc.model.Ip;
 import com.abc12366.uc.model.bo.IpQueryResult;
 import com.abc12366.uc.service.IpService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +73,13 @@ public class IpServiceImpl implements IpService {
         LOGGER.info("{}, {}", Constant.IP_QUERY_URL, ip);
         String jsonStr = restTemplate.getForObject(Constant.IP_QUERY_URL, String.class, ip);
         LOGGER.info("{}", jsonStr);
-        IpQueryResult ipQueryResult = JSON.parseObject(jsonStr, IpQueryResult.class);
-        return ipQueryResult.getCode() == 0 ? ipQueryResult.getData() : null;
+        IpQueryResult ipQueryResult = null;
+        try {
+            ipQueryResult = JSON.parseObject(jsonStr, IpQueryResult.class);
+        } catch (JSONException e) {
+            LOGGER.error("{}", e);
+        }
+        return ipQueryResult != null && ipQueryResult.getCode() == 0 ?
+                JSON.parseObject(ipQueryResult.getData(), Ip.class) : null;
     }
 }

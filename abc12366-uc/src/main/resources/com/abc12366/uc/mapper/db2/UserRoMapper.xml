@@ -75,7 +75,8 @@
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,
-        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
+        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage,
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName
         from uc_user uu
         <where>
             <if test="usernameOrPhone != null">

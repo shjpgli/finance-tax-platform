@@ -64,7 +64,7 @@
             <if test="status != null and status!=''">AND t.status = #{status}</if>
             <if test="organizationId != null and organizationId!=''">AND e.orgId = #{organizationId}</if>
         </where>
-        order by t.lastUpdate DESC
+        order by t.username+0 asc,t.lastUpdate DESC
     </select>
 
     <!--查询单个用户及权限-->

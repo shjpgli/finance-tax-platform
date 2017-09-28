@@ -29,6 +29,7 @@ public class User {
     private Integer points;
     private Integer exp;
     private String vipLevel;
+    private String vipLevelName;
     private Integer usernameModifiedTimes;
     private Date vipExpireDate;
     private String vipImage;
@@ -205,6 +206,14 @@ public class User {
 
     public void setVipLevel(String vipLevel) {
         this.vipLevel = vipLevel;
+    }
+
+    public String getVipLevelName() {
+        return vipLevelName;
+    }
+
+    public void setVipLevelName(String vipLevelName) {
+        this.vipLevelName = vipLevelName;
     }
 
     public Integer getUsernameModifiedTimes() {
