@@ -67,6 +67,12 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
+    public List<ActivityBO> selectSimpleList(int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return activityRoMapper.selectSimpleList();
+    }
+
+    @Override
     public WxActivity selectOne(String id) {
         return activityRoMapper.selectOne(id);
     }
@@ -164,6 +170,7 @@ public class ActivityService implements IActivityService {
             throw new ServiceException(6005);
         }
         String probabilityStr = redEnvelop.getProbability();
+        redEnvelop.setOpenId(lotteryBO.getOpenId());
         if (probabilityStr.contains("%")) {
             probabilityStr = probabilityStr.replaceAll("%", "");
             Double probability = Double.valueOf(probabilityStr) / 100;
@@ -174,16 +181,16 @@ public class ActivityService implements IActivityService {
 
                 redEnvelop.setSendStatus("0"); // 已中奖未发送
                 redEnvelop.setSendTime(new Date());
+                activityMapper.updateRedEnvelop(redEnvelop);
+
+                LOGGER.info("发送微信红包");
+                sendRedPack(lotteryBO, activity, redEnvelop);
             } else { // 未中奖
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
                 redEnvelop.setReceiveTime(new Date());
+                activityMapper.updateRedEnvelop(redEnvelop);
             }
-            redEnvelop.setOpenId(lotteryBO.getOpenId());
-            activityMapper.updateRedEnvelop(redEnvelop);
-
-            LOGGER.info("发送微信红包");
-            sendRedPack(lotteryBO, activity, redEnvelop);
         } else {
             throw new ServiceException(5000);
         }

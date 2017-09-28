@@ -28,6 +28,14 @@
         </where>
     </select>
 
+    <select id="selectSimpleList" resultType="com.abc12366.uc.model.weixin.bo.redpack.ActivityBO"
+            parameterType="com.abc12366.uc.model.weixin.bo.redpack.ActivityBO">
+        SELECT id, name, description FROM uc_wxactivity
+        where now() <![CDATA[<=]]> endTime
+        and now() <![CDATA[>=]]> startTime
+        and status = '1'
+    </select>
+
     <select id="selectOne" resultType="com.abc12366.uc.model.weixin.WxActivity"
             parameterType="java.lang.String">
         SELECT
