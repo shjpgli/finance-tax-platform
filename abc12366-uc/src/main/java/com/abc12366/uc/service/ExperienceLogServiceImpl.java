@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceLog;
+import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.ExpLogUcBO;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
@@ -43,6 +44,9 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
+
     @Transactional("db1TxManager")
     @Override
     public ExperienceLogQueryBO insert(ExperienceLogBO experienceLogBO) {
@@ -58,6 +62,16 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         }
         //可用经验值=上一次的可用经验值+|-本次收入|支出
         int usableExp = user.getExp() + experienceLogBO.getIncome() - experienceLogBO.getOutgo();
+
+        //会员权限埋点（经验值加成）
+        if (experienceLogBO.getIncome() > 0 && experienceLogBO.getIncome() > experienceLogBO.getOutgo()) {
+            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(user.getId());
+            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
+                usableExp = (int) (usableExp * privilegeItem.getHyjyzjc());
+            }
+
+            experienceLogBO.setIncome((int) (experienceLogBO.getIncome() * privilegeItem.getHyjyzjc()));
+        }
 
         //uc_user的exp字段和uc_uexp_log的usableExp字段都要更新
         user.setExp(usableExp);
