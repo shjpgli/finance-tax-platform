@@ -16,7 +16,6 @@ public class ReturnMsg {
     private Integer sort;//排序
     @NotEmpty
     private String msgType;//text,image,news
-
     //text
     private String content;
 

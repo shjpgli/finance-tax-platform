@@ -35,7 +35,15 @@ public class Button implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    private Integer wxStatus;
 
+    public Integer getWxStatus() {
+        return wxStatus;
+    }
+
+    public void setWxStatus(Integer wxStatus) {
+        this.wxStatus = wxStatus;
+    }
     public Date getLastUpdate() {
         return lastUpdate;
     }

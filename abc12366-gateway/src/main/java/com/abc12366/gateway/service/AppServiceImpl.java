@@ -61,7 +61,7 @@ public class AppServiceImpl implements AppService {
         LOGGER.info("{}", bo);
         bo.setId(Utils.uuid());
         Date date = new Date();
-        bo.setPassword(Utils.md5(bo.getPassword()));
+        bo.setPassword(bo.getPassword());
         bo.setStartTime(date);
         bo.setCreateTime(date);
         bo.setLastUpdate(date);
@@ -94,8 +94,8 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("APP用户名不存在：{}", app);
             throw new ServiceException(4094);
         }
-        String password = Utils.md5(bo.getPassword());
-        if (app != null && app.getPassword().equals(password)) {
+        String password = bo.getPassword();
+        if (app != null && Utils.md5(app.getPassword()).equals(password)) {
             //判断app登录是否已过期
             long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
             long currentTime = System.currentTimeMillis();
