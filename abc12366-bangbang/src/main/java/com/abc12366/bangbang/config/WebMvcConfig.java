@@ -78,6 +78,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/classify/selectListsy")
                         //获取课程标签列表
                 .excludePathPatterns("/curriculum/selectLabelList")
+                        //根据分类查询相关标签
+                .excludePathPatterns("/curriculum/selectClassifyTagList")
                         //获取课程大类小类标签集合
                 .excludePathPatterns("/classify/selectClassifyListsy")
                         //获取最新课程
