@@ -19,10 +19,10 @@
         and date_format(a.createTime, '%Y%m%d') <= date_format(#{endDate}, '%Y%m%d')
           ]]>
         </if>
-        <if test="username != null">
+        <if test="username != null and username != ''">
             and b.username = #{username}
         </if>
-        <if test="nickname != null">
+        <if test="nickname != null and nickname != ''">
             and b.nickname = #{nickname}
         </if>
         <if test="businessData != null">

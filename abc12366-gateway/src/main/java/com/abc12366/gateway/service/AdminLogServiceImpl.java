@@ -52,7 +52,7 @@ public class AdminLogServiceImpl implements AdminLogService {
     @Override
     public List<AdminLog> selectList(int page, int size, AdminLog adminLog) {
         Date now = new Date();
-        adminLog.setYyyyMMdd(DateUtils.getDateFormat(now, "yyyyMMdd"));
+        //adminLog.setYyyyMMdd(DateUtils.getDateFormat(now, "yyyyMMdd"));
         adminLog.setYyyyMM(DateUtils.getDateFormat(now, "yyyyMM"));
 
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
