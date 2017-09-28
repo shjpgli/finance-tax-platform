@@ -57,7 +57,7 @@
 		 INSERT INTO bb_feedback
  		(id,sourceType,feedbackUserId,feedbackType,feedbackTime,opinionDesc,contactNumber) 
 		 VALUES 
- 		(#{id},#{sourceType},#{feedbackUserId},#{feedbackType},#{feedbackTime},#{opinionDesc},#{contactNumber}) 
+ 		(#{id},#{sourceType},#{feedbackUserId},#{feedbackType},now(),#{opinionDesc},#{contactNumber})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -76,16 +76,13 @@
 			<if test="feedbackType != null">
 				 feedbackType,
 			</if>
-			<if test="feedbackTime != null">
-				 feedbackTime,
-			</if>
 			<if test="opinionDesc != null">
 				 opinionDesc,
 			</if>
 			<if test="contactNumber != null">
 				 contactNumber,
 			</if>
-
+			 feedbackTime
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
@@ -100,15 +97,13 @@
 			<if test="feedbackType!=null">
 				 #{feedbackType},
 			</if>
-			<if test="feedbackTime!=null">
-				 #{feedbackTime},
-			</if>
 			<if test="opinionDesc!=null">
 				 #{opinionDesc},
 			</if>
 			<if test="contactNumber!=null">
 				 #{contactNumber},
 			</if>
+			 now()
 		 </trim>
 	</insert>
 
@@ -134,7 +129,6 @@
 			<if test="contactNumber != null">
 				 contactNumber = #{contactNumber},
 			</if>
-
  		 </set>
 		 WHERE id = #{id}
 	</update>

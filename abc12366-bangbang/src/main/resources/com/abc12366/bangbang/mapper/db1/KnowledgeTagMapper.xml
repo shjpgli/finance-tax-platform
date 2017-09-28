@@ -77,7 +77,7 @@
         INSERT INTO bb_knowledge_tag
         (id,name,description,status,createTime,updateTime,createUser,updateUser,tagType)
         VALUES
-        (#{id},#{name},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser},#{tagType})
+        (#{id},#{name},#{description},#{status},now(),now(),#{createUser},#{updateUser},#{tagType})
     </insert>
 
     <!-- 批量添加 -->
@@ -86,7 +86,7 @@
         (id,name,description,status,createTime,updateTime,createUser,updateUser,tagType)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id},#{item.name},#{item.description},#{item.status},#{item.createTime},#{item.updateTime},#{item.createUser},#{item.updateUser},#{item.tagType})
+            (#{item.id},#{item.name},#{item.description},#{item.status},now(),now(),#{item.createUser},#{item.updateUser},#{item.tagType})
         </foreach>
     </insert>
 
@@ -117,19 +117,14 @@
             <if test="status != null">
                 status,
             </if>
-            <if test="createTime != null">
-                createTime,
-            </if>
-            <if test="updateTime != null">
-                updateTime,
-            </if>
             <if test="createUser != null">
                 createUser,
             </if>
             <if test="updateUser != null">
                 updateUser,
             </if>
-
+            createTime,
+            updateTime
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -144,18 +139,13 @@
             <if test="status!=null">
                 #{status},
             </if>
-            <if test="createTime!=null">
-                #{createTime},
-            </if>
-            <if test="updateTime!=null">
-                #{updateTime},
-            </if>
             <if test="createUser!=null">
                 #{createUser},
             </if>
             <if test="updateUser!=null">
                 #{updateUser},
             </if>
+            now(),now()
         </trim>
     </insert>
 
@@ -172,16 +162,13 @@
             <if test="status != null">
                 status = #{status},
             </if>
-            <if test="updateTime != null">
-                updateTime = #{updateTime},
-            </if>
             <if test="updateUser != null">
                 updateUser = #{updateUser},
             </if>
             <if test="tagType != null">
                 tagType = #{tagType},
             </if>
-
+            updateTime = now()
         </set>
         WHERE id = #{id}
     </update>
@@ -193,7 +180,7 @@
         name = #{name},
         description = #{description},
         status = #{status},
-        updateTime = #{updateTime},
+        updateTime = now(),
         updateUser = #{updateUser},
         tagType = #{tagType}
         WHERE id = #{id}
