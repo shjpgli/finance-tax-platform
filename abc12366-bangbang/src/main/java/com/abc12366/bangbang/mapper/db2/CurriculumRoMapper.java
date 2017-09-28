@@ -48,6 +48,11 @@ public interface CurriculumRoMapper {
     List<CurriculumListsyBo> selectListNew(Map<String, Object> map);
 
     /**
+     * 查询会员专享课程
+     **/
+    List<CurriculumListsyBo> selectListVIP(Map<String, Object> map);
+
+    /**
      * 查询相关课程
      **/
     List<CurriculumListsyBo> selectListxgNew(@Param("curriculumId") String curriculumId);
