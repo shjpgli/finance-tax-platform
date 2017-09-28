@@ -79,6 +79,29 @@
         ORDER BY issueTime DESC
     </select>
 
+    <!-- 查询会员专享课程 -->
+    <select id="selectListVIP" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
+        SELECT
+        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
+        FROM bb_curriculum c
+        WHERE 1=1 and status = 1
+        <if test="label != null and label != ''">
+            AND curriculumId in (select curriculumId from bb_curriculum_label where labelId = #{label})
+        </if>
+        <if test="classify != null and classify != ''">
+            AND classify like CONCAT(#{classify},'%')
+        </if>
+            AND curriculumId in (select curriculumId from bb_curriculum_membergrade group by curriculumId)
+        <if test="isFree != null and isFree != ''">
+            AND isFree = #{isFree}
+        </if>
+        <if test="freeMember != null and freeMember != ''">
+            AND curriculumId in (select curriculumId from bb_curriculum_membergrade where memberGrade = #{freeMember})
+        </if>
+        ORDER BY issueTime DESC
+    </select>
+
     <!-- 查询热播课程 -->
     <select id="selectListWatch" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT

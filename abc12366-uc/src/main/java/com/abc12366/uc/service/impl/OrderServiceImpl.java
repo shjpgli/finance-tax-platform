@@ -866,7 +866,7 @@ public class OrderServiceImpl implements OrderService {
                         insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中","0");
                     } else if (isPay == 2) {
                         updateStock(orderBO, orderProductBO);
-                        setTodoTask(order);
+                        setTodoTask(orderBO);
                         //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
                         if (goodsType.equals("1") || goodsType.equals("2")) {
                             order.setOrderStatus("4");
@@ -946,8 +946,9 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 加入消费赠送积分规则
+     * @param order
      */
-    private void setTodoTask(Order order) {
+    private void setTodoTask(OrderBO order) {
         double amount = order.getTotalPrice();
         String userId = order.getUserId();
         todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_ID);

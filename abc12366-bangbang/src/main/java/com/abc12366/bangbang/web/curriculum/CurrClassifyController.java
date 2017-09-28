@@ -112,6 +112,17 @@ public class CurrClassifyController {
     }
 
     /**
+     * 更新课程分类信息
+     */
+    @PutMapping(path = "/updateClassify/{classifyId}")
+    public ResponseEntity updateClassify(@PathVariable String classifyId,
+                                 @Valid @RequestBody CurriculumClassifyBo classifyBo) {
+        //更新课程分类信息
+        classifyBo = classifyService.updateClassify(classifyBo);
+        return ResponseEntity.ok(Utils.kv("data", classifyBo));
+    }
+
+    /**
      * 更新课程分类状态
      *
      * @param status

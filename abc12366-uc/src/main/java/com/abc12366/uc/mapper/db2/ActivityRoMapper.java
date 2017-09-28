@@ -3,6 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
+import com.abc12366.uc.model.weixin.bo.redpack.ActivityBO;
 import com.abc12366.uc.model.weixin.bo.redpack.SentReceived;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface ActivityRoMapper {
     WxRedEnvelop selectRedEnvelopOne(String id);
 
     SentReceived selectSentReceivedCount(String activityId);
+
+    List<ActivityBO> selectSimpleList();
 }

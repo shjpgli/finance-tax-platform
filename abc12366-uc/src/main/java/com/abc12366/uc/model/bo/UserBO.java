@@ -28,6 +28,7 @@ public class UserBO {
     private Integer points;
     private Integer exp;
     private String vipLevel;
+    private String vipLevelName;
     private String realName;
     private String level;
     private Integer usernameModifiedTimes;
@@ -248,5 +249,46 @@ public class UserBO {
 
     public void setVipImage(String vipImage) {
         this.vipImage = vipImage;
+    }
+
+    public String getVipLevelName() {
+        return vipLevelName;
+    }
+
+    public void setVipLevelName(String vipLevelName) {
+        this.vipLevelName = vipLevelName;
+    }
+
+    @Override
+    public String toString() {
+        return "UserBO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", regMail='" + regMail + '\'' +
+                ", regIP='" + regIP + '\'' +
+                ", salt='" + salt + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
+                ", midUserPicturePath='" + midUserPicturePath + '\'' +
+                ", minUserPicturePath='" + minUserPicturePath + '\'' +
+                ", points=" + points +
+                ", exp=" + exp +
+                ", vipLevel='" + vipLevel + '\'' +
+                ", vipLevelName='" + vipLevelName + '\'' +
+                ", realName='" + realName + '\'' +
+                ", level='" + level + '\'' +
+                ", usernameModifiedTimes=" + usernameModifiedTimes +
+                ", vipExpireDate=" + vipExpireDate +
+                ", vipImage='" + vipImage + '\'' +
+                ", wxopenid='" + wxopenid + '\'' +
+                ", wxheadimg='" + wxheadimg + '\'' +
+                ", wxnickname='" + wxnickname + '\'' +
+                '}';
     }
 }
