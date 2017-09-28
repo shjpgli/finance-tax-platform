@@ -214,6 +214,27 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
     }
 
     @Override
+    public CurriculumClassifyBo updateClassify(CurriculumClassifyBo classifyBo) {
+        //更新课程分类信息
+        CurriculumClassify classify = new CurriculumClassify();
+        int cnt1 = classifyRoMapper.selectClassifyNameCnt(classifyBo);
+        if(cnt1 >0){
+            //分类名称不能重复
+            throw new ServiceException(4306);
+        }
+        try {
+            JSONObject jsonStu = JSONObject.fromObject(classifyBo);
+            LOGGER.info("更新课程分类信息:{}", jsonStu.toString());
+            BeanUtils.copyProperties(classifyBo, classify);
+            classifyMapper.updateByPrimaryKeySelective(classify);
+        } catch (Exception e) {
+            LOGGER.error("更新课程分类信息异常：{}", e);
+            throw new ServiceException(4303);
+        }
+        return classifyBo;
+    }
+
+    @Override
     public String updateStatus(String classifyId,String status) {
         //更新课程分类信息
         try {
