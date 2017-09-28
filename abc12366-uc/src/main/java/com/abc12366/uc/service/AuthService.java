@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface AuthService {
 
-    UserReturnBO register(RegisterBO registerBO);
+    UserReturnBO register(RegisterBO registerBO, HttpServletRequest request);
 
     Map login(LoginBO loginBO, String token) throws Exception;
 
