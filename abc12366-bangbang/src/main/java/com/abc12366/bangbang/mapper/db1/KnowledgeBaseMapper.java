@@ -124,4 +124,6 @@ public interface KnowledgeBaseMapper {
 
 	List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param);
 
+    /* 根据知识库分类id  查询知识库个数 */
+    int selectCntByCategoryId(String categoryId);
 }
