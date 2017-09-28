@@ -79,6 +79,7 @@ public class IpServiceImpl implements IpService {
         } catch (JSONException e) {
             LOGGER.error("{}", e);
         }
-        return ipQueryResult != null && ipQueryResult.getCode() == 0 ? (Ip) ipQueryResult.getData() : null;
+        return ipQueryResult != null && ipQueryResult.getCode() == 0 ?
+                JSON.parseObject(ipQueryResult.getData(), Ip.class) : null;
     }
 }

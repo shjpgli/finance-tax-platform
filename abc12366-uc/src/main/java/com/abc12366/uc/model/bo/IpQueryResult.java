@@ -12,7 +12,7 @@ public class IpQueryResult {
     // 0：成功，1：失败
     private int code;
 
-    private Object data;
+    private String data;
 
     public int getCode() {
         return code;
@@ -22,11 +22,11 @@ public class IpQueryResult {
         this.code = code;
     }
 
-    public Object getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
