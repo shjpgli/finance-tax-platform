@@ -45,5 +45,5 @@ public interface UserBindService {
 
     HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException;
 
-    boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request) throws IOException;
+    boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request);
 }

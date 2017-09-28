@@ -85,7 +85,7 @@ public class AuthController extends BaseController {
         verifyBO.setCode(registerBO.getVerifyingCode());
         if (authService.verifyCode(verifyBO, request)) {
             //注册
-            UserReturnBO userReturnBO = authService.register(registerBO);
+            UserReturnBO userReturnBO = authService.register(registerBO, request);
             return ResponseEntity.ok(Utils.kv("data", userReturnBO));
         } else {
             throw new ServiceException(4201);
