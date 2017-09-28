@@ -129,26 +129,27 @@ public class EventServiceImpl implements EventService {
             if (event != null) {
                 BeanUtils.copyProperties(event, eventBo);
                 eventSaveBo.setEvent(eventBo);
+                List<EventModelItemBo> eventModelItemBoList = new ArrayList<EventModelItemBo>();
+                List<EventModelItem> eventModelItemList = eventModelItemRoMapper.selectByEventId(event.getEventId());
+                if (eventModelItemList != null) {
+                    for (EventModelItem eventModelItem : eventModelItemList) {
+                        EventModelItemBo eventModelItemBo = new EventModelItemBo();
+                        try {
+                            BeanUtils.copyProperties(eventModelItem, eventModelItemBo);
+                        } catch (Exception e) {
+                            LOGGER.error("类转换异常：{}", e);
+                            throw new RuntimeException("类型转换异常：{}", e);
+                        }
+                        eventModelItemBoList.add(eventModelItemBo);
+                    }
+                }
+                eventSaveBo.setModelItemList(eventModelItemBoList);
             }
         } catch (Exception e) {
             LOGGER.error("类转换异常：{}", e);
             throw new RuntimeException("类型转换异常：{}", e);
         }
-        List<EventModelItemBo> eventModelItemBoList = new ArrayList<EventModelItemBo>();
-        List<EventModelItem> eventModelItemList = eventModelItemRoMapper.selectByEventId(event.getEventId());
-        if (eventModelItemList != null) {
-            for (EventModelItem eventModelItem : eventModelItemList) {
-                EventModelItemBo eventModelItemBo = new EventModelItemBo();
-                try {
-                    BeanUtils.copyProperties(eventModelItem, eventModelItemBo);
-                } catch (Exception e) {
-                    LOGGER.error("类转换异常：{}", e);
-                    throw new RuntimeException("类型转换异常：{}", e);
-                }
-                eventModelItemBoList.add(eventModelItemBo);
-            }
-        }
-        eventSaveBo.setModelItemList(eventModelItemBoList);
+
         return eventSaveBo;
     }
 

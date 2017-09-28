@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/sftp", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/sftp111", headers = Constant.VERSION_HEAD + "=1")
 public class SftpController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SftpController.class);
