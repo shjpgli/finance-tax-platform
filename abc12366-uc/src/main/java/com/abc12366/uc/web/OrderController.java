@@ -331,6 +331,7 @@ public class OrderController {
         LOGGER.info("{}{}", orderPayBO);
         OrderBO bo = orderService.paymentOrder(orderPayBO,"POINTS",request);
         LOGGER.info("{}", bo);
+
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
