@@ -9,6 +9,8 @@ import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.util.AdminUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +39,32 @@ public class RealNameValidationController {
 
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String username,
+    		                         @RequestParam(required = false) Boolean status,
+    		                         @RequestParam(required = false) String realName,
+    		                         @RequestParam(required = false) String phone,
+    		                         @RequestParam(required = false) String validStatus,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", username, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        if (username.equals("")) {
+        if (StringUtils.isEmpty(username)) {
             username = null;
         }
-        Map<String, String> map = new HashMap<>();
+        if (StringUtils.isEmpty(realName)) {
+        	realName = null;
+        }
+        if (StringUtils.isEmpty(phone)) {
+        	phone = null;
+        }
+        if (StringUtils.isEmpty(validStatus)) {
+        	validStatus = null;
+        }
+        Map<String, Object> map = new HashMap<>();
         map.put("username", username);
+        map.put("status", status);
+        map.put("realName", realName);
+        map.put("phone", phone);
+        map.put("validStatus", validStatus);
         List<UserExtendListBO> userExtendBOList = realNameValidationService.selectList(map);
         return (userExtendBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :

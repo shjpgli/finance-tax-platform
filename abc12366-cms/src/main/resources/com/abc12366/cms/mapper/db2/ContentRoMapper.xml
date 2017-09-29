@@ -321,7 +321,7 @@
 		<if test="endTime!=null and endTime!=''">
 			AND UNIX_TIMESTAMP(b.releaseDate) &lt;= #{endTime}
 		</if>
-		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
+		ORDER BY a.topLevel DESC,b.releaseDate DESC
 	</select>
 
     <!-- 查询（根据查询条件查询） -->
