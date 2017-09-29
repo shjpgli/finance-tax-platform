@@ -12,6 +12,8 @@ public interface CurriculumService {
 
     List<CurriculumListsyBo> selectListNew(Map<String, Object> map);
 
+    List<CurriculumListsyBo> selectListVIP(Map<String, Object> map);
+
     List<CurriculumListsyBo> selectListWatch(Map<String, Object> map);
 
     List<CurriculumListsyBo> selectRecommend(Map<String, Object> map);

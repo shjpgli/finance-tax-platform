@@ -22,6 +22,8 @@ public interface CurrClassifyService {
 
     CurriculumClassifyBo update(CurriculumClassifyBo classifyBo);
 
+    CurriculumClassifyBo updateClassify(CurriculumClassifyBo classifyBo);
+
     String updateStatus(String classifyId, String status);
 
     String delete(String classifyId);

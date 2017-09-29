@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.StringUtil;
 import com.abc12366.bangbang.common.UcUserCommon;
+import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper;
 import com.abc12366.bangbang.model.KnowledgeCategory;
 import com.abc12366.bangbang.model.bo.SortBO;
@@ -25,6 +26,9 @@ import java.util.Random;
 public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeBaseServiceImpl.class);
+
+    @Autowired
+    private KnowledgeBaseMapper knowledgeBaseMapper;
 
     @Autowired
     private KnowledgeCategoryMapper knowledgeCategoryMapper;
@@ -104,6 +108,10 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     @Override
     public void deleteById(String id) {
+        int refKnowledgeCnt = knowledgeBaseMapper.selectCntByCategoryId(id);
+        if(refKnowledgeCnt > 0){
+            throw new ServiceException(4522);
+        }
         try {
             knowledgeCategoryMapper.deleteByPrimaryKey(id);
         }catch (Exception e){

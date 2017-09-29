@@ -22,7 +22,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM cms_event where status = '2'
-        ORDER BY createtime DESC LIMIT 1
+        ORDER BY updatetime DESC LIMIT 1
     </select>
 
     <!-- 查询（根据条件查询） -->

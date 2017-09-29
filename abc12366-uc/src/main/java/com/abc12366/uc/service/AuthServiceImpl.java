@@ -12,10 +12,7 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.BaseObject;
-import com.abc12366.uc.model.PrivilegeItem;
-import com.abc12366.uc.model.Token;
-import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.RandomNumber;
 import com.abc12366.uc.util.UCConstant;
@@ -63,6 +60,8 @@ public class AuthServiceImpl implements AuthService {
     private TokenRoMapper tokenRoMapper;
     @Autowired
     private TokenMapper tokenMapper;
+    @Autowired
+    private UserExtendService userExtendService;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -97,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Transactional("db1TxManager")
     @Override
-    public UserReturnBO register(RegisterBO registerBO) {
+    public UserReturnBO register(RegisterBO registerBO, HttpServletRequest request) {
         LOGGER.info("{}", registerBO);
         if (registerBO == null) {
             LOGGER.warn("新增失败，参数:{}" + null);
@@ -166,15 +165,19 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("新增失败，参数:{}" + registerBO.toString());
             throw new ServiceException(4020);
         }
+
+        //注册用户增加地址：province、city到uc_userExtend表
+        UserExtendBO userExtend = new UserExtendBO();
+        userExtend.setUserId(user.getId());
+        userExtend.setProvince(registerBO.getProvince());
+        userExtend.setCity(registerBO.getCity());
+        userExtendService.insert(userExtend, request);
+
         UserReturnBO userReturnBO = new UserReturnBO();
         BeanUtils.copyProperties(user, userReturnBO);
 
         //首次绑定手机任务埋点
         todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
-        if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
-            //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
-        }
 
         LOGGER.info("{}", userReturnBO);
         return userReturnBO;
@@ -268,11 +271,6 @@ public class AuthServiceImpl implements AuthService {
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
             todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
-        }
-
-        if (!StringUtils.isEmpty(user.getUserPicturePath())) {
-            //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         UserBO userBO = new UserBO();
@@ -403,12 +401,6 @@ public class AuthServiceImpl implements AuthService {
                         exp = 10;
                     }
                 }
-            }
-
-            //会员权限埋点（经验值加成）
-            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
-            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
-                exp = (int) (exp * privilegeItem.getHyjyzjc());
             }
 
             ExperienceLogBO logBO = new ExperienceLogBO();
@@ -574,11 +566,6 @@ public class AuthServiceImpl implements AuthService {
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
             todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
-        }
-
-        if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
-            //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         UserBO userBO = new UserBO();

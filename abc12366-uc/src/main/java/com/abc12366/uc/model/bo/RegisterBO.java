@@ -49,6 +49,8 @@ public class RegisterBO implements Serializable {
     private String verifyingCode;
     @NotEmpty
     private String verifyingType;
+    private String province;
+    private String city;
 
     public RegisterBO() {
     }
@@ -163,5 +165,43 @@ public class RegisterBO implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return "RegisterBO{" +
+                "phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", regMail='" + regMail + '\'' +
+                ", username='" + username + '\'' +
+                ", regIP='" + regIP + '\'' +
+                ", salt='" + salt + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
+                ", midUserPicturePath='" + midUserPicturePath + '\'' +
+                ", minUserPicturePath='" + minUserPicturePath + '\'' +
+                ", verifyingCode='" + verifyingCode + '\'' +
+                ", verifyingType='" + verifyingType + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                '}';
     }
 }

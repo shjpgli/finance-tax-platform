@@ -14,7 +14,7 @@ import java.io.IOException;
 public interface UserExtendService {
     UserExtendBO selectOne(String userId);
 
-    UserExtendBO insert(UserExtendBO userExtendBO, HttpServletRequest request) throws IOException;
+    UserExtendBO insert(UserExtendBO userExtendBO, HttpServletRequest request);
 
     UserExtendBO delete(String userId);
 

@@ -244,7 +244,7 @@ public class AppServiceImpl implements AppService {
     public AppBO update(AppBO appBO) {
         LOGGER.info("{}", appBO);
         try {
-            appBO.setPassword(Utils.md5(appBO.getPassword()));
+            appBO.setPassword(appBO.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
         }

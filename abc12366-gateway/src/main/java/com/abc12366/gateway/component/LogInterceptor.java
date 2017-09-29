@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -51,8 +52,10 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         String version = request.getHeader(Constant.VERSION_HEAD);
 
         // body中前台传入的参数
-//        String bodyParam = getBodyString(request);
-//        System.out.println(bodyParam);
+//        SessionFilter sessionFilter = new SessionFilter();
+        /*BodyReaderHttpServletRequestWrapper bodyReaderHttpServletRequestWrapper = new BodyReaderHttpServletRequestWrapper(request);
+        String bodyParam = bodyReaderHttpServletRequestWrapper.getBodyString(request);
+        System.out.println(bodyParam);*/
         LOGGER.info("URI:{}, Version:{}, IP:{}, User-Agent:{}", uri, version, addr, userAgent);
 
         // 版本头检查

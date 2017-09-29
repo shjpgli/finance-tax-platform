@@ -77,6 +77,27 @@ public class CurriculumController {
     }
 
     /**
+     * 会员专享课程查询(前端用无需登录)
+     */
+    @GetMapping(path = "/selectListVIP")
+    public ResponseEntity selectListVIP(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "label", required = false) String label,
+                                        @RequestParam(value = "classify", required = false) String classify,
+                                        @RequestParam(value = "freeMember", required = false) String freeMember,
+                                        @RequestParam(value = "isFree", required = false) String isFree) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("label", label);//标签
+        dataMap.put("classify", classify);//课程分类
+        dataMap.put("freeMember", freeMember);//会员等级
+        dataMap.put("isFree", isFree);//是否免费
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CurriculumListsyBo> dataList = curriculumService.selectListVIP(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 最热课程查询(前端用无需登录)
      */
     @GetMapping(path = "/selectListWatch")
