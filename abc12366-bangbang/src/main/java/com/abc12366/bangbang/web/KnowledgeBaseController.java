@@ -133,6 +133,7 @@ public class KnowledgeBaseController {
                                      @RequestParam(value = "categoryCode", required = false) String categoryCode,
                                      @RequestParam(value = "keywords", required = false) String keywords,
                                      @RequestParam(value = "type", required = false) String type,
+                                     @RequestParam(value = "recommend", required = false) String recommend,
                                      @RequestParam(value = "isOpen", required = false) Boolean isOpen,
                                      @RequestParam(value = "status", required = false) Boolean status) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -140,6 +141,7 @@ public class KnowledgeBaseController {
             keywords = keywords.toUpperCase();
         }
         KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status);
+        param.setRecommend(recommend);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
         return (list == null) ?

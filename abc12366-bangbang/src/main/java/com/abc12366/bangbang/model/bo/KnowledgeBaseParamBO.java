@@ -10,6 +10,8 @@ public class KnowledgeBaseParamBO {
 
     private String type;         //知识库  类别（知识 和 问题）
 
+    private String recommend;         //知识库  类别（知识 和 问题）
+
     private String keywords;    //关键字（知识库标题 模糊匹配）
 
     private Boolean isOpen;     //是否对外开放
@@ -62,5 +64,14 @@ public class KnowledgeBaseParamBO {
 
     public void setKeywords(String keywords) {
         this.keywords = keywords;
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public KnowledgeBaseParamBO setRecommend(String recommend) {
+        this.recommend = recommend;
+        return this;
     }
 }
