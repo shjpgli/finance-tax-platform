@@ -90,6 +90,11 @@ public class CheckServiceImpl implements CheckService {
         //完成任务埋点
         todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_ID);
 
+        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
+        if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
+            //usablePoints = (int) (usablePoints * privilegeItem.getHyjfjc());
+            points = (int) (points * privilegeItem.getHyjyzjc());
+        }
         return points;
     }
 

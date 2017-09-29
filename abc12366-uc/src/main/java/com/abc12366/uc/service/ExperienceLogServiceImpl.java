@@ -60,18 +60,18 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
             LOGGER.warn("新增失败,userId为不存在用户的id,参数为：userId=" + experienceLogBO.getUserId());
             throw new ServiceException(4101);
         }
-        //可用经验值=上一次的可用经验值+|-本次收入|支出
-        int usableExp = user.getExp() + experienceLogBO.getIncome() - experienceLogBO.getOutgo();
 
         //会员权限埋点（经验值加成）
         if (experienceLogBO.getIncome() > 0 && experienceLogBO.getIncome() > experienceLogBO.getOutgo()) {
             PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(user.getId());
-            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
-                usableExp = (int) (usableExp * privilegeItem.getHyjyzjc());
+            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 1) {
+                //usableExp = (int) (usableExp * privilegeItem.getHyjyzjc());
+                experienceLogBO.setIncome((int) (experienceLogBO.getIncome() * privilegeItem.getHyjyzjc()));
             }
-
-            experienceLogBO.setIncome((int) (experienceLogBO.getIncome() * privilegeItem.getHyjyzjc()));
         }
+
+        //可用经验值=上一次的可用经验值+|-本次收入|支出
+        int usableExp = user.getExp() + experienceLogBO.getIncome() - experienceLogBO.getOutgo();
 
         //uc_user的exp字段和uc_uexp_log的usableExp字段都要更新
         user.setExp(usableExp);
