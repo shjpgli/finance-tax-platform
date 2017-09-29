@@ -68,6 +68,11 @@ public class UserController {
             @RequestParam(required = false) String nickname,
             @RequestParam(required = false) Boolean status,
             @RequestParam(required = false) String tagName,
+            @RequestParam(required = false) String realName,
+            @RequestParam(required = false) String points,
+            @RequestParam(required = false) String exp,
+            @RequestParam(required = false) String vipLevel,
+            @RequestParam(required = false) String medal,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}:{}:{}", username, phone, nickname, status, tagName, page, size);
@@ -88,6 +93,26 @@ public class UserController {
         if (tagName != null && StringUtils.isEmpty(tagName)) {
             tagName = null;
         }
+        if (StringUtils.isEmpty(realName)) {
+        	realName = null;
+        }
+        if (StringUtils.isEmpty(points)) {
+        	points = null;
+        }
+        if ( StringUtils.isEmpty(exp)) {
+        	exp = null;
+        }
+        if (StringUtils.isEmpty(vipLevel)) {
+        	vipLevel = null;
+        }
+        if (StringUtils.isEmpty(medal)) {
+        	medal = null;
+        }
+        map.put("medal", medal);
+        map.put("vipLevel", vipLevel);
+        map.put("exp", exp);
+        map.put("points", points);
+        map.put("realName", realName);
         map.put("username", username);
         map.put("phone", phone);
         map.put("nickname", nickname);

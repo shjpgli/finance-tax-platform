@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -74,7 +75,18 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
         }
         return fori;
     }
+    @Override
+    public Integer adds(List<VipPrivilegeLevelBO> list) {
+        Integer fori = 0;
+        for (VipPrivilegeLevelBO obj : list) {
+            VipPrivilegeLevelInsertBO vipPrivilegeLevelInsertBO = new VipPrivilegeLevelInsertBO();
+            BeanUtils.copyProperties(obj, vipPrivilegeLevelInsertBO);
 
+            this.insert(vipPrivilegeLevelInsertBO);
+            fori++;   //暂时没考虑中间异常
+        }
+        return fori;
+    }
     @Override
     public Integer updateByPrivilege(String privilege,List<VipPrivilegeLevelBO> list) {
         if(privilege == null){
@@ -83,7 +95,9 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
         }
         this.deleteByPrivilege(privilege);
 
-        return updates(list);
+        Integer i=  adds(list);
+
+        return i;
     }
     @Override
     public Integer updateByLevel(String level,List<VipPrivilegeLevelBO> list) {
@@ -93,7 +107,7 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
         }
         this.deleteByLevel(level);
 
-        return updates(list);
+        return adds(list);
     }
     @Override
     public VipPrivilegeLevelBO selectOne(String id) {

@@ -62,18 +62,20 @@ public class PointsLogServiceImpl implements PointsLogService {
         if (user == null) {
             throw new ServiceException(4018);
         }
+
+        //会员权限埋点（积分加成）
+        if (pointsLogBO.getIncome() > 0 && pointsLogBO.getIncome() > pointsLogBO.getOutgo()) {
+            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(user.getId());
+            if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
+                //usablePoints = (int) (usablePoints * privilegeItem.getHyjfjc());
+                pointsLogBO.setIncome((int) (pointsLogBO.getIncome() * privilegeItem.getHyjyzjc()));
+            }
+        }
+
         //可用积分=上一次的可用积分+|-本次收入|支出
         int usablePoints = user.getPoints() + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
         if (usablePoints < 0) {
             throw new ServiceException(4635);
-        }
-        //会员权限埋点（积分加成）
-        if (pointsLogBO.getIncome() > 0 && pointsLogBO.getIncome() > pointsLogBO.getOutgo()) {
-            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(user.getId());
-            if (privilegeItem != null && privilegeItem.getHyjfjc() > 0) {
-                usablePoints = (int) (usablePoints * privilegeItem.getHyjfjc());
-            }
-            pointsLogBO.setIncome((int) (pointsLogBO.getIncome() * privilegeItem.getHyjyzjc()));
         }
 
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
