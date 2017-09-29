@@ -123,6 +123,7 @@ public class WxGzhServiceimpl implements IWxGzhService {
 			}
 			inputStream.close();
 
+			//ftp地址 上线修改
 			SFTPUtil sf = new SFTPUtil();
 			String host = "118.118.116.202";
 			int port = 22;
