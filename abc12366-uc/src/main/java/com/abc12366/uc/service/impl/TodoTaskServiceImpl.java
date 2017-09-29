@@ -21,11 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -159,8 +157,15 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     //生成特殊任务
     private void generateSpecialTaskList(String userId) {
+        if (StringUtils.isEmpty(userId)) {
+            return;
+        }
         String type = UCConstant.SPECIAL_TASK_TYPE;
         List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByType(type);
+        List<SysTaskBO> filteredSysTaskBOList = fileterExistSpecialSysTask(sysTaskBOList, userId);
+        if (filteredSysTaskBOList == null || filteredSysTaskBOList.size() < 1) {
+            return;
+        }
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             TodoTask todoTaskTmp = todoTaskRoMapper.selectOneByDayBySysTaskId(userId, sysTaskBO.getId());
             if (todoTaskTmp == null) {
@@ -192,6 +197,31 @@ public class TodoTaskServiceImpl implements TodoTaskService {
                 insert(todoTask);
             }
         }
+    }
+
+    //将系统任务列表中在有效期范围内已生成的过滤掉
+    private List<SysTaskBO> fileterExistSpecialSysTask(List<SysTaskBO> sysTaskBOList, String userId) {
+        if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
+            return null;
+        }
+        List<SysTaskBO> sysTaskBOListReturn = new ArrayList<>();
+        sysTaskBOListReturn.addAll(sysTaskBOList);
+        for (SysTaskBO sysTaskBO : sysTaskBOList) {
+            List<TodoTask> todoTaskList = todoTaskRoMapper.selectListByUserIdAndSysId(userId, sysTaskBO.getId());
+            //如果在有效期内未生成该用户对应的该条特殊任务则不用过滤
+            if (todoTaskList == null || todoTaskList.size() < 1) {
+                continue;
+            }
+            //如果在有效期内已经生成该用户对应的该条特殊任务则过滤
+            for (TodoTask todoTask : todoTaskList) {
+                if (todoTask.getCreateTime().getTime() > sysTaskBO.getStartTime().getTime()
+                        && todoTask.getCreateTime().getTime() <= sysTaskBO.getEndTime().getTime()) {
+                    sysTaskBOListReturn.remove(sysTaskBO);
+                    break;
+                }
+            }
+        }
+        return sysTaskBOListReturn;
     }
 
     //生成一次性任务
