@@ -9,15 +9,15 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceLog;
 import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.ExpLogUcBO;
-import com.abc12366.uc.model.bo.ExperienceLogBO;
-import com.abc12366.uc.model.bo.ExperienceLogQueryBO;
+import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -46,6 +46,12 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
 
     @Autowired
     private PrivilegeItemService privilegeItemService;
+
+    @Autowired
+    private ExperienceService experienceService;
+
+    @Autowired
+    private PointsLogService pointsLogService;
 
     @Transactional("db1TxManager")
     @Override
@@ -82,6 +88,9 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
             throw new ServiceException(4101);
         }
 
+        //用户升级奖励埋点
+        expLevelUpgradeAward(user.getId(), usableExp);
+
         ExperienceLog experienceLog = new ExperienceLog();
         BeanUtils.copyProperties(experienceLogBO, experienceLog);
         experienceLog.setId(Utils.uuid());
@@ -96,6 +105,36 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         ExperienceLogQueryBO experienceLogReturn = new ExperienceLogQueryBO();
         BeanUtils.copyProperties(experienceLog, experienceLogReturn);
         return experienceLogReturn;
+    }
+
+    private void expLevelUpgradeAward(String id, int newExp) {
+        if (StringUtils.isEmpty(id)) {
+            return;
+        }
+        User user = userRoMapper.selectOne(id);
+        if (user == null || user.getExp() == null) {
+            return;
+        }
+
+        MyExperienceBO myExperienceBO = experienceService.getMyExperience(id);
+        if (myExperienceBO == null || myExperienceBO.getNextLevelExp() == null) {
+            return;
+        }
+
+        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(id);
+        if (privilegeItem == null || privilegeItem.getYhsjjl() <= 0) {
+            return;
+        }
+
+        if (newExp >= Integer.parseInt(myExperienceBO.getNextLevelExp())) {
+            PointsLogBO pointsLogBO = new PointsLogBO();
+            pointsLogBO.setUserId(id);
+            pointsLogBO.setIncome(privilegeItem.getYhsjjl());
+            pointsLogBO.setOutgo(0);
+            pointsLogBO.setRuleId(UCConstant.POINT_RULE_EXP_UP_ID);
+            pointsLogBO.setRemark("用户等级提升奖励");
+            pointsLogService.insert(pointsLogBO);
+        }
     }
 
     @Override

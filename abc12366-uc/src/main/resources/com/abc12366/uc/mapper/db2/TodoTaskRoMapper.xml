@@ -165,4 +165,11 @@
         and a.type = '3'
     </select>
 
+    <select id="selectListByUserIdAndSysId" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_user_task_todo
+        WHERE userId = #{userId}
+        and sysTaskId = #{sysTaskId}
+    </select>
 </mapper>
