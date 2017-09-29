@@ -34,6 +34,6 @@ public interface VipPrivilegeLevelService {
     VipPrivilegeLevelBO update(VipPrivilegeLevelUpdateBO vipPrivilegeLevelUpdateBO, String id);
     List<VipPrivilegeLevelBO> selectListbyPrivlege(String privilege);
     boolean delete(String id);
-
+    public Integer adds(List<VipPrivilegeLevelBO> list);
     void enableOrDisable(String id, String status);
 }

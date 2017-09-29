@@ -81,13 +81,6 @@ public class CheckServiceImpl implements CheckService {
 //            pointsLog(check.getUserId(), points);
 //            return;
         }
-        //会员权限埋点（积分加成）
-        float factor = 1.0F;
-        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
-        if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
-            factor = privilegeItem.getHyjyzjc();
-        }
-        points = (int) (points * factor);
 
         //签到统计
         continuingCheck(check.getUserId());
@@ -97,6 +90,11 @@ public class CheckServiceImpl implements CheckService {
         //完成任务埋点
         todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_ID);
 
+        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
+        if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
+            //usablePoints = (int) (usablePoints * privilegeItem.getHyjfjc());
+            points = (int) (points * privilegeItem.getHyjyzjc());
+        }
         return points;
     }
 

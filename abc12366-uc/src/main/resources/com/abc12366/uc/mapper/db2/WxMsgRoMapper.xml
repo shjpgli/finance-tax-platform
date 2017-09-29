@@ -57,7 +57,7 @@
 
     <select id="getReMsgOneBykeyString" resultMap="reMsgMap" parameterType="java.lang.String">
         SELECT id,setting,keyString,msgType,content,mediaId,imgurl,newsId,createDate,lastUpdate,searchTp,sort
-        from uc_wxremsg where setting = 2 and ((keyString= #{keyString} and searchTp='ALL') or (keyString like CONCAT('%',#{keyString},'%') and searchTp='PART')) limit 1
+        from uc_wxremsg where setting = 2 and ((keyString= #{keyString} and searchTp='ALL') or (keyString like CONCAT('%',#{keyString},'%') and searchTp='PART') or ( keyString = '*')) order by keyString desc,sort asc limit 1
     </select>
 
     <select id="getNewsById" resultMap="newsResultMap" parameterType="java.lang.String">

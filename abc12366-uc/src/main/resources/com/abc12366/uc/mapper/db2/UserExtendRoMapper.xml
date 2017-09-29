@@ -25,6 +25,18 @@
             <if test="username!=null">
                 and uu.username like CONCAT('%',#{username},'%')
             </if>
+            <if test="status!=null">
+                and uu.status = #{status}
+            </if>
+            <if test="phone!=null">
+                and uu.phone = #{phone}
+            </if>
+            <if test="realName!=null">
+                and uue.realName = #{realName}
+            </if>
+            <if test="validStatus!=null">
+                and uue.validStatus = #{validStatus}
+            </if>
         </where>
         order by createTime desc
 

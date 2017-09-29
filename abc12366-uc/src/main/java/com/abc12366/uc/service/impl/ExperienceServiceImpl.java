@@ -230,13 +230,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             experienceLog.setIncome(0);
             experienceLog.setOutgo(-codex.getUexp());
         } else {
-            //会员权限埋点（经验值加成）
-            float factor = 1.0F;
-            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(expComputeBO.getUserId());
-            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
-                factor = privilegeItem.getHyjyzjc();
-            }
-            experienceLog.setIncome((int) (codex.getUexp()*factor));
+            experienceLog.setIncome(codex.getUexp());
             experienceLog.setOutgo(0);
         }
         experienceLogService.insert(experienceLog);

@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.PointsLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.PointsLog;
+import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsLogUcBO;
@@ -42,6 +43,9 @@ public class PointsLogServiceImpl implements PointsLogService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
+
     @Override
     public List<PointsLogBO> selectList(Map map) {
         return pointsLogRoMapper.selectList(map);
@@ -58,11 +62,22 @@ public class PointsLogServiceImpl implements PointsLogService {
         if (user == null) {
             throw new ServiceException(4018);
         }
+
+        //会员权限埋点（积分加成）
+        if (pointsLogBO.getIncome() > 0 && pointsLogBO.getIncome() > pointsLogBO.getOutgo()) {
+            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(user.getId());
+            if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
+                //usablePoints = (int) (usablePoints * privilegeItem.getHyjfjc());
+                pointsLogBO.setIncome((int) (pointsLogBO.getIncome() * privilegeItem.getHyjyzjc()));
+            }
+        }
+
         //可用积分=上一次的可用积分+|-本次收入|支出
         int usablePoints = user.getPoints() + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
         if (usablePoints < 0) {
             throw new ServiceException(4635);
         }
+
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
         user.setLastUpdate(new Date());

@@ -230,13 +230,7 @@ public class PointsServiceImpl implements PointsService {
             pointsLog.setIncome(0);
             pointsLog.setOutgo(-pointsRuleBO.getPoints());
         } else {
-            //会员权限埋点（积分加成）
-            float factor = 1.0F;
-            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(pointCalculateBO.getUserId());
-            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 0) {
-                factor = privilegeItem.getHyjyzjc();
-            }
-            pointsLog.setIncome((int) (pointsRuleBO.getPoints()*factor));
+            pointsLog.setIncome(pointsRuleBO.getPoints());
             pointsLog.setOutgo(0);
         }
         pointsLogService.insert(pointsLog);

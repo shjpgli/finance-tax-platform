@@ -22,7 +22,8 @@
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
-        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        select * from 
+        (select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
@@ -32,7 +33,7 @@
         (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
         (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
         medalIcon
-        from uc_user uu
+        from uc_user uu) u
         <where>
             <if test="username!=null">
                 username=#{username}
@@ -46,9 +47,24 @@
             <if test="status!=null">
                 and status=#{status}
             </if>
+            <if test="medal!=null">
+                and medal=#{medal}
+            </if>
+            <if test="vipLevel!=null">
+                and vipLevel=#{vipLevel}
+            </if>
+            <if test="exp!=null">
+                and exp=#{exp}
+            </if>
+            <if test="points!=null">
+                and points=#{points}
+            </if>
+            <if test="realName!=null">
+                and realName=#{realName}
+            </if>
 
             <if test="tagName!=null and tagName.size()>0">
-                and uu.id in
+                and u.id in
                 (SELECT a.subjectId FROM
                 <foreach item="item" collection="tagName" separator="union all" open="(" close=")" index="">
                     SELECT subjectId FROM uc_subject_tag ust,uc_tag ut WHERE ust.tagId=ut.id AND ut.tagName=#{item}
@@ -56,7 +72,7 @@
                 a group by a.subjectId HAVING COUNT(subjectid) = #{tagNameCount})
             </if>
         </where>
-        ORDER BY uu.lastUpdate DESC
+        ORDER BY u.lastUpdate DESC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
@@ -75,7 +91,8 @@
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,
-        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
+        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage,
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName
         from uc_user uu
         <where>
             <if test="usernameOrPhone != null">

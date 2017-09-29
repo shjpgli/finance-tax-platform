@@ -42,4 +42,6 @@ public interface TodoTaskRoMapper {
     List<TodoTaskFront> selectOnetimeTaskList(String userId);
 
     List<TodoTaskFront> selectSpecialTaskList(String userId);
+
+    List<TodoTask> selectListByUserIdAndSysId(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 }

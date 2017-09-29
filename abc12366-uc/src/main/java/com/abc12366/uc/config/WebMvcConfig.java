@@ -29,7 +29,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return slr;
     }
 
-   /* @Bean
+    /*@Bean
     public SessionFilter getSessionFilter() {
         return new SessionFilter();
     }*/
