@@ -167,6 +167,21 @@ public class GoodsController {
     }
 
     /**
+     * 前台查询单个课程商品
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "/curriculum/{id}")
+    public ResponseEntity selectCurriculumGoods(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        List<GoodsBO> goodsBOs = goodsService.selectCurriculumGoods(id);
+        LOGGER.info("{}", goodsBOs);
+        return ResponseEntity.ok(Utils.kv("data", goodsBOs.get(0)));
+    }
+
+
+    /**
      * 修改商品信息
      *
      * @param goodsBO
