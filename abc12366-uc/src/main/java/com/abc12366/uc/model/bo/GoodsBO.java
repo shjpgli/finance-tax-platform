@@ -99,6 +99,9 @@ public class GoodsBO implements Serializable {
     /**会员等级**/
     private String memberLevel;
 
+    /**积分对比比例**/
+    private Double prop;
+
     public String getId() {
         return this.id;
     }
@@ -369,5 +372,13 @@ public class GoodsBO implements Serializable {
 
     public void setMemberLevel(String memberLevel) {
         this.memberLevel = memberLevel;
+    }
+
+    public Double getProp() {
+        return prop;
+    }
+
+    public void setProp(Double prop) {
+        this.prop = prop;
     }
 }

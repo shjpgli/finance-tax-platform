@@ -318,9 +318,10 @@
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
         g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn,g.memberLevel,
-        p.sellingPrice as sellingPrice
+        p.sellingPrice as sellingPrice,d.fieldValue as prop
         FROM uc_goods g
         left JOIN uc_product p on p.goodsId = g.id
+        LEFT JOIN uc_dict d on d.dictId = 'system_setting_points'
         WHERE g.id = #{id}
     </select>
 
