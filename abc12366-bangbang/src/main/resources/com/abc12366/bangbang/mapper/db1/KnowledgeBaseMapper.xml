@@ -155,7 +155,7 @@
             <if test="type != null and type !=''">
                 AND t_base.type = #{type}
             </if>
-            <if test="recommend != null">
+            <if test="recommend != null and recommend !=''">
                 AND t_base.recommend = #{recommend}
             </if>
             <if test="isOpen != null">
