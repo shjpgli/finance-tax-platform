@@ -6,7 +6,7 @@ package com.abc12366.uc.util;
 public class MessageConstant {
 
     //UC访问地址
-    public static final String ABCUC_URL = "https://uc.abc12366.com/ABCUC";
+    public static final String ABCUC_URL = "http://uc.abc12366.com";
     public static final String SPDD = "SPDD";//商品订单
     public static final String ZZFPDD = "ZZFPDD";//纸质发票订单
     public static final String DZFPDD = "DZFPDD";//电子发票订单
