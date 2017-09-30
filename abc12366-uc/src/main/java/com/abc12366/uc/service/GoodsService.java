@@ -38,4 +38,6 @@ public interface GoodsService {
     List<GoodsBO> selectGoodsBOList(Goods goods);
 
     List<GoodsLogBO> selectGoodsLogList(String id);
+
+    List<GoodsBO> selectCurriculumGoods(String id);
 }

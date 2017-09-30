@@ -313,4 +313,15 @@
         WHERE g.id = #{id}
     </select>
 
+    <select id="selectCurriculumGoods" resultType="com.abc12366.uc.model.bo.GoodsBO" parameterType="java.lang.String">
+        SELECT
+        g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
+        g.giftPoints,
+        g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.invoiceContent,g.isExchange,g.isReturn,g.memberLevel,
+        p.sellingPrice as sellingPrice
+        FROM uc_goods g
+        left JOIN uc_product p on p.goodsId = g.id
+        WHERE g.id = #{id}
+    </select>
+
 </mapper>
