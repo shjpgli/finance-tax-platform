@@ -59,7 +59,7 @@
     <!-- 查询课件是否免费 -->
     <select id="selectCoursewareisFree" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT
-            isFree
+            IFNULL(isFree,0)
         FROM
             bb_curriculum_courseware
         WHERE coursewareId = #{coursewareId}
