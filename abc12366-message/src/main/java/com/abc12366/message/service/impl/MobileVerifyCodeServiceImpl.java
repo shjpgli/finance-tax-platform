@@ -11,11 +11,15 @@ import com.abc12366.message.model.MessageSendLog;
 import com.abc12366.message.model.PhoneCode;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.MobileVerifyCodeService;
-import com.abc12366.message.util.CheckSumBuilder;
-import com.abc12366.message.util.MessageConstant;
-import com.abc12366.message.util.RandomNumber;
-import com.abc12366.message.util.soaUtil;
+import com.abc12366.message.util.*;
 import com.alibaba.fastjson.JSON;
+import com.aliyun.mns.client.CloudAccount;
+import com.aliyun.mns.client.CloudTopic;
+import com.aliyun.mns.client.MNSClient;
+import com.aliyun.mns.model.BatchSmsAttributes;
+import com.aliyun.mns.model.MessageAttributes;
+import com.aliyun.mns.model.RawTopicMessage;
+import com.aliyun.mns.model.TopicMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,22 +88,26 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCode.setType(type);
             phoneCodeMapper.insert(phoneCode);
         }
+//        版本3.0:使用阿里云短信通道
+        sendAliyunMessage(phone, type, code);
 
-        //随机使用两个通道中的一个发送短信
-        if(Math.random()>0.5){
-            if(!sendNeteaseTemplate(phone, type, code)){
-                if(sendYoupaiTemplate(phone, type, code)){
-                    throw new ServiceException(4204);
-                }
-            }
-        }else{
-            if(!sendYoupaiTemplate(phone, type, code)){
-                if(sendNeteaseTemplate(phone, type, code)){
-                    throw new ServiceException(4204);
-                }
-            }
-        }
+//      版本2.0
+//        //随机使用两个通道中的一个发送短信
+//        if(Math.random()>0.5){
+//            if(!sendNeteaseTemplate(phone, type, code)){
+//                if(sendYoupaiTemplate(phone, type, code)){
+//                    throw new ServiceException(4204);
+//                }
+//            }
+//        }else{
+//            if(!sendYoupaiTemplate(phone, type, code)){
+//                if(sendNeteaseTemplate(phone, type, code)){
+//                    throw new ServiceException(4204);
+//                }
+//            }
+//        }
 
+//      版本1.0
 //        boolean sendCodeThroghNetease = sendNeteaseTemplate(phone, type, code);
 
         //调用网易短信接口不成功，则换调用又拍云短信接口
@@ -295,6 +303,66 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         sendLog.setFailcause(failcause);
         sendLog.setLogtime(time);
         sendLogMapper.insert(sendLog);
+    }
+
+    public boolean sendAliyunMessage(String phone, String codeType, String code){
+        String accessId = SpringCtxHolder.getProperty("message.aliyun.accessid");
+        String accessKey = SpringCtxHolder.getProperty("message.aliyun.accesskey");
+        String endPoint = SpringCtxHolder.getProperty("message.aliyun.endpoint");
+        String topicRef = SpringCtxHolder.getProperty("message.aliyun.topic");
+        String signName = SpringCtxHolder.getProperty("message.aliyun.signname");
+        String templateCode = SpringCtxHolder.getProperty("message.aliyun.templatecode");
+
+        /**
+         * Step 1. 获取主题引用
+         */
+        CloudAccount account = new CloudAccount(accessId, accessKey, endPoint);
+        MNSClient client = account.getMNSClient();
+        CloudTopic topic = client.getTopicRef(topicRef);
+        /**
+         * Step 2. 设置SMS消息体（必须）
+         *
+         * 注：目前暂时不支持消息内容为空，需要指定消息内容，不为空即可。
+         */
+        RawTopicMessage msg = new RawTopicMessage();
+        msg.setMessageBody("sms-message");
+        /**
+         * Step 3. 生成SMS消息属性
+         */
+        MessageAttributes messageAttributes = new MessageAttributes();
+        BatchSmsAttributes batchSmsAttributes = new BatchSmsAttributes();
+        // 3.1 设置发送短信的签名（SMSSignName）
+        batchSmsAttributes.setFreeSignName(signName);
+        // 3.2 设置发送短信使用的模板（SMSTempateCode）
+        batchSmsAttributes.setTemplateCode(templateCode);
+        // 3.3 设置发送短信所使用的模板中参数对应的值（在短信模板中定义的，没有可以不用设置）
+        BatchSmsAttributes.SmsReceiverParams smsReceiverParams = new BatchSmsAttributes.SmsReceiverParams();
+        smsReceiverParams.setParam("code", code);
+        // 3.4 增加接收短信的号码
+        batchSmsAttributes.addSmsReceiver(phone, smsReceiverParams);
+        messageAttributes.setBatchSmsAttributes(batchSmsAttributes);
+        try {
+            /**
+             * Step 4. 发布SMS消息
+             */
+            TopicMessage ret = topic.publishMessage(msg, messageAttributes);
+            messageLog("ali", codeType, code, "1", "200", "发送成功");
+            System.out.println("MessageId: " + ret.getMessageId());
+            System.out.println("MessageMD5: " + ret.getMessageBodyMD5());
+
+        } catch (com.aliyun.mns.common.ServiceException se) {
+            System.out.println(se.getErrorCode() + se.getRequestId());
+            System.out.println(se.getMessage());
+            messageLog("ali", codeType, code, "4", "4204", "短信发送通道异常");
+            se.printStackTrace();
+            throw new ServiceException(4204);
+        } catch (Exception e) {
+            messageLog("ali", codeType, code, "4", "4204", "短信发送通道异常");
+            e.printStackTrace();
+            throw new ServiceException(4204);
+        }
+        client.close();
+        return true;
     }
 
 }
