@@ -73,6 +73,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/payreturn/**")
                         //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
+        
+        
 
         // App验证、授权拦截
         registry.addInterceptor(appInterceptor())
@@ -116,7 +118,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //根据省市区编号查询名称
                 .excludePathPatterns("/provinceorcityorarea")
                 //JS获取微信信息
-                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**")
+                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**","/wx/redpack")
                         //
                 .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
                 //好会计

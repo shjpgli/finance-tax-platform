@@ -38,7 +38,7 @@
                 and uue.validStatus = #{validStatus}
             </if>
         </where>
-        order by createTime desc
+        order by lastUpdate desc
 
     </select>
 

@@ -135,7 +135,7 @@
         from uc_user uu
         WHERE status = true
         <![CDATA[
-                and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                and date_format(vipExpireDate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
                 ]]>
     </select>
 
