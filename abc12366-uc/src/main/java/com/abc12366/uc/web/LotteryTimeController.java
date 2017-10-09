@@ -30,8 +30,11 @@ public class LotteryTimeController {
     private LotteryTimeService lotteryTimeService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+    public ResponseEntity selectList(@RequestParam(required = false)String activityId ,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
+        if(activityId != null && !activityId.isEmpty()){
+            map.put("activityId",activityId);
+        }
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LotteryTimeBO> list = lotteryTimeService.selectList(map);
         LOGGER.info("selectList:{}", list);

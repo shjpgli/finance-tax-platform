@@ -31,8 +31,11 @@ public class LotteryController {
     private LotteryService lotteryService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+    public ResponseEntity selectList(@RequestParam(required = false) String name,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
+        if(name != null && !name.isEmpty()){
+            map.put("name",name);
+        }
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LotteryBO> list = lotteryService.selectList(map);
         LOGGER.info("selectList:{}", list);

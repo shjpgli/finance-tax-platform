@@ -9,7 +9,27 @@ import java.util.Date;
 
 
 public class LotteryTimeBO{
- /** pk */
+    private String activityId;
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
+    }
+    private String activityName;
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+
+    /** pk */
 private String id;
  /** 创建时间 */
 private Date createTime;
@@ -59,14 +79,5 @@ public void setLuck(Integer luck){
    this.luck = luck;
 }
 
-@Override
-public String toString() {
-return "LotteryTime {\r\n"+
-"\""+"id"+"\""+":"+"\""+id+"\""+",\r\n"+
-"\""+"createTime"+"\""+":"+"\""+createTime+"\""+",\r\n"+
-"\""+"lastUpdate"+"\""+":"+"\""+lastUpdate+"\""+",\r\n"+
-"\""+"startTime"+"\""+":"+"\""+startTime+"\""+",\r\n"+
-"\""+"endTime"+"\""+":"+"\""+endTime+"\""+",\r\n"+
-"\""+"luck"+"\""+":"+"\""+luck+"\""+"}";
-}
+
 }

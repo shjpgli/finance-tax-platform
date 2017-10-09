@@ -9,7 +9,17 @@ import java.util.Date;
 
 
 public class LotteryTime{
- /** pk */
+    private String activityId;
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
+    }
+
+    /** pk */
 private String id;
  /** 创建时间 */
 private Date createTime;
