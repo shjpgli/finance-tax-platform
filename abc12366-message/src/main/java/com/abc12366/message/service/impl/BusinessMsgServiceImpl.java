@@ -4,6 +4,7 @@ import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.BusinessMsgMapper;
 import com.abc12366.message.mapper.db2.BusinessMsgRoMapper;
+import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.service.BusinessMsgService;
 import com.alibaba.fastjson.JSON;
@@ -16,6 +17,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +58,31 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         return data;
     }
 
-//    @KafkaListener(topics = "business_message_topic")
+    @Override
+    public List<BusinessMessage> insert(BusinessBatchMessage data) {
+        List<BusinessMessage> dataList = null;
+        if (data != null && data.getUserIds().size() > 0) {
+            dataList = new ArrayList<>();
+            for (String userId: data.getUserIds()) {
+                Timestamp now = new Timestamp(new Date().getTime());
+                BusinessMessage bm = new BusinessMessage.Builder()
+                        .id(Utils.uuid())
+                        .userId(userId)
+                        .businessId(data.getBusinessId())
+                        .content(data.getContent())
+                        .status("1")
+                        .createTime(now)
+                        .lastUpdate(now)
+                        .type(data.getType())
+                        .build();
+                dataList.add(bm);
+            }
+            businessMsgMapper.batchInsert(dataList);
+        }
+        return dataList;
+    }
+
+    //    @KafkaListener(topics = "business_message_topic")
     public void handleUserMessage(ConsumerRecord<String, String> record) {
         LOGGER.info("business_message_topic: " + record.value());
         BusinessMessage data = JSON.parseObject(record.value(), BusinessMessage.class);

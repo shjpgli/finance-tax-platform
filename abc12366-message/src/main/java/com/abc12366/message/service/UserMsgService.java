@@ -1,6 +1,7 @@
 package com.abc12366.message.service;
 
 import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface UserMsgService {
     UserMessage selectOne(String id);
 
     BodyStatus delete(UserMessage data);
+
+    // 批量发送用户消息
+    List<UserMessage> insert(UserBatchMessage data);
 }

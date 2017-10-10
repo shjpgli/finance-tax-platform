@@ -4,6 +4,7 @@ import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
+import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
 import com.abc12366.message.service.UserMsgService;
 import com.alibaba.fastjson.JSON;
@@ -16,6 +17,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -94,5 +96,29 @@ public class UserMsgServiceImpl implements UserMsgService {
         } else {
             return Utils.bodyStatus(4024);
         }
+    }
+
+    @Override
+    public List<UserMessage> insert(UserBatchMessage data) {
+        List<UserMessage> dataList = null;
+        if (data != null && data.getToUserIds().size() > 0) {
+            dataList = new ArrayList<>();
+            for (String userId: data.getToUserIds()) {
+                Timestamp now = new Timestamp(new Date().getTime());
+                UserMessage bm = new UserMessage.Builder()
+                        .id(Utils.uuid())
+                        .fromUserId(data.getFromUserId())
+                        .toUserId(userId)
+                        .content(data.getContent())
+                        .status("1")
+                        .createTime(now)
+                        .lastUpdate(now)
+                        .type(data.getType())
+                        .build();
+                dataList.add(bm);
+            }
+            userMsgMapper.batchInsert(dataList);
+        }
+        return dataList;
     }
 }

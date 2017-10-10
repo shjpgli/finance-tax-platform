@@ -4,22 +4,23 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
- * 业务消息对象
+ * 批量业务消息对象
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-07-27 11:21 AM
  * @since 1.0.0
  */
-public class BusinessMessage {
+public class BusinessBatchMessage {
 
     private String id;
 
-    @NotEmpty
-    @Length(min = 1, max = 64)
-    private String userId;
+    @NotNull
+    private List<String> userIds;
 
     @NotEmpty
     @Length(min = 1, max = 64)
@@ -41,24 +42,12 @@ public class BusinessMessage {
     @Length(min = 1, max = 32)
     private String type;
 
-    public BusinessMessage() {
+    public BusinessBatchMessage() {
     }
 
-    public BusinessMessage(String id, String userId, String businessId, String content, String status, Timestamp
-            createTime, Timestamp lastUpdate, String type) {
-        this.id = id;
-        this.userId = userId;
-        this.businessId = businessId;
-        this.content = content;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-        this.type = type;
-    }
-
-    private BusinessMessage(Builder builder) {
+    private BusinessBatchMessage(Builder builder) {
         setId(builder.id);
-        setUserId(builder.userId);
+        setUserIds(builder.userIds);
         setBusinessId(builder.businessId);
         setContent(builder.content);
         setStatus(builder.status);
@@ -75,12 +64,12 @@ public class BusinessMessage {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public List<String> getUserIds() {
+        return userIds;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserIds(List<String> userIds) {
+        this.userIds = userIds;
     }
 
     public String getBusinessId() {
@@ -133,9 +122,9 @@ public class BusinessMessage {
 
     @Override
     public String toString() {
-        return "BusinessMessage{" +
+        return "BusinessBatchMessage{" +
                 "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
+                ", userIds=" + userIds +
                 ", businessId='" + businessId + '\'' +
                 ", content='" + content + '\'' +
                 ", status='" + status + '\'' +
@@ -147,7 +136,7 @@ public class BusinessMessage {
 
     public static final class Builder {
         private String id;
-        private String userId;
+        private List<String> userIds;
         private String businessId;
         private String content;
         private String status;
@@ -163,8 +152,8 @@ public class BusinessMessage {
             return this;
         }
 
-        public Builder userId(String val) {
-            userId = val;
+        public Builder userIds(List<String> val) {
+            userIds = val;
             return this;
         }
 
@@ -198,8 +187,8 @@ public class BusinessMessage {
             return this;
         }
 
-        public BusinessMessage build() {
-            return new BusinessMessage(this);
+        public BusinessBatchMessage build() {
+            return new BusinessBatchMessage(this);
         }
     }
 }

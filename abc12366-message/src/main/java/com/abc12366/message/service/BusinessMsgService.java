@@ -1,6 +1,7 @@
 package com.abc12366.message.service;
 
 import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public interface BusinessMsgService {
     List<BusinessMessage> selectList(BusinessMessage data, int page, int size);
 
     BusinessMessage insert(BusinessMessage data);
+
+    // 发送批量业务消息
+    List<BusinessMessage> insert(BusinessBatchMessage data);
 
     BusinessMessage update(BusinessMessage data);
 
