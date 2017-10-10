@@ -30,5 +30,4 @@ lastTime
  from uc_lottery_activityprize z
 where id=#{id}
 </select>
-
 </mapper>
