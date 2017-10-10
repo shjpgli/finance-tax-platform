@@ -12,6 +12,13 @@
         (#{id}, #{fromUserId}, #{toUserId}, #{content}, #{status}, #{type}, #{createTime}, #{lastUpdate})
     </insert>
 
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO msg_user_message (<include refid="Base_Column"/>) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.fromUserId}, #{item.toUserId}, #{item.content}, #{item.status}, #{item.type}, #{item.createTime}, #{item.lastUpdate})
+        </foreach>
+    </insert>
+
     <update id="update">
         UPDATE msg_user_message
         <set>
