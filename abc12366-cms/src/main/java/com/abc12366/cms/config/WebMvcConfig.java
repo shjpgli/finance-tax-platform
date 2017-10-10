@@ -68,7 +68,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //定时任务查询不需验证
                 .excludePathPatterns("/task/list")
                         //修改内容浏览量
-                .excludePathPatterns("/content/updateViewsDay")
+                .excludePathPatterns("/content/updateViewsDay/**")
                         //获取标签
                 .excludePathPatterns("/content/selectContentType")
                         //根据内容标签查询内容列表信息
