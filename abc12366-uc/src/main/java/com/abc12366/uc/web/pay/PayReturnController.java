@@ -41,6 +41,7 @@ public class PayReturnController {
     @Autowired
     private OrderService orderService;
 
+    //uc支付宝回调信息签名校验
     @SuppressWarnings("rawtypes")
     @PostMapping("/validate")
     public ResponseEntity validate(@RequestBody Map<String, String> params) {
@@ -53,6 +54,7 @@ public class PayReturnController {
         }
     }
 
+    //UC前段回调更新支付状态，订单状态
     @SuppressWarnings("rawtypes")
     @RequestMapping("/alipay")
     public ResponseEntity aliPayReturn(HttpServletRequest request) {

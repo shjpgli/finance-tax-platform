@@ -70,6 +70,7 @@ public class WxMenuController {
         return responseEntity;
     }
 
+    //编辑单个菜单信息
     @SuppressWarnings("rawtypes")
     @PutMapping("/wxmenu/db/{id}")
     public ResponseEntity wxmenudbEdit(@PathVariable("id") String id, @Valid @RequestBody Button button) {
@@ -83,6 +84,7 @@ public class WxMenuController {
         return responseEntity;
     }
 
+    //删除单个菜单信息
     @SuppressWarnings("rawtypes")
     @DeleteMapping("/wxmenu/db/{id}")
     public ResponseEntity wxmenudbDel(@PathVariable("id") String id) {
