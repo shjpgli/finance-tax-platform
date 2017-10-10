@@ -74,6 +74,13 @@ public class ApiLogBO implements Serializable {
      **/
     private String method;
 
+    /**app昵称**/
+    private String nickname;
+
+    /**APP访问次数**/
+    private Integer appAccessCount;
+
+
     public String getId() {
         return this.id;
     }
@@ -176,5 +183,21 @@ public class ApiLogBO implements Serializable {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public Integer getAppAccessCount() {
+        return appAccessCount;
+    }
+
+    public void setAppAccessCount(Integer appAccessCount) {
+        this.appAccessCount = appAccessCount;
     }
 }
