@@ -71,6 +71,14 @@ public class LotteryActivityController {
         LotteryActivityBO returnObj = lotteryActivityService.selectOne(id);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
+
+    /**
+     * 抽奖算法接口
+     * @param userId
+     * @param activityId
+     * @param ip
+     * @return
+     */
     @GetMapping(path = "/luckdraw")
     public ResponseEntity luckDraw(@RequestParam(required = true) String userId,@RequestParam(required = true) String activityId,@RequestParam(required = true) String ip) {
         LotteryLogBO returnObj =lotteryActivityService.luckDraw(userId,activityId,ip);

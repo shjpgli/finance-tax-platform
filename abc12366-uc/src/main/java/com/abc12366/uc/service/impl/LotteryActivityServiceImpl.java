@@ -129,7 +129,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
             if (lottery.getCount() == null) {
                 lottery.setCount(0);
             }
-            if (!obj.getStatus()) {
+            if (!obj.getStatus() || !lottery.getStatus()) {
                 remake = "奖品已禁用";
             } else if (lottery.getStock() <= lottery.getCount()) {
                 remake = "总库存不足";
