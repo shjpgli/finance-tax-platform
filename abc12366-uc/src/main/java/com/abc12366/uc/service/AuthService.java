@@ -32,4 +32,6 @@ public interface AuthService {
     void logout(String token);
 
 	Map loginByopenid(UserBO user, String header) throws Exception;
+
+    void loginByVerifyFail(VerifyingCodeBO loginBO);
 }

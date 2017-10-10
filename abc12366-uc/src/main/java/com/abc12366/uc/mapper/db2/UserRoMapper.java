@@ -3,6 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -31,4 +32,6 @@ public interface UserRoMapper {
 	UserBO selectByopenid(String openid);
 
     List<User> selectUserVipList(@Param("date")Date date);
+
+    List<UserLoginPasswordWrongCount> selectContinuePwdWrong(String id);
 }

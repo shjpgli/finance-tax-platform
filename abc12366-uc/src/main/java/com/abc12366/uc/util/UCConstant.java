@@ -1,6 +1,7 @@
 package com.abc12366.uc.util;
 
 /**
+ * UC常用静态变量
  * User: liuguiyao<435720953@qq.com>
  * Date: 20170912
  * Time: 15:24
@@ -104,9 +105,9 @@ public class UCConstant {
     //待认证：1
     public final static String USER_REALNAME_TO_VALIDATE = "1";
     //已认证：2
-    public final static String USER_REALNAME_VALIDATED= "2";
+    public final static String USER_REALNAME_VALIDATED = "2";
     //认证失败：3
-    public final static String USER_REALNAME_FAIL_VALIDATE= "3";
+    public final static String USER_REALNAME_FAIL_VALIDATE = "3";
 
 
     //积分计算规则ID
@@ -141,4 +142,10 @@ public class UCConstant {
     public final static String PRIVILEGE_TYPE_YHJFZR = "yhjfzr";
     //8.商品/发票免邮券
     public final static String PRIVILEGE_TYPE_SPFPMYQ = "spfpmyq";
+
+
+    //用户连续输错密码阈值
+    public final static int USER_CONTINUE_PASSWORD_WRONG_MAX = 5;
+    //用户连续输错密码超过阈值锁定时间，单位：毫秒
+    public final static int LOCK_TIME = 10 * 60 * 1000;
 }
