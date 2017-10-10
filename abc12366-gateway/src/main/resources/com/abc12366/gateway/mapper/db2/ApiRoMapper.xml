@@ -35,6 +35,7 @@
             <if test="status != null">AND i.status = #{status}</if>
             <if test="dictId != null and dictId != ''">AND i.dictId = #{dictId}</if>
         </where>
+        order by i.name,i.lastUpdate asc
     </select>
 
     <select id="selectBySettingList" resultMap="apiMap" parameterType="java.lang.String">

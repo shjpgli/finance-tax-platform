@@ -3,6 +3,7 @@ package com.abc12366.message.web;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
 import com.abc12366.message.service.UserMsgService;
 import com.github.pagehelper.PageInfo;
@@ -73,6 +74,23 @@ public class UserMsgController {
 
         data = userMsgService.insert(data);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 发送批量用户消息
+     *
+     * @param data BusinessMessage
+     * @return ResponseEntity
+     */
+    @PostMapping(path = "/batch")
+    public ResponseEntity insert(@Valid @RequestBody UserBatchMessage data) {
+        LOGGER.info("{}", data);
+
+        List<UserMessage> dataList = userMsgService.insert(data);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", dataList));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;

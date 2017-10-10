@@ -29,7 +29,7 @@ public class WxIndexController {
     public @ResponseBody String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
     	LOGGER.info("微信服务器回调!-----------");
         boolean isGet = request.getMethod().toLowerCase().equals("get");
-        if (isGet) {
+        if (isGet) {//微信服务器地址设置校验回调
         	LOGGER.info("微信服务器回调校验!");
             String signature = request.getParameter("signature");
             // 时间戳
@@ -43,7 +43,7 @@ public class WxIndexController {
             } else {
                 return null;
             }
-        } else {
+        } else {//微信事件主动回调
             return iWxMsgService.exec(request);
         }
     }

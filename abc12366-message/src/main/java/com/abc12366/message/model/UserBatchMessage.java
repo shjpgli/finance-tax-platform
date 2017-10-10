@@ -4,26 +4,27 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
- * 业务消息对象
+ * 批量用户消息对象
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-07-27 11:21 AM
  * @since 1.0.0
  */
-public class BusinessMessage {
+public class UserBatchMessage {
 
     private String id;
 
     @NotEmpty
     @Length(min = 1, max = 64)
-    private String userId;
+    private String fromUserId;
 
-    @NotEmpty
-    @Length(min = 1, max = 64)
-    private String businessId;
+    @NotNull
+    private List<String> toUserIds;
 
     @NotEmpty
     @Length(min = 1, max = 500)
@@ -38,33 +39,35 @@ public class BusinessMessage {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp lastUpdate;
 
-    @Length(min = 1, max = 32)
+    @Length(min = 1, max = 1)
     private String type;
 
-    public BusinessMessage() {
+    public UserBatchMessage() {
     }
 
-    public BusinessMessage(String id, String userId, String businessId, String content, String status, Timestamp
-            createTime, Timestamp lastUpdate, String type) {
-        this.id = id;
-        this.userId = userId;
-        this.businessId = businessId;
-        this.content = content;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-        this.type = type;
-    }
-
-    private BusinessMessage(Builder builder) {
+    private UserBatchMessage(Builder builder) {
         setId(builder.id);
-        setUserId(builder.userId);
-        setBusinessId(builder.businessId);
+        setFromUserId(builder.fromUserId);
+        setToUserIds(builder.toUserIds);
         setContent(builder.content);
         setStatus(builder.status);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
+    }
+
+    @Override
+    public String toString() {
+        return "UserBatchMessage{" +
+                "id='" + id + '\'' +
+                ", fromUserId='" + fromUserId + '\'' +
+                ", toUserIds=" + toUserIds +
+                ", content='" + content + '\'' +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", type='" + type + '\'' +
+                '}';
     }
 
     public String getId() {
@@ -75,20 +78,20 @@ public class BusinessMessage {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getFromUserId() {
+        return fromUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setFromUserId(String fromUserId) {
+        this.fromUserId = fromUserId;
     }
 
-    public String getBusinessId() {
-        return businessId;
+    public List<String> getToUserIds() {
+        return toUserIds;
     }
 
-    public void setBusinessId(String businessId) {
-        this.businessId = businessId;
+    public void setToUserIds(List<String> toUserIds) {
+        this.toUserIds = toUserIds;
     }
 
     public String getContent() {
@@ -131,24 +134,10 @@ public class BusinessMessage {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "BusinessMessage{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", businessId='" + businessId + '\'' +
-                ", content='" + content + '\'' +
-                ", status='" + status + '\'' +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                ", type='" + type + '\'' +
-                '}';
-    }
-
     public static final class Builder {
         private String id;
-        private String userId;
-        private String businessId;
+        private String fromUserId;
+        private List<String> toUserIds;
         private String content;
         private String status;
         private Timestamp createTime;
@@ -163,13 +152,13 @@ public class BusinessMessage {
             return this;
         }
 
-        public Builder userId(String val) {
-            userId = val;
+        public Builder fromUserId(String val) {
+            fromUserId = val;
             return this;
         }
 
-        public Builder businessId(String val) {
-            businessId = val;
+        public Builder toUserIds(List<String> val) {
+            toUserIds = val;
             return this;
         }
 
@@ -198,8 +187,8 @@ public class BusinessMessage {
             return this;
         }
 
-        public BusinessMessage build() {
-            return new BusinessMessage(this);
+        public UserBatchMessage build() {
+            return new UserBatchMessage(this);
         }
     }
 }

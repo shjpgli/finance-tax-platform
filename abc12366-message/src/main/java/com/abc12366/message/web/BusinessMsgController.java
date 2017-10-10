@@ -3,6 +3,7 @@ package com.abc12366.message.web;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.service.BusinessMsgService;
 import com.github.pagehelper.PageInfo;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 用户消息服务
+ * 业务消息服务
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-07-27 11:20 AM
@@ -33,7 +34,7 @@ public class BusinessMsgController {
     private BusinessMsgService businessMsgService;
 
     /**
-     * 获取当前用户消息列表
+     * 获取当前用户业务消息列表
      *
      * @param page 当前页
      * @param size 每页大小
@@ -63,9 +64,9 @@ public class BusinessMsgController {
     }
 
     /**
-     * 发送用户消息
+     * 发送业务消息
      *
-     * @param data UserMessage
+     * @param data BusinessMessage
      * @return ResponseEntity
      */
     @PostMapping
@@ -74,6 +75,23 @@ public class BusinessMsgController {
 
         data = businessMsgService.insert(data);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 发送批量业务消息
+     *
+     * @param data BusinessMessage
+     * @return ResponseEntity
+     */
+    @PostMapping(path = "/batch")
+    public ResponseEntity insert(@Valid @RequestBody BusinessBatchMessage data) {
+        LOGGER.info("{}", data);
+
+        List<BusinessMessage> dataList = businessMsgService.insert(data);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", dataList));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;
