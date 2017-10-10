@@ -17,8 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -41,11 +40,57 @@ public class ApiLogController {
     /**
      * 接口日志查询
      */
-    @GetMapping(path = "/log")
+    /*@GetMapping(path = "/log")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ApiLog> dataList = apiLogService.selectList();
+        LOGGER.info("{}", dataList);
+        PageInfo<ApiLog> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }*/
+
+    /**
+     * 接口日志-根据APPID分类统计查询
+     */
+    @GetMapping(path = "/log/api")
+    public ResponseEntity selectApiList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                        @RequestParam(value = "startTime", required = false) String startTime) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        if(startTime != null && !"".equals(startTime)){
+            startTime = DateUtils.getDateFormat(DateUtils.StrToDate(startTime), "yyyyMMdd");
+        }else{
+            startTime = DateUtils.getDateFormat(new Date(), "yyyyMMdd");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("startTime",startTime);
+
+        List<ApiLog> dataList = apiLogService.selectApiList(map);
+        LOGGER.info("{}", dataList);
+        PageInfo<ApiLog> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 接口日志-根据APPID分类统计查询
+     */
+    @GetMapping(path = "/log/api/app")
+    public ResponseEntity selectApiListByAppId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                @RequestParam(value = "appId", required = false) String appId,
+                                                @RequestParam(value = "startTime", required = false) String startTime) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        if(startTime != null && !"".equals(startTime)){
+            startTime = DateUtils.getDateFormat(DateUtils.StrToDate(startTime), "yyyyMMdd");
+        }else{
+            startTime = DateUtils.getDateFormat(new Date(), "yyyyMMdd");
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("appId",appId);
+        map.put("startTime",startTime);
+
+        List<ApiLog> dataList = apiLogService.selectApiListByAppId(map);
         LOGGER.info("{}", dataList);
         PageInfo<ApiLog> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
