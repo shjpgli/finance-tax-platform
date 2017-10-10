@@ -36,6 +36,14 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    /**
+     * 列表查询
+     * @param pageNum
+     * @param pageSize
+     * @param roleName 名称
+     * @param status 状态
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
@@ -53,6 +61,11 @@ public class RoleController {
     }
 
 
+    /**
+     * 根据角色ID查询用户
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/user/{id}")
     public ResponseEntity selectUserByRoleId(@PathVariable("id") String id) {
         RoleBO roleBO = new RoleBO();
@@ -76,6 +89,11 @@ public class RoleController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 单个查询
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         RoleBO roleBO = new RoleBO();
@@ -85,6 +103,11 @@ public class RoleController {
         return ResponseEntity.ok(Utils.kv("data", temp));
     }
 
+    /**
+     * 根据角色名称查询
+     * @param roleName
+     * @return
+     */
     @GetMapping(path = "/selectRoleByName/{roleName}")
     public ResponseEntity selectRoleByName(@PathVariable("roleName") String roleName) {
         RoleBO roleBO = new RoleBO();
@@ -95,6 +118,9 @@ public class RoleController {
     }
 
 
+    /**
+     * 新增
+     */
     @PostMapping
     public ResponseEntity addRole(@Valid @RequestBody RoleBO roleBO) {
         LOGGER.info("{roleBO}", roleBO);
@@ -103,6 +129,9 @@ public class RoleController {
         return ResponseEntity.ok(Utils.kv("data", role));
     }
 
+    /**
+     * 修改
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO, @PathVariable("id") String id) {
         roleBO.setId(id);
@@ -111,6 +140,9 @@ public class RoleController {
         return ResponseEntity.ok(Utils.kv("data", upd));
     }
 
+    /**
+     * 删除
+     */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteRoleById(@PathVariable("id") String id) {
         int del = roleService.deleteRoleById(id);

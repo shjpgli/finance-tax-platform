@@ -88,7 +88,7 @@ public class AppSettingController {
     }
 
     /**
-     * APP设置单个查询
+     * APP设置单个授权
      *
      * @param appId
      * @param appSettingBO

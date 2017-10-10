@@ -39,8 +39,10 @@ public class QuestionAcceptedController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "phone", required = true) String phone,
-                                     @RequestParam(value = "date", required = true) String date) {
+                                     @RequestParam(value = "phone", required = false) String phone,
+                                     @RequestParam(value = "nsrsbh", required = false) String nsrsbh,
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "date", required = false) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         QuestionAcceptedBO param = new QuestionAcceptedBO();
         if(date != null && !"".equals(date)) {
@@ -49,6 +51,8 @@ public class QuestionAcceptedController {
             param.setDate(DateUtils.dateYearToString(new Date()));
         }
         param.setPhone(phone);
+        param.setNsrsbh(nsrsbh);
+        param.setName(name);
         List<QuestionAccepted> list = questionAcceptedService.selectList(param);
 
         return (list == null) ?
@@ -62,8 +66,8 @@ public class QuestionAcceptedController {
     @GetMapping(path = "/statis")
     public ResponseEntity selectStatisList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "phone", required = true) String phone,
-                                     @RequestParam(value = "date", required = true) String date) {
+                                     @RequestParam(value = "phone", required = false) String phone,
+                                     @RequestParam(value = "date", required = false) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         QuestionAcceptedBO param = new QuestionAcceptedBO();
         if(date != null && !"".equals(date)) {

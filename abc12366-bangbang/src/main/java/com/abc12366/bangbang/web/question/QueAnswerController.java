@@ -1,4 +1,4 @@
-dpackage com.abc12366.bangbang.web.question;
+package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
