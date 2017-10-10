@@ -139,4 +139,9 @@
                 ]]>
     </select>
 
+    <select id="selectContinuePwdWrong" resultType="com.abc12366.uc.model.UserLoginPasswordWrongCount" parameterType="java.lang.String">
+        select id, userId, count, limitTime
+        from uc_login_password_wrong_count
+        where userId = #{userId}
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -15,4 +16,9 @@ public interface UserMapper {
 
     int delete(String id);
 
+    int deleteContinuePwdWrong(String id);
+
+    int insertContinuePwdWrong(UserLoginPasswordWrongCount wrongCount);
+
+    int updateContinuePwdWrong(UserLoginPasswordWrongCount wrongCount);
 }

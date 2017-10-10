@@ -44,4 +44,21 @@
         delete from uc_user
         where id=#{id}
     </delete>
+
+    <delete id="deleteContinuePwdWrong" parameterType="java.lang.String">
+        delete from uc_login_password_wrong_count
+        where userId = #{userId}
+    </delete>
+    <insert id="insertContinuePwdWrong" parameterType="com.abc12366.uc.model.UserLoginPasswordWrongCount">
+        insert into uc_login_password_wrong_count(id, userId, count, limitTime)
+        values(#{id},#{userId},#{count},#{limitTime})
+    </insert>
+    <update id="updateContinuePwdWrong" parameterType="com.abc12366.uc.model.UserLoginPasswordWrongCount">
+        update uc_login_password_wrong_count
+        <set>
+            <if test="count != null">count = #{count},</if>
+            <if test="limitTime != null">limitTime = #{limitTime}</if>
+        </set>
+        where userId=#{userId}
+    </update>
 </mapper>

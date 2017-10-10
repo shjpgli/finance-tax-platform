@@ -154,7 +154,8 @@ public class AuthController extends BaseController {
             LOGGER.info("{}", token);
             return ResponseEntity.ok(Utils.kv("data", token));
         } else {
-            throw new ServiceException(4201);
+            authService.loginByVerifyFail(loginBO);
+            return null;
         }
     }
 
