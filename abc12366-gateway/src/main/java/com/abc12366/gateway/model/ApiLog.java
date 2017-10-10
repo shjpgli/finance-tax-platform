@@ -77,12 +77,16 @@ public class ApiLog extends TableBO implements Serializable {
     private String method;
 
 
+    //开始时间
     private long startTime;
-
+    //结束时间
     private long endTime;
 
+    //每分钟访问次数
     private int minuteCount;
+    //每小时访问次数
     private int hourCount;
+    //每天访问次数
     private int dayCount;
 
     public String getId() {

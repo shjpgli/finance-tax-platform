@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -48,5 +49,15 @@ public class ApiLogServiceImpl implements ApiLogService {
     @Override
     public int selectApiLogCount(ApiLog apiLog) {
         return apiLogRoMapper.selectApiLogCount(apiLog);
+    }
+
+    @Override
+    public List<ApiLog> selectApiList(Map<String, Object> map) {
+        return apiLogRoMapper.selectApiList(map);
+    }
+
+    @Override
+    public List<ApiLog> selectApiListByAppId(Map<String, Object> map) {
+        return apiLogRoMapper.selectApiListByAppId(map);
     }
 }
