@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,9 +83,13 @@ public class LotteryTimeServiceImpl implements LotteryTimeService {
     }
 
     @Override
-    public LotteryTimeBO findbyTime(Date date) {
+    public LotteryTimeBO findbyTime(String activityId, Date date) {
         //根据时间返回时间段对象
-         List<LotteryTimeBO> list = this.selectList(null);
+        Map<String, Object> map = new HashMap<>();
+        if(activityId != null && !activityId.isEmpty()){
+            map.put("activityId",activityId);
+        }
+         List<LotteryTimeBO> list = this.selectList(map);
         for (LotteryTimeBO obj : list) {
             Date startDate = obj.getStartTime();
             Date endDate = obj.getEndTime();

@@ -329,7 +329,9 @@ public class UserServiceImpl implements UserService {
         Date date = DataUtils.getAddDate(UCConstant.USER_VIP_EXPIRE_DATE);
         List<User> userList = userRoMapper.selectUserVipList(date);
         for (User user : userList){
-            user.setStatus(false);
+            //user.setStatus(false);
+            user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
+            user.setLastUpdate(new Date());
             userMapper.update(user);
         }
     }

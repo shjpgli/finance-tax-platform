@@ -14,7 +14,7 @@ import java.util.Map;
 
 public interface LotteryTimeService {
     List<LotteryTimeBO> selectList(Map map);
-    public LotteryTimeBO findbyTime(Date date);
+    public LotteryTimeBO findbyTime(String activityId,Date date);
     LotteryTimeBO selectOne(String id);
     LotteryTimeBO insert(LotteryTimeBO lotteryTimeBO);
     LotteryTimeBO update(LotteryTimeBO lotteryTimeBO, String id);

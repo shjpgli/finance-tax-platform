@@ -80,6 +80,6 @@ public class LotteryServiceImpl implements LotteryService {
 
     @Override
     public List<LotteryBO> findLotteryByActivity(Map map) {
-        return lotteryRoMapper.findLotteryByActivity(map);
+        return lotteryRoMapper.findLotteryByActivity(map);//uc_lottery_activityprize
     }
 }
