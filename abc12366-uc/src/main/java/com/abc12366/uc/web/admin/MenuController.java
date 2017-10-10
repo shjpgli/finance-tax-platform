@@ -34,6 +34,15 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
+    /**
+     * 列表查询
+     * @param pageNum
+     * @param pageSize
+     * @param menuName  菜单名称
+     * @param parentId  父节点ID
+     * @param type  类型
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
@@ -52,6 +61,11 @@ public class MenuController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) menuList, "total", ((Page) menuList).getTotal()));
     }
 
+    /**
+     * 根据父节点查询所有
+     * @param parentId
+     * @return
+     */
     @GetMapping(path = "/parent/{parentId}")
     public ResponseEntity selectFirstLevel(@PathVariable String parentId) {
         List<MenuBO> menuBOs = menuService.selectFirstLevel();
@@ -59,6 +73,11 @@ public class MenuController {
         return ResponseEntity.ok(Utils.kv("dataList", menuBOs));
     }
 
+    /**
+     * 根据父节点查询树形机构
+     * @param parentId
+     * @return
+     */
     @GetMapping(path = "/project/{parentId}")
     public ResponseEntity selectByParentId(@PathVariable String parentId) {
         LOGGER.info("{}", parentId);
@@ -67,6 +86,11 @@ public class MenuController {
         return ResponseEntity.ok(Utils.kv("data", menuBO));
     }
 
+    /**
+     * 根据ID查询
+     * @param menuId
+     * @return
+     */
     @GetMapping(path = "/{menuId}")
     public ResponseEntity selectOne(@PathVariable String menuId) {
         LOGGER.info("{}", menuId);
@@ -75,6 +99,11 @@ public class MenuController {
         return ResponseEntity.ok(Utils.kv("data", menuBO));
     }
 
+    /**
+     * 新增
+     * @param mBO
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody MenuBO mBO) {
         LOGGER.info("{}", mBO);
@@ -83,6 +112,11 @@ public class MenuController {
         return ResponseEntity.ok(Utils.kv("data", menuBO));
     }
 
+    /**
+     * 删除
+     * @param menuId
+     * @return
+     */
     @DeleteMapping(path = "/{menuId}")
     public ResponseEntity delete(@PathVariable String menuId) {
         LOGGER.info("{}", menuId);
@@ -90,6 +124,12 @@ public class MenuController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 修改
+     * @param bo
+     * @param menuId
+     * @return
+     */
     @PutMapping(path = "/{menuId}")
     public ResponseEntity update(@Valid @RequestBody MenuBO bo, @PathVariable String menuId) {
         LOGGER.info("{}", bo, menuId);

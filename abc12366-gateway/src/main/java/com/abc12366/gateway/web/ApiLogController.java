@@ -73,7 +73,7 @@ public class ApiLogController {
     }
 
     /**
-     * 接口日志-根据APPID分类统计查询
+     * 接口日志-根据APPID分类列表查询
      */
     @GetMapping(path = "/log/api/app")
     public ResponseEntity selectApiListByAppId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,

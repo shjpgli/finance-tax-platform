@@ -59,7 +59,7 @@ public class OrganizationController {
     }
 
     /**
-     * 组织列表
+     * 根据名称查询
      *
      * @return
      */

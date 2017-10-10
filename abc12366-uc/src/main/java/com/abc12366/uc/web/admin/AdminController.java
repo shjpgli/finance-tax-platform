@@ -34,6 +34,14 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    /**
+     * 列表查询
+     * @param username 用户名
+     * @param nickname 昵称
+     * @param orgId 组织机构ID
+     * @param status 状态
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
@@ -54,6 +62,11 @@ public class AdminController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
+    /**
+     * 详情查询
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         AdminBO adminBO = adminService.selectOne(id);
@@ -131,6 +144,11 @@ public class AdminController {
         return ResponseEntity.ok(Utils.kv("data", upd));
     }
 
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteUserById(@PathVariable("id") String id) {
         LOGGER.info("id{}", id);
