@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.WxGzhMapper;
@@ -125,10 +126,10 @@ public class WxGzhServiceimpl implements IWxGzhService {
 
 			//ftp地址 上线修改
 			SFTPUtil sf = new SFTPUtil();
-			String host = "118.118.116.202";
-			int port = 22;
-			String username = "root";
-			String password = "hngs_123";
+			String host = SpringCtxHolder.getProperty("sftp_host");
+			int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));
+			String username = SpringCtxHolder.getProperty("sftp_username");
+			String password = SpringCtxHolder.getProperty("sftp_password");
 			
 			ChannelSftp sftp = sf.connect(host, port, username, password);
 			Map<String, String> map = sf.uploadByByte(userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);

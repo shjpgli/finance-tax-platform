@@ -39,6 +39,13 @@ public class WxGzhController {
     @Autowired
     private IWxGzhService iWxGzhService;
 
+    /**
+     * 公众号列表信息
+     * @param gzhInfo
+     * @param page
+     * @param size
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxgzh/list")
     public ResponseEntity wxgzhList(GzhInfo gzhInfo,
@@ -81,6 +88,7 @@ public class WxGzhController {
         return responseEntity;
     }
 
+    //修改微信公众号
     @SuppressWarnings("rawtypes")
     @PutMapping("/wxgzh/{id}")
     public ResponseEntity wxmenudbEdit(@PathVariable("id") String id, @Valid @RequestBody GzhInfo gzhInfo) {
@@ -94,6 +102,7 @@ public class WxGzhController {
         return responseEntity;
     }
 
+    //删除单个微信公众号信息
     @SuppressWarnings("rawtypes")
     @DeleteMapping("/wxgzh/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
@@ -106,12 +115,14 @@ public class WxGzhController {
         return responseEntity;
     }
     
+    //微信网页授权JS注册
     @PostMapping("/wxgzh/getwxJsConfig")
     public @ResponseBody WxJsConfig getwxJsConfig(@RequestParam(value="charge",required=false) String charge,@RequestBody WxJsConfig config){
     	LOGGER.info(JSON.toJSONString(config));
     	return SignUtil.jsign(WxGzhClient.getInstance().getAppid(), WxGzhClient.getInstanceJstiket(), config.getUrl(),charge);
     }
     
+    //通过微信授权code获取微信用户信息
     @SuppressWarnings("rawtypes")
 	@GetMapping("/wxgzh/getuserinfo/{code}")
     public ResponseEntity getuserinfo(@PathVariable("code") String code){
@@ -138,6 +149,7 @@ public class WxGzhController {
         
     }
     
+    //通过微信授权code获取用户openid
     @SuppressWarnings("rawtypes")
 	@GetMapping("/wxgzh/getuserid/{code}")
     public ResponseEntity getuserid(@PathVariable("code") String code){
