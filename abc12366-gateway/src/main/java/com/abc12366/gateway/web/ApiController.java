@@ -43,12 +43,14 @@ public class ApiController {
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) Boolean status,
                                      @RequestParam(value = "dictId", required = false) String dictId,
+                                     @RequestParam(value = "uri", required = false) String uri,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         Api api = new Api();
         api.setName(name);
         api.setStatus(status);
         api.setDictId(dictId);
+        api.setUri(uri);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ApiBO> apiList = apiService.selectList(api);
         PageInfo<ApiBO> pageInfo = new PageInfo<>(apiList);
