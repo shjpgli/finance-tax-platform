@@ -93,17 +93,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //获取课程详情信息
                 .excludePathPatterns("/curriculum/selectCurriculum/**")
                         //查询热门问题
-                .excludePathPatterns("/question/selectListByBrowseNum")
+                .excludePathPatterns("/questionbb/selectListByBrowseNum")
                         //查询等你回答的问题
-                .excludePathPatterns("/question/selectListWait")
+                .excludePathPatterns("/questionbb/selectListWait")
                         //查询已解决的问题
-                .excludePathPatterns("/question/selectListAccept")
+                .excludePathPatterns("/questionbb/selectListAccept")
                         //帮友热议列表查询
-                .excludePathPatterns("/question/selectListry")
+                .excludePathPatterns("/questionbb/selectListry")
                         //查询热议标签
-                .excludePathPatterns("/question/selectTagList")
+                .excludePathPatterns("/questionbb/selectTagList")
                         //查询最新问题
-                .excludePathPatterns("/question/selectListNew")
+                .excludePathPatterns("/questionbb/selectListNew")
                         //问题分类列表查询
                 .excludePathPatterns("/queclassify/selectClassifyList")
                         //根据分类查询相关标签
@@ -113,11 +113,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //问题回复评论列表查询
                 .excludePathPatterns("/queAnswer/selectListByParentId")
                         //最新回答
-                .excludePathPatterns("/question/selectListNew")
+                .excludePathPatterns("/questionbb/selectListNew")
                         //查询单个问题
-                .excludePathPatterns("/question/selectQuestion/**")
+                .excludePathPatterns("/questionbb/selectQuestion/**")
                         //问题更新浏览量
-                .excludePathPatterns("/question/updateBrowseNum/**")
+                .excludePathPatterns("/questionbb/updateBrowseNum/**")
                         //优秀邦派列表查询
                 .excludePathPatterns("/queFaction/selectListExcellent")
                 .excludePathPatterns("/hotspot/**")
