@@ -125,7 +125,7 @@
         FROM bb_question q
         WHERE 1=1
         <if test="title != null and title != ''">
-            AND title like CONCAT('%',#{title},'%')
+            AND title like CONCAT('%',#{keywords},'%')
         </if>
         <if test="isRecommend != null">
             AND isRecommend = #{isRecommend}
