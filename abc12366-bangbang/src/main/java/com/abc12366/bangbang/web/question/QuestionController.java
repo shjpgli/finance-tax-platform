@@ -26,7 +26,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/question", headers = Constant.VERSION_HEAD + "=1")
+@RequestMapping(path = "/questionbb", headers = Constant.VERSION_HEAD + "=1")
 public class QuestionController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
 
@@ -166,7 +166,7 @@ public class QuestionController {
     /**
      * 查询单个问题信息(
      */
-    @GetMapping(path = "selectQuestion/{id}")
+    @GetMapping(path = "/selectQuestion/{id}")
     public ResponseEntity selectQuestion(@PathVariable String id) {
         //查询问题信息
         QuestionBo questionBo = questionService.selectQuestion(id);
