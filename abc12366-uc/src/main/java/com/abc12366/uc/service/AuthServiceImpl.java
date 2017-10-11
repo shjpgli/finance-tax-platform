@@ -737,7 +737,7 @@ public class AuthServiceImpl implements AuthService {
             }
             userMapper.updateContinuePwdWrong(wrongCount);
         }
-        throw new ServiceException("", "密码(或验证码)输入错误 " + wrongCount.getCount() + " 次，连续输错5次该账户将被锁定！");
+        throw new ServiceException("1234", "密码(或验证码)输入错误 " + wrongCount.getCount() + " 次，连续输错5次该账户将被锁定！");
     }
 
     @Override
