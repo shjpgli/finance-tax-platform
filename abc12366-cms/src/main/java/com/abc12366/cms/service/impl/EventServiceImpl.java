@@ -120,10 +120,10 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public EventSaveBo selecttopone() {
+    public EventSaveBo selecttopone(String category) {
         //查询主办方信息
         EventSaveBo eventSaveBo = new EventSaveBo();
-        Event event = eventRoMapper.selecttopone();
+        Event event = eventRoMapper.selecttopone(category);
         EventBo eventBo = new EventBo();
         try {
             if (event != null) {

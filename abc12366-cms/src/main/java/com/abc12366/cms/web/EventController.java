@@ -106,10 +106,10 @@ public class EventController {
     /**
      * 查询最新的一个活动信息
      */
-    @GetMapping(path = "/topone")
-    public ResponseEntity selecttopone() {
+    @GetMapping(path = "/topone/{category}")
+    public ResponseEntity selecttopone(@PathVariable String category) {
         //查询活动信息
-        EventSaveBo eventSaveBo = eventService.selecttopone();
+        EventSaveBo eventSaveBo = eventService.selecttopone(category);
         LOGGER.info("{}", eventSaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
     }

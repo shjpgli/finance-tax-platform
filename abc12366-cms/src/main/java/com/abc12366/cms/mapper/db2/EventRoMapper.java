@@ -22,7 +22,7 @@ public interface EventRoMapper {
     /**
      * 查询（根据主键ID查询）
      **/
-    Event selecttopone();
+    Event selecttopone(@Param("category") String category);
 
     /**
      * 查询（根据条件查询）
