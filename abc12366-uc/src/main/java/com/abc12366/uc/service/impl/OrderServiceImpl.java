@@ -558,6 +558,8 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4139);
         }
 
+        orderProductBO.setDealPrice(totalPrice * num);
+        orderProductBO.setSellingPrice(prBO.getSellingPrice());
         orderProductBO.setUnitPrice(prBO.getMarketPrice());
         orderProductBO.setNum(num);
         orderProductBO.setName(goodsBO.getName());
