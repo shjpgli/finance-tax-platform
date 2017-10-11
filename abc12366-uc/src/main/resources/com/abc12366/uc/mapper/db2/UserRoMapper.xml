@@ -4,7 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.UserRoMapper">
 
     <select id="selectListExcludedId" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
-        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname,
+        uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname 
@@ -13,7 +14,7 @@
     </select>
     
     <select id="selectByopenid" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
-        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname 
@@ -23,11 +24,12 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
         select * from 
-        (select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        (select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname,
+        uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
-        (select uue.realName from uc_user_extend uue where uue.userId=uu.id) realName,
+        (select insert(uue.realName, 1, 1, '*') realName from uc_user_extend uue where uue.userId=uu.id) realName,
         (select uul.name from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
         levelName,
         (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
@@ -39,7 +41,7 @@
                 username=#{username}
             </if>
             <if test="phone!=null">
-                and phone=#{phone}
+                and phone=insert(#{phone}, 4, 4, '****')
             </if>
             <if test="nickname!=null">
                 and nickname=#{nickname}
@@ -60,7 +62,7 @@
                 and points=#{points}
             </if>
             <if test="realName!=null">
-                and realName=#{realName}
+                and realName=insert(realName, 1, 1, '*')
             </if>
 
             <if test="tagName!=null and tagName.size()>0">
@@ -76,7 +78,7 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-       select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+       select uu.id, uu.username, uu.password, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,
@@ -104,7 +106,7 @@
         </where>
     </select>
     <select id="selectOneByToken" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
-        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime,
+        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime,
         uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
@@ -116,7 +118,7 @@
     </select>
 
     <select id="selectValidOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-        select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        select uu.id, uu.username, uu.password, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,
@@ -128,7 +130,7 @@
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectUserVipList" resultType="com.abc12366.uc.model.User" parameterType="java.util.Date">
-        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname

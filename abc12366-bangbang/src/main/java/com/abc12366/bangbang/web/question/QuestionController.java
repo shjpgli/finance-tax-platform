@@ -234,7 +234,7 @@ public class QuestionController {
      * 话题推荐管理
      */
     @GetMapping(path = "/selectListTopicRecommend")
-    public ResponseEntity topicRecommendList(@RequestBody TopicRecommendParamBO param) {
+    public ResponseEntity topicRecommendList(TopicRecommendParamBO param) {
         PageHelper.startPage(param.getPage(), param.getSize(), true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectList(param);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));

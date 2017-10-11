@@ -176,24 +176,24 @@ public class AuthController extends BaseController {
      * @return
      * @throws Exception
      */
-    @PostMapping(path = "/rsa/login")
-    public ResponseEntity rsaLogin(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
-        LOGGER.info("{}", loginBO);
-        // 记录用户IP归属
-        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
-            ipService.merge(request.getHeader(Constant.CLIENT_IP));
-        }
-        //将密码解密
-        loginBO.setPassword(decode(loginBO.getPassword()));
+//    @PostMapping(path = "/rsa/login")
+//    public ResponseEntity rsaLogin(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
+//        LOGGER.info("{}", loginBO);
+//        // 记录用户IP归属
+//        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
+//            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+//        }
+//        //将密码解密
+//        loginBO.setPassword(decode(loginBO.getPassword()));
+//
+//        Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+//        LOGGER.info("{}", token);
+//        return ResponseEntity.ok(Utils.kv("data", token));
+//    }
 
-        Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
-        LOGGER.info("{}", token);
-        return ResponseEntity.ok(Utils.kv("data", token));
-    }
-
-    public String decode(String str) throws Exception {
-        RSAPublicKey publicKey = RSA.getDefaultPublicKey();
-        RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
+//    public String decode(String str) throws Exception {
+//        RSAPublicKey publicKey = RSA.getDefaultPublicKey();
+//        RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
 
 //        byte[] bytes = RSA.encrypt(publicKey, str.getBytes());
 //        String s = new BASE64Encoder().encode(bytes);
@@ -203,14 +203,14 @@ public class AuthController extends BaseController {
 //        System.out.println(response2);
 //        return response2;
 
-        byte[] bytes2 = new BASE64Decoder().decodeBuffer(str);
-        String newStr = new String(bytes2);
-        String []test=newStr.split(" ");
-        String json="";
-        for(String s : test){
-            json+= RSA.decryptStringByJs(s);
-        }
-        return json;
-    }
+//        byte[] bytes2 = new BASE64Decoder().decodeBuffer(str);
+//        String newStr = new String(bytes2);
+//        String []test=newStr.split(" ");
+//        String json="";
+//        for(String s : test){
+//            json+= RSA.decryptStringByJs(s);
+//        }
+//        return json;
+//    }
 
 }
