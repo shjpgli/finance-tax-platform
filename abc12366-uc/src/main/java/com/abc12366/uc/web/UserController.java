@@ -250,10 +250,10 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    @PostMapping(path = "/test")
-    public ResponseEntity test(){
-        return ResponseEntity.ok(Utils.kv());
-    }
+//    @PostMapping(path = "/test")
+//    public ResponseEntity test(){
+//        return ResponseEntity.ok(Utils.kv());
+//    }
 
 //    @PutMapping(path = "/updatevip")
 //    public ResponseEntity updateVip(){
