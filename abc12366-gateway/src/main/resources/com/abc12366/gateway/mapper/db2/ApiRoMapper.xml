@@ -62,7 +62,7 @@
         <include refid="Base_BO_Column_List"/>
         from gw_api i
         LEFT JOIN gw_view_sys_dict d ON d.id = i.dictId WHERE i.uri = #{uri}
-        and i.method = #{method} and i.version = #{version} and i.dictId = #{dictId}
+        and i.method = #{method} and i.version = #{version}
     </select>
 
 </mapper>

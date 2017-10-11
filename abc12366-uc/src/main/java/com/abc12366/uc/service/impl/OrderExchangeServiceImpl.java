@@ -20,10 +20,7 @@ import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.TradeLogService;
-import com.abc12366.uc.util.AliPayConfig;
-import com.abc12366.uc.util.MessageConstant;
-import com.abc12366.uc.util.MessageSendUtil;
-import com.abc12366.uc.util.UserUtil;
+import com.abc12366.uc.util.*;
 import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -356,100 +353,120 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         } else {
             throw new ServiceException(4960);
         }
-    	
-    	
-        if ("1".equals(data.getRefundType())) {
-            
 
-            // 查询交易日志中支付成功的订单
-            TradeLog log = new TradeLog();
-            log.setOrderNo(oe.getOrderNo());
-            log.setTradeStatus("1");
-            log.setPayMethod("ALIPAY");
-            List<TradeLog> logList = tradeLogRoMapper.selectList(log);
-            
-            
-            
+        //查询订单信息
+        Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+        //判断是RMB、积分
+        if(order != null && "RMB".equals(order.getTradeMethod())){
+            if ("ALIPAY".equals(order.getPayMethod())) {
+                // 查询交易日志中支付成功的订单
+                TradeLog log = new TradeLog();
+                log.setOrderNo(oe.getOrderNo());
+                log.setTradeStatus("1");
+                log.setPayMethod("ALIPAY");
+                List<TradeLog> logList = tradeLogRoMapper.selectList(log);
 
-            if (logList.size() > 0) {
-                for (int i = 0; i < logList.size(); i++) {
-                    if (logList.get(i).getAmount() >= data.getAmount()) {
-                        AliRefund refund = new AliRefund();
-                        refund.setOut_trade_no(logList.get(i).getOrderNo());
-                        refund.setTrade_no(logList.get(i).getAliTrandeNo());
-                        refund.setRefund_amount(String.valueOf(data.getAmount()));
-                        refund.setRefund_reason(data.getAdminRemark());
-                        String out_request_no=log.getOrderNo()+"_"+logList.size();
-                        refund.setOut_request_no(out_request_no);
-                        
-                        try {
-							AlipayClient alipayClient = AliPayConfig.getInstance();
-							AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-							request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
-							AlipayTradeRefundResponse response = alipayClient.execute(request);
-							LOGGER.info("支付宝退款支付宝返回信息{}",JSON.toJSONString(response));
-							if(response.isSuccess()){
-								
-								JSONObject object = JSON.parseObject(response.getBody());
-								RefundRes refundRes=JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
-								
-								LOGGER.info("支付宝退款成功,插入退款流水记录");
-								TradeLog tradeLog=new TradeLog();
-								tradeLog.setId(Utils.uuid());
-								tradeLog.setOrderNo(out_request_no);
-								tradeLog.setAliTrandeNo(refundRes.getTrade_no());
-								tradeLog.setTradeStatus("1");
-								tradeLog.setTradeType("2");
-								tradeLog.setAmount(Double.parseDouble("-"+refundRes.getRefund_fee()));
-								tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
-								Timestamp now = new Timestamp(new Date().getTime());
-								tradeLog.setCreateTime(now);
-								tradeLog.setLastUpdate(now);
-								tradeLog.setPayMethod("ALIPAY");
-								tradeLogService.insertTradeLog(tradeLog);
-								
-								oe.setStatus("8");
-	                            oe.setAdminRemark(data.getAdminRemark());
-	                            oe.setLastUpdate(new Timestamp(new Date().getTime()));
-	                            orderExchangeMapper.update(oe);
-	                            // 插入订单日志-已退款
-	                           // insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
+                if(data.getAmount() >= order.getTotalPrice()){
+                    LOGGER.info("退款金额不能大于订单成交总金额，{}",data.getAmount());
+                    throw new ServiceException(4919);
+                }
+                if (logList.size() > 0) {
+                    for (int i = 0; i < logList.size(); i++) {
+                        if (logList.get(i).getAmount() >= data.getAmount()) {
+                            AliRefund refund = new AliRefund();
+                            refund.setOut_trade_no(logList.get(i).getOrderNo());
+                            refund.setTrade_no(logList.get(i).getAliTrandeNo());
+                            refund.setRefund_amount(String.valueOf(data.getAmount()));
+                            refund.setRefund_reason(data.getAdminRemark());
+                            String out_request_no=log.getOrderNo()+"_"+logList.size();
+                            refund.setOut_request_no(out_request_no);
 
-                                
-                                // 插入订单日志-已完成
-                                insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款","1");
+                            try {
+                                AlipayClient alipayClient = AliPayConfig.getInstance();
+                                AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+                                request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
+                                AlipayTradeRefundResponse response = alipayClient.execute(request);
+                                LOGGER.info("支付宝退款支付宝返回信息{}",JSON.toJSONString(response));
+                                if(response.isSuccess()){
 
-                                //发送消息
-                                Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-                                if(order == null){
-                                    LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
-                                    throw new ServiceException(4102,"订单信息查询失败");
+                                    JSONObject object = JSON.parseObject(response.getBody());
+                                    RefundRes refundRes=JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
+
+                                    LOGGER.info("支付宝退款成功,插入退款流水记录");
+                                    TradeLog tradeLog=new TradeLog();
+                                    tradeLog.setId(Utils.uuid());
+                                    tradeLog.setOrderNo(out_request_no);
+                                    tradeLog.setAliTrandeNo(refundRes.getTrade_no());
+                                    tradeLog.setTradeStatus("1");
+                                    tradeLog.setTradeType("2");
+                                    tradeLog.setAmount(Double.parseDouble("-"+refundRes.getRefund_fee()));
+                                    tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
+                                    Timestamp now = new Timestamp(new Date().getTime());
+                                    tradeLog.setCreateTime(now);
+                                    tradeLog.setLastUpdate(now);
+                                    tradeLog.setPayMethod("ALIPAY");
+                                    tradeLogService.insertTradeLog(tradeLog);
+
+                                    oe.setStatus("8");
+                                    oe.setAdminRemark(data.getAdminRemark());
+                                    oe.setLastUpdate(new Timestamp(new Date().getTime()));
+                                    orderExchangeMapper.update(oe);
+                                    // 插入订单日志-已退款
+                                    // insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
+
+
+                                    // 插入订单日志-已完成
+                                    insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款","1");
+
+                                    //发送消息
+                                    if(order == null){
+                                        LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
+                                        throw new ServiceException(4102,"订单信息查询失败");
+                                    }
+                                    //服务类型：1-换货 2-退货
+                                    Message message = new Message();
+                                    message.setBusinessId(oe.getOrderNo());
+                                    message.setType(MessageConstant.SPDD);
+                                    message.setContent(MessageConstant.REFUND_PREFIX+refundRes.getRefund_fee()+MessageConstant.REFUND_SUFFIX+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
+                                    message.setUserId(order.getUserId());
+                                    messageSendUtil.sendMessage(message, httpServletRequest);
+
+                                    return ResponseEntity.ok(Utils.kv("data", refundRes));
+                                }else{
+                                    return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
                                 }
-                                //服务类型：1-换货 2-退货
-                                Message message = new Message();
-                                message.setBusinessId(oe.getOrderNo());
-                                message.setType(MessageConstant.SPDD);
-                                message.setContent(MessageConstant.REFUND_PREFIX+refundRes.getRefund_fee()+MessageConstant.REFUND_SUFFIX+"<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
-                                message.setUserId(order.getUserId());
-                                messageSendUtil.sendMessage(message, httpServletRequest);
 
-								return ResponseEntity.ok(Utils.kv("data", refundRes));
-							}else{
-								return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
-							}
-
-						}  catch (Exception e) {
-							LOGGER.error("支付宝退款失败：",e);
-							return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
-						}
+                            }  catch (Exception e) {
+                                LOGGER.error("支付宝退款失败：",e);
+                                return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
+                            }
+                        }
                     }
                 }
-            }
 
-        } else {
-            throw new ServiceException(4956);
+            } else {
+                throw new ServiceException(4956);
+            }
+        }else if(order != null && "POINTS".equals(order.getTradeMethod())){
+            insertPoints(order);
         }
         throw new ServiceException(4957);
+    }
+
+    /**
+     * 插入可获得的积分
+     * @param orderBO
+     */
+    private void insertPoints(Order orderBO) {
+        PointsLogBO pointsLog = new PointsLogBO();
+        pointsLog.setUserId(orderBO.getUserId());
+        pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_RETURN_ID);
+        pointsLog.setId(Utils.uuid());
+        //成交总积分 - 赠送积分
+        pointsLog.setIncome((int) (orderBO.getTotalPrice() - orderBO.getGiftPoints()));
+        pointsLog.setRemark("用户退单- 订单号："+orderBO.getOrderNo());
+        pointsLog.setLogType("ORDER_EXCHANGE");
+        pointsLogService.insert(pointsLog);
     }
 
     @Transactional("db1TxManager")
