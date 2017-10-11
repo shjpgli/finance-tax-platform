@@ -4,6 +4,7 @@ import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
+import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
@@ -253,6 +254,11 @@ public class QuestionServiceImpl implements QuestionService {
     public String updateBrowseNum(String id) {
         questionMapper.updateBrowseNum(id);
         return "";
+    }
+
+    @Override
+    public List<QuestionBo> selectList(TopicRecommendParamBO param) {
+        return questionRoMapper.selectListTopicRecommend(param);
     }
 
 }

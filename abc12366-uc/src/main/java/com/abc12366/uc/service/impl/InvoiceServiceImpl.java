@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
@@ -676,7 +677,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 Message message = new Message();
                 message.setBusinessId(invoiceBO.getId());
                 message.setType(MessageConstant.ZZFPDD);
-                message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT+"<a href=\""+MessageConstant.ABCUC_URL+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
+                message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT+"<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
                 message.setUserId(invoiceBO.getUserId());
                 messageSendUtil.sendMessage(message, request);
 
@@ -751,7 +752,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             Message message = new Message();
             message.setBusinessId(invoiceBO.getId());
             message.setType(MessageConstant.ZZFPDD);
-            message.setContent(MessageConstant.INVOICE_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.INVOICE_CHECK_REFUSE+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
             message.setUserId(invoiceBO.getUserId());
             messageSendUtil.sendMessage(message, request);
         }else{
@@ -759,7 +760,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             Message message = new Message();
             message.setBusinessId(invoiceBO.getId());
             message.setType(MessageConstant.ZZFPDD);
-            message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE+"<a href=\""+MessageConstant.ABCUC_URL+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
             message.setUserId(invoiceBO.getUserId());
             messageSendUtil.sendMessage(message, request);
         }

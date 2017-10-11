@@ -40,11 +40,11 @@ public class DzfpClient {
 	
 	public static final  Double SL=0.06; //税率固定
 	
-	public static final String XSF_NSRSBH="110109500321655";
+	public static final String XSF_NSRSBH="110109500321655";//消费方纳税人识别号
 	
-	public static final String XSF_MC="百旺电子测试2";
+	public static final String XSF_MC="百旺电子测试2";//消费方名称
 	
-	public static final String TXSF_DZDH="南山区蛇口 83484949";
+	public static final String TXSF_DZDH="南山区蛇口 83484949";//消费方地址
 	
 	public static final String XSF_YHZH="";
 	

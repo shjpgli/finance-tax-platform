@@ -124,6 +124,9 @@ public class UCConstant {
     //用户等级升级奖励
     public final static String POINT_RULE_EXP_UP_ID = "c10c55bef01d4e948a7b5efc8eb8a96b";
 
+    //退单返还积分
+    public final static String POINT_RULE_ORDER_RETURN_ID = "c10c55bef01d4e948a7b5efc8eb8a96b";
+
 
     //用户权益类型
     //1.用户财税经验证明印制

@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
@@ -1006,7 +1007,7 @@ public class OrderServiceImpl implements OrderService {
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setType(MessageConstant.SPDD);
-        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX+"。<a href=\""+MessageConstant.ABCUC_URL+"/member/member_rights.html\">会员权益详情查看</a>");
+        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX+"。<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/member/member_rights.html\">会员权益详情查看</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message);
     }
@@ -1019,7 +1020,7 @@ public class OrderServiceImpl implements OrderService {
         message.setBusinessId(order.getOrderNo());
         message.setType(MessageConstant.SPDD);
         User user = userRoMapper.selectOne(order.getUserId());
-        message.setContent(MessageConstant.INTEGRAL_RECHARGE+orderProductBO.getName()+user.getPoints()+"。<a href=\""+MessageConstant.ABCUC_URL+"/pointsExchange/points.php\">查看积分明细</a>");
+        message.setContent(MessageConstant.INTEGRAL_RECHARGE+orderProductBO.getName()+user.getPoints()+"。<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/pointsExchange/points.php\">查看积分明细</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message);
     }
@@ -1228,7 +1229,7 @@ public class OrderServiceImpl implements OrderService {
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
         }else{
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+order.getExpressNo()+MessageConstant.SUFFIX);
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO+"<a href=\""+MessageConstant.ABCUC_URL+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
         }
 
         message.setUserId(order.getUserId());
@@ -1263,7 +1264,7 @@ public class OrderServiceImpl implements OrderService {
 //            Message message = new Message();
 //            message.setBusinessId(order.getOrderNo());
 //            message.setType(MessageConstant.SPDD);
-//            message.setContent(MessageConstant.AUTOMATIC_CONFIRMATION_RECEIPT+"<a href=\""+MessageConstant.ABCUC_URL+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
+//            message.setContent(MessageConstant.AUTOMATIC_CONFIRMATION_RECEIPT+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
 //            message.setUserId(order.getUserId());
 //            messageSendUtil.sendMessage(message);
         }

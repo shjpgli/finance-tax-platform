@@ -13,6 +13,8 @@ import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxGzhClient;
 import com.github.pagehelper.PageHelper;
 import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.SftpATTRS;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -119,7 +122,7 @@ public class WxGzhServiceimpl implements IWxGzhService {
 			ByteArrayOutputStream content=new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
 			int len;
-			while ((len = inputStream.read(buffer)) > 0) {
+			while ((len = inputStream.read(buffer)) !=-1) {
 				content.write(buffer, 0, len);
 			}
 			inputStream.close();
@@ -132,15 +135,44 @@ public class WxGzhServiceimpl implements IWxGzhService {
 			String password = SpringCtxHolder.getProperty("sftp_password");
 			
 			ChannelSftp sftp = sf.connect(host, port, username, password);
-			Map<String, String> map = sf.uploadByByte(userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);
+			String filenam=mediaId+".jpg";
+			sftp.cd("/abc12366/images");
+            if (isDirExist(userId, sftp)) {
+                sftp.cd(userId);
+            } else {
+                // 建立目录
+                sftp.mkdir(userId);
+                // 进入并设置为当前目录
+                sftp.cd(userId);
+            }
+            String filePath = "/abc12366/images/" + userId + "/" + filenam;
+            OutputStream outputStream = sftp.put(filePath);
+            outputStream.write(content.toByteArray());
+            outputStream.flush();
+            outputStream.close();
+			//Map<String, String> map = sf.uploadByByte(userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);
 			sftp.disconnect();
 			sftp.exit();
-			return "/images"+map.get("filePath");
+			return "/images/" + userId+ "/" + filenam;
 		} catch (Exception e) {
 			LOGGER.info("下载微信服务器文件失败",e);
 			throw new ServiceException(9999,"下载微信服务器文件失败");
 		}
 	}
+	
+	public boolean isDirExist(String directory, ChannelSftp sftp) {
+        boolean isDirExistFlag = false;
+        try {
+            SftpATTRS sftpATTRS = sftp.lstat(directory);
+            isDirExistFlag = true;
+            return sftpATTRS.isDir();
+        } catch (Exception e) {
+            if (e.getMessage().toLowerCase().equals("no such file")) {
+                isDirExistFlag = false;
+            }
+        }
+        return isDirExistFlag;
+    }
 	
 	@SuppressWarnings("rawtypes")
 	private static List fileBytesToList(byte[] bytes) throws Exception {

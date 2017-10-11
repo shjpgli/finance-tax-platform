@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.web.question;
 
+import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
@@ -227,6 +228,16 @@ public class QuestionController {
         String rtn = questionService.updateBrowseNum(id);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 话题推荐管理
+     */
+    @GetMapping(path = "/selectListTopicRecommend")
+    public ResponseEntity topicRecommendList(@RequestBody TopicRecommendParamBO param) {
+        PageHelper.startPage(param.getPage(), param.getSize(), true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectList(param);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
 
