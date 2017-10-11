@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service;
 
 
 
+import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 
@@ -33,5 +34,7 @@ public interface QuestionService {
     List<QuestionTagBo> selectTagList();
 
     String updateBrowseNum(String id);
+
+    List<QuestionBo> selectList(TopicRecommendParamBO param);
 
 }

@@ -68,6 +68,9 @@ public class QuestionBo implements Serializable {
     /**点赞次数**int(11)**/
     private Integer likeNum;
 
+	/**评论次数**int(11)**/
+	private Integer commentNum;
+
     /****varchar(64)**/
     private String factionId;
 
@@ -224,7 +227,16 @@ public class QuestionBo implements Serializable {
         this.likeNum = likeNum;
     }
 
-    public String getFactionId() {
+	public Integer getCommentNum() {
+		return commentNum;
+	}
+
+	public QuestionBo setCommentNum(Integer commentNum) {
+		this.commentNum = commentNum;
+		return this;
+	}
+
+	public String getFactionId() {
         return factionId;
     }
 
