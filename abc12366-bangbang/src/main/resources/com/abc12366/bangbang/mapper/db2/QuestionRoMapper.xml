@@ -124,7 +124,7 @@
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId != '') commentNum
         FROM bb_question q
         WHERE 1=1
-        <if test="title != null and title != ''">
+        <if test="keywords != null and keywords != ''">
             AND title like CONCAT('%',#{keywords},'%')
         </if>
         <if test="isRecommend != null">
