@@ -31,7 +31,8 @@
         LEFT JOIN gw_view_sys_dict d ON d.id = i.dictId
         <where>
             1 = 1
-            <if test="name != null">and i.name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="name != null and name != ''">and i.name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="uri != null and uri != '' ">and i.uri LIKE CONCAT('%',#{uri},'%')</if>
             <if test="status != null">AND i.status = #{status}</if>
             <if test="dictId != null and dictId != ''">AND i.dictId = #{dictId}</if>
         </where>

@@ -87,6 +87,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/test")
                         //第三方交易回调地址
                 .excludePathPatterns("/payreturn/**")
+                //微信回调地址
+                .excludePathPatterns("/wechatserver/init/**")
                         //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
 
@@ -121,7 +123,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**","/wx/redpack")
                         //
                 .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
-                //好会计
+                        //微信回调地址
+                .excludePathPatterns("/wechatserver/init/**")
+                        //好会计
                 .excludePathPatterns("/userhkj/token");
         //用户业务操作导致经验值更新，拦截器拦截处理
 //        registry.addInterceptor(uexpInterceptor())

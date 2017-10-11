@@ -62,7 +62,7 @@ public class ApiServiceImpl implements ApiService {
         temp.setVersion(apiBO.getVersion());
         temp.setMethod(apiBO.getMethod());
         ApiBO bo = apiRoMapper.selectByUriAndVersion(temp);
-        if (bo != null && !apiBO.getId().equals(bo.getId())) {
+        if (bo != null && !bo.getId().equals(apiBO.getId())) {
             LOGGER.warn("uri，version，method，确定数据的唯一性：{}", bo);
             throw new ServiceException(4030);
         }
