@@ -5,7 +5,7 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.VipLogBO" parameterType="java.lang.String">
         SELECT uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level,uulo.createTime,
-        (select vipExpireDate from uc_user uu where uu.id=uulo.userId) vipExpireDate
+         uulo.vipExpireDate
         from uc_uvip_log uulo left join uc_uvip_level uule
         ON uulo.levelId = uule.levelCode
         where uulo.userId = #{userId}
