@@ -93,7 +93,7 @@ public class WxTemplateController {
         return templateService.templateSend(temp_id,dataList);
     }
     
-  //模板消息发送
+    //模板消息发送
     @SuppressWarnings("rawtypes")
     @PostMapping("/wxTemplate/sendstr/")
     public ResponseEntity templateSendstr(@RequestBody String templatemsg) {
