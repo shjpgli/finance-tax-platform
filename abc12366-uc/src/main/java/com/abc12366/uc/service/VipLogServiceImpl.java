@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +47,11 @@ public class VipLogServiceImpl implements VipLogService {
         BeanUtils.copyProperties(vipLogBO, vipLog);
         vipLog.setId(Utils.uuid());
         vipLog.setCreateTime(new Date());
+        //会员到期时间为创建时间加一年
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(vipLog.getCreateTime());
+        calendar.add(Calendar.YEAR, 1);
+        vipLog.setVipExpireDate(calendar.getTime());
         int result = vipLogMapper.insert(vipLog);
         if (result != 1) {
             LOGGER.warn("新增失败，参数：" + vipLog.toString());
