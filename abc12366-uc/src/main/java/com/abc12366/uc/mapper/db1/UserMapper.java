@@ -21,4 +21,6 @@ public interface UserMapper {
     int insertContinuePwdWrong(UserLoginPasswordWrongCount wrongCount);
 
     int updateContinuePwdWrong(UserLoginPasswordWrongCount wrongCount);
+
+    int updatePhone(User user);
 }
