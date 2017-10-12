@@ -226,6 +226,7 @@
             AND b.channelId like CONCAT(#{channelId},'%')
         </if>
 		GROUP BY a.tagId
+		ORDER BY priority DESC
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->
