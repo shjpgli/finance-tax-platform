@@ -13,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import sun.misc.BASE64Decoder;
+
 import javax.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -38,19 +42,20 @@ public class ApiController {
      * @param pageNum
      * @param pageSize
      * @return
+     * @throws IOException 
      */
     @GetMapping(path = "/api")
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "status", required = false) Boolean status,
                                      @RequestParam(value = "dictId", required = false) String dictId,
-                                     @RequestParam(value = "uri", required = false) String uri,
+                                     @RequestParam(value = "url", required = false) String url,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) throws IOException {
         Api api = new Api();
         api.setName(name);
         api.setStatus(status);
         api.setDictId(dictId);
-        api.setUri(uri);
+        api.setUri(new String(new BASE64Decoder().decodeBuffer(url)));
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ApiBO> apiList = apiService.selectList(api);
         PageInfo<ApiBO> pageInfo = new PageInfo<>(apiList);
