@@ -128,7 +128,14 @@
             AND title like CONCAT('%',#{keywords},'%')
         </if>
         <if test="isRecommend != null">
-            AND isRecommend = #{isRecommend}
+            <choose>
+                <when test="isRecommend == true">
+                    AND isRecommend = 1
+                </when>
+                <otherwise>
+                    AND (isRecommend = 0 OR isRecommend is NULL )
+                </otherwise>
+            </choose>
         </if>
         <choose>
             <when test="sortFieldName != null and sortFieldName != '' and sortName !=null and sortName !=''">

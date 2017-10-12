@@ -112,6 +112,15 @@
             <if test="expressCompId != null">
                 expressCompId,
             </if>
+            <if test="consignee != null">
+                consignee,
+            </if>
+            <if test="contactNumber != null">
+                contactNumber,
+            </if>
+            <if test="shippingAddress != null">
+                shippingAddress,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -207,6 +216,15 @@
             </if>
             <if test="expressCompId!=null">
                 #{expressCompId},
+            </if>
+            <if test="consignee!=null">
+                #{consignee},
+            </if>
+            <if test="contactNumber!=null">
+                #{contactNumber},
+            </if>
+            <if test="shippingAddress!=null">
+                #{shippingAddress},
             </if>
         </trim>
     </insert>
@@ -304,6 +322,15 @@
             </if>
             <if test="expressCompId != null">
                 expressCompId = #{expressCompId},
+            </if>
+            <if test="consignee != null">
+                consignee = #{consignee},
+            </if>
+            <if test="contactNumber != null">
+                contactNumber = #{contactNumber},
+            </if>
+            <if test="shippingAddress != null">
+                shippingAddress = #{shippingAddress},
             </if>
 
         </set>

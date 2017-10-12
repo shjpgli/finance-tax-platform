@@ -4,6 +4,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
+import com.abc12366.uc.model.bo.UserSimpleInfoBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -34,4 +35,6 @@ public interface UserRoMapper {
     List<User> selectUserVipList(@Param("date")Date date);
 
     List<UserLoginPasswordWrongCount> selectContinuePwdWrong(String id);
+
+    UserSimpleInfoBO selectSimple(String userId);
 }
