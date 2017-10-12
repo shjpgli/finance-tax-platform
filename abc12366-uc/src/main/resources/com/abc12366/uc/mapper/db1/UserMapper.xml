@@ -14,7 +14,6 @@
         update uc_user
         <set>
             <if test="username != null">username = #{username},</if>
-            <if test="phone != null">phone = #{phone},</if>
             <if test="password != null">password = #{password},</if>
             <if test="regMail != null">regMail = #{regMail},</if>
             <if test="regIP != null">regIP = #{regIP},</if>
