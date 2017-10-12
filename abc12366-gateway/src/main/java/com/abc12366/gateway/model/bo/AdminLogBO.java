@@ -69,4 +69,15 @@ public class AdminLogBO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    @Override
+    public String toString() {
+        return "AdminLogBO{" +
+                "businessUri='" + businessUri + '\'' +
+                ", businessName='" + businessName + '\'' +
+                ", businessData='" + businessData + '\'' +
+                ", method='" + method + '\'' +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
 }
