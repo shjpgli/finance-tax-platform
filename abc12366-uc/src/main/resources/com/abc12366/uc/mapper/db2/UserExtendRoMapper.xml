@@ -13,7 +13,7 @@
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserExtendListBO" parameterType="java.util.Map">
-        select uu.username,uu.nickname,uu.phone,uu.status,
+        select uu.username,uu.nickname,insert(uu.phone, 4, 4, '****') phone,uu.status,
         uue.userId,uue.signature,uue.sex,uue.birthday,uue.bloodType,uue.weight,uue.height,uue.marital,
         uue.education,uue.graduate, uue.occupation,uue.income,uue.postAddress,insert(uue.realName, 1, 1, '*') realName,
         uue.weixin,uue.qq,uue.safeQuestion,
@@ -30,7 +30,7 @@
                 and uu.status = #{status}
             </if>
             <if test="phone!=null">
-                and uu.phone = #{phone}
+                and uu.phone = insert(#{phone}, 4, 4, '****')
             </if>
             <if test="realName!=null">
                 and uue.realName = insert(#{realName}, 1, 1, '*')
