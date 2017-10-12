@@ -12,7 +12,7 @@
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.Question" parameterType="java.lang.String">
 		 SELECT
              q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
 	      (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
 		 FROM bb_question q left join bb_user u on q.userId = u.id
 		 WHERE q.id = #{id}
@@ -22,7 +22,7 @@
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1
@@ -42,7 +42,7 @@
     <select id="selectListByBrowseNum" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1
@@ -62,7 +62,7 @@
     <select id="selectListWait" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1 and id not in(SELECT questionId FROM bb_question_answer where userId = #{userId})
@@ -82,7 +82,7 @@
     <select id="selectListAccept" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1 and id in(SELECT questionId FROM bb_question_answer where isAccept = '1')
@@ -119,7 +119,7 @@
     <select id="selectListTopicRecommend" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="com.abc12366.bangbang.model.bo.TopicRecommendParamBO">
         SELECT
         q.id,	userId,	q.title,q.detail,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	q.isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where id = q.id) likeNum,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId != '') commentNum
         FROM bb_question q
@@ -128,7 +128,14 @@
             AND title like CONCAT('%',#{keywords},'%')
         </if>
         <if test="isRecommend != null">
-            AND isRecommend = #{isRecommend}
+            <choose>
+                <when test="isRecommend == true">
+                    AND isRecommend = 1
+                </when>
+                <otherwise>
+                    AND (isRecommend = 0 OR isRecommend is NULL )
+                </otherwise>
+            </choose>
         </if>
         <choose>
             <when test="sortFieldName != null and sortFieldName != '' and sortName !=null and sortName !=''">

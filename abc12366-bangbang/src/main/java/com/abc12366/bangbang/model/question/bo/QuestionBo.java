@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.model.question.bo;
 
+import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
 
 import java.io.Serializable;
@@ -55,6 +56,8 @@ public class QuestionBo implements Serializable {
 	private java.util.Date recommendTime;
 
 	private List<QuestionTag> tagList;
+
+    private List<QuestionInvite> inviteList;
 
     /**标签**varchar(1000)**/
     private String tag;
@@ -258,5 +261,13 @@ public class QuestionBo implements Serializable {
 
     public void setUserPicturePath(String userPicturePath) {
         this.userPicturePath = userPicturePath;
+    }
+
+    public List<QuestionInvite> getInviteList() {
+        return inviteList;
+    }
+
+    public void setInviteList(List<QuestionInvite> inviteList) {
+        this.inviteList = inviteList;
     }
 }

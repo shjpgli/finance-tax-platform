@@ -30,6 +30,9 @@
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
         <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
         <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
@@ -78,6 +81,9 @@
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
         <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
         <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
@@ -118,6 +124,9 @@
         <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
         <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
         <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
 
@@ -194,6 +203,9 @@
         <result column="isInsured" property="isInsured" jdbcType="VARCHAR"/>
         <result column="InsuredFee" property="InsuredFee" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--配送方式对象-->
@@ -262,7 +274,8 @@
         iv.amount, iv.type,
         iv.property, iv.status, iv.createTime, iv.lastUpdate, iv.nsrsbh, iv.nsrmc,
         iv.address, iv.phone, iv.bank, iv.addressId, iv.deliveryMethod, iv.isShipping, iv.isFreeShipping,
-        iv.deliveryFee, iv.isInsured, iv.insuredFee, iv.payMethod
+        iv.deliveryFee, iv.isInsured, iv.insuredFee, iv.payMethod,
+        iv.consignee,	iv.contactNumber,	iv.shippingAddress
         FROM uc_invoice iv
         LEFT JOIN uc_order_invoice uoi ON uoi.invoiceId = iv.id
         WHERE  uoi.status = true and uoi.orderNo = #{orderNo}
@@ -436,7 +449,8 @@
     <sql id="Base_Column_List">
         orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
         isShipping, isFreeShipping, deliveryFee,
-        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser,expressCompId
+        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser,expressCompId,
+        consignee,	contactNumber,	shippingAddress
     </sql>
 
 
@@ -452,7 +466,7 @@
         SELECT
         orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
         isShipping, isFreeShipping, deliveryFee,
-        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser,expressCompId
+        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser,expressCompId,consignee,	contactNumber,	shippingAddress
         FROM uc_order
         <where>
             <if test="orderNo != null">orderNo = #{orderNo}</if>
@@ -488,7 +502,7 @@
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel,v.level as nowVipLevelName, o.createTime, o.lastUpdate,
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,
+        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
         u.id as userId,u.username,u.phone,u.vipLevel,u.nickname,u.level,u.realName
         FROM uc_order o
         LEFT JOIN (select r.id,r.username,r.phone,r.vipLevel,r.nickname,e.realName as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
@@ -511,9 +525,9 @@
     <sql id="Base_Column_BO_List">
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
-        o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,u.id as
-        userId,u.username,u.phone,u.vipLevel,u.nickname
+        o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
+        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,
+        u.id as  userId,u.username,u.phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
@@ -644,8 +658,8 @@
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,u.id as
-        userId,u.username,u.phone,u.vipLevel,u.nickname,
+        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
+        u.id as userId,u.username,u.phone,u.vipLevel,u.nickname,
         t.orderNo, t.productId, t.sellingPrice, t.unitPrice, t.num, t.discount, t.dealPrice, t.name, t.categoryId, t.category, t.weight,
         t.createTime, t.lastUpdate,t.goodsId,t.specInfo,t.isReturn,t.isExchange,t.imageUrl,t.goodsType
         FROM uc_order o
@@ -731,7 +745,7 @@
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel,v.level as nowVipLevelName, o.createTime, o.lastUpdate,
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,
+        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
         u.id as userId,u.username,u.phone,u.vipLevel,u.nickname,u.level,u.realName
         FROM uc_order o
         LEFT JOIN (select r.id,r.username,r.phone,r.vipLevel,r.nickname,e.realName as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId

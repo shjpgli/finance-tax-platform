@@ -2,12 +2,12 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.MapUtil;
 import com.abc12366.bangbang.common.UcUserCommon;
-import com.abc12366.bangbang.mapper.db1.QuestionLikeMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
-import com.abc12366.bangbang.model.question.QuestionLike;
+import com.abc12366.bangbang.mapper.db1.QuestionCollectMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionCollectRoMapper;
+import com.abc12366.bangbang.model.question.QuestionCollect;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
-import com.abc12366.bangbang.service.QueLikeService;
+import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
+import com.abc12366.bangbang.service.QueCollectService;
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +23,14 @@ import java.util.UUID;
  * Created by xieyanmao on 2017/9/15.
  */
 @Service
-public class QueLikeServiceImpl implements QueLikeService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(QueLikeServiceImpl.class);
+public class QueCollectServiceImpl implements QueCollectService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(QueCollectServiceImpl.class);
 
     @Autowired
-    private QuestionLikeMapper likeMapper;
+    private QuestionCollectMapper collectMapper;
 
     @Autowired
-    private QuestionLikeRoMapper likeRoMapper;
+    private QuestionCollectRoMapper collectRoMapper;
 
     @Override
     public String insert(String id, HttpServletRequest request) {
@@ -38,47 +38,47 @@ public class QueLikeServiceImpl implements QueLikeService {
         String userId = UcUserCommon.getUserId(request);
 
 
-        QuestionLike like = new QuestionLike();
+        QuestionCollect collect = new QuestionCollect();
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        like.setUserId(userId);
+        collect.setUserId(userId);
 
-        Map map = MapUtil.kv("id", id, "userId", userId);
-        int cnt =  likeRoMapper.selectExist(map);
+        Map map = MapUtil.kv("questionId", id, "userId", userId);
+        int cnt =  collectRoMapper.selectExist(map);
 
         if(cnt >0){
-            throw new ServiceException(6115);
+            throw new ServiceException(6116);
         }
 
-        int result = likeMapper.insert(like);
+        int result = collectMapper.insert(collect);
 
-        int likeCnt = likeRoMapper.selectLikeCnt(id);
+        int collectCnt = collectRoMapper.selectCollectCnt(id);
 
-        return likeCnt+"";
+        return collectCnt+"";
     }
 
     @Override
     public String delete(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
-        Map map = MapUtil.kv("id", id, "userId", userId);
-        likeMapper.delete(map);
-        int likeCnt = likeRoMapper.selectLikeCnt(id);
+        Map map = MapUtil.kv("questionId", id, "userId", userId);
+        collectMapper.delete(map);
+        int collectCnt = collectRoMapper.selectCollectCnt(id);
 
-        return likeCnt+"";
+        return collectCnt+"";
     }
 
     @Override
     public List<QuestionBo> selectList(String userId) {
         LOGGER.info("{}", userId);
-        return likeRoMapper.selectList(userId);
+        return collectRoMapper.selectList(userId);
     }
 
     @Override
     public String selectExist(String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
         String userId = UcUserCommon.getUserId(request);
-        Map map = MapUtil.kv("id", id, "userId", userId);
-        String cnt = likeRoMapper.selectExist(map)+"";
+        Map map = MapUtil.kv("questionId", id, "userId", userId);
+        String cnt = collectRoMapper.selectExist(map)+"";
         return cnt;
     }
 

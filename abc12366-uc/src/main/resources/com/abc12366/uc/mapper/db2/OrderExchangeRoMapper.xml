@@ -5,13 +5,13 @@
 
     <sql id="Base_Column_List">
         id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
-        toExpressNo, type,adminConfirmRemark
+        toExpressNo, type,adminConfirmRemark,consignee,	contactNumber,	shippingAddress
     </sql>
 
     <select id="selectList" parameterType="com.abc12366.uc.model.OrderExchange"
             resultType="com.abc12366.uc.model.OrderExchange">
         select e.id, e.userId, e.orderNo, e.name, e.imageUrl, e.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
-        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark
+        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark,e.consignee,	e.contactNumber,	e.shippingAddress
         from (select c.*, d.productId, d.num, d.name, d.imageUrl, d.goodsType from (select b.username, b.createTime as orderTime, a.* from
         uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo where a.userId = b.userId) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
@@ -29,7 +29,7 @@
     <select id="selectListForFinance" parameterType="com.abc12366.uc.model.OrderExchange"
             resultType="com.abc12366.uc.model.OrderExchange">
         select e.id, e.userId, e.orderNo, e.name, e.imageUrl, e.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
-        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark
+        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark,e.consignee,	e.contactNumber,	e.shippingAddress
         from (select c.*, d.productId, d.num, d.name, d.imageUrl, d.goodsType from (select b.username, b.createTime as orderTime, a.* from
         uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo where a.userId = b.userId) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
@@ -57,7 +57,7 @@
 
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
        select e.id, e.userId, e.orderNo, e.name, e.imageUrl, e.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
-        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark
+        e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark,e.consignee,	e.contactNumber,	e.shippingAddress
         from (select c.*, d.productId, d.num, d.name, d.imageUrl, d.goodsType from (select b.username, b.createTime as orderTime, a.* from
         uc_order_exchange a left join uc_order b on a.orderNo = b.orderNo where a.userId = b.userId) c
         left join uc_order_product d on c.orderNo = d.orderNo) e
