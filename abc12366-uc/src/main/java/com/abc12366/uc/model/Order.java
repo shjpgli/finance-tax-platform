@@ -125,6 +125,15 @@ public class Order implements Serializable {
     /**物流公司ID**/
     private String expressCompId;
 
+    /**收件人**/
+    private String consignee;
+
+    /**联系电话**/
+    private String contactNumber;
+
+    /**收件地址**/
+    private String shippingAddress;
+
     public String getOrderNo() {
         return this.orderNo;
     }
@@ -323,5 +332,29 @@ public class Order implements Serializable {
 
     public void setExpressCompId(String expressCompId) {
         this.expressCompId = expressCompId;
+    }
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 }

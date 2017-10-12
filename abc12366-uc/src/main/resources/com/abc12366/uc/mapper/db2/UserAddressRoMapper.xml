@@ -35,6 +35,17 @@
         WHERE a.userId = #{userId}
     </select>
 
+    <select id="selectById" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
+        SELECT
+        a.id, a.userId, a.name, a.province, a.city, a.area, a.detail, a.phone, a.isDefault, a.status, a.createTime, a.lastUpdate,
+        p.province as provinceName,c.city as cityName,e.area as areaName
+        FROM uc_user_address a
+        LEFT JOIN uc_province p ON p.provinceId = a.province
+        LEFT JOIN uc_city c on c.cityId = a.city
+        LEFT JOIN uc_area e on e.areaId = a.area
+        WHERE a.id = #{id}
+    </select>
+
     <select id="selectOne" resultType="com.abc12366.uc.model.UserAddress"
             parameterType="com.abc12366.uc.model.UserAddress">
         SELECT

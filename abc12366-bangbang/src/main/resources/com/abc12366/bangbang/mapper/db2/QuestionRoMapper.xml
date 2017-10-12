@@ -131,14 +131,8 @@
             AND isRecommend = #{isRecommend}
         </if>
         <choose>
-            <when test="numName != null and numName != '' and isAsc !=null">
-                ORDER BY #{numName}
-                <if test="isAsc == true">
-                    ASC
-                </if>
-                <if test="isAsc == false">
-                    DESC
-                </if>
+            <when test="sortFieldName != null and sortFieldName != '' and sortName !=null and sortName !=''">
+                ORDER BY ${sortFieldName} ${sortName}
             </when>
             <otherwise>
                 ORDER BY createTime DESC

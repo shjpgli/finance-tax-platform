@@ -35,7 +35,6 @@
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
-        <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
                     select="getOrderBO"></collection>
@@ -72,7 +71,6 @@
         <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
-        <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
     </resultMap>
 
@@ -183,7 +181,7 @@
     </select>
 
     <!-- 查询用户地址信息 -->
-    <select id="getUserAddress" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
+    <!--<select id="getUserAddress" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
         SELECT
         a.id, a.userId, a.name, a.province, a.city, a.area, a.detail, a.phone, a.isDefault, a.status, a.createTime, a.lastUpdate,
         p.province as provinceName,c.city as cityName,e.area as areaName
@@ -192,7 +190,7 @@
 				LEFT JOIN uc_city c on c.cityId = a.city
 				LEFT JOIN uc_area e on e.areaId = a.area
         WHERE a.id = #{id}
-    </select>
+    </select>-->
 
     <!-- 查询订单信息 -->
     <select id="getOrderBO" resultMap="oneOrderBOMap" parameterType="java.lang.String">
@@ -250,7 +248,6 @@
         <include refid="InvoiceBO_Column_List"/>
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
-        LEFT JOIN uc_user_address a ON a.id = i.addressId
         LEFT JOIN uc_dict t on t.fieldValue = i.content and t.dictId = 'invoicecontent'
         WHERE i.id = #{id}
     </select>
@@ -302,7 +299,6 @@
         <include refid="InvoiceBO_Column_List"/>
         FROM uc_invoice i
         LEFT JOIN uc_user u ON u.id = i.userId
-        LEFT JOIN uc_user_address a ON a.id = i.addressId
         LEFT JOIN uc_dict t on t.fieldValue = i.content and t.dictId = 'invoicecontent'
         <where>
             1 = 1

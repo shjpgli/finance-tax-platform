@@ -293,4 +293,15 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRoMapper.selectListTopicRecommend(param);
     }
 
+    @Override
+    public void recommend(String id, Boolean isRecommend) {
+        try {
+            LOGGER.info("话题推荐功能:{}", id);
+            questionMapper.recommend(id, isRecommend);
+        } catch (Exception e) {
+            LOGGER.error("话题推荐功能异常：{}", e);
+            throw new ServiceException(6106);
+        }
+    }
+
 }

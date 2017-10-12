@@ -37,4 +37,5 @@ public interface QuestionService {
 
     List<QuestionBo> selectList(TopicRecommendParamBO param);
 
+    void recommend(String id, Boolean isRecommend);
 }

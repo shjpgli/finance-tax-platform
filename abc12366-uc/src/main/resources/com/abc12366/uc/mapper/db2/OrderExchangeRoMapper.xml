@@ -79,26 +79,18 @@
     <select id="export" parameterType="com.abc12366.uc.model.bo.OrderExchangeExportBO"
             resultType="com.abc12366.uc.model.bo.SfExportBO">
         select h.orderNo, h.company, h.name, h.phone, h.address, j.name as content, 1 as num from (SELECT
-        c.orderNo, d.name  as company, d.name, d.phone, concat(e.province, f.city, g.area, d.detail) as address
+        c.orderNo, c.consigneeTemp as name,c.consigneeTemp as company, c.contactNumberTemp as phone, c.shippingAddressTemp as address
         FROM
         (SELECT
-        b.*
+        b.*,a.consignee as consigneeTemp,a.contactNumber as contactNumberTemp,a.shippingAddress as shippingAddressTemp
         FROM
         uc_order_exchange a
         LEFT JOIN uc_order b ON a.orderNo = b.orderNo
         WHERE a.status = '6'
         and a.type = '1'
         and a.createTime <![CDATA[>=]]> DATE_FORMAT(#{startTime}, '%Y-%m-%d %H-%i-%s')
-        and a.createTime <![CDATA[<=]]> DATE_FORMAT(#{endTime}, '%Y-%m-%d %H-%i-%s')) c,
-        uc_user_address d,
-        uc_province e,
-        uc_city f,
-        uc_area g
-        WHERE
-        c.addressId = d.id
-        AND d.province = e.provinceId
-        AND d.city = f.cityId
-        AND d.area = g.areaId) h left join (select x.orderNo, x.name, y.specId from uc_order_product x left join uc_order_product_spec y on x.productId = y.productId) j on h.orderNo = j.orderNo
+        and a.createTime <![CDATA[<=]]> DATE_FORMAT(#{endTime}, '%Y-%m-%d %H-%i-%s')) c
+        ) h left join (select x.orderNo, x.name, y.specId from uc_order_product x left join uc_order_product_spec y on x.productId = y.productId) j on h.orderNo = j.orderNo
     </select>
 
     <select id="selectCompletedOrder" resultType="com.abc12366.uc.model.bo.ExchangeCompletedOrderBO"

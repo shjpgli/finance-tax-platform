@@ -19,9 +19,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +51,6 @@ public class AppServiceImpl implements AppService {
      * 将时间戳转换为时间
      */
     public static Date getLongToDate(long lt) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
         return new Date(lt);
     }
 
@@ -82,7 +81,6 @@ public class AppServiceImpl implements AppService {
         return bo;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public String login(AppBO bo) throws Exception {
         LOGGER.info("{}", bo);
@@ -94,29 +92,29 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("APP用户名不存在：{}", app);
             throw new ServiceException(4094);
         }
-        String password = bo.getPassword();
-        if (app != null && Utils.md5(app.getPassword()).equals(password)) {
-            //判断app登录是否已过期
-            long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
+        if (Utils.md5(app.getPassword()).equals(bo.getPassword())) {
             long currentTime = System.currentTimeMillis();
-            String token = app.getAccessToken();
-            Date now = new Date();
-            if (currentTime > lastTime) {
-                LOGGER.warn("APP登录已过期，返回新的token：{}", app);
-                token = Utils.token();
-                app.setAccessToken(token);
-                //设置有效时间
+
+            if (!StringUtils.isEmpty(app.getAccessToken()) && app.getLastResetTokenTime() != null) {
+                //判断app登录是否已过期
+                long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
+                if (currentTime > lastTime) {
+                    LOGGER.warn("APP登录已过期，返回新的token：{}", app);
+                    app.setAccessToken(Utils.token());
+                }
+            } else { // 第一次登录
+                app.setAccessToken(Utils.token());
             }
-            app.setLastResetTokenTime(getLongToDate(System.currentTimeMillis() + Constant
-                    .ADMIN_USER_TOKEN_VALID_SECONDS));
-            app.setLastUpdate(now);
+            //更新有效时间
+            app.setLastResetTokenTime(getLongToDate(currentTime + Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
+            app.setLastUpdate(new Date());
             int upd = appMapper.update(app);
             if (upd != 1) {
                 LOGGER.warn("APP修改异常：{}", app);
                 throw new ServiceException(4102);
             }
-            LOGGER.info("{}", token);
-            return token;
+            LOGGER.info("{}", app.getAccessToken());
+            return app.getAccessToken();
         } else {
             LOGGER.warn("APP密码错误：{}", app);
             throw new ServiceException(4093);

@@ -19,4 +19,6 @@ public interface UserAddressRoMapper {
     List<UserAddress> selectByUserId(UserAddress userAddress);
 
     List<UserAddressBO> selectBOList(String userId);
+
+    UserAddressBO selectById(String addressId);
 }

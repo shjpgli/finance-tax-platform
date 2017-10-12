@@ -1,5 +1,8 @@
 package com.abc12366.gateway.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -17,11 +20,14 @@ public class AppBO implements Serializable {
     /**
      * 授权应用名称
      **/
+    @NotEmpty
     private String name;
 
     /**
      * 授权应用密码
      **/
+    @NotEmpty
+    @Size(min = 8)
     private String password;
 
     /**
@@ -163,5 +169,23 @@ public class AppBO implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Override
+    public String toString() {
+        return "AppBO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", accessToken='" + accessToken + '\'' +
+                ", lastResetTokenTime=" + lastResetTokenTime +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status=" + status +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                '}';
     }
 }
