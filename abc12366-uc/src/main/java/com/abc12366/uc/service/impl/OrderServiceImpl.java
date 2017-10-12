@@ -93,6 +93,9 @@ public class OrderServiceImpl implements OrderService {
     private TradeLogMapper tradeLogMapper;
 
     @Autowired
+    private UserAddressRoMapper userAddressRoMapper;
+
+    @Autowired
     private ExpressCompRoMapper expressCompRoMapper;
 
     @Autowired
@@ -195,6 +198,7 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setCreateTime(date);
         orderBO.setLastUpdate(date);
         Order order = new Order();
+
         //加入订单与产品关系信息
         List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
         if (orderProductBOs == null) {
@@ -835,6 +839,20 @@ public class OrderServiceImpl implements OrderService {
     public OrderBO paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request) {
         String orderNo = orderPayBO.getOrderNo();
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
+        //查询地址信息
+        if(orderPayBO != null && orderPayBO.getAddressId() != null && !"".equals(orderPayBO.getAddressId())){
+            UserAddressBO userAddress = userAddressRoMapper.selectById(orderPayBO.getAddressId());
+            if(userAddress != null){
+                StringBuffer address = new StringBuffer();
+                address.append(userAddress.getProvinceName() + "-");
+                address.append(userAddress.getCityName() + "-");
+                address.append(userAddress.getAreaName() + "-");
+                address.append(userAddress.getDetail());
+                orderBO.setConsignee(userAddress.getName());
+                orderBO.setContactNumber(userAddress.getPhone());
+                orderBO.setShippingAddress(address.toString());
+            }
+        }
         if (orderBO != null) {
             OrderProductBO pBO = new OrderProductBO();
             pBO.setOrderNo(orderNo);
@@ -848,10 +866,12 @@ public class OrderServiceImpl implements OrderService {
                 //支付状态，1：支付中，2：支付成功，3：支付失败，
                 int isPay = orderPayBO.getIsPay();
                 Order order = new Order();
-                order.setOrderNo(orderNo);
+                /*order.setOrderNo(orderNo);
                 order.setPayMethod(orderPayBO.getPayMethod());
                 order.setAddressId(orderPayBO.getAddressId());
-                order.setUserId(orderBO.getUserId());
+                order.setUserId(orderBO.getUserId());*/
+                orderBO.setLastUpdate(new Date());
+                BeanUtils.copyProperties(orderBO,order);
                 //实物订单，必须要先填写地址
                 if (goodsType.equals("1")){
                     if(orderPayBO.getAddressId() == null || "".equals(orderPayBO.getAddressId())){
@@ -1091,29 +1111,24 @@ public class OrderServiceImpl implements OrderService {
             OrderListBO orderListBO = new OrderListBO();
             orderListBO.setOrderNo(bo.getOrderNo());
             //收货地址
-            StringBuffer address = new StringBuffer();
-            String phone = null;
-            if(bo.getUserAddressBO() != null){
-                UserAddressBO userAddress = setUserAddress(bo, address);
-                orderListBO.setAddress(address.toString());
-                phone = userAddress.getPhone();
+            String address = bo.getShippingAddress();
+            String phone = bo.getContactNumber();
+//            if(bo.getUserAddressBO() != null){
+//                UserAddressBO userAddress = setUserAddress(bo, address);
+                orderListBO.setAddress(address);
+//                phone = userAddress.getPhone();
                 orderListBO.setPhone(phone);
-                orderListBO.setFullName(userAddress.getName());
-            }
+                orderListBO.setFullName(bo.getConsignee());
+//            }
             boolean isAlike = false;
             StringBuffer goodsName = new StringBuffer();
             int num = 0;
             if(address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
                 for(OrderBO data:orderDataList){
-                    StringBuffer addressBuffer = new StringBuffer();
-                    String phoneTemp = null;
-                    if(data.getUserAddressBO() != null){
-                        addressBuffer = new StringBuffer();
-                        UserAddressBO userAddressBO = setUserAddress(data, addressBuffer);
-                        phoneTemp = userAddressBO.getPhone();
-                    }
+                    String addressBuffer = data.getShippingAddress();
+                    String phoneTemp = data.getContactNumber();
                     //有地址和电话相同的
-                    if(address.toString().equals(addressBuffer.toString()) && phone.equals(phoneTemp)){
+                    if(address.equals(addressBuffer) && phone.equals(phoneTemp)){
                         isAlike = true;
                         //寄托货物信息合并
                         if(data.getOrderProductBOList() != null){
@@ -1151,7 +1166,7 @@ public class OrderServiceImpl implements OrderService {
         return orderListBOList;
     }
 
-    //拼接地址信息
+    /*//拼接地址信息
     private UserAddressBO setUserAddress(OrderBO bo, StringBuffer address) {
         UserAddressBO userAddress = bo.getUserAddressBO();
         address.append(userAddress.getProvinceName() + "-");
@@ -1159,7 +1174,7 @@ public class OrderServiceImpl implements OrderService {
         address.append(userAddress.getAreaName() + "-");
         address.append(userAddress.getDetail());
         return userAddress;
-    }
+    }*/
 
     @Override
     public void selectImportOrder(List<OrderBO> orderBOList, String expressCompId, HttpServletRequest request) {

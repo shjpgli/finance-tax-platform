@@ -14,27 +14,99 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class OrderBO implements Serializable {
 
+    /**
+     * 订单编号
+     **/
     private String orderNo;
+
+    /**
+     * 用户ID
+     **/
     private String userId;
+
+    /**
+     * 订单状态：1.新订单 2.确认订单 3.取消订单 4.作废订单 5.完成订单 6.退款 7.部分退款
+     **/
     private String orderStatus;
+
+    /**
+     * 配送方式
+     **/
     private String deliveryMethod;
+
+    /**
+     * 支付方式：WEIXIN、ALIPAY
+     **/
     private String payMethod;
+
+    /**
+     * 当前会员等级
+     **/
     private String nowVipLevel;
     private java.util.Date createTime;
     private java.util.Date lastUpdate;
+    /**
+     * 用户名
+     **/
     private String username;
+
+    /**
+     * 是否需要寄送
+     **/
     private Integer isShipping;
+
+    /**
+     * 是否免运费
+     **/
     private Integer isFreeShipping;
+
+    /**
+     * 配送费
+     **/
     private Double deliveryFee;
+
+    /**
+     * 是否保价
+     **/
     private Integer isInsured;
+    /**
+     * 保价费用
+     **/
     private Double insuredFee;
+
+    /**
+     * 成交总金额
+     **/
     private Double totalPrice;
+
+    /**
+     * 配送地址ID
+     **/
     private String addressId;
+
+    /**
+     * 运单号
+     **/
     private String expressNo;
+    /**
+     * 备注
+     **/
     private String remark;
+
+    /**
+     * 赠送积分
+     **/
     private Integer giftPoints;
+
+    /**
+     * 交易方式：RMB、POINTS
+     **/
     private String tradeMethod;
+    /**取消原因，字典表ID**/
     private String cancelId;
+    /**
+     * 商品ID
+     **/
     private String goodsId;
     private String[] status;
     /**推荐人姓名**/
@@ -49,10 +121,20 @@ public class OrderBO implements Serializable {
      * 是否已开发票，true：是，false：否
      **/
     private Boolean isInvoice;
+
+    /**收件人**/
+    private String consignee;
+
+    /**联系电话**/
+    private String contactNumber;
+
+    /**收件地址**/
+    private String shippingAddress;
+
     private GoodsBO goodsBO;
 
     private UserBO user;
-    private UserAddressBO userAddressBO;
+    //private UserAddressBO userAddressBO;
 
     private List<OrderProductBO> orderProductBOList;
     private List<OrderProductSpec> orderProductSpecList;
@@ -333,13 +415,13 @@ public class OrderBO implements Serializable {
         this.tradeLogBOList = tradeLogBOList;
     }
 
-    public UserAddressBO getUserAddressBO() {
-        return userAddressBO;
-    }
-
-    public void setUserAddressBO(UserAddressBO userAddressBO) {
-        this.userAddressBO = userAddressBO;
-    }
+//    public UserAddressBO getUserAddressBO() {
+//        return userAddressBO;
+//    }
+//
+//    public void setUserAddressBO(UserAddressBO userAddressBO) {
+//        this.userAddressBO = userAddressBO;
+//    }
 
     public String getRecommendUser() {
         return recommendUser;
@@ -395,5 +477,29 @@ public class OrderBO implements Serializable {
 
     public void setStatus(String[] status) {
         this.status = status;
+    }
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 }

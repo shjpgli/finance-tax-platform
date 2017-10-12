@@ -81,6 +81,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private MessageSendUtil messageSendUtil;
 
+    @Autowired
+    private UserAddressRoMapper userAddressRoMapper;
+
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
         return invoiceRoMapper.selectList(invoice);
@@ -210,6 +213,21 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
         }
         invoiceBO.setAmount(amount);
+
+        //查询地址信息
+        if(invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())){
+            UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
+            if(userAddress != null){
+                StringBuffer address = new StringBuffer();
+                address.append(userAddress.getProvinceName() + "-");
+                address.append(userAddress.getCityName() + "-");
+                address.append(userAddress.getAreaName() + "-");
+                address.append(userAddress.getDetail());
+                invoiceBO.setConsignee(userAddress.getName());
+                invoiceBO.setContactNumber(userAddress.getPhone());
+                invoiceBO.setShippingAddress(address.toString());
+            }
+        }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceBO, invoice);
         int ins = invoiceMapper.insert(invoice);
@@ -301,14 +319,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     //拼接地址信息
-    private UserAddressBO setUserAddress(InvoiceBO bo, StringBuffer address) {
-        UserAddressBO userAddress = bo.getUserAddressBO();
-        address.append(userAddress.getProvinceName() + "-");
-        address.append(userAddress.getCityName() + "-");
-        address.append(userAddress.getAreaName() + "-");
-        address.append(userAddress.getDetail());
-        return userAddress;
-    }
+//    private UserAddressBO setUserAddress(InvoiceBO bo, StringBuffer address) {
+//        UserAddressBO userAddress = bo.getUserAddressBO();
+//        address.append(userAddress.getProvinceName() + "-");
+//        address.append(userAddress.getCityName() + "-");
+//        address.append(userAddress.getAreaName() + "-");
+//        address.append(userAddress.getDetail());
+//        return userAddress;
+//    }
 
     @Override
     public List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice) {
@@ -322,37 +340,38 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoiceExpressExcel excel = null;
             for (InvoiceBO bo : invoiceBOList) {
                 excel = new InvoiceExpressExcel();
-                //List<Express> exList = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
                 excel.setInvoiceOrderNo(bo.getId());
                 //收货地址
-                StringBuffer address = new StringBuffer();
-                String phone = null;
+                String address = bo.getShippingAddress();
+                String phone = bo.getContactNumber();
+
+                excel.setPhone(phone);
+                excel.setAddress(address);
+                /*
                 if(bo.getUserAddressBO() != null){
                     UserAddressBO userAddress = setUserAddress(bo, address);
                     phone = userAddress.getPhone();
-                    excel.setPhone(phone);
-                    excel.setAddress(address.toString());
+
                     excel.setLinkman(userAddress.getName());
                     excel.setPhone(userAddress.getPhone());
                 }else {
                     LOGGER.info("收货人地址信息异常：{}", bo);
                     throw new ServiceException(4909);
-                }
+                }*/
                 boolean isAlike = false;
                 StringBuffer invoiceNos = new StringBuffer();
                 int num = 0;
                 if(address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
                     for (InvoiceBO data : invoiceDatas) {
-                        StringBuffer addressBuffer;
-                        String phoneTemp = null;
-                        if (data.getUserAddressBO() != null) {
-                            addressBuffer = new StringBuffer();
+                        String addressBuffer = data.getShippingAddress();
+                        String phoneTemp = data.getContactNumber();
+                        /*if (data.getUserAddressBO() != null) {
                             UserAddressBO userAddressBO = setUserAddress(data, addressBuffer);
                             phoneTemp = userAddressBO.getPhone();
                         }else {
                             LOGGER.info("收货人地址信息异常：{}", bo);
                             throw new ServiceException(4909);
-                        }
+                        }*/
                         //有地址和电话相同的
                         if (address.toString().equals(addressBuffer.toString()) && phone.equals(phoneTemp)) {
                             isAlike = true;

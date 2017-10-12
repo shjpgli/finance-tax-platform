@@ -68,12 +68,18 @@ public class InvoiceBO implements Serializable {
 	 **/
 	private String consignee;
 
+	/**联系电话**/
+	private String contactNumber;
+
+	/**收件地址**/
+	private String shippingAddress;
+
 	private List<OrderBO> orderBOList;
 
 	private String[] orderNos;
 	private java.util.Date startTime;
 	private java.util.Date endTime;
-	private UserAddressBO userAddressBO;
+//	private UserAddressBO userAddressBO;
 	private DeliveryMethodBO deliveryMethodBO;
 
 	private InvoiceDetail invoiceDetail;
@@ -399,14 +405,6 @@ public class InvoiceBO implements Serializable {
 		this.isBilling = isBilling;
 	}
 
-	public UserAddressBO getUserAddressBO() {
-		return userAddressBO;
-	}
-
-	public void setUserAddressBO(UserAddressBO userAddressBO) {
-		this.userAddressBO = userAddressBO;
-	}
-
 	public String getWaybillNum() {
 		return waybillNum;
 	}
@@ -445,5 +443,21 @@ public class InvoiceBO implements Serializable {
 
 	public void setExpressCompId(String expressCompId) {
 		this.expressCompId = expressCompId;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
+	public String getShippingAddress() {
+		return shippingAddress;
+	}
+
+	public void setShippingAddress(String shippingAddress) {
+		this.shippingAddress = shippingAddress;
 	}
 }
