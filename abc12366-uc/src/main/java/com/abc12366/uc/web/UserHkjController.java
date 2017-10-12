@@ -41,10 +41,12 @@ public class UserHkjController {
         // 根据用户token获取用户
         UserBO userBO = userService.authAndRefreshToken(apptoken);
         UserHkj userHkj = new UserHkj();
-        LOGGER.info("{}", userBO);
-        userHkj.setMobile(userBO.getPhone());
-        userHkj.setUsername(userBO.getUsername());
-        userHkj.setIdentify(userBO.getId());
+        if(userBO != null) {
+            LOGGER.info("{}", userBO);
+            userHkj.setMobile(userBO.getPhone());
+            userHkj.setUsername(userBO.getUsername());
+            userHkj.setIdentify(userBO.getId());
+        }
         return ResponseEntity.ok(Utils.kv("data", userHkj));
     }
 

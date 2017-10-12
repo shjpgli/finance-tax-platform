@@ -11,6 +11,7 @@ import com.abc12366.uc.mapper.db2.LotteryActivityRoMapper;
 import com.abc12366.uc.model.LotteryActivity;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
+import com.abc12366.uc.util.LszUtil;
 import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,15 +92,29 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
     @Override
     public LotteryLogBO luckDraw(String userId, String activityId, String ip) {
         if (userId == null || userId.isEmpty()) {
-            throw new ServiceException(9999, "userId参数错误，请查正");
+            throw new ServiceException(9999, "userId参数错误，请查证");
         }
         if (activityId == null || activityId.isEmpty()) {
-            throw new ServiceException(9999, "activityId参数错误，请查正");
+            throw new ServiceException(9999, "activityId参数错误，请查证");
         }
         if (ip == null || ip.isEmpty()) {
-            throw new ServiceException(9999, "ip参数错误，请查正");
+            throw new ServiceException(9999, "ip参数错误，请查证");
         }
+//判断活动是否启用 是否到期
+        LotteryActivityBO lotteryActivityBO = this.selectOne(activityId);
+        if(lotteryActivityBO == null){
+            throw new ServiceException(9999, "抽奖活动不存在，请查证");
+        }
+        if(!lotteryActivityBO.getStatus()){
+            throw new ServiceException(9999, "抽奖活动已停用");
+        }
+        if(!lotteryActivityBO.getStatus()){
+            throw new ServiceException(9999, "抽奖活动已停用");
+        }
+        if(!LszUtil.dateIn(lotteryActivityBO.getStartTime(),lotteryActivityBO.getEndTime(),new Date())){
+            throw new ServiceException(9999, "抽奖活动已过期");
 
+        }
 //        P-hycj
 //        PointCodex pointCodex = pointsService.selectCodexByRuleCode("P-hycj");
 //        Integer point = pointCodex.getUpoint();
@@ -119,7 +134,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         } else {
              lottery =lotteryService.selectOne(obj.getLotteryId());
             if(lottery==null){
-                return null;
+                return null;// 这种情况几乎不存在
             }
             //中奖的情况
             if (lottery.getStock() == null) {
@@ -187,6 +202,8 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         }
 
         LotteryLogBO logs = lotteryLogService.insert(lotteryLogBO);
+        lotteryActivityBO.setCount((lotteryActivityBO.getCount() + 1));
+        this.update(lotteryActivityBO,lotteryActivityBO.getId());
         return logs;
     }
 
