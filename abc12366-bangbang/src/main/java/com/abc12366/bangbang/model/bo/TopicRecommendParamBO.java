@@ -18,9 +18,9 @@ public class TopicRecommendParamBO {
     private Boolean isRecommend;
 
     /*回答数，评论数，点赞数*/
-    private String numName;
-
-    private Boolean isAsc;
+    private String sortFieldName;
+    /*asc.desc*/
+    private String sortName;
 
     public String getKeywords() {
         return keywords;
@@ -40,21 +40,21 @@ public class TopicRecommendParamBO {
         return this;
     }
 
-    public String getNumName() {
-        return numName;
+    public String getSortFieldName() {
+        return sortFieldName;
     }
 
-    public TopicRecommendParamBO setNumName(String numName) {
-        this.numName = numName;
+    public TopicRecommendParamBO setSortFieldName(String sortFieldName) {
+        this.sortFieldName = sortFieldName;
         return this;
     }
 
-    public Boolean getIsAsc() {
-        return isAsc;
+    public String getSortName() {
+        return sortName;
     }
 
-    public TopicRecommendParamBO setIsAsc(Boolean isAsc) {
-        this.isAsc = isAsc;
+    public TopicRecommendParamBO setSortName(String sortName) {
+        this.sortName = sortName;
         return this;
     }
 
