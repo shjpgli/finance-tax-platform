@@ -1,11 +1,14 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.mapper.db1.QuestionInviteMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionInviteRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
+import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
@@ -39,6 +42,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionTagRoMapper tagRoMapper;
+
+    @Autowired
+    private QuestionInviteMapper inviteMapper;
+
+    @Autowired
+    private QuestionInviteRoMapper inviteRoMapper;
 
     @Override
     public List<QuestionBo> selectList(Map<String,Object> map) {
@@ -141,6 +150,16 @@ public class QuestionServiceImpl implements QuestionService {
                 }
             }
 
+            List<QuestionInvite> inviteList = questionBo.getInviteList();
+
+            if(inviteList != null){
+                for(QuestionInvite invite :inviteList){
+                    invite.setId(UUID.randomUUID().toString().replace("-", ""));
+                    invite.setQuestionId(uuid);
+                    inviteMapper.insert(invite);
+                }
+            }
+
 
             questionMapper.insert(question);
         } catch (Exception e) {
@@ -159,8 +178,10 @@ public class QuestionServiceImpl implements QuestionService {
             //查询问题信息
             Question question = questionRoMapper.selectByPrimaryKey(id);
             List<QuestionTag> tagList = tagRoMapper.selectList(id);
+            List<QuestionInvite> inviteList = inviteRoMapper.selectList(id);
             BeanUtils.copyProperties(question, questionBo);
             questionBo.setTagList(tagList);
+            questionBo.setInviteList(inviteList);
         } catch (Exception e) {
             LOGGER.error("查询单个问题信息异常：{}", e);
             throw new ServiceException(6101);
@@ -212,6 +233,17 @@ public class QuestionServiceImpl implements QuestionService {
                     tag.setId(UUID.randomUUID().toString().replace("-", ""));
                     tag.setQuestionId(questionBo.getId());
                     tagMapper.insert(tag);
+                }
+            }
+
+            List<QuestionInvite> inviteList = questionBo.getInviteList();
+            inviteMapper.deleteByPrimaryKey(questionBo.getId());
+
+            if(inviteList != null){
+                for(QuestionInvite invite :inviteList){
+                    invite.setId(UUID.randomUUID().toString().replace("-", ""));
+                    invite.setQuestionId(questionBo.getId());
+                    inviteMapper.insert(invite);
                 }
             }
 

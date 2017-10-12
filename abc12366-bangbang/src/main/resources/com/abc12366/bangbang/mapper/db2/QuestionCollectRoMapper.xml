@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	questionId,	userId,	collectTime
+		 collectId,	questionId,	userId,	collectTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -15,6 +15,32 @@
 		 FROM bb_question_collect
 		 WHERE collectId = #{collectId}
 	</select>
+
+    <!-- 查询（我的收藏） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
+        SELECT
+        q.id,	q.userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        (SELECT count(likeId) FROM bb_question_like where questionId = c.questionId) likeNum,
+        (SELECT count(id) FROM bb_question_answer where questionId = c.questionId and parentId = '') answerNum
+        FROM bb_question_collect c left join bb_question q on c.questionId = q.id left join bb_user u on q.userId = u.id
+        where c.userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectExist" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(collectId)
+        FROM bb_question_collect
+        WHERE attentionUserId = #{attentionUserId} and userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCollectCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(collectId)
+        FROM bb_question_collect
+        WHERE questionId = #{questionId}
+    </select>
 
 
 </mapper>

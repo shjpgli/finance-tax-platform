@@ -3,12 +3,13 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public interface QueLikeService {
+public interface QueCollectService {
 
     String insert(String id, HttpServletRequest request);
 
