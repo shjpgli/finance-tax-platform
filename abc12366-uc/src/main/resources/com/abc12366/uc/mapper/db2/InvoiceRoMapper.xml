@@ -35,6 +35,9 @@
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
                     select="getOrderBO"></collection>
@@ -71,6 +74,9 @@
         <result column="waybillNum" property="waybillNum" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
     </resultMap>
 
@@ -93,6 +99,9 @@
         <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
         <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
                     select="getOrderProduct"></collection>
     </resultMap>
@@ -197,7 +206,7 @@
         SELECT
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee, o.isInsured, o.insuredFee, o.totalPrice, o.addressId,
-        o.expressNo, o.remark
+        o.expressNo, o.remark,o.consignee,	o.contactNumber,	o.shippingAddress
         FROM uc_order o
         LEFT JOIN uc_order_invoice uoi ON uoi.orderNo = o.orderNo
         WHERE uoi.invoiceId = #{invoiceId}
@@ -207,7 +216,8 @@
     <sql id="Base_Column_List">
         id, userId, username, invoiceNo, invoiceCode, name, content, compName, amount, type, property, status,
         createTime, lastUpdate, nsrsbh, nsrmc, address, phone, bank, addressId, deliveryMethod, isShipping,
-        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum,remark,email,expressCompId
+        isFreeShipping, deliveryFee, isInsured, insuredFee, payMethod,waybillNum,remark,email,expressCompId,
+        consignee,	contactNumber,	shippingAddress
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -290,7 +300,8 @@
         i.id, i.userId, i.username, i.invoiceNo, i.invoiceCode, i.name, i.content, i.compName, i.amount, i.type,
         i.property, i.status, i.createTime, i.lastUpdate, i.nsrsbh, i.nsrmc, i.address, i.phone, i.bank, i.addressId,
         i.deliveryMethod, i.isShipping, i.isFreeShipping, i.deliveryFee, i.isInsured, i.insuredFee, i.payMethod,i.waybillNum,i.remark,i.email,i.expressCompId,
-        u.username as username, a.name as consignee,t.fieldKey as contentDetail
+        i.consignee,	i.contactNumber,	i.shippingAddress,
+        u.username as username, t.fieldKey as contentDetail
     </sql>
 
     <!-- 后台查询（根据条件查询） -->
@@ -309,7 +320,7 @@
                 and i.waybillNum = #{waybillNum}
             </if>
             <if test=" consignee != null and consignee != '' ">
-                and a.name = #{consignee}
+                and i.consignee = #{consignee}
             </if>
             <if test=" id != null and id != '' ">
                 and i.id = #{id}
