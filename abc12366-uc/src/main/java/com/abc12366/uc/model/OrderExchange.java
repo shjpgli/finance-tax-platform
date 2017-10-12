@@ -64,6 +64,15 @@ public class OrderExchange implements Serializable {
      */
     private String adminConfirmRemark;
 
+    /**收件人**/
+    private String consignee;
+
+    /**联系电话**/
+    private String contactNumber;
+
+    /**收件地址**/
+    private String shippingAddress;
+
     /****/
     private Timestamp createTime;
 
@@ -318,6 +327,30 @@ public class OrderExchange implements Serializable {
 
     public void setAdminConfirmRemark(String adminConfirmRemark) {
         this.adminConfirmRemark = adminConfirmRemark;
+    }
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 
     public static final class Builder {

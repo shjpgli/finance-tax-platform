@@ -44,7 +44,6 @@
         <association property="expressComp" column="expressCompId" select="getExpressComp"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
-        <association property="userAddressBO" column="addressId" select="getUserAddress"/>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
         select="getOrderProduct"></collection>
         <collection property="orderLogBOList" ofType="com.abc12366.uc.model.bo.OrderLogBO" column="orderNo"
@@ -235,7 +234,7 @@
     </select>
 
     <!-- 查询用户地址信息 -->
-    <select id="getUserAddress" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
+    <!--<select id="getUserAddress" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
         SELECT
         a.id, a.userId, a.name, a.province, a.city, a.area, a.detail, a.phone, a.isDefault, a.status, a.createTime, a.lastUpdate,
         p.province as provinceName,c.city as cityName,e.area as areaName
@@ -245,7 +244,7 @@
 				LEFT JOIN uc_area e on e.areaId = a.area
         WHERE a.id = #{id}
         order by a.province,a.city,a.area,a.detail asc
-    </select>
+    </select>-->
 
     <!--获取配送方式-->
     <select id="getDeliveryMethodBO" resultMap="deliveryMethodBOMap" parameterType="java.lang.String">

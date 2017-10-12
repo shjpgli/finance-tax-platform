@@ -30,6 +30,11 @@ public class ExchangeApplicationBO {
     @Length(min = 1, max = 1)
     private String type;
 
+    // 订单号
+    @NotEmpty
+    @Length(min = 16, max = 64)
+    private String addressId;
+
     public String getId() {
         return id;
     }
@@ -79,5 +84,13 @@ public class ExchangeApplicationBO {
                 ", userRemark='" + userRemark + '\'' +
                 ", type='" + type + '\'' +
                 '}';
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 }
