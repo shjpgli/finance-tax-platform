@@ -37,6 +37,8 @@ public class User {
     private String wxheadimg;
     private String wxnickname;
     private String bdqudao;
+    private String level;
+    private String levelName;
     public String getWxopenid() {
 		return wxopenid;
 	}
@@ -247,4 +249,54 @@ public class User {
 	public void setBdqudao(String bdqudao) {
 		this.bdqudao = bdqudao;
 	}
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", regMail='" + regMail + '\'' +
+                ", regIP='" + regIP + '\'' +
+                ", salt='" + salt + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
+                ", midUserPicturePath='" + midUserPicturePath + '\'' +
+                ", minUserPicturePath='" + minUserPicturePath + '\'' +
+                ", points=" + points +
+                ", exp=" + exp +
+                ", vipLevel='" + vipLevel + '\'' +
+                ", vipLevelName='" + vipLevelName + '\'' +
+                ", usernameModifiedTimes=" + usernameModifiedTimes +
+                ", vipExpireDate=" + vipExpireDate +
+                ", vipImage='" + vipImage + '\'' +
+                ", wxopenid='" + wxopenid + '\'' +
+                ", wxheadimg='" + wxheadimg + '\'' +
+                ", wxnickname='" + wxnickname + '\'' +
+                ", bdqudao='" + bdqudao + '\'' +
+                ", level='" + level + '\'' +
+                ", levelName='" + levelName + '\'' +
+                '}';
+    }
 }
