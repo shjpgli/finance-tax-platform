@@ -300,7 +300,7 @@ public class GoodsController {
     }
 
     /**
-     *
+     *商品操作日志
      * @param pageNum
      * @param pageSize
      * @return

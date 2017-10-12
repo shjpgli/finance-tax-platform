@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * 配送方式控制类
  * @author lizhongwei
  * @since 2.0.0
  */
@@ -31,6 +32,13 @@ public class DeliveryMethodController {
     @Autowired
     private DeliveryMethodService deliveryMethodService;
 
+    /**
+     * 列表查询
+     * @param pageNum
+     * @param pageSize
+     * @param name
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
@@ -47,8 +55,7 @@ public class DeliveryMethodController {
     }
 
     /**
-     * 新增商品
-     *
+     * 新增
      * @param deliveryMethodBO
      * @return
      */
