@@ -3,9 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.UserService;
@@ -247,6 +245,22 @@ public class UserController {
     public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
         LOGGER.info("{}:{}", id, status);
         userService.enableOrDisable(id, status);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //用户未登录状态下根据用户ID查询用户简单信息：用户编号，用户昵称，用户头像，擅长领域
+    @GetMapping(path = "/notoken/simple/{userId}")
+    public ResponseEntity<?> selectSimple(@PathVariable String userId) {
+        LOGGER.info("{}", userId);
+        UserSimpleInfoBO user = userService.selectSimple(userId);
+        LOGGER.info("查询到用户简单信息为：{}", user);
+        return ResponseEntity.ok(Utils.kv("user", user));
+    }
+
+    //用户登录后发送短信接口
+    @PostMapping(path = "/verifycode")
+    public ResponseEntity loginedSendCode(@Valid @RequestBody LoginedSendCodeBO sendCodeBO){
+        userService.loginedSendCode(sendCodeBO);
         return ResponseEntity.ok(Utils.kv());
     }
 

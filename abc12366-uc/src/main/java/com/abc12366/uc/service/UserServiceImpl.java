@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.mapper.db1.TokenMapper;
@@ -7,21 +8,27 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.DataUtils;
 import com.abc12366.uc.util.UCConstant;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -56,6 +63,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TodoTaskService todoTaskService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
@@ -166,7 +176,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         UserBO userDTO = new UserBO();
@@ -255,7 +265,7 @@ public class UserServiceImpl implements UserService {
         String encodePassword = rsaService.decode(passwordUpdateBO.getPassword());
 
         //修改密码不能为旧密码
-        if(encodePassword.equals(userExist.getPassword())){
+        if (encodePassword.equals(userExist.getPassword())) {
             throw new ServiceException(4040);
         }
 
@@ -307,7 +317,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //用户会员等级发生变化，则会员有效时间直接覆盖原有的，否则延长一年
-        if(vipLevel.trim().toUpperCase().equals(userTmp.getVipLevel())){
+        if (vipLevel.trim().toUpperCase().equals(userTmp.getVipLevel())) {
             calendar.setTime(userTmp.getVipExpireDate());
             calendar.add(Calendar.YEAR, 1); // 年份加1
         }
@@ -319,20 +329,65 @@ public class UserServiceImpl implements UserService {
         userMapper.update(user);
     }
 
-	@Override
-	public UserBO selectByopenid(String openid) {
-		return userRoMapper.selectByopenid(openid);
-	}
+    @Override
+    public UserBO selectByopenid(String openid) {
+        return userRoMapper.selectByopenid(openid);
+    }
 
     @Override
     public void automaticUserCancel() {
         Date date = DataUtils.getAddDate(UCConstant.USER_VIP_EXPIRE_DATE);
         List<User> userList = userRoMapper.selectUserVipList(date);
-        for (User user : userList){
+        for (User user : userList) {
             //user.setStatus(false);
             user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
             user.setLastUpdate(new Date());
             userMapper.update(user);
+        }
+    }
+
+    @Override
+    public UserSimpleInfoBO selectSimple(String userId) {
+        return userRoMapper.selectSimple(userId);
+    }
+
+    @Override
+    public void loginedSendCode(LoginedSendCodeBO sendCodeBO) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        User user = userRoMapper.selectOne(sendCodeBO.getUserId());
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        if (user.getPhone() == null || user.getPhone().trim().equals("")) {
+            throw new ServiceException(4184);
+        }
+
+        //不变参数
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/getcode";
+
+        //请求头设置
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("phone", user.getPhone());
+        requestBody.put("type", sendCodeBO.getType());
+
+        HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
+        }
+
+        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
+            BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
+            if (object.getCode().equals("2000")) {
+                //return true;
+            }
         }
     }
 }

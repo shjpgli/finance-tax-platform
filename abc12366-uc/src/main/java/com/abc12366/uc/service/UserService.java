@@ -1,9 +1,7 @@
 package com.abc12366.uc.service;
 
 
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -42,4 +40,17 @@ public interface UserService {
      * 自动会员失效
      */
     void automaticUserCancel();
+
+    /**
+     * 用户未登录状态下获取用户简单信息：用户编号，用户昵称，用户头像，擅长领域
+     * @param userId
+     * @return
+     */
+    UserSimpleInfoBO selectSimple(String userId);
+
+    /**
+     * 用户登录状态下发送短信接口
+     * @param sendCodeBO
+     */
+    void loginedSendCode(LoginedSendCodeBO sendCodeBO);
 }
