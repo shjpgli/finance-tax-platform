@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserPhoneBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,4 +43,9 @@ public interface UserService {
      * 自动会员失效
      */
     void automaticUserCancel();
+
+    /**
+     * 用户更换手机号码
+     */
+    UserBO updatePhone(UserPhoneBO bo);
 }

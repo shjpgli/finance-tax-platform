@@ -10,10 +10,7 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.DataUtils;
 import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
@@ -334,5 +331,25 @@ public class UserServiceImpl implements UserService {
             user.setLastUpdate(new Date());
             userMapper.update(user);
         }
+    }
+
+    @Override
+    public UserBO updatePhone(UserPhoneBO bo) {
+        User user = userRoMapper.selectOne(bo.getId());
+        if (user == null) {
+            LOGGER.warn("修改失败");
+            throw new ServiceException(4018);
+        }
+        user.setLastUpdate(new Date());
+        int result = userMapper.updatePhone(user);
+        if (result != 1) {
+            LOGGER.warn("修改失败");
+            throw new ServiceException(4102);
+        }
+
+        UserBO userDTO = new UserBO();
+        BeanUtils.copyProperties(user, userDTO);
+        userDTO.setPassword(null);
+        return userDTO;
     }
 }

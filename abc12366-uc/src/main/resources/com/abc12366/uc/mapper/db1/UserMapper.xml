@@ -21,7 +21,6 @@
             <if test="salt != null">salt = #{salt},</if>
             <if test="nickname != null">nickname = #{nickname},</if>
             <if test="status != null">status = #{status},</if>
-            <if test="createTime != null">createTime = #{createTime},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
             <if test="userPicturePath != null">userPicturePath = #{userPicturePath},</if>
             <if test="maxUserPicturePath != null">maxUserPicturePath = #{maxUserPicturePath},</if>
@@ -36,6 +35,15 @@
             <if test="wxheadimg != null">wxheadimg = #{wxheadimg},</if>
             <if test="wxnickname != null">wxnickname = #{wxnickname},</if>
             <if test="bdqudao != null">bdqudao = #{bdqudao},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updatePhone" parameterType="com.abc12366.uc.model.User">
+        update uc_user
+        <set>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
         </set>
         where id=#{id}
     </update>

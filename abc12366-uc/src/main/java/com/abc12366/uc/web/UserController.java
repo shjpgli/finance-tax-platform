@@ -5,6 +5,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserPhoneBO;
 import com.abc12366.uc.model.bo.UserUpdateBO;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IWxGzhService;
@@ -185,6 +186,17 @@ public class UserController {
 		} catch (Exception e) {
 			throw new ServiceException(4018);
 		}
+    }
+
+    //用户更换手机号码
+    @PutMapping(path = "/phone/{id}")
+    public ResponseEntity updatePhone(@Valid @RequestBody UserPhoneBO bo, @PathVariable String id) {
+        bo.setId(id);
+        LOGGER.info("{}", bo);
+
+        UserBO user = userService.updatePhone(bo);
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
     }
 
     //更新用户信息
