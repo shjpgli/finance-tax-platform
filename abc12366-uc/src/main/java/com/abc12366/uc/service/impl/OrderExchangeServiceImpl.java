@@ -349,22 +349,22 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminConfirmRemark(),"1");
 
             //发送消息
-            Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-            if(order == null){
-                LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
-                throw new ServiceException(4102,"订单信息查询失败");
-            }
-            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-            if(expressComp == null){
-                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-                throw new ServiceException(4102,"物流公司查询失败");
-            }
-            Message message = new Message();
-            message.setBusinessId(oe.getOrderNo());
-            message.setType("SPDD");
-            message.setContent("您的宝贝已发出，运单号：（"+expressComp.getCompName()+"+"+order.getExpressNo()+"），如有疑问请联系客服咨询4008873133");
-            message.setUserId(order.getUserId());
-            messageSendUtil.sendMessage(message, request);
+//            Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+//            if(order == null){
+//                LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
+//                throw new ServiceException(4102,"订单信息查询失败");
+//            }
+//            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+//            if(expressComp == null){
+//                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+//                throw new ServiceException(4102,"物流公司查询失败");
+//            }
+//            Message message = new Message();
+//            message.setBusinessId(oe.getOrderNo());
+//            message.setType("SPDD");
+//            message.setContent("您的宝贝已发出，运单号：（"+data.getExpressComp()+"+"+order.getExpressNo()+"），如有疑问请联系客服咨询4008873133");
+//            message.setUserId(order.getUserId());
+//            messageSendUtil.sendMessage(message, request);
         }
         return oe;
     }
