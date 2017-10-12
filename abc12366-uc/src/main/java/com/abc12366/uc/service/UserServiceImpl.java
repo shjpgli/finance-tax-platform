@@ -341,6 +341,7 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4018);
         }
         user.setLastUpdate(new Date());
+        user.setPhone(bo.getPhone());
         int result = userMapper.updatePhone(user);
         if (result != 1) {
             LOGGER.warn("修改失败");
