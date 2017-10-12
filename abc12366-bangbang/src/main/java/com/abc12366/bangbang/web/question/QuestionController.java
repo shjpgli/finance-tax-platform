@@ -240,5 +240,9 @@ public class QuestionController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
-
+    @PutMapping(path = "/recommend/{id}/{isRecommend}")
+    public ResponseEntity recommend(@PathVariable String id, @PathVariable Boolean isRecommend) {
+        questionService.recommend(id, isRecommend);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

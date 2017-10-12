@@ -180,4 +180,9 @@
         WHERE id = #{id}
     </update>
 
+	<!-- 话题推荐 -->
+	<update id="recommend">
+		UPDATE bb_question SET isRecommend = #{isRecommend},recommendTime = now() WHERE id = #{id}
+	</update>
+
 </mapper>
