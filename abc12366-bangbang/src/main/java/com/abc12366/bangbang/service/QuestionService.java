@@ -38,4 +38,10 @@ public interface QuestionService {
     List<QuestionBo> selectList(TopicRecommendParamBO param);
 
     void recommend(String id, Boolean isRecommend);
+
+    List<QuestionBo> selectTipList(String userId);
+
+    List<QuestionBo> selectInviteList(String userId);
+
+    List<QuestionBo> selectMyQuestionList(Map<String, Object> map);
 }

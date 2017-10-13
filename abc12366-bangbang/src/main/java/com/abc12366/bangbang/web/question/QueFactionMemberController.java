@@ -38,9 +38,11 @@ public class QueFactionMemberController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "factionId", required = false) String factionId) {
+                                     @RequestParam(value = "factionId", required = false) String factionId,
+                                     @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("factionId", factionId);//
+        dataMap.put("status", status);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionMemberBo> dataList = queFactionMemberService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));

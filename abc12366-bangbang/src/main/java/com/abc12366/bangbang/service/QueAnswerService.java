@@ -25,4 +25,8 @@ public interface QueAnswerService {
 
     String delete(String id);
 
+    List<QuestionAnswerBo> selectMyAnswerList(Map<String, Object> map);
+
+    List<QuestionAnswerBo> selectMyCommentList(Map<String, Object> map);
+
 }

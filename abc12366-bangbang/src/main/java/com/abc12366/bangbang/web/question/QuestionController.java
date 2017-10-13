@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.web.question;
 
+import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
+import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
@@ -33,6 +35,9 @@ public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private QuestionTagRoMapper tagRoMapper;
 
     /**
      * 问题列表查询
@@ -244,5 +249,64 @@ public class QuestionController {
     public ResponseEntity recommend(@PathVariable String id, @PathVariable Boolean isRecommend) {
         questionService.recommend(id, isRecommend);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 查询举报列表
+     */
+    @GetMapping(path = "/selectTipList/{userId}")
+    public ResponseEntity selectTipList(@PathVariable String userId,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> questionBoList = questionService.selectTipList(userId);
+        return (questionBoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
+                        ()));
+    }
+
+    /**
+     * 查询邀我回答的列表
+     */
+    @GetMapping(path = "/selectInviteList/{userId}")
+    public ResponseEntity selectInviteList(@PathVariable String userId,
+                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> questionBoList = questionService.selectInviteList(userId);
+        if(questionBoList != null){
+            for(QuestionBo questionBo : questionBoList){
+                if(questionBo.getId() != null){
+                    List<QuestionTag> tagList = tagRoMapper.selectList(questionBo.getId());
+                    questionBo.setTagList(tagList);
+                }
+            }
+        }
+        return (questionBoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
+                        ()));
+    }
+
+    /**
+     * 查询我的提问
+     */
+    @GetMapping(path = "/selectMyQuestionList")
+    public ResponseEntity selectMyQuestionList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "isAccept", required = false) String isAccept,
+                                        @RequestParam(value = "isTip", required = false) String isTip,
+                                        @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("isAccept", isAccept);//是否被采纳，1为被采纳
+        dataMap.put("isTip", isTip);//是否被举报，1为被举报
+        dataMap.put("userId", userId);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
     }
 }
