@@ -103,7 +103,7 @@ public class QueClassifyController {
     /**
      * 修改分类标签关联
      */
-    @GetMapping(path = "/updateClassifyTag")
+    @PutMapping(path = "/updateClassifyTag")
     public ResponseEntity updateClassifyTag(@RequestBody QuestionClassifyBo classifyBo) {
         classifyService.updateClassifyTag(classifyBo);
         return ResponseEntity.ok(Utils.kv());
