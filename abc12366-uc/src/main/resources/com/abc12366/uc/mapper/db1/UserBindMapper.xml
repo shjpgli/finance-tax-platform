@@ -64,7 +64,10 @@
             <if test="expireTime!=null">uud.expireTime = #{expireTime},</if>
             <if test="expandExpireTime!=null">uud.expandExpireTime = #{expandExpireTime},</if>
             <if test="frmc!=null">uud.frmc = #{frmc},</if>
-            <if test="frzjh!=null">uud.frzjh = #{frzjh}</if>
+            <if test="frzjh!=null">uud.frzjh = #{frzjh},</if>
+            <if test="lastLoginTime!=null">uud.lastLoginTime = #{lastLoginTime},</if>
+            <if test="nsrlx!=null">uud.nsrlx = #{nsrlx},</if>
+            <if test="sfgtjzh!=null">uud.sfgtjzh = #{sfgtjzh}</if>
         </set>
         where uud.userId = #{userId}
         and uud.djxh = #{djxh}
