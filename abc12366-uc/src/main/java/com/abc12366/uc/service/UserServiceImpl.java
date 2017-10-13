@@ -405,10 +405,11 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
-        User userUpdate = new User();
-        userUpdate.setId(user.getId());
-        userUpdate.setPhone(bindPhoneBO.getNewPhone());
-        userMapper.update(userUpdate);
+        UserPhoneBO userPhoneBO = new UserPhoneBO();
+        userPhoneBO.setId(user.getId());
+        userPhoneBO.setPhone(bindPhoneBO.getNewPhone());
+        LOGGER.info("用户绑定手机号：{}", userPhoneBO.toString());
+        updatePhone(userPhoneBO);
     }
 
     @Override
