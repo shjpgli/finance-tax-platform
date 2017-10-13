@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.weixin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -27,9 +28,11 @@ public class WxActivity {
     private String description;
     // 活动起始时间
     @NotNull
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     // 活动截止时间
     @NotNull
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     // 规则类型
     @NotEmpty
@@ -69,8 +72,10 @@ public class WxActivity {
     @NotNull
     private Integer times;
     // 创建时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     // 修改时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
     // 已发送人数

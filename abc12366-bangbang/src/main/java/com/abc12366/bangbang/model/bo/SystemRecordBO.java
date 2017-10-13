@@ -7,6 +7,15 @@ import java.util.Date;
  */
 
 public class SystemRecordBO {
+	private String username;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	/** PK */
 	private String id;
 	/** 用户ID */
@@ -34,7 +43,7 @@ public class SystemRecordBO {
 	/** REFERER路径 */
 	private String referer;
 	/** 停留时长，单位：秒 */
-	private String stayLong;
+	private Integer stayLong;
 	/** 操作功能 */
 	private String feature;
 	/** 使用系统 */
@@ -133,10 +142,10 @@ public class SystemRecordBO {
 	public void setReferer(String referer) {
 		this.referer = referer;
 	}
-	public String getStayLong() {
+	public Integer getStayLong() {
 		return stayLong;
 	}
-	public void setStayLong(String stayLong) {
+	public void setStayLong(Integer stayLong) {
 		this.stayLong = stayLong;
 	}
 	public String getFeature() {
