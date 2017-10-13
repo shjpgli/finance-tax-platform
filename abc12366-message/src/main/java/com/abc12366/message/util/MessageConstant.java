@@ -30,4 +30,9 @@ public class MessageConstant {
 
     //阿里云短信通知接口类别（记日志用）
     public static final String ALIYUN_MESSAGE_API = "aliyun_message_api";
+
+    //短信通道：阿里：ali，网易：wy，又拍：yp
+    public static final String MSG_CHANNEL_ALI = "ali";
+    public static final String MSG_CHANNEL_NETEASE = "wy";
+    public static final String MSG_CHANNEL_YOUPAI = "yp";
 }

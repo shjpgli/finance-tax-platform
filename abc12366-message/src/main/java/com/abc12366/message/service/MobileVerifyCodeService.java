@@ -13,4 +13,6 @@ public interface MobileVerifyCodeService {
     void getCode(String type, String phone) throws IOException;
 
     void verify(VerifyParam verifyParam);
+
+
 }
