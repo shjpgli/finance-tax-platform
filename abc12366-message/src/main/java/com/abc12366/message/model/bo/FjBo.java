@@ -14,6 +14,8 @@ public class FjBo implements Serializable {
 
     private List<Byte> content;
 
+    private String fileContent;
+
     public String getFileName() {
         return fileName;
     }
@@ -28,5 +30,13 @@ public class FjBo implements Serializable {
 
     public void setContent(List<Byte> content) {
         this.content = content;
+    }
+
+    public String getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(String fileContent) {
+        this.fileContent = fileContent;
     }
 }

@@ -2,6 +2,7 @@ package com.abc12366.message.util;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.jcraft.jsch.*;
+import sun.misc.BASE64Decoder;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -152,6 +153,45 @@ public class SFTPUtil {
             if (content1 != null) {
                 buffer = SFTPUtil.listToByteArray(content1);
             }
+            String filePath1 = "/" + directory + "/" + storeName;
+            outputStream.write(buffer);
+            map.put("fileName", fileName);
+            map.put("storeName", storeName);
+            map.put("filePath", filePath1);
+            return map;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return map;
+        }
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param directory 上传的目录
+     * @param content   要上传的文件
+     * @param sftp
+     */
+    public Map<String, String> uploadByBase64(String directory, String content, String fileName, ChannelSftp sftp) {
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            String imagesuri = SpringCtxHolder.getProperty("sftp_imagesuri");
+//            sftp.cd("/abc12366/images");
+            sftp.cd(imagesuri);
+            if (isDirExist(directory, sftp)) {
+                sftp.cd(directory);
+            } else {
+                // 建立目录
+                sftp.mkdir(directory);
+                // 进入并设置为当前目录
+                sftp.cd(directory);
+            }
+            String storeName = rename(fileName);
+            String filePath = imagesuri + "/" + directory + "/" + storeName;
+            OutputStream outputStream = sftp.put(filePath);
+            BASE64Decoder decoder = new BASE64Decoder();
+            //Base64解码
+            byte[] buffer = decoder.decodeBuffer(content);
             String filePath1 = "/" + directory + "/" + storeName;
             outputStream.write(buffer);
             map.put("fileName", fileName);

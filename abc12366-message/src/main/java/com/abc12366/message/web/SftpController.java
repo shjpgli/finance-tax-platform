@@ -56,5 +56,35 @@ public class SftpController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    @PostMapping(path = "/upload")
+    public ResponseEntity uploadBase64(@Valid @RequestBody FjListBo fjListBo) {
+        LOGGER.info("{}", fjListBo);
+        SFTPUtil sf = new SFTPUtil();
+        String host = SpringCtxHolder.getProperty("sftp_host");
+        int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));
+        String username = SpringCtxHolder.getProperty("sftp_username");
+        String password = SpringCtxHolder.getProperty("sftp_password");
+
+
+
+
+        String directory = fjListBo.getDirectory();
+        List<FjBo> fjBoList = fjListBo.getFjBo();
+        List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
+        String fileName = "";
+        String fileContent = "";
+        for (FjBo fjBo : fjBoList) {
+            ChannelSftp sftp = sf.connect(host, port, username, password);
+            fileName = fjBo.getFileName();
+            fileContent = fjBo.getFileContent();
+            Map<String, String> map = sf.uploadByBase64(directory, fileContent, fileName, sftp);
+            dataList.add(map);
+            sftp.disconnect();
+            sftp.exit();
+        }
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
 
 }
