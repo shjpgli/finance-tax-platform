@@ -2,6 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
+import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -58,6 +59,11 @@ public interface QuestionRoMapper {
      * 邀我回答
      **/
     List<QuestionBo> selectInviteList(String userId);
+
+    /**
+     * 我的帮帮
+     **/
+    List<MyQuestionTjBo> selectMybangbang(String userId);
 
     /**
      * 查询我的提问

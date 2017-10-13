@@ -3,6 +3,7 @@ package com.abc12366.bangbang.web.question;
 import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.QuestionTag;
+import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
@@ -308,5 +309,21 @@ public class QuestionController {
         List<QuestionBo> dataList = questionService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
+    }
+
+    /**
+     * 我的帮帮
+     */
+    @GetMapping(path = "/selectMybangbang/{userId}")
+    public ResponseEntity selectMybangbang(@PathVariable String userId,
+                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<MyQuestionTjBo> questionBoList = questionService.selectMybangbang(userId);
+        return (questionBoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
+                        ()));
     }
 }

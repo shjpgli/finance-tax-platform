@@ -10,6 +10,7 @@ import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
+import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
@@ -316,6 +317,13 @@ public class QuestionServiceImpl implements QuestionService {
         //邀我回答
         LOGGER.info("{}", userId);
         return questionRoMapper.selectInviteList(userId);
+    }
+
+    @Override
+    public List<MyQuestionTjBo> selectMybangbang(String userId) {
+        //我的帮帮
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectMybangbang(userId);
     }
 
     @Override

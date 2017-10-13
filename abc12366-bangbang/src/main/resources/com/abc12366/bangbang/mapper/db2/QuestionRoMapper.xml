@@ -186,4 +186,23 @@
         ORDER BY createTime DESC
     </select>
 
+    <!-- 我的提问 -->
+    <select id="selectMybangbang" resultType="com.abc12366.bangbang.model.question.bo.MyQuestionTjBo" parameterType="java.lang.String">
+        select
+        (SELECT count(*) FROM bb_question_answer where parentId = '' and userId = #{userId}) answerNum,
+        (SELECT count(*) FROM bb_question_like where userId = #{userId}) likeNum,
+        (SELECT count(*) FROM bb_question_answer where parentId != '' and userId = #{userId}) commentNum,
+        (SELECT count(*) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId = #{userId}) acceptNum,
+        0 medalNum,
+        (SELECT count(*) FROM bb_question where userId = #{userId}) questionNum,
+        (SELECT count(*) FROM bb_question_invite where userId = #{userId}) inviteNum,
+        (SELECT count(*) FROM bb_question_faction_member where status = '2' and userId = #{userId}) applyQueFactionNum,
+        (SELECT count(*) FROM bb_question_faction_member where status = '2' and duty in('1','2') and  userId = #{userId}) manageQueFactionNum,
+        (SELECT count(*) FROM bb_question_attention where attentionUserId = #{userId}) fansNum,
+        (SELECT count(*) FROM bb_question_attention where userId = #{userId}) attentionNum,
+        (SELECT count(*) FROM bb_question_collect where userId = #{userId}) collectNum,
+        (SELECT count(*) FROM bb_question_tip_off where createUser = #{userId}) tipNum
+        from dual
+    </select>
+
 </mapper>
