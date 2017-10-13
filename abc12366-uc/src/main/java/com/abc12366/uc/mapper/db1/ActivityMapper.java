@@ -4,6 +4,8 @@ import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
 
+import java.util.List;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-09-14 11:25 AM
@@ -21,4 +23,6 @@ public interface ActivityMapper {
     void updateRedEnvelop(WxRedEnvelop redEnvelop);
 
     void insertLotteryLog(WxLotteryLog lotteryLog);
+
+    void batchGenerateSecret(List<WxRedEnvelop> dataList);
 }

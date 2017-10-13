@@ -78,11 +78,20 @@
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-       select uu.id, uu.username, uu.password, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+       select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,
-        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
+        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage,
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName,
+        IFNULL(
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;= (SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) level,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) levelName
         from uc_user uu
         where uu.id = #{id}
     </select>
@@ -94,7 +103,15 @@
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,
         (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage,
-        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName,
+        IFNULL(
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;= (SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) level,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) levelName
         from uc_user uu
         <where>
             <if test="usernameOrPhone != null">
@@ -145,5 +162,13 @@
         select id, userId, count, limitTime
         from uc_login_password_wrong_count
         where userId = #{userId}
+    </select>
+
+    <select id="selectSimple" parameterType="java.lang.String" resultType="com.abc12366.uc.model.bo.UserSimpleInfoBO">
+        select uu.id, uu.nickName, uu.userPicturePath,uu.tags
+        from uc_user uu
+        left join uc_user_extend uue
+         on uue.userId=uu.id
+         where uu.id=#{userId}
     </select>
 </mapper>

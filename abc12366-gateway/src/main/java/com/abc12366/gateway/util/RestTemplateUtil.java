@@ -50,6 +50,7 @@ public class RestTemplateUtil {
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
         } catch (RestClientException e) {
+            LOGGER.error("{}", e);
             throw new ServiceException("0000", "调用接口异常，地址：" + url);
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);

@@ -57,6 +57,11 @@ public class ProductController {
     }
 
 
+    /**
+     * 规格查询
+     * @param goodsId
+     * @return
+     */
     @GetMapping(path = "/spec/{goodsId}")
     public ResponseEntity selectSpecList(@PathVariable("goodsId") String goodsId) {
         LOGGER.info("{}:{}", goodsId);

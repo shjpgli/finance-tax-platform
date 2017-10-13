@@ -19,8 +19,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionFactionTag" parameterType="java.lang.String">
         SELECT
-            f.id,	f.factionId,	f.tagId,k.name name
-        FROM bb_question_faction_tag f LEFT JOIN bb_knowledge_tag k ON f.id = k.id
+            f.id,	f.factionId,	f.tagId,k.name tagName
+        FROM bb_question_faction_tag f LEFT JOIN bb_knowledge_tag k ON f.tagId = k.id
         WHERE factionId = #{factionId}
     </select>
 

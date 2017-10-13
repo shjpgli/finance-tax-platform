@@ -199,6 +199,21 @@ public class OrderServiceImpl implements OrderService {
         orderBO.setLastUpdate(date);
         Order order = new Order();
 
+        //查询地址信息
+        if(orderBO != null && orderBO.getAddressId() != null && !"".equals(orderBO.getAddressId())){
+            UserAddressBO userAddress = userAddressRoMapper.selectById(orderBO.getAddressId());
+            if(userAddress != null){
+                StringBuffer address = new StringBuffer();
+                address.append(userAddress.getProvinceName() + "-");
+                address.append(userAddress.getCityName() + "-");
+                address.append(userAddress.getAreaName() + "-");
+                address.append(userAddress.getDetail());
+                orderBO.setConsignee(userAddress.getName());
+                orderBO.setContactNumber(userAddress.getPhone());
+                orderBO.setShippingAddress(address.toString());
+            }
+        }
+
         //加入订单与产品关系信息
         List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
         if (orderProductBOs == null) {
@@ -709,7 +724,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
-        insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单","0");
+        insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单", "0");
         return bo;
     }
 
@@ -839,20 +854,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderBO paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request) {
         String orderNo = orderPayBO.getOrderNo();
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
-        //查询地址信息
-        if(orderPayBO != null && orderPayBO.getAddressId() != null && !"".equals(orderPayBO.getAddressId())){
-            UserAddressBO userAddress = userAddressRoMapper.selectById(orderPayBO.getAddressId());
-            if(userAddress != null){
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
-                orderBO.setConsignee(userAddress.getName());
-                orderBO.setContactNumber(userAddress.getPhone());
-                orderBO.setShippingAddress(address.toString());
-            }
-        }
+
         if (orderBO != null) {
             OrderProductBO pBO = new OrderProductBO();
             pBO.setOrderNo(orderNo);
@@ -1040,7 +1042,7 @@ public class OrderServiceImpl implements OrderService {
         message.setBusinessId(order.getOrderNo());
         message.setType(MessageConstant.SPDD);
         User user = userRoMapper.selectOne(order.getUserId());
-        message.setContent(MessageConstant.INTEGRAL_RECHARGE+orderProductBO.getName()+user.getPoints()+"。<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/pointsExchange/points.php\">查看积分明细</a>");
+        message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints() + "。<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">查看积分明细</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message);
     }
@@ -1082,7 +1084,7 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_ID);
         pointsLog.setId(Utils.uuid());
         pointsLog.setIncome(orderBO.getGiftPoints());
-        pointsLog.setRemark("用户下单 - 订单号："+orderBO.getOrderNo());
+        pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
         pointsLog.setLogType("ORDER_INCOME");
         pointsLogService.insert(pointsLog);
     }
