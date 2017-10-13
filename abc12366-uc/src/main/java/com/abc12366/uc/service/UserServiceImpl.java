@@ -408,6 +408,8 @@ public class UserServiceImpl implements UserService {
         User userUpdate = new User();
         userUpdate.setId(user.getId());
         userUpdate.setPhone(bindPhoneBO.getNewPhone());
+        userUpdate.setLastUpdate(new Date());
+        LOGGER.info("用户绑定手机号：{}", userUpdate.toString());
         userMapper.update(userUpdate);
     }
 
