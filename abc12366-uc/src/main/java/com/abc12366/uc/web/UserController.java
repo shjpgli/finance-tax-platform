@@ -40,23 +40,23 @@ public class UserController {
 
     @Autowired
     private AuthService authService;
-    
+
     @Autowired
     private IWxGzhService iWxGzhService;
-    
+
     @SuppressWarnings("rawtypes")
-	@PutMapping("/changeheadbywx/{userid}/{mediaid}")
-    public ResponseEntity changeHeadByWx(@PathVariable("userid")String userid,@PathVariable("mediaid")String mediaid){
-    	String filePath=iWxGzhService.getWxDownFilePath(userid, mediaid);
-    	
-    	UserUpdateBO userUpdateDTO=new UserUpdateBO();
-    	userUpdateDTO.setId(userid);
-    	userUpdateDTO.setUserPicturePath(filePath);
-    	UserBO user = userService.update(userUpdateDTO);
+    @PutMapping("/changeheadbywx/{userid}/{mediaid}")
+    public ResponseEntity changeHeadByWx(@PathVariable("userid") String userid, @PathVariable("mediaid") String mediaid) {
+        String filePath = iWxGzhService.getWxDownFilePath(userid, mediaid);
+
+        UserUpdateBO userUpdateDTO = new UserUpdateBO();
+        userUpdateDTO.setId(userid);
+        userUpdateDTO.setUserPicturePath(filePath);
+        UserBO user = userService.update(userUpdateDTO);
         LOGGER.info("{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
-    
+
 
     //查询用户列表，支持多标签查询
     @GetMapping
@@ -92,19 +92,19 @@ public class UserController {
             tagName = null;
         }
         if (StringUtils.isEmpty(realName)) {
-        	realName = null;
+            realName = null;
         }
         if (StringUtils.isEmpty(points)) {
-        	points = null;
+            points = null;
         }
-        if ( StringUtils.isEmpty(exp)) {
-        	exp = null;
+        if (StringUtils.isEmpty(exp)) {
+            exp = null;
         }
         if (StringUtils.isEmpty(vipLevel)) {
-        	vipLevel = null;
+            vipLevel = null;
         }
         if (StringUtils.isEmpty(medal)) {
-        	medal = null;
+            medal = null;
         }
         map.put("medal", medal);
         map.put("vipLevel", vipLevel);
@@ -133,7 +133,7 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("user", null, "user_extend", null)) :
                 ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
-    
+
     @GetMapping(path = "/wx/{id}")
     public ResponseEntity<?> selectOneByWx(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -143,10 +143,10 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("user", null)) :
                 ResponseEntity.ok(Utils.kv("user", map.get("user")));
     }
-    
+
     @GetMapping(path = "/wx/openid/{openid}")
     public ResponseEntity<?> selectByopenid(@PathVariable String openid) {
-    	UserBO user = userService.selectByopenid(openid);
+        UserBO user = userService.selectByopenid(openid);
         if (user == null) {
             throw new ServiceException(4018);
         }
@@ -165,24 +165,24 @@ public class UserController {
         LOGGER.info("{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
-    
+
     //
     @GetMapping(path = "/u/openid/{openid}")
-    public ResponseEntity loginByopenid(@PathVariable String openid,HttpServletRequest request){
+    public ResponseEntity loginByopenid(@PathVariable String openid, HttpServletRequest request) {
         try {
-			LOGGER.info("{}", openid);
-			UserBO user = userService.selectByopenid(openid);
-			if (user == null) {
-			    throw new ServiceException(4018);
-			}else{
-				Map token = authService.loginByopenid(user, request.getHeader(Constant.APP_TOKEN_HEAD));
-				LOGGER.info("{}", user);
-				return ResponseEntity.ok(Utils.kv("data", token));
-			}
-			
-		} catch (Exception e) {
-			throw new ServiceException(4018);
-		}
+            LOGGER.info("{}", openid);
+            UserBO user = userService.selectByopenid(openid);
+            if (user == null) {
+                throw new ServiceException(4018);
+            } else {
+                Map token = authService.loginByopenid(user, request.getHeader(Constant.APP_TOKEN_HEAD));
+                LOGGER.info("{}", user);
+                return ResponseEntity.ok(Utils.kv("data", token));
+            }
+
+        } catch (Exception e) {
+            throw new ServiceException(4018);
+        }
     }
 
     //更新用户信息
@@ -194,7 +194,7 @@ public class UserController {
         LOGGER.info("{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
-    
+
     //更新用户信息
     @PutMapping(path = "/wx/{id}")
     public ResponseEntity wxupdate(@Valid @RequestBody UserUpdateBO userUpdateDTO, @PathVariable String id) {
@@ -238,6 +238,7 @@ public class UserController {
         LOGGER.info("{}", message);
         return ResponseEntity.ok(Utils.kv("data", message));
     }
+
     /**
      * 启用、禁用
      */
@@ -259,8 +260,16 @@ public class UserController {
 
     //用户登录后发送短信接口
     @PostMapping(path = "/verifycode")
-    public ResponseEntity loginedSendCode(@Valid @RequestBody LoginedSendCodeBO sendCodeBO){
+    public ResponseEntity loginedSendCode(@Valid @RequestBody LoginedSendCodeBO sendCodeBO) {
         userService.loginedSendCode(sendCodeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //用户绑定手机
+    @PutMapping(path = "/phone")
+    public ResponseEntity bindPhone(@Valid @RequestBody BindPhoneBO bindPhoneBO) {
+        LOGGER.info("绑定手机入参：{}", bindPhoneBO.toString());
+        userService.bindPhone(bindPhoneBO);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -274,7 +283,6 @@ public class UserController {
 //        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
 //        return ResponseEntity.ok(Utils.kv());
 //    }
-    
-    
-    
+
+
 }

@@ -29,12 +29,13 @@ public interface UserService {
     UserBO authAndRefreshToken(String token);
 
     Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request);
+
     void enableOrDisable(String id, String status);
     //String login(LoginBO loginBO, String token) throws Exception;
 
     void updateUserVipInfo(String userId, String vipLevel);
 
-	UserBO selectByopenid(String openid);
+    UserBO selectByopenid(String openid);
 
     /**
      * 自动会员失效
@@ -43,6 +44,7 @@ public interface UserService {
 
     /**
      * 用户未登录状态下获取用户简单信息：用户编号，用户昵称，用户头像，擅长领域
+     *
      * @param userId
      * @return
      */
@@ -50,7 +52,15 @@ public interface UserService {
 
     /**
      * 用户登录状态下发送短信接口
+     *
      * @param sendCodeBO
      */
     void loginedSendCode(LoginedSendCodeBO sendCodeBO);
+
+    /**
+     * 用户绑定手机号码
+     *
+     * @param bindPhoneBO
+     */
+    void bindPhone(BindPhoneBO bindPhoneBO);
 }
