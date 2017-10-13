@@ -36,6 +36,9 @@ public class QueFactionServiceImpl implements QueFactionService {
     private QuestionFactionRoMapper questionFactionRoMapper;
 
     @Autowired
+    private QuestionFactionMemberMapper memberFactionMapper;
+
+    @Autowired
     private QuestionFactionMemberRoMapper memberFactionRoMapper;
 
     @Autowired
@@ -144,6 +147,14 @@ public class QueFactionServiceImpl implements QueFactionService {
                 }
             }
 
+            QuestionFactionMember member = new QuestionFactionMember();
+            member.setFactionId(questionFaction.getFactionId());
+            member.setUserId(questionFaction.getUserId());
+            member.setDuty("1");
+            member.setCreateTime(new Date());
+            member.setMemberId(UUID.randomUUID().toString().replace("-", ""));
+            member.setStatus(1);
+            memberFactionMapper.insert(member);
 
             questionFactionMapper.insert(questionFaction);
         } catch (Exception e) {

@@ -31,6 +31,7 @@ public class UserBO {
     private String vipLevelName;
     private String realName;
     private String level;
+    private String levelName;
     private Integer usernameModifiedTimes;
     private Date vipExpireDate;
     private String vipImage;
@@ -259,6 +260,14 @@ public class UserBO {
         this.vipLevelName = vipLevelName;
     }
 
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
     @Override
     public String toString() {
         return "UserBO{" +
@@ -283,6 +292,7 @@ public class UserBO {
                 ", vipLevelName='" + vipLevelName + '\'' +
                 ", realName='" + realName + '\'' +
                 ", level='" + level + '\'' +
+                ", levelName='" + levelName + '\'' +
                 ", usernameModifiedTimes=" + usernameModifiedTimes +
                 ", vipExpireDate=" + vipExpireDate +
                 ", vipImage='" + vipImage + '\'' +

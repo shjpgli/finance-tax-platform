@@ -1,10 +1,7 @@
 package com.abc12366.uc.service;
 
 
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserPhoneBO;
-import com.abc12366.uc.model.bo.UserUpdateBO;
+import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -48,4 +45,17 @@ public interface UserService {
      * 用户更换手机号码
      */
     UserBO updatePhone(UserPhoneBO bo);
+
+    /**
+     * 用户未登录状态下获取用户简单信息：用户编号，用户昵称，用户头像，擅长领域
+     * @param userId
+     * @return
+     */
+    UserSimpleInfoBO selectSimple(String userId);
+
+    /**
+     * 用户登录状态下发送短信接口
+     * @param sendCodeBO
+     */
+    void loginedSendCode(LoginedSendCodeBO sendCodeBO);
 }
