@@ -101,6 +101,15 @@ public class QueClassifyController {
     }
 
     /**
+     * 修改分类标签关联
+     */
+    @PutMapping(path = "/updateClassifyTag")
+    public ResponseEntity updateClassifyTag(@RequestBody QuestionClassifyBo classifyBo) {
+        classifyService.updateClassifyTag(classifyBo);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
      * 更新问题分类状态
      *
      * @param status

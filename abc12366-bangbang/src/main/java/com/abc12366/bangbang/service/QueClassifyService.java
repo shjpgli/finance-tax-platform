@@ -22,4 +22,6 @@ public interface QueClassifyService {
 
     String delete(String classifyCode);
 
+    /*修改分类标签关联关系*/
+    void updateClassifyTag(QuestionClassifyBo classifyBo);
 }
