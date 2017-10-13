@@ -33,21 +33,21 @@ public class SystemRecordController {
     private SystemRecordService systemRecordService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false) String userId,
-                                     @RequestParam(required = false) String ip,
+    public ResponseEntity selectList(@RequestParam(required = false) String appName,
+                                     @RequestParam(required = false) String location,
+                                     @RequestParam(required = false) String startTime,
+                                     @RequestParam(required = false) String  endTime,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
 
-        LOGGER.info("{}:{}:{}:{}:{}", userId, ip, page, size);
+
         Map<String, Object> map = new HashMap<>();
-        if (userId != null && StringUtils.isEmpty(userId)) {
-            userId = null;
-        }
-        if (ip != null && StringUtils.isEmpty(ip)) {
-            ip = null;
-        }
-        map.put("userId", userId);
-        map.put("ip", ip);
+
+        if(startTime != null && !startTime.isEmpty())        map.put("startTime",startTime);
+        if(endTime != null && !endTime.isEmpty())        map.put("endTime",endTime);
+        if(appName != null && !appName.isEmpty())        map.put("appName",appName);
+        if(location != null && !location.isEmpty())        map.put("location",location);
+
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<SystemRecordBO> systemRecordList = systemRecordService.selectList(map);
         LOGGER.info("{}", systemRecordList);

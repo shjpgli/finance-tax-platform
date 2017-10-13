@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
+import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 
@@ -38,4 +39,12 @@ public interface QuestionService {
     List<QuestionBo> selectList(TopicRecommendParamBO param);
 
     void recommend(String id, Boolean isRecommend);
+
+    List<QuestionBo> selectTipList(String userId);
+
+    List<QuestionBo> selectInviteList(String userId);
+
+    List<MyQuestionTjBo> selectMybangbang(String userId);
+
+    List<QuestionBo> selectMyQuestionList(Map<String, Object> map);
 }

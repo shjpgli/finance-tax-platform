@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.message.mapper.db2.MessageSendLogRoMapper">
+
+    <sql id="Base_Column">
+        id, sendchanel, biztype, sendinfo, sendtime, sendstatus, failcode, failcause, logtime
+    </sql>
+
+    <select id="selectLast" resultType="com.abc12366.message.model.MessageSendLog">
+        SELECT <include refid="Base_Column"/>
+        FROM msg_message_send_log mmsl
+        WHERE mmsl.sendtime=(SELECT MAX(sendtime) FROM msg_message_send_log)
+    </select>
+
+</mapper>

@@ -83,6 +83,9 @@ public class QuestionBo implements Serializable {
     /**用户图片**/
     private String userPicturePath;
 
+    /**回复或者评论内容**/
+    private String answer;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -269,5 +272,13 @@ public class QuestionBo implements Serializable {
 
     public void setInviteList(List<QuestionInvite> inviteList) {
         this.inviteList = inviteList;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

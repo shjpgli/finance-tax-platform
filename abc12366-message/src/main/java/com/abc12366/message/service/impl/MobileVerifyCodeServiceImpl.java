@@ -6,6 +6,7 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.MessageSendLogMapper;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
+import com.abc12366.message.mapper.db2.MessageSendLogRoMapper;
 import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
 import com.abc12366.message.model.MessageSendLog;
 import com.abc12366.message.model.PhoneCode;
@@ -60,6 +61,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     @Autowired
     private MessageSendLogMapper sendLogMapper;
 
+    @Autowired
+    private MessageSendLogRoMapper messageSendLogRoMapper;
+
     //获取验证码
     @Override
     public void getCode(String type, String phone) throws IOException {
@@ -88,8 +92,21 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCode.setType(type);
             phoneCodeMapper.insert(phoneCode);
         }
+        //版本4.0阿里和友拍轮流发
+        List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
+        if(sendLogList==null||sendLogList.size()<1){
+            sendAliyunMessage(phone, type, code);
+        }else{
+            MessageSendLog messageSendLog = sendLogList.get(0);
+            if(messageSendLog.getSendchanel().equals(MessageConstant.MSG_CHANNEL_ALI)){
+                sendYoupaiTemplate(phone, type, code);
+            }else{
+                sendAliyunMessage(phone, type, code);
+            }
+        }
+
 //        版本3.0:使用阿里云短信通道
-        sendAliyunMessage(phone, type, code);
+//        sendAliyunMessage(phone, type, code);
 
 //      版本2.0
 //        //随机使用两个通道中的一个发送短信

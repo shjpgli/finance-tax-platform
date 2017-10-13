@@ -10,6 +10,7 @@ import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
+import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
 import com.abc12366.bangbang.service.QuestionService;
@@ -302,6 +303,40 @@ public class QuestionServiceImpl implements QuestionService {
             LOGGER.error("话题推荐功能异常：{}", e);
             throw new ServiceException(6106);
         }
+    }
+
+    @Override
+    public List<QuestionBo> selectTipList(String userId) {
+        //我的举报
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectTipList(userId);
+    }
+
+    @Override
+    public List<QuestionBo> selectInviteList(String userId) {
+        //邀我回答
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectInviteList(userId);
+    }
+
+    @Override
+    public List<MyQuestionTjBo> selectMybangbang(String userId) {
+        //我的帮帮
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectMybangbang(userId);
+    }
+
+    @Override
+    public List<QuestionBo> selectMyQuestionList(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //查询我的提问
+            questionBoList = questionRoMapper.selectMyQuestionList(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
     }
 
 }

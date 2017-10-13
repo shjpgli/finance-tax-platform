@@ -107,6 +107,40 @@ public class QueAnswerController {
     }
 
     /**
+     * 我的回答
+     */
+    @GetMapping(path = "/selectMyAnswerList")
+    public ResponseEntity selectMyAnswerList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "userId", required = false) String userId,
+                                        @RequestParam(value = "isTip", required = false) String isTip,
+                                        @RequestParam(value = "isAccept", required = false) String isAccept) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//
+        dataMap.put("isTip", isTip);//是否被举报，1为被举报
+        dataMap.put("isAccept", isAccept);//是否被采纳，1为被采纳
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 我的评论
+     */
+    @GetMapping(path = "/selectMyCommentList")
+    public ResponseEntity selectMyCommentList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                             @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 问题回复新增
      */
     @PostMapping

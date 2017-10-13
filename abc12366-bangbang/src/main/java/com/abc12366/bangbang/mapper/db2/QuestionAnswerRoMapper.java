@@ -43,4 +43,14 @@ public interface QuestionAnswerRoMapper {
      **/
     String selectfactionId(Map<String, Object> map);
 
+    /**
+     * 查询我的回答
+     **/
+    List<QuestionAnswerBo> selectMyAnswerList(Map<String, Object> map);
+
+    /**
+     * 查询我的评论
+     **/
+    List<QuestionAnswerBo> selectMyCommentList(Map<String, Object> map);
+
 }

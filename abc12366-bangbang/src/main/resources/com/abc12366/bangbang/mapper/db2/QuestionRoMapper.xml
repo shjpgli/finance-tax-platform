@@ -108,6 +108,12 @@
         ORDER BY answerNum DESC
     </select>
 
+    <!-- 我的举报 -->
+    <select id="selectTipList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
+        SELECT a.answer,t.createTime,q.title FROM bb_question_tip_off t left join bb_question_answer a on t.sourceId = a.id left join bb_question q on a.questionId = q.id
+        where t.createUser = #{userId} order by t.createTime desc
+    </select>
+
     <!-- 查找邦派ID -->
     <select id="selectfactionId" resultType="java.lang.String" parameterType="java.util.Map">
         SELECT factionId FROM bb_question_faction_classify where factionId in(SELECT factionId FROM bb_question_faction_member where userId = #{userId})
@@ -145,6 +151,58 @@
                 ORDER BY createTime DESC
             </otherwise>
         </choose>
+    </select>
+
+    <!-- 邀我答的问题 -->
+    <select id="selectInviteList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
+        SELECT
+        q.id,	q.userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
+        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        FROM bb_question_invite i left join bb_question q on i.questionId = q.id left join bb_user u on q.userId = u.id
+        WHERE q.userId = #{userId}
+        ORDER BY createTime DESC
+    </select>
+
+    <!-- 我的提问 -->
+    <select id="selectMyQuestionList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+        SELECT
+        q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
+        (SELECT count(id) FROM bb_question_answer where questionId = q.id and isAccept = '1') isAccept,
+        (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = q.id and sourceType = 'question' and createUser = q.userId) isTip,
+        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        FROM bb_question q left join bb_user u on q.userId = u.id
+        WHERE 1=1
+        <if test="isAccept != null and isAccept != ''">
+            AND (SELECT count(id) FROM bb_question_answer where questionId = q.id and isAccept = '1') > 0
+        </if>
+        <if test="isTip != null and isTip != ''">
+            AND (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = q.id and sourceType = 'question' and createUser = q.userId) > 0
+        </if>
+        <if test="userId != null and userId != ''">
+            AND q.userId = #{userId}
+        </if>
+        ORDER BY createTime DESC
+    </select>
+
+    <!-- 我的提问 -->
+    <select id="selectMybangbang" resultType="com.abc12366.bangbang.model.question.bo.MyQuestionTjBo" parameterType="java.lang.String">
+        select
+        (SELECT count(*) FROM bb_question_answer where parentId = '' and userId = #{userId}) answerNum,
+        (SELECT count(*) FROM bb_question_like where userId = #{userId}) likeNum,
+        (SELECT count(*) FROM bb_question_answer where parentId != '' and userId = #{userId}) commentNum,
+        (SELECT count(*) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId = #{userId}) acceptNum,
+        0 medalNum,
+        (SELECT count(*) FROM bb_question where userId = #{userId}) questionNum,
+        (SELECT count(*) FROM bb_question_invite where userId = #{userId}) inviteNum,
+        (SELECT count(*) FROM bb_question_faction_member where status = '2' and userId = #{userId}) applyQueFactionNum,
+        (SELECT count(*) FROM bb_question_faction_member where status = '2' and duty in('1','2') and  userId = #{userId}) manageQueFactionNum,
+        (SELECT count(*) FROM bb_question_attention where attentionUserId = #{userId}) fansNum,
+        (SELECT count(*) FROM bb_question_attention where userId = #{userId}) attentionNum,
+        (SELECT count(*) FROM bb_question_collect where userId = #{userId}) collectNum,
+        (SELECT count(*) FROM bb_question_tip_off where createUser = #{userId}) tipNum
+        from dual
     </select>
 
 </mapper>

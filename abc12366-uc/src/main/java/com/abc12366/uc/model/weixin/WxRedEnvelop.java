@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.weixin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -23,6 +24,7 @@ public class WxRedEnvelop {
     private String secret;
     // 口令产生时间
     @NotNull
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     // 红包活动编号（主键）
     @NotEmpty

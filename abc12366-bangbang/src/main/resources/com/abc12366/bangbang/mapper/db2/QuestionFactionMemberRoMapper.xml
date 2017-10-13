@@ -19,23 +19,26 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo" parameterType="java.util.Map">
         SELECT
-            memberId,	factionId,	userId,	username,	nickname,	status,duty,	createTime,	lastUpdate
-        FROM bb_question_faction_member
+        memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,	m.createTime,	m.lastUpdate
+        FROM bb_question_faction_member m LEFT JOIN bb_user u on m.userId = u.id
         WHERE 1=1
         <if test="factionId != null and factionId != ''">
             AND factionId = #{factionId}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
         </if>
     </select>
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectListTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo" parameterType="java.util.Map">
         SELECT
-        memberId,	factionId,	userId,	username,	nickname,	status,duty,	createTime,	lastUpdate,
+        memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,	m.createTime,	m.lastUpdate,
         (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId = '' and factionId = m.factionId) answerNum,
         (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId != '' and factionId = m.factionId) discussNum,
         (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId = '' and isAccept = '1' and factionId = m.factionId) adoptNum
-        FROM bb_question_faction_member m
-        WHERE 1=1
+        FROM bb_question_faction_member m LEFT JOIN bb_user u on m.userId = u.id
+        WHERE 1=1 and status = '2'
         <if test="factionId != null and factionId != ''">
             AND factionId = #{factionId}
         </if>
@@ -49,7 +52,7 @@
             (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId != '' AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') and factionId = m.factionId) discussNum,
             (SELECT count(id) FROM bb_question_answer where userId = m.userId and parentId = '' AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') and isAccept = '1' and factionId = m.factionId) adoptNum
         FROM bb_question_faction_member m
-            WHERE factionId = #{factionId}
+            WHERE and status = '2' and factionId = #{factionId}
     </select>
 
     <!-- 查询邦派精彩回答数 -->
