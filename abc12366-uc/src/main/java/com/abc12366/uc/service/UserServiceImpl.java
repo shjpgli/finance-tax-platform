@@ -26,11 +26,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -66,6 +68,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private AuthService authService;
 
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
@@ -349,6 +354,61 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserSimpleInfoBO selectSimple(String userId) {
         return userRoMapper.selectSimple(userId);
+    }
+
+    @Override
+    public void bindPhone(BindPhoneBO bindPhoneBO) {
+        LOGGER.info("绑定手机输入信息：{}", bindPhoneBO.toString());
+        User user = userRoMapper.selectOne(bindPhoneBO.getUserId());
+        //判断用户是否存在
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+
+        //新的绑定手机是否已被绑定过
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(bindPhoneBO.getNewPhone());
+        User userPhoneExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        //该手机号码已被绑定
+        if (userPhoneExist != null) {
+            throw new ServiceException(4858);
+        }
+
+        //如果用户已绑定电话，则对传入的旧电话号码进行校验
+        if (user.getPhone() != null) {
+            //旧的手机号码不能为空
+            if (StringUtils.isEmpty(bindPhoneBO.getOldPhone())) {
+                throw new ServiceException(4856);
+            }
+            //旧手机号码需和已绑定手机一致
+            if (!bindPhoneBO.getOldPhone().equals(user.getPhone())) {
+                throw new ServiceException(4857);
+            }
+            //新的绑定手机号码和旧的是同一个号码
+            if (bindPhoneBO.getOldPhone().equals(bindPhoneBO.getNewPhone())) {
+                throw new ServiceException(4859);
+            }
+        }
+
+        //验证码校验
+        VerifyingCodeBO verifyingCodeBO = new VerifyingCodeBO();
+        verifyingCodeBO.setPhone(bindPhoneBO.getNewPhone());
+        verifyingCodeBO.setType(bindPhoneBO.getType());
+        verifyingCodeBO.setCode(bindPhoneBO.getCode());
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        try {
+            if (!authService.verifyCode(verifyingCodeBO, request)) {
+                throw new ServiceException(4201);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        User userUpdate = new User();
+        userUpdate.setId(user.getId());
+        userUpdate.setPhone(bindPhoneBO.getNewPhone());
+        userMapper.update(userUpdate);
     }
 
     @Override
