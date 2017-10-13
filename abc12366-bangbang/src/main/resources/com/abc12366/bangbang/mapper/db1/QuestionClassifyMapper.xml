@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionClassify">
 		 INSERT INTO bb_question_classify
- 		(classifyId,parentCode,isDisplay,classifyCode,classifyName) 
+ 		(classifyId,parentCode,isDisplay,classifyCode,classifyName,priority)
 		 VALUES 
- 		(#{classifyId},#{parentCode},#{isDisplay},#{classifyCode},#{classifyName}) 
+ 		(#{classifyId},#{parentCode},#{isDisplay},#{classifyCode},#{classifyName},#{priority})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -36,6 +36,9 @@
 			<if test="classifyName != null">
 				 classifyName,
 			</if>
+			<if test="priority != null">
+				 priority,
+			</if>
 
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -54,6 +57,9 @@
 			<if test="classifyName!=null">
 				 #{classifyName},
 			</if>
+			<if test="priority!=null">
+				 #{priority},
+			</if>
 		 </trim>
 	</insert>
 
@@ -66,6 +72,9 @@
 			</if>
 			<if test="classifyName != null">
 				 classifyName = #{classifyName},
+			</if>
+			<if test="priority != null">
+				priority = #{priority},
 			</if>
  		 </set>
 		 WHERE classifyCode = #{classifyCode}
