@@ -76,6 +76,7 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             QuestionFactionMember factionMember = new QuestionFactionMember();
             factionMemberBo.setMemberId(uuid);
+            factionMemberBo.setStatus(1);
             BeanUtils.copyProperties(factionMemberBo, factionMember);
             memberMapper.insert(factionMember);
         } catch (Exception e) {

@@ -64,8 +64,11 @@ public class QuestionAnswerBo implements Serializable {
     /**是否已点赞：1/0**tinyint(4)**/
     private Integer isLike;
 
-    /****varchar(64)**/
+    /**邦派ID**/
     private String factionId;
+
+    /**问题标题)**/
+    private String title;
 
     public String getAnswerNickname() {
         return answerNickname;
@@ -217,5 +220,13 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setUserPicturePath(String userPicturePath) {
         this.userPicturePath = userPicturePath;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

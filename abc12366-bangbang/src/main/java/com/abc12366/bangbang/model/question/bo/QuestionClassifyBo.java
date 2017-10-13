@@ -28,7 +28,13 @@ public class QuestionClassifyBo implements Serializable {
 	/**分类名称**varchar(100)**/
 	private String classifyName;
 
-    private List<QuestionClassifyTag> tagList;
+	/*分类父名称*/
+	private String parentName;
+
+	/**排列顺序**int**/
+	private Integer priority;
+
+	private List<QuestionClassifyTag> tagList;
 
 
 
@@ -79,4 +85,22 @@ public class QuestionClassifyBo implements Serializable {
     public void setTagList(List<QuestionClassifyTag> tagList) {
         this.tagList = tagList;
     }
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public QuestionClassifyBo setParentName(String parentName) {
+		this.parentName = parentName;
+		return this;
+	}
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public QuestionClassifyBo setPriority(Integer priority) {
+		this.priority = priority;
+		return this;
+	}
 }

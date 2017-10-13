@@ -304,4 +304,31 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Override
+    public List<QuestionBo> selectTipList(String userId) {
+        //我的举报
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectTipList(userId);
+    }
+
+    @Override
+    public List<QuestionBo> selectInviteList(String userId) {
+        //邀我回答
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectInviteList(userId);
+    }
+
+    @Override
+    public List<QuestionBo> selectMyQuestionList(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //查询我的提问
+            questionBoList = questionRoMapper.selectMyQuestionList(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
 }

@@ -77,4 +77,45 @@
     </select>
 
 
+    <!-- 我的回答 -->
+    <select id="selectMyAnswerList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
+        SELECT
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,
+        (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
+        answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = a.id and sourceType = 'answer' and createUser = a.userId) isTip,
+        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = a.userId) isLike,
+        (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum,
+        (SELECT count(id) FROM bb_question_answer where parentId = a.id) answerNum
+        FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
+        WHERE parentId=''
+        <if test="isTip != null and isTip != ''">
+            AND (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = a.id and sourceType = 'answer' and createUser = a.userId) > 0
+        </if>
+        <if test="isAccept != null and isAccept != ''">
+            AND isAccept = #{isAccept}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND a.userId = #{userId}
+        </if>
+        order by a.createTime desc
+    </select>
+
+    <!-- 我的评论 -->
+    <select id="selectMyCommentList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
+        SELECT
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,
+        (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
+        answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = a.userId) isLike,
+        (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum
+        FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
+        WHERE parentId != ''
+        <if test="userId != null and userId != ''">
+            AND a.userId = #{userId}
+        </if>
+        order by a.createTime desc
+    </select>
+
+
 </mapper>

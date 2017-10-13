@@ -68,6 +68,32 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         return answerBoList;
     }
 
+    @Override
+    public List<QuestionAnswerBo> selectMyAnswerList(Map<String,Object> map) {
+        List<QuestionAnswerBo> answerBoList;
+        try {
+            //查询我的回答列表
+            answerBoList = answerRoMapper.selectMyAnswerList(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题回复列表信息异常：{}", e);
+            throw new ServiceException(6110);
+        }
+        return answerBoList;
+    }
+
+    @Override
+    public List<QuestionAnswerBo> selectMyCommentList(Map<String,Object> map) {
+        List<QuestionAnswerBo> answerBoList;
+        try {
+            //查询我的评论列表
+            answerBoList = answerRoMapper.selectMyCommentList(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题回复列表信息异常：{}", e);
+            throw new ServiceException(6110);
+        }
+        return answerBoList;
+    }
+
     @Transactional("db1TxManager")
     @Override
     public QuestionAnswerBo save(QuestionAnswerBo answerBo) {

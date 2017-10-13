@@ -50,6 +50,21 @@ public interface QuestionRoMapper {
     List<QuestionBo> selectListry(Map<String, Object> map);
 
     /**
+     * 我的举报
+     **/
+    List<QuestionBo> selectTipList(String userId);
+
+    /**
+     * 邀我回答
+     **/
+    List<QuestionBo> selectInviteList(String userId);
+
+    /**
+     * 查询我的提问
+     **/
+    List<QuestionBo> selectMyQuestionList(Map<String, Object> map);
+
+    /**
      * 查询(根据查询条件查询)
      **/
     String selectfactionId(Map<String, Object> map);
