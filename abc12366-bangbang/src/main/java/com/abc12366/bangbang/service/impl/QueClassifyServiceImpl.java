@@ -140,6 +140,7 @@ public class QueClassifyServiceImpl implements QueClassifyService {
         return classifyTagBoList;
     }
 
+    /* 修改分类信息，（不更新分类标签关联） */
     @Override
     public QuestionClassifyBo update(QuestionClassifyBo classifyBo) {
         //更新问题分类信息
@@ -148,19 +149,6 @@ public class QueClassifyServiceImpl implements QueClassifyService {
             JSONObject jsonStu = JSONObject.fromObject(classifyBo);
             LOGGER.info("更新问题分类信息:{}", jsonStu.toString());
             BeanUtils.copyProperties(classifyBo, classify);
-
-
-            tagMapper.deleteByPrimaryKey(classifyBo.getClassifyCode());
-
-            List<QuestionClassifyTag> tagList = classifyBo.getTagList();
-
-            if(tagList != null){
-                for(QuestionClassifyTag tag :tagList){
-                    tag.setId(UUID.randomUUID().toString().replace("-", ""));
-                    tag.setClassifyId(classifyBo.getClassifyCode());
-                    tagMapper.insert(tag);
-                }
-            }
 
             classifyMapper.updateByPrimaryKeySelective(classify);
         } catch (Exception e) {
@@ -194,6 +182,25 @@ public class QueClassifyServiceImpl implements QueClassifyService {
             throw new ServiceException(6124);
         }
         return "";
+    }
+
+    /*修改分类标签关联关系*/
+    @Transactional("db1TxManager")
+    @Override
+    public void updateClassifyTag(QuestionClassifyBo classifyBo) {
+
+        tagMapper.deleteByPrimaryKey(classifyBo.getClassifyCode());
+
+        List<QuestionClassifyTag> tagList = classifyBo.getTagList();
+
+        if(tagList != null){
+            for(QuestionClassifyTag tag :tagList){
+                tag.setId(UUID.randomUUID().toString().replace("-", ""));
+                tag.setClassifyId(classifyBo.getClassifyCode());
+                tag.setTagId(tag.getTagId());
+                tagMapper.insert(tag);
+            }
+        }
     }
 
     public String genCodes(int length){
