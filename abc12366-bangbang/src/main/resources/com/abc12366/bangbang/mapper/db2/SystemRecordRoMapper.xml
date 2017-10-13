@@ -6,13 +6,23 @@
     <select id="selectList" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO" parameterType="java.util.Map">
         SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,pageUrl
         ,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime
+        ,(select username from bb_user bu where bu.id=userId) username
         from bb_system_record 
         <where>
             <if test="userId!=null">
                 userId=#{userId}
             </if>
-            <if test="ip!=null">
-                and ip=#{ip}
+            <if test="appName!=null">
+                and appName=#{appName}
+            </if>
+            <if test="location!=null">
+                and location=#{location}
+            </if>
+            <if test="startTime!=null">
+                and createTime &gt;=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and createTime &lt;= #{endTime}
             </if>
         </where>
         ORDER BY createTime DESC

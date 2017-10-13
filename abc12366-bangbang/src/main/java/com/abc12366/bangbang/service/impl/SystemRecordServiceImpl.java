@@ -70,7 +70,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
                     SystemRecordBO systemRecordBO = list.get(0);
                     Long oldTime = systemRecordBO.getCreateTime().getTime();
                     Long newTime = date.getTime();
-                    systemRecordBO.setStayLong(String.valueOf(newTime - oldTime));
+                    systemRecordBO.setStayLong((int)(newTime - oldTime));
                     int returnI = SystemRecordMapper.updateStay(systemRecordBO);
                 }
             } catch (Exception e) {
