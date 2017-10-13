@@ -50,7 +50,7 @@ public class MessageServiceImpl implements MessageService {
         try {
             responseStr = ucRestTemplateUtil.send(url, HttpMethod.GET, request);
         } catch (Exception e) {
-            throw new ServiceException(4821);
+            throw new ServiceException(4822);
         }
         MessageListBO response = null;
         if (!StringUtils.isEmpty(responseStr)) {
@@ -76,7 +76,7 @@ public class MessageServiceImpl implements MessageService {
         try {
             responseStr = ucRestTemplateUtil.send(url, HttpMethod.POST, map, request);
         } catch (Exception e) {
-            throw new ServiceException(4821);
+            throw new ServiceException(4822);
         }
         MessageBO response = null;
         if (!StringUtils.isEmpty(responseStr)) {
@@ -93,7 +93,7 @@ public class MessageServiceImpl implements MessageService {
         try {
             responseStr = ucRestTemplateUtil.send(url, HttpMethod.GET, request);
         } catch (Exception e) {
-            throw new ServiceException(4821);
+            throw new ServiceException(4822);
         }
         MessageBO response = null;
         if (!StringUtils.isEmpty(responseStr)) {
@@ -110,7 +110,7 @@ public class MessageServiceImpl implements MessageService {
         try {
             responseStr = ucRestTemplateUtil.send(url, HttpMethod.PUT, request);
         } catch (Exception e) {
-            throw new ServiceException(4821);
+            throw new ServiceException(4822);
         }
         MessageBO response = null;
         if (!StringUtils.isEmpty(responseStr)) {
@@ -127,7 +127,7 @@ public class MessageServiceImpl implements MessageService {
         try {
             responseStr = ucRestTemplateUtil.send(url, HttpMethod.DELETE, request);
         } catch (Exception e) {
-            throw new ServiceException(4821);
+            throw new ServiceException(4822);
         }
         MessageBO response = null;
         if (!StringUtils.isEmpty(responseStr)) {
