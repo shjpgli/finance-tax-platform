@@ -182,16 +182,16 @@ public class AppServiceImpl implements AppService {
 //        if("c1109d75-02b1-4c9b-83da-677f86182003".equals(appId)){
         AppSettingBO bo = appSettingRoMapper.selectByAppId(appSettingBO);
         if (bo == null) {
-            LOGGER.warn("API不存在或未授权：{}", app);
+            LOGGER.warn("API不存在或未授权：{}, {}", request.getRequestURI(), bo);
             throw new ServiceException(4027);
         }
         //if(bo.getIsValidate() == true){
         if (method != null && !method.equals(bo.getMethod())) {
-            LOGGER.warn("API方法不正确：{}", app);
+            LOGGER.warn("API方法不正确：{}", method);
             throw new ServiceException(4028);
         }
         if (version != null && !version.equals(bo.getVersion())) {
-            LOGGER.warn("API版本不正确：{}", app);
+            LOGGER.warn("API版本不正确：{}", version);
             throw new ServiceException(4029);
         }
         //查询每分钟访问的次数
