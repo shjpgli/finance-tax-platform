@@ -221,4 +221,26 @@ public class AppSettingBO implements Serializable {
     public void setAppName(String appName) {
         this.appName = appName;
     }
+
+    @Override
+    public String toString() {
+        return "AppSettingBO{" +
+                "id='" + id + '\'' +
+                ", appId='" + appId + '\'' +
+                ", apiId='" + apiId + '\'' +
+                ", timesPerMinute=" + timesPerMinute +
+                ", timesPerHour=" + timesPerHour +
+                ", timesPerDay=" + timesPerDay +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", isValidate=" + isValidate +
+                ", name='" + name + '\'' +
+                ", uri='" + uri + '\'' +
+                ", method='" + method + '\'' +
+                ", version='" + version + '\'' +
+                ", authentication=" + authentication +
+                ", appName='" + appName + '\'' +
+                '}';
+    }
 }

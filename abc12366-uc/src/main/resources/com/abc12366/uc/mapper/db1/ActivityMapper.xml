@@ -62,6 +62,17 @@
         #{sendAmount}, #{sendStatus}, #{sendTimes}, #{sendTime}, #{receiveStatus}, #{receiveTime}, #{ip}, #{openId})
     </insert>
 
+    <insert id="batchGenerateSecret" parameterType="java.util.List">
+        INSERT INTO uc_wxredenvelop
+        (<include refid="Base_RedEnvelop_List"/>)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.secret}, #{item.createTime}, #{item.activityId}, #{item.startTime}, #{item.endTime},
+            #{item.amount}, #{item.amountType}, #{item.probability}, #{item.sendAmount}, #{item.sendStatus},
+            #{item.sendTimes}, #{item.sendTime}, #{item.receiveStatus}, #{item.receiveTime}, #{item.ip}, #{item.openId})
+        </foreach>
+    </insert>
+
     <update id="updateRedEnvelop">
         update uc_wxredenvelop
         <set>

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -236,10 +237,12 @@ public class ActivityService implements IActivityService {
     @Override
     public void importJSON(List<WxRedEnvelop> redEnvelopList) {
         if (redEnvelopList.size() > 0 && redEnvelopList.size() <= 500) {
+            List<WxRedEnvelop> dataList = new ArrayList<>();
             for(WxRedEnvelop redEnvelop : redEnvelopList) {
                 redEnvelop.setId(Utils.uuid().replaceAll("-", ""));
-                activityMapper.generateSecret(redEnvelop);
+                dataList.add(redEnvelop);
             }
+            activityMapper.batchGenerateSecret(dataList);
         } else {
             throw new ServiceException(6008);
         }

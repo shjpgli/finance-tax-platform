@@ -25,6 +25,9 @@ public class QuestionClassify implements Serializable {
 	/**分类名称**varchar(100)**/
 	private String classifyName;
 
+	/**分类排序**varchar(100)**/
+	private Integer priority;
+
 
 
 	public void setClassifyId(String classifyId){
@@ -67,4 +70,12 @@ public class QuestionClassify implements Serializable {
 		return this.classifyName;
 	}
 
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public QuestionClassify setPriority(Integer priority) {
+		this.priority = priority;
+		return this;
+	}
 }
