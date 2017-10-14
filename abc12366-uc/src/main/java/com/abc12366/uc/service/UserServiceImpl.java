@@ -496,7 +496,7 @@ public class UserServiceImpl implements UserService {
         }
         //判断用户的会员身份
         if (user.getVipLevel() == null || user.getVipLevel().equals(Constant.USER_ORIGINAL_LEVEL)) {
-            throw new ServiceException(4823);
+            throw new ServiceException(4824);
         }
         //判断用户会员是否有效
         if (user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
@@ -536,6 +536,34 @@ public class UserServiceImpl implements UserService {
             if (!object.getCode().equals("2000")) {
                 throw new ServiceException(4204);
             }
+        }
+    }
+
+    @Override
+    public void loginedVerifyCode(LoginedVerifyCodeBO verifyCodeBO) {
+        LOGGER.info("用户通过用户ID校验手机验证码，参数：{}", verifyCodeBO.toString());
+        User user = userRoMapper.selectOne(verifyCodeBO.getUserId());
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        if(StringUtils.isEmpty(user.getPhone())){
+            throw new ServiceException(4184);
+        }
+
+        VerifyingCodeBO codeBO = new VerifyingCodeBO();
+        codeBO.setCode(verifyCodeBO.getCode());
+        codeBO.setType(verifyCodeBO.getType());
+        codeBO.setPhone(user.getPhone());
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        boolean result = false;
+        try {
+            result = authService.verifyCode(codeBO, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!result) {
+            throw new ServiceException(4201);
         }
     }
 }

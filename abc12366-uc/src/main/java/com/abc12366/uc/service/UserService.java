@@ -63,6 +63,12 @@ public interface UserService {
     void loginedSendCode(LoginedSendCodeBO sendCodeBO);
 
     /**
+     * 用户已登录状态下通过用户ID和验证码校验验证码
+     * @param verifyCodeBO
+     */
+    void loginedVerifyCode(LoginedVerifyCodeBO verifyCodeBO);
+
+    /**
      * 用户绑定手机号码
      *
      * @param bindPhoneBO

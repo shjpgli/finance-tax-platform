@@ -276,6 +276,13 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    //用户登录后校验短信验证码接口
+    @PostMapping(path = "/verify")
+    public ResponseEntity loginedVerifyCode(@Valid @RequestBody LoginedVerifyCodeBO verifyCodeBO) {
+        userService.loginedVerifyCode(verifyCodeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
     //用户绑定手机
     @PutMapping(path = "/phone")
     public ResponseEntity bindPhone(@Valid @RequestBody BindPhoneBO bindPhoneBO) {
