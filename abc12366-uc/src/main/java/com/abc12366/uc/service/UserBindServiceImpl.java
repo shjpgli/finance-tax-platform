@@ -446,9 +446,8 @@ public class UserBindServiceImpl implements UserBindService {
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY21");
         map.put("nsrsbh", login.getNsrsbhOrShxydm());
-        //String pwdDecode1 = rsaService.decodeStringFromJs(login.getFwmm());
-        //String pwdDecode2 = fwmmEncode(pwdDecode1);
-        String pwdDecode2 = fwmmEncode(login.getFwmm());
+        String pwdDecode1 = rsaService.decodeStringFromJs(login.getFwmm());
+        String pwdDecode2 = fwmmEncode(pwdDecode1);
         map.put("fwmm", pwdDecode2);
         map.put("userid", userId);
         Map<String, String> resMap = client.process(map);

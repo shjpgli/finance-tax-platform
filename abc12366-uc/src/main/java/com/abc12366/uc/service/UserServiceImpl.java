@@ -97,6 +97,12 @@ public class UserServiceImpl implements UserService {
         if (userTemp != null) {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
+            //用户重要信息模糊化处理:电话号码
+            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
+                String phone = user.getPhone();
+                StringBuilder phoneFuffer = new StringBuilder(phone);
+                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+            }
             user.setPassword(null);
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
@@ -181,7 +187,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         UserBO userDTO = new UserBO();
@@ -270,7 +276,7 @@ public class UserServiceImpl implements UserService {
         String encodePassword = rsaService.decode(passwordUpdateBO.getPassword());
 
         //修改密码不能为旧密码
-        if(encodePassword.equals(userExist.getPassword())){
+        if (encodePassword.equals(userExist.getPassword())) {
             throw new ServiceException(4040);
         }
 
@@ -322,7 +328,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //用户会员等级发生变化，则会员有效时间直接覆盖原有的，否则延长一年
-        if(vipLevel.trim().toUpperCase().equals(userTmp.getVipLevel())){
+        if (vipLevel.trim().toUpperCase().equals(userTmp.getVipLevel())) {
             calendar.setTime(userTmp.getVipExpireDate());
             calendar.add(Calendar.YEAR, 1); // 年份加1
         }
@@ -334,10 +340,10 @@ public class UserServiceImpl implements UserService {
         userMapper.update(user);
     }
 
-	@Override
-	public UserBO selectByopenid(String openid) {
-		return userRoMapper.selectByopenid(openid);
-	}
+    @Override
+    public UserBO selectByopenid(String openid) {
+        return userRoMapper.selectByopenid(openid);
+    }
 
     @Override
     public void automaticUserCancel() {

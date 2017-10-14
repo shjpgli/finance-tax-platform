@@ -71,5 +71,6 @@
         </set>
         where uud.userId = #{userId}
         and uud.djxh = #{djxh}
+        and status=1
     </update>
 </mapper>
