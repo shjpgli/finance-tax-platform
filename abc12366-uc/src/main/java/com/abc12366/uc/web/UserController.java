@@ -284,6 +284,13 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    //用户手机+验证码登录专用发送短信接口
+    @PostMapping(path = "/phonelogin/code")
+    public ResponseEntity phoneLoginSendCode(@Valid @RequestBody SendPhoneCodeParam sendCodeBO) {
+        userService.phoneLoginSendCode(sendCodeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
 //    @PostMapping(path = "/test")
 //    public ResponseEntity test(){
 //        return ResponseEntity.ok(Utils.kv());

@@ -68,4 +68,10 @@ public interface UserService {
      * @param bindPhoneBO
      */
     void bindPhone(BindPhoneBO bindPhoneBO);
+
+    /**
+     * 用户手机+验证码登录专用接口
+     * @param sendCodeBO
+     */
+    void phoneLoginSendCode(SendPhoneCodeParam sendCodeBO);
 }

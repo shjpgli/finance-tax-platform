@@ -478,4 +478,64 @@ public class UserServiceImpl implements UserService {
         userDTO.setPassword(null);
         return userDTO;
     }
+
+    @Override
+    public void phoneLoginSendCode(SendPhoneCodeParam sendCodeBO) {
+        LOGGER.info("用户手机+验证码登录获取手机验证码参数：{}", sendCodeBO.toString());
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(sendCodeBO.getPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        //判断手机号码是否注册
+        if (user == null) {
+            LOGGER.warn("此号码未注册，不允许通过验证码登录：{}", loginBO.toString());
+            throw new ServiceException(4823);
+        }
+        //判断用户是否激活状态
+        if (!user.getStatus()) {
+            throw new ServiceException(4038);
+        }
+        //判断用户的会员身份
+        if (user.getVipLevel() == null || user.getVipLevel().equals(Constant.USER_ORIGINAL_LEVEL)) {
+            throw new ServiceException(4823);
+        }
+        //判断用户会员是否有效
+        if (user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
+            throw new ServiceException(4825);
+        }
+
+        //发送短信
+        sendPhoneCode(sendCodeBO.getPhone(), sendCodeBO.getType());
+    }
+
+    //调用message接口发送短信
+    private void sendPhoneCode(String phone, String type) {
+        //不变参数
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/getcode";
+
+        //请求头设置
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("phone", phone);
+        requestBody.put("type", type);
+
+        HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
+        }
+
+        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
+            BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
+            if (!object.getCode().equals("2000")) {
+                throw new ServiceException(4204);
+            }
+        }
+    }
 }
