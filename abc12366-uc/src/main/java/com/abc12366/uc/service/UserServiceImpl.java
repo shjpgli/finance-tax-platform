@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
@@ -546,7 +547,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new ServiceException(4018);
         }
-        if(StringUtils.isEmpty(user.getPhone())){
+        if (StringUtils.isEmpty(user.getPhone())) {
             throw new ServiceException(4184);
         }
 
@@ -564,6 +565,21 @@ public class UserServiceImpl implements UserService {
         }
         if (!result) {
             throw new ServiceException(4201);
+        }
+    }
+
+    @Override
+    public void verifyOldPhone(oldPhoneBO oldPhone) {
+        String userId = Utils.getUserId();
+        User userNow = userRoMapper.selectOne(userId);
+
+
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(oldPhone.getOldPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        if (user == null || !userNow.getPhone().equals(oldPhone.getOldPhone())) {
+            LOGGER.warn("旧手机校验不通过：", oldPhone);
+            throw new ServiceException(4826);
         }
     }
 }

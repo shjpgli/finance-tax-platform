@@ -298,6 +298,13 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    //旧的手机号码是否有效校验
+    @PostMapping(path = "/oldphone")
+    public ResponseEntity verifyOldPhone(@Valid @RequestBody oldPhoneBO oldPhone) {
+        userService.verifyOldPhone(oldPhone);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
 //    @PostMapping(path = "/test")
 //    public ResponseEntity test(){
 //        return ResponseEntity.ok(Utils.kv());

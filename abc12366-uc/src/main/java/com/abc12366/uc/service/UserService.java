@@ -80,4 +80,10 @@ public interface UserService {
      * @param sendCodeBO
      */
     void phoneLoginSendCode(SendPhoneCodeParam sendCodeBO);
+
+    /**
+     * 旧手机号码有效性校验
+     * @param oldPhone
+     */
+    void verifyOldPhone(oldPhoneBO oldPhone);
 }
