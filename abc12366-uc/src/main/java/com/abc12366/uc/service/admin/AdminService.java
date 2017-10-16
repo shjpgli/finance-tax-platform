@@ -40,7 +40,7 @@ public interface AdminService {
      *
      * @param admin
      */
-    List<AdminBO> selectList(Admin admin);
+    List<AdminBO> selectList(AdminBO admin);
 
     /**
      * 添加用户

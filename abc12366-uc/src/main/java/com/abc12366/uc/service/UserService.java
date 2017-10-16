@@ -86,4 +86,10 @@ public interface UserService {
      * @param oldPhone
      */
     void verifyOldPhone(oldPhoneBO oldPhone);
+
+    /**
+     * 用户是否实名认证
+     * @return
+     */
+    IsRealNameBO isRealName();
 }

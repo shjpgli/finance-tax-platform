@@ -13,6 +13,8 @@ public interface QuestionHeadmanService {
 
     List<QuestionHeadman> selectList();
 
+    QuestionHeadmanBo selectByPrimaryKey(String id);
+
     void add(QuestionHeadmanBo record);
 
     void modify(QuestionHeadmanBo record);

@@ -47,9 +47,10 @@ public class AdminController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "nickname", required = false) String nickname,
+                                     @RequestParam(value = "phone", required = false) String phone,
                                      @RequestParam(value = "orgId", required = false) String orgId,
                                      @RequestParam(value = "status", required = false) Boolean status) {
-        Admin admin = new Admin();
+        AdminBO admin = new AdminBO();
         admin.setUsername(username);
         admin.setNickname(nickname);
         admin.setStatus(status);

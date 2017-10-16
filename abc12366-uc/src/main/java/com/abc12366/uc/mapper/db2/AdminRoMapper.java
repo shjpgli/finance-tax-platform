@@ -27,7 +27,7 @@ public interface AdminRoMapper {
 
     AdminBO selectUserBoById(String id);
 
-    List<AdminBO> selectList(Admin admin);
+    List<AdminBO> selectList(AdminBO admin);
 
     AdminBO selectOne(@Param("id") String id);
 

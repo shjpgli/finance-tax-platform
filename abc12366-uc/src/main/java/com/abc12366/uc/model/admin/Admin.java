@@ -44,16 +44,6 @@ public class Admin implements Serializable {
      **/
     private java.util.Date lastUpdate;
 
-    private String organizationId;
-
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
-    }
-
     public String getId() {
         return this.id;
     }

@@ -62,7 +62,7 @@
                 and points=#{points}
             </if>
             <if test="realName!=null">
-                and realName=insert(realName, 1, 1, '*')
+                and realName=insert(#{realName}, 1, 1, '*')
             </if>
 
             <if test="tagName!=null and tagName.size()>0">

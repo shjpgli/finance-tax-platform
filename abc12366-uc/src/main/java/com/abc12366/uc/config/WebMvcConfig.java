@@ -90,7 +90,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //微信回调地址
                 .excludePathPatterns("/wechatserver/init/**")
                         // 操作员登录、登出、token验证自动刷新
-                .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**")
+                .excludePathPatterns("/admin/token/**")
                         //微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
 

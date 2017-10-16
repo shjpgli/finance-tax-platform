@@ -17,10 +17,13 @@
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionHeadman" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_question_headman
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo" parameterType="java.lang.String">
+		 SELECT *,
+			(SELECT COUNT(1) FROM bb_question_answer WHERE userId = t1.userId AND parentId ='') AS answerNum,
+			(SELECT COUNT(1) FROM bb_question_answer WHERE userId = t1.userId AND parentId !='') AS commentNum,
+			(SELECT COUNT(1) FROM bb_question WHERE userId = t1.userId) AS questionNum,
+			(SELECT factionName FROM bb_question_faction WHERE factionId = t1.factionId) AS factionName
+		 FROM bb_question_headman  t1
 		 WHERE id = #{id}
 	</select>
 
