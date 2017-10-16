@@ -26,6 +26,9 @@ public class QuestionHeadman  {
 	/**掌门人登录用户uc_user id**/
 	private String userId;
 
+	/**掌门人所属帮派id**/
+	private String factionId;
+
 	/**状态（apply:申请,success:通过,refuse:拒绝）**/
 	private String status;
 
@@ -83,6 +86,15 @@ public class QuestionHeadman  {
 
 	public String getUserId(){
 		return this.userId;
+	}
+
+	public String getFactionId() {
+		return factionId;
+	}
+
+	public QuestionHeadman setFactionId(String factionId) {
+		this.factionId = factionId;
+		return this;
 	}
 
 	public void setStatus(String status){

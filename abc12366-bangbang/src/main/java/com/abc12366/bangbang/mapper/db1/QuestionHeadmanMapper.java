@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.question.QuestionHeadman;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 
  * QuestionHeadmanMapper数据库操作接口类
@@ -11,6 +13,12 @@ import org.apache.ibatis.annotations.Param;
 
 public interface QuestionHeadmanMapper{
 
+	/**
+	 *
+	 * 列表查询
+	 *
+	 **/
+	List<QuestionHeadman> selectList();
 
 	/**
 	 * 

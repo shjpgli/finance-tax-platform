@@ -5,8 +5,16 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	name,	phone,	applyReason,	createTime,	userId,	status,	updateTime,	updateAdmin
+		 id,	name,	phone,	applyReason,	createTime,	userId, factionId,	status,	updateTime,	updateAdmin
 	</sql>
+
+	<!-- 列表查询 -->
+	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionHeadman">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bb_question_headman
+		ORDER BY createTime DESC
+	</select>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionHeadman" parameterType="java.lang.String">
@@ -25,9 +33,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionHeadman">
 		 INSERT INTO bb_question_headman
- 		(id,name,phone,applyReason,createTime,userId,status,updateTime,updateAdmin) 
+ 		(id,name,phone,applyReason,createTime,userId,factionId,status,updateTime,updateAdmin)
 		 VALUES 
- 		(#{id},#{name},#{phone},#{applyReason},now(),#{userId},#{status},now(),#{updateAdmin})
+ 		(#{id},#{name},#{phone},#{applyReason},now(),#{userId},#{factionId},#{status},now(),#{updateAdmin})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -49,6 +57,9 @@
 			<if test="userId != null">
 				 userId,
 			</if>
+			 <if test="factionId != null">
+				 factionId,
+			 </if>
 			<if test="status != null">
 				 status,
 			</if>
@@ -73,6 +84,9 @@
 			<if test="userId!=null">
 				 #{userId},
 			</if>
+			 <if test="factionId!=null">
+				 #{factionId},
+			 </if>
 			<if test="status!=null">
 				 #{status},
 			</if>
@@ -99,6 +113,9 @@
 			<if test="userId != null">
 				 userId = #{userId},
 			</if>
+			<if test="factionId != null">
+				factionId = #{factionId},
+			</if>
 			<if test="status != null">
 				 status = #{status},
 			</if>
@@ -118,6 +135,7 @@
 			 phone = #{phone},
 			 applyReason = #{applyReason},
 			 userId = #{userId},
+			 factionId = #{factionId},
 			 status = #{status},
 			 updateTime = now(),
 			 updateAdmin = #{updateAdmin}

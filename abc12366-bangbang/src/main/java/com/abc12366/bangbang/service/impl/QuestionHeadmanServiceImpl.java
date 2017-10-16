@@ -28,6 +28,11 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
     @Autowired
     private QuestionHeadmanClassifyRelMapper questionHeadmanClassifyRelMapper;
 
+    @Override
+    public List<QuestionHeadman> selectList() {
+        return questionHeadmanMapper.selectList();
+    }
+
     @Transactional("db1TxManager")
     @Override
     public void add(QuestionHeadmanBo headmanBo) {
@@ -68,5 +73,13 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
     public void delete(String id) {
         questionHeadmanMapper.deleteByPrimaryKey(id);
         questionHeadmanClassifyRelMapper.deleteByHeadmanId(id);
+    }
+
+    @Override
+    public void changeStatus(String id, String status) {
+        QuestionHeadman headman = new QuestionHeadman();
+        headman.setId(id);
+        headman.setStatus(status);
+        questionHeadmanMapper.updateByPrimaryKeySelective(headman);
     }
 }
