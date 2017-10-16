@@ -41,6 +41,8 @@ public class QuestionAcceptedBO implements Serializable {
 	//所有总数
 	private String allCount;
 
+	private String userId;
+
 
 	public void setId(Integer id){
 		this.id = id;
@@ -129,4 +131,12 @@ public class QuestionAcceptedBO implements Serializable {
     public void setAllCount(String allCount) {
         this.allCount = allCount;
     }
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

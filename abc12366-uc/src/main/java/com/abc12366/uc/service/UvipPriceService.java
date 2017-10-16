@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.UvipPrice;
+import com.abc12366.uc.model.bo.UvipPriceBO;
 
 import java.util.List;
 
@@ -9,6 +10,6 @@ import java.util.List;
  */
 public interface UvipPriceService {
 
-    List<UvipPrice> selectList(UvipPrice uvipPrice);
+    List<UvipPriceBO> selectList(UvipPrice uvipPrice);
 
 }

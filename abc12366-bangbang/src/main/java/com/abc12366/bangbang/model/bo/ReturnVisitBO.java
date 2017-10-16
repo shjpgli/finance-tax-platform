@@ -36,6 +36,8 @@ public class ReturnVisitBO implements Serializable {
 	//总数
 	private String total;
 
+	private String userId;
+
 
 	public void setId(Integer id){
 		this.id = id;
@@ -108,4 +110,12 @@ public class ReturnVisitBO implements Serializable {
     public void setTotal(String total) {
         this.total = total;
     }
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

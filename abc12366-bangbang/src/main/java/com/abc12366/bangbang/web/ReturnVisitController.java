@@ -39,7 +39,8 @@ public class ReturnVisitController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "phone", required = true) String phone,
+                                     @RequestParam(value = "phone", required = false) String phone,
+                                     @RequestParam(value = "userId", required = false) String userId,
                                      @RequestParam(value = "date", required = true) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
@@ -50,6 +51,7 @@ public class ReturnVisitController {
             param.setDate(DateUtils.dateYearToString(new Date()));
         }
         param.setPhone(phone);
+        param.setUserId(userId);
         List<ReturnVisit> list = returnVisitService.selectList(param);
 
         return (list == null) ?
@@ -64,7 +66,8 @@ public class ReturnVisitController {
     @GetMapping(path = "/statis")
     public ResponseEntity selectStatisList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                           @RequestParam(value = "phone", required = true) String phone,
+                                           @RequestParam(value = "phone", required = false) String phone,
+                                           @RequestParam(value = "userId", required = false) String userId,
                                            @RequestParam(value = "date", required = true) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         QuestionAcceptedBO param = new QuestionAcceptedBO();
@@ -72,6 +75,7 @@ public class ReturnVisitController {
             param.setDate(date);
         }
         param.setPhone(phone);
+        param.setUserId(userId);
         List<QuestionAcceptedBO> list = returnVisitService.selectStatisList(param);
 
         return (list == null) ?

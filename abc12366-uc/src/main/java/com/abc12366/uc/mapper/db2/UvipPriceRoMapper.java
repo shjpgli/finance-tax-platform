@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.UvipPrice;
+import com.abc12366.uc.model.bo.UvipPriceBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface UvipPriceRoMapper {
     UvipPrice selectByPrimaryKey(@Param("id") String id);
 
 
-	List<UvipPrice> selectList(UvipPrice uvipPrice);
+	List<UvipPriceBO> selectList(UvipPrice uvipPrice);
 
 	UvipPrice selectByLevel(UvipPrice uvip);
 
