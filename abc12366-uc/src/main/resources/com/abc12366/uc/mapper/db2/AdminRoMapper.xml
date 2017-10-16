@@ -42,14 +42,13 @@
         SELECT
         t.id,
         t.username,
-        t.password,
-        t.nickname,
+        insert(t.nickname, 1, 1, '*') as nickname,
         t.status,
         t.createTime,
         t.lastUpdate,
         e.userId,
         e.job,
-        e.phone,
+        insert(e.phone, 4, 4, '****') as  phone,
         e.address,
         e.orgId,
         s.name AS orgName
@@ -60,8 +59,9 @@
         <where>
             1=1
             <if test="username != null and username!=''">and t.username = #{username}</if>
+            <if test="phone != null and phone!=''">and e.phone = #{phone}</if>
             <if test="nickname != null and nickname!=''">and t.nickname = #{nickname}</if>
-            <if test="status != null and status!=''">AND t.status = #{status}</if>
+            <if test="status != null">AND t.status = #{status}</if>
             <if test="organizationId != null and organizationId!=''">AND e.orgId = #{organizationId}</if>
         </where>
         order by t.username+0 asc,t.lastUpdate DESC
@@ -73,13 +73,13 @@
         t.id,
         t.username,
         t.password,
-        t.nickname,
+        insert(t.nickname, 1, 1, '*') as nickname,
         t.status,
         t.createTime,
         t.lastUpdate,
         e.userId,
         e.job,
-        e.phone,
+        insert(e.phone, 4, 4, '****') as phone,
         e.address,
         e.orgId,
         s.name AS orgName,
@@ -101,13 +101,13 @@
         t.id,
         t.username,
         t.password,
-        t.nickname,
+        insert(t.nickname, 1, 1, '*') as nickname
         t.status,
         t.createTime,
         t.lastUpdate,
         e.userId,
         e.job,
-        e.phone,
+        insert(e.phone, 4, 4, '****') as phone,
         e.address,
         e.orgId,
         s.name AS orgName,
@@ -144,7 +144,7 @@
         t.id,
         t.username,
         t.password,
-        t.nickname,
+        insert(t.nickname, 1, 1, '*') as nickname
         t.status,
         t.createTime,
         t.lastUpdate,
@@ -161,8 +161,9 @@
 
     <select id="selectAdminByOrgId" resultMap="userBoResultMap" parameterType="java.lang.String">
         SELECT
-        t.id, t.username, t.password, t.nickname,  t.status, t.createTime, t.lastUpdate, e.userId,
-        e.job, e.phone, e.address, e.orgId, s.name AS orgName
+        t.id, t.username, t.password,
+        insert(t.nickname, 1, 1, '*') as nickname,  t.status, t.createTime, t.lastUpdate, e.userId,
+        e.job, insert(e.phone, 4, 4, '****') as phone,, e.address, e.orgId, s.name AS orgName
         FROM
         uc_admin t
         LEFT JOIN uc_admin_extend e ON e.userId = t.id
