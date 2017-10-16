@@ -17,7 +17,7 @@ public class UserUpdateBO {
     @Size(min = 6, max = 32, message = "用户名长度只能在6到32之间")
     @Pattern(regexp = "^[a-zA-Z0-9]{6,32}$", message = "用户名只能为数字字母组合！")
     private String username;
-    @Pattern(regexp = "^\\d{11}$")
+    @Pattern(regexp = "^\\d{11}$",message = "手机号码格式不正确")
     @Size(min = 11, max = 11)
     private String phone;
     @Email
