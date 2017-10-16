@@ -19,7 +19,7 @@
 	<!-- 列表查询 -->
 	<select id="selectList" resultType="com.abc12366.bangbang.model.ReturnVisit" parameterType="com.abc12366.bangbang.model.bo.ReturnVisitBO">
 		SELECT
-		v.id,	v.nsrsbh,	v.nsrmc,	v.productName,	insert(v.name, 1, 1, '*') as name,	insert(v.phone, 4, 4, '****') as phone,	v.visitDate
+		v.id,	v.nsrsbh,	v.nsrmc,	v.productName,	v.name,	v.phone,v.visitDate
 		FROM bb_return_visit v
 		LEFT JOIN bb_user u on u.phone = v.phone
 		<where>

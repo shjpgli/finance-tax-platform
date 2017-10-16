@@ -42,13 +42,13 @@
         SELECT
         t.id,
         t.username,
-        insert(t.nickname, 1, 1, '*') as nickname,
+        t.nickname,
         t.status,
         t.createTime,
         t.lastUpdate,
         e.userId,
         e.job,
-        insert(e.phone, 4, 4, '****') as  phone,
+        e.phone,
         e.address,
         e.orgId,
         s.name AS orgName
@@ -73,13 +73,13 @@
         t.id,
         t.username,
         t.password,
-        insert(t.nickname, 1, 1, '*') as nickname,
+        t.nickname,
         t.status,
         t.createTime,
         t.lastUpdate,
         e.userId,
         e.job,
-        insert(e.phone, 4, 4, '****') as phone,
+        e.phone,
         e.address,
         e.orgId,
         s.name AS orgName,
@@ -101,13 +101,13 @@
         t.id,
         t.username,
         t.password,
-        insert(t.nickname, 1, 1, '*') as nickname,
+        t.nickname,
         t.status,
         t.createTime,
         t.lastUpdate,
         e.userId,
         e.job,
-        insert(e.phone, 4, 4, '****') as phone,
+        e.phone,
         e.address,
         e.orgId,
         s.name AS orgName,
@@ -144,7 +144,7 @@
         t.id,
         t.username,
         t.password,
-        insert(t.nickname, 1, 1, '*') as nickname
+        t.nickname
         t.status,
         t.createTime,
         t.lastUpdate,
@@ -162,8 +162,8 @@
     <select id="selectAdminByOrgId" resultMap="userBoResultMap" parameterType="java.lang.String">
         SELECT
         t.id, t.username, t.password,
-        insert(t.nickname, 1, 1, '*') as nickname,  t.status, t.createTime, t.lastUpdate, e.userId,
-        e.job, insert(e.phone, 4, 4, '****') as phone,, e.address, e.orgId, s.name AS orgName
+        t.nickname,  t.status, t.createTime, t.lastUpdate, e.userId,
+        e.job, e.phone,, e.address, e.orgId, s.name AS orgName
         FROM
         uc_admin t
         LEFT JOIN uc_admin_extend e ON e.userId = t.id
