@@ -1,5 +1,6 @@
 package com.abc12366.uc.webservice;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
@@ -15,14 +16,11 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.xml.namespace.QName;
-
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,7 +38,25 @@ public class DzfpClient {
 	
 	public static final  Double SL=0.06; //税率固定
 	
-	public static final String XSF_NSRSBH="110109500321655";//消费方纳税人识别号
+	public static final String XSF_NSRSBH=SpringCtxHolder.getProperty("XSF_NSRSBH");
+	
+	public static final String XSF_MC=SpringCtxHolder.getProperty("XSF_MC");
+	
+	public static final String TXSF_DZDH=SpringCtxHolder.getProperty("TXSF_DZDH");
+	
+	public static final String XSF_YHZH=SpringCtxHolder.getProperty("XSF_YHZH");
+	
+	public static final String ssl_pwd=SpringCtxHolder.getProperty("SSL_PWD");
+	
+    private static String endpoint=SpringCtxHolder.getProperty("ENDPOINT");
+	
+	private static String namepace=SpringCtxHolder.getProperty("NAMEPACE");
+	
+	private static String appid=SpringCtxHolder.getProperty("APPID");
+	
+	private static String ssl_store ="";
+	
+	/*public static final String XSF_NSRSBH="110109500321655";//消费方纳税人识别号
 	
 	public static final String XSF_MC="百旺电子测试2";//消费方名称
 	
@@ -59,7 +75,7 @@ public class DzfpClient {
 	
 	private static String namepace="http://dsqzjk.dzfpqz";
 	
-	private static String appid="6d29f136114544bcc73edcce960c430231183cc192c433e2b9ebcad56e8ceb08";
+	private static String appid="6d29f136114544bcc73edcce960c430231183cc192c433e2b9ebcad56e8ceb08";*/
 	
 	
 	@SuppressWarnings("rawtypes")
