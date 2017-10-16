@@ -52,7 +52,7 @@ public class DzfpClient {
 	
 	private static String namepace=SpringCtxHolder.getProperty("NAMEPACE");
 	
-	private static String appid=SpringCtxHolder.getProperty("APPID");
+	private static String appid=SpringCtxHolder.getProperty("DZFP_APPID");
 	
 	private static String ssl_store ="";
 	
