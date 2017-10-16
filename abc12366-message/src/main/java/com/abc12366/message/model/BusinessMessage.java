@@ -41,11 +41,17 @@ public class BusinessMessage {
     @Length(min = 1, max = 32)
     private String type;
 
+    //链接地址
+    private String url;
+
+    //用户名
+    private String nickname;
+
     public BusinessMessage() {
     }
 
     public BusinessMessage(String id, String userId, String businessId, String content, String status, Timestamp
-            createTime, Timestamp lastUpdate, String type) {
+            createTime, Timestamp lastUpdate, String type, String url, String nickname) {
         this.id = id;
         this.userId = userId;
         this.businessId = businessId;
@@ -54,6 +60,8 @@ public class BusinessMessage {
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
         this.type = type;
+        this.url = url;
+        this.nickname = nickname;
     }
 
     private BusinessMessage(Builder builder) {
@@ -65,6 +73,8 @@ public class BusinessMessage {
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
+        setUrl(builder.url);
+        setNickname(builder.nickname);
     }
 
     public String getId() {
@@ -131,18 +141,20 @@ public class BusinessMessage {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "BusinessMessage{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", businessId='" + businessId + '\'' +
-                ", content='" + content + '\'' +
-                ", status='" + status + '\'' +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                ", type='" + type + '\'' +
-                '}';
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public static final class Builder {
@@ -154,6 +166,8 @@ public class BusinessMessage {
         private Timestamp createTime;
         private Timestamp lastUpdate;
         private String type;
+        private String url;
+        private String nickname;
 
         public Builder() {
         }
@@ -195,6 +209,16 @@ public class BusinessMessage {
 
         public Builder type(String val) {
             type = val;
+            return this;
+        }
+
+        public Builder url(String val) {
+            url = val;
+            return this;
+        }
+
+        public Builder nickname(String val) {
+            nickname = val;
             return this;
         }
 
