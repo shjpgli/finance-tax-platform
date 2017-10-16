@@ -41,11 +41,14 @@ public class UserMessage {
     @Length(min = 1, max = 1)
     private String type;
 
+    //用户名
+    private String nickname;
+
     public UserMessage() {
     }
 
     public UserMessage(String id, String fromUserId, String toUserId, String content, String status, Timestamp
-            createTime, Timestamp lastUpdate, String type) {
+            createTime, Timestamp lastUpdate, String type, String nickname) {
         this.id = id;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
@@ -54,6 +57,7 @@ public class UserMessage {
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
         this.type = type;
+        this.nickname = nickname;
     }
 
     private UserMessage(Builder builder) {
@@ -65,6 +69,7 @@ public class UserMessage {
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
+        setNickname(builder.nickname);
     }
 
     public String getId() {
@@ -131,6 +136,14 @@ public class UserMessage {
         this.type = type;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     @Override
     public String toString() {
         return "UserMessage{" +
@@ -138,10 +151,11 @@ public class UserMessage {
                 ", fromUserId='" + fromUserId + '\'' +
                 ", toUserId='" + toUserId + '\'' +
                 ", content='" + content + '\'' +
-                ", status=" + status +
+                ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", type='" + type + '\'' +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 
@@ -154,6 +168,7 @@ public class UserMessage {
         private Timestamp createTime;
         private Timestamp lastUpdate;
         private String type;
+        private String nickname;
 
         public Builder() {
         }
@@ -195,6 +210,11 @@ public class UserMessage {
 
         public Builder type(String val) {
             type = val;
+            return this;
+        }
+
+        public Builder nickname(String val) {
+            nickname = val;
             return this;
         }
 
