@@ -1,8 +1,7 @@
-package com.abc12366.bangbang.web.Question;
+package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionCountBo;
 import com.abc12366.bangbang.service.QueCountService;
-import com.abc12366.bangbang.service.QueLikeService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
