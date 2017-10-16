@@ -128,7 +128,16 @@
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,
-        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage
+        (select ug.imageUrl from uc_goods ug where ug.memberLevel = uu.vipLevel limit 1) vipImage,
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName,
+        IFNULL(
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;= (SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) level,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) levelName
         from uc_user uu, uc_token ut
         where uu.id=ut.userId
         and ut.token=#{userToken}
