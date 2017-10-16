@@ -40,6 +40,7 @@ public class QuestionAcceptedController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "phone", required = false) String phone,
+                                     @RequestParam(value = "userId", required = false) String userId,
                                      @RequestParam(value = "nsrsbh", required = false) String nsrsbh,
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "date", required = false) String date) {
@@ -53,6 +54,7 @@ public class QuestionAcceptedController {
         param.setPhone(phone);
         param.setNsrsbh(nsrsbh);
         param.setName(name);
+        param.setUserId(userId);
         List<QuestionAccepted> list = questionAcceptedService.selectList(param);
 
         return (list == null) ?

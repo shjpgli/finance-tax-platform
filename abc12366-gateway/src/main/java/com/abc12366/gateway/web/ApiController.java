@@ -55,7 +55,9 @@ public class ApiController {
         api.setName(name);
         api.setStatus(status);
         api.setDictId(dictId);
-        api.setUri(new String(new BASE64Decoder().decodeBuffer(url)));
+        if(url != null && !"".equals(url)){
+            api.setUri(new String(new BASE64Decoder().decodeBuffer(url)));
+        }
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ApiBO> apiList = apiService.selectList(api);
         PageInfo<ApiBO> pageInfo = new PageInfo<>(apiList);

@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.UvipPrice;
+import com.abc12366.uc.model.bo.UvipPriceBO;
 import com.abc12366.uc.service.UvipPriceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class UvipPriceController {
         LOGGER.info("{}:{}", productId);
         UvipPrice uvipPrice = new UvipPrice();
         uvipPrice.setProductId(productId);
-        List<UvipPrice> uvipPriceList = uvipPriceService.selectList(uvipPrice);
+        List<UvipPriceBO> uvipPriceList = uvipPriceService.selectList(uvipPrice);
         LOGGER.info("{}", uvipPriceList);
         return ResponseEntity.ok(Utils.kv("dataList", uvipPriceList));
     }
