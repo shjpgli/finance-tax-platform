@@ -27,6 +27,18 @@ public class QuestionHeadmanBo {
     /**掌门人登录用户uc_user id**/
     private String userId;
 
+    /**掌门人负责的分类代码**/
+    private String classifyCode;
+
+    /**掌门人负责的分类名称**/
+    private String classifyName;
+
+    /**掌门人所属帮派id**/
+    private String factionId;
+
+    /**掌门人所属帮派Name**/
+    private String factionName;
+
     /**状态（apply:申请,success:通过,refuse:拒绝）**/
     private String status;
 
@@ -36,11 +48,14 @@ public class QuestionHeadmanBo {
     /**后台操作人**/
     private String updateAdmin;
 
-    /**分类id集合**/
-    private List<String> classifyIds;
+    /**提问数**/
+    private Integer questionNum;
 
-    /**分类名称集合**/
-    private List<String> classifyNames;
+    /**回答数**/
+    private Integer answerNum;
+
+    /**评论数**/
+    private Integer commentNum;
 
 
     public String getId() {
@@ -124,21 +139,66 @@ public class QuestionHeadmanBo {
         return this;
     }
 
-    public List<String> getClassifyIds() {
-        return classifyIds;
+    public String getClassifyCode() {
+        return classifyCode;
     }
 
-    public QuestionHeadmanBo setClassifyIds(List<String> classifyIds) {
-        this.classifyIds = classifyIds;
+    public QuestionHeadmanBo setClassifyCode(String classifyCode) {
+        this.classifyCode = classifyCode;
         return this;
     }
 
-    public List<String> getClassifyNames() {
-        return classifyNames;
+    public String getClassifyName() {
+        return classifyName;
     }
 
-    public QuestionHeadmanBo setClassifyNames(List<String> classifyNames) {
-        this.classifyNames = classifyNames;
+    public QuestionHeadmanBo setClassifyName(String classifyName) {
+        this.classifyName = classifyName;
+        return this;
+    }
+
+    public String getFactionId() {
+        return factionId;
+    }
+
+    public QuestionHeadmanBo setFactionId(String factionId) {
+        this.factionId = factionId;
+        return this;
+    }
+
+    public String getFactionName() {
+        return factionName;
+    }
+
+    public QuestionHeadmanBo setFactionName(String factionName) {
+        this.factionName = factionName;
+        return this;
+    }
+
+    public Integer getQuestionNum() {
+        return questionNum;
+    }
+
+    public QuestionHeadmanBo setQuestionNum(Integer questionNum) {
+        this.questionNum = questionNum;
+        return this;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public QuestionHeadmanBo setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+        return this;
+    }
+
+    public Integer getCommentNum() {
+        return commentNum;
+    }
+
+    public QuestionHeadmanBo setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
         return this;
     }
 }

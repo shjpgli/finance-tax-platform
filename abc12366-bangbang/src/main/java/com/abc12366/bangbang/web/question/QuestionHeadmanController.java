@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionHeadman;
+import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
 import com.abc12366.bangbang.service.QuestionHeadmanService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -34,6 +35,13 @@ public class QuestionHeadmanController {
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /* 掌门人 详情 */
+    @GetMapping(path = "/view/{id}")
+    public ResponseEntity selectList(@PathVariable String id){
+        QuestionHeadmanBo headmanBo = questionHeadmanService.selectByPrimaryKey(id);
+        return ResponseEntity.ok(Utils.kv("data", headmanBo));
     }
 
     /* 掌门人 审核 */

@@ -25,12 +25,17 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
     @Autowired
     private QuestionHeadmanMapper questionHeadmanMapper;
 
-    @Autowired
-    private QuestionHeadmanClassifyRelMapper questionHeadmanClassifyRelMapper;
+//    @Autowired
+//    private QuestionHeadmanClassifyRelMapper questionHeadmanClassifyRelMapper;
 
     @Override
     public List<QuestionHeadman> selectList() {
         return questionHeadmanMapper.selectList();
+    }
+
+    @Override
+    public QuestionHeadmanBo selectByPrimaryKey(String id) {
+        return questionHeadmanMapper.selectByPrimaryKey(id);
     }
 
     @Transactional("db1TxManager")
@@ -41,14 +46,14 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         headman.setId(Utils.uuid());
         headman.setUserId(Utils.getUserId());
         questionHeadmanMapper.insert(headman);
-        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
-        for (String classifyId:headmanBo.getClassifyIds()){
-            QuestionHeadmanClassifyRel rel = new QuestionHeadmanClassifyRel();
-            rel.setId(Utils.uuid());
-            rel.setHeadmanId(headman.getId());
-            rel.setClassifyId(classifyId);
-        }
-        questionHeadmanClassifyRelMapper.insertBatch(relList);
+//        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
+//        for (String classifyId:headmanBo.getClassifyIds()){
+//            QuestionHeadmanClassifyRel rel = new QuestionHeadmanClassifyRel();
+//            rel.setId(Utils.uuid());
+//            rel.setHeadmanId(headman.getId());
+//            rel.setClassifyId(classifyId);
+//        }
+//        questionHeadmanClassifyRelMapper.insertBatch(relList);
     }
 
     @Transactional("db1TxManager")
@@ -57,22 +62,22 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         QuestionHeadman headman = new QuestionHeadman();
         BeanUtils.copyProperties(headmanBo, headman);
         questionHeadmanMapper.updateByPrimaryKeySelective(headman);
-        questionHeadmanClassifyRelMapper.deleteByHeadmanId(headman.getId());
-        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
-        for (String classifyId:headmanBo.getClassifyIds()){
-            QuestionHeadmanClassifyRel rel = new QuestionHeadmanClassifyRel();
-            rel.setId(Utils.uuid());
-            rel.setHeadmanId(headman.getId());
-            rel.setClassifyId(classifyId);
-        }
-        questionHeadmanClassifyRelMapper.insertBatch(relList);
+//        questionHeadmanClassifyRelMapper.deleteByHeadmanId(headman.getId());
+//        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
+//        for (String classifyId:headmanBo.getClassifyIds()){
+//            QuestionHeadmanClassifyRel rel = new QuestionHeadmanClassifyRel();
+//            rel.setId(Utils.uuid());
+//            rel.setHeadmanId(headman.getId());
+//            rel.setClassifyId(classifyId);
+//        }
+//        questionHeadmanClassifyRelMapper.insertBatch(relList);
     }
 
     @Transactional("db1TxManager")
     @Override
     public void delete(String id) {
         questionHeadmanMapper.deleteByPrimaryKey(id);
-        questionHeadmanClassifyRelMapper.deleteByHeadmanId(id);
+//        questionHeadmanClassifyRelMapper.deleteByHeadmanId(id);
     }
 
     @Override
