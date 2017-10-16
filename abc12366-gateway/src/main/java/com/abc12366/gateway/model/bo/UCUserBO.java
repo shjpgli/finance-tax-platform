@@ -25,9 +25,21 @@ public class UCUserBO {
     private String minUserPicturePath;
     private int points;
     private int exp;
+    //会员等级
     private String vipLevel;
+    //会员等级名称
+    private String vipLevelName;
     private String realName;
+    //用户等级
+    private String level;
+    //用户等级名称
+    private String levelName;
     private Integer usernameModifiedTimes;
+    private Date vipExpireDate;
+    private String vipImage;
+    private String wxopenid;
+    private String wxheadimg;
+    private String wxnickname;
 
     public UCUserBO() {
     }
@@ -192,6 +204,70 @@ public class UCUserBO {
         this.usernameModifiedTimes = usernameModifiedTimes;
     }
 
+    public String getVipLevelName() {
+        return vipLevelName;
+    }
+
+    public void setVipLevelName(String vipLevelName) {
+        this.vipLevelName = vipLevelName;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
+    public Date getVipExpireDate() {
+        return vipExpireDate;
+    }
+
+    public void setVipExpireDate(Date vipExpireDate) {
+        this.vipExpireDate = vipExpireDate;
+    }
+
+    public String getVipImage() {
+        return vipImage;
+    }
+
+    public void setVipImage(String vipImage) {
+        this.vipImage = vipImage;
+    }
+
+    public String getWxopenid() {
+        return wxopenid;
+    }
+
+    public void setWxopenid(String wxopenid) {
+        this.wxopenid = wxopenid;
+    }
+
+    public String getWxheadimg() {
+        return wxheadimg;
+    }
+
+    public void setWxheadimg(String wxheadimg) {
+        this.wxheadimg = wxheadimg;
+    }
+
+    public String getWxnickname() {
+        return wxnickname;
+    }
+
+    public void setWxnickname(String wxnickname) {
+        this.wxnickname = wxnickname;
+    }
+
     @Override
     public String toString() {
         return "UCUserBO{" +
@@ -213,7 +289,16 @@ public class UCUserBO {
                 ", points=" + points +
                 ", exp=" + exp +
                 ", vipLevel='" + vipLevel + '\'' +
+                ", vipLevelName='" + vipLevelName + '\'' +
                 ", realName='" + realName + '\'' +
+                ", level='" + level + '\'' +
+                ", levelName='" + levelName + '\'' +
+                ", usernameModifiedTimes=" + usernameModifiedTimes +
+                ", vipExpireDate=" + vipExpireDate +
+                ", vipImage='" + vipImage + '\'' +
+                ", wxopenid='" + wxopenid + '\'' +
+                ", wxheadimg='" + wxheadimg + '\'' +
+                ", wxnickname='" + wxnickname + '\'' +
                 '}';
     }
 }
