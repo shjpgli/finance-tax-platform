@@ -245,10 +245,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
         LOGGER.info("{}", passwordUpdateBO);
-        LoginBO loginBO = new LoginBO();
-        loginBO.setUsernameOrPhone(passwordUpdateBO.getPhone());
+        String userId = Utils.getUserId();
         //判断用户是否存在
-        User userExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User userExist = userRoMapper.selectOne(userId);
         if (userExist == null) {
             throw new ServiceException(4018);
         }
@@ -284,7 +283,6 @@ public class UserServiceImpl implements UserService {
         //改库..
         User user = new User();
         user.setId(userExist.getId());
-        user.setPhone(passwordUpdateBO.getPhone());
         user.setPassword(encodePassword);
         user.setLastUpdate(new Date());
         int result = userMapper.update(user);
