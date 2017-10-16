@@ -183,7 +183,7 @@ public class AppServiceImpl implements AppService {
         AppSettingBO bo = appSettingRoMapper.selectByAppId(appSettingBO);
         if (bo == null) {
             LOGGER.warn("API不存在或未授权：{}, {}", request.getRequestURI(), bo);
-            throw new ServiceException(4027,"API不存在或未授权："+request.getRequestURI());
+            throw new ServiceException(4027);
         }
         //if(bo.getIsValidate() == true){
         if (method != null && !method.equals(bo.getMethod())) {
