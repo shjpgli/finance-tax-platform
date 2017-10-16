@@ -11,9 +11,9 @@
 	<!-- 列表查询 -->
 	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionHeadman">
 		SELECT
-		<include refid="Base_Column_List" />
-		FROM bb_question_headman
-		ORDER BY createTime DESC
+		t1.*,t2.classifyName as classifyName
+		FROM bb_question_headman t1 JOIN bb_question_classify  t2 ON t1.classifyId = t2.classifyId
+		ORDER BY t1.createTime DESC
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
