@@ -17,6 +17,14 @@
 	</select>
 
     <!-- 查询（根据主键ID查询） -->
+    <select id="selectMemberCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM bb_question_faction_member
+        WHERE factionId = #{factionId} and userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo" parameterType="java.util.Map">
         SELECT
         memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,	m.createTime,	m.lastUpdate

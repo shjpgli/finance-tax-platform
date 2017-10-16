@@ -17,6 +17,14 @@
 	</select>
 
     <!-- 查询（根据主键ID查询） -->
+    <select id="selectClassifyCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM bb_question_faction_classify c left join bb_question_faction f on c.factionId = f.factionId
+        WHERE f.userId = #{userId} and c.classifyId = #{classifyId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionFactionClassify" parameterType="java.lang.String">
         SELECT
             fc.id,	fc.factionId,	fc.classifyId,qc.classifyName classifyName

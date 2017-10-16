@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/9/14.
@@ -67,9 +64,17 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
     @Transactional("db1TxManager")
     @Override
     public QuestionFactionMemberBo save(QuestionFactionMemberBo factionMemberBo) {
+        JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
+        LOGGER.info("新增邦派成员信息:{}", jsonStu.toString());
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("factionId", factionMemberBo.getUserId());//
+        dataMap.put("userId", factionMemberBo.getFactionId());//
+        int cnt = memberRoMapper.selectMemberCnt(dataMap);
+        if(cnt > 0){
+            //已申请加入邦派，请勿重复申请
+            throw new ServiceException(6135);
+        }
         try {
-            JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
-            LOGGER.info("新增邦派成员信息:{}", jsonStu.toString());
             factionMemberBo.setCreateTime(new Date());
             factionMemberBo.setLastUpdate(new Date());
             //保存邦派成员信息

@@ -32,6 +32,13 @@ public interface QuestionFactionRoMapper {
      * 查询（根据主键ID查询）
      *
      **/
+    int selectFactionCnt(@Param("userId") String userId);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
     List<QuestionFactionBo> selectList(Map<String, Object> map);
 
     /**

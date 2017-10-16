@@ -16,6 +16,14 @@
 		 WHERE factionId = #{factionId}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectFactionCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+            count(*)
+        FROM bb_question_faction
+        WHERE userId = #{userId}
+    </select>
+
     <!-- 查询我管理的邦派列表 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionBo" parameterType="java.util.Map">
         SELECT
