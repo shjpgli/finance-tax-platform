@@ -47,6 +47,13 @@ public interface QuestionFactionMemberRoMapper {
 
     /**
      *
+     * 查询用户是否已申请
+     *
+     **/
+    int selectMemberCnt(Map<String, Object> map);
+
+    /**
+     *
      * 查询（根据主键ID查询）
      *
      **/

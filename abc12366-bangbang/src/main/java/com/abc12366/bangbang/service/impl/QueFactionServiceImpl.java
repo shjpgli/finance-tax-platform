@@ -115,7 +115,7 @@ public class QueFactionServiceImpl implements QueFactionService {
     @Transactional("db1TxManager")
     @Override
     public QuestionFactionBo save(QuestionFactionBo questionFactionBo) {
-        try {
+
             JSONObject jsonStu = JSONObject.fromObject(questionFactionBo);
             LOGGER.info("新增邦派信息:{}", jsonStu.toString());
             questionFactionBo.setCreateTime(new Date());
@@ -126,6 +126,12 @@ public class QueFactionServiceImpl implements QueFactionService {
             questionFactionBo.setFactionId(uuid);
             BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
+            int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
+
+            if(factionCnt>4){
+                //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
+                throw new ServiceException(6126);
+            }
 
             List<QuestionFactionTag> tagList = questionFactionBo.getTagList();
 
@@ -139,14 +145,24 @@ public class QueFactionServiceImpl implements QueFactionService {
 
             List<QuestionFactionClassify> classifyList = questionFactionBo.getClassifyList();
 
-            if(tagList != null){
+            if(classifyList != null){
                 for(QuestionFactionClassify classify :classifyList){
                     classify.setId(UUID.randomUUID().toString().replace("-", ""));
                     classify.setFactionId(uuid);
+                    Map<String, Object> dataMap = new HashMap<>();
+                    dataMap.put("factionId", questionFactionBo.getUserId());//
+                    dataMap.put("userId", classify.getFactionId());//
+                    int cnt = classifyRoMapper.selectClassifyCnt(dataMap);
+                    if(cnt > 0){
+                        //该用户创建的帮派所选话题分类不允许重叠
+                        throw new ServiceException(6125);
+                    }
+
                     classifyMapper.insert(classify);
                 }
             }
 
+        try {
             QuestionFactionMember member = new QuestionFactionMember();
             member.setFactionId(questionFaction.getFactionId());
             member.setUserId(questionFaction.getUserId());
@@ -246,17 +262,17 @@ public class QueFactionServiceImpl implements QueFactionService {
                 }
             }
 
-            classifyMapper.deleteByPrimaryKey(questionFactionBo.getFactionId());
-
-            List<QuestionFactionClassify> classifyList = questionFactionBo.getClassifyList();
-
-            if(tagList != null){
-                for(QuestionFactionClassify classify :classifyList){
-                    classify.setId(UUID.randomUUID().toString().replace("-", ""));
-                    classify.setFactionId(questionFactionBo.getFactionId());
-                    classifyMapper.insert(classify);
-                }
-            }
+//            classifyMapper.deleteByPrimaryKey(questionFactionBo.getFactionId());
+//
+//            List<QuestionFactionClassify> classifyList = questionFactionBo.getClassifyList();
+//
+//            if(classifyList != null){
+//                for(QuestionFactionClassify classify :classifyList){
+//                    classify.setId(UUID.randomUUID().toString().replace("-", ""));
+//                    classify.setFactionId(questionFactionBo.getFactionId());
+//                    classifyMapper.insert(classify);
+//                }
+//            }
 
 
             questionFactionMapper.updateByPrimaryKeySelective(questionFaction);

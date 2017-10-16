@@ -4,6 +4,7 @@ import com.abc12366.bangbang.model.question.QuestionFactionClassify;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -27,6 +28,13 @@ public interface QuestionFactionClassifyRoMapper {
      *
      **/
     List<QuestionFactionClassify> selectList(@Param("factionId") String factionId);
+
+    /**
+     *
+     * 查询该用户创建的分类是否已存在
+     *
+     **/
+    int selectClassifyCnt(Map<String, Object> map);
 
 
 }
