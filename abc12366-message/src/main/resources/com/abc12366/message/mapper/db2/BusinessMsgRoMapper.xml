@@ -18,8 +18,7 @@
     <select id="selectList" parameterType="com.abc12366.message.model.BusinessMessage"
             resultType="com.abc12366.message.model.BusinessMessage">
         SELECT
-        <include refid="Base_Column"/>,
-        (select muu.nickname from msg_uc_user muu where muu.id=#{userId}) nickname
+        <include refid="Base_Column"/>
         FROM msg_business_message
         WHERE userId = #{userId}
         <if test="type!=null">AND type = #{type}</if>

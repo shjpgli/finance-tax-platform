@@ -44,8 +44,6 @@ public class BusinessMessage {
     //链接地址
     private String url;
 
-    //用户名
-    private String nickname;
 
     public BusinessMessage() {
     }
@@ -61,7 +59,6 @@ public class BusinessMessage {
         this.lastUpdate = lastUpdate;
         this.type = type;
         this.url = url;
-        this.nickname = nickname;
     }
 
     private BusinessMessage(Builder builder) {
@@ -74,7 +71,6 @@ public class BusinessMessage {
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
         setUrl(builder.url);
-        setNickname(builder.nickname);
     }
 
     public String getId() {
@@ -149,14 +145,6 @@ public class BusinessMessage {
         this.url = url;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public static final class Builder {
         private String id;
         private String userId;
@@ -167,7 +155,6 @@ public class BusinessMessage {
         private Timestamp lastUpdate;
         private String type;
         private String url;
-        private String nickname;
 
         public Builder() {
         }
@@ -214,11 +201,6 @@ public class BusinessMessage {
 
         public Builder url(String val) {
             url = val;
-            return this;
-        }
-
-        public Builder nickname(String val) {
-            nickname = val;
             return this;
         }
 
