@@ -164,11 +164,11 @@ public class UserServiceImpl implements UserService {
                         throw new ServiceException(4182);
                     }
                 }
-                if (userUpdateBO.getPhone() != null) {
-                    if (userBO.getPhone().trim().equals(userUpdateBO.getPhone().trim())) {
-                        throw new ServiceException(4183);
-                    }
-                }
+//                if (userUpdateBO.getPhone() != null) {
+//                    if (userBO.getPhone().trim().equals(userUpdateBO.getPhone().trim())) {
+//                        throw new ServiceException(4183);
+//                    }
+//                }
 
             }
         }
