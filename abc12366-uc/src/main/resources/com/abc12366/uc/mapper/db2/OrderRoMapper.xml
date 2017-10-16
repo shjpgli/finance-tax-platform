@@ -87,8 +87,8 @@
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
-            <id column="userId" property="id"/>
-            <result column="username" property="username"/>
+            <id column="uId" property="id"/>
+            <result column="uName" property="username"/>
             <result column="nickname" property="nickname"/>
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
@@ -131,8 +131,8 @@
         <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
 
         <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
-            <id column="userId" property="id"/>
-            <result column="username" property="username"/>
+            <id column="uId" property="id"/>
+            <result column="uName" property="username"/>
             <result column="nickname" property="nickname"/>
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
@@ -441,7 +441,7 @@
 
     <!--获取用户信息-->
     <select id="getUser" resultMap="userBOMap" parameterType="java.lang.String">
-        select id, username, phone,vipLevel
+        select id, username, insert(phone, 4, 4, '****') as phone,vipLevel
         from uc_user WHERE id = #{userId}
     </select>
 
@@ -503,9 +503,9 @@
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
         o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
-        u.id as userId,u.username,u.phone,u.vipLevel,u.nickname,u.level,u.realName
+        u.id as userId,u.username,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,u.level,insert(u.realName, 1, 1, '*') as realName
         FROM uc_order o
-        LEFT JOIN (select r.id,r.username,r.phone,r.vipLevel,r.nickname,e.realName as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
+        LEFT JOIN (select r.id,r.username,insert(r.phone, 4, 4, '****') as phone,r.vipLevel,r.nickname,insert(e.realName, 1, 1, '*') as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
         left join uc_uvip_level l on l.levelCode = r.vipLevel
         ) u ON u.id = o.userId
         left join uc_uvip_level v on v.levelCode = o.nowVipLevel
@@ -526,8 +526,8 @@
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,
-        u.id as  userId,u.username,u.phone,u.vipLevel,u.nickname
+        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,
+        u.id as  uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->
     <select id="selectList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
@@ -659,7 +659,7 @@
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
         o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
-        u.id as userId,u.username,u.phone,u.vipLevel,u.nickname,
+        u.id as userId,u.username,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,
         t.orderNo, t.productId, t.sellingPrice, t.unitPrice, t.num, t.discount, t.dealPrice, t.name, t.categoryId, t.category, t.weight,
         t.createTime, t.lastUpdate,t.goodsId,t.specInfo,t.isReturn,t.isExchange,t.imageUrl,t.goodsType
         FROM uc_order o
@@ -746,9 +746,9 @@
         o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
         o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
         o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
-        u.id as userId,u.username,u.phone,u.vipLevel,u.nickname,u.level,u.realName
+        u.id as userId,u.username,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,u.level,insert(u.realName, 4, 4, '****') phone
         FROM uc_order o
-        LEFT JOIN (select r.id,r.username,r.phone,r.vipLevel,r.nickname,e.realName as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
+        LEFT JOIN (select r.id,r.username,insert(r.phone, 4, 4, '****') as phone,r.vipLevel,r.nickname,insert(e.realName, 1, 1, '*') as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
         left join uc_uvip_level l on l.levelCode = r.vipLevel
         ) u ON u.id = o.userId
         left join uc_uvip_level v on v.levelCode = o.nowVipLevel

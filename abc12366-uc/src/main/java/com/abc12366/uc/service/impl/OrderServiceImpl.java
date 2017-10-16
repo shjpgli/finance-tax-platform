@@ -875,11 +875,11 @@ public class OrderServiceImpl implements OrderService {
                 orderBO.setLastUpdate(new Date());
                 BeanUtils.copyProperties(orderBO,order);
                 //实物订单，必须要先填写地址
-                if (goodsType.equals("1")){
+                /*if (goodsType.equals("1")){
                     if(orderPayBO.getAddressId() == null || "".equals(orderPayBO.getAddressId())){
                         throw new ServiceException(4999,"实物订单，必须要先填写地址");
                     }
-                }
+                }*/
                 if("RMB".equals(type)){
                     if (isPay == 1) {
                         order.setOrderStatus("3");
