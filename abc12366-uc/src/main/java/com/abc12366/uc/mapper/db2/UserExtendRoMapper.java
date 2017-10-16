@@ -14,4 +14,6 @@ public interface UserExtendRoMapper {
     UserExtend selectOne(String userId);
 
     List<UserExtendListBO> selectList(Map map);
+
+    UserExtend isRealName(String userId);
 }

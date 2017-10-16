@@ -43,4 +43,8 @@
 
     </select>
 
+    <select id="isRealName" resultType="com.abc12366.uc.model.UserExtend" parameterType="java.lang.String">
+        select validStatus from uc_user_extend where userId =#{userId}
+    </select>
+
 </mapper>

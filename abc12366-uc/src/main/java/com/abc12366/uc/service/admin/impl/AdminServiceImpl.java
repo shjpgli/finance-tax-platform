@@ -250,12 +250,12 @@ public class AdminServiceImpl implements AdminService {
             Date date = new Date();
             long lastLong = TimeUtil.getDateStringToLong(new Date()) + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
             loginInfo.setLastResetTokenTime(TimeUtil.getLongToDate(lastLong));
-            LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
+            List<LoginInfo> info = loginInfoRoMapper.selectByAppList(loginInfo);
 
             //判断该用户是否存在此应用的登录信息
             loginInfo.setToken(userToken);
-            if (info != null) {
-                loginInfo.setId(info.getId());
+            if (info != null && info.size() > 0) {
+                loginInfo.setId(info.get(0).getId());
                 int update = loginInfoMapper.update(loginInfo);
                 if (update != 1) {
                     LOGGER.error("修改登录信息失败：{}", update);

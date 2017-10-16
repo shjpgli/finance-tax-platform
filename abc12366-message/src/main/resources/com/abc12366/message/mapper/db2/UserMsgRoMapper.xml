@@ -18,8 +18,9 @@
     <select id="selectList" parameterType="com.abc12366.message.model.UserMessage"
             resultType="com.abc12366.message.model.UserMessage">
         SELECT
-        <include refid="Base_Column"/>
-        FROM msg_user_message
+        <include refid="Base_Column"/>,
+        (select muu.nickname from msg_uc_user muu where muu.id=mu.fromUserId) nickname
+        FROM msg_user_message mu
         WHERE toUserId = #{toUserId}
         AND status != '0'
         AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
