@@ -373,7 +373,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                             throw new ServiceException(4909);
                         }*/
                         //有地址和电话相同的
-                        if (address.toString().equals(addressBuffer.toString()) && phone.equals(phoneTemp)) {
+                        if (address.equals(addressBuffer) && phone.equals(phoneTemp)) {
                             isAlike = true;
                             //寄托货物信息合并
                             invoiceNos.append(data.getInvoiceNo());
