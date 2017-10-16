@@ -38,7 +38,7 @@
     </select>
 
     <!-- 查询所有用户 -->
-    <select id="selectList" resultMap="userBoResultMap" parameterType="com.abc12366.uc.model.admin.Admin">
+    <select id="selectList" resultMap="userBoResultMap" parameterType="com.abc12366.uc.model.admin.bo.AdminBO">
         SELECT
         t.id,
         t.username,

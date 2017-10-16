@@ -87,7 +87,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<AdminBO> selectList(Admin admin) {
+    public List<AdminBO> selectList(AdminBO admin) {
         List<AdminBO> users = adminRoMapper.selectList(admin);
         return users;
     }
@@ -555,9 +555,10 @@ public class AdminServiceImpl implements AdminService {
     @Transactional("db1TxManager")
     @Override
     public void disableAll() {
-        Admin admin = new Admin();
-        List<AdminBO> adminBOs = adminRoMapper.selectList(admin);
+        AdminBO adminBO = new AdminBO();
+        List<AdminBO> adminBOs = adminRoMapper.selectList(adminBO);
         for (AdminBO temp : adminBOs) {
+            Admin admin = new Admin();
             admin.setId(temp.getId());
             admin.setStatus(false);
             int enable = adminMapper.updateUser(admin);
