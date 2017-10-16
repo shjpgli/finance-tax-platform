@@ -41,6 +41,8 @@ public class BusinessBatchMessage {
 
     @Length(min = 1, max = 32)
     private String type;
+    //链接地址
+    private String url;
 
     public BusinessBatchMessage() {
     }
@@ -54,6 +56,7 @@ public class BusinessBatchMessage {
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
+        setUrl(builder.url);
     }
 
     public String getId() {
@@ -120,6 +123,14 @@ public class BusinessBatchMessage {
         this.type = type;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         return "BusinessBatchMessage{" +
@@ -143,6 +154,7 @@ public class BusinessBatchMessage {
         private Timestamp createTime;
         private Timestamp lastUpdate;
         private String type;
+        private String url;
 
         public Builder() {
         }
@@ -184,6 +196,11 @@ public class BusinessBatchMessage {
 
         public Builder type(String val) {
             type = val;
+            return this;
+        }
+
+        public Builder url(String val) {
+            url = val;
             return this;
         }
 

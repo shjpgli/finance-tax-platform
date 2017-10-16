@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.message.mapper.db2.BusinessMsgRoMapper">
 
     <sql id="Base_Column">
-        id, userId, businessId, content, status, type, createTime, lastUpdate
+        id, userId, businessId, content, status, type, createTime, lastUpdate, url
     </sql>
 
     <select id="selectOne" resultType="com.abc12366.message.model.BusinessMessage">
@@ -18,7 +18,8 @@
     <select id="selectList" parameterType="com.abc12366.message.model.BusinessMessage"
             resultType="com.abc12366.message.model.BusinessMessage">
         SELECT
-        <include refid="Base_Column"/>
+        <include refid="Base_Column"/>,
+        (select muu.nickname from msg_uc_user muu where muu.id=#{userId}) nickname
         FROM msg_business_message
         WHERE userId = #{userId}
         <if test="type!=null">AND type = #{type}</if>
