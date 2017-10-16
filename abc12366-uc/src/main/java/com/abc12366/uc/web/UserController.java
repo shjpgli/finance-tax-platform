@@ -276,11 +276,32 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    //用户登录后校验短信验证码接口
+    @PostMapping(path = "/verify")
+    public ResponseEntity loginedVerifyCode(@Valid @RequestBody LoginedVerifyCodeBO verifyCodeBO) {
+        userService.loginedVerifyCode(verifyCodeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
     //用户绑定手机
     @PutMapping(path = "/phone")
     public ResponseEntity bindPhone(@Valid @RequestBody BindPhoneBO bindPhoneBO) {
         LOGGER.info("绑定手机入参：{}", bindPhoneBO.toString());
         userService.bindPhone(bindPhoneBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //用户手机+验证码登录专用发送短信接口
+    @PostMapping(path = "/phonelogin/code")
+    public ResponseEntity phoneLoginSendCode(@Valid @RequestBody SendPhoneCodeParam sendCodeBO) {
+        userService.phoneLoginSendCode(sendCodeBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //旧的手机号码是否有效校验
+    @PostMapping(path = "/oldphone")
+    public ResponseEntity verifyOldPhone(@Valid @RequestBody oldPhoneBO oldPhone) {
+        userService.verifyOldPhone(oldPhone);
         return ResponseEntity.ok(Utils.kv());
     }
 

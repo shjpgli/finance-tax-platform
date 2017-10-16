@@ -128,7 +128,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //微信回调地址
                 .excludePathPatterns("/wechatserver/init/**")
                         //好会计
-                .excludePathPatterns("/userhkj/token");
+                .excludePathPatterns("/userhkj/token")
+                        //用户验证码登录发送验证码短信
+                .excludePathPatterns("/user/phonelogin/code");
         //用户业务操作导致经验值更新，拦截器拦截处理
 //        registry.addInterceptor(uexpInterceptor())
 //                .addPathPatterns("/user/test");

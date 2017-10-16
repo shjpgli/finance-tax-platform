@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
@@ -97,6 +98,12 @@ public class UserServiceImpl implements UserService {
         if (userTemp != null) {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
+            //用户重要信息模糊化处理:电话号码
+            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
+                String phone = user.getPhone();
+                StringBuilder phoneFuffer = new StringBuilder(phone);
+                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+            }
             user.setPassword(null);
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
@@ -157,11 +164,11 @@ public class UserServiceImpl implements UserService {
                         throw new ServiceException(4182);
                     }
                 }
-                if (userUpdateBO.getPhone() != null) {
-                    if (userBO.getPhone().trim().equals(userUpdateBO.getPhone().trim())) {
-                        throw new ServiceException(4183);
-                    }
-                }
+//                if (userUpdateBO.getPhone() != null) {
+//                    if (userBO.getPhone().trim().equals(userUpdateBO.getPhone().trim())) {
+//                        throw new ServiceException(4183);
+//                    }
+//                }
 
             }
         }
@@ -181,7 +188,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(),UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
         }
 
         UserBO userDTO = new UserBO();
@@ -270,7 +277,7 @@ public class UserServiceImpl implements UserService {
         String encodePassword = rsaService.decode(passwordUpdateBO.getPassword());
 
         //修改密码不能为旧密码
-        if(encodePassword.equals(userExist.getPassword())){
+        if (encodePassword.equals(userExist.getPassword())) {
             throw new ServiceException(4040);
         }
 
@@ -322,7 +329,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //用户会员等级发生变化，则会员有效时间直接覆盖原有的，否则延长一年
-        if(vipLevel.trim().toUpperCase().equals(userTmp.getVipLevel())){
+        if (vipLevel.trim().toUpperCase().equals(userTmp.getVipLevel())) {
             calendar.setTime(userTmp.getVipExpireDate());
             calendar.add(Calendar.YEAR, 1); // 年份加1
         }
@@ -334,10 +341,10 @@ public class UserServiceImpl implements UserService {
         userMapper.update(user);
     }
 
-	@Override
-	public UserBO selectByopenid(String openid) {
-		return userRoMapper.selectByopenid(openid);
-	}
+    @Override
+    public UserBO selectByopenid(String openid) {
+        return userRoMapper.selectByopenid(openid);
+    }
 
     @Override
     public void automaticUserCancel() {
@@ -405,10 +412,11 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
-        User userUpdate = new User();
-        userUpdate.setId(user.getId());
-        userUpdate.setPhone(bindPhoneBO.getNewPhone());
-        userMapper.update(userUpdate);
+        UserPhoneBO userPhoneBO = new UserPhoneBO();
+        userPhoneBO.setId(user.getId());
+        userPhoneBO.setPhone(bindPhoneBO.getNewPhone());
+        LOGGER.info("用户绑定手机号：{}", userPhoneBO.toString());
+        updatePhone(userPhoneBO);
     }
 
     @Override
@@ -470,5 +478,108 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(user, userDTO);
         userDTO.setPassword(null);
         return userDTO;
+    }
+
+    @Override
+    public void phoneLoginSendCode(SendPhoneCodeParam sendCodeBO) {
+        LOGGER.info("用户手机+验证码登录获取手机验证码参数：{}", sendCodeBO.toString());
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(sendCodeBO.getPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        //判断手机号码是否注册
+        if (user == null) {
+            LOGGER.warn("此号码未注册，不允许通过验证码登录：{}", loginBO.toString());
+            throw new ServiceException(4823);
+        }
+        //判断用户是否激活状态
+        if (!user.getStatus()) {
+            throw new ServiceException(4038);
+        }
+        //判断用户的会员身份
+        if (user.getVipLevel() == null || user.getVipLevel().equals(Constant.USER_ORIGINAL_LEVEL)) {
+            throw new ServiceException(4824);
+        }
+        //判断用户会员是否有效
+        if (user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
+            throw new ServiceException(4825);
+        }
+
+        //发送短信
+        sendPhoneCode(sendCodeBO.getPhone(), sendCodeBO.getType());
+    }
+
+    //调用message接口发送短信
+    private void sendPhoneCode(String phone, String type) {
+        //不变参数
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/getcode";
+
+        //请求头设置
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("phone", phone);
+        requestBody.put("type", type);
+
+        HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
+        }
+
+        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
+            BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
+            if (!object.getCode().equals("2000")) {
+                throw new ServiceException(4204);
+            }
+        }
+    }
+
+    @Override
+    public void loginedVerifyCode(LoginedVerifyCodeBO verifyCodeBO) {
+        LOGGER.info("用户通过用户ID校验手机验证码，参数：{}", verifyCodeBO.toString());
+        User user = userRoMapper.selectOne(verifyCodeBO.getUserId());
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        if (StringUtils.isEmpty(user.getPhone())) {
+            throw new ServiceException(4184);
+        }
+
+        VerifyingCodeBO codeBO = new VerifyingCodeBO();
+        codeBO.setCode(verifyCodeBO.getCode());
+        codeBO.setType(verifyCodeBO.getType());
+        codeBO.setPhone(user.getPhone());
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        boolean result = false;
+        try {
+            result = authService.verifyCode(codeBO, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!result) {
+            throw new ServiceException(4201);
+        }
+    }
+
+    @Override
+    public void verifyOldPhone(oldPhoneBO oldPhone) {
+        String userId = Utils.getUserId();
+        User userNow = userRoMapper.selectOne(userId);
+
+
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(oldPhone.getOldPhone());
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        if (user == null || !userNow.getPhone().equals(oldPhone.getOldPhone())) {
+            LOGGER.warn("旧手机校验不通过：", oldPhone);
+            throw new ServiceException(4826);
+        }
     }
 }

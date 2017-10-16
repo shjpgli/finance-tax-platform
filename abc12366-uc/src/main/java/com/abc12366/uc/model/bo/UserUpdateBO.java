@@ -17,9 +17,9 @@ public class UserUpdateBO {
     @Size(min = 6, max = 32, message = "用户名长度只能在6到32之间")
     @Pattern(regexp = "^[a-zA-Z0-9]{6,32}$", message = "用户名只能为数字字母组合！")
     private String username;
-    @Pattern(regexp = "^\\d{11}$")
-    @Size(min = 11, max = 11)
-    private String phone;
+//    @Pattern(regexp = "^\\d{11}$",message = "手机号码格式不正确")
+//    @Size(min = 11, max = 11)
+//    private String phone;
     @Email
     private String regMail;
     private String regIP;
@@ -80,14 +80,6 @@ public class UserUpdateBO {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getRegMail() {
@@ -192,5 +184,29 @@ public class UserUpdateBO {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return "UserUpdateBO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", regMail='" + regMail + '\'' +
+                ", regIP='" + regIP + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", userPicturePath='" + userPicturePath + '\'' +
+                ", maxUserPicturePath='" + maxUserPicturePath + '\'' +
+                ", midUserPicturePath='" + midUserPicturePath + '\'' +
+                ", minUserPicturePath='" + minUserPicturePath + '\'' +
+                ", points=" + points +
+                ", exp=" + exp +
+                ", vipLevel='" + vipLevel + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", wxopenid='" + wxopenid + '\'' +
+                ", wxheadimg='" + wxheadimg + '\'' +
+                ", wxnickname='" + wxnickname + '\'' +
+                '}';
     }
 }

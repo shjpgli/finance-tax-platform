@@ -49,23 +49,21 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     @Override
     public ResponseForAbc4000Simple update(ABC4000CallbackBO data) {
         LOGGER.info("{}", data);
-        int result = 0;
-        for (NSRXXBO nsrxxbo : data.getT_nsrxx()) {
-            UserDzsb userDzsb = new UserDzsb();
-            userDzsb.setStatus(true);
-            userDzsb.setUserId(data.getUserid());
-            userDzsb.setNsrsbh(nsrxxbo.getY_nsrsbh());
-            userDzsb.setShxydm(nsrxxbo.getShxydm());
-            userDzsb.setDjxh(nsrxxbo.getDjxh());
-            userDzsb.setSwjgMc(nsrxxbo.getSwjgmc());
-            userDzsb.setSwjgDm(nsrxxbo.getSwjgdm());
-            userDzsb.setLastUpdate(new Date());
-            userDzsb.setExpireTime(nsrxxbo.getRjdqr());
-            userDzsb.setExpandExpireTime(nsrxxbo.getYqdqr());
-            userDzsb.setFrmc(nsrxxbo.getFrmc());
-            userDzsb.setFrzjh(nsrxxbo.getFrzjh());
-            result += userBindMapper.update(userDzsb);
-        }
+        UserDzsb userDzsb = new UserDzsb();
+        userDzsb.setStatus(true);
+        userDzsb.setUserId(data.getUserid());
+        userDzsb.setNsrsbh(data.getNsrsbh());
+        userDzsb.setShxydm(data.getShxydm());
+        userDzsb.setDjxh(data.getDjxh());
+        userDzsb.setSwjgMc(data.getSwjgmc());
+        userDzsb.setSwjgDm(data.getSwjgdm());
+        userDzsb.setLastUpdate(new Date());
+        userDzsb.setExpireTime(data.getRjdqr());
+        userDzsb.setExpandExpireTime(data.getYqdqr());
+        userDzsb.setFrmc(data.getFrmc());
+        userDzsb.setFrzjh(data.getFrzjh());
+        userDzsb.setLastLoginTime(new Date());
+        int result = userBindMapper.update(userDzsb);
 
         ResponseForAbc4000Simple response = new ResponseForAbc4000Simple();
         if (result < 1) {

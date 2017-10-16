@@ -1,6 +1,9 @@
 package com.abc12366.bangbang.service;
 
+import com.abc12366.bangbang.model.question.QuestionHeadman;
 import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
+
+import java.util.List;
 
 /**
  * @Author liuQi
@@ -8,7 +11,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
  */
 public interface QuestionHeadmanService {
 
-
+    List<QuestionHeadman> selectList();
 
     void add(QuestionHeadmanBo record);
 
@@ -16,5 +19,7 @@ public interface QuestionHeadmanService {
 
     void delete(String id);
 
+    /* 修改状态（apply:申请,success:通过,refuse:拒绝） */
+    void changeStatus(String id, String status);
 
 }

@@ -26,6 +26,7 @@
         <where>
             <if test="name != null and name != ''">name LIKE CONCAT('%',#{name},'%')</if>
         </where>
+        ORDER BY lastUpdate DESC
     </select>
 
     <select id="selectSimpleList" resultType="com.abc12366.uc.model.weixin.bo.redpack.ActivityBO"
@@ -57,6 +58,7 @@
             <if test="sendStatus != null and sendStatus != ''">and sendStatus = #{sendStatus}</if>
             <if test="openId != null and openId != ''">and openId = #{openId}</if>
         </where>
+        ORDER BY r.createTime DESC
     </select>
 
     <!-- 未抽奖记录 -->
@@ -77,7 +79,7 @@
         <where>
             receiveStatus is null and sendStatus is null
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
-            <if test="secret != null and secret != ''">and secret LIKE CONCAT('%',#{secret},'%')</if>
+            <if test="secret != null and secret != ''">and find_in_set(#{secret}, replace(secret, '#', ','))</if>
         </where>
     </select>
 

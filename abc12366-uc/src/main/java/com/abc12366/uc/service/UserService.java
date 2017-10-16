@@ -63,9 +63,27 @@ public interface UserService {
     void loginedSendCode(LoginedSendCodeBO sendCodeBO);
 
     /**
+     * 用户已登录状态下通过用户ID和验证码校验验证码
+     * @param verifyCodeBO
+     */
+    void loginedVerifyCode(LoginedVerifyCodeBO verifyCodeBO);
+
+    /**
      * 用户绑定手机号码
      *
      * @param bindPhoneBO
      */
     void bindPhone(BindPhoneBO bindPhoneBO);
+
+    /**
+     * 用户手机+验证码登录专用接口
+     * @param sendCodeBO
+     */
+    void phoneLoginSendCode(SendPhoneCodeParam sendCodeBO);
+
+    /**
+     * 旧手机号码有效性校验
+     * @param oldPhone
+     */
+    void verifyOldPhone(oldPhoneBO oldPhone);
 }

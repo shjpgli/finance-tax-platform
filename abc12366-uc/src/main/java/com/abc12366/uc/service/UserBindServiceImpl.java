@@ -133,7 +133,7 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
         userDzsb.setNsrmc(ty21Object.getNSRMC());
         userDzsb.setShxydm(ty21Object.getSHXYDM());
-        userDzsb.setLastLoginTime(DateUtils.GeneralStringToDate(ty21Object.getDLSJ(), "yyyy-MM-dd HH:mm:ss"));
+        userDzsb.setLastLoginTime(new Date());
         userDzsb.setNsrlx(ty21Object.getNSRLX());
         userDzsb.setSfgtjzh(ty21Object.getSFGTJZH());
         if (ty21Object.getSHXYDM() == null || ty21Object.getSHXYDM().trim().equals("")) {
@@ -453,6 +453,37 @@ public class UserBindServiceImpl implements UserBindService {
         Map<String, String> resMap = client.process(map);
 
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
+        //更新用户绑定信息
+        UserDzsb userDzsb = new UserDzsb();
+
+        userDzsb.setId(Utils.uuid());
+        Date date = new Date();
+        userDzsb.setCreateTime(date);
+        userDzsb.setLastUpdate(date);
+        userDzsb.setStatus(true);
+        userDzsb.setUserId(userId);
+        userDzsb.setDjxh(ty21Object.getDJXH());
+        userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
+        userDzsb.setNsrmc(ty21Object.getNSRMC());
+        userDzsb.setShxydm(ty21Object.getSHXYDM());
+        userDzsb.setLastLoginTime(new Date());
+        userDzsb.setNsrlx(ty21Object.getNSRLX());
+        userDzsb.setSfgtjzh(ty21Object.getSFGTJZH());
+        if (ty21Object.getSHXYDM() == null || ty21Object.getSHXYDM().trim().equals("")) {
+            userDzsb.setShxydm(ty21Object.getY_NSRSBH());
+        }
+        userDzsb.setSwjgMc(ty21Object.getSWJGMC());
+        userDzsb.setSwjgDm(ty21Object.getSWJGDM());
+        if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {
+            userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+        }
+        if (ty21Object.getYQDQR() != null && !ty21Object.getYQDQR().trim().equals("")) {
+            userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+        }
+        userDzsb.setFrmc(ty21Object.getFRXM());
+        userDzsb.setFrzjh(ty21Object.getFRZJH());
+        userBindMapper.update(userDzsb);
+
         return ty21Object;
     }
 

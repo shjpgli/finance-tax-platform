@@ -290,6 +290,12 @@ public class AuthServiceImpl implements AuthService {
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
         userBO.setPassword(null);
+        //用户重要信息模糊化处理:电话号码
+        if (!StringUtils.isEmpty(userBO.getPhone()) && userBO.getPhone().length() >= 8) {
+            String phone = userBO.getPhone();
+            StringBuilder phoneFuffer = new StringBuilder(phone);
+            userBO.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+        }
 
         Map<String, Object> map = new HashMap<>();
         map.put("token", userToken);
@@ -402,6 +408,12 @@ public class AuthServiceImpl implements AuthService {
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
         userBO.setPassword(null);
+        //用户重要信息模糊化处理:电话号码
+        if (!StringUtils.isEmpty(userBO.getPhone()) && userBO.getPhone().length() >= 8) {
+            String phone = userBO.getPhone();
+            StringBuilder phoneFuffer = new StringBuilder(phone);
+            userBO.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+        }
 
         Map<String, Object> map = new HashMap<>();
         map.put("token", userToken);
@@ -606,6 +618,13 @@ public class AuthServiceImpl implements AuthService {
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
+        //用户重要信息模糊化处理:电话号码
+        if (!StringUtils.isEmpty(userBO.getPhone()) && userBO.getPhone().length() >= 8) {
+            String phone = userBO.getPhone();
+            StringBuilder phoneFuffer = new StringBuilder(phone);
+            userBO.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+        }
+
         return Utils.kv("token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
     }
 
