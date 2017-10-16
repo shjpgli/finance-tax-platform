@@ -32,9 +32,11 @@ public class WxRedEnvelop {
     private String activityId;
     // 活动起始时间
     @NotNull
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     // 活动截止时间
     @NotNull
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     // 红包金额
     @NotNull
