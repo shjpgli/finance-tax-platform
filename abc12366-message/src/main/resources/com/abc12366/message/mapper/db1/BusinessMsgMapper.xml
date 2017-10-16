@@ -4,18 +4,18 @@
 <mapper namespace="com.abc12366.message.mapper.db1.BusinessMsgMapper">
 
     <sql id="Base_Column">
-        id, userId, businessId, content, status, type, createTime, lastUpdate
+        id, userId, businessId, content, status, type, createTime, lastUpdate, url
     </sql>
 
     <insert id="insert">
         INSERT INTO msg_business_message (<include refid="Base_Column"/>) VALUES
-        (#{id}, #{userId}, #{businessId}, #{content}, #{status}, #{type}, #{createTime}, #{lastUpdate})
+        (#{id}, #{userId}, #{businessId}, #{content}, #{status}, #{type}, #{createTime}, #{lastUpdate}, #{url})
     </insert>
 
     <insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO msg_business_message (<include refid="Base_Column"/>) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-        (#{item.id}, #{item.userId}, #{item.businessId}, #{item.content}, #{item.status}, #{item.type}, #{item.createTime}, #{item.lastUpdate})
+        (#{item.id}, #{item.userId}, #{item.businessId}, #{item.content}, #{item.status}, #{item.type}, #{item.createTime}, #{item.lastUpdate}, #{item.url})
         </foreach>
     </insert>
 

@@ -46,7 +46,7 @@
             <if test="method != null">AND b.method = #{method}</if>
             <if test="version != null">AND b.version = #{version}</if>
             <if test="appId != null">AND a.appId = #{appId}</if>
-            <if test="1 != null">AND b.status = '1'</if>
+
         </where>
     </select>
     <select id="selectByAppId" resultMap="appSettingMap" parameterType="com.abc12366.gateway.model.bo.AppSettingBO">

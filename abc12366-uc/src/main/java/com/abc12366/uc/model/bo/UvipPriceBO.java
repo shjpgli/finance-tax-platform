@@ -12,6 +12,7 @@ public class UvipPriceBO implements Serializable {
     private String id;
     private String productId;
     private String vipLevel;
+    private String vipLevelName;
     private Double discount;
     private Double tradePrice;
     private Integer giftPoints;
@@ -82,4 +83,11 @@ public class UvipPriceBO implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getVipLevelName() {
+        return vipLevelName;
+    }
+
+    public void setVipLevelName(String vipLevelName) {
+        this.vipLevelName = vipLevelName;
+    }
 }

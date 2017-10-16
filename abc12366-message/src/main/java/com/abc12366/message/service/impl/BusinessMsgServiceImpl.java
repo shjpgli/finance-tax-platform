@@ -74,6 +74,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
                         .createTime(now)
                         .lastUpdate(now)
                         .type(data.getType())
+                        .url(data.getUrl())
                         .build();
                 dataList.add(bm);
             }
