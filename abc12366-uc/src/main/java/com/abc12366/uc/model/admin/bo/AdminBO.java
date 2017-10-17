@@ -44,6 +44,8 @@ public class AdminBO extends AdminExtendBO implements Serializable {
      **/
     private Boolean status;
 
+    private String organizationId;
+
     private String roleIds;
 
     private List<Role> rolesList;
@@ -122,5 +124,13 @@ public class AdminBO extends AdminExtendBO implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
     }
 }

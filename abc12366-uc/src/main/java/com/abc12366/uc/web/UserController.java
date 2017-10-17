@@ -305,6 +305,12 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    @GetMapping(path = "/realname")
+    public ResponseEntity isRealName() {
+        IsRealNameBO isRealName = userService.isRealName();
+        return ResponseEntity.ok(Utils.kv("data", isRealName));
+    }
+
 //    @PostMapping(path = "/test")
 //    public ResponseEntity test(){
 //        return ResponseEntity.ok(Utils.kv());

@@ -16,8 +16,6 @@ public class ExchangeRefundBO {
 
     private String id;
     // 退款金额流向
-    @NotEmpty
-    @Length(min = 1, max = 10)
     private String refundType;
 
     // 退款金额

@@ -468,7 +468,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                 }else{
                                     return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
                                 }
-
                             }  catch (Exception e) {
                                 LOGGER.error("支付宝退款失败：",e);
                                 return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
@@ -482,8 +481,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }
         }else if(order != null && "POINTS".equals(order.getTradeMethod())){
             insertPoints(order);
+        }else{
+            throw new ServiceException(4957);
         }
-        throw new ServiceException(4957);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**

@@ -30,11 +30,11 @@
             <if test="nsrsbh != null and nsrsbh!=''">AND a.nsrsbh = #{nsrsbh}</if>
             <if test="date != null and date!=''">
                 <![CDATA[
-                and date_format(visitDate, '%Y') = #{date}
+                and date_format(a.visitDate, '%Y') = #{date}
                 ]]>
             </if>
         </where>
-		order by visitDate desc
+		order by a.visitDate desc
 	</select>
 
 	<!-- 统计列表查询 -->
@@ -43,15 +43,15 @@
 		LEFT JOIN bb_user u on u.phone = a.phone
         <where>
             1=1
-            <if test="phone != null and phone!=''">AND phone = #{phone}</if>
+            <if test="phone != null and phone!=''">AND a.phone = #{phone}</if>
 			<if test="userId != null and userId!=''">AND u.id = #{userId}</if>
             <if test="date != null and date!=''">
                 <![CDATA[
-                and date_format(visitDate, '%Y') = #{date}
+                and date_format(a.visitDate, '%Y') = #{date}
                 ]]>
             </if>
         </where>
-        group by date_format(visitDate, '%Y')
+        group by date_format(a.visitDate, '%Y')
 	</select>
 
 

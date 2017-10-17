@@ -50,10 +50,26 @@
         FROM uc_login_info
         <where>
             1=1
-            <if test="userId != null">
+            <if test="userId != null and appId != '' ">
                 and userId = #{userId}
             </if>
-            <if test="appId != null">
+            <if test="appId != null and appId != ''">
+                and appId = #{appId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByAppList" resultType="com.abc12366.uc.model.admin.LoginInfo"
+            parameterType="com.abc12366.uc.model.admin.LoginInfo">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_login_info
+        <where>
+            1=1
+            <if test="userId != null and appId != '' ">
+                and userId = #{userId}
+            </if>
+            <if test="appId != null and appId != ''">
                 and appId = #{appId}
             </if>
         </where>

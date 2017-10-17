@@ -580,4 +580,17 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4826);
         }
     }
+
+    @Override
+    public IsRealNameBO isRealName() {
+        IsRealNameBO isRealName = new IsRealNameBO();
+        String userId = Utils.getUserId();
+        UserExtend userExtend = userExtendRoMapper.isRealName(userId);
+        if (userExtend != null && userExtend.getValidStatus() != null && userExtend.getValidStatus().equals(UCConstant.USER_REALNAME_VALIDATED)) {
+            isRealName.setIsRealName(true);
+        } else {
+            isRealName.setIsRealName(false);
+        }
+        return isRealName;
+    }
 }

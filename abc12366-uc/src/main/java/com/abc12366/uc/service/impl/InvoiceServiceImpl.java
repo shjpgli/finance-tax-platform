@@ -373,7 +373,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                             throw new ServiceException(4909);
                         }*/
                         //有地址和电话相同的
-                        if (address.toString().equals(addressBuffer.toString()) && phone.equals(phoneTemp)) {
+                        if (address.equals(addressBuffer) && phone.equals(phoneTemp)) {
                             isAlike = true;
                             //寄托货物信息合并
                             invoiceNos.append(data.getInvoiceNo());
@@ -387,10 +387,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                         invoiceNos.append(bo.getInvoiceNo());
                         invoiceNos.append(";");
                     }
-                    excel.setCargoContent(invoiceNos.toString());
-                    //寄托数量
-                    excel.setCargoNum(num);
                 }
+                excel.setCargoContent(invoiceNos.toString());
+                //寄托数量
+                excel.setCargoNum(num);
                 excel.setReceivingCompany(bo.getNsrmc());
                 excelList.add(excel);
             }
