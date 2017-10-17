@@ -387,10 +387,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                         invoiceNos.append(bo.getInvoiceNo());
                         invoiceNos.append(";");
                     }
-                    excel.setCargoContent(invoiceNos.toString());
-                    //寄托数量
-                    excel.setCargoNum(num);
                 }
+                excel.setCargoContent(invoiceNos.toString());
+                //寄托数量
+                excel.setCargoNum(num);
                 excel.setReceivingCompany(bo.getNsrmc());
                 excelList.add(excel);
             }
