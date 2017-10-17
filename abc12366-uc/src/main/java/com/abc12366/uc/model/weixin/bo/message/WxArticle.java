@@ -4,21 +4,21 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class WxArticle {
     @NotEmpty
-    private String newsId;
+    private String newsId;//id
     @NotEmpty
-    private String title;
+    private String title;//标题
     @NotEmpty
-    private String thumb_media_id;
+    private String thumb_media_id;//图片id
 
-    private String author;
+    private String author;//作者
 
-    private String digest;
+    private String digest;//个数
     @NotEmpty
     private Integer show_cover_pic; //是否显示封面，0为false，即不显示，1为true，即显示
     @NotEmpty
-    private String content;
+    private String content;//内容
     @NotEmpty
-    private String content_source_url;
+    private String content_source_url;//内容地址
 
     public String getNewsId() {
         return newsId;
