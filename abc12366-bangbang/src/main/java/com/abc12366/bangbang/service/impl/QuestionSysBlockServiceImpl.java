@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionSysBlockRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
@@ -25,6 +26,9 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
     private QuestionSysBlockMapper questionSysBlockMapper;
 
     @Autowired
+    private QuestionSysBlockRoMapper questionSysBlockRoMapper;
+
+    @Autowired
     private QuestionMapper questionMapper;
 
     @Autowired
@@ -32,7 +36,7 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
 
     @Override
     public List<QuestionSysBlockBo> selectList() {
-        return questionSysBlockMapper.selectList();
+        return questionSysBlockRoMapper.selectList();
     }
 
     @Override
@@ -40,9 +44,10 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
         QuestionSysBlock req = new QuestionSysBlock();
         req.setId(id);
         req.setUpdateAdmin(Utils.getAdminId());
+        req.setStatus(status);
         questionSysBlockMapper.updateByPrimaryKeySelective(req);
 
-        QuestionSysBlock record = questionSysBlockMapper.selectByPrimaryKey(id);
+        QuestionSysBlock record = questionSysBlockRoMapper.selectByPrimaryKey(id);
         if("question".equals(record.getSourceType())){
             Question question = new Question();
             question.setId(record.getSourceId());

@@ -10,6 +10,12 @@ public class QuestionSysBlock  {
 	/**PK**/
 	private String id;
 
+	/*用户id*/
+	private String userId;
+
+	/**内容状态**/
+	private String status;
+
 	/**来源id**/
 	private String sourceId;
 
@@ -75,4 +81,21 @@ public class QuestionSysBlock  {
 		return this.updateTime;
 	}
 
+	public String getUserId() {
+		return userId;
+	}
+
+	public QuestionSysBlock setUserId(String userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public QuestionSysBlock setStatus(String status) {
+		this.status = status;
+		return this;
+	}
 }
