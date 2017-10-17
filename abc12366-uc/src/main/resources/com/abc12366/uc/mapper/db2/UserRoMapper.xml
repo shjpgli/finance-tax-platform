@@ -34,8 +34,14 @@
         (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
         (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
         ) levelName,
-        (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
-        (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        )  medal,
+        IFNULL(
+        (SELECT uul.medalIcon FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medalIcon FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        )
         medalIcon
         from uc_user uu) u
         <where>
