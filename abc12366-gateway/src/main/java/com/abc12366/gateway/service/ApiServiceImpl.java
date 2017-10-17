@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -25,6 +24,7 @@ import java.util.List;
 public class ApiServiceImpl implements ApiService {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ApiServiceImpl.class);
+
     @Autowired
     private ApiRoMapper apiRoMapper;
 
@@ -36,10 +36,9 @@ public class ApiServiceImpl implements ApiService {
         return apiRoMapper.selectList(api);
     }
 
-    @Transactional("db1TxManager")
     @Override
     public Api insert(ApiBO apiBO) {
-        isSameInvoice(apiBO);
+        isSameApi(apiBO);
 
         apiBO.setId(Utils.uuid());
         Date now = new Date();
@@ -55,13 +54,14 @@ public class ApiServiceImpl implements ApiService {
         return api;
     }
 
-    private void isSameInvoice(ApiBO apiBO) {
-        //uri，version，method,dictId，确定数据的唯一性
+    /**
+     * uri，version，method确定接口的唯一
+     */
+    private void isSameApi(ApiBO apiBO) {
         Api temp = new Api();
         temp.setUri(apiBO.getUri());
         temp.setVersion(apiBO.getVersion());
         temp.setMethod(apiBO.getMethod());
-//        temp.setDictId(apiBO.getDictId());
         ApiBO bo = apiRoMapper.selectByUriAndVersion(temp);
         if (bo != null && !bo.getId().equals(apiBO.getId())) {
             LOGGER.warn("uri，version，method,dictId，确定数据的唯一性：{}", bo);
@@ -69,10 +69,9 @@ public class ApiServiceImpl implements ApiService {
         }
     }
 
-    @Transactional("db1TxManager")
     @Override
     public Api update(ApiBO apiBO) {
-        isSameInvoice(apiBO);
+        isSameApi(apiBO);
         Api api = new Api();
         BeanUtils.copyProperties(apiBO, api);
         api.setLastUpdate(new Date());
@@ -85,7 +84,6 @@ public class ApiServiceImpl implements ApiService {
 
     }
 
-    @Transactional("db1TxManager")
     @Override
     public void delete(String id) {
         int del = apiMapper.delete(id);

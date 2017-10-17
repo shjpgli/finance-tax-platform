@@ -47,10 +47,15 @@ public interface ApiService {
     /**
      * 查看服务接口
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ApiBO
      */
     ApiBO selectOne(String id);
 
+    /**
+     * 通过AppId查找未授权的API
+     * @param appId 应用ID
+     * @return List
+     */
     List<ApiBO> selectBySettingList(String appId);
 }
