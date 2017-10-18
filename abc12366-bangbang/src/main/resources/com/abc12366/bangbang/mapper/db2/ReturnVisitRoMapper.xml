@@ -19,33 +19,37 @@
 	<!-- 列表查询 -->
 	<select id="selectList" resultType="com.abc12366.bangbang.model.ReturnVisit" parameterType="com.abc12366.bangbang.model.bo.ReturnVisitBO">
 		SELECT
-		<include refid="Base_Column_List" />
-		FROM bb_return_visit
+		v.id,	v.nsrsbh,	v.nsrmc,	v.productName,	v.name,	v.phone,v.visitDate
+		FROM bb_return_visit v
+		LEFT JOIN bb_user u on u.phone = v.phone
 		<where>
 			1=1
-			<if test="phone != null and phone!=''">AND phone = #{phone}</if>
+			<if test="phone != null and phone!=''">AND v.phone = #{phone}</if>
+			<if test="userId != null and userId!=''">AND u.id = #{userId}</if>
 			<if test="date != null and date!=''">
 				<![CDATA[
-                and date_format(visitDate, '%Y') = #{date}
+                and date_format(v.visitDate, '%Y') = #{date}
                 ]]>
 			</if>
 		</where>
-		order by visitDate desc
+		order by v.visitDate desc
 	</select>
 
 	<!-- 统计列表查询 -->
 	<select id="selectStatisList" resultType="com.abc12366.bangbang.model.bo.ReturnVisitBO" parameterType="com.abc12366.bangbang.model.bo.ReturnVisitBO">
-		select count(*) as total,date_format(visitDate, '%Y') as date from bb_return_visit
+		select count(v.id) as total,date_format(v.visitDate, '%Y') as date from bb_return_visit v
+		LEFT JOIN bb_user u on u.phone = v.phone
 		<where>
 			1=1
-			<if test="phone != null and phone!=''">AND phone = #{phone}</if>
+			<if test="phone != null and phone!=''">AND v.phone = #{phone}</if>
+			<if test="userId != null and userId!=''">AND u.id = #{userId}</if>
 			<if test="date != null and date!=''">
 				<![CDATA[
-                and date_format(visitDate, '%Y') = #{date}
+                and date_format(v.visitDate, '%Y') = #{date}
                 ]]>
 			</if>
 		</where>
-		group by date_format(visitDate, '%Y')
+		group by date_format(v.visitDate, '%Y')
 	</select>
 
 </mapper>

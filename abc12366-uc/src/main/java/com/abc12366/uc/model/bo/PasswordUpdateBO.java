@@ -13,21 +13,9 @@ import javax.validation.constraints.Size;
 public class PasswordUpdateBO {
 
     @NotEmpty
-    @Pattern(regexp = "^\\d{11}$")
-    @Size(min = 11, max = 11)
-    private String phone;
-    @NotEmpty
     private String password;
 
     public PasswordUpdateBO() {
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getPassword() {
@@ -41,7 +29,6 @@ public class PasswordUpdateBO {
     @Override
     public String toString() {
         return "PasswordUpdateBO{" +
-                "phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

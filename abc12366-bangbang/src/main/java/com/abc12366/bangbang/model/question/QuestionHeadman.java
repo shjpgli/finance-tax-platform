@@ -26,8 +26,8 @@ public class QuestionHeadman  {
 	/**掌门人登录用户uc_user id**/
 	private String userId;
 
-	/**掌门人负责的分类id**/
-	private String classifyId;
+	/**掌门人负责的分类代码**/
+	private String classifyCode;
 
 	/**掌门人负责的分类名称**/
 	private String classifyName;
@@ -98,12 +98,12 @@ public class QuestionHeadman  {
 		return factionId;
 	}
 
-	public String getClassifyId() {
-		return classifyId;
+	public String getClassifyCode() {
+		return classifyCode;
 	}
 
-	public QuestionHeadman setClassifyId(String classifyId) {
-		this.classifyId = classifyId;
+	public QuestionHeadman setClassifyCode(String classifyCode) {
+		this.classifyCode = classifyCode;
 		return this;
 	}
 

@@ -18,21 +18,21 @@ public class GzhInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id;
     @NotEmpty
-    private String gzhName;
+    private String gzhName;//公众号好名
     @NotEmpty
-    private String appid;
+    private String appid;//公众号ID
     @NotEmpty
-    private String secret;
+    private String secret;//密码
     @NotEmpty
-    private String tokenStr;
+    private String tokenStr;//加密串
     @NotEmpty
-    private String serverUrl;
+    private String serverUrl;//回调地址
     
     private String userToken;//usertoken
     private Date userTokenUpdate;//token更新时间
     
-    private String jsapi_ticket;
-    private Date jsapiTicketUpdate;
+    private String jsapi_ticket;//JS tikect
+    private Date jsapiTicketUpdate;//JS tikect更新时间
     
     private Date creatDate;
     private Date lastupdate;

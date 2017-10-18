@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.question.QuestionHeadman;
+import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface QuestionHeadmanMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionHeadman selectByPrimaryKey(@Param("id") String id);
+	QuestionHeadmanBo selectByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 

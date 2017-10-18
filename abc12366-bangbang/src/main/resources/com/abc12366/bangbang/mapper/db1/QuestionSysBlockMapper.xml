@@ -3,32 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	sourceId,	sourceType,	createTime,	updateAdmin, updateTime
-	</sql>
-
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo">
-		SELECT
-		t.*,
-		IF(t1.title IS NULL, t2.answer, CONCAT(t1.title,t1.detail)) content,
-		IF(t1.status IS NULL, t2.status, t1.status) STATUS
-		FROM bb_question_sys_block t
-		LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
-		LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
-	</select>
-
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionSysBlock" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_question_sys_block
-		 WHERE id = #{id}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM bb_question_sys_block
@@ -38,86 +12,23 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
 		 INSERT INTO bb_question_sys_block
- 		(id,sourceId,sourceType,createTime,updateAdmin,updateTime) 
+ 		(id,userId,classifyCode,status,sourceId,sourceType,createTime)
 		 VALUES 
- 		(#{id},#{sourceId},#{sourceType},now(),#{updateAdmin},#{updateTime})
-	</insert>
-
-	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
-		 INSERT INTO bb_question_sys_block
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="id != null">
-				 id,
-			</if>
-			<if test="sourceId != null">
-				 sourceId,
-			</if>
-			<if test="sourceType != null">
-				 sourceType,
-			</if>
-			<if test="createTime != null">
-				 createTime,
-			</if>
-			<if test="updateAdmin != null">
-				 updateAdmin,
-			</if>
-			<if test="updateTime != null">
-				 updateTime,
-			</if>
-
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="id!=null">
-				 #{id},
-			</if>
-			<if test="sourceId!=null">
-				 #{sourceId},
-			</if>
-			<if test="sourceType!=null">
-				 #{sourceType},
-			</if>
-			<if test="createTime!=null">
-				 #{createTime},
-			</if>
-			<if test="updateAdmin!=null">
-				 #{updateAdmin},
-			</if>
-			<if test="updateTime!=null">
-				 #{updateTime},
-			</if>
-		 </trim>
+ 		(#{id},#{userId},#{classifyCode},#{status},#{sourceId},#{sourceType},now())
 	</insert>
 
 	<!-- 修 改-->
 	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
 		 UPDATE bb_question_sys_block
- 		 <set> 
-			<if test="sourceId != null">
-				 sourceId = #{sourceId},
-			</if>
-			<if test="sourceType != null">
-				 sourceType = #{sourceType},
-			</if>
-			<if test="updateAdmin != null">
+ 		 <set>
+			 <if test="status != null">
+				 status = #{status},
+			 </if>
+			 <if test="updateAdmin != null">
 				 updateAdmin = #{updateAdmin},
-			</if>
-			<if test="updateTime != null">
-				 updateTime = #{updateTime},
-			</if>
-
+			 </if>
+				 updateTime = now()
  		 </set>
-		 WHERE id = #{id}
-	</update>
-
-	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionSysBlock">
-		 UPDATE bb_question_sys_block
-		 SET 
-			 sourceId = #{sourceId},
-			 sourceType = #{sourceType},
-			 updateAdmin = #{updateAdmin},
-			 updateTime = #{updateTime}
 		 WHERE id = #{id}
 	</update>
 

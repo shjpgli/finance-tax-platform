@@ -12,15 +12,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import sun.misc.BASE64Decoder;
 
 import javax.validation.Valid;
-
 import java.io.IOException;
 import java.util.List;
 
 /**
+ * API接口控制器
+ *
  * @create 2017-04-27 10:21 AM
  * @since 1.0.0
  */
@@ -36,13 +36,14 @@ public class ApiController {
     /**
      * API列表
      *
-     * @param name
-     * @param status
-     * @param dictId
-     * @param pageNum
-     * @param pageSize
-     * @return
-     * @throws IOException 
+     * @param name     接口名称
+     * @param status   状态
+     * @param dictId   字典ID
+     * @param url      接口地址
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @return ResponseEntity
+     * @throws IOException IO异常
      */
     @GetMapping(path = "/api")
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
@@ -50,12 +51,17 @@ public class ApiController {
                                      @RequestParam(value = "dictId", required = false) String dictId,
                                      @RequestParam(value = "url", required = false) String url,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) throws IOException {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize)
+            throws IOException {
         Api api = new Api();
         api.setName(name);
         api.setStatus(status);
         api.setDictId(dictId);
-        api.setUri(new String(new BASE64Decoder().decodeBuffer(url)));
+        if (url != null && !"".equals(url)) {
+            api.setUri(new String(new BASE64Decoder().decodeBuffer(url)));
+        }
+        LOGGER.info("{}", api);
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ApiBO> apiList = apiService.selectList(api);
         PageInfo<ApiBO> pageInfo = new PageInfo<>(apiList);

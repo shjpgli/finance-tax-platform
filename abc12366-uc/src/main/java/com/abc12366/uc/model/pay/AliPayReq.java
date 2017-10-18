@@ -16,8 +16,8 @@ public class AliPayReq implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@NotNull
 	private AliPagePayContent payContent;
-	private String notify_url;
-	private String return_url;
+	private String notify_url;//通知地址
+	private String return_url;//返回地址
 	
 	
 	public AliPagePayContent getPayContent() {

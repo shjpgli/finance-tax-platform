@@ -99,11 +99,11 @@ public class UserServiceImpl implements UserService {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
             //用户重要信息模糊化处理:电话号码
-            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
-                String phone = user.getPhone();
-                StringBuilder phoneFuffer = new StringBuilder(phone);
-                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
-            }
+//            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
+//                String phone = user.getPhone();
+//                StringBuilder phoneFuffer = new StringBuilder(phone);
+//                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+//            }
             user.setPassword(null);
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
@@ -245,10 +245,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
         LOGGER.info("{}", passwordUpdateBO);
-        LoginBO loginBO = new LoginBO();
-        loginBO.setUsernameOrPhone(passwordUpdateBO.getPhone());
+        String userId = Utils.getUserId();
         //判断用户是否存在
-        User userExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User userExist = userRoMapper.selectOne(userId);
         if (userExist == null) {
             throw new ServiceException(4018);
         }
@@ -284,7 +283,6 @@ public class UserServiceImpl implements UserService {
         //改库..
         User user = new User();
         user.setId(userExist.getId());
-        user.setPhone(passwordUpdateBO.getPhone());
         user.setPassword(encodePassword);
         user.setLastUpdate(new Date());
         int result = userMapper.update(user);
@@ -581,5 +579,18 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn("旧手机校验不通过：", oldPhone);
             throw new ServiceException(4826);
         }
+    }
+
+    @Override
+    public IsRealNameBO isRealName() {
+        IsRealNameBO isRealName = new IsRealNameBO();
+        String userId = Utils.getUserId();
+        UserExtend userExtend = userExtendRoMapper.isRealName(userId);
+        if (userExtend != null && userExtend.getValidStatus() != null && userExtend.getValidStatus().equals(UCConstant.USER_REALNAME_VALIDATED)) {
+            isRealName.setIsRealName(true);
+        } else {
+            isRealName.setIsRealName(false);
+        }
+        return isRealName;
     }
 }

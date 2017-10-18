@@ -19,35 +19,39 @@
 	<!-- 列表查询 -->
 	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionAccepted" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
 		SELECT
-		id,	nsrsbh,	nsrmc,	productName,	type,	name,	phone,	date_format(visitDate, '%Y-%m-%d') as visitDate
-		FROM bb_question_accepted
-        <where>
+		a.id,	a.nsrsbh,	a.nsrmc,	a.productName,	a.type,	a.name,	a.phone,	date_format(a.visitDate, '%Y-%m-%d') as visitDate
+		FROM bb_question_accepted a
+		LEFT JOIN bb_user u on u.phone = a.phone
+		<where>
             1=1
-            <if test="phone != null and phone!=''">AND phone = #{phone}</if>
-            <if test="name != null and name!=''">AND name = #{name}</if>
-            <if test="nsrsbh != null and nsrsbh!=''">AND nsrsbh = #{nsrsbh}</if>
+            <if test="phone != null and phone!=''">AND a.phone = #{phone}</if>
+            <if test="userId != null and userId!=''">AND u.id = #{userId}</if>
+            <if test="name != null and name!=''">AND a.name = #{name}</if>
+            <if test="nsrsbh != null and nsrsbh!=''">AND a.nsrsbh = #{nsrsbh}</if>
             <if test="date != null and date!=''">
                 <![CDATA[
-                and date_format(visitDate, '%Y') = #{date}
+                and date_format(a.visitDate, '%Y') = #{date}
                 ]]>
             </if>
         </where>
-		order by visitDate desc
+		order by a.visitDate desc
 	</select>
 
 	<!-- 统计列表查询 -->
 	<select id="selectStatisList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
-		select count(id) as total,(select count(id) from bb_question_accepted) as allCount,date_format(visitDate, '%Y') as date from bb_question_accepted
+		select count(a.id) as total,(select count(b.id) from bb_question_accepted b) as allCount,date_format(a.visitDate, '%Y') as date from bb_question_accepted a
+		LEFT JOIN bb_user u on u.phone = a.phone
         <where>
             1=1
-            <if test="phone != null and phone!=''">AND phone = #{phone}</if>
+            <if test="phone != null and phone!=''">AND a.phone = #{phone}</if>
+			<if test="userId != null and userId!=''">AND u.id = #{userId}</if>
             <if test="date != null and date!=''">
                 <![CDATA[
-                and date_format(visitDate, '%Y') = #{date}
+                and date_format(a.visitDate, '%Y') = #{date}
                 ]]>
             </if>
         </where>
-        group by date_format(visitDate, '%Y')
+        group by date_format(a.visitDate, '%Y')
 	</select>
 
 

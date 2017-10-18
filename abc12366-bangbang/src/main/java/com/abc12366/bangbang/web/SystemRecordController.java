@@ -18,6 +18,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +47,19 @@ public class SystemRecordController {
         Map<String, Object> map = new HashMap<>();
 
         if(startTime != null && !startTime.isEmpty())        map.put("startTime",startTime);
-        if(endTime != null && !endTime.isEmpty())        map.put("endTime",endTime);
+        if(endTime != null && !endTime.isEmpty())     {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date eTime = sdf.parse(endTime);
+                endTime = sdf.format(eTime) + " 23:59:59";
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                eTime = sdf2.parse(endTime);
+                map.put("endTime",eTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
         if(appName != null && !appName.isEmpty())        map.put("appName",appName);
         if(location != null && !location.isEmpty())        map.put("location",location);
 

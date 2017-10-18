@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.message.mapper.db2.BusinessMsgRoMapper">
 
     <sql id="Base_Column">
-        id, userId, businessId, content, status, type, createTime, lastUpdate
+        id, userId, businessId, content, status, type, createTime, lastUpdate, url
     </sql>
 
     <select id="selectOne" resultType="com.abc12366.message.model.BusinessMessage">

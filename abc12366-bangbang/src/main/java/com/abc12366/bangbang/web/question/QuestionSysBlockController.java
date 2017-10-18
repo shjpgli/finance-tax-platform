@@ -1,8 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
-import com.abc12366.bangbang.model.question.QuestionHeadman;
-import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
-import com.abc12366.bangbang.service.QuestionHeadmanService;
+import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
+import com.abc12366.bangbang.service.QuestionSysBlockService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
@@ -15,41 +14,38 @@ import java.util.List;
 
 /**
  * @Author liuQi
- * @Date 2017/10/16 10:54
- * 掌门人管理
+ * @Date 2017/10/17 17:21
+ * 系统过滤帮帮内容（包括问题，回答，评论）
  */
 @RestController
-@RequestMapping(path = "/questionHeadman", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
-public class QuestionHeadmanController {
+@RequestMapping(path = "/questionSysBlock", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+public class QuestionSysBlockController {
 
     @Autowired
-    private QuestionHeadmanService questionHeadmanService;
+    private QuestionSysBlockService questionSysBlockService;
 
-    /* 掌门人列表查询 */
+    /* 列表查询 */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionHeadman> list = questionHeadmanService.selectList();
+        List<QuestionSysBlockBo> list = questionSysBlockService.selectList();
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
-    /* 掌门人 详情 */
-    @GetMapping(path = "/view/{id}")
-    public ResponseEntity selectList(@PathVariable String id){
-        QuestionHeadmanBo headmanBo = questionHeadmanService.selectByPrimaryKey(id);
-        return ResponseEntity.ok(Utils.kv("data", headmanBo));
-    }
 
-    /* 掌门人 审核 */
-    @PutMapping(path = "/modifyStatus/{id}/{status}")
+    /*
+    * 修改状态 接口
+    */
+    @PutMapping(path = "/status/{id}/{status}")
     public ResponseEntity modifyStatus(@PathVariable String id, @PathVariable String status) {
-        questionHeadmanService.changeStatus(id, status);
+        questionSysBlockService.changeStatus(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
+
 
 
 }
