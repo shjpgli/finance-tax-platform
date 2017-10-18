@@ -122,6 +122,7 @@ public class ApiLogController {
     public ResponseEntity selectApiListByApiId(
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+            @RequestParam(value = "appId", required = false) String appId,
             @RequestParam(value = "version", required = false) String version,
             @RequestParam(value = "method", required = false) String method,
             @RequestParam(value = "uri", required = false) String uri,
@@ -139,6 +140,7 @@ public class ApiLogController {
             map.put("uri", new String(new BASE64Decoder().decodeBuffer(uri)));
         }
         map.put("startTime", startTime);
+        map.put("appId", appId);
         LOGGER.info("{}", map);
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);

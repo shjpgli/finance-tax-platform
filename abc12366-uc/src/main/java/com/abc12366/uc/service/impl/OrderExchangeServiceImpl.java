@@ -374,18 +374,18 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     public ResponseEntity refund(ExchangeRefundBO data, HttpServletRequest httpServletRequest) {
     	OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
     	// 退积分
-        ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
-        if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
-            PointsLogBO pointsLog = new PointsLogBO();
-            pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_RETURN_ID);
-            pointsLog.setOutgo(eco.getGiftPoints());
-            pointsLog.setUserId(eco.getUserId());
-            pointsLog.setRemark("用户退单");
-            pointsLog.setLogType("ORDER_BACK");
-            pointsLogService.insert(pointsLog);
-        } else {
-            throw new ServiceException(4960);
-        }
+//        ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
+//        if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
+//            PointsLogBO pointsLog = new PointsLogBO();
+//            pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_RETURN_ID);
+//            pointsLog.setOutgo(eco.getGiftPoints());
+//            pointsLog.setUserId(eco.getUserId());
+//            pointsLog.setRemark("用户退单");
+//            pointsLog.setLogType("ORDER_BACK");
+//            pointsLogService.insert(pointsLog);
+//        } else {
+//            throw new ServiceException(4960);
+//        }
 
         //查询订单信息
         Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());

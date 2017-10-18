@@ -42,6 +42,9 @@
             <if test="uri != null and uri != ''">
               AND  uri = #{uri}
             </if>
+            <if test="appId != null appId uri != ''">
+              AND  appId = #{appId}
+            </if>
         </where>
     </select>
 
