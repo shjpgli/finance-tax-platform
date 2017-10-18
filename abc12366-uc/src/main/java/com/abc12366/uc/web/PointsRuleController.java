@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 积分规则接口控制器
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 9:13
@@ -34,6 +35,7 @@ public class PointsRuleController {
     @Autowired
     private PointsRuleService pointsRuleService;
 
+    //积分规则列表
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) String code,

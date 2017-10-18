@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * Time: 11:48
  */
 public class NsrbindListParam {
+    //用户ID
     @NotEmpty
     private String userId;
 

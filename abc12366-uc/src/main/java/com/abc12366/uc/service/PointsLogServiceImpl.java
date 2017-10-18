@@ -73,7 +73,11 @@ public class PointsLogServiceImpl implements PointsLogService {
         }
 
         //可用积分=上一次的可用积分+|-本次收入|支出
-        int usablePoints = user.getPoints() + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
+        int priPoints = 0;
+        if(user.getPoints()!=null){
+            priPoints = user.getPoints();
+        }
+        int usablePoints = priPoints + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
         if (usablePoints < 0) {
             throw new ServiceException(4635);
         }
