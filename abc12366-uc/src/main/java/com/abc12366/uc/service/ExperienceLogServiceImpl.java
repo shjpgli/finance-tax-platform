@@ -77,7 +77,11 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         }
 
         //可用经验值=上一次的可用经验值+|-本次收入|支出
-        int usableExp = user.getExp() + experienceLogBO.getIncome() - experienceLogBO.getOutgo();
+        int preExp = 0;
+        if(user.getExp()!=null){
+            preExp = user.getExp();
+        }
+        int usableExp = preExp + experienceLogBO.getIncome() - experienceLogBO.getOutgo();
 
         //uc_user的exp字段和uc_uexp_log的usableExp字段都要更新
         user.setExp(usableExp);
