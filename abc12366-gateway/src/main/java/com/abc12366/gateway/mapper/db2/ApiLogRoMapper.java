@@ -23,4 +23,6 @@ public interface ApiLogRoMapper {
     List<ApiLog> selectApiList(Map<String, Object> map);
 
     List<ApiLog> selectApiListByAppId(Map<String, Object> map);
+
+    List<ApiLog> selectApiListByApiId(Map<String, Object> map);
 }

@@ -60,4 +60,9 @@ public class ApiLogServiceImpl implements ApiLogService {
     public List<ApiLog> selectApiListByAppId(Map<String, Object> map) {
         return apiLogRoMapper.selectApiListByAppId(map);
     }
+
+    @Override
+    public List<ApiLog> selectApiListByApiId(Map<String, Object> map) {
+        return apiLogRoMapper.selectApiListByApiId(map);
+    }
 }
