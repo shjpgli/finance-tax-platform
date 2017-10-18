@@ -68,8 +68,14 @@ public class QuestionBo implements Serializable {
     /**回复次数**int(11)**/
     private Integer answerNum;
 
+    /**收藏次数**int(11)**/
+    private Integer collectNum;
+
     /**点赞次数**int(11)**/
     private Integer likeNum;
+
+    /**踩次数**int(11)**/
+    private Integer trampleNum;
 
 	/**评论次数**int(11)**/
 	private Integer commentNum;
@@ -280,5 +286,21 @@ public class QuestionBo implements Serializable {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
+    }
+
+    public Integer getTrampleNum() {
+        return trampleNum;
+    }
+
+    public void setTrampleNum(Integer trampleNum) {
+        this.trampleNum = trampleNum;
     }
 }

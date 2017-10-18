@@ -56,10 +56,13 @@ public class QuestionAnswerBo implements Serializable {
     private String ip;
 
     /**评论次数**int(11)**/
-    private Integer answerNum;
+    private Integer commentNum;
 
     /**点赞次数**int(11)**/
     private Integer likeNum;
+
+    /**踩次数**int(11)**/
+    private Integer trampleNum;
 
     /**是否已点赞：1/0**tinyint(4)**/
     private Integer isLike;
@@ -166,12 +169,12 @@ public class QuestionAnswerBo implements Serializable {
         this.ip = ip;
     }
 
-    public Integer getAnswerNum() {
-        return answerNum;
+    public Integer getCommentNum() {
+        return commentNum;
     }
 
-    public void setAnswerNum(Integer answerNum) {
-        this.answerNum = answerNum;
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
     }
 
     public Integer getLikeNum() {
@@ -228,5 +231,13 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getTrampleNum() {
+        return trampleNum;
+    }
+
+    public void setTrampleNum(Integer trampleNum) {
+        this.trampleNum = trampleNum;
     }
 }

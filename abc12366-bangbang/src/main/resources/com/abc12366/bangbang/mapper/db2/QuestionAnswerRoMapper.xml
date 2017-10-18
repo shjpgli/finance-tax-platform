@@ -33,6 +33,7 @@
         <if test="isAccept != null and isAccept != ''">
             AND isAccept = #{isAccept}
         </if>
+        order by createTime DESC
     </select>
 
     <!-- 问题回复评论列表查询 -->
@@ -51,6 +52,7 @@
         <if test="questionId != null and questionId != ''">
             AND questionId = #{questionId}
         </if>
+        order by createTime DESC
     </select>
 
 

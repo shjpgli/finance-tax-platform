@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.common;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.Constant;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -46,6 +47,12 @@ public class UcUserCommon {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
         return (String) request.getAttribute(Constant.USER_ID);
+    }
+
+    public static UCUserBO getUserInfo(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        return (UCUserBO) request.getAttribute(Constant.USER_INFO);
     }
 
 }
