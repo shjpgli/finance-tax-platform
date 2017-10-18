@@ -47,6 +47,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         map.put("content", message.getContent());
         map.put("status", "1");
         map.put("type", message.getType());
+        map.put("url", message.getUrl());
 
         String responseStr;
         try {
@@ -104,6 +105,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         map.put("content", message.getContent());
         map.put("status", "1");
         map.put("type", message.getType());
+        map.put("url", message.getUrl());
 
         String responseStr;
         try {
