@@ -24,7 +24,7 @@
         (SELECT COUNT(1) FROM bb_question WHERE ip = tb.ip AND STATUS ='2') questionDisableCnt,
         (SELECT COUNT(1) FROM bb_question_answer WHERE ip = tb.ip AND STATUS = '2'AND parentId ='') answerDisableCnt,
         (SELECT COUNT(1) FROM bb_question_answer WHERE ip = tb.ip AND STATUS = '2'AND parentId !='')  commentDisableCnt ,
-        IF(t_disable_ip.ip IS NULL, FALSE, TRUE) isdiable
+        IF(t_disable_ip.ip IS NULL, FALSE, TRUE) isDiable
         FROM
         (SELECT DISTINCT(ip) FROM bb_question WHERE ip IS NOT NULL AND ip !=''
          UNION

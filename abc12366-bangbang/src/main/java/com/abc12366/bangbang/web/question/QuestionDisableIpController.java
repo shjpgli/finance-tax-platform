@@ -40,7 +40,7 @@ public class QuestionDisableIpController {
     }
 
     /*
-    * 禁用用户 接口
+    * 禁用 接口
     */
     @PostMapping(path = "/disable")
     public ResponseEntity disable(@RequestBody QuestionDisableIp record) {
@@ -49,7 +49,7 @@ public class QuestionDisableIpController {
     }
 
     /*
-    * 撤销禁用用户 接口
+    * 撤销禁用 接口
     */
     @DeleteMapping(path = "/enable/{id}")
     public ResponseEntity enable(@PathVariable String id) {
