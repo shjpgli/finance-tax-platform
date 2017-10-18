@@ -150,8 +150,12 @@ public class AuthController extends BaseController {
         return ResponseEntity.ok(Utils.kv("data", token));
     }
 
-    /*
-    用户通过手机验证码进行登录
+    /**
+     * 用户通过手机号码+验证码的方式进行登录
+     * @param loginBO
+     * @param request
+     * @return 用户基本信息、用户token、token有效时间
+     * @throws Exception
      */
     @PostMapping(path = "/verifylogin")
     public ResponseEntity loginByVerifyingCode(@Valid @RequestBody VerifyingCodeBO loginBO, HttpServletRequest
@@ -178,7 +182,11 @@ public class AuthController extends BaseController {
     }
 
     /**
-     * 用户登出
+     * 用户退出登录接口
+     * @param token
+     * @param request
+     * @return
+     * @throws Exception
      */
     @DeleteMapping(path = "/logout/{token}")
     public ResponseEntity logout(@PathVariable String token, HttpServletRequest request) throws Exception {

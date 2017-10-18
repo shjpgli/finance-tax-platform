@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
+ * 经验值日志接口控制器
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 14:38
@@ -33,6 +34,11 @@ public class ExperienceLogController {
     @Autowired
     private ExperienceLogService experienceLogService;
 
+    /**
+     * 新增经验值日志
+     * @param experienceLogBO
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@RequestBody ExperienceLogBO experienceLogBO) {
         LOGGER.info("{}", experienceLogBO);
@@ -41,6 +47,16 @@ public class ExperienceLogController {
         return ResponseEntity.ok(Utils.kv("data", experienceLogBOReturn));
     }
 
+    /**
+     * 查询经验值日志列表
+     * @param name
+     * @param code
+     * @param type
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) String code,
@@ -75,6 +91,15 @@ public class ExperienceLogController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
     }
 
+    /**
+     * 用户登录后查询用户经验值日志列表
+     * @param start
+     * @param end
+     * @param request
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping(path = "/user")
     public ResponseEntity selectListByUser(@RequestParam(required = false) String start,
                                            @RequestParam(required = false) String end,
