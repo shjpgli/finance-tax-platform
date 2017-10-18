@@ -16,8 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +125,7 @@ public class ApiLogController {
             @RequestParam(value = "version", required = false) String version,
             @RequestParam(value = "method", required = false) String method,
             @RequestParam(value = "uri", required = false) String uri,
-            @RequestParam(value = "startTime", required = false) String startTime) {
+            @RequestParam(value = "startTime", required = false) String startTime) throws IOException {
 
         if (startTime != null && !"".equals(startTime)) {
             startTime = DateUtils.getDateFormat(DateUtils.StrToDate(startTime), "yyyyMMdd");
@@ -133,7 +135,9 @@ public class ApiLogController {
         Map<String, Object> map = new HashMap<>();
         map.put("version", version);
         map.put("method", method);
-        map.put("uri", uri);
+        if (uri != null && !"".equals(uri)) {
+            map.put("uri", new String(new BASE64Decoder().decodeBuffer(uri)));
+        }
         map.put("startTime", startTime);
         LOGGER.info("{}", map);
 
