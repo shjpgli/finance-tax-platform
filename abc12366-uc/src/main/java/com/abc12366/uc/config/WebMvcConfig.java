@@ -120,6 +120,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //好会计
                 .excludePathPatterns("/userhkj/token")
                         //用户验证码登录发送验证码短信
-                .excludePathPatterns("/user/phonelogin/code");
+                .excludePathPatterns("/user/phonelogin/code")
+                // 根据微信活动生成红包口令
+                .excludePathPatterns("/wx/redpack/{activityId}");
     }
 }
