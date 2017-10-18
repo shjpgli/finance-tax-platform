@@ -31,6 +31,16 @@ public interface QuestionRoMapper {
     List<QuestionBo> selectList(Map<String, Object> map);
 
     /**
+     * 推荐问题
+     **/
+    List<QuestionBo> selectListRecommend(Map<String, Object> map);
+
+    /**
+     * 高悬赏问题
+     **/
+    List<QuestionBo> selectListByPoints(Map<String, Object> map);
+
+    /**
      * 查询热门问题
      **/
     List<QuestionBo> selectListByBrowseNum(Map<String, Object> map);

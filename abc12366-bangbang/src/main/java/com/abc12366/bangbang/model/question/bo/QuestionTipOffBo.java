@@ -21,6 +21,9 @@ public class QuestionTipOffBo {
     /**举报人id**/
     private String createUser;
 
+    /**举报人姓名**/
+    private String createUsername;
+
     /**举报时间**/
     private java.util.Date createTime;
 
@@ -128,6 +131,15 @@ public class QuestionTipOffBo {
 
     public QuestionTipOffBo setStatus(String status) {
         this.status = status;
+        return this;
+    }
+
+    public String getCreateUsername() {
+        return createUsername;
+    }
+
+    public QuestionTipOffBo setCreateUsername(String createUsername) {
+        this.createUsername = createUsername;
         return this;
     }
 }

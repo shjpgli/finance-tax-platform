@@ -134,6 +134,17 @@ public class UserController {
                 ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
 
+    //根据用户ID查询用户(后台管理系统使用，敏感信息不做模糊化处理)
+    @GetMapping(path = "/admin/{id}")
+    public ResponseEntity<?> selectOneForAdmin(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        Map map = userService.selectOneForAdmin(id);
+        LOGGER.info("{}", map);
+        return (map == null) ?
+                ResponseEntity.ok(Utils.kv("user", null, "user_extend", null)) :
+                ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
+    }
+
     @GetMapping(path = "/wx/{id}")
     public ResponseEntity<?> selectOneByWx(@PathVariable String id) {
         LOGGER.info("{}", id);

@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTipOffMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionTipOffRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionTipOff;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +28,9 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
     private QuestionTipOffMapper questionTipOffMapper;
 
     @Autowired
+    private QuestionTipOffRoMapper questionTipOffRoMapper;
+
+    @Autowired
     private QuestionMapper questionMapper;
 
     @Autowired
@@ -33,7 +38,7 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
 
     @Override
     public List<QuestionTipOffBo> selectList() {
-        return questionTipOffMapper.selectList();
+        return questionTipOffRoMapper.selectList();
     }
 
 
@@ -45,16 +50,18 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         req.setUpdateAdmin(Utils.getAdminId());
         questionTipOffMapper.updateByPrimaryKeySelective(req);
 
-        QuestionTipOff record = questionTipOffMapper.selectByPrimaryKey(id);
+        QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(id);
         if("question".equals(record.getSourceType())){
             Question question = new Question();
             question.setId(record.getSourceId());
             question.setStatus(status);
+            question.setLastUpdate(new Date());
             questionMapper.updateByPrimaryKeySelective(question);
         }else{
             QuestionAnswer questionAnswer = new QuestionAnswer();
             questionAnswer.setId(record.getSourceId());
             questionAnswer.setStatus(status);
+            questionAnswer.setLastUpdate(new Date());
             questionAnswerMapper.updateByPrimaryKeySelective(questionAnswer);
         }
 

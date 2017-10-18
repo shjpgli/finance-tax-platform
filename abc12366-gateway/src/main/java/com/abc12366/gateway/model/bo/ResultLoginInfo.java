@@ -31,4 +31,13 @@ public class ResultLoginInfo {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "ResultLoginInfo{" +
+                "code='" + code + '\'' +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

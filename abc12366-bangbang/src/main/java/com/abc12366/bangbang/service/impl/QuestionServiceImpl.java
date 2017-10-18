@@ -77,6 +77,32 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<QuestionBo> selectListRecommend(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //推荐问题
+            questionBoList = questionRoMapper.selectListRecommend(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
+    @Override
+    public List<QuestionBo> selectListByPoints(Map<String,Object> map) {
+        List<QuestionBo> questionBoList;
+        try {
+            //高悬赏问题
+            questionBoList = questionRoMapper.selectListByPoints(map);
+        } catch (Exception e) {
+            LOGGER.error("查询问题列表信息异常：{}", e);
+            throw new ServiceException(6100);
+        }
+        return questionBoList;
+    }
+
+    @Override
     public List<QuestionBo> selectListWait(Map<String,Object> map) {
         List<QuestionBo> questionBoList;
         try {

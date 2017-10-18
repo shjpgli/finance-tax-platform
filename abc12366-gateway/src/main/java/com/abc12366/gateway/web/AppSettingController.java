@@ -18,6 +18,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * APP设置控制器
+ *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-04-27 3:29 PM
  * @since 1.0.0
@@ -34,21 +36,23 @@ public class AppSettingController {
     /**
      * APP设置列表查询
      *
-     * @param appId
-     * @param pageNum
-     * @param pageSize
-     * @return
+     * @param appId    应用ID
+     * @param name     应用名称
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @return ResponseEntity
      */
     @GetMapping(path = "/appsetting")
-    public ResponseEntity selectList(@RequestParam(value = "appId", required = true) String appId,
+    public ResponseEntity selectList(@RequestParam(value = "appId") String appId,
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        LOGGER.info(appId);
         AppSettingBO appSettingBO = new AppSettingBO();
         appSettingBO.setAppId(appId);
         appSettingBO.setName(name);
+        LOGGER.info("{},{},{}", pageNum, pageSize, appSettingBO);
+
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<AppSettingBO> dataList = appSettingService.selectList(appSettingBO);
         PageInfo<AppSettingBO> pageInfo = new PageInfo<>(dataList);
         LOGGER.info("{}", dataList);
@@ -58,9 +62,9 @@ public class AppSettingController {
     /**
      * APP设置详细查询
      *
-     * @param appId
-     * @param id
-     * @return
+     * @param appId 应用ID
+     * @param id    PK
+     * @return ResponseEntity
      */
     @GetMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity selectOne(@PathVariable("appId") String appId,
@@ -74,9 +78,9 @@ public class AppSettingController {
     /**
      * APP设置批量授权
      *
-     * @param appId
-     * @param appSettingBOList
-     * @return
+     * @param appId            应用ID
+     * @param appSettingBOList 应用设置列表
+     * @return ResponseEntity
      */
     @PostMapping(path = "/appsetting/list/{appId}")
     public ResponseEntity insertList(@PathVariable("appId") String appId,
@@ -90,9 +94,9 @@ public class AppSettingController {
     /**
      * APP设置单个授权
      *
-     * @param appId
-     * @param appSettingBO
-     * @return
+     * @param appId        应用ID
+     * @param appSettingBO AppSettingBO
+     * @return ResponseEntity
      */
     @PostMapping(path = "/appsetting/{appId}")
     public ResponseEntity insert(@PathVariable("appId") String appId,
@@ -109,10 +113,10 @@ public class AppSettingController {
     /**
      * APP设置修改
      *
-     * @param appId
-     * @param id
-     * @param appSettingBO
-     * @return
+     * @param appId        应用ID
+     * @param id           PK
+     * @param appSettingBO AppSettingBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity update(@PathVariable("appId") String appId,
@@ -129,9 +133,9 @@ public class AppSettingController {
     /**
      * APP设置删除
      *
-     * @param appId
-     * @param id
-     * @return
+     * @param appId 应用ID
+     * @param id PK
+     * @return ResponseEntity
      */
     @DeleteMapping(path = "/appsetting/{appId}/{id}")
     public ResponseEntity delete(@PathVariable("appId") String appId,

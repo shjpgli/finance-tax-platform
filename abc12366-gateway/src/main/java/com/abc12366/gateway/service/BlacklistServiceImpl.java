@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -52,7 +51,6 @@ public class BlacklistServiceImpl implements BlacklistService {
         return blacklistRoMapper.selectOne(blacklist);
     }
 
-    @Transactional("db1TxManager")
     @Override
     public Blacklist insert(BlacklistBO bo) {
         Blacklist blacklist = new Blacklist();
@@ -66,7 +64,6 @@ public class BlacklistServiceImpl implements BlacklistService {
         return blacklist;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public Blacklist update(BlacklistBO bo) {
         Blacklist blacklist = new Blacklist();
@@ -80,7 +77,6 @@ public class BlacklistServiceImpl implements BlacklistService {
         return blacklist;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public void delete(String id) {
         int del = blacklistMapper.delete(id);

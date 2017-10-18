@@ -40,7 +40,7 @@ public interface AppService {
     /**
      * App授权
      *
-     * @param request
+     * @param request HttpServletRequest
      * @return true:已授权,false:未授权
      */
     boolean isAuthentization(HttpServletRequest request);
@@ -48,7 +48,7 @@ public interface AppService {
     /**
      * App列表查询
      *
-     * @param
+     * @param appGeneralBO AppBO
      * @return List<AppGeneralBO>
      */
     List<AppBO> selectList(AppBO appGeneralBO);
@@ -56,7 +56,7 @@ public interface AppService {
     /**
      * 修改App对象
      *
-     * @param
+     * @param appUpdateBO AppBO
      * @return App对象
      */
     AppBO update(AppBO appUpdateBO);
@@ -64,10 +64,8 @@ public interface AppService {
     /**
      * 查询App对象
      *
-     * @param
+     * @param id PK
      * @return App对象
      */
     AppBO selectById(String id);
-
-    List<AppBO> selectBySettingIdList(String id);
 }

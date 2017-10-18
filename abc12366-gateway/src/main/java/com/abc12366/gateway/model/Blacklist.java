@@ -136,4 +136,20 @@ public class Blacklist implements Serializable {
     public void setNow(Date now) {
         this.now = now;
     }
+
+    @Override
+    public String toString() {
+        return "Blacklist{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", ip='" + ip + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status=" + status +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                ", createUser='" + createUser + '\'' +
+                ", now=" + now +
+                '}';
+    }
 }

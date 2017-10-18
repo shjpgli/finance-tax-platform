@@ -5,15 +5,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
+ * 用户登录入参实体类
  * @author lijun <ljun51@outlook.com>
  * @create 2017-03-27 4:18 PM
  * @since 1.0.0
  */
 public class LoginBO implements Serializable {
 
+    //用户名或手机号码
     @NotEmpty
     private String usernameOrPhone;
 
+    //密码
     @NotEmpty
     private String password;
 

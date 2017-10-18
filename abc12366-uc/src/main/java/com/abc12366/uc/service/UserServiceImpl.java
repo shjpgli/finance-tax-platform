@@ -597,4 +597,22 @@ public class UserServiceImpl implements UserService {
         }
         return isRealName;
     }
+
+    @Override
+    public Map selectOneForAdmin(String userId) {
+        LOGGER.info("{}", userId);
+        User userTemp = userRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
+        if (userTemp != null) {
+            UserBO user = new UserBO();
+            BeanUtils.copyProperties(userTemp, user);
+            user.setPassword(null);
+            Map<String, Object> map = new HashMap<>();
+            map.put("user", user);
+            map.put("user_extend", userExtend);
+            LOGGER.info("{}：{}", user.toString(),userExtend.toString());
+            return map;
+        }
+        return null;
+    }
 }
