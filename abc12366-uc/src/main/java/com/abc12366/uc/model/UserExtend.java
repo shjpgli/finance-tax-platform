@@ -7,38 +7,71 @@ import java.util.Date;
  */
 public class UserExtend {
 
+    //用户ID
     private String userId;
+    //个性签名
     private String signature;
+    //性别，0：女，1：男
     private String sex;
+    //生日
     private Date birthday;
+    //血型
     private String bloodType;
+    //体重
     private String weight;
+    //身高
     private String height;
+    //婚姻状况
     private String marital;
+    //教育程度
     private String education;
+    //毕业院校
     private String graduate;
+    //职业
     private String occupation;
+    //收入水平
     private String income;
+    //通讯地址
     private String postAddress;
+    //真实姓名
     private String realName;
+    //微信账号
     private String weixin;
+    //QQ账号
     private String qq;
+    //密保问题
     private String safeQuestion;
+    //密保答案
     private String safeAnswer;
+    //所在地（省）
     private String province;
+    //所在（市）
     private String city;
+    //所在 （地区）
     private String area;
+    //创建时间
     private Date createTime;
+    //修改时间
     private Date lastUpdate;
+    //擅长领域
     private String tags;
+    //身份证号
     private String idcard;
+    //身份证正面图片地址
     private String frontImage;
+    //图片地址
     private String backImage;
+    //实名认证有效期起
     private Date startTime;
+    //实名认证有效期止
     private Date endTime;
+    //实名认证状态,实名认证状态可以为：0:未认证、1:待认证、2:已认证、3:认证失败
     private String validStatus;
+    //实名认证时间
     private Date validTime;
+    //认证备注
     private String remark;
+    //从业时间
     private String careerDuration;
 
     public UserExtend() {
@@ -306,5 +339,44 @@ public class UserExtend {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "UserExtend{" +
+                "userId='" + userId + '\'' +
+                ", signature='" + signature + '\'' +
+                ", sex='" + sex + '\'' +
+                ", birthday=" + birthday +
+                ", bloodType='" + bloodType + '\'' +
+                ", weight='" + weight + '\'' +
+                ", height='" + height + '\'' +
+                ", marital='" + marital + '\'' +
+                ", education='" + education + '\'' +
+                ", graduate='" + graduate + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", income='" + income + '\'' +
+                ", postAddress='" + postAddress + '\'' +
+                ", realName='" + realName + '\'' +
+                ", weixin='" + weixin + '\'' +
+                ", qq='" + qq + '\'' +
+                ", safeQuestion='" + safeQuestion + '\'' +
+                ", safeAnswer='" + safeAnswer + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", tags='" + tags + '\'' +
+                ", idcard='" + idcard + '\'' +
+                ", frontImage='" + frontImage + '\'' +
+                ", backImage='" + backImage + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", validStatus='" + validStatus + '\'' +
+                ", validTime=" + validTime +
+                ", remark='" + remark + '\'' +
+                ", careerDuration='" + careerDuration + '\'' +
+                '}';
     }
 }

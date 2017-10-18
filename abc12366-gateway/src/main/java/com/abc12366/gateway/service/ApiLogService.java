@@ -58,4 +58,11 @@ public interface ApiLogService {
      * @return List<ApiLog>
      */
     List<ApiLog> selectApiListByAppId(Map<String, Object> map);
+
+    /**
+     * 接口日志-根据uri,version,method列表查询
+     * @param map
+     * @return
+     */
+    List<ApiLog> selectApiListByApiId(Map<String, Object> map);
 }
