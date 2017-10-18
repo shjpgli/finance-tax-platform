@@ -28,7 +28,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 
-/**
+/**用户注册、登录等行为控制器
  * @author lijun <ljun51@outlook.com>
  * @create 2017-03-27 4:13 PM
  * @since 1.0.0
@@ -52,6 +52,11 @@ public class AuthController extends BaseController {
         super(restTemplate);
     }
 
+    /**
+     * 刷新用户登录令牌token接口
+     * @param token
+     * @return
+     */
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refresh(@RequestHeader(Constant.USER_TOKEN_HEAD) String token) {
         String refreshedToken = authService.refresh(token);
@@ -69,6 +74,13 @@ public class AuthController extends BaseController {
         return ResponseEntity.ok(userReturnBO);
     }*/
 
+    /**
+     * 用户使用手机号码进行注册
+     * @param registerBO
+     * @param request
+     * @return 注册后生成的用户信息
+     * @throws IOException
+     */
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws
             IOException {
@@ -94,9 +106,12 @@ public class AuthController extends BaseController {
 
     }
 
-    /*
-    用户登录方法：用于java做接口调用进行登录
-        1.请求访问时获取token，token为空则需要用户名和密码登录
+    /**
+     * 用户登录方法：用于java做接口调用进行登录
+     * @param loginBO
+     * @param request
+     * @return 用户基本信息、用户token、token有效时间
+     * @throws Exception
      */
     @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
@@ -113,9 +128,12 @@ public class AuthController extends BaseController {
         return ResponseEntity.ok(Utils.kv("data", token));
     }
 
-    /*
-    用户登录方法：用于js做接口调用进行登录(此场景多用于移动客户端登录)
-        1.请求访问时获取token，token为空则需要用户名和密码登录
+    /**
+     * 用户登录方法：用于js做接口调用进行登录(此场景多用于移动客户端登录)
+     * @param loginBO
+     * @param request
+     * @return 用户基本信息、用户token、token有效时间
+     * @throws Exception
      */
     @PostMapping(path = "/login/js")
     public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
