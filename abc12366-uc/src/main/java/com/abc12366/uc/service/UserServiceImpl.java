@@ -89,7 +89,11 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("{}", users);
         return users;
     }
-
+    @Override
+    public User selectUser(String userId) {
+        User userTemp = userRoMapper.selectOne(userId);
+        return userTemp;
+    }
     @Override
     public Map selectOne(String userId) {
         LOGGER.info("{}", userId);
