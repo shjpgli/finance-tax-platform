@@ -377,7 +377,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
         if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
             PointsLogBO pointsLog = new PointsLogBO();
-            pointsLog.setRuleId(oe.getOrderNo());
+            pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_RETURN_ID);
             pointsLog.setOutgo(eco.getGiftPoints());
             pointsLog.setUserId(eco.getUserId());
             pointsLog.setRemark("用户退单");
@@ -461,7 +461,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     message.setBusinessId(oe.getOrderNo());
                                     message.setType(MessageConstant.SPDD);
                                     message.setContent(MessageConstant.REFUND_PREFIX+refundRes.getRefund_fee()+MessageConstant.REFUND_SUFFIX+order.getOrderNo());
-                                    message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
+                                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                                     message.setUserId(order.getUserId());
                                     messageSendUtil.sendMessage(message, httpServletRequest);
 
@@ -593,7 +593,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
                 message.setContent(MessageConstant.EXCHANGE_CHECK_REFUSE+order.getOrderNo()+MessageConstant.SUFFIX);
-                message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }else if("2".equals(oe.getType())){
@@ -601,7 +601,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
                 message.setContent(MessageConstant.RETREAT_CHECK_REFUSE+order.getOrderNo()+MessageConstant.SUFFIX);
-                message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }
@@ -649,7 +649,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
                 message.setContent(MessageConstant.RETREAT_CHECK_ADOPT);
-                message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }

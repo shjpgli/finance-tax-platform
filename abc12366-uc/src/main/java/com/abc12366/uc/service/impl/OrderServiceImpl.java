@@ -1030,7 +1030,7 @@ public class OrderServiceImpl implements OrderService {
         message.setBusinessId(order.getOrderNo());
         message.setType(MessageConstant.SPDD);
         message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX);
-        message.setUrl("<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/member/member_rights.html\">"+MessageConstant.VIEW_DETAILS+"</a>");
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message);
     }
@@ -1044,7 +1044,7 @@ public class OrderServiceImpl implements OrderService {
         message.setType(MessageConstant.SPDD);
         User user = userRoMapper.selectOne(order.getUserId());
         message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints());
-        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">"+MessageConstant.VIEW_DETAILS+"</a>");
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message);
     }
@@ -1081,14 +1081,16 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void insertPoints(OrderBO orderBO) {
-        PointsLogBO pointsLog = new PointsLogBO();
-        pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_ID);
-        pointsLog.setId(Utils.uuid());
-        pointsLog.setIncome(orderBO.getGiftPoints());
-        pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
-        pointsLog.setLogType("ORDER_INCOME");
-        pointsLogService.insert(pointsLog);
+        if(orderBO != null && orderBO.getGiftPoints() != null && orderBO.getGiftPoints() > 0){
+            PointsLogBO pointsLog = new PointsLogBO();
+            pointsLog.setUserId(orderBO.getUserId());
+            pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_ID);
+            pointsLog.setId(Utils.uuid());
+            pointsLog.setIncome(orderBO.getGiftPoints());
+            pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
+            pointsLog.setLogType("ORDER_INCOME");
+            pointsLogService.insert(pointsLog);
+        }
     }
 
     /**
