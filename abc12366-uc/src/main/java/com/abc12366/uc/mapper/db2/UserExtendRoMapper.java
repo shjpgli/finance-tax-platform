@@ -16,4 +16,6 @@ public interface UserExtendRoMapper {
     List<UserExtendListBO> selectList(Map map);
 
     UserExtend isRealName(String userId);
+
+    UserExtend selectOneForAdmin(String userId);
 }

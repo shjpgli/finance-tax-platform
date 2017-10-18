@@ -92,4 +92,11 @@ public interface UserService {
      * @return
      */
     IsRealNameBO isRealName();
+
+    /**
+     * 根据用户ID获取用户信息和用户扩展信息（供后台管理系统使用，敏感信息不做模糊化处理）
+     * @param id
+     * @return
+     */
+    Map selectOneForAdmin(String id);
 }
