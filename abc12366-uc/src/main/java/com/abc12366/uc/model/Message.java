@@ -38,6 +38,9 @@ public class Message {
     @Length(min = 1, max = 32)
     private String type;
 
+    /**查看详情地址**/
+    private String url;
+
     public Message() {
     }
 
@@ -103,5 +106,13 @@ public class Message {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

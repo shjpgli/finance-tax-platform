@@ -47,4 +47,8 @@ public interface QuestionService {
     List<MyQuestionTjBo> selectMybangbang(String userId);
 
     List<QuestionBo> selectMyQuestionList(Map<String, Object> map);
+
+    List<QuestionBo> selectListRecommend(Map<String, Object> map);
+
+    List<QuestionBo> selectListByPoints(Map<String, Object> map);
 }

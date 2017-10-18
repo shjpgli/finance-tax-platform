@@ -1029,7 +1029,8 @@ public class OrderServiceImpl implements OrderService {
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setType(MessageConstant.SPDD);
-        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX+"。<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/member/member_rights.html\">会员权益详情查看</a>");
+        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX);
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message);
     }
@@ -1042,7 +1043,8 @@ public class OrderServiceImpl implements OrderService {
         message.setBusinessId(order.getOrderNo());
         message.setType(MessageConstant.SPDD);
         User user = userRoMapper.selectOne(order.getUserId());
-        message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints() + "。<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">查看积分明细</a>");
+        message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints());
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message);
     }
@@ -1079,14 +1081,16 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void insertPoints(OrderBO orderBO) {
-        PointsLogBO pointsLog = new PointsLogBO();
-        pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_ID);
-        pointsLog.setId(Utils.uuid());
-        pointsLog.setIncome(orderBO.getGiftPoints());
-        pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
-        pointsLog.setLogType("ORDER_INCOME");
-        pointsLogService.insert(pointsLog);
+        if(orderBO != null && orderBO.getGiftPoints() != null && orderBO.getGiftPoints() > 0){
+            PointsLogBO pointsLog = new PointsLogBO();
+            pointsLog.setUserId(orderBO.getUserId());
+            pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_ID);
+            pointsLog.setId(Utils.uuid());
+            pointsLog.setIncome(orderBO.getGiftPoints());
+            pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
+            pointsLog.setLogType("ORDER_INCOME");
+            pointsLogService.insert(pointsLog);
+        }
     }
 
     /**
@@ -1245,8 +1249,8 @@ public class OrderServiceImpl implements OrderService {
         if(expressComp != null){
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
         }else{
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+order.getExpressNo()+MessageConstant.SUFFIX);
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO+order.getOrderNo()+MessageConstant.SUFFIX);
+            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         }
 
         message.setUserId(order.getUserId());
@@ -1276,14 +1280,6 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus("6");
             orderMapper.update(order);
             insertOrderLog("", order.getOrderNo(), "6", "系统自动确认收货","0");
-
-            //发送消息
-//            Message message = new Message();
-//            message.setBusinessId(order.getOrderNo());
-//            message.setType(MessageConstant.SPDD);
-//            message.setContent(MessageConstant.AUTOMATIC_CONFIRMATION_RECEIPT+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderDetail/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
-//            message.setUserId(order.getUserId());
-//            messageSendUtil.sendMessage(message);
         }
     }
 

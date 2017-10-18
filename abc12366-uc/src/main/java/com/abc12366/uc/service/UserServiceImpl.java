@@ -89,7 +89,11 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("{}", users);
         return users;
     }
-
+    @Override
+    public User selectUser(String userId) {
+        User userTemp = userRoMapper.selectOne(userId);
+        return userTemp;
+    }
     @Override
     public Map selectOne(String userId) {
         LOGGER.info("{}", userId);
@@ -99,11 +103,11 @@ public class UserServiceImpl implements UserService {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
             //用户重要信息模糊化处理:电话号码
-//            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
-//                String phone = user.getPhone();
-//                StringBuilder phoneFuffer = new StringBuilder(phone);
-//                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
-//            }
+            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
+                String phone = user.getPhone();
+                StringBuilder phoneFuffer = new StringBuilder(phone);
+                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+            }
             user.setPassword(null);
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
@@ -592,5 +596,23 @@ public class UserServiceImpl implements UserService {
             isRealName.setIsRealName(false);
         }
         return isRealName;
+    }
+
+    @Override
+    public Map selectOneForAdmin(String userId) {
+        LOGGER.info("{}", userId);
+        User userTemp = userRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
+        if (userTemp != null) {
+            UserBO user = new UserBO();
+            BeanUtils.copyProperties(userTemp, user);
+            user.setPassword(null);
+            Map<String, Object> map = new HashMap<>();
+            map.put("user", user);
+            map.put("user_extend", userExtend);
+            LOGGER.info("{}：{}", user.toString(),userExtend.toString());
+            return map;
+        }
+        return null;
     }
 }

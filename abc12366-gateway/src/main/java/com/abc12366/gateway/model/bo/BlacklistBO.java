@@ -126,4 +126,18 @@ public class BlacklistBO implements Serializable {
         this.createUser = createUser;
     }
 
+    @Override
+    public String toString() {
+        return "BlacklistBO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", ip='" + ip + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status=" + status +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                ", createUser='" + createUser + '\'' +
+                '}';
+    }
 }

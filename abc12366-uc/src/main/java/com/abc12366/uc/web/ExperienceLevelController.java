@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 经验值等级接口控制器
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 15:44
@@ -32,6 +33,14 @@ public class ExperienceLevelController {
     @Autowired
     private ExperienceLevelService experienceLevelService;
 
+    /**
+     * 查询当前经验值等级列表
+     * @param name
+     * @param status
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) Boolean status,
@@ -55,6 +64,11 @@ public class ExperienceLevelController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) levelList, "total", ((Page) levelList).getTotal()));
     }
 
+    /**
+     * 根据经验值等级ID查询一条经验值等级信息
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -63,6 +77,11 @@ public class ExperienceLevelController {
         return ResponseEntity.ok(Utils.kv("data", experienceLevelQueryBO));
     }
 
+    /**
+     * 增加一条经验值等级
+     * @param experienceLevelInsertBO
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody ExperienceLevelInsertAndUpdateBO experienceLevelInsertBO) {
         LOGGER.info("{}", experienceLevelInsertBO);
@@ -71,6 +90,12 @@ public class ExperienceLevelController {
         return ResponseEntity.ok(Utils.kv("data", experienceLevelBOReturn));
     }
 
+    /**
+     * 修改经验值等级
+     * @param experienceLevelUpdateBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody ExperienceLevelInsertAndUpdateBO experienceLevelUpdateBO,
                                  @PathVariable String id) {
@@ -80,6 +105,11 @@ public class ExperienceLevelController {
         return ResponseEntity.ok(Utils.kv("data", experienceLevelReturn));
     }
 
+    /**
+     * 删除经验值等级
+     * @param id
+     * @return
+     */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -87,7 +117,12 @@ public class ExperienceLevelController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    //启用、禁用等级勋章接口
+    /**
+     * 启用、禁用等级勋章接口
+     * @param id
+     * @param status
+     * @return
+     */
     @PutMapping(path = "/{id}/{status}")
     public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
         LOGGER.info("{}:{}", id, status);

@@ -38,8 +38,8 @@ public class AppController {
     /**
      * APP注册
      *
-     * @param appBO
-     * @return
+     * @param appBO appBO对象
+     * @return ResponseEntity
      * @throws Exception
      */
     @PostMapping(path = "/register")
@@ -53,8 +53,8 @@ public class AppController {
     /**
      * APP登录
      *
-     * @param appBO
-     * @return
+     * @param appBO appBO对象
+     * @return ResponseEntity
      * @throws Exception
      */
     @PostMapping(path = "/login")
@@ -69,14 +69,13 @@ public class AppController {
     /**
      * APP列表查询
      *
-     * @param pageNum
-     * @param pageSize
-     * @param name
-     * @param accessToken
-     * @param startTime
-     * @param endTime
-     * @param status
-     * @return
+     * @param pageNum   当前页
+     * @param pageSize  每页大小
+     * @param name      app名称
+     * @param startTime 开始日期
+     * @param endTime   截止日期
+     * @param status    应用状态
+     * @return ResponseEntity
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -87,42 +86,25 @@ public class AppController {
                                      @RequestParam(required = false, value = "endTime") String endTime,
                                      @RequestParam(required = false, value = "status") Boolean status
     ) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
         if (name != null && StringUtils.isEmpty(name)) {
             name = null;
         }
-//        Date start=null;
-//        if(startTime!=null){
-//        	try {
-//				start=new SimpleDateFormat("yyyy-MM-dd").parse(startTime);
-//			} catch (ParseException e) {
-//				start=null;
-//			}
-//        }
-//        Date end=null;
-//        if(endTime!=null){
-//        	try {
-//				end=new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
-//			} catch (ParseException e) {
-//				end=null;
-//			}
-//        }
         AppBO appBO = new AppBO();
         appBO.setName(name);
         if (startTime != null && !"".equals(startTime)) {
             appBO.setStartTime(DateUtils.StrToDate(startTime));
-        }else{
+        } else {
             appBO.setStartTime(null);
         }
         if (endTime != null && !"".equals(endTime)) {
             appBO.setEndTime(DateUtils.StrToDate(endTime));
-        }else{
+        } else {
             appBO.setEndTime(null);
         }
         appBO.setAccessToken(accessToken);
-//        appBO.setStartTime(start);
-//        appBO.setEndTime(end);
         appBO.setStatus(status);
+        LOGGER.info("{},{},{}", pageNum, pageSize, appBO);
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<AppBO> appList = appService.selectList(appBO);
         LOGGER.info("{}", appList);
@@ -134,8 +116,8 @@ public class AppController {
     /**
      * APP详情查询
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ResponseEntity
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectById(@PathVariable("id") String id) {
@@ -148,9 +130,9 @@ public class AppController {
     /**
      * APP修改
      *
-     * @param appUpdateBO
-     * @param id
-     * @return
+     * @param appUpdateBO appUpdateBO对象
+     * @param id          PK
+     * @return ResponseEntity
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@RequestBody AppBO appUpdateBO, @PathVariable("id") String id) {
