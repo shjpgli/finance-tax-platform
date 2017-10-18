@@ -99,11 +99,11 @@ public class UserServiceImpl implements UserService {
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
             //用户重要信息模糊化处理:电话号码
-            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
-                String phone = user.getPhone();
-                StringBuilder phoneFuffer = new StringBuilder(phone);
-                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
-            }
+//            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
+//                String phone = user.getPhone();
+//                StringBuilder phoneFuffer = new StringBuilder(phone);
+//                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+//            }
             user.setPassword(null);
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
