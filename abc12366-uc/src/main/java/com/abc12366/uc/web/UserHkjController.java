@@ -33,7 +33,7 @@ public class UserHkjController {
     @GetMapping(path = "/token")
     public ResponseEntity authAndRefreshToken(@RequestParam(required = true) String apptoken,
                                               @RequestParam(required = false) String sign, HttpServletRequest request) {
-        LOGGER.info("{}", apptoken);
+        LOGGER.info("-----------------------------------{}", apptoken);
 
         // token校验
 //        boolean isAuth = authService.isAuthentication(apptoken, request);
