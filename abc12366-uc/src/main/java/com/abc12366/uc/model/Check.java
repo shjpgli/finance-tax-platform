@@ -5,17 +5,20 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 
 /**
+ * 用户签到入参实体类
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-21
  * Time: 14:40
  */
 public class Check {
     private String id;
+    //用户ID
     @NotEmpty
     private String userId;
     private Date createTime;
     private Date checkDate;
     private String orderby;
+    //是否是补签
     private Boolean isReCheck;
 
     public Check() {
