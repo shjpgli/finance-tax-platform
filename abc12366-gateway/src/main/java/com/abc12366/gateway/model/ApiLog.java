@@ -232,4 +232,28 @@ public class ApiLog extends TableBO implements Serializable {
     public void setMethod(String method) {
         this.method = method;
     }
+
+    @Override
+    public String toString() {
+        return "ApiLog{" +
+                "id='" + id + '\'' +
+                ", uri='" + uri + '\'' +
+                ", userAgent='" + userAgent + '\'' +
+                ", userId='" + userId + '\'' +
+                ", appId='" + appId + '\'' +
+                ", ip='" + ip + '\'' +
+                ", inTime=" + inTime +
+                ", outTime=" + outTime +
+                ", status='" + status + '\'' +
+                ", version='" + version + '\'' +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", method='" + method + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", minuteCount=" + minuteCount +
+                ", hourCount=" + hourCount +
+                ", dayCount=" + dayCount +
+                "} " + super.toString();
+    }
 }

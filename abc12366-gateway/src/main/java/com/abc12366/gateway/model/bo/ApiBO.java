@@ -185,4 +185,23 @@ public class ApiBO implements Serializable {
     public void setDictName(String dictName) {
         this.dictName = dictName;
     }
+
+    @Override
+    public String toString() {
+        return "ApiBO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", uri='" + uri + '\'' +
+                ", method='" + method + '\'' +
+                ", version='" + version + '\'' +
+                ", dictId='" + dictId + '\'' +
+                ", dictName='" + dictName + '\'' +
+                ", authentication=" + authentication +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", appName='" + appName + '\'' +
+                ", appId='" + appId + '\'' +
+                '}';
+    }
 }

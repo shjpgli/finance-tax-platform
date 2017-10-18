@@ -138,4 +138,20 @@ public class Api implements Serializable {
     public void setDictId(String dictId) {
         this.dictId = dictId;
     }
+
+    @Override
+    public String toString() {
+        return "Api{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", uri='" + uri + '\'' +
+                ", method='" + method + '\'' +
+                ", version='" + version + '\'' +
+                ", dictId='" + dictId + '\'' +
+                ", authentication=" + authentication +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                '}';
+    }
 }
