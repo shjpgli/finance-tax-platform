@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * 用户签到接口控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-21
  * Time: 10:39
@@ -31,6 +32,11 @@ public class CheckController {
     @Autowired
     private CheckService checkService;
 
+    /**
+     * 用户签到接口
+     * @param check
+     * @return 签到获取的积分值
+     */
     @PostMapping(path = "/check")
     public ResponseEntity check(@Valid @RequestBody Check check){
         LOGGER.info("{}", check);
@@ -38,6 +44,11 @@ public class CheckController {
         return ResponseEntity.ok(Utils.kv("data", points));
     }
 
+    /**
+     * 用户补签接口
+     * @param check
+     * @return
+     */
     @PostMapping(path = "/recheck")
     public ResponseEntity reCheck(@Valid @RequestBody ReCheck check){
         LOGGER.info("{}", check);
@@ -45,6 +56,13 @@ public class CheckController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 用户签到排行列表
+     * @param year
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping(path = "/check/rank")
     public ResponseEntity rankingList(@RequestParam(required = false) String year,
                                         @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -59,7 +77,7 @@ public class CheckController {
     /**
      * 获取用户的签到情况
      * @param yearMonth
-     * @param request
+     * @param
      * @return
      */
     @GetMapping(path = "/check/list")
