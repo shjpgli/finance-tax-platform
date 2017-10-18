@@ -107,10 +107,21 @@
         </trim>
     </insert>
 
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO gw_app_setting (id, appId, apiId, timesPerMinute, timesPerHour,
+        timesPerDay, status, createTime,lastUpdate,isValidate) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.appId}, #{item.apiId}, #{item.timesPerMinute}, #{item.timesPerHour},
+            #{item.timesPerDay}, #{item.status}, #{item.createTime}, #{item.lastUpdate}, #{item.isValidate})
+        </foreach>
+    </insert>
+
     <delete id="delete" parameterType="java.lang.String">
-        DELETE FROM gw_app_setting WHERE id = #{id}
+        DELETE FROM gw_app_setting
+        WHERE id = #{id}
     </delete>
     <delete id="deleteByAppId" parameterType="java.lang.String">
-        DELETE FROM gw_app_setting WHERE appId = #{appId}
+        DELETE FROM gw_app_setting
+        WHERE appId = #{appId}
     </delete>
 </mapper>
