@@ -1,6 +1,8 @@
 package com.abc12366.uc.config;
 
-import com.abc12366.gateway.component.*;
+import com.abc12366.gateway.component.AppInterceptor;
+import com.abc12366.gateway.component.LogInterceptor;
+import com.abc12366.gateway.component.TokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -29,11 +31,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return slr;
     }
 
-    /*@Bean
-    public SessionFilter getSessionFilter() {
-        return new SessionFilter();
-    }*/
-
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -52,16 +49,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     public TokenInterceptor tokenInterceptor() {
         return new TokenInterceptor();
-    }
-
-    @Bean
-    public UexpInterceptor uexpInterceptor() {
-        return new UexpInterceptor();
-    }
-
-    @Bean
-    public UpointInterceptor upointInterceptor() {
-        return new UpointInterceptor();
     }
 
     @Override
@@ -134,13 +121,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/userhkj/token")
                         //用户验证码登录发送验证码短信
                 .excludePathPatterns("/user/phonelogin/code");
-        //用户业务操作导致经验值更新，拦截器拦截处理
-//        registry.addInterceptor(uexpInterceptor())
-//                .addPathPatterns("/user/test");
-        //用户业务操作导致积分值更新，拦截器处理
-//       registry.addInterceptor(upointInterceptor())
-//                //.addPathPatterns("/user/test")
-//               //.addPathPatterns("/upointslottery/getval/**");
-
     }
 }

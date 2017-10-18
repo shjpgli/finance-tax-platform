@@ -86,4 +86,16 @@ public class LoginInfoBO implements Serializable {
     public void setAdmin(User admin) {
         this.admin = admin;
     }
+
+    @Override
+    public String toString() {
+        return "LoginInfoBO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", appId='" + appId + '\'' +
+                ", token='" + token + '\'' +
+                ", lastResetTokenTime=" + lastResetTokenTime +
+                ", admin=" + admin +
+                '}';
+    }
 }

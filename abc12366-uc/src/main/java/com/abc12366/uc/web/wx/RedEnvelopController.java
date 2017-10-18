@@ -65,7 +65,7 @@ public class RedEnvelopController {
     public ResponseEntity insert(@PathVariable("activityId") String activityId) {
         LOGGER.info("{}", activityId);
         WxRedEnvelop data = iActivityService.generateSecret(activityId);
-        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;

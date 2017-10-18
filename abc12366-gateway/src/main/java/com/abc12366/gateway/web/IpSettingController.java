@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * IP控制器
+ *
+ * @author lijun <ljun51@outlook.com>
+ * @create 2017-02-20 8:00 PM
+ * @since 1.0.0
  */
 @Controller
 @RequestMapping(path = "/ipsetting", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -22,6 +26,11 @@ public class IpSettingController {
     @Autowired
     private IpSettingService ipSettingService;
 
+    /**
+     * 查看IP设置信息
+     *
+     * @return ResponseEntity
+     */
     @GetMapping
     public ResponseEntity selectOne() {
         IpSetting ipSetting = ipSettingService.selectOne();
@@ -29,6 +38,13 @@ public class IpSettingController {
         return ResponseEntity.ok(ipSetting);
     }
 
+    /**
+     * 更新IP设置信息
+     *
+     * @param ipSetting IpSetting
+     * @param id        PK
+     * @return ResponseEntity
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@RequestBody IpSetting ipSetting, @PathVariable String id) {
         LOGGER.info("{}", ipSetting);

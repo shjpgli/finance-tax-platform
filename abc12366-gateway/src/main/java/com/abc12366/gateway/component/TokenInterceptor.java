@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Token拦截器
+ *
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-05-25
  * Time: 11:34
