@@ -5,8 +5,8 @@
 
     <select id="selectOne" resultType="com.abc12366.uc.model.UserExtend">
         select userId,signature,sex,birthday,bloodType,weight,height,marital, education,graduate,
-        occupation,income,postAddress,insert(realName, 1, 1, '*') realName, weixin,qq,safeQuestion,safeAnswer,province,city,area,createTime,
-        lastUpdate,tags,insert(idcard, 7, 8, '******') idcard,
+        occupation,income,postAddress,realName, weixin,qq,safeQuestion,safeAnswer,province,city,area,createTime,
+        lastUpdate,tags,idcard,
         frontImage,backImage,startTime,endTime,validStatus,validTime,remark,careerDuration
         from uc_user_extend
         where userId = #{userId}

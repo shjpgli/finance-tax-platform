@@ -9,47 +9,74 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
+ * 用户注册入参实体类
  * @author lijun <ljun51@outlook.com>
  * @create 2017-03-27 4:18 PM
  * @since 1.0.0
  */
 public class RegisterBO implements Serializable {
 
+    //手机号码
     @NotEmpty
     @Pattern(regexp = "^\\d{11}$")
     @Size(min = 11, max = 11)
     private String phone;
 
+    //密码
     @NotEmpty
     private String password;
 
+    //邮箱地址
     @Email
     private String regMail;
     private String username;
+
+    //注册IP
     @Size(max = 50)
     @Pattern(regexp = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
             + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
             + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
             + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$")
     private String regIP;
+
+    //盐值
     private String salt;
+
+    //昵称
     @Size(max = 32)
     private String nickname;
+
+    //用户激活状态
     @NotNull
     private Boolean status;
+
+    //原始用户图片路径
     @Size(max = 100)
     private String userPicturePath;
+
+    //大尺寸用户头像路径
     @Size(max = 100)
     private String maxUserPicturePath;
+
+    //中尺寸用户头像路径
     @Size(max = 100)
     private String midUserPicturePath;
+
+    //小尺寸用户头像路径
     @Size(max = 100)
     private String minUserPicturePath;
+
+    //验证码
     @NotEmpty
     private String verifyingCode;
+
+    //验证码类型
     @NotEmpty
     private String verifyingType;
+
+    //用户地址-省份
     private String province;
+    //用户地址-城市
     private String city;
 
     public RegisterBO() {
