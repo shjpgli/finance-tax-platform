@@ -16,21 +16,6 @@ public interface QuestionTipOffMapper{
 
 
 	/**
-	 *
-	 * 列表查询
-	 *
-	 **/
-	List<QuestionTipOffBo> selectList();
-
-
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	QuestionTipOff selectByPrimaryKey(@Param("id") String id);
-
-	/**
 	 * 
 	 * 删除（根据主键ID删除）
 	 * 
