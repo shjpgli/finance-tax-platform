@@ -25,7 +25,7 @@
             AND i.method = a.method
             AND i.uri = a.uri
             <if test="appId != null and appId != ''">
-                i.appId = #{appId}
+             AND  i.appId = #{appId}
             </if>
         </where>
     </select>
@@ -36,13 +36,13 @@
         from gw_api_log_${startTime}
         <where>
             <if test="version != null and version != ''">
-                version = #{version}
+             AND   version = #{version}
             </if>
             <if test="method != null and method != ''">
-                method = #{method}
+              AND  method = #{method}
             </if>
             <if test="uri != null and uri != ''">
-                version = #{version}
+              AND  uri = #{uri}
             </if>
         </where>
     </select>
