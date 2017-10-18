@@ -12,7 +12,9 @@ import com.abc12366.bangbang.service.QuestionSysBlockService;
 import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +41,7 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
         return questionSysBlockRoMapper.selectList();
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void changeStatus(String id, String status) {
         QuestionSysBlock req = new QuestionSysBlock();
@@ -52,11 +55,13 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
             Question question = new Question();
             question.setId(record.getSourceId());
             question.setStatus(status);
+            question.setLastUpdate(new Date());
             questionMapper.updateByPrimaryKeySelective(question);
         }else{
             QuestionAnswer questionAnswer = new QuestionAnswer();
             questionAnswer.setId(record.getSourceId());
             questionAnswer.setStatus(status);
+            questionAnswer.setLastUpdate(new Date());
             questionAnswerMapper.updateByPrimaryKeySelective(questionAnswer);
         }
     }

@@ -8,10 +8,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +35,17 @@ public class QuestionSysBlockController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
+
+
+    /*
+    * 修改状态 接口
+    */
+    @PutMapping(path = "/status/{id}/{status}")
+    public ResponseEntity modifyStatus(@PathVariable String id, @PathVariable String status) {
+        questionSysBlockService.changeStatus(id, status);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+
 
 }
