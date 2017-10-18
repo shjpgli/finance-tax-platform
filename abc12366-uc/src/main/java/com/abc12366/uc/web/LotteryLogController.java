@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +42,19 @@ public class LotteryLogController {
         if(userName != null && !userName.isEmpty())        map.put("userName",userName);
         if(activityName != null && !activityName.isEmpty())        map.put("activityName",activityName);
         if(startTime != null && !startTime.isEmpty())        map.put("startTime",startTime);
-        if(endTime != null && !endTime.isEmpty())        map.put("endTime",endTime);
+        if(endTime != null && !endTime.isEmpty())     {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date eTime = sdf.parse(endTime);
+                endTime = sdf.format(eTime) + " 23:59:59";
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                eTime = sdf2.parse(endTime);
+                map.put("endTime",eTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
 
          PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LotteryLogBO> list = lotteryLogService.selectList(map);
