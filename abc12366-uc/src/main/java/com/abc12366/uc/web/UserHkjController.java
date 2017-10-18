@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserHkj;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.AuthService;
@@ -25,6 +26,7 @@ public class UserHkjController {
     @Autowired
     private UserService userService;
 
+
     @Autowired
     private AuthService authService;
     // 用户token校验,根据用户token获取用户并刷新token
@@ -43,9 +45,12 @@ public class UserHkjController {
         UserHkj userHkj = new UserHkj();
         if(userBO != null) {
             LOGGER.info("{}", userBO);
-            userHkj.setMobile(userBO.getPhone());
-            userHkj.setUsername(userBO.getUsername());
-            userHkj.setIdentify(userBO.getId());
+            if(userBO.getId() != null) {
+                User user =userService.selectUser(userBO.getId());
+                userHkj.setMobile(user.getPhone());
+                userHkj.setUsername(user.getUsername());
+                userHkj.setIdentify(user.getId());
+            }
         }
         return ResponseEntity.ok(Utils.kv("data", userHkj));
     }

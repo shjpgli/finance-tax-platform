@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import java.util.Map;
 public interface UserService {
 
     List<UserBO> selectList(Map<String, Object> map);
-
+    User selectUser(String userId) ;
     Map selectOne(String userId);
 
     UserBO update(UserUpdateBO userUpdateBO);
