@@ -53,4 +53,18 @@ public interface QuestionAnswerRoMapper {
      **/
     List<QuestionAnswerBo> selectMyCommentList(Map<String, Object> map);
 
+    /**
+     *
+     * 查询回复数
+     *
+     **/
+    int  selectAnswerCnt(@Param("questionId") String questionId);
+
+    /**
+     *
+     * 查询评论数
+     *
+     **/
+    int  selectCommentCnt(@Param("id") String id);
+
 }
