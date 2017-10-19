@@ -1,7 +1,9 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionExpertMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionExpertRoMapper;
 import com.abc12366.bangbang.model.question.QuestionExpert;
+import com.abc12366.bangbang.model.question.bo.QuestionExpertBO;
 import com.abc12366.bangbang.service.QuestionExpertService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -24,21 +26,26 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
     @Autowired
     private QuestionExpertMapper questionExpertMapper;
 
+    @Autowired
+    private QuestionExpertRoMapper questionExpertRoMapper;
+
     @Override
-    public List<QuestionExpert> selectList() {
-        return questionExpertMapper.selectList();
+    public List<QuestionExpertBO> selectList() {
+        return questionExpertRoMapper.selectList();
     }
 
     @Override
     public QuestionExpert selectOne(String id) {
-        return questionExpertMapper.selectByPrimaryKey(id);
+        return questionExpertRoMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public void add(QuestionExpert questionExpert) {
         try{
+            String adminId = Utils.getAdminId();
             questionExpert.setId(Utils.uuid());
-            questionExpert.setCreateUser(Utils.getAdminId());
+            questionExpert.setCreateAdmin(adminId);
+            questionExpert.setUpdateAdmin(adminId);
             questionExpertMapper.insert(questionExpert);
         }catch (Exception e){
             LOGGER.error("QuestionExpertServiceImpl.add():" + e);
@@ -49,6 +56,7 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
     @Override
     public void modify(QuestionExpert questionExpert) {
         try {
+            questionExpert.setUpdateAdmin(Utils.getAdminId());
             questionExpertMapper.updateByPrimaryKeySelective(questionExpert);
         }catch (Exception e){
             LOGGER.error("QuestionExpertServiceImpl.modify():" + e);
