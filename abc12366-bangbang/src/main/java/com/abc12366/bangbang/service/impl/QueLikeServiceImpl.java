@@ -48,6 +48,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
         like.setLikeId(uuid);
+        like.setId(id);
 
         Map map = MapUtil.kv("id", id, "userId", userId);
         int cnt =  likeRoMapper.selectExist(map);

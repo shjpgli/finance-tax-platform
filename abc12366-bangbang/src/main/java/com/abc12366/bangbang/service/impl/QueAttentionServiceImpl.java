@@ -38,10 +38,11 @@ public class QueAttentionServiceImpl implements QueAttentionService {
         String userId = UcUserCommon.getUserId(request);
 
 
-        QuestionAttention Attention = new QuestionAttention();
+        QuestionAttention attention = new QuestionAttention();
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        Attention.setUserId(userId);
-        Attention.setAttentionId(uuid);
+        attention.setUserId(userId);
+        attention.setAttentionId(uuid);
+        attention.setAttentionUserId(id);
 
         Map map = MapUtil.kv("attentionUserId", id, "userId", userId);
         int cnt =  attentionRoMapper.selectExist(map);
@@ -50,7 +51,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
             throw new ServiceException(6117);
         }
 
-        int result = attentionMapper.insert(Attention);
+        int result = attentionMapper.insert(attention);
 
         int attentionCnt = attentionRoMapper.selectAttentionCnt(id);
 
