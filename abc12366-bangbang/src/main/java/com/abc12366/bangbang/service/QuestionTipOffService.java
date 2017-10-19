@@ -17,4 +17,6 @@ public interface QuestionTipOffService {
     /* 审核 */
     void changeStatus(String id ,String status);
 
+    QuestionTipOffBo save(QuestionTipOffBo questionTipOffBo);
+
 }

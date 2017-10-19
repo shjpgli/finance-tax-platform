@@ -4,6 +4,9 @@ package com.abc12366.uc.util;
  * Created by Administrator on 2017/9/18.
  */
 public class MessageConstant {
+    //消息类型
+    public static final String SYS_MESSAGE = "1";
+    public static final String BANGBANG_MESSAGE = "2";
 
     //UC访问地址
     public static final String ABCUC_URL = "http://uc.abc12366.com";

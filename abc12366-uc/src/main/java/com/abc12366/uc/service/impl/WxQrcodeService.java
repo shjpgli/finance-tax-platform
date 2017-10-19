@@ -88,7 +88,6 @@ public class WxQrcodeService implements IWxQrcodeService {
         if (data != null) {
             data.setName(qrcode.getName());
             data.setDescription(qrcode.getDescription());
-//            data.setStatus(qrcode.getStatus());
             data.setType(qrcode.getType());
             data.setContent(qrcode.getContent());
             data.setLastUpdate(new Date());

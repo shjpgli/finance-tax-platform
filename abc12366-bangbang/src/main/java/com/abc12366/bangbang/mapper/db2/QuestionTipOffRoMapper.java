@@ -5,6 +5,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -26,5 +27,9 @@ public interface QuestionTipOffRoMapper {
      *
      **/
     QuestionTipOff selectByPrimaryKey(@Param("id") String id);
+
+    int selectExist(Map map);
+
+    int selectTipoffCnt(@Param("sourceId") String sourceId);
 
 }

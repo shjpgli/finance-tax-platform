@@ -43,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
         if(!StringUtils.isEmpty(busiType)){
             url = url + "&busiType=" + busiType;
         }
-        if(!StringUtils.isEmpty(busiType)){
+        if(!StringUtils.isEmpty(status)){
             url = url + "&status=" + status;
         }
         if (!StringUtils.isEmpty(request.getAttribute("page"))) {
