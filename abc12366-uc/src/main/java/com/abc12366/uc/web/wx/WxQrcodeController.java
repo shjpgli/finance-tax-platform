@@ -29,22 +29,35 @@ public class WxQrcodeController {
 
     @Autowired
     IWxQrcodeService iWxQrcodeService;
-    
-    @GetMapping("/getcode")
-    private ResponseEntity getWxQrcode(@RequestParam String codeStr){
-    	try {
-			String url=iWxQrcodeService.getWxQrcode(codeStr);
-			if(url!=null){
-				return ResponseEntity.ok(Utils.kv("data", url));
-			}else{
-				return ResponseEntity.ok(Utils.bodyStatus(9999, "获取二维码异常"));
-			}
-		} catch (UnsupportedEncodingException e) {
-			return ResponseEntity.ok(Utils.bodyStatus(9999, "获取二维码异常"));
-		}
-    }
-    
 
+    /**
+     * 获取微信二维码
+     *
+     * @param codeStr 二维码字符串
+     * @return ResponseEntity
+     */
+    @GetMapping("/getcode")
+    private ResponseEntity getWxQrcode(@RequestParam String codeStr) {
+        try {
+            String url = iWxQrcodeService.getWxQrcode(codeStr);
+            if (url != null) {
+                return ResponseEntity.ok(Utils.kv("data", url));
+            } else {
+                return ResponseEntity.ok(Utils.bodyStatus(9999, "获取二维码异常"));
+            }
+        } catch (UnsupportedEncodingException e) {
+            return ResponseEntity.ok(Utils.bodyStatus(9999, "获取二维码异常"));
+        }
+    }
+
+    /**
+     * 查询渠道二维码列表
+     *
+     * @param name 二维码名称
+     * @param page 当前页
+     * @param size 每页大小
+     * @return ResponseEntity
+     */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -62,6 +75,12 @@ public class WxQrcodeController {
         return responseEntity;
     }
 
+    /**
+     * 查看二维码
+     *
+     * @param id PK
+     * @return ResponseEntity
+     */
     @GetMapping("/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
@@ -74,6 +93,13 @@ public class WxQrcodeController {
 
     }
 
+    /**
+     * 新增二维码
+     *
+     * @param qrcode Qrcode
+     * @return ResponseEntity
+     * @throws UnsupportedEncodingException 编码异常
+     */
     @PostMapping()
     public ResponseEntity insert(@Valid @RequestBody Qrcode qrcode) throws UnsupportedEncodingException {
         LOGGER.info("{}", qrcode);
@@ -85,6 +111,14 @@ public class WxQrcodeController {
         return responseEntity;
     }
 
+    /**
+     * 更新二维码
+     *
+     * @param id     PK
+     * @param qrcode Qrcode
+     * @return ResponseEntity
+     * @throws UnsupportedEncodingException 编码异常
+     */
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody Qrcode qrcode) throws
             UnsupportedEncodingException {
@@ -98,6 +132,12 @@ public class WxQrcodeController {
         return responseEntity;
     }
 
+    /**
+     * 删除二维码
+     *
+     * @param id PK
+     * @return ResponseEntity
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
