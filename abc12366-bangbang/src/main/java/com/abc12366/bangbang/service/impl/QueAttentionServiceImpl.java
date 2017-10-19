@@ -51,9 +51,11 @@ public class QueAttentionServiceImpl implements QueAttentionService {
             throw new ServiceException(6117);
         }
 
-        int attentionCnt = attentionRoMapper.selectAttentionCnt(id)+1;
+
 
         int result = attentionMapper.insert(attention);
+
+        int attentionCnt = attentionRoMapper.selectAttentionCnt(id);
 
         return attentionCnt+"";
     }
