@@ -58,6 +58,9 @@ public class QuestionAnswerBo implements Serializable {
     /**回复次数**int(11)**/
     private Integer answerNum;
 
+    /**收藏次数**int(11)**/
+    private Integer collectNum;
+
     /**评论次数**int(11)**/
     private Integer commentNum;
 
@@ -261,5 +264,13 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setReportNum(Integer reportNum) {
         this.reportNum = reportNum;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
     }
 }
