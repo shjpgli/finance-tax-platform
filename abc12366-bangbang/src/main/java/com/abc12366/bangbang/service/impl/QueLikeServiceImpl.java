@@ -9,6 +9,7 @@ import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
 import com.abc12366.bangbang.model.Answer;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionLike;
+import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
 import com.abc12366.bangbang.service.QueLikeService;
@@ -48,7 +49,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
 
-        QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+        QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
         if(answer != null){
             questionId = answer.getQuestionId();
@@ -86,7 +87,7 @@ public class QueLikeServiceImpl implements QueLikeService {
     public String inserttrample(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
-        QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+        QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
         if(answer != null){
             questionId = answer.getQuestionId();
