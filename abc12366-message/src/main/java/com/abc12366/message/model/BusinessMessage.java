@@ -44,12 +44,16 @@ public class BusinessMessage {
     //链接地址
     private String url;
 
+    //消息业务类型
+    private String busiType;
+
+
 
     public BusinessMessage() {
     }
 
     public BusinessMessage(String id, String userId, String businessId, String content, String status, Timestamp
-            createTime, Timestamp lastUpdate, String type, String url, String nickname) {
+            createTime, Timestamp lastUpdate, String type, String url, String busiType) {
         this.id = id;
         this.userId = userId;
         this.businessId = businessId;
@@ -59,6 +63,7 @@ public class BusinessMessage {
         this.lastUpdate = lastUpdate;
         this.type = type;
         this.url = url;
+        this.busiType = busiType;
     }
 
     private BusinessMessage(Builder builder) {
@@ -71,6 +76,7 @@ public class BusinessMessage {
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
         setUrl(builder.url);
+        setBusiType(builder.busiType);
     }
 
     public String getId() {
@@ -145,6 +151,14 @@ public class BusinessMessage {
         this.url = url;
     }
 
+    public String getBusiType() {
+        return busiType;
+    }
+
+    public void setBusiType(String busiType) {
+        this.busiType = busiType;
+    }
+
     public static final class Builder {
         private String id;
         private String userId;
@@ -155,6 +169,7 @@ public class BusinessMessage {
         private Timestamp lastUpdate;
         private String type;
         private String url;
+        private String busiType;
 
         public Builder() {
         }
@@ -201,6 +216,11 @@ public class BusinessMessage {
 
         public Builder url(String val) {
             url = val;
+            return this;
+        }
+
+        public Builder busiType(String val) {
+            busiType = val;
             return this;
         }
 

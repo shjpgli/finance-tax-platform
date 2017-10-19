@@ -3,7 +3,9 @@ package com.abc12366.uc.web.wx;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
+import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.WxLotteryBO;
+import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
 import com.abc12366.uc.service.IActivityService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -33,6 +35,13 @@ public class RedEnvelopController {
 
     /**
      * 抽奖记录列表
+     * @param activityId 活动ID
+     * @param sendStatus 发送状态
+     * @param receiveStatus 接收状态
+     * @param openId 微信OPENID
+     * @param page 当前页
+     * @param size 每页大小
+     * @return ResponseEntity
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "activityId", required = false) String activityId,
@@ -41,6 +50,7 @@ public class RedEnvelopController {
                                      @RequestParam(value = "openId", required = false) String openId,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+
         WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                 .activityId(activityId)
                 .sendStatus(sendStatus)
@@ -60,11 +70,13 @@ public class RedEnvelopController {
 
     /**
      * 根据活动ID生成口令
+     * @param activityId 活动ID
+     * @return ResponseEntity
      */
     @GetMapping("/{activityId}")
     public ResponseEntity insert(@PathVariable("activityId") String activityId) {
         LOGGER.info("{}", activityId);
-        WxRedEnvelop data = iActivityService.generateSecret(activityId);
+        WxRedEnvelopBO data = iActivityService.generateSecret(activityId);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
@@ -73,6 +85,8 @@ public class RedEnvelopController {
 
     /**
      * 抽奖
+     * @param lotteryBO WxLotteryBO
+     * @return ResponseEntity
      */
     @PostMapping()
     public ResponseEntity lottery(@Valid @RequestBody WxLotteryBO lotteryBO) {
@@ -87,6 +101,8 @@ public class RedEnvelopController {
 
     /**
      * 查询微信红包信息
+     * @param id 红包口令表主键
+     * @return ResponseEntity
      */
     @GetMapping("/hbinfo/{id}")
     public ResponseEntity gethbinfo(@PathVariable("id") String id) {
@@ -100,9 +116,11 @@ public class RedEnvelopController {
 
     /**
      * 导入红包数据
+     * @param redEnvelopList List<WxRedEnvelop>
+     * @return ResponseEntity
      */
     @PostMapping("/import")
-    public ResponseEntity importJSON(@Valid @RequestBody List<WxRedEnvelop> redEnvelopList) {
+    public ResponseEntity importJSON(@Valid @RequestBody List<WxRedEnvelopBO> redEnvelopList) {
         LOGGER.info("{}", redEnvelopList);
         iActivityService.importJSON(redEnvelopList);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
@@ -113,12 +131,44 @@ public class RedEnvelopController {
 
     /**
      * 对于发送失败的红包，重新发送
+     * @param id 红包口令表主键
+     * @return ResponseEntity
      */
     @PutMapping("/resend/{id}")
-    public ResponseEntity Resend(@PathVariable("id") String id) {
+    public ResponseEntity resend(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         WxRedEnvelop data = iActivityService.resend(id);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 删除未抽奖的口令
+     * @param id 红包口令表主键
+     * @return ResponseEntity
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") String id) {
+        LOGGER.info("{}", id);
+        iActivityService.deleteSecret(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 批量删除未抽奖的口令
+     * @param ids List<Id>
+     * @return ResponseEntity
+     */
+    @PostMapping("/batchdelete")
+    public ResponseEntity batchDelete(@Valid @RequestBody List<Id> ids) {
+        LOGGER.info("{}", ids);
+        iActivityService.batchDeleteSecret(ids);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;
