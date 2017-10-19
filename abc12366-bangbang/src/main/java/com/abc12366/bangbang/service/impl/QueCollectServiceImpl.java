@@ -41,9 +41,8 @@ public class QueCollectServiceImpl implements QueCollectService {
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        //String userId = UcUserCommon.getUserId(request);
+        String userId = UcUserCommon.getUserId(request);
 
-        String userId = "12345";
 
                 QuestionCollect collect = new QuestionCollect();
         String uuid = UUID.randomUUID().toString().replace("-", "");
