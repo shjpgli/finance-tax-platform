@@ -35,12 +35,13 @@ public class RedEnvelopController {
 
     /**
      * 抽奖记录列表
-     * @param activityId 活动ID
-     * @param sendStatus 发送状态
+     *
+     * @param activityId    活动ID
+     * @param sendStatus    发送状态
      * @param receiveStatus 接收状态
-     * @param openId 微信OPENID
-     * @param page 当前页
-     * @param size 每页大小
+     * @param openId        微信OPENID
+     * @param page          当前页
+     * @param size          每页大小
      * @return ResponseEntity
      */
     @GetMapping()
@@ -70,6 +71,7 @@ public class RedEnvelopController {
 
     /**
      * 根据活动ID生成口令
+     *
      * @param activityId 活动ID
      * @return ResponseEntity
      */
@@ -85,6 +87,7 @@ public class RedEnvelopController {
 
     /**
      * 抽奖
+     *
      * @param lotteryBO WxLotteryBO
      * @return ResponseEntity
      */
@@ -101,6 +104,7 @@ public class RedEnvelopController {
 
     /**
      * 查询微信红包信息
+     *
      * @param id 红包口令表主键
      * @return ResponseEntity
      */
@@ -116,6 +120,7 @@ public class RedEnvelopController {
 
     /**
      * 导入红包数据
+     *
      * @param redEnvelopList List<WxRedEnvelop>
      * @return ResponseEntity
      */
@@ -131,6 +136,7 @@ public class RedEnvelopController {
 
     /**
      * 对于发送失败的红包，重新发送
+     *
      * @param id 红包口令表主键
      * @return ResponseEntity
      */
@@ -146,6 +152,7 @@ public class RedEnvelopController {
 
     /**
      * 删除未抽奖的口令
+     *
      * @param id 红包口令表主键
      * @return ResponseEntity
      */
@@ -161,6 +168,7 @@ public class RedEnvelopController {
 
     /**
      * 批量删除未抽奖的口令
+     *
      * @param ids List<Id>
      * @return ResponseEntity
      */

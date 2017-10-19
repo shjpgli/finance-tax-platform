@@ -39,7 +39,6 @@ public class WxActivity {
     @Length(min = 1, max = 1)
     private String ruleType;
     // 生成规则定义
-    @NotEmpty
     @Length(min = 1, max = 50)
     private String rule;
     // 固定金额／随机金额
