@@ -9,6 +9,12 @@
 		 WHERE id = #{id}
 	</delete>
 
+	<!--删除：根据主键IP删除-->
+	<delete id="deleteByIP" parameterType="java.lang.String">
+		DELETE FROM bb_question_disable_ip
+		WHERE ip = #{ip}
+	</delete>
+
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionDisableIp">
 		 INSERT INTO bb_question_disable_ip

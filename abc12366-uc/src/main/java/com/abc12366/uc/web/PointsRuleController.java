@@ -35,7 +35,15 @@ public class PointsRuleController {
     @Autowired
     private PointsRuleService pointsRuleService;
 
-    //积分规则列表
+    /**
+     * 积分规则列表
+     * @param name
+     * @param code
+     * @param type
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) String code,
@@ -65,6 +73,11 @@ public class PointsRuleController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) ruleList, "total", ((Page) ruleList).getTotal()));
     }
 
+    /**
+     * 查询一条积分规则
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -73,6 +86,11 @@ public class PointsRuleController {
         return ResponseEntity.ok(Utils.kv("data", points_rule));
     }
 
+    /**
+     * 新增一条积分规则
+     * @param pointsRuleInsertBO
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody PointsRuleInsertBO pointsRuleInsertBO) {
         LOGGER.info("{}", pointsRuleInsertBO);
@@ -81,6 +99,12 @@ public class PointsRuleController {
         return ResponseEntity.ok(Utils.kv("data", rule));
     }
 
+    /**
+     * 更新积分规则
+     * @param pointsRuleUpdateBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/{id}")
     ResponseEntity update(@RequestBody PointsRuleUpdateBO pointsRuleUpdateBO, @PathVariable String id) {
         LOGGER.info("{}", pointsRuleUpdateBO);
@@ -89,6 +113,11 @@ public class PointsRuleController {
         return ResponseEntity.ok(Utils.kv("data", rule));
     }
 
+    /**
+     * 删除积分规则
+     * @param id
+     * @return
+     */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -96,7 +125,12 @@ public class PointsRuleController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    //启用、禁用积分规则接口
+    /**
+     * 启用、禁用积分规则
+     * @param id
+     * @param status
+     * @return
+     */
     @PutMapping(path = "/{id}/{status}")
     public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
         LOGGER.info("{}:{}", id, status);
