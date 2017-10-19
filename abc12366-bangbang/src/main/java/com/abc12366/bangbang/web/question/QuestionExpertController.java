@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionExpert;
+import com.abc12366.bangbang.model.question.bo.QuestionExpertBO;
 import com.abc12366.bangbang.service.QuestionExpertService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -29,11 +30,18 @@ public class QuestionExpertController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionExpert> list = questionExpertService.selectList();
+        List<QuestionExpertBO> list = questionExpertService.selectList();
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /* 专家列表查询 */
+    @GetMapping(path = "/view/{id}")
+    public ResponseEntity selectOne(@PathVariable String id){
+        QuestionExpert expert = questionExpertService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data", expert));
     }
 
     /* 专家添加 */

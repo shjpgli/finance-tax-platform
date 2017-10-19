@@ -3,26 +3,6 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db1.QuestionExpertMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		id,	useId,	image,	expertise,	permission,	createTime,	updateTime, createUser
-	</sql>
-
-	<!-- 查询列表 -->
-	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionExpert" parameterType="java.lang.String">
-		SELECT
-		<include refid="Base_Column_List" />
-		FROM bb_question_expert
-	</select>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionExpert" parameterType="java.lang.String">
-		SELECT
-		<include refid="Base_Column_List" />
-		FROM bb_question_expert
-		WHERE id = #{id}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		DELETE FROM bb_question_expert
@@ -32,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionExpert">
 		INSERT INTO bb_question_expert
-		(id,useId,image,expertise,permission,createTime,updateTime, createUser)
+		(id,userId,type,yearWork,goodField,intro,createTime,createAdmin,updateTime,updateAdmin,status)
 		VALUES
-		(#{id},#{useId},#{image},#{expertise},#{permission}, now(), now(),#{createUser})
+		(#{id},#{userId},#{type},#{yearWork},#{goodField},#{intro},now(),#{createAdmin},now(),#{updateAdmin},#{status})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -44,53 +24,61 @@
 			<if test="id != null">
 				id,
 			</if>
-			<if test="useId != null">
-				useId,
+			<if test="userId != null">
+				userId,
 			</if>
-			<if test="image != null">
-				image,
+			<if test="type != null">
+				type,
 			</if>
-			<if test="expertise != null">
-				expertise,
+			<if test="yearWork != null">
+				yearWork,
 			</if>
-			<if test="permission != null">
-				permission,
+			<if test="goodField != null">
+				goodField,
 			</if>
-			<if test="createTime != null">
-				createTime,
+			<if test="intro != null">
+				intro,
 			</if>
-			<if test="updateTime != null">
-				updateTime,
+			<if test="createAdmin != null">
+				createAdmin,
 			</if>
-			<if test="createUser != null">
-				createUser,
+			<if test="updateAdmin != null">
+				updateAdmin,
 			</if>
+			<if test="status != null">
+				status,
+			</if>
+			createTime,updateTime
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
 				#{id},
 			</if>
-			<if test="useId!=null">
-				#{useId},
+			<if test="userId!=null">
+				#{userId},
 			</if>
-			<if test="image!=null">
-				#{image},
+			<if test="type!=null">
+				#{type},
 			</if>
-			<if test="expertise!=null">
-				#{expertise},
+			<if test="yearWork!=null">
+				#{yearWork},
 			</if>
-			<if test="permission!=null">
-				#{permission},
+			<if test="goodField!=null">
+				#{goodField},
 			</if>
-			<if test="createTime!=null">
-				#{createTime},
+			<if test="intro!=null">
+				#{intro},
 			</if>
-			<if test="updateTime!=null">
-				#{updateTime},
+			<if test="createAdmin!=null">
+				#{createAdmin},
 			</if>
-			<if test="createUser!=null">
-				#{createUser},
+			<if test="updateAdmin!=null">
+				#{updateAdmin},
 			</if>
+			<if test="status!=null">
+				#{status},
+			</if>
+			now(),now()
 		</trim>
 	</insert>
 
@@ -98,37 +86,50 @@
 	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionExpert">
 		UPDATE bb_question_expert
 		<set>
-			<if test="useId != null">
-				useId = #{useId},
+			<if test="userId != null">
+				userId = #{userId},
 			</if>
-			<if test="image != null">
-				image = #{image},
+			<if test="type != null">
+				type = #{type},
 			</if>
-			<if test="expertise != null">
-				expertise = #{expertise},
+			<if test="yearWork != null">
+				yearWork = #{yearWork},
 			</if>
-			<if test="permission != null">
-				permission = #{permission},
+			<if test="goodField != null">
+				goodField = #{goodField},
 			</if>
-			<if test="createUser != null">
-				createUser = #{createUser},
+			<if test="intro != null">
+				intro = #{intro},
 			</if>
-			updateTime = now()
+			<if test="createAdmin != null">
+				createAdmin = #{createAdmin},
+			</if>
+			<if test="updateAdmin != null">
+				updateAdmin = #{updateAdmin},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			createTime = now(), updateTime = now()
 		</set>
 		WHERE id = #{id}
 	</update>
 
 	<!-- 修 改-->
 	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionExpert">
-		UPDATE bb_question_expert
-		SET
-		useId = #{useId},
-		image = #{image},
-		expertise = #{expertise},
-		permission = #{permission},
-		updateTime = now(),
-		createUser = #{createUser}
-		WHERE id = #{id}
+		 UPDATE bb_question_expert
+		 SET
+			 userId = #{userId},
+			 type = #{type},
+			 yearWork = #{yearWork},
+			 goodField = #{goodField},
+			 intro = #{intro},
+			 createTime = now(),
+			 updateTime = now(),
+			 createAdmin = #{createAdmin},
+			 updateAdmin = #{updateAdmin},
+			 status = #{status}
+		 WHERE id = #{id}
 	</update>
 
 </mapper>
