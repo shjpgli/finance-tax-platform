@@ -41,6 +41,7 @@ public class QueCollectServiceImpl implements QueCollectService {
         QuestionCollect collect = new QuestionCollect();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         collect.setUserId(userId);
+        collect.setCollectId(uuid);
 
         Map map = MapUtil.kv("questionId", id, "userId", userId);
         int cnt =  collectRoMapper.selectExist(map);

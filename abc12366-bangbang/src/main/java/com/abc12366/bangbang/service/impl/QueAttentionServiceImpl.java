@@ -41,6 +41,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
         QuestionAttention Attention = new QuestionAttention();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         Attention.setUserId(userId);
+        Attention.setAttentionId(uuid);
 
         Map map = MapUtil.kv("attentionUserId", id, "userId", userId);
         int cnt =  attentionRoMapper.selectExist(map);

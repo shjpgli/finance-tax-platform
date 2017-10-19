@@ -37,10 +37,10 @@ public class QueLikeServiceImpl implements QueLikeService {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
 
-
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
+        like.setLikeId(uuid);
 
         Map map = MapUtil.kv("id", id, "userId", userId);
         int cnt =  likeRoMapper.selectExist(map);
