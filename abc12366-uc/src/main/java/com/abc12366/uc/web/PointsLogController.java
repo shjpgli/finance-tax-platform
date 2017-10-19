@@ -34,6 +34,16 @@ public class PointsLogController {
     @Autowired
     private PointsLogService pointsLogService;
 
+    /**
+     * 积分日志列表
+     * @param name
+     * @param code
+     * @param type
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String name, @RequestParam(required = false)
     String code,
@@ -67,6 +77,11 @@ public class PointsLogController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
     }
 
+    /**
+     * 新增积分日志
+     * @param pointsLogBO
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@RequestBody PointsLogBO pointsLogBO) {
         LOGGER.info("{}", pointsLogBO);
@@ -75,6 +90,15 @@ public class PointsLogController {
         return ResponseEntity.ok(Utils.kv("data", points_log));
     }
 
+    /**
+     * 查询当前用户
+     * @param start
+     * @param end
+     * @param request
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping(path = "/user")
     public ResponseEntity selectListByUser(@RequestParam(required = false) String start,
                                            @RequestParam(required = false) String end,

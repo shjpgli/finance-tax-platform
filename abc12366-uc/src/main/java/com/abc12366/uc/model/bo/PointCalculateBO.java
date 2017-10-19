@@ -6,7 +6,10 @@ package com.abc12366.uc.model.bo;
  * Time: 10:29
  */
 public class PointCalculateBO {
+    //用户ID
     private String userId;
+
+    //积分规则ID
     private String ruleId;
 
     public String getUserId() {
