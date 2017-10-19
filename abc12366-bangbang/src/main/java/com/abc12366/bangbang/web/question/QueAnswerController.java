@@ -161,6 +161,16 @@ public class QueAnswerController {
     }
 
     /**
+     * 查询单个问题回复信息(无需登录)
+     */
+    @GetMapping(path = "/selectAnswer/{id}")
+    public ResponseEntity selectAnswer(@PathVariable String id) {
+        //查询单个问题回复信息
+        QuestionAnswerBo answerBo = queAnswerService.selectAnswer(id);
+        return ResponseEntity.ok(Utils.kv("data", answerBo));
+    }
+
+    /**
      * 更新问题回复信息
      */
     @PutMapping(path = "/{id}")

@@ -102,13 +102,13 @@
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
         (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
 
-        (SELECT count(id) FROM bb_question where userId =#{userId} and factionId = f.factionId) questionNum,
+        (SELECT count(id) FROM bb_question where factionId = f.factionId) questionNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId = '' and userId =#{userId} and factionId = f.factionId) answerNum,
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and factionId = f.factionId) answerNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId != '' and userId =#{userId} and factionId = f.factionId) discussNum,
+        (SELECT count(id) FROM bb_question_answer where parentId != '' and factionId = f.factionId) discussNum,
 
-        (SELECT count(id) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId =#{userId} and factionId = f.factionId) adoptNum
+        (SELECT count(id) FROM bb_question_answer where parentId = '' and isAccept = '1' and factionId = f.factionId) adoptNum
         FROM bb_question_faction f
         WHERE 1=1
         order by 2*answerNum+discussNum+7*adoptNum desc
