@@ -53,9 +53,11 @@ public class QueCollectServiceImpl implements QueCollectService {
             throw new ServiceException(6116);
         }
 
+        int collectCnt = collectRoMapper.selectCollectCnt(id)+1;
+
         int result = collectMapper.insert(collect);
 
-        int collectCnt = collectRoMapper.selectCollectCnt(id);
+
 
         return collectCnt+"";
     }
