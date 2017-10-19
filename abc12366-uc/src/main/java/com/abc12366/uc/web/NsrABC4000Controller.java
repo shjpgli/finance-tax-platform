@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
+ * 查询纳税人绑定电子申报接口控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-10
  * Time: 9:31
@@ -31,6 +32,11 @@ public class NsrABC4000Controller {
     @Autowired
     private NsrABC4000Service nsrABC4000Service;
 
+    /**
+     * 查询用户所有纳税人绑定列表
+     * @param data
+     * @return
+     */
     @PostMapping(path = "/list")
     public ResponseEntity selectList(@Valid @RequestBody NsrbindListParam data) {
         LOGGER.info("{}", data);
@@ -45,6 +51,11 @@ public class NsrABC4000Controller {
 //        return ResponseEntity.ok(response);
 //    }
 
+    /**
+     * 供外系统回调UC修改用户绑定关系数据
+     * @param data
+     * @return
+     */
     @PostMapping(path = "/update")
     public ResponseEntity update(@Valid @RequestBody ABC4000CallbackBO data) {
         LOGGER.info("{}", data);

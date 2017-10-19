@@ -127,6 +127,15 @@
 			<if test="status != null">
 				 status = #{status},
 			</if>
+             <if test="commentNum != null">
+                 commentNum = #{commentNum},
+             </if>
+             <if test="likeNum != null">
+                 likeNum = #{likeNum},
+             </if>
+             <if test="trampleNum != null">
+                 trampleNum = #{trampleNum},
+             </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
 			</if>

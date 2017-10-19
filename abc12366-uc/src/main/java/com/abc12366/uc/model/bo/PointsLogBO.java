@@ -12,18 +12,32 @@ import java.util.Date;
  */
 public class PointsLogBO {
     private String id;
+
+    //用户ID
     @NotEmpty
     private String userId;
+
+    //积分规则ID
     private String ruleId;
+
+    //规则名称，查询时候用到
     private String name;
+    //规则编码，查询时候用到
     private String code;
+    //规则类型
     private String type;
+    //积分收入
     private int income;
+    //积分支出
     private int outgo;
+    //当前可用积分
     private int usablePoints;
+    //创建时间
     private Date createTime;
+    //日志类型
     @Size(max = 20)
     private String logType;
+    //备注
     @Size(max = 200)
     private String remark;
 

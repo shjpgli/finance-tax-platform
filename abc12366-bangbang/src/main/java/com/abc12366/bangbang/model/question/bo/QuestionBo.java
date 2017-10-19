@@ -92,6 +92,9 @@ public class QuestionBo implements Serializable {
     /**回复或者评论内容**/
     private String answer;
 
+    /**回复或者评论内容Id**/
+    private String answerId;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -302,5 +305,13 @@ public class QuestionBo implements Serializable {
 
     public void setTrampleNum(Integer trampleNum) {
         this.trampleNum = trampleNum;
+    }
+
+    public String getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(String answerId) {
+        this.answerId = answerId;
     }
 }

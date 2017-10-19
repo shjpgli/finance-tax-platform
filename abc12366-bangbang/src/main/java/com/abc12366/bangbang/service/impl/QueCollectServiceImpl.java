@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,6 +43,8 @@ public class QueCollectServiceImpl implements QueCollectService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         collect.setUserId(userId);
         collect.setCollectId(uuid);
+        collect.setQuestionId(id);
+        collect.setCollectTime(new Date());
 
         Map map = MapUtil.kv("questionId", id, "userId", userId);
         int cnt =  collectRoMapper.selectExist(map);
@@ -50,9 +53,11 @@ public class QueCollectServiceImpl implements QueCollectService {
             throw new ServiceException(6116);
         }
 
+        int collectCnt = collectRoMapper.selectCollectCnt(id)+1;
+
         int result = collectMapper.insert(collect);
 
-        int collectCnt = collectRoMapper.selectCollectCnt(id);
+
 
         return collectCnt+"";
     }
