@@ -112,7 +112,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //根据省市区编号查询名称
                 .excludePathPatterns("/provinceorcityorarea")
                 //JS获取微信信息
-                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**","/wx/redpack")
+                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**","/wx/redpack","/wx/activity/redpack")
                         //
                 .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
                         //微信回调地址
