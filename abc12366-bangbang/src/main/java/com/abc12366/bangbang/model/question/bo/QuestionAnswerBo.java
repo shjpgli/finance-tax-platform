@@ -67,6 +67,9 @@ public class QuestionAnswerBo implements Serializable {
     /**踩次数**int(11)**/
     private Integer trampleNum;
 
+    /**被举报次数**int(11)**/
+    private Integer reportNum;
+
     /**是否已点赞：1/0**tinyint(4)**/
     private Integer isLike;
 
@@ -250,5 +253,13 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setAnswerNum(Integer answerNum) {
         this.answerNum = answerNum;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
     }
 }

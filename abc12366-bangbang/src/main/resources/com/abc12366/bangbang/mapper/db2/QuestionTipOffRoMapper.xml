@@ -29,4 +29,20 @@
         WHERE id = #{id}
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectExist" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(id)
+        FROM bb_question_tip_off
+        WHERE sourceId = #{sourceId} and userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectTipoffCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(id)
+        FROM bb_question_tip_off
+        WHERE sourceId = #{sourceId}
+    </select>
+
 </mapper>

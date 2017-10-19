@@ -55,6 +55,9 @@ public class QuestionAnswer implements Serializable {
     /**踩次数**int(11)**/
     private Integer trampleNum;
 
+    /**被举报次数**int(11)**/
+    private Integer reportNum;
+
 
 
 	public void setId(String id){
@@ -175,5 +178,13 @@ public class QuestionAnswer implements Serializable {
 
     public void setTrampleNum(Integer trampleNum) {
         this.trampleNum = trampleNum;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
     }
 }
