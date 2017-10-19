@@ -25,4 +25,10 @@ public interface ActivityMapper {
     void insertLotteryLog(WxLotteryLog lotteryLog);
 
     void batchGenerateSecret(List<WxRedEnvelop> dataList);
+
+    /**
+     * 删除口令
+     * @param id 口令ID
+     */
+    void deleteSecret(String id);
 }

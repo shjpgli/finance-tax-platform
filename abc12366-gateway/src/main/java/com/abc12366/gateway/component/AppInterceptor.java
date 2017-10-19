@@ -43,16 +43,6 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
             LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
             return false;
         }
-        //accessToken是否存在
-        /*if (!appService.isAuthentication(accessToken)) {
-            BodyStatus bodyStatus = Utils.bodyStatus(4001);
-            response.setStatus(200);
-            response.getWriter().write(JSON.toJSONString(bodyStatus));
-            response.getWriter().flush();
-            response.getWriter().close();
-            LOGGER.warn("URI:{}, IP:{}, {}", request.getRequestURI(), request.getRemoteAddr(), bodyStatus);
-            return false;
-        }*/
         // 4.App授权
         if (!appService.isAuthentization(request)) {
             BodyStatus bodyStatus = Utils.bodyStatus(4002);
@@ -66,11 +56,4 @@ public class AppInterceptor extends HandlerInterceptorAdapter {
 
         return true;
     }
-
-    /*public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception
-     ex)
-            throws Exception {
-        // 移除appId，用于在业务中快速获取有效AppId，在AppInterceptor.preHandle.isAuthentization中设置
-        request.removeAttribute(Constant.APP_ID);
-    }*/
 }

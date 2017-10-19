@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import java.util.Map;
 public interface UserService {
 
     List<UserBO> selectList(Map<String, Object> map);
-
+    User selectUser(String userId) ;
     Map selectOne(String userId);
 
     UserBO update(UserUpdateBO userUpdateBO);
@@ -92,4 +93,11 @@ public interface UserService {
      * @return
      */
     IsRealNameBO isRealName();
+
+    /**
+     * 根据用户ID获取用户信息和用户扩展信息（供后台管理系统使用，敏感信息不做模糊化处理）
+     * @param id
+     * @return
+     */
+    Map selectOneForAdmin(String id);
 }

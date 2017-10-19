@@ -79,6 +79,44 @@ public class QuestionController {
     }
 
     /**
+     * 推荐问题
+     */
+    @GetMapping(path = "/selectListRecommend")
+    public ResponseEntity selectListRecommend(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                                @RequestParam(value = "title", required = false) String title,
+                                                @RequestParam(value = "tag", required = false) String tag,
+                                                @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//s
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListRecommend(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 高悬赏问题
+     */
+    @GetMapping(path = "/selectListByPoints")
+    public ResponseEntity selectListByPoints(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                                @RequestParam(value = "title", required = false) String title,
+                                                @RequestParam(value = "tag", required = false) String tag,
+                                                @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//s
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListByPoints(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
      * 查询热门问题
      */
     @GetMapping(path = "/selectListByBrowseNum")

@@ -12,15 +12,57 @@ import java.util.Map;
  * @since 1.0.0
  */
 public interface ApiLogService {
+
+    /**
+     * 新增接口日志
+     *
+     * @param log 日志对象
+     */
     void insert(ApiLog log);
 
+    /**
+     * 无参查询日志列表
+     *
+     * @return List
+     */
     List<ApiLog> selectList();
 
+    /**
+     * 带参查询日志列表
+     *
+     * @param apiLog 日志对象
+     * @return
+     */
     List<ApiLog> selectList(ApiLog apiLog);
 
+    /**
+     * 查询接口访问次数
+     *
+     * @param apiLog 日志对象
+     * @return int
+     */
     int selectApiLogCount(ApiLog apiLog);
 
+    /**
+     * 根据日期查询日志列表
+     *
+     * @param map createTime:查询日期
+     * @return List<ApiLog>
+     */
     List<ApiLog> selectApiList(Map<String, Object> map);
 
+    /**
+     * 根据日期、appId查询日志列表
+     *
+     * @param map createTime:查询日期，appId:appId
+     * @return List<ApiLog>
+     */
     List<ApiLog> selectApiListByAppId(Map<String, Object> map);
+
+    /**
+     * 接口日志-根据uri,version,method列表查询
+     * @param map
+     * @return
+     */
+    List<ApiLog> selectApiListByApiId(Map<String, Object> map);
 }

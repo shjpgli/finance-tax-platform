@@ -8,13 +8,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * Created by relic5 on 2017/5/26.
+ * 获取应用上下文
  */
 @Component
 public class SpringCtxHolder implements ApplicationContextAware {
 
+    /**
+     * 应用上下文
+     */
     private static ApplicationContext applicationContext;
 
+    /**
+     * 环境配置
+     */
     private static Environment env;
 
     public static ApplicationContext getApplicationContext() {

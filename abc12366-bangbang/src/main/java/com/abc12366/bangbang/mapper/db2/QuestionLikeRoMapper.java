@@ -30,5 +30,7 @@ public interface QuestionLikeRoMapper {
 
     int selectLikeCnt(String id);
 
+    int selectTrampleCnt(String id);
+
 
 }

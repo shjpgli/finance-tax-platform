@@ -3,11 +3,21 @@ package com.abc12366.bangbang.model.question.bo;
 /**
  * @Author liuQi
  * @Date 2017/9/19 11:54
+ * 系统过滤帮帮内容（包括问题，回答，评论）
  */
 public class QuestionSysBlockBo {
 
     /**PK**/
     private String id;
+
+    /*用户id*/
+    private String userId;
+
+    /*用户name*/
+    private String username;
+
+    /* 分类 */
+    private String classifyName;
 
     /**内容**/
     private String content;
@@ -96,5 +106,30 @@ public class QuestionSysBlockBo {
         return this.updateTime;
     }
 
+    public String getUserId() {
+        return userId;
+    }
 
+    public QuestionSysBlockBo setUserId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public QuestionSysBlockBo setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getClassifyName() {
+        return classifyName;
+    }
+
+    public QuestionSysBlockBo setClassifyName(String classifyName) {
+        this.classifyName = classifyName;
+        return this;
+    }
 }

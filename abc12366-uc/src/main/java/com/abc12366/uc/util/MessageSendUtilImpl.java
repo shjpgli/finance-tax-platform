@@ -47,6 +47,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         map.put("content", message.getContent());
         map.put("status", "1");
         map.put("type", message.getType());
+        map.put("url", message.getUrl());
 
         String responseStr;
         try {
@@ -104,6 +105,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         map.put("content", message.getContent());
         map.put("status", "1");
         map.put("type", message.getType());
+        map.put("url", message.getUrl());
 
         String responseStr;
         try {
@@ -138,7 +140,8 @@ public class MessageSendUtilImpl implements MessageSendUtil {
     public static void main(String[] args) {
         Message message = new Message();
         message.setBusinessId("cs");
-        message.setType(MessageConstant.SPDD);
+        message.setBusiType(MessageConstant.SPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
         message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX + MessageConstant.BUYING_MEMBERS_SUFFIX + "。<a " +
                 "href=\"" + SpringCtxHolder.getProperty("abc12366.api.url") + "/member/member_rights.html\">会员权益详情查看</a>");
         message.setUserId("cs");

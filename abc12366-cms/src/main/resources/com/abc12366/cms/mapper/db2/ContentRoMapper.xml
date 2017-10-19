@@ -215,18 +215,24 @@
 
 	<!-- 查询（根据channelId查询） -->
 	<select id="selectContentType" resultType="com.abc12366.cms.model.bo.ContenttagidBo" parameterType="java.util.Map">
-        SELECT
-        a.tagId,COUNT(a.tagId) priority,(select name from abc12366_bangbang.bb_knowledge_tag where id = a.tagId) tagName
-        FROM cms_contenttagid a LEFT JOIN cms_content b ON a.contentId = b.contentId
-		WHERE 1=1
-		<if test="siteId != null and siteId != ''">
-			AND b.siteId = #{siteId}
-		</if>
-        <if test="channelId != null and channelId != ''">
-            AND b.channelId like CONCAT(#{channelId},'%')
-        </if>
-		GROUP BY a.tagId
-		ORDER BY priority DESC
+		SELECT t.tagId, t.priority, t.tagName FROM
+		(
+			SELECT
+			a.tagId,COUNT(a.tagId) priority,(select name from abc12366_bangbang.bb_knowledge_tag where id = a.tagId) tagName
+			FROM cms_contenttagid a LEFT JOIN cms_content b ON a.contentId = b.contentId LEFT JOIN cms_content_ext c on
+			a.contentId = c.contentId
+			WHERE 1=1
+			<if test="siteId != null and siteId != ''">
+				AND b.siteId = #{siteId}
+			</if>
+			<if test="channelId != null and channelId != ''">
+				AND b.channelId like CONCAT(#{channelId},'%')
+			</if>
+			AND b.status = 2 AND c.needRegenerate= 1
+			GROUP BY a.tagId
+			ORDER BY priority DESC
+		)t
+		WHERE t.tagName IS NOT null
 	</select>
 
 	<!-- 查询（根据查询条件查询） -->

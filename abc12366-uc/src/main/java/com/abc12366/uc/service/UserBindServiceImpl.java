@@ -84,7 +84,7 @@ public class UserBindServiceImpl implements UserBindService {
         }
 
         //是否已实名认证，未认证不允许做绑定
-        isRealnameValidated(request);
+//        isRealnameValidated(request);
 
         //用户会员绑定企业数量限制
         String userId = UserUtil.getUserId(request);
@@ -299,7 +299,7 @@ public class UserBindServiceImpl implements UserBindService {
         }
 
         //是否已实名认证，未认证不允许做绑定
-        isRealnameValidated(request);
+//        isRealnameValidated(request);
 
         //用户会员绑定企业数量限制
         String userId = UserUtil.getUserId(request);
@@ -389,7 +389,7 @@ public class UserBindServiceImpl implements UserBindService {
         }
 
         //是否已实名认证，未认证不允许做绑定
-        isRealnameValidated(request);
+//        isRealnameValidated(request);
 
         UserHnds userHnds = new UserHnds();
         //BeanUtils.copyProperties(userHndsInsertBO, userHnds);
@@ -666,13 +666,13 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     //用户是否实名制
-    private void isRealnameValidated(HttpServletRequest request) {
-        String userId = UserUtil.getUserId(request);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
-        if (userExtend == null || StringUtils.isEmpty(userExtend.getValidStatus()) || !userExtend.getValidStatus().trim().equals("2")) {
-            throw new ServiceException(4712);
-        }
-    }
+//    private void isRealnameValidated(HttpServletRequest request) {
+//        String userId = UserUtil.getUserId(request);
+//        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+//        if (userExtend == null || StringUtils.isEmpty(userExtend.getValidStatus()) || !userExtend.getValidStatus().trim().equals("2")) {
+//            throw new ServiceException(4712);
+//        }
+//    }
 
     //用户会员绑定纳税人数量是否超过上限-以社会信用代码作为企业唯一标识
     private void bindLimit(String userId){

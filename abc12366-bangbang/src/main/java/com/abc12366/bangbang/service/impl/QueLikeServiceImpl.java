@@ -2,8 +2,12 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.MapUtil;
 import com.abc12366.bangbang.common.UcUserCommon;
+import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionLikeMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
+import com.abc12366.bangbang.model.Answer;
+import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionLike;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
@@ -13,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -30,6 +35,12 @@ public class QueLikeServiceImpl implements QueLikeService {
     private QuestionLikeMapper likeMapper;
 
     @Autowired
+    private QuestionAnswerMapper answerMapper;
+
+    @Autowired
+    private QuestionAnswerRoMapper answerRoMapper;
+
+    @Autowired
     private QuestionLikeRoMapper likeRoMapper;
 
     @Override
@@ -37,10 +48,18 @@ public class QueLikeServiceImpl implements QueLikeService {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
 
-
+        QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+        String questionId = "";
+        if(answer != null){
+            questionId = answer.getQuestionId();
+        }
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
+        like.setLikeId(uuid);
+        like.setLikeType(1);
+        like.setQuestionId(questionId);
+        like.setId(id);
 
         Map map = MapUtil.kv("id", id, "userId", userId);
         int cnt =  likeRoMapper.selectExist(map);
@@ -49,11 +68,56 @@ public class QueLikeServiceImpl implements QueLikeService {
             throw new ServiceException(6115);
         }
 
+
+
         int result = likeMapper.insert(like);
 
         int likeCnt = likeRoMapper.selectLikeCnt(id);
 
+        QuestionAnswer answer1 = new QuestionAnswer();
+        answer1.setLikeNum(likeCnt);
+        answer1.setId(id);
+        answerMapper.updateByPrimaryKeySelective(answer1);
+
         return likeCnt+"";
+    }
+
+    @Override
+    public String inserttrample(String id, HttpServletRequest request) {
+        LOGGER.info("{}:{}", id, request);
+        String userId = UcUserCommon.getUserId(request);
+        QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+        String questionId = "";
+        if(answer != null){
+            questionId = answer.getQuestionId();
+        }
+        QuestionLike like = new QuestionLike();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        like.setUserId(userId);
+        like.setLikeId(uuid);
+        like.setLikeType(2);
+        like.setQuestionId(questionId);
+        like.setId(id);
+
+        Map map = MapUtil.kv("id", id, "userId", userId);
+        int cnt =  likeRoMapper.selectExist(map);
+
+        if(cnt >0){
+            throw new ServiceException(6115);
+        }
+
+
+
+        int result = likeMapper.insert(like);
+
+        int trampleNum = likeRoMapper.selectLikeCnt(id);
+
+        QuestionAnswer answer1 = new QuestionAnswer();
+        answer1.setTrampleNum(trampleNum);
+        answer1.setId(id);
+        answerMapper.updateByPrimaryKeySelective(answer1);
+
+        return trampleNum+"";
     }
 
     @Override
@@ -63,6 +127,10 @@ public class QueLikeServiceImpl implements QueLikeService {
         Map map = MapUtil.kv("id", id, "userId", userId);
         likeMapper.delete(map);
         int likeCnt = likeRoMapper.selectLikeCnt(id);
+        QuestionAnswer answer = new QuestionAnswer();
+        answer.setLikeNum(likeCnt);
+        answer.setId(id);
+        answerMapper.updateByPrimaryKeySelective(answer);
 
         return likeCnt+"";
     }

@@ -31,7 +31,7 @@
         SELECT
         count(collectId)
         FROM bb_question_collect
-        WHERE attentionUserId = #{attentionUserId} and userId = #{userId}
+        WHERE questionId = #{questionId} and userId = #{userId}
     </select>
 
     <!-- 查询（根据主键ID查询） -->

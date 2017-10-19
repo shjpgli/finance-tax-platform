@@ -24,16 +24,24 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
         select * from 
-        (select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname,
+        (select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname,
         uu.status,
         uu.createTime, uu.lastUpdate,
         uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
         uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
-        (select insert(uue.realName, 1, 1, '*') realName from uc_user_extend uue where uue.userId=uu.id) realName,
-        (select uul.name from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
-        levelName,
-        (select uul.medal from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue) medal,
-        (select uul.medalIcon from uc_uexp_level uul where uu.exp &gt;= uul.minValue and uu.exp &lt;= uul.maxValue)
+        (select uue.realName from uc_user_extend uue where uue.userId=uu.id) realName,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) levelName,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        )  medal,
+        IFNULL(
+        (SELECT uul.medalIcon FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medalIcon FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        )
         medalIcon
         from uc_user uu) u
         <where>
@@ -41,7 +49,7 @@
                 username=#{username}
             </if>
             <if test="phone!=null">
-                and phone=insert(#{phone}, 4, 4, '****')
+                and phone=#{phone}
             </if>
             <if test="nickname!=null">
                 and nickname=#{nickname}
@@ -62,7 +70,7 @@
                 and points=#{points}
             </if>
             <if test="realName!=null">
-                and realName=insert(#{realName}, 1, 1, '*')
+                and realName=#{realName}
             </if>
 
             <if test="tagName!=null and tagName.size()>0">

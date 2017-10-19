@@ -61,7 +61,6 @@
         ORDER BY r.createTime DESC
     </select>
 
-    <!-- 未抽奖记录 -->
     <select id="selectRedEnvelopOne" resultType="com.abc12366.uc.model.weixin.WxRedEnvelop"
             parameterType="java.lang.String">
         SELECT
@@ -111,7 +110,7 @@
         <where>
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
             <if test="openId != null and openId != ''">and openId = #{openId}</if>
-            <if test="createTime != null">and DATE_FORMAT(createTime, '%Y%m%d') = DATE_FORMAT(#{openId}, '%Y%m%d')</if>
+            <if test="createTime != null">and DATE_FORMAT(createTime, '%Y%m%d') = DATE_FORMAT(#{createTime}, '%Y%m%d')</if>
         </where>
     </select>
 </mapper>

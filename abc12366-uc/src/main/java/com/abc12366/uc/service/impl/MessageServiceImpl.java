@@ -34,11 +34,17 @@ public class MessageServiceImpl implements MessageService {
     private UcRestTemplateUtil ucRestTemplateUtil;
 
     @Override
-    public MessageListBO selectList(String type, int page, int size, HttpServletRequest request) throws IOException {
+    public MessageListBO selectList(String type, String busiType,String status,int page, int size, HttpServletRequest request) throws IOException {
         LOGGER.info("{},{}:{}:{}", type, page, size, request);
         String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business?";
         if (type != null && !type.equals("")) {
             url = url + "type=" + type;
+        }
+        if(!StringUtils.isEmpty(busiType)){
+            url = url + "&busiType=" + busiType;
+        }
+        if(!StringUtils.isEmpty(status)){
+            url = url + "&status=" + status;
         }
         if (!StringUtils.isEmpty(request.getAttribute("page"))) {
             url += "&page=" + request.getAttribute("page");
@@ -71,6 +77,7 @@ public class MessageServiceImpl implements MessageService {
         map.put("content", message.getContent());
         map.put("status", "1");
         map.put("type", message.getType());
+        map.put("busiType", message.getBusiType());
 
         String responseStr;
         try {

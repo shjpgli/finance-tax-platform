@@ -95,4 +95,9 @@
         VALUES
         (#{id}, #{secret}, #{activityId}, #{openId}, #{createTime})
     </insert>
+
+    <delete id="deleteSecret" parameterType="java.lang.String">
+        DELETE FROM uc_wxredenvelop
+        WHERE id = #{id}
+    </delete>
 </mapper>

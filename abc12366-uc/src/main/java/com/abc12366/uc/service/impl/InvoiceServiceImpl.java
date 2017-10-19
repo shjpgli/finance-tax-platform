@@ -435,7 +435,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
             Message message = new Message();
             message.setBusinessId(invoiceTemp.getId());
-            message.setType(MessageConstant.ZZFPDD);
+            message.setBusiType(MessageConstant.ZZFPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
             message.setContent(MessageConstant.IMPORT_COURIER_INFO+expressComp.getCompName()+"+"+invoiceTemp.getWaybillNum() +MessageConstant.SUFFIX);
             message.setUserId(invoiceTemp.getUserId());
             messageSendUtil.sendMessage(message);
@@ -695,8 +696,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                 //发送消息
                 Message message = new Message();
                 message.setBusinessId(invoiceBO.getId());
-                message.setType(MessageConstant.ZZFPDD);
-                message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT+"<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
+                message.setBusiType(MessageConstant.ZZFPDD);
+                message.setType(MessageConstant.SYS_MESSAGE);
+                message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT+invoiceBO.getId()+MessageConstant.SUFFIX);
+                message.setUrl("<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(invoiceBO.getUserId());
                 messageSendUtil.sendMessage(message, request);
 
@@ -720,7 +723,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 //发送消息
                 Message message = new Message();
                 message.setBusinessId(invoiceBO.getId());
-                message.setType(MessageConstant.ZZFPDD);
+                message.setBusiType(MessageConstant.ZZFPDD);
+                message.setType(MessageConstant.SYS_MESSAGE);
                 message.setContent(MessageConstant.INVOICE_CHECK_ADOPT);
                 message.setUserId(invoiceBO.getUserId());
                 messageSendUtil.sendMessage(message, request);
@@ -770,16 +774,20 @@ public class InvoiceServiceImpl implements InvoiceService {
             //发送消息
             Message message = new Message();
             message.setBusinessId(invoiceBO.getId());
-            message.setType(MessageConstant.ZZFPDD);
-            message.setContent(MessageConstant.INVOICE_CHECK_REFUSE+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
+            message.setBusiType(MessageConstant.ZZFPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
+            message.setContent(MessageConstant.INVOICE_CHECK_REFUSE+invoiceBO.getId()+MessageConstant.SUFFIX);
+            message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
             message.setUserId(invoiceBO.getUserId());
             messageSendUtil.sendMessage(message, request);
         }else{
             //发送消息
             Message message = new Message();
             message.setBusinessId(invoiceBO.getId());
-            message.setType(MessageConstant.ZZFPDD);
-            message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+invoiceBO.getId()+"</a>"+MessageConstant.SUFFIX);
+            message.setBusiType(MessageConstant.ZZFPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
+            message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE+invoiceBO.getId()+MessageConstant.SUFFIX);
+            message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
             message.setUserId(invoiceBO.getUserId());
             messageSendUtil.sendMessage(message, request);
         }

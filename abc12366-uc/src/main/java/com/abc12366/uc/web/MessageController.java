@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 /**
+ * UC发送业务消息接口控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-09
  * Time: 11:39
@@ -39,6 +40,8 @@ public class MessageController {
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String type,
+                                     @RequestParam(required = false) String busiType,
+                                     @RequestParam(required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      HttpServletRequest request) throws IOException {
@@ -53,9 +56,15 @@ public class MessageController {
         if (type != null && type.equals("")) {
             type = null;
         }
+        if (busiType != null && busiType.equals("")) {
+            busiType = null;
+        }
+        if (status != null && status.equals("")) {
+            status = null;
+        }
 
         if (!StringUtils.isEmpty(userId)) {
-            MessageListBO data = messageService.selectList(type, page, size, request);
+            MessageListBO data = messageService.selectList(type,busiType,status, page, size, request);
             responseEntity = ResponseEntity.ok(data);
         }
 

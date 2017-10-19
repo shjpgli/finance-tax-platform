@@ -74,4 +74,14 @@ public class IpSettingBO implements Serializable {
         this.disableTime = disableTime;
     }
 
+    @Override
+    public String toString() {
+        return "IpSettingBO{" +
+                "id='" + id + '\'' +
+                ", setTime=" + setTime +
+                ", sameThreshold=" + sameThreshold +
+                ", distinctThreshold=" + distinctThreshold +
+                ", disableTime=" + disableTime +
+                '}';
+    }
 }

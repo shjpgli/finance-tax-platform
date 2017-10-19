@@ -68,11 +68,20 @@ public class QuestionBo implements Serializable {
     /**回复次数**int(11)**/
     private Integer answerNum;
 
+    /**收藏次数**int(11)**/
+    private Integer collectNum;
+
     /**点赞次数**int(11)**/
     private Integer likeNum;
 
+    /**踩次数**int(11)**/
+    private Integer trampleNum;
+
 	/**评论次数**int(11)**/
 	private Integer commentNum;
+
+    /**被举报次数**int(11)**/
+    private Integer reportNum;
 
     /****varchar(64)**/
     private String factionId;
@@ -85,6 +94,9 @@ public class QuestionBo implements Serializable {
 
     /**回复或者评论内容**/
     private String answer;
+
+    /**回复或者评论内容Id**/
+    private String answerId;
 
 
 	public void setId(String id){
@@ -280,5 +292,37 @@ public class QuestionBo implements Serializable {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
+    }
+
+    public Integer getTrampleNum() {
+        return trampleNum;
+    }
+
+    public void setTrampleNum(Integer trampleNum) {
+        this.trampleNum = trampleNum;
+    }
+
+    public String getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(String answerId) {
+        this.answerId = answerId;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
     }
 }

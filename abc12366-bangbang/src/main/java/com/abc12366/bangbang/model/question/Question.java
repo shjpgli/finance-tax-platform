@@ -63,8 +63,11 @@ public class Question implements Serializable {
     /**回复数**int(11)**/
     private Integer answerNum;
 
-    /**回复数**int(11)**/
-    private Integer likeNum;
+    /**收藏次数**int(11)**/
+    private Integer collectNum;
+
+    /**被举报次数**int(11)**/
+    private Integer reportNum;
 
     /**用户昵称**varchar(64)**/
     private String nickname;
@@ -211,14 +214,6 @@ public class Question implements Serializable {
         this.answerNum = answerNum;
     }
 
-    public Integer getLikeNum() {
-        return likeNum;
-    }
-
-    public void setLikeNum(Integer likeNum) {
-        this.likeNum = likeNum;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -233,5 +228,21 @@ public class Question implements Serializable {
 
     public void setUserPicturePath(String userPicturePath) {
         this.userPicturePath = userPicturePath;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
     }
 }

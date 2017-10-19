@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	parentId,	questionId,factionId,	userId,	answerUserId,ip,	answer,	status,	createTime,	lastUpdate,	isAccept
+		 id,	parentId,	questionId,factionId,commentNum,likeNum,trampleNum,reportNum,	userId,	answerUserId,ip,	answer,	status,	createTime,	lastUpdate,	isAccept
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -19,12 +19,10 @@
     <!-- 问题回复列表查询 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,
+        a.id,	parentId,	questionId,commentNum,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,
         (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum,
-        (SELECT count(id) FROM bb_question_answer where parentId = a.id) answerNum
+        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike
         FROM bb_question_answer a left join bb_user u on a.userId = u.id
         WHERE parentId=''
         <if test="questionId != null and questionId != ''">
@@ -33,16 +31,16 @@
         <if test="isAccept != null and isAccept != ''">
             AND isAccept = #{isAccept}
         </if>
+        order by createTime DESC
     </select>
 
     <!-- 问题回复评论列表查询 -->
     <select id="selectListByParentId" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,
+        a.id,	parentId,	questionId,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,
         (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum
+        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike
         FROM bb_question_answer a left join bb_user u on a.userId = u.id
         WHERE 1=1
         <if test="parentId != null and parentId != ''">
@@ -51,17 +49,16 @@
         <if test="questionId != null and questionId != ''">
             AND questionId = #{questionId}
         </if>
+        order by createTime DESC
     </select>
 
 
     <!-- 最新回答 -->
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,
+        a.id,	parentId,	questionId,q.collectNum,q.answerNum,a.commentNum,a.likeNum,a.trampleNum,	a.userId,u.userPicturePath,u.nickname,
         (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
-        (SELECT count(likeId) FROM bb_question_like where id = #{questionId}) likeNum,
-        (SELECT count(id) FROM bb_question_answer where id = #{questionId}) answerNum,
         q.title questionTitle
         FROM bb_question_answer a LEFT JOIN bb_question q on a.questionId = q.id
         left join bb_user u on a.userId = u.id
@@ -115,6 +112,22 @@
             AND a.userId = #{userId}
         </if>
         order by a.createTime desc
+    </select>
+
+    <!-- 查询回复数 -->
+    <select id="selectAnswerCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(id)
+        FROM bb_question_answer
+        WHERE parentId != '' and questionId = #{questionId}
+    </select>
+
+    <!-- 查询回复数 -->
+    <select id="selectCommentCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(id)
+        FROM bb_question_answer
+        WHERE parentId = #{id}
     </select>
 
 

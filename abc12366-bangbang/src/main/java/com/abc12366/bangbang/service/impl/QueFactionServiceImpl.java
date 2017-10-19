@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionClassifyRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionMemberRoMapper;
@@ -12,6 +13,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,51 +118,59 @@ public class QueFactionServiceImpl implements QueFactionService {
     @Override
     public QuestionFactionBo save(QuestionFactionBo questionFactionBo) {
 
-            JSONObject jsonStu = JSONObject.fromObject(questionFactionBo);
-            LOGGER.info("新增邦派信息:{}", jsonStu.toString());
-            questionFactionBo.setCreateTime(new Date());
-            questionFactionBo.setUpdateTime(new Date());
-            //保存邦派信息
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            QuestionFaction questionFaction = new QuestionFaction();
-            questionFactionBo.setFactionId(uuid);
-            BeanUtils.copyProperties(questionFactionBo, questionFaction);
+        JSONObject jsonStu = JSONObject.fromObject(questionFactionBo);
+        LOGGER.info("新增邦派信息:{}", jsonStu.toString());
+        questionFactionBo.setCreateTime(new Date());
+        questionFactionBo.setUpdateTime(new Date());
+        //保存邦派信息
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        QuestionFaction questionFaction = new QuestionFaction();
+        questionFactionBo.setFactionId(uuid);
+        BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
-            int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
+        int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
 
-            if(factionCnt>4){
-                //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
-                throw new ServiceException(6126);
+        UCUserBO userBo = UcUserCommon.getUserInfo();
+        String vipLevel = "";
+        String userLevel = "";
+        if(userBo != null){
+            vipLevel = userBo.getVipLevel();
+            userLevel = userBo.getLevel();
+        }
+
+        if(factionCnt>4){
+            //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
+            throw new ServiceException(6126);
+        }
+
+        List<QuestionFactionTag> tagList = questionFactionBo.getTagList();
+
+        if(tagList != null){
+            for(QuestionFactionTag tag :tagList){
+                tag.setId(UUID.randomUUID().toString().replace("-", ""));
+                tag.setFactionId(uuid);
+                tagMapper.insert(tag);
             }
+        }
 
-            List<QuestionFactionTag> tagList = questionFactionBo.getTagList();
+        List<QuestionFactionClassify> classifyList = questionFactionBo.getClassifyList();
 
-            if(tagList != null){
-                for(QuestionFactionTag tag :tagList){
-                    tag.setId(UUID.randomUUID().toString().replace("-", ""));
-                    tag.setFactionId(uuid);
-                    tagMapper.insert(tag);
+        if(classifyList != null){
+            for(QuestionFactionClassify classify :classifyList){
+                classify.setId(UUID.randomUUID().toString().replace("-", ""));
+                classify.setFactionId(uuid);
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("factionId", questionFactionBo.getUserId());//
+                dataMap.put("userId", classify.getFactionId());//
+                int cnt = classifyRoMapper.selectClassifyCnt(dataMap);
+                if(cnt > 0){
+                    //该用户创建的帮派所选话题分类不允许重叠
+                    throw new ServiceException(6125);
                 }
+
+                classifyMapper.insert(classify);
             }
-
-            List<QuestionFactionClassify> classifyList = questionFactionBo.getClassifyList();
-
-            if(classifyList != null){
-                for(QuestionFactionClassify classify :classifyList){
-                    classify.setId(UUID.randomUUID().toString().replace("-", ""));
-                    classify.setFactionId(uuid);
-                    Map<String, Object> dataMap = new HashMap<>();
-                    dataMap.put("factionId", questionFactionBo.getUserId());//
-                    dataMap.put("userId", classify.getFactionId());//
-                    int cnt = classifyRoMapper.selectClassifyCnt(dataMap);
-                    if(cnt > 0){
-                        //该用户创建的帮派所选话题分类不允许重叠
-                        throw new ServiceException(6125);
-                    }
-
-                    classifyMapper.insert(classify);
-                }
-            }
+        }
 
         try {
             QuestionFactionMember member = new QuestionFactionMember();

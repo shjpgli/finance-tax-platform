@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * 黑名单控制器
+ *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-04-28 11:06 AM
  * @since 1.0.0
@@ -30,6 +32,13 @@ public class BlacklistController {
     @Autowired
     private BlacklistService blacklistService;
 
+    /**
+     * 黑名单列表查询
+     *
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @return ResponseEntity
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -40,6 +49,12 @@ public class BlacklistController {
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
+    /**
+     * 查询单条黑名单记录
+     *
+     * @param id PK
+     * @return ResponseEntity
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
         LOGGER.info(id);
@@ -48,6 +63,12 @@ public class BlacklistController {
         return ResponseEntity.ok(Utils.kv("data", blacklist));
     }
 
+    /**
+     * 新增黑名单
+     *
+     * @param bo BlacklistBO
+     * @return ResponseEntity
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody BlacklistBO bo) {
         LOGGER.info("{}", bo);
@@ -56,6 +77,13 @@ public class BlacklistController {
         return ResponseEntity.ok(Utils.kv("data", blacklist));
     }
 
+    /**
+     * 更新黑名单
+     *
+     * @param id PK
+     * @param bo BlacklistBO
+     * @return ResponseEntity
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@PathVariable("id") String id,
                                  @Valid @RequestBody BlacklistBO bo) {
@@ -66,6 +94,12 @@ public class BlacklistController {
         return ResponseEntity.ok(Utils.kv("data", blacklist));
     }
 
+    /**
+     * 删除黑名单
+     *
+     * @param id PK
+     * @return ResponseEntity
+     */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info(id);

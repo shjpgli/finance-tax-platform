@@ -55,11 +55,23 @@ public class QuestionAnswerBo implements Serializable {
     /**ip**varchar(45)**/
     private String ip;
 
-    /**评论次数**int(11)**/
+    /**回复次数**int(11)**/
     private Integer answerNum;
+
+    /**收藏次数**int(11)**/
+    private Integer collectNum;
+
+    /**评论次数**int(11)**/
+    private Integer commentNum;
 
     /**点赞次数**int(11)**/
     private Integer likeNum;
+
+    /**踩次数**int(11)**/
+    private Integer trampleNum;
+
+    /**被举报次数**int(11)**/
+    private Integer reportNum;
 
     /**是否已点赞：1/0**tinyint(4)**/
     private Integer isLike;
@@ -166,12 +178,12 @@ public class QuestionAnswerBo implements Serializable {
         this.ip = ip;
     }
 
-    public Integer getAnswerNum() {
-        return answerNum;
+    public Integer getCommentNum() {
+        return commentNum;
     }
 
-    public void setAnswerNum(Integer answerNum) {
-        this.answerNum = answerNum;
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
     }
 
     public Integer getLikeNum() {
@@ -228,5 +240,37 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getTrampleNum() {
+        return trampleNum;
+    }
+
+    public void setTrampleNum(Integer trampleNum) {
+        this.trampleNum = trampleNum;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
     }
 }

@@ -31,6 +31,14 @@ public class ActivityController {
     @Autowired
     private IActivityService iActivityService;
 
+    /**
+     * 查询微信红包活动列表-管理端
+     *
+     * @param name 活动名称
+     * @param page 当前页
+     * @param size 每页大小
+     * @return ResponseEntity
+     */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -47,6 +55,13 @@ public class ActivityController {
         return responseEntity;
     }
 
+    /**
+     * 查询微信红包活动列表-微信端
+     *
+     * @param page 当前页
+     * @param size 每页大小
+     * @return ResponseEntity
+     */
     @GetMapping("/redpack")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
@@ -61,6 +76,12 @@ public class ActivityController {
         return responseEntity;
     }
 
+    /**
+     * 查看微信红包活动
+     *
+     * @param id 活动ID
+     * @return ResponseEntity
+     */
     @GetMapping("/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
 
@@ -72,6 +93,12 @@ public class ActivityController {
         return responseEntity;
     }
 
+    /**
+     * 新增微信红包活动
+     *
+     * @param activity WxActivity
+     * @return ResponseEntity
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody WxActivity activity) {
         LOGGER.info("{}", activity);
@@ -82,6 +109,13 @@ public class ActivityController {
         return responseEntity;
     }
 
+    /**
+     * 更新微信红包活动
+     *
+     * @param id       活动ID
+     * @param activity WxActivity
+     * @return ResponseEntity
+     */
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody WxActivity activity) {
 
@@ -94,6 +128,12 @@ public class ActivityController {
         return responseEntity;
     }
 
+    /**
+     * 删除微信红包活动
+     *
+     * @param id 活动ID
+     * @return ResponseEntity
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
 

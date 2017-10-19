@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.QuestionTipOffRoMapper">
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,	reason,	createUser,	createTime,	sourceId,	sourceType,	updateAdmin,	updateTime
+    </sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionTipOffBo">
+        SELECT t.*,
+        IF(t1.title IS NULL, t2.answer, CONCAT(t1.title,t1.detail)) content,
+        IF(t1.status IS NULL, t2.status, t1.status) STATUS,
+        t3.nickname as createUsername
+        FROM bb_question_tip_off t
+        LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
+        LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
+        LEFT JOIN abc12366_uc.uc_user t3 ON t.createUser = t3.id
+    </select>
+
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionTipOff" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_question_tip_off
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectExist" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(id)
+        FROM bb_question_tip_off
+        WHERE sourceId = #{sourceId} and userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectTipoffCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(id)
+        FROM bb_question_tip_off
+        WHERE sourceId = #{sourceId}
+    </select>
+
+</mapper>
