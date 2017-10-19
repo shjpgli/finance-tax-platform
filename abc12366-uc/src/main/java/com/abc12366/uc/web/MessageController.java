@@ -40,6 +40,8 @@ public class MessageController {
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String type,
+                                     @RequestParam(required = false) String busiType,
+                                     @RequestParam(required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      HttpServletRequest request) throws IOException {
@@ -56,7 +58,7 @@ public class MessageController {
         }
 
         if (!StringUtils.isEmpty(userId)) {
-            MessageListBO data = messageService.selectList(type, page, size, request);
+            MessageListBO data = messageService.selectList(type,busiType,status, page, size, request);
             responseEntity = ResponseEntity.ok(data);
         }
 

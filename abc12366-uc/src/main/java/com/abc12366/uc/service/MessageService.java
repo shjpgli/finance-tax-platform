@@ -13,7 +13,7 @@ import java.io.IOException;
  * Time: 11:41
  */
 public interface MessageService {
-    MessageListBO selectList(String type, int page, int size, HttpServletRequest request) throws IOException;
+    MessageListBO selectList(String type, String busiType,String status,int page, int size, HttpServletRequest request) throws IOException;
 
     MessageBO insert(Message message, HttpServletRequest request) throws IOException;
 
