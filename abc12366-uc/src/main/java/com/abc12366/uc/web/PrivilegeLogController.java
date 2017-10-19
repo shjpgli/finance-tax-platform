@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 会员权益日志接口控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-09-25
  * Time: 11:38
@@ -25,6 +26,11 @@ public class PrivilegeLogController {
     @Autowired
     private PrivilegeLogService privilegeLogService;
 
+    /**
+     * 新增一条日志
+     * @param privilegeLog
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@RequestBody PrivilegeLog privilegeLog){
         LOGGER.info("{}", privilegeLog);
@@ -32,6 +38,12 @@ public class PrivilegeLogController {
         return ResponseEntity.ok(Utils.kv("data", log));
     }
 
+    /**
+     * 查询用户月度权益日志列表
+     * @param logType
+     * @param userId
+     * @return
+     */
     @GetMapping(path = "/month/{logType}/{userId}")
     public ResponseEntity selectListMonth(@PathVariable String logType, @PathVariable String userId){
         LOGGER.info("{}:{}", logType, userId);
@@ -39,6 +51,12 @@ public class PrivilegeLogController {
         return ResponseEntity.ok(Utils.kv("dataList", logList));
     }
 
+    /**
+     * 查询用户年度权益日志列表
+     * @param logType
+     * @param userId
+     * @return
+     */
     @GetMapping(path = "/year/{logType}/{userId}")
     public ResponseEntity selectListYear(@PathVariable String logType, @PathVariable String userId){
         LOGGER.info("{}:{}", logType, userId);
@@ -46,6 +64,12 @@ public class PrivilegeLogController {
         return ResponseEntity.ok(Utils.kv("dataList", logList));
     }
 
+    /**
+     * 查询用户所有权益日志
+     * @param logType
+     * @param userId
+     * @return
+     */
     @GetMapping(path = "/{logType}/{userId}")
     public ResponseEntity selectList(@PathVariable String logType, @PathVariable String userId){
         LOGGER.info("{}:{}", logType, userId);

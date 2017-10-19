@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 实名认证接口控制器
  * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-04
  * Time: 10:29
@@ -37,6 +38,17 @@ public class RealNameValidationController {
     @Autowired
     private RealNameValidationService realNameValidationService;
 
+    /**
+     * 查询用户实名认证列表
+     * @param username
+     * @param status
+     * @param realName
+     * @param phone
+     * @param validStatus
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String username,
     		                         @RequestParam(required = false) Boolean status,
