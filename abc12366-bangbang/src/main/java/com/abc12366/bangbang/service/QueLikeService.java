@@ -12,6 +12,8 @@ public interface QueLikeService {
 
     String insert(String id, HttpServletRequest request);
 
+    String inserttrample(String id, HttpServletRequest request);
+
     String delete(String id, HttpServletRequest request);
 
     List<QuestionBo> selectList(String userId);

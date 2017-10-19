@@ -19,6 +19,9 @@ public class QuestionLike implements Serializable {
 	/**用户ID**varchar(64)**/
 	private String userId;
 
+    /**用户ID**int**/
+    private Integer likeType;
+
 	/**点赞时间**datetime**/
 	private java.util.Date likeTime;
 
@@ -66,5 +69,13 @@ public class QuestionLike implements Serializable {
 
     public void setQuestionId(String questionId) {
         this.questionId = questionId;
+    }
+
+    public Integer getLikeType() {
+        return likeType;
+    }
+
+    public void setLikeType(Integer likeType) {
+        this.likeType = likeType;
     }
 }

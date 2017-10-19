@@ -41,6 +41,16 @@ public class QueLikeController {
     }
 
     /**
+     * 问题回复踩
+     */
+    @PostMapping(path = "/trample/{id}")
+    public ResponseEntity inserttrample(@PathVariable String id, HttpServletRequest request) {
+        LOGGER.info("{}:{}", id, request);
+        String likeCnt = likeService.inserttrample(id, request);
+        return ResponseEntity.ok(Utils.kv("data", likeCnt));
+    }
+
+    /**
      * 取消问题回复点赞
      */
     @DeleteMapping(path = "/{id}")
