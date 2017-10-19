@@ -501,7 +501,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         pointsLog.setIncome((int) (orderBO.getTotalPrice() - orderBO.getGiftPoints()));
         pointsLog.setRemark("用户退单- 订单号："+orderBO.getOrderNo());
         pointsLog.setLogType("ORDER_EXCHANGE");
-        pointsLogService.insert(pointsLog);
+        pointsLogService.insertNoVip(pointsLog);
     }
 
     @Transactional("db1TxManager")
