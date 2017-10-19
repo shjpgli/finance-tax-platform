@@ -80,6 +80,9 @@ public class QuestionBo implements Serializable {
 	/**评论次数**int(11)**/
 	private Integer commentNum;
 
+    /**被举报次数**int(11)**/
+    private Integer reportNum;
+
     /****varchar(64)**/
     private String factionId;
 
@@ -313,5 +316,13 @@ public class QuestionBo implements Serializable {
 
     public void setAnswerId(String answerId) {
         this.answerId = answerId;
+    }
+
+    public Integer getReportNum() {
+        return reportNum;
+    }
+
+    public void setReportNum(Integer reportNum) {
+        this.reportNum = reportNum;
     }
 }

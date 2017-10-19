@@ -38,7 +38,6 @@ public class QueLikeServiceImpl implements QueLikeService {
     @Autowired
     private QuestionLikeRoMapper likeRoMapper;
 
-    @Transactional("db1TxManager")
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
@@ -57,11 +56,11 @@ public class QueLikeServiceImpl implements QueLikeService {
             throw new ServiceException(6115);
         }
 
-        int likeCnt = likeRoMapper.selectLikeCnt(id) +1;
+
 
         int result = likeMapper.insert(like);
 
-
+        int likeCnt = likeRoMapper.selectLikeCnt(id);
 
         QuestionAnswer answer = new QuestionAnswer();
         answer.setLikeNum(likeCnt);

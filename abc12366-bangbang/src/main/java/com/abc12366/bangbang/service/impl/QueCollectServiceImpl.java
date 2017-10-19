@@ -3,7 +3,9 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.common.MapUtil;
 import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionCollectMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCollectRoMapper;
+import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionCollect;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
@@ -28,6 +30,9 @@ public class QueCollectServiceImpl implements QueCollectService {
     private static final Logger LOGGER = LoggerFactory.getLogger(QueCollectServiceImpl.class);
 
     @Autowired
+    private QuestionMapper quesionMapper;
+
+    @Autowired
     private QuestionCollectMapper collectMapper;
 
     @Autowired
@@ -39,7 +44,7 @@ public class QueCollectServiceImpl implements QueCollectService {
         String userId = UcUserCommon.getUserId(request);
 
 
-        QuestionCollect collect = new QuestionCollect();
+                QuestionCollect collect = new QuestionCollect();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         collect.setUserId(userId);
         collect.setCollectId(uuid);
@@ -53,10 +58,15 @@ public class QueCollectServiceImpl implements QueCollectService {
             throw new ServiceException(6116);
         }
 
-        int collectCnt = collectRoMapper.selectCollectCnt(id)+1;
-
         int result = collectMapper.insert(collect);
 
+        int collectCnt = collectRoMapper.selectCollectCnt(id);
+
+        Question question = new Question();
+        question.setId(id);
+        question.setCollectNum(collectCnt);
+
+        quesionMapper.updateByPrimaryKeySelective(question);
 
 
         return collectCnt+"";
@@ -69,6 +79,12 @@ public class QueCollectServiceImpl implements QueCollectService {
         Map map = MapUtil.kv("questionId", id, "userId", userId);
         collectMapper.delete(map);
         int collectCnt = collectRoMapper.selectCollectCnt(id);
+
+        Question question = new Question();
+        question.setId(id);
+        question.setCollectNum(collectCnt);
+
+        quesionMapper.updateByPrimaryKeySelective(question);
 
         return collectCnt+"";
     }
