@@ -13,11 +13,18 @@ public interface QuestionDisableIpMapper{
 
 
 	/**
-	 * 
+	 *
 	 * 删除（根据主键ID删除）
-	 * 
+	 *
 	 **/
 	int deleteByPrimaryKey(@Param("id") String id);
+
+	/**
+	 *
+	 * 删除（根据主键ID删除）
+	 *
+	 **/
+	int deleteByIP(@Param("ip") String ip);
 
 	/**
 	 * 

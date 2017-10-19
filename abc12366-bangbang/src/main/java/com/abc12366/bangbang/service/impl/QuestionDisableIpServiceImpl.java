@@ -36,7 +36,8 @@ public class QuestionDisableIpServiceImpl implements QuestionDisableIpService {
     @Transactional("db1TxManager")
     @Override
     public void disable(QuestionDisableIp record) {
-        questionDisableIpMapper.deleteByPrimaryKey(record.getId());
+        questionDisableIpMapper.deleteByIP(record.getIp());
+        record.setId(Utils.uuid());
         record.setUpdateAdmin(Utils.getAdminId());
         questionDisableIpMapper.insert(record);
     }
