@@ -38,6 +38,12 @@ public class Message {
     @Length(min = 1, max = 32)
     private String type;
 
+    //查看详情地址
+    private String url;
+
+    //消息业务类型
+    private String busiType;
+
     public Message() {
     }
 
@@ -103,5 +109,37 @@ public class Message {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getBusiType() {
+        return busiType;
+    }
+
+    public void setBusiType(String busiType) {
+        this.busiType = busiType;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", businessId='" + businessId + '\'' +
+                ", content='" + content + '\'' +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", busiType='" + busiType + '\'' +
+                '}';
     }
 }

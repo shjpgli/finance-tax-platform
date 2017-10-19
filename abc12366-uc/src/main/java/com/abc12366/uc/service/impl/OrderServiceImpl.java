@@ -1028,7 +1028,8 @@ public class OrderServiceImpl implements OrderService {
     private void sendMemberMsg(OrderProductBO orderProductBO, Order order) {
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
-        message.setType(MessageConstant.SPDD);
+        message.setBusiType(MessageConstant.SPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
         message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX);
         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
@@ -1041,7 +1042,8 @@ public class OrderServiceImpl implements OrderService {
     private void sendPointsMsg(OrderProductBO orderProductBO, Order order) {
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
-        message.setType(MessageConstant.SPDD);
+        message.setBusiType(MessageConstant.SPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
         User user = userRoMapper.selectOne(order.getUserId());
         message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints());
         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
@@ -1218,7 +1220,8 @@ public class OrderServiceImpl implements OrderService {
             }
             Message message = new Message();
             message.setBusinessId(order.getOrderNo());
-            message.setType(MessageConstant.SPDD);
+            message.setBusiType(MessageConstant.SPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
             message.setUserId(order.getUserId());
             messageSendUtil.sendMessage(message, request);
@@ -1245,7 +1248,8 @@ public class OrderServiceImpl implements OrderService {
         }
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
-        message.setType(MessageConstant.SPDD);
+        message.setBusiType(MessageConstant.SPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
         if(expressComp != null){
             message.setContent(MessageConstant.DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
         }else{

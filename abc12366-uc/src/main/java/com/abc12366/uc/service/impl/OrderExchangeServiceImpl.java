@@ -459,7 +459,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     //服务类型：1-换货 2-退货
                                     Message message = new Message();
                                     message.setBusinessId(oe.getOrderNo());
-                                    message.setType(MessageConstant.SPDD);
+                                    message.setBusiType(MessageConstant.SPDD);
+                                    message.setType(MessageConstant.SYS_MESSAGE);
                                     message.setContent(MessageConstant.REFUND_PREFIX+refundRes.getRefund_fee()+MessageConstant.REFUND_SUFFIX+order.getOrderNo());
                                     message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                                     message.setUserId(order.getUserId());
@@ -591,7 +592,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             if("1".equals(oe.getType())){
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
-                message.setType(MessageConstant.SPDD);
+                message.setBusiType(MessageConstant.SPDD);
+                message.setType(MessageConstant.SYS_MESSAGE);
                 message.setContent(MessageConstant.EXCHANGE_CHECK_REFUSE+order.getOrderNo()+MessageConstant.SUFFIX);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
@@ -599,7 +601,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }else if("2".equals(oe.getType())){
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
-                message.setType(MessageConstant.SPDD);
+                message.setBusiType(MessageConstant.SPDD);
+                message.setType(MessageConstant.SYS_MESSAGE);
                 message.setContent(MessageConstant.RETREAT_CHECK_REFUSE+order.getOrderNo()+MessageConstant.SUFFIX);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
@@ -639,7 +642,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             if("1".equals(oe.getType())){
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
-                message.setType(MessageConstant.SPDD);
+                message.setBusiType(MessageConstant.SPDD);
+                message.setType(MessageConstant.SYS_MESSAGE);
                 message.setContent(MessageConstant.EXCHANGE_CHECK_ADOPT);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                 message.setUserId(order.getUserId());
@@ -647,7 +651,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }else if("2".equals(oe.getType())){
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
-                message.setType(MessageConstant.SPDD);
+                message.setBusiType(MessageConstant.SPDD);
+                message.setType(MessageConstant.SYS_MESSAGE);
                 message.setContent(MessageConstant.RETREAT_CHECK_ADOPT);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
