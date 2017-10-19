@@ -8,6 +8,7 @@ import com.abc12366.uc.mapper.db2.ActivityRoMapper;
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
+import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.*;
 import com.abc12366.uc.service.IActivityService;
 import com.abc12366.uc.util.LocalIpAddressUtil;
@@ -15,12 +16,15 @@ import com.abc12366.uc.util.wx.SignUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxMchConnectFactory;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -104,14 +108,16 @@ public class ActivityService implements IActivityService {
      * 生成口令
      */
     @Override
-    public WxRedEnvelop generateSecret(String activityId) {
+    public WxRedEnvelopBO generateSecret(String activityId) {
         WxActivity activity = selectOne(activityId);
         if (activity != null) {
-            if (!activity.getStatus()) { // 活动是否激活
+            // 活动是否激活
+            if (!activity.getStatus()) {
                 throw new ServiceException(6001);
             }
             Date now = new Date();
-            if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) { // 活动是否在有效期内
+            // 活动是否在有效期内
+            if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
                 throw new ServiceException(6002);
             }
             WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
@@ -119,14 +125,11 @@ public class ActivityService implements IActivityService {
                     .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId))
                     .createTime(new Date())
                     .activityId(activity.getId())
-                    .startTime(activity.getStartTime())
-                    .endTime(activity.getEndTime())
-                    .amount(activity.getAmount())
-                    .amountType(activity.getAmountType())
-                    .probability(activity.getProbability())
                     .build();
             activityMapper.generateSecret(redEnvelop);
-            return redEnvelop;
+            WxRedEnvelopBO bo = new WxRedEnvelopBO();
+            BeanUtils.copyProperties(redEnvelop, bo);
+            return bo;
         }
         return null;
     }
@@ -146,42 +149,67 @@ public class ActivityService implements IActivityService {
                 .build();
         activityMapper.insertLotteryLog(lotteryLog);
 
-        LOGGER.info("查询今天参与次数,活动:{}, openId:{}", lotteryBO.getActivityId(), lotteryBO.getOpenId());
-        List<WxLotteryLog> lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
+
         WxActivity activity = activityRoMapper.selectOne(lotteryBO.getActivityId());
         if (activity == null) {
             throw new ServiceException(6007);
         }
-        if (lotteryLogs.size() > activity.getTimes()) {
-            throw new ServiceException(6006);
-        }
-        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret());
-
-        if (dataList == null || dataList.size() < 1) {
-            throw new ServiceException(6003);
-        }
-        WxRedEnvelop redEnvelop = dataList.get(0);// 取第一条记录
         Date now = new Date();
         LOGGER.info("活动是否在有效期内");
-        if (now.before(redEnvelop.getStartTime()) || now.after(redEnvelop.getEndTime())) {
+        if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
             throw new ServiceException(6002);
         }
+        List<WxLotteryLog> lotteryLogs;
+        // 规则类型为【口令】时, 查询每人每天可抽奖次数
+        if ("1".equals(activity.getRuleType())) {
+            lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
+            LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
+                    lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
+            if (lotteryLogs.size() > activity.getTimes()) {
+                throw new ServiceException(6006);
+            }
+        }
+        // 规则类型为【关键字】时, 参与活动次数仅为1次
+        if ("2".equals(activity.getRuleType())) {
+            lotteryLog.setCreateTime(null);
+            lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
+            LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
+                    lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
+            if (lotteryLogs.size() > 1) {
+                throw new ServiceException(6006);
+            }
+        }
+
         LOGGER.info("是否超出红包总数");
         if (isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
             throw new ServiceException(6005);
         }
+        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret());
+        LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
+        if (dataList.size() < 1) {
+            throw new ServiceException(6003);
+        }
+        // 取第一条记录
+        WxRedEnvelop redEnvelop = dataList.get(0);
+
         String probabilityStr = redEnvelop.getProbability();
         redEnvelop.setOpenId(lotteryBO.getOpenId());
         if (probabilityStr.contains("%")) {
             probabilityStr = probabilityStr.replaceAll("%", "");
             Double probability = Double.valueOf(probabilityStr) / 100;
             LOGGER.info("开始抽奖");
-            if (inProbability(probability)) { // 中奖
+            // 中奖
+            if (inProbability(probability)) {
                 LOGGER.info("中奖:{}", redEnvelop.getSecret());
-                redEnvelop.setSendAmount(amountRule(redEnvelop.getAmountType(), redEnvelop.getAmount()));
-
-                redEnvelop.setSendStatus("0"); // 已中奖未发送
+                redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
+                // 已中奖未发送
+                redEnvelop.setSendStatus("0");
                 redEnvelop.setSendTime(new Date());
+                redEnvelop.setStartTime(activity.getStartTime());
+                redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setAmount(activity.getAmount());
+                redEnvelop.setAmountType(activity.getAmountType());
+                redEnvelop.setProbability(activity.getProbability());
                 activityMapper.updateRedEnvelop(redEnvelop);
 
                 LOGGER.info("发送微信红包");
@@ -190,6 +218,11 @@ public class ActivityService implements IActivityService {
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
                 redEnvelop.setReceiveTime(new Date());
+                redEnvelop.setStartTime(activity.getStartTime());
+                redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setAmount(activity.getAmount());
+                redEnvelop.setAmountType(activity.getAmountType());
+                redEnvelop.setProbability(activity.getProbability());
                 activityMapper.updateRedEnvelop(redEnvelop);
             }
         } else {
@@ -235,11 +268,17 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public void importJSON(List<WxRedEnvelop> redEnvelopList) {
-        if (redEnvelopList.size() > 0 && redEnvelopList.size() <= 500) {
+    public void importJSON(List<WxRedEnvelopBO> redEnvelopList) {
+        if (redEnvelopList.size() > 0 && redEnvelopList.size() <= 1000) {
             List<WxRedEnvelop> dataList = new ArrayList<>();
-            for(WxRedEnvelop redEnvelop : redEnvelopList) {
-                redEnvelop.setId(Utils.uuid().replaceAll("-", ""));
+            Date now = new Date();
+            for (WxRedEnvelopBO redEnvelopBO : redEnvelopList) {
+                WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
+                        .id(Utils.uuid().replaceAll("-", ""))
+                        .createTime(now)
+                        .secret(redEnvelopBO.getSecret())
+                        .activityId(redEnvelopBO.getActivityId().trim())
+                        .build();
                 dataList.add(redEnvelop);
             }
             activityMapper.batchGenerateSecret(dataList);
@@ -251,7 +290,8 @@ public class ActivityService implements IActivityService {
     @Override
     public WxRedEnvelop resend(String id) {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
-        if (redEnvelop != null && "2".equals(redEnvelop.getSendStatus())) {// 发送失败的记录
+        // 发送失败的记录
+        if (redEnvelop != null && "2".equals(redEnvelop.getSendStatus())) {
             WxActivity activity = selectOne(redEnvelop.getActivityId());
             SendRedPack srp = new SendRedPack.Builder()
                     .nonce_str(redEnvelop.getId())
@@ -273,11 +313,15 @@ public class ActivityService implements IActivityService {
 
             ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);
             if (rrp != null) {
-                if ("SUCCESS".equals(rrp.getReturn_code())) { // 发送请求成功
-                    if ("SUCCESS".equals(rrp.getResult_code())) { // 发红包成功
-                        redEnvelop.setSendStatus("1"); // 发送成功
+                // 发送请求成功
+                if ("SUCCESS".equals(rrp.getReturn_code())) {
+                    // 发红包成功
+                    if ("SUCCESS".equals(rrp.getResult_code())) {
+                        // 发送成功
+                        redEnvelop.setSendStatus("1");
                     } else {
-                        redEnvelop.setSendStatus("2"); // 发送失败
+                        // 发送失败
+                        redEnvelop.setSendStatus("2");
                     }
                     redEnvelop.setSendTime(new Date());
                     activityMapper.updateRedEnvelop(redEnvelop);
@@ -292,6 +336,26 @@ public class ActivityService implements IActivityService {
             throw new ServiceException(6009);
         }
         return redEnvelop;
+    }
+
+    @Override
+    public void deleteSecret(String id) {
+        WxRedEnvelop wxRedEnvelop = activityRoMapper.selectRedEnvelopOne(id);
+        // 如果接收状态、发送状态都为空值，则为没有抽奖的口令
+        if (wxRedEnvelop != null &&
+                StringUtils.isEmpty(wxRedEnvelop.getReceiveStatus()) &&
+                StringUtils.isEmpty(wxRedEnvelop.getSendStatus())) {
+            activityMapper.deleteSecret(id);
+        } else {
+            throw new ServiceException(6010);
+        }
+    }
+
+    @Override
+    public void batchDeleteSecret(List<Id> ids) {
+        for (Id id: ids) {
+            deleteSecret(id.getId());
+        }
     }
 
     /**
@@ -327,15 +391,20 @@ public class ActivityService implements IActivityService {
                 .build();
         srp.setSign(SignUtil.signKey(srp));
 
-        for (int i = 1; i <= 3; i++) { // 发送3次
+        // 发送3次
+        for (int i = 1; i <= 3; i++) {
             LOGGER.info("第{}次发送", i);
             ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);
             if (rrp != null) {
-                if ("SUCCESS".equals(rrp.getReturn_code())) { // 发送请求成功
-                    if ("SUCCESS".equals(rrp.getResult_code())) { // 发红包成功
-                        redEnvelop.setSendStatus("1"); // 发送成功
+                // 发送请求成功
+                if ("SUCCESS".equals(rrp.getReturn_code())) {
+                    // 发红包成功
+                    if ("SUCCESS".equals(rrp.getResult_code())) {
+                        // 发送成功
+                        redEnvelop.setSendStatus("1");
                     } else {
-                        redEnvelop.setSendStatus("2"); // 发送失败
+                        // 发送失败
+                        redEnvelop.setSendStatus("2");
                     }
                     redEnvelop.setSendTime(new Date());
                     redEnvelop.setSendTimes(i);
@@ -401,15 +470,6 @@ public class ActivityService implements IActivityService {
      */
     private String secretRule(String ruleType, String rule, String activityId) {
         if ("1".equals(ruleType)) {
-              // 2个大写字母+六位1至9个数字组合的随机字符串，总共8位长度
-//            String random = String.valueOf(new Random().nextInt(1000000));
-//            if (random.length() < 6) { // 不足6位补0
-//                for (int i = 0; i < 6 - random.length(); i++) {
-//                    random = "0" + random;
-//                }
-//            }
-//            return rule + random;
-
             // 规则1口令格式为：大写字母+1至9个数字组合的随机字符串，总共8位长度
             String candidateStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
             StringBuffer sb = new StringBuffer();
@@ -417,13 +477,14 @@ public class ActivityService implements IActivityService {
                 int selectedChar = ThreadLocalRandom.current().nextInt(0, candidateStr.length());
                 sb.append(candidateStr.charAt(selectedChar));
             }
-            String secret = sb.toString();
+            String secret = rule + sb.toString();
             List<WxRedEnvelop> dataList = selectRedEnvelop(activityId, secret);
             return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId) : secret;
         } else {
             // 规则2口令格式为：管理员自主输入的中文字符串，用#符号分割，
             // 如：艾博克#财税平台#爱我中华#美丽中国，只要匹配其中一个词即可
-            return rule;
+            String[] keywords = rule.split("#");
+            return keywords[LocalDateTime.now().getSecond() % keywords.length];
         }
     }
 }
