@@ -56,6 +56,12 @@ public class MessageController {
         if (type != null && type.equals("")) {
             type = null;
         }
+        if (busiType != null && busiType.equals("")) {
+            busiType = null;
+        }
+        if (status != null && status.equals("")) {
+            status = null;
+        }
 
         if (!StringUtils.isEmpty(userId)) {
             MessageListBO data = messageService.selectList(type,busiType,status, page, size, request);
