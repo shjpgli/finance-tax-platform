@@ -35,13 +35,18 @@ public class BusinessMsgController {
 
     /**
      * 获取当前用户业务消息列表
-     *
-     * @param page 当前页
-     * @param size 每页大小
-     * @return ResponseEntity
+     * @param type
+     * @param busiType
+     * @param status
+     * @param page
+     * @param size
+     * @param request
+     * @return
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String type,
+                                     @RequestParam(required = false) String busiType,
+                                     @RequestParam(required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      HttpServletRequest request) {
@@ -52,7 +57,7 @@ public class BusinessMsgController {
         String userId = (String) request.getAttribute(Constant.USER_ID);
 
         if (!StringUtils.isEmpty(userId)) {
-            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).build();
+            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).status(status).build();
             List<BusinessMessage> dataList = businessMsgService.selectList(bm, page, size);
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);

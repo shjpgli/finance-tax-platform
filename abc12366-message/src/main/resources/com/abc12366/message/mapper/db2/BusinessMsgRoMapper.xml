@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.message.mapper.db2.BusinessMsgRoMapper">
 
     <sql id="Base_Column">
-        id, userId, businessId, content, status, type, createTime, lastUpdate, url
+        id, userId, businessId, content, status, type, createTime, lastUpdate, url,busiType
     </sql>
 
     <select id="selectOne" resultType="com.abc12366.message.model.BusinessMessage">
@@ -22,7 +22,8 @@
         FROM msg_business_message
         WHERE userId = #{userId}
         <if test="type!=null">AND type = #{type}</if>
-        AND status != '0'
+        <if test="busiType!=null">AND busiType = #{busiType}</if>
+        <if test="status!=null">AND status = #{status}</if>
         AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
         ORDER BY createTime DESC
     </select>

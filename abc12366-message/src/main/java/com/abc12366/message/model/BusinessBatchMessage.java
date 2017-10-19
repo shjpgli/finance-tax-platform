@@ -43,6 +43,9 @@ public class BusinessBatchMessage {
     private String type;
     //链接地址
     private String url;
+    //消息业务类型
+    private String busiType;
+
 
     public BusinessBatchMessage() {
     }
@@ -57,6 +60,7 @@ public class BusinessBatchMessage {
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
         setUrl(builder.url);
+        setBusiType(builder.busiType);
     }
 
     public String getId() {
@@ -131,6 +135,14 @@ public class BusinessBatchMessage {
         this.url = url;
     }
 
+    public String getBusiType() {
+        return busiType;
+    }
+
+    public void setBusiType(String busiType) {
+        this.busiType = busiType;
+    }
+
     @Override
     public String toString() {
         return "BusinessBatchMessage{" +
@@ -142,6 +154,8 @@ public class BusinessBatchMessage {
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", busiType='" + busiType + '\'' +
                 '}';
     }
 
@@ -155,6 +169,7 @@ public class BusinessBatchMessage {
         private Timestamp lastUpdate;
         private String type;
         private String url;
+        private String busiType;
 
         public Builder() {
         }
@@ -201,6 +216,11 @@ public class BusinessBatchMessage {
 
         public Builder url(String val) {
             url = val;
+            return this;
+        }
+
+        public Builder busiType(String val) {
+            busiType = val;
             return this;
         }
 
