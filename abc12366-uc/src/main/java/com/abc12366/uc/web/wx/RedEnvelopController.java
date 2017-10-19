@@ -164,7 +164,7 @@ public class RedEnvelopController {
      * @param ids List<Id>
      * @return ResponseEntity
      */
-    @PostMapping("/batchDelete")
+    @PostMapping("/batchdelete")
     public ResponseEntity batchDelete(@Valid @RequestBody List<Id> ids) {
         LOGGER.info("{}", ids);
         iActivityService.batchDeleteSecret(ids);
