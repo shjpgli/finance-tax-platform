@@ -9,10 +9,10 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionAnswer" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.lang.String">
 		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_question_answer
+             a.id,	parentId,	questionId,factionId,commentNum,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,	answerUserId,ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept
+		 FROM bb_question_answer a left join bb_user u on a.userId = u.id
 		 WHERE id = #{id}
 	</select>
 
