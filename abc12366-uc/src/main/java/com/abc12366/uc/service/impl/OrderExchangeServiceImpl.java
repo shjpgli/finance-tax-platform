@@ -374,18 +374,18 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     public ResponseEntity refund(ExchangeRefundBO data, HttpServletRequest httpServletRequest) {
     	OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
     	// 退积分
-        ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
-        if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
-            PointsLogBO pointsLog = new PointsLogBO();
-            pointsLog.setRuleId(oe.getOrderNo());
-            pointsLog.setOutgo(eco.getGiftPoints());
-            pointsLog.setUserId(eco.getUserId());
-            pointsLog.setRemark("用户退单");
-            pointsLog.setLogType("ORDER_BACK");
-            pointsLogService.insert(pointsLog);
-        } else {
-            throw new ServiceException(4960);
-        }
+//        ExchangeCompletedOrderBO eco = orderExchangeRoMapper.selectCompletedOrder(oe.getOrderNo());
+//        if (eco != null && eco.getGiftPoints() < eco.getPoints()) {
+//            PointsLogBO pointsLog = new PointsLogBO();
+//            pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_RETURN_ID);
+//            pointsLog.setOutgo(eco.getGiftPoints());
+//            pointsLog.setUserId(eco.getUserId());
+//            pointsLog.setRemark("用户退单");
+//            pointsLog.setLogType("ORDER_BACK");
+//            pointsLogService.insert(pointsLog);
+//        } else {
+//            throw new ServiceException(4960);
+//        }
 
         //查询订单信息
         Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
@@ -460,7 +460,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     Message message = new Message();
                                     message.setBusinessId(oe.getOrderNo());
                                     message.setType(MessageConstant.SPDD);
-                                    message.setContent(MessageConstant.REFUND_PREFIX+refundRes.getRefund_fee()+MessageConstant.REFUND_SUFFIX+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>");
+                                    message.setContent(MessageConstant.REFUND_PREFIX+refundRes.getRefund_fee()+MessageConstant.REFUND_SUFFIX+order.getOrderNo());
+                                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                                     message.setUserId(order.getUserId());
                                     messageSendUtil.sendMessage(message, httpServletRequest);
 
@@ -591,14 +592,16 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
-                message.setContent(MessageConstant.EXCHANGE_CHECK_REFUSE+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">查看详情</a>"+MessageConstant.SUFFIX);
+                message.setContent(MessageConstant.EXCHANGE_CHECK_REFUSE+order.getOrderNo()+MessageConstant.SUFFIX);
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }else if("2".equals(oe.getType())){
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
-                message.setContent(MessageConstant.RETREAT_CHECK_REFUSE+"<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+order.getOrderNo()+"</a>"+MessageConstant.SUFFIX);
+                message.setContent(MessageConstant.RETREAT_CHECK_REFUSE+order.getOrderNo()+MessageConstant.SUFFIX);
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }
@@ -637,14 +640,16 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
-                message.setContent("<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
+                message.setContent(MessageConstant.EXCHANGE_CHECK_ADOPT);
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }else if("2".equals(oe.getType())){
                 Message message = new Message();
                 message.setBusinessId(oe.getOrderNo());
                 message.setType(MessageConstant.SPDD);
-                message.setContent("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.RETREAT_CHECK_ADOPT+"</a>");
+                message.setContent(MessageConstant.RETREAT_CHECK_ADOPT);
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }

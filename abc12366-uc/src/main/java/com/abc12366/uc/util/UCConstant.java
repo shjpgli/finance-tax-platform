@@ -125,7 +125,7 @@ public class UCConstant {
     public final static String POINT_RULE_EXP_UP_ID = "c10c55bef01d4e948a7b5efc8eb8a96b";
 
     //退单返还积分
-    public final static String POINT_RULE_ORDER_RETURN_ID = "c10c55bef01d4e948a7b5efc8eb8a96b";
+    public final static String POINT_RULE_ORDER_RETURN_ID = "96eaa78a55974557b796ee01233e7733";
 
 
     //用户权益类型

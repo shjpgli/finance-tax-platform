@@ -3,17 +3,31 @@ package com.abc12366.uc.model.bo;
 import java.util.Date;
 
 /**
+ * 经验值日志实体类
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 15:05
  */
 public class ExperienceLogBO {
+    //经验值日志ID，新增时为空
     private String id;
+
+    //用户ID
     private String userId;
+
+    //经验值规则ID
     private String ruleId;
+
+    //增加的经验值
     private int income;
+
+    //减少的经验值
     private int outgo;
+
+    //当前经验值
     private int usableExp;
+
+    //创建时间，新增时不传
     private Date createTime;
 
     public ExperienceLogBO() {

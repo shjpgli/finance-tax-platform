@@ -92,7 +92,7 @@ public class Constant {
     /**
      * 获取当前系统当天日期String
      *
-     * @return
+     * @return String
      */
     public static String getTodaySting() {
         Date date = new Date();
@@ -103,8 +103,8 @@ public class Constant {
     /**
      * 获取当前系统当天日期
      *
-     * @param date
-     * @return
+     * @param date Date
+     * @return Date
      */
     public static Date getToday(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -117,8 +117,8 @@ public class Constant {
     /**
      * 获取当前系统前一天日期
      *
-     * @param date
-     * @return
+     * @param date Date
+     * @return Date
      */
     public static Date getYesterDay(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -131,8 +131,8 @@ public class Constant {
     /**
      * 获取当前系统下一天日期
      *
-     * @param date
-     * @return
+     * @param date Date
+     * @return Date
      */
     public static Date getNextDay(Date date) {
         Calendar calendar = Calendar.getInstance();

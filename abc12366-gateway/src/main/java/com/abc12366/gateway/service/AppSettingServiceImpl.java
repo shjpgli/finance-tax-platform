@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,6 @@ public class AppSettingServiceImpl implements AppSettingService {
         return appSettingRoMapper.selectList(appSettingBO);
     }
 
-    @Transactional("db1TxManager")
     @Override
     public AppSetting update(AppSettingBO bo) {
         AppSetting appSetting = new AppSetting();
@@ -51,7 +51,6 @@ public class AppSettingServiceImpl implements AppSettingService {
         return appSetting;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public AppSetting insert(AppSettingBO bo) {
         bo.setId(Utils.uuid());
@@ -68,7 +67,6 @@ public class AppSettingServiceImpl implements AppSettingService {
         return appSetting;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public void delete(String appId, String id) {
         appSettingMapper.delete(id);
@@ -83,7 +81,7 @@ public class AppSettingServiceImpl implements AppSettingService {
         return appSettingRoMapper.selectOne(appSetting);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public List<AppSetting> insertList(String appId, List<AppSettingBO> appSettingBOList) {
         List<AppSetting> list = new ArrayList<>();
@@ -97,13 +95,9 @@ public class AppSettingServiceImpl implements AppSettingService {
                 bo.setLastUpdate(date);
                 AppSetting appSetting = new AppSetting();
                 BeanUtils.copyProperties(bo, appSetting);
-                int insert = appSettingMapper.insert(appSetting);
-                if (insert != 1) {
-                    LOGGER.warn("插入失败，参数：{}", appSetting);
-                    throw new ServiceException(4101);
-                }
                 list.add(appSetting);
             }
+            appSettingMapper.batchInsert(list);
         }
         return list;
     }

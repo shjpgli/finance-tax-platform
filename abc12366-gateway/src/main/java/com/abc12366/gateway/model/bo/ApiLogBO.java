@@ -200,4 +200,25 @@ public class ApiLogBO implements Serializable {
     public void setAppAccessCount(Integer appAccessCount) {
         this.appAccessCount = appAccessCount;
     }
+
+    @Override
+    public String toString() {
+        return "ApiLogBO{" +
+                "id='" + id + '\'' +
+                ", uri='" + uri + '\'' +
+                ", userAgent='" + userAgent + '\'' +
+                ", userId='" + userId + '\'' +
+                ", appId='" + appId + '\'' +
+                ", ip='" + ip + '\'' +
+                ", inTime=" + inTime +
+                ", outTime=" + outTime +
+                ", status='" + status + '\'' +
+                ", version='" + version + '\'' +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", method='" + method + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", appAccessCount=" + appAccessCount +
+                '}';
+    }
 }

@@ -138,4 +138,20 @@ public class AppSetting implements Serializable {
     public void setIsValidate(Boolean isValidate) {
         this.isValidate = isValidate;
     }
+
+    @Override
+    public String toString() {
+        return "AppSetting{" +
+                "id='" + id + '\'' +
+                ", appId='" + appId + '\'' +
+                ", apiId='" + apiId + '\'' +
+                ", timesPerMinute=" + timesPerMinute +
+                ", timesPerHour=" + timesPerHour +
+                ", timesPerDay=" + timesPerDay +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", isValidate=" + isValidate +
+                '}';
+    }
 }

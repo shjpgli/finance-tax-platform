@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @Author liuQi
  * @Date 2017/10/17 17:21
- * 系统过滤帮帮内容（包括问题，回答，评论）
+ * 帮帮举报内容（包括问题，回答，评论）
  */
 @RestController
 @RequestMapping(path = "/questionTipOff", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)

@@ -22,15 +22,49 @@ public interface BlacklistService {
      */
     boolean isBlacklist(String addr);
 
+    /**
+     * 查询黑名单列表
+     *
+     * @return List<Blacklist>
+     */
     List<Blacklist> selectList();
 
+    /**
+     * 查看黑名单
+     *
+     * @param id PK
+     * @return Blacklist
+     */
     Blacklist selectOne(String id);
 
+    /**
+     * 新增黑名单
+     *
+     * @param bo BlacklistBO
+     * @return Blacklist
+     */
     Blacklist insert(BlacklistBO bo);
 
+    /**
+     * 更新黑名单
+     *
+     * @param bo BlacklistBO
+     * @return Blacklist
+     */
     Blacklist update(BlacklistBO bo);
 
+    /**
+     * 删除黑名单
+     *
+     * @param id PK
+     */
     void delete(String id);
 
+    /**
+     * 根据IP删除黑名单
+     *
+     * @param ip IP地址
+     * @return Blacklist
+     */
     Blacklist selectByIp(String ip);
 }

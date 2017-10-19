@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -47,14 +48,7 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private AppSettingRoMapper appSettingRoMapper;
 
-    /*
-     * 将时间戳转换为时间
-     */
-    public static Date getLongToDate(long lt) {
-        return new Date(lt);
-    }
-
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public AppBO register(AppBO bo) throws Exception {
         LOGGER.info("{}", bo);
@@ -89,7 +83,7 @@ public class AppServiceImpl implements AppService {
         app.setStatus(true);
         app = appRoMapper.selectByName(bo.getName());
         if (app == null) {
-            LOGGER.warn("APP用户名不存在：{}", app);
+            LOGGER.warn("APP用户名不存在：{}", bo.getName());
             throw new ServiceException(4094);
         }
         if (Utils.md5(app.getPassword()).equals(bo.getPassword())) {
@@ -130,7 +124,7 @@ public class AppServiceImpl implements AppService {
         app = appRoMapper.selectOne(app);
         //判断app是否正常
         if (app == null) {
-            LOGGER.warn("APP不存在或APP未启用：{}", app);
+            LOGGER.warn("APP不存在或APP未启用, accessToken: {}", accessToken);
             throw new ServiceException(4035);
         }
         return true;
@@ -151,7 +145,7 @@ public class AppServiceImpl implements AppService {
         app = appRoMapper.selectOne(app);
         //判断app是否正常
         if (app == null) {
-            LOGGER.warn("APP不存在或APP未启用：{}", app);
+            LOGGER.warn("APP不存在或APP未启用, accessToken: {}", accessToken);
             throw new ServiceException(4035);
         }
         //判断app登录是否已过期
@@ -178,15 +172,12 @@ public class AppServiceImpl implements AppService {
         appSettingBO.setUri(bestMatchingPattern);
         appSettingBO.setMethod(method);
 
-        //TODO 目前只对微信API拦截,微信appId=c1109d75-02b1-4c9b-83da-677f86182003
-//        if("c1109d75-02b1-4c9b-83da-677f86182003".equals(appId)){
         AppSettingBO bo = appSettingRoMapper.selectByAppId(appSettingBO);
         if (bo == null) {
-            LOGGER.warn("API不存在或未授权：{}, {}", request.getRequestURI(), bo);
+            LOGGER.warn("API不存在或未授权：{}, {}", request.getRequestURI(), appId);
             throw new ServiceException(4027);
         }
-        //if(bo.getIsValidate() == true){
-        if (method != null && !method.equals(bo.getMethod())) {
+        if (!method.equals(bo.getMethod())) {
             LOGGER.warn("API方法不正确：{}", method);
             throw new ServiceException(4028);
         }
@@ -222,8 +213,6 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
             throw new ServiceException(4033);
         }
-//            }
-//        }
         return true;
     }
 
@@ -234,7 +223,7 @@ public class AppServiceImpl implements AppService {
         return apps;
     }
 
-    @Transactional("gw1TxManager")
+    @Transactional(value = "gw1TxManager", rollbackFor = SQLException.class)
     @Override
     public AppBO update(AppBO appBO) {
         LOGGER.info("{}", appBO);
@@ -267,7 +256,7 @@ public class AppServiceImpl implements AppService {
         LOGGER.info("{}", id);
         App app = appRoMapper.selectById(id);
         if (app == null) {
-            LOGGER.warn("APP用户名不存在：{}", app);
+            LOGGER.warn("APP用户名不存在：{}", id);
             throw new ServiceException(4094);
         }
         AppBO appBO = new AppBO();
@@ -275,8 +264,12 @@ public class AppServiceImpl implements AppService {
         return appBO;
     }
 
-    @Override
-    public List<AppBO> selectBySettingIdList(String id) {
-        return appRoMapper.selectBySettingIdList(id);
+    /**
+     * 将时间戳转换为时间
+     * @param lt 时间戳
+     * @return Date
+     */
+    private static Date getLongToDate(long lt) {
+        return new Date(lt);
     }
 }
