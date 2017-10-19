@@ -145,6 +145,15 @@
 			<if test="browseNum != null">
 				 browseNum = #{browseNum},
 			</if>
+             <if test="collectNum != null">
+                 collectNum = #{collectNum},
+             </if>
+             <if test="answerNum != null">
+                 answerNum = #{answerNum},
+             </if>
+             <if test="reportNum != null">
+                 reportNum = #{reportNum},
+             </if>
 			<if test="isRecommend != null">
 				isRecommend = #{isRecommend},
 			</if>

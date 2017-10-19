@@ -18,16 +18,14 @@
     <!--根据apiId统计-->
     <select id="selectApiListByAppId" resultType="com.abc12366.gateway.model.bo.ApiLogBO" parameterType="java.util.Map">
         select a.name as nickname,a.uri,a.method,a.version,i.num as appAccessCount  from
-        (SELECT g.uri,g.method,g.version,g.appId,count(g.uri) as num FROM gw_api_log_${startTime} g GROUP BY g.uri,g.method,g.version) i,
+        (SELECT g.uri,g.method,g.version,g.appId,count(g.uri) as num FROM gw_api_log_${startTime} g
+         where g.appId = #{appId}
+         GROUP BY g.uri,g.method,g.version) i,
         gw_api a
-        <where>
+        where
             i.version = a.version
             AND i.method = a.method
             AND i.uri = a.uri
-            <if test="appId != null and appId != ''">
-             AND  i.appId = #{appId}
-            </if>
-        </where>
     </select>
 
     <!--根据apiId列表查询-->
@@ -43,6 +41,9 @@
             </if>
             <if test="uri != null and uri != ''">
               AND  uri = #{uri}
+            </if>
+            <if test="appId != null appId uri != ''">
+              AND  appId = #{appId}
             </if>
         </where>
     </select>

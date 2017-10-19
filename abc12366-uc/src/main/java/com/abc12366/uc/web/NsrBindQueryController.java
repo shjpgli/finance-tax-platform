@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 查询所有绑定关系接口控制器
  * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-06-16
  * Time: 11:35
@@ -27,6 +28,15 @@ public class NsrBindQueryController {
     @Autowired
     private NsrBindQueryService nsrBindQueryService;
 
+    /**
+     * 查询纳税人绑定关系列表
+     * @param username
+     * @param nsrsbh
+     * @param status
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String username,
                                      @RequestParam(required = false) String nsrsbh,
@@ -50,6 +60,11 @@ public class NsrBindQueryController {
 
     }
 
+    /**
+     * 查询一条电子申报绑定
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/dzsb/{id}")
     public ResponseEntity selectDzsb(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -57,6 +72,11 @@ public class NsrBindQueryController {
         return ResponseEntity.ok(Utils.kv("data", userDzsbBO));
     }
 
+    /**
+     * 查询一条湖南地税绑定
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/hnds/{id}")
     public ResponseEntity selectHnds(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -64,6 +84,11 @@ public class NsrBindQueryController {
         return ResponseEntity.ok(Utils.kv("data", userHndsBO));
     }
 
+    /**
+     * 查询一条湖南国税绑定
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/hngs/{id}")
     public ResponseEntity selectHngs(@PathVariable String id) {
         LOGGER.info("{}", id);

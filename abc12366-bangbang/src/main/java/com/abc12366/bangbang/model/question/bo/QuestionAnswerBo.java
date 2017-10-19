@@ -55,6 +55,9 @@ public class QuestionAnswerBo implements Serializable {
     /**ip**varchar(45)**/
     private String ip;
 
+    /**回复次数**int(11)**/
+    private Integer answerNum;
+
     /**评论次数**int(11)**/
     private Integer commentNum;
 
@@ -239,5 +242,13 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setTrampleNum(Integer trampleNum) {
         this.trampleNum = trampleNum;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
     }
 }

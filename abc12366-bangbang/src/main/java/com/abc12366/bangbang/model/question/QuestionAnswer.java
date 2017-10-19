@@ -46,6 +46,15 @@ public class QuestionAnswer implements Serializable {
     /****varchar(64)**/
     private String factionId;
 
+    /**评论次数**int(11)**/
+    private Integer commentNum;
+
+    /**点赞次数**int(11)**/
+    private Integer likeNum;
+
+    /**踩次数**int(11)**/
+    private Integer trampleNum;
+
 
 
 	public void setId(String id){
@@ -142,5 +151,29 @@ public class QuestionAnswer implements Serializable {
 
     public void setFactionId(String factionId) {
         this.factionId = factionId;
+    }
+
+    public Integer getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
+    }
+
+    public Integer getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(Integer likeNum) {
+        this.likeNum = likeNum;
+    }
+
+    public Integer getTrampleNum() {
+        return trampleNum;
+    }
+
+    public void setTrampleNum(Integer trampleNum) {
+        this.trampleNum = trampleNum;
     }
 }

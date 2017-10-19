@@ -3,23 +3,39 @@ package com.abc12366.uc.model.bo;
 import javax.validation.constraints.Size;
 
 /**
+ * 修改经验值规则入参实体类
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 11:50
  */
 public class ExperienceRuleUpdateBO {
+    //规则名称
     @Size(max = 32)
     private String name;
+
+    //规则编码
     @Size(max = 10)
     private String code;
+
+    //经验值
     private int exp;
+
+    //描述
     @Size(max = 1000)
     private String description;
+
+    //经验值类型
     @Size(max = 1)
     private String type;
+
+    //规则状态
     private Boolean status;
+
+    //经验值规则周期限制:D:日，M：月，Y：年，A：无限制
     @Size(max = 5)
     private String period;
+
+    //经验值规则频率/次数
     private Integer degree;
 
     public ExperienceRuleUpdateBO() {
@@ -96,5 +112,19 @@ public class ExperienceRuleUpdateBO {
 
     public void setDegree(Integer degree) {
         this.degree = degree;
+    }
+
+    @Override
+    public String toString() {
+        return "ExperienceRuleUpdateBO{" +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", exp=" + exp +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", status=" + status +
+                ", period='" + period + '\'' +
+                ", degree=" + degree +
+                '}';
     }
 }

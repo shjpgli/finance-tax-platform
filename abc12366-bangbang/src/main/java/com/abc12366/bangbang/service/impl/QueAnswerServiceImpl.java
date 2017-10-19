@@ -1,7 +1,9 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
+import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
@@ -25,6 +27,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private QuestionAnswerMapper answerMapper;
+
+    @Autowired
+    private QuestionMapper questionMapper;
 
     @Autowired
     private QuestionAnswerRoMapper answerRoMapper;
@@ -94,7 +99,6 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         return answerBoList;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public QuestionAnswerBo save(QuestionAnswerBo answerBo) {
         try {
@@ -120,6 +124,24 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             answerBo.setId(uuid);
             BeanUtils.copyProperties(answerBo, answer);
             answerMapper.insert(answer);
+
+            if("".equals(answerBo.getParentId())){
+                int answerNum = answerRoMapper.selectAnswerCnt(answerBo.getQuestionId());
+                Question question = new Question();
+                question.setId(answerBo.getQuestionId());
+                question.setAnswerNum(answerNum);
+                questionMapper.updateByPrimaryKeySelective(question);
+                answerBo.setAnswerNum(answerNum);
+            }else{
+                int commentNum = answerRoMapper.selectCommentCnt(answerBo.getParentId());
+                QuestionAnswer answer1 = new QuestionAnswer();
+                answer1.setId(answerBo.getParentId());
+                answer1.setCommentNum(commentNum);
+                answerMapper.updateByPrimaryKeySelective(answer1);
+                answerBo.setCommentNum(commentNum);
+            }
+
+
         } catch (Exception e) {
             LOGGER.error("新增问题回复信息异常：{}", e);
             throw new ServiceException(6112);
@@ -173,17 +195,37 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         return "";
     }
 
-    @Transactional("db1TxManager")
     @Override
     public String delete(String id) {
+        int num = 0;
         try {
             LOGGER.info("删除问题回复信息:{}", id);
+
+            QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+
             answerMapper.deleteByPrimaryKey(id);
+
+            if("".equals(answer.getParentId())){
+                int answerNum = answerRoMapper.selectAnswerCnt(answer.getQuestionId());
+                Question question = new Question();
+                question.setId(answer.getQuestionId());
+                question.setAnswerNum(answerNum);
+                questionMapper.updateByPrimaryKeySelective(question);
+                num = answerNum;
+            }else{
+                int commentNum = answerRoMapper.selectCommentCnt(answer.getParentId());
+                QuestionAnswer answer1 = new QuestionAnswer();
+                answer1.setId(answer.getParentId());
+                answer1.setCommentNum(commentNum);
+                answerMapper.updateByPrimaryKeySelective(answer1);
+                num = commentNum;
+            }
+
         } catch (Exception e) {
             LOGGER.error("删除问题回复异常：{}", e);
             throw new ServiceException(6114);
         }
-        return "";
+        return num+"";
     }
 
 }

@@ -93,6 +93,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 财税专家客户端广告页、通知公告
                 .excludePathPatterns("/adpages", "adpages/**", "/notices", "/notices/**")
                         //发现之旅财税资讯列表
-                .excludePathPatterns("/channel/list");
+                .excludePathPatterns("/channel/list")
+                        //问卷
+                .excludePathPatterns("/question/**")
+                .excludePathPatterns("/subjects/**")
+                .excludePathPatterns("/answer/batch")
+                        //多个结果投票
+                .excludePathPatterns("/vote/**")
+                .excludePathPatterns("/vote/result/**");
+
     }
 }

@@ -405,6 +405,11 @@ public class AuthServiceImpl implements AuthService {
         //任务日志
         todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_ID);
 
+        //首次绑定手机任务埋点
+        if (!StringUtils.isEmpty(user.getPhone())) {
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_ID);
+        }
+
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);
         userBO.setPassword(null);

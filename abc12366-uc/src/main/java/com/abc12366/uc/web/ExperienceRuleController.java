@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 经验值规则接口控制器
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-22
  * Time: 9:13
@@ -33,6 +34,15 @@ public class ExperienceRuleController {
     @Autowired
     private ExperienceRuleService experienceRuleService;
 
+    /**
+     * 经验值规则列表
+     * @param name
+     * @param code
+     * @param type
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) String code,
@@ -61,6 +71,11 @@ public class ExperienceRuleController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) ruleList, "total", ((Page) ruleList).getTotal()));
     }
 
+    /**
+     * 查询一条经验值规则
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -69,6 +84,11 @@ public class ExperienceRuleController {
         return ResponseEntity.ok(Utils.kv("data", experienceRuleReturnBO));
     }
 
+    /**
+     * 新增一条经验值规则
+     * @param experienceRuleInsertBO
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody ExperienceRuleInsertBO experienceRuleInsertBO) {
         LOGGER.info("{}", experienceRuleInsertBO);
@@ -77,6 +97,12 @@ public class ExperienceRuleController {
         return ResponseEntity.ok(Utils.kv("data", experienceRuleReturn));
     }
 
+    /**
+     * 修改经验值规则
+     * @param experienceRuleUpdateBO
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody ExperienceRuleUpdateBO experienceRuleUpdateBO, @PathVariable
     String id) {

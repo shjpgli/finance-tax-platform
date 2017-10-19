@@ -36,6 +36,13 @@ public class UserBindController {
     @Autowired
     private UserBindService userBindService;
 
+    /**
+     * 用户绑定纳税人（电子申报）
+     * @param userDzsbInsertBO
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @PostMapping(path = "/bind/dzsb")
     public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest
             request) throws Exception {
@@ -45,6 +52,11 @@ public class UserBindController {
         return ResponseEntity.ok(Utils.kv("data", user_dzsb));
     }
 
+    /**
+     * 用户解除纳税人绑定（电子申报）
+     * @param id
+     * @return
+     */
     @PutMapping(path = "/unbind/dzsb/{id}")
     public ResponseEntity userDzsbUnbind(@PathVariable String id) {
         LOGGER.info("{}", id);

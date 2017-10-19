@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 /**
+ * UC发送业务消息接口控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-09
  * Time: 11:39

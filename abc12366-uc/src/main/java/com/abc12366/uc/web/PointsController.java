@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * 积分接口控制器
  * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-20
  * Time: 21:42
@@ -30,7 +31,11 @@ public class PointsController {
     @Autowired
     private PointsService pointsService;
 
-    //根据用户ID查询用户积分情况
+    /**
+     * 根据用户ID查询用户积分情况
+     * @param userId
+     * @return
+     */
     @GetMapping(path = "/{userId}")
     public ResponseEntity selectOne(@PathVariable String userId) {
         LOGGER.info("{}", userId);
@@ -39,35 +44,40 @@ public class PointsController {
         return ResponseEntity.ok(Utils.kv("data", pointsBO));
     }
 
-    @PostMapping(path = "/compute")
-    public ResponseEntity compute(@Valid @RequestBody PointComputeBO pointComputeBO){
-        pointsService.compute(pointComputeBO);
-        return ResponseEntity.ok(Utils.kv());
-    }
+//    @PostMapping(path = "/compute")
+//    public ResponseEntity compute(@Valid @RequestBody PointComputeBO pointComputeBO){
+//        pointsService.compute(pointComputeBO);
+//        return ResponseEntity.ok(Utils.kv());
+//    }
 
+    /**
+     * 根据积分规则计算用户积分
+     * @param pointCalculateBO
+     * @return
+     */
     @PostMapping(path = "/calculate")
     public ResponseEntity calculate(@Valid @RequestBody PointCalculateBO pointCalculateBO){
         int point = pointsService.calculate(pointCalculateBO);
         return ResponseEntity.ok(Utils.kv("data", point));
     }
 
-    @PostMapping(path = "/codex/{upointCodexId}")
-    public ResponseEntity codex(@PathVariable String upointCodexId,@Valid @RequestBody List<PointCodex> codexList ) {
-        LOGGER.info("{}:{}", upointCodexId, codexList);
-        List<PointCodex> pointCodexList = pointsService.codex(upointCodexId, codexList);
-        return ResponseEntity.ok(Utils.kv("dataList", pointCodexList));
-    }
-
-    @DeleteMapping(path = "/codex/{id}")
-    public ResponseEntity deleteCodex(@PathVariable String id) {
-        LOGGER.info("{}", id);
-        pointsService.deleteCodex(id);
-        return ResponseEntity.ok(Utils.kv());
-    }
-
-    @GetMapping(path = "/codex")
-    public ResponseEntity codexList() {
-        List<PointCodex> codexList = pointsService.codexList();
-        return ResponseEntity.ok(Utils.kv("dataList", codexList));
-    }
+//    @PostMapping(path = "/codex/{upointCodexId}")
+//    public ResponseEntity codex(@PathVariable String upointCodexId,@Valid @RequestBody List<PointCodex> codexList ) {
+//        LOGGER.info("{}:{}", upointCodexId, codexList);
+//        List<PointCodex> pointCodexList = pointsService.codex(upointCodexId, codexList);
+//        return ResponseEntity.ok(Utils.kv("dataList", pointCodexList));
+//    }
+//
+//    @DeleteMapping(path = "/codex/{id}")
+//    public ResponseEntity deleteCodex(@PathVariable String id) {
+//        LOGGER.info("{}", id);
+//        pointsService.deleteCodex(id);
+//        return ResponseEntity.ok(Utils.kv());
+//    }
+//
+//    @GetMapping(path = "/codex")
+//    public ResponseEntity codexList() {
+//        List<PointCodex> codexList = pointsService.codexList();
+//        return ResponseEntity.ok(Utils.kv("dataList", codexList));
+//    }
 }
