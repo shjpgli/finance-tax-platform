@@ -301,9 +301,10 @@
     <!--获取交易记录信息-->
     <select id="getTradeLogBO" resultMap="tradeLogBOMap" parameterType="java.lang.String">
         SELECT
-        id, orderNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime,aliTrandeNo,tradeType
-        FROM uc_trade_log
-        WHERE orderNo like CONCAT('%',#{orderNo},'%')
+        l.id, l.orderNo, l.amount, l.tradeStatus, l.tradeTime, l.payMethod, l.createTime, l.lastUpdate, l.compareStatus, l.compareTime,l.aliTrandeNo,l.tradeType
+        FROM uc_trade_log l
+        LEFT JOIN uc_trade t ON  t.tradeNo = l.id
+        WHERE orderNo = #{orderNo}
     </select>
 
     <!--用户对象-->
