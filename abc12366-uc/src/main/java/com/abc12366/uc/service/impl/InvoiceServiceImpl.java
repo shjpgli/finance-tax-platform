@@ -7,6 +7,8 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.Order;
+import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;

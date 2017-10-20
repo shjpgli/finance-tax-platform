@@ -10,15 +10,15 @@
     </delete>
 
     <!--删除：根据主键ID和UserID删除-->
-    <delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.Order">
+    <delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.order.Order">
         DELETE FROM uc_order
         WHERE orderNo = #{orderNo} and userId=#{userId}
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.Order">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.Order">
         INSERT INTO uc_order
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="orderNo != null">
                 orderNo,
             </if>
@@ -46,26 +46,11 @@
             <if test="username != null">
                 username,
             </if>
-            <if test="isShipping != null">
-                isShipping,
-            </if>
-            <if test="isFreeShipping != null">
-                isFreeShipping,
-            </if>
             <if test="deliveryFee != null">
                 deliveryFee,
             </if>
-            <if test="isInsured != null">
-                isInsured,
-            </if>
-            <if test="insuredFee != null">
-                insuredFee,
-            </if>
             <if test="totalPrice != null">
                 totalPrice,
-            </if>
-            <if test="addressId != null">
-                addressId,
             </if>
             <if test="expressNo != null">
                 expressNo,
@@ -100,9 +85,15 @@
             <if test="shippingAddress != null">
                 shippingAddress,
             </if>
+            <if test="isShipping != null">
+                isShipping,
+            </if>
+            <if test="isFreeShipping != null">
+                isFreeShipping,
+            </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="orderNo!=null">
                 #{orderNo},
             </if>
@@ -130,26 +121,11 @@
             <if test="username!=null">
                 #{username},
             </if>
-            <if test="isShipping!=null">
-                #{isShipping},
-            </if>
-            <if test="isFreeShipping!=null">
-                #{isFreeShipping},
-            </if>
             <if test="deliveryFee!=null">
                 #{deliveryFee},
             </if>
-            <if test="isInsured!=null">
-                #{isInsured},
-            </if>
-            <if test="insuredFee!=null">
-                #{insuredFee},
-            </if>
             <if test="totalPrice!=null">
                 #{totalPrice},
-            </if>
-            <if test="addressId!=null">
-                #{addressId},
             </if>
             <if test="expressNo!=null">
                 #{expressNo},
@@ -184,12 +160,17 @@
             <if test="shippingAddress!=null">
                 #{shippingAddress},
             </if>
-
+            <if test="isShipping!=null">
+                #{isShipping},
+            </if>
+            <if test="isFreeShipping!=null">
+                #{isFreeShipping},
+            </if>
         </trim>
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.Order">
+    <update id="update" parameterType="com.abc12366.uc.model.order.Order">
         UPDATE uc_order
         <set>
             <if test="userId != null">
@@ -216,26 +197,11 @@
             <if test="username != null">
                 username = #{username},
             </if>
-            <if test="isShipping != null">
-                isShipping = #{isShipping},
-            </if>
-            <if test="isFreeShipping != null">
-                isFreeShipping = #{isFreeShipping},
-            </if>
             <if test="deliveryFee != null">
                 deliveryFee = #{deliveryFee},
             </if>
-            <if test="isInsured != null">
-                isInsured = #{isInsured},
-            </if>
-            <if test="insuredFee != null">
-                insuredFee = #{insuredFee},
-            </if>
             <if test="totalPrice != null">
                 totalPrice = #{totalPrice},
-            </if>
-            <if test="addressId != null">
-                addressId = #{addressId},
             </if>
             <if test="expressNo != null">
                 expressNo = #{expressNo},
@@ -269,6 +235,12 @@
             </if>
             <if test="shippingAddress != null">
                 shippingAddress = #{shippingAddress},
+            </if>
+            <if test="isShipping != null">
+                isShipping = #{isShipping},
+            </if>
+            <if test="isFreeShipping != null">
+                isFreeShipping = #{isFreeShipping},
             </if>
 
         </set>

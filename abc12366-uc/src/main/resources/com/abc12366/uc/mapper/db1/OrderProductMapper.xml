@@ -8,26 +8,17 @@
         WHERE orderNo = #{orderNo}
     </delete>
 
-    <insert id="insert" parameterType="com.abc12366.uc.model.OrderProduct">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.OrderProduct">
         INSERT INTO uc_order_product
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="orderNo != null">
                 orderNo,
             </if>
-            <if test="productId != null">
-                productId,
-            </if>
-            <if test="sellingPrice != null">
-                sellingPrice,
-            </if>
-            <if test="unitPrice != null">
-                unitPrice,
+            <if test="goodsPrice != null">
+                goodsPrice,
             </if>
             <if test="num != null">
                 num,
-            </if>
-            <if test="discount != null">
-                discount,
             </if>
             <if test="dealPrice != null">
                 dealPrice,
@@ -50,6 +41,9 @@
             <if test="lastUpdate != null">
                 lastUpdate,
             </if>
+            <if test="productId != null">
+                productId,
+            </if>
             <if test="goodsId != null">
                 goodsId,
             </if>
@@ -68,26 +62,23 @@
             <if test="goodsType != null">
                 goodsType,
             </if>
+            <if test="browseUrl != null">
+                browseUrl,
+            </if>
+            <if test="tradingChannels != null">
+                tradingChannels,
+            </if>
 
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="orderNo!=null">
                 #{orderNo},
             </if>
-            <if test="productId!=null">
-                #{productId},
-            </if>
-            <if test="sellingPrice!=null">
-                #{sellingPrice},
-            </if>
-            <if test="unitPrice!=null">
-                #{unitPrice},
+            <if test="goodsPrice!=null">
+                #{goodsPrice},
             </if>
             <if test="num!=null">
                 #{num},
-            </if>
-            <if test="discount!=null">
-                #{discount},
             </if>
             <if test="dealPrice!=null">
                 #{dealPrice},
@@ -110,6 +101,9 @@
             <if test="lastUpdate!=null">
                 #{lastUpdate},
             </if>
+            <if test="productId!=null">
+                #{productId},
+            </if>
             <if test="goodsId!=null">
                 #{goodsId},
             </if>
@@ -128,26 +122,23 @@
             <if test="goodsType!=null">
                 #{goodsType},
             </if>
+            <if test="browseUrl!=null">
+                #{browseUrl},
+            </if>
+            <if test="tradingChannels!=null">
+                #{tradingChannels},
+            </if>
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.OrderProduct">
+    <update id="update" parameterType="com.abc12366.uc.model.order.OrderProduct">
         UPDATE uc_order_product
         <set>
-            <if test="productId != null">
-                productId = #{productId},
-            </if>
-            <if test="sellingPrice != null">
-                sellingPrice = #{sellingPrice},
-            </if>
-            <if test="unitPrice != null">
-                unitPrice = #{unitPrice},
+            <if test="goodsPrice != null">
+                goodsPrice = #{goodsPrice},
             </if>
             <if test="num != null">
                 num = #{num},
-            </if>
-            <if test="discount != null">
-                discount = #{discount},
             </if>
             <if test="dealPrice != null">
                 dealPrice = #{dealPrice},
@@ -170,6 +161,9 @@
             <if test="lastUpdate != null">
                 lastUpdate = #{lastUpdate},
             </if>
+            <if test="productId != null">
+                productId = #{productId},
+            </if>
             <if test="goodsId != null">
                 goodsId = #{goodsId},
             </if>
@@ -179,16 +173,21 @@
             <if test="isReturn != null">
                 isReturn = #{isReturn},
             </if>
-            <if test="specInfo != null">
+            <if test="isExchange != null">
                 isExchange = #{isExchange},
             </if>
-            <if test="specInfo != null">
+            <if test="imageUrl != null">
                 imageUrl = #{imageUrl},
             </if>
             <if test="goodsType != null">
                 goodsType = #{goodsType},
             </if>
-
+            <if test="browseUrl != null">
+                browseUrl = #{browseUrl},
+            </if>
+            <if test="tradingChannels != null">
+                tradingChannels = #{tradingChannels},
+            </if>
         </set>
         WHERE orderNo = #{orderNo}
     </update>

@@ -1,14 +1,16 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.order;
 
-import com.abc12366.uc.model.Order;
 import com.abc12366.uc.model.OrderBack;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.Order;
+import com.abc12366.uc.model.order.bo.OrderBO;
+import com.abc12366.uc.model.order.bo.OrderPayBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by MY on 2017-05-15.
+ * Created by lizhongwei on 2017-10-19.
  */
 public interface OrderService {
 
@@ -144,9 +146,27 @@ public interface OrderService {
      */
     OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO);
 
+    /**
+     * 确认订单
+     * @param order
+     */
     void confirmOrder(Order order);
 
+    /**
+     * 根据发票查询订单列表
+     * @param order
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize);
 
+    /**
+     * 查询课程订单列表
+     * @param orderBO
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     List<OrderBO> selectCurriculumOrderList(OrderBO orderBO, int pageNum, int pageSize);
 }

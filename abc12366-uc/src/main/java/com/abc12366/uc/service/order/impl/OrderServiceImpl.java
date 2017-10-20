@@ -1,4 +1,4 @@
-package com.abc12366.uc.service.impl;
+package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
@@ -7,7 +7,17 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.service.*;
+import com.abc12366.uc.model.order.Order;
+import com.abc12366.uc.model.order.OrderProduct;
+import com.abc12366.uc.model.order.Trade;
+import com.abc12366.uc.model.order.bo.OrderBO;
+import com.abc12366.uc.model.order.bo.OrderPayBO;
+import com.abc12366.uc.model.order.bo.OrderProductBO;
+import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.service.UserService;
+import com.abc12366.uc.service.VipLogService;
+import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -24,7 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @create 2017-05-15 10:17 AM
+ * @create 2017-10-19
  * @since 1.0.0
  */
 @Service("orderService")
@@ -91,6 +101,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private TradeLogMapper tradeLogMapper;
+
+    @Autowired
+    private TradeMapper tradeMapper;
 
     @Autowired
     private UserAddressRoMapper userAddressRoMapper;
@@ -197,23 +210,16 @@ public class OrderServiceImpl implements OrderService {
         Date date = new Date();
         orderBO.setCreateTime(date);
         orderBO.setLastUpdate(date);
-        Order order = new Order();
-
-        //查询地址信息
-        if(orderBO != null && orderBO.getAddressId() != null && !"".equals(orderBO.getAddressId())){
-            UserAddressBO userAddress = userAddressRoMapper.selectById(orderBO.getAddressId());
-            if(userAddress != null){
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
-                orderBO.setConsignee(userAddress.getName());
-                orderBO.setContactNumber(userAddress.getPhone());
-                orderBO.setShippingAddress(address.toString());
-            }
+        orderBO.setIsInvoice(false);
+        //是否免运费：由配送费来判断
+        if(orderBO.getDeliveryFee() != null && orderBO.getDeliveryFee()>0){
+            orderBO.setIsShipping(1);
         }
-
+        //是否需要寄送：由是否存在地址判断
+        if(orderBO.getConsignee() != null && !"".equals(orderBO.getConsignee()) && orderBO.getContactNumber() != null && !"".equals(orderBO.getContactNumber())){
+            orderBO.setIsFreeShipping(1);
+        }
+        Order order = new Order();
         //加入订单与产品关系信息
         List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
         if (orderProductBOs == null) {
@@ -221,57 +227,77 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4166);
         } else {
             for (OrderProductBO orderProductBO : orderProductBOs) {
-                //查询产品库存信息
-                ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
-                StringBuffer specInfo = new StringBuffer();
-                if(orderProductBO.getProductBO() != null){
-                    List<DictBO> dictList  = orderProductBO.getProductBO().getDictList();
-                    if(dictList != null && dictList.size() > 0){
-                        for(DictBO dictBO:dictList){
-                            specInfo.append(dictBO.getDictName()+"  ");
-                            specInfo.append(dictBO.getFieldKey());
-                        }
+                //判断是否需要查询产品库存信息
+                if(orderProductBO.getProductId() != null && !"".equals(orderProductBO.getProductId())){
+                    ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+                    if(prBO == null){
+                        throw new ServiceException(4903,"商品信息错误");
                     }
-                }
+                    if(prBO.getStock() == null){
+                        throw new ServiceException(4903,"商品库存信息异常");
+                    }
+                    if (prBO.getStock() < orderProductBO.getNum()) {
+                        LOGGER.info("商品库存不足：{}", prBO);
+                        throw new ServiceException(4903);
+                    }
 
-                if(prBO == null){
-                    throw new ServiceException(4903,"商品信息错误");
                 }
-                if(prBO.getStock() == null){
-                    throw new ServiceException(4903,"商品库存信息异常");
-                }
-                if (prBO.getStock() < orderProductBO.getNum()) {
-                    LOGGER.info("商品库存不足：{}", prBO);
-                    throw new ServiceException(4903);
-                }
-                GoodsBO goodsBO = goodsRoMapper.selectGoods(orderBO.getGoodsId());
                 //1：实物，2：虚拟物品，3：服务，4：会员服务，5：会员充值，6：学堂服务
+                orderProductBO.setOrderNo(orderBO.getOrderNo());
+                orderBO.setOrderStatus("2");
 
-                String goodsType = goodsBO.getGoodsType();
-                if ("RMB".equals(orderBO.getTradeMethod())) {
+                BeanUtils.copyProperties(orderBO, order);
+                int insert = orderMapper.insert(order);
+                if (insert != 1) {
+                    LOGGER.info("提交产品订单失败：{}", orderBO);
+                    throw new ServiceException(4139);
+                }
+                orderProductBO.setOrderNo(orderBO.getOrderNo());
+                OrderProduct orderProduct = new OrderProduct();
+                BeanUtils.copyProperties(orderProductBO, orderProduct);
+
+                int opInsert = orderProductMapper.insert(orderProduct);
+                if (opInsert != 1) {
+                    LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
+                    throw new ServiceException(4167);
+                }
+                insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
+                /*if ("RMB".equals(orderBO.getTradeMethod())) {
                     if ("5".equals(goodsType)) {
                         //会员充值
-                        operationMoneyRechargeOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2",specInfo.toString());
+                        operationMoneyRechargeOrder(orderBO, order, orderProductBO,"2");
                         insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
                     }else{
-                        operationMoneyServiceOrder(orderBO, date, order, orderProductBO, prBO, goodsBO, "2",specInfo.toString());
+                        operationMoneyServiceOrder(orderBO, order, orderProductBO, "2");
                         insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
                     }
                 } else if ("POINTS".equals(orderBO.getTradeMethod())) {
-                    //订单状态，1：新订单，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
-//                    if ("1".equals(goodsType) || "2".equals(goodsType)) {
-                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"2",specInfo.toString());
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
-//                    } else if ("3".equals(goodsType) || "4".equals(goodsType)) {
-//                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
-//                        userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
-//                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功","0");
-//                    }else if ("6".equals(goodsType)) {
-//                        operationPointsOrder(orderBO, date, order, orderProductBO, prBO, goodsBO,"6",specInfo.toString());
-//                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "用户新增订单，支付成功","0");
-//                    }
-                }
+                    operationPointsOrder(orderBO, order, orderProductBO,"2");
+                    insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
+                }*/
             }
+        }
+        //新增交易流水号
+        String tradeNo = DataUtils.getJYLSH();
+        TradeLog tradeLog = new TradeLog();
+        tradeLog.setLastUpdate(date);
+        tradeLog.setCreateTime(date);
+        tradeLog.setId(tradeNo);
+        LOGGER.info("新增交易日志记录：{}"+tradeNo);
+        int logInsert = tradeLogMapper.insert(tradeLog);
+        if(logInsert != 1){
+            LOGGER.info("新增交易日志记录失败：{}", tradeNo);
+            throw new ServiceException(4919);
+        }
+        Trade trade = new Trade();
+        trade.setTradeNo(tradeNo);
+        trade.setOrderNo(orderNo);
+        trade.setCreateTime(date);
+        trade.setLastUpdate(date);
+        int tradeInsert = tradeMapper.insert(trade);
+        if(tradeInsert != 1){
+            LOGGER.info("新增交易日志与订单关系失败：{}", tradeNo);
+            throw new ServiceException(4920);
         }
 
         OrderBO temp = new OrderBO();
@@ -313,92 +339,17 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理人民币购买服务
      */
-    @Transactional("db1TxManager")
-    private void operationMoneyServiceOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
-        // 查询用户信息
-        User user = userRoMapper.selectOne(orderBO.getUserId());
+   @Transactional("db1TxManager")
+    private void operationMoneyServiceOrder(OrderBO orderBO, Order order, OrderProductBO orderProductBO, String orderStatus) {
         orderProductBO.setOrderNo(orderBO.getOrderNo());
-
-        //减去Product库存数量
-        int num = orderProductBO.getNum();
-        int stock = prBO.getStock() - num;
-        if (stock < 0) {
-            LOGGER.info("库存不足,请联系管理员：{}", stock);
-            throw new ServiceException(4905);
-        }
-        /*prBO.setStock(stock);
-        Product product = new Product();
-        BeanUtils.copyProperties(prBO, product);
-        productMapper.update(product);
-        //库存表数据处理
-        ProductRepo repo = new ProductRepo();
-        repo.setId(Utils.uuid());
-        repo.setGoodsId(prBO.getGoodsId());
-        repo.setProductId(prBO.getId());
-        repo.setOutcome(num);
-        repo.setStock(stock);
-        repo.setCreateTime(date);
-        repo.setLastUpdate(date);
-        productRepoMapper.insert(repo);*/
-
-        //交易价格
-        double totalPrice;
-        int giftPoints; //赠送积分
-//        int consumePoints;
-        //根据用户等级查找该等级下赠送的积分，没有则设置为goods中设置的赠送积分
-        UvipPrice uvip = new UvipPrice();
-        uvip.setProductId(prBO.getId());
-        uvip.setVipLevel(user.getVipLevel());
-        UvipPrice uvipPrice = uvipPriceRoMapper.selectByLevel(uvip);
-        //查找对应的金额
-        if(uvipPrice != null && uvipPrice.getTradePrice() != null && !"".equals(uvipPrice.getTradePrice())){
-            totalPrice = uvipPrice.getTradePrice();
-        }else{
-            totalPrice = prBO.getSellingPrice();
-        }
-        //查找对应的积分
-        if(uvipPrice != null && uvipPrice.getGiftPoints() != null && !"".equals(uvipPrice.getGiftPoints())){
-            giftPoints = uvipPrice.getGiftPoints();
-        }else{
-            giftPoints = goodsBO.getGiftPoints();
-        }
-        double discount = 0;
-        //查找对应的折扣
-        if(uvipPrice != null && uvipPrice.getDiscount() != null){
-            discount = uvipPrice.getDiscount();
-        }
-        //加入订单信息
         orderBO.setOrderStatus(orderStatus);
-        orderBO.setIsInvoice(false);
-        orderBO.setNowVipLevel(user.getVipLevel());
-        orderBO.setUsername(user.getUsername());
-        orderBO.setGiftPoints(giftPoints);
-        orderBO.setTotalPrice(totalPrice);
-        orderBO.setIsShipping(goodsBO.getIsShipping());
-        orderBO.setIsFreeShipping(goodsBO.getIsFreeShipping());
-
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {
             LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
-        orderProductBO.setSellingPrice(prBO.getSellingPrice());
-        orderProductBO.setUnitPrice(prBO.getMarketPrice());
-        orderProductBO.setNum(num);
-        orderProductBO.setDiscount(discount);
-        orderProductBO.setDealPrice(totalPrice);
-        orderProductBO.setName(goodsBO.getName());
-        orderProductBO.setCategoryId(goodsBO.getCategoryId());
-        orderProductBO.setCategory(goodsBO.getCategoryName());
-        orderProductBO.setCreateTime(date);
-        orderProductBO.setLastUpdate(date);
-        orderProductBO.setGoodsId(goodsBO.getId());
-        orderProductBO.setIsExchange(goodsBO.getIsExchange());
-        orderProductBO.setIsReturn(goodsBO.getIsReturn());
-        orderProductBO.setImageUrl(goodsBO.getImageUrl());
-        orderProductBO.setGoodsType(goodsBO.getGoodsType());
-        orderProductBO.setSpecInfo(specInfo);
+        orderProductBO.setOrderNo(orderBO.getOrderNo());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -413,70 +364,18 @@ public class OrderServiceImpl implements OrderService {
      * 处理人民币充值积分订单
      */
     @Transactional("db1TxManager")
-    private void operationMoneyRechargeOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
+    private void operationMoneyRechargeOrder(OrderBO orderBO,Order order, OrderProductBO orderProductBO,String orderStatus) {
         // 查询用户信息
-        User user = userRoMapper.selectOne(orderBO.getUserId());
         orderProductBO.setOrderNo(orderBO.getOrderNo());
-        //减去Product库存数量
-        int num = orderProductBO.getNum();
-        int stock = prBO.getStock() - num;
-        if(stock < 0){
-            LOGGER.info("库存不足,请联系管理员：{}", stock);
-            throw new ServiceException(4905);
-        }
-//        prBO.setStock(stock);
-//        Product product = new Product();
-//        BeanUtils.copyProperties(prBO, product);
-//        productMapper.update(product);
-//        //库存表数据处理
-//        ProductRepo repo = new ProductRepo();
-//        repo.setId(Utils.uuid());
-//        repo.setGoodsId(prBO.getGoodsId());
-//        repo.setProductId(prBO.getId());
-//        repo.setOutcome(num);
-//        repo.setStock(stock);
-//        repo.setCreateTime(date);
-//        repo.setLastUpdate(date);
-//        repo.setRemark(orderBO.getOrderNo());
-//        repo.setOptionUser(orderBO.getUserId());
-//        repo.setRemark(orderBO.getOrderNo());
-//        repo.setOptionUser(orderBO.getUserId());
-//        productRepoMapper.insert(repo);
-
-        //商品价格
-        double totalPrice = orderBO.getTotalPrice();
-        int giftPoints = (int) totalPrice * 1100;
-
-        //加入订单信息
         orderBO.setOrderStatus(orderStatus);
-        orderBO.setIsInvoice(false);
-        orderBO.setNowVipLevel(user.getVipLevel());
-        orderBO.setUsername(user.getUsername());
-        orderBO.setGiftPoints(giftPoints);
-        //orderBO.setTotalPrice(totalPrice);
-        orderBO.setIsShipping(goodsBO.getIsShipping());
-        orderBO.setIsFreeShipping(goodsBO.getIsFreeShipping());
+
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
         if (insert != 1) {
             LOGGER.info("提交产品订单失败：{}", orderBO);
             throw new ServiceException(4139);
         }
-        orderProductBO.setSellingPrice(totalPrice);
-        orderProductBO.setUnitPrice(prBO.getMarketPrice());
-        orderProductBO.setNum(num);
-        orderProductBO.setDealPrice(totalPrice);
-        orderProductBO.setName(goodsBO.getName());
-        orderProductBO.setCategoryId(goodsBO.getCategoryId());
-        orderProductBO.setCategory(goodsBO.getCategoryName());
-        orderProductBO.setCreateTime(date);
-        orderProductBO.setLastUpdate(date);
-        orderProductBO.setGoodsId(goodsBO.getId());
-        orderProductBO.setIsExchange(goodsBO.getIsExchange());
-        orderProductBO.setIsReturn(goodsBO.getIsReturn());
-        orderProductBO.setImageUrl(goodsBO.getImageUrl());
-        orderProductBO.setGoodsType(goodsBO.getGoodsType());
-        orderProductBO.setSpecInfo(specInfo);
+        orderProductBO.setOrderNo(orderBO.getOrderNo());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -490,86 +389,10 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理积分订单
      */
-    private void operationPointsOrder(OrderBO orderBO, Date date, Order order, OrderProductBO orderProductBO, ProductBO prBO, GoodsBO goodsBO,String orderStatus,String specInfo) {
-        // 查询用户积分
-        User user = userRoMapper.selectOne(orderBO.getUserId());
+    private void operationPointsOrder(OrderBO orderBO, Order order, OrderProductBO orderProductBO,  String orderStatus) {
         orderProductBO.setOrderNo(orderBO.getOrderNo());
-        //减去Product库存数量
-        int num = orderProductBO.getNum();
-        int stock = prBO.getStock() - num;
-        if(stock < 0){
-            LOGGER.info("库存不足,请联系管理员：{}", stock);
-            throw new ServiceException(4905);
-        }
-
-        //商品价格
-        double totalPrice;
-        int giftPoints; //赠送积分
-        //根据用户等级查找该等级下赠送的积分，没有则设置为goods中设置的赠送积分
-        UvipPrice uvip = new UvipPrice();
-        uvip.setProductId(prBO.getId());
-        uvip.setVipLevel(user.getVipLevel());
-        UvipPrice uvipPrice = uvipPriceRoMapper.selectByLevel(uvip);
-        //查找对应的金额
-        if(uvipPrice != null && uvipPrice.getTradePrice() != null && !"".equals(uvipPrice.getTradePrice())){
-            totalPrice = uvipPrice.getTradePrice();
-        }else{
-            totalPrice = prBO.getSellingPrice();
-        }
-        //判断是正常积分兑换，还是RMB转积分兑换
-        if(orderBO.getTotalPrice() != null && !"".equals(orderBO.getTotalPrice())){
-            totalPrice = orderBO.getTotalPrice();
-        }
-        //查找对应的积分
-        if(uvipPrice != null && uvipPrice.getGiftPoints() != null && !"".equals(uvipPrice.getGiftPoints())){
-            giftPoints = uvipPrice.getGiftPoints();
-        }else{
-            giftPoints = goodsBO.getGiftPoints();
-        }
-
-        int userPoints = user.getPoints();
-        //比较用户积分是否足够
-        if (user != null && userPoints < totalPrice) {
-            LOGGER.info("用户积分不足，请充值：{}", user);
-            throw new ServiceException(4904);
-        }
-
-        //可用积分=上一次的可用积分+|-本次收入|支出
-
-        /*// 积分日志
-        PointsLogBO pointsLog = new PointsLogBO();
-        pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setRuleId(orderBO.getOrderNo());
-        pointsLog.setIncome(giftPoints * num);
-        pointsLog.setOutgo((int) totalPrice * num);
-        pointsLog.setLogType("POINTS_RECHARGE");
-        pointsLog.setRemark("积分兑换");
-        pointsLogService.insert(pointsLog);
-
-        //加入交易日志
-        TradeLog tradeLog=new TradeLog();
-        tradeLog.setId(Utils.uuid());
-        tradeLog.setOrderNo(orderBO.getOrderNo());
-        tradeLog.setAliTrandeNo(orderBO.getOrderNo());
-        tradeLog.setTradeStatus("1");
-        tradeLog.setTradeType("2");
-        tradeLog.setAmount(Double.parseDouble("-"+totalPrice));
-        Timestamp now = new Timestamp(new Date().getTime());
-        tradeLog.setTradeTime(now);
-        tradeLog.setCreateTime(now);
-        tradeLog.setLastUpdate(now);
-        //tradeLog.setPayMethod("ALIPAY");
-        tradeLogMapper.insertTradeLog(tradeLog);*/
-
         //加入订单信息,
         orderBO.setOrderStatus(orderStatus);
-        orderBO.setIsInvoice(false);
-        orderBO.setNowVipLevel(user.getVipLevel());
-        orderBO.setUsername(user.getUsername());
-        orderBO.setGiftPoints(giftPoints);
-        orderBO.setTotalPrice(totalPrice * num);
-        orderBO.setIsShipping(goodsBO.getIsShipping());
-        orderBO.setIsFreeShipping(goodsBO.getIsFreeShipping());
 
         BeanUtils.copyProperties(orderBO, order);
         int insert = orderMapper.insert(order);
@@ -578,21 +401,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4139);
         }
 
-        orderProductBO.setDealPrice(totalPrice * num);
-        orderProductBO.setSellingPrice(prBO.getSellingPrice());
-        orderProductBO.setUnitPrice(prBO.getMarketPrice());
-        orderProductBO.setNum(num);
-        orderProductBO.setName(goodsBO.getName());
-        orderProductBO.setCategoryId(goodsBO.getCategoryId());
-        orderProductBO.setCategory(goodsBO.getCategoryName());
-        orderProductBO.setCreateTime(date);
-        orderProductBO.setLastUpdate(date);
-        orderProductBO.setGoodsId(goodsBO.getId());
-        orderProductBO.setIsExchange(goodsBO.getIsExchange());
-        orderProductBO.setIsReturn(goodsBO.getIsReturn());
-        orderProductBO.setImageUrl(goodsBO.getImageUrl());
-        orderProductBO.setGoodsType(goodsBO.getGoodsType());
-        orderProductBO.setSpecInfo(specInfo);
+        orderProductBO.setOrderNo(orderBO.getOrderNo());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -852,35 +661,24 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public OrderBO paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request) {
-        String orderNo = orderPayBO.getOrderNo();
-        OrderBO orderBO = orderRoMapper.selectById(orderNo);
+        String tradeNo = orderPayBO.getTradeNo();
+        OrderBO orderBO = orderRoMapper.selectById(tradeNo);
 
         if (orderBO != null) {
             OrderProductBO pBO = new OrderProductBO();
-            pBO.setOrderNo(orderNo);
+            pBO.setOrderNo(tradeNo);
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
 
             for (OrderProductBO orderProductBO : orderProductBOs) {
-                String goodsId = orderProductBO.getGoodsId();
-                GoodsBO goodsBO = goodsRoMapper.selectGoods(goodsId);
-                String goodsType = goodsBO.getGoodsType();
-                //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
-                //支付状态，1：支付中，2：支付成功，3：支付失败，
+
+                String goodsType = orderProductBO.getGoodsType();
                 int isPay = orderPayBO.getIsPay();
                 Order order = new Order();
-                /*order.setOrderNo(orderNo);
-                order.setPayMethod(orderPayBO.getPayMethod());
-                order.setAddressId(orderPayBO.getAddressId());
-                order.setUserId(orderBO.getUserId());*/
                 orderBO.setLastUpdate(new Date());
                 BeanUtils.copyProperties(orderBO,order);
-                //实物订单，必须要先填写地址
-                /*if (goodsType.equals("1")){
-                    if(orderPayBO.getAddressId() == null || "".equals(orderPayBO.getAddressId())){
-                        throw new ServiceException(4999,"实物订单，必须要先填写地址");
-                    }
-                }*/
+                //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
                 if("RMB".equals(type)){
+                    //支付状态，1：支付中，2：支付成功，3：支付失败，
                     if (isPay == 1) {
                         order.setOrderStatus("3");
                         int update = orderMapper.update(order);
@@ -888,7 +686,7 @@ public class OrderServiceImpl implements OrderService {
                             LOGGER.warn("修改失败，参数：{}", order);
                             throw new ServiceException(4102);
                         }
-                        insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中","0");
+                        insertOrderLog(orderBO.getUserId(), tradeNo, "3", "用户付款中","0");
                     } else if (isPay == 2) {
                         updateStock(orderBO, orderProductBO);
                         setTodoTask(orderBO);
@@ -898,19 +696,21 @@ public class OrderServiceImpl implements OrderService {
                             orderMapper.update(order);
 
                             insertPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功","0");
+                            insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功","0");
                         } else if (goodsType.equals("3") || goodsType.equals("4")) {
+                            String goodsId = orderProductBO.getGoodsId();
+                            GoodsBO goodsBO = goodsRoMapper.selectGoods(goodsId);
                             order.setOrderStatus("6");
                             orderMapper.update(order);
 
                             insertPoints(orderBO);
-                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", tradeNo);
                             userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                            LOGGER.info("插入会员日志: {}", orderNo);
-                            insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
+                            LOGGER.info("插入会员日志: {}", tradeNo);
+                            insertVipLog(tradeNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单", "0");
+                            insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单", "0");
                             //发送消息
                             sendMemberMsg(orderProductBO, order);
                         } else if (goodsType.equals("5")) {
@@ -918,7 +718,7 @@ public class OrderServiceImpl implements OrderService {
                             orderMapper.update(order);
 
                             insertPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单","0");
                             //发送消息
                             sendPointsMsg(orderProductBO, order);
                         }else if (goodsType.equals("6")) {
@@ -926,12 +726,12 @@ public class OrderServiceImpl implements OrderService {
                             orderMapper.update(order);
 
                             insertPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单","0");
                         }
                     } else if (isPay == 3) {
                         order.setOrderStatus("2");
                         orderMapper.update(order);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
+                        insertOrderLog(orderBO.getUserId(), tradeNo, "2", "等待用户付款", "0");
                     }
                 }else if("POINTS".equals(type)){
                     updateStock(orderBO, orderProductBO);
@@ -941,26 +741,29 @@ public class OrderServiceImpl implements OrderService {
                         orderMapper.update(order);
 
                         insertDeductPoints(orderBO);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功","0");
+                        insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功","0");
                     } else if (goodsType.equals("3") || goodsType.equals("4")) {
+                        String goodsId = orderProductBO.getGoodsId();
+                        GoodsBO goodsBO = goodsRoMapper.selectGoods(goodsId);
+
                         order.setOrderStatus("6");
                         orderMapper.update(order);
 
                         insertDeductPoints(orderBO);
-                        LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                        LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", tradeNo);
                         userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                        LOGGER.info("插入会员日志: {}", orderNo);
-                        insertVipLog(orderNo, orderBO.getUserId(), goodsBO.getMemberLevel());
+                        LOGGER.info("插入会员日志: {}", tradeNo);
+                        insertVipLog(tradeNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
-                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                        insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单","0");
                         sendMemberMsg(orderProductBO, order);
                     }else if (goodsType.equals("6")) {
                         order.setOrderStatus("6");
                         orderMapper.update(order);
 
                         insertDeductPoints(orderBO);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                        insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单","0");
                     }
                     insertTradeLog(orderBO);
                 }

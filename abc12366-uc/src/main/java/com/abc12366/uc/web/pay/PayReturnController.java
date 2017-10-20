@@ -2,11 +2,12 @@ package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
-import com.abc12366.uc.model.bo.OrderPayBO;
+import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.bo.TradeBillBO;
-import com.abc12366.uc.service.OrderService;
 import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
+import com.abc12366.uc.util.DataUtils;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import org.slf4j.Logger;
@@ -119,7 +120,7 @@ public class PayReturnController {
                     tradeLogService.update(tradeLogUpdate);
                 } else {
                     TradeLog tradeLog = new TradeLog();
-                    tradeLog.setId(Utils.uuid());
+                    tradeLog.setId(DataUtils.getJYLSH());
                     tradeLog.setAliTrandeNo(trade_no);
                     tradeLog.setOrderNo(out_trade_no);
                     tradeLog.setTradeStatus("1");
@@ -135,7 +136,7 @@ public class PayReturnController {
                     LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
 
                     OrderPayBO orderPayBO = new OrderPayBO();
-                    orderPayBO.setOrderNo(out_trade_no);
+//                    orderPayBO.setOrderNo(out_trade_no);
                     orderPayBO.setIsPay(2);
                     orderPayBO.setPayMethod("ALIPAY");
                     orderService.paymentOrder(orderPayBO,"RMB", request);
