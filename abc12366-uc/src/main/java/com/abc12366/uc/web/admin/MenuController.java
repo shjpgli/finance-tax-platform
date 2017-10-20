@@ -35,13 +35,14 @@ public class MenuController {
     private MenuService menuService;
 
     /**
-     * 列表查询
-     * @param pageNum
-     * @param pageSize
-     * @param menuName  菜单名称
-     * @param parentId  父节点ID
-     * @param type  类型
-     * @return
+     * 菜单列表查询
+     *
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @param menuName 菜单名称
+     * @param parentId 父节点ID
+     * @param type     类型
+     * @return ResponseEntity
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -53,18 +54,21 @@ public class MenuController {
         menu.setMenuName(menuName);
         menu.setParentId(parentId);
         menu.setType(type);
+        LOGGER.info("{}", menu);
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<MenuBO> menuList = menuService.selectList(menu);
         LOGGER.info("{}", menuList);
         return menuList == null ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) menuList, "total", ((Page) menuList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", menuList, "total", ((Page) menuList).getTotal()));
     }
 
     /**
      * 根据父节点查询所有
-     * @param parentId
-     * @return
+     *
+     * @param parentId 父菜单ID
+     * @return ResponseEntity
      */
     @GetMapping(path = "/parent/{parentId}")
     public ResponseEntity selectFirstLevel(@PathVariable String parentId) {
@@ -75,8 +79,9 @@ public class MenuController {
 
     /**
      * 根据父节点查询树形机构
-     * @param parentId
-     * @return
+     *
+     * @param parentId 父菜单ID
+     * @return ResponseEntity
      */
     @GetMapping(path = "/project/{parentId}")
     public ResponseEntity selectByParentId(@PathVariable String parentId) {
@@ -88,8 +93,9 @@ public class MenuController {
 
     /**
      * 根据ID查询
-     * @param menuId
-     * @return
+     *
+     * @param menuId 菜单ID
+     * @return ResponseEntity
      */
     @GetMapping(path = "/{menuId}")
     public ResponseEntity selectOne(@PathVariable String menuId) {
@@ -100,9 +106,10 @@ public class MenuController {
     }
 
     /**
-     * 新增
-     * @param mBO
-     * @return
+     * 新增菜单
+     *
+     * @param mBO MenuBO
+     * @return ResponseEntity
      */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody MenuBO mBO) {
@@ -113,9 +120,10 @@ public class MenuController {
     }
 
     /**
-     * 删除
-     * @param menuId
-     * @return
+     * 删除菜单
+     *
+     * @param menuId 菜单ID
+     * @return ResponseEntity
      */
     @DeleteMapping(path = "/{menuId}")
     public ResponseEntity delete(@PathVariable String menuId) {
@@ -125,10 +133,11 @@ public class MenuController {
     }
 
     /**
-     * 修改
-     * @param bo
-     * @param menuId
-     * @return
+     * 修改菜单
+     *
+     * @param bo     MenuBO
+     * @param menuId 菜单ID
+     * @return ResponseEntity
      */
     @PutMapping(path = "/{menuId}")
     public ResponseEntity update(@Valid @RequestBody MenuBO bo, @PathVariable String menuId) {
@@ -140,9 +149,10 @@ public class MenuController {
     }
 
     /**
-     * 启用、禁用
+     * 启用、禁用菜单
      *
-     * @return
+     * @param updateBO MenuUpdateBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/enable")
     public ResponseEntity enable(@Valid @RequestBody MenuUpdateBO updateBO) {
@@ -152,9 +162,9 @@ public class MenuController {
     }
 
     /**
-     * 启用、禁用
+     * 启用、禁用所有菜单
      *
-     * @return
+     * @return ResponseEntity
      */
     @PutMapping(path = "/disableAll")
     public ResponseEntity disableAll() {

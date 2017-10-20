@@ -191,9 +191,7 @@ public class ActivityService implements IActivityService {
         }
         // 取第一条记录
         WxRedEnvelop redEnvelop = dataList.get(0);
-
-        String probabilityStr = redEnvelop.getProbability();
-        redEnvelop.setOpenId(lotteryBO.getOpenId());
+        String probabilityStr = activity.getProbability();
         if (probabilityStr.contains("%")) {
             probabilityStr = probabilityStr.replaceAll("%", "");
             Double probability = Double.valueOf(probabilityStr) / 100;
@@ -201,6 +199,7 @@ public class ActivityService implements IActivityService {
             // 中奖
             if (inProbability(probability)) {
                 LOGGER.info("中奖:{}", redEnvelop.getSecret());
+                redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
                 // 已中奖未发送
                 redEnvelop.setSendStatus("0");
@@ -216,6 +215,7 @@ public class ActivityService implements IActivityService {
                 sendRedPack(lotteryBO, activity, redEnvelop);
             } else { // 未中奖
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
+                redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
                 redEnvelop.setReceiveTime(new Date());
                 redEnvelop.setStartTime(activity.getStartTime());
