@@ -29,7 +29,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectClassifyTagList" resultType="com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo" parameterType="java.lang.String">
+    <select id="selectClassifyTagList" resultType="com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo" parameterType="java.util.Map">
         SELECT
             c.tagId,k.name tagName
         FROM bb_question_classify_tag c left join bb_knowledge_tag k on c.tagId = k.id

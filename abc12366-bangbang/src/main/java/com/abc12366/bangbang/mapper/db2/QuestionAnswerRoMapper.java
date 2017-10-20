@@ -21,7 +21,7 @@ public interface QuestionAnswerRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionAnswer  selectByPrimaryKey(@Param("id") String id);
+    QuestionAnswerBo  selectByPrimaryKey(@Param("id") String id);
 
     /**
      * 查询(根据查询条件查询)

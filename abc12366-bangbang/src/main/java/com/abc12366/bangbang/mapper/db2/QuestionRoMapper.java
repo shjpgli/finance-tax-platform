@@ -26,6 +26,13 @@ public interface QuestionRoMapper {
 	Question  selectByPrimaryKey(@Param("id") String id);
 
     /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    QuestionBo  selectQuestion(@Param("id") String id);
+
+    /**
      * 查询最新问题
      **/
     List<QuestionBo> selectList(Map<String, Object> map);

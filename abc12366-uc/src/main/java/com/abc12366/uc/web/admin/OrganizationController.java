@@ -19,7 +19,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @description：组织管理
+ * 组织管理控制器
+ *
+ * @author liuguiyao
+ * @create 2017-04-27 10:08 AM
+ * @since 1.0.0
  */
 @Controller
 @RequestMapping(path = "/admin/org", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -32,9 +36,15 @@ public class OrganizationController {
 
 
     /**
-     * 组织列表
+     * 组织机构列表查询
      *
-     * @return
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @param name     机构名称
+     * @param type     类型
+     * @param parentId 父机构ID
+     * @param status   状态
+     * @return ResponseEntity
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -43,25 +53,27 @@ public class OrganizationController {
                                      @RequestParam(value = "type", required = false) String type,
                                      @RequestParam(value = "parentId", required = false) String parentId,
                                      @RequestParam(value = "status", required = false) Boolean status) {
-        LOGGER.info("{}", name, status);
         Organization organization = new Organization();
         organization.setName(name);
         organization.setStatus(status);
         organization.setType(type);
         organization.setParentId(parentId);
+        LOGGER.info("{}", organization);
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<OrganizationBO> organizationList = organizationService.selectList(organization);
         LOGGER.info("{}", organizationList);
         return organizationList == null ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) organizationList, "total", ((Page) organizationList)
+                ResponseEntity.ok(Utils.kv("dataList", organizationList, "total", ((Page) organizationList)
                         .getTotal()));
     }
 
     /**
      * 根据名称查询
      *
-     * @return
+     * @param name 名称
+     * @return ResponseEntity
      */
     @GetMapping(path = "/name")
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name) {
@@ -72,10 +84,10 @@ public class OrganizationController {
     }
 
     /**
-     * 添加组织
+     * 添加组织机构
      *
-     * @param organizationBO
-     * @return
+     * @param organizationBO OrganizationBO
+     * @return ResponseEntity
      */
     @PostMapping
     public ResponseEntity addOrganization(@Valid @RequestBody OrganizationBO organizationBO) {
@@ -88,8 +100,8 @@ public class OrganizationController {
     /**
      * 查询单个组织
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ResponseEntity
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
@@ -100,10 +112,10 @@ public class OrganizationController {
     }
 
     /**
-     * 查询单个组织
+     * 查询子机构组织
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ResponseEntity
      */
     @GetMapping(path = "/child/{id}")
     public ResponseEntity selectChildOrg(@PathVariable("id") String id) {
@@ -116,23 +128,24 @@ public class OrganizationController {
     /**
      * 修改组织
      *
-     * @param organizationBO
-     * @return
+     * @param id             PK
+     * @param organizationBO OrganizationBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateOrganization(@Valid @RequestBody OrganizationBO organizationBO,
                                              @PathVariable("id") String id) {
         LOGGER.info("id", id);
         OrganizationBO bo = organizationService.updateOrganization(organizationBO);
-        LOGGER.info("修改组织成功", organizationBO);
-        return ResponseEntity.ok(Utils.kv("data", organizationBO));
+        LOGGER.info("修改组织成功", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
      * 删除组织--物理删除
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ResponseEntity
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteOrganizationById(@PathVariable("id") String id) {
@@ -145,7 +158,8 @@ public class OrganizationController {
     /**
      * 启用、禁用
      *
-     * @return
+     * @param updateBO OrganizationUpdateBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/enable")
     public ResponseEntity enable(@Valid @RequestBody OrganizationUpdateBO updateBO) {
@@ -157,7 +171,7 @@ public class OrganizationController {
     /**
      * 全部启用、禁用
      *
-     * @return
+     * @return ResponseEntity
      */
     @PutMapping(path = "/disableAll")
     public ResponseEntity disableAll() {

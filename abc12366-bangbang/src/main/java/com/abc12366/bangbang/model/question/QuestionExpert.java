@@ -1,5 +1,7 @@
 package com.abc12366.bangbang.model.question;
 
+import java.util.Date;
+
 /**
  * 
  * 
@@ -11,16 +13,19 @@ public class QuestionExpert {
 	private String id;
 
 	/**uc关联用户id**/
-	private String useId;
+	private String userId;
 
-	/**专家头像**/
-	private String image;
+	/**专家类型(财税大侠，税务大侠)**/
+	private String type;
 
-	/**擅长领域（对应字典表的bb_question_expert_expertise编码）**/
-	private String expertise;
+	/**工作年长**/
+	private Integer yearWork;
 
-	/**权限（对应字典表的bb_question_expert_permission编码）**/
-	private String permission;
+	/**擅长领域**/
+	private String goodField;
+
+	/**专家介绍**/
+	private String intro;
 
 	/**创建时间**/
 	private java.util.Date createTime;
@@ -29,73 +34,110 @@ public class QuestionExpert {
 	private java.util.Date updateTime;
 
 	/**对应uc_admin用户**/
-	private String createUser;
+	private String createAdmin;
+
+	private String updateAdmin;
+
+	/**状态（0：无效，1：有效）**/
+	private String status;
 
 
+	public String getId() {
+		return id;
+	}
 
-	public void setId(String id){
+	public QuestionExpert setId(String id) {
 		this.id = id;
+		return this;
 	}
 
-	public String getId(){
-		return this.id;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUseId(String useId){
-		this.useId = useId;
+	public QuestionExpert setUserId(String userId) {
+		this.userId = userId;
+		return this;
 	}
 
-	public String getUseId(){
-		return this.useId;
+	public String getType() {
+		return type;
 	}
 
-	public void setImage(String image){
-		this.image = image;
+	public QuestionExpert setType(String type) {
+		this.type = type;
+		return this;
 	}
 
-	public String getImage(){
-		return this.image;
+	public Integer getYearWork() {
+		return yearWork;
 	}
 
-	public void setExpertise(String expertise){
-		this.expertise = expertise;
+	public QuestionExpert setYearWork(Integer yearWork) {
+		this.yearWork = yearWork;
+		return this;
 	}
 
-	public String getExpertise(){
-		return this.expertise;
+	public String getGoodField() {
+		return goodField;
 	}
 
-	public void setPermission(String permission){
-		this.permission = permission;
+	public QuestionExpert setGoodField(String goodField) {
+		this.goodField = goodField;
+		return this;
 	}
 
-	public String getPermission(){
-		return this.permission;
+	public String getIntro() {
+		return intro;
 	}
 
-	public void setCreateTime(java.util.Date createTime){
+	public QuestionExpert setIntro(String intro) {
+		this.intro = intro;
+		return this;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public QuestionExpert setCreateTime(Date createTime) {
 		this.createTime = createTime;
+		return this;
 	}
 
-	public java.util.Date getCreateTime(){
-		return this.createTime;
+	public Date getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setUpdateTime(java.util.Date updateTime){
+	public QuestionExpert setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+		return this;
 	}
 
-	public java.util.Date getUpdateTime(){
-		return this.updateTime;
+	public String getCreateAdmin() {
+		return createAdmin;
 	}
 
-	public void setCreateUser(String createUser){
-		this.createUser = createUser;
+	public QuestionExpert setCreateAdmin(String createAdmin) {
+		this.createAdmin = createAdmin;
+		return this;
 	}
 
-	public String getCreateUser(){
-		return this.createUser;
+	public String getUpdateAdmin() {
+		return updateAdmin;
 	}
 
+	public QuestionExpert setUpdateAdmin(String updateAdmin) {
+		this.updateAdmin = updateAdmin;
+		return this;
+	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public QuestionExpert setStatus(String status) {
+		this.status = status;
+		return this;
+	}
 }

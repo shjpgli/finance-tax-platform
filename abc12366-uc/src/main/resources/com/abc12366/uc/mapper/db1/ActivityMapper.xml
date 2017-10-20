@@ -79,7 +79,11 @@
             <if test="sendAmount != null">sendAmount = #{sendAmount},</if>
             <if test="sendStatus != null">sendStatus = #{sendStatus},</if>
             <if test="sendTimes != null">sendTimes = #{sendTimes},</if>
+            <if test="startTime != null">startTime = #{startTime},</if>
             <if test="endTime != null">endTime = #{endTime},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="amountType != null">amountType = #{amountType},</if>
+            <if test="probability != null">probability = #{probability},</if>
             <if test="sendTime != null">sendTime = #{sendTime},</if>
             <if test="receiveStatus != null">receiveStatus = #{receiveStatus},</if>
             <if test="receiveTime != null">receiveTime = #{receiveTime},</if>

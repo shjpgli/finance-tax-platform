@@ -40,7 +40,7 @@ public class AdminServiceUserController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "username", required = false) String username) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("username", username);//
+        dataMap.put("username", username);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<AdminServiceUserBo> dataList = adminServUserService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
