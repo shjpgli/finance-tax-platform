@@ -7,30 +7,33 @@ import com.abc12366.uc.model.admin.bo.*;
 import java.util.List;
 
 /**
- * @description：用户管理
+ * 用户管理
+ *
  * @author：lizhongwei
  */
 public interface AdminService {
+
     /**
      * 根据用户名查询用户
      *
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return Admin
      */
     Admin selectUserByLoginName(String username);
 
     /**
      * 根据用户id查询用户
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return Admin
      */
     Admin selectUserById(String id);
 
     /**
      * 用户列表
      *
-     * @param admin
+     * @param admin Admin
+     * @return List<AdminBO>
      */
     List<AdminBO> selectUser(Admin admin);
 
@@ -38,96 +41,148 @@ public interface AdminService {
     /**
      * 用户列表
      *
-     * @param admin
+     * @param admin AdminBO
+     * @return List<AdminBO>
      */
     List<AdminBO> selectList(AdminBO admin);
 
     /**
      * 添加用户
      *
-     * @param adminBO
+     * @param adminBO AdminBO
+     * @return int
      */
     int register(AdminBO adminBO);
 
     /**
      * 修改密码
      *
-     * @param userId
-     * @param pwd
+     * @param userId 用户ID
+     * @param pwd    密码
      */
     void updateUserPwdById(String userId, String pwd);
 
     /**
      * 根据用户id查询用户带部门
      *
-     * @param id
-     * @return
+     * @param id 用户ID
+     * @return AdminBO
      */
     AdminBO selectUserVOById(String id);
 
     /**
      * 修改用户
      *
-     * @param adminUpdateBO
+     * @param adminUpdateBO AdminUpdateBO
+     * @return AdminUpdateBO
      */
     AdminUpdateBO updateUser(AdminUpdateBO adminUpdateBO);
 
     /**
      * 删除用户
      *
-     * @param id
+     * @param id pk
+     * @return int
      */
     int deleteUserById(String id);
 
+    /**
+     * 查看用户
+     *
+     * @param id pk
+     * @return AdminBO
+     */
     AdminBO selectOne(String id);
 
+    /**
+     * 用户登陆
+     *
+     * @param adminBO AdminBO
+     * @param appId   用户ID
+     * @return AdminBO
+     */
     AdminBO login(AdminBO adminBO, String appId);
 
-
+    /**
+     * 查看用户扩展信息
+     *
+     * @param id pk
+     * @return AdminExtend
+     */
     AdminExtend selectUserExtendByUserId(String id);
 
-    AdminExtend updateUserExtend(AdminExtendBO adminExtendBO);
-
     /**
-     * 判断该tonken是否存在
+     * 判断该token是否存在
      *
-     * @param userToken
-     * @return
+     * @param userToken 用户令牌
+     * @return boolean
      */
     boolean isAuthentication(String userToken);
 
+    /**
+     * 新增用户
+     *
+     * @param adminBO AdminBO
+     * @return AdminBO
+     */
     AdminBO addUser(AdminBO adminBO);
 
     /**
      * 登出
      *
-     * @param token
+     * @param token 令牌
      */
     void logout(String token);
 
     /**
      * 修改用户密码
      *
-     * @param userPasswordBO
-     * @return
+     * @param userPasswordBO UserPasswordBO
+     * @return int
      */
     int updateUserPwd(UserPasswordBO userPasswordBO);
 
     /**
      * 重置用户密码
      *
-     * @param id
-     * @return
+     * @param id pk
+     * @return int
      */
     int resetUserPwd(String id);
 
+    /**
+     * 禁用所以用户
+     */
     void disableAll();
 
+    /**
+     * 启用用户
+     *
+     * @param adminUpdateBO AdminUpdateBO
+     */
     void enable(AdminUpdateBO adminUpdateBO);
 
+    /**
+     * 校验token
+     *
+     * @param token String
+     * @return Boolean
+     */
     Boolean checkToken(String token);
 
+    /**
+     * 刷新token
+     *
+     * @param token String
+     * @return Boolean
+     */
     Boolean refreshToken(String token);
 
+    /**
+     * 通过token查询用户信息
+     *
+     * @param token String
+     * @return LoginInfoBO
+     */
     LoginInfoBO selectLoginInfoByToken(String token);
 }

@@ -16,7 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
- * @description：登录退出
+ * 操作员登陆退出相关控制器
+ *
+ * @author lizhongwei
+ * @create 2017-05-02 10:08 AM
+ * @since 1.0.0
  */
 @Controller
 @RequestMapping(path = "/admin", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -29,8 +33,11 @@ public class LoginController {
 
 
     /**
-     * @param adminBO 用户信息
-     * @return
+     * 操作员登陆
+     *
+     * @param adminBO AdminBO
+     * @param request HttpServletRequest
+     * @return ResponseEntity
      */
     @PostMapping(value = "/login")
     @ResponseBody
@@ -42,14 +49,13 @@ public class LoginController {
     }
 
     /**
-     * 退出
+     * 操作员退出
      *
-     * @param token
-     * @param request
-     * @return
+     * @param token 令牌
+     * @return ResponseEntity
      */
     @PostMapping(value = "/logout/{token}")
-    public ResponseEntity logout(@PathVariable("token") String token, HttpServletRequest request) {
+    public ResponseEntity logout(@PathVariable("token") String token) {
         LOGGER.info("登出");
         adminService.logout(token);
         return ResponseEntity.ok(Utils.kv());
@@ -58,8 +64,8 @@ public class LoginController {
     /**
      * 查看LoginInfo信息
      *
-     * @param token
-     * @return
+     * @param token 令牌
+     * @return ResponseEntity
      */
     @GetMapping(path = "/token/{token}")
     public ResponseEntity selectUser(@PathVariable("token") String token) {
@@ -72,11 +78,4 @@ public class LoginController {
         LOGGER.info("响应用时:{}毫秒", res);
         return ResponseEntity.ok(Utils.kv("data", loginInfo));
     }
-
-    /*@PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody AdminBO userBO) {
-        int registerNum = adminService.register(userBO);
-        LOGGER.info("{}", registerNum);
-        return ResponseEntity.ok(registerNum);
-    }*/
 }
