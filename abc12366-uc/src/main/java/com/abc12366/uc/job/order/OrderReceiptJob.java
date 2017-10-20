@@ -1,7 +1,7 @@
 package com.abc12366.uc.job.order;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.service.order.OrderService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

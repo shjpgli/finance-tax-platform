@@ -35,6 +35,7 @@
         where now() <![CDATA[<=]]> endTime
         and now() <![CDATA[>=]]> startTime
         and status = '1'
+        ORDER BY lastUpdate DESC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.weixin.WxActivity"
@@ -86,8 +87,7 @@
     <select id="queryRedEnvelopCount" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT count(id) FROM uc_wxredenvelop
         WHERE
-        receiveStatus = '0'
-        and receiveStatus = '1'
+        (sendStatus = '1' or sendStatus = '2')
         and activityId = #{activityId}
     </select>
 

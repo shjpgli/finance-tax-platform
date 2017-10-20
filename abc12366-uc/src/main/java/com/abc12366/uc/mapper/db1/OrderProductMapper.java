@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
-import com.abc12366.uc.model.OrderProduct;
+import com.abc12366.uc.model.order.OrderProduct;
 import org.apache.ibatis.annotations.Param;
 
 /**

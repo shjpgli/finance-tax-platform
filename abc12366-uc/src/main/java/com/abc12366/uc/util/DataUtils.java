@@ -50,6 +50,20 @@ public class DataUtils {
     }
 
     /**
+     * yyyyMMddHHmmssSSS+三位随机数
+     *
+     * @return
+     */
+    public static String getJYLSH() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");//设置日期格式
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("JYLSH");
+        buffer.append(df.format(new Date()));
+        buffer.append(getRandom());
+        return buffer.toString();
+    }
+
+    /**
      * 获取用户订单号
      *
      * @return

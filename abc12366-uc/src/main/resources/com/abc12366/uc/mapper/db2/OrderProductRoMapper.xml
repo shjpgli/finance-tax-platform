@@ -4,17 +4,14 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderProductRoMapper">
 
     <sql id="Base_Column_List">
-        orderNo, productId, sellingPrice, unitPrice, num, discount, dealPrice, name, categoryId, category, weight,
-        createTime, lastUpdate,isReturn,isExchange,imageUrl,goodsType
+        id,	goodsPrice,	num,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate,	productId,	goodsId,	specInfo,	isReturn,	isExchange,	imageUrl,	goodsType,	browseUrl,	tradingChannels
     </sql>
 
-    <resultMap type="com.abc12366.uc.model.bo.OrderProductBO" id="orderProductRoMap">
+    <resultMap type="com.abc12366.uc.model.order.bo.OrderProductBO" id="orderProductRoMap">
         <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
-        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
-        <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
+        <result column="goodsPrice" property="goodsPrice" jdbcType="DOUBLE"/>
         <result column="num" property="num" jdbcType="INTEGER"/>
-        <result column="discount" property="discount" jdbcType="DOUBLE"/>
         <result column="dealPrice" property="dealPrice" jdbcType="DOUBLE"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
@@ -28,6 +25,8 @@
         <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
         <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
         <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
+        <result column="browseUrl" property="browseUrl" jdbcType="VARCHAR"/>
+        <result column="tradingChannels" property="tradingChannels" jdbcType="VARCHAR"/>
         <!--<association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO">
             <id column="id" property="id" jdbcType="VARCHAR"/>
             <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
@@ -39,28 +38,28 @@
             <result column="stock" property="stock" jdbcType="INTEGER"/>
         </association>-->
     </resultMap>
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.OrderProduct" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.OrderProduct" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_product
         WHERE orderNo = #{orderNo}
     </select>
 
-    <select id="selectByProductId" resultType="com.abc12366.uc.model.OrderProduct" parameterType="java.lang.String">
+    <select id="selectByProductId" resultType="com.abc12366.uc.model.order.OrderProduct" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_product
         WHERE productId = #{productId}
     </select>
 
-    <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.bo.OrderProductBO">
+    <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.order.bo.OrderProductBO">
         SELECT
-        op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name,
-        op.categoryId, op.category, op.weight, op.createTime, op.lastUpdate,op.goodsId,op.specInfo,op.isReturn,op.isExchange,op.imageUrl,op.goodsType
+        op.orderNo,	op.goodsPrice,	op.num,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,	op.productId,	op.goodsId,
+        op.specInfo,	op.isReturn,	op.isExchange,	op.imageUrl,	op.goodsType,	op.browseUrl,	op.tradingChannels
         FROM uc_order_product op
         WHERE op.orderNo = #{orderNo}
     </select>
-<!--    <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.bo.OrderProductBO">
+<!--    <select id="selectByOrderNo" resultMap="orderProductRoMap" parameterType="com.abc12366.uc.model.order.bo.OrderProductBO">
         SELECT
         op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name,
         op.categoryId, op.category, op.weight, op.createTime, op.lastUpdate,

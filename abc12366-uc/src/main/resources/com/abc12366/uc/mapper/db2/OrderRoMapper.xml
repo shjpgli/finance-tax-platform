@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderRoMapper">
 
     <!--订单对象-->
-    <resultMap id="orderBOResultMap" type="com.abc12366.uc.model.bo.OrderBO">
+    <resultMap id="orderBOResultMap" type="com.abc12366.uc.model.order.bo.OrderBO">
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
@@ -18,10 +18,7 @@
         <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
-        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
-        <result column="insuredFee" property="insuredFee" jdbcType="DOUBLE"/>
         <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
-        <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
         <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
@@ -47,7 +44,7 @@
         <association property="expressComp" column="expressCompId" select="getExpressComp"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
-        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
         select="getOrderProduct"></collection>
         <collection property="orderLogBOList" ofType="com.abc12366.uc.model.bo.OrderLogBO" column="orderNo"
         select="getOrderLog"></collection>
@@ -56,23 +53,21 @@
     </resultMap>
 
     <!--订单列表对象-->
-    <resultMap id="orderBOListResultMap" type="com.abc12366.uc.model.bo.OrderBO">
+    <resultMap id="orderBOListResultMap" type="com.abc12366.uc.model.order.bo.OrderBO">
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
         <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <result column="nowVipLevel" property="nowVipLevel" jdbcType="VARCHAR"/>
+        <result column="nowVipLevelName" property="nowVipLevelName" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
-        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
-        <result column="insuredFee" property="insuredFee" jdbcType="DOUBLE"/>
         <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
-        <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
         <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
@@ -93,29 +88,27 @@
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
         </association>
-        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
                     select="getOrderProduct"></collection>
     </resultMap>
 
 
     <!--前台订单列表查询对象-->
-    <resultMap id="orderBOMap" type="com.abc12366.uc.model.bo.OrderBO">
+    <resultMap id="orderBOMap" type="com.abc12366.uc.model.order.bo.OrderBO">
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
         <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
         <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <result column="nowVipLevel" property="nowVipLevel" jdbcType="VARCHAR"/>
+        <result column="nowVipLevelName" property="nowVipLevelName" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
-        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
-        <result column="insuredFee" property="insuredFee" jdbcType="DOUBLE"/>
         <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
-        <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
         <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
@@ -137,13 +130,11 @@
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
         </association>
-        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO">
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO">
             <id column="orNo" property="orderNo" jdbcType="VARCHAR"/>
             <result column="productId" property="productId" jdbcType="VARCHAR"/>
-            <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
-            <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
+            <result column="goodsPrice" property="goodsPrice" jdbcType="DOUBLE"/>
             <result column="num" property="num" jdbcType="INTEGER"/>
-            <result column="discount" property="discount" jdbcType="DOUBLE"/>
             <result column="dealPrice" property="dealPrice" jdbcType="DOUBLE"/>
             <result column="name" property="name" jdbcType="INTEGER"/>
             <result column="categoryId" property="categoryId" jdbcType="VARCHAR"/>
@@ -157,7 +148,8 @@
             <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
             <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
             <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
-            <association property="goodsBO" column="goodsId" select="getGoodsBOList"/>
+            <result column="browseUrl" property="browseUrl" jdbcType="VARCHAR"/>
+            <result column="tradingChannels" property="tradingChannels" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 
@@ -228,14 +220,14 @@
     </resultMap>
 
     <!-- 获取商品信息-->
-    <select id="getGoodsBOList" resultType="com.abc12366.uc.model.bo.GoodsBO" parameterType="java.lang.String">
+    <!--<select id="getGoodsBOList" resultType="com.abc12366.uc.model.bo.GoodsBO" parameterType="java.lang.String">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
         g.sort, g.unit, g.recommendType, g.isShipping, g.isFreeShipping, g.tradeMethod,g.goodsType,g.isReturn,g.isExchange,g.imageUrl
         FROM uc_goods g where g.id = #{id}
 
-    </select>
+    </select>-->
 
     <!-- 获取物流公司信息-->
     <select id="getExpressComp" resultType="com.abc12366.uc.model.ExpressComp" parameterType="java.lang.String">
@@ -309,9 +301,10 @@
     <!--获取交易记录信息-->
     <select id="getTradeLogBO" resultMap="tradeLogBOMap" parameterType="java.lang.String">
         SELECT
-        id, orderNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime,aliTrandeNo,tradeType
-        FROM uc_trade_log
-        WHERE orderNo like CONCAT('%',#{orderNo},'%')
+        l.id, l.orderNo, l.amount, l.tradeStatus, l.tradeTime, l.payMethod, l.createTime, l.lastUpdate, l.compareStatus, l.compareTime,l.aliTrandeNo,l.tradeType
+        FROM uc_trade_log l
+        LEFT JOIN uc_trade t ON  t.tradeNo = l.id
+        WHERE orderNo = #{orderNo}
     </select>
 
     <!--用户对象-->
@@ -324,10 +317,10 @@
     </resultMap>
 
     <!--订单和产品对应关系对象-->
-    <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.bo.OrderProductBO">
+    <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.order.bo.OrderProductBO">
         <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
-        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="goodsPrice" property="goodsPrice" jdbcType="DOUBLE"/>
         <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
         <result column="num" property="num" jdbcType="INTEGER"/>
         <result column="discount" property="discount" jdbcType="DOUBLE"/>
@@ -344,7 +337,6 @@
         <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
         <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
         <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
-        <association property="goodsBO" column="goodsId" select="getGoodsBOList"/>
     </resultMap>
 
     <!--订单日志对象-->
@@ -423,8 +415,8 @@
     <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
-        op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
-        op.createTime, op.lastUpdate,op.goodsId,op.specInfo,op.isReturn,op.isExchange,op.imageUrl,op.goodsType
+        op.orderNo,	op.goodsPrice,	op.num,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,	op.productId,	op.goodsId,
+        op.specInfo,	op.isReturn,	op.isExchange,	op.imageUrl,	op.goodsType,	op.browseUrl,	op.tradingChannels
         FROM uc_order_product op
         WHERE op.orderNo = #{orderNo}
     </select>
@@ -447,26 +439,22 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
-        isShipping, isFreeShipping, deliveryFee,
-        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser,expressCompId,
-        consignee,	contactNumber,	shippingAddress
+        orderNo,	userId,	orderStatus,	deliveryMethod,	payMethod,	nowVipLevel,	createTime,	lastUpdate,	username,	deliveryFee,	totalPrice,	expressNo,
+        remark,	giftPoints,	tradeMethod,	isInvoice,	cancelId,	recommendUser,	expressCompId,	consignee,	contactNumber,	shippingAddress,	isShipping,	isFreeShipping
     </sql>
 
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Order" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.Order" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order
         WHERE orderNo = #{orderNo}
     </select>
 
-    <select id="selectOne" resultType="com.abc12366.uc.model.Order" parameterType="com.abc12366.uc.model.Order">
+    <select id="selectOne" resultType="com.abc12366.uc.model.order.Order" parameterType="com.abc12366.uc.model.order.Order">
         SELECT
-        orderNo, userId, orderStatus, deliveryMethod, payMethod, nowVipLevel, createTime, lastUpdate, username,
-        isShipping, isFreeShipping, deliveryFee,
-        isInsured, insuredFee, totalPrice, addressId, expressNo, remark,giftPoints,tradeMethod,isInvoice,cancelId,recommendUser,expressCompId,consignee,	contactNumber,	shippingAddress
+        <include refid="Base_Column_List"/>
         FROM uc_order
         <where>
             <if test="orderNo != null">orderNo = #{orderNo}</if>
@@ -475,7 +463,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectReceiptOrderByDate" resultType="com.abc12366.uc.model.Order" parameterType="java.util.Date">
+    <select id="selectReceiptOrderByDate" resultType="com.abc12366.uc.model.order.Order" parameterType="java.util.Date">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order
@@ -486,7 +474,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectCancelOrderByDate" resultType="com.abc12366.uc.model.Order" parameterType="java.util.Date">
+    <select id="selectCancelOrderByDate" resultType="com.abc12366.uc.model.order.Order" parameterType="java.util.Date">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order
@@ -499,21 +487,20 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectById" resultMap="orderBOResultMap" parameterType="java.lang.String">
         SELECT
-        o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel,v.level as nowVipLevelName, o.createTime, o.lastUpdate,
-        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
-        o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
-        u.id as uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,u.level,insert(u.realName, 1, 1, '*') as realName
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
+        v.level as nowVipLevelName,
+        u.id as uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,insert(e.realName, 1, 1, '*') as realName
         FROM uc_order o
-        LEFT JOIN (select r.id,r.username,insert(r.phone, 4, 4, '****') as phone,r.vipLevel,r.nickname,insert(e.realName, 1, 1, '*') as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
-        left join uc_uvip_level l on l.levelCode = r.vipLevel
-        ) u ON u.id = o.userId
+        LEFT JOIN uc_user u ON u.id = o.userId
+		left join uc_user_extend e on u.id = e.userId
+        left join uc_uvip_level l on l.levelCode = u.vipLevel
         left join uc_uvip_level v on v.levelCode = o.nowVipLevel
         WHERE o.orderNo = #{orderNo}
     </select>
 
     <!-- 查询（根据主键ID和UserId查询） -->
-    <select id="selectOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.Order">
+    <select id="selectOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.Order">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -523,14 +510,12 @@
 
     <!-- 通用BO查询结果列-->
     <sql id="Base_Column_BO_List">
-        o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
-        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
-        o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
         u.id as  uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname
     </sql>
     <!-- 后台查询（根据条件查询） -->
-    <select id="selectList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -563,7 +548,7 @@
 
     </select>
 
-    <select id="selectWaitList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectWaitList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -594,7 +579,7 @@
     </select>
 
     <!--根据GoodsId和UserId查询订单信息-->
-    <select id="selectOrderByGoodsIdAndUserId" resultType="com.abc12366.uc.model.bo.OrderBO" parameterType="com.abc12366.uc.model.Order">
+    <select id="selectOrderByGoodsIdAndUserId" resultType="com.abc12366.uc.model.order.bo.OrderBO" parameterType="com.abc12366.uc.model.order.Order">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -613,7 +598,7 @@
 
 
     <!-- 前台查询（根据条件查询） -->
-    <select id="selectOrderList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectOrderList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -653,19 +638,18 @@
     </select>
 
     <!-- 前台查询（根据条件查询） -->
-    <select id="selectUserAllOrderList" resultMap="orderBOMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectUserAllOrderList" resultMap="orderBOMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
-        o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
-        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
-        o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
         u.id as uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,
-        t.orderNo as orNo, t.productId, t.sellingPrice, t.unitPrice, t.num, t.discount, t.dealPrice, t.name, t.categoryId, t.category, t.weight,
-        t.createTime as cTime, t.lastUpdate as lUpdate,t.goodsId,t.specInfo,t.isReturn,t.isExchange,t.imageUrl,t.goodsType
+        t.orderNo as orNo, t.goodsPrice,	t.num,	t.dealPrice,	t.name,	t.categoryId,	t.category,	t.weight,	t.createTime as cTime, t.lastUpdate as lUpdate,	t.productId,	t.goodsId,
+        t.specInfo,	t.isReturn,	t.isExchange,	t.imageUrl,	t.goodsType,	t.browseUrl,	t.tradingChannels
+
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
-        LEFT JOIN (select DISTINCT op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
-        op.createTime, op.lastUpdate,op.goodsId,op.specInfo,op.isReturn,op.isExchange,op.imageUrl,op.goodsType from uc_order_product op ) t on t.orderNo = o.orderNo
+        LEFT JOIN (select DISTINCT op.orderNo,	op.goodsPrice,	op.num,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,	op.productId,	op.goodsId,
+        op.specInfo,	op.isReturn,	op.isExchange,	op.imageUrl,	op.goodsType,	op.browseUrl,	op.tradingChannels from uc_order_product op ) t on t.orderNo = o.orderNo
         <where>
             1 = 1
             <if test=" user.id != null and user.id != '' ">
@@ -712,7 +696,7 @@
         </foreach>
     </select>
     <!-- 查询未发货订单 -->
-    <select id="selectExprotOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectExprotOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -724,7 +708,7 @@
     </select>
 
     <!-- 前台查询（根据条件查询） -->
-    <select id="selectCartList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectCartList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
         <include refid="Base_Column_BO_List"/>
         FROM uc_order o
@@ -740,12 +724,10 @@
     </select>
 
     <!-- 课程订单查询（根据条件查询） -->
-    <select id="selectCurriculumOrderList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.bo.OrderBO">
+    <select id="selectCurriculumOrderList" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
-        o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel,v.level as nowVipLevelName, o.createTime, o.lastUpdate,
-        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee,
-        o.isInsured, o.insuredFee, o.totalPrice, o.addressId, o.expressNo,
-        o.remark,o.giftPoints,o.tradeMethod,o.isInvoice,o.cancelId,o.recommendUser,o.expressCompId,o.consignee,	o.contactNumber,	o.shippingAddress,
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
         u.id as uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,u.level,insert(u.realName, 4, 4, '****') phone
         FROM uc_order o
         LEFT JOIN (select r.id,r.username,insert(r.phone, 4, 4, '****') as phone,r.vipLevel,r.nickname,insert(e.realName, 1, 1, '*') as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId

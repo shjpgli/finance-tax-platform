@@ -149,7 +149,6 @@ public class ActivityService implements IActivityService {
             throw new ServiceException(6002);
         }
 
-        LOGGER.info("记录抽奖日志");
         WxLotteryLog lotteryLog = new WxLotteryLog.Builder()
                 .id(Utils.uuid())
                 .activityId(lotteryBO.getActivityId())
@@ -157,7 +156,6 @@ public class ActivityService implements IActivityService {
                 .secret(lotteryBO.getSecret())
                 .createTime(new Date())
                 .build();
-        activityMapper.insertLotteryLog(lotteryLog);
 
         List<WxLotteryLog> lotteryLogs;
         // 规则类型为【口令】时, 查询每人每天可抽奖次数
@@ -169,6 +167,10 @@ public class ActivityService implements IActivityService {
                 throw new ServiceException(6006);
             }
         }
+
+        LOGGER.info("记录抽奖日志");
+        activityMapper.insertLotteryLog(lotteryLog);
+
         // 规则类型为【关键字】时, 参与活动次数仅为1次
         if ("2".equals(activity.getRuleType())) {
             lotteryLog.setCreateTime(null);
