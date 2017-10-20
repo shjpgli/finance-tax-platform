@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.web.question;
 
+import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 import com.abc12366.bangbang.service.QuestionSysBlockService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -45,6 +47,16 @@ public class QuestionTipOffController {
     public ResponseEntity modifyStatus(@PathVariable String id, @PathVariable String status) {
         questionTipOffService.changeStatus(id, status);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 举报新增
+     */
+    @PostMapping
+    public ResponseEntity save(@Valid @RequestBody QuestionTipOffBo questionTipOffBo) {
+        //新增问题信息
+        questionTipOffBo = questionTipOffService.save(questionTipOffBo);
+        return ResponseEntity.ok(Utils.kv("data", questionTipOffBo));
     }
 
 

@@ -133,4 +133,20 @@ public class AdminBO extends AdminExtendBO implements Serializable {
     public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
     }
+
+    @Override
+    public String toString() {
+        return "AdminBO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", organizationId='" + organizationId + '\'' +
+                ", roleIds='" + roleIds + '\'' +
+                ", rolesList=" + rolesList +
+                ", loginInfo=" + loginInfo +
+                ", menuMap=" + menuMap +
+                "} " + super.toString();
+    }
 }

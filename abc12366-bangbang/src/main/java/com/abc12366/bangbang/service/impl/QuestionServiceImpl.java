@@ -199,14 +199,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionBo selectQuestion(String id) {
-        QuestionBo questionBo = new QuestionBo();
+        QuestionBo questionBo;
         try {
             LOGGER.info("查询单个问题信息:{}", id);
             //查询问题信息
-            Question question = questionRoMapper.selectByPrimaryKey(id);
+            questionBo = questionRoMapper.selectQuestion(id);
             List<QuestionTag> tagList = tagRoMapper.selectList(id);
             List<QuestionInvite> inviteList = inviteRoMapper.selectList(id);
-            BeanUtils.copyProperties(question, questionBo);
             questionBo.setTagList(tagList);
             questionBo.setInviteList(inviteList);
         } catch (Exception e) {

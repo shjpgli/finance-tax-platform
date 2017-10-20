@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/nsrbindquery", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class NsrBindQueryController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SubjectTagController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NsrBindQueryController.class);
 
     @Autowired
     private NsrBindQueryService nsrBindQueryService;
@@ -44,6 +44,7 @@ public class NsrBindQueryController {
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}", username, nsrsbh, page, size);
+        long start = System.currentTimeMillis();
         if (username != null && username.equals("")) {
             username = null;
         }
@@ -53,6 +54,8 @@ public class NsrBindQueryController {
         NsrBindQueryParamBO nsrBindQueryParamBO = new NsrBindQueryParamBO(username, nsrsbh,status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<NsrBindQueryBO> nsrBindQueryBOList = nsrBindQueryService.selectList(nsrBindQueryParamBO);
+        long end = System.currentTimeMillis();
+        LOGGER.warn("消耗时间：{}" , end-start);
         return (nsrBindQueryBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page)

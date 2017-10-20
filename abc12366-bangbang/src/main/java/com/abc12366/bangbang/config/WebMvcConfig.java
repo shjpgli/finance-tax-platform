@@ -120,6 +120,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/questionbb/selectListNew")
                         //查询单个问题
                 .excludePathPatterns("/questionbb/selectQuestion/**")
+                        //查询单个问题回复信息
+                .excludePathPatterns("/queAnswer/selectAnswer/**")
                         //问题更新浏览量
                 .excludePathPatterns("/questionbb/updateBrowseNum/**")
                         //优秀邦派列表查询

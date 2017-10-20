@@ -156,8 +156,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         try {
             LOGGER.info("查询单个问题回复信息:{}", id);
             //查询单个问题回复信息
-            QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
-            BeanUtils.copyProperties(answer, answerBo);
+            answerBo = answerRoMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
             LOGGER.error("查询单个问题回复信息异常：{}", e);
             throw new ServiceException(6111);
@@ -201,7 +200,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         try {
             LOGGER.info("删除问题回复信息:{}", id);
 
-            QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+            QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
 
             answerMapper.deleteByPrimaryKey(id);
 

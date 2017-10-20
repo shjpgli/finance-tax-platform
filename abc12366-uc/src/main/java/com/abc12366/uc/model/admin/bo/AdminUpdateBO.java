@@ -96,4 +96,19 @@ public class AdminUpdateBO extends AdminExtendUpdateBO implements Serializable {
     public void setStatus(Boolean status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "AdminUpdateBO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", roleIds='" + roleIds + '\'' +
+                ", rolesList=" + rolesList +
+                ", loginInfo=" + loginInfo +
+                ", menuMap=" + menuMap +
+                "} " + super.toString();
+    }
 }
