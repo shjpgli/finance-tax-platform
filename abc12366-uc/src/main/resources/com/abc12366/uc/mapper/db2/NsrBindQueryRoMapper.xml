@@ -5,31 +5,45 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO"
             parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
-        SELECT a.id,a.username,a.nickname,a.nsrsbh,a.nsrmc,a.swjgmc,a.status,a.createTime,a.lastUpdate, a.bindType from
-        (
-        SELECT
-        uud.id,uu.username,uu.nickname,uud.nsrsbh,uud.nsrmc,uud.swjgmc,uud.status,uud.createTime,uud.lastUpdate,'dzsb'
-        bindType
-        FROM uc_user uu, uc_user_dzsb uud
+        SELECT a.id,uu.username,uu.nickname,a.nsrsbh,a.nsrmc,a.swjgmc,a.status,a.createTime,a.lastUpdate, a.bindType
+        FROM (SELECT uud.id,
+            uud.userId,
+            uud.nsrsbh,
+            uud.nsrmc,
+            uud.swjgmc,
+            uud.status,
+            uud.createTime,
+            uud.lastUpdate,
+            'dzsb' bindType
+            FROM uc_user_dzsb uud
+            GROUP BY id
+            UNION ALL
+            SELECT uuh.id,
+            uuh.userId,
+            uuh.nsrsbh,
+            uuh.nsrmc,
+            uuh.swjgmc,
+            uuh.status,
+            uuh.createTime,
+            uuh.lastUpdate,
+            'hnds' bindType
+            FROM uc_user_hnds uuh
+            GROUP BY id
+            UNION ALL
+            SELECT uuh.id,
+            uuh.userId,
+            uuh.nsrsbh,
+            uuh.nsrmc,
+            uuh.swjgmc,
+            uuh.status,
+            uuh.createTime,
+            uuh.lastUpdate,
+            'hngs' bindType
+            FROM uc_user_hngs uuh
+            GROUP BY id
+            ) AS a LEFT JOIN uc_user AS uu
+            ON a.userId = uu.id
         <where>
-            uu.id = uud.userId
-            <if test="username!=null">
-                and uu.username=#{username}
-            </if>
-            <if test="nsrsbh!=null">
-                and uud.nsrsbh=#{nsrsbh}
-            </if>
-            <if test="status!=null">
-                and uud.status=#{status}
-            </if>
-        </where>
-        UNION ALL
-        SELECT
-        uuh.id,uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.lastUpdate,'hnds'
-        bindType
-        FROM uc_user uu, uc_user_hnds uuh
-        <where>
-            uu.id = uuh.userId
             <if test="username!=null">
                 and uu.username=#{username}
             </if>
@@ -40,25 +54,7 @@
                 and uuh.status=#{status}
             </if>
         </where>
-        UNION ALL
-        SELECT
-        uuh.id,uu.username,uu.nickname,uuh.nsrsbh,uuh.nsrmc,uuh.swjgmc,uuh.status,uuh.createTime,uuh.lastUpdate,'hngs'
-        bindType
-        FROM uc_user uu, uc_user_hngs uuh
-        <where>
-            uu.id = uuh.userId
-            <if test="username!=null">
-                and uu.username=#{username}
-            </if>
-            <if test="nsrsbh!=null">
-                and uuh.nsrsbh=#{nsrsbh}
-            </if>
-            <if test="status!=null">
-                and uuh.status=#{status}
-            </if>
-        </where>
-        ) a
-        order by createTime desc
+        order by a.createTime desc
     </select>
 
     <select id="selectDzsb" resultType="com.abc12366.uc.model.bo.UserDzsbBO" parameterType="java.lang.String">
