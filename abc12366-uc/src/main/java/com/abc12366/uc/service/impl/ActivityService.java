@@ -139,6 +139,16 @@ public class ActivityService implements IActivityService {
      */
     @Override
     public WxRedEnvelop lottery(WxLotteryBO lotteryBO) {
+        WxActivity activity = activityRoMapper.selectOne(lotteryBO.getActivityId());
+        if (activity == null) {
+            throw new ServiceException(6007);
+        }
+        Date now = new Date();
+        LOGGER.info("活动是否在有效期内");
+        if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
+            throw new ServiceException(6002);
+        }
+
         LOGGER.info("记录抽奖日志");
         WxLotteryLog lotteryLog = new WxLotteryLog.Builder()
                 .id(Utils.uuid())
@@ -149,16 +159,6 @@ public class ActivityService implements IActivityService {
                 .build();
         activityMapper.insertLotteryLog(lotteryLog);
 
-
-        WxActivity activity = activityRoMapper.selectOne(lotteryBO.getActivityId());
-        if (activity == null) {
-            throw new ServiceException(6007);
-        }
-        Date now = new Date();
-        LOGGER.info("活动是否在有效期内");
-        if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
-            throw new ServiceException(6002);
-        }
         List<WxLotteryLog> lotteryLogs;
         // 规则类型为【口令】时, 查询每人每天可抽奖次数
         if ("1".equals(activity.getRuleType())) {
