@@ -2,7 +2,6 @@ package com.abc12366.uc.web.admin;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.admin.Admin;
 import com.abc12366.uc.model.admin.AdminExtend;
 import com.abc12366.uc.model.admin.bo.AdminBO;
 import com.abc12366.uc.model.admin.bo.AdminExtendBO;
@@ -21,6 +20,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * 操作员控制器
+ *
  * @author lizhongwei
  * @create 2017-05-02 10:08 AM
  * @since 1.0.0
@@ -35,12 +36,16 @@ public class AdminController {
     private AdminService adminService;
 
     /**
-     * 列表查询
+     * 查询操作员列表
+     *
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
      * @param username 用户名
-     * @param nickname 昵称
-     * @param orgId 组织机构ID
-     * @param status 状态
-     * @return
+     * @param nickname 姓名
+     * @param phone    手机号
+     * @param orgId    部门ID
+     * @param status   用户状态
+     * @return ResponseEntity
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -55,18 +60,21 @@ public class AdminController {
         admin.setNickname(nickname);
         admin.setStatus(status);
         admin.setOrganizationId(orgId);
+        LOGGER.info("{}", admin);
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<AdminBO> userList = adminService.selectList(admin);
         LOGGER.info("userList:{}", userList);
         return userList == null ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", userList, "total", ((Page) userList).getTotal()));
     }
 
     /**
      * 详情查询
-     * @param id
-     * @return
+     *
+     * @param id PK
+     * @return ResponseEntity
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
@@ -79,8 +87,8 @@ public class AdminController {
     /**
      * 新增用户
      *
-     * @param adminBO
-     * @return
+     * @param adminBO AdminBO
+     * @return ResponseEntity
      */
     @PostMapping
     public ResponseEntity addUser(@Valid @RequestBody AdminBO adminBO) {
@@ -92,9 +100,9 @@ public class AdminController {
     /**
      * 修改用户信息
      *
-     * @param adminUpdateBO
-     * @param id
-     * @return
+     * @param adminUpdateBO AdminUpdateBO
+     * @param id            PK
+     * @return ResponseEntity
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(@Valid @RequestBody AdminUpdateBO adminUpdateBO, @PathVariable("id") String id) {
@@ -107,7 +115,8 @@ public class AdminController {
     /**
      * 启用、禁用
      *
-     * @return
+     * @param adminUpdateBO AdminUpdateBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/enable")
     public ResponseEntity enable(@Valid @RequestBody AdminUpdateBO adminUpdateBO) {
@@ -120,8 +129,8 @@ public class AdminController {
     /**
      * 修改用户密码
      *
-     * @param userPasswordBO
-     * @return
+     * @param userPasswordBO UserPasswordBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/password")
     public ResponseEntity updateUserPwd(@Valid @RequestBody UserPasswordBO userPasswordBO) {
@@ -134,8 +143,8 @@ public class AdminController {
     /**
      * 重置用户密码
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ResponseEntity
      */
     @PutMapping(path = "/password/{id}")
     public ResponseEntity resetUserPwd(@PathVariable("id") String id) {
@@ -147,8 +156,9 @@ public class AdminController {
 
     /**
      * 删除
-     * @param id
-     * @return
+     *
+     * @param id PK
+     * @return ResponseEntity
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteUserById(@PathVariable("id") String id) {
@@ -160,10 +170,10 @@ public class AdminController {
 
 
     /**
-     * 查看User详情
+     * 查看用户扩展详情
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ResponseEntity
      */
     @GetMapping(path = "/extend/{id}")
     public ResponseEntity selectUserExtend(@PathVariable("id") String id) {
@@ -174,14 +184,14 @@ public class AdminController {
     }
 
     /**
-     * 更新User详情
+     * 更新用户扩展详情
      *
-     * @param id
-     * @return
+     * @param id PK
+     * @return ResponseEntity
      */
     @PutMapping(path = "/extend/{id}")
     public ResponseEntity updateUserExtend(@Valid @RequestBody AdminExtendBO adminExtendBO, @PathVariable("id")
-    String id) {
+            String id) {
         LOGGER.info("adminExtendBO:{}", adminExtendBO);
         adminExtendBO.setUserId(id);
         AdminExtend adminExtend = adminService.updateUserExtend(adminExtendBO);
