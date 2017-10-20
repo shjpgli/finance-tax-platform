@@ -109,4 +109,18 @@ public class AdminExtendBO implements Serializable {
     public void setOrgName(String orgName) {
         this.orgName = orgName;
     }
+
+    @Override
+    public String toString() {
+        return "AdminExtendBO{" +
+                "userId='" + userId + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", job='" + job + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                '}';
+    }
 }

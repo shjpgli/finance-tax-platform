@@ -1,11 +1,7 @@
 package com.abc12366.uc.service.admin.impl;
 
-
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.mapper.db2.AppRoMapper;
-import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.TimeUtil;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.AdminExtendMapper;
@@ -14,7 +10,10 @@ import com.abc12366.uc.mapper.db1.LoginInfoMapper;
 import com.abc12366.uc.mapper.db1.UserRoleMapper;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.admin.*;
-import com.abc12366.uc.model.admin.bo.*;
+import com.abc12366.uc.model.admin.bo.AdminBO;
+import com.abc12366.uc.model.admin.bo.AdminUpdateBO;
+import com.abc12366.uc.model.admin.bo.LoginInfoBO;
+import com.abc12366.uc.model.admin.bo.UserPasswordBO;
 import com.abc12366.uc.service.admin.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +25,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 
+/**
+ * 操作员服务接口实现类
+ *
+ * @author lijun <ljun51@outlook.com>
+ * @create 2017-06-07 4:02 PM
+ * @since 1.0.0
+ */
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -55,9 +59,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private LoginInfoRoMapper loginInfoRoMapper;
-
-    @Autowired
-    private AppRoMapper appRoMapper;
 
     @Autowired
     private AdminExtendRoMapper adminExtendRoMapper;
@@ -88,11 +89,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<AdminBO> selectList(AdminBO admin) {
-        List<AdminBO> users = adminRoMapper.selectList(admin);
-        return users;
+        return adminRoMapper.selectList(admin);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public int register(AdminBO adminBO) {
         Admin admin = new Admin();
@@ -120,13 +120,23 @@ public class AdminServiceImpl implements AdminService {
         String[] roles = adminBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
 
+        insertRole(id, roles, userRole);
+        return ins;
+    }
+
+    /**
+     * 插入角色
+     * @param id 用户ID
+     * @param roles 角色数组
+     * @param userRole UserRole
+     */
+    private void insertRole(String id, String[] roles, UserRole userRole) {
         for (String roleId : roles) {
             userRole.setId(Utils.uuid());
             userRole.setUserId(id);
             userRole.setRoleId(roleId);
             userRoleMapper.insert(userRole);
         }
-        return ins;
     }
 
     @Override
@@ -139,7 +149,7 @@ public class AdminServiceImpl implements AdminService {
         return adminRoMapper.selectUserBoById(id);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public AdminUpdateBO updateUser(AdminUpdateBO adminUpdateBO) {
         AdminUpdateBO uBO = new AdminUpdateBO();
@@ -152,14 +162,6 @@ public class AdminServiceImpl implements AdminService {
         }
         Date date = new Date();
         admin.setLastUpdate(date);
-        //密码不为空时，给密码加密
-        /*if(adminUpdateBO.getPassword() != null && !"".equals(adminUpdateBO.getPassword())){
-            try {
-                admin.setPassword(Utils.md5(adminUpdateBO.getPassword()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
         int upd = adminMapper.updateUser(admin);
         if (upd != 1) {
             throw new ServiceException(4102);
@@ -185,16 +187,11 @@ public class AdminServiceImpl implements AdminService {
 
         String[] roles = adminUpdateBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
-        for (String roleId : roles) {
-            userRole.setId(Utils.uuid());
-            userRole.setUserId(id);
-            userRole.setRoleId(roleId);
-            userRoleMapper.insert(userRole);
-        }
+        insertRole(id, roles, userRole);
         return uBO;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public int deleteUserById(String id) {
         int del = adminMapper.deleteById(id);
@@ -214,8 +211,6 @@ public class AdminServiceImpl implements AdminService {
         return adminRoMapper.selectOne(id);
     }
 
-
-    @Transactional("db1TxManager")
     @Override
     public AdminBO login(AdminBO adminBO, String appId) {
         AdminBO user = adminRoMapper.selectUserBOByLoginName(adminBO.getUsername());
@@ -227,7 +222,7 @@ public class AdminServiceImpl implements AdminService {
                 throw new ServiceException(4126);
             }
         }
-        String password = "";
+        String password;
         try {
             password = Utils.md5(adminBO.getPassword());
         } catch (Exception e) {
@@ -235,8 +230,7 @@ public class AdminServiceImpl implements AdminService {
             throw new ServiceException(4106);
         }
         if (user != null && password.equals(user.getPassword())) {
-            Date now = new Date();
-            String userToken = null;
+            String userToken;
             try {
                 userToken = Utils.md5(Utils.uuid());
             } catch (Exception e) {
@@ -247,7 +241,6 @@ public class AdminServiceImpl implements AdminService {
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(user.getId());
             loginInfo.setAppId(appId);
-            Date date = new Date();
             long lastLong = TimeUtil.getDateStringToLong(new Date()) + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
             loginInfo.setLastResetTokenTime(TimeUtil.getLongToDate(lastLong));
             List<LoginInfo> info = loginInfoRoMapper.selectByAppList(loginInfo);
@@ -273,10 +266,10 @@ public class AdminServiceImpl implements AdminService {
             adminBO.setLoginInfo(loginInfo);
 
             //查询用户菜单信息
-            Map<String, List<Menu>> menuMap = new HashMap<String, List<Menu>>();
+            Map<String, List<Menu>> menuMap = new HashMap<>();
             List<Role> roles = adminBO.getRolesList();
             for (Role role : roles) {
-                if(Boolean.TRUE == role.getStatus()){
+                if(Objects.equals(Boolean.TRUE, role.getStatus())){
                     if(role.getId() != null && !"".equals(role.getId())){
                         List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
                         menuMap.put(role.getId(), menus);
@@ -295,47 +288,15 @@ public class AdminServiceImpl implements AdminService {
         return adminExtendRoMapper.selectUserExtendByUserId(id);
     }
 
-
-    @Override
-    public AdminExtend updateUserExtend(AdminExtendBO adminExtendBO) {
-        /*AdminExtend userExtend = new AdminExtend();
-        BeanUtils.copyProperties(adminExtendBO,userExtend);
-        //查询该用户是否存在详情，不存在，insert；存在，Update
-        AdminExtend extend = adminExtendRoMapper.selectUserExtendByUserId(adminExtendBO.getUserId());
-        Date date = new Date();
-        if (extend == null){
-            userExtend.setId(Utils.uuid());
-            userExtend.setCreateTime(date);
-            userExtend.setLastUpdate(date);
-            int insert = adminExtendMapper.insert(userExtend);
-            if(insert != 1){
-                throw new ServiceException(4101);
-            }
-            return userExtend;
-        }else{
-            userExtend.setId(extend.getId());
-            int upd = adminExtendMapper.updateUserExtentBO(userExtend);
-            if(upd != 1){
-                throw new ServiceException(4102);
-            }
-            return userExtend;
-        }*/
-        return null;
-    }
-
-
     @Override
     public boolean isAuthentication(String userToken) {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setToken(userToken);
         LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
-        if (info != null) {
-            return true;
-        }
-        return false;
+        return info != null;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public AdminBO addUser(AdminBO adminBO) {
         AdminBO bo = adminRoMapper.selectUserBOByLoginName(adminBO.getUsername());
@@ -371,13 +332,6 @@ public class AdminServiceImpl implements AdminService {
         adminExtend.setLastUpdate(date);
         adminExtend.setCreateTime(date);
         adminExtend.setUserId(admin.getId());
-        /*adminExtend.setLastUpdate(date);
-        adminExtend.setCreateTime(date);
-        adminExtend.setUserId(admin.getId());
-        adminExtend.setAddress(adminBO.getAddress());
-        adminExtend.setJob(adminBO.getJob());
-        adminExtend.setOrgId(adminBO.getOrgId());
-        adminExtend.setPhone(adminBO.getPhone());*/
         int extInsert = adminExtendMapper.insert(adminExtend);
         if (extInsert != 1) {
             throw new ServiceException(4112);
@@ -386,7 +340,7 @@ public class AdminServiceImpl implements AdminService {
         String[] roles = adminBO.getRoleIds().split(",");
         UserRole userRole = new UserRole();
 
-        int roleIns = 0;
+        int roleIns;
         for (String roleId : roles) {
             userRole.setId(Utils.uuid());
             userRole.setUserId(id);
@@ -401,7 +355,7 @@ public class AdminServiceImpl implements AdminService {
         return temp;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public void logout(String token) {
         LoginInfo loginInfo = new LoginInfo();
@@ -422,11 +376,9 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    @Transactional("db1TxManager")
     @Override
     public int updateUserPwd(UserPasswordBO userPasswordBO) {
-
-        int update = 0;
+        int update;
         AdminBO user = adminRoMapper.selectUserBoById(userPasswordBO.getId());
         String newPassword;
         String oldPassword;
@@ -446,7 +398,6 @@ public class AdminServiceImpl implements AdminService {
         return update;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public int resetUserPwd(String id) {
         String newPassword;
@@ -463,7 +414,7 @@ public class AdminServiceImpl implements AdminService {
         return update;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public void enable(AdminUpdateBO adminUpdateBO) {
         String[] idArray = adminUpdateBO.getId().split(",");
@@ -480,7 +431,6 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    @Transactional("db1TxManager")
     @Override
     public Boolean checkToken(String token) {
 
@@ -502,7 +452,6 @@ public class AdminServiceImpl implements AdminService {
         return true;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public Boolean refreshToken(String token) {
         LoginInfo loginInfo = new LoginInfo();
@@ -510,7 +459,7 @@ public class AdminServiceImpl implements AdminService {
         //验证Token是否存在
         LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
         if (info == null) {
-            LOGGER.warn("Admin-Token不存在{}", info);
+            LOGGER.warn("Admin-Token不存在{}", token);
             throw new ServiceException(4128);
         }
         long datelong = System.currentTimeMillis() + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
@@ -523,7 +472,6 @@ public class AdminServiceImpl implements AdminService {
         return true;
     }
 
-    @Transactional("db1TxManager")
     @Override
     public LoginInfoBO selectLoginInfoByToken(String token) {
         LoginInfo loginInfo = new LoginInfo();
@@ -552,7 +500,7 @@ public class AdminServiceImpl implements AdminService {
         return loginInfoRoMapper.selectLoginInfoByToken(token);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public void disableAll() {
         AdminBO adminBO = new AdminBO();
@@ -567,33 +515,5 @@ public class AdminServiceImpl implements AdminService {
                 throw new ServiceException(4102);
             }
         }
-    }
-
-    @Transactional("db1TxManager")
-    private LoginInfo getLoginInfo(AdminBO user, String userToken, App app) {
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setUserId(user.getId());
-        loginInfo.setAppId(app.getId());
-        loginInfo.setToken(userToken);
-        Date date = new Date();
-        loginInfo.setLastResetTokenTime(DateUtils.addHours(date, Constant.USER_TOKEN_VALID_HOURS));
-        LoginInfo info = loginInfoRoMapper.selectOne(loginInfo);
-        //判断该用户是否存在此应用的登录信息
-        if (info != null) {
-            loginInfo.setId(info.getId());
-            int update = loginInfoMapper.update(loginInfo);
-            if (update != 1) {
-                LOGGER.error("修改登录信息失败：{}", update);
-                throw new ServiceException(4132);
-            }
-        } else {
-            loginInfo.setId(Utils.uuid());
-            int insert = loginInfoMapper.insertSelective(loginInfo);
-            if (insert != 1) {
-                LOGGER.error("新增登录信息失败：{}", insert);
-                throw new ServiceException(4131);
-            }
-        }
-        return loginInfo;
     }
 }
