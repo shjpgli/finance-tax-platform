@@ -30,9 +30,9 @@ public class TaskManageController {
     private TaskService taskService;
 
     /**
-     * 任务列表d
+     * 任务列表
      *
-     * @return 2016年10月9日上午11:36:03
+     * @return ResponseEntity
      */
     @GetMapping
     public ResponseEntity selectList() {
@@ -47,7 +47,8 @@ public class TaskManageController {
     /**
      * 保存定时任务
      *
-     * @param info 2016年10月9日下午1:36:59
+     * @param info TaskInfo
+     * @return ResponseEntity
      */
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody TaskInfo info) {
@@ -67,8 +68,9 @@ public class TaskManageController {
     /**
      * 删除定时任务
      *
-     * @param jobName
-     * @param jobGroup 2016年10月9日下午1:52:20
+     * @param jobName  String
+     * @param jobGroup String
+     * @return ResponseEntity
      */
     @DeleteMapping(value = "/{jobName}/{jobGroup}")
     public ResponseEntity delete(@PathVariable String jobName, @PathVariable String jobGroup) {
@@ -84,8 +86,9 @@ public class TaskManageController {
     /**
      * 暂停定时任务
      *
-     * @param jobName
-     * @param jobGroup 2016年10月10日上午9:41:25
+     * @param jobName  String
+     * @param jobGroup String
+     * @return ResponseEntity
      */
     @GetMapping(value = "/pause/{jobName}/{jobGroup}")
     public ResponseEntity pause(@PathVariable String jobName, @PathVariable String jobGroup) {
@@ -101,8 +104,9 @@ public class TaskManageController {
     /**
      * 重新开始定时任务
      *
-     * @param jobName
-     * @param jobGroup 2016年10月10日上午9:41:40
+     * @param jobName  String
+     * @param jobGroup String
+     * @return ResponseEntity
      */
     @GetMapping(value = "/resume/{jobName}/{jobGroup}")
     public ResponseEntity resume(@PathVariable String jobName, @PathVariable String jobGroup) {
