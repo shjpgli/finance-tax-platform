@@ -24,6 +24,6 @@ public interface QuestionExpertRoMapper {
      * 查询（根据主键ID查询）
      *
      **/
-    QuestionExpert selectByPrimaryKey(@Param("id") String id);
+    QuestionExpertBO selectByPrimaryKey(@Param("id") String id);
 
 }

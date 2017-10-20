@@ -15,7 +15,7 @@ public interface QuestionExpertService {
     List<QuestionExpertBO> selectList();
 
     /* 单个查询 */
-    QuestionExpert selectOne(String id);
+    QuestionExpertBO selectOne(String id);
 
     /* 新增专家 */
     void add(QuestionExpert questionExpert);
