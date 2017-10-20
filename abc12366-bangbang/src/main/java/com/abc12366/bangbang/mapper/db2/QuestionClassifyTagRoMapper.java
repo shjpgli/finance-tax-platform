@@ -34,7 +34,7 @@ public interface QuestionClassifyTagRoMapper {
      * 查询（根据主键ID查询）
      *
      **/
-    List<QuestionClassifyTagBo> selectClassifyTagList(@Param("classifyId") String classifyId);
+    List<QuestionClassifyTagBo> selectClassifyTagList(String classifyId);
 
 
 }
