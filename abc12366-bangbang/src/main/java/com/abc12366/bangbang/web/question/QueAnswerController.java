@@ -80,6 +80,9 @@ public class QueAnswerController {
                                      @RequestParam(value = "questionId", required = false) String questionId,
                                      @RequestParam(value = "parentId", required = false) String parentId) {
         Map<String, Object> dataMap = new HashMap<>();
+        if(userId == null || "".equals(userId)){
+            userId = "11";
+        }
         dataMap.put("userId", userId);//
         dataMap.put("questionId", questionId);//
         dataMap.put("parentId", parentId);//
