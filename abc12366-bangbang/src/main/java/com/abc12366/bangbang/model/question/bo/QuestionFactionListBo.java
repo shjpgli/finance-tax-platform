@@ -54,6 +54,9 @@ public class QuestionFactionListBo implements Serializable {
     /**帮主昵称**/
     private String nickname;
 
+    /**副帮主昵称**/
+    private String nickname2;
+
 	/**状态**int(2)**/
 	private Integer state;
 
@@ -286,5 +289,13 @@ public class QuestionFactionListBo implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getNickname2() {
+        return nickname2;
+    }
+
+    public void setNickname2(String nickname2) {
+        this.nickname2 = nickname2;
     }
 }

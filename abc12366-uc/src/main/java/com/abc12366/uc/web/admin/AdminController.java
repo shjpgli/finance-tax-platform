@@ -4,7 +4,6 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.AdminExtend;
 import com.abc12366.uc.model.admin.bo.AdminBO;
-import com.abc12366.uc.model.admin.bo.AdminExtendBO;
 import com.abc12366.uc.model.admin.bo.AdminUpdateBO;
 import com.abc12366.uc.model.admin.bo.UserPasswordBO;
 import com.abc12366.uc.service.admin.AdminService;
@@ -179,22 +178,6 @@ public class AdminController {
     public ResponseEntity selectUserExtend(@PathVariable("id") String id) {
         LOGGER.info("id:{}", id);
         AdminExtend adminExtend = adminService.selectUserExtendByUserId(id);
-        LOGGER.info("adminExtend:{}", adminExtend);
-        return ResponseEntity.ok(Utils.kv("data", adminExtend));
-    }
-
-    /**
-     * 更新用户扩展详情
-     *
-     * @param id PK
-     * @return ResponseEntity
-     */
-    @PutMapping(path = "/extend/{id}")
-    public ResponseEntity updateUserExtend(@Valid @RequestBody AdminExtendBO adminExtendBO, @PathVariable("id")
-            String id) {
-        LOGGER.info("adminExtendBO:{}", adminExtendBO);
-        adminExtendBO.setUserId(id);
-        AdminExtend adminExtend = adminService.updateUserExtend(adminExtendBO);
         LOGGER.info("adminExtend:{}", adminExtend);
         return ResponseEntity.ok(Utils.kv("data", adminExtend));
     }

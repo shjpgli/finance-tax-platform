@@ -70,7 +70,7 @@ public class CountController {
                         ()));
     }
     /**
-     * 回答总数
+     * 热心用户
      */
     @GetMapping(path = "/answers")
     public ResponseEntity selectAnswers(
@@ -100,7 +100,7 @@ public class CountController {
     /**
      * 专家采纳
      */
-    @GetMapping(path = "/")
+    @GetMapping(path = "/acceptExpert")
     public ResponseEntity selectAcceptExpert(
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {

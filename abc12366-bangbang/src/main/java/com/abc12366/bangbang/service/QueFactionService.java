@@ -17,6 +17,8 @@ public interface QueFactionService {
 
     List<QuestionFactionListBo> selectListExcellent(Map<String, Object> map);
 
+    List<QuestionFactionListBo> selectListPotential(Map<String, Object> map);
+
     QuestionFactionBo save(QuestionFactionBo factionBo);
 
     QuestionFactionBo selectQuestionFaction(String factionId);

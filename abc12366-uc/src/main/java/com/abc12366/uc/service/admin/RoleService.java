@@ -9,16 +9,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @description：权限管理
- * @author：lizhongwei
+ * 权限管理
+ *
+ * @author lizhongwei
+ * @create 2017-05-03 10:08 AM
+ * @since 1.0.0
  */
 public interface RoleService {
 
     /**
      * 查询权限树
      *
-     * @param role
-     * @return
+     * @param role Role
+     * @return List<RoleBO>
      */
     List<RoleBO> selectList(Role role);
 

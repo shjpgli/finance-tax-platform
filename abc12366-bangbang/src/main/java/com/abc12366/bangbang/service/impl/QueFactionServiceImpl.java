@@ -114,6 +114,26 @@ public class QueFactionServiceImpl implements QueFactionService {
         return QuestionFactionListBoList;
     }
 
+    @Override
+    public List<QuestionFactionListBo> selectListPotential(Map<String,Object> map) {
+        List<QuestionFactionListBo> QuestionFactionListBoList;
+        try {
+            //查询潜力邦派列表
+            QuestionFactionListBoList = questionFactionRoMapper.selectListPotential(map);
+
+            for(QuestionFactionListBo questionFactionBo : QuestionFactionListBoList){
+                int honor = 2*questionFactionBo.getAnswerNum() + 1*questionFactionBo.getDiscussNum() + 7*questionFactionBo.getAdoptNum();
+
+                questionFactionBo.setHonor(honor+"");
+            }
+
+        } catch (Exception e) {
+            LOGGER.error("查询邦派列表信息异常：{}", e);
+            throw new ServiceException(6120);
+        }
+        return QuestionFactionListBoList;
+    }
+
     @Transactional("db1TxManager")
     @Override
     public QuestionFactionBo save(QuestionFactionBo questionFactionBo) {
