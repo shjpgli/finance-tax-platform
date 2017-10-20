@@ -233,4 +233,28 @@ public class Organization implements Serializable {
     public void setArea(String area) {
         this.area = area;
     }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "id='" + id + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", areaId='" + areaId + '\'' +
+                ", type='" + type + '\'' +
+                ", contact='" + contact + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", remark='" + remark + '\'' +
+                ", status=" + status +
+                ", createUser='" + createUser + '\'' +
+                ", createTime=" + createTime +
+                ", lastUser='" + lastUser + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                '}';
+    }
 }

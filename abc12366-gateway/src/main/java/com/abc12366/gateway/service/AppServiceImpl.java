@@ -194,24 +194,31 @@ public class AppServiceImpl implements AppService {
         apiLog.setYyyyMMdd(DateUtils.getDataString());
         apiLog.setAppId(appId);
         apiLog.setMethod(method);
-        int minuteCount = apiLogRoMapper.selectApiLogCount(apiLog);
-        if (bo.getTimesPerMinute() != 0 && minuteCount > bo.getTimesPerMinute()) {
-            LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
-            throw new ServiceException(4031);
+        //查询每分钟访问的次数
+        if (bo.getTimesPerMinute() != 0) {
+            int minuteCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            if (minuteCount > bo.getTimesPerMinute()) {
+                LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
+                throw new ServiceException(4031);
+            }
         }
         //查询每小时访问的次数
         apiLog.setStartTime(currentTime - (60 * 1000 * 60));
-        int hourCount = apiLogRoMapper.selectApiLogCount(apiLog);
-        if (bo.getTimesPerHour() != 0 && hourCount > bo.getTimesPerHour()) {
-            LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
-            throw new ServiceException(4032);
+        if (bo.getTimesPerHour() != 0) {
+            int hourCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            if (hourCount > bo.getTimesPerHour()) {
+                LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
+                throw new ServiceException(4032);
+            }
         }
         //查询每天访问的次数
         apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
-        int dayCount = apiLogRoMapper.selectApiLogCount(apiLog);
-        if (bo.getTimesPerDay() != 0 && dayCount > bo.getTimesPerDay()) {
-            LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
-            throw new ServiceException(4033);
+        if (bo.getTimesPerDay() != 0) {
+            int dayCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            if (dayCount > bo.getTimesPerDay()) {
+                LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
+                throw new ServiceException(4033);
+            }
         }
         return true;
     }
