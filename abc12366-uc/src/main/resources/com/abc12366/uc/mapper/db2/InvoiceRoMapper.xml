@@ -39,7 +39,7 @@
         <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
         <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
-        <collection property="orderBOList" ofType="com.abc12366.uc.model.bo.OrderBO" column="id"
+        <collection property="orderBOList" ofType="com.abc12366.uc.model.order.bo.OrderBO" column="id"
                     select="getOrderBO"></collection>
     </resultMap>
 
@@ -80,7 +80,7 @@
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
     </resultMap>
 
-    <resultMap id="oneOrderBOMap" type="com.abc12366.uc.model.bo.OrderBO">
+    <resultMap id="oneOrderBOMap" type="com.abc12366.uc.model.order.bo.OrderBO">
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
@@ -102,7 +102,7 @@
         <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
         <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
         <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
-        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.bo.OrderProductBO" column="orderNo"
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
                     select="getOrderProduct"></collection>
     </resultMap>
 
@@ -126,7 +126,7 @@
     </resultMap>
 
     <!--订单和产品对应关系对象-->
-    <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.bo.OrderProductBO">
+    <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.order.bo.OrderProductBO">
         <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
         <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>

@@ -1,13 +1,14 @@
-package com.abc12366.uc.web;
+package com.abc12366.uc.web.order;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.order.Order;
+import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.OrderBack;
-import com.abc12366.uc.model.OrderProduct;
+import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.DataUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -41,14 +42,15 @@ public class OrderController {
 
     /**
      * 订单列表管理
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param orderNo
-     * @param username
-     * @param startTime
-     * @param endTime
-     * @return
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param orderNo   订单号
+     * @param username  用户名
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @param orderStatus   订单状态
+     * @param phone 电话号码
+     * @return  订单列表
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -84,12 +86,16 @@ public class OrderController {
 
     /**
      * 已完成订单列表查询
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param name
-     * @param userId
-     * @return
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param name  商品名称
+     * @param tradeMethod   交易方式
+     * @param status    状态
+     * @param userId    用户ID
+     * @param isInvoice 是否开发票
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 订单列表
      */
     @GetMapping(path = "/user")
     public ResponseEntity selectUserOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -109,10 +115,8 @@ public class OrderController {
 
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
-        order.setGoodsBO(goodsBO);
         String data[] = status.split(",");
         order.setStatus(data);
-//        order.setOrderStatus(status);
         order.setTradeMethod(tradeMethod);
         order.setIsInvoice(isInvoice);
 
@@ -132,12 +136,14 @@ public class OrderController {
 
     /**
      * 用户所有订单查询，未开票的订单
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param name
-     * @param userId
-     * @return
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param name  商品名称
+     * @param userId    用户ID
+     * @param goodsType 商品类型
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 订单列表
      */
     @GetMapping(path = "/user/all")
     public ResponseEntity selectUserAllOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -155,9 +161,9 @@ public class OrderController {
 
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
-        order.setGoodsBO(goodsBO);
+//        order.setGoodsBO(goodsBO);
         order.setIsInvoice(false);
-        order.setGoodsType(goodsType);
+//        order.setGoodsType(goodsType);
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DataUtils.StrToDate(startTime));
         }
@@ -174,20 +180,21 @@ public class OrderController {
 
     /**
      * 用户所有订单查询,未开票和已开票的订单
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param name
-     * @param userId
-     * @return
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param name  商品名称
+     * @param userId    用户ID
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 订单列表
      */
     @GetMapping(path = "/user/all/invoice")
     public ResponseEntity selectOrderListByInvoice(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                                 @RequestParam(value = "name", required = false) String name,
-                                                 @RequestParam(value = "userId", required = true) String userId,
-                                                 @RequestParam(value = "startTime", required = false) String startTime,
-                                                 @RequestParam(value = "endTime", required = false) String endTime) {
+                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                   @RequestParam(value = "name", required = false) String name,
+                                                   @RequestParam(value = "userId", required = true) String userId,
+                                                   @RequestParam(value = "startTime", required = false) String startTime,
+                                                   @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
         UserBO user = new UserBO();
@@ -196,7 +203,7 @@ public class OrderController {
 
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
-        order.setGoodsBO(goodsBO);
+//        order.setGoodsBO(goodsBO);
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DataUtils.StrToDate(startTime));
         }
@@ -215,21 +222,27 @@ public class OrderController {
 
     /**
      * 课程订单查询
-     *
-     */
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param goodsId   商品ID
+     * @param nickname  用户昵称
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 订单列表
+     *//*
     @GetMapping(path = "/curriculum")
     public ResponseEntity selectCurriculumOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                     @RequestParam(value = "goodsId", required = true) String goodsId,
-                                     @RequestParam(value = "nickname", required = false) String nickname,
-                                     @RequestParam(value = "startTime", required = false) String startTime,
-                                     @RequestParam(value = "endTime", required = false) String endTime) {
+                                                    @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                    @RequestParam(value = "goodsId", required = true) String goodsId,
+                                                    @RequestParam(value = "nickname", required = false) String nickname,
+                                                    @RequestParam(value = "startTime", required = false) String startTime,
+                                                    @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO orderBO = new OrderBO();
         UserBO user = new UserBO();
         user.setNickname(nickname);
         orderBO.setUser(user);
-        orderBO.setGoodsId(goodsId);
+//        orderBO.setGoodsId(goodsId);
         if (startTime != null && !"".equals(startTime)) {
             orderBO.setStartTime(DataUtils.StrToDate(startTime));
         }
@@ -243,13 +256,12 @@ public class OrderController {
         return (orderList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    }
+    }*/
 
     /**
      * 查询订单详情
-     *
-     * @param orderNo
-     * @return
+     * @param orderNo   订单号
+     * @return 订单详情
      */
     @GetMapping(path = "/select/{orderNo}")
     public ResponseEntity selectByOrderNo(@PathVariable("orderNo") String orderNo) {
@@ -261,8 +273,7 @@ public class OrderController {
 
     /**
      * 导出订单信息
-     *
-     * @return
+     * @return 订单列表
      */
     @GetMapping(path = "/export")
     public ResponseEntity exportOrder() {
@@ -275,8 +286,6 @@ public class OrderController {
 
     /**
      * 导入订单信息
-     *
-     * @return
      */
     @PostMapping(path = "/import/{expressCompId}")
     public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList,
@@ -290,6 +299,9 @@ public class OrderController {
 
     /**
      * 用户下单
+     * @param orderBO 订单信息
+     * @param userId   用户 ID
+     * @return 订单信息
      */
     @PostMapping(path = "/submit/{userId}")
     public ResponseEntity submitOrder(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId) {
@@ -302,6 +314,9 @@ public class OrderController {
 
     /**
      * 用户修改订单
+     * @param orderUpdateBO 订单信息
+     * @param userId 用户ID
+     * @return 订单信息
      */
     @PostMapping(path = "/update/{userId}")
     public ResponseEntity updateOrder(@Valid @RequestBody OrderUpdateBO orderUpdateBO, @PathVariable("userId") String userId) {
@@ -314,6 +329,9 @@ public class OrderController {
 
     /**
      * 用户将订单改为支付中，虚拟订单
+     * @param orderPayBO 支付信息
+     * @param request
+     * @return 订单信息
      */
     @PostMapping(path = "/payment")
     public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO,HttpServletRequest request) {
@@ -325,6 +343,9 @@ public class OrderController {
 
     /**
      * 用户交易积分订单
+     * @param orderPayBO 支付信息
+     * @param request
+     * @return 订单信息
      */
     @PostMapping(path = "/paypoints")
     public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO,HttpServletRequest request) {
@@ -339,6 +360,8 @@ public class OrderController {
 
     /**
      * 用户确认收货
+     * @param orderNo 订单号
+     * @param userId   用户ID
      */
     @PostMapping(path = "/confirm/{orderNo}/{userId}")
     public ResponseEntity confirmOrder(@PathVariable("orderNo") String orderNo,@PathVariable("userId") String userId) {
@@ -352,8 +375,8 @@ public class OrderController {
 
     /**
      * 订单发货
-     *
-     * @return
+     * @param orderOperationBO 订单操作信息
+     * @param request
      */
     @PostMapping(path = "/send")
     public ResponseEntity sendOrder(@Valid @RequestBody OrderOperationBO orderOperationBO,HttpServletRequest request) {
@@ -364,8 +387,7 @@ public class OrderController {
 
     /**
      * 订单作废
-     *
-     * @return
+     * @param orderOperationBO 订单操作信息
      */
     @PostMapping(path = "/invalid")
     public ResponseEntity invalidOrder(@Valid @RequestBody OrderOperationBO orderOperationBO) {
@@ -376,8 +398,8 @@ public class OrderController {
 
     /**
      * 用户取消订单
-     *
-     * @return
+     * @param orderCancelBO 订单取消信息
+     * @return 订单信息
      */
     @PostMapping(path = "/cancel")
     public ResponseEntity cancelOrder(@Valid @RequestBody OrderCancelBO orderCancelBO) {
@@ -389,9 +411,8 @@ public class OrderController {
 
     /**
      * 删除购物车订单
-     *
-     * @param userId
-     * @param id
+     * @param userId 用户ID
+     * @param id   订单号
      * @return
      */
     @DeleteMapping(path = "/delete/{userId}/{id}")
@@ -405,6 +426,8 @@ public class OrderController {
 
     /**
      * 反馈虚拟产品订单信息
+     * @param orderBO 订单信息
+     * @return
      */
     @PutMapping(path = "/feedback")
     public ResponseEntity feedback(@Valid @RequestBody OrderBO orderBO) {
@@ -417,8 +440,11 @@ public class OrderController {
 
     /**
      * 退单管理列表
-     *
-     * @return
+     * @param pageNum 页数
+     * @param pageSize 条数
+     * @param orderNo 订单号
+     * @param username 用户名
+     * @return 退单列表
      */
     @GetMapping(path = "/back")
     public ResponseEntity selectBackList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -443,9 +469,10 @@ public class OrderController {
 
     /**
      * 用户申请退单
-     *
-     * @param userId
-     * @return
+     * @param orderBack 退单信息
+     * @param userId 用户ID
+     * @param orderNo 订单号
+     * @return 退单信息
      */
     @PostMapping(path = "/back/apply/{userId}/{orderNo}")
     public ResponseEntity applyBackOrder(@Valid @RequestBody OrderBack orderBack, @PathVariable("userId") String
@@ -460,8 +487,8 @@ public class OrderController {
 
     /**
      * 管理员审核退单申请
-     *
-     * @return
+     * @param orderBack
+     * @return 退单信息
      */
     @PostMapping(path = "/back/check")
     public ResponseEntity backCheckOrder(@Valid @RequestBody OrderBack orderBack) {
@@ -473,8 +500,8 @@ public class OrderController {
 
     /**
      * 用户提交退单
-     *
-     * @return
+     * @param orderBack 退单信息
+     * @return 退单信息
      */
     @PostMapping(path = "/back/submit")
     public ResponseEntity submitBackOrder(@Valid @RequestBody OrderBack orderBack) {
@@ -486,14 +513,15 @@ public class OrderController {
 
     /**
      * 根据GoodsId和UserId查询订单信息
-     *
+     * @param goodsId 商品 ID
+     * @param userId 用户ID
      * @return
      */
     @GetMapping(path = "/goods")
     public ResponseEntity selectOrderByGoodsIdAndUserId(@RequestParam(value = "goodsId", required = true) String goodsId,
                                                         @RequestParam(value = "userId", required = true) String userId) {
         Order order = new Order();
-        order.setGoodsId(goodsId);
+//        order.setGoodsId(goodsId);
         order.setUserId(userId);
         LOGGER.info("{}", order);
         OrderBO bo = orderService.selectOrderByGoodsIdAndUserId(order);

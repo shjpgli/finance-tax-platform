@@ -6,6 +6,7 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.OrderProduct;
 import com.abc12366.uc.service.GoodsService;
 import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;

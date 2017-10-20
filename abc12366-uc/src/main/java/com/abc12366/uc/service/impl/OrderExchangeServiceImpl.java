@@ -12,6 +12,7 @@ import com.abc12366.uc.mapper.db1.OrderMapper;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
@@ -286,11 +287,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.update(oe);
 
             // 更新订单状态：已退单
-            /*Order order = new Order();
-            order.setOrderNo(oe.getOrderNo());
-            order.setOrderStatus("9");
-            order.setLastUpdate(new Timestamp(new Date().getTime()));
-            orderMapper.update(order);*/
 
             // 发票作废
             List<ExchangeOrderInvoiceBO> orderInvoiceBOList = orderExchangeRoMapper.selectInvoice(oe.getOrderNo());
@@ -347,24 +343,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             }
             // 插入订单日志
             insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminConfirmRemark(),"1");
-
-            //发送消息
-//            Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-//            if(order == null){
-//                LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
-//                throw new ServiceException(4102,"订单信息查询失败");
-//            }
-//            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-//            if(expressComp == null){
-//                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-//                throw new ServiceException(4102,"物流公司查询失败");
-//            }
-//            Message message = new Message();
-//            message.setBusinessId(oe.getOrderNo());
-//            message.setType("SPDD");
-//            message.setContent("您的宝贝已发出，运单号：（"+data.getExpressComp()+"+"+order.getExpressNo()+"），如有疑问请联系客服咨询4008873133");
-//            message.setUserId(order.getUserId());
-//            messageSendUtil.sendMessage(message, request);
         }
         return oe;
     }
@@ -522,15 +500,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.update(data);
 
             // 更新订单状态
-            /*Order order = new Order();
-            order.setOrderNo(data.getOrderNo());
-            order.setOrderStatus("10");
-            order = orderRoMapper.selectOne(order);
-            if (order != null) {
-                order.setOrderStatus("6");
-                order.setLastUpdate(new Date());
-                orderMapper.update(order);
-            }*/
             // 插入订单日志
             insertLog(data.getOrderNo(), "4", "", "系统自动完成收货","1");
         });
