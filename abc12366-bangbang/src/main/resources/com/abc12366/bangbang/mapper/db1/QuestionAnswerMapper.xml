@@ -136,6 +136,9 @@
              <if test="trampleNum != null">
                  trampleNum = #{trampleNum},
              </if>
+             <if test="reportNum != null">
+                 reportNum = #{reportNum},
+             </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
 			</if>

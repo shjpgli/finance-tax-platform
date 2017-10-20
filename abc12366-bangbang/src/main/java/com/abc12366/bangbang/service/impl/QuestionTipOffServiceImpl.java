@@ -82,7 +82,7 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         questionTipOffBo.setCreateTime(new Date());
         questionTipOffBo.setId(uuid);
 
-        Map map = MapUtil.kv("sourceId", questionTipOffBo.getSourceId(), "userId", questionTipOffBo.getCreateUser());
+        Map map = MapUtil.kv("sourceId", questionTipOffBo.getSourceId(), "createUser", questionTipOffBo.getCreateUser());
         int cnt =  questionTipOffRoMapper.selectExist(map);
         if(cnt >0){
             throw new ServiceException(6370);

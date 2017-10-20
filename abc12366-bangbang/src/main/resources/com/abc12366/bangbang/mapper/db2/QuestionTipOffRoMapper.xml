@@ -34,7 +34,7 @@
         SELECT
         count(id)
         FROM bb_question_tip_off
-        WHERE sourceId = #{sourceId} and userId = #{userId}
+        WHERE sourceId = #{sourceId} and createUser = #{createUser}
     </select>
 
     <!-- 查询（根据主键ID查询） -->
