@@ -40,7 +40,7 @@ public class QuestionExpertController {
     /* 专家列表查询 */
     @GetMapping(path = "/view/{id}")
     public ResponseEntity selectOne(@PathVariable String id){
-        QuestionExpert expert = questionExpertService.selectOne(id);
+        QuestionExpertBO expert = questionExpertService.selectOne(id);
         return ResponseEntity.ok(Utils.kv("data", expert));
     }
 

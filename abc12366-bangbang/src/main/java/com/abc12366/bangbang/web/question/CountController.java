@@ -69,4 +69,47 @@ public class CountController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) likeBOList, "total", ((Page) likeBOList).getTotal
                         ()));
     }
+    /**
+     * 回答总数
+     */
+    @GetMapping(path = "/answers")
+    public ResponseEntity selectAnswers(
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionCountBo> likeBOList = service.selectAnswers();
+        return (likeBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) likeBOList, "total", ((Page) likeBOList).getTotal
+                        ()));
+    }
+    /**
+     * 勋章
+     */
+    @GetMapping(path = "/medal")
+    public ResponseEntity selectMedal(
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionCountBo> likeBOList = service.selectMedal();
+        return (likeBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) likeBOList, "total", ((Page) likeBOList).getTotal
+                        ()));
+    }
+    /**
+     * 专家采纳
+     */
+    @GetMapping(path = "/")
+    public ResponseEntity selectAcceptExpert(
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionCountBo> likeBOList = service.selectAcceptExpert();
+        return (likeBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) likeBOList, "total", ((Page) likeBOList).getTotal
+                        ()));
+    }
+
 }

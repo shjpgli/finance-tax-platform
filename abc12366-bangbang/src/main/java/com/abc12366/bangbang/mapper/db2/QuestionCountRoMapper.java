@@ -15,5 +15,7 @@ public interface QuestionCountRoMapper {
     List<QuestionCountBo> selectAttention();
     List<QuestionCountBo> selectAccept();
 
-
+    List<QuestionCountBo> selectAnswers();
+    List<QuestionCountBo> selectMedal();
+    List<QuestionCountBo> selectAcceptExpert();
 }

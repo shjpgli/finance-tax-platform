@@ -35,7 +35,7 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
     }
 
     @Override
-    public QuestionExpert selectOne(String id) {
+    public QuestionExpertBO selectOne(String id) {
         return questionExpertRoMapper.selectByPrimaryKey(id);
     }
 
