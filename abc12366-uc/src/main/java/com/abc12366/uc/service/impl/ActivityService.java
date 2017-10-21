@@ -189,7 +189,7 @@ public class ActivityService implements IActivityService {
         List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
-            throw new ServiceException(6003);
+            throw new ServiceException(6005);
         }
         // 取第一条记录
         WxRedEnvelop redEnvelop = dataList.get(0);
@@ -363,7 +363,7 @@ public class ActivityService implements IActivityService {
     /**
      * 查询未抽奖的口令，过滤已中奖、已抽奖的数据
      */
-    public List<WxRedEnvelop> selectRedEnvelop(String activityId, String secret) {
+    private List<WxRedEnvelop> selectRedEnvelop(String activityId, String secret) {
         WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                 .activityId(activityId)
                 .secret(secret)
