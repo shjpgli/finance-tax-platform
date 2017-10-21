@@ -13,7 +13,7 @@ public interface QuestionMedalService {
 
     List<QuestionMedalBo> selectList();
 
-    QuestionMedalBo selectOne(String id);
+    QuestionMedal selectOne(String id);
 
     void add(QuestionMedal medal);
 

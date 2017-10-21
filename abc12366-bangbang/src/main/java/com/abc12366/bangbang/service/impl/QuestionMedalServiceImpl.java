@@ -30,7 +30,7 @@ public class QuestionMedalServiceImpl implements QuestionMedalService {
     }
 
     @Override
-    public QuestionMedalBo selectOne(String id) {
+    public QuestionMedal selectOne(String id) {
         return questionMedalRoMapper.selectByPrimaryKey(id);
     }
 
