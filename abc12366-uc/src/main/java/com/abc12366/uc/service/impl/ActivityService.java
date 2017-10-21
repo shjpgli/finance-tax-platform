@@ -439,7 +439,7 @@ public class ActivityService implements IActivityService {
      * 是否超出红包总数
      */
     private boolean isOverRedEnvelopCount(Integer num, String activityId) {
-        return activityRoMapper.queryRedEnvelopCount(activityId) >= num;
+        return activityRoMapper.queryRedEnvelopCount(activityId) > num;
     }
 
     /**
