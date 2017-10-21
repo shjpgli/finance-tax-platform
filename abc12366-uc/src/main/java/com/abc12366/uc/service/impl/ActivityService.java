@@ -154,7 +154,6 @@ public class ActivityService implements IActivityService {
                 .activityId(lotteryBO.getActivityId())
                 .openId(lotteryBO.getOpenId())
                 .secret(lotteryBO.getSecret())
-                .createTime(new Date())
                 .build();
 
         List<WxLotteryLog> lotteryLogs;
@@ -170,7 +169,6 @@ public class ActivityService implements IActivityService {
 
         // 规则类型为【关键字】时, 参与活动次数仅为1次
         if ("2".equals(activity.getRuleType())) {
-            lotteryLog.setCreateTime(null);
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
@@ -179,13 +177,15 @@ public class ActivityService implements IActivityService {
             }
         }
 
-        LOGGER.info("记录抽奖日志");
-        activityMapper.insertLotteryLog(lotteryLog);
-
         LOGGER.info("是否超出红包总数");
         if (isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
             throw new ServiceException(6005);
         }
+
+        LOGGER.info("记录抽奖日志");
+        lotteryLog.setCreateTime(now);
+        activityMapper.insertLotteryLog(lotteryLog);
+
         List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
@@ -205,7 +205,7 @@ public class ActivityService implements IActivityService {
                 redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
                 // 已中奖未发送
                 redEnvelop.setSendStatus("0");
-                redEnvelop.setSendTime(new Date());
+                redEnvelop.setSendTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
                 redEnvelop.setAmount(activity.getAmount());
@@ -219,7 +219,7 @@ public class ActivityService implements IActivityService {
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
                 redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
-                redEnvelop.setReceiveTime(new Date());
+                redEnvelop.setReceiveTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
                 redEnvelop.setAmount(activity.getAmount());
