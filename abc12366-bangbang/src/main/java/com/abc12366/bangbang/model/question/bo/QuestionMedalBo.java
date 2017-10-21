@@ -16,7 +16,7 @@ public class QuestionMedalBo {
     private String name;
 
     /**获取条件**/
-    private String condition;
+    private String acquireCondition;
 
     /**描述**/
     private String description;
@@ -52,12 +52,13 @@ public class QuestionMedalBo {
         return this.name;
     }
 
-    public void setCondition(String condition){
-        this.condition = condition;
+    public String getAcquireCondition() {
+        return acquireCondition;
     }
 
-    public String getCondition(){
-        return this.condition;
+    public QuestionMedalBo setAcquireCondition(String acquireCondition) {
+        this.acquireCondition = acquireCondition;
+        return this;
     }
 
     public void setDescription(String description){
