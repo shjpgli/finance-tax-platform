@@ -183,7 +183,7 @@ public class ActivityService implements IActivityService {
         }
 
         LOGGER.info("是否超出红包总数");
-        if (isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
+        if (!isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
             throw new ServiceException(6005);
         }
         List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret());
@@ -439,7 +439,7 @@ public class ActivityService implements IActivityService {
      * 是否超出红包总数
      */
     private boolean isOverRedEnvelopCount(Integer num, String activityId) {
-        return num <= activityRoMapper.queryRedEnvelopCount(activityId);
+        return activityRoMapper.queryRedEnvelopCount(activityId) >= num;
     }
 
     /**
