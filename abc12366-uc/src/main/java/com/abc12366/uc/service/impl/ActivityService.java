@@ -163,13 +163,10 @@ public class ActivityService implements IActivityService {
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
-            if (lotteryLogs.size() > activity.getTimes()) {
+            if (lotteryLogs.size() >= activity.getTimes()) {
                 throw new ServiceException(6006);
             }
         }
-
-        LOGGER.info("记录抽奖日志");
-        activityMapper.insertLotteryLog(lotteryLog);
 
         // 规则类型为【关键字】时, 参与活动次数仅为1次
         if ("2".equals(activity.getRuleType())) {
@@ -177,16 +174,19 @@ public class ActivityService implements IActivityService {
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
-            if (lotteryLogs.size() > 1) {
+            if (lotteryLogs.size() >= 1) {
                 throw new ServiceException(6006);
             }
         }
 
+        LOGGER.info("记录抽奖日志");
+        activityMapper.insertLotteryLog(lotteryLog);
+
         LOGGER.info("是否超出红包总数");
-        if (!isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
+        if (isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
             throw new ServiceException(6005);
         }
-        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret());
+        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
             throw new ServiceException(6003);
@@ -439,7 +439,7 @@ public class ActivityService implements IActivityService {
      * 是否超出红包总数
      */
     private boolean isOverRedEnvelopCount(Integer num, String activityId) {
-        return activityRoMapper.queryRedEnvelopCount(activityId) > num;
+        return num <= activityRoMapper.queryRedEnvelopCount(activityId);
     }
 
     /**

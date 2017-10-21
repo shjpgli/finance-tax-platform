@@ -79,7 +79,7 @@
         <where>
             receiveStatus is null and sendStatus is null
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
-            <if test="secret != null and secret != ''">and find_in_set(#{secret}, replace(secret, '#', ','))</if>
+            <if test="secret != null and secret != ''">and secret = #{secret}</if>
         </where>
     </select>
 
@@ -87,7 +87,7 @@
     <select id="queryRedEnvelopCount" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT count(id) FROM uc_wxredenvelop
         WHERE
-        (sendStatus = '1' or sendStatus = '2')
+        sendStatus is NOT NULL
         and activityId = #{activityId}
     </select>
 
