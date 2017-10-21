@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionMedal">
 		 INSERT INTO bb_question_medal
- 		(id,image,name,condition,description,status,updateAdmin,updateTime) 
+ 		(id,image,name,acquireCondition,description,status,updateAdmin,updateTime) 
 		 VALUES 
- 		(#{id},#{image},#{name},#{condition},#{description},#{status},#{updateAdmin},#{updateTime}) 
+ 		(#{id},#{image},#{name},#{acquireCondition},#{description},#{status},#{updateAdmin},now())
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -30,8 +30,8 @@
 			<if test="name != null">
 				 name,
 			</if>
-			<if test="condition != null">
-				 condition,
+			<if test="acquireCondition != null">
+				 acquireCondition,
 			</if>
 			<if test="description != null">
 				 description,
@@ -42,10 +42,7 @@
 			<if test="updateAdmin != null">
 				 updateAdmin,
 			</if>
-			<if test="updateTime != null">
-				 updateTime,
-			</if>
-
+				 updateTime
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="id!=null">
@@ -57,8 +54,8 @@
 			<if test="name!=null">
 				 #{name},
 			</if>
-			<if test="condition!=null">
-				 #{condition},
+			<if test="acquireCondition!=null">
+				 #{acquireCondition},
 			</if>
 			<if test="description!=null">
 				 #{description},
@@ -69,9 +66,7 @@
 			<if test="updateAdmin!=null">
 				 #{updateAdmin},
 			</if>
-			<if test="updateTime!=null">
-				 #{updateTime},
-			</if>
+			 now()
 		 </trim>
 	</insert>
 
@@ -85,8 +80,8 @@
 			<if test="name != null">
 				 name = #{name},
 			</if>
-			<if test="condition != null">
-				 condition = #{condition},
+			<if test="acquireCondition != null">
+				 acquireCondition = #{acquireCondition},
 			</if>
 			<if test="description != null">
 				 description = #{description},
@@ -97,10 +92,7 @@
 			<if test="updateAdmin != null">
 				 updateAdmin = #{updateAdmin},
 			</if>
-			<if test="updateTime != null">
-				 updateTime = #{updateTime},
-			</if>
-
+				 updateTime = now()
  		 </set>
 		 WHERE id = #{id}
 	</update>
@@ -111,11 +103,11 @@
 		 SET 
 			 image = #{image},
 			 name = #{name},
-			 condition = #{condition},
+			 acquireCondition = #{acquireCondition},
 			 description = #{description},
 			 status = #{status},
 			 updateAdmin = #{updateAdmin},
-			 updateTime = #{updateTime}
+			 updateTime = now()
 		 WHERE id = #{id}
 	</update>
 

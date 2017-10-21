@@ -20,13 +20,13 @@ public class QuestionMedal implements Serializable {
 	private String name;
 
 	/**获取条件**/
-	private String condition;
+	private String acquireCondition;
 
 	/**描述**/
 	private String description;
 
 	/**启用，停用**/
-	private Integer status;
+	private Boolean status;
 
 	/**管理员id**/
 	private String updateAdmin;
@@ -60,12 +60,13 @@ public class QuestionMedal implements Serializable {
 		return this.name;
 	}
 
-	public void setCondition(String condition){
-		this.condition = condition;
+	public String getAcquireCondition() {
+		return acquireCondition;
 	}
 
-	public String getCondition(){
-		return this.condition;
+	public QuestionMedal setAcquireCondition(String acquireCondition) {
+		this.acquireCondition = acquireCondition;
+		return this;
 	}
 
 	public void setDescription(String description){
@@ -76,12 +77,13 @@ public class QuestionMedal implements Serializable {
 		return this.description;
 	}
 
-	public void setStatus(Integer status){
-		this.status = status;
+	public Boolean getStatus() {
+		return status;
 	}
 
-	public Integer getStatus(){
-		return this.status;
+	public QuestionMedal setStatus(Boolean status) {
+		this.status = status;
+		return this;
 	}
 
 	public void setUpdateAdmin(String updateAdmin){
