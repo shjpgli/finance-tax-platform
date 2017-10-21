@@ -30,6 +30,6 @@ public interface QuestionMedalRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionMedalBo selectByPrimaryKey(@Param("id") String id);
+	QuestionMedal selectByPrimaryKey(@Param("id") String id);
 
 }

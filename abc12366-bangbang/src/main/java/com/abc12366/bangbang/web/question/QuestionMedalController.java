@@ -40,7 +40,7 @@ public class QuestionMedalController {
     /* 勋章查询 */
     @GetMapping(path = "/view/{id}")
     public ResponseEntity selectOne(@PathVariable String id){
-        QuestionMedalBo expert = questionMedalService.selectOne(id);
+        QuestionMedal expert = questionMedalService.selectOne(id);
         return ResponseEntity.ok(Utils.kv("data", expert));
     }
 
