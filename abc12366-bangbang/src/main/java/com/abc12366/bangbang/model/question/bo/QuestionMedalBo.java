@@ -22,7 +22,7 @@ public class QuestionMedalBo {
     private String description;
 
     /**启用，停用**/
-    private Integer status;
+    private Boolean status;
 
     /* 获取勋章的人数 */
     private Integer ownerCnt;
@@ -69,12 +69,13 @@ public class QuestionMedalBo {
         return this.description;
     }
 
-    public void setStatus(Integer status){
-        this.status = status;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public Integer getStatus(){
-        return this.status;
+    public QuestionMedalBo setStatus(Boolean status) {
+        this.status = status;
+        return this;
     }
 
     public Integer getOwnerCnt() {

@@ -18,11 +18,10 @@
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.bo.QuestionExpertBO" parameterType="java.lang.String">
-		SELECT t.*, t1.nickname, t1.phone, t2.realName
+		SELECT t.*,t1.username, t1.userPicturePath AS userImage, t1.nickname, t1.phone, t2.realName
 		FROM bb_question_expert t
 		JOIN abc12366_uc.uc_user t1 ON t1.id = t.userId
 		JOIN abc12366_uc.uc_user_extend t2 ON t2.userId = t.userId
-		WHERE t.id = #{id}
 	</select>
 
 </mapper>
