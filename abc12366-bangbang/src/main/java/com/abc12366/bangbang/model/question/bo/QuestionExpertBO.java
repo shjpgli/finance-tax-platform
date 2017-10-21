@@ -1,7 +1,5 @@
 package com.abc12366.bangbang.model.question.bo;
 
-import java.util.List;
-
 /**
  * @Author liuQi
  * @Date 2017/10/19 17:28
@@ -10,8 +8,16 @@ public class QuestionExpertBO {
 
     private String id;
 
+    /*用户ID*/
     private String userId;
 
+    /*用户名称*/
+    private String username;
+
+    /*用户图片*/
+    private String userImage;
+
+    /*用户昵称*/
     private String nickname;
 
     /*真实名称*/
@@ -50,6 +56,24 @@ public class QuestionExpertBO {
 
     public QuestionExpertBO setUserId(String userId) {
         this.userId = userId;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public QuestionExpertBO setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public QuestionExpertBO setUserImage(String userImage) {
+        this.userImage = userImage;
         return this;
     }
 
