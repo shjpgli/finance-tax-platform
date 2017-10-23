@@ -2,6 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
+import com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface QuestionSysBlockRoMapper {
      * 列表查询
      *
      **/
-    List<QuestionSysBlockBo> selectList();
+    List<QuestionSysBlockBo> selectList(QuestionSysBlockParamBo Param);
 
 
     /**
