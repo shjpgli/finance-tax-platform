@@ -143,6 +143,12 @@ public class ActivityService implements IActivityService {
         if (activity == null) {
             throw new ServiceException(6007);
         }
+
+        LOGGER.info("活动是否启用:{}", activity.getStatus());
+        if (!activity.getStatus()) {
+            throw new ServiceException(6002);
+        }
+
         Date now = new Date();
         LOGGER.info("活动是否在有效期内");
         if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
