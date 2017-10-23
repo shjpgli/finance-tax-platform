@@ -284,27 +284,34 @@
     </select>
 
     <!--订单和产品对应关系对象-->
-    <resultMap id="tradeLogBOMap" type="com.abc12366.uc.model.bo.TradeLogBO">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
+    <resultMap id="tradeBOMap" type="com.abc12366.uc.model.order.bo.TradeBO">
+        <id column="tradeNo" property="tradeNo" jdbcType="VARCHAR"/>
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
-        <result column="amount" property="amount" jdbcType="DOUBLE"/>
-        <result column="tradeStatus" property="tradeStatus" jdbcType="VARCHAR"/>
-        <result column="tradeType" property="tradeType" jdbcType="VARCHAR"/>
-        <result column="tradeTime" property="tradeTime" jdbcType="TIMESTAMP"/>
-        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <result column="compareStatus" property="compareStatus" jdbcType="VARCHAR"/>
-        <result column="compareTime" property="compareTime" jdbcType="TIMESTAMP"/>
+        <collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO">
+            <id column="id" property="id" jdbcType="VARCHAR"/>
+            <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+            <result column="amount" property="amount" jdbcType="DOUBLE"/>
+            <result column="tradeStatus" property="tradeStatus" jdbcType="VARCHAR"/>
+            <result column="tradeType" property="tradeType" jdbcType="VARCHAR"/>
+            <result column="tradeTime" property="tradeTime" jdbcType="TIMESTAMP"/>
+            <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+            <result column="compareStatus" property="compareStatus" jdbcType="VARCHAR"/>
+            <result column="compareTime" property="compareTime" jdbcType="TIMESTAMP"/>
+        </collection>
     </resultMap>
 
     <!--获取交易记录信息-->
-    <select id="getTradeLogBO" resultMap="tradeLogBOMap" parameterType="java.lang.String">
+    <select id="getTradeLogBO" resultMap="tradeBOMap" parameterType="java.lang.String">
         SELECT
-        l.id, l.orderNo, l.amount, l.tradeStatus, l.tradeTime, l.payMethod, l.createTime, l.lastUpdate, l.compareStatus, l.compareTime,l.aliTrandeNo,l.tradeType
+        t.tradeNo,t.orderNo,	t.createTime,	t.lastUpdate,
+        l.id, l.tradeNo, l.amount, l.tradeStatus, l.tradeTime, l.payMethod, l.createTime, l.lastUpdate, l.compareStatus, l.compareTime,l.aliTrandeNo,l.tradeType
         FROM uc_trade_log l
-        LEFT JOIN uc_trade t ON  t.tradeNo = l.id
-        WHERE orderNo = #{orderNo}
+        LEFT JOIN  uc_trade t on  t.tradeNo = l.tradeNo
+        where t.orderNo = #{orderNo}
     </select>
 
     <!--用户对象-->

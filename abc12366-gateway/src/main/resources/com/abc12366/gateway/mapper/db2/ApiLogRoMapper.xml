@@ -33,6 +33,7 @@
         select id, uri, userAgent, userId, appId, ip, inTime, outTime, status, version,method
         from gw_api_log_${startTime}
         <where>
+            1 = 1
             <if test="version != null and version != ''">
              AND   version = #{version}
             </if>
@@ -42,7 +43,7 @@
             <if test="uri != null and uri != ''">
               AND  uri = #{uri}
             </if>
-            <if test="appId != null appId uri != ''">
+            <if test="appId != null and appId != ''">
               AND  appId = #{appId}
             </if>
         </where>

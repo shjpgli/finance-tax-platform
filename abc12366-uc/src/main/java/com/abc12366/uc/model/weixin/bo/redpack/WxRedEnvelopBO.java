@@ -25,7 +25,7 @@ public class WxRedEnvelopBO {
      * 红包口令
      */
     @NotEmpty
-    @Length(min = 6, max = 32)
+    @Length(min = 2, max = 16)
     private String secret;
 
     /**
