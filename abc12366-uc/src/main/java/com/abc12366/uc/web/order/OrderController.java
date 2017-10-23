@@ -42,15 +42,16 @@ public class OrderController {
 
     /**
      * 订单列表管理
-     * @param pageNum   页数
-     * @param pageSize  条数
-     * @param orderNo   订单号
-     * @param username  用户名
-     * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @param orderStatus   订单状态
-     * @param phone 电话号码
-     * @return  订单列表
+     *
+     * @param pageNum     页数
+     * @param pageSize    条数
+     * @param orderNo     订单号
+     * @param username    用户名
+     * @param startTime   开始时间
+     * @param endTime     结束时间
+     * @param orderStatus 订单状态
+     * @param phone       电话号码
+     * @return 订单列表
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -86,15 +87,16 @@ public class OrderController {
 
     /**
      * 已完成订单列表查询
-     * @param pageNum   页数
-     * @param pageSize  条数
-     * @param name  商品名称
-     * @param tradeMethod   交易方式
-     * @param status    状态
-     * @param userId    用户ID
-     * @param isInvoice 是否开发票
-     * @param startTime 开始时间
-     * @param endTime   结束时间
+     *
+     * @param pageNum     页数
+     * @param pageSize    条数
+     * @param name        商品名称
+     * @param tradeMethod 交易方式
+     * @param status      状态
+     * @param userId      用户ID
+     * @param isInvoice   是否开发票
+     * @param startTime   开始时间
+     * @param endTime     结束时间
      * @return 订单列表
      */
     @GetMapping(path = "/user")
@@ -136,9 +138,10 @@ public class OrderController {
 
     /**
      * 用户所有订单查询，未开票的订单
+     *
      * @param pageNum   页数
      * @param pageSize  条数
-     * @param name  商品名称
+     * @param name      商品名称
      * @param userId    用户ID
      * @param goodsType 商品类型
      * @param startTime 开始时间
@@ -163,7 +166,7 @@ public class OrderController {
         goodsBO.setName(name);
 //        order.setGoodsBO(goodsBO);
         order.setIsInvoice(false);
-//        order.setGoodsType(goodsType);
+        order.setGoodsType(goodsType);
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DataUtils.StrToDate(startTime));
         }
@@ -180,9 +183,10 @@ public class OrderController {
 
     /**
      * 用户所有订单查询,未开票和已开票的订单
+     *
      * @param pageNum   页数
      * @param pageSize  条数
-     * @param name  商品名称
+     * @param name      商品名称
      * @param userId    用户ID
      * @param startTime 开始时间
      * @param endTime   结束时间
@@ -260,7 +264,8 @@ public class OrderController {
 
     /**
      * 查询订单详情
-     * @param orderNo   订单号
+     *
+     * @param orderNo 订单号
      * @return 订单详情
      */
     @GetMapping(path = "/select/{orderNo}")
@@ -273,6 +278,7 @@ public class OrderController {
 
     /**
      * 导出订单信息
+     *
      * @return 订单列表
      */
     @GetMapping(path = "/export")
@@ -292,15 +298,16 @@ public class OrderController {
                                       @PathVariable("expressCompId") String expressCompId,
                                       HttpServletRequest request) {
         LOGGER.info("{}", orderBOList);
-        orderService.selectImportOrder(orderBOList,expressCompId,request);
+        orderService.selectImportOrder(orderBOList, expressCompId, request);
         return ResponseEntity.ok(Utils.kv());
     }
 
 
     /**
      * 用户下单
+     *
      * @param orderBO 订单信息
-     * @param userId   用户 ID
+     * @param userId  用户 ID
      * @return 订单信息
      */
     @PostMapping(path = "/submit/{userId}")
@@ -314,8 +321,9 @@ public class OrderController {
 
     /**
      * 用户修改订单
+     *
      * @param orderUpdateBO 订单信息
-     * @param userId 用户ID
+     * @param userId        用户ID
      * @return 订单信息
      */
     @PostMapping(path = "/update/{userId}")
@@ -328,30 +336,32 @@ public class OrderController {
     }
 
     /**
-     * 用户将订单改为支付中，虚拟订单
+     * 用户将订单改为支付中
+     *
      * @param orderPayBO 支付信息
      * @param request
      * @return 订单信息
      */
     @PostMapping(path = "/payment")
-    public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO,HttpServletRequest request) {
+    public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO, HttpServletRequest request) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"RMB", request);
+        OrderBO bo = orderService.paymentOrder(orderPayBO, "RMB", request);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
      * 用户交易积分订单
+     *
      * @param orderPayBO 支付信息
      * @param request
      * @return 订单信息
      */
     @PostMapping(path = "/paypoints")
-    public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO,HttpServletRequest request) {
+    public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO, HttpServletRequest request) {
         LOGGER.info("{}{}", orderPayBO);
         orderPayBO.setPayMethod("POINTS");
-        OrderBO bo = orderService.paymentOrder(orderPayBO,"POINTS",request);
+        OrderBO bo = orderService.paymentOrder(orderPayBO, "POINTS", request);
         LOGGER.info("{}", bo);
 
         return ResponseEntity.ok(Utils.kv("data", bo));
@@ -360,12 +370,13 @@ public class OrderController {
 
     /**
      * 用户确认收货
+     *
      * @param orderNo 订单号
-     * @param userId   用户ID
+     * @param userId  用户ID
      */
     @PostMapping(path = "/confirm/{orderNo}/{userId}")
-    public ResponseEntity confirmOrder(@PathVariable("orderNo") String orderNo,@PathVariable("userId") String userId) {
-        LOGGER.info("{}{}", orderNo,userId);
+    public ResponseEntity confirmOrder(@PathVariable("orderNo") String orderNo, @PathVariable("userId") String userId) {
+        LOGGER.info("{}{}", orderNo, userId);
         Order order = new Order();
         order.setOrderNo(orderNo);
         order.setUserId(userId);
@@ -375,18 +386,20 @@ public class OrderController {
 
     /**
      * 订单发货
+     *
      * @param orderOperationBO 订单操作信息
      * @param request
      */
     @PostMapping(path = "/send")
-    public ResponseEntity sendOrder(@Valid @RequestBody OrderOperationBO orderOperationBO,HttpServletRequest request) {
+    public ResponseEntity sendOrder(@Valid @RequestBody OrderOperationBO orderOperationBO, HttpServletRequest request) {
         LOGGER.info("{}", orderOperationBO);
-        orderService.sendOrder(orderOperationBO,request);
+        orderService.sendOrder(orderOperationBO, request);
         return ResponseEntity.ok(Utils.kv());
     }
 
     /**
      * 订单作废
+     *
      * @param orderOperationBO 订单操作信息
      */
     @PostMapping(path = "/invalid")
@@ -398,6 +411,7 @@ public class OrderController {
 
     /**
      * 用户取消订单
+     *
      * @param orderCancelBO 订单取消信息
      * @return 订单信息
      */
@@ -411,8 +425,9 @@ public class OrderController {
 
     /**
      * 删除购物车订单
+     *
      * @param userId 用户ID
-     * @param id   订单号
+     * @param id     订单号
      * @return
      */
     @DeleteMapping(path = "/delete/{userId}/{id}")
@@ -426,6 +441,7 @@ public class OrderController {
 
     /**
      * 反馈虚拟产品订单信息
+     *
      * @param orderBO 订单信息
      * @return
      */
@@ -440,9 +456,10 @@ public class OrderController {
 
     /**
      * 退单管理列表
-     * @param pageNum 页数
+     *
+     * @param pageNum  页数
      * @param pageSize 条数
-     * @param orderNo 订单号
+     * @param orderNo  订单号
      * @param username 用户名
      * @return 退单列表
      */
@@ -469,9 +486,10 @@ public class OrderController {
 
     /**
      * 用户申请退单
+     *
      * @param orderBack 退单信息
-     * @param userId 用户ID
-     * @param orderNo 订单号
+     * @param userId    用户ID
+     * @param orderNo   订单号
      * @return 退单信息
      */
     @PostMapping(path = "/back/apply/{userId}/{orderNo}")
@@ -487,6 +505,7 @@ public class OrderController {
 
     /**
      * 管理员审核退单申请
+     *
      * @param orderBack
      * @return 退单信息
      */
@@ -500,6 +519,7 @@ public class OrderController {
 
     /**
      * 用户提交退单
+     *
      * @param orderBack 退单信息
      * @return 退单信息
      */
@@ -513,8 +533,9 @@ public class OrderController {
 
     /**
      * 根据GoodsId和UserId查询订单信息
+     *
      * @param goodsId 商品 ID
-     * @param userId 用户ID
+     * @param userId  用户ID
      * @return
      */
     @GetMapping(path = "/goods")

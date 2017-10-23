@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.OrderProductRoMapper">
 
     <sql id="Base_Column_List">
-        id,	goodsPrice,	num,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate,	productId,	goodsId,	specInfo,	isReturn,	isExchange,	imageUrl,	goodsType,	browseUrl,	tradingChannels
+        orderNo,	goodsPrice,	num,	dealPrice,	name,	categoryId,	category,	weight,	createTime,	lastUpdate,	productId,	goodsId,	specInfo,	isReturn,	isExchange,	imageUrl,	goodsType,	browseUrl,	tradingChannels
     </sql>
 
     <resultMap type="com.abc12366.uc.model.order.bo.OrderProductBO" id="orderProductRoMap">
