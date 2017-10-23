@@ -57,6 +57,37 @@
         order by a.createTime desc
     </select>
 
+    <select id="selectDzsbList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO"
+            parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
+        SELECT
+        uu.username,
+        uu.nickname,
+        uud.id,
+        uud.userId,
+        uud.nsrsbh,
+        uud.nsrmc,
+        uud.swjgmc,
+        uud.status,
+        uud.createTime,
+        uud.lastUpdate,
+        'dzsb' bindType
+        FROM uc_user_dzsb uud
+        LEFT JOIN uc_user uu
+        ON uud.userId = uu.id
+        <where>
+            <if test="username!=null">
+                and uu.username=#{username}
+            </if>
+            <if test="nsrsbh!=null">
+                and uud.nsrsbh=#{nsrsbh}
+            </if>
+            <if test="status!=null">
+                and uud.status=#{status}
+            </if>
+        </where>
+        
+    </select>
+
     <select id="selectDzsb" resultType="com.abc12366.uc.model.bo.UserDzsbBO" parameterType="java.lang.String">
         select id,userId,djxh,nsrsbh,nsrmc,shxydm,swjgMc,swjgDm,status,createTime,lastUpdate
         from uc_user_dzsb
