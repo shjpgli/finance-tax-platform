@@ -175,4 +175,14 @@
          on uue.userId=uu.id
          where uu.id=#{userId}
     </select>
+    
+    <select id="getAllNomalCont" resultType="java.lang.Integer">
+        select count(id) from uc_user where status = true
+    </select>
+    
+    
+    <select id="getNomalList" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.util.Map">
+        SELECT id,wxopenid,phone,vipLevel,vipExpireDate FROM uc_user where status = true ORDER BY id LIMIT #{begin},#{size};
+    </select>
+    
 </mapper>
