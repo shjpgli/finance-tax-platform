@@ -26,7 +26,7 @@ import java.util.List;
  * modify by liuQi 2017-10-23
  */
 @RestController
-@RequestMapping(path = "/words", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/sensitiveWords", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class SensitiveWordsController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensitiveWordsController.class);
@@ -38,7 +38,7 @@ public class SensitiveWordsController {
      * 敏感词列表管理
      * @return
      */
-    @GetMapping
+    @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                      @RequestParam(value = "keywords", required = false) String keywords) {
@@ -60,7 +60,7 @@ public class SensitiveWordsController {
      * @param id
      * @return
      */
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/view/{id}")
     public ResponseEntity<?> selectOne(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         SensitiveWords sensitiveWords = sensitiveWordsService.selectOne(id);
@@ -72,7 +72,7 @@ public class SensitiveWordsController {
      * 敏感词新增
      * @return
      */
-    @PostMapping
+    @PostMapping(path = "/add")
     public ResponseEntity addSensitiveWords(@Valid @RequestBody SensitiveWords sensitiveWords) {
         LOGGER.info("{}", sensitiveWords);
         SensitiveWords bo = sensitiveWordsService.add(sensitiveWords);
@@ -83,17 +83,15 @@ public class SensitiveWordsController {
     /**
      * 修改敏感词
      * @param sensitiveWords
-     * @param id
      * @return
      */
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity update(@Valid @RequestBody SensitiveWords sensitiveWords, @PathVariable("id") String id) {
+    @PutMapping(path = "/modify")
+    public ResponseEntity update(@Valid @RequestBody SensitiveWords sensitiveWords) {
         LOGGER.info("{}", sensitiveWords);
-        sensitiveWords.setId(id);
         SensitiveWords bo = sensitiveWordsService.update(sensitiveWords);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -101,7 +99,7 @@ public class SensitiveWordsController {
      * @param id
      * @return
      */
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         sensitiveWordsService.delete(id);
