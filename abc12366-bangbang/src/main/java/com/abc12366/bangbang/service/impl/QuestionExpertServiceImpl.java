@@ -4,6 +4,7 @@ import com.abc12366.bangbang.mapper.db1.QuestionExpertMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionExpertRoMapper;
 import com.abc12366.bangbang.model.question.QuestionExpert;
 import com.abc12366.bangbang.model.question.bo.QuestionExpertBO;
+import com.abc12366.bangbang.model.question.bo.QuestionExpertParamBo;
 import com.abc12366.bangbang.service.QuestionExpertService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -30,8 +31,8 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
     private QuestionExpertRoMapper questionExpertRoMapper;
 
     @Override
-    public List<QuestionExpertBO> selectList() {
-        return questionExpertRoMapper.selectList();
+    public List<QuestionExpertBO> selectList(QuestionExpertParamBo param) {
+        return questionExpertRoMapper.selectList(param);
     }
 
     @Override

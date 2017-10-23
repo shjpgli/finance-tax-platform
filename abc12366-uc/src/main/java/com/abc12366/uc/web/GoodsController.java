@@ -41,12 +41,14 @@ public class GoodsController {
     /**
      * 商品后台管理查询
      *
-     * @param pageNum
-     * @param pageSize
-     * @param name
-     * @param categoryId
-     * @param recommendType
-     * @return
+     * @param pageNum       页数
+     * @param pageSize      条数
+     * @param name          商品名称
+     * @param status        状态
+     * @param categoryId    分类ID
+     * @param recommendType 推荐类型
+     * @param goodsType     商品类型
+     * @return 商品列表信息
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -74,8 +76,9 @@ public class GoodsController {
 
     /**
      * 根据商品名称查询商品
-     * @param name
-     * @return
+     *
+     * @param name 商品名称
+     * @return 商品信息
      */
     @GetMapping(path = "/name")
     public ResponseEntity selectListByName(@RequestParam(value = "name", required = false) String name) {
@@ -91,12 +94,14 @@ public class GoodsController {
     /**
      * 商品前台列表查询
      *
-     * @param pageNum
-     * @param pageSize
-     * @param name
-     * @param categoryId
-     * @param recommendType
-     * @return
+     * @param pageNum       页数
+     * @param pageSize      条数
+     * @param name          商品名称
+     * @param tradeMethod   交易方式
+     * @param categoryId    分类ID
+     * @param goodsType     商品类型
+     * @param recommendType 推荐类型
+     * @return 商品列表信息
      */
     @GetMapping(path = "/user")
     public ResponseEntity selectGoodsList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -106,7 +111,7 @@ public class GoodsController {
                                           @RequestParam(value = "categoryId", required = false) String categoryId,
                                           @RequestParam(value = "goodsType", required = false) String goodsType,
                                           @RequestParam(value = "recommendType", required = false) String
-                                                      recommendType) {
+                                                  recommendType) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         Goods goods = new Goods();
         goods.setName(name);
@@ -127,8 +132,8 @@ public class GoodsController {
     /**
      * 新增商品
      *
-     * @param goodsBO
-     * @return
+     * @param goodsBO 商品对象
+     * @return 商品信息
      */
     @PostMapping
     public ResponseEntity addGoods(@Valid @RequestBody GoodsBO goodsBO) {
@@ -141,8 +146,8 @@ public class GoodsController {
     /**
      * 查询单个商品
      *
-     * @param id
-     * @return
+     * @param id 商品ID
+     * @return 商品信息
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectGoods(@PathVariable("id") String id) {
@@ -155,8 +160,8 @@ public class GoodsController {
     /**
      * 前台用户查询单个商品
      *
-     * @param id
-     * @return
+     * @param id 商品ID
+     * @return 商品信息
      */
     @GetMapping(path = "/user/{id}")
     public ResponseEntity selectUserGoods(@PathVariable("id") String id) {
@@ -169,8 +174,8 @@ public class GoodsController {
     /**
      * 前台查询单个课程商品
      *
-     * @param id
-     * @return
+     * @param id 商品ID
+     * @return 商品信息
      */
     @GetMapping(path = "/curriculum/{id}")
     public ResponseEntity selectCurriculumGoods(@PathVariable("id") String id) {
@@ -184,9 +189,9 @@ public class GoodsController {
     /**
      * 修改商品信息
      *
-     * @param goodsBO
-     * @param id
-     * @return
+     * @param goodsBO 商品信息
+     * @param id      商品ID
+     * @return 商品信息
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateGoods(@Valid @RequestBody GoodsBO goodsBO, @PathVariable("id") String id) {
@@ -200,7 +205,7 @@ public class GoodsController {
     /**
      * 删除商品信息
      *
-     * @param id
+     * @param id 商品ID
      * @return
      */
     @DeleteMapping(path = "/{id}")
@@ -213,6 +218,7 @@ public class GoodsController {
     /**
      * 审核商品信息
      *
+     * @param goodsCheckBO 商品审核信息
      * @return
      */
     @PutMapping(path = "/check")
@@ -226,7 +232,8 @@ public class GoodsController {
     /**
      * 产品分类列表
      *
-     * @return
+     * @param category 类别名称
+     * @return 类别信息
      */
     @GetMapping(path = "/category")
     public ResponseEntity selectGategoryList(
@@ -244,8 +251,8 @@ public class GoodsController {
     /**
      * 查询单个产品分类
      *
-     * @param id
-     * @return
+     * @param id 类别ID
+     * @return 类别信息
      */
     @GetMapping(path = "/category/{id}")
     public ResponseEntity selectGategory(@PathVariable("id") String id) {
@@ -258,8 +265,8 @@ public class GoodsController {
     /**
      * 新增产品分类
      *
-     * @param goodsCategoryBO
-     * @return
+     * @param goodsCategoryBO 商品类别对象
+     * @return 类别信息
      */
     @PostMapping(path = "/category")
     public ResponseEntity addGategory(@Valid @RequestBody GoodsCategoryBO goodsCategoryBO) {
@@ -272,9 +279,9 @@ public class GoodsController {
     /**
      * 查找商品分类详情
      *
-     * @param goodsCategoryBO
-     * @param id
-     * @return
+     * @param goodsCategoryBO 商品类别对象
+     * @param id              商品类别ID
+     * @return 类别信息
      */
     @PutMapping(path = "/category/{id}")
     public ResponseEntity updateGategory(@Valid @RequestBody GoodsCategoryBO goodsCategoryBO, @PathVariable("id")
@@ -289,7 +296,7 @@ public class GoodsController {
     /**
      * 删除商品分类
      *
-     * @param id
+     * @param id 商品类别ID
      * @return
      */
     @DeleteMapping(path = "/category/{id}")
@@ -300,10 +307,12 @@ public class GoodsController {
     }
 
     /**
-     *商品操作日志
-     * @param pageNum
-     * @param pageSize
-     * @return
+     * 商品操作日志
+     *
+     * @param pageNum  页数
+     * @param pageSize 条数
+     * @param id       日志 ID
+     * @return 日志列表
      */
     @GetMapping(path = "/log")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,

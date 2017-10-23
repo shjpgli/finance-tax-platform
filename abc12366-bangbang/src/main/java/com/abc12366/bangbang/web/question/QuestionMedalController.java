@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -28,9 +30,12 @@ public class QuestionMedalController {
     /* 勋章列表查询 */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "name", defaultValue = "") String name){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionMedalBo> list = questionMedalService.selectList();
+        Map map = new HashMap<>();
+        map.put("name", name);
+        List<QuestionMedalBo> list = questionMedalService.selectList(map);
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -40,7 +45,7 @@ public class QuestionMedalController {
     /* 勋章查询 */
     @GetMapping(path = "/view/{id}")
     public ResponseEntity selectOne(@PathVariable String id){
-        QuestionMedalBo expert = questionMedalService.selectOne(id);
+        QuestionMedal expert = questionMedalService.selectOne(id);
         return ResponseEntity.ok(Utils.kv("data", expert));
     }
 

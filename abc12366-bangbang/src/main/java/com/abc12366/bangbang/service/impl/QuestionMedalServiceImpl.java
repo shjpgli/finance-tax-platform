@@ -5,10 +5,12 @@ import com.abc12366.bangbang.mapper.db2.QuestionMedalRoMapper;
 import com.abc12366.bangbang.model.question.QuestionMedal;
 import com.abc12366.bangbang.model.question.bo.QuestionMedalBo;
 import com.abc12366.bangbang.service.QuestionMedalService;
+import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -24,22 +26,25 @@ public class QuestionMedalServiceImpl implements QuestionMedalService {
     private QuestionMedalRoMapper questionMedalRoMapper;
 
     @Override
-    public List<QuestionMedalBo> selectList() {
-        return questionMedalRoMapper.selectList(null);
+    public List<QuestionMedalBo> selectList(Map map) {
+        return questionMedalRoMapper.selectList(map);
     }
 
     @Override
-    public QuestionMedalBo selectOne(String id) {
+    public QuestionMedal selectOne(String id) {
         return questionMedalRoMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public void add(QuestionMedal medal) {
+        medal.setId(Utils.uuid());
+        medal.setUpdateAdmin(Utils.getAdminId());
         questionMedalMapper.insert(medal);
     }
 
     @Override
     public void modify(QuestionMedal medal) {
+        medal.setUpdateAdmin(Utils.getAdminId());
         questionMedalMapper.updateByPrimaryKeySelective(medal);
     }
 

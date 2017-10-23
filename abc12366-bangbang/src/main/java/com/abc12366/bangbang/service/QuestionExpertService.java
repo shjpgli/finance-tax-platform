@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.question.QuestionExpert;
 import com.abc12366.bangbang.model.question.bo.QuestionExpertBO;
+import com.abc12366.bangbang.model.question.bo.QuestionExpertParamBo;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public interface QuestionExpertService {
 
     /* 查询用户列表 */
-    List<QuestionExpertBO> selectList();
+    List<QuestionExpertBO> selectList(QuestionExpertParamBo param);
 
     /* 单个查询 */
     QuestionExpertBO selectOne(String id);

@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -19,25 +20,24 @@ public class SensitiveWords implements Serializable {
     private String id;
 
     /**
-     * 关键字，多个关键字逗号分隔
+     * 关键字
      **/
     private String keywords;
 
     /**
-     * 排序
+     * 是否有效
      **/
-    private Integer sort;
+    private Boolean status;
 
     /**
-     * 匹配类型：1.全匹配 2.模糊匹配
+     * 修改时间
      **/
-    private String type;
+    private java.util.Date updateTime;
 
-    /****/
-    private java.util.Date createTime;
-
-    /****/
-    private java.util.Date lastUpdate;
+    /**
+     * 修改adminId
+     **/
+    private String updateAdmin;
 
     public String getId() {
         return this.id;
@@ -55,36 +55,30 @@ public class SensitiveWords implements Serializable {
         this.keywords = keywords;
     }
 
-    public Integer getSort() {
-        return this.sort;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public void setSort(Integer sort) {
-        this.sort = sort;
+    public SensitiveWords setStatus(Boolean status) {
+        this.status = status;
+        return this;
     }
 
-    public String getType() {
-        return this.type;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public SensitiveWords setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+        return this;
     }
 
-    public java.util.Date getCreateTime() {
-        return this.createTime;
+    public String getUpdateAdmin() {
+        return updateAdmin;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
+    public SensitiveWords setUpdateAdmin(String updateAdmin) {
+        this.updateAdmin = updateAdmin;
+        return this;
     }
-
-    public java.util.Date getLastUpdate() {
-        return this.lastUpdate;
-    }
-
-    public void setLastUpdate(java.util.Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
 }

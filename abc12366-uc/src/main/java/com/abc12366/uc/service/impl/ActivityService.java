@@ -143,6 +143,12 @@ public class ActivityService implements IActivityService {
         if (activity == null) {
             throw new ServiceException(6007);
         }
+
+        LOGGER.info("活动是否启用:{}", activity.getStatus());
+        if (!activity.getStatus()) {
+            throw new ServiceException(6002);
+        }
+
         Date now = new Date();
         LOGGER.info("活动是否在有效期内");
         if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
@@ -154,7 +160,6 @@ public class ActivityService implements IActivityService {
                 .activityId(lotteryBO.getActivityId())
                 .openId(lotteryBO.getOpenId())
                 .secret(lotteryBO.getSecret())
-                .createTime(new Date())
                 .build();
 
         List<WxLotteryLog> lotteryLogs;
@@ -163,21 +168,17 @@ public class ActivityService implements IActivityService {
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
-            if (lotteryLogs.size() > activity.getTimes()) {
+            if (lotteryLogs.size() >= activity.getTimes()) {
                 throw new ServiceException(6006);
             }
         }
 
-        LOGGER.info("记录抽奖日志");
-        activityMapper.insertLotteryLog(lotteryLog);
-
         // 规则类型为【关键字】时, 参与活动次数仅为1次
         if ("2".equals(activity.getRuleType())) {
-            lotteryLog.setCreateTime(null);
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
-            if (lotteryLogs.size() > 1) {
+            if (lotteryLogs.size() >= 1) {
                 throw new ServiceException(6006);
             }
         }
@@ -186,10 +187,15 @@ public class ActivityService implements IActivityService {
         if (isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
             throw new ServiceException(6005);
         }
-        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret());
+
+        LOGGER.info("记录抽奖日志");
+        lotteryLog.setCreateTime(now);
+        activityMapper.insertLotteryLog(lotteryLog);
+
+        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
-            throw new ServiceException(6003);
+            throw new ServiceException(6005);
         }
         // 取第一条记录
         WxRedEnvelop redEnvelop = dataList.get(0);
@@ -205,7 +211,7 @@ public class ActivityService implements IActivityService {
                 redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
                 // 已中奖未发送
                 redEnvelop.setSendStatus("0");
-                redEnvelop.setSendTime(new Date());
+                redEnvelop.setSendTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
                 redEnvelop.setAmount(activity.getAmount());
@@ -219,7 +225,7 @@ public class ActivityService implements IActivityService {
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
                 redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
-                redEnvelop.setReceiveTime(new Date());
+                redEnvelop.setReceiveTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
                 redEnvelop.setAmount(activity.getAmount());
@@ -292,8 +298,8 @@ public class ActivityService implements IActivityService {
     @Override
     public WxRedEnvelop resend(String id) {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
-        // 发送失败的记录
-        if (redEnvelop != null && "2".equals(redEnvelop.getSendStatus())) {
+        // 重新发送状态为【0-未发送、2-发送失败】的记录
+        if (redEnvelop != null && ("0".equals(redEnvelop.getSendStatus()) || "2".equals(redEnvelop.getSendStatus()))) {
             WxActivity activity = selectOne(redEnvelop.getActivityId());
             SendRedPack srp = new SendRedPack.Builder()
                     .nonce_str(redEnvelop.getId())
@@ -363,7 +369,7 @@ public class ActivityService implements IActivityService {
     /**
      * 查询未抽奖的口令，过滤已中奖、已抽奖的数据
      */
-    public List<WxRedEnvelop> selectRedEnvelop(String activityId, String secret) {
+    private List<WxRedEnvelop> selectRedEnvelop(String activityId, String secret) {
         WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                 .activityId(activityId)
                 .secret(secret)
