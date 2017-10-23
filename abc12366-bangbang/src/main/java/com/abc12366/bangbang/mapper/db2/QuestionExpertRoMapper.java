@@ -2,6 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionExpert;
 import com.abc12366.bangbang.model.question.bo.QuestionExpertBO;
+import com.abc12366.bangbang.model.question.bo.QuestionExpertParamBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface QuestionExpertRoMapper {
      * 列表查询
      *
      **/
-    List<QuestionExpertBO> selectList();
+    List<QuestionExpertBO> selectList(QuestionExpertParamBo param);
 
     /**
      *

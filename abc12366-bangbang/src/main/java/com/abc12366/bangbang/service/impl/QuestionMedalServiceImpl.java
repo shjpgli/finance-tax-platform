@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -25,8 +26,8 @@ public class QuestionMedalServiceImpl implements QuestionMedalService {
     private QuestionMedalRoMapper questionMedalRoMapper;
 
     @Override
-    public List<QuestionMedalBo> selectList() {
-        return questionMedalRoMapper.selectList(null);
+    public List<QuestionMedalBo> selectList(Map map) {
+        return questionMedalRoMapper.selectList(map);
     }
 
     @Override

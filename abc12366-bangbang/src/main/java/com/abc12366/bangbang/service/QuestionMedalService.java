@@ -4,6 +4,7 @@ import com.abc12366.bangbang.model.question.QuestionMedal;
 import com.abc12366.bangbang.model.question.bo.QuestionMedalBo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface QuestionMedalService {
 
-    List<QuestionMedalBo> selectList();
+    List<QuestionMedalBo> selectList(Map map);
 
     QuestionMedal selectOne(String id);
 
