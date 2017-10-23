@@ -22,7 +22,7 @@
         FROM bb_sensitive_words
         <where>
             1=1
-            <if test="keywords != null and keywords!=''">and subject LIKE CONCAT('%',#{keywords},'%')</if>
+            <if test="keywords != null and keywords!=''">and keywords LIKE CONCAT('%',#{keywords},'%')</if>
         </where>
     </select>
 
