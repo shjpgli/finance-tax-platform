@@ -45,4 +45,12 @@ public class MobileVerifyCodeController {
         moboleVerifyCodeService.verify(verifyParam);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    //获取注册验证码接口（校验号码是否已被注册）
+    @PostMapping(path = "/regis/code")
+    public ResponseEntity getRegisCode(@Valid @RequestBody GetCodeParam getCodeParam) throws IOException {
+        LOGGER.info("{}", getCodeParam);
+        moboleVerifyCodeService.getRegisCode(getCodeParam.getType().trim(), getCodeParam.getPhone().trim());
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

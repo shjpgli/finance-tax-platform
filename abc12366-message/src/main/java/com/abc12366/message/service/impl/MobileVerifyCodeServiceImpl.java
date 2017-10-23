@@ -7,9 +7,11 @@ import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.MessageSendLogMapper;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
 import com.abc12366.message.mapper.db2.MessageSendLogRoMapper;
+import com.abc12366.message.mapper.db2.MsgUcUserRoMapper;
 import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
 import com.abc12366.message.model.MessageSendLog;
 import com.abc12366.message.model.PhoneCode;
+import com.abc12366.message.model.PhoneExist;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.MobileVerifyCodeService;
 import com.abc12366.message.util.*;
@@ -64,6 +66,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     @Autowired
     private MessageSendLogRoMapper messageSendLogRoMapper;
 
+    @Autowired
+    private MsgUcUserRoMapper msgUcUserRoMapper;
+
     //获取验证码
     @Override
     public void getCode(String type, String phone) throws IOException {
@@ -94,13 +99,13 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         }
         //版本4.0阿里和友拍轮流发
         List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
-        if(sendLogList==null||sendLogList.size()<1){
+        if (sendLogList == null || sendLogList.size() < 1) {
             sendAliyunMessage(phone, type, code);
-        }else{
+        } else {
             MessageSendLog messageSendLog = sendLogList.get(0);
-            if(messageSendLog.getSendchanel().equals(MessageConstant.MSG_CHANNEL_ALI)){
+            if (messageSendLog.getSendchanel().equals(MessageConstant.MSG_CHANNEL_ALI)) {
                 sendYoupaiTemplate(phone, type, code);
-            }else{
+            } else {
                 sendAliyunMessage(phone, type, code);
             }
         }
@@ -322,7 +327,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         sendLogMapper.insert(sendLog);
     }
 
-    public boolean sendAliyunMessage(String phone, String codeType, String code){
+    public boolean sendAliyunMessage(String phone, String codeType, String code) {
         String accessId = SpringCtxHolder.getProperty("message.aliyun.accessid");
         String accessKey = SpringCtxHolder.getProperty("message.aliyun.accesskey");
         String endPoint = SpringCtxHolder.getProperty("message.aliyun.endpoint");
@@ -382,4 +387,18 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         return true;
     }
 
+    @Override
+    public void getRegisCode(String type, String phone) {
+        LOGGER.info("发送短信验证码参数：类型：{}，手机号码：{}", type, phone);
+        PhoneExist user = msgUcUserRoMapper.selectPhoneExist(phone);
+        if (user != null) {
+            throw new ServiceException(4117);
+        }
+        try {
+            getCode(type, phone);
+        } catch (Exception e) {
+            LOGGER.info("发送短信失败：{}", e.toString());
+            e.printStackTrace();
+        }
+    }
 }

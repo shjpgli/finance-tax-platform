@@ -14,5 +14,5 @@ public interface MobileVerifyCodeService {
 
     void verify(VerifyParam verifyParam);
 
-
+    void getRegisCode(String type, String phone);
 }
