@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -511,6 +512,18 @@ public class ContentController {
         LOGGER.info("{}", contentId);
         //更新浏览量信息
         String rtn = contentService.updateViewsDay(contentId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 更新浏览量
+     */
+    @PutMapping(path = "/updateViewsDayjf/{contentId}")
+    public ResponseEntity updateViewsDayjf(@PathVariable String contentId, HttpServletRequest request) {
+        LOGGER.info("{}", contentId);
+        //更新浏览量信息
+        String rtn = contentService.updateViewsDayjf(contentId,request);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

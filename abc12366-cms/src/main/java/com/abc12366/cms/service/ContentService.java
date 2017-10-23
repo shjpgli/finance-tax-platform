@@ -2,6 +2,7 @@ package com.abc12366.cms.service;
 
 import com.abc12366.cms.model.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -56,5 +57,7 @@ public interface ContentService {
     List<ContentudBo> selectContentudList(Map<String, Object> map);
 
     String updateViewsDay(String contentId);
+
+    String updateViewsDayjf(String contentId, HttpServletRequest request);
 
 }
