@@ -146,7 +146,7 @@ public class ActivityService implements IActivityService {
 
         LOGGER.info("活动是否启用:{}", activity.getStatus());
         if (!activity.getStatus()) {
-            throw new ServiceException(6001);
+            throw new ServiceException(6002);
         }
 
         Date now = new Date();
