@@ -45,7 +45,7 @@ order by count(*) desc
         order by count(*) desc
     </select>
     <!--回答次数-->
-    <select id="selectAnswerCount" resultType="com.abc12366.bangbang.model.question.bo.QuestionCountBo">
+    <select id="selectAnswers" resultType="com.abc12366.bangbang.model.question.bo.QuestionCountBo">
   SELECT userId as id,count(*) as count
             ,(select userPicturePath from bb_user bu where bu.id=userId) userPicturePath
         ,(select username from bb_user bu where bu.id=userId) username
