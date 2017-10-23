@@ -9,7 +9,9 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo">
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo"
+            parameterType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo">
+        select * from (
         SELECT t.*,t_user.nickname as username,t_classify.classifyName,
         IF(t1.title IS NULL, t2.answer, CONCAT(t1.title,t1.detail)) content
         FROM bb_question_sys_block t
@@ -17,6 +19,24 @@
         LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
         LEFT JOIN abc12366_uc.uc_user t_user ON t.userId = t_user.id
         LEFT JOIN bb_question_classify t_classify ON t.classifyCode = t_classify.classifyCode
+        ) as temp
+        where 1 = 1
+        <if test="content != null and content != ''">
+            AND temp.content like CONCAT('%',#{content},'%')
+        </if>
+        <if test="status != null and status != ''">
+            AND temp.status = #{status}
+        </if>
+        <if test="beginTime != null and beginTime != ''">
+            <![CDATA[
+              and date_format(temp.createTime, '%Y%m%d') >= date_format(#{beginTime}, '%Y%m%d')
+                ]]>
+        </if>
+        <if test="endTime != null and endTime != ''">
+            <![CDATA[
+              and date_format(temp.createTime, '%Y%m%d') <= date_format(#{endTime}, '%Y%m%d')
+              ]]>
+        </if>
     </select>
 
 
