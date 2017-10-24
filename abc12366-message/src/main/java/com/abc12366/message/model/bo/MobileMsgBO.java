@@ -13,7 +13,7 @@ public class MobileMsgBO {
     @NotNull(message = "验证码类型type不能为空")
     private String content;
     @NotNull(message = "手机号码phone不能为空")
-    @Pattern(regexp = "^\\d{11}$")
+    @Pattern(regexp = "^\\d{11}$" ,message = "手机号码phone只能为11位")
     @Size(min = 11, max = 11)
     private String phone;
 

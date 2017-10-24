@@ -60,18 +60,20 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService{
     @Override
     public void sendMsg(MobileMsgBO mobileMsgBO) {
         LOGGER.info("发送业务通知短信：{}", mobileMsgBO.toString());
+        //只通过又拍发送
+        sendMsgByUppyun(mobileMsgBO);
         //版本4.0阿里和友拍轮流发
-        List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
-        if (sendLogList == null || sendLogList.size() < 1) {
-            sendMsgByAliyun(mobileMsgBO);
-        } else {
-            MessageSendLog messageSendLog = sendLogList.get(0);
-            if (messageSendLog.getSendchanel().equals(MessageConstant.MSG_CHANNEL_ALI)) {
-                sendMsgByUppyun(mobileMsgBO);
-            } else {
-                sendMsgByAliyun(mobileMsgBO);
-            }
-        }
+//        List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
+//        if (sendLogList == null || sendLogList.size() < 1) {
+//            sendMsgByAliyun(mobileMsgBO);
+//        } else {
+//            MessageSendLog messageSendLog = sendLogList.get(0);
+//            if (messageSendLog.getSendchanel().equals(MessageConstant.MSG_CHANNEL_ALI)) {
+//                sendMsgByUppyun(mobileMsgBO);
+//            } else {
+//                sendMsgByAliyun(mobileMsgBO);
+//            }
+//        }
     }
 
     @Override
