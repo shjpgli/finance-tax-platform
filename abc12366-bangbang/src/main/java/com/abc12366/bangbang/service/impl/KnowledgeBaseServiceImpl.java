@@ -183,6 +183,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             if(attachmentList != null && !attachmentList.isEmpty()){
                 for (KnowledgeAttachment attachment: attachmentList){
                     attachment.setId(Utils.uuid());
+                    attachment.setKnowledgeId(knowledgeBase.getId());
                 }
                 knowledgeAttachmentMapper.insertBatch(attachmentList);
             }
@@ -215,6 +216,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             if(attachmentList != null && !attachmentList.isEmpty()){
                 for (KnowledgeAttachment attachment: attachmentList){
                     attachment.setId(Utils.uuid());
+                    attachment.setKnowledgeId(knowledgeId);
                 }
                 knowledgeAttachmentMapper.insertBatch(attachmentList);
             }
