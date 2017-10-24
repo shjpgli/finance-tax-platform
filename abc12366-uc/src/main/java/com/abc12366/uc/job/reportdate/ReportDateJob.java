@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.service.AppService;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.weixin.bo.template.Template;
@@ -60,11 +61,16 @@ public class ReportDateJob implements Job{
 	@Autowired
 	private IWxTemplateService templateService;
 	
+	@Autowired
+	private AppService appService;
+	
 	private String shenqqix="";
 	
 	private String pmonthF="";
 	
 	private String pmonthL="";
+	
+	private String accessToken="";
 	
 	private static final int SPLIT_NUM=10;
 
@@ -75,6 +81,7 @@ public class ReportDateJob implements Job{
 		userService=(UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
 		messageSendUtil=(MessageSendUtil) SpringCtxHolder.getApplicationContext().getBean("messageSendUtil");
 		templateService=(IWxTemplateService) SpringCtxHolder.getApplicationContext().getBean("templateService");
+		appService=(AppService) SpringCtxHolder.getApplicationContext().getBean("appService");
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar   cal_1=Calendar.getInstance();//获取当前日期 
@@ -104,7 +111,7 @@ public class ReportDateJob implements Job{
             headers2.add("platform", SpringCtxHolder.getProperty("APPID"));
             headers2.add("accessToken", dzsjtoken);
             HttpEntity httpEntity = new HttpEntity(headers2);
-            ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("dzsj.soa.url") + "/ggfw/bsrl/getsbrq?sbnf="+new SimpleDateFormat("yyyy").format(new Date()), HttpMethod.GET, httpEntity, String.class);
+            ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/ggfw/bsrl/getsbrq?sbnf="+new SimpleDateFormat("yyyy").format(new Date()), HttpMethod.GET, httpEntity, String.class);
             
             JSONObject json=JSONObject.parseObject(String.valueOf(responseEntity2.getBody()));
             if("000".equals(json.getString("code"))){
@@ -125,7 +132,10 @@ public class ReportDateJob implements Job{
         }else{
         	LOGGER.info("电子税局登录异常..............");
         }
-		
+        
+        
+        //获取运营管理系统accessToken
+        accessToken=appService.selectByName("abc12366-admin").getAccessToken();
 		 
 		int userTotal=userService.getAllNomalCont();
 		 
@@ -212,13 +222,13 @@ public class ReportDateJob implements Job{
             	      if(StringUtils.isNotEmpty(userBO.getWxopenid())){
             	    	  Template info=new Template();
             	    	  //info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
-            	    	  info.setTemplate_id("LItud1KsLXYYA7X-rUnZyLKAXViXuq0Ipf1SumbyPWw");
+            	    	  info.setTemplate_id("yE6keGqr9-Uz0agQalhhfuWcwzN8bKxTBmkL6NsqiJY");
             	    	  info.setContent("{{first.DATA}}\n\n 商品信息：{{keyword1.DATA}}\n 过期时间：{{keyword2.DATA}}\n {{remark.DATA}}");
             	    	  Map<String,String> dataList =new HashMap<String,String>();
             	    	  dataList.put("openId",userBO.getWxopenid());
             	    	  dataList.put("first","您的会员即将过期");
             	    	  dataList.put("remark","您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
-            	    	  dataList.put("keyword1",userBO.getLevelName());
+            	    	  dataList.put("keyword1",userBO.getVipLevelName());
             	    	  dataList.put("keyword1Color","#00DB00");
             	    	  dataList.put("keyword2",getFormat(userBO.getVipExpireDate()));
             	    	  dataList.put("keyword2Color","#00DB00");

@@ -1,6 +1,7 @@
 package com.abc12366.gateway.service;
 
 
+
 import com.abc12366.gateway.model.bo.AppBO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,4 +69,11 @@ public interface AppService {
      * @return App对象
      */
     AppBO selectById(String id);
+    
+    /**
+     * 查询App对象
+     * @param appId 应用name
+     * @return List
+     */
+    AppBO selectByName(String name);
 }

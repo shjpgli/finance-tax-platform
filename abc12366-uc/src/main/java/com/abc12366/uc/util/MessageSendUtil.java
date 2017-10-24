@@ -25,5 +25,7 @@ public interface MessageSendUtil {
     MessageBO sendMessage(Message message);
 
     String sendMsg(String url, HttpMethod method, Map<String, Object> map);
+    
+    MessageBO sendMessage(Message message,String accessToken);
 
 }

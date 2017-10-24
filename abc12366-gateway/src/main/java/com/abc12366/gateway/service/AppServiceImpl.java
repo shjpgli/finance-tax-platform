@@ -31,7 +31,7 @@ import java.util.List;
  * @create 2017-04-05 1:12 PM
  * @since 1.0.0
  */
-@Service
+@Service("appService")
 public class AppServiceImpl implements AppService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppServiceImpl.class);
@@ -279,4 +279,12 @@ public class AppServiceImpl implements AppService {
     private static Date getLongToDate(long lt) {
         return new Date(lt);
     }
+
+	@Override
+	public AppBO selectByName(String name) {
+		App app= appRoMapper.selectByName(name);
+		AppBO appBO = new AppBO();
+        BeanUtils.copyProperties(app, appBO);
+        return appBO;
+	}
 }
