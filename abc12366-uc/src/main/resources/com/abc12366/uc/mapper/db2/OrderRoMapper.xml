@@ -43,7 +43,7 @@
         </association>
         <association property="expressComp" column="expressCompId" select="getExpressComp"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
-        <association property="tradeBO" column="orderNo" select="getTradeLogBO"/>
+        <association property="tradeBO" column="orderNo" select="getTradeBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
         select="getOrderProduct"></collection>
@@ -291,8 +291,7 @@
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO">
-            <id column="id" property="id" jdbcType="VARCHAR"/>
-            <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+            <result column="tradeNo" property="tradeNo" jdbcType="VARCHAR"/>
             <result column="amount" property="amount" jdbcType="DOUBLE"/>
             <result column="tradeStatus" property="tradeStatus" jdbcType="VARCHAR"/>
             <result column="tradeType" property="tradeType" jdbcType="VARCHAR"/>
@@ -306,7 +305,7 @@
     </resultMap>
 
     <!--获取交易记录信息-->
-    <select id="getTradeLogBO" resultMap="tradeBOMap" parameterType="java.lang.String">
+    <select id="getTradeBO" resultMap="tradeBOMap" parameterType="java.lang.String">
         SELECT
         t.tradeNo,t.orderNo,	t.createTime,	t.lastUpdate,
         l.tradeNo, l.amount, l.tradeStatus, l.tradeTime, l.payMethod, l.createTime, l.lastUpdate, l.compareStatus, l.compareTime,l.aliTrandeNo,l.tradeType
