@@ -35,4 +35,20 @@ public class MessageConstant {
     public static final String MSG_CHANNEL_ALI = "ali";
     public static final String MSG_CHANNEL_NETEASE = "wy";
     public static final String MSG_CHANNEL_YOUPAI = "yp";
+
+    //短信业务类型：发送业务通知短信
+    public static final String MOBILE_MSG_BUSI_TYPE = "业务通知";
+    //发送状态（0待发送，1发送成功，4发送失败）
+    public static final String SEND_MSG_STATUS_SUCCESS = "1";
+    public static final String SEND_MSG_STATUS_FAIL = "4";
+
+    //短信接口异常
+    public static final String SEND_MSG_CHANNEL_ERROR_CODE = "111";
+    public static final String SEND_MSG_CHANNEL_ERROR_YOUPAI = "又拍短信接口异常";
+    public static final String SEND_MSG_CHANNEL_ERROR_ALI = "阿里云短信接口异常";
+    public static final String SEND_MSG_CHANNEL_ERROR_NETEASE = "网易云短信接口异常";
+
+    //短信发送成功编码和文字描述
+    public static final String SEND_MSG_SUCCESS_CODE = "200";
+    public static final String SEND_MSG_SUCCESS_CONTENT = "发送成功";
 }
