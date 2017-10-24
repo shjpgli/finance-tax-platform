@@ -622,4 +622,13 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+    //获取总用户数
+	@Override
+	public int getAllNomalCont() {
+		return userRoMapper.getAllNomalCont();
+	}
+	@Override
+	public List<UserBO> getNomalList(Map<String, Object> map) {
+		return userRoMapper.getNomalList(map);
+	}
 }

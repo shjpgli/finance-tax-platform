@@ -37,4 +37,8 @@ public interface UserRoMapper {
     List<UserLoginPasswordWrongCount> selectContinuePwdWrong(String id);
 
     UserSimpleInfoBO selectSimple(String userId);
+
+	int getAllNomalCont();
+
+	List<UserBO> getNomalList(Map<String, Object> map);
 }
