@@ -136,6 +136,7 @@ public class ReportDateJob implements Job{
         
         //获取运营管理系统accessToken
         accessToken=appService.selectByName("abc12366-admin").getAccessToken();
+        LOGGER.info("获取运营管理系统accessToken:"+accessToken);
 		 
 		int userTotal=userService.getAllNomalCont();
 		 
@@ -216,7 +217,7 @@ public class ReportDateJob implements Job{
             	      message.setType(MessageConstant.SYS_MESSAGE);
             	      message.setContent(MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate())));
             	      message.setUserId(userBO.getId());
-            	      messageSendUtil.sendMessage(message);
+            	      messageSendUtil.sendMessage(message,accessToken);
             		  
             		  //微信消息
             	      if(StringUtils.isNotEmpty(userBO.getWxopenid())){
@@ -256,7 +257,7 @@ public class ReportDateJob implements Job{
         	      message.setType(MessageConstant.SYS_MESSAGE);
         	      message.setContent(MessageConstant.SBQXMSG.replaceAll("\\{#DATA.DATE\\}",shenqqix ));
         	      message.setUserId(userBO.getId());
-        	      messageSendUtil.sendMessage(message);
+        	      messageSendUtil.sendMessage(message,accessToken);
         	      
         	      
         	      if(!"VIP0".equalsIgnoreCase(userBO.getLevel()) 
@@ -271,7 +272,7 @@ public class ReportDateJob implements Job{
         	    	  dataList.put("remark","实际申报种类以税务局核定信息为准，请您在申报期限内及时进行申报缴税！");
         	    	  dataList.put("keyword1","增值税、消费税、所得税、财务报表");
         	    	  dataList.put("keyword1Color","#00DB00");
-        	    	  dataList.put("keyword2",pmonthF+" 至  "+pmonthL);
+        	    	  dataList.put("keyword2",pmonthF+"至"+pmonthL);
         	    	  dataList.put("keyword2Color","#00DB00");
         	    	  dataList.put("keyword3",shenqqix);
         	    	  dataList.put("keyword3Color","#00DB00");

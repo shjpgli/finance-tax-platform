@@ -165,7 +165,8 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         map.put("url", message.getUrl());
         
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("accessToken", accessToken);
+        httpHeaders.add("Access-Token", accessToken);
+        httpHeaders.add("Version", "1");
         HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
         ResponseEntity<String> responseEntity = null;
         try {
