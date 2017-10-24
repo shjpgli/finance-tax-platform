@@ -211,7 +211,8 @@ public class ReportDateJob implements Job{
             		  //微信消息
             	      if(StringUtils.isNotEmpty(userBO.getWxopenid())){
             	    	  Template info=new Template();
-            	    	  info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
+            	    	  //info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
+            	    	  info.setTemplate_id("LItud1KsLXYYA7X-rUnZyLKAXViXuq0Ipf1SumbyPWw");
             	    	  info.setContent("{{first.DATA}}\n\n 商品信息：{{keyword1.DATA}}\n 过期时间：{{keyword2.DATA}}\n {{remark.DATA}}");
             	    	  Map<String,String> dataList =new HashMap<String,String>();
             	    	  dataList.put("openId",userBO.getWxopenid());
