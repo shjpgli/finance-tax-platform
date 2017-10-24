@@ -162,4 +162,21 @@ public class BusinessMsgController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+
+    /**
+     * 发送业务消息(提供给系统使用,不做token校验)
+     *
+     * @param data BusinessMessage
+     * @return ResponseEntity
+     */
+    @PostMapping(path="/system")
+    public ResponseEntity insertBySystem(@Valid @RequestBody BusinessMessage data) {
+        LOGGER.info("{}", data);
+
+        data = businessMsgService.insert(data);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
 }
