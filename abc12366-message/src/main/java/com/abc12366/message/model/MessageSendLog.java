@@ -10,6 +10,7 @@ import java.util.Date;
 public class MessageSendLog {
     private String id;
     private String sendchanel;
+    private String phone;
     private String biztype;
     private String sendinfo;
     private Date sendtime;
@@ -19,6 +20,16 @@ public class MessageSendLog {
     private Date logtime;
 
     public MessageSendLog() {
+    }
+
+    public MessageSendLog(String sendchanel, String phone, String biztype, String sendinfo, String sendstatus, String failcode, String failcause) {
+        this.sendchanel = sendchanel;
+        this.phone = phone;
+        this.biztype = biztype;
+        this.sendinfo = sendinfo;
+        this.sendstatus = sendstatus;
+        this.failcode = failcode;
+        this.failcause = failcause;
     }
 
     public String getId() {
@@ -91,5 +102,29 @@ public class MessageSendLog {
 
     public void setLogtime(Date logtime) {
         this.logtime = logtime;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageSendLog{" +
+                "id='" + id + '\'' +
+                ", sendchanel='" + sendchanel + '\'' +
+                ", phone='" + phone + '\'' +
+                ", biztype='" + biztype + '\'' +
+                ", sendinfo='" + sendinfo + '\'' +
+                ", sendtime=" + sendtime +
+                ", sendstatus='" + sendstatus + '\'' +
+                ", failcode='" + failcode + '\'' +
+                ", failcause='" + failcause + '\'' +
+                ", logtime=" + logtime +
+                '}';
     }
 }

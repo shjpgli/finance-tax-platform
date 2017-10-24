@@ -4,12 +4,12 @@
 <mapper namespace="com.abc12366.message.mapper.db1.MessageSendLogMapper">
 
     <sql id="Base_Column">
-        id, sendchanel, biztype, sendinfo, sendtime, sendstatus, failcode, failcause, logtime
+        id, sendchanel,phone, biztype, sendinfo, sendtime, sendstatus, failcode, failcause, logtime
     </sql>
 
     <insert id="insert" parameterType="com.abc12366.message.model.MessageSendLog">
         INSERT INTO msg_message_send_log (<include refid="Base_Column"/>) VALUES
-        (#{id}, #{sendchanel}, #{biztype}, #{sendinfo}, #{sendtime}, #{sendstatus}, #{failcode}, #{failcause}, #{logtime})
+        (#{id}, #{sendchanel}, #{phone}, #{biztype}, #{sendinfo}, #{sendtime}, #{sendstatus}, #{failcode}, #{failcause}, #{logtime})
     </insert>
 
 </mapper>
