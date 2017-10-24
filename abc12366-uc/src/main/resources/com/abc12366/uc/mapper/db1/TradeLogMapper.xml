@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.TradeLogMapper">
 
     <sql id="Base_Column_List">
-        id, orderNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime,tradeType,aliTrandeNo
+        tradeNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime,tradeType,aliTrandeNo
     </sql>
 
     <!--删除：根据主键ID删除-->
@@ -15,7 +15,7 @@
     
     <insert id="insertTradeLog" parameterType="com.abc12366.uc.model.TradeLog">
         INSERT INTO uc_trade_log (<include refid="Base_Column_List"/>)
-        VALUES (#{id},#{orderNo},#{amount},#{tradeStatus},#{tradeTime},#{payMethod},#{createTime},#{lastUpdate},#{compareStatus},#{compareTime},#{tradeType},#{aliTrandeNo})
+        VALUES (#{tradeNo},#{amount},#{tradeStatus},#{tradeTime},#{payMethod},#{createTime},#{lastUpdate},#{compareStatus},#{compareTime},#{tradeType},#{aliTrandeNo})
     </insert>
     
     
@@ -23,11 +23,8 @@
     <insert id="insert" parameterType="com.abc12366.uc.model.TradeLog">
         INSERT INTO uc_trade_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="orderNo != null">
-                orderNo,
+            <if test="tradeNo != null">
+                tradeNo,
             </if>
             <if test="amount != null">
                 amount,
@@ -56,11 +53,8 @@
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id!=null">
-                #{id},
-            </if>
-            <if test="orderNo!=null">
-                #{orderNo},
+            <if test="tradeNo!=null">
+                #{tradeNo},
             </if>
             <if test="amount!=null">
                 #{amount},
@@ -93,8 +87,8 @@
     <update id="update" parameterType="com.abc12366.uc.model.TradeLog">
         UPDATE uc_trade_log
         <set>
-            <if test="orderNo != null">
-                orderNo = #{orderNo},
+            <if test="tradeNo != null">
+                tradeNo = #{tradeNo},
             </if>
             <if test="amount != null">
                 amount = #{amount},

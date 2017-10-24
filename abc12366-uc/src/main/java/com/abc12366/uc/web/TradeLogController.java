@@ -41,7 +41,7 @@ public class TradeLogController {
         LOGGER.info("{},{},{}", orderNo, pageNum, pageSize);
         TradeLog tradeLog = new TradeLog();
 
-        tradeLog.setOrderNo(orderNo);
+        tradeLog.setTradeNo(orderNo);
         List<TradeLog> orderLogList = tradeLogService.selectList(tradeLog, pageNum, pageSize);
         PageInfo<TradeLog> pageInfo = new PageInfo<>(orderLogList);
 
@@ -72,7 +72,7 @@ public class TradeLogController {
         LOGGER.info("{}", id);
 
         TradeLog log = new TradeLog();
-        log.setId(id);
+        log.setTradeNo(id);
         log.setCompareStatus("3");
         TradeLog data = tradeLogService.updateCompare(log);
 
@@ -89,7 +89,7 @@ public class TradeLogController {
         LOGGER.info("{}", id);
 
         TradeLog log = new TradeLog();
-        log.setId(id);
+        log.setTradeNo(id);
         log.setCompareStatus("2");
         TradeLog data = tradeLogService.updateCompare(log);
 

@@ -108,7 +108,7 @@ public class PayReturnController {
                 tradeBillBO.setTradeNo(trade_no);
                 TradeLog tradeLogUpdate = tradeLogService.selectOne(tradeBillBO);
                 if (tradeLogUpdate != null) {
-                    tradeLogUpdate.setOrderNo(out_trade_no);
+                    tradeLogUpdate.setTradeNo(out_trade_no);
                     tradeLogUpdate.setTradeStatus("1");
                     tradeLogUpdate.setTradeType("1");
                     tradeLogUpdate.setAmount(Double.parseDouble(total_amount));
@@ -120,9 +120,9 @@ public class PayReturnController {
                     tradeLogService.update(tradeLogUpdate);
                 } else {
                     TradeLog tradeLog = new TradeLog();
-                    tradeLog.setId(DataUtils.getJYLSH());
+//                    tradeLog.setId(DataUtils.getJYLSH());
                     tradeLog.setAliTrandeNo(trade_no);
-                    tradeLog.setOrderNo(out_trade_no);
+                    tradeLog.setTradeNo(DataUtils.getJYLSH());
                     tradeLog.setTradeStatus("1");
                     tradeLog.setTradeType("1");
                     tradeLog.setAmount(Double.parseDouble(total_amount));

@@ -43,13 +43,14 @@
         </association>
         <association property="expressComp" column="expressCompId" select="getExpressComp"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
+        <association property="tradeBO" column="orderNo" select="getTradeLogBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
         select="getOrderProduct"></collection>
         <collection property="orderLogBOList" ofType="com.abc12366.uc.model.bo.OrderLogBO" column="orderNo"
         select="getOrderLog"></collection>
-        <collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO" column="orderNo"
-                    select="getTradeLogBO"></collection>
+        <!--<collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO" column="orderNo"
+                    select="getTradeLogBO"></collection>-->
     </resultMap>
 
     <!--订单列表对象-->
