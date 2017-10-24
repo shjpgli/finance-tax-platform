@@ -13,6 +13,8 @@ public class MessageConstant {
     public static final String SPDD = "SPDD";//商品订单
     public static final String ZZFPDD = "ZZFPDD";//纸质发票订单
     public static final String DZFPDD = "DZFPDD";//电子发票订单
+    public static final String HYDQTX = "HYDQTX";//会员到期提醒
+    public static final String SBXQTX = "SBXQTX";//会员到期提醒
 
     public static final String VIEW_DETAILS = "查看详情";
     /**实物商品**/
@@ -58,4 +60,10 @@ public class MessageConstant {
     public static final String BUYING_MEMBERS_SUFFIX = "查看详细会员权益";
     //积分充值
     public static final String INTEGRAL_RECHARGE = "恭喜您！您的积分已充值成功，当前积分为";
+    
+    
+    //会员到期消息
+    public static final String HYDQMSG="您的财税专家会员（{#DATA.LEVEL}）即将过期，过期时间:{#DATA.DATE}，为不影响您正常使用，请您及时续费";
+    
+    public static final String SBQXMSG="财税专家用户提醒，本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税！";
 }

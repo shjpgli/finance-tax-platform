@@ -100,4 +100,15 @@ public interface UserService {
      * @return
      */
     Map selectOneForAdmin(String id);
+    /**
+     * 获取正常用户总数
+     * @return
+     */
+	int getAllNomalCont();
+	/**
+	 * 分页获取正常用户信息
+	 * @param map
+	 * @return
+	 */
+	List<UserBO> getNomalList(Map<String, Object> map);
 }

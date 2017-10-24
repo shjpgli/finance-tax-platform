@@ -88,6 +88,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/curriculum/selectListWatch")
                         //获取推荐课程
                 .excludePathPatterns("/curriculum/selectRecommend")
+                        //课程浏览量增加
+                .excludePathPatterns("/curriculum/updateBrowsesDay/**")
                         //获取活动
                 .excludePathPatterns("/event/**")
                         //获取课程详情信息
@@ -118,6 +120,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/queAnswer/selectListByParentId")
                         //最新回答
                 .excludePathPatterns("/questionbb/selectListNew")
+                        //0回答
+                .excludePathPatterns("/questionbb/selectListWait")
                         //查询单个问题
                 .excludePathPatterns("/questionbb/selectQuestion/**")
                         //查询单个问题回复信息

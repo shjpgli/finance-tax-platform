@@ -9,23 +9,23 @@ import javax.validation.constraints.Size;
  * Date: 2017-08-10
  * Time: 16:10
  */
-public class GetCodeParam {
+public class MobileMsgBO {
     @NotNull(message = "验证码类型type不能为空")
-    private String type;
+    private String content;
     @NotNull(message = "手机号码phone不能为空")
     @Pattern(regexp = "^\\d{11}$")
     @Size(min = 11, max = 11)
     private String phone;
 
-    public GetCodeParam() {
+    public MobileMsgBO() {
     }
 
-    public String getType() {
-        return type;
+    public String getContent() {
+        return content;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getPhone() {
@@ -34,5 +34,13 @@ public class GetCodeParam {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "MobileMsgBO{" +
+                "content='" + content + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }

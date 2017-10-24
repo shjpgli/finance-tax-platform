@@ -147,8 +147,8 @@ public class AliPayController {
 				
 				LOGGER.info("支付宝退款成功,插入退款流水记录");
 				TradeLog tradeLog=new TradeLog();
-				tradeLog.setId(Utils.uuid());
-				tradeLog.setOrderNo(refundRes.getOut_trade_no());
+//				tradeLog.setId(Utils.uuid());
+				tradeLog.setTradeNo(refundRes.getOut_trade_no());
 				tradeLog.setAliTrandeNo(refundRes.getTrade_no());
 				tradeLog.setTradeStatus("1");
 				tradeLog.setTradeType("2");

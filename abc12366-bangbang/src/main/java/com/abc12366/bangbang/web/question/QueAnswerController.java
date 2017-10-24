@@ -123,7 +123,7 @@ public class QueAnswerController {
         dataMap.put("isTip", isTip);//是否被举报，1为被举报
         dataMap.put("isAccept", isAccept);//是否被采纳，1为被采纳
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectMyAnswerList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -138,7 +138,7 @@ public class QueAnswerController {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("userId", userId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectMyCommentList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

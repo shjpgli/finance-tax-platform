@@ -182,7 +182,7 @@
     
     
     <select id="getNomalList" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.util.Map">
-        SELECT u.id,u.wxopenid,u.phone,u.vipLevel,u.vipExpireDate,l.level as vipLevelName FROM uc_user u, uc_uvip_level l where u.status = true and l.status = true and u.vipLevel=l.levelCode ORDER BY id LIMIT #{begin},#{size};
+        SELECT u.id,u.wxopenid,u.phone,u.vipLevel,u.vipExpireDate,l.level as vipLevelName FROM uc_user u, uc_uvip_level l where u.status = true and l.status = true and u.vipLevel=l.levelCode ORDER BY vipLevel DESC LIMIT #{begin},#{size};
     </select>
     
 </mapper>

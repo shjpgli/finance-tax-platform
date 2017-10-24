@@ -5,15 +5,21 @@ import com.abc12366.cms.mapper.db2.*;
 import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ContentService;
+import com.abc12366.cms.util.CmsRestTemplateUtil;
+import com.abc12366.cms.util.UCConstant;
+import com.abc12366.cms.util.UcUserCommon;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -89,6 +95,9 @@ public class ContentServiceImpl implements ContentService {
 
     @Autowired
     private ContenttagidRoMapper tagRoMapper;
+
+    @Autowired
+    private CmsRestTemplateUtil cmsRestTemplateUtil;
 
     @Override
     public List<ContentListBo> selectList(Map<String, Object> map) {
@@ -186,6 +195,7 @@ public class ContentServiceImpl implements ContentService {
         ContentBo contentBo = contentSaveBo.getContent();
 //        contentBo.setStatus(2);//审核通过
         contentBo.setContentId(uuid);
+        contentBo.setViewsDay(0);
         Content content = new Content();
         try {
             BeanUtils.copyProperties(contentBo, content);
@@ -752,6 +762,17 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public String updateViewsDay(String contentId) {
         contentMapper.updateViewsDay(contentId);
+        return "";
+    }
+
+    @Override
+    public String updateViewsDayjf(String contentId, HttpServletRequest request) {
+        contentMapper.updateViewsDay(contentId);
+        String userId = UcUserCommon.getUserId();
+        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{sysTaskId}";
+        String responseStr;
+        String sysTaskId = UCConstant.SYS_TASK_BROSE_NEWS_ID;
+        responseStr = cmsRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
         return "";
     }
 

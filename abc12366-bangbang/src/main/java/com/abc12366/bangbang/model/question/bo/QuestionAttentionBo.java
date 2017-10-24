@@ -74,4 +74,51 @@ public class QuestionAttentionBo implements Serializable {
 		return this.attentionTime;
 	}
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
+    }
+
+    public Integer getQuestionNum() {
+        return questionNum;
+    }
+
+    public void setQuestionNum(Integer questionNum) {
+        this.questionNum = questionNum;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+    }
+
+    public Integer getAttentionNum() {
+        return attentionNum;
+    }
+
+    public void setAttentionNum(Integer attentionNum) {
+        this.attentionNum = attentionNum;
+    }
+
+    public Integer getIsAttention() {
+        return isAttention;
+    }
+
+    public void setIsAttention(Integer isAttention) {
+        this.isAttention = isAttention;
+    }
 }

@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, orderNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime,tradeType,aliTrandeNo
+        tradeNo, amount, tradeStatus, tradeTime, payMethod, createTime, lastUpdate, compareStatus, compareTime,tradeType,aliTrandeNo
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -13,7 +13,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
-        WHERE id = #{id}
+        WHERE tradeNo = #{tradeNo}
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.bo.TradeBillBO">
@@ -21,19 +21,19 @@
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
         <where>
-            <if test="tradeNo != null and tradeNo != ''">aliTrandeNo = #{tradeNo}</if>
-            <if test="orderNo != null and orderNo != ''">AND orderNo = #{orderNo}</if>
+            <if test="aliTrandeNo != null and aliTrandeNo != ''">aliTrandeNo = #{aliTrandeNo}</if>
+            <if test="tradeNo != null and tradeNo != ''">AND tradeNo = #{tradeNo}</if>
         </where>
     </select>
 
-    <!-- 查询（根据主键orderNo查询） -->
+    <!-- 查询（根据主键tradeNo查询） -->
     <select id="selectList" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.TradeLog">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log 
         <where>
             payMethod is not null 
-            <if test="orderNo != null and orderNo != ''">AND orderNo like CONCAT('%',#{orderNo},'%')</if>
+            <if test="tradeNo != null and tradeNo != ''">AND tradeNo like CONCAT('%',#{tradeNo},'%')</if>
             <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
             <if test="payMethod != null and payMethod != ''">AND payMethod = #{payMethod}</if>
         </where>

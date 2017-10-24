@@ -198,6 +198,13 @@ public class UserServiceImpl implements UserService {
         UserBO userDTO = new UserBO();
         BeanUtils.copyProperties(user, userDTO);
         userDTO.setPassword(null);
+
+        //用户重要信息模糊化处理:电话号码
+        if (!StringUtils.isEmpty(userDTO.getPhone()) && userDTO.getPhone().length() >= 8) {
+            String phone = userDTO.getPhone();
+            StringBuilder phoneFuffer = new StringBuilder(phone);
+            userDTO.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+        }
         LOGGER.info("{}", userDTO);
         return userDTO;
     }
@@ -615,4 +622,13 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+    //获取总用户数
+	@Override
+	public int getAllNomalCont() {
+		return userRoMapper.getAllNomalCont();
+	}
+	@Override
+	public List<UserBO> getNomalList(Map<String, Object> map) {
+		return userRoMapper.getNomalList(map);
+	}
 }

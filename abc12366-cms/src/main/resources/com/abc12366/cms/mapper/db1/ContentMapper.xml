@@ -233,9 +233,8 @@
     <!-- 修 改 访问量-->
     <update id="updateViewsDay" parameterType="java.lang.String">
         UPDATE cms_content
-        <set>
-            viewsDay = viewsDay + 1,
-        </set>
+        set
+            viewsDay = viewsDay + 1
         WHERE contentId = #{contentId}
     </update>
 
