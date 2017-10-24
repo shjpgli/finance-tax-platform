@@ -14,6 +14,7 @@ import com.abc12366.message.model.PhoneCode;
 import com.abc12366.message.model.PhoneExist;
 import com.abc12366.message.model.bo.*;
 import com.abc12366.message.service.MobileVerifyCodeService;
+import com.abc12366.message.service.SendMsgLogService;
 import com.abc12366.message.util.*;
 import com.alibaba.fastjson.JSON;
 import com.aliyun.mns.client.CloudAccount;
@@ -68,6 +69,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
     @Autowired
     private MsgUcUserRoMapper msgUcUserRoMapper;
+
+    @Autowired
+    private SendMsgLogService sendMsgLogService;
 
     //获取验证码
     @Override
@@ -278,11 +282,11 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     private boolean sendYoupaiTemplate(String phone, String type, String code) throws IOException {
         //发送通知类短信接口地址
         String url = SpringCtxHolder.getProperty("message.upyun.send.url");
-        //调用网易接口请求头设置
+        //调用又拍接口请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", config.getContentType());
         httpHeaders.add("Authorization", SpringCtxHolder.getProperty("message.upyun.auth"));
-        //调用网易接口请求体设置
+        //调用又拍接口请求体设置
         LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("mobile", phone);
         requestBody.add("template_id", SpringCtxHolder.getProperty("message.upyun.templateid"));
@@ -293,18 +297,25 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         } catch (Exception e) {
             //记日志
-            messageLog("yp", type, code, "4", "4204", "短信发送通道异常");
+            MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_YOUPAI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
+                    (type+code), MessageConstant.SEND_MSG_STATUS_FAIL, MessageConstant.SEND_MSG_CHANNEL_ERROR_CODE,MessageConstant.SEND_MSG_CHANNEL_ERROR_YOUPAI);
+            sendMsgLogService.insert(sendLog);
             throw new ServiceException(4204);
         }
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
             try {
-                UpyunMessageResponse essageResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
+                UpyunMessageResponse messageResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
                 //记日志
-                messageLog("yp", type, code, "1", "200", "发送成功");
+                MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_YOUPAI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
+                        (type+code), MessageConstant.SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE,MessageConstant.SEND_MSG_SUCCESS_CONTENT);
+                sendMsgLogService.insert(sendLog);
             } catch (Exception e) {
                 UpyunErrorBO response = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunErrorBO.class);
                 //记日志
-                messageLog("yp", type, code, "4", response.getError_code(), response.getMessage());
+                //记日志
+                MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_YOUPAI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
+                        (type+code), MessageConstant.SEND_MSG_STATUS_FAIL, response.getError_code(),response.getMessage());
+                sendMsgLogService.insert(sendLog);
                 return false;
             }
             return true;
@@ -368,18 +379,28 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
              * Step 4. 发布SMS消息
              */
             TopicMessage ret = topic.publishMessage(msg, messageAttributes);
-            messageLog("ali", codeType, code, "1", "200", "发送成功");
+            //记日志
+            MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_ALI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
+                    (codeType+code), MessageConstant.SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE,
+                    MessageConstant.SEND_MSG_SUCCESS_CONTENT);
+            sendMsgLogService.insert(sendLog);
             System.out.println("MessageId: " + ret.getMessageId());
             System.out.println("MessageMD5: " + ret.getMessageBodyMD5());
 
         } catch (com.aliyun.mns.common.ServiceException se) {
             System.out.println(se.getErrorCode() + se.getRequestId());
             System.out.println(se.getMessage());
-            messageLog("ali", codeType, code, "4", "4204", "短信发送通道异常");
+            //记日志
+            MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_ALI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
+                    (codeType+code), MessageConstant.SEND_MSG_STATUS_FAIL, se.getErrorCode(),se.getMessage());
+            sendMsgLogService.insert(sendLog);
             se.printStackTrace();
             throw new ServiceException(4204);
         } catch (Exception e) {
-            messageLog("ali", codeType, code, "4", "4204", "短信发送通道异常");
+            //记日志
+            MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_ALI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
+                    (codeType+code), MessageConstant.SEND_MSG_STATUS_FAIL, MessageConstant.SEND_MSG_CHANNEL_ERROR_CODE,e.getMessage());
+            sendMsgLogService.insert(sendLog);
             e.printStackTrace();
             throw new ServiceException(4204);
         }

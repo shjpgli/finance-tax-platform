@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 /**
+ * 验证码发送校验控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-07-20
  * Time: 0:08
