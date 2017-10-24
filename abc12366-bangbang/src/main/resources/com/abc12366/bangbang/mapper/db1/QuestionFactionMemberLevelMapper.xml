@@ -3,27 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db1.QuestionFactionMemberLevelMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	name,	answers,	discussions,	adoptions,	createTime,	createAdmin,	updateTime,	updateAdmin
-	</sql>
-
-
-	<!-- 查询列表 -->
-	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
-		SELECT
-		<include refid="Base_Column_List" />
-		FROM bb_question_faction_member_level
-	</select>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_question_faction_member_level
-		 WHERE id = #{id}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		 DELETE FROM bb_question_faction_member_level
@@ -33,67 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 INSERT INTO bb_question_faction_member_level
- 		(id,name,answers,discussions,adoptions,createTime,createAdmin,updateTime,updateAdmin) 
+ 		(id,name,answers,discussions,adoptions,status,createTime,createAdmin,updateTime,updateAdmin)
 		 VALUES 
- 		(#{id},#{name},#{answers},#{discussions},#{adoptions},now(),#{createAdmin},now(),#{updateAdmin})
-	</insert>
-
-	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
-		 INSERT INTO bb_question_faction_member_level
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="id != null">
-				 id,
-			</if>
-			<if test="name != null">
-				 name,
-			</if>
-			<if test="answers != null">
-				 answers,
-			</if>
-			<if test="discussions != null">
-				 discussions,
-			</if>
-			<if test="adoptions != null">
-				 adoptions,
-			</if>
-			<if test="createAdmin != null">
-				 createAdmin,
-			</if>
-			<if test="updateTime != null">
-				 updateTime,
-			</if>
-			<if test="updateAdmin != null">
-				 updateAdmin,
-			</if>
-
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="id!=null">
-				 #{id},
-			</if>
-			<if test="name!=null">
-				 #{name},
-			</if>
-			<if test="answers!=null">
-				 #{answers},
-			</if>
-			<if test="discussions!=null">
-				 #{discussions},
-			</if>
-			<if test="adoptions!=null">
-				 #{adoptions},
-			</if>
-			<if test="createAdmin!=null">
-				 #{createAdmin},
-			</if>
-			<if test="updateTime!=null">
-				 #{updateTime},
-			</if>
-			<if test="updateAdmin!=null">
-				 #{updateAdmin},
-			</if>
-		 </trim>
+ 		(#{id},#{name},#{answers},#{discussions},#{adoptions},#{status},now(),#{createAdmin},now(),#{updateAdmin})
 	</insert>
 
 	<!-- 修 改-->
@@ -112,15 +33,13 @@
 			<if test="adoptions != null">
 				 adoptions = #{adoptions},
 			</if>
-			<if test="createAdmin != null">
-				 createAdmin = #{createAdmin},
-			</if>
-			<if test="updateTime != null">
-				 updateTime = #{updateTime},
-			</if>
+			 <if test="status != null">
+				 status = #{status},
+			 </if>
 			<if test="updateAdmin != null">
 				 updateAdmin = #{updateAdmin},
 			</if>
+			 updateTime = now()
  		 </set>
 		 WHERE id = #{id}
 	</update>
@@ -133,7 +52,7 @@
 			 answers = #{answers},
 			 discussions = #{discussions},
 			 adoptions = #{adoptions},
-			 createAdmin = #{createAdmin},
+			 status = #{status},
 			 updateAdmin = #{updateAdmin},
 			 updateTime = now(),
 		 WHERE id = #{id}

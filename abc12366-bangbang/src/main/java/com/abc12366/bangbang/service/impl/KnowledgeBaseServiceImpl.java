@@ -1,10 +1,9 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.UcUserCommon;
-import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
-import com.abc12366.bangbang.mapper.db1.KnowledgeRelMapper;
-import com.abc12366.bangbang.mapper.db1.KnowledgeTagRelMapper;
-import com.abc12366.bangbang.mapper.db1.KnowledgeVoteLogMapper;
+import com.abc12366.bangbang.mapper.db1.*;
+import com.abc12366.bangbang.mapper.db2.KnowledgeAttachmentRoMapper;
+import com.abc12366.bangbang.model.KnowledgeAttachment;
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeRel;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
@@ -42,6 +41,12 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Autowired
     private KnowledgeVoteLogMapper knowledgeVoteLogMapper;
+
+    @Autowired
+    private KnowledgeAttachmentRoMapper knowledgeAttachmentRoMapper;
+
+    @Autowired
+    private KnowledgeAttachmentMapper knowledgeAttachmentMapper;
 
     @Override
     public Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO) {
@@ -104,13 +109,25 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Override
     public KnowledgeBase selectOne(String id) {
-        return knowledgeBaseMapper.selectByPrimaryKey(id);
+        KnowledgeBase knowledgeBase = knowledgeBaseMapper.selectByPrimaryKey(id);
+        if(knowledgeBase != null){
+            List<KnowledgeAttachment> list =knowledgeAttachmentRoMapper.selectListByKnowledgeId(id);
+            knowledgeBase.setAttachmentList(list);
+        }
+        return knowledgeBase;
     }
 
     @Override
     public void add(KnowledgeBase knowledgeBase) {
         try {
             knowledgeBaseMapper.insert(knowledgeBase);
+            List<KnowledgeAttachment> attachmentList = knowledgeBase.getAttachmentList();
+            if(attachmentList != null && !attachmentList.isEmpty()){
+                for (KnowledgeAttachment attachment: attachmentList){
+                    attachment.setId(Utils.uuid());
+                }
+                knowledgeAttachmentMapper.insertBatch(attachmentList);
+            }
         }catch (Exception e){
             LOGGER.error("KnowledgeBaseServiceImpl.add():" + e);
             throw new ServiceException(4501);
@@ -130,6 +147,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             knowledgeVoteLogMapper.deleteByKnowledgeIds(ids);
             //删除知识库
             knowledgeBaseMapper.deleteByPrimaryKeys(ids);
+            //删除知识库附件
+            knowledgeAttachmentMapper.deleteByKnowledgeIds(ids);
         }catch (Exception e){
             LOGGER.error("KnowledgeBaseServiceImpl.delete():" + e);
             throw new ServiceException(4503);
@@ -160,6 +179,14 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             //添加关联的问题
             addKnowledgeRel(knowledgeBaseBO);
 
+            List<KnowledgeAttachment> attachmentList = knowledgeBase.getAttachmentList();
+            if(attachmentList != null && !attachmentList.isEmpty()){
+                for (KnowledgeAttachment attachment: attachmentList){
+                    attachment.setId(Utils.uuid());
+                    attachment.setKnowledgeId(knowledgeBase.getId());
+                }
+                knowledgeAttachmentMapper.insertBatch(attachmentList);
+            }
             return knowledgeBaseBO;
         }catch (Exception e){
             LOGGER.error("KnowledgeBaseServiceImpl.add(KnowledgeBaseBO knowledgeBaseBO):" + e);
@@ -183,6 +210,16 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
             //管理关联 的知识库
             knowledgeRelMapper.deleteByKnowledgeId(knowledgeId);
             addKnowledgeRel(knowledgeBaseBO);
+
+            knowledgeAttachmentMapper.deleteByKnowledgeId(knowledgeId);
+            List<KnowledgeAttachment> attachmentList = knowledgeBase.getAttachmentList();
+            if(attachmentList != null && !attachmentList.isEmpty()){
+                for (KnowledgeAttachment attachment: attachmentList){
+                    attachment.setId(Utils.uuid());
+                    attachment.setKnowledgeId(knowledgeId);
+                }
+                knowledgeAttachmentMapper.insertBatch(attachmentList);
+            }
 
             return knowledgeBaseBO;
         }catch (Exception e){

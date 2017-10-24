@@ -1,5 +1,7 @@
 package com.abc12366.bangbang.model;
 
+import java.util.List;
+
 /**
  * @Author liuqi
  * @Date 2017/8/2 17:58
@@ -101,6 +103,20 @@ public class KnowledgeBase {
      * 修改人
      **/
     private String updateUser;
+
+    /**
+     * 附件列表
+     **/
+    private List<KnowledgeAttachment> attachmentList;
+
+    public List<KnowledgeAttachment> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public KnowledgeBase setAttachmentList(List<KnowledgeAttachment> attachmentList) {
+        this.attachmentList = attachmentList;
+        return this;
+    }
 
     public String getId() {
         return this.id;
