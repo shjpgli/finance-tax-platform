@@ -195,6 +195,7 @@ public class ContentServiceImpl implements ContentService {
         ContentBo contentBo = contentSaveBo.getContent();
 //        contentBo.setStatus(2);//审核通过
         contentBo.setContentId(uuid);
+        contentBo.setViewsDay(0);
         Content content = new Content();
         try {
             BeanUtils.copyProperties(contentBo, content);
