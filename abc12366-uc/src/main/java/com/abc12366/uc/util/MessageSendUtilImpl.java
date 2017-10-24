@@ -154,7 +154,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public MessageBO sendMessage(Message message, String accessToken) {
-		String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business";
+		String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business/system";
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", message.getUserId());
