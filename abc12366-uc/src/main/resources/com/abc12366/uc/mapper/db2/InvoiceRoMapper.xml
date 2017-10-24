@@ -93,8 +93,6 @@
         <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
         <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
         <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
-        <result column="isInsured" property="isInsured" jdbcType="INTEGER"/>
-        <result column="insuredFee" property="insuredFee" jdbcType="DOUBLE"/>
         <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
         <result column="addressId" property="addressId" jdbcType="VARCHAR"/>
         <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
@@ -129,7 +127,7 @@
     <resultMap id="orderProductBOMap" type="com.abc12366.uc.model.order.bo.OrderProductBO">
         <id column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
-        <result column="sellingPrice" property="sellingPrice" jdbcType="DOUBLE"/>
+        <result column="goodsPrice" property="goodsPrice" jdbcType="DOUBLE"/>
         <result column="unitPrice" property="unitPrice" jdbcType="DOUBLE"/>
         <result column="num" property="num" jdbcType="INTEGER"/>
         <result column="discount" property="discount" jdbcType="DOUBLE"/>
@@ -142,8 +140,10 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="specInfo" property="specInfo" jdbcType="VARCHAR"/>
-        <!--<association property="productBO" javaType="com.abc12366.uc.model.bo.ProductBO" column="productId"
-                     select="getProductBO"></association>-->
+        <result column="isReturn" property="isReturn" jdbcType="VARCHAR"/>
+        <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--产品对象-->
@@ -174,8 +174,8 @@
     <!--获取产品和订单对应关系信息-->
     <select id="getOrderProduct" resultMap="orderProductBOMap" parameterType="java.lang.String">
         SELECT
-        op.orderNo, op.productId, op.sellingPrice, op.unitPrice, op.num, op.discount, op.dealPrice, op.name, op.categoryId, op.category, op.weight,
-        op.createTime, op.lastUpdate,op.goodsId,op.specInfo
+        op.orderNo,	op.goodsPrice,	op.num,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,	op.productId,	op.goodsId,
+        op.specInfo,	op.isReturn,	op.isExchange,	op.imageUrl,	op.goodsType,	op.browseUrl,	op.tradingChannels
         FROM uc_order_product op
         WHERE op.orderNo = #{orderNo}
     </select>
@@ -205,7 +205,7 @@
     <select id="getOrderBO" resultMap="oneOrderBOMap" parameterType="java.lang.String">
         SELECT
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime, o.lastUpdate,
-        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee, o.isInsured, o.insuredFee, o.totalPrice, o.addressId,
+        o.username, o.isShipping, o.isFreeShipping, o.deliveryFee, o.totalPrice,
         o.expressNo, o.remark,o.consignee,	o.contactNumber,	o.shippingAddress
         FROM uc_order o
         LEFT JOIN uc_order_invoice uoi ON uoi.orderNo = o.orderNo
