@@ -13,4 +13,18 @@
         WHERE mmsl.sendtime=(SELECT MAX(sendtime) FROM msg_message_send_log)
     </select>
 
+    <select id="selectList" resultType="com.abc12366.message.model.MessageSendLog" parameterType="java.util.Map">
+        SELECT <include refid="Base_Column"/>
+        FROM msg_message_send_log mmsl
+        <where>
+            1=1
+            <if test="phone!=null">and phone = #{phone}</if>
+            <if test="status!=null">and sendstatus = #{status}</if>
+            <if test="channel!=null">and sendchanel = #{channel}</if>
+            <if test="start!=null">and sendtime &gt;= #{start}</if>
+            <if test="end!=null">and sendtime &lt; #{end}</if>
+        </where>
+        ORDER by sendtime desc
+    </select>
+
 </mapper>
