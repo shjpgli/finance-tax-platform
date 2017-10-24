@@ -20,10 +20,11 @@
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
         a.id,	parentId,	questionId,commentNum,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,
-        (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
+        u1.nickname answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike
         FROM bb_question_answer a left join bb_user u on a.userId = u.id
+        left join bb_user u1 on a.answerUserId = u1.id
         WHERE parentId=''
         <if test="questionId != null and questionId != ''">
             AND questionId = #{questionId}
@@ -31,17 +32,18 @@
         <if test="isAccept != null and isAccept != ''">
             AND isAccept = #{isAccept}
         </if>
-        order by createTime DESC
+        order by a.createTime DESC
     </select>
 
     <!-- 问题回复评论列表查询 -->
     <select id="selectListByParentId" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
         a.id,	parentId,	questionId,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,
-        (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
+        u1.nickname answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike
         FROM bb_question_answer a left join bb_user u on a.userId = u.id
+        left join bb_user u1 on a.answerUserId = u1.id
         WHERE 1=1
         <if test="parentId != null and parentId != ''">
             AND parentId = #{parentId}
@@ -49,7 +51,7 @@
         <if test="questionId != null and questionId != ''">
             AND questionId = #{questionId}
         </if>
-        order by createTime DESC
+        order by a.createTime DESC
     </select>
 
 
@@ -57,13 +59,14 @@
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
         a.id,	parentId,	questionId,q.collectNum,q.answerNum,a.commentNum,a.likeNum,a.trampleNum,	a.userId,u.userPicturePath,u.nickname,
-        (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
+        u1.nickname answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         q.title questionTitle
         FROM bb_question_answer a LEFT JOIN bb_question q on a.questionId = q.id
         left join bb_user u on a.userId = u.id
+        left join bb_user u1 on a.answerUserId = u1.id
         WHERE parentId=''
-        ORDER BY createTime DESC
+        ORDER BY a.createTime DESC
     </select>
 
 
@@ -77,17 +80,16 @@
     <!-- 我的回答 -->
     <select id="selectMyAnswerList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,
-        (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,q.browseNum,
+        u1.nickname answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
-        (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = a.id and sourceType = 'answer' and createUser = a.userId) isTip,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = a.userId) isLike,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum,
-        (SELECT count(id) FROM bb_question_answer where parentId = a.id) answerNum
+        a.likeNum,a.commentNum,a.trampleNum,a.reportNum,
+        q.browseNum,q.answerNum
         FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
+        left join bb_user u1 on a.answerUserId = u1.id
         WHERE parentId=''
         <if test="isTip != null and isTip != ''">
-            AND (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = a.id and sourceType = 'answer' and createUser = a.userId) > 0
+            a.reportNum > 0
         </if>
         <if test="isAccept != null and isAccept != ''">
             AND isAccept = #{isAccept}
@@ -102,11 +104,11 @@
     <select id="selectMyCommentList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
         a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,
-        (SELECT nickname FROM bb_user where id = answerUserId) answerNickname,
+        u1.nickname answerNickname,
         answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = a.userId) isLike,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id) likeNum
+        a.likeNum
         FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
+        left join bb_user u1 on a.answerUserId = u1.id
         WHERE parentId != ''
         <if test="userId != null and userId != ''">
             AND a.userId = #{userId}
@@ -122,7 +124,7 @@
         WHERE parentId != '' and questionId = #{questionId}
     </select>
 
-    <!-- 查询回复数 -->
+    <!-- 查询评论数 -->
     <select id="selectCommentCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT
         count(id)

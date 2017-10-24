@@ -29,14 +29,10 @@
 
     <!-- 最新问题 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
-        SELECT
+        select aa.*,a.answer,a.likeNum,a.trampleNum,a.commentNum from (SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1
         <if test="title != null and title != ''">
@@ -48,7 +44,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC) aa left join bb_question_answer a on aa.answerId = a.id
     </select>
 
     <!-- 推荐问题 -->
@@ -72,7 +68,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 高悬赏问题 -->
@@ -86,7 +82,7 @@
         (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
         (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1
+        WHERE 1=1 and points >0
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -96,7 +92,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY points,createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 热门问题 -->
@@ -134,7 +130,7 @@
         (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
         (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1 and id not in(SELECT questionId FROM bb_question_answer where userId = #{userId})
+        WHERE 1=1 and q.id not in(SELECT questionId FROM bb_question_answer where userId = #{userId})
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -144,7 +140,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 已解决问题 -->
@@ -158,7 +154,7 @@
         (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
         (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1 and id in(SELECT questionId FROM bb_question_answer where isAccept = '1')
+        WHERE 1=1 and q.id in(SELECT questionId FROM bb_question_answer where isAccept = '1')
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
