@@ -180,8 +180,8 @@ public class QueFactionServiceImpl implements QueFactionService {
                 classify.setId(UUID.randomUUID().toString().replace("-", ""));
                 classify.setFactionId(uuid);
                 Map<String, Object> dataMap = new HashMap<>();
-                dataMap.put("factionId", questionFactionBo.getUserId());//
-                dataMap.put("userId", classify.getFactionId());//
+                dataMap.put("userId", questionFactionBo.getUserId());//
+                dataMap.put("factionId", classify.getFactionId());//
                 int cnt = classifyRoMapper.selectClassifyCnt(dataMap);
                 if(cnt > 0){
                     //该用户创建的帮派所选话题分类不允许重叠
