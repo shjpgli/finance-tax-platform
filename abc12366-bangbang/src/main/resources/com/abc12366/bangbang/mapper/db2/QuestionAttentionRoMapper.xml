@@ -24,7 +24,7 @@
         (SELECT count(id) FROM bb_question_answer where parentId = '' and userId = a.attentionUserId) answerNum,
         (SELECT count(attentionId) FROM bb_question_attention where attentionUserId = a.attentionUserId) attentionNum,
         (SELECT count(attentionId) FROM bb_question_attention where userId = a.attentionUserId and attentionUserId = a.userId) isAttention
-        FROM bb_question_attention a left join bb_user u on a.userId = u.id
+        FROM bb_question_attention a left join bb_user u on a.attentionUserId = u.id
         WHERE userId = #{userId}
     </select>
 

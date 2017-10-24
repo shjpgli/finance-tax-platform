@@ -27,5 +27,13 @@ public interface MessageSendUtil {
     String sendMsg(String url, HttpMethod method, Map<String, Object> map);
     
     MessageBO sendMessage(Message message,String accessToken);
+    
+    /**
+     * 短信发送
+     * @param phone
+     * @param vdxMsg
+     * @param accessToken
+     */
+	void sendPhoneMessage(String phone, String vdxMsg, String accessToken);
 
 }
