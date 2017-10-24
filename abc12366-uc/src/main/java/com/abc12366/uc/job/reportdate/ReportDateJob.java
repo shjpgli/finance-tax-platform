@@ -88,7 +88,7 @@ public class ReportDateJob implements Job{
 		
 		LOGGER.info("电子税局获取办税期限..............");
 		HttpHeaders headers = new HttpHeaders();
-		String url = SpringCtxHolder.getProperty("dzsj.soa.url") + "/app/login";
+		String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/app/login";
 		Map<String, Object> map = new HashMap<>();
         map.put("appId", SpringCtxHolder.getProperty("APPID"));
         map.put("secret", SpringCtxHolder.getProperty("SECRET"));
@@ -265,6 +265,7 @@ public class ReportDateJob implements Job{
         	    	  dataList.put("keyword2Color","#00DB00");
         	    	  dataList.put("keyword3",shenqqix);
         	    	  dataList.put("keyword3Color","#00DB00");
+        	    	  dataList.put("url",SpringCtxHolder.getProperty("mbxx.sbqx.url"));
         	    	  templateService.templateSend(info.toSendJson(dataList));
         	      }
         	      
