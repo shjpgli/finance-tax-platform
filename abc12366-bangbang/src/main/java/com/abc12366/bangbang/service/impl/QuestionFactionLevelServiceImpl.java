@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionFactionLevelMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionFactionLevelRoMapper;
 import com.abc12366.bangbang.model.question.QuestionFactionLevel;
 import com.abc12366.bangbang.service.QuestionFactionLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,12 @@ public class QuestionFactionLevelServiceImpl implements QuestionFactionLevelServ
     @Autowired
     private QuestionFactionLevelMapper questionFactionLevelMapper;
 
+    @Autowired
+    private QuestionFactionLevelRoMapper questionFactionLevelRoMapper;
+
     @Override
     public List<QuestionFactionLevel> selectList() {
-        return questionFactionLevelMapper.selectList();
+        return questionFactionLevelRoMapper.selectList();
     }
 
     @Override

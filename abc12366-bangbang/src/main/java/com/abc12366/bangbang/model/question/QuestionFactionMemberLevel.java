@@ -22,6 +22,9 @@ public class QuestionFactionMemberLevel  {
 	/**采纳数**/
 	private Integer adoptions;
 
+	/**状态**/
+	private Boolean status;
+
 	/****/
 	private java.util.Date createTime;
 
@@ -108,4 +111,12 @@ public class QuestionFactionMemberLevel  {
 		return this.updateAdmin;
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public QuestionFactionMemberLevel setStatus(Boolean status) {
+		this.status = status;
+		return this;
+	}
 }
