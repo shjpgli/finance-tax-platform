@@ -123,23 +123,26 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             QuestionAnswer answer = new QuestionAnswer();
             answerBo.setId(uuid);
             BeanUtils.copyProperties(answerBo, answer);
-            answerMapper.insert(answer);
 
             if("".equals(answerBo.getParentId())){
                 int answerNum = answerRoMapper.selectAnswerCnt(answerBo.getQuestionId());
                 Question question = new Question();
                 question.setId(answerBo.getQuestionId());
-                question.setAnswerNum(answerNum);
+                question.setAnswerNum(answerNum+1);
                 questionMapper.updateByPrimaryKeySelective(question);
                 answerBo.setAnswerNum(answerNum);
             }else{
                 int commentNum = answerRoMapper.selectCommentCnt(answerBo.getParentId());
                 QuestionAnswer answer1 = new QuestionAnswer();
                 answer1.setId(answerBo.getParentId());
-                answer1.setCommentNum(commentNum);
+                answer1.setCommentNum(commentNum+1);
                 answerMapper.updateByPrimaryKeySelective(answer1);
                 answerBo.setCommentNum(commentNum);
             }
+
+            answerMapper.insert(answer);
+
+
 
 
         } catch (Exception e) {
@@ -202,23 +205,25 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
             QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
 
-            answerMapper.deleteByPrimaryKey(id);
-
             if("".equals(answer.getParentId())){
                 int answerNum = answerRoMapper.selectAnswerCnt(answer.getQuestionId());
                 Question question = new Question();
                 question.setId(answer.getQuestionId());
-                question.setAnswerNum(answerNum);
+                question.setAnswerNum(answerNum-1);
                 questionMapper.updateByPrimaryKeySelective(question);
                 num = answerNum;
             }else{
                 int commentNum = answerRoMapper.selectCommentCnt(answer.getParentId());
                 QuestionAnswer answer1 = new QuestionAnswer();
                 answer1.setId(answer.getParentId());
-                answer1.setCommentNum(commentNum);
+                answer1.setCommentNum(commentNum-1);
                 answerMapper.updateByPrimaryKeySelective(answer1);
                 num = commentNum;
             }
+
+            answerMapper.deleteByPrimaryKey(id);
+
+
 
         } catch (Exception e) {
             LOGGER.error("删除问题回复异常：{}", e);
