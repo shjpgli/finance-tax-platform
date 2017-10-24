@@ -309,7 +309,7 @@
     <select id="getTradeLogBO" resultMap="tradeBOMap" parameterType="java.lang.String">
         SELECT
         t.tradeNo,t.orderNo,	t.createTime,	t.lastUpdate,
-        l.id, l.tradeNo, l.amount, l.tradeStatus, l.tradeTime, l.payMethod, l.createTime, l.lastUpdate, l.compareStatus, l.compareTime,l.aliTrandeNo,l.tradeType
+        l.tradeNo, l.amount, l.tradeStatus, l.tradeTime, l.payMethod, l.createTime, l.lastUpdate, l.compareStatus, l.compareTime,l.aliTrandeNo,l.tradeType
         FROM uc_trade_log l
         LEFT JOIN  uc_trade t on  t.tradeNo = l.tradeNo
         where t.orderNo = #{orderNo}
