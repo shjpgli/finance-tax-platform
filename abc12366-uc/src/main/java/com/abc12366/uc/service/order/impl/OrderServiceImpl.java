@@ -282,7 +282,7 @@ public class OrderServiceImpl implements OrderService {
         TradeLog tradeLog = new TradeLog();
         tradeLog.setLastUpdate(date);
         tradeLog.setCreateTime(date);
-        tradeLog.setId(tradeNo);
+        tradeLog.setTradeNo(tradeNo);
         LOGGER.info("新增交易日志记录：{}"+tradeNo);
         int logInsert = tradeLogMapper.insert(tradeLog);
         if(logInsert != 1){
@@ -712,7 +712,7 @@ public class OrderServiceImpl implements OrderService {
 
                             insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单", "0");
                             //发送消息
-                            sendMemberMsg(orderProductBO, order);
+                            sendMemberMsg(orderProductBO, order,request);
                         } else if (goodsType.equals("5")) {
                             order.setOrderStatus("6");
                             orderMapper.update(order);
@@ -720,7 +720,7 @@ public class OrderServiceImpl implements OrderService {
                             insertPoints(orderBO);
                             insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单","0");
                             //发送消息
-                            sendPointsMsg(orderProductBO, order);
+                            sendPointsMsg(orderProductBO, order,request);
                         }else if (goodsType.equals("6")) {
                             order.setOrderStatus("6");
                             orderMapper.update(order);
@@ -757,7 +757,7 @@ public class OrderServiceImpl implements OrderService {
                         insertVipLog(tradeNo, orderBO.getUserId(), goodsBO.getMemberLevel());
 
                         insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单","0");
-                        sendMemberMsg(orderProductBO, order);
+                        sendMemberMsg(orderProductBO, order,request);
                     }else if (goodsType.equals("6")) {
                         order.setOrderStatus("6");
                         orderMapper.update(order);
@@ -828,7 +828,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 购买会员，消息发送
      */
-    private void sendMemberMsg(OrderProductBO orderProductBO, Order order) {
+    private void sendMemberMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setBusiType(MessageConstant.SPDD);
@@ -836,13 +836,13 @@ public class OrderServiceImpl implements OrderService {
         message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX+orderProductBO.getName()+MessageConstant.BUYING_MEMBERS_SUFFIX);
         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
-        messageSendUtil.sendMessage(message);
+        messageSendUtil.sendMessage(message,request);
     }
 
     /**
      * 积分充值，消息发送
      */
-    private void sendPointsMsg(OrderProductBO orderProductBO, Order order) {
+    private void sendPointsMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setBusiType(MessageConstant.SPDD);
@@ -851,7 +851,7 @@ public class OrderServiceImpl implements OrderService {
         message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints());
         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
-        messageSendUtil.sendMessage(message);
+        messageSendUtil.sendMessage(message,request);
     }
 
     /**
@@ -860,8 +860,8 @@ public class OrderServiceImpl implements OrderService {
     private void insertTradeLog(OrderBO orderBO) {
         //加入交易日志
         TradeLog tradeLog=new TradeLog();
-        tradeLog.setId(Utils.uuid());
-        tradeLog.setOrderNo(orderBO.getOrderNo());
+        tradeLog.setTradeNo(DataUtils.getJYLSH());
+        tradeLog.setTradeNo(orderBO.getOrderNo());
         tradeLog.setAliTrandeNo(orderBO.getOrderNo());
         tradeLog.setTradeStatus("1");
         tradeLog.setTradeType("2");

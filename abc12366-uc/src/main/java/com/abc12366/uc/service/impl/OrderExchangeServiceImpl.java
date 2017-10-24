@@ -372,7 +372,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             if ("ALIPAY".equals(order.getPayMethod())) {
                 // 查询交易日志中支付成功的订单
                 TradeLog log = new TradeLog();
-                log.setOrderNo(oe.getOrderNo());
+                log.setTradeNo(oe.getOrderNo());
                 log.setTradeStatus("1");
                 log.setPayMethod("ALIPAY");
                 List<TradeLog> logList = tradeLogRoMapper.selectList(log);
@@ -385,11 +385,11 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     for (int i = 0; i < logList.size(); i++) {
                         if (logList.get(i).getAmount() >= data.getAmount()) {
                             AliRefund refund = new AliRefund();
-                            refund.setOut_trade_no(logList.get(i).getOrderNo());
+                            refund.setOut_trade_no(logList.get(i).getTradeNo());
                             refund.setTrade_no(logList.get(i).getAliTrandeNo());
                             refund.setRefund_amount(String.valueOf(data.getAmount()));
                             refund.setRefund_reason(data.getAdminRemark());
-                            String out_request_no=log.getOrderNo()+"_"+logList.size();
+                            String out_request_no=log.getTradeNo()+"_"+logList.size();
                             refund.setOut_request_no(out_request_no);
 
                             try {
@@ -405,8 +405,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
                                     LOGGER.info("支付宝退款成功,插入退款流水记录");
                                     TradeLog tradeLog=new TradeLog();
-                                    tradeLog.setId(Utils.uuid());
-                                    tradeLog.setOrderNo(out_request_no);
+                                    tradeLog.setTradeNo(DataUtils.getJYLSH());
+//                                    tradeLog.setId(Utils.uuid());
+                                    tradeLog.setTradeNo(out_request_no);
                                     tradeLog.setAliTrandeNo(refundRes.getTrade_no());
                                     tradeLog.setTradeStatus("1");
                                     tradeLog.setTradeType("2");

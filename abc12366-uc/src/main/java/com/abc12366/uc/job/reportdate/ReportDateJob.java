@@ -44,7 +44,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 本月申报期限提醒
+ * 本月申报期限以及会员到期提醒
  * @author zhushuai 2017-10-23
  *
  */
@@ -64,15 +64,15 @@ public class ReportDateJob implements Job{
 	@Autowired
 	private AppService appService;
 	
-	private String shenqqix="";
+	private String shenqqix="";//申报期限
 	
-	private String pmonthF="";
+	private String pmonthF="";//上个月第一天
 	
-	private String pmonthL="";
+	private String pmonthL="";//上个月最后一天
 	
-	private String accessToken="";
+	private String accessToken="";//accessToken
 	
-	private static final int SPLIT_NUM=10;
+	private static final int SPLIT_NUM=5000;//每个线程处理数量
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -148,18 +148,18 @@ public class ReportDateJob implements Job{
         long time=System.currentTimeMillis();
         
         //创建线程池
-        ExecutorService executorService = new ThreadPoolExecutor(2, 2, 0L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(threadNum), new ThreadFactory() {
-        	private int  counter=1; 
+        ExecutorService executorService = new ThreadPoolExecutor(threadNum, threadNum, 0L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(threadNum), new ThreadFactory() {
+        	 
         	
 			public Thread newThread(Runnable runnable) {
-				Thread t = new Thread(runnable, "ReportDateThread_"+counter);  
+				Thread t = new Thread(runnable, "ReportDateThread_"+System.currentTimeMillis());  
 			    return t;  
 			}
 		}); 
         
         
-        //for (int i = 1; i <=threadNum; i++) {  
-        for (int i = 1; i <=2; i++) { 
+        for (int i = 1; i <=threadNum; i++) {  
+        //for (int i = 1; i <=2; i++) { 
         	int begin=(i-1)*SPLIT_NUM;
             Future<Integer> future = executorService.submit(new ReportDateThread(begin));  
             futureList.add(future);  
@@ -205,7 +205,7 @@ public class ReportDateJob implements Job{
             	 LOGGER.info("用户:"+JSONObject.toJSONString(userBO));
             	 
             	 //1.会员是否快到期
-            	 if(!"VIP0".equalsIgnoreCase(userBO.getLevel()) 
+            	 if(!"VIP0".equalsIgnoreCase(userBO.getVipLevel()) 
             			&& chargeDate(userBO.getVipExpireDate())){
             		  //普通消息
                       
@@ -239,11 +239,11 @@ public class ReportDateJob implements Job{
             	      
             		  
             		  //短信消息
-            		  if("VIP3".equalsIgnoreCase(userBO.getLevel())
-            				  || "VIP4".equalsIgnoreCase(userBO.getLevel())){
-            			  
-            			  String vdxMsg=MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
-                      	
+            		  if(("VIP3".equalsIgnoreCase(userBO.getVipLevel())
+            				  || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
+            				      && StringUtils.isNotEmpty(userBO.getPhone())){
+            			  String vdxMsg=MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
+            			  messageSendUtil.sendPhoneMessage(userBO.getPhone(),vdxMsg,accessToken);
             		  }
             	  }
             	 
@@ -260,7 +260,7 @@ public class ReportDateJob implements Job{
         	      messageSendUtil.sendMessage(message,accessToken);
         	      
         	      
-        	      if(!"VIP0".equalsIgnoreCase(userBO.getLevel()) 
+        	      if(!"VIP0".equalsIgnoreCase(userBO.getVipLevel()) 
              	    	 && StringUtils.isNotEmpty(userBO.getWxopenid())){
         	    	  Template info=new Template();
         	    	  //info.setTemplate_id("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g");
@@ -281,11 +281,11 @@ public class ReportDateJob implements Job{
         	      }
         	      
         	      //短信消息
-        		  if("VIP3".equalsIgnoreCase(userBO.getLevel())
-        				  || "VIP4".equalsIgnoreCase(userBO.getLevel())){
-        			  
-        			  String vdxMsg=MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
-                  	
+        		  if(("VIP3".equalsIgnoreCase(userBO.getVipLevel())
+        				  || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
+        				     && StringUtils.isNotEmpty(userBO.getPhone())){
+        			  String vdxMsg=MessageConstant.SBQXMSG.replaceAll("\\{#DATA.DATE\\}",shenqqix);
+        			  messageSendUtil.sendPhoneMessage(userBO.getPhone(),vdxMsg,accessToken);
         		  }
 
             }
@@ -314,20 +314,6 @@ public class ReportDateJob implements Job{
 	 }
 	 
 	 
-     public static void main(String[] args) {
-    	 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
-         String firstDay="",lastDay="";
-         //获取前月的第一天
-         Calendar   cal_1=Calendar.getInstance();//获取当前日期 
-         cal_1.add(Calendar.MONTH, -1);
-         cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
-         firstDay = format.format(cal_1.getTime());
-         System.out.println("-----1------firstDay:"+firstDay);
-         //获取前月的最后一天
-         Calendar cale = Calendar.getInstance();   
-         cale.set(Calendar.DAY_OF_MONTH,0);//设置为1号,当前日期既为本月第一天 
-         lastDay = format.format(cale.getTime());
-         System.out.println("-----2------lastDay:"+lastDay);
-	}
+    
 	 
 }

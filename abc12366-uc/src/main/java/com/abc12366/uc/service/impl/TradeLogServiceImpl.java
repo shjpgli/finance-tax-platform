@@ -56,7 +56,7 @@ public class TradeLogServiceImpl implements TradeLogService {
 			if (dataList.size() > 0) {
 			    for (TradeBillBO data: dataList) {
 			        TradeLog log = selectOne(data);
-			        if (log != null && log.getOrderNo().equals(data.getOrderNo())
+			        if (log != null && log.getTradeNo().equals(data.getOrderNo())
 			                && log.getAmount().equals(data.getAmount())) {
 			            log.setCompareStatus("1");
 			        } else {
@@ -76,7 +76,7 @@ public class TradeLogServiceImpl implements TradeLogService {
 
     @Override
     public TradeLog updateCompare(TradeLog log) {
-        TradeLog tradeLog = tradeLogRoMapper.selectByPrimaryKey(log.getId());
+        TradeLog tradeLog = tradeLogRoMapper.selectByPrimaryKey(log.getTradeNo());
         tradeLog.setCompareStatus(log.getCompareStatus());
         tradeLog.setCompareTime(new Date());
         tradeLogMapper.update(tradeLog);

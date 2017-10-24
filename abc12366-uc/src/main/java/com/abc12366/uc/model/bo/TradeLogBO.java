@@ -9,13 +9,10 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class TradeLogBO implements Serializable {
 
-    /****/
-    private String id;
-
     /**
-     * 订单号
+     * 交易流水号
      **/
-    private String orderNo;
+    private String tradeNo;
 
     /**
      * 交易金额
@@ -54,22 +51,6 @@ public class TradeLogBO implements Serializable {
      * 对账时间
      **/
     private java.util.Date compareTime;
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getOrderNo() {
-        return this.orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
 
     public Double getAmount() {
         return this.amount;
@@ -143,4 +124,11 @@ public class TradeLogBO implements Serializable {
 		this.tradeType = tradeType;
 	}
 
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
+    }
 }
