@@ -182,4 +182,26 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         }
         return response;
 	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void sendPhoneMessage(String phone, String vdxMsg, String accessToken) {
+		String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/mobile/msg";
+        Map<String, Object> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("content", vdxMsg);
+        
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Access-Token", accessToken);
+        httpHeaders.add("Version", "1");
+        HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+            LOGGER.info("Response: {}, {}", url, responseEntity);
+        } catch (RestClientException e) {
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
+        }
+		
+	}
 }
