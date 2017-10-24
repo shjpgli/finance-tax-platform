@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Service("templateService")
 public class WxTemplateServiceImpl implements IWxTemplateService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WxTemplateServiceImpl.class);

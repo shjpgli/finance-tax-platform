@@ -143,7 +143,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
         message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX + MessageConstant.BUYING_MEMBERS_SUFFIX + "。<a " +
-                "href=\"" + SpringCtxHolder.getProperty("abc12366.api.url") + "/member/member_rights.html\">会员权益详情查看</a>");
+                "href=\"/member/member_rights.html\">会员权益详情查看</a>");
         message.setUserId("cs");
         new MessageSendUtilImpl().sendMessage(message);
     }
