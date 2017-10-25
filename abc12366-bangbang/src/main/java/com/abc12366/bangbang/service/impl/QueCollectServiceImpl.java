@@ -58,11 +58,11 @@ public class QueCollectServiceImpl implements QueCollectService {
             throw new ServiceException(6116);
         }
 
-        int collectCnt = collectRoMapper.selectCollectCnt(id);
+        int collectCnt = collectRoMapper.selectCollectCnt(id)+1;
 
         Question question = new Question();
         question.setId(id);
-        question.setCollectNum(collectCnt+1);
+        question.setCollectNum(collectCnt);
 
         quesionMapper.updateByPrimaryKeySelective(question);
 
@@ -80,11 +80,11 @@ public class QueCollectServiceImpl implements QueCollectService {
         String userId = UcUserCommon.getUserId(request);
         Map map = MapUtil.kv("questionId", id, "userId", userId);
 
-        int collectCnt = collectRoMapper.selectCollectCnt(id);
+        int collectCnt = collectRoMapper.selectCollectCnt(id)-1;
 
         Question question = new Question();
         question.setId(id);
-        question.setCollectNum(collectCnt-1);
+        question.setCollectNum(collectCnt);
 
         quesionMapper.updateByPrimaryKeySelective(question);
 
