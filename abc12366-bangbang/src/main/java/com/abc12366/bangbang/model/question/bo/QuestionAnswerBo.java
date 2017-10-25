@@ -31,6 +31,12 @@ public class QuestionAnswerBo implements Serializable {
 	/**回答内容**varchar(4000)**/
 	private String answer;
 
+    /**回答图片**varchar(300)**/
+    private String shortAnswer;
+
+    /**简短回答内容**varchar(300)**/
+    private String answerImage;
+
 	/**状态**varchar(20)**/
 	private String status;
 
@@ -230,5 +236,21 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setCollectNum(Integer collectNum) {
         this.collectNum = collectNum;
+    }
+
+    public String getShortAnswer() {
+        return shortAnswer;
+    }
+
+    public void setShortAnswer(String shortAnswer) {
+        this.shortAnswer = shortAnswer;
+    }
+
+    public String getAnswerImage() {
+        return answerImage;
+    }
+
+    public void setAnswerImage(String answerImage) {
+        this.answerImage = answerImage;
     }
 }

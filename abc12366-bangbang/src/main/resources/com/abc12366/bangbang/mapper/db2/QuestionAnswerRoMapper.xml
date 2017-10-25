@@ -11,7 +11,7 @@
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.lang.String">
 		 SELECT
-             a.id,	parentId,	questionId,factionId,commentNum,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,	answerUserId,ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept
+             a.id,	parentId,	questionId,factionId,commentNum,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,	answerUserId,ip,	answer,shortAnswer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept
 		 FROM bb_question_answer a left join bb_user u on a.userId = u.id
 		 WHERE a.id = #{id}
 	</select>
@@ -21,7 +21,7 @@
         SELECT
         a.id,	parentId,	questionId,commentNum,likeNum,trampleNum,reportNum,	a.userId,u.userPicturePath,u.nickname,
         u1.nickname answerNickname,
-        answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        answerUserId,a.ip,	shortAnswer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike
         FROM bb_question_answer a left join bb_user u on a.userId = u.id
         left join bb_user u1 on a.answerUserId = u1.id
@@ -40,7 +40,7 @@
         SELECT
         a.id,	parentId,	questionId,q.collectNum,q.answerNum,a.commentNum,a.likeNum,a.trampleNum,	a.userId,u.userPicturePath,u.nickname,
         u1.nickname answerNickname,
-        answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        answerUserId,a.ip,	shortAnswer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         q.title questionTitle
         FROM bb_question_answer a LEFT JOIN bb_question q on a.questionId = q.id
         left join bb_user u on a.userId = u.id
@@ -62,7 +62,7 @@
         SELECT
         a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,q.browseNum,
         u1.nickname answerNickname,
-        answerUserId,a.ip,	answer,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        answerUserId,a.ip,	shortAnswer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         a.likeNum,a.commentNum,a.trampleNum,a.reportNum,
         q.browseNum,q.answerNum
         FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
