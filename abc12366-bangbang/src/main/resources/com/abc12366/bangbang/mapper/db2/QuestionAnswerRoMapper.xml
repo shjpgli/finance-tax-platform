@@ -93,7 +93,7 @@
         SELECT
         count(id)
         FROM bb_question_answer
-        WHERE questionId = #{questionId} AND a.userId = #{userId}
+        WHERE questionId = #{questionId} AND userId = #{userId}
     </select>
 
 
