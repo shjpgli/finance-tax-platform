@@ -31,4 +31,11 @@ public interface InvoiceUseApplyService {
     void signUseApply(String id);
 
     InvoiceUseDetailBO selectInvoiceRepoNum(String code);
+
+    /**
+     * 【待审核】发票领用数
+     *
+     * @return Integer
+     */
+    Integer selectTodoListCount();
 }

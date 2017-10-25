@@ -301,6 +301,8 @@ public class AuthServiceImpl implements AuthService {
         map.put("token", userToken);
         map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
         map.put("user", userBO);
+        // 在request中设置userId，记录日志使用
+        Utils.setUserId(userBO.getId());
 
         // 用户信息写入redis
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,

@@ -124,7 +124,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             String userId = Utils.getUserId();
             data.setId(Utils.uuid());
             data.setUserId(userId);
-            Timestamp now = new Timestamp(new Date().getTime());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             data.setCreateTime(now);
             data.setLastUpdate(now);
             data.setStatus("1");
@@ -214,7 +214,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             oe.setReason(data.getReason());
             oe.setUserRemark(data.getUserRemark());
             oe.setType(data.getType());
-            oe.setLastUpdate(new Timestamp(new Date().getTime()));
+            oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             oe.setStatus("1");
             oe.setAdminRemark("");
             oe.setExpressNo("");
@@ -281,7 +281,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             oe.setExpressNo(data.getExpressNo());
             oe.setExpressComp(data.getExpressComp());
             oe.setAdminRemark(data.getAdminRemark());
-            oe.setLastUpdate(new Timestamp(new Date().getTime()));
+            oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             oe.setStatus("7");
             oe.setAdminConfirmRemark(data.getAdminConfirmRemark());
             orderExchangeMapper.update(oe);
@@ -412,7 +412,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     tradeLog.setTradeType("2");
                                     tradeLog.setAmount(Double.parseDouble("-"+refundRes.getRefund_fee()));
                                     tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
-                                    Timestamp now = new Timestamp(new Date().getTime());
+                                    Timestamp now = new Timestamp(System.currentTimeMillis());
                                     tradeLog.setCreateTime(now);
                                     tradeLog.setLastUpdate(now);
                                     tradeLog.setPayMethod("ALIPAY");
@@ -420,7 +420,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
                                     oe.setStatus("8");
                                     oe.setAdminRemark(data.getAdminRemark());
-                                    oe.setLastUpdate(new Timestamp(new Date().getTime()));
+                                    oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                     orderExchangeMapper.update(oe);
                                     // 插入订单日志-已退款
                                     // insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
@@ -486,7 +486,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Transactional("db1TxManager")
     @Override
     public void automaticReceipt() throws Exception {
-        Timestamp now = new Timestamp(new Date().getTime());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         OrderExchange oe = new OrderExchange.Builder()
                 .status("3")
                 .lastUpdate(now)
@@ -515,7 +515,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     public OrderExchange receive(String id) {
         OrderExchange oe = orderExchangeRoMapper.selectById(id);
         oe.setStatus("4");
-        oe.setLastUpdate(new Timestamp(new Date().getTime()));
+        oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
         orderExchangeMapper.update(oe);
 
         // 插入订单日志
@@ -523,6 +523,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         return oe;
     }
 
+    @Override
+    public Integer selectTodoListCount(String status) {
+        return orderExchangeRoMapper.selectTodoListCount(status);
+    }
 
     @Override
     public List<OrderExchange> selectList(OrderExchange oe, int page, int size) {
@@ -542,7 +546,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
-            Timestamp now = new Timestamp(new Date().getTime());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             oe.setAdminRemark(data.getAdminRemark());
             oe.setLastUpdate(now);
             oe.setStatus("5");
@@ -592,7 +596,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
-            Timestamp now = new Timestamp(new Date().getTime());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             oe.setAdminRemark(data.getAdminRemark());
             oe.setLastUpdate(now);
             oe.setStatus("2");
@@ -637,7 +641,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         OrderExchange oe = orderExchangeRoMapper.selectById(data.getId());
 
         if (oe != null) {
-            Timestamp now = new Timestamp(new Date().getTime());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             oe.setExpressNo(data.getExpressNo());
             oe.setExpressComp(data.getExpressComp());
             oe.setAdminRemark(data.getAdminRemark());
@@ -669,7 +673,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 .id(Utils.uuid())
                 .orderNo(orderNo)
                 .action(selectFieldValue("exchange_status", status))
-                .createTime(new Timestamp(new Date().getTime()))
+                .createTime(new Timestamp(System.currentTimeMillis()))
                 .createUser(userId)
                 .remark(remark)
                 .logType(logType)

@@ -198,6 +198,17 @@ public class Utils {
         return userId;
     }
 
+    /**
+     * 在HttpServletRequest记录userId
+     *
+     * @param userId 用户ID
+     */
+    public static void setUserId(String userId) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        request.setAttribute(Constant.USER_ID, userId);
+    }
+
     public static String getAdminId() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();

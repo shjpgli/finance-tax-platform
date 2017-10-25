@@ -88,4 +88,12 @@ public interface OrderExchangeService {
      * 用户确认收货
      */
     OrderExchange receive(String id);
+
+    /**
+     * 统计某一状态的退换货数
+     *
+     * @param status String
+     * @return Integer
+     */
+    Integer selectTodoListCount(String status);
 }

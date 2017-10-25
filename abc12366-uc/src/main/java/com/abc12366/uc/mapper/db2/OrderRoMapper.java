@@ -46,4 +46,11 @@ public interface OrderRoMapper {
     List<OrderBO> selectUserAllOrderList(OrderBO order);
 
     List<OrderBO> selectCurriculumOrderList(OrderBO orderBO);
+
+    /**
+     * 状态为[付款成功]订单数量
+     *
+     * @return Integer
+     */
+    Integer selectTodoListCount();
 }

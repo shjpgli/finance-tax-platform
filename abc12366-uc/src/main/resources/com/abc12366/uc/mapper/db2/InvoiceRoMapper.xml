@@ -354,4 +354,7 @@
 
     </select>
 
+    <select id="selectTodoListCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_invoice WHERE status = '1'
+    </select>
 </mapper>

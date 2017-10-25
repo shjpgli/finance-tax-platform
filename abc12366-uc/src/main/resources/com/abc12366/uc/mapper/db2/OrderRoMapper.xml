@@ -770,4 +770,8 @@
 
     </select>
 
+    <select id="selectTodoListCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_order
+        WHERE orderStatus = '4'
+    </select>
 </mapper>
