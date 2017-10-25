@@ -80,4 +80,12 @@
         and type = #{type}
         ORDER BY lastUpdate DESC
     </select>
+
+    <select id="selectValidSysTaskByRuleId" resultType="com.abc12366.uc.model.SysTask" parameterType="java.lang.String">
+        SELECT
+        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
+        count,skipURL,ruleId,awardType,remark,dateType
+        from uc_sys_task
+        where ruleId = #{ruleId}
+    </select>
 </mapper>
