@@ -43,5 +43,5 @@ public interface UserRoMapper {
 
 	List<UserBO> getNomalList(Map<String, Object> map);
 
-	User selectByWxUserId(UserUpdateBO userUpdateDTO);
+	User selectByWxUserId(User users);
 }
