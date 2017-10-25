@@ -3,6 +3,7 @@ package com.abc12366.cms.service.impl;
 import com.abc12366.cms.mapper.db1.NoticeMapper;
 import com.abc12366.cms.mapper.db2.NoticeRoMapper;
 import com.abc12366.cms.model.bo.NoticeBO;
+import com.abc12366.cms.model.bo.NoticeForqtBO;
 import com.abc12366.cms.service.NoticeService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -42,9 +43,9 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public List<NoticeBO> selectListForqt(NoticeBO notice, int page, int size) {
+    public List<NoticeForqtBO> selectListForqt(NoticeForqtBO notice, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<NoticeBO> noticeList = noticeRoMapper.selectListForqt(notice);
+        List<NoticeForqtBO> noticeList = noticeRoMapper.selectListForqt(notice);
         return noticeList;
     }
 
