@@ -40,14 +40,14 @@ public class QueCommentController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                                @RequestParam(value = "userId", required = false) String userId,
                                      @RequestParam(value = "questionId", required = false) String questionId,
-                                     @RequestParam(value = "parentId", required = false) String parentId) {
+                                     @RequestParam(value = "answerId", required = false) String answerId) {
         Map<String, Object> dataMap = new HashMap<>();
         if(userId == null || "".equals(userId)){
             userId = "11";
         }
         dataMap.put("userId", userId);//
         dataMap.put("questionId", questionId);//
-        dataMap.put("parentId", parentId);//
+        dataMap.put("answerId", answerId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionCommentBo> dataList = queCommentService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
