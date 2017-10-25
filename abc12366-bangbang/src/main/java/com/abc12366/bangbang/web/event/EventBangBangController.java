@@ -39,8 +39,8 @@ public class EventBangBangController {
      * @return
      */
     @GetMapping(path = "/singleevent")
-    public ResponseEntity singleevent( HttpServletRequest request) {
-        SingleEventBo singleEvent = eventService.singleEvent(request);
+    public ResponseEntity singleevent( HttpServletRequest request, @RequestParam(defaultValue = "") String category) {
+        SingleEventBo singleEvent = eventService.singleEvent(request, category);
         return ResponseEntity.ok(Utils.kv("data", singleEvent));
     }
 
@@ -51,8 +51,8 @@ public class EventBangBangController {
      * @return
      */
     @GetMapping(path = "/singleeventlist")
-    public ResponseEntity singleeventlist( HttpServletRequest request) {
-        List<SingleEventBo> dataList = eventService.singleEventList(request);
+    public ResponseEntity singleeventlist( HttpServletRequest request, @RequestParam(defaultValue = "") String category) {
+        List<SingleEventBo> dataList = eventService.singleEventList(request, category);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 

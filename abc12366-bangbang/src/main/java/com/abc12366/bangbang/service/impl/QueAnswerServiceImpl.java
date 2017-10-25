@@ -48,19 +48,6 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     }
 
     @Override
-    public List<QuestionAnswerBo> selectListByParentId(Map<String,Object> map) {
-        List<QuestionAnswerBo> answerBoList;
-        try {
-            //查询问题回复列表
-            answerBoList = answerRoMapper.selectListByParentId(map);
-        } catch (Exception e) {
-            LOGGER.error("查询问题回复列表信息异常：{}", e);
-            throw new ServiceException(6110);
-        }
-        return answerBoList;
-    }
-
-    @Override
     public List<QuestionAnswerBo> selectListNew(Map<String,Object> map) {
         List<QuestionAnswerBo> answerBoList;
         try {
@@ -87,30 +74,20 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     }
 
     @Override
-    public List<QuestionAnswerBo> selectMyCommentList(Map<String,Object> map) {
-        List<QuestionAnswerBo> answerBoList;
-        try {
-            //查询我的评论列表
-            answerBoList = answerRoMapper.selectMyCommentList(map);
-        } catch (Exception e) {
-            LOGGER.error("查询问题回复列表信息异常：{}", e);
-            throw new ServiceException(6110);
-        }
-        return answerBoList;
-    }
-
-    @Override
     public QuestionAnswerBo save(QuestionAnswerBo answerBo) {
-        try {
-            JSONObject jsonStu = JSONObject.fromObject(answerBo);
-            LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
-            if(answerBo.getParentId() == null){
-                answerBo.setParentId("");
-            }
+        JSONObject jsonStu = JSONObject.fromObject(answerBo);
+        LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
 
-            Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("userId", answerBo.getUserId());
-            dataMap.put("questionId", answerBo.getQuestionId());
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", answerBo.getUserId());
+        dataMap.put("questionId", answerBo.getQuestionId());
+        int answerCnt = answerRoMapper.selectMyAnswerCnt(dataMap);
+        if(answerCnt >0){
+            //已回复，请勿重复回复
+            throw new ServiceException(6118);
+        }
+        try {
+
             String factionId = answerRoMapper.selectfactionId(dataMap);
             if(factionId == null){
                 factionId = "";
@@ -122,23 +99,18 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             QuestionAnswer answer = new QuestionAnswer();
             answerBo.setId(uuid);
+            answerBo.setCommentNum(0);
+            answerBo.setLikeNum(0);
+            answerBo.setTrampleNum(0);
+            answerBo.setReportNum(0);
             BeanUtils.copyProperties(answerBo, answer);
 
-            if("".equals(answerBo.getParentId())){
-                int answerNum = answerRoMapper.selectAnswerCnt(answerBo.getQuestionId());
-                Question question = new Question();
-                question.setId(answerBo.getQuestionId());
-                question.setAnswerNum(answerNum+1);
-                questionMapper.updateByPrimaryKeySelective(question);
-                answerBo.setAnswerNum(answerNum);
-            }else{
-                int commentNum = answerRoMapper.selectCommentCnt(answerBo.getParentId());
-                QuestionAnswer answer1 = new QuestionAnswer();
-                answer1.setId(answerBo.getParentId());
-                answer1.setCommentNum(commentNum+1);
-                answerMapper.updateByPrimaryKeySelective(answer1);
-                answerBo.setCommentNum(commentNum);
-            }
+            int answerNum = answerRoMapper.selectAnswerCnt(answerBo.getQuestionId());
+            Question question = new Question();
+            question.setId(answerBo.getQuestionId());
+            question.setAnswerNum(answerNum+1);
+            questionMapper.updateByPrimaryKeySelective(question);
+            answerBo.setAnswerNum(answerNum);
 
             answerMapper.insert(answer);
 
@@ -205,21 +177,12 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
             QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
 
-            if("".equals(answer.getParentId())){
-                int answerNum = answerRoMapper.selectAnswerCnt(answer.getQuestionId());
-                Question question = new Question();
-                question.setId(answer.getQuestionId());
-                question.setAnswerNum(answerNum-1);
-                questionMapper.updateByPrimaryKeySelective(question);
-                num = answerNum;
-            }else{
-                int commentNum = answerRoMapper.selectCommentCnt(answer.getParentId());
-                QuestionAnswer answer1 = new QuestionAnswer();
-                answer1.setId(answer.getParentId());
-                answer1.setCommentNum(commentNum-1);
-                answerMapper.updateByPrimaryKeySelective(answer1);
-                num = commentNum;
-            }
+            int answerNum = answerRoMapper.selectAnswerCnt(answer.getQuestionId());
+            Question question = new Question();
+            question.setId(answer.getQuestionId());
+            question.setAnswerNum(answerNum-1);
+            questionMapper.updateByPrimaryKeySelective(question);
+            num = answerNum;
 
             answerMapper.deleteByPrimaryKey(id);
 

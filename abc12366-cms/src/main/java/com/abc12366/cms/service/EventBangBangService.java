@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public interface EventBangBangService {
 
-    SingleEventBo singleEvent();
+    SingleEventBo singleEvent(Map map);
 
-    List<SingleEventBo> singleEventList();
+    List<SingleEventBo> singleEventList(Map map);
 
     EventRecordBbBo addEventRecord(EventRecordBbBo eventRecord);
 

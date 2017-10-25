@@ -160,6 +160,9 @@ public class QuestionServiceImpl implements QuestionService {
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
             questionBo.setBrowseNum(0);
+            questionBo.setCollectNum(0);
+            questionBo.setReportNum(0);
+            questionBo.setAnswerNum(0);
             //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
