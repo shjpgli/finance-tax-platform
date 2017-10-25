@@ -23,4 +23,6 @@ public interface UserMapper {
     int updateContinuePwdWrong(UserLoginPasswordWrongCount wrongCount);
 
     int updatePhone(User user);
+
+	void qxwxbd(String wxopenid);
 }

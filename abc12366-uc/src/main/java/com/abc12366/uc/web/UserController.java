@@ -321,6 +321,18 @@ public class UserController {
         IsRealNameBO isRealName = userService.isRealName();
         return ResponseEntity.ok(Utils.kv("data", isRealName));
     }
+    
+    /**
+     * 修改微信绑定信息
+     * @return
+     */
+    @PostMapping(path = "/wx/changeWxBdxx")
+    public ResponseEntity changeWxBdxx(@RequestBody UserUpdateBO userUpdateDTO) {
+    	int status=userService.changeWxBdxx(userUpdateDTO);
+    	return ResponseEntity.ok(Utils.kv("data", status));
+    }
+    
+    
 
 //    @PostMapping(path = "/test")
 //    public ResponseEntity test(){

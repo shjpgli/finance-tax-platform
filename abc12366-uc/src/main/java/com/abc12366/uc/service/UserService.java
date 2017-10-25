@@ -111,4 +111,5 @@ public interface UserService {
 	 * @return
 	 */
 	List<UserBO> getNomalList(Map<String, Object> map);
+	int changeWxBdxx(UserUpdateBO userUpdateDTO);
 }
