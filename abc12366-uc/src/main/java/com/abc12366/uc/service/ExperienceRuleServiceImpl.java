@@ -4,7 +4,9 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceRuleMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRuleRoMapper;
+import com.abc12366.uc.mapper.db2.SysTaskRoMapper;
 import com.abc12366.uc.model.ExperienceRule;
+import com.abc12366.uc.model.SysTask;
 import com.abc12366.uc.model.bo.ExperienceRuleBO;
 import com.abc12366.uc.model.bo.ExperienceRuleInsertBO;
 import com.abc12366.uc.model.bo.ExperienceRuleUpdateBO;
@@ -34,6 +36,9 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
 
     @Autowired
     private ExperienceRuleMapper experienceRuleMapper;
+
+    @Autowired
+    private SysTaskRoMapper sysTaskRoMapper;
 
     @Override
     public List<ExperienceRuleBO> selectList(Map<String, Object> map) {
@@ -90,6 +95,9 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
             throw new ServiceException(4102);
         }
 
+        //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
+        isValidSysTaskRelatedTheRule(id);
+
         //经验值规则新增，规则名称、规则代码唯一性校验
         List<ExperienceRuleBO> experienceRuleBOList = experienceRuleRoMapper.selectList(null);
         //本身不计入校验数据
@@ -135,6 +143,9 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
     @Override
     public int delete(String id) {
         LOGGER.info("{}", id);
+        //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
+        isValidSysTaskRelatedTheRule(id);
+
         int result = experienceRuleMapper.delete(id);
         if (result != 1) {
             LOGGER.warn("删除失败，参数为：id=" + id);
@@ -155,6 +166,12 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
         if ((!status.equals("true")) && (!status.equals("false"))) {
             throw new ServiceException(4614);
         }
+
+        if(status.equals("false")){
+            //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
+            isValidSysTaskRelatedTheRule(id);
+        }
+
         boolean modifyStatus = status.equals("true");
         ExperienceRule experienceRule = new ExperienceRule();
         experienceRule.setId(id);
@@ -166,6 +183,14 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
                 throw new ServiceException(4615);
             }
             throw new ServiceException(4616);
+        }
+    }
+
+    @Override
+    public void isValidSysTaskRelatedTheRule(String ruleId) {
+        SysTask sysTask = sysTaskRoMapper.selectValidSysTaskByRuleId(ruleId);
+        if (sysTask != null) {
+            throw new ServiceException(4713);
         }
     }
 }

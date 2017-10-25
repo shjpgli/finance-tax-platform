@@ -226,42 +226,82 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     //生成一次性任务
     private void generateOneTimeTaskList(String userId) {
-        String dateType = UCConstant.TASK_TIME_ONETIME_TYPE;
-        List<TodoTask> taskList = todoTaskRoMapper.selectListOneTime(userId, dateType);
-        if (taskList != null && taskList.size() > 0) {
-            return;
+//        String dateType = UCConstant.TASK_TIME_ONETIME_TYPE;
+//        List<TodoTask> taskList = todoTaskRoMapper.selectListOneTime(userId, dateType);
+//        if (taskList != null && taskList.size() > 0) {
+//            return;
+//        }
+//        generateTaskListByDateType(userId, dateType);
+
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(UCConstant.TASK_TIME_ONETIME_TYPE);
+        for (SysTaskBO sysTaskBO : sysTaskBOList) {
+            //假如成长任务已生成则不用再生成
+            List<TodoTask> taskList = todoTaskRoMapper.selectListOneTime(userId, sysTaskBO.getId());
+            if (taskList != null && taskList.size() > 0) {
+                continue;
+            }
+            generateOneTodoTask(userId, sysTaskBO);
         }
-        generateTaskListByDateType(userId, dateType);
     }
 
     //生成日度任务
     private void generateDayTaskList(String userId) {
-        String dateType = UCConstant.TASK_TIME_DAY_TYPE;
-        List<TodoTask> taskList = todoTaskRoMapper.selectListByDay(userId, dateType);
-        if (taskList != null && taskList.size() > 0) {
-            return;
+//        String dateType = UCConstant.TASK_TIME_DAY_TYPE;
+//        List<TodoTask> taskList = todoTaskRoMapper.selectListByDay(userId, dateType);
+//        if (taskList != null && taskList.size() > 0) {
+//            return;
+//        }
+//        generateTaskListByDateType(userId, dateType);
+
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(UCConstant.TASK_TIME_DAY_TYPE);
+        for (SysTaskBO sysTaskBO : sysTaskBOList) {
+            //假如日度任务已生成则不用再生成
+            List<TodoTask> taskList = todoTaskRoMapper.selectListByDay(userId, sysTaskBO.getId());
+            if (taskList != null && taskList.size() > 0) {
+                continue;
+            }
+            generateOneTodoTask(userId, sysTaskBO);
         }
-        generateTaskListByDateType(userId, dateType);
     }
 
     //生成年度任务
     private void generateYearTaskList(String userId) {
-        String dateType = UCConstant.TASK_TIME_YEAR_TYPE;
-        List<TodoTask> taskList = todoTaskRoMapper.selectListByYear(userId, dateType);
-        if (taskList != null && taskList.size() > 0) {
-            return;
+//        String dateType = UCConstant.TASK_TIME_YEAR_TYPE;
+//        List<TodoTask> taskList = todoTaskRoMapper.selectListByYear(userId, dateType);
+//        if (taskList != null && taskList.size() > 0) {
+//            return;
+//        }
+//        generateTaskListByDateType(userId, dateType);
+
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(UCConstant.TASK_TIME_YEAR_TYPE);
+        for (SysTaskBO sysTaskBO : sysTaskBOList) {
+            //假如年度任务已生成则不用再生成
+            List<TodoTask> taskList = todoTaskRoMapper.selectListByYear(userId, sysTaskBO.getId());
+            if (taskList != null && taskList.size() > 0) {
+                continue;
+            }
+            generateOneTodoTask(userId, sysTaskBO);
         }
-        generateTaskListByDateType(userId, dateType);
     }
 
     //生成月度任务
     private void generateMonthTaskList(String userId) {
-        String dateType = UCConstant.TASK_TIME_MONTH_TYPE;
-        List<TodoTask> taskList = todoTaskRoMapper.selectListByMonth(userId, dateType);
-        if (taskList != null && taskList.size() > 0) {
-            return;
+//        String dateType = UCConstant.TASK_TIME_MONTH_TYPE;
+//        List<TodoTask> taskList = todoTaskRoMapper.selectListByMonth(userId, dateType);
+//        if (taskList != null && taskList.size() > 0) {
+//            return;
+//        }
+//        generateTaskListByDateType(userId, dateType);
+
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(UCConstant.TASK_TIME_MONTH_TYPE);
+        for (SysTaskBO sysTaskBO : sysTaskBOList) {
+            //假如月度任务已生成则不用再生成
+            List<TodoTask> taskList = todoTaskRoMapper.selectListByMonth(userId, sysTaskBO.getId());
+            if (taskList != null && taskList.size() > 0) {
+                continue;
+            }
+            generateOneTodoTask(userId, sysTaskBO);
         }
-        generateTaskListByDateType(userId, dateType);
     }
 
     @Override
@@ -391,6 +431,12 @@ public class TodoTaskServiceImpl implements TodoTaskService {
             return;
         }
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
+            //假如成长任务已生成则不用再生成
+            List<TodoTask> taskList = todoTaskRoMapper.selectListByUserIdAndSysId(userId, sysTaskBO.getId());
+            if (taskList != null && taskList.size() > 0) {
+                continue;
+            }
+
             TodoTask todoTask = new TodoTask();
             todoTask.setId(Utils.uuid());
             todoTask.setUserId(userId);
@@ -433,5 +479,31 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     @Override
     public List<TodoTaskFront> selectOnetimeTaskList(String userId) {
         return todoTaskRoMapper.selectOnetimeTaskList(userId);
+    }
+
+    @Override
+    public List<TodoTaskFront> selectBangbangTaskList(String userId) {
+        return todoTaskRoMapper.selectBangbangTaskList(userId);
+    }
+
+    @Override
+    public void generateOneTodoTask(String userId, SysTaskBO sysTaskBO) {
+        TodoTask todoTask = new TodoTask();
+        todoTask.setId(Utils.uuid());
+        todoTask.setUserId(userId);
+        todoTask.setSysTaskId(sysTaskBO.getId());
+        todoTask.setAllCount(sysTaskBO.getCount());
+        todoTask.setFinishedCount(0);
+        todoTask.setAwardType(sysTaskBO.getAwardType());
+        todoTask.setType(sysTaskBO.getType());
+        todoTask.setAward(sysTaskBO.getAward());
+        todoTask.setStatus(UCConstant.TASK_UNFINISHED);
+        todoTask.setSkipUrl(sysTaskBO.getSkipURL());
+        todoTask.setRuleId(sysTaskBO.getRuleId());
+        Date date = new Date();
+        todoTask.setCreateTime(date);
+        todoTask.setLastUpdate(date);
+        todoTask.setDateType(sysTaskBO.getDateType());
+        insert(todoTask);
     }
 }
