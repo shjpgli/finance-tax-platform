@@ -59,7 +59,7 @@
                 <when test="receiveStatus != null and receiveStatus == 'UNUSED'">
                     and receiveStatus IS NULL
                 </when>
-                <when test="receiveStatus != null and receiveStatus != 'UNUSED'">
+                <when test="receiveStatus != null and receiveStatus != '' and receiveStatus != 'UNUSED'">
                     and receiveStatus = #{receiveStatus}
                 </when>
                 <otherwise>
@@ -69,7 +69,7 @@
                 <when test="sendStatus != null and sendStatus == '3'.toString()">
                     and sendStatus IS NULL
                 </when>
-                <when test="sendStatus != null and sendStatus != '3'.toString()">
+                <when test="sendStatus != null and sendStatus != '' and sendStatus != '3'.toString()">
                     and sendStatus = #{sendStatus}
                 </when>
                 <otherwise>
