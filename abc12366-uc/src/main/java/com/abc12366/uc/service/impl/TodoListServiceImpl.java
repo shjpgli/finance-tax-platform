@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.uc.model.bo.OrderStatBO;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.RealNameValidationService;
@@ -70,6 +71,19 @@ public class TodoListServiceImpl implements TodoListService{
         map.put("num4", num4);
         map.put("num5", num5);
         map.put("num6", num6);
+        return map;
+    }
+
+    @Override
+    public Map<String, Integer> orderStat() {
+        OrderStatBO orderStatBO = orderService.orderStat();
+        Map<String, Integer> map = new HashMap<>(6);
+        map.put("orderStatus3", orderStatBO.getOrderStatus3());
+        map.put("orderStatus4", orderStatBO.getOrderStatus4());
+        map.put("orderStatus6", orderStatBO.getOrderStatus6());
+        map.put("orderStatus7", orderStatBO.getOrderStatus7());
+        map.put("orderStatus9", orderStatBO.getOrderStatus9());
+        map.put("orderStatus", orderStatBO.getOrderStatus());
         return map;
     }
 }

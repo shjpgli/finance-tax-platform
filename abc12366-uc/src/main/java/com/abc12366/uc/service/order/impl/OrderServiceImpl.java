@@ -1153,4 +1153,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectTodoListCount();
     }
 
+    @Override
+    public OrderStatBO orderStat() {
+        return orderRoMapper.orderStat();
+    }
+
 }

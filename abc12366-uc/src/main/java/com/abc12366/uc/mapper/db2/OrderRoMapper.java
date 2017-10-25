@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.bo.OrderStatBO;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.OrderBO;
 import org.apache.ibatis.annotations.Param;
@@ -53,4 +54,11 @@ public interface OrderRoMapper {
      * @return Integer
      */
     Integer selectTodoListCount();
+
+    /**
+     * 统计3-付款中，4-付款成功，6-订单完成，7-订单结束，9-已退款，订单总数的数量
+     *
+     * @return OrderStatBO
+     */
+    OrderStatBO orderStat();
 }
