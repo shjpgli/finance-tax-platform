@@ -426,6 +426,8 @@ public class AuthServiceImpl implements AuthService {
         map.put("token", userToken);
         map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
         map.put("user", userBO);
+        // 在request中设置userId，记录日志使用
+        Utils.setUserId(userBO.getId());
 
         // 用户信息写入redis
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
@@ -503,7 +505,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4016);
         }
         long lastTokenResetTime = token.getLastTokenResetTime().getTime();
-        long currentTime = new Date().getTime();
+        long currentTime = System.currentTimeMillis();
         if (currentTime > (lastTokenResetTime + 1000 * Constant.USER_TOKEN_VALID_SECONDS)) {
             throw new ServiceException(4015);
         }
@@ -631,6 +633,8 @@ public class AuthServiceImpl implements AuthService {
             StringBuilder phoneFuffer = new StringBuilder(phone);
             userBO.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
         }
+        // 在request中设置userId，记录日志使用
+        Utils.setUserId(userBO.getId());
 
         return Utils.kv("token", userToken, "expires_in", Constant.USER_TOKEN_VALID_SECONDS, "user", userBO);
     }
