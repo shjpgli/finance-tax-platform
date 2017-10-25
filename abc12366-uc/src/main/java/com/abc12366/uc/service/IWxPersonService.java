@@ -12,4 +12,6 @@ public interface IWxPersonService {
     WxPerson selectOne(String openid);
 
     WxPerson synchroOne(String openid);
+
+	WxPerson getOneFromWx(String openid);
 }
