@@ -122,4 +122,13 @@ public class WxPersonServiceImpl implements IWxPersonService {
 
     }
 
+	@Override
+	public WxPerson getOneFromWx(String openid) {
+		Map<String, String> tks1 = new HashMap<String, String>();
+        tks1.put("access_token", WxGzhClient.getInstanceToken());
+        tks1.put("openid", openid);
+        WxPerson person = WxConnectFactory.get(WechatUrl.WXUSEINFO, tks1, null, WxPerson.class);
+		return person;
+	}
+
 }
