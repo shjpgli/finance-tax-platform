@@ -29,10 +29,10 @@
 
     <!-- 最新问题 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
-        select aa.*,a.answer,a.likeNum,a.trampleNum,a.commentNum from (SELECT
+        select aa.*,a.shortAnswer,a.answerImage,a.likeNum,a.trampleNum,a.commentNum from (SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId
+        (select id from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerId
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1
         <if test="title != null and title != ''">
@@ -52,11 +52,12 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1 and isRecommend = '1'
         <if test="title != null and title != ''">
@@ -76,11 +77,12 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1 and q.points >0
         <if test="title != null and title != ''">
@@ -100,11 +102,12 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1
         <if test="title != null and title != ''">
@@ -123,12 +126,7 @@
     <select id="selectListWait" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        collectNum,answerNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1 and q.answerNum = 0
         <if test="title != null and title != ''">
@@ -148,11 +146,12 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1 and q.id in(SELECT questionId FROM bb_question_answer where isAccept = '1')
         <if test="title != null and title != ''">
@@ -168,15 +167,13 @@
     </select>
 
     <!-- 查询帮友热议 -->
-    <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+    <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionryBo" parameterType="java.util.Map">
         SELECT
-        q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        q.id,q.title,u.userPicturePath,u.nickname,q.createTime,	q.points,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select commentNum from bb_question_answer where questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1
         ORDER BY answerNum DESC
@@ -200,8 +197,7 @@
         SELECT
         q.id,	userId,	q.title,q.detail,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	q.isSolve,	classifyCode,	browseNum, isRecommend,
         (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
-        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum,
-        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId != '') commentNum
+        q.answerNum
         FROM bb_question q
         WHERE 1=1
         <if test="keywords != null and keywords != ''">
@@ -264,8 +260,8 @@
         select
         (SELECT count(*) FROM bb_question_answer where parentId = '' and userId = #{userId}) answerNum,
         (SELECT count(*) FROM bb_question_like where userId = #{userId}) likeNum,
-        (SELECT count(*) FROM bb_question_answer where parentId != '' and userId = #{userId}) commentNum,
-        (SELECT count(*) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId = #{userId}) acceptNum,
+        (SELECT count(*) FROM bb_question_comment where userId = #{userId}) commentNum,
+        (SELECT count(*) FROM bb_question_answer where isAccept = '1' and userId = #{userId}) acceptNum,
         0 medalNum,
         (SELECT count(*) FROM bb_question where userId = #{userId}) questionNum,
         (SELECT count(*) FROM bb_question_invite where userId = #{userId}) inviteNum,

@@ -19,16 +19,16 @@
         ORDER BY lastUpdate DESC
     </select>
 
-    <select id="selectListForqt" resultType="com.abc12366.cms.model.bo.NoticeBO"
-            parameterType="com.abc12366.cms.model.bo.NoticeBO">
+    <select id="selectListForqt" resultType="com.abc12366.cms.model.bo.NoticeForqtBO"
+            parameterType="com.abc12366.cms.model.bo.NoticeForqtBO">
         SELECT
-        <include refid="Base_Column_List"/>
+        id, title,releaseTime
         FROM cms_notice
         <where>
             status = '1'
             <if test="title != null">and title like CONCAT('%',#{title},'%')</if>
         </where>
-        ORDER BY lastUpdate DESC
+        ORDER BY releaseTime DESC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.cms.model.bo.NoticeBO" parameterType="java.lang.String">

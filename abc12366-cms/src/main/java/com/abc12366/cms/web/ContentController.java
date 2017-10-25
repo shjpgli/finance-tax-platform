@@ -108,7 +108,7 @@ public class ContentController {
         // reasonable=true,分页合理化参数，默认值为false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询内容列表
-        List<ContentsListBo> dataList = contentService.selectListByviews(dataMap);
+        List<ContentViewListBo> dataList = contentService.selectListByviews(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }

@@ -1,6 +1,7 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.NoticeBO;
+import com.abc12366.cms.model.bo.NoticeForqtBO;
 import com.abc12366.cms.service.NoticeService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -53,11 +54,11 @@ public class NoticeController {
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{},{},{}", title, page, size);
 
-        NoticeBO notice = new NoticeBO();
+        NoticeForqtBO notice = new NoticeForqtBO();
         notice.setTitle(title);
-        List<NoticeBO> dataList = noticeService.selectListForqt(notice, page, size);
+        List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, page, size);
 
-        PageInfo<NoticeBO> pageInfo = new PageInfo<NoticeBO>(dataList);
+        PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
                 "total", pageInfo.getTotal()));
 

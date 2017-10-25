@@ -98,6 +98,12 @@ public class QuestionBo implements Serializable {
     /**回复或者评论内容Id**/
     private String answerId;
 
+    /**简短回答内容**varchar(300)**/
+    private String shortAnswer;
+
+    /**回答图片**varchar(300)**/
+    private String answerImage;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -324,5 +330,21 @@ public class QuestionBo implements Serializable {
 
     public void setReportNum(Integer reportNum) {
         this.reportNum = reportNum;
+    }
+
+    public String getShortAnswer() {
+        return shortAnswer;
+    }
+
+    public void setShortAnswer(String shortAnswer) {
+        this.shortAnswer = shortAnswer;
+    }
+
+    public String getAnswerImage() {
+        return answerImage;
+    }
+
+    public void setAnswerImage(String answerImage) {
+        this.answerImage = answerImage;
     }
 }

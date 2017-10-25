@@ -11,8 +11,6 @@ public interface QueAnswerService {
 
     List<QuestionAnswerBo> selectList(Map<String, Object> map);
 
-    List<QuestionAnswerBo> selectListByParentId(Map<String, Object> map);
-
     List<QuestionAnswerBo> selectListNew(Map<String, Object> map);
 
     QuestionAnswerBo save(QuestionAnswerBo questionAnswerBo);
@@ -26,7 +24,5 @@ public interface QueAnswerService {
     String delete(String id);
 
     List<QuestionAnswerBo> selectMyAnswerList(Map<String, Object> map);
-
-    List<QuestionAnswerBo> selectMyCommentList(Map<String, Object> map);
 
 }

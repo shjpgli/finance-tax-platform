@@ -69,10 +69,10 @@ public class QueLikeServiceImpl implements QueLikeService {
             throw new ServiceException(6115);
         }
 
-        int likeCnt = likeRoMapper.selectLikeCnt(id);
+        int likeCnt = likeRoMapper.selectLikeCnt(id)+1;
 
         QuestionAnswer answer1 = new QuestionAnswer();
-        answer1.setLikeNum(likeCnt+1);
+        answer1.setLikeNum(likeCnt);
         answer1.setId(id);
         answerMapper.updateByPrimaryKeySelective(answer1);
 
@@ -107,10 +107,10 @@ public class QueLikeServiceImpl implements QueLikeService {
             throw new ServiceException(6115);
         }
 
-        int trampleNum = likeRoMapper.selectLikeCnt(id);
+        int trampleNum = likeRoMapper.selectLikeCnt(id)+1;
 
         QuestionAnswer answer1 = new QuestionAnswer();
-        answer1.setTrampleNum(trampleNum+1);
+        answer1.setTrampleNum(trampleNum);
         answer1.setId(id);
         answerMapper.updateByPrimaryKeySelective(answer1);
 

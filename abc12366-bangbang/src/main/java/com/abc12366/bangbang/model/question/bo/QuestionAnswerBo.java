@@ -13,9 +13,6 @@ public class QuestionAnswerBo implements Serializable {
 	/****varchar(64)**/
 	private String id;
 
-	/**父回答Id**varchar(64)**/
-	private String parentId;
-
 	/**问题ID**varchar(64)**/
 	private String questionId;
 
@@ -28,17 +25,17 @@ public class QuestionAnswerBo implements Serializable {
     /**用户昵称**varchar(64)**/
     private String nickname;
 
-    /**被回答用户昵称**varchar(64)**/
-    private String answerNickname;
-
     /**用户图片**/
     private String userPicturePath;
 
-	/**回答用户ID**varchar(64)**/
-	private String answerUserId;
-
 	/**回答内容**varchar(4000)**/
 	private String answer;
+
+    /**简短回答内容**varchar(300)**/
+    private String shortAnswer;
+
+    /**回答图片**varchar(300)**/
+    private String answerImage;
 
 	/**状态**varchar(20)**/
 	private String status;
@@ -79,16 +76,6 @@ public class QuestionAnswerBo implements Serializable {
     /**邦派ID**/
     private String factionId;
 
-    /**问题标题)**/
-    private String title;
-
-    public String getAnswerNickname() {
-        return answerNickname;
-    }
-
-    public void setAnswerNickname(String answerNickname) {
-        this.answerNickname = answerNickname;
-    }
 
     public void setId(String id){
 		this.id = id;
@@ -98,13 +85,6 @@ public class QuestionAnswerBo implements Serializable {
 		return this.id;
 	}
 
-	public void setParentId(String parentId){
-		this.parentId = parentId;
-	}
-
-	public String getParentId(){
-		return this.parentId;
-	}
 
 	public void setQuestionId(String questionId){
 		this.questionId = questionId;
@@ -120,14 +100,6 @@ public class QuestionAnswerBo implements Serializable {
 
 	public String getUserId(){
 		return this.userId;
-	}
-
-	public void setAnswerUserId(String answerUserId){
-		this.answerUserId = answerUserId;
-	}
-
-	public String getAnswerUserId(){
-		return this.answerUserId;
 	}
 
 	public void setAnswer(String answer){
@@ -234,14 +206,6 @@ public class QuestionAnswerBo implements Serializable {
         this.userPicturePath = userPicturePath;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Integer getTrampleNum() {
         return trampleNum;
     }
@@ -272,5 +236,21 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setCollectNum(Integer collectNum) {
         this.collectNum = collectNum;
+    }
+
+    public String getShortAnswer() {
+        return shortAnswer;
+    }
+
+    public void setShortAnswer(String shortAnswer) {
+        this.shortAnswer = shortAnswer;
+    }
+
+    public String getAnswerImage() {
+        return answerImage;
+    }
+
+    public void setAnswerImage(String answerImage) {
+        this.answerImage = answerImage;
     }
 }

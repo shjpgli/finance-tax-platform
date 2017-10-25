@@ -60,7 +60,7 @@
     <!-- 查询最新课程 -->
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,originalPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        curriculumId,title,originalPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1

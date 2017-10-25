@@ -13,6 +13,7 @@ import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
+import com.abc12366.bangbang.model.question.bo.QuestionryBo;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
@@ -129,8 +130,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionBo> selectListry(Map<String,Object> map) {
-        List<QuestionBo> questionBoList;
+    public List<QuestionryBo> selectListry(Map<String,Object> map) {
+        List<QuestionryBo> questionBoList;
         try {
             //查询帮友热议列表
             questionBoList = questionRoMapper.selectListry(map);
@@ -160,6 +161,9 @@ public class QuestionServiceImpl implements QuestionService {
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
             questionBo.setBrowseNum(0);
+            questionBo.setCollectNum(0);
+            questionBo.setReportNum(0);
+            questionBo.setAnswerNum(0);
             //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
