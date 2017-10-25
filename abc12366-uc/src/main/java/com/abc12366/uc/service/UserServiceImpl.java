@@ -649,7 +649,7 @@ public class UserServiceImpl implements UserService {
 			users.setWxheadimg(userUpdateDTO.getWxheadimg());
 			users.setWxnickname(userUpdateDTO.getWxnickname());
 			int n=userMapper.update(users);
-			if(n>1){
+			if(n>=1){
 				userMapper.qxwxbd(userUpdateDTO.getWxopenid());
 				return 2;
 			}else{
