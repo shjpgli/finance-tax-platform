@@ -83,6 +83,11 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         return userExtendBO;
     }
 
+    @Override
+    public Integer selectTodoListCount() {
+        return userExtendRoMapper.selectTodoListCount();
+    }
+
     public Date getSpecifiedDate(String date) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.parse(date);

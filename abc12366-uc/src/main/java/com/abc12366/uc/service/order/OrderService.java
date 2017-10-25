@@ -255,4 +255,11 @@ public interface OrderService {
      * @return 订单列表
      */
     List<OrderBO> selectCurriculumOrderList(OrderBO orderBO, int pageNum, int pageSize);
+
+    /**
+     * 状态为[付款成功]订单数量
+     *
+     * @return Integer
+     */
+    Integer selectTodoListCount();
 }

@@ -30,13 +30,13 @@ public class EventBangBangServiceImpl implements EventBangBangService{
     private EventBangBangUpdateMapper eventBangBangUpdateMapper;
 
     @Override
-    public SingleEventBo singleEvent() {
-        return eventMapper.singleEvent();
+    public SingleEventBo singleEvent(Map map) {
+        return eventMapper.singleEvent(map);
     }
 
     @Override
-    public List<SingleEventBo> singleEventList() {
-        return eventMapper.singleEventList();
+    public List<SingleEventBo> singleEventList(Map map) {
+        return eventMapper.singleEventList(map);
     }
 
 

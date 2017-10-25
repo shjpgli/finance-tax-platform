@@ -11,7 +11,6 @@ import com.abc12366.uc.model.bo.VerifyingCodeBO;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IpService;
 import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.uc.wsbssoa.utils.RSA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +18,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 
-/**用户注册、登录等行为控制器
+/**
+ * 用户注册、登录等行为控制器
+ *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-03-27 4:13 PM
  * @since 1.0.0
@@ -54,8 +52,9 @@ public class AuthController extends BaseController {
 
     /**
      * 刷新用户登录令牌token接口
-     * @param token
-     * @return
+     *
+     * @param token String
+     * @return ResponseEntity
      */
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refresh(@RequestHeader(Constant.USER_TOKEN_HEAD) String token) {
@@ -76,10 +75,11 @@ public class AuthController extends BaseController {
 
     /**
      * 用户使用手机号码进行注册
-     * @param registerBO
-     * @param request
+     *
+     * @param registerBO RegisterBO
+     * @param request    HttpServletRequest
      * @return 注册后生成的用户信息
-     * @throws IOException
+     * @throws IOException IOException
      */
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws
@@ -108,10 +108,11 @@ public class AuthController extends BaseController {
 
     /**
      * 用户登录方法：用于java做接口调用进行登录
-     * @param loginBO
-     * @param request
+     *
+     * @param loginBO LoginBO
+     * @param request HttpServletRequest
      * @return 用户基本信息、用户token、token有效时间
-     * @throws Exception
+     * @throws Exception Exception
      */
     @PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
@@ -130,10 +131,11 @@ public class AuthController extends BaseController {
 
     /**
      * 用户登录方法：用于js做接口调用进行登录(此场景多用于移动客户端登录)
-     * @param loginBO
-     * @param request
+     *
+     * @param loginBO LoginBO
+     * @param request HttpServletRequest
      * @return 用户基本信息、用户token、token有效时间
-     * @throws Exception
+     * @throws Exception Exception
      */
     @PostMapping(path = "/login/js")
     public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
@@ -152,10 +154,11 @@ public class AuthController extends BaseController {
 
     /**
      * 用户通过手机号码+验证码的方式进行登录
-     * @param loginBO
-     * @param request
+     *
+     * @param loginBO VerifyingCodeBO
+     * @param request HttpServletRequest
      * @return 用户基本信息、用户token、token有效时间
-     * @throws Exception
+     * @throws Exception Exception
      */
     @PostMapping(path = "/verifylogin")
     public ResponseEntity loginByVerifyingCode(@Valid @RequestBody VerifyingCodeBO loginBO, HttpServletRequest
@@ -183,25 +186,25 @@ public class AuthController extends BaseController {
 
     /**
      * 用户退出登录接口
-     * @param token
-     * @param request
-     * @return
-     * @throws Exception
+     *
+     * @param token String
+     * @return ResponseEntity
+     * @throws Exception Exception
      */
     @DeleteMapping(path = "/logout/{token}")
-    public ResponseEntity logout(@PathVariable String token, HttpServletRequest request) throws Exception {
+    public ResponseEntity logout(@PathVariable String token) throws Exception {
         LOGGER.info("{}", token);
         authService.logout(token);
         return ResponseEntity.ok(Utils.kv());
     }
 
-    /**
-     *
-     * @param loginBO
-     * @param request
-     * @return
-     * @throws Exception
-     */
+//    /**
+//     *
+//     * @param loginBO
+//     * @param request
+//     * @return
+//     * @throws Exception
+//     */
 //    @PostMapping(path = "/rsa/login")
 //    public ResponseEntity rsaLogin(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
 //        LOGGER.info("{}", loginBO);

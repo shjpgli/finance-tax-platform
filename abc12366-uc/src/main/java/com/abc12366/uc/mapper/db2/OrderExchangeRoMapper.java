@@ -33,4 +33,12 @@ public interface OrderExchangeRoMapper {
     OrderExchange selectById(String id);
 
     OrderExchange selectByOrderNo(String orderNo);
+
+    /**
+     * 统计某一状态的退换货数
+     *
+     * @param status 状态
+     * @return Integer
+     */
+    Integer selectTodoListCount(String status);
 }

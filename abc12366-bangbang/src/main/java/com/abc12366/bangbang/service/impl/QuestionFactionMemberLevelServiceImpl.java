@@ -4,6 +4,7 @@ import com.abc12366.bangbang.mapper.db1.QuestionFactionMemberLevelMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionMemberLevelRoMapper;
 import com.abc12366.bangbang.model.question.QuestionFactionMemberLevel;
 import com.abc12366.bangbang.service.QuestionFactionMemberLevelService;
+import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +29,22 @@ public class QuestionFactionMemberLevelServiceImpl implements QuestionFactionMem
     }
 
     @Override
+    public QuestionFactionMemberLevel selectOne(String id) {
+        return questionFactionMemberLevelRoMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public void add(QuestionFactionMemberLevel record) {
+        record.setId(Utils.uuid());
+        String adminId = Utils.getAdminId();
+        record.setCreateAdmin(adminId);
+        record.setUpdateAdmin(adminId);
         questionFactionMemberLevelMapper.insert(record);
     }
 
     @Override
     public void modify(QuestionFactionMemberLevel record) {
+        record.setUpdateAdmin(Utils.getAdminId());
         questionFactionMemberLevelMapper.updateByPrimaryKeySelective(record);
     }
 
