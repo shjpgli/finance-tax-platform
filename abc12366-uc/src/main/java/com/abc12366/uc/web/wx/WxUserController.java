@@ -86,7 +86,7 @@ public class WxUserController {
     
     
     @SuppressWarnings("rawtypes")
-    @PutMapping("/wxuser/getOneFromWx/{openid}")
+    @GetMapping("/wxuser/getOneFromWx/{openid}")
     public ResponseEntity getOneFromWx(@PathVariable("openid") String openid) {
         LOGGER.info("{}", openid);
 
