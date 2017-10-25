@@ -532,6 +532,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
+    @Override
+    public Integer selectTodoListCount() {
+        return invoiceRoMapper.selectTodoListCount();
+    }
+
     @Transactional("db1TxManager")
     @Override
     public InvoiceBackBO refund(InvoiceBackBO invoiceBackBO) {

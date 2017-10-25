@@ -33,4 +33,11 @@ public interface InvoiceRoMapper {
     Invoice selectByIdAndUserId(Invoice id);
 
     List<Invoice> selectReceiptInvoiceByDate(@Param("date")Date date);
+
+    /**
+     * 状态为[待审批]发票申请数
+     *
+     * @return Integer
+     */
+    Integer selectTodoListCount();
 }

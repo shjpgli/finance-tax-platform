@@ -307,5 +307,8 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         return invoiceUseDetailRoMapper.selectInvoiceRepoNum(code);
     }
 
-
+    @Override
+    public Integer selectTodoListCount() {
+        return invoiceUseApplyRoMapper.selectTodoListCount();
+    }
 }

@@ -185,4 +185,7 @@
         where a.id = #{id}
     </select>
 
+    <select id="selectTodoListCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_invoice_use_apply WHERE examineStatus = '0'
+    </select>
 </mapper>

@@ -1148,4 +1148,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectCurriculumOrderList(orderBO);
     }
 
+    @Override
+    public Integer selectTodoListCount() {
+        return orderRoMapper.selectTodoListCount();
+    }
+
 }

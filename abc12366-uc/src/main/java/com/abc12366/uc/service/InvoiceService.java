@@ -56,4 +56,11 @@ public interface InvoiceService {
      * 自动确认收货
      */
     void automaticReceiptInvoice();
+
+    /**
+     * 状态为[待审批]发票申请数
+     *
+     * @return Integer
+     */
+    Integer selectTodoListCount();
 }
