@@ -43,11 +43,11 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
     }
 
     @Override
-    public List<QuestionFactionMemberBo> selectListTj(String factionId) {
+    public List<QuestionFactionMemberBo> selectListTj(Map<String, Object> map) {
         List<QuestionFactionMemberBo> factionMemberBoList;
         try {
             //查询邦派成员列表(我管理的邦派)统计
-            factionMemberBoList = memberRoMapper.selectListTj(factionId);
+            factionMemberBoList = memberRoMapper.selectListTj(map);
 
             for(QuestionFactionMemberBo factionMemberBo : factionMemberBoList){
                 int honor = 2*factionMemberBo.getAnswerNum() + 1*factionMemberBo.getDiscussNum() + 7*factionMemberBo.getAdoptNum();

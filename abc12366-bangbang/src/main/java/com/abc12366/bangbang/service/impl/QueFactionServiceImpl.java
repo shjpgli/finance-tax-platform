@@ -146,7 +146,7 @@ public class QueFactionServiceImpl implements QueFactionService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         QuestionFaction questionFaction = new QuestionFaction();
         questionFactionBo.setFactionId(uuid);
-        questionFactionBo.setFactionGrade("PO");
+        questionFactionBo.setFactionGrade("PO");//默认最低等级
         BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
         int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());

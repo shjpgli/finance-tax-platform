@@ -36,7 +36,7 @@ public interface QuestionFactionMemberRoMapper {
      * 查询（根据主键ID查询）
      *
      **/
-    List<QuestionFactionMemberBo> selectListTj(@Param("factionId") String factionId);
+    List<QuestionFactionMemberBo> selectListTj(Map<String, Object> map);
 
     /**
      *
