@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public interface EventBangBangMapper {
 
-    SingleEventBo singleEvent();
+    SingleEventBo singleEvent(Map map);
 
-    List<SingleEventBo> singleEventList();
+    List<SingleEventBo> singleEventList(Map map);
 
     EventBrowseCountBo browseCount(Map<String,String> map);
 

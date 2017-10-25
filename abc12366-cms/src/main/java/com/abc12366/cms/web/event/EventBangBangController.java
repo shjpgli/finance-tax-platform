@@ -35,15 +35,19 @@ public class EventBangBangController {
     private RestTemplate restTemplate;
 
     @GetMapping(path = "/singleevent")
-    public ResponseEntity singleevent( HttpServletRequest request) {
-        SingleEventBo singleevent = eventService.singleEvent();
+    public ResponseEntity singleevent( HttpServletRequest request, @RequestParam(defaultValue = "") String category) {
+        Map map = new HashMap<>();
+        map.put("category",category);
+        SingleEventBo singleevent = eventService.singleEvent(map);
         return ResponseEntity.ok(Utils.kv("data", singleevent));
     }
 
 
     @GetMapping(path = "/singleeventlist")
-    public ResponseEntity singleeventlist( HttpServletRequest request) {
-        List<SingleEventBo> dataList = eventService.singleEventList();
+    public ResponseEntity singleeventlist( HttpServletRequest request, @RequestParam(defaultValue = "") String category) {
+        Map map=new HashMap();
+        map.put("category",category);
+        List<SingleEventBo> dataList = eventService.singleEventList(map);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
