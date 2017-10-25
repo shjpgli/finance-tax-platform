@@ -33,7 +33,7 @@
                 and uu.phone = #{phone}
             </if>
             <if test="realName!=null">
-                and uue.realName = uue.realName
+                and uue.realName = #{realName}
             </if>
             <if test="validStatus!=null">
                 and uue.validStatus = #{validStatus}
