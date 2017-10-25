@@ -262,4 +262,11 @@ public interface OrderService {
      * @return Integer
      */
     Integer selectTodoListCount();
+
+    /**
+     * 统计3-付款中，4-付款成功，6-订单完成，7-订单结束，9-已退款，订单总数的数量
+     *
+     * @return OrderStatBO
+     */
+    OrderStatBO orderStat();
 }

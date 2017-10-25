@@ -21,7 +21,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/todolist", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class TodoListController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(TodoTaskController.class);
@@ -41,10 +41,24 @@ public class TodoListController {
      *
      * @return ResponseEntity
      */
-    @GetMapping()
+    @GetMapping("/todolist")
     public ResponseEntity selectList() {
         LOGGER.info("selectList");
         Map<String, Integer> map = todoListService.selectList();
+
+        LOGGER.info("{}", map);
+        return ResponseEntity.ok(Utils.kv("dataList", map));
+    }
+
+    /**
+     * 统计3-付款中，4-付款成功，6-订单完成，7-订单结束，9-已退款，订单总数的数量
+     *
+     * @return ResponseEntity
+     */
+    @GetMapping("/stat/order")
+    public ResponseEntity orderStat() {
+        LOGGER.info("orderStat");
+        Map<String, Integer> map = todoListService.orderStat();
 
         LOGGER.info("{}", map);
         return ResponseEntity.ok(Utils.kv("dataList", map));
