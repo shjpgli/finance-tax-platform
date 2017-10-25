@@ -169,7 +169,7 @@
     <!-- 查询帮友热议 -->
     <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionryBo" parameterType="java.util.Map">
         SELECT
-        q.id,q.title,u.userPicturePath,u.nickname,q.createTime,	q.points,
+        q.id,q.title,u.userPicturePath,u.nickname,q.createTime,	q.points,detail,
         collectNum,answerNum,
         (select id from bb_question_answer where questionId = q.id order by likeNum desc limit 1) answerId,
         (select shortAnswer from bb_question_answer where questionId = q.id order by likeNum desc limit 1) shortAnswer,

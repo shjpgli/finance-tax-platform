@@ -22,6 +22,9 @@ public class QuestionryBo implements Serializable {
 	/**问题**varchar(300)**/
 	private String title;
 
+    /**问题描述**/
+    private String detail;
+
 	/**创建时间**datetime**/
 	private Date createTime;
 
@@ -42,6 +45,8 @@ public class QuestionryBo implements Serializable {
 
     /**简短回答内容**varchar(300)**/
     private String shortAnswer;
+
+
 
     public String getId() {
         return id;
@@ -113,5 +118,13 @@ public class QuestionryBo implements Serializable {
 
     public void setAnswerId(String answerId) {
         this.answerId = answerId;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }
