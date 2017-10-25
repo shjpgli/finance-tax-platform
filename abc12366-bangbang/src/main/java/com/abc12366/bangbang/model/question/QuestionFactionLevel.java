@@ -11,6 +11,9 @@ public class QuestionFactionLevel  {
 	/**PK**/
 	private String id;
 
+	/**帮派等级编码**/
+	private String code;
+
 	/**帮派等级名称**/
 	private String name;
 
@@ -132,6 +135,15 @@ public class QuestionFactionLevel  {
 
 	public QuestionFactionLevel setStatus(Boolean status) {
 		this.status = status;
+		return this;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public QuestionFactionLevel setCode(String code) {
+		this.code = code;
 		return this;
 	}
 }

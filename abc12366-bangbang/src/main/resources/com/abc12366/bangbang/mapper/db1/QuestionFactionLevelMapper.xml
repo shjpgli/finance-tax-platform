@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
 		 INSERT INTO bb_question_faction_level
- 		(id,name,image,	honorValue,peopleLimit,taskLimit,status,createTime,createAdmin,updateTime,updateAdmin)
+ 		(id, code, name,image,	honorValue,peopleLimit,taskLimit,status,createTime,createAdmin,updateTime,updateAdmin)
 		 VALUES 
- 		(#{id},#{name},#{image},#{honorValue},#{peopleLimit},#{taskLimit},#{status},now(),#{createAdmin},now(),#{updateAdmin})
+ 		(#{id}, #{code}, #{name}, #{image},#{honorValue},#{peopleLimit},#{taskLimit},#{status},now(),#{createAdmin},now(),#{updateAdmin})
 	</insert>
 
 	<!-- 修 改-->
@@ -23,6 +23,9 @@
  		 <set> 
 			<if test="name != null">
 				 name = #{name},
+			</if>
+			<if test="code != null">
+				 code = #{code},
 			</if>
 			<if test="image != null">
 				image = #{image},

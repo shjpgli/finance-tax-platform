@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	name,image,	honorValue,peopleLimit,taskLimit,status,	createTime,	createAdmin,	updateTime,	updateAdmin
+		 id,code,name,image,	honorValue,peopleLimit,taskLimit,status,	createTime,	createAdmin,	updateTime,	updateAdmin
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
