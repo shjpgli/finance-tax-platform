@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 import com.abc12366.uc.model.TodoTask;
 import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.SysTaskBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -84,4 +85,8 @@ public interface TodoTaskService {
     List<TodoTaskFront> selectOnetimeTaskList(String userId);
 
     List<TodoTaskFront> selectSpecialTaskList(String userId);
+
+    void generateOneTodoTask(String userId, SysTaskBO sysTaskBO);
+
+    List<TodoTaskFront> selectBangbangTaskList(String userId);
 }

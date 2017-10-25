@@ -35,6 +35,9 @@ public class PointsRuleServiceImpl implements PointsRuleService {
     @Autowired
     private PointsRuleRoMapper uPointRuleRoMapper;
 
+    @Autowired
+    private ExperienceRuleService experienceRuleService;
+
     @Override
     public List<PointsRuleBO> selectList(Map map) {
         return uPointRuleRoMapper.selectList(map);
@@ -93,6 +96,8 @@ public class PointsRuleServiceImpl implements PointsRuleService {
             LOGGER.warn("更新失败，参数：{}：{}", id);
             throw new ServiceException(4102);
         }
+        //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
+        experienceRuleService.isValidSysTaskRelatedTheRule(id);
 
         //积分规则的规则名称和规则代码唯一性校验
         List<PointsRuleBO> pointsRuleBOList = uPointRuleRoMapper.selectList(null);
@@ -137,6 +142,10 @@ public class PointsRuleServiceImpl implements PointsRuleService {
     @Override
     public int delete(String id) {
         LOGGER.info("{}", id);
+
+        //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
+        experienceRuleService.isValidSysTaskRelatedTheRule(id);
+
         int result = uPointRuleMapper.delete(id);
         if (result != 1) {
             LOGGER.warn("删除失败，参数为：id=" + id);
@@ -156,6 +165,11 @@ public class PointsRuleServiceImpl implements PointsRuleService {
         if ((!status.equals("true")) && (!status.equals("false"))) {
             throw new ServiceException(4614);
         }
+        if(status.equals("false")){
+            //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
+            experienceRuleService.isValidSysTaskRelatedTheRule(id);
+        }
+
         boolean modifyStatus = status.equals("true");
         PointsRule pointsRule = new PointsRule();
         pointsRule.setId(id);

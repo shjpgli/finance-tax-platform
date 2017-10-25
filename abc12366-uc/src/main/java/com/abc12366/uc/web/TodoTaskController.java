@@ -90,6 +90,24 @@ public class TodoTaskController {
     }
 
     /**
+     * 查询用户帮帮任务列表
+     *
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/bangbang")
+    public ResponseEntity selectBangbangTaskList(@RequestParam(value = "userId") String userId,
+                                                @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<TodoTaskFront> taskList = todoTaskService.selectBangbangTaskList(userId);
+        return (taskList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
+    }
+
+    /**
      * 用户做任务接口：做任务并且计算奖励，用于用户业务操作任务埋点，
      *
      * @param userId

@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.SysTask;
 import com.abc12366.uc.model.bo.SysTaskBO;
 import com.abc12366.uc.model.bo.SysTaskListBO;
 
@@ -23,4 +24,6 @@ public interface SysTaskRoMapper {
     List<SysTaskBO> selectListByDateType(String dateType);
 
     List<SysTaskBO> selectListByType(String type);
+
+    SysTask selectValidSysTaskByRuleId(String ruleId);
 }
