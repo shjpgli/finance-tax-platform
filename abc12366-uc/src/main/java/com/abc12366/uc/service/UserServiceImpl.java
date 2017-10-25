@@ -648,9 +648,9 @@ public class UserServiceImpl implements UserService {
 			
 			users.setWxheadimg(userUpdateDTO.getWxheadimg());
 			users.setWxnickname(userUpdateDTO.getWxnickname());
+			userMapper.qxwxbd(userUpdateDTO.getWxopenid());
 			int n=userMapper.update(users);
 			if(n>=1){
-				userMapper.qxwxbd(userUpdateDTO.getWxopenid());
 				return 2;
 			}else{
 				throw new ServiceException(4624);
