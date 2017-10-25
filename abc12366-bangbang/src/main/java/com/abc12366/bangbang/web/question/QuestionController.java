@@ -6,6 +6,7 @@ import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
+import com.abc12366.bangbang.model.question.bo.QuestionryBo;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -183,7 +184,7 @@ public class QuestionController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         Map<String, Object> dataMap = new HashMap<>();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionBo> dataList = questionService.selectListry(dataMap);
+        List<QuestionryBo> dataList = questionService.selectListry(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

@@ -31,10 +31,10 @@ public class QuestionAnswerBo implements Serializable {
 	/**回答内容**varchar(4000)**/
 	private String answer;
 
-    /**回答图片**varchar(300)**/
+    /**简短回答内容**varchar(300)**/
     private String shortAnswer;
 
-    /**简短回答内容**varchar(300)**/
+    /**回答图片**varchar(300)**/
     private String answerImage;
 
 	/**状态**varchar(20)**/

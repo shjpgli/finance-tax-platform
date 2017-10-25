@@ -98,10 +98,10 @@ public class QuestionBo implements Serializable {
     /**回复或者评论内容Id**/
     private String answerId;
 
-    /**回答图片**varchar(300)**/
+    /**简短回答内容**varchar(300)**/
     private String shortAnswer;
 
-    /**简短回答内容**varchar(300)**/
+    /**回答图片**varchar(300)**/
     private String answerImage;
 
 
