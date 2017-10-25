@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.bo.NoticeBO;
+import com.abc12366.cms.model.bo.NoticeForqtBO;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface NoticeRoMapper {
 
     List<NoticeBO> selectList(NoticeBO notice);
 
-    List<NoticeBO> selectListForqt(NoticeBO notice);
+    List<NoticeForqtBO> selectListForqt(NoticeForqtBO notice);
 
     NoticeBO selectOne(String id);
 }
