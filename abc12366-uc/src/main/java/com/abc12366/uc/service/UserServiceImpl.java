@@ -635,21 +635,22 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional("db1TxManager")
 	public int changeWxBdxx(UserUpdateBO userUpdateDTO) {
-		
-		User user = userRoMapper.selectByWxUserId(userUpdateDTO);
+		User users =new User();
+		users.setId(userUpdateDTO.getId());
+		users.setWxopenid(userUpdateDTO.getWxopenid());
+
+		User user = userRoMapper.selectByWxUserId(users);
 		if(user!=null){
 			LOGGER.info("微信已绑定此账号");
 			return 1;
 		}else{
 			LOGGER.info("微信绑定账号与此账号不符合，更新绑定关系");
-			User users =new User();
-			users.setId(userUpdateDTO.getId());
+			
 			users.setWxheadimg(userUpdateDTO.getWxheadimg());
-			users.setWxopenid(userUpdateDTO.getWxopenid());
 			users.setWxnickname(userUpdateDTO.getWxnickname());
+			userMapper.qxwxbd(userUpdateDTO.getWxopenid());
 			int n=userMapper.update(users);
-			if(n>1){
-				userMapper.qxwxbd(userUpdateDTO.getWxopenid());
+			if(n>=1){
 				return 2;
 			}else{
 				throw new ServiceException(4624);

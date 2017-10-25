@@ -185,7 +185,7 @@
         SELECT u.id,u.wxopenid,u.phone,u.vipLevel,u.vipExpireDate,l.level as vipLevelName FROM uc_user u, uc_uvip_level l where u.status = true and l.status = true and u.vipLevel=l.levelCode ORDER BY vipLevel DESC LIMIT #{begin},#{size};
     </select>
     
-    <select id="selectByWxUserId" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.bo.UserUpdateBO">
+    <select id="selectByWxUserId" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.User">
         SELECT * FROM uc_user where id=#{id} and wxopenid=#{wxopenid}
     </select>
     
