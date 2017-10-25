@@ -1,10 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.Content;
-import com.abc12366.cms.model.bo.ContentListBo;
-import com.abc12366.cms.model.bo.ContentsListBo;
-import com.abc12366.cms.model.bo.ContenttagidBo;
-import com.abc12366.cms.model.bo.ContentudBo;
+import com.abc12366.cms.model.bo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -35,7 +32,7 @@ public interface ContentRoMapper {
     /**
      * 查询(根据查询条件查询)按访问量排序
      **/
-    List<ContentsListBo> selectListByviews(Map<String, Object> map);
+    List<ContentViewListBo> selectListByviews(Map<String, Object> map);
 
     /**
      * 查询(根据查询条件查询)

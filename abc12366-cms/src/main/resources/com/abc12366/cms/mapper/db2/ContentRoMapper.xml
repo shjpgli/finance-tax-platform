@@ -80,7 +80,7 @@
 	</select>
 
     <!-- 查询（根据查询条件查询） -->
-    <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+    <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentViewListBo" parameterType="java.util.Map">
         SELECT
         a.contentId contentId,
         a.userid userid,
