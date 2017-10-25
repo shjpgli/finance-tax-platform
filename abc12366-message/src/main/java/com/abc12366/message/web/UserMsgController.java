@@ -26,7 +26,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/user/msg", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class UserMsgController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserMsgController.class);
 
