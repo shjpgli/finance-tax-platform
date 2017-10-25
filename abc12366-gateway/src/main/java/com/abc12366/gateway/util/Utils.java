@@ -1,6 +1,5 @@
 package com.abc12366.gateway.util;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
 import com.alibaba.druid.support.http.StatViewServlet;
@@ -14,9 +13,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -122,13 +119,22 @@ public class Utils {
      *
      * @param str 需要计算的字符串
      * @return String
-     * @throws NoSuchAlgorithmException
+     * @throws Exception Exception
      */
     public static String md5(String str) throws Exception {
         Assert.notNull(str, "MD5 string is not empty");
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update(str.getBytes());
-        return new BigInteger(1, md.digest()).toString(16);
+        MessageDigest digest = MessageDigest.getInstance("md5");
+        byte[] bs = digest.digest(str.getBytes());
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : bs) {
+            int temp = b & 255;
+            if (temp < 16) {
+                hexString.append("0").append(Integer.toHexString(temp));
+            } else {
+                hexString.append(Integer.toHexString(temp));
+            }
+        }
+        return hexString.toString();
     }
 
     /**
