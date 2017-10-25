@@ -19,4 +19,9 @@ public interface RealNameValidationService {
     UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
             ParseException;
 
+    /**
+     * 查询认证状态为【待认证】数量
+     * @return Integer 数量
+     */
+    Integer selectTodoListCount();
 }

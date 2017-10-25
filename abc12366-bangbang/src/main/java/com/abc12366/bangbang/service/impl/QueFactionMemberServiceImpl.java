@@ -67,8 +67,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
         JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
         LOGGER.info("新增邦派成员信息:{}", jsonStu.toString());
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("factionId", factionMemberBo.getUserId());//
-        dataMap.put("userId", factionMemberBo.getFactionId());//
+        dataMap.put("userId", factionMemberBo.getUserId());//
+        dataMap.put("factionId", factionMemberBo.getFactionId());//
         int cnt = memberRoMapper.selectMemberCnt(dataMap);
         if(cnt > 0){
             //已申请加入邦派，请勿重复申请

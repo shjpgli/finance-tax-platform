@@ -122,4 +122,9 @@
         where c.status = '6'
         and c.orderNo = #{orderNo}
     </select>
+
+    <select id="selectTodoListCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT count(*) FROM uc_order_exchange
+        WHERE status = #{status}
+    </select>
 </mapper>

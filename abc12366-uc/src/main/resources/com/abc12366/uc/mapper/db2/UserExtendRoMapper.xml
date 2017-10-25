@@ -33,7 +33,7 @@
                 and uu.phone = #{phone}
             </if>
             <if test="realName!=null">
-                and uue.realName = uue.realName
+                and uue.realName = #{realName}
             </if>
             <if test="validStatus!=null">
                 and uue.validStatus = #{validStatus}
@@ -56,4 +56,8 @@
         where userId = #{userId}
     </select>
 
+    <select id="selectTodoListCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_user_extend
+        WHERE validStatus = '1'
+    </select>
 </mapper>
