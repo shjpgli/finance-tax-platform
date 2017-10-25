@@ -12,6 +12,8 @@ public interface QuestionFactionMemberLevelService {
 
     List<QuestionFactionMemberLevel> selectList();
 
+    QuestionFactionMemberLevel selectOne(String id);
+
     void add(QuestionFactionMemberLevel record);
 
     void modify(QuestionFactionMemberLevel record);
