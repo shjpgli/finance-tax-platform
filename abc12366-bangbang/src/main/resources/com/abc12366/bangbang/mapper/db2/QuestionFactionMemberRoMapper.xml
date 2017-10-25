@@ -51,6 +51,7 @@
         <if test="factionId != null and factionId != ''">
             AND factionId = #{factionId}
         </if>
+        order by discussNum+2*answerNum+7*adoptNum desc
     </select>
 
     <!-- 查询（根据主键ID查询） -->
