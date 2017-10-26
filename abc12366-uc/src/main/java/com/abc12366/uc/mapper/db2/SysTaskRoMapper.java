@@ -3,6 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.SysTask;
 import com.abc12366.uc.model.bo.SysTaskBO;
 import com.abc12366.uc.model.bo.SysTaskListBO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +27,6 @@ public interface SysTaskRoMapper {
     List<SysTaskBO> selectListByType(String type);
 
     SysTask selectValidSysTaskByRuleId(String ruleId);
+
+    List<SysTaskBO> selectValidListByTypeAndDateType(@Param("type") String type, @Param("dateType") String dateType);
 }

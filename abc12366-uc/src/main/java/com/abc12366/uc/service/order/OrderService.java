@@ -171,7 +171,7 @@ public interface OrderService {
      * @param request
      * @return 订单对象
      */
-    OrderBO paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request);
+    void paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request);
 
     /**
      * 查询导出订单
