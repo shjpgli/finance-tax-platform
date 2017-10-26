@@ -205,10 +205,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderBO submitOrder(OrderSubmitBO orderSubmitBO) {
         Date date = new Date();
-        //是否免运费：由配送费来判断
-        /*if(orderSubmitBO.getDeliveryFee() != null && orderSubmitBO.getDeliveryFee()>0){
-            orderSubmitBO.setIsShipping(1);
-        }*/
+        //根据是否需要寄送来判断地址是否填写
+        if (orderSubmitBO.getIsShipping() != null && orderSubmitBO.getIsShipping() == 1) {
+            if (orderSubmitBO.getConsignee() == null || "".equals(orderSubmitBO.getConsignee())
+                    || orderSubmitBO.getContactNumber() == null && "".equals(orderSubmitBO.getContactNumber())
+                    || orderSubmitBO.getShippingAddress() == null && "".equals(orderSubmitBO.getShippingAddress())) {
+                LOGGER.info("需要寄送的商品必须填写联系人、联系方式、寄送地址：{}", orderSubmitBO);
+                throw new ServiceException(4922);
+            }
+        }
         //是否需要寄送：由是否存在地址判断
         /*if(orderSubmitBO.getConsignee() != null && !"".equals(orderSubmitBO.getConsignee()) && orderSubmitBO.getContactNumber() != null && !"".equals(orderSubmitBO.getContactNumber())){
             orderSubmitBO.setIsFreeShipping(1);
@@ -300,6 +305,7 @@ public class OrderServiceImpl implements OrderService {
 
         OrderBO temp = new OrderBO();
         BeanUtils.copyProperties(order, temp);
+        temp.setTradeNo(tradeNo);
         return temp;
 
     }
@@ -666,7 +672,7 @@ public class OrderServiceImpl implements OrderService {
             OrderProductBO pBO = new OrderProductBO();
             pBO.setOrderNo(tradeNo);
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
-            Boolean isShipping = orderBO.getIsShipping();
+            Integer isShipping = orderBO.getIsShipping();
             for (OrderProductBO orderProductBO : orderProductBOs) {
                 int isPay = orderPayBO.getIsPay();
                 Order order = new Order();
@@ -972,7 +978,7 @@ public class OrderServiceImpl implements OrderService {
                 LOGGER.warn("订单数据不存在：{}", bo);
                 throw new ServiceException(4102, "订单数据不存在");
             }
-            if (!data.getIsShipping()) {
+            if (data.getIsShipping() == 2) {
                 LOGGER.warn("该订单不需要寄送：{}", bo);
                 throw new ServiceException(4102, bo.getOrderNo() + "该订单不需要寄送");
             }
