@@ -41,6 +41,12 @@ public class QuestionExpertBO {
     /**专家简介**longtext**/
     private String intro;
 
+    /*回答数*/
+    private Integer answerNum;
+
+    /*采纳数*/
+    private Integer acccptNum;
+
     public String getId() {
         return id;
     }
@@ -148,5 +154,21 @@ public class QuestionExpertBO {
     public QuestionExpertBO setGoodField(String goodField) {
         this.goodField = goodField;
         return this;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
+    }
+
+    public Integer getAcccptNum() {
+        return acccptNum;
+    }
+
+    public void setAcccptNum(Integer acccptNum) {
+        this.acccptNum = acccptNum;
     }
 }

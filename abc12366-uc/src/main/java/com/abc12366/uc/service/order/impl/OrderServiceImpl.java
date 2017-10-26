@@ -675,7 +675,8 @@ public class OrderServiceImpl implements OrderService {
         for (OrderBO orderBO : orderBOList){
             if (orderBO != null) {
                 OrderProductBO pBO = new OrderProductBO();
-                pBO.setOrderNo(tradeNo);
+                String orderNo = orderBO.getOrderNo();
+                pBO.setOrderNo(orderNo);
                 List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
                 for (OrderProductBO orderProductBO : orderProductBOs) {
                     int isPay = orderPayBO.getIsPay();
@@ -692,7 +693,7 @@ public class OrderServiceImpl implements OrderService {
                                 LOGGER.warn("修改失败，参数：{}", order);
                                 throw new ServiceException(4102);
                             }
-                            insertOrderLog(orderBO.getUserId(), tradeNo, "3", "用户付款中", "0");
+                            insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
                             updateStock(orderBO, orderProductBO);
                             setTodoTask(orderBO);
@@ -701,12 +702,12 @@ public class OrderServiceImpl implements OrderService {
                             order.setOrderStatus("4");
                             orderMapper.update(order);
                             insertPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功", "0");
+                            insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功", "0");
 //                        }
                         } else if (isPay == 3) {
                             order.setOrderStatus("2");
                             orderMapper.update(order);
-                            insertOrderLog(orderBO.getUserId(), tradeNo, "2", "等待用户付款", "0");
+                            insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
                         updateStock(orderBO, orderProductBO);
@@ -715,7 +716,7 @@ public class OrderServiceImpl implements OrderService {
                         //扣除积分
                         insertDeductPoints(orderBO);
                         order.setOrderStatus("4");
-                        insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功", "0");
+                        insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功", "0");
                         insertTradeLog(orderBO);
                     }
                 }

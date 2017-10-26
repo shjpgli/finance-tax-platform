@@ -10,10 +10,7 @@ import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
-import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
-import com.abc12366.bangbang.model.question.bo.QuestionryBo;
+import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
@@ -335,7 +332,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionBo> selectTipList(String userId) {
+    public List<QuestionjbBo> selectTipList(String userId) {
         //我的举报
         LOGGER.info("{}", userId);
         return questionRoMapper.selectTipList(userId);
