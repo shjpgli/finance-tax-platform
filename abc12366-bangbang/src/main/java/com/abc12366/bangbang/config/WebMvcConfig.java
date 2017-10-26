@@ -134,6 +134,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/queCount/**")
                         //潜力邦派列表查询
                 .excludePathPatterns("/queFaction/selectListPotential")
+                        //问大侠列表查询
+                .excludePathPatterns("/questionExpert/listDX")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",
