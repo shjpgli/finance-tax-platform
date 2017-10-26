@@ -123,7 +123,7 @@
 		<if test="exceptChannelId != null and exceptChannelId != ''">
 			AND a.channelId != #{exceptChannelId}
 		</if>
-        ORDER BY a.topLevel DESC,e.views DESC
+        ORDER BY a.topLevel DESC,e.viewsDay DESC
     </select>
 
 	<!-- 查询（根据查询条件查询） -->
