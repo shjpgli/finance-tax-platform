@@ -96,6 +96,7 @@
         FROM uc_user_task_todo
         WHERE userId = #{userId}
         and sysTaskId = #{sysTaskId}
+        and dateType = 'O'
     </select>
 
     <!--查询特殊任务-->
@@ -169,7 +170,7 @@
         and b.status='1'
         and a.type = '3'
         and b.startTime &lt;(SELECT CURDATE())
-        and b.endTime &gt;(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
+        and b.endTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
 
     <select id="selectListByUserIdAndSysId" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
@@ -189,6 +190,6 @@
         and b.status='1'
         and a.type = '4'
         and b.startTime &lt;(SELECT CURDATE())
-        and b.endTime &gt;(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
+        and b.endTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
 </mapper>
