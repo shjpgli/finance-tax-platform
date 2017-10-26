@@ -72,8 +72,8 @@ public interface AppService {
     
     /**
      * 查询App对象
-     * @param appId 应用name
-     * @return List
+     * @param name 应用name
+     * @return AppBO
      */
     AppBO selectByName(String name);
 }

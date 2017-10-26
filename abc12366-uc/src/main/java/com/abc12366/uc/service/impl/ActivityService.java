@@ -73,7 +73,6 @@ public class ActivityService implements IActivityService {
 
     @Override
     public List<ActivityBO> selectSimpleList(int page, int size) {
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return activityRoMapper.selectSimpleList();
     }
 
@@ -479,7 +478,7 @@ public class ActivityService implements IActivityService {
     private String secretRule(String ruleType, String rule, String activityId) {
         if ("1".equals(ruleType)) {
             // 规则1口令格式为：大写字母+1至9个数字组合的随机字符串，总共8位长度
-            String candidateStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+            String candidateStr = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 8; i++) {
                 int selectedChar = ThreadLocalRandom.current().nextInt(0, candidateStr.length());
