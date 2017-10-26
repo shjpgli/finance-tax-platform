@@ -233,7 +233,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //        }
 //        generateTaskListByDateType(userId, dateType);
 
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(UCConstant.TASK_TIME_ONETIME_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NEW_USER_TASK_TYPE, UCConstant.TASK_TIME_ONETIME_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如成长任务已生成则不用再生成
             List<TodoTask> taskList = todoTaskRoMapper.selectListOneTime(userId, sysTaskBO.getId());
@@ -424,47 +424,47 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         finishTask(userId, todoTask);
     }
 
-    private void generateTaskListByDateType(String userId, String dateType) {
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(dateType);
-
-        if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
-            return;
-        }
-        for (SysTaskBO sysTaskBO : sysTaskBOList) {
-            //假如成长任务已生成则不用再生成
-            List<TodoTask> taskList = todoTaskRoMapper.selectListByUserIdAndSysId(userId, sysTaskBO.getId());
-            if (taskList != null && taskList.size() > 0) {
-                continue;
-            }
-
-            TodoTask todoTask = new TodoTask();
-            todoTask.setId(Utils.uuid());
-            todoTask.setUserId(userId);
-            todoTask.setSysTaskId(sysTaskBO.getId());
-            todoTask.setAllCount(sysTaskBO.getCount());
-            todoTask.setFinishedCount(0);
-            todoTask.setAwardType(sysTaskBO.getAwardType());
-            todoTask.setType(sysTaskBO.getType());
-            todoTask.setAward(sysTaskBO.getAward());
-            todoTask.setStatus(UCConstant.TASK_UNFINISHED);
-            todoTask.setSkipUrl(sysTaskBO.getSkipURL());
-            todoTask.setRuleId(sysTaskBO.getRuleId());
-            Date date = new Date();
-            todoTask.setCreateTime(date);
-            todoTask.setLastUpdate(date);
-            todoTask.setDateType(sysTaskBO.getDateType());
-            if (sysTaskBO.getType().trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
-                long now = System.currentTimeMillis();
-                //如果特殊任务已过期则不需要生成了
-                if (now > sysTaskBO.getEndTime().getTime()) {
-                    continue;
-                }
-                todoTask.setStartTime(sysTaskBO.getStartTime());
-                todoTask.setEndTime(sysTaskBO.getEndTime());
-            }
-            insert(todoTask);
-        }
-    }
+//    private void generateTaskListByDateType(String userId, String dateType) {
+//        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(dateType);
+//
+//        if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
+//            return;
+//        }
+//        for (SysTaskBO sysTaskBO : sysTaskBOList) {
+//            //假如成长任务已生成则不用再生成
+//            List<TodoTask> taskList = todoTaskRoMapper.selectListByUserIdAndSysId(userId, sysTaskBO.getId());
+//            if (taskList != null && taskList.size() > 0) {
+//                continue;
+//            }
+//
+//            TodoTask todoTask = new TodoTask();
+//            todoTask.setId(Utils.uuid());
+//            todoTask.setUserId(userId);
+//            todoTask.setSysTaskId(sysTaskBO.getId());
+//            todoTask.setAllCount(sysTaskBO.getCount());
+//            todoTask.setFinishedCount(0);
+//            todoTask.setAwardType(sysTaskBO.getAwardType());
+//            todoTask.setType(sysTaskBO.getType());
+//            todoTask.setAward(sysTaskBO.getAward());
+//            todoTask.setStatus(UCConstant.TASK_UNFINISHED);
+//            todoTask.setSkipUrl(sysTaskBO.getSkipURL());
+//            todoTask.setRuleId(sysTaskBO.getRuleId());
+//            Date date = new Date();
+//            todoTask.setCreateTime(date);
+//            todoTask.setLastUpdate(date);
+//            todoTask.setDateType(sysTaskBO.getDateType());
+//            if (sysTaskBO.getType().trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
+//                long now = System.currentTimeMillis();
+//                //如果特殊任务已过期则不需要生成了
+//                if (now > sysTaskBO.getEndTime().getTime()) {
+//                    continue;
+//                }
+//                todoTask.setStartTime(sysTaskBO.getStartTime());
+//                todoTask.setEndTime(sysTaskBO.getEndTime());
+//            }
+//            insert(todoTask);
+//        }
+//    }
 
     @Override
     public List<TodoTaskFront> selectNormalTaskList(String userId) {
