@@ -38,8 +38,6 @@ public class TodoTaskController {
     /**
      * 查询用户日常任务列表
      *
-     * @param userId
-     * @return
      */
     @GetMapping(path = "/normal")
     public ResponseEntity selectNormalTaskList(@RequestParam(value = "userId") String userId,
@@ -56,8 +54,6 @@ public class TodoTaskController {
     /**
      * 查询用户一次性（多为成长任务）任务列表
      *
-     * @param userId
-     * @return
      */
     @GetMapping(path = "/onetime")
     public ResponseEntity selectOnetimeTaskList(@RequestParam(value = "userId") String userId,
@@ -74,8 +70,6 @@ public class TodoTaskController {
     /**
      * 查询用户日常任务列表
      *
-     * @param userId
-     * @return
      */
     @GetMapping(path = "/special")
     public ResponseEntity selectSpecialTaskList(@RequestParam(value = "userId") String userId,
@@ -92,8 +86,6 @@ public class TodoTaskController {
     /**
      * 查询用户帮帮任务列表
      *
-     * @param userId
-     * @return
      */
     @GetMapping(path = "/bangbang")
     public ResponseEntity selectBangbangTaskList(@RequestParam(value = "userId") String userId,
@@ -110,9 +102,6 @@ public class TodoTaskController {
     /**
      * 用户做任务接口：做任务并且计算奖励，用于用户业务操作任务埋点，
      *
-     * @param userId
-     * @param sysTaskId
-     * @return
      */
     @PostMapping(path = "/do/award/{userId}/{sysTaskId}")
     public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
@@ -123,9 +112,6 @@ public class TodoTaskController {
     /**
      * 用户做任务接口：做任务不计算奖励，用于用户业务操作任务埋点，多用于奖励规则比较复杂需要单做的业务
      *
-     * @param userId
-     * @param sysTaskId
-     * @return
      */
     @PostMapping(path = "/do/noaward/{userId}/{sysTaskId}")
     public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
