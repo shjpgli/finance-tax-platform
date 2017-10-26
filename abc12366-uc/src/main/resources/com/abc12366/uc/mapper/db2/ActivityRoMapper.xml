@@ -6,7 +6,7 @@
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
         id, name, description, startTime, endTime, ruleType, rule, amountType, amount,
-        probability, status, wishing, remark, num, times, createTime, lastUpdate
+        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort
     </sql>
 
     <sql id="Base_RedEnvelop_List">
@@ -32,10 +32,9 @@
     <select id="selectSimpleList" resultType="com.abc12366.uc.model.weixin.bo.redpack.ActivityBO"
             parameterType="com.abc12366.uc.model.weixin.bo.redpack.ActivityBO">
         SELECT id, name, description FROM uc_wxactivity
-        where now() <![CDATA[<=]]> endTime
-        and now() <![CDATA[>=]]> startTime
+        where now() BETWEEN startTime AND endTime
         and status = '1'
-        ORDER BY lastUpdate DESC
+        ORDER BY sort ASC limit 3
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.weixin.WxActivity"
