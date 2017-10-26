@@ -6,6 +6,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionExpertParamBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -19,6 +20,13 @@ public interface QuestionExpertRoMapper {
      *
      **/
     List<QuestionExpertBO> selectList(QuestionExpertParamBo param);
+
+    /**
+     *
+     * 列表查询
+     *
+     **/
+    List<QuestionExpertBO> selectListDX(Map<String, Object> map);
 
     /**
      *

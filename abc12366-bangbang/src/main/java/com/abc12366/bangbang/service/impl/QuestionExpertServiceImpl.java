@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -33,6 +34,11 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
     @Override
     public List<QuestionExpertBO> selectList(QuestionExpertParamBo param) {
         return questionExpertRoMapper.selectList(param);
+    }
+
+    @Override
+    public List<QuestionExpertBO> selectListDX(Map<String, Object> map) {
+        return questionExpertRoMapper.selectListDX(map);
     }
 
     @Override
