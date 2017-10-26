@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service;
 import com.abc12366.bangbang.model.Feedback;
 import com.abc12366.bangbang.model.bo.FeedbackParamBO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface FeedbackService {
 
-    Feedback add(Feedback feedBack);
+    Feedback add(Feedback feedBack, HttpServletRequest request);
 
     List<Feedback> selectList(FeedbackParamBO param);
 

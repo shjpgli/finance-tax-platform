@@ -6,11 +6,13 @@ import com.abc12366.bangbang.model.bo.FeedbackParamBO;
 import com.abc12366.bangbang.service.FeedbackService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -26,9 +28,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     private FeedbackMapper feedbackMapper;
 
     @Override
-    public Feedback add(Feedback feedBack) {
+    public Feedback add(Feedback feedBack, HttpServletRequest request) {
         try {
             feedBack.setId(Utils.uuid());
+            if(StringUtils.isEmpty(feedBack.getContactNumber())){
+                /* 如果没有填写手机号，  查询用户的手机号 */
+            }
             feedbackMapper.insert(feedBack);
             return feedBack;
         }catch (Exception e){
