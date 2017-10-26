@@ -26,4 +26,6 @@ public interface SysTaskRoMapper {
     List<SysTaskBO> selectListByType(String type);
 
     SysTask selectValidSysTaskByRuleId(String ruleId);
+
+    List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType);
 }
