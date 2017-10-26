@@ -48,7 +48,6 @@ public interface OrderRoMapper {
 
     List<OrderBO> selectCurriculumOrderList(OrderBO orderBO);
 
-<<<<<<< HEAD
     /**
      * 状态为[付款成功]订单数量
      *
@@ -62,7 +61,6 @@ public interface OrderRoMapper {
      * @return OrderStatBO
      */
     OrderStatBO orderStat();
-=======
+
     OrderBO selectByOrderNoAdmin(String orderNo);
->>>>>>> lizhongwei-dev
 }
