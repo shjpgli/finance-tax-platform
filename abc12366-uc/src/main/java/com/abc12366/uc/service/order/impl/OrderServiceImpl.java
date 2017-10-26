@@ -1126,7 +1126,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-<<<<<<< HEAD
     public Integer selectTodoListCount() {
         return orderRoMapper.selectTodoListCount();
     }
@@ -1134,7 +1133,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderStatBO orderStat() {
         return orderRoMapper.orderStat();
-=======
+    }
+
+    @Override
     public OrderBO selectByOrderNoAdmin(String orderNo) {
         return orderRoMapper.selectByOrderNoAdmin(orderNo);
     }
@@ -1171,7 +1172,6 @@ public class OrderServiceImpl implements OrderService {
             sendMemberMsg(orderProductBO, order, request);
         }
         return orderBO;
->>>>>>> lizhongwei-dev
     }
 
 }

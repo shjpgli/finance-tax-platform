@@ -259,7 +259,6 @@ public interface OrderService {
     List<OrderBO> selectCurriculumOrderList(OrderBO orderBO, int pageNum, int pageSize);
 
     /**
-<<<<<<< HEAD
      * 状态为[付款成功]订单数量
      *
      * @return Integer
@@ -272,7 +271,8 @@ public interface OrderService {
      * @return OrderStatBO
      */
     OrderStatBO orderStat();
-=======
+
+    /**
      * 后台用户查询订单详情
      * @param orderNo 订单号
      * @return
@@ -285,5 +285,4 @@ public interface OrderService {
      * @return
      */
     OrderBO openVip(OrderVipBO orderVipBO,HttpServletRequest request);
->>>>>>> lizhongwei-dev
 }
