@@ -61,4 +61,6 @@ public interface OrderRoMapper {
      * @return OrderStatBO
      */
     OrderStatBO orderStat();
+
+    OrderBO selectByOrderNoAdmin(String orderNo);
 }

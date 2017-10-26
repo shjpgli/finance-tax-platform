@@ -120,12 +120,12 @@ public class Order implements Serializable {
     /**
      * 是否需要寄送
      **/
-    private Integer isShipping;
+    private Boolean isShipping;
 
     /**
      * 是否免运费
      **/
-    private Integer isFreeShipping;
+    private Boolean isFreeShipping;
 
 
     public void setOrderNo(String orderNo) {
@@ -200,19 +200,19 @@ public class Order implements Serializable {
         return this.username;
     }
 
-    public void setIsShipping(Integer isShipping) {
+    public void setIsShipping(Boolean isShipping) {
         this.isShipping = isShipping;
     }
 
-    public Integer getIsShipping() {
+    public Boolean getIsShipping() {
         return this.isShipping;
     }
 
-    public void setIsFreeShipping(Integer isFreeShipping) {
+    public void setIsFreeShipping(Boolean isFreeShipping) {
         this.isFreeShipping = isFreeShipping;
     }
 
-    public Integer getIsFreeShipping() {
+    public Boolean getIsFreeShipping() {
         return this.isFreeShipping;
     }
 

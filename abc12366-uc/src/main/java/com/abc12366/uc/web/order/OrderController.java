@@ -8,6 +8,8 @@ import com.abc12366.uc.model.OrderBack;
 import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.bo.OrderSubmitBO;
+import com.abc12366.uc.model.order.bo.OrderVipBO;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.DataUtils;
 import com.alibaba.fastjson.JSON;
@@ -263,6 +265,20 @@ public class OrderController {
     }*/
 
     /**
+     * 查询订单详情-后台
+     *
+     * @param orderNo 订单号
+     * @return 订单详情
+     */
+    @GetMapping(path = "/admin/select/{orderNo}")
+    public ResponseEntity selectByOrderNoAdmin(@PathVariable("orderNo") String orderNo) {
+        LOGGER.info("{}", orderNo);
+        OrderBO orderBO = orderService.selectByOrderNoAdmin(orderNo);
+        LOGGER.info("{}", orderBO);
+        return ResponseEntity.ok(Utils.kv("data", orderBO));
+    }
+
+    /**
      * 查询订单详情
      *
      * @param orderNo 订单号
@@ -306,15 +322,29 @@ public class OrderController {
     /**
      * 用户下单
      *
-     * @param orderBO 订单信息
+     * @param orderSubmitBO 订单信息
      * @param userId  用户 ID
      * @return 订单信息
      */
     @PostMapping(path = "/submit/{userId}")
-    public ResponseEntity submitOrder(@Valid @RequestBody OrderBO orderBO, @PathVariable("userId") String userId) {
-        LOGGER.info("{}", orderBO);
-        orderBO.setUserId(userId);
-        OrderBO bo = orderService.submitOrder(orderBO);
+    public ResponseEntity submitOrder(@Valid @RequestBody OrderSubmitBO orderSubmitBO, @PathVariable("userId") String userId) {
+        LOGGER.info("{}", orderSubmitBO);
+        orderSubmitBO.setUserId(userId);
+        OrderBO bo = orderService.submitOrder(orderSubmitBO);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 用户开通会员
+     *
+     * @param orderVipBO 开通VIP
+     * @return  订单信息
+     */
+    @PutMapping(path = "/open")
+    public ResponseEntity openVip(@Valid @RequestBody OrderVipBO orderVipBO,HttpServletRequest request) {
+        LOGGER.info("{}", orderVipBO);
+        OrderBO bo = orderService.openVip(orderVipBO,request);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
