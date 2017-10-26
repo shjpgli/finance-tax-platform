@@ -14,15 +14,13 @@ import java.util.Map;
 public interface SendMsgLogService {
     /**
      * 新增短信日志
-     * @param sendLog
-     * @return
+     *
      */
     MessageSendLog insert(MessageSendLog sendLog);
 
     /**
      * 查询短信日志列表
-     * @param map
-     * @return
+     *
      */
     List<MessageSendLog> selectList(Map<String, Object> map);
 }

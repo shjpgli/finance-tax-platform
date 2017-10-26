@@ -218,6 +218,12 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);
+            //用户重要信息模糊化处理:电话号码
+            if (!StringUtils.isEmpty(userDTO.getPhone()) && userDTO.getPhone().length() >= 8) {
+                String phone = userDTO.getPhone();
+                StringBuilder phoneFuffer = new StringBuilder(phone);
+                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+            }
             userDTO.setPassword(null);
             LOGGER.info("{}", userDTO);
             return userDTO;

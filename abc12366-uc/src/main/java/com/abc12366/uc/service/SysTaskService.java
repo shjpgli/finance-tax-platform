@@ -32,4 +32,6 @@ public interface SysTaskService {
     List<SysTaskBO> selectListByType(String type);
 
     List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType);
+
+    List<SysTaskBO> selectTimeLimitedListByType(String type);
 }
