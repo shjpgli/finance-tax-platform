@@ -112,7 +112,7 @@
         LEFT JOIN cms_content_count e ON a.contentId = e.contentId
         WHERE a.status = 2 AND b.needRegenerate = 1
         <if test="tagId != null and tagId != ''">
-            AND t.tagId = #{tagId}
+            AND a.contentType like CONCAT('%',#{channelId},'%')
         </if>
         <if test="channelId != null and channelId != ''">
             AND a.channelId like CONCAT(#{channelId},'%')
