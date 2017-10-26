@@ -87,20 +87,6 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
             BeanUtils.copyProperties(questionTipOffBo, tipOff);
             questionTipOffMapper.insert(tipOff);
 
-            int reportNum = questionTipOffRoMapper.selectTipoffCnt(questionTipOffBo.getSourceId());
-
-            if("question".equals(tipOff.getSourceType())){
-                Question question = new Question();
-                question.setId(tipOff.getSourceId());
-                question.setReportNum(reportNum);
-                questionMapper.updateByPrimaryKeySelective(question);
-            }else{
-                QuestionAnswer questionAnswer = new QuestionAnswer();
-                questionAnswer.setId(tipOff.getSourceId());
-                questionAnswer.setReportNum(reportNum);
-                questionAnswerMapper.updateByPrimaryKeySelective(questionAnswer);
-            }
-
         } catch (Exception e) {
             throw new ServiceException(6371);
         }
