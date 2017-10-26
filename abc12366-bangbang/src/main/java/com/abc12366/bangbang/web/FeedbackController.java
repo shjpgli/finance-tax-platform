@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -54,8 +55,8 @@ public class FeedbackController {
      * 添加意见反馈接口
      */
     @PostMapping(path = "/add")
-    public ResponseEntity add(@RequestBody Feedback feedback) {
-        feedbackService.add(feedback);
+    public ResponseEntity add(@RequestBody Feedback feedback, HttpServletRequest request) {
+        feedbackService.add(feedback, request);
         return ResponseEntity.ok(Utils.kv("data", feedback));
     }
 

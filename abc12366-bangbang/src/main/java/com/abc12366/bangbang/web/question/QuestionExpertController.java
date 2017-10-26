@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -40,6 +42,21 @@ public class QuestionExpertController {
         QuestionExpertParamBo param = new QuestionExpertParamBo();
         param.setPhone(phone).setRealName(realName).setStatus(status).setUsername(username).setType(type);
         List<QuestionExpertBO> list = questionExpertService.selectList(param);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /* 专家大侠列表查询 */
+    @GetMapping(path = "/listDX")
+    public ResponseEntity selectListDX(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "type", required = false) String type){
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("type", type);//专家类型
+        List<QuestionExpertBO> list = questionExpertService.selectListDX(dataMap);
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));

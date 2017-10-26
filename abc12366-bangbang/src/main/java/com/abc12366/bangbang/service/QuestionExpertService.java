@@ -5,6 +5,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionExpertBO;
 import com.abc12366.bangbang.model.question.bo.QuestionExpertParamBo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -14,6 +15,9 @@ public interface QuestionExpertService {
 
     /* 查询用户列表 */
     List<QuestionExpertBO> selectList(QuestionExpertParamBo param);
+
+    /* 查询大侠列表 */
+    List<QuestionExpertBO> selectListDX(Map<String, Object> map);
 
     /* 单个查询 */
     QuestionExpertBO selectOne(String id);

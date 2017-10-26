@@ -173,4 +173,9 @@ public class SysTaskServiceImpl implements SysTaskService {
     public List<SysTaskListBO> selectDeployedListByType(Map<String, String> map) {
         return sysTaskRoMapper.selectDeployedListByType(map);
     }
+
+    @Override
+    public List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType) {
+        return sysTaskRoMapper.selectValidListByTypeAndDateType(type, dateType);
+    }
 }

@@ -617,7 +617,7 @@ public class UserServiceImpl implements UserService {
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
             map.put("user_extend", userExtend);
-            LOGGER.info("{}：{}", user.toString(),userExtend.toString());
+            LOGGER.info("{}：{}", user,userExtend);
             return map;
         }
         return null;
