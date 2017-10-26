@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service;
 
+import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface QuestionTipOffService {
     List<QuestionTipOffBo> selectList();
 
     /* 审核 */
-    void changeStatus(String id ,String status);
+    void changeStatus(QuestionTipOff questionTipOff);
 
     QuestionTipOffBo save(QuestionTipOffBo questionTipOffBo);
 

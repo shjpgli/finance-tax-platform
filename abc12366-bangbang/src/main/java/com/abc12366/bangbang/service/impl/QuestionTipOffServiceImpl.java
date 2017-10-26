@@ -9,6 +9,7 @@ import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTipOffStatus;
 import com.abc12366.bangbang.service.QuestionTipOffService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -50,12 +51,21 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
 
     @Transactional("db1TxManager")
     @Override
-    public void changeStatus(String id ,String status) {
-        QuestionTipOff req = new QuestionTipOff();
-        req.setId(id);
-        req.setUpdateAdmin(Utils.getAdminId());
-        questionTipOffMapper.updateByPrimaryKeySelective(req);
+    public void changeStatus(QuestionTipOff questionTipOff) {
+        String id = questionTipOff.getId();
+        String status = questionTipOff.getStatus();
 
+        questionTipOff.setUpdateAdmin(Utils.getAdminId());
+        questionTipOffMapper.updateByPrimaryKeySelective(questionTipOff);
+        /*如果举报内容 审核通过 加被举报数*/
+        if(QuestionTipOffStatus.approved.name().equals(status)){
+            QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(id);
+            if("question".equals(record.getSourceType())){
+                questionMapper.updateReportNum(id);
+            }else{
+                questionAnswerMapper.updateReportNum(id);
+            }
+        }
     }
 
     @Override
