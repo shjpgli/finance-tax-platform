@@ -90,6 +90,18 @@
         ORDER BY lastUpdate DESC
     </select>
 
+    <select id="selectTimeLimitedListByType" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from uc_sys_task
+        where status = 1
+        and type = #{type}
+        and startTime IS NOT NULL
+        and endTime IS NOT NULL
+        and <![CDATA[  startTime < (SELECT CURDATE())]]>
+        and <![CDATA[  endTime > (SELECT CURDATE())]]>
+    </select>
+
     <select id="selectValidSysTaskByRuleId" resultType="com.abc12366.uc.model.SysTask" parameterType="java.lang.String">
         SELECT
         id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,

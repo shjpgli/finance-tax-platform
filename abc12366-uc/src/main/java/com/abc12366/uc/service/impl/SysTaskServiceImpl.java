@@ -178,4 +178,9 @@ public class SysTaskServiceImpl implements SysTaskService {
     public List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType) {
         return sysTaskRoMapper.selectValidListByTypeAndDateType(type, dateType);
     }
+
+    @Override
+    public List<SysTaskBO> selectTimeLimitedListByType(String type) {
+        return sysTaskRoMapper.selectTimeLimitedListByType(type);
+    }
 }

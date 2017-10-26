@@ -46,4 +46,6 @@ public interface TodoTaskRoMapper {
     List<TodoTask> selectListByUserIdAndSysId(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
     List<TodoTaskFront> selectBangbangTaskList(String userId);
+
+    List<TodoTask> selectTimeLimitedOneByUserIdAndSysTaskId(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 }
