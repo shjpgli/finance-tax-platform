@@ -3,10 +3,7 @@ package com.abc12366.bangbang.web.question;
 import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.QuestionTag;
-import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
-import com.abc12366.bangbang.model.question.bo.QuestionryBo;
+import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -300,7 +297,7 @@ public class QuestionController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionBo> questionBoList = questionService.selectTipList(userId);
+        List<QuestionjbBo> questionBoList = questionService.selectTipList(userId);
         return (questionBoList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
