@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userUpdateBO, user);
 
         user.setLastUpdate(new Date());
-        if (user.getUsername() != null) {
+        if (!user.getUsername().equals(userUpdateBO.getUsername())) {
             user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
         }
         int result = userMapper.update(user);
