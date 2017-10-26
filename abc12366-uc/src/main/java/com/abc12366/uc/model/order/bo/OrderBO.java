@@ -178,9 +178,6 @@ public class OrderBO implements Serializable {
     //会员名称
     private String nowVipLevelName;
 
-    //交易流水号
-    private String tradeNo;
-
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
@@ -483,13 +480,5 @@ public class OrderBO implements Serializable {
 
     public void setTradeBO(TradeBO tradeBO) {
         this.tradeBO = tradeBO;
-    }
-
-    public String getTradeNo() {
-        return tradeNo;
-    }
-
-    public void setTradeNo(String tradeNo) {
-        this.tradeNo = tradeNo;
     }
 }

@@ -375,9 +375,8 @@ public class OrderController {
     @PostMapping(path = "/payment")
     public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO, HttpServletRequest request) {
         LOGGER.info("{}{}", orderPayBO);
-        OrderBO bo = orderService.paymentOrder(orderPayBO, "RMB", request);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
+        orderService.paymentOrder(orderPayBO, "RMB", request);
+        return ResponseEntity.ok(Utils.kv());
     }
 
     /**
@@ -391,10 +390,9 @@ public class OrderController {
     public ResponseEntity paymentOrder(@Valid @RequestBody OrderPayBO orderPayBO, HttpServletRequest request) {
         LOGGER.info("{}{}", orderPayBO);
         orderPayBO.setPayMethod("POINTS");
-        OrderBO bo = orderService.paymentOrder(orderPayBO, "POINTS", request);
-        LOGGER.info("{}", bo);
+        orderService.paymentOrder(orderPayBO, "POINTS", request);
 
-        return ResponseEntity.ok(Utils.kv("data", bo));
+        return ResponseEntity.ok(Utils.kv());
     }
 
 

@@ -305,7 +305,10 @@ public class OrderServiceImpl implements OrderService {
 
         OrderBO temp = new OrderBO();
         BeanUtils.copyProperties(order, temp);
-        temp.setTradeNo(tradeNo);
+        TradeBO tradeBO = new TradeBO();
+        BeanUtils.copyProperties(trade, tradeBO);
+        temp.setTradeBO(tradeBO);
+
         return temp;
 
     }
@@ -664,89 +667,60 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional("db1TxManager")
     @Override
-    public OrderBO paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request) {
+    public void paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request) {
         String tradeNo = orderPayBO.getTradeNo();
-        OrderBO orderBO = orderRoMapper.selectById(tradeNo);
+        //根据交易流水号查询订单信息
+        List<OrderBO> orderBOList = orderRoMapper.selectByTradeNo(tradeNo);
 
-        if (orderBO != null) {
-            OrderProductBO pBO = new OrderProductBO();
-            pBO.setOrderNo(tradeNo);
-            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
-            Integer isShipping = orderBO.getIsShipping();
-            for (OrderProductBO orderProductBO : orderProductBOs) {
-                int isPay = orderPayBO.getIsPay();
-                Order order = new Order();
-                orderBO.setLastUpdate(new Date());
-                BeanUtils.copyProperties(orderBO, order);
-                //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
-                if ("RMB".equals(type)) {
-                    //支付状态，1：支付中，2：支付成功，3：支付失败，
-                    if (isPay == 1) {
-                        order.setOrderStatus("3");
-                        int update = orderMapper.update(order);
-                        if (update != 1) {
-                            LOGGER.warn("修改失败，参数：{}", order);
-                            throw new ServiceException(4102);
-                        }
-                        insertOrderLog(orderBO.getUserId(), tradeNo, "3", "用户付款中", "0");
-                    } else if (isPay == 2) {
-                        updateStock(orderBO, orderProductBO);
-                        setTodoTask(orderBO);
-                        //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
-                        //根据是否需要寄送来判断，虚拟和实物
-//                        if (isShipping) {
-                        order.setOrderStatus("4");
-                        orderMapper.update(order);
-                        insertPoints(orderBO);
-                        insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功", "0");
-//                        } else {
-//                            String goodsId = orderProductBO.getGoodsId();
-//                            order.setOrderStatus("4");
-//                            orderMapper.update(order);
-//                            insertPoints(orderBO);
-//                            GoodsBO goodsBO = goodsRoMapper.selectGoods(goodsId);
-//                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", tradeNo);
-//                            userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
-//
-//                            LOGGER.info("插入会员日志: {}", tradeNo);
-//                            insertVipLog(tradeNo, orderBO.getUserId(), goodsBO.getMemberLevel());
-//                            insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单", "0");
-                        //发送消息
-//                            sendMemberMsg(orderProductBO, order,request);
+        for (OrderBO orderBO : orderBOList){
+            if (orderBO != null) {
+                OrderProductBO pBO = new OrderProductBO();
+                pBO.setOrderNo(tradeNo);
+                List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+                for (OrderProductBO orderProductBO : orderProductBOs) {
+                    int isPay = orderPayBO.getIsPay();
+                    Order order = new Order();
+                    orderBO.setLastUpdate(new Date());
+                    BeanUtils.copyProperties(orderBO, order);
+                    //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
+                    if ("RMB".equals(type)) {
+                        //支付状态，1：支付中，2：支付成功，3：支付失败，
+                        if (isPay == 1) {
+                            order.setOrderStatus("3");
+                            int update = orderMapper.update(order);
+                            if (update != 1) {
+                                LOGGER.warn("修改失败，参数：{}", order);
+                                throw new ServiceException(4102);
+                            }
+                            insertOrderLog(orderBO.getUserId(), tradeNo, "3", "用户付款中", "0");
+                        } else if (isPay == 2) {
+                            updateStock(orderBO, orderProductBO);
+                            setTodoTask(orderBO);
+                            //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
+                            //根据是否需要寄送来判断，虚拟和实物
+                            order.setOrderStatus("4");
+                            orderMapper.update(order);
+                            insertPoints(orderBO);
+                            insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功", "0");
 //                        }
-                    } else if (isPay == 3) {
-                        order.setOrderStatus("2");
+                        } else if (isPay == 3) {
+                            order.setOrderStatus("2");
+                            orderMapper.update(order);
+                            insertOrderLog(orderBO.getUserId(), tradeNo, "2", "等待用户付款", "0");
+                        }
+                    } else if ("POINTS".equals(type)) {
+                        updateStock(orderBO, orderProductBO);
+                        //修改商品信息
                         orderMapper.update(order);
-                        insertOrderLog(orderBO.getUserId(), tradeNo, "2", "等待用户付款", "0");
+                        //扣除积分
+                        insertDeductPoints(orderBO);
+                        order.setOrderStatus("4");
+                        insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功", "0");
+                        insertTradeLog(orderBO);
                     }
-                } else if ("POINTS".equals(type)) {
-                    updateStock(orderBO, orderProductBO);
-                    //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
-                    //修改商品信息
-                    orderMapper.update(order);
-                    //扣除积分
-                    insertDeductPoints(orderBO);
-//                    if (isShipping) {
-                    order.setOrderStatus("4");
-                    insertOrderLog(orderBO.getUserId(), tradeNo, "4", "用户付款成功", "0");
-//                    } else{
-//                        order.setOrderStatus("6");
-//                        String goodsId = orderProductBO.getGoodsId();
-//                        GoodsBO goodsBO = goodsRoMapper.selectGoods(goodsId);
-//                        LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", tradeNo);
-//                        userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
-//
-//                        LOGGER.info("插入会员日志: {}", tradeNo);
-//                        insertVipLog(tradeNo, orderBO.getUserId(), goodsBO.getMemberLevel());
-
-//                        insertOrderLog(orderBO.getUserId(), tradeNo, "6", "用户付款成功，完成订单","0");
-//                        sendMemberMsg(orderProductBO, order,request);
-//                    }
-                    insertTradeLog(orderBO);
                 }
             }
         }
-        return orderBO;
     }
 
     /**
