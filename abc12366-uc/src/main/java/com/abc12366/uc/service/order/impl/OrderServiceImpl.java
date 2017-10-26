@@ -712,10 +712,10 @@ public class OrderServiceImpl implements OrderService {
                     } else if ("POINTS".equals(type)) {
                         updateStock(orderBO, orderProductBO);
                         //修改商品信息
+                        order.setOrderStatus("4");
                         orderMapper.update(order);
                         //扣除积分
                         insertDeductPoints(orderBO);
-                        order.setOrderStatus("4");
                         insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功", "0");
                         insertTradeLog(orderBO);
                     }

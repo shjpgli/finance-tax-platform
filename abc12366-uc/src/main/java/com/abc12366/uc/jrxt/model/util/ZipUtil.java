@@ -9,7 +9,7 @@ import java.util.zip.*;
 
 /**
  * @author ziben
- * @version 1.0 11-3-29 下午2:37
+ * @version 1.0 11-3-29 2:37
  */
 @Component("zipUtil")
 public class ZipUtil {
@@ -56,12 +56,6 @@ public class ZipUtil {
         return outBytes;
     }
 
-    /**
-     * 使用zlib压缩
-     * @param contents
-     * @return
-     * @throws IOException
-     */
     public byte[] compressWithZlib(HashMap<String, String> contents) throws IOException {
         byte[] output = new byte[0];
         byte[] data = ((String)contents.values().toArray()[0]).getBytes();
@@ -127,12 +121,6 @@ public class ZipUtil {
         return resultMap;
     }
 
-    /**
-     * 使用zlib算法解压缩
-     * @param bytes
-     * @return
-     * @throws IOException
-     */
     public HashMap<String, String> decompressWithZlib(byte[] bytes) throws IOException {
         HashMap<String, String> resultMap = new HashMap<String, String>();
 
@@ -167,24 +155,10 @@ public class ZipUtil {
         decompress(srcFile, basePath);
     }
 
-    /**
-     * 解压缩
-     *
-     * @param srcFile
-     * @param destPath
-     * @throws Exception
-     */
     public void decompress(File srcFile, String destPath) throws Exception {
         decompress(srcFile, new File(destPath));
     }
 
-    /**
-     * 解压缩
-     *
-     * @param srcFile
-     * @param destFile
-     * @throws Exception
-     */
     public void decompress(File srcFile, File destFile) throws Exception {
         CheckedInputStream cis = new CheckedInputStream(new FileInputStream(srcFile), new CRC32());
         ZipInputStream zis = new ZipInputStream(cis);
@@ -192,24 +166,17 @@ public class ZipUtil {
         zis.close();
     }
 
-    /**
-     * 文件 解压缩
-     *
-     * @param destFile 目标文件
-     * @param zis      ZipInputStream
-     * @throws Exception
-     */
     private void decompress(File destFile, ZipInputStream zis) throws Exception {
 
         ZipEntry entry = null;
         while ((entry = zis.getNextEntry()) != null) {
 
-            // 文件
+            // 募
             String dir = destFile.getPath() + File.separator + entry.getName();
 
             File dirFile = new File(dir);
 
-            // 文件检查
+            // 募
             fileProber(dirFile);
 
             if (entry.isDirectory()) {
@@ -222,13 +189,6 @@ public class ZipUtil {
         }
     }
 
-    /**
-     * 文件解压缩
-     *
-     * @param destFile 目标文件
-     * @param zis      ZipInputStream
-     * @throws Exception
-     */
     private void decompressFile(File destFile, ZipInputStream zis) throws Exception {
 
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(destFile));
@@ -242,20 +202,11 @@ public class ZipUtil {
         bos.close();
     }
 
-    /**
-     * 文件探针
-     * <p/>
-     * <p/>
-     * 当父目录不存在时，创建目录！
-     *
-     * @param dirFile
-     */
     private static void fileProber(File dirFile) {
 
         File parentFile = dirFile.getParentFile();
         if (!parentFile.exists()) {
 
-            // 递归寻找上级目录
             fileProber(parentFile);
 
             parentFile.mkdir();
@@ -263,8 +214,6 @@ public class ZipUtil {
     }
 
     public static void main(String[] args) {
-        //System.setProperty("sun.zip.encoding", "GBK");
-
         String srcStr = "<?xml version=\"1.0\" encoding=\"GBK\" ?>\n" +
                 "<REQUEST>\n" +
                 "    <NSRSBH>430903707384722</NSRSBH>\n" +
@@ -290,7 +239,7 @@ public class ZipUtil {
                 */
                 FileOutputStream fos = null;
 
-                    fos = new FileOutputStream("D:\\project\\FPWTDKDZ\\项目工程过程\\实现与测试\\WTDKDZ\\DKDZFW\\dkdz-service\\samples\\getqyxxreq.zip");
+                    fos = new FileOutputStream("D:\\project\\FPWTDKDZ\\目坦\\实\\WTDKDZ\\DKDZFW\\dkdz-service\\samples\\getqyxxreq.zip");
             fos.write(bytes2);
             fos.close();
         } catch (FileNotFoundException e) {

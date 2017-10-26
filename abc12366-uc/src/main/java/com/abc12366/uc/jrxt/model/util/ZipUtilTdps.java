@@ -12,24 +12,10 @@ import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 
-/**
- * 压缩解压缩工具类
- *
- * @author ziben
- * @version 1.0 11-3-29 下午2:37
- */
 @Component
 public class ZipUtilTdps {
     private static int BUFFER = 2048;
 
-    /**
-     * 将输入的map压缩为字节流，map中的每一个元素为压缩包中的一个元素
-     *
-     * @param contents 将要被压缩的的内容
-     * @return 压缩后的字节流
-     * @throws ArchiveException 创建压缩输出流时排除的异常
-     * @throws IOException
-     */
     public static byte[] compress(HashMap<String, String> contents) throws ArchiveException, IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ArchiveOutputStream zipOutput = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP,
@@ -47,14 +33,6 @@ public class ZipUtilTdps {
         return outBytes;
     }
 
-    /**
-     * 将字节数组解压缩到map，压缩包中的一个元素为map中的一个元素
-     *
-     * @param bytes 输入的字节数组
-     * @return 解压后的hashmap
-     * @throws IOException
-     * @throws ArchiveException
-     */
     public static HashMap<String, String> decompress(byte[] bytes) throws IOException, ArchiveException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         CheckedInputStream cis = new CheckedInputStream(inputStream, new CRC32());
@@ -80,13 +58,6 @@ public class ZipUtilTdps {
         return resultMap;
     }
 
-    /**
-     * 解压缩
-     *
-     * @param srcFile
-     * @param destFile
-     * @throws Exception
-     */
     public static void decompress(File srcFile, File destFile) throws Exception {
         ZipFile zipFile = new ZipFile(srcFile);
 
