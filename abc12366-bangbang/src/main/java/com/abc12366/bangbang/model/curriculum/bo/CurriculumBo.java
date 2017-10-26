@@ -2,6 +2,7 @@ package com.abc12366.bangbang.model.curriculum.bo;
 import com.abc12366.bangbang.model.curriculum.CurriculumLabel;
 import com.abc12366.bangbang.model.curriculum.CurriculumLecturerGx;
 import com.abc12366.bangbang.model.curriculum.CurriculumMembergrade;
+import com.abc12366.bangbang.model.curriculum.CurriculumUvipPrice;
 
 import java.io.Serializable;
 import java.util.List;
@@ -90,17 +91,17 @@ public class CurriculumBo implements Serializable {
 	/**课程收费**tinyint(1)**/
 	private Integer isFree;
 
-	/**订购价格原价**double**/
-	private Double originalPrice;
+    /**成本价格**double**/
+    private Double costPrice;
 
-	/**订购价格优惠价**double**/
-	private Double preferentialPrice;
+    /**销售价格**double**/
+    private Double sellPrice;
 
-	/**积分价格原价**double**/
-	private Double integralOriginalPrice;
+    /**市场价格**double**/
+    private Double marketPrice;
 
-	/**积分价格优惠价**double**/
-	private Double integralPreferentialPrice;
+    /**积分价格**double**/
+    private Double integralPrice;
 
 	/**免费会员**varchar(200)**/
 	private String freeMember;
@@ -140,6 +141,8 @@ public class CurriculumBo implements Serializable {
     private List<CurriculumLecturerGx> lecturerGxList;
 
     private List<CurriculumChapterBo> chapterBoList;
+
+    private List<CurriculumUvipPrice> uvipPriceList;
 
 
 
@@ -343,36 +346,36 @@ public class CurriculumBo implements Serializable {
 		return this.isFree;
 	}
 
-    public Double getOriginalPrice() {
-        return originalPrice;
+    public Double getCostPrice() {
+        return costPrice;
     }
 
-    public void setOriginalPrice(Double originalPrice) {
-        this.originalPrice = originalPrice;
+    public void setCostPrice(Double costPrice) {
+        this.costPrice = costPrice;
     }
 
-    public Double getPreferentialPrice() {
-        return preferentialPrice;
+    public Double getSellPrice() {
+        return sellPrice;
     }
 
-    public void setPreferentialPrice(Double preferentialPrice) {
-        this.preferentialPrice = preferentialPrice;
+    public void setSellPrice(Double sellPrice) {
+        this.sellPrice = sellPrice;
     }
 
-    public Double getIntegralOriginalPrice() {
-        return integralOriginalPrice;
+    public Double getMarketPrice() {
+        return marketPrice;
     }
 
-    public void setIntegralOriginalPrice(Double integralOriginalPrice) {
-        this.integralOriginalPrice = integralOriginalPrice;
+    public void setMarketPrice(Double marketPrice) {
+        this.marketPrice = marketPrice;
     }
 
-    public Double getIntegralPreferentialPrice() {
-        return integralPreferentialPrice;
+    public Double getIntegralPrice() {
+        return integralPrice;
     }
 
-    public void setIntegralPreferentialPrice(Double integralPreferentialPrice) {
-        this.integralPreferentialPrice = integralPreferentialPrice;
+    public void setIntegralPrice(Double integralPrice) {
+        this.integralPrice = integralPrice;
     }
 
     public void setFreeMember(String freeMember){
@@ -485,5 +488,13 @@ public class CurriculumBo implements Serializable {
 
     public void setChapterBoList(List<CurriculumChapterBo> chapterBoList) {
         this.chapterBoList = chapterBoList;
+    }
+
+    public List<CurriculumUvipPrice> getUvipPriceList() {
+        return uvipPriceList;
+    }
+
+    public void setUvipPriceList(List<CurriculumUvipPrice> uvipPriceList) {
+        this.uvipPriceList = uvipPriceList;
     }
 }

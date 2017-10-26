@@ -2,6 +2,7 @@ package com.abc12366.bangbang.model.curriculum.bo;
 
 import com.abc12366.bangbang.model.curriculum.CurriculumLabel;
 import com.abc12366.bangbang.model.curriculum.CurriculumMembergrade;
+import com.abc12366.bangbang.model.curriculum.CurriculumUvipPrice;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,9 +23,6 @@ public class CurriculumsyBo implements Serializable {
     /**课程标题**varchar(200)**/
     private String title;
 
-    /**订购价格原价**double**/
-    private Double originalPrice;
-
     /**浏览量**tinyint(11)**/
     private Integer browseNum;
 
@@ -42,6 +40,18 @@ public class CurriculumsyBo implements Serializable {
 
 	/**课程收费**tinyint(1)**/
 	private Integer isFree;
+
+    /**成本价格**double**/
+    private Double costPrice;
+
+    /**销售价格**double**/
+    private Double sellPrice;
+
+    /**市场价格**double**/
+    private Double marketPrice;
+
+    /**积分价格**double**/
+    private Double integralPrice;
 
 	/**课程简介**longtext**/
 	private String curriculumidIntro;
@@ -108,6 +118,8 @@ public class CurriculumsyBo implements Serializable {
 
     //相关课程
     List<CurriculumListsyBo> curriculumListBoList;
+
+    private List<CurriculumUvipPrice> uvipPriceList;
 
     public String getCurriculumId() {
         return curriculumId;
@@ -343,11 +355,43 @@ public class CurriculumsyBo implements Serializable {
         this.curriculumListBoList = curriculumListBoList;
     }
 
-    public Double getOriginalPrice() {
-        return originalPrice;
+    public Double getCostPrice() {
+        return costPrice;
     }
 
-    public void setOriginalPrice(Double originalPrice) {
-        this.originalPrice = originalPrice;
+    public void setCostPrice(Double costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public Double getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(Double sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
+    public Double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(Double marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public Double getIntegralPrice() {
+        return integralPrice;
+    }
+
+    public void setIntegralPrice(Double integralPrice) {
+        this.integralPrice = integralPrice;
+    }
+
+    public List<CurriculumUvipPrice> getUvipPriceList() {
+        return uvipPriceList;
+    }
+
+    public void setUvipPriceList(List<CurriculumUvipPrice> uvipPriceList) {
+        this.uvipPriceList = uvipPriceList;
     }
 }
