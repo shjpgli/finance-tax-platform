@@ -10,7 +10,7 @@
     <!--删除：根据主键ID删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         DELETE FROM uc_trade_log
-        WHERE id = #{id}
+        WHERE tradeNo = #{tradeNo}
     </delete>
     
     <insert id="insertTradeLog" parameterType="com.abc12366.uc.model.TradeLog">
@@ -116,7 +116,7 @@
             </if>
 
         </set>
-        WHERE id = #{id}
+        WHERE tradeNo = #{tradeNo}
     </update>
 
 </mapper>
