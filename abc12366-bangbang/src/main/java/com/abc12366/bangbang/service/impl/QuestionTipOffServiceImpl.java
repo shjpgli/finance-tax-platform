@@ -56,21 +56,6 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         req.setUpdateAdmin(Utils.getAdminId());
         questionTipOffMapper.updateByPrimaryKeySelective(req);
 
-        QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(id);
-        if("question".equals(record.getSourceType())){
-            Question question = new Question();
-            question.setId(record.getSourceId());
-            question.setStatus(status);
-            question.setLastUpdate(new Date());
-            questionMapper.updateByPrimaryKeySelective(question);
-        }else{
-            QuestionAnswer questionAnswer = new QuestionAnswer();
-            questionAnswer.setId(record.getSourceId());
-            questionAnswer.setStatus(status);
-            questionAnswer.setLastUpdate(new Date());
-            questionAnswerMapper.updateByPrimaryKeySelective(questionAnswer);
-        }
-
     }
 
     @Override
