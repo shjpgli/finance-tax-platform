@@ -129,12 +129,12 @@ public class OrderBO implements Serializable {
     /**
      * 是否需要寄送
      **/
-    private Boolean isShipping;
+    private Integer isShipping;
 
     /**
      * 是否免运费
      **/
-    private Boolean isFreeShipping;
+    private Integer isFreeShipping;
 
     //商品类型
     private String goodsType;
@@ -178,6 +178,8 @@ public class OrderBO implements Serializable {
     //会员名称
     private String nowVipLevelName;
 
+    //交易流水号
+    private String tradeNo;
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
@@ -251,19 +253,19 @@ public class OrderBO implements Serializable {
         return this.username;
     }
 
-    public void setIsShipping(Boolean isShipping) {
+    public void setIsShipping(Integer isShipping) {
         this.isShipping = isShipping;
     }
 
-    public Boolean getIsShipping() {
+    public Integer getIsShipping() {
         return this.isShipping;
     }
 
-    public void setIsFreeShipping(Boolean isFreeShipping) {
+    public void setIsFreeShipping(Integer isFreeShipping) {
         this.isFreeShipping = isFreeShipping;
     }
 
-    public Boolean getIsFreeShipping() {
+    public Integer getIsFreeShipping() {
         return this.isFreeShipping;
     }
 
@@ -481,5 +483,13 @@ public class OrderBO implements Serializable {
 
     public void setTradeBO(TradeBO tradeBO) {
         this.tradeBO = tradeBO;
+    }
+
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
     }
 }

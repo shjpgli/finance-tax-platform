@@ -102,13 +102,13 @@ public class OrderSubmitBO implements Serializable {
      * 是否需要寄送
      **/
     @NotNull
-    private Boolean isShipping;
+    private Integer isShipping;
 
     /**
      * 是否免运费
      **/
     @NotNull
-    private Boolean isFreeShipping;
+    private Integer isFreeShipping;
 
 
     //订单和商品对应关系
@@ -218,19 +218,19 @@ public class OrderSubmitBO implements Serializable {
         this.shippingAddress = shippingAddress;
     }
 
-    public Boolean getIsShipping() {
+    public Integer getIsShipping() {
         return isShipping;
     }
 
-    public void setIsShipping(Boolean isShipping) {
+    public void setIsShipping(Integer isShipping) {
         this.isShipping = isShipping;
     }
 
-    public Boolean getIsFreeShipping() {
+    public Integer getIsFreeShipping() {
         return isFreeShipping;
     }
 
-    public void setIsFreeShipping(Boolean isFreeShipping) {
+    public void setIsFreeShipping(Integer isFreeShipping) {
         this.isFreeShipping = isFreeShipping;
     }
 

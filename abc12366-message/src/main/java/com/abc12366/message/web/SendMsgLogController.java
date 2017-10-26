@@ -32,6 +32,17 @@ public class SendMsgLogController {
     @Autowired
     private SendMsgLogService sendMsgLogService;
 
+    /**
+     * 查询短信日志列表接口
+     * @param phone
+     * @param status
+     * @param channel
+     * @param start
+     * @param end
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String phone,
                                      @RequestParam(required = false) String status,
@@ -42,6 +53,15 @@ public class SendMsgLogController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         Map<String, Object> map = new HashMap<>();
+        if (phone != null && "".equals(phone.trim())) {
+            phone = null;
+        }
+        if (status != null && "".equals(status.trim())) {
+            status = null;
+        }
+        if (channel != null && "".equals(channel.trim())) {
+            channel = null;
+        }
         if (start != null && "".equals(start.trim())) {
             start = null;
         }
