@@ -63,4 +63,11 @@ public interface OrderRoMapper {
     OrderStatBO orderStat();
 
     OrderBO selectByOrderNoAdmin(String orderNo);
+
+    /**
+     * 根据交易流水号查询订单信息
+     * @param tradeNo
+     * @return
+     */
+    List<OrderBO> selectByTradeNo(String tradeNo);
 }

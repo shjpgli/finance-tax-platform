@@ -30,4 +30,6 @@ public interface SysTaskService {
     List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
 
     List<SysTaskBO> selectListByType(String type);
+
+    List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType);
 }

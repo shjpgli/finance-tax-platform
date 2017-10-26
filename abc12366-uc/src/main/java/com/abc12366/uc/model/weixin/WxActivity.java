@@ -77,6 +77,12 @@ public class WxActivity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
+    /**
+     * 排序
+     */
+    @Length(max = 255)
+    private Integer sort;
+
     // 已发送人数
     private Integer sent;
 
@@ -96,7 +102,8 @@ public class WxActivity {
 
     public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType,
                       String rule, String amountType, Double amount, String probability, Boolean status, String
-                              wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate) {
+                              wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate,
+                      Integer sort) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -114,6 +121,7 @@ public class WxActivity {
         this.times = times;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
+        this.sort = sort;
     }
 
     private WxActivity(Builder builder) {
@@ -134,6 +142,7 @@ public class WxActivity {
         setTimes(builder.times);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
+        setSort(builder.sort);
     }
 
     public String getId() {
@@ -272,6 +281,14 @@ public class WxActivity {
         this.lastUpdate = lastUpdate;
     }
 
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     public Integer getSent() {
         return sent;
     }
@@ -332,6 +349,7 @@ public class WxActivity {
                 ", times=" + times +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", sort=" + sort +
                 '}';
     }
 
@@ -353,6 +371,7 @@ public class WxActivity {
         private Integer times;
         private Date createTime;
         private Date lastUpdate;
+        private Integer sort;
 
         public Builder() {
         }
@@ -439,6 +458,11 @@ public class WxActivity {
 
         public Builder lastUpdate(Date val) {
             lastUpdate = val;
+            return this;
+        }
+
+        public Builder sort(Integer val) {
+            sort = val;
             return this;
         }
 

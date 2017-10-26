@@ -521,6 +521,18 @@
         WHERE o.orderNo = #{orderNo}
     </select>
 
+    <!-- 查询（根据TradeNo查询） -->
+    <select id="selectByTradeNo" resultMap="orderBOResultMap" parameterType="java.lang.String">
+        SELECT
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
+        u.id as uId,u.username as uName,u.phone,u.vipLevel,u.nickname
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        LEFT JOIN uc_trade t on t.orderNo = o.orderNo
+        WHERE t.tradeNo = #{tradeNo}
+    </select>
+
     <!-- 查询（根据主键ID和UserId查询） -->
     <select id="selectOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.Order">
         SELECT
