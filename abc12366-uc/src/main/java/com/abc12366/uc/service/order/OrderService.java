@@ -5,6 +5,8 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.order.bo.OrderPayBO;
+import com.abc12366.uc.model.order.bo.OrderSubmitBO;
+import com.abc12366.uc.model.order.bo.OrderVipBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -68,10 +70,10 @@ public interface OrderService {
     /**
      * 用户直接提交订单
      *
-     * @param orderBO 订单对象
+     * @param orderSubmitBO 订单对象
      * @return 订单对象
      */
-    OrderBO submitOrder(OrderBO orderBO);
+    OrderBO submitOrder(OrderSubmitBO orderSubmitBO);
 
     /**
      * 修改用户等级服务
@@ -257,6 +259,7 @@ public interface OrderService {
     List<OrderBO> selectCurriculumOrderList(OrderBO orderBO, int pageNum, int pageSize);
 
     /**
+<<<<<<< HEAD
      * 状态为[付款成功]订单数量
      *
      * @return Integer
@@ -269,4 +272,18 @@ public interface OrderService {
      * @return OrderStatBO
      */
     OrderStatBO orderStat();
+=======
+     * 后台用户查询订单详情
+     * @param orderNo 订单号
+     * @return
+     */
+    OrderBO selectByOrderNoAdmin(String orderNo);
+
+    /**
+     * 开通会员
+     * @param orderVipBO 订单信息
+     * @return
+     */
+    OrderBO openVip(OrderVipBO orderVipBO,HttpServletRequest request);
+>>>>>>> lizhongwei-dev
 }

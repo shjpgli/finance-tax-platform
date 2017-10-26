@@ -42,6 +42,13 @@ public class OrderExchangeController {
 
     /**
      * 退换货列表
+     * @param pageNum   页数
+     * @param pageSize 条数
+     * @param orderNo 订单号
+     * @param username 用户名
+     * @param type 类型
+     * @param status 状态
+     * @return 退换货列表
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -69,6 +76,13 @@ public class OrderExchangeController {
 
     /**
      * 退换货列表-财务
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param orderNo   订单号
+     * @param username  用户名
+     * @param type      类型
+     * @param status    状态
+     * @return 退换货列表-财务
      */
     @GetMapping("/finance")
     public ResponseEntity selectListForFinance(
@@ -96,7 +110,11 @@ public class OrderExchangeController {
     }
 
     /**
-     * 退换货列表
+     * 退换货列表-前台
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param orderNo   订单号
+     * @return  退换货列表-前台
      */
     @GetMapping("/record")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -118,7 +136,9 @@ public class OrderExchangeController {
     }
 
     /**
-     * 查看
+     * 查看详情
+     * @param id    ID
+     * @return  详情对象
      */
     @GetMapping("/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
@@ -135,6 +155,10 @@ public class OrderExchangeController {
 
     /**
      * 同意换货
+     * @param id    ID
+     * @param data  退换货管理员操作对象
+     * @param request
+     * @return  退换货信息对象
      */
     @PutMapping(path = "/agree/{id}")
     public ResponseEntity agree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data,HttpServletRequest request) {
@@ -151,6 +175,10 @@ public class OrderExchangeController {
 
     /**
      * 拒绝换货
+     * @param id    ID
+     * @param data  退换货管理员操作对象
+     * @param request
+     * @return  退换货信息对象
      */
     @PutMapping(path = "/disagree/{id}")
     public ResponseEntity disagree(@PathVariable("id") String id, @Valid @RequestBody ExchangeAdminBO data,HttpServletRequest request) {
@@ -166,6 +194,9 @@ public class OrderExchangeController {
 
     /**
      * 操作员确认收货
+     * @param id    ID
+     * @param data  退换货管理员操作对象
+     * @return  退换货信息对象
      */
     @PutMapping(path = "/confirm/{id}")
     public ResponseEntity confirm(@PathVariable("id") String id, @Valid @RequestBody ExchangeConfirmBO data) {
@@ -181,6 +212,8 @@ public class OrderExchangeController {
 
     /**
      * 用户确认收货
+     * @param id    ID
+     * @return
      */
     @PutMapping(path = "/receive/{id}")
     public ResponseEntity receive(@PathVariable("id") String id) {
@@ -195,6 +228,11 @@ public class OrderExchangeController {
 
     /**
      * 确认退货
+     * @param id    ID
+     * @param data  退换货管理员操作对象
+     * @param request
+     * @return  退换货信息对象
+     * @throws Exception
      */
     @PutMapping(path = "/back/{id}")
     public ResponseEntity back(@PathVariable("id") String id, @Valid @RequestBody ExchangeBackBO data,HttpServletRequest request) throws
@@ -226,6 +264,10 @@ public class OrderExchangeController {
 
     /**
      * 退款
+     * @param id    ID
+     * @param data  退款对象
+     * @param request
+     * @return  退款对象
      */
     @PutMapping(path = "/refund/{id}")
     public ResponseEntity refund(@PathVariable("id") String id, @Valid @RequestBody ExchangeRefundBO data,HttpServletRequest request) {
@@ -240,6 +282,8 @@ public class OrderExchangeController {
 
     /**
      * 用户提交换货单
+     * @param data  退换货申请对象
+     * @return  退换货申请对象
      */
     @PostMapping()
     public ResponseEntity insert(@Valid @RequestBody ExchangeApplicationBO data) {
@@ -253,6 +297,9 @@ public class OrderExchangeController {
 
     /**
      * 用户重新提交换货单
+     * @param id    ID
+     * @param data  退换货申请对象
+     * @return  退换货申请对象
      */
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable("id") String id, @Valid @RequestBody ExchangeApplicationBO data) {
@@ -266,7 +313,10 @@ public class OrderExchangeController {
     }
 
     /**
-     * 导出json
+     * 导出退换货信息json
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 退换货信息对象
      */
     @GetMapping("/export")
     public ResponseEntity exportJson(@RequestParam(value = "startTime", required = false) String startTime,
@@ -291,7 +341,10 @@ public class OrderExchangeController {
     }
 
     /**
-     * 导入json
+     * 导入退换货信息json
+     * @param dataList  退换货导入对象
+     * @param request
+     * @return
      */
     @PutMapping("/import")
     public ResponseEntity importJson(@Valid @RequestBody List<SfImportBO> dataList,HttpServletRequest request) {
