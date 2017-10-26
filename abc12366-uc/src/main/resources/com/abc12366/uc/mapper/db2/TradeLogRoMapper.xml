@@ -16,7 +16,7 @@
         WHERE tradeNo = #{tradeNo}
     </select>
 
-    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.bo.TradeLogBO" parameterType="java.lang.String">
+    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.TradeLog" parameterType="java.lang.String">
         SELECT
         t.tradeNo, t.amount, t.tradeStatus, t.tradeTime, t.payMethod, t.createTime, t.lastUpdate, t.compareStatus, t.compareTime,t.tradeType,t.aliTrandeNo
         FROM uc_trade_log t
