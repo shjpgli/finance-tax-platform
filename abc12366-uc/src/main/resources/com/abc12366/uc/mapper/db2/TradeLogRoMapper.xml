@@ -16,6 +16,14 @@
         WHERE tradeNo = #{tradeNo}
     </select>
 
+    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.bo.TradeLogBO" parameterType="java.lang.String">
+        SELECT
+        t.tradeNo, t.amount, t.tradeStatus, t.tradeTime, t.payMethod, t.createTime, t.lastUpdate, t.compareStatus, t.compareTime,t.tradeType,t.aliTrandeNo
+        FROM uc_trade_log t
+        LEFT JOIN uc_trade d ON d.tradeNo = t.tradeNo
+        WHERE d.orderNo = #{orderNo}
+    </select>
+
     <select id="selectOne" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.bo.TradeBillBO">
         SELECT
         <include refid="Base_Column_List"/>

@@ -46,4 +46,6 @@ public interface OrderRoMapper {
     List<OrderBO> selectUserAllOrderList(OrderBO order);
 
     List<OrderBO> selectCurriculumOrderList(OrderBO orderBO);
+
+    OrderBO selectByOrderNoAdmin(String orderNo);
 }

@@ -21,4 +21,6 @@ public interface TradeLogRoMapper {
     List<TradeLog> selectList(TradeLog tradeLog);
 
     TradeLog selectOne(TradeBillBO data);
+
+    TradeLog selectByOrderNo(String OrderNo);
 }
