@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -80,7 +81,7 @@ public class WxActivity {
     /**
      * 排序
      */
-    @Length(max = 255)
+    @Max(255)
     private Integer sort;
 
     // 已发送人数
