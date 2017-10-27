@@ -22,7 +22,8 @@
         a.id,	a.answerId,	a.questionId,	a.userId,	a.commentUserId,	a.commentTxt,	a.status,	a.createTime,	a.lastUpdate,	a.ip,	a.factionId,	a.likeNum,	a.trampleNum,	a.reportNum
         ,u.userPicturePath,u.nickname,
         u1.nickname commentNickname,
-        (SELECT count(likeId) FROM bb_question_like where id = a.id and userId = #{userId}) isLike
+        (SELECT count(likeId) FROM bb_question_like where id = a.id and likeType = '1' and userId = #{userId}) isLike,
+        (SELECT count(likeId) FROM bb_question_like where id = a.id and likeType = '2' and userId = #{userId}) isTrample
         FROM bb_question_comment a left join bb_user u on a.userId = u.id
         left join bb_user u1 on a.commentUserId = u1.id
         WHERE 1=1

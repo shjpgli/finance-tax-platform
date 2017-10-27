@@ -64,6 +64,12 @@ public class QuestionCommentBo implements Serializable {
     /**被评论用户昵称**/
     private String commentNickname;
 
+    /**是否已点赞：1/0**tinyint(4)**/
+    private Integer isLike;
+
+    /**是否已踩：1/0**tinyint(4)**/
+    private Integer isTrample;
+
 
 
 	public void setId(String id){
@@ -208,5 +214,21 @@ public class QuestionCommentBo implements Serializable {
 
     public void setCommentNum(Integer commentNum) {
         this.commentNum = commentNum;
+    }
+
+    public Integer getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(Integer isLike) {
+        this.isLike = isLike;
+    }
+
+    public Integer getIsTrample() {
+        return isTrample;
+    }
+
+    public void setIsTrample(Integer isTrample) {
+        this.isTrample = isTrample;
     }
 }
