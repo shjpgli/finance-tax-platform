@@ -315,7 +315,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //        }
 //        generateTaskListByDateType(userId, dateType);
 
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NORMAL_TASK_TYPE, UCConstant.TASK_TIME_DAY_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NORMAL_TASK_TYPE, UCConstant.TASK_TIME_YEAR_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如年度任务已生成则不用再生成
             List<TodoTask> taskList = todoTaskRoMapper.selectListByYear(userId, sysTaskBO.getId());
@@ -334,7 +334,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //            return;
 //        }
 //        generateTaskListByDateType(userId, dateType);
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NORMAL_TASK_TYPE, UCConstant.TASK_TIME_DAY_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NORMAL_TASK_TYPE, UCConstant.TASK_TIME_MONTH_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如月度任务已生成则不用再生成
             List<TodoTask> taskList = todoTaskRoMapper.selectListByMonth(userId, sysTaskBO.getId());
