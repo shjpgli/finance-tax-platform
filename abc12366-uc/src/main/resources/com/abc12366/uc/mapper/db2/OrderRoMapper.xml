@@ -40,6 +40,7 @@
             <result column="vipLevel" property="vipLevel"/>
             <result column="level" property="level"/>
             <result column="realName" property="realName"/>
+            <result column="vipLevelName" property="vipLevelName"/>
         </association>
         <association property="expressComp" column="expressCompId" select="getExpressComp"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
@@ -88,6 +89,7 @@
             <result column="nickname" property="nickname"/>
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
+            <result column="vipLevelName" property="vipLevelName"/>
         </association>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
                     select="getOrderProduct"></collection>
@@ -130,6 +132,7 @@
             <result column="nickname" property="nickname"/>
             <result column="phone" property="phone"/>
             <result column="vipLevel" property="vipLevel"/>
+            <result column="vipLevelName" property="vipLevelName"/>
         </association>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO">
             <id column="orNo" property="orderNo" jdbcType="VARCHAR"/>
