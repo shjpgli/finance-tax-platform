@@ -4,6 +4,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserTaskMapper;
 import com.abc12366.uc.mapper.db2.UserTaskRoMapper;
+import com.abc12366.uc.model.MyTaskSurvey;
 import com.abc12366.uc.model.UserTask;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserTaskService;
@@ -114,5 +115,10 @@ public class UserTaskServiceImpl implements UserTaskService {
             }
         }
         return myTaskBO;
+    }
+
+    @Override
+    public MyTaskSurvey selectMyTaskSurvey(String userId) {
+        return userTaskRoMapper.selectMyTaskSurvey(userId);
     }
 }

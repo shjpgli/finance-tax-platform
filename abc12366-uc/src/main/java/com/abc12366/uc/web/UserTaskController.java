@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.MyTaskSurvey;
 import com.abc12366.uc.model.bo.MyTaskBO;
 import com.abc12366.uc.model.bo.UserTaskBO;
 import com.abc12366.uc.model.bo.UserTaskInsertBO;
@@ -30,6 +31,7 @@ public class UserTaskController {
     @Autowired
     private UserTaskService userTaskService;
 
+    //我的任务统计：UC我的任务模块顶排统计列表
     @GetMapping(path = "/mytask/{userId}")
     public ResponseEntity selectMyTask(@PathVariable String userId) {
         LOGGER.info("{}", userId);
@@ -38,30 +40,39 @@ public class UserTaskController {
         return ResponseEntity.ok(Utils.kv("data", myTaskBO));
     }
 
-    @PostMapping(path = "/{userId}")
-    public ResponseEntity insert(@Valid @RequestBody UserTaskInsertBO userTaskInsertBO, @PathVariable String userId) {
-        LOGGER.info("{}:{}", userTaskInsertBO, userId);
-        UserTaskBO userTaskBO = userTaskService.insert(userTaskInsertBO, userId);
-        LOGGER.info("{}", userTaskBO);
-        return ResponseEntity.ok(Utils.kv("data", userTaskBO));
+    //我的任务概况：UC、模块顶排用户任务概况展示，包括本月完成任务获取的经验值、积分，以及本月完成任务数量
+    @GetMapping(path = "/mytask/survey/{userId}")
+    public ResponseEntity selectMyTaskSurvey(@PathVariable String userId) {
+        LOGGER.info("{}", userId);
+        MyTaskSurvey myTaskBO = userTaskService.selectMyTaskSurvey(userId);
+        LOGGER.info("{}", myTaskBO);
+        return ResponseEntity.ok(Utils.kv("data", myTaskBO));
     }
 
-    @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity update(@RequestBody UserTaskUpdateBO userTaskUpdateBO, @PathVariable String userId,
-                                 @PathVariable String id) {
-        LOGGER.info("{}:{}:{}", userTaskUpdateBO, userId, id);
-        UserTaskBO userTaskBO = userTaskService.update(userTaskUpdateBO, userId, id);
-        LOGGER.info("{}", userTaskBO);
-        return ResponseEntity.ok(Utils.kv("data", userTaskBO));
-    }
-
-    @DeleteMapping(path = "/{userId}/{id}")
-    public ResponseEntity delete(@PathVariable String userId, @PathVariable String id) {
-        LOGGER.info("{}:{}", userId, id);
-        Map<String, String> map = new HashMap<>();
-        map.put("userId", userId);
-        map.put("id", id);
-        userTaskService.delete(map);
-        return ResponseEntity.ok(Utils.kv());
-    }
+//    @PostMapping(path = "/{userId}")
+//    public ResponseEntity insert(@Valid @RequestBody UserTaskInsertBO userTaskInsertBO, @PathVariable String userId) {
+//        LOGGER.info("{}:{}", userTaskInsertBO, userId);
+//        UserTaskBO userTaskBO = userTaskService.insert(userTaskInsertBO, userId);
+//        LOGGER.info("{}", userTaskBO);
+//        return ResponseEntity.ok(Utils.kv("data", userTaskBO));
+//    }
+//
+//    @PutMapping(path = "/{userId}/{id}")
+//    public ResponseEntity update(@RequestBody UserTaskUpdateBO userTaskUpdateBO, @PathVariable String userId,
+//                                 @PathVariable String id) {
+//        LOGGER.info("{}:{}:{}", userTaskUpdateBO, userId, id);
+//        UserTaskBO userTaskBO = userTaskService.update(userTaskUpdateBO, userId, id);
+//        LOGGER.info("{}", userTaskBO);
+//        return ResponseEntity.ok(Utils.kv("data", userTaskBO));
+//    }
+//
+//    @DeleteMapping(path = "/{userId}/{id}")
+//    public ResponseEntity delete(@PathVariable String userId, @PathVariable String id) {
+//        LOGGER.info("{}:{}", userId, id);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("userId", userId);
+//        map.put("id", id);
+//        userTaskService.delete(map);
+//        return ResponseEntity.ok(Utils.kv());
+//    }
 }
