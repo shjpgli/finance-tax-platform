@@ -76,6 +76,7 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         QuestionTipOff tipOff = new QuestionTipOff();
         questionTipOffBo.setCreateTime(new Date());
         questionTipOffBo.setId(uuid);
+        questionTipOffBo.setStatus("auditing");
 
         Map map = MapUtil.kv("sourceId", questionTipOffBo.getSourceId(), "createUser", questionTipOffBo.getCreateUser());
         int cnt =  questionTipOffRoMapper.selectExist(map);
