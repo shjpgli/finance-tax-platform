@@ -127,6 +127,9 @@ public class UCConstant {
     //退单返还积分
     public final static String POINT_RULE_ORDER_RETURN_ID = "96eaa78a55974557b796ee01233e7733";
 
+    //帮帮批量奖励用户积分
+    public final static String POINT_RULE_BANGBANG_BATCH_AWARD = "b285c7c56b7643158b61435fd730352d";
+
 
     //用户权益类型
     //1.用户财税经验证明印制

@@ -13,6 +13,7 @@ import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.PointsService;
 import com.abc12366.uc.service.PrivilegeItemService;
 import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -174,7 +175,7 @@ public class PointsServiceImpl implements PointsService {
     public int calculate(PointCalculateBO pointCalculateBO) {
         //查询出对应的积分规则
         PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOne(pointCalculateBO.getRuleId());
-        if(pointsRuleBO==null){
+        if (pointsRuleBO == null) {
             return 0;
         }
 
@@ -246,5 +247,28 @@ public class PointsServiceImpl implements PointsService {
         pointMapper.insertComputeLog(pointComputeLog);
 
         return pointsRuleBO.getPoints();
+    }
+
+    @Override
+    public void batchAward(PointBatchAwardBO pointBatchAwardBO) {
+        String ruleId = UCConstant.POINT_RULE_BANGBANG_BATCH_AWARD;
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOne(ruleId);
+        if (pointsRuleBO == null) {
+            return;
+        }
+        for (PointAwardBO pointAwardBO : pointBatchAwardBO.getPointAwardBOList()) {
+            PointsLogBO pointsLog = new PointsLogBO();
+            pointsLog.setUserId(pointAwardBO.getUserId());
+            pointsLog.setRuleId(ruleId);
+            pointsLog.setRemark(pointsRuleBO.getDescription());
+            if (pointAwardBO.getPoint() < 0) {
+                pointsLog.setIncome(0);
+                pointsLog.setOutgo(pointAwardBO.getPoint());
+            } else {
+                pointsLog.setIncome(pointAwardBO.getPoint());
+                pointsLog.setOutgo(0);
+            }
+            pointsLogService.insert(pointsLog);
+        }
     }
 }
