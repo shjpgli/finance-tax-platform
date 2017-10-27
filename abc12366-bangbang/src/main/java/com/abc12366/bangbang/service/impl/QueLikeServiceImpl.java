@@ -142,12 +142,12 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         if(flag == 0){
             QuestionAnswer answer1 = new QuestionAnswer();
-            answer1.setLikeNum(trampleNum);
+            answer1.setTrampleNum(trampleNum);
             answer1.setId(id);
             answerMapper.updateByPrimaryKeySelective(answer1);
         }else{
             QuestionComment comment1 = new QuestionComment();
-            comment1.setLikeNum(trampleNum);
+            comment1.setReportNum(trampleNum);
             comment1.setId(id);
             commentMapper.updateByPrimaryKeySelective(comment1);
         }
