@@ -17,6 +17,9 @@ public class CurriculumListsyBo implements Serializable {
     /**课程标题**varchar(200)**/
     private String title;
 
+    /**销售价格**double**/
+    private Double sellPrice;
+
     /**浏览量**tinyint(11)**/
     private Integer browseNum;
 
@@ -133,4 +136,11 @@ public class CurriculumListsyBo implements Serializable {
         this.coursewareNum = coursewareNum;
     }
 
+    public Double getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(Double sellPrice) {
+        this.sellPrice = sellPrice;
+    }
 }

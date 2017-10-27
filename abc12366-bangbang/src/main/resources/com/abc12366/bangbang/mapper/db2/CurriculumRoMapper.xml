@@ -19,7 +19,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo" parameterType="java.util.Map">
         SELECT
-          curriculumId,title,browseNum,watchNum,cover,cl.classifyName classify,teachingMethod,issueTime,isFree,c.status,nickname createrName,updateTime
+          curriculumId,title,browseNum,sellPrice,watchNum,cover,cl.classifyName classify,teachingMethod,issueTime,isFree,c.status,nickname createrName,updateTime
         FROM bb_curriculum c LEFT JOIN bb_curriculum_classify cl ON c.classify = cl.classifyId
         LEFT JOIN abc12366_uc.uc_admin u ON c.createrId = u.id
         WHERE 1=1
@@ -60,7 +60,7 @@
     <!-- 查询最新课程 -->
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,
+        curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1
@@ -82,7 +82,7 @@
     <!-- 查询会员专享课程 -->
     <select id="selectListVIP" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1
@@ -105,7 +105,7 @@
     <!-- 查询热播课程 -->
     <select id="selectListWatch" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1
@@ -127,7 +127,7 @@
     <!-- 查询推荐课程 -->
     <select id="selectRecommend" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.lang.String">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1 and recommend = 'recommend'
@@ -200,7 +200,7 @@
     <!-- 查询相关课程 -->
     <select id="selectListxgNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.lang.String">
         SELECT
-        curriculumId,title,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro
+        curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro
         FROM bb_curriculum
         WHERE 1=1 and status = 1 and curriculumId != #{curriculumId}
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId in(select labelId from bb_curriculum_label where curriculumId = #{curriculumId}))
@@ -257,7 +257,7 @@
     <!-- 查询收藏课程 -->
     <select id="selectListCollect" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        col.curriculumId,title,browseNum,watchNum,goodsId,cover,collectTime,issueTime,isFree,freeMember,curriculumidIntro,
+        col.curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,collectTime,issueTime,isFree,freeMember,curriculumidIntro,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum_collect col left join bb_curriculum c on col.curriculumId = c.curriculumId
         WHERE 1=1
