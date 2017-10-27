@@ -19,6 +19,9 @@ public class CurriculumUvipPrice implements Serializable {
 	/**会员等级**varchar(10)**/
 	private String vipGrade;
 
+    /**会员等级**varchar(30)**/
+    private String levelName;
+
 	/**会员价格**double**/
 	private Double vipPrice;
 
@@ -100,4 +103,11 @@ public class CurriculumUvipPrice implements Serializable {
 		return this.lastUpdate;
 	}
 
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
 }
