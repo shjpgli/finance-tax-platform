@@ -37,5 +37,19 @@ public interface QuestionFactionAllocationRoMapper {
      **/
     int selectAllocationCnt(Map map);
 
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    int selectIntegral(Map map);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    int selectAwardPoint(Map map);
+
 
 }
