@@ -33,7 +33,7 @@
     SELECT
     mu.id, mu.fromUserId, mu.toUserId, mu.content, mu.status, mu.type, mu.createTime, mu.lastUpdate,
     muu.nickname,muu.userPicturePath
-    FROM msg_user_message mu join msg_uc_user muu on toUserId=muu.id
+    FROM msg_user_message mu join msg_uc_user muu on mu.fromUserId=muu.id
     WHERE mu.toUserId = #{userId}
     AND mu.status != '0'
     AND mu.createTime > date_sub(now(), interval '181 0:0:0' day_second)

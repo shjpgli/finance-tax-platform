@@ -57,6 +57,23 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
             //已对该用户申请奖励分配,请勿重复申请
             throw new ServiceException(6145);
         }
+
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap1.put("factionId", factionAllocationBo.getFactionId());//
+        dataMap1.put("state", "1");
+        //已申请分配的积分
+        int integral = allocationRoMapper.selectIntegral(dataMap1);
+
+        Map<String, Object> dataMap2 = new HashMap<>();
+        dataMap2.put("factionId", factionAllocationBo.getFactionId());//
+        //邦派剩余奖励积分
+        int awardPoint = allocationRoMapper.selectAwardPoint(dataMap2);
+
+        if((integral + factionAllocationBo.getIntegral()) > awardPoint ){
+            //待审批分配的积分大于邦派剩余奖励积分
+            throw new ServiceException(6146);
+        }
+
         try {
             factionAllocationBo.setCreateTime(new Date());
             factionAllocationBo.setUpdateTime(new Date());

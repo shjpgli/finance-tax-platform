@@ -147,6 +147,8 @@ public class QueFactionServiceImpl implements QueFactionService {
         QuestionFaction questionFaction = new QuestionFaction();
         questionFactionBo.setFactionId(uuid);
         questionFactionBo.setFactionGrade("PO");//默认最低等级
+        questionFactionBo.setPeopleLimit(1000);//初始人数限制
+        questionFactionBo.setAwardPoint(0);//初始奖励积分为0
         BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
         int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
