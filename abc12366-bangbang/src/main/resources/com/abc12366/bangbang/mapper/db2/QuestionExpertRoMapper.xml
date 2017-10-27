@@ -36,7 +36,7 @@
     <!-- 查询大侠 -->
     <select id="selectListDX" resultType="com.abc12366.bangbang.model.question.bo.QuestionExpertBO"
             parameterType="java.util.Map">
-        SELECT t.id, t.status, t.type,t.yearWork,t.goodField, t1.nickname, t1.phone, t2.realName, t1.username,
+        SELECT t.id,t.userId, t.status, t.type,t.yearWork,t.goodField, t1.nickname, t1.phone, t2.realName, t1.username,
         t1.userPicturePath userImage,
         (select count(*) from bb_question_answer where userId = t.userId) answerNum,
         (select count(*) from bb_question_answer where userId = t.userId and isAccept = '1') acccptNum

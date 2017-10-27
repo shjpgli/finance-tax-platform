@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade
+		 factionId,	factionName,	factionImg,	classifyCode,awardPoint,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -27,7 +27,7 @@
     <!-- 查询我管理的邦派列表 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionBo" parameterType="java.util.Map">
         SELECT
-        factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade
+        factionId,	factionName,	factionImg,	classifyCode,	tag,awardPoint,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade
         FROM bb_question_faction
         WHERE 1=1
         <if test="userId != null and userId != ''">
@@ -58,7 +58,7 @@
     <!-- 查询我管理的邦派信息包括统计 -->
     <select id="selectFactionTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo" parameterType="java.lang.String">
         SELECT
-          factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
+          factionId,	factionName,	factionImg,	classifyCode,	tag,awardPoint,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
 
         (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
 
