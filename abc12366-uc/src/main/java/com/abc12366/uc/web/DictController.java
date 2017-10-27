@@ -40,7 +40,7 @@ public class DictController {
      * @param pageSize 每页大小
      * @param dictName 字典名称
      * @param status   状态
-     * @return ResponseEntity 字典列表响应实体
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.Dict Dict}列表响应实体
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -59,7 +59,10 @@ public class DictController {
     }
 
     /**
-     * 详情查询
+     * 查看字典详情
+     *
+     * @param id 主键ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.Dict Dict}响应实体
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectById(@PathVariable("id") String id) {
@@ -70,6 +73,9 @@ public class DictController {
 
     /**
      * 根据字典名查找
+     *
+     * @param dictName 字典名称
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.Dict Dict}响应实体
      */
     @GetMapping(path = "/name")
     public ResponseEntity selectListByDictName(@RequestParam(value = "dictName", required = false) String dictName) {
@@ -81,7 +87,9 @@ public class DictController {
     }
 
     /**
-     * 查找第一级列表
+     * 查找字典第一级列表
+     *
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.Dict Dict}列表响应实体
      */
     @GetMapping(path = "/firstLevel")
     public ResponseEntity selectFirstLevel() {
@@ -91,7 +99,10 @@ public class DictController {
     }
 
     /**
-     * 根据dictId查找
+     * 根据dictId查找字典列表
+     *
+     * @param dictId 字典ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.Dict Dict}列表响应实体
      */
     @GetMapping(path = "/kv/{dictId}")
     public ResponseEntity selectDictList(@PathVariable("dictId") String dictId) {
@@ -104,6 +115,9 @@ public class DictController {
 
     /**
      * 字典删除
+     *
+     * @param id 字典ID
+     * @return ResponseEntity
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
@@ -114,6 +128,10 @@ public class DictController {
 
     /**
      * 字典修改
+     *
+     * @param dictUpdateBO {@linkplain com.abc12366.uc.model.bo.DictUpdateBO DictUpdateBO}
+     * @param id           字典ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.Dict Dict}响应实体
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody DictUpdateBO dictUpdateBO, @PathVariable("id") String id) {
@@ -126,6 +144,9 @@ public class DictController {
 
     /**
      * 字典新增
+     *
+     * @param bo {@linkplain com.abc12366.uc.model.bo.DictBO DictBO}
+     * @return ResponseEntity DictBO实体
      */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody DictBO bo) {
@@ -137,6 +158,9 @@ public class DictController {
 
     /**
      * 字典批量删除
+     *
+     * @param bo {@linkplain com.abc12366.uc.model.Dict Dict}
+     * @return ResponseEntity
      */
     @PostMapping(path = "/delete")
     public ResponseEntity batchDelete(@Valid @RequestBody Dict bo) {
