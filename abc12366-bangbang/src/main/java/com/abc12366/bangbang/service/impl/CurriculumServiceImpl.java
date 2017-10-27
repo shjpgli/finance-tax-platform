@@ -249,6 +249,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 
             if(uvipPriceList != null){
                 for(CurriculumUvipPrice uvipPrice : uvipPriceList){
+                    uvipPrice.setId(UUID.randomUUID().toString().replace("-", ""));
                     uvipPrice.setCurriculumId(uuid);
                     uvipPriceMapper.insert(uvipPrice);
                 }
@@ -580,6 +581,7 @@ public class CurriculumServiceImpl implements CurriculumService {
             uvipPriceMapper.deleteByPrimaryKey(curriculumId);
             if(uvipPriceList != null){
                 for(CurriculumUvipPrice uvipPrice : uvipPriceList){
+                    uvipPrice.setId(UUID.randomUUID().toString().replace("-", ""));
                     uvipPrice.setCurriculumId(curriculumId);
                     uvipPriceMapper.insert(uvipPrice);
                 }
