@@ -533,6 +533,17 @@
         WHERE t.tradeNo = #{tradeNo}
     </select>
 
+    <!-- 查询（根据TradeNo查询） -->
+    <select id="selectOrderTrade" resultType="com.abc12366.uc.model.order.bo.OrderTradeBO" parameterType="java.lang.String">
+        SELECT
+        o.orderNo,o.totalPrice as tradeAmount,	t.tradeNo,GROUP_CONCAT(p.name SEPARATOR ',') tradeName
+        FROM uc_order o
+        LEFT JOIN uc_order_product p on p.orderNo = o.orderNo
+        LEFT JOIN uc_trade t on t.orderNo = o.orderNo
+        WHERE t.tradeNo = #{tradeNo}
+        GROUP BY o.orderNo
+    </select>
+
     <!-- 查询（根据主键ID和UserId查询） -->
     <select id="selectOrder" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.Order">
         SELECT

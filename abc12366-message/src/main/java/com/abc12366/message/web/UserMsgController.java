@@ -5,6 +5,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -149,6 +150,34 @@ public class UserMsgController {
             UserMessage data = new UserMessage.Builder().id(id).toUserId(userId).build();
             BodyStatus body = userMsgService.delete(data);
             responseEntity = ResponseEntity.ok(body);
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 获取当前用户消息列表
+     *
+     * @param page 当前页
+     * @param size 每页大小
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bangbang")
+    public ResponseEntity selectListForBangbang(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     HttpServletRequest request) {
+        LOGGER.info("{},{}", page, size);
+
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = (String) request.getAttribute(Constant.USER_ID);
+
+        if (!StringUtils.isEmpty(userId)) {
+            List<UserMessageForBangbang> dataList = userMsgService.selectListForBangbang(userId, page, size);
+
+            PageInfo<UserMessageForBangbang> pageInfo = new PageInfo<>(dataList);
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
         }
 
         LOGGER.info("{}", responseEntity);

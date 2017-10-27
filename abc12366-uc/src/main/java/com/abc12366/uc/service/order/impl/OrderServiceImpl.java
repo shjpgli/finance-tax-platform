@@ -1155,4 +1155,10 @@ public class OrderServiceImpl implements OrderService {
         return orderBO;
     }
 
+    @Override
+    public OrderTradeBO selectOrderTrade(String tradeNo) {
+
+        return orderRoMapper.selectOrderTrade(tradeNo);
+    }
+
 }
