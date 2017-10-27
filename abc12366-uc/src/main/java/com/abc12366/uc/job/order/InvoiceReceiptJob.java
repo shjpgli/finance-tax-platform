@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ * 用户收到发票后一段时间之后自动收货任务
+ *
  * @author lizhongwei
  * @create 2017-08-07 12:21 PM
  * @since 1.0.0
  */
-public class InvoiceReceiptJob implements Job{
+public class InvoiceReceiptJob implements Job {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceReceiptJob.class);
 
@@ -28,11 +30,9 @@ public class InvoiceReceiptJob implements Job{
         invoiceService.automaticReceiptInvoice();
     }
 
-    public static void initService(){
-        synchronized(InvoiceReceiptJob.class){
-            invoiceService =(InvoiceService) SpringCtxHolder.getApplicationContext().getBean("invoiceService");
+    public static void initService() {
+        synchronized (InvoiceReceiptJob.class) {
+            invoiceService = (InvoiceService) SpringCtxHolder.getApplicationContext().getBean("invoiceService");
         }
     }
-
-
 }
