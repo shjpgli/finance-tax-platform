@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * 字典控制器
  *
+ * @author lizhongwei
  * @create 2017-04-24 2:51 PM
  * @since 1.0.0
  */
@@ -33,7 +34,13 @@ public class DictController {
     private DictService dictService;
 
     /**
-     * 列表查询
+     * 字典列表查询
+     *
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @param dictName 字典名称
+     * @param status   状态
+     * @return ResponseEntity 字典列表响应实体
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,

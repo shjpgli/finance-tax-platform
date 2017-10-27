@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 省市区查询控制器
+ *
  * @author lizhongwei
  * @create 2017-05-02 10:08 AM
  * @since 1.0.0
@@ -32,8 +34,8 @@ public class AreaController {
     /**
      * 省列表
      *
-     * @param provinceId
-     * @return
+     * @param provinceId 省ID
+     * @return ResponseEntity 省列表响应实体
      */
     @GetMapping(path = "/province")
     public ResponseEntity selectProvinceList(@RequestParam(value = "provinceId", required = false) String provinceId) {
@@ -45,8 +47,8 @@ public class AreaController {
     /**
      * 市列表
      *
-     * @param cityId
-     * @return
+     * @param cityId 市ID
+     * @return ResponseEntity 市列表响应实体
      */
     @GetMapping(path = "/city")
     public ResponseEntity selectCityList(@RequestParam(value = "cityId", required = false) String cityId) {
@@ -58,8 +60,8 @@ public class AreaController {
     /**
      * 根据省ID查市
      *
-     * @param provinceId
-     * @return
+     * @param provinceId 省ID
+     * @return ResponseEntity 市列表响应实体
      */
     @GetMapping(path = "/city/{provinceId}")
     public ResponseEntity selectCityByProId(@PathVariable("provinceId") String provinceId) {
@@ -71,8 +73,8 @@ public class AreaController {
     /**
      * 区列表
      *
-     * @param areaId
-     * @return
+     * @param areaId 区ID
+     * @return ResponseEntity 区列表响应实体
      */
     @GetMapping(path = "/area")
     public ResponseEntity selectAreaList(@RequestParam(value = "areaId", required = false) String areaId) {
@@ -84,7 +86,7 @@ public class AreaController {
     /**
      * 根据市ID查区
      *
-     * @return
+     * @return ResponseEntity 区列表响应实体
      */
     @GetMapping(path = "/area/{cityId}")
     public ResponseEntity selectAreaByCityId(@PathVariable("cityId") String cityId) {
@@ -97,7 +99,7 @@ public class AreaController {
     /**
      * 查询所有省市区
      *
-     * @return
+     * @return ResponseEntity 省市区列表响应实体
      */
     @GetMapping(path = "/provincecityarea")
     public ResponseEntity selectAll() {
@@ -111,6 +113,14 @@ public class AreaController {
                 ResponseEntity.ok(Utils.kv("provinceList", provinceList, "cityList", cityList, "areaList", areaList));
     }
 
+    /**
+     * 根据省ID、市ID、区ID查询名称
+     *
+     * @param provinceId 省ID
+     * @param cityId     市ID
+     * @param areaId     区ID
+     * @return ResponseEntity 省市区名称
+     */
     @GetMapping("/provinceorcityorarea")
     public ResponseEntity selectProvinceOrCityOrArea(
             @RequestParam(value = "provinceId", required = false) String provinceId,
