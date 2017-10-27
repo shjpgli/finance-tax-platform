@@ -30,5 +30,12 @@ public interface QuestionFactionAllocationRoMapper {
      **/
     List<QuestionFactionAllocationBo> selectList(Map map);
 
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    int selectAllocationCnt(Map map);
+
 
 }

@@ -49,12 +49,14 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
         JSONObject jsonStu = JSONObject.fromObject(factionAllocationBo);
         LOGGER.info("新增邦派奖励分配信息:{}", jsonStu.toString());
         Map<String, Object> dataMap = new HashMap<>();
-//        dataMap.put("factionId", factionAllocationBo.getFactionId());//
-//        int cnt = allocationRoMapper.selectMemberCnt(dataMap);
-//        if(cnt > 0){
-//            //已申请加入邦派，请勿重复申请
-//            throw new ServiceException(6145);
-//        }
+        dataMap.put("factionId", factionAllocationBo.getFactionId());//
+        dataMap.put("userId", factionAllocationBo.getUserId());
+        dataMap.put("state", "1");
+        int cnt = allocationRoMapper.selectAllocationCnt(dataMap);
+        if(cnt > 0){
+            //已对该用户申请奖励分配,请勿重复申请
+            throw new ServiceException(6145);
+        }
         try {
             factionAllocationBo.setCreateTime(new Date());
             factionAllocationBo.setUpdateTime(new Date());

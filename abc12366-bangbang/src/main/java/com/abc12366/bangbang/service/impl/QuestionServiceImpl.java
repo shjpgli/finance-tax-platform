@@ -157,6 +157,7 @@ public class QuestionServiceImpl implements QuestionService {
 
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
+            questionBo.setStatus("1");
             questionBo.setBrowseNum(0);
             questionBo.setCollectNum(0);
             questionBo.setReportNum(0);

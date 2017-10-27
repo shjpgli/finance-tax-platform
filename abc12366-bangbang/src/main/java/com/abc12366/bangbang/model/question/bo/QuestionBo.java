@@ -55,8 +55,10 @@ public class QuestionBo implements Serializable {
 	/**推荐创建时间**/
 	private java.util.Date recommendTime;
 
+    /**标签**/
 	private List<QuestionTag> tagList;
 
+    /**问题邀请用户表**/
     private List<QuestionInvite> inviteList;
 
     /**标签**varchar(1000)**/
