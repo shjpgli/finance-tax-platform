@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionAcceptedMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAcceptedRoMapper;
+import com.abc12366.bangbang.model.bo.UCUserBO;
 import com.abc12366.bangbang.model.question.QuestionAccepted;
 import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import com.abc12366.bangbang.service.QuestionAcceptedService;
@@ -34,7 +35,12 @@ public class QuestionAcceptedServiceImpl implements QuestionAcceptedService {
 
     @Override
     public List<QuestionAccepted> selectList(QuestionAcceptedBO questionAcceptedBO) {
-        return acceptedRoMapper.selectList(questionAcceptedBO);
+        UCUserBO ucUserBO = acceptedRoMapper.selectUCUser(questionAcceptedBO.getUserId());
+        if(ucUserBO != null && ucUserBO.getPhone() != null && !"".equals(ucUserBO.getPhone())){
+            questionAcceptedBO.setPhone(ucUserBO.getPhone());
+            return acceptedRoMapper.selectList(questionAcceptedBO);
+        }
+        return null;
     }
 
     @Override
@@ -44,6 +50,11 @@ public class QuestionAcceptedServiceImpl implements QuestionAcceptedService {
 
     @Override
     public List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param) {
-        return acceptedRoMapper.selectStatisList(param);
+        UCUserBO ucUserBO = acceptedRoMapper.selectUCUser(param.getUserId());
+        if(ucUserBO != null && ucUserBO.getPhone() != null && !"".equals(ucUserBO.getPhone())){
+            param.setPhone(ucUserBO.getPhone());
+            return acceptedRoMapper.selectStatisList(param);
+        }
+        return null;
     }
 }
