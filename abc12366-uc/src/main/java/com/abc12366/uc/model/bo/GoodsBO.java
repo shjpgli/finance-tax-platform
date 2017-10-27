@@ -61,7 +61,6 @@ public class GoodsBO implements Serializable {
     /**
      * 商品类型
      **/
-    @NotEmpty
     private String goodsType;
 
     private ProductBO productBO;

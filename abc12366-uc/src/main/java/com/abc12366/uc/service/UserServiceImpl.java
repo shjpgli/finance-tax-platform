@@ -163,11 +163,11 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4182);
             }
         }
-        BeanUtils.copyProperties(userUpdateBO, user);
-        user.setLastUpdate(new Date());
         if (userUpdateBO.getUsername() != null && !user.getUsername().equals(userUpdateBO.getUsername())) {
             user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
         }
+        BeanUtils.copyProperties(userUpdateBO, user);
+        user.setLastUpdate(new Date());
         int result = userMapper.update(user);
         if (result != 1) {
             LOGGER.warn("修改失败");
