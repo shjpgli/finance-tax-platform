@@ -39,7 +39,6 @@ public class QuestionAcceptedController {
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "phone", required = false) String phone,
                                      @RequestParam(value = "userId", required = false) String userId,
                                      @RequestParam(value = "nsrsbh", required = false) String nsrsbh,
                                      @RequestParam(value = "name", required = false) String name,
@@ -51,7 +50,6 @@ public class QuestionAcceptedController {
         }else{
             param.setDate(DateUtils.dateYearToString(new Date()));
         }
-        param.setPhone(phone);
         param.setNsrsbh(nsrsbh);
         param.setName(name);
         param.setUserId(userId);

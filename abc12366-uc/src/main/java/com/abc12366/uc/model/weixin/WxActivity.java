@@ -84,19 +84,35 @@ public class WxActivity {
     @Max(255)
     private Integer sort;
 
-    // 已发送人数
+    /**
+     * 已发送人数
+     */
     private Integer sent;
 
-    // 已发送金额
+    /**
+     * 已发送金额
+     */
     private Double sentAmount;
 
-    // 已领取人数
+    /**
+     * 已领取人数
+     */
     private Integer received;
 
-    // 已领取金额
+    /**
+     * 已领取金额
+     */
     private Double receivedAmount;
-    // 活动参与人数
+
+    /**
+     * 活动参与人数
+     */
     private Integer nop;
+
+    /**
+     * 活动是否过期
+     */
+    private Boolean outdated;
 
     public WxActivity() {
     }
@@ -330,6 +346,11 @@ public class WxActivity {
         this.nop = nop;
     }
 
+    public Boolean getOutdated() {
+        Date now = new Date();
+        return now.before(startTime) || now.after(endTime);
+    }
+
     @Override
     public String toString() {
         return "WxActivity{" +
@@ -351,6 +372,7 @@ public class WxActivity {
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", sort=" + sort +
+                ", outdated=" + outdated +
                 '}';
     }
 
