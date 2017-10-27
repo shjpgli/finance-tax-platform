@@ -3,13 +3,10 @@ package com.abc12366.uc.web.order;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.bo.OrderBO;
+import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.OrderBack;
-import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.model.order.bo.OrderSubmitBO;
-import com.abc12366.uc.model.order.bo.OrderVipBO;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.DataUtils;
 import com.alibaba.fastjson.JSON;
@@ -290,6 +287,37 @@ public class OrderController {
         OrderBO orderBO = orderService.selectByOrderNo(orderNo);
         LOGGER.info("{}", orderBO);
         return ResponseEntity.ok(Utils.kv("data", orderBO));
+    }
+
+    /**
+     * 根据交易流水号查询列表
+     *
+     * @param tradeNo 订单号
+     * @return 订单详情
+     */
+    /*@GetMapping(path = "/select/trade/list/{tradeNo}")
+    public ResponseEntity selectListByTradeNo(@PathVariable("tradeNo") String tradeNo) {
+        LOGGER.info("{}", tradeNo);
+        List<OrderTradeBO> boList = orderService.selectListByTradeNo(tradeNo);
+        PageInfo<OrderTradeBO> pageInfo = new PageInfo<>(boList);
+        LOGGER.info("{}", boList);
+        return (boList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }*/
+
+    /**
+     * 根据交易流水号查询订单合并内容
+     *
+     * @param tradeNo 订单号
+     * @return 订单详情
+     */
+    @GetMapping(path = "/select/trade/{tradeNo}")
+    public ResponseEntity selectByTradeNo(@PathVariable("tradeNo") String tradeNo) {
+        LOGGER.info("{}", tradeNo);
+        OrderTradeBO orderTradeBO = orderService.selectOrderTrade(tradeNo);
+        LOGGER.info("{}", orderTradeBO);
+        return ResponseEntity.ok(Utils.kv("data", orderTradeBO));
     }
 
     /**

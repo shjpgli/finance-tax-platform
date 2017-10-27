@@ -3,10 +3,7 @@ package com.abc12366.uc.service.order;
 import com.abc12366.uc.model.OrderBack;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.bo.OrderBO;
-import com.abc12366.uc.model.order.bo.OrderPayBO;
-import com.abc12366.uc.model.order.bo.OrderSubmitBO;
-import com.abc12366.uc.model.order.bo.OrderVipBO;
+import com.abc12366.uc.model.order.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -285,4 +282,12 @@ public interface OrderService {
      * @return
      */
     OrderBO openVip(OrderVipBO orderVipBO,HttpServletRequest request);
+
+
+    /**
+     * 根据交易流水号查询订单合并内容
+     * @param tradeNo
+     * @return
+     */
+    OrderTradeBO selectOrderTrade(String tradeNo);
 }

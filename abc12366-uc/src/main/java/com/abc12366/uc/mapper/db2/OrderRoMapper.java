@@ -3,6 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.bo.OrderStatBO;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.OrderBO;
+import com.abc12366.uc.model.order.bo.OrderTradeBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -70,4 +71,11 @@ public interface OrderRoMapper {
      * @return
      */
     List<OrderBO> selectByTradeNo(String tradeNo);
+
+    /**
+     * 根据交易流水号查询订单合并信息
+     * @param tradeNo
+     * @return
+     */
+    OrderTradeBO selectOrderTrade(String tradeNo);
 }
