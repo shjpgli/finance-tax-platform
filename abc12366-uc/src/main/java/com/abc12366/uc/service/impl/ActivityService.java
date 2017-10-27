@@ -164,6 +164,7 @@ public class ActivityService implements IActivityService {
         List<WxLotteryLog> lotteryLogs;
         // 规则类型为【口令】时, 查询每人每天可抽奖次数
         if ("1".equals(activity.getRuleType())) {
+            lotteryLog.setCreateTime(now);
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
