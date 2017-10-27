@@ -89,11 +89,13 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("{}", users);
         return users;
     }
+
     @Override
     public User selectUser(String userId) {
         User userTemp = userRoMapper.selectOne(userId);
         return userTemp;
     }
+
     @Override
     public Map selectOne(String userId) {
         LOGGER.info("{}", userId);
@@ -152,36 +154,18 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4037);
         }
 
-        //进行用户名和电话唯一性确认
-        List<UserBO> userBOList = userRoMapper.selectListExcludedId(userUpdateBO.getId());
-        if (userBOList != null && userBOList.size() > 1) {
-            //从list移除本身
-            for (int i = 0; i < userBOList.size(); i++) {
-                if (userBOList.get(i).getId().trim().equals(userUpdateBO.getId().trim())) {
-                    userBOList.remove(i);
-                }
-            }
-
-            for (UserBO userBO : userBOList) {
-                if (userUpdateBO.getUsername() != null) {
-                    if (userBO.getUsername().trim().equals(userUpdateBO.getUsername().trim())) {
-                        throw new ServiceException(4182);
-                    }
-                }
-//                if (userUpdateBO.getPhone() != null) {
-//                    if (userBO.getPhone().trim().equals(userUpdateBO.getPhone().trim())) {
-//                        throw new ServiceException(4183);
-//                    }
-//                }
-
+        //进行用户名唯一性确认
+        if (userUpdateBO.getUsername() != null) {
+            LoginBO loginBO = new LoginBO();
+            loginBO.setUsernameOrPhone(userUpdateBO.getUsername());
+            User userOnly = userRoMapper.selectByUsernameOrPhone(loginBO);
+            if (userOnly != null && !userOnly.getId().equals(userUpdateBO.getId())) {
+                throw new ServiceException(4182);
             }
         }
-
-
         BeanUtils.copyProperties(userUpdateBO, user);
-
         user.setLastUpdate(new Date());
-        if (!user.getUsername().equals(userUpdateBO.getUsername())) {
+        if (userUpdateBO.getUsername() != null && !user.getUsername().equals(userUpdateBO.getUsername())) {
             user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
         }
         int result = userMapper.update(user);
@@ -623,45 +607,47 @@ public class UserServiceImpl implements UserService {
             Map<String, Object> map = new HashMap<>();
             map.put("user", user);
             map.put("user_extend", userExtend);
-            LOGGER.info("{}：{}", user,userExtend);
+            LOGGER.info("{}：{}", user, userExtend);
             return map;
         }
         return null;
     }
-    //获取总用户数
-	@Override
-	public int getAllNomalCont() {
-		return userRoMapper.getAllNomalCont();
-	}
-	@Override
-	public List<UserBO> getNomalList(Map<String, Object> map) {
-		return userRoMapper.getNomalList(map);
-	}
-	
-	@Override
-	@Transactional("db1TxManager")
-	public int changeWxBdxx(UserUpdateBO userUpdateDTO) {
-		User users =new User();
-		users.setId(userUpdateDTO.getId());
-		users.setWxopenid(userUpdateDTO.getWxopenid());
 
-		User user = userRoMapper.selectByWxUserId(users);
-		if(user!=null){
-			LOGGER.info("微信已绑定此账号");
-			return 1;
-		}else{
-			LOGGER.info("微信绑定账号与此账号不符合，更新绑定关系");
-			
-			users.setWxheadimg(userUpdateDTO.getWxheadimg());
-			users.setWxnickname(userUpdateDTO.getWxnickname());
-			userMapper.qxwxbd(userUpdateDTO.getWxopenid());
-			int n=userMapper.update(users);
-			if(n>=1){
-				return 2;
-			}else{
-				throw new ServiceException(4624);
-			}
-		}
-		
-	}
+    //获取总用户数
+    @Override
+    public int getAllNomalCont() {
+        return userRoMapper.getAllNomalCont();
+    }
+
+    @Override
+    public List<UserBO> getNomalList(Map<String, Object> map) {
+        return userRoMapper.getNomalList(map);
+    }
+
+    @Override
+    @Transactional("db1TxManager")
+    public int changeWxBdxx(UserUpdateBO userUpdateDTO) {
+        User users = new User();
+        users.setId(userUpdateDTO.getId());
+        users.setWxopenid(userUpdateDTO.getWxopenid());
+
+        User user = userRoMapper.selectByWxUserId(users);
+        if (user != null) {
+            LOGGER.info("微信已绑定此账号");
+            return 1;
+        } else {
+            LOGGER.info("微信绑定账号与此账号不符合，更新绑定关系");
+
+            users.setWxheadimg(userUpdateDTO.getWxheadimg());
+            users.setWxnickname(userUpdateDTO.getWxnickname());
+            userMapper.qxwxbd(userUpdateDTO.getWxopenid());
+            int n = userMapper.update(users);
+            if (n >= 1) {
+                return 2;
+            } else {
+                throw new ServiceException(4624);
+            }
+        }
+
+    }
 }
