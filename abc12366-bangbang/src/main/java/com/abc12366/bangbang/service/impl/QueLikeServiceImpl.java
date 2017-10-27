@@ -3,14 +3,18 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.common.MapUtil;
 import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionCommentMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionLikeMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionCommentRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
 import com.abc12366.bangbang.model.Answer;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
+import com.abc12366.bangbang.model.question.QuestionComment;
 import com.abc12366.bangbang.model.question.QuestionLike;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
 import com.abc12366.bangbang.service.QueLikeService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -42,6 +46,12 @@ public class QueLikeServiceImpl implements QueLikeService {
     private QuestionAnswerRoMapper answerRoMapper;
 
     @Autowired
+    private QuestionCommentMapper commentMapper;
+
+    @Autowired
+    private QuestionCommentRoMapper commentRoMapper;
+
+    @Autowired
     private QuestionLikeRoMapper likeRoMapper;
 
     @Override
@@ -51,9 +61,16 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
+        int flag = 0;
         if(answer != null){
             questionId = answer.getQuestionId();
         }
+        QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
+        if(comment != null && "".equals(questionId)){
+            flag = 1;
+            questionId = comment.getQuestionId();
+        }
+
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
@@ -71,10 +88,18 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         int likeCnt = likeRoMapper.selectLikeCnt(id)+1;
 
-        QuestionAnswer answer1 = new QuestionAnswer();
-        answer1.setLikeNum(likeCnt);
-        answer1.setId(id);
-        answerMapper.updateByPrimaryKeySelective(answer1);
+        if(flag == 0){
+            QuestionAnswer answer1 = new QuestionAnswer();
+            answer1.setLikeNum(likeCnt);
+            answer1.setId(id);
+            answerMapper.updateByPrimaryKeySelective(answer1);
+        }else{
+            QuestionComment comment1 = new QuestionComment();
+            comment1.setLikeNum(likeCnt);
+            comment1.setId(id);
+            commentMapper.updateByPrimaryKeySelective(comment1);
+        }
+
 
         int result = likeMapper.insert(like);
 
@@ -89,8 +114,14 @@ public class QueLikeServiceImpl implements QueLikeService {
         String userId = UcUserCommon.getUserId(request);
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
+        int flag = 0;
         if(answer != null){
             questionId = answer.getQuestionId();
+        }
+        QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
+        if(comment != null && "".equals(questionId)){
+            flag = 1;
+            questionId = comment.getQuestionId();
         }
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -109,10 +140,17 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         int trampleNum = likeRoMapper.selectLikeCnt(id)+1;
 
-        QuestionAnswer answer1 = new QuestionAnswer();
-        answer1.setTrampleNum(trampleNum);
-        answer1.setId(id);
-        answerMapper.updateByPrimaryKeySelective(answer1);
+        if(flag == 0){
+            QuestionAnswer answer1 = new QuestionAnswer();
+            answer1.setLikeNum(trampleNum);
+            answer1.setId(id);
+            answerMapper.updateByPrimaryKeySelective(answer1);
+        }else{
+            QuestionComment comment1 = new QuestionComment();
+            comment1.setLikeNum(trampleNum);
+            comment1.setId(id);
+            commentMapper.updateByPrimaryKeySelective(comment1);
+        }
 
         int result = likeMapper.insert(like);
 
