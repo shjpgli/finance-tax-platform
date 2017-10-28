@@ -8,10 +8,12 @@ package com.abc12366.bangbang.web;
  * @since 1.0.0
  */
 
+import com.abc12366.bangbang.model.SystemRecord;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 import com.abc12366.bangbang.service.SystemRecordService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -39,30 +41,27 @@ public class SystemRecordController {
     /**
      * 查询用户日志列表
      *
-     * @param appName   使用系统
-     * @param location  访问地点
-     * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @param page      当前页
-     * @param size      每页大小
+     * @param appName  使用系统
+     * @param location 访问地点
+     * @param yyyyMMdd 查询日期
+     * @param page     当前页
+     * @param size     每页大小
      * @return ResponseEntity SystemRecordBO实体
      * @see com.abc12366.bangbang.model.bo.SystemRecordBO
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String appName,
                                      @RequestParam(required = false) String location,
-                                     @RequestParam(required = false) String startTime,
-                                     @RequestParam(required = false) String endTime,
+                                     @RequestParam(required = false) String yyyyMMdd,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
 
-        Map<String, Object> map = new HashMap<>(16);
+        Map<String, String> map = new HashMap<>(16);
 
-        if (startTime != null && !startTime.isEmpty()) {
-            map.put("startTime", startTime);
-        }
-        if (endTime != null && !endTime.isEmpty()) {
-            map.put("endTime", endTime);
+        if (yyyyMMdd != null && !yyyyMMdd.isEmpty()) {
+            map.put("yyyyMMdd", yyyyMMdd);
+        } else {
+            map.put("yyyyMMdd", DateUtils.getDataString());
         }
         if (appName != null && !appName.isEmpty()) {
             map.put("appName", appName);
@@ -82,14 +81,20 @@ public class SystemRecordController {
     /**
      * 查看用户日志
      *
-     * @param id 日志ID
+     * @param yyyyMMdd 查询日期
+     * @param id       日志ID
      * @return ResponseEntity SystemRecordBO实体
      * @see com.abc12366.bangbang.model.bo.SystemRecordBO
      */
-    @GetMapping(path = "/{id}")
-    public ResponseEntity selectOne(@PathVariable String id) {
-        LOGGER.info("{}", id);
-        SystemRecordBO systemRecordBO = systemRecordService.selectOne(id);
+    @GetMapping(path = "/{yyyyMMdd}/{id}")
+    public ResponseEntity selectOne(@PathVariable("yyyyMMdd") String yyyyMMdd,
+                                    @PathVariable("id") String id) {
+        LOGGER.info("{},{}", yyyyMMdd, id);
+
+        SystemRecord sr = new SystemRecord();
+        sr.setId(id);
+        sr.setYyyyMMdd(yyyyMMdd);
+        SystemRecordBO systemRecordBO = systemRecordService.selectOne(sr);
         LOGGER.info("{}", systemRecordBO);
         return ResponseEntity.ok(Utils.kv("data", systemRecordBO));
     }
