@@ -628,9 +628,10 @@
     </select>
 
     <!--根据GoodsId和UserId查询订单信息-->
-    <select id="selectOrderByGoodsIdAndUserId" resultType="com.abc12366.uc.model.order.bo.OrderBO" parameterType="com.abc12366.uc.model.order.Order">
+    <select id="selectOrderByGoodsIdAndUserId" resultType="com.abc12366.uc.model.order.bo.OrderBO" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_BO_List"/>
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
         LEFT JOIN uc_order_product p on p.orderNo = o.orderNo
@@ -708,7 +709,7 @@
                 and o.orderStatus = #{orderStatus}
             </if>
             <if test=" goodsType != null and goodsType != '' ">
-                and t.goodsType = #{goodsType}
+                and t.tradingChannels = #{goodsType}
             </if>
             <if test=" tradeMethod != null and tradeMethod != '' ">
                 and o.tradeMethod = #{tradeMethod}

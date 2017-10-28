@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * OrderMapper数据库操作接口类
@@ -43,7 +44,7 @@ public interface OrderRoMapper {
 
     List<OrderBO> selectByOrderNos(@Param("orderNos") String[] orderNos);
 
-    OrderBO selectOrderByGoodsIdAndUserId(Order order);
+    OrderBO selectOrderByGoodsIdAndUserId(Map<String, Object> order);
 
     List<OrderBO> selectUserAllOrderList(OrderBO order);
 
