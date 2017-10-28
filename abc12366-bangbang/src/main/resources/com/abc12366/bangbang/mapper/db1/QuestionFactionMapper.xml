@@ -199,4 +199,9 @@
 		 WHERE factionId = #{factionId}
 	</update>
 
+	<update id="updateAwardPoint" parameterType="java.lang.Integer">
+		UPDATE bb_question_faction SET awardPoint = awardPoint + #{awardPoint}
+	</update>
+
+
 </mapper>

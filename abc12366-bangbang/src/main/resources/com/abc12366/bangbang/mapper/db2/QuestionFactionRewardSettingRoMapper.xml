@@ -40,7 +40,7 @@
         temp
         WHERE 1=1
         <if test="factionName != null and factionName != ''">
-            AND factionName = LIKE CONCAT('%',#{factionName},'%')
+            AND factionName LIKE CONCAT('%',#{factionName},'%')
         </if>
         <if test="date != null and date != ''">
             AND date = #{date}
