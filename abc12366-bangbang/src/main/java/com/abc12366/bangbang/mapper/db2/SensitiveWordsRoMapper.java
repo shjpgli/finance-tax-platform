@@ -22,4 +22,6 @@ public interface SensitiveWordsRoMapper {
     List<SensitiveWords> selectList(SensitiveWords sensitiveWords);
 
     Set<String> selectListKeywords();
+
+    List<String> selectListWords();
 }

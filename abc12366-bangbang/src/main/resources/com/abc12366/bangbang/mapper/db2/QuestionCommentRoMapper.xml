@@ -26,7 +26,7 @@
         (SELECT count(likeId) FROM bb_question_like where id = a.id and likeType = '2' and userId = #{userId}) isTrample
         FROM bb_question_comment a left join bb_user u on a.userId = u.id
         left join bb_user u1 on a.commentUserId = u1.id
-        WHERE 1=1
+        WHERE a.status = '0'
         <if test="answerId != null and answerId != ''">
             AND answerId = #{answerId}
         </if>
@@ -56,7 +56,7 @@
         SELECT
         count(id)
         FROM bb_question_comment
-        WHERE answerId = #{id}
+        WHERE a.status = '0' and answerId = #{id}
     </select>
 
 

@@ -31,4 +31,11 @@
         keywords
         FROM bb_sensitive_words
     </select>
+
+    <select id="selectListWords" resultType="java.lang.String">
+        SELECT
+        keywords
+        FROM bb_sensitive_words where status = 1
+    </select>
+
 </mapper>
