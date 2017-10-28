@@ -105,7 +105,7 @@ public class PayReturnController {
                 LOGGER.info("支付宝回调信息:交易成功,插入支付流水记录");
 
                 TradeBillBO tradeBillBO = new TradeBillBO();
-                tradeBillBO.setTradeNo(trade_no);
+                tradeBillBO.setAliTrandeNo(trade_no);
                 TradeLog tradeLogUpdate = tradeLogService.selectOne(tradeBillBO);
                 if (tradeLogUpdate != null) {
                     tradeLogUpdate.setTradeNo(out_trade_no);
@@ -120,7 +120,7 @@ public class PayReturnController {
                     tradeLogService.update(tradeLogUpdate);
                 } else {
                     TradeLog tradeLog = new TradeLog();
-//                    tradeLog.setId(DataUtils.getJYLSH());
+                    tradeLog.setTradeNo(out_trade_no);
                     tradeLog.setAliTrandeNo(trade_no);
                     tradeLog.setTradeNo(DataUtils.getJYLSH());
                     tradeLog.setTradeStatus("1");
@@ -136,7 +136,7 @@ public class PayReturnController {
                     LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
 
                     OrderPayBO orderPayBO = new OrderPayBO();
-//                    orderPayBO.setOrderNo(out_trade_no);
+                    orderPayBO.setTradeNo(out_trade_no);
                     orderPayBO.setIsPay(2);
                     orderPayBO.setPayMethod("ALIPAY");
                     orderService.paymentOrder(orderPayBO,"RMB", request);
