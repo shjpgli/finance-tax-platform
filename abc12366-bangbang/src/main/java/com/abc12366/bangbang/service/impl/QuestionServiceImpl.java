@@ -6,6 +6,7 @@ import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionInviteRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
+import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
@@ -47,6 +48,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionInviteRoMapper inviteRoMapper;
+
+    @Autowired
+    private SensitiveWordsRoMapper sensitiveWordsRoMapper;
 
     @Override
     public List<QuestionBo> selectList(Map<String,Object> map) {
@@ -157,11 +161,41 @@ public class QuestionServiceImpl implements QuestionService {
 
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
-            questionBo.setStatus("1");
+            questionBo.setStatus("0");//0正常，1待审查，2拉黑
             questionBo.setBrowseNum(0);
             questionBo.setCollectNum(0);
             questionBo.setReportNum(0);
             questionBo.setAnswerNum(0);
+
+            //敏感词校验
+            String title = questionBo.getTitle();
+            String detail = questionBo.getDetail();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(title != null && !"".equals(title)){
+                for(String word : wordList){
+                    boolean bl = title.contains(word);
+                    if(bl){
+                        questionBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
+            if("0".equals(questionBo.getStatus())){
+                if(detail != null && !"".equals(detail)){
+                    for(String word : wordList){
+                        boolean bl = detail.contains(word);
+                        if(bl){
+                            questionBo.setStatus("1");
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+
+
             //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
@@ -188,7 +222,6 @@ public class QuestionServiceImpl implements QuestionService {
                     inviteMapper.insert(invite);
                 }
             }
-
 
             questionMapper.insert(question);
         } catch (Exception e) {
@@ -247,8 +280,35 @@ public class QuestionServiceImpl implements QuestionService {
                 factionId = "";
             }
             questionBo.setFactionId(factionId);
-
             questionBo.setLastUpdate(new Date());
+            questionBo.setStatus("0");
+
+            String title = questionBo.getTitle();
+            String detail = questionBo.getDetail();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(title != null && !"".equals(title)){
+                for(String word : wordList){
+                    boolean bl = title.contains(word);
+                    if(bl){
+                        questionBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
+            if("0".equals(questionBo.getStatus())){
+                if(detail != null && !"".equals(detail)){
+                    for(String word : wordList){
+                        boolean bl = detail.contains(word);
+                        if(bl){
+                            questionBo.setStatus("1");
+                            break;
+                        }
+                    }
+                }
+            }
+
+
             BeanUtils.copyProperties(questionBo, question);
 
 

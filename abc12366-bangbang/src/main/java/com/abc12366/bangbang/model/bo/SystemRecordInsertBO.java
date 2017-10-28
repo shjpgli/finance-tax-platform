@@ -12,7 +12,6 @@ import java.util.Date;
  * @author lingsuzhi <554600654@qq.com.com>
  * @create 2017-08-16
  */
-
 public class SystemRecordInsertBO {
     /**
      * 用户ID
@@ -222,5 +221,28 @@ public class SystemRecordInsertBO {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return "SystemRecordInsertBO{" +
+                "userId='" + userId + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", browseDate=" + browseDate +
+                ", pageTitle='" + pageTitle + '\'' +
+                ", pageUrl='" + pageUrl + '\'' +
+                ", referer='" + referer + '\'' +
+                ", stayLong='" + stayLong + '\'' +
+                ", feature='" + feature + '\'' +
+                ", appName='" + appName + '\'' +
+                ", ip='" + ip + '\'' +
+                ", location='" + location + '\'' +
+                ", browseType='" + browseType + '\'' +
+                ", browseVersion='" + browseVersion + '\'' +
+                ", os='" + os + '\'' +
+                ", device='" + device + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                '}';
     }
 }

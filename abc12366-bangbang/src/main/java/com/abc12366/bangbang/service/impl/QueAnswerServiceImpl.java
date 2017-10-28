@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
+import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
@@ -33,6 +34,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private QuestionAnswerRoMapper answerRoMapper;
+
+    @Autowired
+    private SensitiveWordsRoMapper sensitiveWordsRoMapper;
 
     @Override
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
@@ -103,6 +107,23 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             answerBo.setLikeNum(0);
             answerBo.setTrampleNum(0);
             answerBo.setReportNum(0);
+            answerBo.setStatus("0");//0正常，1待审查，2拉黑
+
+            //敏感词校验
+            String answerTxt = answerBo.getAnswer();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(answerTxt != null && !"".equals(answerTxt)){
+                for(String word : wordList){
+                    boolean bl = answerTxt.contains(word);
+                    if(bl){
+                        answerBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
+
+
             BeanUtils.copyProperties(answerBo, answer);
 
             int answerNum = answerRoMapper.selectAnswerCnt(answerBo.getQuestionId());
@@ -148,6 +169,21 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             JSONObject jsonStu = JSONObject.fromObject(answerBo);
             LOGGER.info("更新问题回复信息:{}", jsonStu.toString());
             answerBo.setLastUpdate(new Date());
+            answerBo.setStatus("0");
+
+            //敏感词校验
+            String answerTxt = answerBo.getAnswer();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(answerTxt != null && !"".equals(answerTxt)){
+                for(String word : wordList){
+                    boolean bl = answerTxt.contains(word);
+                    if(bl){
+                        answerBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
             BeanUtils.copyProperties(answerBo, answer);
             answerMapper.updateByPrimaryKeySelective(answer);
         } catch (Exception e) {

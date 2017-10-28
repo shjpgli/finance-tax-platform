@@ -5,6 +5,7 @@ import com.abc12366.bangbang.mapper.db1.QuestionCommentMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCommentRoMapper;
+import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionComment;
@@ -39,6 +40,9 @@ public class QueCommentServiceImpl implements QueCommentService {
 
     @Autowired
     private QuestionAnswerRoMapper answerRoMapper;
+
+    @Autowired
+    private SensitiveWordsRoMapper sensitiveWordsRoMapper;
 
     @Override
     public List<QuestionCommentBo> selectList(Map<String,Object> map) {
@@ -85,6 +89,21 @@ public class QueCommentServiceImpl implements QueCommentService {
             commentBo.setLikeNum(0);
             commentBo.setTrampleNum(0);
             commentBo.setReportNum(0);
+            commentBo.setStatus("0");
+
+            //敏感词校验
+            String commentTxt = commentBo.getCommentTxt();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(commentTxt != null && !"".equals(commentTxt)){
+                for(String word : wordList){
+                    boolean bl = commentTxt.contains(word);
+                    if(bl){
+                        commentBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
             //保存问题评论信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             QuestionComment comment = new QuestionComment();
@@ -134,6 +153,21 @@ public class QueCommentServiceImpl implements QueCommentService {
             JSONObject jsonStu = JSONObject.fromObject(commentBo);
             LOGGER.info("更新问题评论信息:{}", jsonStu.toString());
             commentBo.setLastUpdate(new Date());
+            commentBo.setStatus("0");
+
+            //敏感词校验
+            String commentTxt = commentBo.getCommentTxt();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(commentTxt != null && !"".equals(commentTxt)){
+                for(String word : wordList){
+                    boolean bl = commentTxt.contains(word);
+                    if(bl){
+                        commentBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
             BeanUtils.copyProperties(commentBo, comment);
             commentMapper.updateByPrimaryKeySelective(comment);
         } catch (Exception e) {
