@@ -249,6 +249,7 @@ public class OrderServiceImpl implements OrderService {
                 order.setCreateTime(date);
                 order.setLastUpdate(date);
                 order.setIsInvoice(false);
+
                 int insert = orderMapper.insert(order);
                 if (insert != 1) {
                     LOGGER.info("提交产品订单失败：{}", orderSubmitBO);
@@ -265,19 +266,22 @@ public class OrderServiceImpl implements OrderService {
                 }
 
                 insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户新增订单", "0");
-                /*if ("RMB".equals(orderBO.getTradeMethod())) {
-                    if ("5".equals(goodsType)) {
-                        //会员充值
-                        operationMoneyRechargeOrder(orderBO, order, orderProductBO,"2");
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
-                    }else{
-                        operationMoneyServiceOrder(orderBO, order, orderProductBO, "2");
-                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
-                    }
-                } else if ("POINTS".equals(orderBO.getTradeMethod())) {
-                    operationPointsOrder(orderBO, order, orderProductBO,"2");
-                    insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
-                }*/
+                //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
+//                String trading = orderProductBO.getTradingChannels();
+//                if ("RMB".equals(order.getTradeMethod())) {
+//                    if ("HYCZ".equals(trading)) {
+//                        //会员充值
+//                        operationMoneyRechargeOrder(order, orderProductBO,"2");
+//                        insertOrderLog(order.getUserId(), order.getOrderNo(), "2", "用户新增订单","0");
+//                    }else{
+//                        operationMoneyServiceOrder(orderBO, order, orderProductBO, "2");
+//                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
+//                    }
+//                } else if ("POINTS".equals(orderBO.getTradeMethod())) {
+//                    operationPointsOrder(orderBO, order, orderProductBO,"2");
+//                    insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
+//                }
+
             }
         }
         //新增交易流水号
@@ -371,18 +375,16 @@ public class OrderServiceImpl implements OrderService {
      * 处理人民币充值积分订单
      */
     @Transactional("db1TxManager")
-    private void operationMoneyRechargeOrder(OrderBO orderBO, Order order, OrderProductBO orderProductBO, String orderStatus) {
+    private void operationMoneyRechargeOrder(Order order, OrderProductBO orderProductBO, String orderStatus) {
         // 查询用户信息
-        orderProductBO.setOrderNo(orderBO.getOrderNo());
-        orderBO.setOrderStatus(orderStatus);
-
-        BeanUtils.copyProperties(orderBO, order);
+        order.setOrderStatus(orderStatus);
+        orderProductBO.setOrderNo(order.getOrderNo());
         int insert = orderMapper.insert(order);
         if (insert != 1) {
-            LOGGER.info("提交产品订单失败：{}", orderBO);
+            LOGGER.info("提交产品订单失败：{}", order);
             throw new ServiceException(4139);
         }
-        orderProductBO.setOrderNo(orderBO.getOrderNo());
+        orderProductBO.setOrderNo(order.getOrderNo());
         OrderProduct orderProduct = new OrderProduct();
         BeanUtils.copyProperties(orderProductBO, orderProduct);
 
@@ -684,6 +686,8 @@ public class OrderServiceImpl implements OrderService {
                     orderBO.setLastUpdate(new Date());
                     BeanUtils.copyProperties(orderBO, order);
                     //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
+                    //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
+                    String trading = orderProductBO.getTradingChannels();
                     if ("RMB".equals(type)) {
                         //支付状态，1：支付中，2：支付成功，3：支付失败，
                         if (isPay == 1) {
@@ -695,14 +699,44 @@ public class OrderServiceImpl implements OrderService {
                             }
                             insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
-                            updateStock(orderBO, orderProductBO);
+                            //判断是否需要查询产品库存信息
                             setTodoTask(orderBO);
-                            //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
-                            //根据是否需要寄送来判断，虚拟和实物
-                            order.setOrderStatus("4");
-                            orderMapper.update(order);
-                            insertPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功", "0");
+                            if (trading.equals("UCSC")) {
+                                updateStock(orderBO, orderProductBO);
+                                order.setOrderStatus("4");
+                                orderMapper.update(order);
+
+                                insertPoints(orderBO);
+                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功","0");
+                            } else if (trading.equals("HYCZ")) {
+                                order.setOrderStatus("6");
+                                orderMapper.update(order);
+
+                                insertPoints(orderBO);
+                                LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                                userService.updateUserVipInfo(orderBO.getUserId(), orderProductBO.getSpecInfo());
+
+                                LOGGER.info("插入会员日志: {}", orderNo);
+                                insertVipLog(orderNo, orderBO.getUserId(), orderProductBO.getSpecInfo());
+
+                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
+                                //发送消息
+                                sendMemberMsg(orderProductBO, order,request);
+                            } else if (trading.equals("CSKT")) {
+                                order.setOrderStatus("6");
+                                orderMapper.update(order);
+
+                                insertPoints(orderBO);
+                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
+                                //发送消息
+                                sendPointsMsg(orderProductBO, order,request);
+                            }else if (trading.equals("JFCZ")) {
+                                order.setOrderStatus("6");
+                                orderMapper.update(order);
+
+                                insertPoints(orderBO);
+                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
+                            }
 //                        }
                         } else if (isPay == 3) {
                             order.setOrderStatus("2");
@@ -710,13 +744,34 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
-                        updateStock(orderBO, orderProductBO);
-                        //修改商品信息
-                        order.setOrderStatus("4");
-                        orderMapper.update(order);
-                        //扣除积分
-                        insertDeductPoints(orderBO);
-                        insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功", "0");
+                        //判断是否需要查询产品库存信息
+                        if (trading.equals("1") || trading.equals("2")) {
+                            updateStock(orderBO, orderProductBO);
+                            order.setOrderStatus("4");
+                            orderMapper.update(order);
+
+                            insertDeductPoints(orderBO);
+                            insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功","0");
+                        } else if (trading.equals("3") || trading.equals("4")) {
+                            order.setOrderStatus("6");
+                            orderMapper.update(order);
+
+                            insertDeductPoints(orderBO);
+                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                            userService.updateUserVipInfo(orderBO.getUserId(), orderProductBO.getSpecInfo());
+
+                            LOGGER.info("插入会员日志: {}", orderNo);
+                            insertVipLog(orderNo, orderBO.getUserId(), orderProductBO.getSpecInfo());
+
+                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            sendMemberMsg(orderProductBO, order,request);
+                        }else if (trading.equals("6")) {
+                            order.setOrderStatus("6");
+                            orderMapper.update(order);
+
+                            insertDeductPoints(orderBO);
+                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                        }
                         insertTradeLog(orderBO);
                     }
                 }

@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service;
 
+import com.abc12366.bangbang.model.SystemRecord;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 
@@ -8,13 +9,38 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Admin: lingsuzhi <554600654@qq.com.com> Date: 2017-08-16
+ * 用户日志服务
+ *
+ * @author lingsuzhi <554600654@qq.com.com>
+ * @create 2017-08-16
  */
 public interface SystemRecordService {
-    List<SystemRecordBO> selectList(Map map);
 
-    SystemRecordBO selectOne(String id);
+    /**
+     * 查询用户日志列表
+     *
+     * @param map Map appName,location,startTime,endTime,page,size
+     * @return List<SystemRecordBO>
+     * @see com.abc12366.bangbang.model.bo.SystemRecordBO
+     */
+    List<SystemRecordBO> selectList(Map<String, String> map);
 
-    CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO SystemRecordInsertBO);
- 
+    /**
+     * 查看用户日志
+     *
+     * @param systemRecord SystemRecord
+     * @return SystemRecordBO
+     * @see com.abc12366.bangbang.model.bo.SystemRecordBO
+     */
+    SystemRecordBO selectOne(SystemRecord systemRecord);
+
+    /**
+     * 异步新增日志
+     *
+     * @param systemRecordInsertBO 日志BO
+     * @return CompletableFuture<SystemRecordBO>
+     * @see com.abc12366.bangbang.model.bo.SystemRecordInsertBO
+     * @see com.abc12366.bangbang.model.bo.SystemRecordBO
+     */
+    CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO);
 }

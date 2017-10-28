@@ -23,6 +23,10 @@ public class TradeBillBO {
     @NotEmpty
     private Double amount;
 
+    @NotEmpty
+    @Length(min = 16, max = 64)
+    private String aliTrandeNo;
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -54,5 +58,13 @@ public class TradeBillBO {
                 ", tradeNo='" + tradeNo + '\'' +
                 ", amount=" + amount +
                 '}';
+    }
+
+    public String getAliTrandeNo() {
+        return aliTrandeNo;
+    }
+
+    public void setAliTrandeNo(String aliTrandeNo) {
+        this.aliTrandeNo = aliTrandeNo;
     }
 }
