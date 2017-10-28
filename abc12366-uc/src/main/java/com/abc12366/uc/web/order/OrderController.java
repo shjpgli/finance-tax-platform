@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 订单控制类
@@ -597,11 +600,11 @@ public class OrderController {
     @GetMapping(path = "/goods")
     public ResponseEntity selectOrderByGoodsIdAndUserId(@RequestParam(value = "goodsId", required = true) String goodsId,
                                                         @RequestParam(value = "userId", required = true) String userId) {
-        Order order = new Order();
-//        order.setGoodsId(goodsId);
-        order.setUserId(userId);
-        LOGGER.info("{}", order);
-        OrderBO bo = orderService.selectOrderByGoodsIdAndUserId(order);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("goodsId",goodsId);
+        LOGGER.info("{}", map);
+        OrderBO bo = orderService.selectOrderByGoodsIdAndUserId(map);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
