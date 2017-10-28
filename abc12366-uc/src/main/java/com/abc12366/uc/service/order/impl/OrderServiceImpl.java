@@ -30,6 +30,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @create 2017-10-19
@@ -1117,8 +1118,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderBO selectOrderByGoodsIdAndUserId(Order order) {
-        return orderRoMapper.selectOrderByGoodsIdAndUserId(order);
+    public OrderBO selectOrderByGoodsIdAndUserId(Map<String, Object> map) {
+        return orderRoMapper.selectOrderByGoodsIdAndUserId(map);
     }
 
     @Transactional("db1TxManager")

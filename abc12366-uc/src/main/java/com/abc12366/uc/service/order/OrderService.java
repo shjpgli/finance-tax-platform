@@ -7,6 +7,7 @@ import com.abc12366.uc.model.order.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lizhongwei on 2017-10-19.
@@ -215,10 +216,10 @@ public interface OrderService {
     /**
      * 根据GoodsId和UserId查询订单信息
      *
-     * @param order 订单对象
+     * @param map 订单对象
      * @return 订单对象
      */
-    OrderBO selectOrderByGoodsIdAndUserId(Order order);
+    OrderBO selectOrderByGoodsIdAndUserId(Map<String, Object> map);
 
     /**
      * 用户修改订单
