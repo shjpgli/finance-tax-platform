@@ -15,7 +15,6 @@ import com.abc12366.bangbang.service.SystemRecordService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,8 +69,7 @@ public class SystemRecordController {
             map.put("location", location);
         }
 
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<SystemRecordBO> systemRecordList = systemRecordService.selectList(map);
+        List<SystemRecordBO> systemRecordList = systemRecordService.selectList(map, page, size);
         PageInfo<SystemRecordBO> pageInfo = new PageInfo<>(systemRecordList);
 
         LOGGER.info("{}", systemRecordList);
@@ -86,9 +84,9 @@ public class SystemRecordController {
      * @return ResponseEntity SystemRecordBO实体
      * @see com.abc12366.bangbang.model.bo.SystemRecordBO
      */
-    @GetMapping(path = "/{yyyyMMdd}/{id}")
-    public ResponseEntity selectOne(@PathVariable("yyyyMMdd") String yyyyMMdd,
-                                    @PathVariable("id") String id) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable("id") String id,
+                                    @RequestParam("yyyyMMdd") String yyyyMMdd) {
         LOGGER.info("{},{}", yyyyMMdd, id);
 
         SystemRecord sr = new SystemRecord();

@@ -117,6 +117,8 @@ public class OrderProductBO implements Serializable {
     /**
      * 交易渠道，(字典ID)
      **/
+    @NotEmpty
+    @Size(min = 2, max = 64)
     private String tradingChannels;
 
     private GoodsBO goodsBO;

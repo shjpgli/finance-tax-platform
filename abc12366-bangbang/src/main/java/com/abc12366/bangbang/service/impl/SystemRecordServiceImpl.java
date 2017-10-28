@@ -10,6 +10,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.TableBO;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -39,11 +40,12 @@ public class SystemRecordServiceImpl implements SystemRecordService {
     private SystemRecordMapper systemRecordMapper;
 
     @Override
-    public List<SystemRecordBO> selectList(Map<String, String> map) {
+    public List<SystemRecordBO> selectList(Map<String, String> map, int page, int size) {
         // 如果不存在表，创建当天的用户日志表
         TableBO tableBO = new TableBO.Builder().yyyyMMdd(map.get("yyyyMMdd")).build();
         systemRecordMapper.create(tableBO);
 
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return systemRecordRoMapper.selectList(map);
     }
 

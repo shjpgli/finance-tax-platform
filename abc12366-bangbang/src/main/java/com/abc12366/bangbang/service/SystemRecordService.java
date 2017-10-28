@@ -19,11 +19,13 @@ public interface SystemRecordService {
     /**
      * 查询用户日志列表
      *
-     * @param map Map appName,location,startTime,endTime,page,size
+     * @param map  Map appName,location,startTime,endTime
+     * @param page 当前页
+     * @param size 页大小
      * @return List<SystemRecordBO>
      * @see com.abc12366.bangbang.model.bo.SystemRecordBO
      */
-    List<SystemRecordBO> selectList(Map<String, String> map);
+    List<SystemRecordBO> selectList(Map<String, String> map, int page, int size);
 
     /**
      * 查看用户日志
