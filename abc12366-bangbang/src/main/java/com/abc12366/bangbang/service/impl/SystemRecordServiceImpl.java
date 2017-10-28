@@ -7,7 +7,10 @@ import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 import com.abc12366.bangbang.service.SystemRecordService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.TableBO;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,19 +34,24 @@ public class SystemRecordServiceImpl implements SystemRecordService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemRecordServiceImpl.class);
 
     @Autowired
-    private SystemRecordRoMapper SystemRecordRoMapper;
+    private SystemRecordRoMapper systemRecordRoMapper;
 
     @Autowired
-    private SystemRecordMapper SystemRecordMapper;
+    private SystemRecordMapper systemRecordMapper;
 
     @Override
-    public List<SystemRecordBO> selectList(Map map) {
-        return SystemRecordRoMapper.selectList(map);
+    public List<SystemRecordBO> selectList(Map<String, String> map, int page, int size) {
+        // 如果不存在表，创建当天的用户日志表
+        TableBO tableBO = new TableBO.Builder().yyyyMMdd(map.get("yyyyMMdd")).build();
+        systemRecordMapper.create(tableBO);
+
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return systemRecordRoMapper.selectList(map);
     }
 
     @Override
-    public SystemRecordBO selectOne(String id) {
-        return SystemRecordRoMapper.selectOne(id);
+    public SystemRecordBO selectOne(SystemRecord systemRecord) {
+        return systemRecordRoMapper.selectOne(systemRecord);
     }
 
     /**
@@ -56,28 +64,36 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
         }
+
+        // 如果不存在表，创建当天的用户日志表
+        String today = DateUtils.getDataString();
+        TableBO tableBO = new TableBO.Builder().yyyyMMdd(today).build();
+        systemRecordMapper.create(tableBO);
+
         SystemRecord systemRecord = new SystemRecord();
         BeanUtils.copyProperties(systemRecordInsertBO, systemRecord);
         Date date = new Date();
+        systemRecord.setYyyyMMdd(today);
         systemRecord.setId(Utils.uuid());
         systemRecord.setCreateTime(date);
         systemRecordSetDate(systemRecord);
         if (systemRecord.getUserId() != null && systemRecord.getSessionId() != null) {
             try {
                 //  要搜索一个 sessionId 相等 UserId相等  browseDate 要当天
-                List<SystemRecordBO> list = SystemRecordRoMapper.findStay(systemRecord);
+                List<SystemRecordBO> list = systemRecordRoMapper.findStay(systemRecord);
                 if (list != null && list.size() > 0) {
                     SystemRecordBO systemRecordBO = list.get(0);
+                    systemRecordBO.setYyyyMMdd(today);
                     Long oldTime = systemRecordBO.getCreateTime().getTime();
                     Long newTime = date.getTime();
                     systemRecordBO.setStayLong((int) (newTime - oldTime));
-                    SystemRecordMapper.updateStay(systemRecordBO);
+                    systemRecordMapper.updateStay(systemRecordBO);
                 }
             } catch (Exception e) {
                 LOGGER.error("错误：" + e.getMessage());
             }
         }
-        int result = SystemRecordMapper.insert(systemRecord);
+        int result = systemRecordMapper.insert(systemRecord);
         if (result != 1) {
             LOGGER.warn("新增失败，参数：" + systemRecord);
             throw new ServiceException(4101);

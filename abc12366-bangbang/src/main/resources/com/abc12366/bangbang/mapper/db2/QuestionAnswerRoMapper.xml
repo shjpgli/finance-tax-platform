@@ -26,7 +26,7 @@
         (SELECT count(likeId) FROM bb_question_like where id = a.id and likeType = '2' and userId = #{userId}) isTrample
         FROM bb_question_answer a left join bb_user u on a.userId = u.id
         left join bb_user u1 on a.answerUserId = u1.id
-        WHERE 1=1
+        WHERE a.status = '0'
         <if test="questionId != null and questionId != ''">
             AND questionId = #{questionId}
         </if>
@@ -46,7 +46,7 @@
         FROM bb_question_answer a LEFT JOIN bb_question q on a.questionId = q.id
         left join bb_user u on a.userId = u.id
         left join bb_user u1 on a.answerUserId = u1.id
-        WHERE 1=1
+        WHERE a.status = '0'
         ORDER BY a.createTime DESC
     </select>
 
@@ -86,7 +86,7 @@
         SELECT
         count(id)
         FROM bb_question_answer
-        WHERE questionId = #{questionId}
+        WHERE a.status = '0' and questionId = #{questionId}
     </select>
 
     <!-- 查询是否回复过 -->

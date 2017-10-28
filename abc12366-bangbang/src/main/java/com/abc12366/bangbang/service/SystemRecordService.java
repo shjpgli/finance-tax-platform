@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service;
 
+import com.abc12366.bangbang.model.SystemRecord;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 
@@ -18,20 +19,22 @@ public interface SystemRecordService {
     /**
      * 查询用户日志列表
      *
-     * @param map Map appName,location,startTime,endTime,page,size
+     * @param map  Map appName,location,startTime,endTime
+     * @param page 当前页
+     * @param size 页大小
      * @return List<SystemRecordBO>
      * @see com.abc12366.bangbang.model.bo.SystemRecordBO
      */
-    List<SystemRecordBO> selectList(Map map);
+    List<SystemRecordBO> selectList(Map<String, String> map, int page, int size);
 
     /**
      * 查看用户日志
      *
-     * @param id 日志ID
+     * @param systemRecord SystemRecord
      * @return SystemRecordBO
      * @see com.abc12366.bangbang.model.bo.SystemRecordBO
      */
-    SystemRecordBO selectOne(String id);
+    SystemRecordBO selectOne(SystemRecord systemRecord);
 
     /**
      * 异步新增日志

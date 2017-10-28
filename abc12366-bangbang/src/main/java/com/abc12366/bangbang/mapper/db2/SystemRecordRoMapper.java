@@ -17,5 +17,5 @@ public interface SystemRecordRoMapper {
 
     List<SystemRecordBO> findStay(SystemRecord systemRecord);
 
-    SystemRecordBO selectOne(String id);
+    SystemRecordBO selectOne(SystemRecord systemRecord);
 }
