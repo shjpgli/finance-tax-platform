@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Admin: lingsuzhi <554600654@qq.com.com> Date: 2017-08-16
+ * @author lingsuzhi <554600654@qq.com.com>
+ * @create 2017-08-16
  */
 @Service
 public class SystemRecordServiceImpl implements SystemRecordService {
@@ -50,28 +51,27 @@ public class SystemRecordServiceImpl implements SystemRecordService {
      */
     @Async
     @Override
-    public CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO SystemRecordInsertBO) {
-        if (SystemRecordInsertBO == null) {
+    public CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO) {
+        if (systemRecordInsertBO == null) {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
         }
         SystemRecord systemRecord = new SystemRecord();
-        BeanUtils.copyProperties(SystemRecordInsertBO, systemRecord);
+        BeanUtils.copyProperties(systemRecordInsertBO, systemRecord);
         Date date = new Date();
         systemRecord.setId(Utils.uuid());
         systemRecord.setCreateTime(date);
-        SystemRecordSetDate(systemRecord);//设置 时分秒字段
+        systemRecordSetDate(systemRecord);
         if (systemRecord.getUserId() != null && systemRecord.getSessionId() != null) {
             try {
-
                 //  要搜索一个 sessionId 相等 UserId相等  browseDate 要当天
                 List<SystemRecordBO> list = SystemRecordRoMapper.findStay(systemRecord);
                 if (list != null && list.size() > 0) {
                     SystemRecordBO systemRecordBO = list.get(0);
                     Long oldTime = systemRecordBO.getCreateTime().getTime();
                     Long newTime = date.getTime();
-                    systemRecordBO.setStayLong((int)(newTime - oldTime));
-                    int returnI = SystemRecordMapper.updateStay(systemRecordBO);
+                    systemRecordBO.setStayLong((int) (newTime - oldTime));
+                    SystemRecordMapper.updateStay(systemRecordBO);
                 }
             } catch (Exception e) {
                 LOGGER.error("错误：" + e.getMessage());
@@ -83,20 +83,18 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             throw new ServiceException(4101);
         }
 
-        SystemRecordBO SystemRecordBOReturn = new SystemRecordBO();
-        BeanUtils.copyProperties(systemRecord, SystemRecordBOReturn);
+        SystemRecordBO systemRecordBOReturn = new SystemRecordBO();
+        BeanUtils.copyProperties(systemRecord, systemRecordBOReturn);
 
-        return CompletableFuture.completedFuture(SystemRecordBOReturn);
+        return CompletableFuture.completedFuture(systemRecordBOReturn);
     }
 
     /**
      * 年、月、日。。。是根据浏览日期算出来的，新增的时候不需要用户传过来
      */
-    private void SystemRecordSetDate(SystemRecord systemRecord) {
-        Date date = new Date();// systemRecord.getBrowseDate();
-        if (date == null) return;
+    private void systemRecordSetDate(SystemRecord systemRecord) {
         Calendar now = Calendar.getInstance();
-        now.setTime(date);
+        now.setTime(new Date());
         systemRecord.setWeek(String.valueOf(now.get(Calendar.DAY_OF_WEEK) - 1));
         systemRecord.setYear(String.valueOf(now.get(Calendar.YEAR)));
         systemRecord.setMonth(String.valueOf(now.get(Calendar.MONTH) + 1));
@@ -104,5 +102,4 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         systemRecord.setHour(String.valueOf(now.get(Calendar.HOUR_OF_DAY)));
         systemRecord.setMinute(String.valueOf(now.get(Calendar.MINUTE)));
     }
-
 }

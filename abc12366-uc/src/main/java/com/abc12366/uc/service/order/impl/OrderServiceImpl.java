@@ -695,7 +695,11 @@ public class OrderServiceImpl implements OrderService {
                             }
                             insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
-                            updateStock(orderBO, orderProductBO);
+                            //判断是否需要查询产品库存信息
+                            if (orderProductBO.getProductId() != null && !"".equals(orderProductBO.getProductId())) {
+                                updateStock(orderBO, orderProductBO);
+                            }
+
                             setTodoTask(orderBO);
                             //查询商品类型，商品类型，1.实物 2.虚拟 3.服务，4.会员服务，5.会员充值，6.学堂服务
                             //根据是否需要寄送来判断，虚拟和实物
@@ -710,7 +714,10 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
-                        updateStock(orderBO, orderProductBO);
+                        //判断是否需要查询产品库存信息
+                        if (orderProductBO.getProductId() != null && !"".equals(orderProductBO.getProductId())) {
+                            updateStock(orderBO, orderProductBO);
+                        }
                         //修改商品信息
                         order.setOrderStatus("4");
                         orderMapper.update(order);
