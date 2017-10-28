@@ -7,7 +7,7 @@
         SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,pageUrl
         ,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime
         ,(select username from bb_user bu where bu.id=userId) username
-        from bb_system_record 
+        from bb_system_record
         <where>
             <if test="userId!=null">
                 userId=#{userId}
@@ -19,10 +19,14 @@
                 and location=#{location}
             </if>
             <if test="startTime!=null">
-                and createTime &gt;=#{startTime}
+                <![CDATA[
+                and date_format(createTime, '%Y%m%d') >= date_format(#{startTime}, '%Y%m%d')
+                ]]>
             </if>
             <if test="endTime!=null">
-                and createTime &lt;= #{endTime}
+                <![CDATA[
+                and date_format(createTime, '%Y%m%d') <= date_format(#{endTime}, '%Y%m%d')
+                ]]>
             </if>
         </where>
         ORDER BY createTime DESC
@@ -35,7 +39,8 @@
         from bb_system_record
         where id=#{id}
     </select>
-    <select id="findStay" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO" parameterType="com.abc12366.bangbang.model.SystemRecord">
+    <select id="findStay" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO"
+            parameterType="com.abc12366.bangbang.model.SystemRecord">
         SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,
         pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime
         from bb_system_record

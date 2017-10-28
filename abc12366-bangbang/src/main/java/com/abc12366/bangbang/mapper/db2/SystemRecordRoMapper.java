@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Admin: liuguiyao<435720953@qq.com.com>
- * Date: 2017-05-22
- * Time: 9:57
+ * @author liuguiyao<435720953@qq.com.com>
+ * @create 2017-05-22
+ * @since 1.0.0
  */
 public interface SystemRecordRoMapper {
+
     List<SystemRecordBO> selectList(Map map);
+
     List<SystemRecordBO> findStay(SystemRecord systemRecord);
+
     SystemRecordBO selectOne(String id);
 }
