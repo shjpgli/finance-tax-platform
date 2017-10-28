@@ -3,9 +3,7 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionCommentMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionCommentRoMapper;
-import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
+import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionComment;
@@ -44,6 +42,12 @@ public class QueCommentServiceImpl implements QueCommentService {
     @Autowired
     private SensitiveWordsRoMapper sensitiveWordsRoMapper;
 
+    @Autowired
+    private QuestionDisableIpRoMapper questionDisableIpRoMapper;
+
+    @Autowired
+    private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
     @Override
     public List<QuestionCommentBo> selectList(Map<String,Object> map) {
         List<QuestionCommentBo> commentBoList;
@@ -72,6 +76,21 @@ public class QueCommentServiceImpl implements QueCommentService {
 
     @Override
     public QuestionCommentBo save(QuestionCommentBo commentBo) {
+
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(commentBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(commentBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
         try {
             JSONObject jsonStu = JSONObject.fromObject(commentBo);
             LOGGER.info("新增问题评论信息:{}", jsonStu.toString());
@@ -147,6 +166,21 @@ public class QueCommentServiceImpl implements QueCommentService {
     @Transactional("db1TxManager")
     @Override
     public QuestionCommentBo update(QuestionCommentBo commentBo) {
+
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(commentBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(commentBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
         //更新问题评论信息
         QuestionComment comment = new QuestionComment();
         try {

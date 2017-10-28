@@ -3,6 +3,8 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionDisableIpRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionDisableUserRoMapper;
 import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
@@ -37,6 +39,12 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private SensitiveWordsRoMapper sensitiveWordsRoMapper;
+
+    @Autowired
+    private QuestionDisableIpRoMapper questionDisableIpRoMapper;
+
+    @Autowired
+    private QuestionDisableUserRoMapper questionDisableUserRoMapper;
 
     @Override
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
@@ -79,6 +87,21 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Override
     public QuestionAnswerBo save(QuestionAnswerBo answerBo) {
+
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(answerBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(answerBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
         JSONObject jsonStu = JSONObject.fromObject(answerBo);
         LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
 
@@ -163,6 +186,21 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     @Transactional("db1TxManager")
     @Override
     public QuestionAnswerBo update(QuestionAnswerBo answerBo) {
+
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(answerBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(answerBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
         //更新问题回复信息
         QuestionAnswer answer = new QuestionAnswer();
         try {

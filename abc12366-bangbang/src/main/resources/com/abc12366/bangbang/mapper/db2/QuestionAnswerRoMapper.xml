@@ -86,7 +86,7 @@
         SELECT
         count(id)
         FROM bb_question_answer
-        WHERE a.status = '0' and questionId = #{questionId}
+        WHERE status = '0' and questionId = #{questionId}
     </select>
 
     <!-- 查询是否回复过 -->
