@@ -154,4 +154,10 @@ public class UCConstant {
     public final static int USER_CONTINUE_PASSWORD_WRONG_MAX = 5;
     //用户连续输错密码超过阈值锁定时间，单位：毫秒
     public final static int LOCK_TIME = 10 * 60 * 1000;
+
+    //消息类型，1：系统消息，2：帮帮消息
+    public final static String BUSI_MSG_TYPE_SYSTEM = "1";
+    public final static String BUSI_MSG_TYPE_BANGBANG = "2";
+    //业务类型：帮帮
+    public final static String BUSI_TYPE_BANGBANG = "BANGBANG-AWARD";
 }

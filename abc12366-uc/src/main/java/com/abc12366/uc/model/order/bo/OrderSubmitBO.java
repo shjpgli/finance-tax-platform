@@ -77,7 +77,7 @@ public class OrderSubmitBO implements Serializable {
     /**
      * 推荐人工号
      **/
-    @Size(min = 2, max = 64)
+    @Size(min = 0, max = 64)
     private String recommendUser;
 
     /**
