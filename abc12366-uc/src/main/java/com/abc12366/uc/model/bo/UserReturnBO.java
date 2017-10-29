@@ -3,9 +3,11 @@ package com.abc12366.uc.model.bo;
 import java.util.Date;
 
 /**
+ * 用户注册返回信息
+ *
  * @author liuguiyao<435720953@qq.com.com>
  * @create 2017-05-18 10:18 PM
- * @since 2.0.0
+ * @since 1.0.0
  */
 public class UserReturnBO {
     private String id;
@@ -18,20 +20,20 @@ public class UserReturnBO {
     public UserReturnBO() {
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public UserReturnBO(String id, String username, String phone, Date createTime, Date lastUpdate) {
         this.id = id;
         this.username = username;
         this.phone = phone;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getId() {
@@ -82,6 +84,7 @@ public class UserReturnBO {
                 ", phone='" + phone + '\'' +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 
@@ -97,6 +100,5 @@ public class UserReturnBO {
         if (!phone.equals(that.phone)) return false;
         if (!createTime.equals(that.createTime)) return false;
         return lastUpdate.equals(that.lastUpdate);
-
     }
 }

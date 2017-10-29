@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -51,39 +50,14 @@ public class AuthController extends BaseController {
     }
 
     /**
-     * 刷新用户登录令牌token接口
-     *
-     * @param token String
-     * @return ResponseEntity
-     */
-    @RequestMapping(value = "/refresh", method = RequestMethod.GET)
-    public ResponseEntity<?> refresh(@RequestHeader(Constant.USER_TOKEN_HEAD) String token) {
-        String refreshedToken = authService.refresh(token);
-        return ResponseEntity.ok(Utils.kv("data", refreshedToken));
-    }
-
-    //老的注册接口暂时注释保留
-    /*@PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO) {
-        LOGGER.info("{}", registerBO);
-        UserReturnBO userReturnBO = authService.register(registerBO);
-        if (userReturnBO == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        return ResponseEntity.ok(userReturnBO);
-    }*/
-
-    /**
      * 用户使用手机号码进行注册
      *
      * @param registerBO RegisterBO
      * @param request    HttpServletRequest
      * @return 注册后生成的用户信息
-     * @throws IOException IOException
      */
     @PostMapping(path = "/register")
-    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) throws
-            IOException {
+    public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) {
         LOGGER.info("{}", registerBO);
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
@@ -102,8 +76,6 @@ public class AuthController extends BaseController {
         } else {
             throw new ServiceException(4201);
         }
-
-
     }
 
     /**
@@ -197,49 +169,4 @@ public class AuthController extends BaseController {
         authService.logout(token);
         return ResponseEntity.ok(Utils.kv());
     }
-
-//    /**
-//     *
-//     * @param loginBO
-//     * @param request
-//     * @return
-//     * @throws Exception
-//     */
-//    @PostMapping(path = "/rsa/login")
-//    public ResponseEntity rsaLogin(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
-//        LOGGER.info("{}", loginBO);
-//        // 记录用户IP归属
-//        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
-//            ipService.merge(request.getHeader(Constant.CLIENT_IP));
-//        }
-//        //将密码解密
-//        loginBO.setPassword(decode(loginBO.getPassword()));
-//
-//        Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
-//        LOGGER.info("{}", token);
-//        return ResponseEntity.ok(Utils.kv("data", token));
-//    }
-
-//    public String decode(String str) throws Exception {
-//        RSAPublicKey publicKey = RSA.getDefaultPublicKey();
-//        RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
-
-//        byte[] bytes = RSA.encrypt(publicKey, str.getBytes());
-//        String s = new BASE64Encoder().encode(bytes);
-//        byte[] bytes2 = new BASE64Decoder().decodeBuffer(s);
-//        byte[] bytes2 = new BASE64Decoder().decodeBuffer(str);
-//        String response2 = new String(RSA.decrypt(privateKey, bytes2));
-//        System.out.println(response2);
-//        return response2;
-
-//        byte[] bytes2 = new BASE64Decoder().decodeBuffer(str);
-//        String newStr = new String(bytes2);
-//        String []test=newStr.split(" ");
-//        String json="";
-//        for(String s : test){
-//            json+= RSA.decryptStringByJs(s);
-//        }
-//        return json;
-//    }
-
 }
