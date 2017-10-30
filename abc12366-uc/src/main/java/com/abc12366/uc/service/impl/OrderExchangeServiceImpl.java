@@ -21,6 +21,7 @@ import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.TradeLogService;
 import com.abc12366.uc.util.*;
 import com.abc12366.uc.webservice.DzfpClient;
@@ -94,6 +95,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private UserAddressRoMapper userAddressRoMapper;
+
+    @Autowired
+    private PointsRuleService pointsRuleService;
 
     @Transactional("db1TxManager")
     @Override
@@ -473,9 +477,14 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
      * @param orderBO
      */
     private void insertPoints(Order orderBO) {
+        //如果积分规则为空则返回
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_ORDER_RETURN_CODE);
+        if (pointsRuleBO == null) {
+            return;
+        }
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_RETURN_ID);
+        pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setId(Utils.uuid());
         //成交总积分 - 赠送积分
         pointsLog.setIncome((int) (orderBO.getTotalPrice() - orderBO.getGiftPoints()));

@@ -34,4 +34,7 @@ public interface SysTaskService {
     List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType);
 
     List<SysTaskBO> selectTimeLimitedListByType(String type);
+
+    //根据编码查询一条系统任务
+    SysTaskBO selectValidOneByCode(String taskCode);
 }

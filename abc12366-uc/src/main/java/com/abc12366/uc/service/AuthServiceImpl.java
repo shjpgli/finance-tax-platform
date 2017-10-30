@@ -87,6 +87,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private PrivilegeItemService privilegeItemService;
 
+    @Autowired
+    private ExperienceRuleService experienceRuleService;
+
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
      * 3、用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
@@ -450,11 +453,18 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
 
+            //查询系统任务
+            //新的查询系统任务方法：根据编码查询
+            ExperienceRuleBO experienceRuleBO = experienceRuleService.selectValidOneByCode(UCConstant.EXP_RULE_LOGIN_CODE);
+            if (experienceRuleBO == null) {
+                return;
+            }
+
             ExperienceLogBO logBO = new ExperienceLogBO();
             logBO.setId(Utils.uuid());
             logBO.setIncome(exp);
             logBO.setUserId(userId);
-            logBO.setRuleId(UCConstant.EXP_RULE_LOGIN_ID);
+            logBO.setRuleId(experienceRuleBO.getId());
             logBO.setOutgo(0);
             logBO.setCreateTime(new Date());
             experienceLogService.insert(logBO);

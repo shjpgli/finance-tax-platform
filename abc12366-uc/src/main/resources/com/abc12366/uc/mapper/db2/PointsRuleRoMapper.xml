@@ -31,4 +31,11 @@
         from uc_upoints_rule
         where code=#{code}
     </select>
+
+    <select id="selectValidOneByCode" resultType="com.abc12366.uc.model.bo.PointsRuleBO" parameterType="java.lang.String">
+        select id, name, code, points, description, type, status, createTime, lastUpdate,period,degree
+        from uc_upoints_rule
+        where code=#{ruleCode}
+        and status='1'
+    </select>
 </mapper>

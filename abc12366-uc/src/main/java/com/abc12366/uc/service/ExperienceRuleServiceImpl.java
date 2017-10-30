@@ -193,4 +193,10 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
             throw new ServiceException(4713);
         }
     }
+
+    @Override
+    public ExperienceRuleBO selectValidOneByCode(String ruleCode) {
+        LOGGER.info("查询经验值规则，规则编码：{}", ruleCode);
+        return experienceRuleRoMapper.selectValidOneByCode(ruleCode);
+    }
 }

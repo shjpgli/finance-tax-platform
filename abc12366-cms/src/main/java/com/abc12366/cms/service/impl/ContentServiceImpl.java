@@ -769,7 +769,7 @@ public class ContentServiceImpl implements ContentService {
     public String updateViewsDayjf(String contentId, HttpServletRequest request) {
         contentMapper.updateViewsDay(contentId);
         String userId = UcUserCommon.getUserId();
-        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{sysTaskId}";
+        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
         String responseStr;
         String sysTaskId = UCConstant.SYS_TASK_BROSE_NEWS_ID;
         responseStr = cmsRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);

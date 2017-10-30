@@ -67,7 +67,7 @@ public class CurrCollectServiceImpl implements CurrCollectService {
 
         int result = collectMapper.insert(collect);
 
-        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{sysTaskId}";
+        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
         String responseStr;
         String sysTaskId = UCConstant.SYS_TASK_COURSE_COLLECT_ID;
         responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);

@@ -16,4 +16,6 @@ public interface ExperienceRuleRoMapper {
     ExperienceRuleBO selectOne(String id);
 
     ExperienceRuleBO selectValidOne(String ruleId);
+
+    ExperienceRuleBO selectValidOneByCode(String ruleCode);
 }
