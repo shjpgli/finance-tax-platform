@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/9/25.
@@ -57,11 +54,13 @@ public class AdminServServiceImpl implements AdminServService {
             adminServBo.setId(uuid);
             adminServBo.setCreateTime(new Date());
 
-//            int cnt = adminServRoMapper.selectLecturerCnt(lecturerBo);
-//            if(cnt >0){
-//                //同一用户只能创建一位客服经理信息
-//                throw new ServiceException(4355);
-//            }
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("userId", adminServBo.getUserId());
+            int cnt = adminServRoMapper.selectCnt(dataMap);
+            if(cnt >0){
+                //同一用户只能创建一位客服经理信息
+                throw new ServiceException(6355);
+            }
 
         try {
             BeanUtils.copyProperties(adminServBo, adminServ);
@@ -98,11 +97,14 @@ public class AdminServServiceImpl implements AdminServService {
             LOGGER.info("更新客服经理信息:{}", jsonStu.toString());
             adminServBo.setLastUpdate(new Date());
 
-//            int cnt = adminServRoMapper.selectLecturerCnt(lecturerBo);
-//            if(cnt >0){
-//                //同一用户只能创建一位客服经理信息
-//                throw new ServiceException(4355);
-//            }
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("userId", adminServBo.getUserId());
+            dataMap.put("id", adminServBo.getId());
+            int cnt = adminServRoMapper.selectCnt(dataMap);
+            if(cnt >0){
+                //同一用户只能创建一位客服经理信息
+                throw new ServiceException(6355);
+            }
 
 
         try {
