@@ -27,6 +27,7 @@ public class SysTaskBO {
     private String remark;
     private String dateType;
     private String ruleId;
+    private String code;
 
     public SysTaskBO() {
     }
@@ -181,5 +182,13 @@ public class SysTaskBO {
 
     public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

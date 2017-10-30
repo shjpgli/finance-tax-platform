@@ -7,7 +7,7 @@
         uc_sys_task(id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,
         ruleName,ruleCode,count,skipURL,awardType,ruleId,remark,dateType)
         values(#{id},#{name},#{startTime},#{endTime},#{rule},#{award},#{type},#{status},#{createTime},
-        #{lastUpdate},#{imageUrl},#{ruleName},#{ruleCode},#{count},#{skipURL},#{awardType},#{ruleId},#{remark},#{dateType})
+        #{lastUpdate},#{imageUrl},#{ruleName},#{ruleCode},#{count},#{skipURL},#{awardType},#{ruleId},#{remark},#{dateType},#{code})
     </insert>
     <update id="update" parameterType="com.abc12366.uc.model.SysTask">
         update uc_sys_task
@@ -28,6 +28,7 @@
             <if test="awardType!=null">awardType=#{awardType},</if>
             <if test="ruleId!=null">ruleId=#{ruleId},</if>
             <if test="remark!=null">remark=#{remark},</if>
+            <if test="dateType!=null">dateType=#{dateType},</if>
             <if test="dateType!=null">dateType=#{dateType}</if>
         </set>
         where id=#{id}
