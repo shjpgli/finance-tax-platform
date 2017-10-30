@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = ServiceException.class)
     @Override
     public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
         LOGGER.info("{}", passwordUpdateBO);
