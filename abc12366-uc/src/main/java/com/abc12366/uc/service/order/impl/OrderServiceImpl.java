@@ -745,15 +745,16 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
+                        //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
                         //判断是否需要查询产品库存信息
-                        if (trading.equals("1") || trading.equals("2")) {
+                        if (trading.equals("UCSC")) {
                             updateStock(orderBO, orderProductBO);
                             order.setOrderStatus("4");
                             orderMapper.update(order);
 
                             insertDeductPoints(orderBO);
                             insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功","0");
-                        } else if (trading.equals("3") || trading.equals("4")) {
+                        } else if (trading.equals("HYCZ")) {
                             order.setOrderStatus("6");
                             orderMapper.update(order);
 
@@ -766,7 +767,7 @@ public class OrderServiceImpl implements OrderService {
 
                             insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
                             sendMemberMsg(orderProductBO, order,request);
-                        }else if (trading.equals("6")) {
+                        }else if (trading.equals("CSKT")) {
                             order.setOrderStatus("6");
                             orderMapper.update(order);
 

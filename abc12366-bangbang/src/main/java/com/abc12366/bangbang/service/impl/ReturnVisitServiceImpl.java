@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
             returnVisitBO.setPhone(ucUserBO.getPhone());
             return returnVisitRoMapper.selectList(returnVisitBO);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -75,7 +76,7 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
             param.setPhone(ucUserBO.getPhone());
             return returnVisitRoMapper.selectStatisList(param);
         }
-        return null;
+        return new ArrayList<>();
     }
 
 }

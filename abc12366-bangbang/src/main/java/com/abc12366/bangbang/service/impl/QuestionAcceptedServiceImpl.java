@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class QuestionAcceptedServiceImpl implements QuestionAcceptedService {
             questionAcceptedBO.setPhone(ucUserBO.getPhone());
             return acceptedRoMapper.selectList(questionAcceptedBO);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -55,6 +56,6 @@ public class QuestionAcceptedServiceImpl implements QuestionAcceptedService {
             param.setPhone(ucUserBO.getPhone());
             return acceptedRoMapper.selectStatisList(param);
         }
-        return null;
+        return new ArrayList<>();
     }
 }

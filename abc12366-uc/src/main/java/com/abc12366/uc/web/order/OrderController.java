@@ -227,44 +227,6 @@ public class OrderController {
 
 
     /**
-     * 课程订单查询
-     * @param pageNum   页数
-     * @param pageSize  条数
-     * @param goodsId   商品ID
-     * @param nickname  用户昵称
-     * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @return 订单列表
-     *//*
-    @GetMapping(path = "/curriculum")
-    public ResponseEntity selectCurriculumOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                    @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                                    @RequestParam(value = "goodsId", required = true) String goodsId,
-                                                    @RequestParam(value = "nickname", required = false) String nickname,
-                                                    @RequestParam(value = "startTime", required = false) String startTime,
-                                                    @RequestParam(value = "endTime", required = false) String endTime) {
-        LOGGER.info("{}:{}", pageNum, pageSize);
-        OrderBO orderBO = new OrderBO();
-        UserBO user = new UserBO();
-        user.setNickname(nickname);
-        orderBO.setUser(user);
-//        orderBO.setGoodsId(goodsId);
-        if (startTime != null && !"".equals(startTime)) {
-            orderBO.setStartTime(DataUtils.StrToDate(startTime));
-        }
-        if (endTime != null && !"".equals(endTime)) {
-            orderBO.setEndTime(DataUtils.StrToDate(endTime));
-        }
-
-        List<OrderBO> orderList = orderService.selectCurriculumOrderList(orderBO, pageNum, pageSize);
-        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
-        LOGGER.info("{}", orderList);
-        return (orderList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    }*/
-
-    /**
      * 查询订单详情-后台
      *
      * @param orderNo 订单号
@@ -292,22 +254,6 @@ public class OrderController {
         return ResponseEntity.ok(Utils.kv("data", orderBO));
     }
 
-    /**
-     * 根据交易流水号查询列表
-     *
-     * @param tradeNo 订单号
-     * @return 订单详情
-     */
-    /*@GetMapping(path = "/select/trade/list/{tradeNo}")
-    public ResponseEntity selectListByTradeNo(@PathVariable("tradeNo") String tradeNo) {
-        LOGGER.info("{}", tradeNo);
-        List<OrderTradeBO> boList = orderService.selectListByTradeNo(tradeNo);
-        PageInfo<OrderTradeBO> pageInfo = new PageInfo<>(boList);
-        LOGGER.info("{}", boList);
-        return (boList == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    }*/
 
     /**
      * 根据交易流水号查询订单合并内容
@@ -362,20 +308,6 @@ public class OrderController {
         LOGGER.info("{}", orderSubmitBO);
         orderSubmitBO.setUserId(userId);
         OrderBO bo = orderService.submitOrder(orderSubmitBO);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 用户开通会员
-     *
-     * @param orderVipBO 开通VIP
-     * @return  订单信息
-     */
-    @PutMapping(path = "/open")
-    public ResponseEntity openVip(@Valid @RequestBody OrderVipBO orderVipBO,HttpServletRequest request) {
-        LOGGER.info("{}", orderVipBO);
-        OrderBO bo = orderService.openVip(orderVipBO,request);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
@@ -482,113 +414,6 @@ public class OrderController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
-    /**
-     * 删除购物车订单
-     *
-     * @param userId 用户ID
-     * @param id     订单号
-     * @return
-     */
-    @DeleteMapping(path = "/delete/{userId}/{id}")
-    public ResponseEntity deleteOrder(@PathVariable("userId") String userId, @PathVariable("id") String id) {
-        OrderBO orderBO = new OrderBO();
-        orderBO.setOrderNo(id);
-        orderBO.setUserId(userId);
-        orderService.deleteOrder(orderBO);
-        return ResponseEntity.ok(Utils.kv());
-    }
-
-    /**
-     * 反馈虚拟产品订单信息
-     *
-     * @param orderBO 订单信息
-     * @return
-     */
-    @PutMapping(path = "/feedback")
-    public ResponseEntity feedback(@Valid @RequestBody OrderBO orderBO) {
-        LOGGER.info("{}", orderBO);
-        OrderBO bo = orderService.feedback(orderBO);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-
-    /**
-     * 退单管理列表
-     *
-     * @param pageNum  页数
-     * @param pageSize 条数
-     * @param orderNo  订单号
-     * @param username 用户名
-     * @return 退单列表
-     */
-    @GetMapping(path = "/back")
-    public ResponseEntity selectBackList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                         @RequestParam(value = "orderNo", required = false) String orderNo,
-                                         @RequestParam(value = "username", required = false) String username) {
-        OrderBackBO orderBackBO = new OrderBackBO();
-        orderBackBO.setOrderNo(orderNo);
-
-        User user = new User();
-        user.setUsername(username);
-        orderBackBO.setUser(user);
-
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBackBO> orderBackBOs = orderService.selectOrderBackList(orderBackBO);
-        PageInfo<OrderBackBO> pageInfo = new PageInfo<>(orderBackBOs);
-        LOGGER.info("{}", orderBackBOs);
-        return (orderBackBOs == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
-    }
-
-    /**
-     * 用户申请退单
-     *
-     * @param orderBack 退单信息
-     * @param userId    用户ID
-     * @param orderNo   订单号
-     * @return 退单信息
-     */
-    @PostMapping(path = "/back/apply/{userId}/{orderNo}")
-    public ResponseEntity applyBackOrder(@Valid @RequestBody OrderBack orderBack, @PathVariable("userId") String
-            userId, @PathVariable("orderNo") String orderNo) {
-        LOGGER.info("{}", orderBack);
-        orderBack.setUserId(userId);
-        orderBack.setOrderNo(orderNo);
-        OrderBack bo = orderService.applyBackOrder(orderBack);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 管理员审核退单申请
-     *
-     * @param orderBack
-     * @return 退单信息
-     */
-    @PostMapping(path = "/back/check")
-    public ResponseEntity backCheckOrder(@Valid @RequestBody OrderBack orderBack) {
-        LOGGER.info("{}", orderBack);
-        OrderBack bo = orderService.backCheckOrder(orderBack);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
-
-    /**
-     * 用户提交退单
-     *
-     * @param orderBack 退单信息
-     * @return 退单信息
-     */
-    @PostMapping(path = "/back/submit")
-    public ResponseEntity submitBackOrder(@Valid @RequestBody OrderBack orderBack) {
-        LOGGER.info("{}", orderBack);
-        OrderBack bo = orderService.submitBackOrder(orderBack);
-        LOGGER.info("{}", bo);
-        return ResponseEntity.ok(Utils.kv("data", bo));
-    }
 
     /**
      * 根据GoodsId和UserId查询订单信息
