@@ -206,7 +206,7 @@
         SELECT
         curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
         (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree
-        FROM bb_curriculum
+        FROM bb_curriculum c
         WHERE 1=1 and status = 1 and curriculumId != #{curriculumId}
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId in(select labelId from bb_curriculum_label where curriculumId = #{curriculumId}))
         ORDER BY issueTime DESC limit 4
