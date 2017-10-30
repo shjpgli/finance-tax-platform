@@ -12,10 +12,7 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.BaseObject;
-import com.abc12366.uc.model.Token;
-import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.UserLoginPasswordWrongCount;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.RandomNumber;
 import com.abc12366.uc.util.UCConstant;
@@ -37,7 +34,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -53,22 +50,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private RestTemplate restTemplate;
-
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private UserRoMapper userRoMapper;
-
     @Autowired
     private AppRoMapper appRoMapper;
-
     @Autowired
     private TokenRoMapper tokenRoMapper;
-
     @Autowired
     private TokenMapper tokenMapper;
-
     @Autowired
     private UserExtendService userExtendService;
 
@@ -93,14 +84,20 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private TodoTaskService todoTaskService;
 
+    @Autowired
+    private PrivilegeItemService privilegeItemService;
+
+    @Autowired
+    private ExperienceRuleService experienceRuleService;
+
     /**
-     * 新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
-     * 用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
+     * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
+     * 3、用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
      *
-     * @param registerBO RegisterBO
-     * @return UserReturnBO
+     * @param registerBO
+     * @return
      */
-    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
+    @Transactional("db1TxManager")
     @Override
     public UserReturnBO register(RegisterBO registerBO, HttpServletRequest request) {
         LOGGER.info("{}", registerBO);
@@ -189,7 +186,7 @@ public class AuthServiceImpl implements AuthService {
         return userReturnBO;
     }
 
-//    @Transactional("db1TxManager")
+    //    @Transactional("db1TxManager")
     @Override
     public Map login(LoginBO loginBO, String accessToken) throws Exception {
         LOGGER.info("loginBO:{},accessToken:{}", loginBO, accessToken);
@@ -458,11 +455,18 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
 
+            //查询系统任务
+            //新的查询系统任务方法：根据编码查询
+            ExperienceRuleBO experienceRuleBO = experienceRuleService.selectValidOneByCode(UCConstant.EXP_RULE_LOGIN_CODE);
+            if (experienceRuleBO == null) {
+                return;
+            }
+
             ExperienceLogBO logBO = new ExperienceLogBO();
             logBO.setId(Utils.uuid());
             logBO.setIncome(exp);
             logBO.setUserId(userId);
-            logBO.setRuleId(UCConstant.EXP_RULE_LOGIN_ID);
+            logBO.setRuleId(experienceRuleBO.getId());
             logBO.setOutgo(0);
             logBO.setCreateTime(new Date());
             experienceLogService.insert(logBO);

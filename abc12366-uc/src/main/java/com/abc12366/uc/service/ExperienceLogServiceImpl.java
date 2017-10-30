@@ -53,6 +53,9 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
     @Autowired
     private PointsLogService pointsLogService;
 
+    @Autowired
+    private PointsRuleService pointsRuleService;
+
     @Transactional("db1TxManager")
     @Override
     public ExperienceLogQueryBO insert(ExperienceLogBO experienceLogBO) {
@@ -131,11 +134,17 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         }
 
         if (newExp >= Integer.parseInt(myExperienceBO.getNextLevelExp())) {
+            //如果积分规则为空则返回
+            PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_EXP_UP_CODE);
+            if (pointsRuleBO == null) {
+                return;
+            }
+
             PointsLogBO pointsLogBO = new PointsLogBO();
             pointsLogBO.setUserId(id);
             pointsLogBO.setIncome(privilegeItem.getYhsjjl());
             pointsLogBO.setOutgo(0);
-            pointsLogBO.setRuleId(UCConstant.POINT_RULE_EXP_UP_ID);
+            pointsLogBO.setRuleId(pointsRuleBO.getId());
             pointsLogBO.setRemark("用户等级提升奖励");
             pointsLogService.insert(pointsLogBO);
         }

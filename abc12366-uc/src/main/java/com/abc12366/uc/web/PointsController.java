@@ -55,7 +55,7 @@ public class PointsController {
     }
 
     /**
-     * 批量用户奖励积分接口
+     * 批量用户奖励积分接口,并且发送帮帮信息
      */
     @PostMapping(path = "/batch/award")
     public ResponseEntity batchAward(@Valid @RequestBody PointBatchAwardBO pointBatchAwardBO){

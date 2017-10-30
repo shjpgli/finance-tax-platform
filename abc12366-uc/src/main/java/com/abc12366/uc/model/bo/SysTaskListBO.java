@@ -24,6 +24,7 @@ public class SysTaskListBO {
     private int count;
     private String skipURL;
     private String finishedCount;
+    private String code;
 
     public SysTaskListBO() {
     }
@@ -154,5 +155,36 @@ public class SysTaskListBO {
 
     public void setRuleName(String ruleName) {
         this.ruleName = ruleName;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "SysTaskListBO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", rule='" + rule + '\'' +
+                ", points=" + points +
+                ", type='" + type + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", ruleName='" + ruleName + '\'' +
+                ", ruleCode='" + ruleCode + '\'' +
+                ", count=" + count +
+                ", skipURL='" + skipURL + '\'' +
+                ", finishedCount='" + finishedCount + '\'' +
+                ", code='" + code + '\'' +
+                '}';
     }
 }

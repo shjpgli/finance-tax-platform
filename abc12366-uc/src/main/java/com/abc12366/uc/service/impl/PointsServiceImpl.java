@@ -178,7 +178,7 @@ public class PointsServiceImpl implements PointsService {
     @Override
     public int calculate(PointCalculateBO pointCalculateBO) {
         //查询出对应的积分规则
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOne(pointCalculateBO.getRuleId());
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(pointCalculateBO.getRuleCode());
         if (pointsRuleBO == null) {
             return 0;
         }
@@ -213,7 +213,7 @@ public class PointsServiceImpl implements PointsService {
                 //param.setUpointCodexId(pointCodex.getId());
                 param.setStartTime(startTime);
                 param.setEndTime(endTime);
-                param.setRuleId(pointCalculateBO.getRuleId());
+                param.setRuleId(pointsRuleBO.getId());
                 List<PointComputeLog> computeLogList = pointsRoMapper.selectCalculateLog(param);
                 if (computeLogList != null && computeLogList.size() >= pointsRuleBO.getDegree()) {
                     return 0;
@@ -229,7 +229,7 @@ public class PointsServiceImpl implements PointsService {
 
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(pointCalculateBO.getUserId());
-        pointsLog.setRuleId(pointCalculateBO.getRuleId());
+        pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setRemark(pointsRuleBO.getDescription());
         if (pointsRuleBO.getPoints() < 0) {
             pointsLog.setIncome(0);
@@ -247,7 +247,7 @@ public class PointsServiceImpl implements PointsService {
         //pointComputeLog.setUpointCodexId(pointCodex.getId());
         pointComputeLog.setTimeType(period);
         pointComputeLog.setCreateTime(new Date());
-        pointComputeLog.setRuleId(pointCalculateBO.getRuleId());
+        pointComputeLog.setRuleId(pointsRuleBO.getId());
         pointMapper.insertComputeLog(pointComputeLog);
 
         return pointsRuleBO.getPoints();
@@ -255,11 +255,12 @@ public class PointsServiceImpl implements PointsService {
 
     @Override
     public void batchAward(PointBatchAwardBO pointBatchAwardBO) {
-        String ruleId = UCConstant.POINT_RULE_BANGBANG_BATCH_AWARD;
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOne(ruleId);
+        //如果积分规则为空则返回
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_BANGBANG_BATCH_AWARD_CODE);
         if (pointsRuleBO == null) {
             return;
         }
+        String ruleId = pointsRuleBO.getId();
         for (PointAwardBO pointAwardBO : pointBatchAwardBO.getPointAwardBOList()) {
             PointsLogBO pointsLog = new PointsLogBO();
             pointsLog.setUserId(pointAwardBO.getUserId());
