@@ -405,6 +405,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                                         throw new ServiceException(4102,"订单信息查询失败");
                                     }
+                                    //将订单状态改成已结束
+                                    order.setOrderStatus("7");
+                                    orderMapper.update(order);
                                     //服务类型：1-换货 2-退货
                                     Message message = new Message();
                                     message.setBusinessId(oe.getOrderNo());
@@ -431,7 +434,19 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(4956);
             }
         }else if(order != null && "POINTS".equals(order.getTradeMethod())){
+            //修改订单状态
+            oe.setStatus("8");
+            oe.setRefundRemark(data.getRefundRemark());
+            oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+            orderExchangeMapper.update(oe);
+
+            //将订单状态改成已结束
+            order.setOrderStatus("7");
+            orderMapper.update(order);
+
+            //退积分
             insertPoints(order);
+
         }else{
             throw new ServiceException(4957);
         }
