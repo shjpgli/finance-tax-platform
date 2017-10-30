@@ -33,7 +33,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -150,7 +149,8 @@ public class UserServiceImpl implements UserService {
         }
 
         //普通用户只允许修改一次用户名
-        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) && user.getUsernameModifiedTimes() >= 1) {
+        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) &&
+                user.getUsernameModifiedTimes() >= 1) {
             throw new ServiceException(4037);
         }
 
@@ -403,12 +403,8 @@ public class UserServiceImpl implements UserService {
         verifyingCodeBO.setCode(bindPhoneBO.getCode());
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
-        try {
-            if (!authService.verifyCode(verifyingCodeBO, request)) {
-                throw new ServiceException(4201);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!authService.verifyCode(verifyingCodeBO, request)) {
+            throw new ServiceException(4201);
         }
 
         UserPhoneBO userPhoneBO = new UserPhoneBO();
@@ -587,7 +583,8 @@ public class UserServiceImpl implements UserService {
         IsRealNameBO isRealName = new IsRealNameBO();
         String userId = Utils.getUserId();
         UserExtend userExtend = userExtendRoMapper.isRealName(userId);
-        if (userExtend != null && userExtend.getValidStatus() != null && userExtend.getValidStatus().equals(UCConstant.USER_REALNAME_VALIDATED)) {
+        if (userExtend != null && userExtend.getValidStatus() != null && userExtend.getValidStatus().equals
+                (UCConstant.USER_REALNAME_VALIDATED)) {
             isRealName.setIsRealName(true);
         } else {
             isRealName.setIsRealName(false);

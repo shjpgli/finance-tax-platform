@@ -87,6 +87,11 @@ public class SystemRecordInsertBO {
      */
     private Date createTime;
 
+    /**
+     * 规则代码：经验值规则代码
+     */
+    private String ruleCode;
+
     public String getUserId() {
         return userId;
     }
@@ -223,6 +228,14 @@ public class SystemRecordInsertBO {
         this.createTime = createTime;
     }
 
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
     @Override
     public String toString() {
         return "SystemRecordInsertBO{" +
@@ -243,6 +256,7 @@ public class SystemRecordInsertBO {
                 ", device='" + device + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
+                ", ruleCode='" + ruleCode + '\'' +
                 '}';
     }
 }

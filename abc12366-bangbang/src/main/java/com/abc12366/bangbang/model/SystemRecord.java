@@ -107,6 +107,11 @@ public class SystemRecord extends TableBO {
      */
     private Date createTime;
 
+    /**
+     * 规则代码：经验值规则代码
+     */
+    private String ruleCode;
+
     public String getId() {
         return id;
     }
@@ -299,6 +304,14 @@ public class SystemRecord extends TableBO {
         this.createTime = createTime;
     }
 
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
     @Override
     public String toString() {
         return "SystemRecord{" +
@@ -326,6 +339,7 @@ public class SystemRecord extends TableBO {
                 ", device='" + device + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
+                ", ruleCode='" + ruleCode + '\'' +
                 "} " + super.toString();
     }
 }

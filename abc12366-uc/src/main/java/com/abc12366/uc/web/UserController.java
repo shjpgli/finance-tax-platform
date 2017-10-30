@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-02-20 3:18 PM
- * @since 2.0.0
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -331,19 +331,4 @@ public class UserController {
     	int status=userService.changeWxBdxx(userUpdateDTO);
     	return ResponseEntity.ok(Utils.kv("data", status));
     }
-    
-    
-
-//    @PostMapping(path = "/test")
-//    public ResponseEntity test(){
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-//    @PutMapping(path = "/updatevip")
-//    public ResponseEntity updateVip(){
-//        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-
 }
