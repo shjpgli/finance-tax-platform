@@ -198,6 +198,8 @@ public class SFTPUtil {
             LOGGER.info("buffer:{}", buffer.length);
             String filePath1 = "/" + directory + "/" + storeName;
             outputStream.write(buffer);
+            outputStream.flush();
+            outputStream.close();
             map.put("fileName", fileName);
             map.put("storeName", storeName);
             map.put("filePath", filePath1);
