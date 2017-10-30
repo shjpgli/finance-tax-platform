@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -55,7 +56,10 @@ public class SystemRecordServiceImpl implements SystemRecordService {
     }
 
     /**
-     * 异步新增
+     * 异步新增；如果规则代码有效，则新增用户经验值
+     *
+     * @param systemRecordInsertBO 日志BO
+     * @return CompletableFuture 系统日志对象
      */
     @Async
     @Override
@@ -97,6 +101,11 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         if (result != 1) {
             LOGGER.warn("新增失败，参数：" + systemRecord);
             throw new ServiceException(4101);
+        }
+
+        // todo 如果规则代码有效，则新增用户经验值
+        if (!StringUtils.isEmpty(systemRecord.getRuleCode()) && !StringUtils.isEmpty(systemRecord.getUserId())) {
+
         }
 
         SystemRecordBO systemRecordBOReturn = new SystemRecordBO();
