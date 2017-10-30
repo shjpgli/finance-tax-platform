@@ -101,23 +101,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         exchangeCheck(ra);
         OrderExchange data = new OrderExchange();
         BeanUtils.copyProperties(ra, data);
-        //查询地址信息
-        if(ra != null && ra.getAddressId() != null && !"".equals(ra.getAddressId())){
-            UserAddressBO userAddress = userAddressRoMapper.selectById(ra.getAddressId());
-            if(userAddress != null){
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
-                data.setConsignee(userAddress.getName());
-                data.setContactNumber(userAddress.getPhone());
-                data.setShippingAddress(address.toString());
-            }
-        }
-
         List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
-        //OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(data.getOrderNo());
         if (dataList != null && dataList.size() > 0) {
             throw new ServiceException(4950);
         } else {
@@ -197,20 +181,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
         if (oe != null && "5".equals(oe.getStatus())) {
             //查询地址信息
-            if(data != null && data.getAddressId() != null && !"".equals(data.getAddressId())){
-                UserAddressBO userAddress = userAddressRoMapper.selectById(data.getAddressId());
-                if(userAddress != null){
-                    StringBuffer address = new StringBuffer();
-                    address.append(userAddress.getProvinceName() + "-");
-                    address.append(userAddress.getCityName() + "-");
-                    address.append(userAddress.getAreaName() + "-");
-                    address.append(userAddress.getDetail());
-                    oe.setConsignee(userAddress.getName());
-                    oe.setContactNumber(userAddress.getPhone());
-                    oe.setShippingAddress(address.toString());
-                }
-            }
-            //List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
             oe.setReason(data.getReason());
             oe.setUserRemark(data.getUserRemark());
             oe.setType(data.getType());
@@ -420,7 +390,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     tradeLogService.insertTradeLog(tradeLog);
 
                                     oe.setStatus("8");
-                                    oe.setAdminRemark(data.getAdminRemark());
+                                    oe.setRefundRemark(data.getRefundRemark());
                                     oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                     orderExchangeMapper.update(oe);
                                     // 插入订单日志-已退款

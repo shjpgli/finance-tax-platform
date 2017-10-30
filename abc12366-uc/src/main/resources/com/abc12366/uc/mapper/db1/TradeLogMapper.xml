@@ -87,11 +87,14 @@
     <update id="update" parameterType="com.abc12366.uc.model.TradeLog">
         UPDATE uc_trade_log
         <set>
-            <if test="tradeNo != null">
-                tradeNo = #{tradeNo},
-            </if>
             <if test="amount != null">
                 amount = #{amount},
+            </if>
+            <if test="aliTrandeNo != null">
+                aliTrandeNo = #{aliTrandeNo},
+            </if>
+            <if test="tradeType != null">
+                tradeType = #{tradeType},
             </if>
             <if test="tradeStatus != null">
                 tradeStatus = #{tradeStatus},
