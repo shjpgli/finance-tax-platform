@@ -26,6 +26,6 @@ public interface ReturnVisitRoMapper {
 
 	List<ReturnVisit> selectList(ReturnVisitBO returnVisitBO);
 
-	List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param);
+	List<ReturnVisitBO> selectStatisList(ReturnVisitBO param);
 
 }

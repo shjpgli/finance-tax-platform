@@ -8,6 +8,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +56,11 @@ public class QuestionAcceptedController {
         param.setUserId(userId);
         List<QuestionAccepted> list = questionAcceptedService.selectList(param);
 
+        PageInfo<QuestionAccepted> pageInfo = new PageInfo<>(list);
+
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -76,9 +79,11 @@ public class QuestionAcceptedController {
         param.setUserId(userId);
         List<QuestionAcceptedBO> list = questionAcceptedService.selectStatisList(param);
 
+        PageInfo<QuestionAcceptedBO> pageInfo = new PageInfo<>(list);
+
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /***
