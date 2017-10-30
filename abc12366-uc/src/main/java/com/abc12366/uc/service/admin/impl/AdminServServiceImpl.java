@@ -97,6 +97,7 @@ public class AdminServServiceImpl implements AdminServService {
             LOGGER.info("更新客服经理信息:{}", jsonStu.toString());
             adminServBo.setLastUpdate(new Date());
 
+        if(adminServBo.getUserId() !=null && !"".equals(adminServBo.getUserId())){
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", adminServBo.getUserId());
             dataMap.put("id", adminServBo.getId());
@@ -105,6 +106,8 @@ public class AdminServServiceImpl implements AdminServService {
                 //同一用户只能创建一位客服经理信息
                 throw new ServiceException(6355);
             }
+        }
+
 
 
         try {
