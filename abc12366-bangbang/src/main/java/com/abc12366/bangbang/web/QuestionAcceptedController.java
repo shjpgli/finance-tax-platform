@@ -35,8 +35,51 @@ public class QuestionAcceptedController {
 
 
     /**
-    *  问题受理 分页查询
-    */
+     * 问题受理 分页查询-后台
+     * @param page  页数
+     * @param size  条数
+     * @param userId    用户ID
+     * @param nsrsbh    纳税人识别号
+     * @param name  名字
+     * @param date  时间
+     * @return
+     */
+    @GetMapping(path = "/admin/list")
+    public ResponseEntity selectAdminList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "userId", required = false) String userId,
+                                     @RequestParam(value = "nsrsbh", required = false) String nsrsbh,
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "date", required = false) String date) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        QuestionAcceptedBO param = new QuestionAcceptedBO();
+        if(date != null && !"".equals(date)) {
+            param.setDate(date);
+        }else{
+            param.setDate(DateUtils.dateYearToString(new Date()));
+        }
+        param.setNsrsbh(nsrsbh);
+        param.setName(name);
+        param.setUserId(userId);
+        List<QuestionAccepted> list = questionAcceptedService.selectAdminList(param);
+
+        PageInfo<QuestionAccepted> pageInfo = new PageInfo<>(list);
+
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     *  问题受理 分页查询
+     * * @param page  页数
+     * @param size  条数
+     * @param userId    用户ID
+     * @param nsrsbh    纳税人识别号
+     * @param name  名字
+     * @param date  时间
+     * @return
+     */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
@@ -64,7 +107,12 @@ public class QuestionAcceptedController {
     }
 
     /**
-     *  问题受理 统计查询
+     * 问题受理 统计查询
+     * @param page  页数
+     * @param size  条数
+     * @param userId    用户ID
+     * @param date  时间
+     * @return
      */
     @GetMapping(path = "/statis")
     public ResponseEntity selectStatisList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,

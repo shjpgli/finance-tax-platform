@@ -58,4 +58,9 @@ public class QuestionAcceptedServiceImpl implements QuestionAcceptedService {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public List<QuestionAccepted> selectAdminList(QuestionAcceptedBO param) {
+        return acceptedRoMapper.selectList(param);
+    }
 }
