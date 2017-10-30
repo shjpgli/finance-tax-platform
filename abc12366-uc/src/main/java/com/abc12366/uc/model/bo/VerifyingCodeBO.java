@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * 手机验证码校验参数实体类
+ *
  * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-06-01
  * Time: 10:40
@@ -53,8 +54,9 @@ public class VerifyingCodeBO implements Serializable {
 
     @Override
     public String toString() {
-        return "LoginVerifyingCodeBO{" +
-                "phone='" + phone + '\'' +
+        return "VerifyingCodeBO{" +
+                "type='" + type + '\'' +
+                ", phone='" + phone + '\'' +
                 ", code='" + code + '\'' +
                 '}';
     }

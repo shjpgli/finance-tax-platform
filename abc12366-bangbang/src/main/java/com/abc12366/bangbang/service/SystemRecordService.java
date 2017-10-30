@@ -37,7 +37,7 @@ public interface SystemRecordService {
     SystemRecordBO selectOne(SystemRecord systemRecord);
 
     /**
-     * 异步新增日志
+     * 异步新增日志；如果规则代码有效，则新增用户经验值
      *
      * @param systemRecordInsertBO 日志BO
      * @return CompletableFuture<SystemRecordBO>

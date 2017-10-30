@@ -12,7 +12,10 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.BaseObject;
+import com.abc12366.uc.model.Token;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.util.RandomNumber;
 import com.abc12366.uc.util.UCConstant;
@@ -34,7 +37,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -50,16 +53,22 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private RestTemplate restTemplate;
+
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private UserRoMapper userRoMapper;
+
     @Autowired
     private AppRoMapper appRoMapper;
+
     @Autowired
     private TokenRoMapper tokenRoMapper;
+
     @Autowired
     private TokenMapper tokenMapper;
+
     @Autowired
     private UserExtendService userExtendService;
 
@@ -84,17 +93,14 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private TodoTaskService todoTaskService;
 
-    @Autowired
-    private PrivilegeItemService privilegeItemService;
-
     /**
-     * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
-     * 3、用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
+     * 新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
+     * 用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
      *
-     * @param registerBO
-     * @return
+     * @param registerBO RegisterBO
+     * @return UserReturnBO
      */
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public UserReturnBO register(RegisterBO registerBO, HttpServletRequest request) {
         LOGGER.info("{}", registerBO);
@@ -183,16 +189,16 @@ public class AuthServiceImpl implements AuthService {
         return userReturnBO;
     }
 
-    //    @Transactional("db1TxManager")
+//    @Transactional("db1TxManager")
     @Override
-    public Map login(LoginBO loginBO, String appToken) throws Exception {
-        LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
+    public Map login(LoginBO loginBO, String accessToken) throws Exception {
+        LOGGER.info("loginBO:{},accessToken:{}", loginBO, accessToken);
 
         //根据用户名查看用户是否存在
         loginBO.setUsernameOrPhone(loginBO.getUsernameOrPhone().trim());
         User user = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (user == null) {
-            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO, accessToken);
             throw new ServiceException(4018);
         }
         //无效用户不允许登录
@@ -219,7 +225,7 @@ public class AuthServiceImpl implements AuthService {
 
         //密码是否输入正确
         if (!user.getPassword().equals(password)) {
-            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), accessToken);
             //记录用户连续输错密码次数
             ContinuePasswordWrong(user.getId());
         }
@@ -227,17 +233,17 @@ public class AuthServiceImpl implements AuthService {
         user.setLastUpdate(new Date());
         int result = userMapper.update(user);
         if (result != 1) {
-            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), accessToken);
             throw new ServiceException(4102);
         }
         //更新用户主表后再更新uc_token表
         App appTemp = new App();
-        appTemp.setAccessToken(appToken);
+        appTemp.setAccessToken(accessToken);
         appTemp.setStatus(true);
         App app = appRoMapper.selectOne(appTemp);
         //如果不存在有效的注册应用，则不允许登录
         if (app == null) {
-            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), accessToken);
             throw new ServiceException(4019);
         }
 
@@ -247,7 +253,8 @@ public class AuthServiceImpl implements AuthService {
         String userToken = Utils.token(Utils.uuid());
         if (queryToken != null) {
             //如果token失效则生成新的token
-            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System.currentTimeMillis()) {
+            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System
+                    .currentTimeMillis()) {
                 userToken = queryToken.getToken();
             } else {
                 queryToken.setToken(userToken);
@@ -268,7 +275,7 @@ public class AuthServiceImpl implements AuthService {
             result02 = tokenMapper.insert(token);
         }
         if (result02 != 1) {
-            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), appToken);
+            LOGGER.warn("登录失败，参数:{}:{}", loginBO.toString(), accessToken);
             throw new ServiceException(4021);
         }
 
@@ -313,7 +320,7 @@ public class AuthServiceImpl implements AuthService {
     //@Transactional("db1TxManager")
     @Override
     public Map loginJs(LoginBO loginBO, String appToken) throws Exception {
-        LOGGER.info("loginBO:{},appToken:{}", loginBO, appToken);
+        LOGGER.info("loginBO:{},accessToken:{}", loginBO, appToken);
 
         //根据用户名查看用户是否存在
         loginBO.setUsernameOrPhone(loginBO.getUsernameOrPhone().trim());
@@ -372,7 +379,8 @@ public class AuthServiceImpl implements AuthService {
         String userToken = Utils.token(Utils.uuid());
         if (queryToken != null) {
             //如果token失效则生成新的token
-            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System.currentTimeMillis()) {
+            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System
+                    .currentTimeMillis()) {
                 userToken = queryToken.getToken();
             } else {
                 queryToken.setToken(userToken);
@@ -494,11 +502,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String refresh(String oldToken) {
-        return null;
-    }
-
-    @Override
     public boolean isAuthentication(String userToken, HttpServletRequest request) {
         Token token = tokenRoMapper.isAuthentication(userToken);
         if (token == null) {
@@ -585,7 +588,8 @@ public class AuthServiceImpl implements AuthService {
         //加入uc_token表有记录（根据userId和appId），则更新，没有则新增
         if (queryToken != null) {
             //如果token失效则生成新的token
-            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System.currentTimeMillis()) {
+            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System
+                    .currentTimeMillis()) {
                 userToken = queryToken.getToken();
             } else {
                 queryToken.setToken(userToken);
@@ -640,7 +644,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) throws IOException {
+    public boolean verifyCode(VerifyingCodeBO loginVerifyingCodeBO, HttpServletRequest request) {
         //不变参数
         String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/verify";
 

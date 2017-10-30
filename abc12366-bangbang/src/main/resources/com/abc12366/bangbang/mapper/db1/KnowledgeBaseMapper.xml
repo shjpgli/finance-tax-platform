@@ -67,7 +67,7 @@
     <!-- 财税网首页热点问题查询 -->
     <select id="hotUnClassifyList" resultType="com.abc12366.bangbang.model.KnowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
 
-        SELECT a.id, a.subject FROM bb_knowledge_base a
+        SELECT a.id, a.subject,a.createTime FROM bb_knowledge_base a
         WHERE
         TYPE = #{KnowledgeType} AND recommend = #{KnowledgeRecommend}
         AND STATUS = 1 AND isOpen = 1 AND (activeTime IS NULL OR activeTime > NOW())
