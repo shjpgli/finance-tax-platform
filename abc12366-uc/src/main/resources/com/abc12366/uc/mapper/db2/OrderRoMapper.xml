@@ -648,11 +648,16 @@
 
 
     <!-- 前台查询（根据条件查询） -->
-    <select id="selectOrderList" resultMap="orderBOListResultMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
+    <select id="selectOrderList" resultMap="orderBOMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
-        <include refid="Base_Column_BO_List"/>
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
+        u.id as uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,
+        t.orderNo as orNo, t.goodsPrice,	t.num,	t.dealPrice,	t.name,	t.categoryId,	t.category,	t.weight,	t.createTime as cTime, t.lastUpdate as lUpdate,	t.productId,	t.goodsId,
+        t.specInfo,	t.isReturn,	t.isExchange,	t.imageUrl,	t.goodsType,	t.browseUrl,	t.tradingChannels
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
+        LEFT JOIN  uc_order_product op t on t.orderNo = o.orderNo
         <where>
             1 = 1
             <if test=" user.id != null and user.id != '' ">
@@ -669,6 +674,10 @@
             </if>
             <if test=" isInvoice != null ">
                 and o.isInvoice = #{isInvoice}
+            </if>
+
+            <if test=" isReturn != null ">
+                and (t.isReturn = '0' or t.isExchange = '0')
             </if>
             <if test="startTime != null">
                 <![CDATA[
@@ -698,8 +707,7 @@
 
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
-        LEFT JOIN (select DISTINCT op.orderNo,	op.goodsPrice,	op.num,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,	op.productId,	op.goodsId,
-        op.specInfo,	op.isReturn,	op.isExchange,	op.imageUrl,	op.goodsType,	op.browseUrl,	op.tradingChannels from uc_order_product op ) t on t.orderNo = o.orderNo
+        LEFT JOIN  uc_order_product op t on t.orderNo = o.orderNo
         <where>
             1 = 1
             <if test=" user.id != null and user.id != '' ">
@@ -778,9 +786,9 @@
         SELECT
         o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
         o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
-        u.id as uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,u.level,insert(u.realName, 4, 4, '****') phone
+        u.id as uId,u.username as uName,u.phone,u.vipLevel,u.nickname,u.level,u.realName
         FROM uc_order o
-        LEFT JOIN (select r.id,r.username,insert(r.phone, 4, 4, '****') as phone,r.vipLevel,r.nickname,insert(e.realName, 1, 1, '*') as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
+        LEFT JOIN (select r.id,r.username,r.phone,r.vipLevel,r.nickname,e.realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
         left join uc_uvip_level l on l.levelCode = r.vipLevel
         ) u ON u.id = o.userId
         left join uc_uvip_level v on v.levelCode = o.nowVipLevel
@@ -788,7 +796,7 @@
         <where>
 
             <![CDATA[
-                o.orderStatus != '7'
+                o.orderStatus != 7 and op.tradingChannels = 'CSKT'
               ]]>
             <if test=" user.nickname != null and user.nickname != '' ">
                 and u.nickname LIKE CONCAT('%',#{user.nickname},'%')

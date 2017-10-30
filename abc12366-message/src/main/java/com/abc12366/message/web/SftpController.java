@@ -72,7 +72,6 @@ public class SftpController {
      */
     @PostMapping(path = "/upload")
     public ResponseEntity uploadBase64(@Valid @RequestBody FjListBo fjListBo) {
-        LOGGER.info("{}", fjListBo);
         SFTPUtil sf = new SFTPUtil();
         String host = SpringCtxHolder.getProperty("sftp_host");
         int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));
@@ -88,8 +87,6 @@ public class SftpController {
             ChannelSftp sftp = sf.connect(host, port, username, password);
             fileName = fjBo.getFileName();
             fileContent = fjBo.getFileContent();
-            LOGGER.info("fileName:{}", fileName);
-            LOGGER.info("fileContent:{}", fileContent);
             Map<String, String> map = sf.uploadByBase64(directory, fileContent, fileName, sftp);
             dataList.add(map);
             sftp.disconnect();

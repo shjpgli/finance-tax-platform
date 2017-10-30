@@ -27,6 +27,11 @@ public class ExchangeRefundBO {
     @Length(max = 500)
     private String adminRemark;
 
+    // 备注
+    //@NotEmpty
+    @Length(max = 500)
+    private String refundRemark;
+
     public String getId() {
         return id;
     }
@@ -57,6 +62,14 @@ public class ExchangeRefundBO {
 
     public void setAdminRemark(String adminRemark) {
         this.adminRemark = adminRemark;
+    }
+
+    public String getRefundRemark() {
+        return refundRemark;
+    }
+
+    public void setRefundRemark(String refundRemark) {
+        this.refundRemark = refundRemark;
     }
 
     @Override

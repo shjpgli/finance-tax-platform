@@ -195,9 +195,10 @@ public class SFTPUtil {
             BASE64Decoder decoder = new BASE64Decoder();
             //Base64解码
             byte[] buffer = decoder.decodeBuffer(content);
-            LOGGER.info("buffer:{}", buffer.length);
             String filePath1 = "/" + directory + "/" + storeName;
             outputStream.write(buffer);
+            outputStream.flush();
+            outputStream.close();
             map.put("fileName", fileName);
             map.put("storeName", storeName);
             map.put("filePath", filePath1);

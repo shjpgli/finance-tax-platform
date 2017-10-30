@@ -108,6 +108,7 @@ public class OrderController {
                                               @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                               @RequestParam(value = "status", required = true) String status,
                                               @RequestParam(value = "userId", required = true) String userId,
+                                              @RequestParam(value = "isReturn", required = true) Boolean isReturn,
                                               @RequestParam(value = "isInvoice", required = false) Boolean isInvoice,
                                               @RequestParam(value = "startTime", required = false) String startTime,
                                               @RequestParam(value = "endTime", required = false) String endTime) {
@@ -123,7 +124,10 @@ public class OrderController {
         order.setStatus(data);
         order.setTradeMethod(tradeMethod);
         order.setIsInvoice(isInvoice);
-
+        //查询可退还列表,true：查，false：不查
+        if(isReturn != null && isReturn){
+            order.setIsReturn(isReturn);
+        }
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DataUtils.StrToDate(startTime));
         }
@@ -223,6 +227,44 @@ public class OrderController {
         return (orderBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 课程订单查询
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param goodsId   商品ID
+     * @param nickname  用户昵称
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 订单列表
+     */
+    @GetMapping(path = "/curriculum")
+    public ResponseEntity selectCurriculumOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                    @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                    @RequestParam(value = "goodsId", required = true) String goodsId,
+                                                    @RequestParam(value = "nickname", required = false) String nickname,
+                                                    @RequestParam(value = "startTime", required = false) String startTime,
+                                                    @RequestParam(value = "endTime", required = false) String endTime) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        OrderBO orderBO = new OrderBO();
+        UserBO user = new UserBO();
+        user.setNickname(nickname);
+        orderBO.setUser(user);
+        orderBO.setGoodsId(goodsId);
+        if (startTime != null && !"".equals(startTime)) {
+            orderBO.setStartTime(DataUtils.StrToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            orderBO.setEndTime(DataUtils.StrToDate(endTime));
+        }
+
+        List<OrderBO> orderList = orderService.selectCurriculumOrderList(orderBO, pageNum, pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
+        LOGGER.info("{}", orderList);
+        return (orderList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
 

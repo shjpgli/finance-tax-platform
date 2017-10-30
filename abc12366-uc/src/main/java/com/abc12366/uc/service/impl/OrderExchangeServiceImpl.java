@@ -101,23 +101,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         exchangeCheck(ra);
         OrderExchange data = new OrderExchange();
         BeanUtils.copyProperties(ra, data);
-        //查询地址信息
-        if(ra != null && ra.getAddressId() != null && !"".equals(ra.getAddressId())){
-            UserAddressBO userAddress = userAddressRoMapper.selectById(ra.getAddressId());
-            if(userAddress != null){
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
-                data.setConsignee(userAddress.getName());
-                data.setContactNumber(userAddress.getPhone());
-                data.setShippingAddress(address.toString());
-            }
-        }
-
         List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
-        //OrderExchange orderExchange = orderExchangeRoMapper.selectByOrderNo(data.getOrderNo());
         if (dataList != null && dataList.size() > 0) {
             throw new ServiceException(4950);
         } else {
@@ -197,20 +181,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
         if (oe != null && "5".equals(oe.getStatus())) {
             //查询地址信息
-            if(data != null && data.getAddressId() != null && !"".equals(data.getAddressId())){
-                UserAddressBO userAddress = userAddressRoMapper.selectById(data.getAddressId());
-                if(userAddress != null){
-                    StringBuffer address = new StringBuffer();
-                    address.append(userAddress.getProvinceName() + "-");
-                    address.append(userAddress.getCityName() + "-");
-                    address.append(userAddress.getAreaName() + "-");
-                    address.append(userAddress.getDetail());
-                    oe.setConsignee(userAddress.getName());
-                    oe.setContactNumber(userAddress.getPhone());
-                    oe.setShippingAddress(address.toString());
-                }
-            }
-            //List<OrderExchange> dataList = selectUndoneList(data.getOrderNo());
             oe.setReason(data.getReason());
             oe.setUserRemark(data.getUserRemark());
             oe.setType(data.getType());
@@ -420,7 +390,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     tradeLogService.insertTradeLog(tradeLog);
 
                                     oe.setStatus("8");
-                                    oe.setAdminRemark(data.getAdminRemark());
+                                    oe.setRefundRemark(data.getRefundRemark());
                                     oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                     orderExchangeMapper.update(oe);
                                     // 插入订单日志-已退款
@@ -435,6 +405,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                                         throw new ServiceException(4102,"订单信息查询失败");
                                     }
+                                    //将订单状态改成已结束
+                                    order.setOrderStatus("7");
+                                    orderMapper.update(order);
                                     //服务类型：1-换货 2-退货
                                     Message message = new Message();
                                     message.setBusinessId(oe.getOrderNo());
@@ -461,7 +434,19 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(4956);
             }
         }else if(order != null && "POINTS".equals(order.getTradeMethod())){
+            //修改订单状态
+            oe.setStatus("8");
+            oe.setRefundRemark(data.getRefundRemark());
+            oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+            orderExchangeMapper.update(oe);
+
+            //将订单状态改成已结束
+            order.setOrderStatus("7");
+            orderMapper.update(order);
+
+            //退积分
             insertPoints(order);
+
         }else{
             throw new ServiceException(4957);
         }
