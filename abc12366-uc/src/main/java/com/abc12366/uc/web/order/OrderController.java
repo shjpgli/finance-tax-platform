@@ -225,6 +225,44 @@ public class OrderController {
                 ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
     }
 
+    /**
+     * 课程订单查询
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param goodsId   商品ID
+     * @param nickname  用户昵称
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 订单列表
+     */
+    @GetMapping(path = "/curriculum")
+    public ResponseEntity selectCurriculumOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                    @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                                    @RequestParam(value = "goodsId", required = true) String goodsId,
+                                                    @RequestParam(value = "nickname", required = false) String nickname,
+                                                    @RequestParam(value = "startTime", required = false) String startTime,
+                                                    @RequestParam(value = "endTime", required = false) String endTime) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        OrderBO orderBO = new OrderBO();
+        UserBO user = new UserBO();
+        user.setNickname(nickname);
+        orderBO.setUser(user);
+        orderBO.setGoodsId(goodsId);
+        if (startTime != null && !"".equals(startTime)) {
+            orderBO.setStartTime(DataUtils.StrToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            orderBO.setEndTime(DataUtils.StrToDate(endTime));
+        }
+
+        List<OrderBO> orderList = orderService.selectCurriculumOrderList(orderBO, pageNum, pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
+        LOGGER.info("{}", orderList);
+        return (orderList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
 
     /**
      * 查询订单详情-后台

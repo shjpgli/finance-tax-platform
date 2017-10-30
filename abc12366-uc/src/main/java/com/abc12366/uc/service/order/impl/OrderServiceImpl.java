@@ -267,22 +267,6 @@ public class OrderServiceImpl implements OrderService {
                 }
 
                 insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户新增订单", "0");
-                //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
-//                String trading = orderProductBO.getTradingChannels();
-//                if ("RMB".equals(order.getTradeMethod())) {
-//                    if ("HYCZ".equals(trading)) {
-//                        //会员充值
-//                        operationMoneyRechargeOrder(order, orderProductBO,"2");
-//                        insertOrderLog(order.getUserId(), order.getOrderNo(), "2", "用户新增订单","0");
-//                    }else{
-//                        operationMoneyServiceOrder(orderBO, order, orderProductBO, "2");
-//                        insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
-//                    }
-//                } else if ("POINTS".equals(orderBO.getTradeMethod())) {
-//                    operationPointsOrder(orderBO, order, orderProductBO,"2");
-//                    insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "2", "用户新增订单","0");
-//                }
-
             }
         }
         //新增交易流水号
@@ -693,11 +677,8 @@ public class OrderServiceImpl implements OrderService {
                         //支付状态，1：支付中，2：支付成功，3：支付失败，
                         if (isPay == 1) {
                             order.setOrderStatus("3");
-                            int update = orderMapper.update(order);
-                            if (update != 1) {
-                                LOGGER.warn("修改失败，参数：{}", order);
-                                throw new ServiceException(4102);
-                            }
+                            //修改订单状态
+                            updOrder(order);
                             insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
                             //判断是否需要查询产品库存信息
@@ -705,13 +686,15 @@ public class OrderServiceImpl implements OrderService {
                             if (trading.equals("UCSC")) {
                                 updateStock(orderBO, orderProductBO);
                                 order.setOrderStatus("4");
-                                orderMapper.update(order);
+                                //修改订单状态
+                                updOrder(order);
 
                                 insertPoints(orderBO);
                                 insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功","0");
                             } else if (trading.equals("HYCZ")) {
                                 order.setOrderStatus("6");
-                                orderMapper.update(order);
+                                //修改订单状态
+                                updOrder(order);
 
                                 insertPoints(orderBO);
                                 LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
@@ -725,7 +708,8 @@ public class OrderServiceImpl implements OrderService {
                                 sendMemberMsg(orderProductBO, order,request);
                             } else if (trading.equals("CSKT")) {
                                 order.setOrderStatus("6");
-                                orderMapper.update(order);
+                                //修改订单状态
+                                updOrder(order);
 
                                 insertPoints(orderBO);
                                 insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
@@ -733,7 +717,8 @@ public class OrderServiceImpl implements OrderService {
                                 sendPointsMsg(orderProductBO, order,request);
                             }else if (trading.equals("JFCZ")) {
                                 order.setOrderStatus("6");
-                                orderMapper.update(order);
+                                //修改订单状态
+                                updOrder(order);
 
                                 insertPoints(orderBO);
                                 insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
@@ -741,23 +726,26 @@ public class OrderServiceImpl implements OrderService {
 //                        }
                         } else if (isPay == 3) {
                             order.setOrderStatus("2");
-                            orderMapper.update(order);
+                            //修改订单状态
+                            updOrder(order);
                             insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
+                        order.setPayMethod(orderPayBO.getPayMethod());
+
                         //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
                         //判断是否需要查询产品库存信息
                         if (trading.equals("UCSC")) {
                             updateStock(orderBO, orderProductBO);
                             order.setOrderStatus("4");
-                            orderMapper.update(order);
-
+                            //修改订单状态
+                            updOrder(order);
                             insertDeductPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功","0");
+                            insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功", "0");
                         } else if (trading.equals("HYCZ")) {
                             order.setOrderStatus("6");
-                            orderMapper.update(order);
-
+                            //修改订单状态
+                            updOrder(order);
                             insertDeductPoints(orderBO);
                             LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
                             userService.updateUserVipInfo(orderBO.getUserId(), orderProductBO.getSpecInfo());
@@ -769,15 +757,23 @@ public class OrderServiceImpl implements OrderService {
                             sendMemberMsg(orderProductBO, order,request);
                         }else if (trading.equals("CSKT")) {
                             order.setOrderStatus("6");
-                            orderMapper.update(order);
-
+                            //修改订单状态
+                            updOrder(order);
                             insertDeductPoints(orderBO);
                             insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
                         }
-                        insertTradeLog(orderBO);
+                        insertTradeLog(order,tradeNo);
                     }
                 }
             }
+        }
+    }
+
+    private void updOrder(Order order) {
+        int update = orderMapper.update(order);
+        if(update != 1){
+            LOGGER.warn("修改失败，参数：{}", order);
+            throw new ServiceException(4102);
         }
     }
 
@@ -867,23 +863,20 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 插入交易流水记录
      */
-    private void insertTradeLog(OrderBO orderBO) {
+    private void insertTradeLog(Order order,String tradeNo) {
         //加入交易日志
-        TradeLog data = tradeLogRoMapper.selectByOrderNo(orderBO.getOrderNo());
-        if (data != null) {
             TradeLog tradeLog = new TradeLog();
-            tradeLog.setTradeNo(data.getTradeNo());
-            tradeLog.setTradeNo(orderBO.getOrderNo());
-            tradeLog.setAliTrandeNo(orderBO.getOrderNo());
+            tradeLog.setTradeNo(tradeNo);
+            tradeLog.setAliTrandeNo(order.getOrderNo());
             tradeLog.setTradeStatus("1");
-            tradeLog.setTradeType("2");
-            tradeLog.setAmount(Double.parseDouble("-" + orderBO.getTotalPrice()));
+            tradeLog.setTradeType("1");
+            tradeLog.setAmount(Double.parseDouble("-" + order.getTotalPrice()));
             Timestamp now = new Timestamp(new Date().getTime());
             tradeLog.setTradeTime(now);
             tradeLog.setCreateTime(now);
             tradeLog.setLastUpdate(now);
+            tradeLog.setPayMethod(order.getPayMethod());
             tradeLogMapper.update(tradeLog);
-        }
     }
 
     public void insertVipLog(String orderNo, String userId, String memberLevel) {
@@ -1023,11 +1016,8 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus("5");
             order.setExpressCompId(expressCompId);
             order.setLastUpdate(new Date());
-            int upd = orderMapper.update(order);
-            if (upd != 1) {
-                LOGGER.warn("修改失败，参数：{}", order);
-                throw new ServiceException(4102);
-            }
+            //修改订单状态
+            updOrder(order);
             insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货", "0");
 
             //发送消息
@@ -1053,11 +1043,8 @@ public class OrderServiceImpl implements OrderService {
         orderOperationBO.setOrderStatus("5");
         Order order = new Order();
         BeanUtils.copyProperties(orderOperationBO, order);
-        int upd = orderMapper.update(order);
-        if (upd != 1) {
-            LOGGER.warn("修改失败，参数：{}", order);
-            throw new ServiceException(4102);
-        }
+        //修改订单状态
+        updOrder(order);
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(), "0");
         //发送消息
         ExpressComp expressComp = null;
@@ -1085,11 +1072,8 @@ public class OrderServiceImpl implements OrderService {
         orderOperationBO.setOrderStatus("6");
         Order order = new Order();
         BeanUtils.copyProperties(orderOperationBO, order);
-        int upd = orderMapper.update(order);
-        if (upd != 1) {
-            LOGGER.warn("修改失败，参数：{}", order);
-            throw new ServiceException(4102);
-        }
+        //修改订单状态
+        updOrder(order);
     }
 
     @Transactional("db1TxManager")
@@ -1130,11 +1114,8 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNo(orderUpdateBO.getOrderNo());
         order.setUserId(orderUpdateBO.getUserId());
         order.setRecommendUser(orderUpdateBO.getRecommendUser());
-        int update = orderMapper.update(order);
-        if (update != 1) {
-            LOGGER.warn("修改失败，参数：{}", order);
-            throw new ServiceException(4102);
-        }
+        //修改订单状态
+        updOrder(order);
         return orderUpdateBO;
     }
 
@@ -1142,11 +1123,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void confirmOrder(Order order) {
         order.setOrderStatus("6");
-        int update = orderMapper.update(order);
-        if (update != 1) {
-            LOGGER.warn("修改失败，参数：{}", order);
-            throw new ServiceException(4102);
-        }
+        //修改订单状态
+        updOrder(order);
         insertOrderLog(order.getUserId(), order.getOrderNo(), "6", "用户确认收货", "0");
     }
 

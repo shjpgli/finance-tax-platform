@@ -30,7 +30,14 @@ public class ExchangeApplicationBO {
     @Length(min = 1, max = 1)
     private String type;
 
-    private String addressId;
+    /**收件人**/
+    private String consignee;
+
+    /**联系电话**/
+    private String contactNumber;
+
+    /**收件地址**/
+    private String shippingAddress;
 
     public String getId() {
         return id;
@@ -72,6 +79,30 @@ public class ExchangeApplicationBO {
         this.type = type;
     }
 
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
     @Override
     public String toString() {
         return "ExchangeApplicationBO{" +
@@ -81,13 +112,5 @@ public class ExchangeApplicationBO {
                 ", userRemark='" + userRemark + '\'' +
                 ", type='" + type + '\'' +
                 '}';
-    }
-
-    public String getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(String addressId) {
-        this.addressId = addressId;
     }
 }
