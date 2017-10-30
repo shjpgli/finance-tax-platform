@@ -20,6 +20,10 @@ public class VipLevel {
     private Double salePrice;
     private Double sendPoints;
     private String imgUrl;
+    /**
+     * 积分价格
+     */
+    private Double pointsPrice;
     
     
     public Double getCostPrice() {
@@ -121,4 +125,11 @@ public class VipLevel {
         this.levelCode = levelCode;
     }
 
+    public Double getPointsPrice() {
+        return pointsPrice;
+    }
+
+    public void setPointsPrice(Double pointsPrice) {
+        this.pointsPrice = pointsPrice;
+    }
 }

@@ -20,6 +20,10 @@ public class VipLevelUpdateBO {
     private Double salePrice;
     private Double sendPoints;
     private String imgUrl;
+    /**
+     * 积分价格
+     */
+    private Double pointsPrice;
 
     public Double getCostPrice() {
 		return costPrice;
@@ -94,5 +98,13 @@ public class VipLevelUpdateBO {
 
     public void setLevelCode(String levelCode) {
         this.levelCode = levelCode;
+    }
+
+    public Double getPointsPrice() {
+        return pointsPrice;
+    }
+
+    public void setPointsPrice(Double pointsPrice) {
+        this.pointsPrice = pointsPrice;
     }
 }
