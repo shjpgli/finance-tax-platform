@@ -108,6 +108,7 @@ public class OrderController {
                                               @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                               @RequestParam(value = "status", required = true) String status,
                                               @RequestParam(value = "userId", required = true) String userId,
+                                              @RequestParam(value = "isReturn", required = true) Boolean isReturn,
                                               @RequestParam(value = "isInvoice", required = false) Boolean isInvoice,
                                               @RequestParam(value = "startTime", required = false) String startTime,
                                               @RequestParam(value = "endTime", required = false) String endTime) {
@@ -123,7 +124,10 @@ public class OrderController {
         order.setStatus(data);
         order.setTradeMethod(tradeMethod);
         order.setIsInvoice(isInvoice);
-
+        //查询可退还列表,true：查，false：不查
+        if(isReturn != null && isReturn){
+            order.setIsReturn(isReturn);
+        }
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DataUtils.StrToDate(startTime));
         }
