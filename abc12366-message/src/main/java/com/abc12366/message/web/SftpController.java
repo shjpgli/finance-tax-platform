@@ -88,6 +88,8 @@ public class SftpController {
             ChannelSftp sftp = sf.connect(host, port, username, password);
             fileName = fjBo.getFileName();
             fileContent = fjBo.getFileContent();
+            LOGGER.info("fileName:{}", fileName);
+            LOGGER.info("fileContent:{}", fileContent);
             Map<String, String> map = sf.uploadByBase64(directory, fileContent, fileName, sftp);
             dataList.add(map);
             sftp.disconnect();
