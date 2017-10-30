@@ -27,4 +27,11 @@ public interface QuestionDisableIpRoMapper {
      **/
     List<QuestionDisableIpBo> selectList(Map map);
 
+    /**
+     *
+     *
+     *查询IP是否被禁止
+     **/
+    int selectIpCnt(@Param("ip") String ip);
+
 }

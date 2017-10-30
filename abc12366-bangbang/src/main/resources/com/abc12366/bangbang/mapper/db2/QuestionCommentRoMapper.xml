@@ -56,7 +56,7 @@
         SELECT
         count(id)
         FROM bb_question_comment
-        WHERE a.status = '0' and answerId = #{id}
+        WHERE status = '0' and answerId = #{id}
     </select>
 
 

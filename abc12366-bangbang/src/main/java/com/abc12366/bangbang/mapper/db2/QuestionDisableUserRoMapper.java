@@ -28,4 +28,11 @@ public interface QuestionDisableUserRoMapper {
      **/
     List<QuestionDisableUserBo> selectList(Map map);
 
+    /**
+     *
+     *
+     *查询用户是否被禁言
+     **/
+    int selectUserCnt(@Param("userId") String userId);
+
 }
