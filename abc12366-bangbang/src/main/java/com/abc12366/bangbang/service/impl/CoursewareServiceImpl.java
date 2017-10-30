@@ -131,17 +131,6 @@ public class CoursewareServiceImpl implements CoursewareService {
             }
         }
 
-        //查询用户是否已购买课程
-        if(flag == 0){
-            Map<String, Object> dataMap1 = new HashMap<>();
-            dataMap1.put("coursewareId", coursewareId);
-            dataMap1.put("userId", userId);
-            int cnt4 = coursewareRoMapper.selectIsBuy(dataMap1);
-            if(cnt4 > 0){
-                flag = 1;
-            }
-        }
-
 
         if(flag == 0){
             //课程收费，请购买课程
