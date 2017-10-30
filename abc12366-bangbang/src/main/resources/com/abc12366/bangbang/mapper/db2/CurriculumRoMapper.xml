@@ -61,6 +61,7 @@
     <select id="selectListNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
         curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,
+        (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1
@@ -83,6 +84,7 @@
     <select id="selectListVIP" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
         curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1
@@ -106,6 +108,7 @@
     <select id="selectListWatch" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
         curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1
@@ -128,6 +131,7 @@
     <select id="selectRecommend" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.lang.String">
         SELECT
         curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum c
         WHERE 1=1 and status = 1 and recommend = 'recommend'
@@ -200,7 +204,8 @@
     <!-- 查询相关课程 -->
     <select id="selectListxgNew" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.lang.String">
         SELECT
-        curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro
+        curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,issueTime,isFree,freeMember,curriculumidIntro,
+        (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree
         FROM bb_curriculum
         WHERE 1=1 and status = 1 and curriculumId != #{curriculumId}
             AND curriculumId in (select curriculumId from bb_curriculum_label where labelId in(select labelId from bb_curriculum_label where curriculumId = #{curriculumId}))
@@ -258,6 +263,7 @@
     <select id="selectListCollect" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
         col.curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,collectTime,issueTime,isFree,freeMember,curriculumidIntro,
+        (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum_collect col left join bb_curriculum c on col.curriculumId = c.curriculumId
         WHERE 1=1

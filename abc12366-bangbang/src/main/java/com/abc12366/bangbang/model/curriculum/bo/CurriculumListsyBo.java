@@ -41,6 +41,9 @@ public class CurriculumListsyBo implements Serializable {
 	/**课程收费**tinyint(1)**/
 	private Integer isFree;
 
+    /**会员是否免费**tinyint(1)**/
+    private Integer isVipFree;
+
     /**课程简介**longtext**/
     private String curriculumidIntro;
 
@@ -142,5 +145,13 @@ public class CurriculumListsyBo implements Serializable {
 
     public void setSellPrice(Double sellPrice) {
         this.sellPrice = sellPrice;
+    }
+
+    public Integer getIsVipFree() {
+        return isVipFree;
+    }
+
+    public void setIsVipFree(Integer isVipFree) {
+        this.isVipFree = isVipFree;
     }
 }
