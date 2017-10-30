@@ -59,6 +59,7 @@ public class AdminController {
         admin.setNickname(nickname);
         admin.setStatus(status);
         admin.setOrganizationId(orgId);
+        admin.setPhone(phone);
         LOGGER.info("{}", admin);
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
