@@ -178,6 +178,9 @@ public class OrderBO implements Serializable {
     //会员名称
     private String nowVipLevelName;
 
+    //条件：是否退还列表
+    private Boolean isReturn;
+
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
@@ -480,5 +483,13 @@ public class OrderBO implements Serializable {
 
     public void setTradeBO(TradeBO tradeBO) {
         this.tradeBO = tradeBO;
+    }
+
+    public Boolean getIsReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(Boolean isReturn) {
+        this.isReturn = isReturn;
     }
 }

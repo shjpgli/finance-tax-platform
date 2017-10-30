@@ -103,9 +103,15 @@ public class TodoTaskController {
      * 用户做任务接口：做任务并且计算奖励，用于用户业务操作任务埋点，
      *
      */
-    @PostMapping(path = "/do/award/{userId}/{sysTaskId}")
-    public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
-        todoTaskService.doTask(userId, sysTaskId);
+//    @PostMapping(path = "/do/award/{userId}/{sysTaskId}")
+//    public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
+//        todoTaskService.doTask(userId, sysTaskId);
+//        return ResponseEntity.ok(Utils.kv());
+//    }
+    @PostMapping(path = "/do/award/{userId}/{taskCode}")
+    public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("taskCode") String taskCode) {
+        LOGGER.info("用户做任务,用户ID：{}，任务编码：{}", userId, taskCode);
+        todoTaskService.doTask(userId, taskCode);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -113,9 +119,14 @@ public class TodoTaskController {
      * 用户做任务接口：做任务不计算奖励，用于用户业务操作任务埋点，多用于奖励规则比较复杂需要单做的业务
      *
      */
-    @PostMapping(path = "/do/noaward/{userId}/{sysTaskId}")
-    public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
-        todoTaskService.doTaskWithouComputeAward(userId, sysTaskId);
+//    @PostMapping(path = "/do/noaward/{userId}/{sysTaskId}")
+//    public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
+//        todoTaskService.doTaskWithouComputeAward(userId, sysTaskId);
+//        return ResponseEntity.ok(Utils.kv());
+//    }
+    @PostMapping(path = "/do/noaward/{userId}/{taskCode}")
+    public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("taskCode") String taskCode) {
+        todoTaskService.doTaskWithouComputeAward(userId, taskCode);
         return ResponseEntity.ok(Utils.kv());
     }
 }

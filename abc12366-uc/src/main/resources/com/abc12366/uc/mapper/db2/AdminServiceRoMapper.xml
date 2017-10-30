@@ -24,4 +24,18 @@
         WHERE 1=1
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+          count(*)
+        FROM uc_admin_service
+        WHERE 1=1
+        <if test="userId != null and userId!=''">
+            AND userId = #{userId}
+        </if>
+        <if test="id != null and id!=''">
+            AND id != #{id}
+        </if>
+    </select>
+
 </mapper>

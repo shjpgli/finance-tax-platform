@@ -183,4 +183,10 @@ public class PointsRuleServiceImpl implements PointsRuleService {
             throw new ServiceException(4622);
         }
     }
+
+    @Override
+    public PointsRuleBO selectValidOneByCode(String ruleCode) {
+        LOGGER.info("根据编码查询积分规则，编码：{}", ruleCode);
+        return uPointRuleRoMapper.selectValidOneByCode(ruleCode);
+    }
 }

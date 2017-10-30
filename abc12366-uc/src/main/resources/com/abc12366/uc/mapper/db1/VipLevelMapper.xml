@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.VipLevelMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.VipLevel">
         insert into uc_uvip_level(id,level,factor,status,lastUpdate,createTime,levelCode,costPrice,marketPrice,salePrice,sendPoints,imgUrl)
-        values(#{id}, #{level}, #{factor}, #{status}, #{lastUpdate}, #{createTime}, #{levelCode},#{costPrice},#{marketPrice},#{salePrice},#{sendPoints},#{imgUrl})
+        values(#{id}, #{level}, #{factor}, #{status}, #{lastUpdate}, #{createTime}, #{levelCode},#{costPrice},#{marketPrice},#{salePrice},#{sendPoints},#{imgUrl},#{pointsPrice})
     </insert>
 
     <update id="update" parameterType="com.abc12366.uc.model.VipLevel">
@@ -19,6 +19,7 @@
             <if test="marketPrice!=null">marketPrice = #{marketPrice},</if>
             <if test="salePrice!=null">salePrice = #{salePrice},</if>
             <if test="sendPoints!=null">sendPoints = #{sendPoints},</if>
+            <if test="sendPoints!=null">pointsPrice = #{pointsPrice},</if>
             <if test="imgUrl!=null">imgUrl = #{imgUrl}</if>
         </set>
         where id=#{id}

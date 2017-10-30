@@ -183,4 +183,10 @@ public class SysTaskServiceImpl implements SysTaskService {
     public List<SysTaskBO> selectTimeLimitedListByType(String type) {
         return sysTaskRoMapper.selectTimeLimitedListByType(type);
     }
+
+    @Override
+    public SysTaskBO selectValidOneByCode(String taskCode) {
+        LOGGER.info("根据编码查询一条系统任务，编码：{}", taskCode);
+        return sysTaskRoMapper.selectValidOneByCode(taskCode);
+    }
 }

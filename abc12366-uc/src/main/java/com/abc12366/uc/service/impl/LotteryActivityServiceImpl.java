@@ -122,7 +122,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
 
         PointCalculateBO pointCalculateBO = new PointCalculateBO();
         pointCalculateBO.setUserId(userId);
-        pointCalculateBO.setRuleId(UCConstant.POINT_RULE_LOTTERY_ID);
+        pointCalculateBO.setRuleCode(UCConstant.POINT_RULE_LOTTERY_CODE);
         Integer point = pointsService.calculate(pointCalculateBO);
         Date date = new Date();
         String remake = "";

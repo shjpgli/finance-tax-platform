@@ -30,5 +30,12 @@ public interface AdminServiceRoMapper {
      **/
     List<AdminServiceBo> selectList(Map<String, Object> map);
 
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    int selectCnt(Map<String, Object> map);
+
 
 }

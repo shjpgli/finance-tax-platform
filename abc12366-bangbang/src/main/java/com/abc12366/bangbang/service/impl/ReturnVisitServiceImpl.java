@@ -70,7 +70,7 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
     }
 
     @Override
-    public List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param) {
+    public List<ReturnVisitBO> selectStatisList(ReturnVisitBO param) {
         UCUserBO ucUserBO = questionAcceptedRoMapper.selectUCUser(param.getUserId());
         if(ucUserBO != null && ucUserBO.getPhone() != null && !"".equals(ucUserBO.getPhone())){
             param.setPhone(ucUserBO.getPhone());

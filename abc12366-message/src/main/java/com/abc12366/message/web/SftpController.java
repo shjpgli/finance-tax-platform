@@ -72,7 +72,6 @@ public class SftpController {
      */
     @PostMapping(path = "/upload")
     public ResponseEntity uploadBase64(@Valid @RequestBody FjListBo fjListBo) {
-        LOGGER.info("{}", fjListBo);
         SFTPUtil sf = new SFTPUtil();
         String host = SpringCtxHolder.getProperty("sftp_host");
         int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));

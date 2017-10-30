@@ -6,13 +6,13 @@
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
         id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
-        count,skipURL,ruleId,awardType,remark,dateType
+        count,skipURL,ruleId,awardType,remark,dateType,code
     </sql>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.util.Map">
         SELECT
         id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode
-        ,count,skipURL,ruleId,awardType,remark,dateType
+        ,count,skipURL,ruleId,awardType,remark,dateType,code
         from uc_sys_task
         <where>
             <if test="name!=null">
@@ -28,7 +28,7 @@
     <select id="selectDeployedList" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.util.Map">
         SELECT
         id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,
-        ruleCode,count,skipURL,ruleId,awardType,remark,dateType
+        ruleCode,count,skipURL,ruleId,awardType,remark,dateType,code
         from uc_sys_task
         <where>
             status=1
@@ -45,7 +45,7 @@
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">
         SELECT
         id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
-        count,skipURL,ruleId,awardType,remark,dateType
+        count,skipURL,ruleId,awardType,remark,dateType,code
         from uc_sys_task
         where id = #{id}
     </select>
@@ -54,7 +54,7 @@
             parameterType="java.util.Map">
         SELECT
         id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
-        count,skipURL,ruleId,awardType,remark,dateType
+        count,skipURL,ruleId,awardType,remark,dateType,code,
         (select count(1) from uc_user_task uut where uut.userId=#{userId} and uut.taskId=ust.id and uut.status='1' and
         uut.createTime &gt;= (SELECT CURDATE()) and uut.createTime &lt; (SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))) finishedCount
         from uc_sys_task ust
@@ -105,8 +105,17 @@
     <select id="selectValidSysTaskByRuleId" resultType="com.abc12366.uc.model.SysTask" parameterType="java.lang.String">
         SELECT
         id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
-        count,skipURL,ruleId,awardType,remark,dateType
+        count,skipURL,ruleId,awardType,remark,dateType,code
         from uc_sys_task
         where ruleId = #{ruleId}
+    </select>
+
+    <select id="selectValidOneByCode" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">
+        SELECT
+        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
+        count,skipURL,ruleId,awardType,remark,dateType,code
+        from uc_sys_task
+        where code = #{taskCode}
+        and status='1'
     </select>
 </mapper>

@@ -27,6 +27,7 @@ public class SysTask {
     private String ruleId;
     private String remark;
     private String dateType;
+    private String code;
 
     public SysTask() {
     }
@@ -181,5 +182,39 @@ public class SysTask {
 
     public void setDateType(String dateType) {
         this.dateType = dateType;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "SysTask{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", rule='" + rule + '\'' +
+                ", award=" + award +
+                ", type='" + type + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", ruleName='" + ruleName + '\'' +
+                ", ruleCode='" + ruleCode + '\'' +
+                ", count=" + count +
+                ", skipURL='" + skipURL + '\'' +
+                ", awardType='" + awardType + '\'' +
+                ", ruleId='" + ruleId + '\'' +
+                ", remark='" + remark + '\'' +
+                ", dateType='" + dateType + '\'' +
+                ", code='" + code + '\'' +
+                '}';
     }
 }

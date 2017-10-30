@@ -2,6 +2,7 @@ package com.abc12366.message.util;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.jcraft.jsch.*;
+import org.slf4j.*;
 import sun.misc.BASE64Decoder;
 
 import java.io.*;
@@ -12,6 +13,8 @@ import java.util.*;
  * @author xieyanmao
  */
 public class SFTPUtil {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SFTPUtil.class);
 
     /**
      * 将上传的文件进行重命名
@@ -194,6 +197,8 @@ public class SFTPUtil {
             byte[] buffer = decoder.decodeBuffer(content);
             String filePath1 = "/" + directory + "/" + storeName;
             outputStream.write(buffer);
+            outputStream.flush();
+            outputStream.close();
             map.put("fileName", fileName);
             map.put("storeName", storeName);
             map.put("filePath", filePath1);

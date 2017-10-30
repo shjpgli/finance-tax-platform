@@ -5,6 +5,7 @@ import com.abc12366.uc.model.bo.ProductBO;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -112,6 +113,8 @@ public class OrderProductBO implements Serializable {
     /**
      * 商品浏览URL
      **/
+    @NotEmpty
+    @Pattern(regexp = "^([hH][tT]{2}[pP]://|[hH][tT]{2}[pP][sS]://)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\\\/])+$", message = "必须为HttpMethod方法")
     private String browseUrl;
 
     /**

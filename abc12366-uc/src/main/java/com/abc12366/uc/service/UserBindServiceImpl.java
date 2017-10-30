@@ -15,6 +15,7 @@ import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
 import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UCConstant;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
@@ -44,6 +45,7 @@ import java.io.IOException;
 import java.security.interfaces.RSAPublicKey;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -75,6 +77,8 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Autowired
     private PrivilegeItemService privilegeItemService;
+
+    protected static Map<String, Object> appCache = new ConcurrentHashMap<>();
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
@@ -222,6 +226,23 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
+        HngsAppLoginResponse hngsAppLoginResponse = new HngsAppLoginResponse();
+
+        //先到缓存里查看是否有有效accessToken
+        if (appCache.containsKey("accessToken") && !StringUtils.isEmpty(appCache.get("accessToken")) &&
+                appCache.containsKey("expiresIn") && !StringUtils.isEmpty(appCache.get("expiresIn"))) {
+            try {
+                Date expiredDate = (Date) appCache.get("expiresIn");
+                if (expiredDate != null && expiredDate.getTime() > System.currentTimeMillis()) {
+                    hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
+                    hngsAppLoginResponse.setExpiresTime(expiredDate);
+                }
+                return hngsAppLoginResponse;
+            } catch (Exception e) {
+
+            }
+        }
+
         String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url");
         HttpHeaders headers = new HttpHeaders();
 
@@ -237,25 +258,28 @@ public class UserBindServiceImpl implements UserBindService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity responseEntity = restTemplate.exchange(url + "/app/login", HttpMethod.POST, requestEntity, String.class);
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            HngsAppLoginResponse hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
+            hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
                     HngsAppLoginResponse.class);
             request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
+            appCache.put("accessToken", hngsAppLoginResponse.getAccessToken());
+            appCache.put("expiresIn", hngsAppLoginResponse.getExpiresTime());
+            LOGGER.info("uc调用电子税局应用登录接口成功，accessToken：{}", hngsAppLoginResponse.getAccessToken());
             return hngsAppLoginResponse;
         }
         return null;
     }
 
     @Override
-    public boolean isRealNameValidatedDzsj(String sfzjhm, String xm , HttpServletRequest request){
-        if(sfzjhm == null || sfzjhm.trim().equals("")
-                || xm == null || xm.trim().equals("")){
+    public boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request) {
+        if (sfzjhm == null || sfzjhm.trim().equals("")
+                || xm == null || xm.trim().equals("")) {
             return false;
         }
-        try{
+        try {
             HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
             if (hngsAppLoginResponse != null) {
                 HttpHeaders headers = new HttpHeaders();
-                headers.add("accessToken", (String) request.getAttribute("accessToken"));
+                headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
                 headers.add("Content-Type", "application/json");
                 String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
                 HttpEntity requestEntity = new HttpEntity(null, headers);
@@ -263,16 +287,17 @@ public class UserBindServiceImpl implements UserBindService {
                 if (soaUtil.isExchangeSuccessful(responseEntity)) {
                     DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
                     if (dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
+                        LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
                         return true;
                     }
+                    LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.warn("uc调用电子税局实名认证查询接口失败，错误信息：{}", e.getCause());
             return false;
         }
-
-
         return false;
     }
 
@@ -633,7 +658,7 @@ public class UserBindServiceImpl implements UserBindService {
 //        return encodedCode;
 
         String frist_sbmm = new MD5(code).compute().toUpperCase();
-        String second_gssbmm = new MD5(frist_sbmm + "abchngs").compute().toUpperCase();
+        String second_gssbmm = new MD5(frist_sbmm + UCConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
         return second_gssbmm;
     }
 
@@ -675,12 +700,12 @@ public class UserBindServiceImpl implements UserBindService {
 //    }
 
     //用户会员绑定纳税人数量是否超过上限-以社会信用代码作为企业唯一标识
-    private void bindLimit(String userId){
+    private void bindLimit(String userId) {
         List<ShxydmBO> list = userBindRoMapper.bindCount(userId);
         PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
         int limit = privilegeItem.getGrzhbdqys();
-        if(limit!=-1){
-            if(list!=null&&list.size()>=limit){
+        if (limit != -1) {
+            if (list != null && list.size() >= limit) {
                 throw new ServiceException(4043);
             }
         }

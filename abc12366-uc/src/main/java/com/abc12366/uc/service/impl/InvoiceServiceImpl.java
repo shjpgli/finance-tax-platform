@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -349,17 +350,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
                 excel.setPhone(phone);
                 excel.setAddress(address);
-                /*
-                if(bo.getUserAddressBO() != null){
-                    UserAddressBO userAddress = setUserAddress(bo, address);
-                    phone = userAddress.getPhone();
-
-                    excel.setLinkman(userAddress.getName());
-                    excel.setPhone(userAddress.getPhone());
-                }else {
-                    LOGGER.info("收货人地址信息异常：{}", bo);
-                    throw new ServiceException(4909);
-                }*/
                 boolean isAlike = false;
                 StringBuffer invoiceNos = new StringBuffer();
                 int num = 0;
@@ -477,10 +467,15 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoice.setId(invoiceExcel.getInvoiceOrderNo());
             invoice.setInvoiceNo(invoiceDetail.getInvoiceNo());
             invoice.setInvoiceCode(invoiceDetail.getInvoiceCode());
-            int update = invoiceMapper.update(invoice);
-            if(update != 1){
-                LOGGER.info("修改失败：{}", invoice);
-                throw new ServiceException(4102);
+            try {
+                int update = invoiceMapper.update(invoice);
+                if(update != 1){
+                    LOGGER.info("修改失败：{}", invoice);
+                    throw new ServiceException(4102);
+                }
+            }catch (Exception e){
+                LOGGER.info("SQL执行异常：{}", invoice);
+                throw new ServiceException(4900);
             }
             //修改发票详情表
             List<OrderBO> orderBOList = invoiceTemp.getOrderBOList();
