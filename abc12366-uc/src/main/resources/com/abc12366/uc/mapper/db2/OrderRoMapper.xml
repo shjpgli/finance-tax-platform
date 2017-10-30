@@ -778,9 +778,9 @@
         SELECT
         o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
         o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
-        u.id as uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,u.level,insert(u.realName, 4, 4, '****') phone
+        u.id as uId,u.username as uName,u.phone,u.vipLevel,u.nickname,u.level,u.realName
         FROM uc_order o
-        LEFT JOIN (select r.id,r.username,insert(r.phone, 4, 4, '****') as phone,r.vipLevel,r.nickname,insert(e.realName, 1, 1, '*') as realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
+        LEFT JOIN (select r.id,r.username,r.phone,r.vipLevel,r.nickname,e.realName,l.level as level from uc_user r left join uc_user_extend e on r.id = e.userId
         left join uc_uvip_level l on l.levelCode = r.vipLevel
         ) u ON u.id = o.userId
         left join uc_uvip_level v on v.levelCode = o.nowVipLevel
@@ -788,7 +788,7 @@
         <where>
 
             <![CDATA[
-                o.orderStatus != '7'
+                o.orderStatus != 7 and op.tradingChannels = 'CSKT'
               ]]>
             <if test=" user.nickname != null and user.nickname != '' ">
                 and u.nickname LIKE CONCAT('%',#{user.nickname},'%')
