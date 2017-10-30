@@ -54,8 +54,10 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Transactional("db1TxManager")
     @Override
-    public void doTask(String userId, String sysTaskId) {
-        SysTaskBO sysTaskBO = sysTaskService.selectOne(sysTaskId);
+    public void doTask(String userId, String taskCode) {
+        //SysTaskBO sysTaskBO = sysTaskService.selectOne(sysTaskId);
+        //新的查询系统任务方法：根据编码查询
+        SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
         if (sysTaskBO == null) {
             return;
         }
@@ -83,13 +85,19 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Transactional("db1TxManager")
     @Override
-    public void doTaskWithouComputeAward(String userId, String sysTaskId) {
+    public boolean doTaskWithouComputeAward(String userId, String taskCode) {
+        //查询系统任务方法：根据编码查询
+        SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
+        if (sysTaskBO == null) {
+            return false;
+        }
+
         //用户每完成当天一项任务一次，更新已完成数，当已完成数等于该项任务数量，更新该项任务数量为已完成
-        TodoTask todoTask = selectOne(userId, sysTaskId);
+        TodoTask todoTask = selectOne(userId, sysTaskBO.getId());
 
         //如果该项任务已完成，则返回
         if (todoTask == null || todoTask.getStatus().trim().equals(UCConstant.TASK_FINISHED)) {
-            return;
+            return false;
         }
 
         todoTask.setFinishedCount(todoTask.getFinishedCount() + 1);
@@ -98,6 +106,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         }
         todoTask.setLastUpdate(new Date());
         update(todoTask);
+        return true;
     }
 
     @Override

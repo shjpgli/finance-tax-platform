@@ -48,10 +48,10 @@
                 and uu.username=#{username}
             </if>
             <if test="nsrsbh!=null">
-                and uuh.nsrsbh=#{nsrsbh}
+                and a.nsrsbh=#{nsrsbh}
             </if>
             <if test="status!=null">
-                and uuh.status=#{status}
+                and a.status=#{status}
             </if>
         </where>
         order by a.createTime desc

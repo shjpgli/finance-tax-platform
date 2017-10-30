@@ -97,7 +97,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public void calculate(ExpCalculateBO expCalculateBO) {
-        ExperienceRuleBO experienceRule = experienceRuleService.selectValidOne(expCalculateBO.getRuleId());
+        ExperienceRuleBO experienceRule = experienceRuleService.selectValidOneByCode(expCalculateBO.getRuleCode());
         if (experienceRule == null) {
             return;
         }
@@ -132,7 +132,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             //param.setUexpCodexId(codex.getId());
             param.setStarTime(startTime);
             param.setEndTime(endTime);
-            param.setRuleId(expCalculateBO.getRuleId());
+            param.setRuleId(experienceRule.getId());
             List<ExpComputeLog> computeLogList = experienceRoMapper.selectCalculateLog(param);
             if (computeLogList != null && computeLogList.size() >= experienceRule.getDegree()) {
                 return;
@@ -148,7 +148,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         ExperienceLogBO experienceLog = new ExperienceLogBO();
         experienceLog.setUserId(expCalculateBO.getUserId());
-        experienceLog.setRuleId(expCalculateBO.getRuleId());
+        experienceLog.setRuleId(experienceRule.getId());
         if (experienceRule.getExp() < 0) {
             experienceLog.setIncome(0);
             experienceLog.setOutgo(-experienceRule.getExp());
@@ -165,7 +165,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         //expComputeLog.setUexpCodexId(codex.getId());
         expComputeLog.setTimeType(experienceRule.getPeriod().toUpperCase());
         expComputeLog.setCreateTime(new Date());
-        expComputeLog.setRuleId(expCalculateBO.getRuleId());
+        expComputeLog.setRuleId(experienceRule.getId());
         experienceMapper.insertComputeLog(expComputeLog);
     }
 

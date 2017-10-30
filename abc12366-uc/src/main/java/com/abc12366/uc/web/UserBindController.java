@@ -163,4 +163,13 @@ public class UserBindController {
         HngsNsrLoginResponse loginResponse = userBindService.loginWsbsHngs(login, request);
         return ResponseEntity.ok(loginResponse);
     }
+
+    //调用电子税局查看用户是否实名认证
+    @GetMapping(path = "/realname/dzsj")
+    public ResponseEntity isRealNameValidatedDzsj(@RequestParam String sfzjhm, @PathVariable @RequestParam String xm, HttpServletRequest request) throws Exception {
+        LOGGER.info("调用电子税局实名认证查询接口：{},{}", sfzjhm, xm);
+        boolean result = userBindService.isRealNameValidatedDzsj(sfzjhm,xm, request);
+        LOGGER.info("电子税局返回查询结果：{}", result);
+        return ResponseEntity.ok(Utils.kv("data",result));
+    }
 }

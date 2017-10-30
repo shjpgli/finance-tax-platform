@@ -10,7 +10,7 @@ public class PointCalculateBO {
     private String userId;
 
     //积分规则ID
-    private String ruleId;
+    private String ruleCode;
 
     public String getUserId() {
         return userId;
@@ -20,11 +20,19 @@ public class PointCalculateBO {
         this.userId = userId;
     }
 
-    public String getRuleId() {
-        return ruleId;
+    public String getRuleCode() {
+        return ruleCode;
     }
 
-    public void setRuleId(String ruleId) {
-        this.ruleId = ruleId;
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
+    @Override
+    public String toString() {
+        return "PointCalculateBO{" +
+                "userId='" + userId + '\'' +
+                ", ruleCode='" + ruleCode + '\'' +
+                '}';
     }
 }

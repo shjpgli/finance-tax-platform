@@ -31,4 +31,6 @@ public interface SysTaskRoMapper {
     List<SysTaskBO> selectValidListByTypeAndDateType(@Param("type") String type, @Param("dateType") String dateType);
 
     List<SysTaskBO> selectTimeLimitedListByType(String type);
+
+    SysTaskBO selectValidOneByCode(String taskCode);
 }

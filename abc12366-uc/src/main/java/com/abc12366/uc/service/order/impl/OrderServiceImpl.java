@@ -11,10 +11,7 @@ import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.OrderProduct;
 import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.order.bo.*;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.service.VipLogService;
+import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
@@ -118,6 +115,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private TodoTaskService todoTaskService;
+
+    @Autowired
+    private PointsRuleService pointsRuleService;
 
 
     @Override
@@ -659,7 +659,7 @@ public class OrderServiceImpl implements OrderService {
         //根据交易流水号查询订单信息
         List<OrderBO> orderBOList = orderRoMapper.selectByTradeNo(tradeNo);
 
-        for (OrderBO orderBO : orderBOList){
+        for (OrderBO orderBO : orderBOList) {
             if (orderBO != null) {
                 OrderProductBO pBO = new OrderProductBO();
                 String orderNo = orderBO.getOrderNo();
@@ -894,9 +894,15 @@ public class OrderServiceImpl implements OrderService {
      */
     private void insertPoints(OrderBO orderBO) {
         if (orderBO != null && orderBO.getGiftPoints() != null && orderBO.getGiftPoints() > 0) {
+            //如果积分规则为空则返回
+            PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_ORDER_CODE);
+            if (pointsRuleBO == null) {
+                return;
+            }
+
             PointsLogBO pointsLog = new PointsLogBO();
             pointsLog.setUserId(orderBO.getUserId());
-            pointsLog.setRuleId(UCConstant.POINT_RULE_ORDER_ID);
+            pointsLog.setRuleId(pointsRuleBO.getId());
             pointsLog.setId(Utils.uuid());
             pointsLog.setIncome(orderBO.getGiftPoints());
             pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
@@ -911,9 +917,14 @@ public class OrderServiceImpl implements OrderService {
      * @param orderBO
      */
     private void insertDeductPoints(OrderBO orderBO) {
+        //如果积分规则为空则返回
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_EXCHANGE_CODE);
+        if (pointsRuleBO == null) {
+            return;
+        }
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(orderBO.getUserId());
-        pointsLog.setRuleId(UCConstant.POINT_RULE_EXCHANGE_ID);
+        pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setOutgo(orderBO.getTotalPrice().intValue());
         pointsLog.setLogType("POINTS_RECHARGE");
         pointsLog.setRemark("积分兑换 - 订单号：" + orderBO.getOrderNo());

@@ -71,7 +71,7 @@ public class CurrStudyServiceImpl implements CurrStudyService {
             studyBo.setStudyId(uuid);
             BeanUtils.copyProperties(studyBo, study);
             studyMapper.insert(study);
-            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{sysTaskId}";
+            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
             String responseStr;
             String userId = UcUserCommon.getUserId();
             String sysTaskId = UCConstant.SYS_TASK_COURSE_LEARNING_ID;

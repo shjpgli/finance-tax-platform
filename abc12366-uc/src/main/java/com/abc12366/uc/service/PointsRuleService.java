@@ -26,4 +26,7 @@ public interface PointsRuleService {
     void enableOrDisable(String id, String status);
 
     PointsRuleBO selectValidOne(String ruleId);
+
+    //根据编码查询一条积分规则
+    PointsRuleBO selectValidOneByCode(String ruleCode);
 }

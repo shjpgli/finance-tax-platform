@@ -109,4 +109,13 @@
         from uc_sys_task
         where ruleId = #{ruleId}
     </select>
+
+    <select id="selectValidOneByCode" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">
+        SELECT
+        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
+        count,skipURL,ruleId,awardType,remark,dateType
+        from uc_sys_task
+        where code = #{taskCode}
+        and status='1'
+    </select>
 </mapper>
