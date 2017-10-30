@@ -10,8 +10,8 @@
     <insert id="insert" parameterType="com.abc12366.uc.model.weixin.bo.menu.Button">
         INSERT INTO uc_wxmenu
         (<include refid="Base_Column_List"/>)
-        VALUES (#{id}, #{parentId}, #{sort}, #{type}, #{name}, #{key},#{url}, #{media_id}, #{appid}, #{pagepath}, #{wxStatus},
-        #{lastUpdate}, #{createTime})
+        VALUES (#{id}, #{parentId}, #{sort}, #{type}, #{name}, #{key},#{url}, #{media_id}, #{appid}, #{pagepath},
+        #{lastUpdate}, #{createTime}, #{wxStatus})
     </insert>
 
     <update id="update" parameterType="com.abc12366.uc.model.weixin.bo.menu.Button">
