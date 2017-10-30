@@ -22,6 +22,7 @@
             p.id,	p.curriculumId,	p.vipGrade,l.level levelName,	p.vipPrice,	p.vipIntegral,	p.giveIntegral,	p.createTime,	p.lastUpdate
         FROM bb_curriculum_uvip_price p left join abc12366_uc.uc_uvip_level l on p.vipGrade = l.levelCode
         WHERE p.curriculumId = #{curriculumId}
+        ORDER BY vipGrade ASC
     </select>
 
 </mapper>
