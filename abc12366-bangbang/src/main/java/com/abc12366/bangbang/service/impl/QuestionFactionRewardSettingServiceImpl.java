@@ -41,6 +41,6 @@ public class QuestionFactionRewardSettingServiceImpl implements QuestionFactionR
         record.setId(Utils.uuid());
         record.setUpdateAdmin(Utils.getAdminId());
         questionFactionRewardSettingMapper.insert(record);
-        questionFactionMapper.updateAwardPoint(record.getRewardsPoints());
+        questionFactionMapper.updateAwardPoint(record.getFactionId(), record.getRewardsPoints());
     }
 }
