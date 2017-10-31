@@ -152,4 +152,17 @@
 		 WHERE id = #{id}
 	</update>
 
+
+	<update id="batchAudit" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			UPDATE bb_question_faction_allocation
+			SET state = #{item.status}
+				<if test="item.refuseReason != null">
+					,refuseReason = #{item.refuseReason}
+				</if>
+			WHERE id = #{item.id}
+		</foreach>
+	</update>
+
+
 </mapper>
