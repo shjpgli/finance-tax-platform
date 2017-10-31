@@ -20,7 +20,7 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         (#{id}, #{userId}, #{orderNo}, #{reason}, #{adminRemark}, #{userRemark}, #{expressNo}, #{expressComp},
-         #{status},#{createTime},#{lastUpdate}, #{toExpressNo}, #{type},#{adminConfirmRemark},#{consignee},#{contactNumber},#{shippingAddress},#{refundRemark})
+         #{status},#{createTime},#{lastUpdate}, #{toExpressNo}, #{toExpressComp}, #{type},#{adminConfirmRemark},#{consignee},#{contactNumber},#{shippingAddress},#{refundRemark})
     </insert>
 
     <!-- 修 改-->
@@ -50,6 +50,9 @@
             </if>
             <if test="toExpressNo != null">
                 toExpressNo = #{toExpressNo},
+            </if>
+            <if test="toExpressComp != null">
+                toExpressComp = #{toExpressComp},
             </if>
             <if test="type != null">
                 type = #{type},
