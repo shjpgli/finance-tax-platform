@@ -87,7 +87,7 @@
     <select id="selectAllocationManageList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo" parameterType="java.util.Map">
         SELECT
         t.id,t.factionId,t.integral,t.state AS STATUS, t.refuseReason, t.createTime,t.updateTime,
-        t1.factionName, t2.username AS Bo,t3.name AS memberLevel
+        t1.factionName, t2.username AS memberName,t3.name AS memberLevel
         FROM bb_question_faction_allocation  t
         JOIN bb_question_faction  t1  ON t.factionId = t1.factionId
         JOIN abc12366_uc.uc_user t2 ON t.userId = t2.id
