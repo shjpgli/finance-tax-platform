@@ -14,7 +14,11 @@ import java.util.List;
  */
 public interface ExperienceService {
 
-
+    /**
+     * 查询用户经验值概况
+     * @param userId 用户ID
+     * @return MyExperienceBO {@linkplain com.abc12366.uc.model.bo.MyExperienceBO}
+     */
     MyExperienceBO getMyExperience(String userId);
 
     List<ExpCodex> codex(String uexpruleId, List<ExpCodex> codex);
@@ -27,7 +31,7 @@ public interface ExperienceService {
 
     /**
      * 根据经验值规则计算用户的经验值变化，并记日志
-     * @param expCalculateBO
+     * @param expCalculateBO {@linkplain com.abc12366.uc.model.bo.ExpCalculateBO}
      */
     void calculate(ExpCalculateBO expCalculateBO);
 }
