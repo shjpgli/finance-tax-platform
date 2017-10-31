@@ -25,4 +25,10 @@ public interface OrderMapper {
      **/
     int update(Order record);
 
+    /**
+     * 根据订单号删除
+     * @param orderNo
+     * @return
+     */
+    int delete(String orderNo);
 }

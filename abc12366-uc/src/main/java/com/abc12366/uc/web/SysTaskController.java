@@ -36,7 +36,12 @@ public class SysTaskController {
     private SysTaskService sysTaskService;
 
     /**
-     *查询系统任务列表
+     * 查询系统任务列表
+     * @param name 系统任务名称
+     * @param type 系统任务类型
+     * @param page 页数
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
      */
     @GetMapping(path = "/task")
     public ResponseEntity selectList(@RequestParam(required = false) String name,
@@ -61,7 +66,12 @@ public class SysTaskController {
     }
 
     /**
-     *查询系统任务列表：只查询启用的
+     * 查询系统任务列表：只查询启用的
+     * @param name 系统任务名称
+     * @param type 系统任务类型
+     * @param page 页数
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
      */
     @GetMapping(path = "/tasks")
     public ResponseEntity selectDeployedList(@RequestParam(required = false) String name,
@@ -87,8 +97,11 @@ public class SysTaskController {
     }
 
     /**
-     *根据ID查询一条系统任务
+     * 根据ID查询一条系统任务
+     * @param id 系统任务ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
      */
+
     @GetMapping(path = "/task/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -98,8 +111,11 @@ public class SysTaskController {
     }
 
     /**
-     *增加一条系统任务
+     * 增加一条系统任务
+     * @param sysTaskInsertBO {@linkplain com.abc12366.uc.model.bo.SysTaskInsertAndUpdateBO}
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
      */
+
     @PostMapping(path = "/task")
     public ResponseEntity insert(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskInsertBO) {
         LOGGER.info("新增系统任务：{}", sysTaskInsertBO);
@@ -109,7 +125,10 @@ public class SysTaskController {
     }
 
     /**
-     *根据ID修改一条系统任务
+     * 根据ID修改一条系统任务
+     * @param sysTaskUpdateBO {@linkplain com.abc12366.uc.model.bo.SysTaskInsertAndUpdateBO}
+     * @param id 系统任务ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
      */
     @PutMapping(path = "/task/{id}")
     public ResponseEntity update( @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String
@@ -121,8 +140,11 @@ public class SysTaskController {
     }
 
     /**
-     *根据ID删除一条系统任务（逻辑删除）
+     * 根据ID删除一条系统任务（逻辑删除）
+     * @param id 系统任务ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
      */
+
     @DeleteMapping(path = "/task/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -131,7 +153,12 @@ public class SysTaskController {
     }
 
     /**
-     *根据任务类型查询启用的任务列表
+     * 根据任务类型查询启用的任务列表
+     * @param request
+     * @param type 任务类型
+     * @param page 页数
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
      */
     @GetMapping(path = "/tasks/{type}")
     public ResponseEntity selectDeployedListByType(

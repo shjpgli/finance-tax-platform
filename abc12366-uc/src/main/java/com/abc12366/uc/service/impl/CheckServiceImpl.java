@@ -78,7 +78,7 @@ public class CheckServiceImpl implements CheckService {
             }
         }
         //完成任务埋点,如果任务不存在或失效则返回
-        if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_ID)) {
+        if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_CODE)) {
             return 0;
         }
 

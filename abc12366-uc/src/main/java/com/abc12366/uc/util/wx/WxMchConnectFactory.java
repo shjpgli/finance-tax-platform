@@ -1,11 +1,17 @@
 package com.abc12366.uc.util.wx;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 
 /**
  * 微信商户连接
  */
 public class WxMchConnectFactory {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WxMchConnectFactory.class);
+
     private static final String HTTP_GET = "GET";
     private static final String HTTP_POST = "POST";
 
@@ -20,6 +26,7 @@ public class WxMchConnectFactory {
         try {
             connect.httpsRequest();
         } catch (Exception e) {
+            LOGGER.error(e.getMessage() + ": {}", e);
             e.printStackTrace();
         }
         return connect.parseXmlObject();

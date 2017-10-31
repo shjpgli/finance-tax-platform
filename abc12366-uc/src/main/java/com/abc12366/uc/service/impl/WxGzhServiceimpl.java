@@ -190,7 +190,7 @@ public class WxGzhServiceimpl implements IWxGzhService {
 	        }
 	        
 	        if(fileListDto.getDataList().size()>0){
-	        	return "/images/" +fileListDto.getDataList().get(0).getFilePath();
+	        	return "/images" +fileListDto.getDataList().get(0).getFilePath();
 	        }else{
 	        	LOGGER.info("下载微信服务器文件失败",fileListDto.getMessage());
 				throw new ServiceException(9999,"下载微信服务器文件失败:"+fileListDto.getMessage());

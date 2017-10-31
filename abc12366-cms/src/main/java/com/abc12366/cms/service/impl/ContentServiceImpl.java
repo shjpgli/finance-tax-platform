@@ -7,9 +7,9 @@ import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.cms.util.CmsRestTemplateUtil;
 import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.cms.util.UcUserCommon;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -771,7 +771,7 @@ public class ContentServiceImpl implements ContentService {
         String userId = UcUserCommon.getUserId();
         String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
         String responseStr;
-        String sysTaskId = UCConstant.SYS_TASK_BROSE_NEWS_ID;
+        String sysTaskId = UCConstant.SYS_TASK_BROSE_NEWS_CODE;
         responseStr = cmsRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
         return "";
     }

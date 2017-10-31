@@ -1,13 +1,13 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.StringUtil;
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper;
 import com.abc12366.bangbang.model.KnowledgeCategory;
 import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

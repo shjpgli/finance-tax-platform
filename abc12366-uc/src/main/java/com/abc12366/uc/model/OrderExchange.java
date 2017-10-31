@@ -51,9 +51,19 @@ public class OrderExchange implements Serializable {
     private String expressComp;
 
     /**
-     * 用户换货快递单号
-     **/
+     * 用户换货，寄送的快递单号
+    **/
     private String toExpressNo;
+
+    /**
+     * 用户换货，寄送的快递公司ID
+     **/
+    private String toExpressComp;
+
+    /**
+     * 用户换货，寄送的快递公司名称
+     **/
+    private String toExpressCompName;
     /**
      * 退单状态
      **/
@@ -362,6 +372,22 @@ public class OrderExchange implements Serializable {
 
     public void setRefundRemark(String refundRemark) {
         this.refundRemark = refundRemark;
+    }
+
+    public String getToExpressComp() {
+        return toExpressComp;
+    }
+
+    public void setToExpressComp(String toExpressComp) {
+        this.toExpressComp = toExpressComp;
+    }
+
+    public String getToExpressCompName() {
+        return toExpressCompName;
+    }
+
+    public void setToExpressCompName(String toExpressCompName) {
+        this.toExpressCompName = toExpressCompName;
     }
 
     public static final class Builder {

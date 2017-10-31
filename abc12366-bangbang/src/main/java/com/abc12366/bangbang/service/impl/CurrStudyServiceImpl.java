@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.CurriculumMapper;
 import com.abc12366.bangbang.mapper.db1.CurriculumStudyMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumStudyRoMapper;
@@ -12,6 +11,7 @@ import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ public class CurrStudyServiceImpl implements CurrStudyService {
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
             String responseStr;
             String userId = UcUserCommon.getUserId();
-            String sysTaskId = UCConstant.SYS_TASK_COURSE_LEARNING_ID;
+            String sysTaskId = UCConstant.SYS_TASK_COURSE_LEARNING_CODE;
             responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 //            System.out.println(responseStr);
 

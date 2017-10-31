@@ -103,11 +103,88 @@ public class TodoTaskController {
      * 用户做任务接口：做任务并且计算奖励，用于用户业务操作任务埋点，
      *
      */
-//    @PostMapping(path = "/do/award/{userId}/{sysTaskId}")
-//    public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
-//        todoTaskService.doTask(userId, sysTaskId);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
+    /**系统任务编码
+    //1.首次修改登录密码
+    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_CODE = "T-scxgdl";
+    //2.首次上传用户头像图片
+    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_CODE = "T-scsctx";
+    //3.首次手机认证
+    public final static String SYS_TASK_FIRST_PHONE_VALIDATE_CODE = "T-scsjrz";
+    //4.首次申报缴税
+    public final static String SYS_TASK_SCSBJS_CODE = "T-scsbjs";
+    //5.首次消费
+    public final static String SYS_TASK_FIRST_CONSUME_CODE = "T-scxf";
+    //6.首次下载安装ABC4000
+    public final static String SYS_TASK_SCXZAZ_CODE = "T-scxzaz";
+    //7.网上零申报
+    public final static String SYS_TASK_WSLSB_CODE = "T-wslsb";
+    //8.网上缴税
+    public final static String SYS_TASK_WSJS_CODE = "T-wsjs";
+    //9.固定资产折旧管理
+    public final static String SYS_TASK_GDZCZJGL_CODE = "T-gdzxcj";
+    //10.海关完税凭证采集
+    public final static String SYS_TASK_HGWSPZCJ_CODE = "T-hgwspz";
+    //11.查询服务器数据
+    public final static String SYS_TASK_CXFWQSJ_CODE = "T-cxwfqsj";
+    //12.获取申报结果
+    public final static String SYS_TASK_HQSBJG_CODE = "T-hqsbjg";
+    //13.分支机构设置
+    public final static String SYS_TASK_FZJGSZ_CODE = "T-fzjgsz";
+    //14.预缴税款
+    public final static String SYS_TASK_YJSK_CODE = "T-yjsk";
+    //15.每日回答问题
+    public final static String SYS_TASK_MRHDWT_CODE = "T-mrhdwt";
+    //16.每日疑难提问
+    public final static String SYS_TASK_MRYNTW_CODE = "T-mryntw";
+    //17.每日问答收藏
+    public final static String SYS_TASK_MRWDSC_CODE = "T-mrwdsc";
+    //18.介质申报
+    public final static String SYS_TASK_JZSB_CODE = "T-jzsb";
+    //19.系统修复
+    public final static String SYS_TASK_XTXF_CODE = "T-xtxf";
+    //20.每日评论任务
+    public final static String SYS_TASK_MRPL_CODE = "T-mrpl";
+    //21.每日签到
+    public final static String SYS_TASK_CHECK_CODE = "T-mrqd";
+    //22.每日收藏课程
+    public final static String SYS_TASK_COURSE_COLLECT_CODE = "T-mrsckc";
+    //23.每日评论问题
+    public final static String SYS_TASK_ASK_COMMENT_CODE = "T-mrplwd";
+    //24.每日浏览资讯
+    public final static String SYS_TASK_BROSE_NEWS_CODE = "T-mrllzx";
+    //25.每日评论课程
+    public final static String SYS_TASK_COURSE_COMMENT_CODE = "T-mrplkc";
+    //26.消费超过1000人民币
+    public final static String SYS_TASK_CONSUME_BEYOND_1000_CODE = "T-ycxxf";
+    //27.消费超过3000人民币
+    public final static String SYS_TASK_CONSUME_BEYOND_3000_CODE = "ycxxf3k";
+    //28.消费超过5000人民币
+    public final static String SYS_TASK_CONSUME_BEYOND_5000_CODE = "T-ycxxf5k";
+    //29.打印完税凭证
+    public final static String SYS_TASK_DYWSPZ_CODE = "T-dywspz";
+    //30.作废报表
+    public final static String SYS_TASK_ZFBB_CODE = "T-zfbb";
+    //31.每日分享课程
+    public final static String SYS_TASK_COURSE_SHARE_CODE = "T-mrfxkc";
+    //32.绑定税号
+    public final static String SYS_TASK_COURSE_BDSH_CODE = "T-mrfxkc";
+    //33.每日登录
+    public final static String SYS_TASK_LOGIN_CODE = "T-mrdl";
+    //34.网上申报
+    public final static String SYS_TASK_WSSB_CODE = "T-wssb";
+    //35.首次实名认证
+    public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_CODE = "T-scsmrz";
+    //36.关注财税专家公众号
+    public final static String SYS_TASK_GZCSZJGZH_CODE = "T-gzcs";
+    //37.首次邮箱认证(暂不做)
+    public final static String SYS_TASK_FIRST_MAIL_VALIDATE_CODE = "T-scyxrz";
+    //38.下载企业信息
+    public final static String SYS_TASK_XZQYXX_CODE = "T-xzqyxx";
+    //40.ABC4000实名认证
+    public final static String SYS_TASK_ABC4000_SMRZ_CODE = "T-smrz";
+    //41.每日课程学习
+    public final static String SYS_TASK_COURSE_LEARNING_CODE = "T-mrkcxx";*/
+
     @PostMapping(path = "/do/award/{userId}/{taskCode}")
     public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("taskCode") String taskCode) {
         LOGGER.info("用户做任务,用户ID：{}，任务编码：{}", userId, taskCode);
@@ -119,11 +196,6 @@ public class TodoTaskController {
      * 用户做任务接口：做任务不计算奖励，用于用户业务操作任务埋点，多用于奖励规则比较复杂需要单做的业务
      *
      */
-//    @PostMapping(path = "/do/noaward/{userId}/{sysTaskId}")
-//    public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
-//        todoTaskService.doTaskWithouComputeAward(userId, sysTaskId);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
     @PostMapping(path = "/do/noaward/{userId}/{taskCode}")
     public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("taskCode") String taskCode) {
         todoTaskService.doTaskWithouComputeAward(userId, taskCode);

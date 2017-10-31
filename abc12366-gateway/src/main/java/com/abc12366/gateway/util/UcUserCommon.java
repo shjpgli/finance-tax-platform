@@ -1,8 +1,7 @@
-package com.abc12366.bangbang.common;
+package com.abc12366.gateway.util;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.UCUserBO;
-import com.abc12366.gateway.util.Constant;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

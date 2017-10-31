@@ -770,16 +770,16 @@ public class OrderServiceImpl implements OrderService {
     private void setTodoTask(OrderBO order) {
         double amount = order.getTotalPrice();
         String userId = order.getUserId();
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_ID);
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_CODE);
         if (amount >= 1000 && amount < 3000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_1000_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_1000_CODE);
         }
 
         if (amount >= 3000 && amount < 5000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_3000_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_3000_CODE);
         }
         if (amount >= 5000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_5000_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_5000_CODE);
         }
     }
 
@@ -1199,7 +1199,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         BeanUtils.copyProperties(orderBO, order);
         //查询订单状态
-        OrderBO bo = orderRoMapper.selectOrder(order);
+        OrderBO bo = orderRoMapper.selectOrderByAdmin(order);
         if (bo == null) {
             LOGGER.info("订单信息不存在：{}", orderBO);
             throw new ServiceException(4134);
@@ -1207,7 +1207,7 @@ public class OrderServiceImpl implements OrderService {
         //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单，11：已删除
         if ("11".equals(bo.getOrderStatus())) {
             //order.setOrderStatus("9");
-            int del = orderMapper.deleteByIdAndUserId(order);
+            int del = orderMapper.delete(order.getOrderNo());
             if (del != 1) {
                 LOGGER.info("删除失败：{}", orderBO);
                 throw new ServiceException(4103);
