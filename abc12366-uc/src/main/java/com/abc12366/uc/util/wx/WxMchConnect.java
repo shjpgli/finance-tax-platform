@@ -18,10 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 
 import javax.net.ssl.SSLContext;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.KeyStore;
 import java.util.Map;
 
@@ -68,8 +65,7 @@ public class WxMchConnect<T> {
 
     public void httpsRequest() throws Exception {
         KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-        File pkcs12 = new ClassPathResource("cer/apiclient_cert.p12").getFile();
-        FileInputStream instream = new FileInputStream(pkcs12);
+        InputStream instream = new ClassPathResource("cer/apiclient_cert.p12").getInputStream();
         String mch_id = SpringCtxHolder.getProperty("abc.mch_id");
         try {
             keyStore.load(instream, mch_id.toCharArray());
