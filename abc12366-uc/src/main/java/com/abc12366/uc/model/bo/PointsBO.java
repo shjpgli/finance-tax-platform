@@ -6,8 +6,17 @@ package com.abc12366.uc.model.bo;
  * Time: 21:53
  */
 public class PointsBO {
+    /**
+     * 我的积分
+     */
     private String myPoints;
+    /**
+     * 我本月获得的积分
+     */
     private String income;
+    /**
+     * 我本月花费的积分
+     */
     private String outgo;
 
     public PointsBO() {
@@ -35,5 +44,14 @@ public class PointsBO {
 
     public void setOutgo(String outgo) {
         this.outgo = outgo;
+    }
+
+    @Override
+    public String toString() {
+        return "PointsBO{" +
+                "myPoints='" + myPoints + '\'' +
+                ", income='" + income + '\'' +
+                ", outgo='" + outgo + '\'' +
+                '}';
     }
 }

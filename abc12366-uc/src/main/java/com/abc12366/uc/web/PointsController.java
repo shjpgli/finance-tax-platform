@@ -30,6 +30,8 @@ public class PointsController {
 
     /**
      * 根据用户ID查询用户积分情况
+     * @param userId 用户ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.PointsBO}
      */
     @GetMapping(path = "/{userId}")
     public ResponseEntity selectOne(@PathVariable String userId) {
@@ -38,12 +40,6 @@ public class PointsController {
         LOGGER.info("{}", pointsBO);
         return ResponseEntity.ok(Utils.kv("data", pointsBO));
     }
-
-//    @PostMapping(path = "/compute")
-//    public ResponseEntity compute(@Valid @RequestBody PointComputeBO pointComputeBO){
-//        pointsService.compute(pointComputeBO);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
 
     /**
      * 根据积分规则计算用户积分
@@ -106,30 +102,12 @@ public class PointsController {
 
     /**
      * 批量用户奖励积分接口,并且发送帮帮信息
+     * @param pointBatchAwardBO {@linkplain com.abc12366.uc.model.bo.PointBatchAwardBO}
+     * @return ResponseEntity
      */
     @PostMapping(path = "/batch/award")
     public ResponseEntity batchAward(@Valid @RequestBody PointBatchAwardBO pointBatchAwardBO){
         pointsService.batchAward(pointBatchAwardBO);
         return ResponseEntity.ok(Utils.kv());
     }
-
-//    @PostMapping(path = "/codex/{upointCodexId}")
-//    public ResponseEntity codex(@PathVariable String upointCodexId,@Valid @RequestBody List<PointCodex> codexList ) {
-//        LOGGER.info("{}:{}", upointCodexId, codexList);
-//        List<PointCodex> pointCodexList = pointsService.codex(upointCodexId, codexList);
-//        return ResponseEntity.ok(Utils.kv("dataList", pointCodexList));
-//    }
-//
-//    @DeleteMapping(path = "/codex/{id}")
-//    public ResponseEntity deleteCodex(@PathVariable String id) {
-//        LOGGER.info("{}", id);
-//        pointsService.deleteCodex(id);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-//
-//    @GetMapping(path = "/codex")
-//    public ResponseEntity codexList() {
-//        List<PointCodex> codexList = pointsService.codexList();
-//        return ResponseEntity.ok(Utils.kv("dataList", codexList));
-//    }
 }
