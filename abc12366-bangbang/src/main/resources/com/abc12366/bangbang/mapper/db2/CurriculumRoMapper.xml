@@ -124,7 +124,7 @@
         <if test="isFree != null and isFree != ''">
             AND isFree = #{isFree}
         </if>
-        ORDER BY watchNum,issueTime DESC
+        ORDER BY watchNum DESC,issueTime DESC
     </select>
 
     <!-- 查询推荐课程 -->
@@ -147,7 +147,7 @@
         <if test="isFree != null and isFree != ''">
             AND isFree = #{isFree}
         </if>
-        ORDER BY watchNum,issueTime DESC
+        ORDER BY watchNum DESC,issueTime DESC
     </select>
 
     <!-- 查询授课情况 -->

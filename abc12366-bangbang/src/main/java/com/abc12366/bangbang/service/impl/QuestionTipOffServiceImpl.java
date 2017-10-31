@@ -94,4 +94,31 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
 
         return questionTipOffBo;
     }
+
+    @Override
+    public QuestionTipOffBo savepb(QuestionTipOffBo questionTipOffBo) {
+
+        JSONObject jsonStu = JSONObject.fromObject(questionTipOffBo);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        QuestionTipOff tipOff = new QuestionTipOff();
+        questionTipOffBo.setCreateTime(new Date());
+        questionTipOffBo.setId(uuid);
+        questionTipOffBo.setStatus("approved");//拉黑
+
+        Map map = MapUtil.kv("sourceId", questionTipOffBo.getSourceId(), "createUser", questionTipOffBo.getCreateUser());
+        int cnt =  questionTipOffRoMapper.selectExist(map);
+        if(cnt >0){
+            throw new ServiceException(6374);
+        }
+
+        try {
+            BeanUtils.copyProperties(questionTipOffBo, tipOff);
+            questionTipOffMapper.insert(tipOff);
+
+        } catch (Exception e) {
+            throw new ServiceException(6375);
+        }
+
+        return questionTipOffBo;
+    }
 }

@@ -238,8 +238,7 @@
     <select id="selectInviteList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
         SELECT
         q.id,	q.userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
-        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        q.answerNum
         FROM bb_question_invite i left join bb_question q on i.questionId = q.id left join bb_user u on q.userId = u.id
         WHERE q.userId = #{userId}
         ORDER BY q.createTime DESC
@@ -283,6 +282,17 @@
         (SELECT count(*) FROM bb_question_collect where userId = #{userId}) collectNum,
         (SELECT count(*) FROM bb_question_tip_off where createUser = #{userId}) tipNum
         from dual
+    </select>
+
+    <!-- 我管理的话题 -->
+    <select id="selectMyManageQuesList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
+        SELECT
+        q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        q.browseNum,q.collectNum,q.answerNum
+        FROM bb_question q left join bb_user u on q.userId = u.id
+        WHERE 1=1
+        and q.classifyCode = (SELECT classifyCode FROM bb_question_headman where userId = #{userId} and status = 'success' limit 1)
+        ORDER BY q.createTime DESC
     </select>
 
 </mapper>
