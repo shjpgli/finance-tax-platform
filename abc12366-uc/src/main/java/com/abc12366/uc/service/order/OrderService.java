@@ -291,4 +291,10 @@ public interface OrderService {
      * @return
      */
     OrderTradeBO selectOrderTrade(String tradeNo);
+
+    /**
+     * 删除订单-后台管理员
+     * @param orderBO
+     */
+    void adminDeleteOrder(OrderBO orderBO);
 }

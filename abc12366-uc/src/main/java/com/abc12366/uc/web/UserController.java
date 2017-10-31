@@ -211,7 +211,7 @@ public class UserController {
     //更新用户信息
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody UserUpdateBO userUpdateDTO, @PathVariable String id) {
-        LOGGER.info("{}", userUpdateDTO);
+        LOGGER.info("修改用户信息：{}", userUpdateDTO);
         userUpdateDTO.setId(id);
         UserBO user = userService.update(userUpdateDTO);
         LOGGER.info("{}", user);

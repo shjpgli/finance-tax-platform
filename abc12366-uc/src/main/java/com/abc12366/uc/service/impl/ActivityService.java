@@ -401,7 +401,7 @@ public class ActivityService implements IActivityService {
 
         // 发送3次
         for (int i = 1; i <= 3; i++) {
-            LOGGER.info("第{}次发送", i);
+            LOGGER.info("第{}次发送:{}", i, srp);
             ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);
             if (rrp != null) {
                 // 发送请求成功

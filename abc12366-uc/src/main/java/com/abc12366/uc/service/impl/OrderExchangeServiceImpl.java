@@ -5,10 +5,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db1.InvoiceDetailMapper;
-import com.abc12366.uc.mapper.db1.OrderExchangeMapper;
-import com.abc12366.uc.mapper.db1.OrderLogMapper;
-import com.abc12366.uc.mapper.db1.OrderMapper;
+import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
@@ -17,6 +14,7 @@ import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.OrderExchangeService;
@@ -99,6 +97,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private PointsRuleService pointsRuleService;
+
+    @Autowired
+    private TradeMapper tradeMapper;
 
     @Transactional("db1TxManager")
     @Override
@@ -379,10 +380,16 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     RefundRes refundRes=JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
 
                                     LOGGER.info("支付宝退款成功,插入退款流水记录");
+                                    String tradeNo = DataUtils.getJYLSH();
+                                    Trade trade = new Trade();
+                                    trade.setOrderNo(oe.getOrderNo());
+                                    trade.setTradeNo(tradeNo);
+                                    Date date = new Date();
+                                    trade.setCreateTime(date);
+                                    tradeMapper.insert(trade);
+
                                     TradeLog tradeLog=new TradeLog();
-                                    tradeLog.setTradeNo(DataUtils.getJYLSH());
-//                                    tradeLog.setId(Utils.uuid());
-                                    tradeLog.setTradeNo(out_request_no);
+                                    tradeLog.setTradeNo(tradeNo);
                                     tradeLog.setAliTrandeNo(refundRes.getTrade_no());
                                     tradeLog.setTradeStatus("1");
                                     tradeLog.setTradeType("2");
@@ -449,6 +456,25 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             order.setOrderStatus("7");
             orderMapper.update(order);
 
+            LOGGER.info("支付宝退款成功,插入退款流水记录");
+            String tradeNo = DataUtils.getJYLSH();
+            Trade trade = new Trade();
+            trade.setOrderNo(oe.getOrderNo());
+            trade.setTradeNo(tradeNo);
+            Date date = new Date();
+            trade.setCreateTime(date);
+            tradeMapper.insert(trade);
+
+            TradeLog tradeLog=new TradeLog();
+            tradeLog.setTradeNo(tradeNo);
+            tradeLog.setAliTrandeNo(oe.getOrderNo());
+            tradeLog.setTradeStatus("1");
+            tradeLog.setTradeType("2");
+            tradeLog.setAmount(Double.parseDouble("-"+order.getTotalPrice()));
+            tradeLog.setCreateTime(date);
+            tradeLog.setLastUpdate(date);
+            tradeLog.setPayMethod("POINTS");
+            tradeLogService.insertTradeLog(tradeLog);
             //退积分
             insertPoints(order);
 

@@ -10,6 +10,9 @@ public class QuestionFactionMemberLevel  {
 	/**PK**/
 	private String id;
 
+	/**code**/
+	private String code;
+
 	/**帮手名称**/
 	private String name;
 
@@ -117,6 +120,15 @@ public class QuestionFactionMemberLevel  {
 
 	public QuestionFactionMemberLevel setStatus(Boolean status) {
 		this.status = status;
+		return this;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public QuestionFactionMemberLevel setCode(String code) {
+		this.code = code;
 		return this;
 	}
 }
