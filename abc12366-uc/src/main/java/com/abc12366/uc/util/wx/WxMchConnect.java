@@ -14,6 +14,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 
 import javax.net.ssl.SSLContext;
@@ -56,6 +57,7 @@ public class WxMchConnect<T> {
 
     public void initXml() {
         if (bodyParameters != null) {
+            LOGGER.info("body: {}", bodyParameters);
             if (bodyParameters instanceof String) {
                 this.outputStr = (String) bodyParameters;
             } else {
@@ -66,7 +68,7 @@ public class WxMchConnect<T> {
 
     public void httpsRequest() throws Exception {
         KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-        File pkcs12 = ResourceUtils.getFile("classpath:cer/apiclient_cert.p12");
+        File pkcs12 = new ClassPathResource("cer/apiclient_cert.p12").getFile();
         FileInputStream instream = new FileInputStream(pkcs12);
         String mch_id = SpringCtxHolder.getProperty("abc.mch_id");
         try {
