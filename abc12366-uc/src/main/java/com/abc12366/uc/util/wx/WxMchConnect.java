@@ -15,10 +15,11 @@ import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.ResourceUtils;
 
 import javax.net.ssl.SSLContext;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.KeyStore;
 import java.util.Map;
 
@@ -64,7 +65,7 @@ public class WxMchConnect<T> {
     }
 
     public void httpsRequest() throws Exception {
-        KeyStore keyStore  = KeyStore.getInstance("PKCS12");
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
         InputStream instream = new ClassPathResource("cer/apiclient_cert.p12").getInputStream();
         String mch_id = SpringCtxHolder.getProperty("abc.mch_id");
         try {
@@ -80,7 +81,7 @@ public class WxMchConnect<T> {
         // Allow TLSv1 protocol only
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                 sslcontext,
-                new String[] { "TLSv1" },
+                new String[]{"TLSv1"},
                 null,
                 SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
         CloseableHttpClient httpclient = HttpClients.custom()

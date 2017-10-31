@@ -8,25 +8,89 @@ import java.util.Date;
  * Time: 17:34
  */
 public class SysTask {
+    /**
+     * 系统任务ID
+     */
     private String id;
+
+    /**
+     * 系统任务名称
+     */
     private String name;
+
+    /**
+     * 系统任务开始时间
+     */
     private Date startTime;
+
+    /**
+     * 系统任务结束时间
+     */
     private Date endTime;
+
+    /**
+     * 系统任务规则
+     */
     private String rule;
+    /**
+     * 系统任务奖励
+     */
     private Integer award;
+    /**
+     * 系统任务类型
+     */
     private String type;
-    private Boolean status;
+    /**
+     * 系统任务状态
+     */
+    private boolean status;
+    /**
+     * 系统任务创建时间
+     */
     private Date createTime;
+    /**
+     * 系统任务最后修改时间
+     */
     private Date lastUpdate;
+    /**
+     * 系统任务图片路径
+     */
     private String imageUrl;
+    /**
+     * 系统任务规则名称
+     */
     private String ruleName;
+    /**
+     * 系统任务规则代码
+     */
     private String ruleCode;
+    /**
+     * 系统任务数量
+     */
     private Integer count;
+    /**
+     * 系统任务跳转地址
+     */
     private String skipURL;
+    /**
+     * 系统任务奖励类型
+     */
     private String awardType;
-    private String ruleId;
+    /**
+     * 系统任务备注
+     */
     private String remark;
+    /**
+     * 系统任务周期类型
+     */
     private String dateType;
+    /**
+     * 系统任务关联的规则ID
+     */
+    private String ruleId;
+    /**
+     * 系统任务编码
+     */
     private String code;
 
     public SysTask() {

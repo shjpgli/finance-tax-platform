@@ -32,8 +32,8 @@ public class ExperienceController {
 
     /**
      * 获取我的经验值信息
-     * @param userId
-     * @return
+     * @param userId 用户ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.MyExperienceBO}
      */
     @GetMapping(path = "/{userId}")
     public ResponseEntity getMyExperience(@PathVariable String userId) {
@@ -73,6 +73,8 @@ public class ExperienceController {
      * 根据经验值规则计算用户经验值
      * 所需参数为：用户ID（userID），经验值规则编码（ruleCode）
      * ruleCode参考com.abc12366.gateway.util.UCConstan.java静态变量类
+     * @param expCalculateBO {@linkplain com.abc12366.uc.model.bo.ExpCalculateBO}
+     * @return ResponseEntity
      */
      /**经验值计算规则编码
      //1.每日登录（由于登陆经验值计算是单做的，此条规则现在只用于展现）

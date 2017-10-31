@@ -11,6 +11,11 @@ import java.util.List;
  * Time: 21:43
  */
 public interface PointsService {
+    /**
+     * 查询用户积分概况
+     * @param userId 用户ID
+     * @return PointsBO {@linkplain com.abc12366.uc.model.bo.PointsBO}
+     */
     PointsBO selectOne(String userId);
 
     void compute(PointComputeBO pointComputeBO);
@@ -25,11 +30,14 @@ public interface PointsService {
 
     /**
      * 根据积分规则根据用户的操作改变其积分值，并记日志
+     * @param pointCalculateBO {@linkplain com.abc12366.uc.model.bo.PointCalculateBO}
+     * @return
      */
     int calculate(PointCalculateBO pointCalculateBO);
 
     /**
-     * 批量用户奖励积分
+     * 批量奖励用户积分
+     * @param pointBatchAwardBO {@linkplain com.abc12366.uc.model.bo.PointBatchAwardBO}
      */
     void batchAward(PointBatchAwardBO pointBatchAwardBO);
 }

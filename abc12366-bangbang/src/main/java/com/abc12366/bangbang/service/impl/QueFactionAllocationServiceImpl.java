@@ -4,8 +4,8 @@ import com.abc12366.bangbang.mapper.db1.QuestionFactionAllocationMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionAllocationRoMapper;
 import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 import com.abc12366.bangbang.service.QueFactionAllocationService;
-import com.abc12366.bangbang.service.QueFactionMemberService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -137,6 +137,21 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
             throw new ServiceException(6144);
         }
         return "";
+    }
+
+    @Override
+    public List<QuestionFactionAllocationManageBo> selectManageList(Map<String, Object> map) {
+        try {
+            return allocationRoMapper.selectAllocationManageList(map);
+        } catch (Exception e) {
+            LOGGER.error("查询邦派成员奖励分配列表信息异常：{}", e);
+            throw new ServiceException(6140);
+        }
+    }
+
+    @Override
+    public void audit(List<QuestionFactionAllocationManageBo> records) {
+        allocationMapper.batchAudit(records);
     }
 
 }

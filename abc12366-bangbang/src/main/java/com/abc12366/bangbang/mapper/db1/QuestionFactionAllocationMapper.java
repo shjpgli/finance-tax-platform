@@ -1,7 +1,10 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -45,5 +48,12 @@ public interface QuestionFactionAllocationMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(QuestionFactionAllocation record);
+
+	/**
+	 *
+	 * 审核
+	 *
+	 **/
+	int batchAudit(List<QuestionFactionAllocationManageBo> records);
 
 }
