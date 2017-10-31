@@ -195,32 +195,7 @@ public class WxGzhServiceimpl implements IWxGzhService {
 	        	LOGGER.info("下载微信服务器文件失败",fileListDto.getMessage());
 				throw new ServiceException(9999,"下载微信服务器文件失败:"+fileListDto.getMessage());
 	        }
-			/*//ftp地址 上线修改
-			SFTPUtil sf = new SFTPUtil();
-			String host = SpringCtxHolder.getProperty("sftp_host");
-			int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));
-			String username = SpringCtxHolder.getProperty("sftp_username");
-			String password = SpringCtxHolder.getProperty("sftp_password");
 			
-			ChannelSftp sftp = sf.connect(host, port, username, password);
-			String filenam=mediaId+".jpg";
-			sftp.cd("/abc12366/images");
-            if (isDirExist(userId, sftp)) {
-                sftp.cd(userId);
-            } else {
-                // 建立目录
-                sftp.mkdir(userId);
-                // 进入并设置为当前目录
-                sftp.cd(userId);
-            }
-            String filePath = "/abc12366/images/" + userId + "/" + filenam;
-            OutputStream outputStream = sftp.put(filePath);
-            outputStream.write(content.toByteArray());
-            outputStream.flush();
-            outputStream.close();
-			//Map<String, String> map = sf.uploadByByte(userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);
-			sftp.disconnect();
-			sftp.exit();*/
 			
 		} catch (Exception e) {
 			LOGGER.info("下载微信服务器文件失败",e);
