@@ -770,16 +770,16 @@ public class OrderServiceImpl implements OrderService {
     private void setTodoTask(OrderBO order) {
         double amount = order.getTotalPrice();
         String userId = order.getUserId();
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_ID);
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_CODE);
         if (amount >= 1000 && amount < 3000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_1000_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_1000_CODE);
         }
 
         if (amount >= 3000 && amount < 5000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_3000_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_3000_CODE);
         }
         if (amount >= 5000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_BEYOND_5000_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_5000_CODE);
         }
     }
 

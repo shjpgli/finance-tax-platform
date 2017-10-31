@@ -74,7 +74,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
 
         //首次实名认证任务埋点
         if(validStatus.equals(UCConstant.USER_REALNAME_VALIDATED)){
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
         }
 
         UserExtendBO userExtendBO = new UserExtendBO();

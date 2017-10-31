@@ -1,12 +1,12 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.curriculum.*;
 import com.abc12366.bangbang.model.curriculum.bo.*;
 import com.abc12366.bangbang.service.CurriculumService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

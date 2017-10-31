@@ -147,7 +147,9 @@ public class UserServiceImpl implements UserService {
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
         //用户名转成小写
-        userUpdateBO.setUsername(userUpdateBO.getUsername().trim().toLowerCase());
+        if (!StringUtils.isEmpty(userUpdateBO.getUsername())) {
+            userUpdateBO.setUsername(userUpdateBO.getUsername().trim().toLowerCase());
+        }
 
         User user = userRoMapper.selectOne(userUpdateBO.getId());
         if (user == null) {
@@ -183,7 +185,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_CODE);
         }
 
         UserBO userDTO = new UserBO();
@@ -301,7 +303,7 @@ public class UserServiceImpl implements UserService {
         tokenMapper.delete(token);
 
         //首次修改密码任务埋点
-        todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_ID);
+        todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
         return true;
     }
 

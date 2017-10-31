@@ -46,47 +46,88 @@ public class UCConstant {
     //会员时间，单位：年
     public final static Integer USER_VIP_EXPIRE_DATE = 1;
 
-    //系统任务ID
-    //用户登录任务
-    public final static String SYS_TASK_LOGIN_ID = "55fe8293a53b46a28a8e1269339d888f";
-    //用户签到任务
-    public final static String SYS_TASK_CHECK_ID = "8b125435755a4e9eb1daf92a17c736f6";
-    //每日课程学习
-    public final static String SYS_TASK_COURSE_LEARNING_ID = "76303795aa1f480b94f451ac0deb3bb2";
-    //每日课程分享
-    public final static String SYS_TASK_COURSE_SHARE_ID = "de72f5947d034473a50cdfe72279e5d2";
-    //每日课程收藏
-    public final static String SYS_TASK_COURSE_COLLECT_ID = "f2a0a28c8c104d33b1b29ab10aff3e3f";
-    //每日课程评论
-    public final static String SYS_TASK_COURSE_COMMENT_ID = "1df0299fcd254c029cdf2160bae56884";
-    //每日问题分享
-    public final static String SYS_TASK_ASK_SHARE_ID = "22575ee9b53140898fb8a7c5a0b48e22";
-    //每日问题收藏
-    public final static String SYS_TASK_ASK_COLLECT_ID = "a02d642935674c699fc3dd4514df4260";
-    //每日问题评论
-    public final static String SYS_TASK_ASK_COMMENT_ID = "d2e7647794524285a747bd49788bdabc";
-    //每日浏览资讯
-    public final static String SYS_TASK_BROSE_NEWS_ID = "ebbe59c7c5974d96ac19b2a8554da53a";
+    //系统任务编码
+    //1.首次修改登录密码
+    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_CODE = "T-scxgdl";
+    //2.首次上传用户头像图片
+    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_CODE = "T-scsctx";
+    //3.首次手机认证
+    public final static String SYS_TASK_FIRST_PHONE_VALIDATE_CODE = "T-scsjrz";
+    //4.首次申报缴税
+    public final static String SYS_TASK_SCSBJS_CODE = "T-scsbjs";
+    //5.首次消费
+    public final static String SYS_TASK_FIRST_CONSUME_CODE = "T-scxf";
+    //6.首次下载安装ABC4000
+    public final static String SYS_TASK_SCXZAZ_CODE = "T-scxzaz";
+    //7.网上零申报
+    public final static String SYS_TASK_WSLSB_CODE = "T-wslsb";
+    //8.网上缴税
+    public final static String SYS_TASK_WSJS_CODE = "T-wsjs";
+    //9.固定资产折旧管理
+    public final static String SYS_TASK_GDZCZJGL_CODE = "T-gdzxcj";
+    //10.海关完税凭证采集
+    public final static String SYS_TASK_HGWSPZCJ_CODE = "T-hgwspz";
+    //11.查询服务器数据
+    public final static String SYS_TASK_CXFWQSJ_CODE = "T-cxwfqsj";
+    //12.获取申报结果
+    public final static String SYS_TASK_HQSBJG_CODE = "T-hqsbjg";
+    //13.分支机构设置
+    public final static String SYS_TASK_FZJGSZ_CODE = "T-fzjgsz";
+    //14.预缴税款
+    public final static String SYS_TASK_YJSK_CODE = "T-yjsk";
+    //15.每日回答问题
+    public final static String SYS_TASK_MRHDWT_CODE = "T-mrhdwt";
+    //16.每日疑难提问
+    public final static String SYS_TASK_MRYNTW_CODE = "T-mryntw";
+    //17.每日问答收藏
+    public final static String SYS_TASK_MRWDSC_CODE = "T-mrwdsc";
+    //18.介质申报
+    public final static String SYS_TASK_JZSB_CODE = "T-jzsb";
+    //19.系统修复
+    public final static String SYS_TASK_XTXF_CODE = "T-xtxf";
+    //20.每日评论任务
+    public final static String SYS_TASK_MRPL_CODE = "T-mrpl";
+    //21.每日签到
+    public final static String SYS_TASK_CHECK_CODE = "T-mrqd";
+    //22.每日收藏课程
+    public final static String SYS_TASK_COURSE_COLLECT_CODE = "T-mrsckc";
+    //23.每日评论问题
+    public final static String SYS_TASK_ASK_COMMENT_CODE = "T-mrplwd";
+    //24.每日浏览资讯
+    public final static String SYS_TASK_BROSE_NEWS_CODE = "T-mrllzx";
+    //25.每日评论课程
+    public final static String SYS_TASK_COURSE_COMMENT_CODE = "T-mrplkc";
+    //26.消费超过1000人民币
+    public final static String SYS_TASK_CONSUME_BEYOND_1000_CODE = "T-ycxxf";
+    //27.消费超过3000人民币
+    public final static String SYS_TASK_CONSUME_BEYOND_3000_CODE = "ycxxf3k";
+    //28.消费超过5000人民币
+    public final static String SYS_TASK_CONSUME_BEYOND_5000_CODE = "T-ycxxf5k";
+    //29.打印完税凭证
+    public final static String SYS_TASK_DYWSPZ_CODE = "T-dywspz";
+    //30.作废报表
+    public final static String SYS_TASK_ZFBB_CODE = "T-zfbb";
+    //31.每日分享课程
+    public final static String SYS_TASK_COURSE_SHARE_CODE = "T-mrfxkc";
+    //32.绑定税号
+    public final static String SYS_TASK_COURSE_BDSH_CODE = "T-mrfxkc";
+    //33.每日登录
+    public final static String SYS_TASK_LOGIN_CODE = "T-mrdl";
+    //34.网上申报
+    public final static String SYS_TASK_WSSB_CODE = "T-wssb";
+    //35.首次实名认证
+    public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_CODE = "T-scsmrz";
+    //36.关注财税专家公众号
+    public final static String SYS_TASK_GZCSZJGZH_CODE = "T-gzcs";
+    //37.首次邮箱认证(暂不做)
+    public final static String SYS_TASK_FIRST_MAIL_VALIDATE_CODE = "T-scyxrz";
+    //38.下载企业信息
+    public final static String SYS_TASK_XZQYXX_CODE = "T-xzqyxx";
+    //40.ABC4000实名认证
+    public final static String SYS_TASK_ABC4000_SMRZ_CODE = "T-smrz";
+    //41.每日课程学习
+    public final static String SYS_TASK_COURSE_LEARNING_CODE = "T-mrkcxx";
 
-    //首次消费
-    public final static String SYS_TASK_FIRST_CONSUME_ID = "587748ea05cd4f609010cb88786612a0";
-    //首次手机认证
-    public final static String SYS_TASK_FIRST_PHONE_VALIDATE_ID = "db7c37b600b84b299c31dfd8f2b30322";
-    //首次邮箱认证(暂不做)
-    public final static String SYS_TASK_FIRST_MAIL_VALIDATE_ID = "ac5c676e80a64d49b809a24d49b997bf";
-    //首次实名认证
-    public final static String SYS_TASK_FIRST_REALNAME_VALIDATE_ID = "99903d77619744ef86c6df14aab9c269";
-    //首次修改登录密码
-    public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_ID = "4e36d694cd024203a44b39eb4c2a4d73";
-    //首次上传用户头像图片
-    public final static String SYS_TASK_FIRST_UPLOAD_PICTURE_ID = "a7668563b70c447e9ddb9dd63bf63282";
-
-    //消费超过1000人民币
-    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_1000_ID = "2c205885f7eb4d309854a870f3540269";
-    //消费超过3000人民币
-    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_3000_ID = "f33a5d317b05408abdb2bec8ba76a224";
-    //消费超过5000人民币
-    public final static String SYS_TASK_FIRST_CONSUME_BEYOND_5000_ID = "9b978d09120c43cfb5b55a52c6c9589a";
 
     //登录tdps密码加密约定码
     public final static String TDPS_LOGIN_PWD_APPOINT_CODE = "abchngs";

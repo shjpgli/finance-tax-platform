@@ -1,14 +1,13 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.MapUtil;
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionAttentionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAttentionRoMapper;
 import com.abc12366.bangbang.model.question.QuestionAttention;
 import com.abc12366.bangbang.model.question.bo.QuestionAttentionBo;
 import com.abc12366.bangbang.service.QueAttentionService;
-import com.abc12366.bangbang.service.QueAttentionService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UcUserCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

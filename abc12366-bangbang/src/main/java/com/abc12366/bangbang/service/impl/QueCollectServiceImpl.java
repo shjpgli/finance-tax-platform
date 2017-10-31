@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.MapUtil;
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionCollectMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCollectRoMapper;
@@ -11,6 +10,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
 import com.abc12366.bangbang.service.QueCollectService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UcUserCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
