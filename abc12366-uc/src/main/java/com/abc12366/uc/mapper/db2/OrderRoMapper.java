@@ -79,4 +79,11 @@ public interface OrderRoMapper {
      * @return
      */
     OrderTradeBO selectOrderTrade(String tradeNo);
+
+    /**
+     * 后台查询订单信息
+     * @param order
+     * @return
+     */
+    OrderBO selectOrderByAdmin(Order order);
 }

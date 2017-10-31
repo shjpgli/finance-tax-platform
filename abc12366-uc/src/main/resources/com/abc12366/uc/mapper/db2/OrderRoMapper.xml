@@ -557,6 +557,14 @@
         WHERE o.orderNo = #{orderNo} and o.userId = #{userId}
     </select>
 
+    <select id="selectOrderByAdmin" resultMap="orderBOResultMap" parameterType="com.abc12366.uc.model.order.Order">
+        SELECT
+        <include refid="Base_Column_BO_List"/>
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        WHERE o.orderNo = #{orderNo}
+    </select>
+
     <!-- 通用BO查询结果列-->
     <sql id="Base_Column_BO_List">
         o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
