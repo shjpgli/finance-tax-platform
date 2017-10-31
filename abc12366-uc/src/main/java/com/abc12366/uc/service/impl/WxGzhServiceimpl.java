@@ -7,13 +7,11 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.WxGzhMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
-import com.abc12366.uc.model.bo.MessageBO;
 import com.abc12366.uc.model.weixin.bo.CmsFileUploadDto;
 import com.abc12366.uc.model.weixin.bo.FileListDto;
 import com.abc12366.uc.model.weixin.bo.FjDto;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.service.IWxGzhService;
-import com.abc12366.uc.util.SFTPUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxGzhClient;
@@ -160,7 +158,7 @@ public class WxGzhServiceimpl implements IWxGzhService {
 				e.printStackTrace();
 			}
   
-			String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/message/sftp/upload";
+			String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/sftp/upload";
 			
 			HttpHeaders httpHeaders = new HttpHeaders();
 	        if (!StringUtils.isEmpty(request.getHeader(Constant.APP_TOKEN_HEAD))) {
