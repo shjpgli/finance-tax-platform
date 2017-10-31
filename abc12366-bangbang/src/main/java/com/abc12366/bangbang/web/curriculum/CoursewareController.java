@@ -1,9 +1,9 @@
 package com.abc12366.bangbang.web.curriculum;
 
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCoursewareBo;
 import com.abc12366.bangbang.service.CoursewareService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

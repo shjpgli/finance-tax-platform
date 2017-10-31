@@ -174,7 +174,7 @@ public class UserBindServiceImpl implements UserBindService {
         if (hngsAppLoginResponse != null) {
             String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/login";
             HttpHeaders headers = new HttpHeaders();
-            headers.add("accessToken", (String) request.getAttribute("accessToken"));
+            headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
             headers.add("Content-Type", "application/json");
 
             Map<String, Object> requestBody = new HashMap<>();

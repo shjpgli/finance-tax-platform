@@ -58,7 +58,7 @@ public class UserExtendServiceImpl implements UserExtendService {
         }
         if(userExtend.getValidStatus().equals(UCConstant.USER_REALNAME_VALIDATED)){
             //首次实名认证任务埋点
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_ID);
+            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
         }
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);
