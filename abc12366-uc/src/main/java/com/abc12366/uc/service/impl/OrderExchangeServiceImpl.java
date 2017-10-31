@@ -217,10 +217,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             for (SfImportBO data : dataList) {
                 OrderExchange oe = new OrderExchange.Builder()
                         .orderNo(data.getOrderNo())
-                        .toExpressNo(data.getExpressNo())
-                        .expressComp(data.getExpressComp())
                         .status("3")
                         .build();
+                oe.setToExpressComp(data.getExpressComp());
+                oe.setToExpressNo(data.getExpressNo());
                 orderExchangeMapper.update(oe);
                 // 插入订单日志
                 insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark(),"1");
