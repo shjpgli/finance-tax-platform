@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
@@ -11,11 +11,14 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
+import com.abc12366.uc.service.PrivilegeItemService;
+import com.abc12366.uc.service.RSAService;
+import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
 import com.abc12366.uc.util.DateUtils;
-import com.abc12366.uc.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;

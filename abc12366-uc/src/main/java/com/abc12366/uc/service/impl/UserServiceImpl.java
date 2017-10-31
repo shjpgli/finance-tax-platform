@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
@@ -14,8 +14,12 @@ import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.service.AuthService;
+import com.abc12366.uc.service.RSAService;
+import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -242,7 +246,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = ServiceException.class)
     @Override
     public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
         LOGGER.info("{}", passwordUpdateBO);

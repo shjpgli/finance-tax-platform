@@ -10,8 +10,8 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.*;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
@@ -26,10 +26,10 @@ public class SSLIgnoreErrorProtocolSocketFactory implements
 		ProtocolSocketFactory {
 	private SSLContext sslcontext = null;
 	
-	private String ssl_store;
+	private InputStream ssl_store;
 	private String ssl_pwd;
 
-	public SSLIgnoreErrorProtocolSocketFactory(String ssl_store, String ssl_pwd) {
+	public SSLIgnoreErrorProtocolSocketFactory(InputStream ssl_store, String ssl_pwd) {
 		this.ssl_store=ssl_store;
 		this.ssl_pwd=ssl_pwd;
 	}
@@ -37,7 +37,7 @@ public class SSLIgnoreErrorProtocolSocketFactory implements
 	private  SSLContext createEasySSLContext() {
 		try {
 			KeyStore keystore=KeyStore.getInstance("JKS");
-			keystore.load(new FileInputStream(ssl_store),ssl_pwd.toCharArray());
+			keystore.load(ssl_store,ssl_pwd.toCharArray());
 			KeyManagerFactory kmf=KeyManagerFactory.getInstance("SunX509");  
 		    kmf.init(keystore,ssl_pwd.toCharArray());
 			

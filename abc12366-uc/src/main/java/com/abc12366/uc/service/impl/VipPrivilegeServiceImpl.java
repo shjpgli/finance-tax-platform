@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -7,6 +7,8 @@ import com.abc12366.uc.mapper.db2.VipPrivilegeRoMapper;
 import com.abc12366.uc.model.VipPrivilege;
 import com.abc12366.uc.model.bo.VipPrivilegeBO;
 import com.abc12366.uc.model.bo.VipPrivilegeInsertAndUpdateBO;
+import com.abc12366.uc.service.VipPrivilegeLevelService;
+import com.abc12366.uc.service.VipPrivilegeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

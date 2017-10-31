@@ -21,6 +21,8 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.xml.namespace.QName;
+
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ public class DzfpClient {
 	
 	private static String appid=SpringCtxHolder.getProperty("DZFP_APPID");
 	
-	private static String ssl_store ="";
+	private static InputStream ssl_store =null;
 	
 	/*public static final String XSF_NSRSBH="110109500321655";//消费方纳税人识别号
 	
@@ -83,7 +85,9 @@ public class DzfpClient {
 		
 		//ssl_store = ResourceUtils.getFile("classpath:cer/testclient.truststore").getAbsolutePath();
 		
-		ssl_store= new ClassPathResource("cer/testclient.truststore").getPath();
+		//ssl_store= new ClassPathResource("cer/testclient.truststore");
+		
+		ssl_store=new ClassPathResource("cer/testclient.truststore").getInputStream();
 		
 		SSLIgnoreErrorProtocolSocketFactory socketfactory = new SSLIgnoreErrorProtocolSocketFactory(ssl_store,ssl_pwd);
 

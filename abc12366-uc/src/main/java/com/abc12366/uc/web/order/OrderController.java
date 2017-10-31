@@ -108,7 +108,7 @@ public class OrderController {
                                               @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                               @RequestParam(value = "status", required = true) String status,
                                               @RequestParam(value = "userId", required = true) String userId,
-                                              @RequestParam(value = "isReturn", required = true) Boolean isReturn,
+                                              @RequestParam(value = "isReturn", required = false) Boolean isReturn,
                                               @RequestParam(value = "isInvoice", required = false) Boolean isInvoice,
                                               @RequestParam(value = "startTime", required = false) String startTime,
                                               @RequestParam(value = "endTime", required = false) String endTime) {

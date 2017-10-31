@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.model.ExperienceLevel;
 import com.abc12366.uc.model.bo.ExperienceLevelBO;
 import com.abc12366.uc.model.bo.ExperienceLevelInsertAndUpdateBO;
+import com.abc12366.uc.service.ExperienceLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

@@ -46,8 +46,9 @@ public class UserController {
 
     @SuppressWarnings("rawtypes")
     @PutMapping("/changeheadbywx/{userid}/{mediaid}")
-    public ResponseEntity changeHeadByWx(@PathVariable("userid") String userid, @PathVariable("mediaid") String mediaid) {
-        String filePath = iWxGzhService.getWxDownFilePath(userid, mediaid);
+    public ResponseEntity changeHeadByWx(@PathVariable("userid") String userid, @PathVariable("mediaid") String mediaid
+    		, HttpServletRequest request) {
+        String filePath = iWxGzhService.getWxDownFilePath(userid, mediaid,request);
 
         UserUpdateBO userUpdateDTO = new UserUpdateBO();
         userUpdateDTO.setId(userid);

@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -6,6 +6,7 @@ import com.abc12366.uc.mapper.db1.VipLogMapper;
 import com.abc12366.uc.mapper.db2.VipLogRoMapper;
 import com.abc12366.uc.model.VipLog;
 import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.service.VipLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

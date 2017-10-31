@@ -85,10 +85,10 @@ public class UserExtendController {
         LOGGER.info("{}:{}:{}", userExtendUpdateBO, userId, request);
         
         userExtendUpdateBO.setUserId(userId);
-        String filePath1=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getFrontImage());
+        String filePath1=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getFrontImage(),request);
         userExtendUpdateBO.setFrontImage(filePath1);
         
-        String filePath2=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getBackImage());
+        String filePath2=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getBackImage(),request);
         userExtendUpdateBO.setBackImage(filePath2);
         
         if (!userId.trim().equals(UserUtil.getUserId(request))) {

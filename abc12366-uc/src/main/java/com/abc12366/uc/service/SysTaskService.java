@@ -8,31 +8,65 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 系统任务接口方法
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-23
  * Time: 17:52
  */
 public interface SysTaskService {
+    /**
+     *查询系统任务列表
+     */
     List<SysTaskBO> selectList(Map<String, String> map);
 
+    /**
+     *根据任务周期类型查询启用的任务列表
+     */
     List<SysTaskBO> selectListByDateType(String dateType);
 
+    /**
+     *查询系统任务列表：只查询启用的
+     */
     List<SysTaskBO> selectDeployedList(Map<String, String> map);
 
+    /**
+     *根据ID查询一条系统任务
+     */
     SysTaskBO selectOne(String id);
 
+    /**
+     *增加一条系统任务
+     */
     SysTaskBO insert(SysTaskInsertAndUpdateBO sysTaskInsertBO);
 
+    /**
+     *根据ID修改一条系统任务
+     */
     SysTaskBO update(SysTaskInsertAndUpdateBO sysTaskUpdateBO, String id);
 
+    /**
+     *根据ID删除一条系统任务（逻辑删除）
+     */
     boolean delete(String id);
 
+    /**
+     *根据任务类型查询启用的任务列表
+     */
     List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
 
+    /**
+     *根据任务类型查询所有的任务列表
+     */
     List<SysTaskBO> selectListByType(String type);
 
+    /**
+     *根据任务类型和周期类型查询启用的任务列表
+     */
     List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType);
 
+    /**
+     *根据任务类型查询有时间限制的系统任务的任务列表
+     */
     List<SysTaskBO> selectTimeLimitedListByType(String type);
 
     //根据编码查询一条系统任务

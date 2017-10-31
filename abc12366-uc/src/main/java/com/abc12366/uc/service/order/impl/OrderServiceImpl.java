@@ -13,6 +13,7 @@ import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -673,6 +674,7 @@ public class OrderServiceImpl implements OrderService {
                     //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
                     //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
                     String trading = orderProductBO.getTradingChannels();
+                    order.setPayMethod(orderPayBO.getPayMethod());
                     if ("RMB".equals(type)) {
                         //支付状态，1：支付中，2：支付成功，3：支付失败，
                         if (isPay == 1) {
@@ -731,7 +733,6 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
-                        order.setPayMethod(orderPayBO.getPayMethod());
 
                         //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
                         //判断是否需要查询产品库存信息

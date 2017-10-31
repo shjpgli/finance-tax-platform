@@ -23,6 +23,7 @@ import com.abc12366.uc.service.OrderExchangeService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
@@ -238,7 +239,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 Message message = new Message();
                 message.setBusinessId(order.getOrderNo());
                 message.setType("SPDD");
-                message.setContent(MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+MessageConstant.SUFFIX);
+                message.setContent(MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+ MessageConstant.SUFFIX);
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }

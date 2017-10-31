@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -8,6 +8,8 @@ import com.abc12366.uc.model.PointsRule;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.model.bo.PointsRuleInsertBO;
 import com.abc12366.uc.model.bo.PointsRuleUpdateBO;
+import com.abc12366.uc.service.ExperienceRuleService;
+import com.abc12366.uc.service.PointsRuleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

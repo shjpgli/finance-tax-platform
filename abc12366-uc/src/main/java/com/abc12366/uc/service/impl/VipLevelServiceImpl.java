@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -9,6 +9,7 @@ import com.abc12366.uc.model.VipLevel;
 import com.abc12366.uc.model.bo.VipLevelBO;
 import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
+import com.abc12366.uc.service.VipLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

@@ -121,7 +121,7 @@ public class ActivityService implements IActivityService {
             }
             WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                     .id(Utils.uuid().replaceAll("-", ""))
-                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId))
+                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
                     .createTime(new Date())
                     .activityId(activity.getId())
                     .build();
@@ -192,7 +192,7 @@ public class ActivityService implements IActivityService {
         lotteryLog.setCreateTime(now);
         activityMapper.insertLotteryLog(lotteryLog);
 
-        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim());
+        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim().toLowerCase());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
             throw new ServiceException(6005);
@@ -461,7 +461,8 @@ public class ActivityService implements IActivityService {
      * 生成金额
      */
     private Double amountRule(String amountType, Double amount) {
-        if ("1".equals(amountType)) { // 固定金额
+        // 固定金额
+        if ("1".equals(amountType)) {
             return amount;
         } else { // 随机金额
             if (amount.intValue() == amount) {
@@ -477,9 +478,12 @@ public class ActivityService implements IActivityService {
      * 口令生成规则
      */
     private String secretRule(String ruleType, String rule, String activityId) {
+        if (StringUtils.isNotEmpty(rule)) {
+            rule = rule.toLowerCase();
+        }
         if ("1".equals(ruleType)) {
             // 规则1口令格式为：大写字母+1至9个数字组合的随机字符串，总共8位长度
-            String candidateStr = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+            String candidateStr = "abcdefghjkmnpqrstuvwxyz23456789";
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 8; i++) {
                 int selectedChar = ThreadLocalRandom.current().nextInt(0, candidateStr.length());
@@ -487,7 +491,7 @@ public class ActivityService implements IActivityService {
             }
             String secret = rule + sb.toString();
             List<WxRedEnvelop> dataList = selectRedEnvelop(activityId, secret);
-            return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId) : secret;
+            return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId).toLowerCase() : secret;
         } else {
             // 规则2口令格式为：管理员自主输入的中文字符串，用#符号分割，
             // 如：艾博克#财税平台#爱我中华#美丽中国，只要匹配其中一个词即可

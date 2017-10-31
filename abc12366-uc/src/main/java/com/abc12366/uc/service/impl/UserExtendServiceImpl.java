@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
@@ -8,7 +8,10 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
-import com.abc12366.uc.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.service.UserBindService;
+import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
