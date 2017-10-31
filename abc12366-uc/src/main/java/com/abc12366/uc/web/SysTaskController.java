@@ -35,6 +35,9 @@ public class SysTaskController {
     @Autowired
     private SysTaskService sysTaskService;
 
+    /**
+     *查询系统任务列表
+     */
     @GetMapping(path = "/task")
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) String type,
@@ -57,6 +60,9 @@ public class SysTaskController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
     }
 
+    /**
+     *查询系统任务列表：只查询启用的
+     */
     @GetMapping(path = "/tasks")
     public ResponseEntity selectDeployedList(@RequestParam(required = false) String name,
                                              @RequestParam(required = false) String type,
@@ -80,6 +86,9 @@ public class SysTaskController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
     }
 
+    /**
+     *根据ID查询一条系统任务
+     */
     @GetMapping(path = "/task/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -88,6 +97,9 @@ public class SysTaskController {
         return ResponseEntity.ok(Utils.kv("data", sysTaskBO));
     }
 
+    /**
+     *增加一条系统任务
+     */
     @PostMapping(path = "/task")
     public ResponseEntity insert(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskInsertBO) {
         LOGGER.info("新增系统任务：{}", sysTaskInsertBO);
@@ -96,6 +108,9 @@ public class SysTaskController {
         return ResponseEntity.ok(Utils.kv("data", sysTaskBO));
     }
 
+    /**
+     *根据ID修改一条系统任务
+     */
     @PutMapping(path = "/task/{id}")
     public ResponseEntity update( @RequestBody SysTaskInsertAndUpdateBO sysTaskUpdateBO, @PathVariable String
             id) {
@@ -105,6 +120,9 @@ public class SysTaskController {
         return ResponseEntity.ok(Utils.kv("data", sysTaskBO));
     }
 
+    /**
+     *根据ID删除一条系统任务（逻辑删除）
+     */
     @DeleteMapping(path = "/task/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -112,6 +130,9 @@ public class SysTaskController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     *根据任务类型查询启用的任务列表
+     */
     @GetMapping(path = "/tasks/{type}")
     public ResponseEntity selectDeployedListByType(
             HttpServletRequest request,

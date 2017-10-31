@@ -13,6 +13,7 @@ import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;

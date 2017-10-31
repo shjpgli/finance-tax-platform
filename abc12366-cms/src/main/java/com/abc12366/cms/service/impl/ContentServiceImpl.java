@@ -6,7 +6,7 @@ import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ContentService;
 import com.abc12366.cms.util.CmsRestTemplateUtil;
-import com.abc12366.cms.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.cms.util.UcUserCommon;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;

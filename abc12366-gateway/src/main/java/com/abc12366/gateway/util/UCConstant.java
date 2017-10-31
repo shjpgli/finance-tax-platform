@@ -1,8 +1,9 @@
-package com.abc12366.bangbang.util;
+package com.abc12366.gateway.util;
 
 /**
+ * UC常用静态变量
  * User: liuguiyao<435720953@qq.com>
- * Date: 2017-09-12
+ * Date: 20170912
  * Time: 15:24
  */
 public class UCConstant {
@@ -42,6 +43,8 @@ public class UCConstant {
     public final static String AWARD_TYPE_EXP = "0";
     public final static String AWARD_TYPE_POINT = "1";
 
+    //会员时间，单位：年
+    public final static Integer USER_VIP_EXPIRE_DATE = 1;
 
     //系统任务ID
     //用户登录任务
@@ -89,11 +92,11 @@ public class UCConstant {
     public final static String TDPS_LOGIN_PWD_APPOINT_CODE = "abchngs";
 
 
-    //经验值计算规则ID
+    //经验值计算规则编码
     //1.网上申报
     public final static String EXP_RULE_WSSB_ID = "";
     //1.登录（此条规则并不起作用，只是勇于展现）
-    public final static String EXP_RULE_LOGIN_ID = "a9ac2dbd61e6411ba59b5f6f698b96f4";
+    public final static String EXP_RULE_LOGIN_CODE = "E-mrdl";
 
 
     //用户实名认证状态
@@ -102,24 +105,30 @@ public class UCConstant {
     //待认证：1
     public final static String USER_REALNAME_TO_VALIDATE = "1";
     //已认证：2
-    public final static String USER_REALNAME_VALIDATED= "2";
+    public final static String USER_REALNAME_VALIDATED = "2";
     //认证失败：3
-    public final static String USER_REALNAME_FAIL_VALIDATE= "3";
+    public final static String USER_REALNAME_FAIL_VALIDATE = "3";
 
 
     //积分计算规则ID
     //签到
-    public final static String POINT_RULE_CHECK_ID = "d4aa8dcad7e7469f93b4764e35050a4f";
+    public final static String POINT_RULE_CHECK_CODE = "P-mrqd";
     //补签到
-    public final static String POINT_RULE_RECHECK_ID = "003a63660bba4a0b84869b3c2805adeb";
+    public final static String POINT_RULE_RECHECK_CODE = "P-recheck";
     //积分兑换（该条规则不用于积分计算，仅用于展示）
-    public final static String POINT_RULE_EXCHANGE_ID = "9e9453322001431abbc7e8c38b66572f";
-    //抽奖扣积分
-    public final static String POINT_RULE_LOTTERY_ID = "314288532339452391db32a182f4fbcf";
-    //用户下单送积分
-    public final static String POINT_RULE_ORDER_ID = "6ef5369fbfb24a89aa6ad2c86751cbf0";
-    //用户等级升级奖励
-    public final static String POINT_RULE_EXP_UP_ID = "c10c55bef01d4e948a7b5efc8eb8a96b";
+    public final static String POINT_RULE_EXCHANGE_CODE = "P-jfdh";
+    //抽奖扣积分P-cjkjf
+    public final static String POINT_RULE_LOTTERY_CODE = "P-cjkjf";
+    //用户下单送积分P-xdsjf
+    public final static String POINT_RULE_ORDER_CODE = "P-xdsjf";
+    //用户等级升级奖励P-yhdjsjjl
+    public final static String POINT_RULE_EXP_UP_CODE = "P-yhdjsjjl";
+
+    //退单返还积分P-fhjf
+    public final static String POINT_RULE_ORDER_RETURN_CODE = "P-fhjf";
+
+    //帮帮批量奖励用户积分P-bpljljf
+    public final static String POINT_RULE_BANGBANG_BATCH_AWARD_CODE = "P-bpljljf";
 
 
     //用户权益类型
@@ -139,4 +148,16 @@ public class UCConstant {
     public final static String PRIVILEGE_TYPE_YHJFZR = "yhjfzr";
     //8.商品/发票免邮券
     public final static String PRIVILEGE_TYPE_SPFPMYQ = "spfpmyq";
+
+
+    //用户连续输错密码阈值
+    public final static int USER_CONTINUE_PASSWORD_WRONG_MAX = 5;
+    //用户连续输错密码超过阈值锁定时间，单位：毫秒
+    public final static int LOCK_TIME = 10 * 60 * 1000;
+
+    //消息类型，1：系统消息，2：帮帮消息
+    public final static String BUSI_MSG_TYPE_SYSTEM = "1";
+    public final static String BUSI_MSG_TYPE_BANGBANG = "2";
+    //业务类型：帮帮
+    public final static String BUSI_TYPE_BANGBANG = "BANGBANG-AWARD";
 }

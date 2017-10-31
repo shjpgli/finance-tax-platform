@@ -19,7 +19,7 @@ import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

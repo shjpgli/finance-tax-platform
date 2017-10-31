@@ -14,7 +14,7 @@ import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.DateUtils;
-import com.abc12366.uc.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
