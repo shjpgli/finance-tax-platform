@@ -137,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
 
         user.setId(Utils.uuid());
         //用户名（字母UC+时间戳毫秒数）
-        user.setUsername("UC" + System.currentTimeMillis());
+        user.setUsername("uc" + System.currentTimeMillis());
         //自动生成用户昵称:（财税+6位数字）
         user.setNickname("财税" + RandomNumber.getRandomNumber(6));
         user.setSalt(salt);
