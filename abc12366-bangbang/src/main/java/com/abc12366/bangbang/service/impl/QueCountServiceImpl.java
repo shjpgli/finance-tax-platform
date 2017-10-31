@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.MapUtil;
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionLikeMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCountRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
