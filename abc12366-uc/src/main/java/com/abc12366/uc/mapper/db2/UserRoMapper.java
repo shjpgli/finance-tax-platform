@@ -3,6 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserUpdateBO;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.UserSimpleInfoBO;
 import org.apache.ibatis.annotations.Param;
@@ -37,4 +38,10 @@ public interface UserRoMapper {
     List<UserLoginPasswordWrongCount> selectContinuePwdWrong(String id);
 
     UserSimpleInfoBO selectSimple(String userId);
+
+	int getAllNomalCont();
+
+	List<UserBO> getNomalList(Map<String, Object> map);
+
+	User selectByWxUserId(User users);
 }

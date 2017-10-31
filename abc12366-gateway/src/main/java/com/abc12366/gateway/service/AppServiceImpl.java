@@ -31,7 +31,7 @@ import java.util.List;
  * @create 2017-04-05 1:12 PM
  * @since 1.0.0
  */
-@Service
+@Service("appService")
 public class AppServiceImpl implements AppService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppServiceImpl.class);
@@ -194,24 +194,31 @@ public class AppServiceImpl implements AppService {
         apiLog.setYyyyMMdd(DateUtils.getDataString());
         apiLog.setAppId(appId);
         apiLog.setMethod(method);
-        int minuteCount = apiLogRoMapper.selectApiLogCount(apiLog);
-        if (bo.getTimesPerMinute() != 0 && minuteCount > bo.getTimesPerMinute()) {
-            LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
-            throw new ServiceException(4031);
+        //查询每分钟访问的次数
+        if (bo.getTimesPerMinute() != 0) {
+            int minuteCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            if (minuteCount > bo.getTimesPerMinute()) {
+                LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
+                throw new ServiceException(4031);
+            }
         }
         //查询每小时访问的次数
         apiLog.setStartTime(currentTime - (60 * 1000 * 60));
-        int hourCount = apiLogRoMapper.selectApiLogCount(apiLog);
-        if (bo.getTimesPerHour() != 0 && hourCount > bo.getTimesPerHour()) {
-            LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
-            throw new ServiceException(4032);
+        if (bo.getTimesPerHour() != 0) {
+            int hourCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            if (hourCount > bo.getTimesPerHour()) {
+                LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
+                throw new ServiceException(4032);
+            }
         }
         //查询每天访问的次数
         apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
-        int dayCount = apiLogRoMapper.selectApiLogCount(apiLog);
-        if (bo.getTimesPerDay() != 0 && dayCount > bo.getTimesPerDay()) {
-            LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
-            throw new ServiceException(4033);
+        if (bo.getTimesPerDay() != 0) {
+            int dayCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            if (dayCount > bo.getTimesPerDay()) {
+                LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
+                throw new ServiceException(4033);
+            }
         }
         return true;
     }
@@ -272,4 +279,12 @@ public class AppServiceImpl implements AppService {
     private static Date getLongToDate(long lt) {
         return new Date(lt);
     }
+
+	@Override
+	public AppBO selectByName(String name) {
+		App app= appRoMapper.selectByName(name);
+		AppBO appBO = new AppBO();
+        BeanUtils.copyProperties(app, appBO);
+        return appBO;
+	}
 }

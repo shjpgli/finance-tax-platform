@@ -33,8 +33,11 @@ public class EventServiceImpl implements EventService {
     private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
-    public SingleEventBo singleEvent(HttpServletRequest request) {
+    public SingleEventBo singleEvent(HttpServletRequest request, String category) {
         String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/cms/bangbang/event/singleevent";
+        if(category!=null && !"".equals(category)){
+            url += "?category="+category;
+        }
         //String url = "http://118.118.116.132:9400/cms/bangbang/event/singleevent";
         String str = bangbangRestTemplateUtil.send(url, HttpMethod.GET, request);
         SingleEventOneBo dataList = JSON.parseObject(str,SingleEventOneBo.class);
@@ -42,9 +45,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<SingleEventBo> singleEventList(HttpServletRequest request) {
+    public List<SingleEventBo> singleEventList(HttpServletRequest request, String category) {
         //String url = "http://118.118.116.132:9400/cms/bangbang/event/singleeventlist";
         String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/cms/bangbang/event/singleeventlist";
+        if(category!=null && !"".equals(category)){
+            url += "?category="+category;
+        }
         String str = bangbangRestTemplateUtil.send(url, HttpMethod.GET, request);
         SingleEventListBo dataList = JSON.parseObject(str,SingleEventListBo.class);
         return dataList.getDataList();

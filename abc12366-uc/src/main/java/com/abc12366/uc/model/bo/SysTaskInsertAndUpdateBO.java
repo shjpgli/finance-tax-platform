@@ -48,6 +48,8 @@ public class SysTaskInsertAndUpdateBO {
     private String remark;
     @NotEmpty(message = "系统任务周期不能为空")
     private String dateType;
+    @NotEmpty(message = "系统任务编码code不能为空")
+    private String code;
 
     public SysTaskInsertAndUpdateBO() {
     }
@@ -178,5 +180,36 @@ public class SysTaskInsertAndUpdateBO {
 
     public void setDateType(String dateType) {
         this.dateType = dateType;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "SysTaskInsertAndUpdateBO{" +
+                "name='" + name + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", rule='" + rule + '\'' +
+                ", award=" + award +
+                ", type='" + type + '\'' +
+                ", status=" + status +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", ruleName='" + ruleName + '\'' +
+                ", ruleCode='" + ruleCode + '\'' +
+                ", count=" + count +
+                ", skipURL='" + skipURL + '\'' +
+                ", awardType='" + awardType + '\'' +
+                ", ruleId='" + ruleId + '\'' +
+                ", remark='" + remark + '\'' +
+                ", dateType='" + dateType + '\'' +
+                ", code='" + code + '\'' +
+                '}';
     }
 }

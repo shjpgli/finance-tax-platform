@@ -5,7 +5,7 @@
 
     <sql id="Base_Column_List">
         id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
-        toExpressNo, type,adminConfirmRemark,consignee,	contactNumber,	shippingAddress
+        toExpressNo, type,adminConfirmRemark,consignee,	contactNumber,	shippingAddress,refundRemark
     </sql>
 
     <!--删除：根据主键ID删除-->
@@ -20,7 +20,7 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         (#{id}, #{userId}, #{orderNo}, #{reason}, #{adminRemark}, #{userRemark}, #{expressNo}, #{expressComp},
-         #{status},#{createTime},#{lastUpdate}, #{toExpressNo}, #{type},#{adminConfirmRemark},#{consignee},#{contactNumber},#{shippingAddress})
+         #{status},#{createTime},#{lastUpdate}, #{toExpressNo}, #{type},#{adminConfirmRemark},#{consignee},#{contactNumber},#{shippingAddress},#{refundRemark})
     </insert>
 
     <!-- 修 改-->
@@ -65,6 +65,9 @@
             </if>
             <if test="shippingAddress != null">
                 shippingAddress = #{shippingAddress},
+            </if>
+            <if test="refundRemark != null">
+                refundRemark = #{refundRemark},
             </if>
         </set>
         <where>

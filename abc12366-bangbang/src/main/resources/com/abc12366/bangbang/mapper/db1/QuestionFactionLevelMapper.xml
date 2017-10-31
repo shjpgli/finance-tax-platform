@@ -3,93 +3,44 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db1.QuestionFactionLevelMapper">
 
-	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		 id,	name,	honorValue,	createTime,	createAdmin,	updateTime,	updateAdmin
-	</sql>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
-		SELECT
-		<include refid="Base_Column_List" />
-		FROM bb_question_fashion_level
-	</select>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionFactionLevel" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_question_fashion_level
-		 WHERE id = #{id}
-	</select>
-
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		 DELETE FROM bb_question_fashion_level
+		 DELETE FROM bb_question_faction_level
 		 WHERE id = #{id}
 	</delete>
 
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
-		 INSERT INTO bb_question_fashion_level
- 		(id,name,honorValue,createTime,createAdmin,updateTime,updateAdmin) 
+		 INSERT INTO bb_question_faction_level
+ 		(id, code, name,image,	honorValue,peopleLimit,taskLimit,status,createTime,createAdmin,updateTime,updateAdmin)
 		 VALUES 
- 		(#{id},#{name},#{honorValue},now(),#{createAdmin},now(),#{updateAdmin})
-	</insert>
-
-	<!-- 添加 （匹配有值的字段）-->
-	<insert id="insertSelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
-		 INSERT INTO bb_question_fashion_level
-		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="id != null">
-				 id,
-			</if>
-			<if test="name != null">
-				 name,
-			</if>
-			<if test="honorValue != null">
-				 honorValue,
-			</if>
-			<if test="createAdmin != null">
-				 createAdmin,
-			</if>
-			<if test="updateAdmin != null">
-				 updateAdmin,
-			</if>
-			 updateTime
-		 </trim>
-		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="id!=null">
-				 #{id},
-			</if>
-			<if test="name!=null">
-				 #{name},
-			</if>
-			<if test="honorValue!=null">
-				 #{honorValue},
-			</if>
-			<if test="createAdmin!=null">
-				 #{createAdmin},
-			</if>
-			<if test="updateAdmin!=null">
-				 #{updateAdmin},
-			</if>
-			now()
-		 </trim>
+ 		(#{id}, #{code}, #{name}, #{image},#{honorValue},#{peopleLimit},#{taskLimit},#{status},now(),#{createAdmin},now(),#{updateAdmin})
 	</insert>
 
 	<!-- 修 改-->
 	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
-		 UPDATE bb_question_fashion_level
+		 UPDATE bb_question_faction_level
  		 <set> 
 			<if test="name != null">
 				 name = #{name},
 			</if>
-			<if test="honorValue != null">
-				 honorValue = #{honorValue},
+			<if test="code != null">
+				 code = #{code},
 			</if>
-			<if test="createAdmin != null">
-				 createAdmin = #{createAdmin},
+			<if test="image != null">
+				image = #{image},
+			</if>
+			 <if test="honorValue != null">
+				 honorValue = #{honorValue},
+			 </if>
+			 <if test="peopleLimit != null">
+				 peopleLimit = #{peopleLimit},
+			 </if>
+			 <if test="taskLimit != null">
+				 taskLimit = #{taskLimit},
+			 </if>
+			<if test="status != null">
+				status = #{status},
 			</if>
 			<if test="updateAdmin != null">
 				 updateAdmin = #{updateAdmin},
@@ -99,16 +50,5 @@
 		 WHERE id = #{id}
 	</update>
 
-	<!-- 修 改-->
-	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionFactionLevel">
-		 UPDATE bb_question_fashion_level
-		 SET 
-			 name = #{name},
-			 honorValue = #{honorValue},
-			 createAdmin = #{createAdmin},
-			 updateAdmin = #{updateAdmin}
-			 updateTime = now()
-		 WHERE id = #{id}
-	</update>
 
 </mapper>

@@ -36,7 +36,7 @@
 			a.topLevel topLevel,
 			a.typeId typeId,
 			b.author author,
-			e.views views,
+			a.viewsDay views,
 			b.releaseDate releaseDate,
 			a.status STATUS,
 			b.needRegenerate needRegenerate,
@@ -80,7 +80,7 @@
 	</select>
 
     <!-- 查询（根据查询条件查询） -->
-    <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
+    <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentViewListBo" parameterType="java.util.Map">
         SELECT
         a.contentId contentId,
         a.userid userid,
@@ -97,7 +97,7 @@
         a.topLevel topLevel,
         a.typeId typeId,
         b.author author,
-        e.views views,
+        a.viewsDay views,
         b.releaseDate releaseDate,
         a.status STATUS,
         b.needRegenerate needRegenerate,
@@ -105,14 +105,14 @@
         b.staticLink,
         d.siteName,
         c.channelPath,d.sitePath,d.domain
-        FROM cms_content a LEFT JOIN cms_contenttagid t ON t.contentId = a.contentId
+        FROM cms_content a
         LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
         LEFT JOIN cms_channel c ON a.channelId = c.channelId
         LEFT JOIN cms_site d ON a.siteId = d.siteId
         LEFT JOIN cms_content_count e ON a.contentId = e.contentId
         WHERE a.status = 2 AND b.needRegenerate = 1
         <if test="tagId != null and tagId != ''">
-            AND t.tagId = #{tagId}
+            AND a.contentType like CONCAT('%',#{channelId},'%')
         </if>
         <if test="channelId != null and channelId != ''">
             AND a.channelId like CONCAT(#{channelId},'%')
@@ -123,7 +123,7 @@
 		<if test="exceptChannelId != null and exceptChannelId != ''">
 			AND a.channelId != #{exceptChannelId}
 		</if>
-        ORDER BY a.topLevel DESC,e.views DESC
+        ORDER BY a.topLevel DESC,e.viewsDay DESC
     </select>
 
 	<!-- 查询（根据查询条件查询） -->
@@ -175,7 +175,7 @@
 		a.topLevel topLevel,
 		a.typeId typeId,
 		b.author author,
-		e.views views,
+        a.viewsDay views,
 		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
@@ -287,7 +287,7 @@
 		a.topLevel topLevel,
 		a.typeId typeId,
 		b.author author,
-		e.views views,
+        a.viewsDay views,
 		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
@@ -349,7 +349,7 @@
         a.topLevel topLevel,
         a.typeId typeId,
         b.author author,
-        e.views views,
+        a.viewsDay views,
         b.releaseDate releaseDate,
         a.status STATUS,
         b.needRegenerate needRegenerate,
@@ -396,7 +396,7 @@
         a.topLevel topLevel,
         a.typeId typeId,
         b.author author,
-        e.views views,
+        a.viewsDay views,
         b.releaseDate releaseDate,
         a.status STATUS,
         b.needRegenerate needRegenerate,
@@ -434,7 +434,7 @@
 		a.topLevel topLevel,
 		a.typeId typeId,
 		b.author author,
-		e.views views,
+        a.viewsDay views,
 		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,

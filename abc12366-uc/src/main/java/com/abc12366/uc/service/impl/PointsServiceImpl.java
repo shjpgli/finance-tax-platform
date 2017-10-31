@@ -5,20 +5,22 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.PointMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.PointsRuleService;
-import com.abc12366.uc.service.PointsService;
-import com.abc12366.uc.service.PrivilegeItemService;
+import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.DateUtils;
+import com.abc12366.uc.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +52,9 @@ public class PointsServiceImpl implements PointsService {
 
     @Autowired
     private PrivilegeItemService privilegeItemService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public PointsBO selectOne(String userId) {
@@ -173,8 +178,8 @@ public class PointsServiceImpl implements PointsService {
     @Override
     public int calculate(PointCalculateBO pointCalculateBO) {
         //查询出对应的积分规则
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOne(pointCalculateBO.getRuleId());
-        if(pointsRuleBO==null){
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(pointCalculateBO.getRuleCode());
+        if (pointsRuleBO == null) {
             return 0;
         }
 
@@ -208,7 +213,7 @@ public class PointsServiceImpl implements PointsService {
                 //param.setUpointCodexId(pointCodex.getId());
                 param.setStartTime(startTime);
                 param.setEndTime(endTime);
-                param.setRuleId(pointCalculateBO.getRuleId());
+                param.setRuleId(pointsRuleBO.getId());
                 List<PointComputeLog> computeLogList = pointsRoMapper.selectCalculateLog(param);
                 if (computeLogList != null && computeLogList.size() >= pointsRuleBO.getDegree()) {
                     return 0;
@@ -224,7 +229,7 @@ public class PointsServiceImpl implements PointsService {
 
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(pointCalculateBO.getUserId());
-        pointsLog.setRuleId(pointCalculateBO.getRuleId());
+        pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setRemark(pointsRuleBO.getDescription());
         if (pointsRuleBO.getPoints() < 0) {
             pointsLog.setIncome(0);
@@ -242,9 +247,54 @@ public class PointsServiceImpl implements PointsService {
         //pointComputeLog.setUpointCodexId(pointCodex.getId());
         pointComputeLog.setTimeType(period);
         pointComputeLog.setCreateTime(new Date());
-        pointComputeLog.setRuleId(pointCalculateBO.getRuleId());
+        pointComputeLog.setRuleId(pointsRuleBO.getId());
         pointMapper.insertComputeLog(pointComputeLog);
 
         return pointsRuleBO.getPoints();
+    }
+
+    @Override
+    public void batchAward(PointBatchAwardBO pointBatchAwardBO) {
+        //如果积分规则为空则返回
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_BANGBANG_BATCH_AWARD_CODE);
+        if (pointsRuleBO == null) {
+            return;
+        }
+        String ruleId = pointsRuleBO.getId();
+        for (PointAwardBO pointAwardBO : pointBatchAwardBO.getPointAwardBOList()) {
+            PointsLogBO pointsLog = new PointsLogBO();
+            pointsLog.setUserId(pointAwardBO.getUserId());
+            pointsLog.setRuleId(ruleId);
+            pointsLog.setRemark(pointsRuleBO.getDescription());
+            if (pointAwardBO.getPoint() < 0) {
+                pointsLog.setIncome(0);
+                pointsLog.setOutgo(pointAwardBO.getPoint());
+            } else {
+                pointsLog.setIncome(pointAwardBO.getPoint());
+                pointsLog.setOutgo(0);
+            }
+            pointsLogService.insert(pointsLog);
+
+            //向用户发送帮帮消息
+            sendBangbangMsg(pointAwardBO);
+        }
+    }
+
+    private void sendBangbangMsg(PointAwardBO pointAwardBO) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        Message message = new Message();
+        message.setUserId(pointAwardBO.getUserId());
+        message.setType(UCConstant.BUSI_MSG_TYPE_BANGBANG);
+        message.setBusiType(UCConstant.BUSI_TYPE_BANGBANG);
+        message.setBusinessId(pointAwardBO.getUserId());
+        message.setStatus("1");
+        message.setUrl("");
+        message.setContent("您在帮邦获得积分奖励：" + pointAwardBO.getPoint());
+        try {
+            messageService.insert(message, request);
+        } catch (Exception e) {
+            throw new ServiceException(4822);
+        }
     }
 }

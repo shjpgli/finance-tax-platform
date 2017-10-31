@@ -14,9 +14,8 @@ import java.net.URLEncoder;
 
 /**
  * 附件下载
- * Created by xieyanmao on 2017-6-2.
+ * @author xieyanmao on 2017-6-2.
  */
-
 @RestController
 @Scope("prototype")
 @RequestMapping(value = "/download")

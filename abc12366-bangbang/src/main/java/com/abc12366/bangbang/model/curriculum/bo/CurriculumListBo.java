@@ -17,9 +17,6 @@ public class CurriculumListBo implements Serializable {
     /**课程标题**varchar(200)**/
     private String title;
 
-    /**订购价格原价**double**/
-    private Double originalPrice;
-
     /**浏览量**tinyint(11)**/
     private Integer browseNum;
 
@@ -40,6 +37,9 @@ public class CurriculumListBo implements Serializable {
 
 	/**课程收费**tinyint(1)**/
 	private Integer isFree;
+
+    /**销售价格**double**/
+    private Double sellPrice;
 
 	/**课程状态**tinyint(1)**/
 	private Integer status;
@@ -146,11 +146,12 @@ public class CurriculumListBo implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public Double getOriginalPrice() {
-        return originalPrice;
+
+    public Double getSellPrice() {
+        return sellPrice;
     }
 
-    public void setOriginalPrice(Double originalPrice) {
-        this.originalPrice = originalPrice;
+    public void setSellPrice(Double sellPrice) {
+        this.sellPrice = sellPrice;
     }
 }

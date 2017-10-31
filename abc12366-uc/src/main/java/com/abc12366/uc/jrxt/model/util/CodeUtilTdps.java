@@ -6,12 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 
-/**
- * 实现文件编码解码的工具类
- *
- * @author ziben
- * @version 1.0 11-3-29 上午11:33
- */
 @Component
 public class CodeUtilTdps {
     public char[] Base64Encode(String inFileName) {
@@ -30,23 +24,10 @@ public class CodeUtilTdps {
         return new char[0];
     }
 
-    /**
-     * 对比特流进行Base64编码，返回编码后的字符串
-     *
-     * @param bytes 输入比特流
-     * @return String
-     */
     public static String encodeContent(byte[] bytes) {
         return CodeUtil.encodeContent("base64", bytes);
     }
 
-    /**
-     * 对比特流进行编码，返回编码后的字符串
-     *
-     * @param code  编码方式，目前只支持“BASE64”
-     * @param bytes 输入比特流
-     * @return String
-     */
     public static String encodeContent(String code, byte[] bytes) {
         if (code.equalsIgnoreCase("BASE64")) {
             char[] chars = Base64Encoder.encode(bytes);
@@ -55,13 +36,6 @@ public class CodeUtilTdps {
         return new String(bytes);
     }
 
-    /**
-     * 对字符串进行解码，返回解码后的比特流
-     *
-     * @param code    编码方式，目前只支持“BASE64”
-     * @param content 输入字符串
-     * @return byte[]
-     */
     public static byte[] decodeContent(String code, String content) {
         byte[] bytes = new byte[0];
         if (code.equalsIgnoreCase("BASE64")) {
@@ -84,12 +58,6 @@ public class CodeUtilTdps {
         }
     }
 
-    /**
-     * 对字符串进行"BASE64"解码，将解码后的比特流转换成字符串输出
-     *
-     * @param content 输入字符串
-     * @return string 输出字符串
-     */
     public static String decodeContent(String content) {
         return new String(CodeUtil.decodeContent("BASE64", content));
     }

@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.bo.TradeBillBO;
+import com.abc12366.uc.model.bo.TradeLogBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface TradeLogRoMapper {
     List<TradeLog> selectList(TradeLog tradeLog);
 
     TradeLog selectOne(TradeBillBO data);
+
+    TradeLog selectByOrderNo(String OrderNo);
 }

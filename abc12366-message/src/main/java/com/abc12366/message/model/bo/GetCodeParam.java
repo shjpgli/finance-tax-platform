@@ -10,9 +10,9 @@ import javax.validation.constraints.Size;
  * Time: 16:10
  */
 public class GetCodeParam {
-    @NotNull
+    @NotNull(message = "验证码类型type不能为空")
     private String type;
-    @NotNull
+    @NotNull(message = "手机号码phone不能为空")
     @Pattern(regexp = "^\\d{11}$")
     @Size(min = 11, max = 11)
     private String phone;

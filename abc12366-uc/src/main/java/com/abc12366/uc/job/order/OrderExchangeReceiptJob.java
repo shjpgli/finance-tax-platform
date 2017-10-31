@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ * 退换货自动确认收货
+ *
  * @author lizhongwei
  * @create 2017-08-07 12:21 PM
  * @since 1.0.0
  */
-public class OrderExchangeReceiptJob implements Job{
+public class OrderExchangeReceiptJob implements Job {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderExchangeReceiptJob.class);
 
@@ -32,9 +34,10 @@ public class OrderExchangeReceiptJob implements Job{
         }
     }
 
-    public static void initService(){
-        synchronized(OrderExchangeReceiptJob.class){
-            orderExchangeService=(OrderExchangeService) SpringCtxHolder.getApplicationContext().getBean("orderExchangeService");
+    public static void initService() {
+        synchronized (OrderExchangeReceiptJob.class) {
+            orderExchangeService = (OrderExchangeService) SpringCtxHolder.getApplicationContext().getBean
+                    ("orderExchangeService");
         }
     }
 }

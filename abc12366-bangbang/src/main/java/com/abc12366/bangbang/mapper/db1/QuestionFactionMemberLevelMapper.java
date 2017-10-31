@@ -14,20 +14,6 @@ import java.util.List;
 public interface QuestionFactionMemberLevelMapper{
 
 	/**
-	 *
-	 * 查询列表
-	 *
-	 **/
-	List<QuestionFactionMemberLevel> selectList();
-
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	QuestionFactionMemberLevel selectByPrimaryKey(@Param("id") String id);
-
-	/**
 	 * 
 	 * 删除（根据主键ID删除）
 	 * 
@@ -41,12 +27,6 @@ public interface QuestionFactionMemberLevelMapper{
 	 **/
 	int insert(QuestionFactionMemberLevel record);
 
-	/**
-	 * 
-	 * 添加 （匹配有值的字段）
-	 * 
-	 **/
-	int insertSelective(QuestionFactionMemberLevel record);
 
 	/**
 	 * 

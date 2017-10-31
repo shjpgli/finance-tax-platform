@@ -25,6 +25,8 @@
         FROM uc_user_task_todo
         WHERE userId = #{userId}
         and sysTaskId = #{sysTaskId}
+        and type = '2'
+        and dateType = 'D'
         and createTime &gt;= (SELECT CURDATE())
         and createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
@@ -34,7 +36,9 @@
         <include refid="Base_Column_List"/>
         FROM uc_user_task_todo
         WHERE userId = #{userId}
-        and dateType = #{dateType}
+        and sysTaskId = #{sysTaskId}
+        and type = '2'
+        and dateType = 'D'
         and createTime &gt;= (SELECT CURDATE())
         and createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
@@ -46,6 +50,8 @@
         FROM uc_user_task_todo
         WHERE userId = #{userId}
         and sysTaskId = #{sysTaskId}
+        and type = '2'
+        and dateType = 'M'
         and createTime &gt;= (SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
         and createTime &lt;(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
     </select>
@@ -55,7 +61,9 @@
         <include refid="Base_Column_List"/>
         FROM uc_user_task_todo
         WHERE userId = #{userId}
-        and dateType = #{dateType}
+        and sysTaskId = #{sysTaskId}
+        and type = '2'
+        and dateType = 'M'
         and createTime &gt;= (SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
         and createTime &lt;(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
     </select>
@@ -67,6 +75,8 @@
         FROM uc_user_task_todo
         WHERE userId = #{userId}
         and sysTaskId = #{sysTaskId}
+        and type = '2'
+        and dateType = 'Y'
         and createTime &gt;= (SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))
         and createTime &lt;(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))
     </select>
@@ -76,7 +86,9 @@
         <include refid="Base_Column_List"/>
         FROM uc_user_task_todo
         WHERE userId = #{userId}
-        and dateType = #{dateType}
+        and sysTaskId = #{sysTaskId}
+        and type = '2'
+        and dateType = 'Y'
         and createTime &gt;= (SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))
         and createTime &lt;(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))
     </select>
@@ -95,7 +107,9 @@
         <include refid="Base_Column_List"/>
         FROM uc_user_task_todo
         WHERE userId = #{userId}
-        and dateType = #{dateType}
+        and sysTaskId = #{sysTaskId}
+        and type = '1'
+        and dateType = 'O'
     </select>
 
     <!--查询特殊任务-->
@@ -118,12 +132,26 @@
         and createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
 
+    <select id="selectTimeLimitedOneByUserIdAndSysTaskId" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_user_task_todo
+        WHERE userId = #{userId}
+        and sysTaskId = #{sysTaskId}
+        and startTime IS NOT NULL
+        and endTime IS NOT NULL
+        and <![CDATA[  startTime < (SELECT CURDATE())]]>
+        and <![CDATA[  endTime > (SELECT CURDATE())]]>
+    </select>
+
     <select id="selectNormalTaskList" resultType="com.abc12366.uc.model.TodoTaskFront" parameterType="java.lang.String">
         SELECT
         a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
         a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
+        and b.type = '2'
+        and b.status='1'
         and a.dateType = 'D'
         and a.createTime &gt;= (SELECT CURDATE())
         and a.createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
@@ -133,6 +161,8 @@
         a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
+        and b.type = '2'
+        and b.status='1'
         and a.dateType = 'M'
         and a.createTime &gt;= (SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
         and a.createTime &lt;(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
@@ -142,6 +172,8 @@
         a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
+        and b.type = '2'
+        and b.status='1'
         and a.dateType = 'Y'
         and a.createTime &gt;= (SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))
         and a.createTime &lt;(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))
@@ -153,6 +185,8 @@
         a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
+        and b.type = '1'
+        and b.status='1'
         and a.dateType = 'O'
     </select>
 
@@ -162,7 +196,10 @@
         a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
+        and b.status='1'
         and a.type = '3'
+        and b.startTime &lt;(SELECT CURDATE())
+        and b.endTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
 
     <select id="selectListByUserIdAndSysId" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
@@ -171,5 +208,17 @@
         FROM uc_user_task_todo
         WHERE userId = #{userId}
         and sysTaskId = #{sysTaskId}
+    </select>
+
+    <select id="selectBangbangTaskList" resultType="com.abc12366.uc.model.TodoTaskFront" parameterType="java.lang.String">
+        SELECT
+        a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
+        a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
+        FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
+        WHERE a.userId = #{userId}
+        and b.status='1'
+        and a.type = '4'
+        and b.startTime &lt;(SELECT CURDATE())
+        and b.endTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
 </mapper>

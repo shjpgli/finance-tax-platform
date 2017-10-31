@@ -90,7 +90,7 @@ public class SysTaskController {
 
     @PostMapping(path = "/task")
     public ResponseEntity insert(@Valid @RequestBody SysTaskInsertAndUpdateBO sysTaskInsertBO) {
-        LOGGER.info("{}", sysTaskInsertBO);
+        LOGGER.info("新增系统任务：{}", sysTaskInsertBO);
         SysTaskBO sysTaskBO = sysTaskService.insert(sysTaskInsertBO);
         LOGGER.info("{}", sysTaskBO);
         return ResponseEntity.ok(Utils.kv("data", sysTaskBO));

@@ -44,8 +44,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
 
     @Override
     public SensitiveWords update(SensitiveWords sensitiveWords) {
-        Date date = new Date();
-        sensitiveWords.setLastUpdate(date);
+        sensitiveWords.setUpdateAdmin(Utils.getAdminId());
         int update = sensitiveWordsMapper.update(sensitiveWords);
         if (update != 1) {
             LOGGER.info("敏感词数据，修改失败", sensitiveWords);
@@ -57,9 +56,7 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
     @Override
     public SensitiveWords add(SensitiveWords sensitiveWords) {
         sensitiveWords.setId(Utils.uuid());
-        Date date = new Date();
-        sensitiveWords.setCreateTime(date);
-        sensitiveWords.setLastUpdate(date);
+        sensitiveWords.setUpdateAdmin(Utils.getAdminId());
         int insert = sensitiveWordsMapper.insert(sensitiveWords);
         if (insert != 1) {
             LOGGER.info("敏感词数据，新增失败", sensitiveWords);
@@ -69,10 +66,10 @@ public class SensitiveWordsServiceImpl implements SensitiveWordsService {
     }
 
     @Override
-    public void delete(SensitiveWords sensitiveWords) {
-        int del = sensitiveWordsMapper.deleteByPrimaryKey(sensitiveWords.getId());
+    public void delete(String id) {
+        int del = sensitiveWordsMapper.deleteByPrimaryKey(id);
         if (del != 1) {
-            LOGGER.info("敏感词数据，删除失败", sensitiveWords);
+            LOGGER.info("敏感词数据，删除失败", id);
             throw new ServiceException(4507);
         }
     }

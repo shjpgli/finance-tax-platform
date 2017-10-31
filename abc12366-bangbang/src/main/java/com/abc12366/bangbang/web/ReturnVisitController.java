@@ -2,6 +2,7 @@ package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.ReturnVisit;
 import com.abc12366.bangbang.model.bo.ReturnVisitBO;
+import com.abc12366.bangbang.model.question.QuestionAccepted;
 import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import com.abc12366.bangbang.service.ReturnVisitService;
 import com.abc12366.bangbang.util.DateUtils;
@@ -9,6 +10,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +56,11 @@ public class ReturnVisitController {
         param.setUserId(userId);
         List<ReturnVisit> list = returnVisitService.selectList(param);
 
+        PageInfo<ReturnVisit> pageInfo = new PageInfo<>(list);
+
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
 
@@ -70,17 +74,19 @@ public class ReturnVisitController {
                                            @RequestParam(value = "userId", required = false) String userId,
                                            @RequestParam(value = "date", required = true) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        QuestionAcceptedBO param = new QuestionAcceptedBO();
+        ReturnVisitBO param = new ReturnVisitBO();
         if(date != null && !"".equals(date)) {
             param.setDate(date);
         }
         param.setPhone(phone);
         param.setUserId(userId);
-        List<QuestionAcceptedBO> list = returnVisitService.selectStatisList(param);
+        List<ReturnVisitBO> list = returnVisitService.selectStatisList(param);
+
+        PageInfo<ReturnVisitBO> pageInfo = new PageInfo<>(list);
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /***

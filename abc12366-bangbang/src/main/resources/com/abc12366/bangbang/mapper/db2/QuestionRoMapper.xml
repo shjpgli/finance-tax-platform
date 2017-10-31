@@ -18,18 +18,23 @@
 		 WHERE q.id = #{id}
 	</select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectQuestion" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
+        SELECT
+        q.id,	userId,	q.title,collectNum,answerNum,reportNum,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum
+        FROM bb_question q left join bb_user u on q.userId = u.id
+        WHERE q.id = #{id}
+    </select>
+
     <!-- 最新问题 -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
-        SELECT
+        select aa.*,a.shortAnswer,a.answerImage,a.likeNum,a.trampleNum,a.commentNum from (SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerId
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1
+        WHERE q.status = '0'
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -39,7 +44,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC) aa left join bb_question_answer a on aa.answerId = a.id
     </select>
 
     <!-- 推荐问题 -->
@@ -47,13 +52,14 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1 and isRecommend = '1'
+        WHERE q.status = '0' and isRecommend = '1'
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -63,7 +69,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 高悬赏问题 -->
@@ -71,13 +77,14 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1
+        WHERE q.status = '0' and q.points >0
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -87,7 +94,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY points,createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 热门问题 -->
@@ -95,13 +102,14 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1
+        WHERE q.status = '0'
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -114,18 +122,13 @@
         ORDER BY browseNum DESC
     </select>
 
-    <!-- 等你回答问题 -->
+    <!-- 0回答问题 -->
     <select id="selectListWait" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        collectNum,answerNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1 and id not in(SELECT questionId FROM bb_question_answer where userId = #{userId})
+        WHERE q.status = '0' and q.answerNum = 0
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -135,7 +138,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 已解决问题 -->
@@ -143,13 +146,14 @@
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answerImage from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerImage,
+        (select likeNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) likeNum,
+        (select trampleNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) trampleNum,
+        (select commentNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1 and id in(SELECT questionId FROM bb_question_answer where isAccept = '1')
+        WHERE q.status = '0' and q.id in(SELECT questionId FROM bb_question_answer where isAccept = '1')
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
@@ -159,28 +163,36 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 查询帮友热议 -->
-    <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
+    <select id="selectListry" resultType="com.abc12366.bangbang.model.question.bo.QuestionryBo" parameterType="java.util.Map">
         SELECT
-        q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
+        q.id,q.title,u.userPicturePath,u.nickname,q.createTime,	q.points,detail,
         collectNum,answerNum,
-        (select id from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answerId,
-        (select answer from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) answer,
-        (select likeNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) likeNum,
-        (select trampleNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) trampleNum,
-        (select commentNum from bb_question_answer where questionId = q.id and parentId = '' order by likeNum desc limit 1) commentNum
+        (select id from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerId,
+        (select shortAnswer from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select commentNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) commentNum
         FROM bb_question q left join bb_user u on q.userId = u.id
-        WHERE 1=1
+        WHERE q.status = '0'
         ORDER BY answerNum DESC
     </select>
 
     <!-- 我的举报 -->
-    <select id="selectTipList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
-        SELECT a.answer,t.createTime,q.title FROM bb_question_tip_off t left join bb_question_answer a on t.sourceId = a.id left join bb_question q on a.questionId = q.id
-        where t.createUser = #{userId} order by t.createTime desc
+    <select id="selectTipList" resultType="com.abc12366.bangbang.model.question.bo.QuestionjbBo" parameterType="java.lang.String">
+        SELECT
+             t.sourceId,t.sourceType,t.createTime,t.status, q.title,
+            CASE sourceType
+                 WHEN 'answer' THEN (select answer from bb_question_answer where id = t.sourceId)
+                 WHEN 'comment' THEN (select commentTxt from bb_question_comment where id = t.sourceId)
+                 ELSE q.detail END  as answer
+        FROM
+            bb_question_tip_off t
+                LEFT JOIN
+            bb_question q ON t.questionId = q.id
+        where t.createUser = #{userId}
+        ORDER BY t.createTime DESC
     </select>
 
     <!-- 查找邦派ID -->
@@ -195,7 +207,7 @@
         SELECT
         q.id,	userId,	q.title,q.detail,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	q.isSolve,	classifyCode,	browseNum, isRecommend,
         (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
-        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum,
+        q.answerNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId != '') commentNum
         FROM bb_question q
         WHERE 1=1
@@ -230,17 +242,16 @@
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
         FROM bb_question_invite i left join bb_question q on i.questionId = q.id left join bb_user u on q.userId = u.id
         WHERE q.userId = #{userId}
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 我的提问 -->
     <select id="selectMyQuestionList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.util.Map">
         SELECT
         q.id,	userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
         (SELECT count(id) FROM bb_question_answer where questionId = q.id and isAccept = '1') isAccept,
         (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = q.id and sourceType = 'question' and createUser = q.userId) isTip,
-        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId = '') answerNum
+        q.browseNum,q.collectNum,q.answerNum
         FROM bb_question q left join bb_user u on q.userId = u.id
         WHERE 1=1
         <if test="isAccept != null and isAccept != ''">
@@ -252,7 +263,7 @@
         <if test="userId != null and userId != ''">
             AND q.userId = #{userId}
         </if>
-        ORDER BY createTime DESC
+        ORDER BY q.createTime DESC
     </select>
 
     <!-- 我的帮帮 -->
@@ -260,8 +271,8 @@
         select
         (SELECT count(*) FROM bb_question_answer where parentId = '' and userId = #{userId}) answerNum,
         (SELECT count(*) FROM bb_question_like where userId = #{userId}) likeNum,
-        (SELECT count(*) FROM bb_question_answer where parentId != '' and userId = #{userId}) commentNum,
-        (SELECT count(*) FROM bb_question_answer where parentId = '' and isAccept = '1' and userId = #{userId}) acceptNum,
+        (SELECT count(*) FROM bb_question_comment where userId = #{userId}) commentNum,
+        (SELECT count(*) FROM bb_question_answer where isAccept = '1' and userId = #{userId}) acceptNum,
         0 medalNum,
         (SELECT count(*) FROM bb_question where userId = #{userId}) questionNum,
         (SELECT count(*) FROM bb_question_invite where userId = #{userId}) inviteNum,

@@ -73,6 +73,9 @@ public class OrderExchange implements Serializable {
     /**收件地址**/
     private String shippingAddress;
 
+    /**退款备注**/
+    private String refundRemark;
+
     /****/
     private Timestamp createTime;
 
@@ -351,6 +354,14 @@ public class OrderExchange implements Serializable {
 
     public void setShippingAddress(String shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    public String getRefundRemark() {
+        return refundRemark;
+    }
+
+    public void setRefundRemark(String refundRemark) {
+        this.refundRemark = refundRemark;
     }
 
     public static final class Builder {

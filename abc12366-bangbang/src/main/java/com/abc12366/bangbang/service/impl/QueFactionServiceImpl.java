@@ -114,6 +114,26 @@ public class QueFactionServiceImpl implements QueFactionService {
         return QuestionFactionListBoList;
     }
 
+    @Override
+    public List<QuestionFactionListBo> selectListPotential(Map<String,Object> map) {
+        List<QuestionFactionListBo> QuestionFactionListBoList;
+        try {
+            //查询潜力邦派列表
+            QuestionFactionListBoList = questionFactionRoMapper.selectListPotential(map);
+
+            for(QuestionFactionListBo questionFactionBo : QuestionFactionListBoList){
+                int honor = 2*questionFactionBo.getAnswerNum() + 1*questionFactionBo.getDiscussNum() + 7*questionFactionBo.getAdoptNum();
+
+                questionFactionBo.setHonor(honor+"");
+            }
+
+        } catch (Exception e) {
+            LOGGER.error("查询邦派列表信息异常：{}", e);
+            throw new ServiceException(6120);
+        }
+        return QuestionFactionListBoList;
+    }
+
     @Transactional("db1TxManager")
     @Override
     public QuestionFactionBo save(QuestionFactionBo questionFactionBo) {
@@ -126,6 +146,9 @@ public class QueFactionServiceImpl implements QueFactionService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         QuestionFaction questionFaction = new QuestionFaction();
         questionFactionBo.setFactionId(uuid);
+        questionFactionBo.setFactionGrade("PO");//默认最低等级
+        questionFactionBo.setPeopleLimit(1000);//初始人数限制
+        questionFactionBo.setAwardPoint(0);//初始奖励积分为0
         BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
         int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
@@ -160,8 +183,8 @@ public class QueFactionServiceImpl implements QueFactionService {
                 classify.setId(UUID.randomUUID().toString().replace("-", ""));
                 classify.setFactionId(uuid);
                 Map<String, Object> dataMap = new HashMap<>();
-                dataMap.put("factionId", questionFactionBo.getUserId());//
-                dataMap.put("userId", classify.getFactionId());//
+                dataMap.put("userId", questionFactionBo.getUserId());//
+                dataMap.put("factionId", classify.getFactionId());//
                 int cnt = classifyRoMapper.selectClassifyCnt(dataMap);
                 if(cnt > 0){
                     //该用户创建的帮派所选话题分类不允许重叠

@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
-import com.abc12366.uc.model.Order;
+import com.abc12366.uc.model.order.Order;
 
 /**
  * OrderMapper数据库操作接口类

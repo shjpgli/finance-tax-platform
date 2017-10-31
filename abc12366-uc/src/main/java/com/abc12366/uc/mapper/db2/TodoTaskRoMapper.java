@@ -19,19 +19,19 @@ public interface TodoTaskRoMapper {
 
     TodoTask selectOneTime(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
-    List<TodoTask> selectListOneTime(@Param("userId") String userId, @Param("dateType") String dateType);
+    List<TodoTask> selectListOneTime(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
     TodoTask selectOneByDay(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
-    List<TodoTask> selectListByDay(@Param("userId") String userId, @Param("dateType") String dateType);
+    List<TodoTask> selectListByDay(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
     TodoTask selectOneByMonth(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
-    List<TodoTask> selectListByMonth(@Param("userId") String userId, @Param("dateType") String dateType);
+    List<TodoTask> selectListByMonth(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
     TodoTask selectOneByYear(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
-    List<TodoTask> selectListByYear(@Param("userId") String userId, @Param("dateType") String dateType);
+    List<TodoTask> selectListByYear(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
     TodoTask selectSpecial(Map map);
 
@@ -44,4 +44,8 @@ public interface TodoTaskRoMapper {
     List<TodoTaskFront> selectSpecialTaskList(String userId);
 
     List<TodoTask> selectListByUserIdAndSysId(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
+
+    List<TodoTaskFront> selectBangbangTaskList(String userId);
+
+    List<TodoTask> selectTimeLimitedOneByUserIdAndSysTaskId(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 }

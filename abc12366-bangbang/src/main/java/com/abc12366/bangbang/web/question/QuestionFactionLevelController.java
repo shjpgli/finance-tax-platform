@@ -36,6 +36,12 @@ public class QuestionFactionLevelController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    @GetMapping(path = "/view/{id}")
+    public ResponseEntity selectOne(@PathVariable String id){
+        QuestionFactionLevel record = questionFactionLevelService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data", record));
+    }
+
     /* 帮派等级添加 */
     @PostMapping(path = "/add")
     public ResponseEntity add(@RequestBody QuestionFactionLevel record) {

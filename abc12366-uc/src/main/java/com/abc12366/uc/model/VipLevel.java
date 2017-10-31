@@ -15,8 +15,58 @@ public class VipLevel {
     private Date lastUpdate;
     private Date createTime;
     private String levelCode;
+    private Double costPrice;
+    private Double marketPrice;
+    private Double salePrice;
+    private Double sendPoints;
+    private String imgUrl;
+    /**
+     * 积分价格
+     */
+    private Double pointsPrice;
+    
+    
+    public Double getCostPrice() {
+		return costPrice;
+	}
 
-    public VipLevel() {
+	public void setCostPrice(Double costPrice) {
+		this.costPrice = costPrice;
+	}
+
+	public Double getMarketPrice() {
+		return marketPrice;
+	}
+
+	public void setMarketPrice(Double marketPrice) {
+		this.marketPrice = marketPrice;
+	}
+
+	public Double getSalePrice() {
+		return salePrice;
+	}
+
+	public void setSalePrice(Double salePrice) {
+		this.salePrice = salePrice;
+	}
+
+	public Double getSendPoints() {
+		return sendPoints;
+	}
+
+	public void setSendPoints(Double sendPoints) {
+		this.sendPoints = sendPoints;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	public VipLevel() {
     }
 
     public String getId() {
@@ -75,4 +125,11 @@ public class VipLevel {
         this.levelCode = levelCode;
     }
 
+    public Double getPointsPrice() {
+        return pointsPrice;
+    }
+
+    public void setPointsPrice(Double pointsPrice) {
+        this.pointsPrice = pointsPrice;
+    }
 }

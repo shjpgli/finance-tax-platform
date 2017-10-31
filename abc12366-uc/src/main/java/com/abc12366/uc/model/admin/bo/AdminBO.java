@@ -24,24 +24,26 @@ public class AdminBO extends AdminExtendBO implements Serializable {
 
     /**
      * 用户名
-     **/
+     */
     @NotEmpty
     @Size(min = 6, max = 32)
     private String username;
 
+    /**
+     * 密码
+     */
     @NotEmpty
     @Size(min = 6, max = 32)
-    /**密码**/
     private String password;
 
     /**
      * 昵称
-     **/
+     */
     private String nickname;
 
     /**
      * 用户状态
-     **/
+     */
     private Boolean status;
 
     private String organizationId;
@@ -132,5 +134,21 @@ public class AdminBO extends AdminExtendBO implements Serializable {
 
     public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
+    }
+
+    @Override
+    public String toString() {
+        return "AdminBO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", organizationId='" + organizationId + '\'' +
+                ", roleIds='" + roleIds + '\'' +
+                ", rolesList=" + rolesList +
+                ", loginInfo=" + loginInfo +
+                ", menuMap=" + menuMap +
+                "} " + super.toString();
     }
 }

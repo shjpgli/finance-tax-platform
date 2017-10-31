@@ -38,11 +38,12 @@ public class RoleController {
 
     /**
      * 列表查询
-     * @param pageNum
-     * @param pageSize
+     *
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
      * @param roleName 名称
-     * @param status 状态
-     * @return
+     * @param status   状态
+     * @return ResponseEntity
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -52,19 +53,22 @@ public class RoleController {
         Role role = new Role();
         role.setRoleName(roleName);
         role.setStatus(status);
+        LOGGER.info("{}", role);
+
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<RoleBO> roleList = roleService.selectList(role);
         LOGGER.info("{}", roleList);
         return roleList == null ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) roleList, "total", ((Page) roleList).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", roleList, "total", ((Page) roleList).getTotal()));
     }
 
 
     /**
      * 根据角色ID查询用户
-     * @param id
-     * @return
+     *
+     * @param id 角色ID
+     * @return ResponseEntity
      */
     @GetMapping(path = "/user/{id}")
     public ResponseEntity selectUserByRoleId(@PathVariable("id") String id) {
@@ -79,8 +83,8 @@ public class RoleController {
     /**
      * 角色-用户关联修改和新增
      *
-     * @param userRoleBO
-     * @return
+     * @param userRoleBO UserRoleBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/user")
     public ResponseEntity updateUserRole(@Valid @RequestBody UserRoleBO userRoleBO) {
@@ -91,8 +95,9 @@ public class RoleController {
 
     /**
      * 单个查询
-     * @param id
-     * @return
+     *
+     * @param id 角色ID
+     * @return ResponseEntity
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable("id") String id) {
@@ -105,8 +110,9 @@ public class RoleController {
 
     /**
      * 根据角色名称查询
-     * @param roleName
-     * @return
+     *
+     * @param roleName 角色名称
+     * @return ResponseEntity
      */
     @GetMapping(path = "/selectRoleByName/{roleName}")
     public ResponseEntity selectRoleByName(@PathVariable("roleName") String roleName) {
@@ -119,7 +125,10 @@ public class RoleController {
 
 
     /**
-     * 新增
+     * 新增角色
+     *
+     * @param roleBO RoleBO
+     * @return ResponseEntity
      */
     @PostMapping
     public ResponseEntity addRole(@Valid @RequestBody RoleBO roleBO) {
@@ -130,7 +139,11 @@ public class RoleController {
     }
 
     /**
-     * 修改
+     * 修改角色
+     *
+     * @param roleBO RoleBO
+     * @param id     角色ID
+     * @return ResponseEntity
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity updateRole(@Valid @RequestBody RoleBO roleBO, @PathVariable("id") String id) {
@@ -141,7 +154,10 @@ public class RoleController {
     }
 
     /**
-     * 删除
+     * 删除角色
+     *
+     * @param id 角色ID
+     * @return ResponseEntity
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteRoleById(@PathVariable("id") String id) {
@@ -152,6 +168,9 @@ public class RoleController {
 
     /**
      * 角色启用、禁用
+     *
+     * @param roleUpdateBO RoleUpdateBO
+     * @return ResponseEntity
      */
     @PutMapping(path = "/enable")
     public ResponseEntity enable(@Valid @RequestBody RoleUpdateBO roleUpdateBO) {
@@ -163,8 +182,8 @@ public class RoleController {
     /**
      * 授权
      *
-     * @param roleMenuBO
-     * @return
+     * @param roleMenuBO RoleMenuBO
+     * @return ResponseEntity
      */
     @PostMapping("/grant")
     public ResponseEntity grant(@Valid @RequestBody RoleMenuBO roleMenuBO) {

@@ -22,11 +22,23 @@ public class QuestionTipOff{
 	/**举报时间**/
 	private java.util.Date createTime;
 
+	/*问题id*/
+	private String questionId;
+
 	/**来源id**/
 	private String sourceId;
 
 	/**来源类型（question：提问，answer：回答，comment：评论）**/
 	private String sourceType;
+
+	/**审核中auditing，审核通过approved，拒绝refuse**/
+	private String status;
+
+	/**拒绝理由**/
+	private String refuseReason;
+
+	/**奖励积分**/
+	private Integer rewardsPoints;
 
 	/**审核人id**/
 	private String updateAdmin;
@@ -109,4 +121,39 @@ public class QuestionTipOff{
 		return this.updateTime;
 	}
 
+	public String getQuestionId() {
+		return questionId;
+	}
+
+	public QuestionTipOff setQuestionId(String questionId) {
+		this.questionId = questionId;
+		return this;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public QuestionTipOff setStatus(String status) {
+		this.status = status;
+		return this;
+	}
+
+	public String getRefuseReason() {
+		return refuseReason;
+	}
+
+	public QuestionTipOff setRefuseReason(String refuseReason) {
+		this.refuseReason = refuseReason;
+		return this;
+	}
+
+	public Integer getRewardsPoints() {
+		return rewardsPoints;
+	}
+
+	public QuestionTipOff setRewardsPoints(Integer rewardsPoints) {
+		this.rewardsPoints = rewardsPoints;
+		return this;
+	}
 }

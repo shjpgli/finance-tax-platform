@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
+import com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo;
 import com.abc12366.bangbang.service.QuestionSysBlockService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -27,9 +28,15 @@ public class QuestionSysBlockController {
     /* 列表查询 */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "content", defaultValue = "") String content,
+                                     @RequestParam(value = "status", defaultValue = "") String status,
+                                     @RequestParam(value = "beginTime", defaultValue = "") String beginTime,
+                                     @RequestParam(value = "endTime", defaultValue = "") String endTime){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionSysBlockBo> list = questionSysBlockService.selectList();
+        QuestionSysBlockParamBo param = new QuestionSysBlockParamBo();
+        param.setStatus(status).setContent(content).setBeginTime(beginTime).setEndTime(endTime);
+        List<QuestionSysBlockBo> list = questionSysBlockService.selectList(param);
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :

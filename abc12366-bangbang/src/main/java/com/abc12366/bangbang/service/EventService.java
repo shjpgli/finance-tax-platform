@@ -13,9 +13,9 @@ import java.util.List;
  */
 public interface EventService {
 
-    SingleEventBo singleEvent(HttpServletRequest request);
+    SingleEventBo singleEvent(HttpServletRequest request, String category);
 
-    List<SingleEventBo> singleEventList(HttpServletRequest request);
+    List<SingleEventBo> singleEventList(HttpServletRequest request, String category);
 
     EventIdBo saveeventrecord(HttpServletRequest request, String eventid,String userid);
 

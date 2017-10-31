@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionAnswer">
 		 INSERT INTO bb_question_answer
- 		(id,parentId,questionId,factionId,userId,ip,answerUserId,answer,status,createTime,lastUpdate,isAccept)
+ 		(id,parentId,questionId,factionId,userId,ip,answerUserId,answer,shortAnswer,answerImage,status,createTime,lastUpdate,isAccept)
 		 VALUES 
- 		(#{id},#{parentId},#{questionId},#{factionId},#{userId},#{ip},#{answerUserId},#{answer},#{status},#{createTime},#{lastUpdate},#{isAccept})
+ 		(#{id},#{parentId},#{questionId},#{factionId},#{userId},#{ip},#{answerUserId},#{answer},#{shortAnswer},#{answerImage},#{status},#{createTime},#{lastUpdate},#{isAccept})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -45,6 +45,12 @@
 			<if test="answer != null">
 				 answer,
 			</if>
+             <if test="shortAnswer != null">
+                 shortAnswer,
+             </if>
+             <if test="answerImage != null">
+                 answerImage,
+             </if>
 			<if test="status != null">
 				 status,
 			</if>
@@ -84,6 +90,12 @@
 			<if test="answer!=null">
 				 #{answer},
 			</if>
+             <if test="shortAnswer!=null">
+                 #{shortAnswer},
+             </if>
+             <if test="answerImage!=null">
+                 #{answerImage},
+             </if>
 			<if test="status!=null">
 				 #{status},
 			</if>
@@ -124,6 +136,12 @@
 			<if test="answer != null">
 				 answer = #{answer},
 			</if>
+             <if test="shortAnswer != null">
+                 shortAnswer = #{shortAnswer},
+             </if>
+             <if test="answerImage != null">
+                 answerImage = #{answerImage},
+             </if>
 			<if test="status != null">
 				 status = #{status},
 			</if>
@@ -135,6 +153,9 @@
              </if>
              <if test="trampleNum != null">
                  trampleNum = #{trampleNum},
+             </if>
+             <if test="reportNum != null">
+                 reportNum = #{reportNum},
              </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
@@ -161,11 +182,18 @@
 			 ip = #{ip},
 			 answerUserId = #{answerUserId},
 			 answer = #{answer},
+			 shortAnswer = #{shortAnswer},
+			 answerImage = #{answerImage},
 			 status = #{status},
 			 createTime = #{createTime},
 			 lastUpdate = #{lastUpdate},
 			 isAccept = #{isAccept}
 		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改 举报数-->
+	<update id="updateReportNum" parameterType="java.lang.String">
+		UPDATE bb_question_answer SET reportNum = reportNum + 1 WHERE id = #{id}
 	</update>
 
 </mapper>

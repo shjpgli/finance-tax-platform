@@ -13,12 +13,12 @@
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserExtendListBO" parameterType="java.util.Map">
-        select uu.username,uu.nickname,insert(uu.phone, 4, 4, '****') phone,uu.status,
+        select uu.username,uu.nickname,uu.phone,uu.status,
         uue.userId,uue.signature,uue.sex,uue.birthday,uue.bloodType,uue.weight,uue.height,uue.marital,
-        uue.education,uue.graduate, uue.occupation,uue.income,uue.postAddress,insert(uue.realName, 1, 1, '*') realName,
+        uue.education,uue.graduate, uue.occupation,uue.income,uue.postAddress,uue.realName,
         uue.weixin,uue.qq,uue.safeQuestion,
         uue.safeAnswer,uue.province,uue.city,uue.area,uue.createTime,
-        uue.lastUpdate,uue.tags,insert(uue.idcard, 7, 8, '******') idcard,uue.frontImage,uue.backImage,
+        uue.lastUpdate,uue.tags,uue.idcard,uue.frontImage,uue.backImage,
         uue.startTime,uue.endTime,uue.validStatus,uue.validTime,uue.remark,uue.careerDuration
         from uc_user_extend uue, uc_user uu
         <where>
@@ -30,10 +30,10 @@
                 and uu.status = #{status}
             </if>
             <if test="phone!=null">
-                and uu.phone = insert(#{phone}, 4, 4, '****')
+                and uu.phone = #{phone}
             </if>
             <if test="realName!=null">
-                and uue.realName = insert(#{realName}, 1, 1, '*')
+                and uue.realName = #{realName}
             </if>
             <if test="validStatus!=null">
                 and uue.validStatus = #{validStatus}
@@ -56,4 +56,8 @@
         where userId = #{userId}
     </select>
 
+    <select id="selectTodoListCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_user_extend
+        WHERE validStatus = '1'
+    </select>
 </mapper>

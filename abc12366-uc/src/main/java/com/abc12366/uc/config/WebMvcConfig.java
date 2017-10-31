@@ -112,7 +112,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 //根据省市区编号查询名称
                 .excludePathPatterns("/provinceorcityorarea")
                 //JS获取微信信息
-                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**","/wx/redpack","/wx/activity/redpack")
+                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**","/wx/redpack","/wx/activity/redpack","/wxuser/getOneFromWx/**")
                         //
                 .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
                         //微信回调地址
@@ -122,6 +122,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //用户验证码登录发送验证码短信
                 .excludePathPatterns("/user/phonelogin/code")
                 // 根据微信活动生成红包口令, 查询微信红包活动
-                .excludePathPatterns("/wx/redpack/{activityId}", "/wx/activity/redpack");
+                .excludePathPatterns("/wx/redpack/{activityId}", "/wx/activity/redpack")
+                //批量用户奖励积分接口
+                .excludePathPatterns("/points/batch/award");
     }
 }

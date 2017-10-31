@@ -1,6 +1,7 @@
 package com.abc12366.cms.service;
 
 import com.abc12366.cms.model.bo.NoticeBO;
+import com.abc12366.cms.model.bo.NoticeForqtBO;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface NoticeService {
     List<NoticeBO> selectList(NoticeBO notice, int page, int size);
 
-    List<NoticeBO> selectListForqt(NoticeBO notice, int page, int size);
+    List<NoticeForqtBO> selectListForqt(NoticeForqtBO notice, int page, int size);
 
     NoticeBO insert(NoticeBO notice);
 

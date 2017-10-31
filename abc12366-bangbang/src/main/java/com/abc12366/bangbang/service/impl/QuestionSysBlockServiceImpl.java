@@ -8,6 +8,7 @@ import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
+import com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo;
 import com.abc12366.bangbang.service.QuestionSysBlockService;
 import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
     private QuestionAnswerMapper questionAnswerMapper;
 
     @Override
-    public List<QuestionSysBlockBo> selectList() {
-        return questionSysBlockRoMapper.selectList();
+    public List<QuestionSysBlockBo> selectList(QuestionSysBlockParamBo Param) {
+        return questionSysBlockRoMapper.selectList(Param);
     }
 
     @Transactional("db1TxManager")

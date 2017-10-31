@@ -20,8 +20,7 @@
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="java.lang.String">
         SELECT
         q.id,	q.userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where questionId = c.questionId) likeNum,
-        (SELECT count(id) FROM bb_question_answer where questionId = c.questionId and parentId = '') answerNum
+        q.collectNum,q.answerNum
         FROM bb_question_collect c left join bb_question q on c.questionId = q.id left join bb_user u on q.userId = u.id
         where c.userId = #{userId}
     </select>

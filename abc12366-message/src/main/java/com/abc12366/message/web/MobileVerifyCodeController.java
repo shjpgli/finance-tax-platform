@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 /**
+ * 验证码发送校验控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-07-20
  * Time: 0:08
@@ -43,6 +44,14 @@ public class MobileVerifyCodeController {
     public ResponseEntity verify(@Valid @RequestBody VerifyParam verifyParam) throws IOException {
         LOGGER.info("{}", verifyParam);
         moboleVerifyCodeService.verify(verifyParam);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    //获取注册验证码接口（校验号码是否已被注册）
+    @PostMapping(path = "/regis/code")
+    public ResponseEntity getRegisCode(@Valid @RequestBody GetCodeParam getCodeParam) throws IOException {
+        LOGGER.info("{}", getCodeParam);
+        moboleVerifyCodeService.getRegisCode(getCodeParam.getType().trim(), getCodeParam.getPhone().trim());
         return ResponseEntity.ok(Utils.kv());
     }
 }

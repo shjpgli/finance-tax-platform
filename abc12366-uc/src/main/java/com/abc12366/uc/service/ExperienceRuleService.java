@@ -26,4 +26,10 @@ public interface ExperienceRuleService {
     void enableOrDisable(String id, String status);
 
     ExperienceRuleBO selectValidOne(String ruleId);
+
+    //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
+    void isValidSysTaskRelatedTheRule(String ruleId);
+
+    //根据经验值规则编码查询一条经验值规则
+    ExperienceRuleBO selectValidOneByCode(String ruleCode);
 }

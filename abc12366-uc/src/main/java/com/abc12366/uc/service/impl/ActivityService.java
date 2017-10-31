@@ -73,7 +73,6 @@ public class ActivityService implements IActivityService {
 
     @Override
     public List<ActivityBO> selectSimpleList(int page, int size) {
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return activityRoMapper.selectSimpleList();
     }
 
@@ -122,7 +121,7 @@ public class ActivityService implements IActivityService {
             }
             WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                     .id(Utils.uuid().replaceAll("-", ""))
-                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId))
+                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
                     .createTime(new Date())
                     .activityId(activity.getId())
                     .build();
@@ -139,43 +138,47 @@ public class ActivityService implements IActivityService {
      */
     @Override
     public WxRedEnvelop lottery(WxLotteryBO lotteryBO) {
-        LOGGER.info("记录抽奖日志");
-        WxLotteryLog lotteryLog = new WxLotteryLog.Builder()
-                .id(Utils.uuid())
-                .activityId(lotteryBO.getActivityId())
-                .openId(lotteryBO.getOpenId())
-                .secret(lotteryBO.getSecret())
-                .createTime(new Date())
-                .build();
-        activityMapper.insertLotteryLog(lotteryLog);
-
-
         WxActivity activity = activityRoMapper.selectOne(lotteryBO.getActivityId());
         if (activity == null) {
             throw new ServiceException(6007);
         }
+
+        LOGGER.info("活动是否启用:{}", activity.getStatus());
+        if (!activity.getStatus()) {
+            throw new ServiceException(6002);
+        }
+
         Date now = new Date();
         LOGGER.info("活动是否在有效期内");
         if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
             throw new ServiceException(6002);
         }
+
+        WxLotteryLog lotteryLog = new WxLotteryLog.Builder()
+                .id(Utils.uuid())
+                .activityId(lotteryBO.getActivityId())
+                .openId(lotteryBO.getOpenId())
+                .secret(lotteryBO.getSecret())
+                .build();
+
         List<WxLotteryLog> lotteryLogs;
         // 规则类型为【口令】时, 查询每人每天可抽奖次数
         if ("1".equals(activity.getRuleType())) {
+            lotteryLog.setCreateTime(now);
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
-            if (lotteryLogs.size() > activity.getTimes()) {
+            if (lotteryLogs.size() >= activity.getTimes()) {
                 throw new ServiceException(6006);
             }
         }
+
         // 规则类型为【关键字】时, 参与活动次数仅为1次
         if ("2".equals(activity.getRuleType())) {
-            lotteryLog.setCreateTime(null);
             lotteryLogs = activityRoMapper.selectLotteryLogList(lotteryLog);
             LOGGER.info("查询今天参与次数,活动:{}, openId:{}, 次数:{}",
                     lotteryBO.getActivityId(), lotteryBO.getOpenId(), lotteryLogs.size());
-            if (lotteryLogs.size() > 1) {
+            if (lotteryLogs.size() >= 1) {
                 throw new ServiceException(6006);
             }
         }
@@ -184,16 +187,19 @@ public class ActivityService implements IActivityService {
         if (isOverRedEnvelopCount(activity.getNum(), lotteryBO.getActivityId())) {
             throw new ServiceException(6005);
         }
-        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret());
+
+        LOGGER.info("记录抽奖日志");
+        lotteryLog.setCreateTime(now);
+        activityMapper.insertLotteryLog(lotteryLog);
+
+        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim().toLowerCase());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
-            throw new ServiceException(6003);
+            throw new ServiceException(6005);
         }
         // 取第一条记录
         WxRedEnvelop redEnvelop = dataList.get(0);
-
-        String probabilityStr = redEnvelop.getProbability();
-        redEnvelop.setOpenId(lotteryBO.getOpenId());
+        String probabilityStr = activity.getProbability();
         if (probabilityStr.contains("%")) {
             probabilityStr = probabilityStr.replaceAll("%", "");
             Double probability = Double.valueOf(probabilityStr) / 100;
@@ -201,10 +207,11 @@ public class ActivityService implements IActivityService {
             // 中奖
             if (inProbability(probability)) {
                 LOGGER.info("中奖:{}", redEnvelop.getSecret());
+                redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
                 // 已中奖未发送
                 redEnvelop.setSendStatus("0");
-                redEnvelop.setSendTime(new Date());
+                redEnvelop.setSendTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
                 redEnvelop.setAmount(activity.getAmount());
@@ -216,8 +223,9 @@ public class ActivityService implements IActivityService {
                 sendRedPack(lotteryBO, activity, redEnvelop);
             } else { // 未中奖
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
+                redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
-                redEnvelop.setReceiveTime(new Date());
+                redEnvelop.setReceiveTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
                 redEnvelop.setAmount(activity.getAmount());
@@ -290,8 +298,8 @@ public class ActivityService implements IActivityService {
     @Override
     public WxRedEnvelop resend(String id) {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
-        // 发送失败的记录
-        if (redEnvelop != null && "2".equals(redEnvelop.getSendStatus())) {
+        // 重新发送状态为【0-未发送、2-发送失败】的记录
+        if (redEnvelop != null && ("0".equals(redEnvelop.getSendStatus()) || "2".equals(redEnvelop.getSendStatus()))) {
             WxActivity activity = selectOne(redEnvelop.getActivityId());
             SendRedPack srp = new SendRedPack.Builder()
                     .nonce_str(redEnvelop.getId())
@@ -361,7 +369,7 @@ public class ActivityService implements IActivityService {
     /**
      * 查询未抽奖的口令，过滤已中奖、已抽奖的数据
      */
-    public List<WxRedEnvelop> selectRedEnvelop(String activityId, String secret) {
+    private List<WxRedEnvelop> selectRedEnvelop(String activityId, String secret) {
         WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                 .activityId(activityId)
                 .secret(secret)
@@ -453,7 +461,8 @@ public class ActivityService implements IActivityService {
      * 生成金额
      */
     private Double amountRule(String amountType, Double amount) {
-        if ("1".equals(amountType)) { // 固定金额
+        // 固定金额
+        if ("1".equals(amountType)) {
             return amount;
         } else { // 随机金额
             if (amount.intValue() == amount) {
@@ -469,9 +478,12 @@ public class ActivityService implements IActivityService {
      * 口令生成规则
      */
     private String secretRule(String ruleType, String rule, String activityId) {
+        if (StringUtils.isNotEmpty(rule)) {
+            rule = rule.toLowerCase();
+        }
         if ("1".equals(ruleType)) {
             // 规则1口令格式为：大写字母+1至9个数字组合的随机字符串，总共8位长度
-            String candidateStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+            String candidateStr = "abcdefghjkmnpqrstuvwxyz23456789";
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 8; i++) {
                 int selectedChar = ThreadLocalRandom.current().nextInt(0, candidateStr.length());
@@ -479,7 +491,7 @@ public class ActivityService implements IActivityService {
             }
             String secret = rule + sb.toString();
             List<WxRedEnvelop> dataList = selectRedEnvelop(activityId, secret);
-            return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId) : secret;
+            return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId).toLowerCase() : secret;
         } else {
             // 规则2口令格式为：管理员自主输入的中文字符串，用#符号分割，
             // 如：艾博克#财税平台#爱我中华#美丽中国，只要匹配其中一个词即可

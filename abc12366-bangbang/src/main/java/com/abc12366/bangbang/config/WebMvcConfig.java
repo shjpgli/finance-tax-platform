@@ -88,6 +88,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/curriculum/selectListWatch")
                         //获取推荐课程
                 .excludePathPatterns("/curriculum/selectRecommend")
+                        //获取会员专享课程
+                .excludePathPatterns("/curriculum/selectListVIP")
+                        //课程浏览量增加
+                .excludePathPatterns("/curriculum/updateBrowsesDay/**")
                         //获取活动
                 .excludePathPatterns("/event/**")
                         //获取课程详情信息
@@ -115,15 +119,25 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //问题回复列表查询
                 .excludePathPatterns("/queAnswer/selectListByQuestionId")
                         //问题回复评论列表查询
-                .excludePathPatterns("/queAnswer/selectListByParentId")
+                .excludePathPatterns("/queComment/selectList")
                         //最新回答
                 .excludePathPatterns("/questionbb/selectListNew")
+                        //0回答
+                .excludePathPatterns("/questionbb/selectListWait")
                         //查询单个问题
                 .excludePathPatterns("/questionbb/selectQuestion/**")
+                        //查询单个问题回复信息
+                .excludePathPatterns("/queAnswer/selectAnswer/**")
                         //问题更新浏览量
                 .excludePathPatterns("/questionbb/updateBrowseNum/**")
                         //优秀邦派列表查询
                 .excludePathPatterns("/queFaction/selectListExcellent")
+                //江湖榜 统计
+                .excludePathPatterns("/queCount/**")
+                        //潜力邦派列表查询
+                .excludePathPatterns("/queFaction/selectListPotential")
+                        //问大侠列表查询
+                .excludePathPatterns("/questionExpert/listDX")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",

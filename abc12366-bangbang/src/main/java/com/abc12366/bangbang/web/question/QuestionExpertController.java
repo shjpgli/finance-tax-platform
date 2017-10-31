@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionExpert;
+import com.abc12366.bangbang.model.question.bo.QuestionExpertBO;
+import com.abc12366.bangbang.model.question.bo.QuestionExpertParamBo;
 import com.abc12366.bangbang.service.QuestionExpertService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -10,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author liuQi
@@ -27,13 +31,42 @@ public class QuestionExpertController {
     /* 专家列表查询 */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "username", required = false) String username,
+                                     @RequestParam(value = "realName", required = false) String realName,
+                                     @RequestParam(value = "phone", required = false) String phone,
+                                     @RequestParam(value = "type", required = false) String type,
+                                     @RequestParam(value = "status", required = false) String status){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionExpert> list = questionExpertService.selectList();
 
+        QuestionExpertParamBo param = new QuestionExpertParamBo();
+        param.setPhone(phone).setRealName(realName).setStatus(status).setUsername(username).setType(type);
+        List<QuestionExpertBO> list = questionExpertService.selectList(param);
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /* 专家大侠列表查询 */
+    @GetMapping(path = "/listDX")
+    public ResponseEntity selectListDX(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "type", required = false) String type){
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("type", type);//专家类型
+        List<QuestionExpertBO> list = questionExpertService.selectListDX(dataMap);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+    }
+
+    /* 专家列表查询 */
+    @GetMapping(path = "/view/{id}")
+    public ResponseEntity selectOne(@PathVariable String id){
+        QuestionExpertBO expert = questionExpertService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data", expert));
     }
 
     /* 专家添加 */

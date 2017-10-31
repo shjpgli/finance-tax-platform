@@ -1,5 +1,10 @@
 package com.abc12366.bangbang.web.question;
 
+import com.abc12366.bangbang.mapper.db1.QuestionFactionClassifyMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionFactionClassifyRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionFactionTagRoMapper;
+import com.abc12366.bangbang.model.question.QuestionFactionClassify;
+import com.abc12366.bangbang.model.question.QuestionFactionTag;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
@@ -34,6 +39,12 @@ public class QueFactionController {
 
     @Autowired
     private QueFactionService queFactionService;
+
+    @Autowired
+    private QuestionFactionTagRoMapper tagRoMapper;
+
+    @Autowired
+    private QuestionFactionClassifyRoMapper classifyRoMapper;
 
     /**
      * 我管理的邦派列表查询
@@ -75,6 +86,41 @@ public class QueFactionController {
 //        queFactionService.autoCalculateFactionHonor();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionListBo> dataList = queFactionService.selectListExcellent(dataMap);
+
+
+        if(dataList != null){
+            for(QuestionFactionListBo factionBo:dataList){
+                List<QuestionFactionTag> tagList = tagRoMapper.selectList(factionBo.getFactionId());
+                List<QuestionFactionClassify> classifyList = classifyRoMapper.selectList(factionBo.getFactionId());
+                factionBo.setTagList(tagList);
+                factionBo.setClassifyList(classifyList);
+            }
+        }
+
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 优秀邦派列表查询
+     */
+    @GetMapping(path = "/selectListPotential")
+    public ResponseEntity selectListPotential(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        Map<String, Object> dataMap = new HashMap<>();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionListBo> dataList = queFactionService.selectListPotential(dataMap);
+
+
+        if(dataList != null){
+            for(QuestionFactionListBo factionBo:dataList){
+                List<QuestionFactionTag> tagList = tagRoMapper.selectList(factionBo.getFactionId());
+                List<QuestionFactionClassify> classifyList = classifyRoMapper.selectList(factionBo.getFactionId());
+                factionBo.setTagList(tagList);
+                factionBo.setClassifyList(classifyList);
+            }
+        }
+
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

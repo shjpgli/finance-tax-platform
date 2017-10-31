@@ -199,4 +199,10 @@
 		 WHERE factionId = #{factionId}
 	</update>
 
+	<update id="updateAwardPoint">
+		UPDATE bb_question_faction SET awardPoint = IFNULL(awardPoint,0) + #{awardPoint}
+		where  factionId = #{factionId}
+	</update>
+
+
 </mapper>

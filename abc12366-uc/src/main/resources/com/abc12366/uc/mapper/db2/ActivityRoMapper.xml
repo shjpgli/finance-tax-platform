@@ -6,7 +6,7 @@
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
         id, name, description, startTime, endTime, ruleType, rule, amountType, amount,
-        probability, status, wishing, remark, num, times, createTime, lastUpdate
+        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort
     </sql>
 
     <sql id="Base_RedEnvelop_List">
@@ -32,9 +32,9 @@
     <select id="selectSimpleList" resultType="com.abc12366.uc.model.weixin.bo.redpack.ActivityBO"
             parameterType="com.abc12366.uc.model.weixin.bo.redpack.ActivityBO">
         SELECT id, name, description FROM uc_wxactivity
-        where now() <![CDATA[<=]]> endTime
-        and now() <![CDATA[>=]]> startTime
+        where now() BETWEEN startTime AND endTime
         and status = '1'
+        ORDER BY sort ASC, lastUpdate DESC limit 3
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.weixin.WxActivity"
@@ -54,9 +54,28 @@
         LEFT JOIN uc_wxactivity a ON a.id = r.activityId
         <where>
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
-            <if test="receiveStatus != null and receiveStatus != ''">and receiveStatus = #{receiveStatus}</if>
-            <if test="sendStatus != null and sendStatus != ''">and sendStatus = #{sendStatus}</if>
+            <choose>
+                <when test="receiveStatus != null and receiveStatus == 'UNUSED'">
+                    and receiveStatus IS NULL
+                </when>
+                <when test="receiveStatus != null and receiveStatus != '' and receiveStatus != 'UNUSED'">
+                    and receiveStatus = #{receiveStatus}
+                </when>
+                <otherwise>
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="sendStatus != null and sendStatus == '3'.toString()">
+                    and sendStatus IS NULL
+                </when>
+                <when test="sendStatus != null and sendStatus != '' and sendStatus != '3'.toString()">
+                    and sendStatus = #{sendStatus}
+                </when>
+                <otherwise>
+                </otherwise>
+            </choose>
             <if test="openId != null and openId != ''">and openId = #{openId}</if>
+            <if test="secret != null and secret != ''">and secret = #{secret}</if>
         </where>
         ORDER BY r.createTime DESC
     </select>
@@ -78,7 +97,7 @@
         <where>
             receiveStatus is null and sendStatus is null
             <if test="activityId != null and activityId != ''">and activityId = #{activityId}</if>
-            <if test="secret != null and secret != ''">and find_in_set(#{secret}, replace(secret, '#', ','))</if>
+            <if test="secret != null and secret != ''">and secret = #{secret}</if>
         </where>
     </select>
 
@@ -86,8 +105,7 @@
     <select id="queryRedEnvelopCount" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT count(id) FROM uc_wxredenvelop
         WHERE
-        receiveStatus = '0'
-        and receiveStatus = '1'
+        sendStatus is NOT NULL
         and activityId = #{activityId}
     </select>
 

@@ -18,4 +18,10 @@ public interface UserExtendRoMapper {
     UserExtend isRealName(String userId);
 
     UserExtend selectOneForAdmin(String userId);
+
+    /**
+     * 查询认证状态为【待认证】数量
+     * @return Integer 数量
+     */
+    Integer selectTodoListCount();
 }

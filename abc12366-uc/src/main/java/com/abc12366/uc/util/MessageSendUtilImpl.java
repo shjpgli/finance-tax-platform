@@ -90,6 +90,9 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity != null ? responseEntity.getBody() : null;
     }
+    
+    
+    
 
     /**
      * 不需要验证token的发送
@@ -143,8 +146,62 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
         message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX + MessageConstant.BUYING_MEMBERS_SUFFIX + "。<a " +
-                "href=\"" + SpringCtxHolder.getProperty("abc12366.api.url") + "/member/member_rights.html\">会员权益详情查看</a>");
+                "href=\"/member/member_rights.html\">会员权益详情查看</a>");
         message.setUserId("cs");
         new MessageSendUtilImpl().sendMessage(message);
     }
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public MessageBO sendMessage(Message message, String accessToken) {
+		String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/business/system";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", message.getUserId());
+        map.put("businessId", message.getBusinessId());
+        map.put("content", message.getContent());
+        map.put("status", "1");
+        map.put("type", message.getType());
+        map.put("url", message.getUrl());
+        
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Access-Token", accessToken);
+        httpHeaders.add("Version", "1");
+        HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        } catch (RestClientException e) {
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
+        }
+        LOGGER.info("Response: {}, {}", url, responseEntity);
+        String responseStr=( responseEntity != null ? responseEntity.getBody() : null);
+        MessageBO response = null;
+        if (!StringUtils.isEmpty(responseStr)) {
+            response = JSON.parseObject(responseStr, MessageBO.class);
+        }
+        return response;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void sendPhoneMessage(String phone, String vdxMsg, String accessToken) {
+		String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/mobile/msg";
+        Map<String, Object> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("content", vdxMsg);
+        
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Access-Token", accessToken);
+        httpHeaders.add("Version", "1");
+        HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+            LOGGER.info("Response: {}, {}", url, responseEntity);
+        } catch (RestClientException e) {
+            throw new ServiceException("0000", "调用接口异常，地址：" + url);
+        }
+		
+	}
 }

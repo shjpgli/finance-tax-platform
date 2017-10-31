@@ -21,17 +21,12 @@ public interface QuestionAnswerRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionAnswer  selectByPrimaryKey(@Param("id") String id);
+    QuestionAnswerBo  selectByPrimaryKey(@Param("id") String id);
 
     /**
      * 查询(根据查询条件查询)
      **/
     List<QuestionAnswerBo> selectList(Map<String, Object> map);
-
-    /**
-     * 查询(根据查询条件查询)
-     **/
-    List<QuestionAnswerBo> selectListByParentId(Map<String, Object> map);
 
     /**
      * 查询(根据查询条件查询)
@@ -49,11 +44,6 @@ public interface QuestionAnswerRoMapper {
     List<QuestionAnswerBo> selectMyAnswerList(Map<String, Object> map);
 
     /**
-     * 查询我的评论
-     **/
-    List<QuestionAnswerBo> selectMyCommentList(Map<String, Object> map);
-
-    /**
      *
      * 查询回复数
      *
@@ -62,9 +52,10 @@ public interface QuestionAnswerRoMapper {
 
     /**
      *
-     * 查询评论数
+     * 查询是否已回复
      *
      **/
-    int  selectCommentCnt(@Param("id") String id);
+    int  selectMyAnswerCnt(Map<String, Object> map);
+
 
 }

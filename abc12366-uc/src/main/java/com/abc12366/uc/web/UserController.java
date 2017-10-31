@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-02-20 3:18 PM
- * @since 2.0.0
+ * @since 1.0.0
  */
 @RestController
 @RequestMapping(path = "/user", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -46,8 +46,9 @@ public class UserController {
 
     @SuppressWarnings("rawtypes")
     @PutMapping("/changeheadbywx/{userid}/{mediaid}")
-    public ResponseEntity changeHeadByWx(@PathVariable("userid") String userid, @PathVariable("mediaid") String mediaid) {
-        String filePath = iWxGzhService.getWxDownFilePath(userid, mediaid);
+    public ResponseEntity changeHeadByWx(@PathVariable("userid") String userid, @PathVariable("mediaid") String mediaid
+    		, HttpServletRequest request) {
+        String filePath = iWxGzhService.getWxDownFilePath(userid, mediaid,request);
 
         UserUpdateBO userUpdateDTO = new UserUpdateBO();
         userUpdateDTO.setId(userid);
@@ -321,17 +322,14 @@ public class UserController {
         IsRealNameBO isRealName = userService.isRealName();
         return ResponseEntity.ok(Utils.kv("data", isRealName));
     }
-
-//    @PostMapping(path = "/test")
-//    public ResponseEntity test(){
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-//    @PutMapping(path = "/updatevip")
-//    public ResponseEntity updateVip(){
-//        userService.updateUserVipInfo("7f6c2464-5d6b-4863-bc52-c1bafc4e503a", "LV2");
-//        return ResponseEntity.ok(Utils.kv());
-//    }
-
-
+    
+    /**
+     * 修改微信绑定信息
+     * @return
+     */
+    @PostMapping(path = "/wx/changeWxBdxx")
+    public ResponseEntity changeWxBdxx(@RequestBody UserUpdateBO userUpdateDTO) {
+    	int status=userService.changeWxBdxx(userUpdateDTO);
+    	return ResponseEntity.ok(Utils.kv("data", status));
+    }
 }

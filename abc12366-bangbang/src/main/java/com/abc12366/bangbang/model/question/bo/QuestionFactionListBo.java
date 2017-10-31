@@ -51,6 +51,12 @@ public class QuestionFactionListBo implements Serializable {
 	/**创建者**varchar(64)**/
 	private String userId;
 
+    /**帮主昵称**/
+    private String nickname;
+
+    /**副帮主昵称**/
+    private String nickname2;
+
 	/**状态**int(2)**/
 	private Integer state;
 
@@ -275,5 +281,21 @@ public class QuestionFactionListBo implements Serializable {
 
     public void setAdoptNum(Integer adoptNum) {
         this.adoptNum = adoptNum;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname2() {
+        return nickname2;
+    }
+
+    public void setNickname2(String nickname2) {
+        this.nickname2 = nickname2;
     }
 }

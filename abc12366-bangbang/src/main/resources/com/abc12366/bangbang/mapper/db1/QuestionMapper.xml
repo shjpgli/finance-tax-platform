@@ -183,11 +183,15 @@
     <!-- 修 改 浏览量-->
     <update id="updateBrowseNum" parameterType="java.lang.String">
         UPDATE bb_question
-        <set>
-            browseNum = browseNum + 1,
-        </set>
+        set
+            browseNum = browseNum + 1
         WHERE id = #{id}
     </update>
+
+	<!-- 修 改 举报数-->
+	<update id="updateReportNum" parameterType="java.lang.String">
+		UPDATE bb_question SET reportNum = reportNum + 1 WHERE id = #{id}
+	</update>
 
 	<!-- 话题推荐 -->
 	<update id="recommend">

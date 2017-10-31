@@ -15,7 +15,7 @@ public interface QueFactionMemberService {
 
     QuestionFactionMemberBo selectFactionMember(String memberId);
 
-    List<QuestionFactionMemberBo> selectListTj(String factionId);
+    List<QuestionFactionMemberBo> selectListTj(Map<String, Object> map);
 
     QuestionFactionMemberBo update(QuestionFactionMemberBo questionFactionMemberBo);
 

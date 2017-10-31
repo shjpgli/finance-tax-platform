@@ -17,4 +17,11 @@ public interface QuestionAcceptedService {
     void delete(String id);
 
     List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param);
+
+    /**
+     * 问题受理 分页查询-后台
+     * @param param
+     * @return
+     */
+    List<QuestionAccepted> selectAdminList(QuestionAcceptedBO param);
 }

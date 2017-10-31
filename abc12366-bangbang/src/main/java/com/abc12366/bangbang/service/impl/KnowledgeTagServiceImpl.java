@@ -86,7 +86,8 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
                 throw new ServiceException(4520);
             }
             if(tag1 != null && tag1.getTagType().indexOf(tag.getTagType()) > -1 && !tag1.getStatus()){
-                throw new ServiceException(4521);
+//                throw new ServiceException(4521);
+                tag1.setStatus(Boolean.TRUE);
             }
             tag.setUpdateUser(UcUserCommon.getAdminId());
             if(tag1 == null){

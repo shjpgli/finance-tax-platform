@@ -2,10 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.bo.PointCalculateBO;
-import com.abc12366.uc.model.bo.PointCodex;
-import com.abc12366.uc.model.bo.PointComputeBO;
-import com.abc12366.uc.model.bo.PointsBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.PointsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +30,6 @@ public class PointsController {
 
     /**
      * 根据用户ID查询用户积分情况
-     * @param userId
-     * @return
      */
     @GetMapping(path = "/{userId}")
     public ResponseEntity selectOne(@PathVariable String userId) {
@@ -52,13 +47,20 @@ public class PointsController {
 
     /**
      * 根据积分规则计算用户积分
-     * @param pointCalculateBO
-     * @return
      */
     @PostMapping(path = "/calculate")
     public ResponseEntity calculate(@Valid @RequestBody PointCalculateBO pointCalculateBO){
         int point = pointsService.calculate(pointCalculateBO);
         return ResponseEntity.ok(Utils.kv("data", point));
+    }
+
+    /**
+     * 批量用户奖励积分接口,并且发送帮帮信息
+     */
+    @PostMapping(path = "/batch/award")
+    public ResponseEntity batchAward(@Valid @RequestBody PointBatchAwardBO pointBatchAwardBO){
+        pointsService.batchAward(pointBatchAwardBO);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 //    @PostMapping(path = "/codex/{upointCodexId}")

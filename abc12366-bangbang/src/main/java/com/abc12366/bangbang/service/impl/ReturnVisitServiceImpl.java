@@ -1,9 +1,11 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.ReturnVisitMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionAcceptedRoMapper;
 import com.abc12366.bangbang.mapper.db2.ReturnVisitRoMapper;
 import com.abc12366.bangbang.model.ReturnVisit;
 import com.abc12366.bangbang.model.bo.ReturnVisitBO;
+import com.abc12366.bangbang.model.bo.UCUserBO;
 import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import com.abc12366.bangbang.service.ReturnVisitService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +28,10 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
 
     @Autowired
     private ReturnVisitMapper returnVisitMapper;
+
+    @Autowired
+    private QuestionAcceptedRoMapper questionAcceptedRoMapper;
+
 
     @Autowired
     private ReturnVisitRoMapper returnVisitRoMapper;
@@ -44,7 +51,12 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
 
     @Override
     public List<ReturnVisit> selectList(ReturnVisitBO returnVisitBO) {
-        return returnVisitRoMapper.selectList(returnVisitBO);
+        UCUserBO ucUserBO = questionAcceptedRoMapper.selectUCUser(returnVisitBO.getUserId());
+        if(ucUserBO != null && ucUserBO.getPhone() != null && !"".equals(ucUserBO.getPhone())){
+            returnVisitBO.setPhone(ucUserBO.getPhone());
+            return returnVisitRoMapper.selectList(returnVisitBO);
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -58,8 +70,13 @@ public class ReturnVisitServiceImpl implements ReturnVisitService {
     }
 
     @Override
-    public List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param) {
-        return returnVisitRoMapper.selectStatisList(param);
+    public List<ReturnVisitBO> selectStatisList(ReturnVisitBO param) {
+        UCUserBO ucUserBO = questionAcceptedRoMapper.selectUCUser(param.getUserId());
+        if(ucUserBO != null && ucUserBO.getPhone() != null && !"".equals(ucUserBO.getPhone())){
+            param.setPhone(ucUserBO.getPhone());
+            return returnVisitRoMapper.selectStatisList(param);
+        }
+        return new ArrayList<>();
     }
 
 }

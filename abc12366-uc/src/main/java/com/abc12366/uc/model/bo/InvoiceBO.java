@@ -1,6 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 import com.abc12366.uc.model.InvoiceLog;
+import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import org.hibernate.validator.constraints.NotEmpty;
 

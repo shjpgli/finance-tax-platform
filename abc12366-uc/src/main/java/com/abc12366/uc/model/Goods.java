@@ -90,17 +90,24 @@ public class Goods implements Serializable {
 
     /**
      * 发票内容：1.软件服务费 2.财税咨询费 3.技术服务费 4.财税培训费
+     *
      * @return
      */
     private String invoiceContent;
 
-    /**是否可退货，0，可退，1，不可退**/
+    /**
+     * 是否可退货，0，可退，1，不可退
+     **/
     private String isReturn;
 
-    /**是否可换货，0：可换，1：不可换**/
+    /**
+     * 是否可换货，0：可换，1：不可换
+     **/
     private String isExchange;
 
-    /**会员等级**/
+    /**
+     * 会员等级
+     **/
     private String memberLevel;
 
     public String getId() {

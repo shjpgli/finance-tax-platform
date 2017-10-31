@@ -35,13 +35,14 @@ public class BusinessMsgController {
 
     /**
      * 获取当前用户业务消息列表
-     * @param type
-     * @param busiType
-     * @param status
-     * @param page
-     * @param size
-     * @param request
-     * @return
+     *
+     * @param type     消息类型
+     * @param busiType 业务类型
+     * @param status   状态
+     * @param page     当前页
+     * @param size     每页大小
+     * @param request  HttpServletRequest
+     * @return ResponseEntity
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String type,
@@ -57,7 +58,8 @@ public class BusinessMsgController {
         String userId = (String) request.getAttribute(Constant.USER_ID);
 
         if (!StringUtils.isEmpty(userId)) {
-            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).status(status).build();
+            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).status
+                    (status).build();
             List<BusinessMessage> dataList = businessMsgService.selectList(bm, page, size);
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
@@ -122,8 +124,8 @@ public class BusinessMsgController {
     /**
      * 直接将'未读'消息置为'已读'，不需要进入消息
      *
-     * @param id
-     * @return
+     * @param id 消息ID
+     * @return ResponseEntity
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@PathVariable("id") String id) {
@@ -156,6 +158,23 @@ public class BusinessMsgController {
             BodyStatus body = businessMsgService.delete(data);
             responseEntity = ResponseEntity.ok(body);
         }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 发送业务消息(提供给系统使用,不做token校验)
+     *
+     * @param data BusinessMessage
+     * @return ResponseEntity
+     */
+    @PostMapping(path="/system")
+    public ResponseEntity insertBySystem(@Valid @RequestBody BusinessMessage data) {
+        LOGGER.info("{}", data);
+
+        data = businessMsgService.insert(data);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
         return responseEntity;

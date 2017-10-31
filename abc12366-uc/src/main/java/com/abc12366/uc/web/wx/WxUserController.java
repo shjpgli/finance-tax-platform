@@ -83,6 +83,19 @@ public class WxUserController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+    
+    
+    @SuppressWarnings("rawtypes")
+    @GetMapping("/wxuser/getOneFromWx/{openid}")
+    public ResponseEntity getOneFromWx(@PathVariable("openid") String openid) {
+        LOGGER.info("{}", openid);
 
+        WxPerson person = iWxPersonService.getOneFromWx(openid);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", person));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    
+    }
 
 }

@@ -55,6 +55,11 @@ public interface QuestionMapper{
 
 
 	/**
+	 * 修改被举报数(根据主键ID)
+	 **/
+	int updateReportNum(@Param("id") String id);
+
+	/**
 	 * 话题推荐
 	 **/
 	void recommend(@Param("id")String id, @Param("isRecommend")Boolean isRecommend);

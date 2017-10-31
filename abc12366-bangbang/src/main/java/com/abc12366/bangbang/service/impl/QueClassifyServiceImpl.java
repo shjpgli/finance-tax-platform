@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/9/14.
@@ -132,7 +129,9 @@ public class QueClassifyServiceImpl implements QueClassifyService {
         try {
             LOGGER.info("查询单个问题分类标签信息:{}", classifyCode);
             //查询课程分类标签信息
-            classifyTagBoList = tagRoMapper.selectClassifyTagList(classifyCode);
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("classifyId", classifyCode);//
+            classifyTagBoList = tagRoMapper.selectClassifyTagList(dataMap);
         } catch (Exception e) {
             LOGGER.error("查询单个问题分类标签信息异常：{}", e);
             throw new ServiceException(6121);

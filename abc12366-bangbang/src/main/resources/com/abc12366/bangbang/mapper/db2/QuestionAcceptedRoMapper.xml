@@ -16,16 +16,21 @@
 		WHERE id = #{id}
 	</select>
 
+	<select id="selectUCUser" resultType="com.abc12366.bangbang.model.bo.UCUserBO" parameterType="java.lang.String">
+		SELECT
+		id,phone,username
+		FROM bb_user
+		WHERE id = #{id}
+	</select>
+
 	<!-- 列表查询 -->
 	<select id="selectList" resultType="com.abc12366.bangbang.model.question.QuestionAccepted" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
 		SELECT
 		a.id,	a.nsrsbh,	a.nsrmc,	a.productName,	a.type,	a.name,	a.phone,	date_format(a.visitDate, '%Y-%m-%d') as visitDate
 		FROM bb_question_accepted a
-		LEFT JOIN bb_user u on u.phone = a.phone
 		<where>
             1=1
             <if test="phone != null and phone!=''">AND a.phone = #{phone}</if>
-            <if test="userId != null and userId!=''">AND u.id = #{userId}</if>
             <if test="name != null and name!=''">AND a.name = #{name}</if>
             <if test="nsrsbh != null and nsrsbh!=''">AND a.nsrsbh = #{nsrsbh}</if>
             <if test="date != null and date!=''">
@@ -39,12 +44,12 @@
 
 	<!-- 统计列表查询 -->
 	<select id="selectStatisList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO" parameterType="com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO">
-		select count(a.id) as total,(select count(b.id) from bb_question_accepted b) as allCount,date_format(a.visitDate, '%Y') as date from bb_question_accepted a
-		LEFT JOIN bb_user u on u.phone = a.phone
+		select count(a.id) as total,
+        (select count(b.id) from bb_question_accepted b where b.phone = #{phone} ) as allCount,
+        date_format(a.visitDate, '%Y') as date from bb_question_accepted a
         <where>
             1=1
             <if test="phone != null and phone!=''">AND a.phone = #{phone}</if>
-			<if test="userId != null and userId!=''">AND u.id = #{userId}</if>
             <if test="date != null and date!=''">
                 <![CDATA[
                 and date_format(a.visitDate, '%Y') = #{date}

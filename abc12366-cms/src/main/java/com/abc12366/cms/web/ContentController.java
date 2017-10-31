@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,7 +108,7 @@ public class ContentController {
         // reasonable=true,分页合理化参数，默认值为false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         //查询内容列表
-        List<ContentsListBo> dataList = contentService.selectListByviews(dataMap);
+        List<ContentViewListBo> dataList = contentService.selectListByviews(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
@@ -511,6 +512,18 @@ public class ContentController {
         LOGGER.info("{}", contentId);
         //更新浏览量信息
         String rtn = contentService.updateViewsDay(contentId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 更新浏览量
+     */
+    @PutMapping(path = "/updateViewsDayjf/{contentId}")
+    public ResponseEntity updateViewsDayjf(@PathVariable String contentId, HttpServletRequest request) {
+        LOGGER.info("{}", contentId);
+        //更新浏览量信息
+        String rtn = contentService.updateViewsDayjf(contentId,request);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

@@ -27,6 +27,9 @@ public class QuestionTipOffBo {
     /**举报时间**/
     private java.util.Date createTime;
 
+    /*问题id*/
+    private String questionId;
+
     /**来源id**/
     private String sourceId;
 
@@ -39,7 +42,7 @@ public class QuestionTipOffBo {
     /**审核时间**/
     private java.util.Date updateTime;
 
-    /**内容    状态**/
+    /**审核中auditing，审核通过approved，拒绝refuse**/
     private String status;
 
 
@@ -140,6 +143,15 @@ public class QuestionTipOffBo {
 
     public QuestionTipOffBo setCreateUsername(String createUsername) {
         this.createUsername = createUsername;
+        return this;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public QuestionTipOffBo setQuestionId(String questionId) {
+        this.questionId = questionId;
         return this;
     }
 }

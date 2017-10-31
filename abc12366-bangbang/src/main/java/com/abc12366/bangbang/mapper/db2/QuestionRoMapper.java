@@ -4,6 +4,8 @@ import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
+import com.abc12366.bangbang.model.question.bo.QuestionjbBo;
+import com.abc12366.bangbang.model.question.bo.QuestionryBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,6 +26,13 @@ public interface QuestionRoMapper {
 	 * 
 	 **/
 	Question  selectByPrimaryKey(@Param("id") String id);
+
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    QuestionBo  selectQuestion(@Param("id") String id);
 
     /**
      * 查询最新问题
@@ -58,12 +67,12 @@ public interface QuestionRoMapper {
     /**
      * 查询邦友热议
      **/
-    List<QuestionBo> selectListry(Map<String, Object> map);
+    List<QuestionryBo> selectListry(Map<String, Object> map);
 
     /**
      * 我的举报
      **/
-    List<QuestionBo> selectTipList(String userId);
+    List<QuestionjbBo> selectTipList(String userId);
 
     /**
      * 邀我回答

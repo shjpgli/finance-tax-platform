@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.mapper.db2;
 
+import com.abc12366.bangbang.model.bo.UCUserBO;
 import com.abc12366.bangbang.model.question.QuestionAccepted;
 import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import org.apache.ibatis.annotations.Param;
@@ -25,4 +26,6 @@ public interface QuestionAcceptedRoMapper {
 	List<QuestionAccepted> selectList(QuestionAcceptedBO returnVisitBO);
 
 	List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param);
+
+	UCUserBO selectUCUser(String userId);
 }

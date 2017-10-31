@@ -6,6 +6,7 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.OrderProduct;
 import com.abc12366.uc.service.GoodsService;
 import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
@@ -192,16 +193,16 @@ public class GoodsServiceImpl implements GoodsService {
         List<ProductBO> tempProductList = productRoMapper.selectBOListByGoodsId(goodsId);
         //获取原有的ProductId
         List<String> oldIds = new ArrayList<>();
-        if(tempProductList != null && tempProductList.size() > 0){
-            for (ProductBO pBO:tempProductList){
+        if (tempProductList != null && tempProductList.size() > 0) {
+            for (ProductBO pBO : tempProductList) {
                 oldIds.add(pBO.getId());
             }
         }
         //获取新的ProductId
         List<ProductBO> productList = goodsBO.getProductBOList();
         List<String> newIds = new ArrayList<>();
-        if(productList != null && productList.size() > 0){
-            for (ProductBO productBO:productList){
+        if (productList != null && productList.size() > 0) {
+            for (ProductBO productBO : productList) {
                 newIds.add(productBO.getId());
             }
         }
@@ -217,14 +218,14 @@ public class GoodsServiceImpl implements GoodsService {
         notexists.removeAll(exists);
         updateIds.addAll(notexists);*/
         List<String> delIds = new ArrayList<>();
-        Collection fExists=new ArrayList<String>(oldIds);
+        Collection fExists = new ArrayList<String>(oldIds);
         fExists.removeAll(newIds);
         delIds.addAll(fExists);
 
         List<ProductBO> productBOs = new ArrayList<ProductBO>();
         int pInsert = 0;
         for (ProductBO pBO : productList) {
-            if(pBO.getId() == null || "".equals(pBO.getId())){ //新增产品
+            if (pBO.getId() == null || "".equals(pBO.getId())) { //新增产品
                 ProductBO productBO = new ProductBO();
                 Product product = new Product();
                 BeanUtils.copyProperties(pBO, product);
@@ -272,7 +273,7 @@ public class GoodsServiceImpl implements GoodsService {
                 }
                 productBO.setUvipPriceList(uvipPriceList);
                 productBOs.add(productBO);
-            }else{
+            } else {
                 ProductBO productBO = new ProductBO();
                 Product product = new Product();
                 BeanUtils.copyProperties(pBO, product);
@@ -328,7 +329,7 @@ public class GoodsServiceImpl implements GoodsService {
             }
         }
 
-        for (String delId : delIds){//需要删除的数据
+        for (String delId : delIds) {//需要删除的数据
             productMapper.deleteById(delId);
             productSpecMapper.deleteByProductId(delId);
             uvipPriceMapper.deleteByProductId(delId);

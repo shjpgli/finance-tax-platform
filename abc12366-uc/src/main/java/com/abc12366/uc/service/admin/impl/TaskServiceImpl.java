@@ -31,15 +31,17 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 所有任务列表
-     * 2016年10月9日上午11:16:59
+     *
+     * @return List<TaskInfo>
      */
-    public List<TaskInfo> list(){
+    @Override
+    public List<TaskInfo> list() {
         List<TaskInfo> list = new ArrayList<>();
         try {
-            for(String groupJob: scheduler.getJobGroupNames()){
-                for(JobKey jobKey: scheduler.getJobKeys(GroupMatcher.<JobKey>groupEquals(groupJob))){
+            for (String groupJob : scheduler.getJobGroupNames()) {
+                for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.<JobKey>groupEquals(groupJob))) {
                     List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
-                    for (Trigger trigger: triggers) {
+                    for (Trigger trigger : triggers) {
                         Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
                         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 
@@ -71,10 +73,10 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 保存定时任务
-     * @param info
-     * 2016年10月9日上午11:30:40
+     *
+     * @param info TaskInfo
      */
-    @SuppressWarnings("unchecked")
+    @Override
     public void addJob(TaskInfo info) {
         String jobName = info.getJobName(),
                 jobGroup = info.getJobGroup(),
@@ -90,11 +92,13 @@ public class TaskServiceImpl implements TaskService {
             TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
             JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
 
-            CronScheduleBuilder schedBuilder = CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionDoNothing();
-            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withDescription(createTime).withSchedule(schedBuilder).build();
+            CronScheduleBuilder schedBuilder = CronScheduleBuilder.cronSchedule(cronExpression)
+                    .withMisfireHandlingInstructionDoNothing();
+            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withDescription(createTime)
+                    .withSchedule(schedBuilder).build();
 
 
-            Class<? extends Job> clazz = (Class<? extends Job>)Class.forName(jobName);
+            Class<? extends Job> clazz = (Class<? extends Job>) Class.forName(jobName);
             JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(jobKey).withDescription(jobDescription).build();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException | ClassNotFoundException e) {
@@ -105,9 +109,10 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 修改定时任务
-     * @param info
-     * 2016年10月9日下午2:20:07
+     *
+     * @param info TaskInfo
      */
+    @Override
     public void edit(TaskInfo info) {
         String jobName = info.getJobName(),
                 jobGroup = info.getJobGroup(),
@@ -121,8 +126,10 @@ public class TaskServiceImpl implements TaskService {
             }
             TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
             JobKey jobKey = new JobKey(jobName, jobGroup);
-            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionDoNothing();
-            CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withDescription(createTime).withSchedule(cronScheduleBuilder).build();
+            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression)
+                    .withMisfireHandlingInstructionDoNothing();
+            CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withDescription
+                    (createTime).withSchedule(cronScheduleBuilder).build();
 
             JobDetail jobDetail = scheduler.getJobDetail(jobKey);
             jobDetail.getJobBuilder().withDescription(jobDescription);
@@ -138,11 +145,12 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 删除定时任务
-     * @param jobName
-     * @param jobGroup
-     * 2016年10月9日下午1:51:12
+     *
+     * @param jobName  job名称
+     * @param jobGroup job组
      */
-    public void delete(String jobName, String jobGroup){
+    @Override
+    public void delete(String jobName, String jobGroup) {
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
         try {
             if (checkExists(jobName, jobGroup)) {
@@ -158,11 +166,12 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 暂停定时任务
-     * @param jobName
-     * @param jobGroup
-     * 2016年10月10日上午9:40:19
+     *
+     * @param jobName  job名称
+     * @param jobGroup job组
      */
-    public void pause(String jobName, String jobGroup){
+    @Override
+    public void pause(String jobName, String jobGroup) {
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
         try {
             if (checkExists(jobName, jobGroup)) {
@@ -177,11 +186,12 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 重新开始任务
-     * @param jobName
-     * @param jobGroup
-     * 2016年10月10日上午9:40:58
+     *
+     * @param jobName  job名称
+     * @param jobGroup job组
      */
-    public void resume(String jobName, String jobGroup){
+    @Override
+    public void resume(String jobName, String jobGroup) {
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
 
         try {
@@ -196,12 +206,13 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 验证是否存在
-     * @param jobName
-     * @param jobGroup
-     * @throws SchedulerException
-     * 2016年10月8日下午5:30:43
+     *
+     * @param jobName  job名称
+     * @param jobGroup job组
+     * @return boolean
+     * @throws SchedulerException 计划异常
      */
-    private boolean checkExists(String jobName, String jobGroup) throws SchedulerException{
+    private boolean checkExists(String jobName, String jobGroup) throws SchedulerException {
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
         return scheduler.checkExists(triggerKey);
     }

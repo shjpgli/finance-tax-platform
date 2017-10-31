@@ -29,6 +29,9 @@ public class QuestionFactionBo implements Serializable {
 	/**邦派标签**varchar(500)**/
 	private String tag;
 
+    /**奖励积分**int(11)**/
+    private Integer awardPoint;
+
 	/**入邦最低等级**varchar(64)**/
 	private String minGrade;
 
@@ -211,5 +214,13 @@ public class QuestionFactionBo implements Serializable {
 
     public void setClassifyList(List<QuestionFactionClassify> classifyList) {
         this.classifyList = classifyList;
+    }
+
+    public Integer getAwardPoint() {
+        return awardPoint;
+    }
+
+    public void setAwardPoint(Integer awardPoint) {
+        this.awardPoint = awardPoint;
     }
 }

@@ -11,10 +11,8 @@ import com.abc12366.uc.model.ReCheck;
 import com.abc12366.uc.model.bo.CheckListBO;
 import com.abc12366.uc.model.bo.CheckListParam;
 import com.abc12366.uc.model.bo.PointsLogBO;
-import com.abc12366.uc.service.CheckService;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.PrivilegeItemService;
-import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.uc.util.UCConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +45,9 @@ public class CheckServiceImpl implements CheckService {
     @Autowired
     private PrivilegeItemService privilegeItemService;
 
+    @Autowired
+    private PointsRuleService pointsRuleService;
+
 
     @Transactional("db1TxManager")
     @Override
@@ -60,7 +61,7 @@ public class CheckServiceImpl implements CheckService {
         if (isExist(check)) {
             throw new ServiceException(4850);
         }
-        insert(check);
+
         int points = 5;
 
         //是否连续签到
@@ -75,20 +76,22 @@ public class CheckServiceImpl implements CheckService {
                     points = 20;
                 }
             }
-            //连续签到统计表
-//            continuingCheck(check.getUserId());
-            //积分日志
-//            pointsLog(check.getUserId(), points);
-//            return;
         }
+        //完成任务埋点,如果任务不存在或失效则返回
+        if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_ID)) {
+            return 0;
+        }
+
+        //记日志,如果规则失效则返回
+        if (!pointsLog(check.getUserId(), points)) {
+            return 0;
+        }
+
+        //记录签到
+        insert(check);
 
         //签到统计
         continuingCheck(check.getUserId());
-        //记日志
-        pointsLog(check.getUserId(), points);
-
-        //完成任务埋点
-        todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_ID);
 
         PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
         if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
@@ -185,28 +188,40 @@ public class CheckServiceImpl implements CheckService {
         return checkListBOs;
     }
 
-    private void pointsLog(String userId, int points) {
+    private boolean pointsLog(String userId, int points) {
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_CHECK_CODE);
+        if (pointsRuleBO == null) {
+            return false;
+        }
+
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setId(Utils.uuid());
         pointsLog.setCreateTime(new Date());
-        pointsLog.setRuleId(UCConstant.POINT_RULE_CHECK_ID);
+        pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setUserId(userId);
         pointsLog.setIncome(points);
         pointsLog.setLogType("CHECK_IN");
         pointsLog.setRemark("用户签到获取积分");
         pointsLogService.insert(pointsLog);
+        return true;
     }
 
-    private void recheckPointsLog(String userId, int points) {
+    private boolean recheckPointsLog(String userId, int points) {
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_RECHECK_CODE);
+        if (pointsRuleBO == null) {
+            return false;
+        }
+
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setId(Utils.uuid());
         pointsLog.setCreateTime(new Date());
         pointsLog.setUserId(userId);
         pointsLog.setOutgo(-points);
-        pointsLog.setRuleId(UCConstant.POINT_RULE_RECHECK_ID);
+        pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setLogType("RE_CHECK_IN");
         pointsLog.setRemark("用户补签消耗20积分");
         pointsLogService.insert(pointsLog);
+        return true;
     }
 
     private Check insert(Check c) {

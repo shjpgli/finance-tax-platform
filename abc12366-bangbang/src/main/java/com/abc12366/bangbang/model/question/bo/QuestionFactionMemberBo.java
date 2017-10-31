@@ -43,6 +43,9 @@ public class QuestionFactionMemberBo implements Serializable {
     /**回答次数**int(11)**/
     private Integer answerNum;
 
+    /**是否已关注**int(11)**/
+    private Integer isAttention;
+
     /**贡献值****/
     private String honor;
 
@@ -164,5 +167,13 @@ public class QuestionFactionMemberBo implements Serializable {
 
     public void setUserPicturePath(String userPicturePath) {
         this.userPicturePath = userPicturePath;
+    }
+
+    public Integer getIsAttention() {
+        return isAttention;
+    }
+
+    public void setIsAttention(Integer isAttention) {
+        this.isAttention = isAttention;
     }
 }

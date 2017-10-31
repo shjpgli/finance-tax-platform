@@ -50,9 +50,9 @@ public interface SensitiveWordsService {
     /**
      * 删除敏感词
      *
-     * @param sensitiveWords
+     * @param id
      */
-    void delete(SensitiveWords sensitiveWords);
+    void delete(String id);
 
     boolean isAuthentication(Map<String, String> parmMap);
 

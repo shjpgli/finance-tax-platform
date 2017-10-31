@@ -43,11 +43,11 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
     }
 
     @Override
-    public List<QuestionFactionMemberBo> selectListTj(String factionId) {
+    public List<QuestionFactionMemberBo> selectListTj(Map<String, Object> map) {
         List<QuestionFactionMemberBo> factionMemberBoList;
         try {
             //查询邦派成员列表(我管理的邦派)统计
-            factionMemberBoList = memberRoMapper.selectListTj(factionId);
+            factionMemberBoList = memberRoMapper.selectListTj(map);
 
             for(QuestionFactionMemberBo factionMemberBo : factionMemberBoList){
                 int honor = 2*factionMemberBo.getAnswerNum() + 1*factionMemberBo.getDiscussNum() + 7*factionMemberBo.getAdoptNum();
@@ -67,8 +67,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
         JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
         LOGGER.info("新增邦派成员信息:{}", jsonStu.toString());
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("factionId", factionMemberBo.getUserId());//
-        dataMap.put("userId", factionMemberBo.getFactionId());//
+        dataMap.put("userId", factionMemberBo.getUserId());//
+        dataMap.put("factionId", factionMemberBo.getFactionId());//
         int cnt = memberRoMapper.selectMemberCnt(dataMap);
         if(cnt > 0){
             //已申请加入邦派，请勿重复申请

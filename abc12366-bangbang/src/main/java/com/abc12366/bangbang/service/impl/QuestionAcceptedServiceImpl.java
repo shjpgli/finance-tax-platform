@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionAcceptedMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAcceptedRoMapper;
+import com.abc12366.bangbang.model.bo.UCUserBO;
 import com.abc12366.bangbang.model.question.QuestionAccepted;
 import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import com.abc12366.bangbang.service.QuestionAcceptedService;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +36,12 @@ public class QuestionAcceptedServiceImpl implements QuestionAcceptedService {
 
     @Override
     public List<QuestionAccepted> selectList(QuestionAcceptedBO questionAcceptedBO) {
-        return acceptedRoMapper.selectList(questionAcceptedBO);
+        UCUserBO ucUserBO = acceptedRoMapper.selectUCUser(questionAcceptedBO.getUserId());
+        if(ucUserBO != null && ucUserBO.getPhone() != null && !"".equals(ucUserBO.getPhone())){
+            questionAcceptedBO.setPhone(ucUserBO.getPhone());
+            return acceptedRoMapper.selectList(questionAcceptedBO);
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -44,6 +51,16 @@ public class QuestionAcceptedServiceImpl implements QuestionAcceptedService {
 
     @Override
     public List<QuestionAcceptedBO> selectStatisList(QuestionAcceptedBO param) {
-        return acceptedRoMapper.selectStatisList(param);
+        UCUserBO ucUserBO = acceptedRoMapper.selectUCUser(param.getUserId());
+        if(ucUserBO != null && ucUserBO.getPhone() != null && !"".equals(ucUserBO.getPhone())){
+            param.setPhone(ucUserBO.getPhone());
+            return acceptedRoMapper.selectStatisList(param);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<QuestionAccepted> selectAdminList(QuestionAcceptedBO param) {
+        return acceptedRoMapper.selectList(param);
     }
 }

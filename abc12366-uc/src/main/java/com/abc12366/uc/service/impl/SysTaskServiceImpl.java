@@ -173,4 +173,20 @@ public class SysTaskServiceImpl implements SysTaskService {
     public List<SysTaskListBO> selectDeployedListByType(Map<String, String> map) {
         return sysTaskRoMapper.selectDeployedListByType(map);
     }
+
+    @Override
+    public List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType) {
+        return sysTaskRoMapper.selectValidListByTypeAndDateType(type, dateType);
+    }
+
+    @Override
+    public List<SysTaskBO> selectTimeLimitedListByType(String type) {
+        return sysTaskRoMapper.selectTimeLimitedListByType(type);
+    }
+
+    @Override
+    public SysTaskBO selectValidOneByCode(String taskCode) {
+        LOGGER.info("根据编码查询一条系统任务，编码：{}", taskCode);
+        return sysTaskRoMapper.selectValidOneByCode(taskCode);
+    }
 }

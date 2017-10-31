@@ -3,10 +3,7 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.*;
-import com.abc12366.bangbang.model.curriculum.Curriculum;
-import com.abc12366.bangbang.model.curriculum.CurriculumLabel;
-import com.abc12366.bangbang.model.curriculum.CurriculumLecturerGx;
-import com.abc12366.bangbang.model.curriculum.CurriculumMembergrade;
+import com.abc12366.bangbang.model.curriculum.*;
 import com.abc12366.bangbang.model.curriculum.bo.*;
 import com.abc12366.bangbang.service.CurriculumService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -65,6 +62,12 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     @Autowired
     private CurriculumCoursewareRoMapper coursewareRoMapper;
+
+    @Autowired
+    private CurriculumUvipPriceMapper uvipPriceMapper;
+
+    @Autowired
+    private CurriculumUvipPriceRoMapper uvipPriceRoMapper;
 
     @Override
     public List<CurriculumListBo> selectList(Map<String,Object> map) {
@@ -173,18 +176,18 @@ public class CurriculumServiceImpl implements CurriculumService {
     @Override
     public CurriculumBo save(CurriculumBo curriculumBo) {
         String goodsId = curriculumBo.getGoodsId();
-        if(goodsId == null){
-            goodsId = "";
-        }
-        if(1 == curriculumBo.getIsFree()){
-            curriculumBo.setGoodsId("");
-        }else{
-            int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
-            if(cnt>0){
-                //该商品已被课程使用，请重新选择商品
-                throw new ServiceException(4326);
-            }
-        }
+//        if(goodsId == null){
+//            goodsId = "";
+//        }
+//        if(1 == curriculumBo.getIsFree()){
+//            curriculumBo.setGoodsId("");
+//        }else{
+//            int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
+//            if(cnt>0){
+//                //该商品已被课程使用，请重新选择商品
+//                throw new ServiceException(4326);
+//            }
+//        }
 
         Map<String, Object> dataMap1 = new HashMap<>();
         dataMap1.put("title", curriculumBo.getTitle());
@@ -241,6 +244,17 @@ public class CurriculumServiceImpl implements CurriculumService {
                 }
             }
 
+            //会员价格表
+            List<CurriculumUvipPrice> uvipPriceList = curriculumBo.getUvipPriceList();
+
+            if(uvipPriceList != null){
+                for(CurriculumUvipPrice uvipPrice : uvipPriceList){
+                    uvipPrice.setId(UUID.randomUUID().toString().replace("-", ""));
+                    uvipPrice.setCurriculumId(uuid);
+                    uvipPriceMapper.insert(uvipPrice);
+                }
+            }
+
 
         } catch (Exception e) {
             LOGGER.error("新增课程信息异常：{}", e);
@@ -291,6 +305,12 @@ public class CurriculumServiceImpl implements CurriculumService {
             }
 
             curriculumBo.setChapterBoList(chapterBoList);
+
+
+            //会员价格
+            List<CurriculumUvipPrice> uvipPriceList =uvipPriceRoMapper.selectList(curriculumId);
+
+            curriculumBo.setUvipPriceList(uvipPriceList);
 
 
         } catch (Exception e) {
@@ -351,6 +371,11 @@ public class CurriculumServiceImpl implements CurriculumService {
 
             curriculumBo.setChapterBoList(chapterBoList);
 
+            //会员价格
+            List<CurriculumUvipPrice> uvipPriceList =uvipPriceRoMapper.selectList(curriculumId);
+
+            curriculumBo.setUvipPriceList(uvipPriceList);
+
             List<CurriculumListsyBo> curriculumListBoList;
             //查询相关课程列表
             curriculumListBoList = curriculumRoMapper.selectListxgNew(curriculumId);
@@ -398,6 +423,11 @@ public class CurriculumServiceImpl implements CurriculumService {
             }
 
             curriculumBo.setLecturerList(lecturerBoList);
+
+            //会员价格
+            List<CurriculumUvipPrice> uvipPriceList =uvipPriceRoMapper.selectList(curriculumId);
+
+            curriculumBo.setUvipPriceList(uvipPriceList);
 
 
             Map<String, Object> dataMap1 = new HashMap<>();
@@ -455,10 +485,10 @@ public class CurriculumServiceImpl implements CurriculumService {
             throw new ServiceException(4329);
         }
         String curriculumId = curriculumBo.getCurriculumId();
-        String goodsId = curriculumBo.getGoodsId();
-        if(goodsId == null){
-            goodsId = "";
-        }
+//        String goodsId = curriculumBo.getGoodsId();
+//        if(goodsId == null){
+//            goodsId = "";
+//        }
 
 
         //1为发布
@@ -477,29 +507,29 @@ public class CurriculumServiceImpl implements CurriculumService {
         Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
 
 
-        if(curriculumBo.getStatus() == 0){
-            if(1 == curriculumBo.getIsFree()){
-                curriculumBo.setGoodsId("");
-            }else{
-                if(!goodsId.equals(curriculum1.getGoodsId())){
-                    int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
-                    if(cnt>0){
-                        //该商品已被课程使用，请重新选择商品
-                        throw new ServiceException(4326);
-                    }
-                }
-            }
-        }else{
-            if(!"".equals(goodsId)){
-                if(!"".equals(curriculum1.getGoodsId()) && !goodsId.equals(curriculum1.getGoodsId())){
-                    //商品不能修改
-                    throw new ServiceException(4327);
-                }
-            }else{
-                curriculumBo.setGoodsId(curriculum1.getGoodsId());
-            }
-
-        }
+//        if(curriculumBo.getStatus() == 0){
+//            if(1 == curriculumBo.getIsFree()){
+//                curriculumBo.setGoodsId("");
+//            }else{
+//                if(!goodsId.equals(curriculum1.getGoodsId())){
+//                    int cnt = curriculumRoMapper.selectCurrCntByGoodsId(goodsId);
+//                    if(cnt>0){
+//                        //该商品已被课程使用，请重新选择商品
+//                        throw new ServiceException(4326);
+//                    }
+//                }
+//            }
+//        }else{
+//            if(!"".equals(goodsId)){
+//                if(!"".equals(curriculum1.getGoodsId()) && !goodsId.equals(curriculum1.getGoodsId())){
+//                    //商品不能修改
+//                    throw new ServiceException(4327);
+//                }
+//            }else{
+//                curriculumBo.setGoodsId(curriculum1.getGoodsId());
+//            }
+//
+//        }
 
         //更新模型信息
         Curriculum curriculum = new Curriculum();
@@ -543,6 +573,17 @@ public class CurriculumServiceImpl implements CurriculumService {
                 for(CurriculumLecturerGx lecturerGx : lecturerGxList){
                     lecturerGx.setCurriculumId(curriculumId);
                     curriculumLecturerGxMapper.insert(lecturerGx);
+                }
+            }
+
+            //会员价格表
+            List<CurriculumUvipPrice> uvipPriceList = curriculumBo.getUvipPriceList();
+            uvipPriceMapper.deleteByPrimaryKey(curriculumId);
+            if(uvipPriceList != null){
+                for(CurriculumUvipPrice uvipPrice : uvipPriceList){
+                    uvipPrice.setId(UUID.randomUUID().toString().replace("-", ""));
+                    uvipPrice.setCurriculumId(curriculumId);
+                    uvipPriceMapper.insert(uvipPrice);
                 }
             }
 
@@ -593,6 +634,7 @@ public class CurriculumServiceImpl implements CurriculumService {
             curriculumLecturerGxMapper.deleteByPrimaryKey(curriculumId);
             coursewareMapper.deleteByCurriculumId(curriculumId);
             chapterMapper.deleteByCurriculumId(curriculumId);
+            uvipPriceMapper.deleteByPrimaryKey(curriculumId);
             curriculumMapper.deleteByPrimaryKey(curriculumId);
         } catch (Exception e) {
             LOGGER.error("删除课程异常：{}", e);

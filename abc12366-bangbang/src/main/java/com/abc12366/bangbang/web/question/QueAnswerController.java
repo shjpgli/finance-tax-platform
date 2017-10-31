@@ -71,25 +71,6 @@ public class QueAnswerController {
     }
 
     /**
-     * 问题回复评论列表查询
-     */
-    @GetMapping(path = "/selectListByParentId")
-    public ResponseEntity selectListByParentId(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                               @RequestParam(value = "userId", required = false) String userId,
-                                     @RequestParam(value = "questionId", required = false) String questionId,
-                                     @RequestParam(value = "parentId", required = false) String parentId) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("userId", userId);//
-        dataMap.put("questionId", questionId);//
-        dataMap.put("parentId", parentId);//
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionAnswerBo> dataList = queAnswerService.selectListByParentId(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
-
-    }
-
-    /**
      * 最新回答
      */
     @GetMapping(path = "/selectListNew")
@@ -120,22 +101,7 @@ public class QueAnswerController {
         dataMap.put("isTip", isTip);//是否被举报，1为被举报
         dataMap.put("isAccept", isAccept);//是否被采纳，1为被采纳
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
-
-    }
-
-    /**
-     * 我的评论
-     */
-    @GetMapping(path = "/selectMyCommentList")
-    public ResponseEntity selectMyCommentList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                             @RequestParam(value = "userId", required = false) String userId) {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("userId", userId);//
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionAnswerBo> dataList = queAnswerService.selectList(dataMap);
+        List<QuestionAnswerBo> dataList = queAnswerService.selectMyAnswerList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -155,6 +121,16 @@ public class QueAnswerController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
+        //查询单个问题回复信息
+        QuestionAnswerBo answerBo = queAnswerService.selectAnswer(id);
+        return ResponseEntity.ok(Utils.kv("data", answerBo));
+    }
+
+    /**
+     * 查询单个问题回复信息(无需登录)
+     */
+    @GetMapping(path = "/selectAnswer/{id}")
+    public ResponseEntity selectAnswer(@PathVariable String id) {
         //查询单个问题回复信息
         QuestionAnswerBo answerBo = queAnswerService.selectAnswer(id);
         return ResponseEntity.ok(Utils.kv("data", answerBo));

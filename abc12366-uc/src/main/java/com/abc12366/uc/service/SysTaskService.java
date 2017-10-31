@@ -30,4 +30,11 @@ public interface SysTaskService {
     List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
 
     List<SysTaskBO> selectListByType(String type);
+
+    List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType);
+
+    List<SysTaskBO> selectTimeLimitedListByType(String type);
+
+    //根据编码查询一条系统任务
+    SysTaskBO selectValidOneByCode(String taskCode);
 }

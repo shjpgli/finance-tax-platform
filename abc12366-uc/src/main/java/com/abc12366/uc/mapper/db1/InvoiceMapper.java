@@ -3,6 +3,8 @@ package com.abc12366.uc.mapper.db1;
 import com.abc12366.uc.model.Invoice;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.SQLException;
+
 /**
  * InvoiceMapper数据库操作接口类
  **/

@@ -3,9 +3,7 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
-import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
+import com.abc12366.bangbang.model.question.bo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,7 @@ public interface QuestionService {
 
     List<QuestionBo> selectListAccept(Map<String, Object> map);
 
-    List<QuestionBo> selectListry(Map<String, Object> map);
+    List<QuestionryBo> selectListry(Map<String, Object> map);
 
     QuestionBo save(QuestionBo questionBo);
 
@@ -40,7 +38,7 @@ public interface QuestionService {
 
     void recommend(String id, Boolean isRecommend);
 
-    List<QuestionBo> selectTipList(String userId);
+    List<QuestionjbBo> selectTipList(String userId);
 
     List<QuestionBo> selectInviteList(String userId);
 

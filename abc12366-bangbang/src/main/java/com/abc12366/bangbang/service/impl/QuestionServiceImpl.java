@@ -3,16 +3,12 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionInviteMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionInviteRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
+import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
-import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionTagBo;
+import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
@@ -49,6 +45,15 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionInviteRoMapper inviteRoMapper;
+
+    @Autowired
+    private SensitiveWordsRoMapper sensitiveWordsRoMapper;
+
+    @Autowired
+    private QuestionDisableIpRoMapper questionDisableIpRoMapper;
+
+    @Autowired
+    private QuestionDisableUserRoMapper questionDisableUserRoMapper;
 
     @Override
     public List<QuestionBo> selectList(Map<String,Object> map) {
@@ -129,8 +134,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionBo> selectListry(Map<String,Object> map) {
-        List<QuestionBo> questionBoList;
+    public List<QuestionryBo> selectListry(Map<String,Object> map) {
+        List<QuestionryBo> questionBoList;
         try {
             //查询帮友热议列表
             questionBoList = questionRoMapper.selectListry(map);
@@ -144,6 +149,21 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional("db1TxManager")
     @Override
     public QuestionBo save(QuestionBo questionBo) {
+
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(questionBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(questionBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
         try {
             JSONObject jsonStu = JSONObject.fromObject(questionBo);
             LOGGER.info("新增问题信息:{}", jsonStu.toString());
@@ -159,7 +179,41 @@ public class QuestionServiceImpl implements QuestionService {
 
             questionBo.setCreateTime(new Date());
             questionBo.setLastUpdate(new Date());
+            questionBo.setStatus("0");//0正常，1待审查，2拉黑
             questionBo.setBrowseNum(0);
+            questionBo.setCollectNum(0);
+            questionBo.setReportNum(0);
+            questionBo.setAnswerNum(0);
+
+            //敏感词校验
+            String title = questionBo.getTitle();
+            String detail = questionBo.getDetail();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(title != null && !"".equals(title)){
+                for(String word : wordList){
+                    boolean bl = title.contains(word);
+                    if(bl){
+                        questionBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
+            if("0".equals(questionBo.getStatus())){
+                if(detail != null && !"".equals(detail)){
+                    for(String word : wordList){
+                        boolean bl = detail.contains(word);
+                        if(bl){
+                            questionBo.setStatus("1");
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+
+
             //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
@@ -187,7 +241,6 @@ public class QuestionServiceImpl implements QuestionService {
                 }
             }
 
-
             questionMapper.insert(question);
         } catch (Exception e) {
             LOGGER.error("新增问题信息异常：{}", e);
@@ -199,14 +252,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionBo selectQuestion(String id) {
-        QuestionBo questionBo = new QuestionBo();
+        QuestionBo questionBo;
         try {
             LOGGER.info("查询单个问题信息:{}", id);
             //查询问题信息
-            Question question = questionRoMapper.selectByPrimaryKey(id);
+            questionBo = questionRoMapper.selectQuestion(id);
             List<QuestionTag> tagList = tagRoMapper.selectList(id);
             List<QuestionInvite> inviteList = inviteRoMapper.selectList(id);
-            BeanUtils.copyProperties(question, questionBo);
             questionBo.setTagList(tagList);
             questionBo.setInviteList(inviteList);
         } catch (Exception e) {
@@ -232,6 +284,20 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional("db1TxManager")
     @Override
     public QuestionBo update(QuestionBo questionBo) {
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(questionBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(questionBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
         //更新问题信息
         Question question = new Question();
         try {
@@ -246,8 +312,35 @@ public class QuestionServiceImpl implements QuestionService {
                 factionId = "";
             }
             questionBo.setFactionId(factionId);
-
             questionBo.setLastUpdate(new Date());
+            questionBo.setStatus("0");
+
+            String title = questionBo.getTitle();
+            String detail = questionBo.getDetail();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(title != null && !"".equals(title)){
+                for(String word : wordList){
+                    boolean bl = title.contains(word);
+                    if(bl){
+                        questionBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
+            if("0".equals(questionBo.getStatus())){
+                if(detail != null && !"".equals(detail)){
+                    for(String word : wordList){
+                        boolean bl = detail.contains(word);
+                        if(bl){
+                            questionBo.setStatus("1");
+                            break;
+                        }
+                    }
+                }
+            }
+
+
             BeanUtils.copyProperties(questionBo, question);
 
 
@@ -332,7 +425,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionBo> selectTipList(String userId) {
+    public List<QuestionjbBo> selectTipList(String userId) {
         //我的举报
         LOGGER.info("{}", userId);
         return questionRoMapper.selectTipList(userId);

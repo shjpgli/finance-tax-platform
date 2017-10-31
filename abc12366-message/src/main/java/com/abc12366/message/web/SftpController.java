@@ -20,12 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 文件上传服务
+ *
+ * @author xieyanmao
+ */
 @RestController
 @RequestMapping(path = "/sftp", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class SftpController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SftpController.class);
 
+    /**
+     * 通过字节码上传文件
+     *
+     * @param fjListBo FjListBo
+     * @return ResponseEntity
+     */
     @PostMapping
     public ResponseEntity upload(@Valid @RequestBody FjListBo fjListBo) {
         LOGGER.info("{}", fjListBo);
@@ -35,14 +46,11 @@ public class SftpController {
         String username = SpringCtxHolder.getProperty("sftp_username");
         String password = SpringCtxHolder.getProperty("sftp_password");
 
-
-
-
         String directory = fjListBo.getDirectory();
         List<FjBo> fjBoList = fjListBo.getFjBo();
         List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
-        String fileName = "";
-        List<Byte> content = null;
+        String fileName;
+        List<Byte> content;
         for (FjBo fjBo : fjBoList) {
             ChannelSftp sftp = sf.connect(host, port, username, password);
             fileName = fjBo.getFileName();
@@ -56,23 +64,25 @@ public class SftpController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    /**
+     * base64方式上传文件
+     *
+     * @param fjListBo FjListBo
+     * @return ResponseEntity
+     */
     @PostMapping(path = "/upload")
     public ResponseEntity uploadBase64(@Valid @RequestBody FjListBo fjListBo) {
-        LOGGER.info("{}", fjListBo);
         SFTPUtil sf = new SFTPUtil();
         String host = SpringCtxHolder.getProperty("sftp_host");
         int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));
         String username = SpringCtxHolder.getProperty("sftp_username");
         String password = SpringCtxHolder.getProperty("sftp_password");
 
-
-
-
         String directory = fjListBo.getDirectory();
         List<FjBo> fjBoList = fjListBo.getFjBo();
         List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
-        String fileName = "";
-        String fileContent = "";
+        String fileName;
+        String fileContent;
         for (FjBo fjBo : fjBoList) {
             ChannelSftp sftp = sf.connect(host, port, username, password);
             fileName = fjBo.getFileName();
@@ -85,6 +95,4 @@ public class SftpController {
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
-
-
 }

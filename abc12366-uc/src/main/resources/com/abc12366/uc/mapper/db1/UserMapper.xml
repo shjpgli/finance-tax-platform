@@ -37,6 +37,10 @@
         </set>
         where id=#{id}
     </update>
+    
+    <update id="qxwxbd" parameterType="java.lang.String">
+        update uc_user set wxopenid=null,wxheadimg=null,wxnickname=null where wxopenid=#{wxopenid}
+    </update>
 
     <update id="updatePhone" parameterType="com.abc12366.uc.model.User">
         update uc_user

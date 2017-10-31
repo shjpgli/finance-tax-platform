@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 import com.abc12366.uc.model.TodoTask;
 import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.SysTaskBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -49,18 +50,18 @@ public interface TodoTaskService {
      * 用户完成任务记日志方法，并且计算奖励
      *
      * @param userId
-     * @param sysTaskId
+     * @param taskCode
      */
-    void doTask(String userId, String sysTaskId);
+    void doTask(String userId, String taskCode);
 
     /**
      * 用户完成任务记日志方法，不计算奖励
      * 多用于奖励规则比较复杂需要单做的业务方法里
      *
      * @param userId
-     * @param sysTaskId
+     * @param taskCode
      */
-    void doTaskWithouComputeAward(String userId, String sysTaskId);
+    boolean doTaskWithouComputeAward(String userId, String taskCode);
 
     /**
      * 更新用户当天一项任务
@@ -84,4 +85,8 @@ public interface TodoTaskService {
     List<TodoTaskFront> selectOnetimeTaskList(String userId);
 
     List<TodoTaskFront> selectSpecialTaskList(String userId);
+
+    void generateOneTodoTask(String userId, SysTaskBO sysTaskBO);
+
+    List<TodoTaskFront> selectBangbangTaskList(String userId);
 }

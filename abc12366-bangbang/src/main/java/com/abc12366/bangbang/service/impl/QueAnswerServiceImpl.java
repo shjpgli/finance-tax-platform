@@ -3,6 +3,9 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionDisableIpRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionDisableUserRoMapper;
+import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
@@ -34,25 +37,21 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     @Autowired
     private QuestionAnswerRoMapper answerRoMapper;
 
+    @Autowired
+    private SensitiveWordsRoMapper sensitiveWordsRoMapper;
+
+    @Autowired
+    private QuestionDisableIpRoMapper questionDisableIpRoMapper;
+
+    @Autowired
+    private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
     @Override
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
         List<QuestionAnswerBo> answerBoList;
         try {
             //查询问题回复列表
             answerBoList = answerRoMapper.selectList(map);
-        } catch (Exception e) {
-            LOGGER.error("查询问题回复列表信息异常：{}", e);
-            throw new ServiceException(6110);
-        }
-        return answerBoList;
-    }
-
-    @Override
-    public List<QuestionAnswerBo> selectListByParentId(Map<String,Object> map) {
-        List<QuestionAnswerBo> answerBoList;
-        try {
-            //查询问题回复列表
-            answerBoList = answerRoMapper.selectListByParentId(map);
         } catch (Exception e) {
             LOGGER.error("查询问题回复列表信息异常：{}", e);
             throw new ServiceException(6110);
@@ -87,30 +86,35 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     }
 
     @Override
-    public List<QuestionAnswerBo> selectMyCommentList(Map<String,Object> map) {
-        List<QuestionAnswerBo> answerBoList;
-        try {
-            //查询我的评论列表
-            answerBoList = answerRoMapper.selectMyCommentList(map);
-        } catch (Exception e) {
-            LOGGER.error("查询问题回复列表信息异常：{}", e);
-            throw new ServiceException(6110);
-        }
-        return answerBoList;
-    }
-
-    @Override
     public QuestionAnswerBo save(QuestionAnswerBo answerBo) {
-        try {
-            JSONObject jsonStu = JSONObject.fromObject(answerBo);
-            LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
-            if(answerBo.getParentId() == null){
-                answerBo.setParentId("");
-            }
 
-            Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("userId", answerBo.getUserId());
-            dataMap.put("questionId", answerBo.getQuestionId());
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(answerBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(answerBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
+        JSONObject jsonStu = JSONObject.fromObject(answerBo);
+        LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", answerBo.getUserId());
+        dataMap.put("questionId", answerBo.getQuestionId());
+        int answerCnt = answerRoMapper.selectMyAnswerCnt(dataMap);
+        if(answerCnt >0){
+            //已回复，请勿重复回复
+            throw new ServiceException(6118);
+        }
+        try {
+
             String factionId = answerRoMapper.selectfactionId(dataMap);
             if(factionId == null){
                 factionId = "";
@@ -122,24 +126,39 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             QuestionAnswer answer = new QuestionAnswer();
             answerBo.setId(uuid);
+            answerBo.setCommentNum(0);
+            answerBo.setLikeNum(0);
+            answerBo.setTrampleNum(0);
+            answerBo.setReportNum(0);
+            answerBo.setStatus("0");//0正常，1待审查，2拉黑
+
+            //敏感词校验
+            String answerTxt = answerBo.getAnswer();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(answerTxt != null && !"".equals(answerTxt)){
+                for(String word : wordList){
+                    boolean bl = answerTxt.contains(word);
+                    if(bl){
+                        answerBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
+
+
             BeanUtils.copyProperties(answerBo, answer);
+
+            int answerNum = answerRoMapper.selectAnswerCnt(answerBo.getQuestionId());
+            Question question = new Question();
+            question.setId(answerBo.getQuestionId());
+            question.setAnswerNum(answerNum+1);
+            questionMapper.updateByPrimaryKeySelective(question);
+            answerBo.setAnswerNum(answerNum);
+
             answerMapper.insert(answer);
 
-            if("".equals(answerBo.getParentId())){
-                int answerNum = answerRoMapper.selectAnswerCnt(answerBo.getQuestionId());
-                Question question = new Question();
-                question.setId(answerBo.getQuestionId());
-                question.setAnswerNum(answerNum);
-                questionMapper.updateByPrimaryKeySelective(question);
-                answerBo.setAnswerNum(answerNum);
-            }else{
-                int commentNum = answerRoMapper.selectCommentCnt(answerBo.getParentId());
-                QuestionAnswer answer1 = new QuestionAnswer();
-                answer1.setId(answerBo.getParentId());
-                answer1.setCommentNum(commentNum);
-                answerMapper.updateByPrimaryKeySelective(answer1);
-                answerBo.setCommentNum(commentNum);
-            }
+
 
 
         } catch (Exception e) {
@@ -156,8 +175,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         try {
             LOGGER.info("查询单个问题回复信息:{}", id);
             //查询单个问题回复信息
-            QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
-            BeanUtils.copyProperties(answer, answerBo);
+            answerBo = answerRoMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
             LOGGER.error("查询单个问题回复信息异常：{}", e);
             throw new ServiceException(6111);
@@ -168,12 +186,42 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     @Transactional("db1TxManager")
     @Override
     public QuestionAnswerBo update(QuestionAnswerBo answerBo) {
+
+        int ipcnt = questionDisableIpRoMapper.selectIpCnt(answerBo.getIp());
+
+        if(ipcnt > 0){
+            //该IP已被禁言
+            throw new ServiceException(6372);
+        }
+
+        int usercnt = questionDisableUserRoMapper.selectUserCnt(answerBo.getUserId());
+
+        if(usercnt > 0){
+            //该用户已被禁言
+            throw new ServiceException(6373);
+        }
+
         //更新问题回复信息
         QuestionAnswer answer = new QuestionAnswer();
         try {
             JSONObject jsonStu = JSONObject.fromObject(answerBo);
             LOGGER.info("更新问题回复信息:{}", jsonStu.toString());
             answerBo.setLastUpdate(new Date());
+            answerBo.setStatus("0");
+
+            //敏感词校验
+            String answerTxt = answerBo.getAnswer();
+            List<String> wordList = sensitiveWordsRoMapper.selectListWords();
+            if(answerTxt != null && !"".equals(answerTxt)){
+                for(String word : wordList){
+                    boolean bl = answerTxt.contains(word);
+                    if(bl){
+                        answerBo.setStatus("1");
+                        break;
+                    }
+                }
+            }
+
             BeanUtils.copyProperties(answerBo, answer);
             answerMapper.updateByPrimaryKeySelective(answer);
         } catch (Exception e) {
@@ -201,25 +249,18 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         try {
             LOGGER.info("删除问题回复信息:{}", id);
 
-            QuestionAnswer answer = answerRoMapper.selectByPrimaryKey(id);
+            QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
+
+            int answerNum = answerRoMapper.selectAnswerCnt(answer.getQuestionId());
+            Question question = new Question();
+            question.setId(answer.getQuestionId());
+            question.setAnswerNum(answerNum-1);
+            questionMapper.updateByPrimaryKeySelective(question);
+            num = answerNum;
 
             answerMapper.deleteByPrimaryKey(id);
 
-            if("".equals(answer.getParentId())){
-                int answerNum = answerRoMapper.selectAnswerCnt(answer.getQuestionId());
-                Question question = new Question();
-                question.setId(answer.getQuestionId());
-                question.setAnswerNum(answerNum);
-                questionMapper.updateByPrimaryKeySelective(question);
-                num = answerNum;
-            }else{
-                int commentNum = answerRoMapper.selectCommentCnt(answer.getParentId());
-                QuestionAnswer answer1 = new QuestionAnswer();
-                answer1.setId(answer.getParentId());
-                answer1.setCommentNum(commentNum);
-                answerMapper.updateByPrimaryKeySelective(answer1);
-                num = commentNum;
-            }
+
 
         } catch (Exception e) {
             LOGGER.error("删除问题回复异常：{}", e);

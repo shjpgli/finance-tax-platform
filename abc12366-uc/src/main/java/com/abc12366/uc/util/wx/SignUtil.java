@@ -23,7 +23,7 @@ public class SignUtil {
 
     public static boolean checkSignature(String signature, String timestamp,
                                          String nonce) {
-        String[] arr = new String[]{SpringCtxHolder.getProperty("abc.wx-token"), timestamp, nonce};
+        String[] arr = new String[]{WxGzhClient.getInstance().getTokenStr(), timestamp, nonce};
         Arrays.sort(arr);
         StringBuilder content = new StringBuilder();
         for (String s : arr) {

@@ -32,5 +32,13 @@
         LEFT JOIN bb_question_disable_ip t_disable_ip ON tb.ip= t_disable_ip.ip AND t_disable_ip.activeTime > NOW()
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectIpCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(*)
+        FROM bb_question_disable_ip
+        WHERE <![CDATA[ activeTime > now()]]> and ip = #{ip}
+    </select>
+
 
 </mapper>

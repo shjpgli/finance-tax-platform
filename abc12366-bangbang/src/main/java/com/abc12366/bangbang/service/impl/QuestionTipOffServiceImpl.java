@@ -9,6 +9,7 @@ import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTipOffStatus;
 import com.abc12366.bangbang.service.QuestionTipOffService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -50,27 +51,21 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
 
     @Transactional("db1TxManager")
     @Override
-    public void changeStatus(String id ,String status) {
-        QuestionTipOff req = new QuestionTipOff();
-        req.setId(id);
-        req.setUpdateAdmin(Utils.getAdminId());
-        questionTipOffMapper.updateByPrimaryKeySelective(req);
+    public void changeStatus(QuestionTipOff questionTipOff) {
+        String id = questionTipOff.getId();
+        String status = questionTipOff.getStatus();
 
-        QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(id);
-        if("question".equals(record.getSourceType())){
-            Question question = new Question();
-            question.setId(record.getSourceId());
-            question.setStatus(status);
-            question.setLastUpdate(new Date());
-            questionMapper.updateByPrimaryKeySelective(question);
-        }else{
-            QuestionAnswer questionAnswer = new QuestionAnswer();
-            questionAnswer.setId(record.getSourceId());
-            questionAnswer.setStatus(status);
-            questionAnswer.setLastUpdate(new Date());
-            questionAnswerMapper.updateByPrimaryKeySelective(questionAnswer);
+        questionTipOff.setUpdateAdmin(Utils.getAdminId());
+        questionTipOffMapper.updateByPrimaryKeySelective(questionTipOff);
+        /*如果举报内容 审核通过 加被举报数*/
+        if(QuestionTipOffStatus.approved.name().equals(status)){
+            QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(id);
+            if("question".equals(record.getSourceType())){
+                questionMapper.updateReportNum(id);
+            }else{
+                questionAnswerMapper.updateReportNum(id);
+            }
         }
-
     }
 
     @Override
@@ -81,8 +76,9 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         QuestionTipOff tipOff = new QuestionTipOff();
         questionTipOffBo.setCreateTime(new Date());
         questionTipOffBo.setId(uuid);
+        questionTipOffBo.setStatus("auditing");
 
-        Map map = MapUtil.kv("sourceId", questionTipOffBo.getSourceId(), "userId", questionTipOffBo.getCreateUser());
+        Map map = MapUtil.kv("sourceId", questionTipOffBo.getSourceId(), "createUser", questionTipOffBo.getCreateUser());
         int cnt =  questionTipOffRoMapper.selectExist(map);
         if(cnt >0){
             throw new ServiceException(6370);
@@ -91,20 +87,6 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         try {
             BeanUtils.copyProperties(questionTipOffBo, tipOff);
             questionTipOffMapper.insert(tipOff);
-
-            int reportNum = questionTipOffRoMapper.selectTipoffCnt(questionTipOffBo.getSourceId());
-
-            if("question".equals(tipOff.getSourceType())){
-                Question question = new Question();
-                question.setId(tipOff.getSourceId());
-                question.setReportNum(reportNum);
-                questionMapper.updateByPrimaryKeySelective(question);
-            }else{
-                QuestionAnswer questionAnswer = new QuestionAnswer();
-                questionAnswer.setId(tipOff.getSourceId());
-                questionAnswer.setReportNum(reportNum);
-                questionAnswerMapper.updateByPrimaryKeySelective(questionAnswer);
-            }
 
         } catch (Exception e) {
             throw new ServiceException(6371);

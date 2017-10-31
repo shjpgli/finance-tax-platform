@@ -46,4 +46,19 @@ public class QueCountServiceImpl implements QueCountService {
     public List<QuestionCountBo> selectAccept() {
         return countMapper.selectAccept();
     }
+
+    @Override
+    public List<QuestionCountBo> selectAnswers() {
+        return countMapper.selectAnswers();
+    }
+
+    @Override
+    public List<QuestionCountBo> selectMedal() {
+        return countMapper.selectMedal();
+    }
+
+    @Override
+    public List<QuestionCountBo> selectAcceptExpert() {
+        return countMapper.selectAcceptExpert();
+    }
 }

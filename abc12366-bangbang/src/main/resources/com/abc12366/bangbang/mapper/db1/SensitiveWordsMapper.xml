@@ -20,19 +20,13 @@
             <if test="keywords != null">
                 keywords,
             </if>
-            <if test="sort != null">
-                sort,
+            <if test="status != null">
+                status,
             </if>
-            <if test="type != null">
-                type,
+            <if test="updateAdmin != null">
+                updateAdmin,
             </if>
-            <if test="createTime != null">
-                createTime,
-            </if>
-            <if test="lastUpdate != null">
-                lastUpdate,
-            </if>
-
+            updateTime
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -41,18 +35,13 @@
             <if test="keywords!=null">
                 #{keywords},
             </if>
-            <if test="sort!=null">
-                #{sort},
+            <if test="status!=null">
+                #{status},
             </if>
-            <if test="type!=null">
-                #{type},
+            <if test="updateAdmin!=null">
+                #{updateAdmin},
             </if>
-            <if test="createTime!=null">
-                #{createTime},
-            </if>
-            <if test="lastUpdate!=null">
-                #{lastUpdate},
-            </if>
+            now()
         </trim>
     </insert>
 
@@ -63,19 +52,13 @@
             <if test="keywords != null">
                 keywords = #{keywords},
             </if>
-            <if test="sort != null">
-                sort = #{sort},
+            <if test="status != null">
+                status = #{status},
             </if>
-            <if test="type != null">
-                type = #{type},
+            <if test="updateAdmin != null">
+                updateAdmin = #{updateAdmin},
             </if>
-            <if test="createTime != null">
-                createTime = #{createTime},
-            </if>
-            <if test="lastUpdate != null">
-                lastUpdate = #{lastUpdate},
-            </if>
-
+            updateTime = now()
         </set>
         WHERE id = #{id}
     </update>

@@ -57,6 +57,13 @@ public interface QuestionFactionRoMapper {
 
     /**
      *
+     * 查询潜力邦派
+     *
+     **/
+    List<QuestionFactionListBo> selectListPotential(Map<String, Object> map);
+
+    /**
+     *
      * 查询（根据主键ID查询）
      *
      **/

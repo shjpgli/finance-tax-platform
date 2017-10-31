@@ -2,9 +2,9 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.Order;
-import com.abc12366.uc.model.bo.OrderBO;
-import com.abc12366.uc.service.OrderService;
+import com.abc12366.uc.model.order.Order;
+import com.abc12366.uc.model.order.bo.OrderBO;
+import com.abc12366.uc.service.order.OrderService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;

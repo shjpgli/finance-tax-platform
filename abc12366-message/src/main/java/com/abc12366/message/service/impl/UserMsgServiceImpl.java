@@ -6,6 +6,7 @@ import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -120,5 +121,11 @@ public class UserMsgServiceImpl implements UserMsgService {
             userMsgMapper.batchInsert(dataList);
         }
         return dataList;
+    }
+
+    @Override
+    public List<UserMessageForBangbang> selectListForBangbang(String userId, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return userMsgRoMapper.UserMessageForBangbang(userId);
     }
 }

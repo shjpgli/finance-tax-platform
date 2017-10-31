@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class WxActivity {
     @Length(min = 1, max = 1)
     private String ruleType;
     // 生成规则定义
-    @Length(min = 1, max = 50)
+    @Length(max = 20)
     private String rule;
     // 固定金额／随机金额
     @NotEmpty
@@ -77,26 +78,49 @@ public class WxActivity {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
-    // 已发送人数
+    /**
+     * 排序
+     */
+    @Max(255)
+    private Integer sort;
+
+    /**
+     * 已发送人数
+     */
     private Integer sent;
 
-    // 已发送金额
+    /**
+     * 已发送金额
+     */
     private Double sentAmount;
 
-    // 已领取人数
+    /**
+     * 已领取人数
+     */
     private Integer received;
 
-    // 已领取金额
+    /**
+     * 已领取金额
+     */
     private Double receivedAmount;
-    // 活动参与人数
+
+    /**
+     * 活动参与人数
+     */
     private Integer nop;
+
+    /**
+     * 活动是否过期
+     */
+    private Boolean outdated;
 
     public WxActivity() {
     }
 
     public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType,
                       String rule, String amountType, Double amount, String probability, Boolean status, String
-                              wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate) {
+                              wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate,
+                      Integer sort) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -114,6 +138,7 @@ public class WxActivity {
         this.times = times;
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
+        this.sort = sort;
     }
 
     private WxActivity(Builder builder) {
@@ -134,6 +159,7 @@ public class WxActivity {
         setTimes(builder.times);
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
+        setSort(builder.sort);
     }
 
     public String getId() {
@@ -272,6 +298,14 @@ public class WxActivity {
         this.lastUpdate = lastUpdate;
     }
 
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     public Integer getSent() {
         return sent;
     }
@@ -312,6 +346,11 @@ public class WxActivity {
         this.nop = nop;
     }
 
+    public Boolean getOutdated() {
+        Date now = new Date();
+        return now.before(startTime) || now.after(endTime);
+    }
+
     @Override
     public String toString() {
         return "WxActivity{" +
@@ -332,6 +371,8 @@ public class WxActivity {
                 ", times=" + times +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", sort=" + sort +
+                ", outdated=" + outdated +
                 '}';
     }
 
@@ -353,6 +394,7 @@ public class WxActivity {
         private Integer times;
         private Date createTime;
         private Date lastUpdate;
+        private Integer sort;
 
         public Builder() {
         }
@@ -439,6 +481,11 @@ public class WxActivity {
 
         public Builder lastUpdate(Date val) {
             lastUpdate = val;
+            return this;
+        }
+
+        public Builder sort(Integer val) {
+            sort = val;
             return this;
         }
 

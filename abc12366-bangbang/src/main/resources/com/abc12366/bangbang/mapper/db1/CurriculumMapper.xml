@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.curriculum.Curriculum">
 		 INSERT INTO bb_curriculum
- 		(curriculumId,title,classify,goodsId,recommend,teachingMethod,trainTimeBegin,trainTimeEnd,isApply,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,issueTime,peopleLimit,trainSite,cover,label,issueScope,isFree,originalPrice,preferentialPrice,integralOriginalPrice,integralPreferentialPrice,freeMember,lecturerId,lecturerName,lecturerPicture,curriculumidIntro,status,createrId,createrName,createrTime,updateTime)
+ 		(curriculumId,title,classify,goodsId,recommend,teachingMethod,trainTimeBegin,trainTimeEnd,isApply,applyTimeBegin,applyTimeEnd,applyPay,isSign,signTimeBegin,signTimeEnd,issueTime,peopleLimit,trainSite,cover,label,issueScope,isFree,costPrice,sellPrice,marketPrice,integralPrice,freeMember,lecturerId,lecturerName,lecturerPicture,curriculumidIntro,status,createrId,createrName,createrTime,updateTime)
 		 VALUES 
- 		(#{curriculumId},#{title},#{classify},#{goodsId},#{recommend},#{teachingMethod},#{trainTimeBegin},#{trainTimeEnd},#{isApply},#{applyTimeBegin},#{applyTimeEnd},#{applyPay},#{isSign},#{signTimeBegin},#{signTimeEnd},#{issueTime},#{peopleLimit},#{trainSite},#{cover},#{label},#{issueScope},#{isFree},#{originalPrice},#{preferentialPrice},#{integralOriginalPrice},#{integralPreferentialPrice},#{freeMember},#{lecturerId},#{lecturerName},#{lecturerPicture},#{curriculumidIntro},#{status},#{createrId},#{createrName},#{createrTime},#{updateTime})
+ 		(#{curriculumId},#{title},#{classify},#{goodsId},#{recommend},#{teachingMethod},#{trainTimeBegin},#{trainTimeEnd},#{isApply},#{applyTimeBegin},#{applyTimeEnd},#{applyPay},#{isSign},#{signTimeBegin},#{signTimeEnd},#{issueTime},#{peopleLimit},#{trainSite},#{cover},#{label},#{issueScope},#{isFree},#{costPrice},#{sellPrice},#{marketPrice},#{integralPrice},#{freeMember},#{lecturerId},#{lecturerName},#{lecturerPicture},#{curriculumidIntro},#{status},#{createrId},#{createrName},#{createrTime},#{updateTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -87,17 +87,17 @@
 			<if test="isFree != null">
 				 isFree,
 			</if>
-			<if test="originalPrice != null">
-				 originalPrice,
+			<if test="costPrice != null">
+                costPrice,
 			</if>
-			<if test="preferentialPrice != null">
-				 preferentialPrice,
+			<if test="sellPrice != null">
+                sellPrice,
 			</if>
-			<if test="integralOriginalPrice != null">
-				 integralOriginalPrice,
+			<if test="marketPrice != null">
+                marketPrice,
 			</if>
-			<if test="integralPreferentialPrice != null">
-				 integralPreferentialPrice,
+			<if test="integralPrice != null">
+                integralPrice,
 			</if>
 			<if test="freeMember != null">
 				 freeMember,
@@ -198,17 +198,17 @@
 			<if test="isFree!=null">
 				 #{isFree},
 			</if>
-			<if test="originalPrice!=null">
-				 #{originalPrice},
+			<if test="costPrice!=null">
+				 #{costPrice},
 			</if>
-			<if test="preferentialPrice!=null">
-				 #{preferentialPrice},
+			<if test="sellPrice!=null">
+				 #{sellPrice},
 			</if>
-			<if test="integralOriginalPrice!=null">
-				 #{integralOriginalPrice},
+			<if test="marketPrice!=null">
+				 #{marketPrice},
 			</if>
-			<if test="integralPreferentialPrice!=null">
-				 #{integralPreferentialPrice},
+			<if test="integralPrice!=null">
+				 #{integralPrice},
 			</if>
 			<if test="freeMember!=null">
 				 #{freeMember},
@@ -310,17 +310,17 @@
 			<if test="isFree != null">
 				 isFree = #{isFree},
 			</if>
-			<if test="originalPrice != null">
-				 originalPrice = #{originalPrice},
+			<if test="costPrice != null">
+                costPrice = #{costPrice},
 			</if>
-			<if test="preferentialPrice != null">
-				 preferentialPrice = #{preferentialPrice},
+			<if test="sellPrice != null">
+                sellPrice = #{sellPrice},
 			</if>
-			<if test="integralOriginalPrice != null">
-				 integralOriginalPrice = #{integralOriginalPrice},
+			<if test="marketPrice != null">
+                marketPrice = #{marketPrice},
 			</if>
-			<if test="integralPreferentialPrice != null">
-				 integralPreferentialPrice = #{integralPreferentialPrice},
+			<if test="integralPrice != null">
+                integralPrice = #{integralPrice},
 			</if>
 			<if test="freeMember != null">
 				 freeMember = #{freeMember},
@@ -381,10 +381,10 @@
 			 label = #{label},
 			 issueScope = #{issueScope},
 			 isFree = #{isFree},
-			 originalPrice = #{originalPrice},
-			 preferentialPrice = #{preferentialPrice},
-			 integralOriginalPrice = #{integralOriginalPrice},
-			 integralPreferentialPrice = #{integralPreferentialPrice},
+			 costPrice = #{costPrice},
+			 sellPrice = #{sellPrice},
+			 marketPrice = #{marketPrice},
+			 integralPrice = #{integralPrice},
 			 freeMember = #{freeMember},
 			 lecturerId = #{lecturerId},
 			 lecturerName = #{lecturerName},
