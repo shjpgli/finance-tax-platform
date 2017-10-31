@@ -75,6 +75,7 @@
                 </otherwise>
             </choose>
             <if test="openId != null and openId != ''">and openId = #{openId}</if>
+            <if test="secret != null and secret != ''">and secret = #{secret}</if>
         </where>
         ORDER BY r.createTime DESC
     </select>
