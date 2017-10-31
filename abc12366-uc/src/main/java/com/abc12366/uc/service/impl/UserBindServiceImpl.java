@@ -240,6 +240,7 @@ public class UserBindServiceImpl implements UserBindService {
                     hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
                     hngsAppLoginResponse.setExpiresTime(expiredDate);
                 }
+                request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
                 return hngsAppLoginResponse;
             } catch (Exception e) {
 

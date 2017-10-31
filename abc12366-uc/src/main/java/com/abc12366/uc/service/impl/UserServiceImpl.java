@@ -146,6 +146,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
+        //用户名转成小写
+        userUpdateBO.setUsername(userUpdateBO.getUsername().trim().toLowerCase());
+
         User user = userRoMapper.selectOne(userUpdateBO.getId());
         if (user == null) {
             LOGGER.warn("修改失败");
@@ -153,7 +156,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //普通用户只允许修改一次用户名
-        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) &&
+        if (!StringUtils.isEmpty(userUpdateBO.getUsername()) && !userUpdateBO.getUsername().trim().equals(user.getUsername()) &&
                 user.getUsernameModifiedTimes() >= 1) {
             throw new ServiceException(4037);
         }
