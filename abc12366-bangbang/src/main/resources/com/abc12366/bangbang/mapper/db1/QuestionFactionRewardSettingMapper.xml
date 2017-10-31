@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.bangbang.mapper.db1.QuestionFactionRewardSettingMapper">
 
 	<!-- 添加 -->
-	<insert id="insert" parameterType="questionFactionRewardSetting">
+	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionRewardSetting">
 		 INSERT INTO bb_question_faction_reward_setting
  		(id,factionId,date,rewardsPoints,updateAdmin,updateTime) 
 		 VALUES 
