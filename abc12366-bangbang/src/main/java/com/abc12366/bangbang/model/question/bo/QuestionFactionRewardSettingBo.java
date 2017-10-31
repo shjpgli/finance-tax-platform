@@ -22,7 +22,10 @@ public class QuestionFactionRewardSettingBo {
     private String leaderName;
 
     /*帮派积分*/
-    private String awardPoint;
+    private String totalPoints;
+
+    /*分配积分*/
+    private String rewardsPoints;
 
     /*帮派荣誉值*/
     private String honor;
@@ -75,12 +78,21 @@ public class QuestionFactionRewardSettingBo {
         return this;
     }
 
-    public String getAwardPoint() {
-        return awardPoint;
+    public String getTotalPoints() {
+        return totalPoints;
     }
 
-    public QuestionFactionRewardSettingBo setAwardPoint(String awardPoint) {
-        this.awardPoint = awardPoint;
+    public QuestionFactionRewardSettingBo setTotalPoints(String totalPoints) {
+        this.totalPoints = totalPoints;
+        return this;
+    }
+
+    public String getRewardsPoints() {
+        return rewardsPoints;
+    }
+
+    public QuestionFactionRewardSettingBo setRewardsPoints(String rewardsPoints) {
+        this.rewardsPoints = rewardsPoints;
         return this;
     }
 
