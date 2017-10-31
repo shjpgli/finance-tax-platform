@@ -456,6 +456,36 @@ public class OrderController {
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
+    /**
+     * 删除订单-前台用户
+     *
+     * @param userId
+     * @param id
+     * @return
+     */
+    @DeleteMapping(path = "/delete/{userId}/{id}")
+    public ResponseEntity deleteOrder(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+        OrderBO orderBO = new OrderBO();
+        orderBO.setOrderNo(id);
+        orderBO.setUserId(userId);
+        orderService.deleteOrder(orderBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 删除订单-后台管理员
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping(path = "/admin/delete/{userId}/{id}")
+    public ResponseEntity adminDeleteOrder(@PathVariable("id") String id) {
+        OrderBO orderBO = new OrderBO();
+        orderBO.setOrderNo(id);
+        orderService.adminDeleteOrder(orderBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
 
     /**
      * 根据GoodsId和UserId查询订单信息
