@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.OrderMapper">
 
     <!--删除：根据主键ID删除-->
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="delete" parameterType="java.lang.String">
         DELETE FROM uc_order
         WHERE orderNo = #{orderNo}
     </delete>
