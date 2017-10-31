@@ -1,16 +1,24 @@
 package com.abc12366.uc.service.impl;
 
+
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.WxGzhMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
+import com.abc12366.uc.model.bo.MessageBO;
+import com.abc12366.uc.model.weixin.bo.CmsFileUploadDto;
+import com.abc12366.uc.model.weixin.bo.FileListDto;
+import com.abc12366.uc.model.weixin.bo.FjDto;
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.util.SFTPUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxGzhClient;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpATTRS;
@@ -18,14 +26,25 @@ import com.jcraft.jsch.SftpATTRS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+
+import sun.misc.BASE64Encoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service("iWxGzhService")
 public class WxGzhServiceimpl implements IWxGzhService {
@@ -35,6 +54,9 @@ public class WxGzhServiceimpl implements IWxGzhService {
     private WxGzhMapper wxGzhMapper;
     @Autowired
     private WxGzhRoMapper wxGzhRoMapper;
+    
+    @Autowired
+    private RestTemplate restTemplate;
     
 
 
@@ -112,7 +134,7 @@ public class WxGzhServiceimpl implements IWxGzhService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String getWxDownFilePath(String userId,String mediaId) {
+	public String getWxDownFilePath(String userId,String mediaId,HttpServletRequest request) {
 		try {
 			Map<String, String> tks = new HashMap<String, String>();
 			tks.put("access_token", WxGzhClient.getInstanceToken());
@@ -126,8 +148,59 @@ public class WxGzhServiceimpl implements IWxGzhService {
 				content.write(buffer, 0, len);
 			}
 			inputStream.close();
-
-			//ftp地址 上线修改
+			
+			CmsFileUploadDto cmsFileUploadDto = new CmsFileUploadDto();
+			FjDto fjDto = new FjDto();
+			fjDto.setFileName(mediaId+".jpg");
+			try {
+				fjDto.setFileContent(new BASE64Encoder().encode(content.toByteArray()));
+				cmsFileUploadDto.setDirectory(userId.replaceAll("!", "/"));
+				cmsFileUploadDto.getFjBo().add(fjDto);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+  
+			String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/message/sftp/upload";
+			
+			HttpHeaders httpHeaders = new HttpHeaders();
+	        if (!StringUtils.isEmpty(request.getHeader(Constant.APP_TOKEN_HEAD))) {
+	            httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+	        }
+	        if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
+	            httpHeaders.add(Constant.ADMIN_TOKEN_HEAD, request.getHeader(Constant.ADMIN_TOKEN_HEAD));
+	        }
+	        if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
+	            httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
+	        }
+	        if (!StringUtils.isEmpty(request.getHeader(Constant.VERSION_HEAD))) {
+	            httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+	        }
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("directory", cmsFileUploadDto.getDirectory());
+	        map.put("fjBo", JSONArray.toJSONString(cmsFileUploadDto.getFjBo()));
+	        HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
+	        
+	        ResponseEntity<String> responseEntity = null;
+	        try {
+	            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+	        } catch (RestClientException e) {
+	            throw new ServiceException("0000", "调用接口异常，地址：" + url);
+	        }
+	        LOGGER.info("Response: {}, {}", url, responseEntity);
+	        String responseStr=( responseEntity != null ? responseEntity.getBody() : null);
+	        
+	        FileListDto fileListDto  = null;
+	        if (!StringUtils.isEmpty(responseStr)) {
+	        	fileListDto = JSON.parseObject(responseStr, FileListDto.class);
+	        }
+	        
+	        if(fileListDto.getDataList().size()>0){
+	        	return "/images/" +fileListDto.getDataList().get(0).getFilePath();
+	        }else{
+	        	LOGGER.info("下载微信服务器文件失败",fileListDto.getMessage());
+				throw new ServiceException(9999,"下载微信服务器文件失败:"+fileListDto.getMessage());
+	        }
+			/*//ftp地址 上线修改
 			SFTPUtil sf = new SFTPUtil();
 			String host = SpringCtxHolder.getProperty("sftp_host");
 			int port = Integer.parseInt(SpringCtxHolder.getProperty("sftp_port"));
@@ -152,8 +225,8 @@ public class WxGzhServiceimpl implements IWxGzhService {
             outputStream.close();
 			//Map<String, String> map = sf.uploadByByte(userId, fileBytesToList(content.toByteArray()), mediaId+".jpg", sftp);
 			sftp.disconnect();
-			sftp.exit();
-			return "/images/" + userId+ "/" + filenam;
+			sftp.exit();*/
+			
 		} catch (Exception e) {
 			LOGGER.info("下载微信服务器文件失败",e);
 			throw new ServiceException(9999,"下载微信服务器文件失败");

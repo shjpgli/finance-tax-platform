@@ -4,6 +4,8 @@ import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface IWxGzhService {
 
     List<GzhInfo> wxgzhList(GzhInfo gzhInfo, int page, int size);
@@ -20,6 +22,6 @@ public interface IWxGzhService {
 
 	void updatejsapiTicket(GzhInfo gzhInfo);
 	
-	String getWxDownFilePath(String userId,String mediaId);
+	String getWxDownFilePath(String userId,String mediaId,HttpServletRequest request);
 
 }
