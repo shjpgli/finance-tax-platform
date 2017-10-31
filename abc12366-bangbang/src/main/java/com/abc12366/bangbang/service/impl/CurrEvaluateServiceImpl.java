@@ -7,7 +7,7 @@ import com.abc12366.bangbang.model.curriculum.CurriculumEvaluate;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateBo;
 import com.abc12366.bangbang.service.CurrEvaluateService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
-import com.abc12366.bangbang.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;

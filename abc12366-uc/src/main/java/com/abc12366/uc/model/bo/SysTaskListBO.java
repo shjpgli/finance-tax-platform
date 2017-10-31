@@ -8,22 +8,82 @@ import java.util.Date;
  * Time: 9:56
  */
 public class SysTaskListBO {
+    /**
+     *系统任务ID
+     */
     private String id;
+
+    /**
+     * 系统任务名称
+     */
     private String name;
+
+    /**
+     * 系统任务开始时间
+     */
     private Date startTime;
+
+    /**
+     * 系统任务结束时间
+     */
     private Date endTime;
+
+    /**
+     * 系统任务规则
+     */
     private String rule;
+
+    /**
+     * 系统任务奖励值
+     */
     private int points;
+
+    /**
+     * 系统任务类型
+     */
     private String type;
+    /**
+     * 系统任务状态
+     */
     private boolean status;
+
+    /**
+     * 系统任务创建时间
+     */
     private Date createTime;
+    /**
+     * 系统任务最后修改时间
+     */
     private Date lastUpdate;
+
+    /**
+     * 系统任务图片路径
+     */
     private String imageUrl;
+
+    /**
+     * 系统任务规则名称
+     */
     private String ruleName;
+    /**
+     * 系统任务规则代码
+     */
     private String ruleCode;
-    private int count;
+    /**
+     * 系统任务数量
+     */
+    private Integer count;
+    /**
+     * 系统任务跳转地址
+     */
     private String skipURL;
+    /**
+     * 系统任务完成数量
+     */
     private String finishedCount;
+    /**
+     * 系统任务编码
+     */
     private String code;
 
     public SysTaskListBO() {

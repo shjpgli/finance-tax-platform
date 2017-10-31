@@ -15,7 +15,7 @@ import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.SysTaskService;
 import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.uc.util.UCConstant;
+import com.abc12366.gateway.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

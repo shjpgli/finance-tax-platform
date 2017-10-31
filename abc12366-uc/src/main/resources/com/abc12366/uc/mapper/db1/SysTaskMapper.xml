@@ -5,7 +5,7 @@
     <insert id="insert" parameterType="com.abc12366.uc.model.SysTask">
         insert into
         uc_sys_task(id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,
-        ruleName,ruleCode,count,skipURL,awardType,ruleId,remark,dateType)
+        ruleName,ruleCode,count,skipURL,awardType,ruleId,remark,dateType,code)
         values(#{id},#{name},#{startTime},#{endTime},#{rule},#{award},#{type},#{status},#{createTime},
         #{lastUpdate},#{imageUrl},#{ruleName},#{ruleCode},#{count},#{skipURL},#{awardType},#{ruleId},#{remark},#{dateType},#{code})
     </insert>
@@ -29,7 +29,7 @@
             <if test="ruleId!=null">ruleId=#{ruleId},</if>
             <if test="remark!=null">remark=#{remark},</if>
             <if test="dateType!=null">dateType=#{dateType},</if>
-            <if test="dateType!=null">dateType=#{dateType}</if>
+            <if test="code!=null">code=#{code}</if>
         </set>
         where id=#{id}
     </update>
