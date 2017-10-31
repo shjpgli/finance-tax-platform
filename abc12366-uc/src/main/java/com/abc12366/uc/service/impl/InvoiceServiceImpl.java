@@ -347,6 +347,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 //收货地址
                 String address = bo.getShippingAddress();
                 String phone = bo.getContactNumber();
+                String linkman = bo.getConsignee();
 
                 excel.setPhone(phone);
                 excel.setAddress(address);
@@ -380,6 +381,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                         invoiceNos.append(";");
                     }
                 }
+                excel.setLinkman(linkman);
                 excel.setCargoContent(invoiceNos.toString());
                 //寄托数量
                 excel.setCargoNum(num);
@@ -460,6 +462,12 @@ public class InvoiceServiceImpl implements InvoiceService {
             if(invoiceTemp == null){
                 LOGGER.info("只有在已审批状态，该张发票才能被导入：{}", invoiceDetail);
                 throw new ServiceException(4913,"只有在已审批状态，该张发票才能被导入"+invoiceExcel.getInvoiceOrderNo());
+            }
+            String type = invoiceTemp.getType();
+            String invoiceRepoId = invoiceDetail.getInvoiceRepoId();
+            if(type != null && invoiceRepoId.contains(type)){
+                LOGGER.info("发票导入信息与发票订单信息的发票种类不一致：{}", invoiceDetail);
+                throw new ServiceException(4913,"发票导入信息与发票订单信息的发票种类不一致："+invoiceExcel.getInvoiceOrderNo());
             }
 
             Invoice invoice = new Invoice();

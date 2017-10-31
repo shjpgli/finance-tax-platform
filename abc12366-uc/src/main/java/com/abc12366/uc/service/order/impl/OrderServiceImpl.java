@@ -461,29 +461,13 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("订单信息不存在：{}", orderBO);
             throw new ServiceException(4134);
         }
-        //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单
+        //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单，11：已删除
         if ("7".equals(bo.getOrderStatus()) || "2".equals(bo.getOrderStatus())) {
-            //order.setOrderStatus("9");
-            int del = orderMapper.deleteByIdAndUserId(order);
+            order.setOrderStatus("11");
+            int del = orderMapper.update(order);
             if (del != 1) {
                 LOGGER.info("删除失败：{}", orderBO);
                 throw new ServiceException(4103);
-            }
-            //订单删除成功之后，删除订单与产品对应关系
-
-            List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
-            if (orderProductBOs == null) {
-                LOGGER.info("产品信息错误：{}", orderBO);
-                throw new ServiceException(4166);
-            } else {
-                for (OrderProductBO orderProductBO : orderProductBOs) {
-                    int opDel = orderProductMapper.delete(orderProductBO.getOrderNo());
-                    if (opDel != 1) {
-                        LOGGER.info("删除订单与产品关系信息失败：{}", orderBO);
-                        throw new ServiceException(4168);
-                    }
-                    orderProductspecMapper.deleteByOrderNo(orderProductBO.getOrderNo());
-                }
             }
             insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "7", "用户删除订单", "0");
         } else {
@@ -868,9 +852,9 @@ public class OrderServiceImpl implements OrderService {
             TradeLog tradeLog = new TradeLog();
             tradeLog.setTradeNo(tradeNo);
             tradeLog.setAliTrandeNo(order.getOrderNo());
-            tradeLog.setTradeStatus("1");
+            tradeLog.setTradeStatus("2");
             tradeLog.setTradeType("1");
-            tradeLog.setAmount(Double.parseDouble("-" + order.getTotalPrice()));
+            tradeLog.setAmount(order.getTotalPrice());
             Timestamp now = new Timestamp(new Date().getTime());
             tradeLog.setTradeTime(now);
             tradeLog.setCreateTime(now);
@@ -943,6 +927,7 @@ public class OrderServiceImpl implements OrderService {
             //收货地址
             String address = bo.getShippingAddress();
             String phone = bo.getContactNumber();
+            String consignee = bo.getConsignee();
 //            if(bo.getUserAddressBO() != null){
 //                UserAddressBO userAddress = setUserAddress(bo, address);
             orderListBO.setAddress(address);
@@ -985,6 +970,7 @@ public class OrderServiceImpl implements OrderService {
                     goodsName.append(";");
                 }
             }
+            orderListBO.setFullName(consignee);
             orderListBO.setGoodsName(goodsName.toString());
             //寄托数量
             orderListBO.setNum(num);
@@ -1205,6 +1191,47 @@ public class OrderServiceImpl implements OrderService {
     public OrderTradeBO selectOrderTrade(String tradeNo) {
 
         return orderRoMapper.selectOrderTrade(tradeNo);
+    }
+
+    @Override
+    public void adminDeleteOrder(OrderBO orderBO) {
+        Order order = new Order();
+        BeanUtils.copyProperties(orderBO, order);
+        //查询订单状态
+        OrderBO bo = orderRoMapper.selectOrder(order);
+        if (bo == null) {
+            LOGGER.info("订单信息不存在：{}", orderBO);
+            throw new ServiceException(4134);
+        }
+        //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单，11：已删除
+        if ("11".equals(bo.getOrderStatus())) {
+            //order.setOrderStatus("9");
+            int del = orderMapper.deleteByIdAndUserId(order);
+            if (del != 1) {
+                LOGGER.info("删除失败：{}", orderBO);
+                throw new ServiceException(4103);
+            }
+            //订单删除成功之后，删除订单与产品对应关系
+
+            List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
+            if (orderProductBOs == null) {
+                LOGGER.info("产品信息错误：{}", orderBO);
+                throw new ServiceException(4166);
+            } else {
+                for (OrderProductBO orderProductBO : orderProductBOs) {
+                    int opDel = orderProductMapper.delete(orderProductBO.getOrderNo());
+                    if (opDel != 1) {
+                        LOGGER.info("删除订单与产品关系信息失败：{}", orderBO);
+                        throw new ServiceException(4168);
+                    }
+                    orderProductspecMapper.deleteByOrderNo(orderProductBO.getOrderNo());
+                }
+            }
+            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "10", "管理员删除用户订单", "0");
+        } else {
+            LOGGER.info("订单只有在前台用户删除后，管理员才可以进行删除：{}", orderBO);
+            throw new ServiceException(4140);
+        }
     }
 
 }
