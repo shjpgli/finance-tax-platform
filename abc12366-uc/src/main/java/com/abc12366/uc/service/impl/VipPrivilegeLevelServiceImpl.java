@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -10,12 +10,12 @@ import com.abc12366.uc.model.bo.VipLevelBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelInsertBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelUpdateBO;
+import com.abc12366.uc.service.VipPrivilegeLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;

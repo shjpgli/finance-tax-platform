@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
@@ -14,6 +14,7 @@ import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.RandomNumber;
 import com.abc12366.uc.util.UCConstant;
 import com.alibaba.fastjson.JSON;
@@ -34,7 +35,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 

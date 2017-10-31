@@ -1,5 +1,6 @@
-package com.abc12366.message.service;
+package com.abc12366.message.service.impl;
 
+import com.abc12366.message.service.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class RedisServiceImpl implements RedisService {
     @Resource(name = "redisTemplate")
     private ListOperations<String, String> listOperations;
 
+    @Override
     public void test() {
         if (redisTemplate.hasKey("foo")) {
             String foo = valueOperations.get("foo");
