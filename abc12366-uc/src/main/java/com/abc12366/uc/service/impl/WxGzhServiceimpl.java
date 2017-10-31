@@ -174,13 +174,11 @@ public class WxGzhServiceimpl implements IWxGzhService {
 	            httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
 	        }
 	        Map<String, Object> map = new HashMap<>();
-	        map.put("directory", cmsFileUploadDto.getDirectory());
-	        map.put("fjBo", JSONArray.toJSONString(cmsFileUploadDto.getFjBo()));
 	        HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
 	        
 	        ResponseEntity<String> responseEntity = null;
 	        try {
-	            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+	            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class,cmsFileUploadDto);
 	        } catch (RestClientException e) {
 	            throw new ServiceException("0000", "调用接口异常，地址：" + url);
 	        }
