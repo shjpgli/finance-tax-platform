@@ -54,6 +54,6 @@ public interface QuestionFactionAllocationMapper{
 	 * 审核
 	 *
 	 **/
-	int batchAudit(List<QuestionFactionAllocationManageBo> records);
+	int audit(QuestionFactionAllocationManageBo record);
 
 }

@@ -3,8 +3,6 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.ExpCalculateBO;
-import com.abc12366.uc.model.bo.ExpCodex;
-import com.abc12366.uc.model.bo.ExpComputeBO;
 import com.abc12366.uc.model.bo.MyExperienceBO;
 import com.abc12366.uc.service.ExperienceService;
 import org.slf4j.Logger;
@@ -12,9 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 用户经验值接口

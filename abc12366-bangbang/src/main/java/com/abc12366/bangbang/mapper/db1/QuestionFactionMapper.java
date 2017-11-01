@@ -53,4 +53,5 @@ public interface QuestionFactionMapper{
 	 **/
 	int updateAwardPoint(@Param("factionId") String factionId, @Param("awardPoint")Integer awardPoint);
 
+	int decreaseAwardPoint(@Param("factionId") String factionId, @Param("awardPoint")Integer awardPoint);
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -109,11 +110,11 @@ public class QueFactionAllocationController {
     }
 
     /*
-    * 撤销禁用用户 接口
+    * 分配审核 接口
     */
     @PutMapping(path = "/audit")
-    public ResponseEntity audit(@RequestBody List<QuestionFactionAllocationManageBo> records) {
-        queFactionAllocationService.audit(records);
+    public ResponseEntity audit(@RequestBody List<QuestionFactionAllocationManageBo> records, HttpServletRequest request) {
+        queFactionAllocationService.audit(records, request);
         return ResponseEntity.ok(Utils.kv());
     }
 

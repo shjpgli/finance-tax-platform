@@ -5,7 +5,7 @@
 
     <sql id="Base_Column_List">
         id, userId, orderNo, reason, adminRemark, userRemark, expressNo, expressComp, status, createTime, lastUpdate,
-        toExpressNo, type,adminConfirmRemark,consignee,	contactNumber,	shippingAddress,refundRemark
+        toExpressNo,toExpressComp, type,adminConfirmRemark,consignee,	contactNumber,	shippingAddress,refundRemark
     </sql>
 
     <!--删除：根据主键ID删除-->

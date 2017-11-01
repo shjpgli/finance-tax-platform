@@ -112,8 +112,8 @@
     <select id="selectSentReceivedCount" resultType="com.abc12366.uc.model.weixin.bo.redpack.SentReceived"
             parameterType="java.lang.String">
         SELECT activityId,
-            sum(case when receiveStatus = 'SENT' then 1 else 0 end) as 'sent',
-            sum(case when receiveStatus = 'SENT' then sendAmount else 0 end) as 'sentAmount',
+            sum(case when sendStatus = '1' then 1 else 0 end) as 'sent',
+            sum(case when sendStatus = '1' then sendAmount else 0 end) as 'sentAmount',
             sum(case when receiveStatus = 'RECEIVED' then 1 else 0 end) as 'received',
             sum(case when receiveStatus = 'RECEIVED' then sendAmount else 0 end) as 'receivedAmount'
         FROM uc_wxredenvelop
