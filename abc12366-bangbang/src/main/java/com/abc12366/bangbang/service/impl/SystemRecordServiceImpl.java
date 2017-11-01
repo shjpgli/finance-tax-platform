@@ -6,23 +6,26 @@ import com.abc12366.bangbang.model.SystemRecord;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 import com.abc12366.bangbang.service.SystemRecordService;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.TableBO;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -39,6 +42,9 @@ public class SystemRecordServiceImpl implements SystemRecordService {
 
     @Autowired
     private SystemRecordMapper systemRecordMapper;
+
+    @Autowired
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public List<SystemRecordBO> selectList(Map<String, String> map, int page, int size) {
@@ -63,7 +69,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
      */
     @Async
     @Override
-    public CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO) {
+    public CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO,HttpServletRequest request) {
         if (systemRecordInsertBO == null) {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
@@ -105,7 +111,16 @@ public class SystemRecordServiceImpl implements SystemRecordService {
 
         // todo 如果规则代码有效，则新增用户经验值
         if (!StringUtils.isEmpty(systemRecord.getRuleCode()) && !StringUtils.isEmpty(systemRecord.getUserId())) {
-
+            LOGGER.info("调用UC计算用户经验值接口，用户ID{}，经验值编码：{}", systemRecord.getUserId(), systemRecord.getRuleCode());
+            String expCalculateUrl = SpringCtxHolder.getProperty("abc12366.uc.url") + "/experience/calculate";
+            Map<String,String> map = new HashMap<>();
+            map.put("userId", systemRecord.getUserId());
+            map.put("ruleCode", systemRecord.getRuleCode());
+            try{
+                restTemplateUtil.exchange(expCalculateUrl, HttpMethod.POST,map,request);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         SystemRecordBO systemRecordBOReturn = new SystemRecordBO();
