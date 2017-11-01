@@ -206,8 +206,7 @@ public class ReportDateJob implements Job {
                     //微信消息
                     if (StringUtils.isNotEmpty(userBO.getWxopenid())) {
                         Template info = new Template();
-                        //info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
-                        info.setTemplate_id("yE6keGqr9-Uz0agQalhhfuWcwzN8bKxTBmkL6NsqiJY");
+                        info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
                         info.setContent("{{first.DATA}}\n\n 商品信息：{{keyword1.DATA}}\n 过期时间：{{keyword2.DATA}}\n " +
 								"{{remark.DATA}}");
                         Map<String, String> dataList = new HashMap<String, String>();
@@ -238,15 +237,14 @@ public class ReportDateJob implements Job {
                 message.setBusinessId(userBO.getId());
                 message.setBusiType(MessageConstant.SBXQTX);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                message.setContent(MessageConstant.SBQXMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix));
+                message.setContent(MessageConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix));
                 message.setUserId(userBO.getId());
                 messageSendUtil.sendMessage(message, accessToken);
 
                 if (!"VIP0".equalsIgnoreCase(userBO.getVipLevel())
                         && StringUtils.isNotEmpty(userBO.getWxopenid())) {
                     Template info = new Template();
-                    //info.setTemplate_id("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g");
-                    info.setTemplate_id("ZNamZjO4dvZyT0r7buJ6p43Izm9Ky-2jNSo_YH7IPjE");
+                    info.setTemplate_id("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g");
                     info.setContent("{{first.DATA}}\n\n 申报税种：{{keyword1.DATA}}\n 所属期：{{keyword2.DATA}}\n " +
 							"申报期限：{{keyword3.DATA}}\n {{remark.DATA}}");
                     Map<String, String> dataList = new HashMap<String, String>();
@@ -267,7 +265,7 @@ public class ReportDateJob implements Job {
                 if (("VIP3".equalsIgnoreCase(userBO.getVipLevel())
                         || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
                         && StringUtils.isNotEmpty(userBO.getPhone())) {
-                    String vdxMsg = MessageConstant.SBQXMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
+                    String vdxMsg = MessageConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
                     messageSendUtil.sendPhoneMessage(userBO.getPhone(), vdxMsg, accessToken);
                 }
             }
