@@ -5,14 +5,12 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 factionId,	factionName,	factionImg,	classifyCode,awardPoint,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade
+		 factionId,	factionName,	factionImg,	classifyCode,awardPoint,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade, awardPoint
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionFaction" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_question_faction
+		 SELECT * FROM bb_question_faction
 		 WHERE factionId = #{factionId}
 	</select>
 

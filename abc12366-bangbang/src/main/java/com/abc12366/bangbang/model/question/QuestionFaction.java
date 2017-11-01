@@ -58,7 +58,17 @@ public class QuestionFaction implements Serializable {
 	/**邦派等级**varchar(64)**/
 	private String factionGrade;
 
+	/**邦派积分***/
+	private Integer awardPoint;
 
+	public Integer getAwardPoint() {
+		return awardPoint;
+	}
+
+	public QuestionFaction setAwardPoint(Integer awardPoint) {
+		this.awardPoint = awardPoint;
+		return this;
+	}
 
 	public void setFactionId(String factionId){
 		this.factionId = factionId;

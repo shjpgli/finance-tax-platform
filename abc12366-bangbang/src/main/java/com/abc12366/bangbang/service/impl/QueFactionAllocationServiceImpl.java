@@ -3,7 +3,9 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionFactionAllocationMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionFactionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionAllocationRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionFactionRoMapper;
 import com.abc12366.bangbang.model.BaseObject;
+import com.abc12366.bangbang.model.question.QuestionFaction;
 import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
 import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
@@ -41,6 +43,9 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
 
     @Autowired
     private QuestionFactionMapper questionFactionMapper;
+
+    @Autowired
+    private QuestionFactionRoMapper questionFactionRoMapper;
 
     @Autowired
     private BangbangRestTemplateUtil bangbangRestTemplateUtil;
@@ -195,7 +200,12 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
                 }
                 //成员积分加完后要扣除帮派的积分
                 for (AllocationPointAwardBO bo: list){
-                    questionFactionMapper.decreaseAwardPoint(bo.getFactionId(), bo.getPoint());
+                    QuestionFaction faction = questionFactionRoMapper.selectByPrimaryKey(bo.getFactionId());
+                    if(faction.getAwardPoint() == null || faction.getAwardPoint().intValue() < bo.getPoint()){
+                        throw new ServiceException(6146);
+                    }else{
+                        questionFactionMapper.decreaseAwardPoint(bo.getFactionId(), bo.getPoint());
+                    }
                 }
             }
         }catch (Exception e){
