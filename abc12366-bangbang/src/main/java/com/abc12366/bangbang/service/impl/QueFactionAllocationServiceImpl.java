@@ -209,8 +209,12 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
                 }
             }
         }catch (Exception e){
-            LOGGER.error("邦派成员奖励分配信息异常：{}", e);
-            throw new ServiceException(6143);
+            if(e instanceof ServiceException){
+                throw e;
+            }else{
+                LOGGER.error("邦派成员奖励分配信息异常：{}", e);
+                throw new ServiceException(6143);
+            }
         }
     }
 }
