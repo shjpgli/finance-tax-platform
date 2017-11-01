@@ -149,9 +149,17 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void audit(List<QuestionFactionAllocationManageBo> records) {
-        allocationMapper.batchAudit(records);
+        try{
+            for (QuestionFactionAllocationManageBo bo: records){
+                allocationMapper.audit(bo);
+            }
+        }catch (Exception e){
+            LOGGER.error("邦派成员奖励分配信息异常：{}", e);
+            throw new ServiceException(6143);
+        }
     }
 
 }

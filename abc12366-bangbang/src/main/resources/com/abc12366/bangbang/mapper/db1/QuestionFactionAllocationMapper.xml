@@ -153,15 +153,16 @@
 	</update>
 
 
-	<update id="batchAudit" parameterType="java.util.List">
-		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
-			UPDATE bb_question_faction_allocation
-			SET state = #{item.status}
-				<if test="item.refuseReason != null">
-					,refuseReason = #{item.refuseReason}
-				</if>
-			WHERE id = #{item.id}
-		</foreach>
+	<!-- 修 改-->
+	<update id="audit" parameterType="com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo">
+		UPDATE bb_question_faction_allocation
+		<set>
+			<if test="refuseReason != null">
+				refuseReason = #{refuseReason},
+			</if>
+			state = #{status}, updateTime = now()
+		</set>
+		WHERE id = #{id}
 	</update>
 
 

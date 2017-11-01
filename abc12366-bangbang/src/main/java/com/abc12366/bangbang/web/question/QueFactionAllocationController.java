@@ -109,7 +109,7 @@ public class QueFactionAllocationController {
     }
 
     /*
-    * 撤销禁用用户 接口
+    * 分配审核 接口
     */
     @PutMapping(path = "/audit")
     public ResponseEntity audit(@RequestBody List<QuestionFactionAllocationManageBo> records) {
