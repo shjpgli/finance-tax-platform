@@ -10,6 +10,28 @@ import java.util.Date;
 
 public class LotteryActivityprizeBO{
 
+    private Integer balance;
+    private Integer amount;
+public Integer getStock(){
+    //库存  =  总数 - 销售数量
+    return  amount - balance;
+}
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     private String activityName;
     private String lotteryName;
     public String getActivityName() {

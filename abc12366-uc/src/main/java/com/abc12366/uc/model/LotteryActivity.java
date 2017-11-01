@@ -9,6 +9,46 @@ import java.util.Date;
 
 
 public class LotteryActivity{
+    /** 时段投库存 */
+    private Integer timeStock;
+    /** 时段段时间 */
+    private Date timeDay;
+    /** 时间段已发数量 */
+    private Integer timeCount;
+    /**中奖时间*/
+    private Date luckTime;
+
+    public Integer getTimeStock() {
+        return timeStock;
+    }
+
+    public void setTimeStock(Integer timeStock) {
+        this.timeStock = timeStock;
+    }
+
+    public Date getTimeDay() {
+        return timeDay;
+    }
+
+    public void setTimeDay(Date timeDay) {
+        this.timeDay = timeDay;
+    }
+
+    public Integer getTimeCount() {
+        return timeCount;
+    }
+
+    public void setTimeCount(Integer timeCount) {
+        this.timeCount = timeCount;
+    }
+
+    public Date getLuckTime() {
+        return luckTime;
+    }
+
+    public void setLuckTime(Date luckTime) {
+        this.luckTime = luckTime;
+    }
  /** key */
 private String id;
  /** 名称 */

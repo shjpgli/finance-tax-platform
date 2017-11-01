@@ -8,7 +8,9 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.LotteryActivityMapper;
 import com.abc12366.uc.mapper.db2.LotteryActivityRoMapper;
+import com.abc12366.uc.model.Lottery;
 import com.abc12366.uc.model.LotteryActivity;
+import com.abc12366.uc.model.LotteryActivityprize;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.LszUtil;
@@ -19,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -88,9 +91,98 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
     public List<LotteryActivityBO> selectList(Map map) {
         return lotteryActivityRoMapper.selectList(map);
     }
+    //随机抽取一个奖品
+    public   LotteryActivityprizeBO lotteryOne(String activityId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("activityId", activityId);
+        List<LotteryActivityprizeBO> lottery = lotteryActivityprizeService.selectList(map);
 
+        if (lottery.size() <= 0) {
+            LOGGER.warn("必须拥有一个奖品");
+            throw new RuntimeException("奖品为空，出现错误");
+        }
+        if (lottery == null || lottery.isEmpty()) {
+            return null;
+        }
+        Date date = new Date();
+        List<LotteryActivityprizeBO> awardToList= new ArrayList<LotteryActivityprizeBO>();
+        for (LotteryActivityprizeBO obj : lottery) {
+            if (!obj.getStatus()) {
+                //remake = "奖品已禁用";
+            } else if (obj.getAmount() <= obj.getBalance()) {//总数量 小于 已出数量
+               // remake = "总库存不足";
+            } else {
+                //判断商品是否过期
+                if (obj.getStartTime() != null && obj.getEndTime() != null) {
+                    if (date.getTime() < obj.getStartTime().getTime() || date.getTime() > obj.getEndTime().getTime()) {
+                       // remake = "奖品过期";
+                    } else {
+                        awardToList.add(obj);
+                    }
+                }
+            }
+        }
+        double weight = 0;
+        for (LotteryActivityprizeBO awardTo : awardToList) {
+
+            weight += awardTo.getStock();
+        }
+
+        if (weight == 0) {
+            return null;
+        }
+        //每次的种子数都是奖品的总量，所以只要奖品没被抽中，当前时间片的中奖时间点始终是固定的
+        Random random = new Random( System.currentTimeMillis());
+        int num = random.nextInt((int) weight);
+
+        for (LotteryActivityprizeBO awardTo : awardToList) {
+            //数量少的奖品在一开始被抽走的概率很小，数量越多越容易被抽中
+            num -= awardTo.getStock();
+            if (num < 0) {
+                return awardTo;
+            }
+        }
+        return null;
+    }
+
+private  boolean luckDo(LotteryActivityBO lottery){
+        //首先判断是不是当天
+    Date date = new Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String oldDate = "";
+    if (lottery.getTimeDay() != null) {
+        oldDate = sdf.format(lottery.getTimeDay());
+    }
+    String nowDate = sdf.format(date);
+    if (!nowDate.equals(oldDate)) {
+        //假如不是当天
+        lottery.setTimeCount(0);
+        lottery.setTimeDay(date);
+    }
+    if (lottery.getTimeStock() <= lottery.getTimeCount()) {
+        //当天库存不足
+        return false;
+    } else {
+
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        long rand = random.nextInt(86400000);//一天是 86400秒
+        String nowDays = sdf.format(date);
+        try {
+            Date nowDay = sdf.parse(nowDays);
+            long timel = date.getTime() - nowDay.getTime();//今天过去的时间数  毫秒
+            if  (timel < rand){
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+}
     @Override
-    public LotteryLogBO luckDraw(String userId, String activityId, String ip) {
+    public synchronized LotteryLogBO luckDraw(String userId, String activityId, String ip) {
         if (userId == null || userId.isEmpty()) {
             throw new ServiceException(9999, "userId参数错误，请查证");
         }
@@ -108,9 +200,8 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         if(!lotteryActivityBO.getStatus()){
             throw new ServiceException(9999, "抽奖活动已停用");
         }
-        if(!lotteryActivityBO.getStatus()){
-            throw new ServiceException(9999, "抽奖活动已停用");
-        }
+
+
         if(!LszUtil.dateIn(lotteryActivityBO.getStartTime(),lotteryActivityBO.getEndTime(),new Date())){
             throw new ServiceException(9999, "抽奖活动已过期");
 
@@ -118,69 +209,27 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
 //        P-hycj
 //        PointCodex pointCodex = pointsService.selectCodexByRuleCode("P-hycj");
 //        Integer point = pointCodex.getUpoint();
-        LotteryActivityprizeBO obj = luckDrawEx(activityId);
-
+        //抽一个奖品
+       // LotteryActivityprizeBO obj = luckDrawEx(activityId);
+        LotteryActivityprizeBO obj =  lotteryOne(activityId);
         PointCalculateBO pointCalculateBO = new PointCalculateBO();
         pointCalculateBO.setUserId(userId);
         pointCalculateBO.setRuleCode(UCConstant.POINT_RULE_LOTTERY_CODE);
+        //扣积分
         Integer point = pointsService.calculate(pointCalculateBO);
         Date date = new Date();
         String remake = "";
         //库存 记日志
         //明天测试
         LotteryBO lottery = null;
-        if (obj == null) {
+        if (obj == null || !luckDo(lotteryActivityBO)) {
             remake = "未抽中";
         } else {
              lottery =lotteryService.selectOne(obj.getLotteryId());
             if(lottery==null){
-                return null;// 这种情况几乎不存在
+                return null;// 这种情况是  奖品被删除
             }
-            //中奖的情况
-            if (lottery.getStock() == null) {
-                lottery.setStock(0);
-
-            }
-            if (lottery.getCount() == null) {
-                lottery.setCount(0);
-            }
-            if (!obj.getStatus() || !lottery.getStatus()) {
-                remake = "奖品已禁用";
-            } else if (lottery.getStock() <= lottery.getCount()) {
-                remake = "总库存不足";
-            } else {
-                //判断商品是否过期
-                if (obj.getStartTime() != null && obj.getEndTime() != null) {
-                    if (date.getTime() < obj.getStartTime().getTime() || date.getTime() > obj.getEndTime().getTime()) {
-                        remake = "奖品过期";
-                    } else {
-                        //首先判断是不是当天
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        String oldDate = "";
-                        if (lottery.getTimeDay() != null) {
-                            oldDate = sdf.format(lottery.getTimeDay());
-                        }
-                        String nowDate = sdf.format(date);
-                        if (!nowDate.equals(oldDate)) {
-                            //假如不是当天
-                            lottery.setTimeCount(0);
-                            lottery.setTimeDay(new Date());
-                        }
-                        if (lottery.getTimeStock() <= lottery.getTimeCount()) {
-                            remake = "当天库存不足";
-                        } else {
-                            lottery.setTimeCount(lottery.getTimeCount() + 1);
-                            lottery.setCount(lottery.getCount() + 1);
-                            lotteryService.update(lottery, lottery.getId());
-                            //remake = "";
-                        }
-                    }
-                }
-
-            }
-
-        }
+         }
 
         LotteryLogBO lotteryLogBO = new LotteryLogBO();
         lotteryLogBO.setUserId(userId);
@@ -190,10 +239,16 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         lotteryLogBO.setIp(ip);
         if ("".equals(remake) && lottery != null)
 
-        {//假如没有这个值 说明抽中了
+        {//假如这个值为空 说明抽中了
             lotteryLogBO.setIsluck(1);
             lotteryLogBO.setLotteryId(lottery.getId());
             lotteryLogBO.setLotteryName(lottery.getName());
+
+            if (obj.getBalance() == null || obj.getBalance()<0){
+                obj.setBalance(0);
+            }
+            obj.setBalance(obj.getBalance() + 1);
+            lotteryActivityprizeService.update(obj,obj.getId());
         } else
 
         {
@@ -203,6 +258,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
 
         LotteryLogBO logs = lotteryLogService.insert(lotteryLogBO);
         lotteryActivityBO.setCount((lotteryActivityBO.getCount() + 1));
+        lotteryActivityBO.setLuckTime(date);
         this.update(lotteryActivityBO,lotteryActivityBO.getId());
         return logs;
     }

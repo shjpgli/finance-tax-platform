@@ -5,7 +5,7 @@
 
     <insert id="insert" parameterType="com.abc12366.bangbang.model.SystemRecord">
         insert into bb_system_record_${yyyyMMdd} (id,userId,sessionId,browseDate,year,week,referer,month,day,hour,
-        minute,pageTitle,
+        minute,pageTitle,ruleCode,
         pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime)
         values (#{id},#{userId},#{sessionId},#{browseDate},#{year},#{week},#{referer},#{month},#{day},#{hour},
         #{minute},#{pageTitle},#{pageUrl},#{stayLong},#{feature},#{appName},#{ip},
