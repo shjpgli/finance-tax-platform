@@ -237,7 +237,7 @@ public class ReportDateJob implements Job {
                 message.setBusinessId(userBO.getId());
                 message.setBusiType(MessageConstant.SBXQTX);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                message.setContent(MessageConstant.SBQXMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix));
+                message.setContent(MessageConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix));
                 message.setUserId(userBO.getId());
                 messageSendUtil.sendMessage(message, accessToken);
 
@@ -265,7 +265,7 @@ public class ReportDateJob implements Job {
                 if (("VIP3".equalsIgnoreCase(userBO.getVipLevel())
                         || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
                         && StringUtils.isNotEmpty(userBO.getPhone())) {
-                    String vdxMsg = MessageConstant.SBQXMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
+                    String vdxMsg = MessageConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
                     messageSendUtil.sendPhoneMessage(userBO.getPhone(), vdxMsg, accessToken);
                 }
             }
