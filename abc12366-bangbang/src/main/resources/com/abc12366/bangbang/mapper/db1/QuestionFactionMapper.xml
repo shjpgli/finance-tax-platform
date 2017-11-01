@@ -204,5 +204,10 @@
 		where  factionId = #{factionId}
 	</update>
 
+	<update id="decreaseAwardPoint">
+		UPDATE bb_question_faction SET awardPoint = awardPoint - #{awardPoint}
+		WHERE  factionId = #{factionId}
+	</update>
+
 
 </mapper>

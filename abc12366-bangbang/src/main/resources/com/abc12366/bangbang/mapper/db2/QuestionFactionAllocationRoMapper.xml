@@ -102,4 +102,12 @@
         ORDER BY t.createTime desc
     </select>
 
+    <select id="selectPointAwardListByIds" resultType="com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO" parameterType="java.util.List">
+        SELECT userId , integral as point,factionId FROM bb_question_faction_allocation
+        WHERE id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>

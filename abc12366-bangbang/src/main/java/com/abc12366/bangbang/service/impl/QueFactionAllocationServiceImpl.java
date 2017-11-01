@@ -1,20 +1,29 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionFactionAllocationMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionFactionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionAllocationRoMapper;
+import com.abc12366.bangbang.model.BaseObject;
 import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
+import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 import com.abc12366.bangbang.service.QueFactionAllocationService;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.alibaba.fastjson.JSON;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -29,6 +38,12 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
 
     @Autowired
     private QuestionFactionAllocationRoMapper allocationRoMapper;
+
+    @Autowired
+    private QuestionFactionMapper questionFactionMapper;
+
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
     public List<QuestionFactionAllocationBo> selectList(Map<String,Object> map) {
@@ -151,15 +166,41 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
 
     @Transactional("db1TxManager")
     @Override
-    public void audit(List<QuestionFactionAllocationManageBo> records) {
+    public void audit(List<QuestionFactionAllocationManageBo> records, HttpServletRequest request) {
         try{
+            List<String> ids = new ArrayList<>();
             for (QuestionFactionAllocationManageBo bo: records){
                 allocationMapper.audit(bo);
+                //审核通过的ids
+                if(bo.getStatus().intValue() == 2){
+                    ids.add(bo.getId());
+                }
+            }
+            //审核通过的成员加积分
+            if(!ids.isEmpty()){
+                List<AllocationPointAwardBO> list = allocationRoMapper.selectPointAwardListByIds(ids);
+                Map<String, Object> map = new HashMap<>();
+                map.put("pointAwardBOList", list);
+                try {
+                    String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/uc/points/batch/award";
+                    String responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, map, request);
+                    if (!StringUtils.isEmpty(responseStr)) {
+                        BaseObject response = JSON.parseObject(responseStr, BaseObject.class);
+                        if(!response.getCode().equals("2000")){
+                            throw new ServiceException(6143);
+                        }
+                    }
+                } catch (Exception e) {
+                    throw new ServiceException(6143);
+                }
+                //成员积分加完后要扣除帮派的积分
+                for (AllocationPointAwardBO bo: list){
+                    questionFactionMapper.decreaseAwardPoint(bo.getFactionId(), bo.getPoint());
+                }
             }
         }catch (Exception e){
             LOGGER.error("邦派成员奖励分配信息异常：{}", e);
             throw new ServiceException(6143);
         }
     }
-
 }
