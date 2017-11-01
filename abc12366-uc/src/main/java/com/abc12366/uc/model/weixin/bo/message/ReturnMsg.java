@@ -44,7 +44,7 @@ public class ReturnMsg {
             buffer.append("<Content><![CDATA[").append(this.content).append("]]></Content>");
         } else if ("image".equals(this.msgType)) {
             buffer.append("<Image><MediaId><![CDATA[").append(this.mediaId).append("]]></MediaId></Image>");
-        } else {
+        } else if ("news".equals(this.msgType)){
             buffer.append("<ArticleCount><![CDATA[").append(this.news.getArticleCount()).append
                     ("]]></ArticleCount><Articles>");
             for (Article article : this.news.getArticles()) {

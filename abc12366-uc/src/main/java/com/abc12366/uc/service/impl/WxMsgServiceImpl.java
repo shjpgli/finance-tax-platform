@@ -80,11 +80,16 @@ public class WxMsgServiceImpl implements IWxMsgService {
                 case 4://小视频
                 case 5://位置
                 case 6://链接
-                    ReturnMsg remsg = getReMsgOneBysetting("1");
+                	//没查到关键字消息，转给多客服
+                	ReturnMsg remsg=new ReturnMsg();
+                	remsg.setMsgType("transfer_customer_service");
+                	return remsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System.currentTimeMillis());
+                	
+                   /* ReturnMsg remsg = getReMsgOneBysetting("1");
                     if (remsg != null) {
                         return remsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System.currentTimeMillis
 								());
-                    }
+                    }*/
                 case 7:
                     int eventCode = MsgMap.getEventType(map.get("Event"));
                     switch (eventCode) {
