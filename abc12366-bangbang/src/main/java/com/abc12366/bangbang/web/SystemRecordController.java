@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -107,10 +108,10 @@ public class SystemRecordController {
      * @see SystemRecordInsertBO
      */
     @PostMapping
-    public ResponseEntity insert(@Valid @RequestBody SystemRecordInsertBO systemRecordInsertBO) throws
+    public ResponseEntity insert(@RequestBody SystemRecordInsertBO systemRecordInsertBO, HttpServletRequest request) throws
             ExecutionException, InterruptedException {
         LOGGER.info("{}", systemRecordInsertBO);
-        CompletableFuture<SystemRecordBO> systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO);
+        CompletableFuture<SystemRecordBO> systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO,request);
         CompletableFuture.allOf(systemRecordBOReturn);
         LOGGER.info("{}", systemRecordBOReturn.get());
         return ResponseEntity.ok(Utils.kv("data", systemRecordBOReturn.get()));

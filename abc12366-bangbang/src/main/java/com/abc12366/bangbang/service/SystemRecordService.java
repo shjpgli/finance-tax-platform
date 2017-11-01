@@ -4,6 +4,7 @@ import com.abc12366.bangbang.model.SystemRecord;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -44,5 +45,5 @@ public interface SystemRecordService {
      * @see com.abc12366.bangbang.model.bo.SystemRecordInsertBO
      * @see com.abc12366.bangbang.model.bo.SystemRecordBO
      */
-    CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO);
+    CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO,HttpServletRequest request);
 }

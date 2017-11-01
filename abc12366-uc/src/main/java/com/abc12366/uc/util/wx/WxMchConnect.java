@@ -65,7 +65,7 @@ public class WxMchConnect<T> {
     }
 
     public void httpsRequest() throws Exception {
-        KeyStore keyStore  = KeyStore.getInstance("PKCS12");
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
         InputStream instream = new ClassPathResource("cer/apiclient_cert.p12").getInputStream();
         String mch_id = SpringCtxHolder.getProperty("abc.mch_id");
         try {
@@ -81,7 +81,7 @@ public class WxMchConnect<T> {
         // Allow TLSv1 protocol only
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                 sslcontext,
-                new String[] { "TLSv1" },
+                new String[]{"TLSv1"},
                 null,
                 SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
         CloseableHttpClient httpclient = HttpClients.custom()
