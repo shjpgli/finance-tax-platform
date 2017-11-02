@@ -6,6 +6,7 @@ import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.ActivityBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxLotteryBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
+import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopUpdateBO;
 
 import java.util.List;
 
@@ -22,8 +23,8 @@ public interface IActivityService {
      * 查看红包活动列表
      *
      * @param activity WxActivity
-     * @param page 当前页
-     * @param size 每页大小
+     * @param page     当前页
+     * @param size     每页大小
      * @return List<WxActivity>
      */
     List<WxActivity> selectList(WxActivity activity, int page, int size);
@@ -63,6 +64,7 @@ public interface IActivityService {
 
     /**
      * 删除活动
+     *
      * @param id PK
      */
     void delete(String id);
@@ -85,15 +87,17 @@ public interface IActivityService {
 
     /**
      * 抽奖列表明细
+     *
      * @param redEnvelop WxRedEnvelop
-     * @param page 当前页
-     * @param size 每页大小
+     * @param page       当前页
+     * @param size       每页大小
      * @return List<WxRedEnvelop>
      */
     List<WxRedEnvelop> selectRedEnvelopList(WxRedEnvelop redEnvelop, int page, int size);
 
     /**
      * 查询微信红包信息
+     *
      * @param id PK
      * @return WxRedEnvelop
      */
@@ -101,12 +105,14 @@ public interface IActivityService {
 
     /**
      * 导入红包数据
+     *
      * @param redEnvelopList List<WxRedEnvelop>
      */
     void importJSON(List<WxRedEnvelopBO> redEnvelopList);
 
     /**
      * 对于发送失败的红包，重新发送
+     *
      * @param id PK
      * @return WxRedEnvelop
      */
@@ -114,13 +120,23 @@ public interface IActivityService {
 
     /**
      * 删除未抽奖的口令
+     *
      * @param id 红包口令表主键
      */
     void deleteSecret(String id);
 
     /**
      * 批量删除未抽奖的口令
+     *
      * @param ids List<Id>
      */
     void batchDeleteSecret(List<Id> ids);
+
+    /**
+     * 根据口令ID修改口令记录
+     *
+     * @param bo 更新口令对象
+     * @return WxRedEnvelopBO
+     */
+    WxRedEnvelop updateSecret(WxRedEnvelopUpdateBO bo);
 }
