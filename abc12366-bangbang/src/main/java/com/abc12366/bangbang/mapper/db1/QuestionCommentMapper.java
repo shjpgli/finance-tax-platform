@@ -46,4 +46,11 @@ public interface QuestionCommentMapper{
 	 **/
 	int updateByPrimaryKey(QuestionComment record);
 
+	/**
+	 *
+	 * 修改被举报数+1(根据主键ID)
+	 *
+	 **/
+	int updateReportNum(@Param("id") String id);
+
 }

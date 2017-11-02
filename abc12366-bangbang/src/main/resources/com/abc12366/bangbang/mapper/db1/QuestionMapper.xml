@@ -190,7 +190,7 @@
 
 	<!-- 修 改 举报数-->
 	<update id="updateReportNum" parameterType="java.lang.String">
-		UPDATE bb_question SET reportNum = reportNum + 1 WHERE id = #{id}
+		UPDATE bb_question SET reportNum = reportNum + 1, status = '3' WHERE id = #{id}
 	</update>
 
 	<!-- 话题推荐 -->

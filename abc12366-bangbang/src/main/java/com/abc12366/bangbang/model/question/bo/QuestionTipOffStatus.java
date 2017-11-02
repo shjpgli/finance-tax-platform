@@ -6,9 +6,9 @@ package com.abc12366.bangbang.model.question.bo;
  */
 public enum QuestionTipOffStatus {
 
-    auditing("未发布"),
-    approved("已发布"),
-    refuse("已撤销");
+    auditing("待审核"),
+    approved("审核通过"),
+    refuse("审核拒绝");
 
     private String description;
 

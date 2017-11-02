@@ -247,4 +247,9 @@
         WHERE id = #{id}
     </update>
 
+	<!-- 修 改 举报数-->
+	<update id="updateReportNum" parameterType="java.lang.String">
+		UPDATE bb_cheats SET reportNum = reportNum + 1, status ='3' WHERE id = #{id}
+	</update>
+
 </mapper>

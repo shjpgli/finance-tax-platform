@@ -1,9 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.MapUtil;
-import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionTipOffMapper;
+import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionTipOffRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
@@ -43,6 +41,16 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
     @Autowired
     private QuestionAnswerMapper questionAnswerMapper;
 
+    @Autowired
+    private QuestionCommentMapper questionCommentMapper;
+
+    @Autowired
+    private CheatsMapper cheatsMapper;
+
+    @Autowired
+    private CheatsCommentMapper cheatsCommentMapper;
+
+
     @Override
     public List<QuestionTipOffBo> selectList() {
         return questionTipOffRoMapper.selectList();
@@ -57,13 +65,20 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
 
         questionTipOff.setUpdateAdmin(Utils.getAdminId());
         questionTipOffMapper.updateByPrimaryKeySelective(questionTipOff);
-        /*如果举报内容 审核通过 加被举报数*/
+        /*如果举报内容 审核通过 加被举报数, 修改状态*/
         if(QuestionTipOffStatus.approved.name().equals(status)){
             QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(id);
+            String sourceId = record.getSourceId();
             if("question".equals(record.getSourceType())){
-                questionMapper.updateReportNum(id);
-            }else{
-                questionAnswerMapper.updateReportNum(id);
+                questionMapper.updateReportNum(sourceId);
+            }else if("answer".equals(record.getSourceType())){
+                questionAnswerMapper.updateReportNum(sourceId);
+            }else if("comment".equals(record.getSourceType())){
+                questionCommentMapper.updateReportNum(sourceId);
+            }else if("cheats".equals(record.getSourceType())){
+                cheatsMapper.updateReportNum(sourceId);
+            }else if("cheats_comment".equals(record.getSourceType())){
+                cheatsCommentMapper.updateReportNum(sourceId);
             }
         }
     }

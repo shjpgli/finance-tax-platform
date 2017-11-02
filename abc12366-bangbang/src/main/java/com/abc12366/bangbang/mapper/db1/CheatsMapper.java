@@ -51,4 +51,10 @@ public interface CheatsMapper{
      **/
     int updateBrowseNum(@Param("id") String id);
 
+	/**
+	 *
+	 * 修改被举报数+1,修改状态(根据主键ID)
+	 *
+	 **/
+	int updateReportNum(@Param("id") String id);
 }
