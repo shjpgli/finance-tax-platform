@@ -156,11 +156,8 @@
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectUserVipList" resultType="com.abc12366.uc.model.User" parameterType="java.util.Date">
-        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
-        uu.createTime, uu.lastUpdate,
-        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
-        uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname
-        from uc_user uu
+        select id
+        from uc_user
         WHERE status = true
         <![CDATA[
                 and date_format(vipExpireDate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')

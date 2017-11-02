@@ -3,6 +3,8 @@ package com.abc12366.uc.mapper.db1;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 
+import java.util.Map;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @create 2017-02-20 4:18 PM
@@ -25,4 +27,6 @@ public interface UserMapper {
     int updatePhone(User user);
 
 	void qxwxbd(String wxopenid);
+
+    int updateBatch(Map<String, Object> map);
 }

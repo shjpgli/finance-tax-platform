@@ -19,6 +19,18 @@
         where id=#{id}
     </update>
 
+    <update id="updateBatch" parameterType="java.util.List">
+        update uc_user_dzsb
+        <set>
+            status=FALSE,
+            lastUpdate=now()
+        </set>
+        WHERE id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
     <insert id="hngsBind" parameterType="com.abc12366.uc.model.UserHngs">
         insert into uc_user_hngs(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, bsy, smrzzt, status,
         createTime, lastUpdate,roleId)
