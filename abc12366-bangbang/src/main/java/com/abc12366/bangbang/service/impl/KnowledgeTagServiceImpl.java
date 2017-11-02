@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.CurriculumLabelMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeTagRelMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionClassifyTagMapper;
 import com.abc12366.bangbang.model.KnowledgeTag;
 import com.abc12366.bangbang.service.KnowledgeTagService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -35,6 +36,9 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
 
     @Autowired
     private CurriculumLabelMapper curriculumLabelMapper;
+
+    @Autowired
+    private QuestionClassifyTagMapper questionClassifyTagMapper;
 
     @Override
     public List<String> selectHotTag(Integer num) {
@@ -111,11 +115,25 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     @Override
     public KnowledgeTag add(KnowledgeTag knowledgeTag) {
         KnowledgeTag tag = knowledgeTagMapper.selectByName(knowledgeTag.getName());
-        if(tag != null && tag.getStatus()){
+        if(tag != null && tag.getTagType().indexOf(knowledgeTag.getTagType()) > -1 && tag.getStatus()){
             throw new ServiceException(4520);
         }
-        if(tag != null && !tag.getStatus()){
+        if(tag != null && tag.getTagType().indexOf(knowledgeTag.getTagType()) > -1 && !tag.getStatus()){
             throw new ServiceException(4521);
+        }
+        if(tag != null){
+            StringBuilder tagTypes1 = new StringBuilder(knowledgeTag.getTagType());
+            String tagTypes = tag.getTagType();
+            String[] arr = tagTypes.split(";");
+            for (String tagType: arr){
+                if(tagTypes1.indexOf(tagType) == -1){
+                    tagTypes1.append(";"+tagType);
+                }
+            }
+            tag.setTagType(tagTypes1.toString());
+            tag.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeTagMapper.updateByPrimaryKeySelective(tag);
+            return tag;
         }
         try {
             knowledgeTag.setId(Utils.uuid());
@@ -163,8 +181,10 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
     @Override
     public void delete(String id) {
         try {
-            curriculumLabelMapper.deleteByLabelId(id);
-            knowledgeTagRelMapper.deleteByTagId(id);
+            curriculumLabelMapper.deleteByLabelId(id);//删除课程关联标签
+            knowledgeTagRelMapper.deleteByTagId(id);//删除知识库关联标签
+            questionClassifyTagMapper.deleteByTagId(id);//删除帮帮关联标签
+
             knowledgeTagMapper.deleteByPrimaryKey(id);
         }catch (Exception e){
             LOGGER.error("KnowledgeTagServiceImpl.delete()", e);
@@ -178,6 +198,8 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
         try {
             curriculumLabelMapper.deleteByLabelIds(ids);
             knowledgeTagRelMapper.deleteByTagIds(ids);
+            questionClassifyTagMapper.deleteByTagIds(ids);
+
             knowledgeTagMapper.deleteByPrimaryKeys(ids);
         }catch (Exception e){
             LOGGER.error("KnowledgeTagServiceImpl.delete(List<String> ids)", e);
