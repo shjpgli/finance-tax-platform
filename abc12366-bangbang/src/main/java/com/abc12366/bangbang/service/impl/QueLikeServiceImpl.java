@@ -61,13 +61,13 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
-        int flag = 0;
+        int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
             questionId = answer.getQuestionId();
         }
         QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
         if(comment != null && "".equals(questionId)){
-            flag = 1;
+            likeTarget = 2;
             questionId = comment.getQuestionId();
         }
 
@@ -88,7 +88,7 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         int likeCnt = likeRoMapper.selectLikeCnt(id)+1;
 
-        if(flag == 0){
+        if(likeTarget == 1){
             QuestionAnswer answer1 = new QuestionAnswer();
             answer1.setLikeNum(likeCnt);
             answer1.setId(id);
@@ -114,13 +114,13 @@ public class QueLikeServiceImpl implements QueLikeService {
         String userId = UcUserCommon.getUserId(request);
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
-        int flag = 0;
+        int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
             questionId = answer.getQuestionId();
         }
         QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
         if(comment != null && "".equals(questionId)){
-            flag = 1;
+            likeTarget = 2;
             questionId = comment.getQuestionId();
         }
         QuestionLike like = new QuestionLike();
@@ -140,7 +140,7 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         int trampleNum = likeRoMapper.selectLikeCnt(id)+1;
 
-        if(flag == 0){
+        if(likeTarget == 1){
             QuestionAnswer answer1 = new QuestionAnswer();
             answer1.setTrampleNum(trampleNum);
             answer1.setId(id);
