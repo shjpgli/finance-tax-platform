@@ -161,7 +161,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             userLevel = userBo.getLevel();
         }
 
-        if(factionCnt>4){
+        if(factionCnt>=4){
             //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
             throw new ServiceException(6126);
         }

@@ -63,7 +63,7 @@
         SELECT
         a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title questionTitle,q.browseNum,
         u1.nickname answerNickname,
-        answerUserId,a.ip,	shortAnswer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        answerUserId,a.ip,	shortAnswer,answer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         a.likeNum,a.commentNum,a.trampleNum,a.reportNum,
         q.browseNum,q.answerNum
         FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
