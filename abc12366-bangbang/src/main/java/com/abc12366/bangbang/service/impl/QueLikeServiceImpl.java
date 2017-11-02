@@ -78,6 +78,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         like.setLikeId(uuid);
         like.setLikeTime(new Date());
         like.setLikeType(1);
+        like.setLikeTarget(likeTarget);
         like.setQuestionId(questionId);
         like.setId(id);
 
@@ -131,6 +132,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         like.setLikeId(uuid);
         like.setLikeType(2);
         like.setLikeTime(new Date());
+        like.setLikeTarget(likeTarget);
         like.setQuestionId(questionId);
         like.setId(id);
 

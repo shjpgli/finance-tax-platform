@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,6 +43,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
         attention.setUserId(userId);
         attention.setAttentionId(uuid);
         attention.setAttentionUserId(id);
+        attention.setAttentionTime(new Date());
 
         Map map = MapUtil.kv("attentionUserId", id, "userId", userId);
         int cnt =  attentionRoMapper.selectExist(map);
