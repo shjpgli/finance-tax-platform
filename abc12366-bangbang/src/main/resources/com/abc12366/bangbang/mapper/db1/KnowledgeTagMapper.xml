@@ -46,7 +46,7 @@
         <if test="tagType != null">
             AND tagType LIKE CONCAT('%',#{tagType},'%')
         </if>
-        ORDER BY createTime DESC
+        ORDER BY updateTime DESC
     </select>
     <!-- 查询列表 -->
     <select id="selectRelatedTags" resultType="com.abc12366.bangbang.model.KnowledgeTag" parameterType="java.lang.String">
