@@ -6,6 +6,7 @@ import com.abc12366.uc.model.weixin.WxRedEnvelop;
 import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.WxLotteryBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
+import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopUpdateBO;
 import com.abc12366.uc.service.IActivityService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -82,6 +83,26 @@ public class RedEnvelopController {
     public ResponseEntity insert(@PathVariable("activityId") String activityId) {
         LOGGER.info("{}", activityId);
         WxRedEnvelopBO data = iActivityService.generateSecret(activityId);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 根据口令ID修改口令记录
+     *
+     * @param id 口令ID
+     * @param bo 更新口令对象
+     * @return ResponseEntity
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity update(@PathVariable("id") String id,
+                                 @Valid @RequestBody WxRedEnvelopUpdateBO bo) {
+        bo.setId(id);
+        LOGGER.info("{}", bo);
+
+        WxRedEnvelop data = iActivityService.updateSecret(bo);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
