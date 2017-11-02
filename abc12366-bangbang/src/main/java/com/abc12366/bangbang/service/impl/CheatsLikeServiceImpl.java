@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -72,6 +73,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         like.setUserId(userId);
         like.setLikeId(uuid);
         like.setLikeType(1);
+        like.setLikeTime(new Date());
         like.setCheatsId(cheatsId);
         like.setLikeTarget(likeTarget);
         like.setId(id);
@@ -123,6 +125,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         like.setUserId(userId);
         like.setLikeId(uuid);
         like.setLikeType(2);
+        like.setLikeTime(new Date());
         like.setLikeTarget(likeTarget);
         like.setCheatsId(cheatsId);
         like.setId(id);

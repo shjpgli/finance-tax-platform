@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -75,6 +76,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
         like.setLikeId(uuid);
+        like.setLikeTime(new Date());
         like.setLikeType(1);
         like.setQuestionId(questionId);
         like.setId(id);
@@ -128,6 +130,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         like.setUserId(userId);
         like.setLikeId(uuid);
         like.setLikeType(2);
+        like.setLikeTime(new Date());
         like.setQuestionId(questionId);
         like.setId(id);
 
