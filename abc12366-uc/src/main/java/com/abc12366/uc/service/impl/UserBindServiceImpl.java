@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
@@ -17,6 +18,7 @@ import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
+import com.abc12366.uc.util.DataUtils;
 import com.abc12366.uc.util.DateUtils;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.UserUtil;
@@ -55,7 +57,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 2017-07-25
  * Time: 16:22
  */
-@Service
+@Service("userBindService")
 public class UserBindServiceImpl implements UserBindService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserBindServiceImpl.class);
@@ -303,6 +305,18 @@ public class UserBindServiceImpl implements UserBindService {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public void automaticBindCancel() {
+        Date date = DataUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
+        List<String> idList = userBindRoMapper.selectListByDate(date);
+        try {
+            userBindMapper.updateBatch(idList);
+        }catch (Exception e){
+            LOGGER.error("automaticBindCancel.updateBatch(List<String> idList)", e);
+            throw new ServiceException(4923);
+        }
     }
 
     @Override

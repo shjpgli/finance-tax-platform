@@ -7,6 +7,7 @@ import com.abc12366.uc.model.abc4000.NSRXX;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,4 +42,6 @@ public interface UserBindRoMapper {
     List<UserHnds> hndsCount(String userId);
 
     List<ShxydmBO> bindCount(String userId);
+
+    List<String> selectListByDate(Date date);
 }
