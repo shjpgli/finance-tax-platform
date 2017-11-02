@@ -1,0 +1,219 @@
+package com.abc12366.bangbang.web.question;
+
+import com.abc12366.bangbang.mapper.db2.CheatsTagRoMapper;
+import com.abc12366.bangbang.model.question.bo.CheatsBo;
+import com.abc12366.bangbang.model.question.bo.CheatsTagBo;
+import com.abc12366.bangbang.service.CheatsService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 秘籍管理模块
+ *
+ * @author xieyanmao
+ * @create 2017-09-14
+ * @since 1.0.0
+ */
+@RestController
+@RequestMapping(path = "/cheats", headers = Constant.VERSION_HEAD + "=1")
+public class CheatsController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheatsController.class);
+
+    @Autowired
+    private CheatsService cheatsService;
+
+    @Autowired
+    private CheatsTagRoMapper tagRoMapper;
+
+    /**
+     * 问题列表查询
+     */
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CheatsBo> dataList = cheatsService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 问题列表查询(最新)
+     */
+    @GetMapping(path = "/selectListNew")
+    public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CheatsBo> dataList = cheatsService.selectList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 推荐问题
+     */
+    @GetMapping(path = "/selectListRecommend")
+    public ResponseEntity selectListRecommend(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                                @RequestParam(value = "title", required = false) String title,
+                                                @RequestParam(value = "tag", required = false) String tag,
+                                                @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//s
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CheatsBo> dataList = cheatsService.selectListRecommend(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 查询热门问题
+     */
+    @GetMapping(path = "/selectListByBrowseNum")
+    public ResponseEntity selectListByBrowseNum(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//s
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CheatsBo> dataList = cheatsService.selectListByBrowseNum(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 问题新增
+     */
+    @PostMapping
+    public ResponseEntity save(@Valid @RequestBody CheatsBo cheatsBo) {
+        //新增问题信息
+        cheatsBo = cheatsService.save(cheatsBo);
+        return ResponseEntity.ok(Utils.kv("data", cheatsBo));
+    }
+
+    /**
+     * 查询单个问题信息
+     */
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        //查询问题信息
+        CheatsBo cheatsBo = cheatsService.selectCheats(id);
+        return ResponseEntity.ok(Utils.kv("data", cheatsBo));
+    }
+
+    /**
+     * 查询单个问题信息(
+     */
+    @GetMapping(path = "/selectCheats/{id}")
+    public ResponseEntity selectCheats(@PathVariable String id) {
+        //查询问题信息
+        CheatsBo cheatsBo = cheatsService.selectCheats(id);
+        return ResponseEntity.ok(Utils.kv("data", cheatsBo));
+    }
+
+    /**
+     * 更新问题信息
+     */
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@PathVariable String id,
+                                 @Valid @RequestBody CheatsBo cheatsBo) {
+        //更新问题信息
+        cheatsBo = cheatsService.update(cheatsBo);
+        return ResponseEntity.ok(Utils.kv("data", cheatsBo));
+    }
+
+    /**
+     * 更新问题状态
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/updateStatus/{id}")
+    public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("id") String id) {
+        cheatsService.updateStatus(id, status);
+        return ResponseEntity.ok(Utils.kv("data", id));
+    }
+
+    /**
+     * 删除问题信息
+     */
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        //删除问题信息
+        String rtn = cheatsService.delete(id);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 查询热议标签
+     */
+    @GetMapping(path = "/selectTagList")
+    public ResponseEntity selectTagList() {
+        List<CheatsTagBo> dataList = cheatsService.selectTagList();
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+
+    }
+
+    /**
+     * 更新浏览量
+     */
+    @PutMapping(path = "/updateBrowseNum/{id}")
+    public ResponseEntity updateBrowseNum(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        //更新浏览量信息
+        String rtn = cheatsService.updateBrowseNum(id);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+
+    /**
+     * 查询我的文章
+     */
+    @GetMapping(path = "/selectMyCheatsList")
+    public ResponseEntity selectMyCheatsList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "isTip", required = false) String isTip,
+                                        @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("isTip", isTip);//是否被举报，1为被举报
+        dataMap.put("userId", userId);//
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CheatsBo> dataList = cheatsService.selectMyCheatsList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+}
