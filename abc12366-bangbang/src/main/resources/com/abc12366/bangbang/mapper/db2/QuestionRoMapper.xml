@@ -182,15 +182,23 @@
     <!-- 我的举报 -->
     <select id="selectTipList" resultType="com.abc12366.bangbang.model.question.bo.QuestionjbBo" parameterType="java.lang.String">
         SELECT
-             t.sourceId,t.sourceType,t.createTime,t.status, q.title,
+             t.sourceId,t.sourceType,t.createTime,t.status,
+             CASE sourceType
+                 WHEN 'question' THEN (select title from bb_question where id = t.sourceId)
+                 WHEN 'cheats' THEN (select title from bb_cheats where id = t.sourceId)
+                 WHEN 'answer' THEN (select title from bb_question where id = t.questionId)
+                 WHEN 'comment' THEN (select title from bb_question where id = t.questionId)
+                 WHEN 'cheats_comment' THEN (select title from bb_cheats where id = t.questionId)
+                 ELSE '' END  as title,
             CASE sourceType
+				 WHEN 'question' THEN (select detail from bb_question where id = t.sourceId)
+                 WHEN 'cheats' THEN (select detail from bb_cheats where id = t.sourceId)
                  WHEN 'answer' THEN (select answer from bb_question_answer where id = t.sourceId)
                  WHEN 'comment' THEN (select commentTxt from bb_question_comment where id = t.sourceId)
-                 ELSE q.detail END  as answer
+                 WHEN 'cheats_comment' THEN (select commentTxt  from bb_cheats_comment where id = t.sourceId)
+                 ELSE '' END  as answer
         FROM
             bb_question_tip_off t
-                LEFT JOIN
-            bb_question q ON t.questionId = q.id
         where t.createUser = #{userId}
         ORDER BY t.createTime DESC
     </select>
