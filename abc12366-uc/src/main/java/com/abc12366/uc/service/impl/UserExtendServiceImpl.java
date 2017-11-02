@@ -3,8 +3,6 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
@@ -39,9 +37,6 @@ public class UserExtendServiceImpl implements UserExtendService {
 
     @Autowired
     private UserExtendRoMapper userExtendRoMapper;
-
-    @Autowired
-    private UserRoMapper userRoMapper;
 
     @Autowired
     private UserBindService userBindService;
@@ -91,6 +86,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
             if(userBindService.isRealNameValidatedDzsj(userExtendBO.getIdcard(), userExtendBO.getRealName(), request)){
                 userExtend.setValidStatus("2");
+                userExtend.setValidTime(new Date());
             }
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {
@@ -141,8 +137,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             if (userExtend == null) {
                 UserExtendBO userExtendBO = new UserExtendBO();
                 BeanUtils.copyProperties(userExtendUpdateBO, userExtendBO);
-                UserExtendBO userExtendBOReturn = insert(userExtendBO, request);
-                return userExtendBOReturn;
+                return insert(userExtendBO, request);
             }
             UserExtend userExtendSecond = new UserExtend();
             BeanUtils.copyProperties(userExtendUpdateBO, userExtendSecond);
