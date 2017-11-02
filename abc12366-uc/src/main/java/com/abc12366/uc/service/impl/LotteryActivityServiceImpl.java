@@ -107,9 +107,13 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         Date date = new Date();
         List<LotteryActivityprizeBO> awardToList= new ArrayList<LotteryActivityprizeBO>();
         for (LotteryActivityprizeBO obj : lottery) {
+            Integer balance = obj.getBalance();
+            if(balance == null)balance=0;
+            Integer amount = obj.getAmount();
+            if(amount == null)amount=0;
             if (!obj.getStatus()) {
                 //remake = "奖品已禁用";
-            } else if (obj.getAmount() <= obj.getBalance()) {//总数量 小于 已出数量
+            } else if (amount<= balance) {//总数量 小于 已出数量
                // remake = "总库存不足";
             } else {
                 //判断商品是否过期
@@ -238,7 +242,6 @@ private  boolean luckDo(LotteryActivityBO lottery){
         lotteryLogBO.setRemake(remake);
         lotteryLogBO.setIp(ip);
         if ("".equals(remake) && lottery != null)
-
         {//假如这个值为空 说明抽中了
             lotteryLogBO.setIsluck(1);
             lotteryLogBO.setLotteryId(lottery.getId());
@@ -249,6 +252,7 @@ private  boolean luckDo(LotteryActivityBO lottery){
             }
             obj.setBalance(obj.getBalance() + 1);
             lotteryActivityprizeService.update(obj,obj.getId());
+            lotteryActivityBO.setTimeCount(lotteryActivityBO.getTimeCount()+1);
         } else
 
         {

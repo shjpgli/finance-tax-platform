@@ -44,8 +44,9 @@
         </association>
         <association property="expressComp" column="expressCompId" select="getExpressComp"/>
         <association property="deliveryMethodBO" column="deliveryMethod" select="getDeliveryMethodBO"/>
-        <association property="tradeBO" column="orderNo" select="getTradeBO"/>
         <association property="invoiceBO" column="orderNo" select="getInvoiceBO"/>
+        <collection property="tradeBOList" ofType="com.abc12366.uc.model.order.bo.TradeBO" column="orderNo"
+        select="getTradeBO"></collection>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
         select="getOrderProduct"></collection>
         <collection property="orderLogBOList" ofType="com.abc12366.uc.model.bo.OrderLogBO" column="orderNo"

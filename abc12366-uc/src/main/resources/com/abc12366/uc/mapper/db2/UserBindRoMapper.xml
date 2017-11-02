@@ -8,6 +8,15 @@
         from uc_user_dzsb
         where id=#{id}
     </select>
+
+    <select id="selectListByDate" resultType="java.lang.String" parameterType="java.util.Date">
+        select id
+        WHERE status = true
+        <![CDATA[
+                and ( date_format(lastLoginTime, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s') or lastLoginTime is null)
+                ]]>
+    </select>
+
     <select id="getUserDzsbBind" resultType="com.abc12366.uc.model.bo.UserDzsbListBO" parameterType="java.lang.String">
         select uud.id, uud.userId, uud.djxh, uud.nsrsbh, uud.nsrmc, uud.shxydm, uud.swjgMc, uud.swjgDm, uud.status,
         uud.createTime, uud.lastUpdate,
@@ -63,6 +72,7 @@
                 uud.expandExpireTime yqdqr
         from uc_user_dzsb uud
         where uud.userId = #{userId}
+        and status = '1'
     </select>
 
     <select id="selectListByUserIdAndNsrsbhOrShxydm" parameterType="com.abc12366.uc.model.UserDzsb" resultType="com.abc12366.uc.model.abc4000.NSRXX">
