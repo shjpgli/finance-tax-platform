@@ -14,6 +14,15 @@ import java.util.Date;
 
 public class SystemRecordBO extends TableBO {
     private String username;
+    private String ruleCode;
+
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
 
     /**
      * PK

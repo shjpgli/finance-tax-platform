@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 待办任务接口控制器
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-09-12
  * Time: 14:36
@@ -28,6 +29,12 @@ public class TodoTaskController {
     @Autowired
     private TodoTaskService todoTaskService;
 
+    /**
+     * 根据系统任务类型查询用户待办任务列表
+     * @param type 系统任务类型
+     * @param userId 用户ID
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.TodoTask}
+     */
     @GetMapping(path = "/{type}/{userId}")
     public ResponseEntity selectList(@PathVariable("type") String type, @PathVariable("userId") String userId) {
         LOGGER.info("{}:{}", type, userId);
@@ -37,7 +44,10 @@ public class TodoTaskController {
 
     /**
      * 查询用户日常任务列表
-     *
+     * @param userId 用户ID
+     * @param page 页数
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.TodoTask}
      */
     @GetMapping(path = "/normal")
     public ResponseEntity selectNormalTaskList(@RequestParam(value = "userId") String userId,
@@ -53,7 +63,10 @@ public class TodoTaskController {
 
     /**
      * 查询用户一次性（多为成长任务）任务列表
-     *
+     * @param userId 用户ID
+     * @param page 页数
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.TodoTask}
      */
     @GetMapping(path = "/onetime")
     public ResponseEntity selectOnetimeTaskList(@RequestParam(value = "userId") String userId,
@@ -69,7 +82,10 @@ public class TodoTaskController {
 
     /**
      * 查询用户日常任务列表
-     *
+     * @param userId 用户ID
+     * @param page 页数
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.TodoTask}
      */
     @GetMapping(path = "/special")
     public ResponseEntity selectSpecialTaskList(@RequestParam(value = "userId") String userId,
@@ -85,7 +101,10 @@ public class TodoTaskController {
 
     /**
      * 查询用户帮帮任务列表
-     *
+     * @param userId 用户ID
+     * @param page 页数
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.TodoTask}
      */
     @GetMapping(path = "/bangbang")
     public ResponseEntity selectBangbangTaskList(@RequestParam(value = "userId") String userId,
@@ -101,13 +120,9 @@ public class TodoTaskController {
 
     /**
      * 用户做任务接口：做任务并且计算奖励，用于用户业务操作任务埋点，
-     *
+     * @param userId 用户ID
+     * @param taskCode 系统任务编码 参考：{@linkplain com.abc12366.gateway.util.UCConstant}
      */
-//    @PostMapping(path = "/do/award/{userId}/{sysTaskId}")
-//    public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
-//        todoTaskService.doTask(userId, sysTaskId);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
     @PostMapping(path = "/do/award/{userId}/{taskCode}")
     public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("taskCode") String taskCode) {
         LOGGER.info("用户做任务,用户ID：{}，任务编码：{}", userId, taskCode);
@@ -117,13 +132,9 @@ public class TodoTaskController {
 
     /**
      * 用户做任务接口：做任务不计算奖励，用于用户业务操作任务埋点，多用于奖励规则比较复杂需要单做的业务
-     *
+     * @param userId 用户ID
+     * @param taskCode 系统任务编码
      */
-//    @PostMapping(path = "/do/noaward/{userId}/{sysTaskId}")
-//    public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("sysTaskId") String sysTaskId) {
-//        todoTaskService.doTaskWithouComputeAward(userId, sysTaskId);
-//        return ResponseEntity.ok(Utils.kv());
-//    }
     @PostMapping(path = "/do/noaward/{userId}/{taskCode}")
     public ResponseEntity doTaskNoAward(@PathVariable("userId") String userId, @PathVariable("taskCode") String taskCode) {
         todoTaskService.doTaskWithouComputeAward(userId, taskCode);

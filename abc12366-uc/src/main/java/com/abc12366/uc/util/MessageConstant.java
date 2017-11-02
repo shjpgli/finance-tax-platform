@@ -65,5 +65,7 @@ public class MessageConstant {
     //会员到期消息
     public static final String HYDQMSG="您的财税专家会员（{#DATA.LEVEL}）即将过期，过期时间:{#DATA.DATE}，为不影响您正常使用，请您及时续费";
     
-    public static final String SBQXMSG="财税专家用户提醒，本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税！";
+    public static final String SBQXXTMSG="财税专家用户提醒，本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税！";
+    
+    public static final String SBQXSJMSG="本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税";
 }

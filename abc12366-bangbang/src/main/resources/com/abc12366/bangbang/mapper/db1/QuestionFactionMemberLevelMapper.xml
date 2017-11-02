@@ -12,15 +12,18 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 INSERT INTO bb_question_faction_member_level
- 		(id,name,answers,discussions,adoptions,status,createTime,createAdmin,updateTime,updateAdmin)
+ 		(id,code,name,answers,discussions,adoptions,status,createTime,createAdmin,updateTime,updateAdmin)
 		 VALUES 
- 		(#{id},#{name},#{answers},#{discussions},#{adoptions},#{status},now(),#{createAdmin},now(),#{updateAdmin})
+ 		(#{id},#{code},#{name},#{answers},#{discussions},#{adoptions},#{status},now(),#{createAdmin},now(),#{updateAdmin})
 	</insert>
 
 	<!-- 修 改-->
 	<update id="updateByPrimaryKeySelective" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 UPDATE bb_question_faction_member_level
- 		 <set> 
+ 		 <set>
+			<if test="code != null">
+				 code = #{code},
+			</if>
 			<if test="name != null">
 				 name = #{name},
 			</if>
@@ -47,7 +50,8 @@
 	<!-- 修 改-->
 	<update id="updateByPrimaryKey" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMemberLevel">
 		 UPDATE bb_question_faction_member_level
-		 SET 
+		 SET
+		 	 code = #{code},
 			 name = #{name},
 			 answers = #{answers},
 			 discussions = #{discussions},

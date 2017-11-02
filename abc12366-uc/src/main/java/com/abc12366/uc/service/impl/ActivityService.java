@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @create 2017-09-14 11:24 AM
  * @since 1.0.0
  */
-@Service
+@Service("activityService")
 public class ActivityService implements IActivityService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivityService.class);
@@ -259,9 +259,14 @@ public class ActivityService implements IActivityService {
             grp.setSign(SignUtil.signKey(grp));
             GetRedPackResp rpp = WxMchConnectFactory.post(WechatUrl.GETHBINFO, null, grp, GetRedPackResp.class);
             if (rpp != null) {
-                if ("SUCCESS".equals(rpp.getReturn_code())) { // 发送请求成功
-                    if ("SUCCESS".equals(rpp.getResult_code())) { // 发红包成功
-                        redEnvelop.setReceiveStatus(rpp.getStatus()); // 发送成功
+                // 发送请求成功
+                if ("SUCCESS".equals(rpp.getReturn_code())) {
+                    // 发红包成功
+                    if ("SUCCESS".equals(rpp.getResult_code())) {
+                        if (!"1".equals(redEnvelop.getSendStatus())) {
+                            redEnvelop.setSendStatus("1");
+                        }
+                        redEnvelop.setReceiveStatus(rpp.getStatus());
                         redEnvelop.setReceiveTime(rpp.getRcv_time());
                         activityMapper.updateRedEnvelop(redEnvelop);
                     } else {
@@ -401,7 +406,7 @@ public class ActivityService implements IActivityService {
 
         // 发送3次
         for (int i = 1; i <= 3; i++) {
-            LOGGER.info("第{}次发送", i);
+            LOGGER.info("第{}次发送:{}", i, srp);
             ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);
             if (rrp != null) {
                 // 发送请求成功

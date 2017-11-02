@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionClassifyRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionMemberRoMapper;
@@ -14,6 +13,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.UCUserBO;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

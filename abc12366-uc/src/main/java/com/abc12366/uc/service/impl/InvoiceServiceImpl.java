@@ -466,7 +466,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
             String type = invoiceTemp.getType();
             String invoiceRepoId = invoiceDetail.getInvoiceRepoId();
-            if(type != null && invoiceRepoId.contains(type)){
+            if(type != null && !invoiceRepoId.contains(type)){
                 LOGGER.info("发票导入信息与发票订单信息的发票种类不一致：{}", invoiceDetail);
                 throw new ServiceException(4913,"发票导入信息与发票订单信息的发票种类不一致："+invoiceExcel.getInvoiceOrderNo());
             }

@@ -1,7 +1,9 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
+import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -51,5 +53,18 @@ public interface QuestionFactionAllocationRoMapper {
      **/
     int selectAwardPoint(Map map);
 
+    /**
+     *
+     * 查询
+     *
+     **/
+    List<QuestionFactionAllocationManageBo> selectAllocationManageList(Map map);
+
+    /**
+     *
+     * 查询积分分配列表
+     *
+     **/
+    List<AllocationPointAwardBO> selectPointAwardListByIds(List<String> ids);
 
 }

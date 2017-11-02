@@ -34,7 +34,7 @@
     <!--删除：根据主键ID删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         DELETE FROM bb_knowledge_category
-        WHERE id = #{id}
+        WHERE code LIKE CONCAT((select code from (SELECT code  FROM  bb_knowledge_category WHERE id = #{id}) t),'%')
     </delete>
 
     <!-- 添加 -->

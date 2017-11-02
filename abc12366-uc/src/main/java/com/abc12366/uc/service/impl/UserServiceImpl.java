@@ -146,6 +146,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO update(UserUpdateBO userUpdateBO) {
         LOGGER.info("{}", userUpdateBO);
+        //用户名转成小写
+        if (!StringUtils.isEmpty(userUpdateBO.getUsername())) {
+            userUpdateBO.setUsername(userUpdateBO.getUsername().trim().toLowerCase());
+        }
+
         User user = userRoMapper.selectOne(userUpdateBO.getId());
         if (user == null) {
             LOGGER.warn("修改失败");
@@ -153,7 +158,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //普通用户只允许修改一次用户名
-        if (userUpdateBO.getUsername() != null && !userUpdateBO.getUsername().trim().equals(user.getUsername()) &&
+        if (!StringUtils.isEmpty(userUpdateBO.getUsername()) && !userUpdateBO.getUsername().trim().equals(user.getUsername()) &&
                 user.getUsernameModifiedTimes() >= 1) {
             throw new ServiceException(4037);
         }
@@ -180,7 +185,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_ID);
+            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_CODE);
         }
 
         UserBO userDTO = new UserBO();
@@ -298,7 +303,7 @@ public class UserServiceImpl implements UserService {
         tokenMapper.delete(token);
 
         //首次修改密码任务埋点
-        todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_ID);
+        todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
         return true;
     }
 

@@ -168,7 +168,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(4953,"您的订单已超过"+Constant.ORDER_BACK_DAYS+"天的退货日，不支持退货");
             }
             // 用户现有积分是否达到购买是赠送的积分
-            if (bo.getPoints() < bo.getGiftPoints()) {
+            if (bo.getPoints() != null && bo.getGiftPoints()!=null && bo.getPoints() < bo.getGiftPoints()) {
                 throw new ServiceException(4960);
             }
             // 查询发票申请是否结束状态
@@ -217,10 +217,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             for (SfImportBO data : dataList) {
                 OrderExchange oe = new OrderExchange.Builder()
                         .orderNo(data.getOrderNo())
-                        .toExpressNo(data.getExpressNo())
-                        .expressComp(data.getExpressComp())
                         .status("3")
                         .build();
+                oe.setToExpressComp(data.getExpressComp());
+                oe.setToExpressNo(data.getExpressNo());
                 orderExchangeMapper.update(oe);
                 // 插入订单日志
                 insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark(),"1");

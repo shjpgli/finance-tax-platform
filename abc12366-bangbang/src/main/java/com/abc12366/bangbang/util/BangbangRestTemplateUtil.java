@@ -54,6 +54,7 @@ public class BangbangRestTemplateUtil {
             e.getMessage();
             e.printStackTrace();
             LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
+            throw e;
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity != null ? responseEntity.getBody() : null;

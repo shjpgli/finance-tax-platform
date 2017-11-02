@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 import com.abc12366.bangbang.service.QueFactionAllocationService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +90,32 @@ public class QueFactionAllocationController {
         //删除邦派奖励分配信息
         String rtn = queFactionAllocationService.delete(id);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+
+    /**
+     * 运营管理系统邦派成员奖励分配
+     */
+    @GetMapping(path = "/manageList")
+    public ResponseEntity selectManageList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "factionName", required = false) String factionName,
+                                        @RequestParam(value = "status", required = false) String status) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("factionName", factionName);
+        dataMap.put("status", status);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionAllocationManageBo> dataList = queFactionAllocationService.selectManageList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    }
+
+    /*
+    * 分配审核 接口
+    */
+    @PutMapping(path = "/audit")
+    public ResponseEntity audit(@RequestBody List<QuestionFactionAllocationManageBo> records, HttpServletRequest request) {
+        queFactionAllocationService.audit(records, request);
+        return ResponseEntity.ok(Utils.kv());
     }
 
 

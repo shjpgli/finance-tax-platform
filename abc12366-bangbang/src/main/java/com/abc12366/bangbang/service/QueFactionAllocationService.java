@@ -3,7 +3,9 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -18,5 +20,9 @@ public interface QueFactionAllocationService {
     QuestionFactionAllocationBo update(QuestionFactionAllocationBo questionFactionAllocationBo);
 
     String delete(String id);
+
+    List<QuestionFactionAllocationManageBo> selectManageList(Map<String, Object> map);
+
+    void audit(List<QuestionFactionAllocationManageBo> records, HttpServletRequest request);
 
 }

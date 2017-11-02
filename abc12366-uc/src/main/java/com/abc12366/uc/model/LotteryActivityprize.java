@@ -9,6 +9,16 @@ import java.util.Date;
 
 
 public class LotteryActivityprize{
+    private Integer balance;
+    private Integer amount;
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
  /** PK */
 private String id;
  /** 抽奖活动id */
