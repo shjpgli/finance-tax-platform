@@ -233,15 +233,15 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                     throw new ServiceException(4102,"订单信息查询失败");
                 }
-                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(data.getExpressComp());
                 if(expressComp == null){
-                    LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                    LOGGER.warn("物流公司查询失败：{}", data.getExpressComp());
                     throw new ServiceException(4102,"物流公司查询失败");
                 }
                 Message message = new Message();
                 message.setBusinessId(order.getOrderNo());
                 message.setType("SPDD");
-                message.setContent(MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+order.getExpressNo()+ MessageConstant.SUFFIX);
+                message.setContent(MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+data.getExpressNo()+ MessageConstant.SUFFIX);
                 message.setUserId(order.getUserId());
                 messageSendUtil.sendMessage(message, request);
             }
