@@ -384,6 +384,20 @@ public class ActivityService implements IActivityService {
         }
     }
 
+    @Override
+    public WxRedEnvelop updateSecret(WxRedEnvelopUpdateBO bo) {
+        WxRedEnvelop data = activityRoMapper.selectRedEnvelopOne(bo.getId());
+        if (data!= null) {
+            // 接收状态设置为空值
+            data.setReceiveStatus("");
+            data.setOpenId(bo.getOpenId());
+            data.setCreateTime(bo.getCreateTime());
+            activityMapper.updateRedEnvelop(data);
+            return data;
+        }
+        return null;
+    }
+
     /**
      * 查询未抽奖的口令，过滤已中奖、已抽奖的数据
      */
