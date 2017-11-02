@@ -50,6 +50,8 @@ public class AdminBO extends AdminExtendBO implements Serializable {
 
     private String roleIds;
 
+    private Boolean isInitPassword;
+
     private List<Role> rolesList;
 
     private LoginInfo loginInfo;
@@ -150,5 +152,13 @@ public class AdminBO extends AdminExtendBO implements Serializable {
                 ", loginInfo=" + loginInfo +
                 ", menuMap=" + menuMap +
                 "} " + super.toString();
+    }
+
+    public Boolean getIsInitPassword() {
+        return isInitPassword;
+    }
+
+    public void setIsInitPassword(Boolean isInitPassword) {
+        this.isInitPassword = isInitPassword;
     }
 }
