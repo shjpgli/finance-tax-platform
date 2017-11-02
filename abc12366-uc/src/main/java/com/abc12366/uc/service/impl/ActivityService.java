@@ -119,16 +119,24 @@ public class ActivityService implements IActivityService {
             if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
                 throw new ServiceException(6002);
             }
-            WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
-                    .id(Utils.uuid().replaceAll("-", ""))
-                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
-                    .createTime(new Date())
-                    .activityId(activity.getId())
-                    .build();
-            activityMapper.generateSecret(redEnvelop);
-            WxRedEnvelopBO bo = new WxRedEnvelopBO();
-            BeanUtils.copyProperties(redEnvelop, bo);
-            return bo;
+            synchronized (this) {
+                WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
+                        .id(Utils.uuid().replaceAll("-", ""))
+                        .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
+                        .createTime(new Date())
+                        .activityId(activity.getId())
+                        .build();
+                activityMapper.generateSecret(redEnvelop);
+                WxRedEnvelopBO bo = new WxRedEnvelopBO();
+                BeanUtils.copyProperties(redEnvelop, bo);
+                try {
+                    Thread.sleep(1000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    LOGGER.error("generateSecret线程中断: {}, {}", e.getMessage(), e);
+                }
+                return bo;
+            }
         }
         return null;
     }
@@ -284,15 +292,20 @@ public class ActivityService implements IActivityService {
     public void importJSON(List<WxRedEnvelopBO> redEnvelopList) {
         if (redEnvelopList.size() > 0 && redEnvelopList.size() <= 1000) {
             List<WxRedEnvelop> dataList = new ArrayList<>();
-            Date now = new Date();
             for (WxRedEnvelopBO redEnvelopBO : redEnvelopList) {
                 WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                         .id(Utils.uuid().replaceAll("-", ""))
-                        .createTime(now)
+                        .createTime(new Date())
                         .secret(redEnvelopBO.getSecret())
                         .activityId(redEnvelopBO.getActivityId().trim())
                         .build();
                 dataList.add(redEnvelop);
+                try {
+                    Thread.sleep(1000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    LOGGER.error("importJSON线程中断: {}, {}", e.getMessage(), e);
+                }
             }
             activityMapper.batchGenerateSecret(dataList);
         } else {
