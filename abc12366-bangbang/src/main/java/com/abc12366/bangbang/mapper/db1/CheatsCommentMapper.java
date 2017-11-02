@@ -46,4 +46,11 @@ public interface CheatsCommentMapper{
 	 **/
 	int updateByPrimaryKey(CheatsComment record);
 
+	/**
+	 *
+	 * 修改被举报数+1,修改状态(根据主键ID)
+	 *
+	 **/
+	int updateReportNum(@Param("id") String id);
+
 }
