@@ -103,6 +103,7 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         QuestionTipOff tipOff = new QuestionTipOff();
         questionTipOffBo.setCreateTime(new Date());
         tipOff.setUpdateTime(new Date());
+        questionTipOffBo.setUpdateAdmin(Utils.getAdminId());
         questionTipOffBo.setId(uuid);
         questionTipOffBo.setStatus("approved");//拉黑
 
