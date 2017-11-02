@@ -17,13 +17,13 @@ public class NsrResetPwd {
     /**
      * 法人名称
      */
-    //@NotEmpty(message = "法人名称不能为空")
+    @NotEmpty(message = "法人名称不能为空")
     private String frmc;
 
     /**
      * 法人证件号
      */
-    //@NotEmpty(message = "法人证件号不能为空")
+    @NotEmpty(message = "法人证件号不能为空")
     private String frzjh;
 
 
