@@ -79,6 +79,20 @@ public class CurrApplyServiceImpl implements CurrApplyService {
             //不能重复报名
             throw new ServiceException(4375);
         }
+        Curriculum curriculum = curriculumRoMapper.selectByPrimaryKey(applyBo.getCurriculumId());
+
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap.put("curriculumId",applyBo.getCurriculumId());
+        //查询课程报名人数
+        cnt = applyRoMapper.selectApplyCnt(dataMap1);
+
+        int peopleLimit = curriculum.getPeopleLimit();
+
+        if(cnt >= peopleLimit){
+            //报名人数已超过本次报名人数限制
+            throw new ServiceException(4376);
+        }
+
         try {
             JSONObject jsonStu = JSONObject.fromObject(applyBo);
             LOGGER.info("新增课程报名签到信息:{}", jsonStu.toString());
@@ -90,8 +104,6 @@ public class CurrApplyServiceImpl implements CurrApplyService {
             applyBo.setApplyId(uuid);
             BeanUtils.copyProperties(applyBo, apply);
             applyMapper.insert(apply);
-
-            Curriculum curriculum = curriculumRoMapper.selectByPrimaryKey(applyBo.getCurriculumId());
 
             String curriculumTitle = "";
             String time = "";

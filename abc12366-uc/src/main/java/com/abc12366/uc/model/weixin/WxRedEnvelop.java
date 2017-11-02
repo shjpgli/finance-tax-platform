@@ -50,24 +50,55 @@ public class WxRedEnvelop {
     @NotEmpty
     @Length(min = 2, max = 10)
     private String probability;
-    // 红包中奖金额
+
+    /**
+     * 备注微信返回信息
+     */
+    private String remark;
+
+    /**
+     *  红包中奖金额
+     */
     private Double sendAmount;
-    // 发送状态 0:已中奖未发送
+
+    /**
+     * 发送状态 0:已中奖未发送
+     */
     private String sendStatus;
-    // 发送次数
+
+    /**
+     * 发送次数
+     */
     private Integer sendTimes;
-    // 发送时间
+
+    /**
+     * 发送时间
+     */
     private Date sendTime;
-    // 领取状态 0:已中奖未领取 1.已领取 2.未中奖
+
+    /**
+     * 领取状态
+     */
     private String receiveStatus;
-    // 用户输入口令的时间
+
+    /**
+     * 用户输入口令的时间
+     */
     private Date receiveTime;
-    // 用户IP
+
+    /**
+     * 用户IP
+     */
     private String ip;
-    // 用户OPENID
+
+    /**
+     * 用户OPENID
+     */
     private String openId;
 
-    //活动名称
+    /**
+     * 活动名称
+     */
     private String name;
 
     public WxRedEnvelop() {
@@ -76,7 +107,7 @@ public class WxRedEnvelop {
     public WxRedEnvelop(String id, String secret, Date createTime, String activityId, Date startTime, Date endTime,
                         Double amount, String amountType, String probability, Double sendAmount, String sendStatus,
                         Integer sendTimes, Date sendTime, String receiveStatus, Date receiveTime, String ip, String
-                                openId) {
+                                openId, String remark) {
         this.id = id;
         this.secret = secret;
         this.createTime = createTime;
@@ -94,6 +125,7 @@ public class WxRedEnvelop {
         this.receiveTime = receiveTime;
         this.ip = ip;
         this.openId = openId;
+        this.remark = remark;
     }
 
     private WxRedEnvelop(Builder builder) {
@@ -114,6 +146,7 @@ public class WxRedEnvelop {
         setReceiveTime(builder.receiveTime);
         setIp(builder.ip);
         setOpenId(builder.openId);
+        setRemark(builder.remark);
     }
 
     public String getId() {
@@ -252,6 +285,22 @@ public class WxRedEnvelop {
         this.openId = openId;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "RedEnvelop{" +
@@ -272,15 +321,8 @@ public class WxRedEnvelop {
                 ", receiveTime='" + receiveTime + '\'' +
                 ", ip='" + ip + '\'' +
                 ", openId='" + openId + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public static final class Builder {
@@ -301,6 +343,7 @@ public class WxRedEnvelop {
         private Date receiveTime;
         private String ip;
         private String openId;
+        private String remark;
 
         public Builder() {
         }
@@ -387,6 +430,11 @@ public class WxRedEnvelop {
 
         public Builder openId(String val) {
             openId = val;
+            return this;
+        }
+
+        public Builder remark(String val) {
+            remark = val;
             return this;
         }
 

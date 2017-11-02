@@ -61,7 +61,7 @@
     <!-- 我的回答 -->
     <select id="selectMyAnswerList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,q.browseNum,
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title questionTitle,q.browseNum,
         u1.nickname answerNickname,
         answerUserId,a.ip,	shortAnswer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         a.likeNum,a.commentNum,a.trampleNum,a.reportNum,

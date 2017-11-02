@@ -102,6 +102,8 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         String uuid = UUID.randomUUID().toString().replace("-", "");
         QuestionTipOff tipOff = new QuestionTipOff();
         questionTipOffBo.setCreateTime(new Date());
+        tipOff.setUpdateTime(new Date());
+        questionTipOffBo.setUpdateAdmin(Utils.getAdminId());
         questionTipOffBo.setId(uuid);
         questionTipOffBo.setStatus("approved");//拉黑
 
@@ -114,6 +116,7 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         try {
             BeanUtils.copyProperties(questionTipOffBo, tipOff);
             questionTipOffMapper.insert(tipOff);
+            changeStatus(tipOff);
 
         } catch (Exception e) {
             throw new ServiceException(6375);

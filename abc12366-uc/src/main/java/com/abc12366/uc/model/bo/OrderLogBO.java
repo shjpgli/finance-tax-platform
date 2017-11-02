@@ -18,6 +18,8 @@ public class OrderLogBO implements Serializable {
     private String createUserName;
     /**订单日志类型，0：订购日志，1：退单日志**/
     private String logType;
+    /**退换货信息ID**/
+    private String exchangeId;
 
     public String getId() {
         return this.id;
@@ -81,5 +83,13 @@ public class OrderLogBO implements Serializable {
 
     public void setLogType(String logType) {
         this.logType = logType;
+    }
+
+    public String getExchangeId() {
+        return exchangeId;
+    }
+
+    public void setExchangeId(String exchangeId) {
+        this.exchangeId = exchangeId;
     }
 }

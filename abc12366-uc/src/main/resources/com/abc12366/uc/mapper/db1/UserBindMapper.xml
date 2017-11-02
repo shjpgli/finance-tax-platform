@@ -19,14 +19,14 @@
         where id=#{id}
     </update>
 
-    <update id="updateBatch" parameterType="java.util.List">
+    <update id="updateBatch" parameterType="java.util.Map">
         update uc_user_dzsb
         <set>
             status=FALSE,
             lastUpdate=now()
         </set>
         WHERE id IN
-        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>

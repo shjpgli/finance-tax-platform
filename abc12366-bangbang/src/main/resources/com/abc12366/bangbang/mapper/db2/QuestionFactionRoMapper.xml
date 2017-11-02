@@ -29,7 +29,7 @@
         FROM bb_question_faction
         WHERE 1=1
         <if test="userId != null and userId != ''">
-            AND factionId in(SELECT factionId FROM abc12366_bangbang.bb_question_faction_member where userId = #{userId})
+            AND factionId in(SELECT factionId FROM abc12366_bangbang.bb_question_faction_member where userId = #{userId} and duty = '1')
         </if>
     </select>
 

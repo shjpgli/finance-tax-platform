@@ -37,10 +37,12 @@ public class OrderLogController {
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "orderNo", required = true) String orderNo,
+                                     @RequestParam(value = "exchangeId", required = true) String exchangeId,
                                      @RequestParam(value = "logType", required = true) String logType) {
         OrderLog orderLog = new OrderLog();
         orderLog.setOrderNo(orderNo);
         orderLog.setLogType(logType);
+        orderLog.setExchangeId(exchangeId);
         List<OrderLog> orderLogList = orderLogService.selectList(orderLog);
         LOGGER.info("{}", orderLogList);
         return (orderLogList == null) ?

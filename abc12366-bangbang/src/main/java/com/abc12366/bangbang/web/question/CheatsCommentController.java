@@ -33,7 +33,7 @@ public class CheatsCommentController {
     private CheatsCommentService cheatsCommentService;
 
     /**
-     * 秘籍回复评论列表查询
+     * 秘籍评论列表查询
      */
     @GetMapping(path = "/selectList")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -70,7 +70,7 @@ public class CheatsCommentController {
     }
 
     /**
-     * 问题评论新增
+     * 秘籍评论新增
      */
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody CheatsCommentBo commentBo) {
@@ -80,7 +80,7 @@ public class CheatsCommentController {
     }
 
     /**
-     * 查询单个问题评论信息
+     * 查询单个秘籍评论信息
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
@@ -90,7 +90,7 @@ public class CheatsCommentController {
     }
 
     /**
-     * 查询单个问题评论信息(无需登录)
+     * 查询单个秘籍评论信息(无需登录)
      */
     @GetMapping(path = "/selectComment/{id}")
     public ResponseEntity selectComment(@PathVariable String id) {
@@ -100,7 +100,7 @@ public class CheatsCommentController {
     }
 
     /**
-     * 更新问题评论信息
+     * 更新秘籍评论信息
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@PathVariable String id,
@@ -111,7 +111,7 @@ public class CheatsCommentController {
     }
 
     /**
-     * 更新问题评论状态
+     * 更新秘籍评论状态
      *
      * @param status
      * @param id
@@ -124,11 +124,11 @@ public class CheatsCommentController {
     }
 
     /**
-     * 删除问题评论信息
+     * 删除秘籍评论信息
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
-        //删除问题评论信息
+        //删除秘籍评论信息
         String rtn = cheatsCommentService.delete(id);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

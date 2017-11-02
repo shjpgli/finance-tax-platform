@@ -38,7 +38,7 @@
         FROM bb_question_faction_allocation
         WHERE 1=1
         <if test="userId != null and userId !=''">
-            AND createUserId = #{userId}
+            AND userId = #{userId}
         </if>
         <if test="state != null and state !=''">
             AND state = #{state}

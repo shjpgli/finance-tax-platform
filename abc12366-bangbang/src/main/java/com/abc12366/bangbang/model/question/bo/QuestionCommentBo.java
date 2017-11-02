@@ -19,6 +19,9 @@ public class QuestionCommentBo implements Serializable {
 	/**问题ID**varchar(64)**/
 	private String questionId;
 
+    /**问题标题**varchar(64)**/
+    private String questionTitle;
+
 	/**用户ID**varchar(64)**/
 	private String userId;
 
@@ -230,5 +233,13 @@ public class QuestionCommentBo implements Serializable {
 
     public void setIsTrample(Integer isTrample) {
         this.isTrample = isTrample;
+    }
+
+    public String getQuestionTitle() {
+        return questionTitle;
+    }
+
+    public void setQuestionTitle(String questionTitle) {
+        this.questionTitle = questionTitle;
     }
 }

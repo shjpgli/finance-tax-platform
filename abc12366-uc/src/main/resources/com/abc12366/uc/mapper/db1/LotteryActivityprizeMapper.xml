@@ -4,9 +4,9 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryActivityprizeMapper">
 <insert id="insert" parameterType="com.abc12366.uc.model.LotteryActivityprize">
 insert into uc_lottery_activityprize(
-id,activityId,lotteryId,val1,description,status,createTime,lastTime,startTime,endTime,luck
+id,activityId,lotteryId,val1,description,status,createTime,lastTime,startTime,endTime,luck,balance,amount
 )values(
-#{id},#{activityId},#{lotteryId},#{val1},#{description},#{status},#{createTime},#{lastTime},#{startTime},#{endTime},#{luck})
+#{id},#{activityId},#{lotteryId},#{val1},#{description},#{status},#{createTime},#{lastTime},#{startTime},#{endTime},#{luck},#{balance}),#{amount}))
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.LotteryActivityprize">
 update  uc_lottery_activityprize 
@@ -18,7 +18,8 @@ update  uc_lottery_activityprize
 <if test="status!=null">status=#{status},</if>
 <if test="createTime!=null">createTime=#{createTime},</if>
 <if test="lastTime!=null">lastTime=#{lastTime},</if>
-
+    <if test="balance!=null">balance=#{balance},</if>
+    <if test="amount!=null">amount=#{amount},</if>
     <if test="luck!=null">luck=#{luck},</if>
     <if test="startTime!=null">startTime=#{startTime},</if>
     <if test="endTime!=null">endTime=#{endTime}</if>

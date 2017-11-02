@@ -154,6 +154,9 @@ public class OrderBO implements Serializable {
     //交易信息
     private TradeBO tradeBO;
 
+    //交易信息列表对象
+    private List<TradeBO> tradeBOList;
+
     //开始时间
     private Date startTime;
 
@@ -491,5 +494,13 @@ public class OrderBO implements Serializable {
 
     public void setIsReturn(Boolean isReturn) {
         this.isReturn = isReturn;
+    }
+
+    public List<TradeBO> getTradeBOList() {
+        return tradeBOList;
+    }
+
+    public void setTradeBOList(List<TradeBO> tradeBOList) {
+        this.tradeBOList = tradeBOList;
     }
 }
