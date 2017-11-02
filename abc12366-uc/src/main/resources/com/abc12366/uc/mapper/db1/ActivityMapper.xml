@@ -77,6 +77,7 @@
     <update id="updateRedEnvelop">
         update uc_wxredenvelop
         <set>
+            <if test="createTime != null">createTime = #{createTime},</if>
             <if test="sendAmount != null">sendAmount = #{sendAmount},</if>
             <if test="sendStatus != null">sendStatus = #{sendStatus},</if>
             <if test="sendTimes != null">sendTimes = #{sendTimes},</if>
