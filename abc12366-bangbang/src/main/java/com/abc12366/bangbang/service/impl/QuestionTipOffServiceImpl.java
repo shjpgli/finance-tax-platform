@@ -88,6 +88,10 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
             BeanUtils.copyProperties(questionTipOffBo, tipOff);
             questionTipOffMapper.insert(tipOff);
 
+            tipOff.setStatus("approved");
+            tipOff.setUpdateTime(new Date());
+            changeStatus(tipOff);
+
         } catch (Exception e) {
             throw new ServiceException(6371);
         }
