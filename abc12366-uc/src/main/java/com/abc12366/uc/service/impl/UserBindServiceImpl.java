@@ -14,6 +14,7 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.PrivilegeItemService;
 import com.abc12366.uc.service.RSAService;
+import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
@@ -75,13 +76,13 @@ public class UserBindServiceImpl implements UserBindService {
     private AcceptClient client;
 
     @Autowired
-    private UserExtendRoMapper userExtendRoMapper;
-
-    @Autowired
     private RSAService rsaService;
 
     @Autowired
     private PrivilegeItemService privilegeItemService;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
 
     protected static Map<String, Object> appCache = new ConcurrentHashMap<>();
 
@@ -165,6 +166,9 @@ public class UserBindServiceImpl implements UserBindService {
         }
         UserDzsbBO userDzsbBO1 = new UserDzsbBO();
         BeanUtils.copyProperties(userDzsb, userDzsbBO1);
+
+        //绑定税号任务埋点
+        todoTaskService.doTask(userId,UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userDzsbBO1;
     }
 
@@ -408,6 +412,8 @@ public class UserBindServiceImpl implements UserBindService {
         }
         UserHngsBO userHngsBO1 = new UserHngsBO();
         BeanUtils.copyProperties(userHngs, userHngsBO1);
+        //绑定税号任务埋点
+        todoTaskService.doTask(userId,UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHngsBO1;
     }
 
@@ -451,6 +457,9 @@ public class UserBindServiceImpl implements UserBindService {
         }
         UserHndsBO userHndsBO1 = new UserHndsBO();
         BeanUtils.copyProperties(userHnds, userHndsBO1);
+        //绑定税号任务埋点
+        String userId = Utils.getUserId();
+        todoTaskService.doTask(userId,UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHndsBO1;
     }
 
