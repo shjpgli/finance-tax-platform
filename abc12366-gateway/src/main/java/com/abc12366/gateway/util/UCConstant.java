@@ -113,7 +113,7 @@ public class UCConstant {
     //31.每日分享课程
     public final static String SYS_TASK_COURSE_SHARE_CODE = "T-mrfxkc";
     //32.绑定税号
-    public final static String SYS_TASK_COURSE_BDSH_CODE = "T-mrfxkc";
+    public final static String SYS_TASK_COURSE_BDSH_CODE = "T-bdsh";
     //33.每日登录
     public final static String SYS_TASK_LOGIN_CODE = "T-mrdl";
     //34.网上申报
@@ -189,6 +189,67 @@ public class UCConstant {
     public final static String EXP_RULE_ZXTW_CODE = "E-ZXTW";
     //26.每日回答问题
     public final static String EXP_RULE_MRHDWT_CODE = "E-hdwt";
+
+
+
+    //27.公告通知提醒
+    public final static String EXP_RULE_GGTZTX_CODE = "E-ggtztx";
+    //28.申请事项办理结果提醒
+    public final static String EXP_RULE_SQSXBLJGTX_CODE = "E-szsxbljg";
+    //29.银行存款账户网上备案
+    public final static String EXP_RULE_YHCKZHWSBA_CODE = "E-yhckzhws";
+
+    //30.税收优惠资格备案
+    public final static String EXP_RULE_SSYHZGBA_CODE = "E-ssyhzgba";
+    //31.企业所得税优惠事项备案
+    public final static String EXP_RULE_QYSDSYHSXBA_CODE = "E-qysdsyh";
+    //32.财务会计制度及核算软件备案
+    public final static String EXP_RULE_CWKJZDJHSRJBA_CODE = "E-cwkjzd";
+    //33.增值税即征即退优惠办理
+    public final static String EXP_RULE_ZZSJZJTYHBL_CODE = "E-zzsjzjt";
+    //34.非居民企业汇总缴纳所得税
+    public final static String EXP_RULE_FJMQYHZNSDS_CODE = "E-fjmqyhz";
+    //35.企业所得税预缴方式核定
+    public final static String EXP_RULE_QYSDSYJFSHD_CODE = "E-qysdsyj";
+    //36.变更纳税定额核准
+    public final static String EXP_RULE_BGNSDEHD_CODE = "E-bgnsdhbz";
+    //37.增值税专票最高开票限额
+    public final static String EXP_RULE_ZZSZPZGKPXE_CODE = "E-zzszpzg";
+    //38.延期申报核准
+    public final static String EXP_RULE_YQSBHZ_CODE = "E-yqsbhz";
+    //39.延期缴纳税款核准
+    public final static String EXP_RULE_YQJNSKHD_CODE = "E-yqjnskhz";
+    //40.企业印制发票审批
+    public final static String EXP_RULE_QYYZFPSP_CODE = "E-qyyzfpsb";
+    //41.一般纳税人资格登记
+    public final static String EXP_RULE_YBNSRZGDJ_CODE = "E-ybnsrz";
+    //42.发票代开
+    public final static String EXP_RULE_FPDK_CODE = "E-fpdk";
+    //43.发票领用
+    public final static String EXP_RULE_FPLY_CODE = "E-fply";
+    //44.发票验旧
+    public final static String EXP_RULE_FPYJ_CODE = "E-fpyj";
+    //45.印有本单位名称发票申请
+    public final static String EXP_RULE_YYBDWMCFPSQ_CODE = "E-yybdwm";
+    //46.发票票种核定
+    public final static String EXP_RULE_FPPZHD_CODE = "E-fppzhd";
+    //47.车辆购置税预申报(4S店专用)
+    public final static String EXP_RULE_CLGZSYSB_CODE = "E-clgzsysb";
+    //48.重点税源申报
+    public final static String EXP_RULE_ZDSYSB_CODE = "E-zdsysb";
+    //49.税收缴款凭证
+    public final static String EXP_RULE_SSJKPZ_CODE = "E-scjkpz";
+    //50.出口退税预申报
+    public final static String EXP_RULE_CKTSYSB_CODE = "E-cktsysb";
+    //51.外出经营活动税收核销管理
+    public final static String EXP_RULE_WCJYHDSSHXGL_CODE = "E-dsshxgl";
+    //52.外出经营活动税收管理证明
+    public final static String EXP_RULE_WCJYHDSSGLZM_CODE = "E-wcjyhdss";
+    //53.扣缴义务人登记
+    public final static String EXP_RULE_KJYWRDJ_CODE = "E-kyrwrdj";
+    //54.变更税务登记
+    public final static String EXP_RULE_BGSWDJ_CODE = "E-bgswdj";
+
 
 
 
