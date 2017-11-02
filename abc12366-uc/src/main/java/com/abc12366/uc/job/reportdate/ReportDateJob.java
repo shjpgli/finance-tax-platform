@@ -27,6 +27,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import sun.misc.BASE64Encoder;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
@@ -217,6 +219,7 @@ public class ReportDateJob implements Job {
                         dataList.put("keyword1Color", "#00DB00");
                         dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
                         dataList.put("keyword2Color", "#00DB00");
+                        dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
                         templateService.templateSend(info.toSendJson(dataList));
                     }
 
