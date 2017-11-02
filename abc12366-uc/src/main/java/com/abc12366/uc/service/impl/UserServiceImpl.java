@@ -356,14 +356,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void automaticUserCancel() {
-        Date date = DataUtils.getAddDate(UCConstant.USER_VIP_EXPIRE_DATE);
-        List<User> userList = userRoMapper.selectUserVipList(date);
-        for (User user : userList) {
-            //user.setStatus(false);
+        Date date = DataUtils.getAddYear(UCConstant.USER_VIP_EXPIRE_DATE);
+        List<String> ids = userRoMapper.selectUserVipList(date);
+        Map<String,Object> map = new HashMap<>();
+        map.put("vipLevel",Constant.USER_ORIGINAL_LEVEL);
+        map.put("ids",ids);
+        try {
+            userMapper.updateBatch(map);
+        }catch (Exception e){
+            LOGGER.error("automaticUserCancel.updateBatch(List<String> idList)", e);
+            throw new ServiceException(4924);
+        }
+        /*for (User user : userList) {
+            LOGGER.info("定时器将修改过期会员等级：{}", user.toString());
             user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
             user.setLastUpdate(new Date());
             userMapper.update(user);
-        }
+        }*/
     }
 
     @Override

@@ -146,6 +146,46 @@ public class QuestionServiceImpl implements QuestionService {
         return questionBoList;
     }
 
+    @Override
+    public List<QuestionTag> selectTagList(String id) {
+        //根据问题ID查询相关标签
+        List<QuestionTag> tagList;
+        try {
+            tagList = tagRoMapper.selectList(id);
+        } catch (Exception e) {
+            LOGGER.error("查询问题相关标签失败：{}", e);
+            throw new ServiceException(6107);
+        }
+        return tagList;
+    }
+
+
+    @Override
+    public QuestionTagListBo updateQuesTag(QuestionTagListBo questionTagListBo) {
+
+            List<QuestionTag> tagList = questionTagListBo.getTagList();
+
+        try {
+            tagMapper.deleteByPrimaryKey(questionTagListBo.getQuestionId());
+
+            if(tagList != null){
+                for(QuestionTag tag :tagList){
+                    tag.setId(UUID.randomUUID().toString().replace("-", ""));
+                    tag.setQuestionId(questionTagListBo.getQuestionId());
+                    tagMapper.insert(tag);
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("话题打标签失败：{}", e);
+            throw new ServiceException(6108);
+        }
+
+        return questionTagListBo;
+    }
+
+
+
+
     @Transactional("db1TxManager")
     @Override
     public QuestionBo save(QuestionBo questionBo) {
@@ -456,6 +496,13 @@ public class QuestionServiceImpl implements QuestionService {
             throw new ServiceException(6100);
         }
         return questionBoList;
+    }
+
+    @Override
+    public List<QuestionBo> selectMyManageQuesList(String userId) {
+        //我管理的话题
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectMyManageQuesList(userId);
     }
 
 }

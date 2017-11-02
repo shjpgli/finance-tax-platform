@@ -122,6 +122,20 @@ public class DataUtils {
     }
 
     /**
+     * 日期往后减去num天
+     * @param num
+     * @return
+     */
+    public static Date getAddMonth(int num){
+        Date date = new Date();//取时间
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.MONTH,-num);
+        date=calendar.getTime();
+        return date;
+    }
+
+    /**
      * 日期往后减去num年
      * @param num
      * @return

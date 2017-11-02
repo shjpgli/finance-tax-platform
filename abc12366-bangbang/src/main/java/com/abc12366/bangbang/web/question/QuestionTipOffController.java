@@ -60,6 +60,16 @@ public class QuestionTipOffController {
         return ResponseEntity.ok(Utils.kv("data", questionTipOffBo));
     }
 
+    /**
+     * 屏蔽
+     */
+    @PostMapping(path = "/questionPb")
+    public ResponseEntity questionPb(@Valid @RequestBody QuestionTipOffBo questionTipOffBo) {
+        //屏蔽问题信息
+        questionTipOffBo = questionTipOffService.savepb(questionTipOffBo);
+        return ResponseEntity.ok(Utils.kv("data", questionTipOffBo));
+    }
+
 
 
 }

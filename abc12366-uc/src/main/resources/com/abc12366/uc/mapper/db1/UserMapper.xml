@@ -42,6 +42,18 @@
         update uc_user set wxopenid=null,wxheadimg=null,wxnickname=null where wxopenid=#{wxopenid}
     </update>
 
+    <update id="updateBatch" parameterType="java.util.Map">
+        UPDATE uc_user
+        <set>
+            vipLevel = #{vipLevel},
+            lastUpdate = now()
+        </set>
+        WHERE id IN
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
     <update id="updatePhone" parameterType="com.abc12366.uc.model.User">
         update uc_user
         <set>

@@ -20,4 +20,6 @@ public interface QuestionTipOffService {
 
     QuestionTipOffBo save(QuestionTipOffBo questionTipOffBo);
 
+    QuestionTipOffBo savepb(QuestionTipOffBo questionTipOffBo);
+
 }

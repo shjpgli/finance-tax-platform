@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
+import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 
 import java.util.List;
@@ -49,4 +50,10 @@ public interface QuestionService {
     List<QuestionBo> selectListRecommend(Map<String, Object> map);
 
     List<QuestionBo> selectListByPoints(Map<String, Object> map);
+
+    List<QuestionBo> selectMyManageQuesList(String userId);
+
+    List<QuestionTag> selectTagList(String id);
+
+    QuestionTagListBo updateQuesTag(QuestionTagListBo questionTagListBo);
 }

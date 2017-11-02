@@ -112,7 +112,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             throw new ServiceException(4950);
         } else {
             String userId = Utils.getUserId();
-            data.setId(Utils.uuid());
+            String id = Utils.uuid();
+            data.setId(id);
             data.setUserId(userId);
             Timestamp now = new Timestamp(System.currentTimeMillis());
             data.setCreateTime(now);
@@ -121,7 +122,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.insert(data);
 
             // 插入订单日志
-            insertLog(data.getOrderNo(), "1", userId, data.getUserRemark(),"1");
+            insertLog(data.getOrderNo(), "1", userId, data.getUserRemark(),"1",id);
             // 更新订单状态
             //changeOrderStatus(data.getOrderNo());
         }
@@ -198,7 +199,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.update(oe);
 
             // 插入订单日志
-            insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark(),"1");
+            insertLog(data.getOrderNo(), "1", Utils.getUserId(), data.getUserRemark(),"1",oe.getId());
         } else {
             throw new ServiceException(4962);
         }
@@ -223,7 +224,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 oe.setToExpressNo(data.getExpressNo());
                 orderExchangeMapper.update(oe);
                 // 插入订单日志
-                insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark(),"1");
+                insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark(),"1",oe.getId());
 
 
                 //发送消息
@@ -318,7 +319,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
             }
             // 插入订单日志
-            insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminConfirmRemark(),"1");
+            insertLog(oe.getOrderNo(), "7", Utils.getAdminId(), oe.getAdminConfirmRemark(),"1",oe.getId());
         }
         return oe;
     }
@@ -410,7 +411,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
 
                                     // 插入订单日志-已完成
-                                    insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款","1");
+                                    insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款","1",oe.getId());
 
                                     //发送消息
                                     if(order == null){
@@ -523,7 +524,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             // 更新订单状态
             // 插入订单日志
-            insertLog(data.getOrderNo(), "4", "", "系统自动完成收货","1");
+            insertLog(data.getOrderNo(), "4", "", "系统自动完成收货","1",data.getId());
         });
     }
 
@@ -541,7 +542,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         orderExchangeMapper.update(oe);
 
         // 插入订单日志
-        insertLog(oe.getOrderNo(), "4", Utils.getUserId(), "用户确认收货","1");
+        insertLog(oe.getOrderNo(), "4", Utils.getUserId(), "用户确认收货","1",id);
         return oe;
     }
 
@@ -575,7 +576,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.update(oe);
 
             // 插入订单日志
-            insertLog(oe.getOrderNo(), "5", Utils.getAdminId(), oe.getAdminRemark(),"1");
+            insertLog(oe.getOrderNo(), "5", Utils.getAdminId(), oe.getAdminRemark(),"1",data.getId());
 
             //发送消息
             Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
@@ -625,7 +626,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.update(oe);
 
             // 插入订单日志
-            insertLog(oe.getOrderNo(), "2", Utils.getAdminId(), oe.getAdminRemark(),"1");
+            insertLog(oe.getOrderNo(), "2", Utils.getAdminId(), oe.getAdminRemark(),"1",oe.getId());
 
             //发送消息
             Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
@@ -672,7 +673,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             orderExchangeMapper.update(oe);
 
             // 插入订单日志
-            insertLog(oe.getOrderNo(), "6", Utils.getAdminId(), oe.getAdminRemark(),"1");
+            insertLog(oe.getOrderNo(), "6", Utils.getAdminId(), oe.getAdminRemark(),"1",oe.getId());
         }
         return oe;
     }
@@ -689,7 +690,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         return dict != null ? dict.getFieldKey() : "";
     }
 
-    private void insertLog(String orderNo, String status, String userId, String remark,String logType) {
+    private void insertLog(String orderNo, String status, String userId, String remark,String logType,String exchangeId) {
         // 插入订单日志
         OrderLog ol = new OrderLog.Builder()
                 .id(Utils.uuid())
@@ -700,6 +701,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 .remark(remark)
                 .logType(logType)
                 .build();
+        ol.setExchangeId(exchangeId);
         orderLogMapper.insert(ol);
     }
     

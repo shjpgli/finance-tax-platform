@@ -99,4 +99,9 @@ public interface QuestionRoMapper {
      **/
     List<QuestionBo> selectListTopicRecommend(TopicRecommendParamBO param);
 
+    /**
+     * 我管理的话题
+     **/
+    List<QuestionBo> selectMyManageQuesList(String userId);
+
 }

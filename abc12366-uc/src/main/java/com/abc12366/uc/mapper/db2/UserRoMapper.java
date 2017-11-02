@@ -33,7 +33,7 @@ public interface UserRoMapper {
 
 	UserBO selectByopenid(String openid);
 
-    List<User> selectUserVipList(@Param("date")Date date);
+    List<String> selectUserVipList(@Param("date")Date date);
 
     List<UserLoginPasswordWrongCount> selectContinuePwdWrong(String id);
 

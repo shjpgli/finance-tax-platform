@@ -46,6 +46,9 @@ public class UCConstant {
     //会员时间，单位：年
     public final static Integer USER_VIP_EXPIRE_DATE = 1;
 
+    //电子申报绑定时间，单位：月
+    public final static Integer DZSB_BIND_DATE = 3;
+
     //系统任务编码
     //1.首次修改登录密码
     public final static String SYS_TASK_FIRST_UPDATE_PASSWROD_CODE = "T-scxgdl";

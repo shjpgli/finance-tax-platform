@@ -342,7 +342,7 @@ public class QuestionController {
         dataMap.put("isTip", isTip);//是否被举报，1为被举报
         dataMap.put("userId", userId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionBo> dataList = questionService.selectList(dataMap);
+        List<QuestionBo> dataList = questionService.selectMyQuestionList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
@@ -361,5 +361,55 @@ public class QuestionController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
                         ()));
+    }
+
+    /**
+     * 查询我管理的话题
+     */
+    @GetMapping(path = "/selectMyManageQuesList/{userId}")
+    public ResponseEntity selectMyManageQuesList(@PathVariable String userId,
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> questionBoList = questionService.selectMyManageQuesList(userId);
+        if(questionBoList != null){
+            for(QuestionBo questionBo : questionBoList){
+                if(questionBo.getId() != null){
+                    List<QuestionTag> tagList = tagRoMapper.selectList(questionBo.getId());
+                    questionBo.setTagList(tagList);
+                }
+            }
+        }
+        return (questionBoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
+                        ()));
+    }
+
+    /**
+     * 根据问题ID查询相关标签
+     */
+    @GetMapping(path = "/selectTagList/{id}")
+    public ResponseEntity selectTagList(@PathVariable String id,
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", id, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionTag> questionTagList = questionService.selectTagList(id);
+        return (questionTagList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionTagList, "total", ((Page) questionTagList).getTotal
+                        ()));
+    }
+
+    /**
+     * 给问题打标签
+     */
+    @PutMapping(path = "/updateQuesTag")
+    public ResponseEntity updateQuesTag(@RequestBody QuestionTagListBo questionTagListBo) {
+        //给问题打标签
+        questionTagListBo = questionService.updateQuesTag(questionTagListBo);
+        return ResponseEntity.ok(Utils.kv("data", questionTagListBo));
     }
 }
