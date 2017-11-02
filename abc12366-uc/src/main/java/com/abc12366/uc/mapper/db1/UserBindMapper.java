@@ -5,6 +5,7 @@ import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liuguiyao<435720953@qq.com.com>
@@ -26,5 +27,5 @@ public interface UserBindMapper {
 
     int update(UserDzsb userDzsb);
 
-    int updateBatch(List<String> idList);
+    int updateBatch(Map<String,Object> map);
 }

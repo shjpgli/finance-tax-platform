@@ -310,9 +310,11 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public void automaticBindCancel() {
         Date date = DataUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
-        List<String> idList = userBindRoMapper.selectListByDate(date);
+        List<String> ids = userBindRoMapper.selectListByDate(date);
+        Map<String,Object> map = new HashMap<>();
+        map.put("ids",ids);
         try {
-            userBindMapper.updateBatch(idList);
+            userBindMapper.updateBatch(ids);
         }catch (Exception e){
             LOGGER.error("automaticBindCancel.updateBatch(List<String> idList)", e);
             throw new ServiceException(4923);
