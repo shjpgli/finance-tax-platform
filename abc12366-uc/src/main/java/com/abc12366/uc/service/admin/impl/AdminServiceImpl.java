@@ -225,6 +225,10 @@ public class AdminServiceImpl implements AdminService {
         String password;
         try {
             password = Utils.md5(adminBO.getPassword());
+            String defaultPwd = Utils.md5(Utils.md5(Constant.defaultPwd));
+            if(password.equals(defaultPwd)){
+                adminBO.setIsInitPassword(true);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException(4106);

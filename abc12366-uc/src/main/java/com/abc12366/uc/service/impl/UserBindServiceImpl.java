@@ -314,7 +314,7 @@ public class UserBindServiceImpl implements UserBindService {
         Map<String,Object> map = new HashMap<>();
         map.put("ids",ids);
         try {
-            userBindMapper.updateBatch(ids);
+            userBindMapper.updateBatch(map);
         }catch (Exception e){
             LOGGER.error("automaticBindCancel.updateBatch(List<String> idList)", e);
             throw new ServiceException(4923);
