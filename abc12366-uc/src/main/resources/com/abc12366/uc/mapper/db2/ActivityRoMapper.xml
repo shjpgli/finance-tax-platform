@@ -11,7 +11,7 @@
 
     <sql id="Base_RedEnvelop_List">
         id, secret, createTime, activityId, startTime, endTime, amount, amountType, probability,
-        sendAmount, sendStatus, sendTimes, sendTime, receiveStatus, receiveTime, ip, openId
+        sendAmount, sendStatus, sendTimes, sendTime, receiveStatus, receiveTime, ip, openId, remark
     </sql>
 
     <sql id="Base_LotteryLog_List">
@@ -49,7 +49,8 @@
             parameterType="com.abc12366.uc.model.weixin.WxRedEnvelop">
         SELECT
         r.id, r.secret, r.createTime, r.activityId, r.startTime, r.endTime, r.amount, r.amountType, r.probability,
-        r.sendAmount, r.sendStatus, r.sendTimes, r.sendTime, r.receiveStatus, r.receiveTime, r.ip, r.openId,a.name
+        r.sendAmount, r.sendStatus, r.sendTimes, r.sendTime, r.receiveStatus, r.receiveTime, r.ip, r.openId, r.remark,
+        a.name
         FROM uc_wxredenvelop r
         LEFT JOIN uc_wxactivity a ON a.id = r.activityId
         <where>

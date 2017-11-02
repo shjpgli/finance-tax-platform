@@ -91,6 +91,7 @@
             <if test="receiveTime != null">receiveTime = #{receiveTime},</if>
             <if test="ip != null">ip = #{ip},</if>
             <if test="openId != null">openId = #{openId},</if>
+            <if test="remark != null">remark = #{remark},</if>
         </set>
         where id = #{id}
     </update>

@@ -276,6 +276,7 @@ public class ActivityService implements IActivityService {
                         }
                         redEnvelop.setReceiveStatus(rpp.getStatus());
                         redEnvelop.setReceiveTime(rpp.getRcv_time());
+                        redEnvelop.setRemark(rpp.getErr_code_des());
                         activityMapper.updateRedEnvelop(redEnvelop);
                     } else {
                         throw new ServiceException(rpp.getResult_code(), rpp.getErr_code_des());
@@ -350,6 +351,7 @@ public class ActivityService implements IActivityService {
                         redEnvelop.setSendStatus("2");
                     }
                     redEnvelop.setSendTime(new Date());
+                    redEnvelop.setRemark(rrp.getErr_code_des());
                     activityMapper.updateRedEnvelop(redEnvelop);
                     if (!"SUCCESS".equals(rrp.getReturn_code())) {
                         throw new ServiceException(rrp.getResult_code(), rrp.getErr_code_des());
@@ -448,6 +450,7 @@ public class ActivityService implements IActivityService {
                     }
                     redEnvelop.setSendTime(new Date());
                     redEnvelop.setSendTimes(i);
+                    redEnvelop.setRemark(rrp.getErr_code_des());
                     activityMapper.updateRedEnvelop(redEnvelop);
                     if (!"SUCCESS".equals(rrp.getReturn_code())) {
                         throw new ServiceException(rrp.getResult_code(), rrp.getErr_code_des());
