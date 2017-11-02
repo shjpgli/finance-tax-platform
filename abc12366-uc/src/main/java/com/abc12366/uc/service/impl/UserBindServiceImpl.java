@@ -534,12 +534,19 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public void resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
-        //1.验证码校验
-//        VerifyingCodeBO param = new VerifyingCodeBO();
-//        param.setPhone(data.getPhone());
-//        param.setType(data.getType());
-//        param.setCode(data.getCode());
-//        authService.verifyCode(param, request);
+        //校验法人姓名和法人证件号
+        Map<String, String> mapVali = new HashMap<>();
+        mapVali.put("serviceid", "TY11");
+        mapVali.put("NSRSBH", data.getNsrsbh());
+        Map respMapVali = client.process(mapVali);
+        //调用tdps查询这个税号的基本信息，然后和输入的法人名称和法人证件号进行对比
+        TY21Xml2Object object = analyzeXmlTY11(respMapVali, data.getNsrsbh());
+        if (StringUtils.isEmpty(object.getFRXM()) || StringUtils.isEmpty(object.getFRZJH())) {
+            throw new ServiceException(4630);
+        }
+        if (!object.getFRXM().equals(data.getFrmc().trim()) || !object.getFRZJH().equals(data.getFrzjh().trim())) {
+            throw new ServiceException(4638);
+        }
 
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY12");
@@ -652,6 +659,84 @@ public class UserBindServiceImpl implements UserBindService {
                 if ("SFGTJZH".equals(mx.getCODE())) {
                     object.setSFGTJZH(mx.getVALUE());
                 }
+            }
+        } else {
+            throw new ServiceException("9999", jbxxcx.getCWYY());
+        }
+        return object;
+    }
+
+    public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException(4629);
+        }
+        if (!resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
+        }
+        if (!resMap.containsKey("taxML_CRM_NSRXXCX_" + nsrsbh + ".xml")) {
+            throw new ServiceException(4634);
+        }
+        TY21Xml2Object object = new TY21Xml2Object();
+        com.abc12366.uc.jrxt.model.TY11Response.JBXXCX jbxxcx;
+        try {
+            jbxxcx = (com.abc12366.uc.jrxt.model.TY11Response.JBXXCX) XmlJavaParser.parseXmlToObject(com.abc12366.uc.jrxt.model.TY11Response.JBXXCX.class, String.valueOf(resMap.get("taxML_CRM_NSRXXCX_" + nsrsbh + ".xml")));
+        } catch (org.exolab.castor.xml.MarshalException e) {
+            e.printStackTrace();
+            throw new ServiceException(4633);
+        }
+        String cxjg = jbxxcx.getCXJG();
+        if ("1".equals(cxjg)) {
+            com.abc12366.uc.jrxt.model.TY11Response.MXXX[] mxxxes = jbxxcx.getMXXXS().getMXXX();
+            for (com.abc12366.uc.jrxt.model.TY11Response.MXXX mx : mxxxes) {
+                if ("FRXM".equals(mx.getCODE())) {
+                    object.setFRXM(mx.getVALUE());
+                }
+                if ("FRZJH".equals(mx.getCODE())) {
+                    object.setFRZJH(mx.getVALUE());
+                }
+
+//                if ("LOGINTOKEN".equals(mx.getCODE())) {
+//                    object.setLOGINTOKEN(mx.getVALUE());
+//                }
+//                if ("DLSJ".equals(mx.getCODE())) {
+//                    object.setDLSJ(mx.getVALUE());
+//                }
+//                if ("Y_NSRSBH".equals(mx.getCODE())) {
+//                    object.setY_NSRSBH(mx.getVALUE());
+//                }
+//                if ("NSRMC".equals(mx.getCODE())) {
+//                    object.setNSRMC(mx.getVALUE());
+//                }
+//                if ("SHXYDM".equals(mx.getCODE())) {
+//                    object.setSHXYDM(mx.getVALUE());
+//                }
+//                if ("SWJGDM".equals(mx.getCODE())) {
+//                    object.setSWJGDM(mx.getVALUE());
+//                }
+//                if ("SWJGMC".equals(mx.getCODE())) {
+//                    object.setSWJGMC(mx.getVALUE());
+//                }
+//                if ("DJXH".equals(mx.getCODE())) {
+//                    object.setDJXH(mx.getVALUE());
+//                }
+//                if ("FRXM".equals(mx.getCODE())) {
+//                    object.setFRXM(mx.getVALUE());
+//                }
+//                if ("FRZJH".equals(mx.getCODE())) {
+//                    object.setFRZJH(mx.getVALUE());
+//                }
+//                if ("RJDQR".equals(mx.getCODE())) {
+//                    object.setRJDQR(mx.getVALUE());
+//                }
+//                if ("YQDQR".equals(mx.getCODE())) {
+//                    object.setYQDQR(mx.getVALUE());
+//                }
+//                if ("NSRLX".equals(mx.getCODE())) {
+//                    object.setNSRLX(mx.getVALUE());
+//                }
+//                if ("SFGTJZH".equals(mx.getCODE())) {
+//                    object.setSFGTJZH(mx.getVALUE());
+//                }
             }
         } else {
             throw new ServiceException("9999", jbxxcx.getCWYY());
