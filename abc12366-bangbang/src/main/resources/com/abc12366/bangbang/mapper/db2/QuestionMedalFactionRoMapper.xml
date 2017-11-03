@@ -5,11 +5,11 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	medalId,	userId,	medalTime
+		 id,	medalId,	factionId,	medalTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionMedalUser" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionMedalFaction" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_medal_user
@@ -17,11 +17,11 @@
 	</select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectListByUserId" resultType="com.abc12366.bangbang.model.question.bo.QuestionMedalUserBo" parameterType="java.util.Map">
+    <select id="selectListByFactionId" resultType="com.abc12366.bangbang.model.question.bo.QuestionMedalFactionBo" parameterType="java.util.Map">
         SELECT
-            mu.id,	medalId,	mu.userId,	medalTime,m.image,m.name
-        FROM bb_question_medal_user mu left join bb_question_medal m on mu.medalId = m.id
-        WHERE mu.userId = #{userId}
+            mf.id,	medalId,	mf.factionId,	medalTime,m.image,m.name
+        FROM bb_question_medal_faction mf left join bb_question_medal m on mu.medalId = m.id
+        WHERE mf.factionId = #{factionId}
         ORDER BY medalTime DESC
     </select>
 
