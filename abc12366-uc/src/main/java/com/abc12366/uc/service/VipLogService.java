@@ -5,12 +5,26 @@ import com.abc12366.uc.model.bo.VipLogBO;
 import java.util.List;
 
 /**
+ * VIP日志服务
+ *
  * Admin: liuguiyao<435720953@qq.com.com>
  * Date: 2017-05-19
  * Time: 15:37
  */
 public interface VipLogService {
+
+    /**
+     * 查询会员日志
+     * @param userId 用户ID
+     * @return {@linkplain com.abc12366.uc.model.bo.VipLogBO VipLogBO}日志对象 List
+     */
     List<VipLogBO> selectList(String userId);
 
+    /**
+     * 新增会员日期，会员期限加1年，普通用户（VIP0）为10年
+     *
+     * @param vipLogBO 日志对象
+     * @return {@linkplain com.abc12366.uc.model.bo.VipLogBO VipLogBO}日志对象
+     */
     VipLogBO insert(VipLogBO vipLogBO);
 }

@@ -318,7 +318,7 @@ public class ActivityService implements IActivityService {
     public WxRedEnvelop resend(String id) {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
         // 重新发送状态为【0-未发送、2-发送失败】的记录
-        if (redEnvelop != null && ("0".equals(redEnvelop.getSendStatus()) || "2".equals(redEnvelop.getSendStatus()))) {
+        if (redEnvelop != null) {
             WxActivity activity = selectOne(redEnvelop.getActivityId());
             SendRedPack srp = new SendRedPack.Builder()
                     .nonce_str(redEnvelop.getId())
