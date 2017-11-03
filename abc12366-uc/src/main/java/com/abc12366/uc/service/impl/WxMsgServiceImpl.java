@@ -104,26 +104,30 @@ public class WxMsgServiceImpl implements IWxMsgService {
                     int eventCode = MsgMap.getEventType(map.get("Event"));
                     switch (eventCode) {
                         case 0://关注
-                        	if(map.get("Ticket")!=null){//扫公众号生成二维码关注
+                        	/*if(map.get("Ticket")!=null){//扫公众号生成二维码关注
                         		String eventKey=map.get("EventKey");
                         		String[] infos=eventKey.split(",");
                         		LOGGER.info("用户扫码关注(EventKey):" +eventKey);
                         		if("qrscene_AA".equals(infos[0])){//用户关注以及自动绑定
                         			smbd(map,infos);
                         		}
-                        	}else{//其他渠道关注
+                        	}else{*///其他渠道关注
+                        	    //关注公众号，完成任务
+		                       	UserBO userBO= userRoMapper.selectByopenid(map.get("FromUserName"));
+		                       	if(userBO!=null){
+		                       	     LOGGER.info("用户关注公众号，做任务，USERID:"+userBO.getId());
+		                       		 todoTaskService.doTask(userBO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
+		                       	}
+                        	
+                        	
                         		ReturnMsg newmsg = getReMsgOneBysetting("0");
                                 if (newmsg != null) {
                                     return newmsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System
     										.currentTimeMillis());
                                 }
-                        	}
+                        	//}
                         	
-                        	//关注公众号，完成任务
-                        	 UserBO userBO= userRoMapper.selectByopenid(map.get("FromUserName"));
-                        	 if(userBO!=null){
-                        		 todoTaskService.doTask(userBO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
-                        	 }
+                        	
                         	 
                         	
                         case 1://取消关注
