@@ -53,6 +53,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/dzsb/getpublickey")
                 .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
