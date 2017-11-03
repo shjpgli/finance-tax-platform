@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service;
 
 
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
+import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 
@@ -56,4 +57,6 @@ public interface QuestionService {
     List<QuestionTag> selectTagList(String id);
 
     QuestionTagListBo updateQuesTag(QuestionTagListBo questionTagListBo);
+
+    QuestionInvite updateIsRead(QuestionInvite invite);
 }

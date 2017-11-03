@@ -170,5 +170,17 @@ public class QueAnswerController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 更新回复为已读
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/updateIsRead/{id}")
+    public ResponseEntity updateIsRead(@PathVariable("id") String id) {
+        queAnswerService.updateIsRead(id);
+        return ResponseEntity.ok(Utils.kv("data", id));
+    }
+
 
 }

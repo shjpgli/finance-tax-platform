@@ -277,6 +277,7 @@ public class QuestionServiceImpl implements QuestionService {
                 for(QuestionInvite invite :inviteList){
                     invite.setId(UUID.randomUUID().toString().replace("-", ""));
                     invite.setQuestionId(uuid);
+                    invite.setIsRead(0);
                     inviteMapper.insert(invite);
                 }
             }
@@ -503,6 +504,17 @@ public class QuestionServiceImpl implements QuestionService {
         //我管理的话题
         LOGGER.info("{}", userId);
         return questionRoMapper.selectMyManageQuesList(userId);
+    }
+
+    @Override
+    public QuestionInvite updateIsRead(QuestionInvite invite) {
+        try {
+            inviteMapper.updateIsRead(invite);
+        } catch (Exception e) {
+            LOGGER.error("更新问题信息异常：{}", e);
+            throw new ServiceException(6103);
+        }
+        return invite;
     }
 
 }

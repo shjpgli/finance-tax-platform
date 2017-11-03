@@ -2,6 +2,7 @@ package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
+import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
@@ -411,5 +412,15 @@ public class QuestionController {
         //给问题打标签
         questionTagListBo = questionService.updateQuesTag(questionTagListBo);
         return ResponseEntity.ok(Utils.kv("data", questionTagListBo));
+    }
+
+    /**
+     * 更新问题为已读
+     */
+    @PutMapping(path = "/updateIsRead")
+    public ResponseEntity updateIsRead(@RequestBody QuestionInvite invite) {
+        //更新问题为已读
+        invite = questionService.updateIsRead(invite);
+        return ResponseEntity.ok(Utils.kv("data", invite));
     }
 }

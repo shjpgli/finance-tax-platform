@@ -23,6 +23,8 @@ public interface QueAnswerService {
 
     String delete(String id);
 
+    String updateIsRead(String id);
+
     List<QuestionAnswerBo> selectMyAnswerList(Map<String, Object> map);
 
 }

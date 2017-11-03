@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionInvite">
 		 INSERT INTO bb_question_invite
- 		(id,questionId,userId) 
+ 		(id,questionId,isRead,userId)
 		 VALUES 
- 		(#{id},#{questionId},#{userId}) 
+ 		(#{id},#{questionId},#{isRead},#{userId})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -68,5 +68,13 @@
 			 userId = #{userId}
 		 WHERE id = #{id}
 	</update>
+
+    <!-- 修 改-->
+    <update id="updateIsRead" parameterType="com.abc12366.bangbang.model.question.QuestionInvite">
+        UPDATE bb_question_invite
+        SET
+        isRead = 1
+        WHERE questionId = #{questionId} and userId = #{userId}
+    </update>
 
 </mapper>

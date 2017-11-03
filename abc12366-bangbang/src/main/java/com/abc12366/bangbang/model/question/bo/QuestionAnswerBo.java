@@ -82,6 +82,9 @@ public class QuestionAnswerBo implements Serializable {
     /**邦派ID**/
     private String factionId;
 
+    /**是否已读**int(1)**/
+    private Integer isRead;
+
 
     public void setId(String id){
 		this.id = id;
@@ -274,5 +277,13 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setBrowseNum(Integer browseNum) {
         this.browseNum = browseNum;
+    }
+
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
     }
 }

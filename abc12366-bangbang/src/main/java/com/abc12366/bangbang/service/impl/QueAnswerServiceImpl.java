@@ -131,6 +131,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             answerBo.setTrampleNum(0);
             answerBo.setReportNum(0);
             answerBo.setStatus("0");//0正常，1待审查，2拉黑
+            answerBo.setIsRead(0);
 
             //敏感词校验
             String answerTxt = answerBo.getAnswer();
@@ -267,6 +268,18 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             throw new ServiceException(6114);
         }
         return num+"";
+    }
+
+    @Override
+    public String updateIsRead(String id) {
+        //更新问题回复信息
+        try {
+            answerMapper.updateIsRead(id);
+        } catch (Exception e) {
+            LOGGER.error("更新问题回复信息异常：{}", e);
+            throw new ServiceException(6113);
+        }
+        return "";
     }
 
 }
