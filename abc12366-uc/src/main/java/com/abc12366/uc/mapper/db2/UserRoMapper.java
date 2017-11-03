@@ -33,7 +33,13 @@ public interface UserRoMapper {
 
 	UserBO selectByopenid(String openid);
 
-    List<String> selectUserVipList(@Param("date")Date date);
+    /**
+     * 查询过期的会员列表
+     *
+     * @param date 目前定义为当前日期
+     * @return List<User> 过期的用户列表
+     */
+    List<User> selectUserVipList(@Param("date")Date date);
 
     List<UserLoginPasswordWrongCount> selectContinuePwdWrong(String id);
 

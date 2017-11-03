@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
@@ -14,12 +15,7 @@ import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.service.AuthService;
-import com.abc12366.uc.service.RSAService;
-import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.util.DataUtils;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +33,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -75,6 +72,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AuthService authService;
+
+    /**
+     * 会员日志服务
+     */
+    @Autowired
+    private VipLogService vipLogService;
 
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
@@ -354,25 +357,23 @@ public class UserServiceImpl implements UserService {
         return userRoMapper.selectByopenid(openid);
     }
 
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public void automaticUserCancel() {
-        Date date = DataUtils.getAddYear(UCConstant.USER_VIP_EXPIRE_DATE);
-        List<String> ids = userRoMapper.selectUserVipList(date);
-        Map<String,Object> map = new HashMap<>();
-        map.put("vipLevel",Constant.USER_ORIGINAL_LEVEL);
-        map.put("ids",ids);
-        try {
-            userMapper.updateBatch(map);
-        }catch (Exception e){
-            LOGGER.error("automaticUserCancel.updateBatch(List<String> idList)", e);
-            throw new ServiceException(4924);
-        }
-        /*for (User user : userList) {
-            LOGGER.info("定时器将修改过期会员等级：{}", user.toString());
+        List<User> userList = userRoMapper.selectUserVipList(new Date());
+        for (User user : userList) {
+            // 更新会员状态
             user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
             user.setLastUpdate(new Date());
             userMapper.update(user);
-        }*/
+
+            // 插入会员日志
+            VipLogBO bo = new VipLogBO();
+            bo.setLevelId(user.getVipLevel());
+            bo.setSource("系统管理员");
+            bo.setUserId(user.getId());
+            vipLogService.insert(bo);
+        }
     }
 
     @Override
