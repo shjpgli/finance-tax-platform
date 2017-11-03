@@ -26,12 +26,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.model.bo.DzsjResult;
 import com.abc12366.message.model.bo.Result;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
-@Controller("/dzsb")
+@Controller()
+@RequestMapping(path = "/dzsb", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class DzsbController {
 	
 	// App缓存信息
@@ -168,10 +171,10 @@ public class DzsbController {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/getpublickey")
-	public @ResponseBody String getPublicKey() {
+	public @ResponseBody JSONObject getPublicKey() {
         HttpEntity httpEntity = new HttpEntity(getHttpHeader());
         String pkStr = exchange(cfg.getDzsjUrl() + "/pk", HttpMethod.GET, httpEntity);
-        return pkStr;
+        return JSONObject.parseObject(pkStr);
     }
     
     /**
@@ -182,10 +185,10 @@ public class DzsbController {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/post")
-    public String sbPost(@RequestParam("api") String api,
+    public @ResponseBody JSONObject sbPost(@RequestParam("api") String api,
     		@RequestBody Map<String, String> body) {
         HttpEntity httpEntity = new HttpEntity(body, getHttpHeader());
-        return exchange(cfg.getDzsjUrl() +api, HttpMethod.POST, httpEntity);
+        return JSONObject.parseObject(exchange(cfg.getDzsjUrl() +api, HttpMethod.POST, httpEntity));
     }
     
     /**
@@ -197,8 +200,8 @@ public class DzsbController {
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/get")
     @ResponseBody
-    public String taxGet(@RequestParam("api") String api) {
+    public JSONObject taxGet(@RequestParam("api") String api) {
         HttpEntity httpEntity = new HttpEntity(getHttpHeader());
-        return exchange(cfg.getDzsjUrl() + new String(Base64.getDecoder().decode(api)), HttpMethod.GET, httpEntity);
+        return JSONObject.parseObject(exchange(cfg.getDzsjUrl() + new String(Base64.getDecoder().decode(api)), HttpMethod.GET, httpEntity));
     }
 }
