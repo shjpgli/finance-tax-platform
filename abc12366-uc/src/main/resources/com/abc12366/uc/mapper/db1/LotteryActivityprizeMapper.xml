@@ -6,7 +6,7 @@
 insert into uc_lottery_activityprize(
 id,activityId,lotteryId,val1,description,status,createTime,lastTime,startTime,endTime,luck,balance,amount
 )values(
-#{id},#{activityId},#{lotteryId},#{val1},#{description},#{status},#{createTime},#{lastTime},#{startTime},#{endTime},#{luck},#{balance}),#{amount}))
+#{id},#{activityId},#{lotteryId},#{val1},#{description},#{status},#{createTime},#{lastTime},#{startTime},#{endTime},#{luck},#{balance},#{amount})
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.LotteryActivityprize">
 update  uc_lottery_activityprize 
