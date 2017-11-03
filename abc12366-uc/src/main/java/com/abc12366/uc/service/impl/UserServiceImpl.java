@@ -33,7 +33,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -357,7 +356,6 @@ public class UserServiceImpl implements UserService {
         return userRoMapper.selectByopenid(openid);
     }
 
-    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public void automaticUserCancel() {
         List<User> userList = userRoMapper.selectUserVipList(new Date());
