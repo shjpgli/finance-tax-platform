@@ -6,10 +6,12 @@ package com.abc12366.uc.model;
  * Time: 15:26
  */
 public class MyTaskSurvey {
-    //本月完成任务获取的经验值
+    //本月获取的经验值
     private String earnedExp;
-    //本月完成任务获取的积分
+    //本月获取的积分
     private String earnedPoint;
+    //本月任务排名
+    private String taskRange;
     //本月完成任务数量
     private String completedTaskCount;
 
@@ -40,11 +42,20 @@ public class MyTaskSurvey {
         this.completedTaskCount = completedTaskCount;
     }
 
+    public String getTaskRange() {
+        return taskRange;
+    }
+
+    public void setTaskRange(String taskRange) {
+        this.taskRange = taskRange;
+    }
+
     @Override
     public String toString() {
         return "MyTaskSurvey{" +
                 "earnedExp='" + earnedExp + '\'' +
                 ", earnedPoint='" + earnedPoint + '\'' +
+                ", taskRange='" + taskRange + '\'' +
                 ", completedTaskCount='" + completedTaskCount + '\'' +
                 '}';
     }
