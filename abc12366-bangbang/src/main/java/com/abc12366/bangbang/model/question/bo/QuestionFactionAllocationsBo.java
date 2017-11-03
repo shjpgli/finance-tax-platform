@@ -19,6 +19,9 @@ public class QuestionFactionAllocationsBo {
     /*成员名称*/
     private String memberName;
 
+    /*成员图片*/
+    private String memberImage;
+
     /*成员等级*/
     private String memberLevel;
 
@@ -36,6 +39,9 @@ public class QuestionFactionAllocationsBo {
 
     /*拒绝理由*/
     private String refuseReason;
+
+    /**奖励理由**varchar(1000)**/
+    private String awardReason;
 
 
     public String getId() {
@@ -72,6 +78,14 @@ public class QuestionFactionAllocationsBo {
     public QuestionFactionAllocationsBo setMemberName(String memberName) {
         this.memberName = memberName;
         return this;
+    }
+
+    public String getMemberImage() {
+        return memberImage;
+    }
+
+    public void setMemberImage(String memberImage) {
+        this.memberImage = memberImage;
     }
 
     public String getMemberLevel() {
@@ -126,5 +140,13 @@ public class QuestionFactionAllocationsBo {
     public QuestionFactionAllocationsBo setRefuseReason(String refuseReason) {
         this.refuseReason = refuseReason;
         return this;
+    }
+
+    public String getAwardReason() {
+        return awardReason;
+    }
+
+    public void setAwardReason(String awardReason) {
+        this.awardReason = awardReason;
     }
 }

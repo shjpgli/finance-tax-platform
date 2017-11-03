@@ -106,6 +106,7 @@
     <select id="selectAllocationList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationsBo" parameterType="java.util.Map">
         SELECT
         t.id,t.factionId,t.integral,t.state AS STATUS, t.refuseReason, t.createTime,t.updateTime,
+        t.awardReason,t2.userPicturePath memberImage,
         t1.factionName, t2.username AS memberName,t3.name AS memberLevel
         FROM bb_question_faction_allocation  t
         JOIN bb_question_faction  t1  ON t.factionId = t1.factionId
