@@ -46,7 +46,7 @@
         <if test="date != null and date != ''">
             AND date = #{date}
         </if>
-        <if test="status != null and status != ''">
+        <if test="status != null">
             AND status = #{status}
         </if>
     </select>
