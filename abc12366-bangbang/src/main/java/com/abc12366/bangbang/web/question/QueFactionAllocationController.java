@@ -99,10 +99,10 @@ public class QueFactionAllocationController {
     @GetMapping(path = "/allocationList")
     public ResponseEntity selectAllocationList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                           @RequestParam(value = "factionName", required = false) String factionName,
+                                           @RequestParam(value = "factionId", required = false) String factionId,
                                            @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("factionName", factionName);
+        dataMap.put("factionId", factionId);
         dataMap.put("status", status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionAllocationsBo> dataList = queFactionAllocationService.selectAllocationList(dataMap);
