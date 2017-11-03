@@ -14,8 +14,11 @@ public class LotteryActivityprizeBO{
     private Integer amount;
 public Integer getStock(){
     //库存  =  总数 - 销售数量
-    return  amount - balance;
-}
+    if(amount != null && balance != null) {
+        return amount - balance;
+    }
+    return null;
+    }
     public Integer getBalance() {
         return balance;
     }

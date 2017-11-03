@@ -40,6 +40,9 @@ public class QuestionFactionAllocationBo implements Serializable {
 	/**状态：1、新增，2、审批通过**int(11)**/
 	private Integer state;
 
+    /**奖励理由**varchar(1000)**/
+    private String awardReason;
+
 
 
 	public void setId(String id){
@@ -122,4 +125,11 @@ public class QuestionFactionAllocationBo implements Serializable {
 		return this.state;
 	}
 
+    public String getAwardReason() {
+        return awardReason;
+    }
+
+    public void setAwardReason(String awardReason) {
+        this.awardReason = awardReason;
+    }
 }

@@ -53,4 +53,11 @@ public interface QuestionAnswerMapper{
 	 **/
 	int updateReportNum(@Param("id") String id);
 
+    /**
+     *
+     * 修改为已读(根据主键ID)
+     *
+     **/
+    int updateIsRead(@Param("id") String id);
+
 }

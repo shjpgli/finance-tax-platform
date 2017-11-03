@@ -102,6 +102,26 @@
         ORDER BY t.createTime desc
     </select>
 
+    <!-- 查询（帮派成员分配列表） -->
+    <select id="selectAllocationList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationsBo" parameterType="java.util.Map">
+        SELECT
+        t.id,t.factionId,t.integral,t.state AS STATUS, t.refuseReason, t.createTime,t.updateTime,
+        t.awardReason,t2.userPicturePath memberImage,
+        t1.factionName, t2.username AS memberName,t3.name AS memberLevel
+        FROM bb_question_faction_allocation  t
+        JOIN bb_question_faction  t1  ON t.factionId = t1.factionId
+        JOIN abc12366_uc.uc_user t2 ON t.userId = t2.id
+        JOIN bb_question_faction_member_level t3 ON t.userRank = t3.code
+        WHERE 1=1
+        <if test="status != null and status !=''">
+            AND t.state = #{status}
+        </if>
+        <if test="factionId != null and factionId !=''">
+            AND t1.factionId = #{factionId}
+        </if>
+        ORDER BY t.createTime desc
+    </select>
+
     <select id="selectPointAwardListByIds" resultType="com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO" parameterType="java.util.List">
         SELECT userId , integral as point,factionId FROM bb_question_faction_allocation
         WHERE id IN

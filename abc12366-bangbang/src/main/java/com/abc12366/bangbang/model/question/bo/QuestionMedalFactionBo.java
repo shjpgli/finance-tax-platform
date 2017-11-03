@@ -19,6 +19,12 @@ public class QuestionMedalFactionBo implements Serializable {
 	/**邦派ID**varchar(64)**/
 	private String factionId;
 
+    /**勋章图片**/
+    private String image;
+
+    /**勋章名称**/
+    private String name;
+
 	/**获取时间**datetime**/
 	private java.util.Date medalTime;
 
@@ -56,4 +62,19 @@ public class QuestionMedalFactionBo implements Serializable {
 		return this.medalTime;
 	}
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

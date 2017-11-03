@@ -64,6 +64,9 @@ public class QuestionAnswer implements Serializable {
     /**被举报次数**int(11)**/
     private Integer reportNum;
 
+    /**是否已读**int(1)**/
+    private Integer isRead;
+
 
 
 	public void setId(String id){
@@ -208,5 +211,13 @@ public class QuestionAnswer implements Serializable {
 
     public void setAnswerImage(String answerImage) {
         this.answerImage = answerImage;
+    }
+
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
     }
 }

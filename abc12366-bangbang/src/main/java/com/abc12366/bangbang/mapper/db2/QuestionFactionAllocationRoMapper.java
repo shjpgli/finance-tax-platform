@@ -4,6 +4,7 @@ import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
 import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationsBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -59,6 +60,13 @@ public interface QuestionFactionAllocationRoMapper {
      *
      **/
     List<QuestionFactionAllocationManageBo> selectAllocationManageList(Map map);
+
+    /**
+     *
+     * 查询
+     *
+     **/
+    List<QuestionFactionAllocationsBo> selectAllocationList(Map map);
 
     /**
      *

@@ -10,6 +10,7 @@ import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
 import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationsBo;
 import com.abc12366.bangbang.service.QueFactionAllocationService;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
@@ -163,6 +164,16 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
     public List<QuestionFactionAllocationManageBo> selectManageList(Map<String, Object> map) {
         try {
             return allocationRoMapper.selectAllocationManageList(map);
+        } catch (Exception e) {
+            LOGGER.error("查询邦派成员奖励分配列表信息异常：{}", e);
+            throw new ServiceException(6140);
+        }
+    }
+
+    @Override
+    public List<QuestionFactionAllocationsBo> selectAllocationList(Map<String, Object> map) {
+        try {
+            return allocationRoMapper.selectAllocationList(map);
         } catch (Exception e) {
             LOGGER.error("查询邦派成员奖励分配列表信息异常：{}", e);
             throw new ServiceException(6140);
