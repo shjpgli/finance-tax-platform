@@ -44,10 +44,10 @@ public class MsgMap {
     }
 
     public static int getMsgType(String key) {
-        return ((Integer) msgmapping.get(key)).intValue();
+        return ((Integer) (msgmapping.get(key)==null?100:msgmapping.get(key))).intValue();
     }
 
     public static int getEventType(String key) {
-        return ((Integer) eventmapping.get(key)).intValue();
+        return ((Integer) (eventmapping.get(key)==null?100:eventmapping.get(key))).intValue();
     }
 }
