@@ -15,6 +15,9 @@ public class QuestionMedalBo {
     /**勋章名称**/
     private String name;
 
+    /**勋章名称**/
+    private String type;
+
     /**获取条件**/
     private String acquireCondition;
 
@@ -27,6 +30,14 @@ public class QuestionMedalBo {
     /* 获取勋章的人数 */
     private Integer ownerCnt;
 
+    public String getType() {
+        return type;
+    }
+
+    public QuestionMedalBo setType(String type) {
+        this.type = type;
+        return this;
+    }
 
     public void setId(String id){
         this.id = id;
