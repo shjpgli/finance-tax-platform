@@ -2,12 +2,10 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
-import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
@@ -168,7 +166,7 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userDzsb, userDzsbBO1);
 
         //绑定税号任务埋点
-        todoTaskService.doTask(userId,UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userDzsbBO1;
     }
 
@@ -242,7 +240,8 @@ public class UserBindServiceImpl implements UserBindService {
                 appCache.containsKey("expiresIn") && !StringUtils.isEmpty(appCache.get("expiresIn"))) {
             try {
                 Date expiredDate = (Date) appCache.get("expiresIn");
-                if (expiredDate != null && expiredDate.getTime() > System.currentTimeMillis()) {
+                //加10分钟的缓冲时间减少误差
+                if (expiredDate != null && expiredDate.getTime() > (System.currentTimeMillis() + 10 * 60 * 1000)) {
                     hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
                     hngsAppLoginResponse.setExpiresTime(expiredDate);
                 }
@@ -315,11 +314,11 @@ public class UserBindServiceImpl implements UserBindService {
     public void automaticBindCancel() {
         Date date = DataUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
         List<String> ids = userBindRoMapper.selectListByDate(date);
-        Map<String,Object> map = new HashMap<>();
-        map.put("ids",ids);
+        Map<String, Object> map = new HashMap<>();
+        map.put("ids", ids);
         try {
             userBindMapper.updateBatch(map);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("automaticBindCancel.updateBatch(List<String> idList)", e);
             throw new ServiceException(4923);
         }
@@ -413,7 +412,7 @@ public class UserBindServiceImpl implements UserBindService {
         UserHngsBO userHngsBO1 = new UserHngsBO();
         BeanUtils.copyProperties(userHngs, userHngsBO1);
         //绑定税号任务埋点
-        todoTaskService.doTask(userId,UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHngsBO1;
     }
 
@@ -459,7 +458,7 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userHnds, userHndsBO1);
         //绑定税号任务埋点
         String userId = Utils.getUserId();
-        todoTaskService.doTask(userId,UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHndsBO1;
     }
 

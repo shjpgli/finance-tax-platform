@@ -58,6 +58,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         //SysTaskBO sysTaskBO = sysTaskService.selectOne(sysTaskId);
         //新的查询系统任务方法：根据编码查询
         SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
+        LOGGER.info("用户正在完成任务，用户ID：{},任务名称:{}", userId, sysTaskBO.getName());
         if (sysTaskBO == null) {
             return;
         }
