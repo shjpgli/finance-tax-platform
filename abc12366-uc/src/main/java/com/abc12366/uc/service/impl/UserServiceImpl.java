@@ -658,6 +658,8 @@ public class UserServiceImpl implements UserService {
             userMapper.qxwxbd(userUpdateDTO.getWxopenid());
             int n = userMapper.update(users);
             if (n >= 1) {
+            	LOGGER.info("用户关注公众号，做任务，USERID:"+userUpdateDTO.getId());
+           		todoTaskService.doTask(userUpdateDTO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
                 return 2;
             } else {
                 throw new ServiceException(4624);
