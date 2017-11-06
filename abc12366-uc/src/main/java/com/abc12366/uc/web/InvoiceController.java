@@ -251,9 +251,10 @@ public class InvoiceController {
      */
     @PostMapping(path = "/import/express/{expressCompId}")
     public ResponseEntity insertInvoiceExpressExcelList(@Valid @RequestBody List<InvoiceExpressExcel> expressExcelList,
-                                                        @PathVariable("expressCompId") String expressCompId) {
+                                                        @PathVariable("expressCompId") String expressCompId,
+                                                        HttpServletRequest request) {
         LOGGER.info("{}", expressExcelList);
-        invoiceService.insertInvoiceExpressExcelList(expressExcelList,expressCompId);
+        invoiceService.insertInvoiceExpressExcelList(expressExcelList,expressCompId,request);
         return ResponseEntity.ok(Utils.kv());
     }
 
