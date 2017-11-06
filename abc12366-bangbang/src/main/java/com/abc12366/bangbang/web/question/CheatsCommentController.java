@@ -39,15 +39,13 @@ public class CheatsCommentController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                                @RequestParam(value = "userId", required = false) String userId,
-                                     @RequestParam(value = "CheatsId", required = false) String CheatsId,
-                                     @RequestParam(value = "answerId", required = false) String answerId) {
+                                     @RequestParam(value = "cheatsId", required = false) String cheatsId) {
         Map<String, Object> dataMap = new HashMap<>();
         if(userId == null || "".equals(userId)){
             userId = "11";
         }
         dataMap.put("userId", userId);//
-        dataMap.put("CheatsId", CheatsId);//
-        dataMap.put("answerId", answerId);//
+        dataMap.put("cheatsId", cheatsId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsCommentBo> dataList = cheatsCommentService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
