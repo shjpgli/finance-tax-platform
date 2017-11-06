@@ -67,4 +67,13 @@
         where userId=#{userId}
         and year=#{year}
     </select>
+
+    <select id="checkTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select a.count
+        from uc_continuing_check a
+        where a.userId=#{userId}
+        <if test="year!=null">
+            and a.year=#{year}
+        </if>
+    </select>
 </mapper>
