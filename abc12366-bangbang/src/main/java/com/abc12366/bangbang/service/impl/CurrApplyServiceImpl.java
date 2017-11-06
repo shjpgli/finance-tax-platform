@@ -82,7 +82,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
         Curriculum curriculum = curriculumRoMapper.selectByPrimaryKey(applyBo.getCurriculumId());
 
         Map<String, Object> dataMap1 = new HashMap<>();
-        dataMap.put("curriculumId",applyBo.getCurriculumId());
+        dataMap1.put("curriculumId",applyBo.getCurriculumId());
         //查询课程报名人数
         cnt = applyRoMapper.selectApplyCnt(dataMap1);
 
