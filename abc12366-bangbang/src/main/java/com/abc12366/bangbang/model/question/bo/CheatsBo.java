@@ -19,6 +19,12 @@ public class CheatsBo implements Serializable {
 	/**用户ID**varchar(64)**/
 	private String userId;
 
+    /**用户昵称**varchar(64)**/
+    private String nickname;
+
+    /**用户图片**/
+    private String userPicturePath;
+
 	/**标题**varchar(300)**/
 	private String title;
 
@@ -94,7 +100,23 @@ public class CheatsBo implements Serializable {
 		return this.userId;
 	}
 
-	public void setTitle(String title){
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getUserPicturePath() {
+        return userPicturePath;
+    }
+
+    public void setUserPicturePath(String userPicturePath) {
+        this.userPicturePath = userPicturePath;
+    }
+
+    public void setTitle(String title){
 		this.title = title;
 	}
 

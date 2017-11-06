@@ -17,6 +17,10 @@ public interface CheatsService {
 
     List<CheatsBo> selectListRecommend(Map<String, Object> map);
 
+    List<CheatstjydBo> selectListRecommendTitle(Map<String, Object> map);
+
+    List<CheatstjydBo> selectListByTag(Map<String, Object> map);
+
     List<CheatsBo> selectMyCheatsList(Map<String, Object> map);
 
     CheatsBo save(CheatsBo cheatsBo);

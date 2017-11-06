@@ -138,6 +138,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/queFaction/selectListPotential")
                         //问大侠列表查询
                 .excludePathPatterns("/questionExpert/listDX")
+                        //秘籍列表查询(最新)
+                .excludePathPatterns("/cheats/selectListNew")
+                        //推荐秘籍查询列表
+                .excludePathPatterns("/cheats/selectListRecommend")
+                        //查询推荐阅读(标题)
+                .excludePathPatterns("/cheats/selectListRecommendTitle")
+                        //查询你可能感兴趣的文章(标题)
+                .excludePathPatterns("/cheats/selectListByTag")
+                        //查询热门秘籍
+                .excludePathPatterns("/cheats/selectListByBrowseNum")
+                        //查询热议标签
+                .excludePathPatterns("/cheats/selectTagList")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",

@@ -7,6 +7,7 @@ import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.CheatsTag;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.CheatsTagBo;
+import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
 import com.abc12366.bangbang.service.CheatsService;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
@@ -82,6 +83,32 @@ public class CheatsServiceImpl implements CheatsService {
         try {
             //查询推荐秘籍列表
             cheatsBoList = cheatsRoMapper.selectListRecommend(map);
+        } catch (Exception e) {
+            LOGGER.error("查询秘籍列表信息异常：{}", e);
+            throw new ServiceException(6180);
+        }
+        return cheatsBoList;
+    }
+
+    @Override
+    public List<CheatstjydBo> selectListRecommendTitle(Map<String,Object> map) {
+        List<CheatstjydBo> cheatsBoList;
+        try {
+            //查询推荐秘籍列表
+            cheatsBoList = cheatsRoMapper.selectListRecommendTitle(map);
+        } catch (Exception e) {
+            LOGGER.error("查询秘籍列表信息异常：{}", e);
+            throw new ServiceException(6180);
+        }
+        return cheatsBoList;
+    }
+
+    @Override
+    public List<CheatstjydBo> selectListByTag(Map<String,Object> map) {
+        List<CheatstjydBo> cheatsBoList;
+        try {
+            //查询你可能感心情的文章
+            cheatsBoList = cheatsRoMapper.selectListByTag(map);
         } catch (Exception e) {
             LOGGER.error("查询秘籍列表信息异常：{}", e);
             throw new ServiceException(6180);

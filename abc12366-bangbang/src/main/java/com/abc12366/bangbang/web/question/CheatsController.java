@@ -3,6 +3,7 @@ package com.abc12366.bangbang.web.question;
 import com.abc12366.bangbang.mapper.db2.CheatsTagRoMapper;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.CheatsTagBo;
+import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
 import com.abc12366.bangbang.service.CheatsService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -90,6 +91,44 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectListRecommend(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 查询推荐阅读(标题)
+     */
+    @GetMapping(path = "/selectListRecommendTitle")
+    public ResponseEntity selectListRecommendTitle(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                              @RequestParam(value = "title", required = false) String title,
+                                              @RequestParam(value = "tag", required = false) String tag,
+                                              @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//s
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CheatstjydBo> dataList = cheatsService.selectListRecommendTitle(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 查询你可能感兴趣的文章(标题)
+     */
+    @GetMapping(path = "/selectListByTag")
+    public ResponseEntity selectListByTag(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                                   @RequestParam(value = "title", required = false) String title,
+                                                   @RequestParam(value = "tag", required = false) String tag,
+                                                   @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//s
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<CheatstjydBo> dataList = cheatsService.selectListByTag(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
