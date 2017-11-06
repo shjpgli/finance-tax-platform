@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	userId,	title,	describe,	detail,	status,	createTime,	lastUpdate,	classifyCode,	browseNum,likeNum,trampleNum,	isRecommend,	recommendTime,	tag,	ip,	factionId,	commentNum,	collectNum,	reportNum
+		 id,	userId,	title,	describ,	detail,	status,	createTime,	lastUpdate,	classifyCode,	browseNum,likeNum,trampleNum,	isRecommend,	recommendTime,	tag,	ip,	factionId,	commentNum,	collectNum,	reportNum
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -19,7 +19,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.CheatsBo" parameterType="java.util.Map">
         SELECT
-        c.id,	c.userId,	title,	c.describe,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,
+        c.id,	c.userId,	title,	c.describ,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,
         browseNum,likeNum,trampleNum,	isRecommend,	recommendTime,	tag,	ip,	factionId,	commentNum,	collectNum,	reportNum,
         u.nickname,u.userPicturePath
         FROM bb_cheats c left join bb_user u on c.userId = u.id
@@ -39,7 +39,7 @@
     <!-- 查询（热门问题） -->
     <select id="selectListByBrowseNum" resultType="com.abc12366.bangbang.model.question.bo.CheatsBo" parameterType="java.util.Map">
         SELECT
-        c.id,	c.userId,	title,	c.describe,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,	browseNum,
+        c.id,	c.userId,	title,	c.describ,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,	browseNum,
         likeNum,trampleNum,	isRecommend,	recommendTime,	tag,	ip,	factionId,	commentNum,	collectNum,	reportNum,
         u.nickname,u.userPicturePath
         FROM bb_cheats c left join bb_user u on c.userId = u.id
@@ -59,7 +59,7 @@
     <!-- 查询（推荐问题） -->
     <select id="selectListRecommend" resultType="com.abc12366.bangbang.model.question.bo.CheatsBo" parameterType="java.util.Map">
         SELECT
-        c.id,	c.userId,	title,	c.describe,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,	browseNum,
+        c.id,	c.userId,	title,	c.describ,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,	browseNum,
         likeNum,trampleNum,	isRecommend,	recommendTime,	tag,	ip,	factionId,	commentNum,	collectNum,	reportNum,
         u.nickname,u.userPicturePath
         FROM bb_cheats c left join bb_user u on c.userId = u.id
@@ -97,7 +97,7 @@
     <!-- 我的文章 -->
     <select id="selectMyCheatsList" resultType="com.abc12366.bangbang.model.question.bo.CheatsBo" parameterType="java.util.Map">
         SELECT
-        c.id,	c.userId,	title,	c.describe,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,	browseNum,
+        c.id,	c.userId,	title,	c.describ,	detail,	c.status,	c.createTime,	c.lastUpdate,	classifyCode,	browseNum,
         likeNum,trampleNum,	isRecommend,	recommendTime,	tag,	ip,	factionId,	commentNum,	collectNum,	reportNum,
         (SELECT count(id) FROM abc12366_bangbang.bb_question_tip_off where sourceId = c.id and sourceType = 'cheats' and createUser = c.userId) isTip
         FROM bb_cheats c left join bb_user u on c.userId = u.id

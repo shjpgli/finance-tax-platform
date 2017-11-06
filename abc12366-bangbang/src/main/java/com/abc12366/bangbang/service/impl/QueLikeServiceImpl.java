@@ -58,9 +58,10 @@ public class QueLikeServiceImpl implements QueLikeService {
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+//        String userId = UcUserCommon.getUserId(request);
+        String userId = "11";
 
-        QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
+                QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
         int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
