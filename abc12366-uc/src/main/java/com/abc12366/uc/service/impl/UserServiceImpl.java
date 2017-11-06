@@ -359,7 +359,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void automaticUserCancel() {
         List<User> userList = userRoMapper.selectUserVipList(new Date());
+        LOGGER.info("VIP到期，自动取消", userList);
         for (User user : userList) {
+            LOGGER.info("VIP到期，取消用户",user);
             // 更新会员状态
             user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
             user.setLastUpdate(new Date());
