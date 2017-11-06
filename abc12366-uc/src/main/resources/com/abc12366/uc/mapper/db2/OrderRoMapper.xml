@@ -747,7 +747,7 @@
             </if>
         </where>
 
-        order by o.lastUpdate desc
+        order by o.createTime desc
 
     </select>
 
