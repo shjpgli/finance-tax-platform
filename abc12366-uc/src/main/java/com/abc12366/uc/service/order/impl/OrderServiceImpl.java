@@ -667,6 +667,10 @@ public class OrderServiceImpl implements OrderService {
                             updOrder(order);
                             insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
+                            if(!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())){
+                                LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}",orderBO.getOrderStatus());
+                                throw new ServiceException(4925);
+                            }
                             //判断是否需要查询产品库存信息
                             setTodoTask(orderBO);
                             if (trading.equals("UCSC")) {
