@@ -43,7 +43,7 @@
         likeNum,trampleNum,	isRecommend,	recommendTime,	tag,	ip,	factionId,	commentNum,	collectNum,	reportNum,
         u.nickname,u.userPicturePath
         FROM bb_cheats c left join bb_user u on c.userId = u.id
-        WHERE c.status = '0' and isRecommend = '1'
+        WHERE c.status = '0'
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
         </if>
