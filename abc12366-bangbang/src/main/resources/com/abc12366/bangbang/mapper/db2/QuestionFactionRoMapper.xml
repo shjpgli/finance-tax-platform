@@ -165,4 +165,18 @@
             AND a.status = '0' AND factionId = #{factionId} and commentNum >2 and likeNum >6
     </select>
 
+    <!-- 查询邦派名称是否存在 -->
+    <select id="selectFactionNameCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM bb_question_faction
+        WHERE 1=1
+        <if test="factionName != null and factionName != ''">
+            factionName = #{factionName}
+        </if>
+        <if test="factionId != null and factionId != ''">
+            factionId != #{factionId}
+        </if>
+    </select>
+
 </mapper>

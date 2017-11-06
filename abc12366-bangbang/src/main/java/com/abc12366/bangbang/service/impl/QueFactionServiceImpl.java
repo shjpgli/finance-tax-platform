@@ -151,6 +151,14 @@ public class QueFactionServiceImpl implements QueFactionService {
         questionFactionBo.setAwardPoint(0);//初始奖励积分为0
         BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap1.put("factionName", questionFactionBo.getFactionName());
+        int factionNameCnt = questionFactionRoMapper.selectFactionNameCnt(dataMap1);
+        if(factionNameCnt > 0){
+            //邦派名称已存在
+            throw new ServiceException(6127);
+        }
+
         int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
 
         UCUserBO userBo = UcUserCommon.getUserInfo();
@@ -281,7 +289,13 @@ public class QueFactionServiceImpl implements QueFactionService {
             questionFactionBo.setUpdateTime(new Date());
             BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
-
+            Map<String, Object> dataMap1 = new HashMap<>();
+            dataMap1.put("factionName", questionFactionBo.getFactionName());
+            int factionNameCnt = questionFactionRoMapper.selectFactionNameCnt(dataMap1);
+            if(factionNameCnt > 0){
+                //邦派名称已存在
+                throw new ServiceException(6127);
+            }
 
             tagMapper.deleteByPrimaryKey(questionFactionBo.getFactionId());
 
