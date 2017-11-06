@@ -37,6 +37,9 @@ public class QuestionFactionMember implements Serializable {
     /**职务**varchar(64)**/
     private String duty;
 
+    /**等级**varchar(64)**/
+    private String memberGrade;
+
 
 
 	public void setMemberId(String memberId){
@@ -110,5 +113,13 @@ public class QuestionFactionMember implements Serializable {
 
     public void setDuty(String duty) {
         this.duty = duty;
+    }
+
+    public String getMemberGrade() {
+        return memberGrade;
+    }
+
+    public void setMemberGrade(String memberGrade) {
+        this.memberGrade = memberGrade;
     }
 }

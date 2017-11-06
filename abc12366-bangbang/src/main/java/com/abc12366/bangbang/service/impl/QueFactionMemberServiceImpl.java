@@ -117,7 +117,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
             LOGGER.info("更新邦派成员信息:{}", jsonStu.toString());
             factionMemberBo.setLastUpdate(new Date());
-            factionMemberBo.setDuty("B1");
+            //factionMemberBo.setDuty("B1");
+            factionMemberBo.setMemberGrade("B1");
             BeanUtils.copyProperties(factionMemberBo, factionMember);
             memberMapper.updateByPrimaryKeySelective(factionMember);
         } catch (Exception e) {
