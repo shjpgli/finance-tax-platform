@@ -59,7 +59,6 @@ public class QueLikeServiceImpl implements QueLikeService {
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
-//        String userId = "11";
 
                 QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
