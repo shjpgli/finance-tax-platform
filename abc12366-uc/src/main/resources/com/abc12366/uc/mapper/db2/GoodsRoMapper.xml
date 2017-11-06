@@ -71,7 +71,7 @@
             <if test="tradeMethod != null  and tradeMethod!=''">AND g.tradeMethod = #{tradeMethod}</if>
             <if test="goodsType != null  and goodsType!=''">AND g.goodsType = #{goodsType}</if>
         </where>
-        order by g.lastUpdate DESC,g.sort DESC
+        order by g.lastUpdate DESC
     </select>
 
     <resultMap id="goodsBoMap" type="com.abc12366.uc.model.bo.GoodsBO">
