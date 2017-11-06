@@ -291,6 +291,7 @@ public class QueFactionServiceImpl implements QueFactionService {
 
             Map<String, Object> dataMap1 = new HashMap<>();
             dataMap1.put("factionName", questionFactionBo.getFactionName());
+            dataMap1.put("factionId", questionFactionBo.getFactionId());
             int factionNameCnt = questionFactionRoMapper.selectFactionNameCnt(dataMap1);
             if(factionNameCnt > 0){
                 //邦派名称已存在
