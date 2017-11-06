@@ -1,18 +1,22 @@
 package com.abc12366.uc.model.weixin.bo.message;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
+/**
+ * 微信图文消息
+ * @author zhushuai 2017-11-6
+ *
+ */
 public class Article {
     @NotEmpty
-    private String newsId;
+    private String newsId;//图文ID
     @NotEmpty
-    private String title;
+    private String title;//图文标题
     @NotEmpty
-    private String description;
+    private String description;//描述
     @NotEmpty
-    private String picUrl;
+    private String picUrl;//图片地址
     @NotEmpty
-    private String url;
+    private String url;//地址
 
     public String getNewsId() {
         return newsId;
