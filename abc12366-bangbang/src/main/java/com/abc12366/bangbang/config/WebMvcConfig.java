@@ -151,7 +151,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //查询热议标签
                 .excludePathPatterns("/cheats/selectTagList")
                         //查询单个秘籍信息
-                .excludePathPatterns("/selectCheats/**")
+                .excludePathPatterns("/cheats/selectCheats/**")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",
