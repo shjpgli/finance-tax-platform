@@ -18,6 +18,7 @@ import com.abc12366.gateway.util.UCConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -323,5 +324,14 @@ public class CheckServiceImpl implements CheckService {
         a.roll(Calendar.DATE, -1);
         int maxDate = a.get(Calendar.DATE);
         return maxDate;
+    }
+
+    @Override
+    public int checkTotal(String userId, String year) {
+        if (StringUtils.isEmpty(year)) {
+            year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        }
+        Integer total = checkRoMapper.checkTotal(userId, year);
+        return total == null ? 0 : total;
     }
 }
