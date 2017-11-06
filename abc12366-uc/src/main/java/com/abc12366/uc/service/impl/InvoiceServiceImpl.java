@@ -431,7 +431,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setBusinessId(invoiceTemp.getId());
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            message.setContent(MessageConstant.IMPORT_COURIER_INFO+expressComp.getCompName()+"+"+invoiceTemp.getWaybillNum() +MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.IMPORT_COURIER_INFO+expressComp.getCompName()+"+"+expressExcel.getWaybillNum() +MessageConstant.SUFFIX);
             message.setUserId(invoiceTemp.getUserId());
             messageSendUtil.sendMessage(message,request);
 

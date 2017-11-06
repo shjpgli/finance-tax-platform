@@ -9,7 +9,7 @@ import java.util.Map;
 public class MsgMap {
     public static final Map<String, Integer> msgmapping = new HashMap<String, Integer>() {
         /**
-         *
+         *消息类型
          */
         private static final long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public class MsgMap {
     };
     public static final Map<String, Integer> eventmapping = new HashMap<String, Integer>() {
         /**
-         *
+         *消息事件类型
          */
         private static final long serialVersionUID = 1L;
 
@@ -42,11 +42,11 @@ public class MsgMap {
 
     public MsgMap() {
     }
-
+    //获取消息类型
     public static int getMsgType(String key) {
         return ((Integer) (msgmapping.get(key)==null?100:msgmapping.get(key))).intValue();
     }
-
+    //获取消息事件类型
     public static int getEventType(String key) {
         return ((Integer) (eventmapping.get(key)==null?100:eventmapping.get(key))).intValue();
     }

@@ -291,6 +291,11 @@ public class ReportDateJob implements Job {
         return dates.before(calendar.getTime());
     }
 
+    /**
+     * 格式化时间
+     * @param date
+     * @return
+     */
     public String getFormat(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

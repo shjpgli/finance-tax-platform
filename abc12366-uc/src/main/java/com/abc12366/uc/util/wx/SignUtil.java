@@ -20,7 +20,13 @@ import java.util.*;
 public class SignUtil {
     private static String charge = "false";
 
-
+    /**
+     * 签名校验
+     * @param signature  签名
+     * @param timestamp 时间戳
+     * @param nonce 随机码
+     * @return
+     */
     public static boolean checkSignature(String signature, String timestamp,
                                          String nonce) {
         String[] arr = new String[]{WxGzhClient.getInstance().getTokenStr(), timestamp, nonce};
@@ -156,10 +162,12 @@ public class SignUtil {
         }
     }
 
+    //获取UUID
     private static String create_nonce_str() {
         return UUID.randomUUID().toString();
     }
 
+    //获取时间
     private static String create_timestamp() {
         return Long.toString(System.currentTimeMillis() / 1000);
     }

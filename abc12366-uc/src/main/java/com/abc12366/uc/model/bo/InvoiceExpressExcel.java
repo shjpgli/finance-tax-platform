@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 
@@ -47,6 +49,7 @@ public class InvoiceExpressExcel implements Serializable {
     /**
      * 运单号
      */
+    @NotEmpty
     private String waybillNum;
 
     public String getReceivingCompany() {

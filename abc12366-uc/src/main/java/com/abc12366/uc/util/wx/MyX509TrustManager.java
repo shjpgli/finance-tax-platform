@@ -5,6 +5,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
+ * https请求信任
  * @author zhushuai 2017-7-27
  */
 public class MyX509TrustManager implements X509TrustManager {

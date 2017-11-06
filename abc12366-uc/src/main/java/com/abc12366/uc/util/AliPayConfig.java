@@ -8,7 +8,11 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 
 import java.util.Map;
-
+/**
+ * 支付宝吃实话参数
+ * @author zhushuai 2017-11-6
+ *
+ */
 public class AliPayConfig {
 	
 	private static AlipayClient alipayClient=null;

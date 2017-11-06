@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * 微信商户连接
+ * 微信商户连接工程
  */
 public class WxMchConnectFactory {
 
