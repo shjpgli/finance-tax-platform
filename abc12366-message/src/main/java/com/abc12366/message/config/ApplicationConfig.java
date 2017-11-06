@@ -34,17 +34,40 @@ public class ApplicationConfig {
 
 	//电子税局地址
     @Value("${dzsj.soa.url}")
-    public String dzsjUrl;
+    private String dzsjUrl;
 
     //电子税局APPID
     @Value("${dzsj.soa.appId}")
-    public String appId;
+    private String appId;
 
     //电子税局密码
     @Value("${dzsj.soa.secret}")
-    public String secret;
+    private String secret;
     
-    public String getDzsjUrl() {
+    //湖南国税地税地址
+    @Value("${hnds.url}")
+    private String hndsUrl;
+    
+    @Value("${hnds.key}")
+    private String hndsKey;
+    
+    public String getHndsKey() {
+		return hndsKey;
+	}
+
+	public void setHndsKey(String hndsKey) {
+		this.hndsKey = hndsKey;
+	}
+
+	public String getHndsUrl() {
+		return hndsUrl;
+	}
+
+	public void setHndsUrl(String hndsUrl) {
+		this.hndsUrl = hndsUrl;
+	}
+
+	public String getDzsjUrl() {
 		return dzsjUrl;
 	}
 

@@ -188,6 +188,7 @@ redis常用命令：
 
 在工程根目录执行：
 > mvn install:install-file -DgroupId=com.alipay -DartifactId=alipay-sdk -Dversion=20170324180803 -Dpackaging=jar -Dfile=alipay-sdk-java20170324180803.jar
+  mvn install:install-file -DgroupId=hnds -DartifactId=hnds-security -Dversion=1.0 -Dpackaging=jar -Dfile=hnds-security.jar
 
 ### 接口规范
 
