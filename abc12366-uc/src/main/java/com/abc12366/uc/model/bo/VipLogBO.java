@@ -66,4 +66,16 @@ public class VipLogBO {
     public void setVipExpireDate(Date vipExpireDate) {
         this.vipExpireDate = vipExpireDate;
     }
+
+    @Override
+    public String toString() {
+        return "VipLogBO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", source='" + source + '\'' +
+                ", levelId='" + levelId + '\'' +
+                ", createTime=" + createTime +
+                ", vipExpireDate=" + vipExpireDate +
+                '}';
+    }
 }

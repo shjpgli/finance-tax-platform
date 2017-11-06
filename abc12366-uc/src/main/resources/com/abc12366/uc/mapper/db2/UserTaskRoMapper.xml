@@ -44,29 +44,25 @@
 
     <select id="selectMyTaskSurvey" parameterType="java.lang.String" resultType="com.abc12366.uc.model.MyTaskSurvey">
 
-        SELECT
-        (SELECT SUM(uutt.award)
-        FROM uc_user_task_todo uutt
-        WHERE uutt.userId=#{userId}
-        AND uutt.status=1
-        AND uutt.awardType='0'
+               SELECT
+        (SELECT SUM(uul.income)
+        FROM uc_uexp_log uul
+        WHERE uul.userId=#{userId}
         <![CDATA[
-                AND uutt.createTime >=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
+                AND uul.createTime >=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
         ]]>
         <![CDATA[
-                AND uutt.createTime < (SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
+                AND uul.createTime < (SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
         ]]>
         ) earnedExp,
-        (SELECT SUM(uutt.award)
-        FROM uc_user_task_todo uutt
-        WHERE uutt.userId=#{userId}
-        AND uutt.status=1
-        AND uutt.awardType='1'
+        (SELECT SUM(upl.income)
+        FROM uc_upoints_log upl
+        WHERE upl.userId=#{userId}
         <![CDATA[
-                AND uutt.createTime >=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
+                AND upl.createTime >=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
         ]]>
         <![CDATA[
-                AND uutt.createTime < (SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
+                AND upl.createTime < (SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
         ]]>
         )earnedPoint,
         (SELECT COUNT(1)

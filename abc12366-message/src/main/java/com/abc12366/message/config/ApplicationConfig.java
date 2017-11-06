@@ -29,6 +29,44 @@ public class ApplicationConfig {
     private String contentType;
     @Value("${message.netease.charset}")
     private String charset;
+    
+    
+
+	//电子税局地址
+    @Value("${dzsj.soa.url}")
+    public String dzsjUrl;
+
+    //电子税局APPID
+    @Value("${dzsj.soa.appId}")
+    public String appId;
+
+    //电子税局密码
+    @Value("${dzsj.soa.secret}")
+    public String secret;
+    
+    public String getDzsjUrl() {
+		return dzsjUrl;
+	}
+
+	public void setDzsjUrl(String dzsjUrl) {
+		this.dzsjUrl = dzsjUrl;
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
 
     public String getBootstrap_servers() {
         return bootstrap_servers;
