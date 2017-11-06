@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * wechat
+ * wechat调用工长
  *
  * @param <T>
  * @author zhushuai 2017-7-27
@@ -28,14 +28,14 @@ public class WxConnect<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(WxConnect.class);
 
     protected Class<T> _class;
-    private String requestUrl;
-    private WechatUrl wechatUrl;
-    private String requestMethod;
-    private String outputStr = null;
-    private String jsonStr;
-    private Map<String, String> headparamters;
-    private Object bodyparamters;
-    private FileContent file;
+    private String requestUrl; //请求地址
+    private WechatUrl wechatUrl; //具体地址
+    private String requestMethod; //类型
+    private String outputStr = null; //输出
+    private String jsonStr; //输入
+    private Map<String, String> headparamters; //参数
+    private Object bodyparamters; //body参数
+    private FileContent file; //文件
 
     public WxConnect(WechatUrl url, String requestMethod, Map<String, String> headparamters, Object bodyparamters,
                      Class<T> _class) {
@@ -60,6 +60,11 @@ public class WxConnect<T> {
         this.requestUrl = SpringCtxHolder.getProperty("abc.wx-url") + wechatUrl.uri;
     }
 
+    /**
+     * list专数组
+     * @param list
+     * @return
+     */
     public static byte[] listToByteArray(List<Byte> list) {
         byte[] bytes = new byte[list.size()];
         for (int i = 0; i < list.size(); i++) {
@@ -69,7 +74,9 @@ public class WxConnect<T> {
     }
 
 
-
+    /**
+     * 初始化数据
+     */
     public void initJson() {
         try {
             if (headparamters != null) {
@@ -96,6 +103,9 @@ public class WxConnect<T> {
         }
     }
 
+    /**
+     * 文件上传下载请求
+     */
     public void httpPostFile() {
         HttpsURLConnection conn = null;
         InputStreamReader inputStreamReader = null;
@@ -171,6 +181,9 @@ public class WxConnect<T> {
         }
     }
 
+    /**
+     * 发送请求
+     */
     public void httpsRequest() {
         HttpsURLConnection conn = null;
         BufferedReader buffferedReader = null;
@@ -233,6 +246,10 @@ public class WxConnect<T> {
         }
     }
     
+    /**
+     * 获取下载文件
+     * @return
+     */
     public InputStream getWxFile(){
     	try {
     		TrustManager[] tm = {new MyX509TrustManager()};

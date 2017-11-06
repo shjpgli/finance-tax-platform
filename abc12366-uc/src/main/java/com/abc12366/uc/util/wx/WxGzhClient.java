@@ -11,13 +11,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * 微信客户端
+ * @author zhushuai 2017-11-6
+ *
+ */
 @Component
 public class WxGzhClient {
     private static IWxGzhService iWxGzhService;
     // token获取失败，重复获取次数
     private static GzhInfo gzhInfo = null;
-    
+    /**
+     * 初始化参数
+     * @return
+     */
     public static GzhInfo getInstance(){    
         if (gzhInfo == null){
            synchronized(WxGzhClient.class){
@@ -28,7 +35,10 @@ public class WxGzhClient {
         }
         return gzhInfo;
 	}
-    
+    /**
+     * 获取当前token
+     * @return
+     */
     public static String getInstanceToken(){
     	String id=getInstance().getId();
     	GzhInfo temp=iWxGzhService.selectOne(id);
@@ -49,6 +59,10 @@ public class WxGzhClient {
     	return temp.getUserToken();
     }
     
+    /**
+     * 获取当前JS token
+     * @return
+     */
     public static String getInstanceJstiket(){
     	String id=getInstance().getId();
     	GzhInfo temp=iWxGzhService.selectOne(id);
@@ -69,7 +83,11 @@ public class WxGzhClient {
     	return temp.getJsapi_ticket();
     }
     
-    
+    /**
+     * 是否在某个时间之前
+     * @param date
+     * @return
+     */
     private static boolean isBefore(Date date){
     	Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
