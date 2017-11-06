@@ -233,7 +233,9 @@ public class CheatsServiceImpl implements CheatsService {
             //查询问题信息
             cheatsBo = cheatsRoMapper.selectCheats(id);
             List<CheatsTag> tagList = tagRoMapper.selectList(id);
-            cheatsBo.setTagList(tagList);
+            if(tagList != null){
+                cheatsBo.setTagList(tagList);
+            }
         } catch (Exception e) {
             LOGGER.error("查询单个秘籍信息异常：{}", e);
             throw new ServiceException(6181);
