@@ -919,7 +919,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderListBO> selectExprotOrder(Order order) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
-        List<OrderBO> orderDataList = orderRoMapper.selectExprotOrder(order);
+        List<OrderBO> orderDataList = new ArrayList<>();
+        orderDataList.addAll(orderBOList);
         List<OrderListBO> orderListBOList = new ArrayList<>();
 
         for (OrderBO bo : orderBOList) {

@@ -1,6 +1,7 @@
 package com.abc12366.uc.model.bo;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -25,6 +26,10 @@ public class InvoiceCheckBO implements Serializable {
 	/**发票详情ID**/
 	private String detailId;
 
+	/**
+	 * 备注
+	 */
+	@Size(min = 0,max = 2000)
 	private String remark;
 
 	public Boolean getIsBilling() {

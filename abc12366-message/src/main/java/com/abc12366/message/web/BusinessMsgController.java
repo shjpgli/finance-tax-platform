@@ -33,7 +33,7 @@ public class BusinessMsgController {
     @Autowired
     private BusinessMsgService businessMsgService;
 
-    /**
+    /**BusinessCBusinessC
      * 获取当前用户业务消息列表
      *
      * @param type     消息类型
