@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.VipLogMapper;
 import com.abc12366.uc.mapper.db2.VipLogRoMapper;
@@ -48,10 +49,17 @@ public class VipLogServiceImpl implements VipLogService {
         BeanUtils.copyProperties(vipLogBO, vipLog);
         vipLog.setId(Utils.uuid());
         vipLog.setCreateTime(new Date());
-        //会员到期时间为创建时间加一年
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(vipLog.getCreateTime());
-        calendar.add(Calendar.YEAR, 1);
+
+        if (Constant.USER_ORIGINAL_LEVEL.equalsIgnoreCase(vipLog.getLevelId())) {
+            // 普通用户到期时间为创建时间加10年
+            calendar.add(Calendar.YEAR, 10);
+        } else {
+            // 会员到期时间为创建时间加一年
+            calendar.add(Calendar.YEAR, 1);
+        }
         vipLog.setVipExpireDate(calendar.getTime());
         int result = vipLogMapper.insert(vipLog);
         if (result != 1) {
