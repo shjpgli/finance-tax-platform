@@ -226,7 +226,9 @@ private  boolean luckDo(LotteryActivityBO lottery){
         //库存 记日志
         //明天测试
         LotteryBO lottery = null;
-        if (obj == null || !luckDo(lotteryActivityBO)) {
+        Random ra = new Random(System.currentTimeMillis());
+        int tmpRa = ra.nextInt(100);
+        if (tmpRa<50 || obj == null || !luckDo(lotteryActivityBO)) {//即使时间到了 也有百分之50的几率 不中奖
             remake = "未抽中";
         } else {
              lottery =lotteryService.selectOne(obj.getLotteryId());
