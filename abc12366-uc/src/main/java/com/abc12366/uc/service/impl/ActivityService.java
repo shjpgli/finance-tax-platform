@@ -203,7 +203,7 @@ public class ActivityService implements IActivityService {
         List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim().toLowerCase());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
-            throw new ServiceException(6005);
+            throw new ServiceException(6003);
         }
         // 取第一条记录
         WxRedEnvelop redEnvelop = dataList.get(0);
