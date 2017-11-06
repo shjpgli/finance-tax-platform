@@ -25,7 +25,7 @@ import com.hnds.security.HndsSecurityUtils;
  * @author zhushuai 2017-11-6
  *
  */
-@Controller()
+@Controller
 @RequestMapping(path = "/wsbs", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class WsbsController {
 	

@@ -33,7 +33,7 @@ import com.abc12366.message.model.bo.Result;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-@Controller()
+@Controller
 @RequestMapping(path = "/dzsb", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class DzsbController {
 	
