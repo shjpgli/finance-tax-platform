@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.springframework.util.StringUtils;
 
+import com.abc12366.message.util.MD5;
+
 
 import sun.misc.BASE64Encoder;
 
@@ -13,7 +15,7 @@ import sun.misc.BASE64Encoder;
  * @author zhushuai 2017-11-6
  * 
  */
-public class WsbsLoginBo implements Serializable {
+public class HndsLoginBo implements Serializable {
 	/**
 	 * 
 	 */
@@ -28,6 +30,8 @@ public class WsbsLoginBo implements Serializable {
 	private String mm;
 	// Taxtype为1时有用，为国税网厅的角色ID，当Taxtype为1时不允许为空
 	private String roleid;
+	//用户ID
+	private String userId;
 
 	public String getTaxtype() {
 		return taxtype;
@@ -73,6 +77,11 @@ public class WsbsLoginBo implements Serializable {
 		return new BASE64Encoder().encode(this.mm.toUpperCase().getBytes());
 	}
 
+	/**
+	 * 拼接地址
+	 * @param urlfix 地址前缀
+	 * @return
+	 */
 	public String toLoginStr(String urlfix) {
 		StringBuffer url = new StringBuffer(urlfix);
 		url.append("&taxtype=" + this.taxtype);
@@ -85,5 +94,17 @@ public class WsbsLoginBo implements Serializable {
 			url.append("&roleid=" + this.roleid);
 		}
 		return url.toString();
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(new MD5("111111").compute());
 	}
 }
