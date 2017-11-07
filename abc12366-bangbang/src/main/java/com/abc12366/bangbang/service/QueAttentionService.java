@@ -20,4 +20,6 @@ public interface QueAttentionService {
 
     String selectExist(String id, HttpServletRequest request);
 
+    String updateIsRead(String id);
+
 }

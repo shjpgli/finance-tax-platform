@@ -44,6 +44,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
         attention.setAttentionId(uuid);
         attention.setAttentionUserId(id);
         attention.setAttentionTime(new Date());
+        attention.setIsRead(0);
 
         Map map = MapUtil.kv("attentionUserId", id, "userId", userId);
         int cnt =  attentionRoMapper.selectExist(map);
@@ -93,6 +94,18 @@ public class QueAttentionServiceImpl implements QueAttentionService {
         Map map = MapUtil.kv("attentionUserId", id, "userId", userId);
         String cnt = attentionRoMapper.selectExist(map)+"";
         return cnt;
+    }
+
+    @Override
+    public String updateIsRead(String id) {
+        //更新为已读
+        try {
+            attentionMapper.updateIsRead(id);
+        } catch (Exception e) {
+            LOGGER.error("更新粉丝为已读异常：{}", e);
+            throw new ServiceException(6119);
+        }
+        return "";
     }
 
 }

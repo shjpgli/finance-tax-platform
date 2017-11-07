@@ -196,7 +196,7 @@
 		UPDATE bb_question_answer SET reportNum = reportNum + 1, status ='3' WHERE id = #{id}
 	</update>
 
-    <!-- 修 改 举报数-->
+    <!-- 修 改 为已读-->
     <update id="updateIsRead" parameterType="java.lang.String">
         UPDATE bb_question_answer SET isRead = 1 WHERE id = #{id}
     </update>
