@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -62,6 +63,12 @@ public class SysTaskServiceImpl implements SysTaskService {
             LOGGER.warn("新增失败，参数为：" + null);
             throw new ServiceException(4101);
         }
+        //系统任务编码唯一性校验
+        List<SysTaskBO> codeList = sysTaskRoMapper.selectListByCode(sysTaskInsertBO.getCode());
+        if (codeList != null && codeList.size() > 0) {
+            throw new ServiceException(4714);
+        }
+
         //任务名称唯一性校验逻辑
         List<SysTaskBO> sysTaskBOList = sysTaskRoMapper.selectList(null);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
@@ -99,6 +106,13 @@ public class SysTaskServiceImpl implements SysTaskService {
         if (sysTaskUpdateBO == null) {
             LOGGER.warn("修改失败，参数为：" + null);
             throw new ServiceException(4102);
+        }
+        //系统任务编码唯一性校验
+        if(StringUtils.isEmpty(sysTaskUpdateBO.getCode())){
+            List<SysTaskBO> codeList = sysTaskRoMapper.selectListByCode(sysTaskUpdateBO.getCode());
+            if (codeList != null && codeList.size() > 0) {
+                throw new ServiceException(4714);
+            }
         }
 
         //任务名称唯一性校验逻辑
