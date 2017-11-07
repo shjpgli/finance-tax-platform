@@ -847,7 +847,7 @@ public class OrderServiceImpl implements OrderService {
         if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                 || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                 && StringUtils.isNotEmpty(user.getPhone())) {
-            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
         }
     }
 
@@ -874,7 +874,7 @@ public class OrderServiceImpl implements OrderService {
         if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                 || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                 && StringUtils.isNotEmpty(user.getPhone())) {
-            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
         }
     }
 
@@ -1069,28 +1069,27 @@ public class OrderServiceImpl implements OrderService {
 
             User user = userRoMapper.selectOne(order.getUserId());
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 1
                 //发送微信消息
-//                Template info = new Template();
-//                info.setTemplate_id("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g");
-//                info.setContent("{{first.DATA}}\n\n 申报税种：{{keyword1.DATA}}\n 所属期：{{keyword2.DATA}}\n " +
-//                        "申报期限：{{keyword3.DATA}}\n {{remark.DATA}}");
-//                Map<String, String> dataList = new HashMap<String, String>();
-//                dataList.put("openId", user.getWxopenid());
-//                dataList.put("first", "财税专家会员提醒，本月纳税申报可申报的报表种类如下：");
-//                dataList.put("remark", "实际申报种类以税务局核定信息为准，请您在申报期限内及时进行申报缴税！");
-//                dataList.put("keyword1", "增值税、消费税、所得税、财务报表");
-//                dataList.put("keyword1Color", "#00DB00");
-//                /*dataList.put("keyword2", pmonthF + "至" + pmonthL);
-//                dataList.put("keyword2Color", "#00DB00");
-//                dataList.put("keyword3", shenqqix);*/
-//                dataList.put("keyword3Color", "#00DB00");
-//                dataList.put("url", SpringCtxHolder.getProperty("mbxx.sbqx.url"));
-//                templateService.templateSend(info.toSendJson(dataList));
-            }else{
+                Map<String, String> dataList = new HashMap<String, String>();
+                dataList.put("userId", user.getId());
+                dataList.put("openId", user.getWxopenid());
+                dataList.put("first", "你有新的订单提醒：");
+                dataList.put("remark", "详情请登录财税平台查看。");
+                dataList.put("keyword1", order.getOrderNo());
+                dataList.put("keyword2", UserUtil.getAdminInfo().getNickname());
+                dataList.put("keyword3", DataUtils.dateToStr(new Date()));
+                templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
+            } else {
                 //发送短信
+                String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", user
+                        .getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", DataUtils.getFormatDate(user.getVipExpireDate()));
+                Map<String, String> maps = new HashMap<String, String>();
+                maps.put("var", vdxMsg);
+                List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+                list.add(maps);
+
                 String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-                messageSendUtil.sendPhoneMessage(user.getPhone(), content, accessToken);
+                messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
             }
         }
     }
@@ -1150,7 +1149,7 @@ public class OrderServiceImpl implements OrderService {
         if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                 || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                 && StringUtils.isNotEmpty(user.getPhone())) {
-            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
         }
 
     }
