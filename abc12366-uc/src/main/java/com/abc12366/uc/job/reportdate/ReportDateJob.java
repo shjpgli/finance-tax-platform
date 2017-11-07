@@ -4,7 +4,6 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.weixin.bo.template.Template;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.MessageConstant;
@@ -83,6 +82,10 @@ public class ReportDateJob implements Job {
         Calendar cale = Calendar.getInstance();
         cale.set(Calendar.DAY_OF_MONTH, 0);
         pmonthL = format.format(cale.getTime());
+        
+        //获取运营管理系统accessToken
+        accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
         LOGGER.info("电子税局获取办税期限..............");
         HttpHeaders headers = new HttpHeaders();
@@ -125,9 +128,7 @@ public class ReportDateJob implements Job {
             LOGGER.info("电子税局登录异常..............");
         }
 
-        //获取运营管理系统accessToken
-        accessToken = appService.selectByName("abc12366-admin").getAccessToken();
-        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
+        
 
         int userTotal = userService.getAllNomalCont();
         int threadNum = (int) Math.ceil((float) userTotal / SPLIT_NUM);
@@ -227,7 +228,12 @@ public class ReportDateJob implements Job {
                         String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO
 								.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
 								()));
-                        messageSendUtil.sendPhoneMessage(userBO.getPhone(), vdxMsg, accessToken);
+                        Map<String,String> maps=new HashMap<String,String>();
+                        maps.put("var", vdxMsg);
+                        List<Map<String,String>> list= new ArrayList<Map<String,String>>();
+                        list.add(maps);
+                        
+                        messageSendUtil.sendPhoneMessage(userBO.getPhone(),"529", list, accessToken);
                     }
                 }
 
@@ -262,8 +268,14 @@ public class ReportDateJob implements Job {
                 if (("VIP3".equalsIgnoreCase(userBO.getVipLevel())
                         || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
                         && StringUtils.isNotEmpty(userBO.getPhone())) {
+                	
                     String vdxMsg = MessageConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
-                    messageSendUtil.sendPhoneMessage(userBO.getPhone(), vdxMsg, accessToken);
+                    Map<String,String> maps=new HashMap<String,String>();
+                    maps.put("var", vdxMsg);
+                    List<Map<String,String>> list= new ArrayList<Map<String,String>>();
+                    list.add(maps);
+                    
+                    messageSendUtil.sendPhoneMessage(userBO.getPhone(),"529", list, accessToken);
                 }
             }
             return 1;
