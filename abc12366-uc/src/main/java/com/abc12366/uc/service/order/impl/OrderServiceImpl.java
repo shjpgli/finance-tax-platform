@@ -1134,7 +1134,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+        List<OrderBO> oList = orderRoMapper.selectOrderListByInvoice(order);
         return oList;
     }
 

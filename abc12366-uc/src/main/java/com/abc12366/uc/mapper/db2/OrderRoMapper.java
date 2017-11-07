@@ -86,4 +86,11 @@ public interface OrderRoMapper {
      * @return
      */
     OrderBO selectOrderByAdmin(Order order);
+
+    /**
+     * 用户所有订单查询,未开票和已开票的订单
+     * @param order
+     * @return
+     */
+    List<OrderBO> selectOrderListByInvoice(OrderBO order);
 }
