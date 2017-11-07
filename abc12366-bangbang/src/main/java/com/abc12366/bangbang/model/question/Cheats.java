@@ -20,7 +20,7 @@ public class Cheats implements Serializable {
 	private String title;
 
 	/**描述**varchar(500)**/
-	private String describe;
+	private String describ;
 
 	/**内容详情**longtext**/
 	private String detail;
@@ -96,12 +96,12 @@ public class Cheats implements Serializable {
 		return this.title;
 	}
 
-	public void setDescribe(String describe){
-		this.describe = describe;
+	public void setDescrib(String describ){
+		this.describ = describ;
 	}
 
-	public String getDescribe(){
-		return this.describe;
+	public String getDescrib(){
+		return this.describ;
 	}
 
 	public void setDetail(String detail){

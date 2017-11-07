@@ -8,13 +8,13 @@ public class WxJsConfig implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-    private String appId;
-    private String timestamp;
-    private String nonceStr;
-    private String signature;
-    private String url;
-    private String charge;
-    
+    private String appId;//APP表示
+    private String timestamp;//时间戳
+    private String nonceStr; //加密串
+    private String signature; //签名
+    private String url; //地址
+    private String charge; //是否获取缓存
+     
     public WxJsConfig(){
     	
     }

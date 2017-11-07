@@ -17,9 +17,9 @@ public class WxNews extends BaseWxRespon {
      */
     private static final long serialVersionUID = 1L;
     @NotNull
-    private List<WxArticle> articles;
+    private List<WxArticle> articles; //图文列表
 
-    private String media_id;
+    private String media_id; //素材ID
 
     public List<WxArticle> getArticles() {
         return articles;

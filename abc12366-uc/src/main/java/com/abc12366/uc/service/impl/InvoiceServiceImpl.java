@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -395,7 +394,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional("db1TxManager")
     @Override
-    public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId) {
+    public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId, HttpServletRequest request) {
         for (InvoiceExpressExcel expressExcel:expressExcelList){
             Invoice invoice = new Invoice();
             invoice.setStatus("4");
@@ -432,9 +431,9 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setBusinessId(invoiceTemp.getId());
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            message.setContent(MessageConstant.IMPORT_COURIER_INFO+expressComp.getCompName()+"+"+invoiceTemp.getWaybillNum() +MessageConstant.SUFFIX);
+            message.setContent(MessageConstant.IMPORT_COURIER_INFO+expressComp.getCompName()+"+"+expressExcel.getWaybillNum() +MessageConstant.SUFFIX);
             message.setUserId(invoiceTemp.getUserId());
-            messageSendUtil.sendMessage(message);
+            messageSendUtil.sendMessage(message,request);
 
         }
     }

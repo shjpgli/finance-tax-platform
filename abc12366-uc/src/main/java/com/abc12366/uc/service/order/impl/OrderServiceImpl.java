@@ -667,6 +667,10 @@ public class OrderServiceImpl implements OrderService {
                             updOrder(order);
                             insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
+                            if(!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())){
+                                LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}",orderBO.getOrderStatus());
+                                throw new ServiceException(4925);
+                            }
                             //判断是否需要查询产品库存信息
                             setTodoTask(orderBO);
                             if (trading.equals("UCSC")) {
@@ -852,7 +856,7 @@ public class OrderServiceImpl implements OrderService {
         //加入交易日志
             TradeLog tradeLog = new TradeLog();
             tradeLog.setTradeNo(tradeNo);
-            tradeLog.setAliTrandeNo(order.getOrderNo());
+            tradeLog.setAliTrandeNo(tradeNo);
             tradeLog.setTradeStatus("2");
             tradeLog.setTradeType("1");
             tradeLog.setAmount(order.getTotalPrice());
@@ -919,7 +923,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderListBO> selectExprotOrder(Order order) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
-        List<OrderBO> orderDataList = orderRoMapper.selectExprotOrder(order);
+        List<OrderBO> orderDataList = new ArrayList<>();
+        orderDataList.addAll(orderBOList);
         List<OrderListBO> orderListBOList = new ArrayList<>();
 
         for (OrderBO bo : orderBOList) {
@@ -1129,7 +1134,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+        List<OrderBO> oList = orderRoMapper.selectOrderListByInvoice(order);
         return oList;
     }
 

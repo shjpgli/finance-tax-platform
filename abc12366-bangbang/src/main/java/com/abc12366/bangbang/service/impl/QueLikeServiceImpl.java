@@ -60,7 +60,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
 
-        QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
+                QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
         int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){

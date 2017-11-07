@@ -4,6 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.bo.TradeBillBO;
+import com.abc12366.uc.model.bo.TradeLogBO;
 import com.abc12366.uc.service.TradeLogService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -42,8 +43,8 @@ public class TradeLogController {
         TradeLog tradeLog = new TradeLog();
 
         tradeLog.setTradeNo(orderNo);
-        List<TradeLog> orderLogList = tradeLogService.selectList(tradeLog, pageNum, pageSize);
-        PageInfo<TradeLog> pageInfo = new PageInfo<>(orderLogList);
+        List<TradeLogBO> orderLogList = tradeLogService.selectBOList(tradeLog, pageNum, pageSize);
+        PageInfo<TradeLogBO> pageInfo = new PageInfo<>(orderLogList);
 
         ResponseEntity re = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
         LOGGER.info("{}", re);

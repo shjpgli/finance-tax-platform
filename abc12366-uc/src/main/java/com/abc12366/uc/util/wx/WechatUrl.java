@@ -1,6 +1,7 @@
 package com.abc12366.uc.util.wx;
 
 /**
+ * 微信调用地址
  * @author zhushuai 2017-7-28
  */
 public enum WechatUrl {

@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	factionId,	userId,	userRank,	proportion,	integral,	createUserId,	createTime,	updateTime,	state
+		 id,	factionId,	userId,	userRank,	proportion,	integral,awardReason,	createUserId,	createTime,	updateTime,	state
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -19,7 +19,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo" parameterType="java.util.Map">
         SELECT
-            id,	factionId,	userId,	userRank,	proportion,	integral,	createUserId,	createTime,	updateTime,	state
+            id,	factionId,	userId,	userRank,	proportion,	integral,awardReason,	createUserId,	createTime,	updateTime,	state
         FROM bb_question_faction_allocation
         WHERE 1=1
         <if test="state != null and state !=''">

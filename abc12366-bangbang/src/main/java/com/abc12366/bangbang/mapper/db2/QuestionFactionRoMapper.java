@@ -90,5 +90,12 @@ public interface QuestionFactionRoMapper {
      **/
     int selectSplendidNumByFactionId(@Param("factionId") String factionId);
 
+    /**
+     *
+     * 查询邦派名称是否存在
+     *
+     **/
+    int selectFactionNameCnt(Map<String, Object> map);
+
 
 }

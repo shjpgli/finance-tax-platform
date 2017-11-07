@@ -5,6 +5,7 @@ import com.abc12366.uc.mapper.db1.TradeLogMapper;
 import com.abc12366.uc.mapper.db2.TradeLogRoMapper;
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.bo.TradeBillBO;
+import com.abc12366.uc.model.bo.TradeLogBO;
 import com.abc12366.uc.service.TradeLogService;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -47,6 +48,17 @@ public class TradeLogServiceImpl implements TradeLogService {
     @Override
     public void update(TradeLog tradeLogUpdate) {
         tradeLogMapper.update(tradeLogUpdate);
+    }
+
+    @Override
+    public TradeLogBO selectByAliNo(TradeLog tradeLog) {
+        return tradeLogRoMapper.selectByAliNo(tradeLog);
+    }
+
+    @Override
+    public List<TradeLogBO> selectBOList(TradeLog tradeLog, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        return tradeLogRoMapper.selectBOList(tradeLog);
     }
 
     @Override

@@ -34,8 +34,8 @@ public class GzhInfo implements Serializable {
     private String jsapi_ticket;//JS tikect
     private Date jsapiTicketUpdate;//JS tikect更新时间
     
-    private Date creatDate;
-    private Date lastupdate;
+    private Date creatDate;//穿件时间
+    private Date lastupdate;//更新时间
 
     
     

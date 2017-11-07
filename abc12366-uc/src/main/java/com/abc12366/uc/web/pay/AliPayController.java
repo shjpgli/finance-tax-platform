@@ -3,6 +3,8 @@ package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.bo.TradeLogBO;
+import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.pay.*;
 import com.abc12366.uc.model.pay.bo.AliCodePay;
 import com.abc12366.uc.model.pay.bo.AliRefund;
@@ -125,7 +127,22 @@ public class AliPayController {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝支付结果查询"));
 		}
 	}
-	
+
+	/**
+	 * 订单交易结果查询
+	 * @param payqueryReq
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/orderpayquery")
+	public ResponseEntity orderPayQuery(PayqueryReq payqueryReq){
+        LOGGER.info("订单交易结果查询{}",payqueryReq);
+        TradeLog data = new TradeLog();
+        data.setAliTrandeNo(payqueryReq.getTrade_no());
+        TradeLogBO tradeLog = tradeLogService.selectByAliNo(data);
+        return ResponseEntity.ok(Utils.kv("data", tradeLog));
+	}
+
 	/**
 	 * 支付宝退款
 	 * @param aliRefund

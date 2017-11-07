@@ -5,7 +5,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
-
+/**
+ * 微信模板消息
+ * @author zhushuai 2017-11-6
+ *
+ */
 public class Template implements Serializable {
     /**
      *
@@ -20,7 +24,11 @@ public class Template implements Serializable {
 
     private Date lastupdate; //同步时间
     
-    
+    /**
+     * 模板消息转换
+     * @param dataList
+     * @return
+     */
     public String toSendJson(Map<String,String> dataList){
     	String[] keys=StringUtils.substringsBetween(this.content,"{{", ".DATA}}");
     	StringBuffer json = new StringBuffer();

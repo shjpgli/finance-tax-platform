@@ -2,6 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
+import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -45,6 +46,16 @@ public interface CheatsRoMapper {
      * 查询推荐问题
      **/
     List<CheatsBo> selectListRecommend(Map<String, Object> map);
+
+    /**
+     * 查询推荐阅读(标题)
+     **/
+    List<CheatstjydBo> selectListRecommendTitle(Map<String, Object> map);
+
+    /**
+     * 查询你可能感兴趣的文章(标题)
+     **/
+    List<CheatstjydBo> selectListByTag(Map<String, Object> map);
 
     /**
      * 查询我的文章

@@ -216,34 +216,42 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     public void importJson(List<SfImportBO> dataList, HttpServletRequest request) {
         if (dataList.size() > 0) {
             for (SfImportBO data : dataList) {
-                OrderExchange oe = new OrderExchange.Builder()
+                //查询退换货记录，2：审核通过
+                OrderExchange orderExchange = new OrderExchange.Builder()
                         .orderNo(data.getOrderNo())
-                        .status("3")
+                        .status("2")
                         .build();
-                oe.setToExpressComp(data.getExpressComp());
-                oe.setToExpressNo(data.getExpressNo());
-                orderExchangeMapper.update(oe);
-                // 插入订单日志
-                insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark(),"1",oe.getId());
+                if(orderExchange != null){
+                    OrderExchange oe = new OrderExchange.Builder()
+                            .orderNo(data.getOrderNo())
+                            .status("3")
+                            .build();
+                    oe.setId(orderExchange.getId());
+                    oe.setToExpressComp(data.getExpressComp());
+                    oe.setToExpressNo(data.getExpressNo());
+                    orderExchangeMapper.update(oe);
+                    // 插入订单日志
+                    insertLog(oe.getOrderNo(), "3", Utils.getAdminId(), oe.getAdminRemark(),"1",oe.getId());
 
 
-                //发送消息
-                Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
-                if(order == null){
-                    LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
-                    throw new ServiceException(4102,"订单信息查询失败");
+                    //发送消息
+                    Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
+                    if(order == null){
+                        LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
+                        throw new ServiceException(4102,"订单信息查询失败");
+                    }
+                    ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(data.getExpressComp());
+                    if(expressComp == null){
+                        LOGGER.warn("物流公司查询失败：{}", data.getExpressComp());
+                        throw new ServiceException(4102,"物流公司查询失败");
+                    }
+                    Message message = new Message();
+                    message.setBusinessId(order.getOrderNo());
+                    message.setType("SPDD");
+                    message.setContent(MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+data.getExpressNo()+ MessageConstant.SUFFIX);
+                    message.setUserId(order.getUserId());
+                    messageSendUtil.sendMessage(message, request);
                 }
-                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(data.getExpressComp());
-                if(expressComp == null){
-                    LOGGER.warn("物流公司查询失败：{}", data.getExpressComp());
-                    throw new ServiceException(4102,"物流公司查询失败");
-                }
-                Message message = new Message();
-                message.setBusinessId(order.getOrderNo());
-                message.setType("SPDD");
-                message.setContent(MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX+expressComp.getCompName()+"+"+data.getExpressNo()+ MessageConstant.SUFFIX);
-                message.setUserId(order.getUserId());
-                messageSendUtil.sendMessage(message, request);
             }
         }
     }

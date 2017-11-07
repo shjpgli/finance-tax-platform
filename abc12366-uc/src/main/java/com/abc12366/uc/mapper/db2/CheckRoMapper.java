@@ -3,6 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.Check;
 import com.abc12366.uc.model.CheckRank;
 import com.abc12366.uc.model.bo.CheckListParam;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -24,4 +25,6 @@ public interface CheckRoMapper {
     List<Check> selectIsRecheck(Check check);
 
     List<Check> selectCheckList(CheckListParam c);
+
+    Integer checkTotal(@Param("userId") String userId, @Param("year") String year);
 }
