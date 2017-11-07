@@ -4,7 +4,6 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.weixin.bo.template.Template;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.MessageConstant;
@@ -227,7 +226,12 @@ public class ReportDateJob implements Job {
                         String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO
 								.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
 								()));
-                        messageSendUtil.sendPhoneMessage(userBO.getPhone(), vdxMsg, accessToken);
+                        Map<String,String> maps=new HashMap<String,String>();
+                        maps.put("var", vdxMsg);
+                        List<Map<String,String>> list= new ArrayList<Map<String,String>>();
+                        list.add(maps);
+                        
+                        messageSendUtil.sendPhoneMessage(userBO.getPhone(),"529", list, accessToken);
                     }
                 }
 
@@ -262,8 +266,14 @@ public class ReportDateJob implements Job {
                 if (("VIP3".equalsIgnoreCase(userBO.getVipLevel())
                         || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
                         && StringUtils.isNotEmpty(userBO.getPhone())) {
+                	
                     String vdxMsg = MessageConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
-                    messageSendUtil.sendPhoneMessage(userBO.getPhone(), vdxMsg, accessToken);
+                    Map<String,String> maps=new HashMap<String,String>();
+                    maps.put("var", vdxMsg);
+                    List<Map<String,String>> list= new ArrayList<Map<String,String>>();
+                    list.add(maps);
+                    
+                    messageSendUtil.sendPhoneMessage(userBO.getPhone(),"529", list, accessToken);
                 }
             }
             return 1;
