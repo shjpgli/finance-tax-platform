@@ -1,6 +1,8 @@
 package com.abc12366.uc.mapper.db1;
 
+
 import com.abc12366.uc.model.weixin.bo.template.Template;
+import com.abc12366.uc.model.weixin.bo.template.TemplateSendLog;
 
 public interface TemplateMapper {
 
@@ -9,5 +11,7 @@ public interface TemplateMapper {
     void delete(String id);
 
     void deleteAll();
+
+	void insertLog(TemplateSendLog log);
 
 }

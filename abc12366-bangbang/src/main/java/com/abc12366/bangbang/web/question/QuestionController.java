@@ -357,11 +357,8 @@ public class QuestionController {
                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<MyQuestionTjBo> questionBoList = questionService.selectMybangbang(userId);
-        return (questionBoList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
-                        ()));
+        MyQuestionTjBo myQuestionTjBo = questionService.selectMybangbang(userId);
+        return ResponseEntity.ok(Utils.kv("data", myQuestionTjBo));
     }
 
     /**

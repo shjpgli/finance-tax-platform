@@ -1,12 +1,14 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionInviteMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionLogMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
+import com.abc12366.bangbang.model.question.QuestionLog;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
@@ -30,6 +32,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionLogMapper questionLogMapper;
 
     @Autowired
     private QuestionRoMapper questionRoMapper;
@@ -283,10 +288,22 @@ public class QuestionServiceImpl implements QuestionService {
             }
 
             questionMapper.insert(question);
+
+            //帮邦日志记录表
+            QuestionLog log = new QuestionLog();
+            log.setId(UUID.randomUUID().toString().replace("-", ""));
+            log.setQcId(question.getId());//问题或者秘籍ID
+            log.setSourceId(question.getId());//来源ID
+            log.setQlogType(1);//日志类型：1、提问
+            log.setUserId(question.getUserId());//用户ID
+            log.setCreateTime(new Date());//记录时间
+            questionLogMapper.insert(log);
+
         } catch (Exception e) {
             LOGGER.error("新增问题信息异常：{}", e);
             throw new ServiceException(6102);
         }
+
 
         return questionBo;
     }
@@ -480,7 +497,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<MyQuestionTjBo> selectMybangbang(String userId) {
+    public MyQuestionTjBo selectMybangbang(String userId) {
         //我的帮帮
         LOGGER.info("{}", userId);
         return questionRoMapper.selectMybangbang(userId);

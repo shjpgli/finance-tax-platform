@@ -5,6 +5,8 @@ import com.abc12366.uc.model.bo.MessageBO;
 import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +36,6 @@ public interface MessageSendUtil {
      * @param vdxMsg
      * @param accessToken
      */
-	void sendPhoneMessage(String phone, String vdxMsg, String accessToken);
+	void sendPhoneMessage(String phone,String templateId,  List<Map<String,String>> list, String accessToken);
 
 }

@@ -99,9 +99,9 @@
         SELECT
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
 
-        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = 1) nickname,
+        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = '1') nickname,
 
-        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = 2) nickname2,
+        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = '2' limit 1) nickname2,
 
         (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
 
