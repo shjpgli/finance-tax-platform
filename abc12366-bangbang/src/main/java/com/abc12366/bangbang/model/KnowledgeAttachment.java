@@ -21,7 +21,17 @@ public class KnowledgeAttachment {
 	/**文件路径**/
 	private String filePath;
 
+	/*排序*/
+	private Integer sort;
 
+	public Integer getSort() {
+		return sort;
+	}
+
+	public KnowledgeAttachment setSort(Integer sort) {
+		this.sort = sort;
+		return this;
+	}
 
 	public void setId(String id){
 		this.id = id;
