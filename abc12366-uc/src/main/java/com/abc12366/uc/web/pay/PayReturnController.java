@@ -121,7 +121,7 @@ public class PayReturnController {
                 } else {
                     TradeBillBO data = new TradeBillBO();
                     data.setTradeNo(out_trade_no);
-                    TradeLog log = tradeLogService.selectOne(tradeBillBO);
+                    TradeLog log = tradeLogService.selectOne(data);
                     if(log != null){
                         TradeLog tradeLog = new TradeLog();
                         tradeLog.setTradeNo(out_trade_no);

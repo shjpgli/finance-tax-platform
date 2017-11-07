@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
@@ -13,21 +14,23 @@ import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.weixin.bo.template.Template;
+import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.InvoiceService;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.abc12366.uc.webservice.DzfpClient;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @create 2017-05-15 10:17 AM
@@ -50,6 +53,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private OrderRoMapper orderRoMapper;
 
+    @Autowired
+    private UserRoMapper userRoMapper;
 
     @Autowired
     private OrderInvoiceMapper orderInvoiceMapper;
@@ -86,6 +91,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private UserAddressRoMapper userAddressRoMapper;
+
+    @Autowired
+    private IWxTemplateService templateService;
 
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
@@ -431,9 +439,23 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setBusinessId(invoiceTemp.getId());
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            message.setContent(MessageConstant.IMPORT_COURIER_INFO+expressComp.getCompName()+"+"+expressExcel.getWaybillNum() +MessageConstant.SUFFIX);
+            String content = MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}", invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
+                    expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
+            message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceTemp.getId()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
+            message.setContent(content);
+
             message.setUserId(invoiceTemp.getUserId());
             messageSendUtil.sendMessage(message,request);
+
+            User user = userRoMapper.selectOne(invoiceTemp.getUserId());
+            if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                //TODO 11
+                //发送微信消息
+            }else{
+                //发送短信
+                String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+                messageSendUtil.sendPhoneMessage(user.getPhone(), content, accessToken);
+            }
 
         }
     }
@@ -708,10 +730,30 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT+invoiceBO.getId()+MessageConstant.SUFFIX);
+                String content = MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+                message.setContent(content);
                 message.setUrl("<a href=\""+ SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
                 message.setUserId(invoiceBO.getUserId());
                 messageSendUtil.sendMessage(message, request);
+
+                User user = userRoMapper.selectOne(invoiceBO.getUserId());
+                if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                    //发送微信消息
+                    Map<String, String> dataList = new HashMap<String, String>();
+                    dataList.put("userId", user.getId());
+                    dataList.put("openId", user.getWxopenid());
+                    dataList.put("first", "您申请的电子发票已开具");
+                    dataList.put("remark", "详情请登录财税网查看。");
+                    dataList.put("keyword1", tail.getInvoiceCode());
+                    dataList.put("keyword2", tail.getInvoiceNo());
+                    dataList.put("keyword3", String.valueOf(invoiceBO.getAmount()));
+                    dataList.put("keyword4", DataUtils.dateToStr(new Date()));
+                    templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
+                }else{
+                    //发送短信
+                    String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+                    messageSendUtil.sendPhoneMessage(user.getPhone(), content, accessToken);
+                }
 
             }else {
                 if(invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())){
@@ -735,9 +777,23 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                message.setContent(MessageConstant.INVOICE_CHECK_ADOPT);
+                String content = MessageConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+                message.setContent(content);
                 message.setUserId(invoiceBO.getUserId());
                 messageSendUtil.sendMessage(message, request);
+
+                User user = userRoMapper.selectOne(invoiceBO.getId());
+                //微信消息
+                if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                    //TODO 8
+                }
+
+                //短信消息
+                if (("VIP3".equalsIgnoreCase(user.getVipLevel())
+                        || "VIP4".equalsIgnoreCase(user.getVipLevel()))
+                        && StringUtils.isNotEmpty(user.getPhone())) {
+                    messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+                }
             }
         } else {
             //发票审核不通过
@@ -784,22 +840,50 @@ public class InvoiceServiceImpl implements InvoiceService {
             //发送消息
             Message message = new Message();
             message.setBusinessId(invoiceBO.getId());
-            message.setBusiType(MessageConstant.ZZFPDD);
+            message.setBusiType(MessageConstant.DZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            message.setContent(MessageConstant.INVOICE_CHECK_REFUSE+invoiceBO.getId()+MessageConstant.SUFFIX);
+            String content = MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+            message.setContent(content);
             message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
             message.setUserId(invoiceBO.getUserId());
             messageSendUtil.sendMessage(message, request);
+            User user = userRoMapper.selectOne(order.getUserId());
+            //微信消息
+            if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                //TODO 9
+            }
+
+            //短信消息
+            if (("VIP3".equalsIgnoreCase(user.getVipLevel())
+                    || "VIP4".equalsIgnoreCase(user.getVipLevel()))
+                    && StringUtils.isNotEmpty(user.getPhone())) {
+                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+            }
+
         }else{
             //发送消息
             Message message = new Message();
             message.setBusinessId(invoiceBO.getId());
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            message.setContent(MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE+invoiceBO.getId()+MessageConstant.SUFFIX);
+            String content = MessageConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+            message.setContent(content);
             message.setUrl("<a href=\""+SpringCtxHolder.getProperty("abc12366.api.url.uc")+"/userinfo/invoice/"+invoiceBO.getId()+"\">"+MessageConstant.VIEW_DETAILS+"</a>");
             message.setUserId(invoiceBO.getUserId());
             messageSendUtil.sendMessage(message, request);
+
+            User user = userRoMapper.selectOne(order.getUserId());
+            //微信消息
+            if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                //TODO 10
+            }
+
+            //短信消息
+            if (("VIP3".equalsIgnoreCase(user.getVipLevel())
+                    || "VIP4".equalsIgnoreCase(user.getVipLevel()))
+                    && StringUtils.isNotEmpty(user.getPhone())) {
+                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+            }
         }
     }
 
