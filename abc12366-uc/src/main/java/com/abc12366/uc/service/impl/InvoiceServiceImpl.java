@@ -737,7 +737,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 messageSendUtil.sendMessage(message, request);
 
                 User user = userRoMapper.selectOne(invoiceBO.getUserId());
-                if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                /*if (StringUtils.isNotEmpty(user.getWxopenid())) {
                     //发送微信消息
                     Map<String, String> dataList = new HashMap<String, String>();
                     dataList.put("userId", user.getId());
@@ -760,7 +760,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
                     String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
                     messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
-                }
+                }*/
 
             } else {
                 if (invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())) {

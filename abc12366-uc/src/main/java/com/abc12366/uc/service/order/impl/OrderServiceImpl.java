@@ -625,7 +625,6 @@ public class OrderServiceImpl implements OrderService {
             }
 
         } else if ("1".equals(orderBack.getStatus())) {
-            //TODO 需要确定状态
             Order order = new Order();
             order.setOrderNo(orderBack.getOrderNo());
             order.setOrderStatus("6");
@@ -1070,7 +1069,7 @@ public class OrderServiceImpl implements OrderService {
             User user = userRoMapper.selectOne(order.getUserId());
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
                 //发送微信消息
-                Map<String, String> dataList = new HashMap<String, String>();
+                /*Map<String, String> dataList = new HashMap<String, String>();
                 dataList.put("userId", user.getId());
                 dataList.put("openId", user.getWxopenid());
                 dataList.put("first", "你有新的订单提醒：");
@@ -1078,10 +1077,10 @@ public class OrderServiceImpl implements OrderService {
                 dataList.put("keyword1", order.getOrderNo());
                 dataList.put("keyword2", UserUtil.getAdminInfo().getNickname());
                 dataList.put("keyword3", DataUtils.dateToStr(new Date()));
-                templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
+                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", dataList);*/
             } else {
                 //发送短信
-                String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", user
+                /*String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", user
                         .getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", DataUtils.getFormatDate(user.getVipExpireDate()));
                 Map<String, String> maps = new HashMap<String, String>();
                 maps.put("var", vdxMsg);
@@ -1089,7 +1088,7 @@ public class OrderServiceImpl implements OrderService {
                 list.add(maps);
 
                 String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-                messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
+                messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);*/
             }
         }
     }
@@ -1129,20 +1128,6 @@ public class OrderServiceImpl implements OrderService {
         //微信消息
         if (StringUtils.isNotEmpty(user.getWxopenid())) {
             //TODO 2
-            Template info = new Template();
-            info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
-            info.setContent("{{first.DATA}}\n\n 商品信息：{{keyword1.DATA}}\n 过期时间：{{keyword2.DATA}}\n " +
-                    "{{remark.DATA}}");
-            Map<String, String> dataList = new HashMap<String, String>();
-            dataList.put("openId", user.getWxopenid());
-           /* dataList.put("first", "您的会员即将过期");
-            dataList.put("remark", "您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
-            dataList.put("keyword1", userBO.getVipLevelName());
-            dataList.put("keyword1Color", "#00DB00");
-            dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
-            dataList.put("keyword2Color", "#00DB00");
-            dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
-            templateService.templateSend(info.toSendJson(dataList));*/
         }
 
         //短信消息
