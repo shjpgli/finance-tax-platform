@@ -41,4 +41,48 @@
     </select>
 
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectClassifyStatistics" resultType="com.abc12366.bangbang.model.question.QuestionClassifyStatistics" parameterType="java.util.Map">
+        SELECT t.classifyName,
+        (
+         SELECT COUNT(id) FROM bb_question  WHERE classifyCode  LIKE   CONCAT(t.classifyCode,'%')
+            <if test="beginTime != null and beginTime != ''">
+                  and date_format(createTime, '%Y%m%d') &gt;= date_format(#{beginTime}, '%Y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                  and date_format(createTime, '%Y%m%d') &lt;= date_format(#{endTime}, '%Y%m%d')
+            </if>
+         ) questionNum,
+        (
+        SELECT COUNT(1) FROM bb_question_like WHERE likeType = 1 AND questionId IN  (SELECT id FROM bb_question WHERE  classifyCode  LIKE   CONCAT(t.classifyCode,'%') )
+            <if test="beginTime != null and beginTime != ''">
+                and date_format(likeTime, '%Y%m%d') &gt;= date_format(#{beginTime}, '%Y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(likeTime, '%Y%m%d') &lt;= date_format(#{endTime}, '%Y%m%d')
+            </if>
+        ) AS likeNum,
+        (
+        SELECT COUNT(1) FROM bb_question_answer WHERE questionId IN  (SELECT id FROM bb_question WHERE  classifyCode  LIKE   CONCAT(t.classifyCode,'%') )
+            <if test="beginTime != null and beginTime != ''">
+                and date_format(createTime, '%Y%m%d') &gt;= date_format(#{beginTime}, '%Y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(createTime, '%Y%m%d') &lt;= date_format(#{endTime}, '%Y%m%d')
+            </if>
+        ) AS answerNum,
+        (
+        SELECT COUNT(1) FROM bb_question_comment WHERE questionId IN  (SELECT id FROM bb_question WHERE  classifyCode  LIKE   CONCAT(t.classifyCode,'%') )
+            <if test="beginTime != null and beginTime != ''">
+                and date_format(createTime, '%Y%m%d') &gt;= date_format(#{beginTime}, '%Y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(createTime, '%Y%m%d') &lt;= date_format(#{endTime}, '%Y%m%d')
+            </if>
+        ) AS commentNum
+        FROM bb_question_classify t WHERE t.parentCode = #{parentCode} ORDER BY t.priority ASC;
+    </select>
+
+
+
 </mapper>
