@@ -708,10 +708,14 @@
     <!-- 前台查询（根据条件查询） -->
     <select id="selectOrderListByInvoice" resultMap="orderBOMap" parameterType="com.abc12366.uc.model.order.bo.OrderBO">
         SELECT
-        o.orderNo,	o.userId,	o.orderStatus,o.payMethod,	o.createTime,o.totalPrice,o.giftPoints,	o.tradeMethod,
-        u.id as uId,u.username as uName,u.vipLevel,u.nickname
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
+        u.id as uId,u.username as uName,u.phone,u.vipLevel,u.nickname,
+        t.orderNo as orNo, t.goodsPrice,	t.num,	t.dealPrice,	t.name,	t.categoryId,	t.category,	t.weight,	t.createTime as cTime, t.lastUpdate as lUpdate,	t.productId,	t.goodsId,
+        t.specInfo,	t.isReturn,	t.isExchange,	t.imageUrl,	t.goodsType,	t.browseUrl,	t.tradingChannels
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
+        LEFT JOIN  uc_order_product t on t.orderNo = o.orderNo
         <where>
             1 = 1
             <if test=" user.id != null and user.id != '' ">
