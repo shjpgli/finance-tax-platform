@@ -1,4 +1,4 @@
-package com.abc12366.message.web.dzsb;
+package com.abc12366.message.web.hngs;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,12 +35,12 @@ import com.alibaba.fastjson.JSONObject;
 
 @Controller
 @RequestMapping(path = "/dzsb", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
-public class DzsbController {
+public class HngsController {
 	
 	// App缓存信息
     protected static Map<String, String> appCache = new ConcurrentHashMap<>();
 	
-	protected static final Logger LOGGER = LoggerFactory.getLogger(DzsbController.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(HngsController.class);
 	
 	@Autowired
     protected ApplicationConfig cfg;
@@ -179,8 +179,8 @@ public class DzsbController {
     
     /**
      * 电子税局post请求
-     * @param api
-     * @param body
+     * @param api  接口地址
+     * @param body 请求参数BODY，包含纳税人识别号
      * @return
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })

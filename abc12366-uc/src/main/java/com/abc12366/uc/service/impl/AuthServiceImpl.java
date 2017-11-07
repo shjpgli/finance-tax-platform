@@ -284,7 +284,7 @@ public class AuthServiceImpl implements AuthService {
         //记用户登录日志
         insertLoginLog(user.getId());
         //登录任务日志
-        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
+//        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
 
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
@@ -410,7 +410,7 @@ public class AuthServiceImpl implements AuthService {
         //记用户登录日志
         insertLoginLog(user.getId());
         //任务日志
-        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
+//        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
 
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
@@ -626,7 +626,7 @@ public class AuthServiceImpl implements AuthService {
         //记用户登录日志
         insertLoginLog(user.getId());
         //任务日志
-        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
+//        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
 
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
@@ -734,7 +734,7 @@ public class AuthServiceImpl implements AuthService {
         //记用户登录日志
         insertLoginLog(user.getId());
         //任务日志
-        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
+//        todoTaskService.doTaskWithouComputeAward(user.getId(), UCConstant.SYS_TASK_LOGIN_CODE);
 
         UserBO userBO = new UserBO();
         BeanUtils.copyProperties(user, userBO);

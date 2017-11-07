@@ -856,7 +856,7 @@ public class OrderServiceImpl implements OrderService {
         //加入交易日志
             TradeLog tradeLog = new TradeLog();
             tradeLog.setTradeNo(tradeNo);
-            tradeLog.setAliTrandeNo(order.getOrderNo());
+            tradeLog.setAliTrandeNo(tradeNo);
             tradeLog.setTradeStatus("2");
             tradeLog.setTradeType("1");
             tradeLog.setAmount(order.getTotalPrice());
@@ -1134,7 +1134,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+        List<OrderBO> oList = orderRoMapper.selectOrderListByInvoice(order);
         return oList;
     }
 
