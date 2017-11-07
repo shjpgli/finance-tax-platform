@@ -52,6 +52,8 @@ public class TradeLogBO implements Serializable {
      **/
     private java.util.Date compareTime;
 
+    private String orderNo;
+
     public Double getAmount() {
         return this.amount;
     }
@@ -130,5 +132,13 @@ public class TradeLogBO implements Serializable {
 
     public void setTradeNo(String tradeNo) {
         this.tradeNo = tradeNo;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 }

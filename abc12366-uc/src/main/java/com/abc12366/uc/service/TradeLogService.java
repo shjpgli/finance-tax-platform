@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.bo.TradeBillBO;
+import com.abc12366.uc.model.bo.TradeLogBO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,4 +24,19 @@ public interface TradeLogService {
     TradeLog selectOne(TradeBillBO log);
 
     void update(TradeLog tradeLogUpdate);
+
+    /**
+     * 根据Ali交易流水号查询
+     * @param tradeLog
+     */
+    TradeLogBO selectByAliNo(TradeLog tradeLog);
+
+    /**
+     * 查询交易日志列表信息
+     * @param tradeLog 订单对象
+     * @param pageNum 页数
+     * @param pageSize 条数
+     * @return
+     */
+    List<TradeLogBO> selectBOList(TradeLog tradeLog, int pageNum, int pageSize);
 }

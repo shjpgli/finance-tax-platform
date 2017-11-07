@@ -856,7 +856,7 @@ public class OrderServiceImpl implements OrderService {
         //加入交易日志
             TradeLog tradeLog = new TradeLog();
             tradeLog.setTradeNo(tradeNo);
-            tradeLog.setAliTrandeNo(order.getOrderNo());
+            tradeLog.setAliTrandeNo(tradeNo);
             tradeLog.setTradeStatus("2");
             tradeLog.setTradeType("1");
             tradeLog.setAmount(order.getTotalPrice());
