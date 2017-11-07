@@ -267,7 +267,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                             || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                             && StringUtils.isNotEmpty(user.getPhone())) {
-                        messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+//                        messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
                     }
                 }
             }
@@ -467,7 +467,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                                             || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                                             && StringUtils.isNotEmpty(user.getPhone())) {
-                                        messageSendUtil.sendPhoneMessage(user.getPhone(), content, httpServletRequest.getHeader(Constant.APP_TOKEN_HEAD));
+//                                        messageSendUtil.sendPhoneMessage(user.getPhone(), content, httpServletRequest.getHeader(Constant.APP_TOKEN_HEAD));
                                     }
                                     return ResponseEntity.ok(Utils.kv("data", refundRes));
                                 } else {
@@ -663,7 +663,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                     || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                     && StringUtils.isNotEmpty(user.getPhone())) {
-                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+//                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
             }
 
         }
@@ -716,27 +716,14 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             //微信消息
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
                 //TODO 3
-                Template info = new Template();
-                info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
-                info.setContent("{{first.DATA}}\n\n 商品信息：{{keyword1.DATA}}\n 过期时间：{{keyword2.DATA}}\n " +
-                        "{{remark.DATA}}");
-                Map<String, String> dataList = new HashMap<String, String>();
-                dataList.put("openId", user.getWxopenid());
-           /* dataList.put("first", "您的会员即将过期");
-            dataList.put("remark", "您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
-            dataList.put("keyword1", userBO.getVipLevelName());
-            dataList.put("keyword1Color", "#00DB00");
-            dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
-            dataList.put("keyword2Color", "#00DB00");
-            dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
-            templateService.templateSend(info.toSendJson(dataList));*/
+
             }
 
             //短信消息
             if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                     || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                     && StringUtils.isNotEmpty(user.getPhone())) {
-                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+//                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
             }
         }
         return oe;
