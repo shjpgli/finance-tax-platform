@@ -82,6 +82,10 @@ public class ReportDateJob implements Job {
         Calendar cale = Calendar.getInstance();
         cale.set(Calendar.DAY_OF_MONTH, 0);
         pmonthL = format.format(cale.getTime());
+        
+        //获取运营管理系统accessToken
+        accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
         LOGGER.info("电子税局获取办税期限..............");
         HttpHeaders headers = new HttpHeaders();
@@ -124,9 +128,7 @@ public class ReportDateJob implements Job {
             LOGGER.info("电子税局登录异常..............");
         }
 
-        //获取运营管理系统accessToken
-        accessToken = appService.selectByName("abc12366-admin").getAccessToken();
-        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
+        
 
         int userTotal = userService.getAllNomalCont();
         int threadNum = (int) Math.ceil((float) userTotal / SPLIT_NUM);
