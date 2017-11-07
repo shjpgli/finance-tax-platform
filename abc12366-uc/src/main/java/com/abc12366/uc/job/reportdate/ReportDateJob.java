@@ -207,11 +207,8 @@ public class ReportDateJob implements Job {
 
                     //微信消息
                     if (StringUtils.isNotEmpty(userBO.getWxopenid())) {
-                        Template info = new Template();
-                        info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
-                        info.setContent("{{first.DATA}}\n\n 商品信息：{{keyword1.DATA}}\n 过期时间：{{keyword2.DATA}}\n " +
-								"{{remark.DATA}}");
                         Map<String, String> dataList = new HashMap<String, String>();
+                        dataList.put("userId", userBO.getId());
                         dataList.put("openId", userBO.getWxopenid());
                         dataList.put("first", "您的会员即将过期");
                         dataList.put("remark", "您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
@@ -220,7 +217,7 @@ public class ReportDateJob implements Job {
                         dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
                         dataList.put("keyword2Color", "#00DB00");
                         dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
-                        templateService.templateSend(info.toSendJson(dataList));
+                        templateService.templateSend("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList);
                     }
 
                     //短信消息
@@ -246,11 +243,8 @@ public class ReportDateJob implements Job {
 
                 if (!"VIP0".equalsIgnoreCase(userBO.getVipLevel())
                         && StringUtils.isNotEmpty(userBO.getWxopenid())) {
-                    Template info = new Template();
-                    info.setTemplate_id("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g");
-                    info.setContent("{{first.DATA}}\n\n 申报税种：{{keyword1.DATA}}\n 所属期：{{keyword2.DATA}}\n " +
-							"申报期限：{{keyword3.DATA}}\n {{remark.DATA}}");
                     Map<String, String> dataList = new HashMap<String, String>();
+                    dataList.put("userId", userBO.getId());
                     dataList.put("openId", userBO.getWxopenid());
                     dataList.put("first", "财税专家会员提醒，本月纳税申报可申报的报表种类如下：");
                     dataList.put("remark", "实际申报种类以税务局核定信息为准，请您在申报期限内及时进行申报缴税！");
@@ -261,7 +255,7 @@ public class ReportDateJob implements Job {
                     dataList.put("keyword3", shenqqix);
                     dataList.put("keyword3Color", "#00DB00");
                     dataList.put("url", SpringCtxHolder.getProperty("mbxx.sbqx.url"));
-                    templateService.templateSend(info.toSendJson(dataList));
+                    templateService.templateSend("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList);
                 }
 
                 //短信消息
