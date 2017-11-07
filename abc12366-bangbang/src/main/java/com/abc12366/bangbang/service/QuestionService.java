@@ -44,7 +44,7 @@ public interface QuestionService {
 
     List<QuestionBo> selectInviteList(String userId);
 
-    List<MyQuestionTjBo> selectMybangbang(String userId);
+    MyQuestionTjBo selectMybangbang(String userId);
 
     List<QuestionBo> selectMyQuestionList(Map<String, Object> map);
 

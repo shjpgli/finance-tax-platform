@@ -289,13 +289,14 @@ public class QuestionServiceImpl implements QuestionService {
 
             questionMapper.insert(question);
 
+            //帮邦日志记录表
             QuestionLog log = new QuestionLog();
             log.setId(UUID.randomUUID().toString().replace("-", ""));
-            log.setQcId(question.getId());
-            log.setSourceId(question.getId());
-            log.setQlogType(1);//提问
-            log.setUserId(question.getUserId());
-            log.setCreateTime(new Date());
+            log.setQcId(question.getId());//问题或者秘籍ID
+            log.setSourceId(question.getId());//来源ID
+            log.setQlogType(1);//日志类型：1、提问
+            log.setUserId(question.getUserId());//用户ID
+            log.setCreateTime(new Date());//记录时间
             questionLogMapper.insert(log);
 
         } catch (Exception e) {
@@ -496,7 +497,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<MyQuestionTjBo> selectMybangbang(String userId) {
+    public MyQuestionTjBo selectMybangbang(String userId) {
         //我的帮帮
         LOGGER.info("{}", userId);
         return questionRoMapper.selectMybangbang(userId);
