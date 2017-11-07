@@ -33,4 +33,6 @@ public interface SysTaskRoMapper {
     List<SysTaskBO> selectTimeLimitedListByType(String type);
 
     SysTaskBO selectValidOneByCode(String taskCode);
+
+    List<SysTaskBO> selectListByCode(String code);
 }

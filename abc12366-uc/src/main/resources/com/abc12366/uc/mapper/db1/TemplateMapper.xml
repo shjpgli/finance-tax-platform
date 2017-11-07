@@ -10,6 +10,13 @@
         #{lastupdate})
     </insert>
 
+    <insert id="insertLog" parameterType="com.abc12366.uc.model.weixin.bo.template.TemplateSendLog">
+        INSERT INTO uc_wxtemplate_log
+        (id,template_id,userId,openid,templateval,returncode,returnmsg,lastupdate,createdate)
+        VALUES 
+        (#{id}, #{template_id}, #{userId}, #{openid}, #{templateval}, #{returncode},#{returnmsg},#{lastupdate},#{createdate})
+    </insert>
+    
 
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM uc_wxtemplate WHERE template_id = #{template_id}

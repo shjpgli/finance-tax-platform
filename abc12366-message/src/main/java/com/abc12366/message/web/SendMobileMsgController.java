@@ -32,7 +32,7 @@ public class SendMobileMsgController {
 
     //发短信接口
     @PostMapping(path = "/mobile/msg")
-    public ResponseEntity getCode(@Valid @RequestBody MobileMsgBO mobileMsgBO) throws IOException {
+    public ResponseEntity sendMsg(@Valid @RequestBody MobileMsgBO mobileMsgBO) {
         LOGGER.info("发送短信参数：{}", mobileMsgBO);
         sendMobileMsgService.sendMsg(mobileMsgBO);
         return ResponseEntity.ok(Utils.kv());
