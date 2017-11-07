@@ -277,18 +277,14 @@
     <select id="selectMybangbang" resultType="com.abc12366.bangbang.model.question.bo.MyQuestionTjBo" parameterType="java.lang.String">
         select
         (SELECT count(*) FROM bb_question_answer where parentId = '' and userId = #{userId}) answerNum,
-        (SELECT count(*) FROM bb_question_like where userId = #{userId}) likeNum,
         (SELECT count(*) FROM bb_question_comment where userId = #{userId}) commentNum,
         (SELECT count(*) FROM bb_question_answer where isAccept = '1' and userId = #{userId}) acceptNum,
-        0 medalNum,
-        (SELECT count(*) FROM bb_question where userId = #{userId}) questionNum,
-        (SELECT count(*) FROM bb_question_invite where userId = #{userId}) inviteNum,
-        (SELECT count(*) FROM bb_question_faction_member where status = '2' and userId = #{userId}) applyQueFactionNum,
-        (SELECT count(*) FROM bb_question_faction_member where status = '2' and duty in('1','2') and  userId = #{userId}) manageQueFactionNum,
-        (SELECT count(*) FROM bb_question_attention where attentionUserId = #{userId}) fansNum,
-        (SELECT count(*) FROM bb_question_attention where userId = #{userId}) attentionNum,
-        (SELECT count(*) FROM bb_question_collect where userId = #{userId}) collectNum,
-        (SELECT count(*) FROM bb_question_tip_off where createUser = #{userId}) tipNum
+        (SELECT count(*) FROM bb_question_attention where isRead = 0 and attentionUserId = #{userId}) fansNum,
+        (SELECT coun(*) FROM bb_question_medal_user mu where mu.userId = #{userId}) medalNum,
+        (select count(*) from bb_question_answer a where a.isRead = 0 and
+          a.questionId in(select q.id from bb_question q where q.userId = #{userId})) newAnswerNum,
+		(select count(*) from bb_question q where
+          q.id in(SELECT i.questionId FROM bb_question_invite i where i.isRead = 0 and i.userId = #{userId})) newInviteNum
         from dual
     </select>
 
