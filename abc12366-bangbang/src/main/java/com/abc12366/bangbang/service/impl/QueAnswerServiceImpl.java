@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionLogMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionDisableIpRoMapper;
@@ -8,8 +9,10 @@ import com.abc12366.bangbang.mapper.db2.QuestionDisableUserRoMapper;
 import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
+import com.abc12366.bangbang.model.question.QuestionLog;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,6 +48,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Override
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
@@ -159,6 +165,10 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
             answerMapper.insert(answer);
 
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(2, answer.getQuestionId(), answer.getId(), answer.getId(), answer.getUserId(), "");
 
 
 

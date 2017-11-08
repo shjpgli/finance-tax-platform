@@ -9,6 +9,7 @@ import com.abc12366.bangbang.model.question.QuestionCollect;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
 import com.abc12366.bangbang.service.QueCollectService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.UcUserCommon;
 import org.slf4j.Logger;
@@ -37,6 +38,9 @@ public class QueCollectServiceImpl implements QueCollectService {
 
     @Autowired
     private QuestionCollectRoMapper collectRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Override
     public String insert(String id, HttpServletRequest request) {
@@ -68,6 +72,9 @@ public class QueCollectServiceImpl implements QueCollectService {
 
         int result = collectMapper.insert(collect);
 
+        //帮邦日志记录表
+        //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+        bangBangDtLogUtil.insertLog(4, collect.getQuestionId(), "", collect.getQuestionId(), collect.getUserId(), "");
 
 
 

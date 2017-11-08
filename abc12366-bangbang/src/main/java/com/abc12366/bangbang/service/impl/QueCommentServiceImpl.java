@@ -9,6 +9,7 @@ import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionComment;
 import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
 import com.abc12366.bangbang.service.QueCommentService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -47,6 +48,9 @@ public class QueCommentServiceImpl implements QueCommentService {
 
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Override
     public List<QuestionCommentBo> selectList(Map<String,Object> map) {
@@ -138,6 +142,9 @@ public class QueCommentServiceImpl implements QueCommentService {
 
             commentMapper.insert(comment);
 
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(3, comment.getQuestionId(), comment.getAnswerId(), comment.getId(), comment.getUserId(), "");
 
 
 

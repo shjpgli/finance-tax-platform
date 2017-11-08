@@ -16,6 +16,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
 import com.abc12366.bangbang.service.QueLikeService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.UcUserCommon;
 import org.slf4j.Logger;
@@ -54,6 +55,9 @@ public class QueLikeServiceImpl implements QueLikeService {
 
     @Autowired
     private QuestionLikeRoMapper likeRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Override
     public String insert(String id, HttpServletRequest request) {
@@ -96,6 +100,12 @@ public class QueLikeServiceImpl implements QueLikeService {
             answer1.setLikeNum(likeCnt);
             answer1.setId(id);
             answerMapper.updateByPrimaryKeySelective(answer1);
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(5, like.getQuestionId(), like.getId(), like.getId(), like.getUserId(), "");
+
+
         }else{
             QuestionComment comment1 = new QuestionComment();
             comment1.setLikeNum(likeCnt);
