@@ -77,6 +77,12 @@
         WHERE status <![CDATA[!=]]> '5' and  orderNo = #{orderNo}
     </select>
 
+    <select id="selectByOrderNoAndStatus" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
+        SELECT <include refid="Base_Column_List"/>
+        FROM uc_order_exchange
+        WHERE status = '2' and  orderNo = #{orderNo}
+    </select>
+
     <select id="export" parameterType="com.abc12366.uc.model.bo.OrderExchangeExportBO"
             resultType="com.abc12366.uc.model.bo.SfExportBO">
         select h.orderNo, h.company, h.name, h.phone, h.address, j.name as content, 1 as num from (SELECT

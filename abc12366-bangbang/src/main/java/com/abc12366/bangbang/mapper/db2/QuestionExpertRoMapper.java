@@ -35,4 +35,11 @@ public interface QuestionExpertRoMapper {
      **/
     QuestionExpertBO selectByPrimaryKey(@Param("id") String id);
 
+    /**
+     *
+     * 列表查询
+     *
+     **/
+    List<QuestionExpertBO> selectListByUserId(@Param("userId") String userId);
+
 }
