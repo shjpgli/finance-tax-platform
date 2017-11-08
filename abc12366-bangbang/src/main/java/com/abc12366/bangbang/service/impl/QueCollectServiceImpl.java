@@ -10,11 +10,15 @@ import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
 import com.abc12366.bangbang.service.QueCollectService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.UcUserCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,10 +46,13 @@ public class QueCollectServiceImpl implements QueCollectService {
     @Autowired
     private BangBangDtLogUtil bangBangDtLogUtil;
 
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = UcUserCommon.getUserId();
 
 
                 QuestionCollect collect = new QuestionCollect();
@@ -77,6 +84,9 @@ public class QueCollectServiceImpl implements QueCollectService {
         bangBangDtLogUtil.insertLog(4, collect.getQuestionId(), "", collect.getQuestionId(), collect.getUserId(), "");
 
 
+        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
+        String sysTaskId = UCConstant.SYS_TASK_MRWDSC_CODE;
+        bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 
         return collectCnt+"";
     }

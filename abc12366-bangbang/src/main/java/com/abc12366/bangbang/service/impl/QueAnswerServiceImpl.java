@@ -13,15 +13,21 @@ import com.abc12366.bangbang.model.question.QuestionLog;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -51,6 +57,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private BangBangDtLogUtil bangBangDtLogUtil;
+
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
@@ -92,7 +101,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     }
 
     @Override
-    public QuestionAnswerBo save(QuestionAnswerBo answerBo) {
+    public QuestionAnswerBo save(QuestionAnswerBo answerBo, HttpServletRequest request) {
 
         int ipcnt = questionDisableIpRoMapper.selectIpCnt(answerBo.getIp());
 
@@ -170,6 +179,10 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
             bangBangDtLogUtil.insertLog(2, answer.getQuestionId(), answer.getId(), answer.getId(), answer.getUserId(), "");
 
+            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
+            String userId = UcUserCommon.getUserId();
+            String sysTaskId = UCConstant.SYS_TASK_MRHDWT_CODE;
+            bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 
 
         } catch (Exception e) {

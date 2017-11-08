@@ -10,15 +10,21 @@ import com.abc12366.bangbang.model.question.QuestionComment;
 import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
 import com.abc12366.bangbang.service.QueCommentService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -52,6 +58,9 @@ public class QueCommentServiceImpl implements QueCommentService {
     @Autowired
     private BangBangDtLogUtil bangBangDtLogUtil;
 
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+
     @Override
     public List<QuestionCommentBo> selectList(Map<String,Object> map) {
         List<QuestionCommentBo> commentBoList;
@@ -79,7 +88,7 @@ public class QueCommentServiceImpl implements QueCommentService {
     }
 
     @Override
-    public QuestionCommentBo save(QuestionCommentBo commentBo) {
+    public QuestionCommentBo save(QuestionCommentBo commentBo, HttpServletRequest request) {
 
         int ipcnt = questionDisableIpRoMapper.selectIpCnt(commentBo.getIp());
 
@@ -146,6 +155,10 @@ public class QueCommentServiceImpl implements QueCommentService {
             //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
             bangBangDtLogUtil.insertLog(3, comment.getQuestionId(), comment.getAnswerId(), comment.getId(), comment.getUserId(), "");
 
+            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
+            String userId = UcUserCommon.getUserId();
+            String sysTaskId = UCConstant.SYS_TASK_ASK_COMMENT_CODE;
+            bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 
 
         } catch (Exception e) {

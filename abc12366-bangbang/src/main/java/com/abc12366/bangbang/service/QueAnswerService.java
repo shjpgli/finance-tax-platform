@@ -4,6 +4,7 @@ package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public interface QueAnswerService {
 
     List<QuestionAnswerBo> selectListNew(Map<String, Object> map);
 
-    QuestionAnswerBo save(QuestionAnswerBo questionAnswerBo);
+    QuestionAnswerBo save(QuestionAnswerBo questionAnswerBo, HttpServletRequest request);
 
     QuestionAnswerBo selectAnswer(String id);
 
