@@ -9,25 +9,85 @@ import java.util.Date;
  * Time: 14:45
  */
 public class TodoTaskFront {
+    /**
+     * 任务ID
+     */
     private String id;
+    /**
+     * 用户ID
+     */
     private String userId;
+    /**
+     * 系统任务ID
+     */
     private String sysTaskId;
+    /**
+     * 需完成数量
+     */
     private Integer allCount;
+    /**
+     * 已完成数量
+     */
     private Integer finishedCount;
+    /**
+     * 奖励类型
+     */
     private String awardType;
+    /**
+     * 任务类型
+     */
     private String type;
+    /**
+     * 奖励值
+     */
     private Integer award;
+    /**
+     * 任务状态
+     */
     private String status;
+    /**
+     * 创建时间
+     */
     private Date createTime;
+    /**
+     * 最后修改时间
+     */
     private Date lastUpdate;
+    /**
+     * 跳转地址
+     */
     private String skipUrl;
+    /**
+     * 规则ID
+     */
     private String ruleId;
+    /**
+     * 开始时间
+     */
     private Date startTime;
+    /**
+     * 结束时间
+     */
     private Date endTime;
+    /**
+     * 周期类型
+     */
     private String dateType;
+    /**
+     * 任务名称
+     */
     private String name;
+    /**
+     * 备注
+     */
     private String remark;
+    /**
+     * 图片地址
+     */
     private String imageUrl;
+    /**
+     * 规则名称
+     */
     private String rule;
 
     public String getImageUrl() {

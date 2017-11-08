@@ -151,8 +151,8 @@ public class UserBindController {
     }
 
     @PostMapping(path = "/shb/updatepassword")
-    public ResponseEntity updatePassword(@RequestBody UpdatePwd data) throws MarshalException, ValidationException {
-        LOGGER.info("{}", data);
+    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePwd data) throws MarshalException, ValidationException {
+        LOGGER.info("用户修改纳税人登录电子申报密码，{}", data);
         userBindService.updatePassword(data);
         return ResponseEntity.ok(Utils.kv());
     }

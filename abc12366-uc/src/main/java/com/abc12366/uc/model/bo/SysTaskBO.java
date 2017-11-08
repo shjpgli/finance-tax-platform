@@ -255,4 +255,30 @@ public class SysTaskBO {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "SysTaskBO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", rule='" + rule + '\'' +
+                ", award=" + award +
+                ", type='" + type + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", ruleName='" + ruleName + '\'' +
+                ", ruleCode='" + ruleCode + '\'' +
+                ", count=" + count +
+                ", skipURL='" + skipURL + '\'' +
+                ", awardType='" + awardType + '\'' +
+                ", remark='" + remark + '\'' +
+                ", dateType='" + dateType + '\'' +
+                ", ruleId='" + ruleId + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

@@ -62,13 +62,13 @@ public class UserExtendController {
     @PutMapping(path = "/{userId}")
     public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String
             userId, HttpServletRequest request) throws IOException {
-        LOGGER.info("{}:{}:{}", userExtendUpdateBO, userId, request);
+        LOGGER.info("用户更新扩展信息，{}:{}:{}", userExtendUpdateBO, userId, request);
         if (!userId.trim().equals(UserUtil.getUserId(request))) {
             throw new ServiceException(4190);
         }
         userExtendUpdateBO.setUserId(userId.trim());
         UserExtendBO user_extend = userExtendService.update(userExtendUpdateBO,request);
-        LOGGER.info("{}", user_extend);
+        LOGGER.info("用户更新扩展信息成功，{}", user_extend);
         return ResponseEntity.ok(Utils.kv("data", user_extend));
     }
     
