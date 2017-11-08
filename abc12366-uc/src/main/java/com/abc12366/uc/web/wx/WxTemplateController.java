@@ -30,7 +30,11 @@ public class WxTemplateController {
     @Autowired
     private IWxTemplateService templateService;
 
-    //同步微信模板消息到数据库
+    /**
+     * 同步微信模板消息到数据库
+     * @param request  上下文
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @RequestMapping("/wxTemplate/synchro")
     public ResponseEntity synchroTemplate(HttpServletRequest request) {
@@ -41,7 +45,13 @@ public class WxTemplateController {
         }
     }
 
-    //从数据库获取模板消息
+    /**
+     * 从数据库获取模板消息
+     * @param template  模板
+     * @param page  页数
+     * @param size 大小
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxTemplate/list")
     public ResponseEntity wxTemplateList(Template template,
@@ -58,7 +68,11 @@ public class WxTemplateController {
         return responseEntity;
     }
 
-    //从数据库获取单个菜单信息
+    /**
+     * 从数据库获取单个菜单信息
+     * @param id  模板id
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxTemplate/{id}")
     public ResponseEntity wxTemplateInfo(@PathVariable("id") String id) {
@@ -72,7 +86,11 @@ public class WxTemplateController {
 
     }
 
-    // 删除数据库以及微信端模板消息
+    /**
+     * 删除数据库以及微信端模板消息
+     * @param id 模板id
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @DeleteMapping("/wxTemplate/{id}")
     public ResponseEntity templateDel(@PathVariable("id") String id) {
@@ -85,7 +103,12 @@ public class WxTemplateController {
         return responseEntity;
     }
 
-    //模板消息发送
+    /**
+     * 模板消息发送
+     * @param temp_id 模板ID
+     * @param dataList 模板内容
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PostMapping("/wxTemplate/send/{temp_id}")
     public ResponseEntity templateSend(@PathVariable("temp_id") String temp_id,
@@ -93,7 +116,11 @@ public class WxTemplateController {
         return templateService.templateSend(temp_id,dataList);
     }
     
-    //模板消息发送
+    /**
+     * 模板消息发送
+     * @param templatemsg  模板内容
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PostMapping("/wxTemplate/sendstr/")
     public ResponseEntity templateSendstr(@RequestBody String templatemsg) {

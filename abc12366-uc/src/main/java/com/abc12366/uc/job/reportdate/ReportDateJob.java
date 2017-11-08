@@ -8,9 +8,6 @@ import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.MessageConstant;
 import com.abc12366.uc.util.MessageSendUtil;
-import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
-import com.abc12366.uc.wsbssoa.utils.soaUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -88,47 +85,30 @@ public class ReportDateJob implements Job {
         LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
         LOGGER.info("电子税局获取办税期限..............");
-        HttpHeaders headers = new HttpHeaders();
-        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/app/login";
-        Map<String, Object> map = new HashMap<>();
-        map.put("appId", SpringCtxHolder.getProperty("APPID"));
-        map.put("secret", SpringCtxHolder.getProperty("SECRET"));
-        HttpEntity requestEntity = new HttpEntity(map, headers);
+        HttpHeaders headers2 = new HttpHeaders();
+    	headers2.add("Access-Token", accessToken);
+    	headers2.add("Version", "1");
+        HttpEntity httpEntity = new HttpEntity(headers2);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            HngsAppLoginResponse hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
-                    HngsAppLoginResponse.class);
-            String dzsjtoken = hngsAppLoginResponse.getAccessToken();
+        ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("abc12366.message.url") +"/hngs/get?api="
+                        +new BASE64Encoder().encode(("/ggfw/bsrl/getsbrq?sbnf=" + new SimpleDateFormat("yyyy").format(new Date())).getBytes()), HttpMethod.GET,
+				httpEntity, String.class);
 
-            HttpHeaders headers2 = new HttpHeaders();
-            headers2.add("platform", SpringCtxHolder.getProperty("APPID"));
-            headers2.add("accessToken", dzsjtoken);
-            HttpEntity httpEntity = new HttpEntity(headers2);
-            ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("wsbssoa.hngs.url") +
-                            "/ggfw/bsrl/getsbrq?sbnf=" + new SimpleDateFormat("yyyy").format(new Date()), HttpMethod.GET,
-					httpEntity, String.class);
-
-            JSONObject json = JSONObject.parseObject(String.valueOf(responseEntity2.getBody()));
-            if ("000".equals(json.getString("code"))) {
-                JSONArray array = json.getJSONArray("dataList");
-                String dateM = new SimpleDateFormat("yyyy-MM").format(new Date());
-                for (Object obj : array) {
-                    JSONObject object = (JSONObject) obj;
-                    if (dateM.equalsIgnoreCase(object.getString("sbyf"))) {
-                        shenqqix = object.getString("sbyf") + "-" + object.getString("sbrq").split(",")[1];
-                        LOGGER.info("获取办税日历本月办税期限:" + shenqqix);
-                        break;
-                    }
+        JSONObject json = JSONObject.parseObject(String.valueOf(responseEntity2.getBody()));
+        if ("000".equals(json.getString("code"))) {
+        	JSONArray array = json.getJSONArray("dataList");
+            String dateM = new SimpleDateFormat("yyyy-MM").format(new Date());
+            for (Object obj : array) {
+                JSONObject object = (JSONObject) obj;
+                if (dateM.equalsIgnoreCase(object.getString("sbyf"))) {
+                    shenqqix = object.getString("sbyf") + "-" + object.getString("sbrq").split(",")[1];
+                    LOGGER.info("获取办税日历本月办税期限:" + shenqqix);
+                    break;
                 }
-            } else {
-                LOGGER.info("获取办税日历异常:" + json.getString("msg"));
             }
         } else {
-            LOGGER.info("电子税局登录异常..............");
+            LOGGER.info("获取办税日历异常:" + json.getString("msg"));
         }
-
-        
 
         int userTotal = userService.getAllNomalCont();
         int threadNum = (int) Math.ceil((float) userTotal / SPLIT_NUM);

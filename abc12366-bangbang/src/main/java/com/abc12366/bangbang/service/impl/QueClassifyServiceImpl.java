@@ -5,6 +5,7 @@ import com.abc12366.bangbang.mapper.db1.QuestionClassifyTagMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionClassifyRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionClassifyTagRoMapper;
 import com.abc12366.bangbang.model.question.QuestionClassify;
+import com.abc12366.bangbang.model.question.QuestionClassifyStatistics;
 import com.abc12366.bangbang.model.question.QuestionClassifyTag;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
@@ -200,6 +201,11 @@ public class QueClassifyServiceImpl implements QueClassifyService {
                 tagMapper.insert(tag);
             }
         }
+    }
+
+    @Override
+    public List<QuestionClassifyStatistics> selectClassifyStatistics(Map<String, Object> map) {
+        return classifyRoMapper.selectClassifyStatistics(map);
     }
 
     public String genCodes(int length){

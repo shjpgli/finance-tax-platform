@@ -30,7 +30,7 @@ import com.hnds.security.HndsSecurityUtils;
  *
  */
 @Controller
-@RequestMapping(path = "/wsbs", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/hnds", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class HndsController {
 	
 	protected static final Logger LOGGER = LoggerFactory.getLogger(HndsController.class);

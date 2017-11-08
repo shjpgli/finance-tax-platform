@@ -1,10 +1,14 @@
 package com.abc12366.bangbang.web.question;
 
+import com.abc12366.bangbang.common.StringUtil;
+import com.abc12366.bangbang.model.question.QuestionClassifyStatistics;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
 import com.abc12366.bangbang.service.QueClassifyService;
+import com.abc12366.bangbang.util.DateUtils;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,4 +137,19 @@ public class QueClassifyController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 问题分类列表查询(无需登录)
+     */
+    @GetMapping(path = "/selectClassifyStatistics")
+    public ResponseEntity selectClassifyStatistics(@RequestParam(value = "beginTime", defaultValue = "") String beginTime,
+                                                   @RequestParam(value = "endTime", defaultValue = "") String endTime,
+                                                   @RequestParam(value = "parentCode") String parentCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("parentCode",parentCode);//分类ID
+        dataMap.put("beginTime",beginTime);
+        dataMap.put("endTime",endTime);
+        List<QuestionClassifyStatistics> dataList = classifyService.selectClassifyStatistics(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
+
+    }
 }

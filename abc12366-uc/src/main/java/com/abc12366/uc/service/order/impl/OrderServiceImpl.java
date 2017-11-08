@@ -2,6 +2,7 @@ package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
@@ -11,24 +12,24 @@ import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.OrderProduct;
 import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.order.bo.*;
+import com.abc12366.uc.model.weixin.bo.template.Template;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @create 2017-10-19
@@ -120,6 +121,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PointsRuleService pointsRuleService;
 
+    @Autowired
+    private IWxTemplateService templateService;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -622,7 +625,6 @@ public class OrderServiceImpl implements OrderService {
             }
 
         } else if ("1".equals(orderBack.getStatus())) {
-            //TODO 需要确定状态
             Order order = new Order();
             order.setOrderNo(orderBack.getOrderNo());
             order.setOrderStatus("6");
@@ -828,10 +830,24 @@ public class OrderServiceImpl implements OrderService {
         message.setBusinessId(order.getOrderNo());
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
-        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX + orderProductBO.getName() + MessageConstant.BUYING_MEMBERS_SUFFIX);
+        String content = MessageConstant.BUYING_MEMBERS_PREFIX.replaceAll("\\{#DATA.VIP\\}", orderProductBO.getName());
+        message.setContent(content);
         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message, request);
+
+        User user = userRoMapper.selectOne(order.getUserId());
+        //微信消息
+        if (StringUtils.isNotEmpty(user.getWxopenid())) {
+            //TODO 12
+        }
+
+        //短信消息
+        if (("VIP3".equalsIgnoreCase(user.getVipLevel())
+                || "VIP4".equalsIgnoreCase(user.getVipLevel()))
+                && StringUtils.isNotEmpty(user.getPhone())) {
+//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+        }
     }
 
     /**
@@ -843,10 +859,22 @@ public class OrderServiceImpl implements OrderService {
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
         User user = userRoMapper.selectOne(order.getUserId());
-        message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints());
+        String content = MessageConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user.getPoints()));
         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message, request);
+
+        //微信消息
+        if (StringUtils.isNotEmpty(user.getWxopenid())) {
+            //TODO 13
+        }
+
+        //短信消息
+        if (("VIP3".equalsIgnoreCase(user.getVipLevel())
+                || "VIP4".equalsIgnoreCase(user.getVipLevel()))
+                && StringUtils.isNotEmpty(user.getPhone())) {
+//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+        }
     }
 
     /**
@@ -1029,13 +1057,39 @@ public class OrderServiceImpl implements OrderService {
                 LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102, "物流公司查询失败");
             }
+            String content = MessageConstant.DELIVER_GOODS_PREFIX+order.getOrderNo()+MessageConstant.DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX;
             Message message = new Message();
             message.setBusinessId(order.getOrderNo());
             message.setBusiType(MessageConstant.SPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX);
+            message.setContent(content);
             message.setUserId(order.getUserId());
             messageSendUtil.sendMessage(message, request);
+
+            User user = userRoMapper.selectOne(order.getUserId());
+            if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                //发送微信消息
+                /*Map<String, String> dataList = new HashMap<String, String>();
+                dataList.put("userId", user.getId());
+                dataList.put("openId", user.getWxopenid());
+                dataList.put("first", "你有新的订单提醒：");
+                dataList.put("remark", "详情请登录财税平台查看。");
+                dataList.put("keyword1", order.getOrderNo());
+                dataList.put("keyword2", UserUtil.getAdminInfo().getNickname());
+                dataList.put("keyword3", DataUtils.dateToStr(new Date()));
+                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", dataList);*/
+            } else {
+                //发送短信
+                /*String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", user
+                        .getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", DataUtils.getFormatDate(user.getVipExpireDate()));
+                Map<String, String> maps = new HashMap<String, String>();
+                maps.put("var", vdxMsg);
+                List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+                list.add(maps);
+
+                String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+                messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);*/
+            }
         }
     }
 
@@ -1049,24 +1103,40 @@ public class OrderServiceImpl implements OrderService {
         //修改订单状态
         updOrder(order);
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(), "0");
-        //发送消息
+        //发送普通业务消息
         ExpressComp expressComp = null;
         if (order.getExpressCompId() != null && !"".equals(order.getExpressCompId())) {
             expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
         }
+        String content;
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
         if (expressComp != null) {
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX);
+            content = MessageConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX;
+            message.setContent(content);
         } else {
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + MessageConstant.SUFFIX);
+            content = MessageConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + MessageConstant.SUFFIX;
+            message.setContent(content);
             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         }
-
         message.setUserId(order.getUserId());
         messageSendUtil.sendMessage(message, request);
+
+        User user = userRoMapper.selectOne(order.getUserId());
+        //微信消息
+        if (StringUtils.isNotEmpty(user.getWxopenid())) {
+            //TODO 2
+        }
+
+        //短信消息
+        if (("VIP3".equalsIgnoreCase(user.getVipLevel())
+                || "VIP4".equalsIgnoreCase(user.getVipLevel()))
+                && StringUtils.isNotEmpty(user.getPhone())) {
+//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+        }
+
     }
 
     @Transactional("db1TxManager")
