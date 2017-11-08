@@ -4,9 +4,9 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryLogMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
 insert into uc_lottery_log(
-id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake
+id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake,addressId
 )values(
-#{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip},#{remake})
+#{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip},#{remake},#{addressId})
 </insert>
     <update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
         update uc_lottery_log
@@ -20,6 +20,7 @@ id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,rem
             <if test="userId!=null">userId=#{userId},</if>
             <if test="upoint!=null">upoint=#{upoint},</if>
             <if test="ip!=null">ip=#{ip},</if>
+            <if test="addressId!=null">addressId=#{addressId},</if>
             <if test="remake!=null">remake=#{remake}</if>
         </set>
         where id=#{id}

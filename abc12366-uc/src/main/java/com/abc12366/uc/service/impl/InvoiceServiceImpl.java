@@ -391,6 +391,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
                 excel.setLinkman(linkman);
                 excel.setCargoContent(invoiceNos.toString());
+                excel.setContent(bo.getInvoiceNo());
                 //寄托数量
                 excel.setCargoNum(num);
                 excel.setReceivingCompany(bo.getNsrmc());
@@ -449,12 +450,24 @@ public class InvoiceServiceImpl implements InvoiceService {
 
             User user = userRoMapper.selectOne(invoiceTemp.getUserId());
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 11
+                //TODO 11 纸质发票发货
                 //发送微信消息
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
+                map.put("remark", "感谢您的使用。");
+                map.put("keyword1", invoiceTemp.getConsignee());
+                map.put("keyword2", invoiceTemp.getContactNumber());
+                map.put("keyword3", expressComp.getCompName());
+                map.put("keyword4", expressExcel.getWaybillNum());
+                map.put("keyword5", invoiceTemp.getInvoiceNo());
+                templateService.templateSend("lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas", map);
+
             } else {
                 //发送短信
                 String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-//                messageSendUtil.sendPhoneMessage(user.getPhone(), content, accessToken);
+                sendPhoneMessage(request,content,user);
             }
 
         }
@@ -737,13 +750,14 @@ public class InvoiceServiceImpl implements InvoiceService {
                 messageSendUtil.sendMessage(message, request);
 
                 User user = userRoMapper.selectOne(invoiceBO.getUserId());
-                /*if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                if (StringUtils.isNotEmpty(user.getWxopenid())) {
+                    //TODO 14 电子发票开票
                     //发送微信消息
                     Map<String, String> dataList = new HashMap<String, String>();
                     dataList.put("userId", user.getId());
                     dataList.put("openId", user.getWxopenid());
                     dataList.put("first", "您申请的电子发票已开具");
-                    dataList.put("remark", "详情请登录财税网查看。");
+                    dataList.put("remark", "请注意查收！");
                     dataList.put("keyword1", tail.getInvoiceCode());
                     dataList.put("keyword2", tail.getInvoiceNo());
                     dataList.put("keyword3", String.valueOf(invoiceBO.getAmount()));
@@ -751,16 +765,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                     templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
                 } else {
                     //发送短信
-                    String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", user
-                            .getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", DataUtils.getFormatDate(user.getVipExpireDate()));
-                    Map<String, String> maps = new HashMap<String, String>();
-                    maps.put("var", vdxMsg);
-                    List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-                    list.add(maps);
-
-                    String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-                    messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
-                }*/
+                    sendPhoneMessage(request,content,user);
+                }
 
             } else {
                 if (invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())) {
@@ -792,14 +798,23 @@ public class InvoiceServiceImpl implements InvoiceService {
                 User user = userRoMapper.selectOne(invoiceBO.getUserId());
                 //微信消息
                 if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                    //TODO 8
+                    //TODO 8 纸质发票审核通过
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("userId", user.getId());
+                    map.put("openId", user.getWxopenid());
+                    map.put("first", "您好，审核结果如下");
+                    map.put("remark", "感谢您的使用。");
+                    map.put("keyword1", invoiceBO.getId());
+                    map.put("keyword2", content);
+                    templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
+
                 }
 
                 //短信消息
                 if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                         || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                         && StringUtils.isNotEmpty(user.getPhone())) {
-//                    messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+                    sendPhoneMessage(request,content,user);
                 }
             }
         } else {
@@ -819,6 +834,23 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         //加入发票日志
         insertInvoiceLog(invoiceCheckBO.getId(), UserUtil.getAdminId(), invoiceCheckBO.getRemark());
+    }
+
+    /**
+     * 发送短信公告方法
+     * @param request
+     * @param content
+     * @param user
+     */
+    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
+        //发送短信
+        Map<String, String> maps = new HashMap<String, String>();
+        maps.put("var", content);
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        list.add(maps);
+
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+        messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
     }
 
     /**
@@ -857,14 +889,22 @@ public class InvoiceServiceImpl implements InvoiceService {
             User user = userRoMapper.selectOne(order.getUserId());
             //微信消息
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 9
+                //TODO 9 电子发票审核不通过
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "您好，审核结果如下");
+                map.put("remark", "感谢您的使用。");
+                map.put("keyword1", invoiceBO.getId());
+                map.put("keyword2", content);
+                templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
             }
 
             //短信消息
             if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                     || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                     && StringUtils.isNotEmpty(user.getPhone())) {
-//                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+                sendPhoneMessage(request,content,user);
             }
 
         } else {
@@ -882,14 +922,22 @@ public class InvoiceServiceImpl implements InvoiceService {
             User user = userRoMapper.selectOne(order.getUserId());
             //微信消息
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 10
+                //TODO 10 纸质发票审核不通过
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "您好，审核结果如下");
+                map.put("remark", "感谢您的使用。");
+                map.put("keyword1", invoiceBO.getId());
+                map.put("keyword2", content);
+                templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
             }
 
             //短信消息
             if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                     || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                     && StringUtils.isNotEmpty(user.getPhone())) {
-//                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+                sendPhoneMessage(request,content,user);
             }
         }
     }

@@ -34,11 +34,13 @@ public class LotteryLogController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String userName,
                                      @RequestParam(required = false) String activityName,
+                                     @RequestParam(required = false) String userId,
                                      @RequestParam(required = false) String startTime,
                                      @RequestParam(required = false) String  endTime,
                                      @RequestParam(required = false) Integer isluck,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
         map.put("isluck",isluck);
+        if(userId != null && !userId.isEmpty())        map.put("userId",userId);
         if(userName != null && !userName.isEmpty())        map.put("userName",userName);
         if(activityName != null && !activityName.isEmpty())        map.put("activityName",activityName);
         if(startTime != null && !startTime.isEmpty())        map.put("startTime",startTime);

@@ -18,10 +18,7 @@ import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.model.weixin.bo.template.Template;
-import com.abc12366.uc.service.OrderExchangeService;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.PointsRuleService;
-import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.*;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.abc12366.uc.webservice.DzfpClient;
@@ -103,6 +100,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private TradeMapper tradeMapper;
+
+    @Autowired
+    private IWxTemplateService templateService;
 
     @Transactional("db1TxManager")
     @Override
@@ -257,14 +257,25 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     User user = userRoMapper.selectOne(order.getUserId());
                     //微信消息
                     if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                        //TODO 5
+                        //TODO 5 退换货发货
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("userId", user.getId());
+                        map.put("openId", user.getWxopenid());
+                        map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
+                        map.put("remark", "感谢您的使用。");
+                        map.put("keyword1", order.getConsignee());
+                        map.put("keyword2", order.getContactNumber());
+                        map.put("keyword3", expressComp.getCompName());
+                        map.put("keyword4", data.getExpressNo());
+                        map.put("keyword5", order.getOrderNo());
+                        templateService.templateSend("lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas", map);
                     }
 
                     //短信消息
                     if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                             || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                             && StringUtils.isNotEmpty(user.getPhone())) {
-//                        messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+                        sendPhoneMessage(request,content,user);
                     }
                 }else {
                     LOGGER.warn("只有审批通过的数据才能进行导入：{}", data.getOrderNo());
@@ -460,14 +471,23 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     User user = userRoMapper.selectOne(order.getUserId());
                                     //微信消息
                                     if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                                        //TODO 6
+                                        //TODO 6 支付宝退款
+                                        Map<String, String> map = new HashMap<String, String>();
+                                        map.put("userId", user.getId());
+                                        map.put("openId", user.getWxopenid());
+                                        map.put("first", "您好，欢迎使用财税平台");
+                                        map.put("remark", "感谢使用财税平台，祝您生活愉快！");
+                                        map.put("keyword1", content);
+                                        map.put("keyword2", refundRes.getRefund_fee());
+                                        map.put("keyword3", DataUtils.dateToStr(new Date()));
+                                        templateService.templateSend("NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM", map);
                                     }
 
                                     //短信消息
                                     if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                                             || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                                             && StringUtils.isNotEmpty(user.getPhone())) {
-//                                        messageSendUtil.sendPhoneMessage(user.getPhone(), content, httpServletRequest.getHeader(Constant.APP_TOKEN_HEAD));
+                                        sendPhoneMessage(httpServletRequest,content,user);
                                     }
                                     return ResponseEntity.ok(Utils.kv("data", refundRes));
                                 } else {
@@ -642,28 +662,22 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             User user = userRoMapper.selectOne(order.getUserId());
             //微信消息
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 4
-                Template info = new Template();
-                info.setTemplate_id("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
-                info.setContent("{{first.DATA}}\n\n 商品信息：{{keyword1.DATA}}\n 过期时间：{{keyword2.DATA}}\n " +
-                        "{{remark.DATA}}");
-                Map<String, String> dataList = new HashMap<String, String>();
-                dataList.put("openId", user.getWxopenid());
-               /* dataList.put("first", "您的会员即将过期");
-                dataList.put("remark", "您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
-                dataList.put("keyword1", userBO.getVipLevelName());
-                dataList.put("keyword1Color", "#00DB00");
-                dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
-                dataList.put("keyword2Color", "#00DB00");
-                dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
-                templateService.templateSend(info.toSendJson(dataList));*/
+                //TODO 4 拒绝退换货
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "您好，审核结果如下");
+                map.put("remark", "感谢您的使用。");
+                map.put("keyword1", data.getId());
+                map.put("keyword2", content);
+                templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
             }
 
             //短信消息
             if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                     || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                     && StringUtils.isNotEmpty(user.getPhone())) {
-//                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+                sendPhoneMessage(request,content,user);
             }
 
         }
@@ -715,18 +729,42 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             User user = userRoMapper.selectOne(order.getUserId());
             //微信消息
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 3
-
+                //TODO 3 同意退货
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "您好，审核结果如下");
+                map.put("remark", "感谢您的使用。");
+                map.put("keyword1", data.getId());
+                map.put("keyword2", content);
+                templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
             }
 
             //短信消息
             if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                     || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                     && StringUtils.isNotEmpty(user.getPhone())) {
-//                messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+                sendPhoneMessage(request, content, user);
             }
         }
         return oe;
+    }
+
+    /**
+     * 发送短信公告方法
+     * @param request
+     * @param content
+     * @param user
+     */
+    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
+        //发送短信
+        Map<String, String> maps = new HashMap<String, String>();
+        maps.put("var", content);
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        list.add(maps);
+
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+        messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
     }
 
     @Transactional("db1TxManager")
