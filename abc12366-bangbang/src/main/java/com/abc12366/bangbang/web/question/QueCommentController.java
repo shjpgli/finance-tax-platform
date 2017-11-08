@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -73,9 +74,9 @@ public class QueCommentController {
      * 问题评论新增
      */
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody QuestionCommentBo CommentBo) {
+    public ResponseEntity save(@Valid @RequestBody QuestionCommentBo CommentBo, HttpServletRequest request) {
         //新增问题评论信息
-        CommentBo = queCommentService.save(CommentBo);
+        CommentBo = queCommentService.save(CommentBo,request);
         return ResponseEntity.ok(Utils.kv("data", CommentBo));
     }
 

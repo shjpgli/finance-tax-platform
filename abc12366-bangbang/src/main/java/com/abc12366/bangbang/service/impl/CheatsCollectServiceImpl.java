@@ -16,6 +16,7 @@ import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.service.CheatsCollectService;
 import com.abc12366.bangbang.service.QueCollectService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,9 @@ public class CheatsCollectServiceImpl implements CheatsCollectService {
 
     @Autowired
     private CheatsCollectRoMapper collectRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Override
     public String insert(String id, HttpServletRequest request) {
@@ -74,7 +78,9 @@ public class CheatsCollectServiceImpl implements CheatsCollectService {
 
         int result = collectMapper.insert(collect);
 
-
+        //帮邦日志记录表
+        //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+        bangBangDtLogUtil.insertLog(8, collect.getCheatsId(), "", collect.getCheatsId(), collect.getUserId(), "");
 
 
         return collectCnt+"";

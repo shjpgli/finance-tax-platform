@@ -7,6 +7,7 @@ import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public interface QuestionService {
 
     List<QuestionryBo> selectListry(Map<String, Object> map);
 
-    QuestionBo save(QuestionBo questionBo);
+    QuestionBo save(QuestionBo questionBo, HttpServletRequest request);
 
     QuestionBo selectQuestion(String id);
 
@@ -44,7 +45,7 @@ public interface QuestionService {
 
     List<QuestionBo> selectInviteList(String userId);
 
-    List<MyQuestionTjBo> selectMybangbang(String userId);
+    MyQuestionTjBo selectMybangbang(String userId);
 
     List<QuestionBo> selectMyQuestionList(Map<String, Object> map);
 

@@ -19,7 +19,10 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -185,16 +188,18 @@ public class MessageSendUtilImpl implements MessageSendUtil {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void sendPhoneMessage(String phone, String vdxMsg, String accessToken) {
+	public void sendPhoneMessage(String phone,String templateId,  List<Map<String,String>> list, String accessToken) {
+		
 		String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/mobile/msg";
         Map<String, Object> map = new HashMap<>();
         map.put("phone", phone);
-        map.put("content", vdxMsg);
+        map.put("templateId", templateId);
+        map.put("vars", list);
         
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Access-Token", accessToken);
         httpHeaders.add("Version", "1");
-        HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
+        HttpEntity requestEntity = new HttpEntity(map,httpHeaders);
         ResponseEntity<String> responseEntity = null;
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);

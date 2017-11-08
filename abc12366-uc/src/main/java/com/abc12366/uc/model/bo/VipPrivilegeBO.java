@@ -1,21 +1,109 @@
 package com.abc12366.uc.model.bo;
 
-import java.util.Date;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
- * Admin: liuguiyao<435720953@qq.com.com>
- * Date: 2017-05-22
- * Time: 9:51
+ * 会员特权新增对象
+ *
+ * @author lijun <ljun51@outlook.com>
+ * @create 2017-11-08 4:02 PM
+ * @since 1.0.0
  */
 public class VipPrivilegeBO {
+
+    /**
+     * PK
+     */
     private String id;
-    private String name;//特权名称
-    private String icon;//icon
-    private String description;//描述
-    private Boolean status;//数据状态
-    private Date lastUpdate;
-    private Date createTime;
-    private Integer sort;//排序
+
+    /**
+     * 特权名称
+     */
+    @NotEmpty
+    @Size(max = 100)
+    private String name;
+
+    /**
+     * 特权代码
+     */
+    @NotEmpty
+    @Length(max = 20)
+    private String code;
+
+    /**
+     * 图标
+     */
+    @Size( max = 100)
+    private String icon;
+
+    /**
+     * 描述
+     */
+    @Size(max = 1000)
+    private String description;
+
+    /**
+     * 数据状态
+     */
+    @NotNull
+    private Boolean status;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public Integer getSort() {
         return sort;
@@ -24,51 +112,16 @@ public class VipPrivilegeBO {
     public void setSort(Integer sort) {
         this.sort = sort;
     }
+
     @Override
     public String toString() {
-        return "VipPrivilegeBO [id=" + id + ", name=" + name + ", icon=" + icon + ", defaults=" + description + ", status="
-                + status + ", lastUpdate=" + lastUpdate + ", createTime=" + createTime + "]";
-    }
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getIcon() {
-        return icon;
-    }
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public Boolean getStatus() {
-        return status;
-    }
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-    public Date getCreateTime() {
-        return createTime;
-    }
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        return "VipPrivilegeInsertAndUpdateBO{" +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", icon='" + icon + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", sort=" + sort +
+                '}';
     }
 }

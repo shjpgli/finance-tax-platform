@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -110,9 +111,9 @@ public class QueAnswerController {
      * 问题回复新增
      */
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody QuestionAnswerBo answerBo) {
+    public ResponseEntity save(@Valid @RequestBody QuestionAnswerBo answerBo, HttpServletRequest request) {
         //新增问题回复信息
-        answerBo = queAnswerService.save(answerBo);
+        answerBo = queAnswerService.save(answerBo,request);
         return ResponseEntity.ok(Utils.kv("data", answerBo));
     }
 

@@ -41,10 +41,10 @@ public class WxGzhController {
 
     /**
      * 公众号列表信息
-     * @param gzhInfo
-     * @param page
-     * @param size
-     * @return
+     * @param gzhInfo 公众号参数
+     * @param page  页数
+     * @param size  大小
+     * @return 
      */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxgzh/list")
@@ -61,7 +61,11 @@ public class WxGzhController {
         return responseEntity;
     }
 
-    //从数据库获取单个菜单信息
+    /**
+     * 从数据库获取单个菜单信息
+     * @param id 菜单id
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxgzh/{id}")
     public ResponseEntity wxgzhInfo(@PathVariable("id") String id) {
@@ -75,7 +79,11 @@ public class WxGzhController {
 
     }
 
-    //新增微信公众号信息
+    /**
+     * 新增微信公众号信息
+     * @param gzhInfo 公众号
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PostMapping("/wxgzh/creat")
     public ResponseEntity wxgzhcreat(@Valid @RequestBody GzhInfo gzhInfo) {
@@ -88,7 +96,12 @@ public class WxGzhController {
         return responseEntity;
     }
 
-    //修改微信公众号
+    /**
+     * 修改微信公众号
+     * @param id  工作号ID
+     * @param gzhInfo 公众号
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PutMapping("/wxgzh/{id}")
     public ResponseEntity wxmenudbEdit(@PathVariable("id") String id, @Valid @RequestBody GzhInfo gzhInfo) {
@@ -102,7 +115,11 @@ public class WxGzhController {
         return responseEntity;
     }
 
-    //删除单个微信公众号信息
+    /**
+     * 删除单个微信公众号信息
+     * @param id 工作号ID
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @DeleteMapping("/wxgzh/{id}")
     public ResponseEntity delete(@PathVariable("id") String id) {
@@ -115,14 +132,23 @@ public class WxGzhController {
         return responseEntity;
     }
     
-    //微信网页授权JS注册
+    /**
+     * 微信网页授权JS注册
+     * @param charge 是否判断缓存
+     * @param config 确认参数
+     * @return
+     */
     @PostMapping("/wxgzh/getwxJsConfig")
     public @ResponseBody WxJsConfig getwxJsConfig(@RequestParam(value="charge",required=false) String charge,@RequestBody WxJsConfig config){
     	LOGGER.info(JSON.toJSONString(config));
     	return SignUtil.jsign(WxGzhClient.getInstance().getAppid(), WxGzhClient.getInstanceJstiket(), config.getUrl(),charge);
     }
     
-    //通过微信授权code获取微信用户信息
+    /**
+     * 通过微信授权code获取微信用户信息
+     * @param code 微信code
+     * @return
+     */
     @SuppressWarnings("rawtypes")
 	@GetMapping("/wxgzh/getuserinfo/{code}")
     public ResponseEntity getuserinfo(@PathVariable("code") String code){
@@ -149,7 +175,11 @@ public class WxGzhController {
         
     }
     
-    //通过微信授权code获取用户openid
+    /**
+     * 通过微信授权code获取用户openid
+     * @param code 微信code
+     * @return
+     */
     @SuppressWarnings("rawtypes")
 	@GetMapping("/wxgzh/getuserid/{code}")
     public ResponseEntity getuserid(@PathVariable("code") String code){

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -191,9 +192,9 @@ public class QuestionController {
      * 问题新增
      */
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody QuestionBo questionBo) {
+    public ResponseEntity save(@Valid @RequestBody QuestionBo questionBo, HttpServletRequest request) {
         //新增问题信息
-        questionBo = questionService.save(questionBo);
+        questionBo = questionService.save(questionBo,request);
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
 
@@ -357,11 +358,8 @@ public class QuestionController {
                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<MyQuestionTjBo> questionBoList = questionService.selectMybangbang(userId);
-        return (questionBoList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
-                        ()));
+        MyQuestionTjBo myQuestionTjBo = questionService.selectMybangbang(userId);
+        return ResponseEntity.ok(Utils.kv("data", myQuestionTjBo));
     }
 
     /**

@@ -82,7 +82,7 @@ public interface QuestionRoMapper {
     /**
      * 我的帮帮
      **/
-    List<MyQuestionTjBo> selectMybangbang(String userId);
+    MyQuestionTjBo selectMybangbang(String userId);
 
     /**
      * 查询我的提问

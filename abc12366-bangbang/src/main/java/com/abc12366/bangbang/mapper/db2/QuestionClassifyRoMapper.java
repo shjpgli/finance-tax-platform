@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionClassify;
+import com.abc12366.bangbang.model.question.QuestionClassifyStatistics;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -34,5 +35,9 @@ public interface QuestionClassifyRoMapper {
      *
      **/
     int selectClassifyCnt(@Param("classifyCode") String classifyCode);
+
+
+    /*话题统计分析*/
+    List<QuestionClassifyStatistics> selectClassifyStatistics(Map<String, Object> map);
 
 }

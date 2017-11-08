@@ -42,7 +42,11 @@ public class PayReturnController {
     @Autowired
     private OrderService orderService;
 
-    //uc支付宝回调信息签名校验
+    /**
+     * uc支付宝回调信息签名校验
+     * @param params  参数
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PostMapping("/validate")
     public ResponseEntity validate(@RequestBody Map<String, String> params) {
@@ -55,7 +59,11 @@ public class PayReturnController {
         }
     }
 
-    //UC前段回调更新支付状态，订单状态
+    /**
+     * UC前段回调更新支付状态，订单状态
+     * @param request  上下文
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @RequestMapping("/alipay")
     public ResponseEntity aliPayReturn(HttpServletRequest request) {
@@ -121,7 +129,7 @@ public class PayReturnController {
                 } else {
                     TradeBillBO data = new TradeBillBO();
                     data.setTradeNo(out_trade_no);
-                    TradeLog log = tradeLogService.selectOne(tradeBillBO);
+                    TradeLog log = tradeLogService.selectOne(data);
                     if(log != null){
                         TradeLog tradeLog = new TradeLog();
                         tradeLog.setTradeNo(out_trade_no);

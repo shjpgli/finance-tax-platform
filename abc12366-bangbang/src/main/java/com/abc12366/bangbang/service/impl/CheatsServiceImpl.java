@@ -9,6 +9,7 @@ import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.CheatsTagBo;
 import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
 import com.abc12366.bangbang.service.CheatsService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -50,6 +51,9 @@ public class CheatsServiceImpl implements CheatsService {
 
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Override
     public List<CheatsBo> selectList(Map<String,Object> map) {
@@ -217,6 +221,12 @@ public class CheatsServiceImpl implements CheatsService {
             }
 
             cheatsMapper.insert(cheats);
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(6, cheats.getId(), "", cheats.getId(), cheats.getUserId(), "");
+
+
         } catch (Exception e) {
             LOGGER.error("新增秘籍信息异常：{}", e);
             throw new ServiceException(6182);

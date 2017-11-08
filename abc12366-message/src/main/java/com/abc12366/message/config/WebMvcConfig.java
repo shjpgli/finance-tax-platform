@@ -53,7 +53,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
-                .excludePathPatterns("/dzsb/getpublickey")
+                .excludePathPatterns("/hngs/getpublickey")
                 //.excludePathPatterns("/wsbs/login")
                 .excludePathPatterns("/test");
 
@@ -68,7 +68,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/getcode","/verify","/regis/code")
                 .excludePathPatterns("/mobile/msg")
                 .excludePathPatterns("/business/system")
-                .excludePathPatterns("/dzsb/getpublickey")
+                .excludePathPatterns("/hngs/getpublickey","/hngs/get")
                 //.excludePathPatterns("/wsbs/login")
                 .excludePathPatterns("/test");
     }
