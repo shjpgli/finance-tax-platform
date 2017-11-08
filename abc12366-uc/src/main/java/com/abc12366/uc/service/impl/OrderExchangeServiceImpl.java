@@ -220,16 +220,13 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         if (dataList.size() > 0) {
             for (SfImportBO data : dataList) {
                 //查询退换货记录，2：审核通过
-                OrderExchange orderExchange = new OrderExchange.Builder()
-                        .orderNo(data.getOrderNo())
-                        .status("2")
-                        .build();
-                if (orderExchange != null) {
+                OrderExchange exchange = orderExchangeRoMapper.selectByOrderNoAndStatus(data.getOrderNo());
+                if (exchange != null) {
                     OrderExchange oe = new OrderExchange.Builder()
                             .orderNo(data.getOrderNo())
                             .status("3")
                             .build();
-                    oe.setId(orderExchange.getId());
+                    oe.setId(exchange.getId());
                     oe.setToExpressComp(data.getExpressComp());
                     oe.setToExpressNo(data.getExpressNo());
                     orderExchangeMapper.update(oe);
@@ -269,6 +266,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                             && StringUtils.isNotEmpty(user.getPhone())) {
 //                        messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
                     }
+                }else {
+                    LOGGER.warn("只有审批通过的数据才能进行导入：{}", data.getOrderNo());
+                    throw new ServiceException(4102, "只有审批通过的数据才能进行导入");
                 }
             }
         }
