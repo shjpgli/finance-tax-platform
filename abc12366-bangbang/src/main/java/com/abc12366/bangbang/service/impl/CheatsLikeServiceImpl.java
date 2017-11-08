@@ -99,7 +99,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
 
             //帮邦日志记录表
             //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
-            bangBangDtLogUtil.insertLog(9, like.getCheatsId(), "", like.getId(), like.getUserId(), "");
+            bangBangDtLogUtil.insertLog(9, like.getCheatsId(), "", like.getLikeId(), like.getUserId(), "");
 
         }else{
             CheatsComment comment1 = new CheatsComment();

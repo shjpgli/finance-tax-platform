@@ -81,7 +81,7 @@ public class QueCollectServiceImpl implements QueCollectService {
 
         //帮邦日志记录表
         //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
-        bangBangDtLogUtil.insertLog(4, collect.getQuestionId(), "", collect.getQuestionId(), collect.getUserId(), "");
+        bangBangDtLogUtil.insertLog(4, collect.getQuestionId(), "", collect.getCollectId(), collect.getUserId(), "");
 
 
         String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
