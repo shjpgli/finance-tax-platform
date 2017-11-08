@@ -37,7 +37,7 @@ public class MyQuestionTjBo implements Serializable {
     /**我的关注数量**int(11)**/
     private Integer attentionNum;
 
-    /**我的粉丝数量**int(11)**/
+    /**我的粉丝角标**int(11)**/
     private Integer fansNum;
 
     /**勋章数**int(11)**/
