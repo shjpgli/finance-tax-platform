@@ -789,7 +789,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setUserId(invoiceBO.getUserId());
                 messageSendUtil.sendMessage(message, request);
 
-                User user = userRoMapper.selectOne(invoiceBO.getId());
+                User user = userRoMapper.selectOne(invoiceBO.getUserId());
                 //微信消息
                 if (StringUtils.isNotEmpty(user.getWxopenid())) {
                     //TODO 8
