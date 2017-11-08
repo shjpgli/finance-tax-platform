@@ -2,7 +2,9 @@ package com.abc12366.uc.web.wx;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.weixin.bo.template.QTemplateSendLog;
 import com.abc12366.uc.model.weixin.bo.template.Template;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.github.pagehelper.PageInfo;
@@ -11,9 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -126,5 +131,51 @@ public class WxTemplateController {
     public ResponseEntity templateSendstr(@RequestBody String templatemsg) {
         return templateService.templateSend(templatemsg);
     }
+    
+    /**
+     * 微信模板发送日志查询
+     * @param nickname  昵称
+     * @param username 用户名
+     * @param beginTime 开始时间 yyyy-MM-dd
+     * @param endTime 结束时间 yyyy-MM-dd
+     * @param page 页数
+     * @param size 大小
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@GetMapping("/wxtemplatesendlog")
+    public ResponseEntity wxTemplateSendList(
+    		@RequestParam(value = "nickname", required = false) String nickname,
+    		@RequestParam(value = "username", required = false) String username,
+    		@RequestParam(value = "beginTime", required = false) String beginTime,
+    		@RequestParam(value = "endTime", required = false) String endTime,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+    	
+		LOGGER.info("{},{},{},{},{},{}", nickname, username, beginTime,endTime,page,size);
+		
+		Map<String,Object> map=new HashMap<String, Object>();
+		if(!StringUtils.isEmpty(nickname)){
+			map.put("nickname", nickname);
+		}
+		if(!StringUtils.isEmpty(username)){
+			map.put("username", username);
+		}
+		if(!StringUtils.isEmpty(beginTime)){
+			map.put("beginTime", DateUtils.StrToDate(beginTime));
+		}
+		if(!StringUtils.isEmpty(endTime)){
+			map.put("endTime", DateUtils.StrToDate(endTime));
+		}
+		
+		List<QTemplateSendLog> dataList = templateService.wxTemplateSendList(page, size,map);
+		
+		PageInfo<QTemplateSendLog> pageInfo = new PageInfo<QTemplateSendLog>(dataList);
+		ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+		"total", pageInfo.getTotal()));
+		
+		LOGGER.info("{}", responseEntity);
+		return responseEntity;
+	}
    
 }

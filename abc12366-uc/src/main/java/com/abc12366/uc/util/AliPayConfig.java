@@ -26,6 +26,10 @@ public class AliPayConfig {
 	//支付宝异步通知地址
 	public static String NOTIFY_URL="http://test.chabc.net/uc/payreturn/alipay";
 
+	/**
+	 * 初始化
+	 * @return
+	 */
 	public static AlipayClient getInstance(){    
         if (alipayClient == null){
            synchronized(AliPayConfig.class){
@@ -36,14 +40,30 @@ public class AliPayConfig {
         return alipayClient;
 	}
 	
+	/**
+	 * JSON转换
+	 * @param object 实体类
+	 * @return
+	 * @throws Exception
+	 */
 	public static String toCharsetJsonStr(Object object) throws Exception{
 		return toCharsetStr(JSON.toJSONString(object));
 	}
-
+    /**
+     * 转换指定格式字符串
+     * @param val 内容
+     * @return
+     * @throws Exception
+     */
 	public static String toCharsetStr(String val) throws Exception{
 		return new String(val.getBytes(charset),charset);
 	}
-
+    /**
+     * 校验签名是否正确
+     * @param params  参数
+     * @return
+     * @throws AlipayApiException
+     */
 	public static boolean rsaCheckV1(Map<String, String> params) throws AlipayApiException {
 		return AlipaySignature.rsaCheckV1(params, AliPayConfig.alipay_public_key, AliPayConfig.charset, AliPayConfig.sign_type);
 	}
