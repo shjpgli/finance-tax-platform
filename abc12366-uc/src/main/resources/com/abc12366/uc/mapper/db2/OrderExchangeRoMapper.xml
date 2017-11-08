@@ -80,7 +80,7 @@
     <select id="selectByOrderNoAndStatus" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
         SELECT <include refid="Base_Column_List"/>
         FROM uc_order_exchange
-        WHERE status = '2' and  orderNo = #{orderNo}
+        WHERE status = '6' and  orderNo = #{orderNo}
     </select>
 
     <select id="export" parameterType="com.abc12366.uc.model.bo.OrderExchangeExportBO"

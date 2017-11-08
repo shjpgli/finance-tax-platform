@@ -839,14 +839,23 @@ public class OrderServiceImpl implements OrderService {
         User user = userRoMapper.selectOne(order.getUserId());
         //微信消息
         if (StringUtils.isNotEmpty(user.getWxopenid())) {
-            //TODO 12
+            //TODO 12 会员购买
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("userId", user.getId());
+            map.put("openId", user.getWxopenid());
+            map.put("first", "亲爱的" + user.getUsername() + "，恭喜您成功升级为 VIP 会员！");
+            map.put("remark", "感恩您的参与和支持，谢谢！。");
+            map.put("keyword1", user.getVipLevelName());
+            map.put("keyword2", orderProductBO.getName());
+            map.put("keyword3", DataUtils.dateToStr(new Date()));
+            templateService.templateSend("GrA5UnnYg39Rhs2nyDzwoFiYfmZh5sFkNXTZWGGmrkY", map);
         }
 
         //短信消息
         if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                 || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                 && StringUtils.isNotEmpty(user.getPhone())) {
-//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+            sendPhoneMessage(request, content, user);
         }
     }
 
@@ -866,14 +875,22 @@ public class OrderServiceImpl implements OrderService {
 
         //微信消息
         if (StringUtils.isNotEmpty(user.getWxopenid())) {
-            //TODO 13
+            //TODO 13 积分充值
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("userId", user.getId());
+            map.put("openId", user.getWxopenid());
+            map.put("first", "亲爱的"+user.getUsername()+"，你已兑换成功。");
+            map.put("remark", "感谢你的使用。");
+            map.put("keyword1", orderProductBO.getName());
+            map.put("keyword2", String.valueOf(order.getGiftPoints()));
+            templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
         }
 
         //短信消息
         if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                 || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                 && StringUtils.isNotEmpty(user.getPhone())) {
-//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+            sendPhoneMessage(request,content,user);
         }
     }
 
@@ -1069,28 +1086,38 @@ public class OrderServiceImpl implements OrderService {
             User user = userRoMapper.selectOne(order.getUserId());
             if (StringUtils.isNotEmpty(user.getWxopenid())) {
                 //发送微信消息
-                /*Map<String, String> dataList = new HashMap<String, String>();
-                dataList.put("userId", user.getId());
-                dataList.put("openId", user.getWxopenid());
-                dataList.put("first", "你有新的订单提醒：");
-                dataList.put("remark", "详情请登录财税平台查看。");
-                dataList.put("keyword1", order.getOrderNo());
-                dataList.put("keyword2", UserUtil.getAdminInfo().getNickname());
-                dataList.put("keyword3", DataUtils.dateToStr(new Date()));
-                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", dataList);*/
+                //TODO 1 发货导入，发送消息
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "你有新的订单提醒：");
+                map.put("remark", "详情请登录财税平台查看。");
+                map.put("keyword1", order.getOrderNo());
+                map.put("keyword2", UserUtil.getAdminInfo().getNickname());
+                map.put("keyword3", DataUtils.dateToStr(new Date()));
+                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
             } else {
-                //发送短信
-                /*String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", user
-                        .getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", DataUtils.getFormatDate(user.getVipExpireDate()));
-                Map<String, String> maps = new HashMap<String, String>();
-                maps.put("var", vdxMsg);
-                List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-                list.add(maps);
+                sendPhoneMessage(request, content, user);
 
-                String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-                messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);*/
             }
         }
+    }
+
+    /**
+     * 发送短信公告方法
+     * @param request
+     * @param content
+     * @param user
+     */
+    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
+        //发送短信
+        Map<String, String> maps = new HashMap<String, String>();
+        maps.put("var", content);
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        list.add(maps);
+
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+        messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
     }
 
     @Transactional("db1TxManager")
@@ -1127,14 +1154,23 @@ public class OrderServiceImpl implements OrderService {
         User user = userRoMapper.selectOne(order.getUserId());
         //微信消息
         if (StringUtils.isNotEmpty(user.getWxopenid())) {
-            //TODO 2
+            //TODO 2 发货发送消息
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("userId", user.getId());
+            map.put("openId", user.getWxopenid());
+            map.put("first", "你有新的订单提醒：");
+            map.put("remark", "详情请登录财税平台查看。");
+            map.put("keyword1", order.getOrderNo());
+            map.put("keyword2", UserUtil.getAdminInfo().getNickname());
+            map.put("keyword3", DataUtils.dateToStr(new Date()));
+            templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
         }
 
         //短信消息
         if (("VIP3".equalsIgnoreCase(user.getVipLevel())
                 || "VIP4".equalsIgnoreCase(user.getVipLevel()))
                 && StringUtils.isNotEmpty(user.getPhone())) {
-//            messageSendUtil.sendPhoneMessage(user.getPhone(), content, request.getHeader(Constant.APP_TOKEN_HEAD));
+            sendPhoneMessage(request, content, user);
         }
 
     }
