@@ -97,6 +97,6 @@ public class QuestionExpertController {
         List<QuestionExpertBO> list = questionExpertService.selectListByUserId(userId);
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", list));
     }
 }
