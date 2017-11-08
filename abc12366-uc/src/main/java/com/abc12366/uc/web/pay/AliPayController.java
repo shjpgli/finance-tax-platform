@@ -69,7 +69,7 @@ public class AliPayController {
 	
 	/**
 	 * 支付宝支付接口,返回二维码
-	 * @param payReq
+	 * @param payReq 支付内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -103,7 +103,7 @@ public class AliPayController {
 	
 	/**
 	 * 支付宝交易结果查询
-	 * @param payqueryReq
+	 * @param payqueryReq 结果内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -130,7 +130,7 @@ public class AliPayController {
 
 	/**
 	 * 订单交易结果查询
-	 * @param payqueryReq
+	 * @param payqueryReq 查询内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -145,7 +145,7 @@ public class AliPayController {
 
 	/**
 	 * 支付宝退款
-	 * @param aliRefund
+	 * @param aliRefund 退款内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -189,8 +189,8 @@ public class AliPayController {
 	
 	/**
 	 * 退款结果查询
-	 * @param out_trade_no
-	 * @param out_request_no
+	 * @param out_trade_no 交易ID
+	 * @param out_request_no 交易流水号
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -217,7 +217,7 @@ public class AliPayController {
 	}
 	/**
 	 * 交易关闭
-	 * @param payqueryReq
+	 * @param payqueryReq 关闭内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -241,7 +241,7 @@ public class AliPayController {
 	
 	/**
 	 * 交易取消
-	 * @param payqueryReq
+	 * @param payqueryReq 取消内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -265,7 +265,7 @@ public class AliPayController {
 	
 	/**
 	 * 交易对账单
-	 * @param bill_date
+	 * @param bill_date 对账日期
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")

@@ -12,15 +12,22 @@ import com.abc12366.bangbang.model.question.QuestionLog;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -32,9 +39,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
-
-    @Autowired
-    private QuestionLogMapper questionLogMapper;
 
     @Autowired
     private QuestionRoMapper questionRoMapper;
@@ -59,6 +63,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
+
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
     public List<QuestionBo> selectList(Map<String,Object> map) {
@@ -193,7 +203,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional("db1TxManager")
     @Override
-    public QuestionBo save(QuestionBo questionBo) {
+    public QuestionBo save(QuestionBo questionBo, HttpServletRequest request) {
 
         int ipcnt = questionDisableIpRoMapper.selectIpCnt(questionBo.getIp());
 
@@ -290,14 +300,16 @@ public class QuestionServiceImpl implements QuestionService {
             questionMapper.insert(question);
 
             //帮邦日志记录表
-            QuestionLog log = new QuestionLog();
-            log.setId(UUID.randomUUID().toString().replace("-", ""));
-            log.setQcId(question.getId());//问题或者秘籍ID
-            log.setSourceId(question.getId());//来源ID
-            log.setQlogType(1);//日志类型：1、提问
-            log.setUserId(question.getUserId());//用户ID
-            log.setCreateTime(new Date());//记录时间
-            questionLogMapper.insert(log);
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(1,question.getId(),"",question.getId(),question.getUserId(),"");
+
+
+            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
+            String userId = UcUserCommon.getUserId();
+            String sysTaskId = UCConstant.SYS_TASK_MRYNTW_CODE;
+            bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+
+
 
         } catch (Exception e) {
             LOGGER.error("新增问题信息异常：{}", e);

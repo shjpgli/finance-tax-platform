@@ -1,14 +1,11 @@
 package com.abc12366.bangbang.web.question;
 
-import com.abc12366.bangbang.common.StringUtil;
 import com.abc12366.bangbang.model.question.QuestionClassifyStatistics;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
 import com.abc12366.bangbang.service.QueClassifyService;
-import com.abc12366.bangbang.util.DateUtils;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -10,6 +10,16 @@ public class EventApplyFieldBo  implements Serializable {
     private String fieldkey;
     private String fieldvalue;
 
+    private int isRequired;
+
+    public int getIsRequired() {
+        return isRequired;
+    }
+
+    public void setIsRequired(int isRequired) {
+        this.isRequired = isRequired;
+    }
+
     public String getFieldkey() {
         return fieldkey;
     }

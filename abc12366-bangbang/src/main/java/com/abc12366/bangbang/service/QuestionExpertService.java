@@ -31,4 +31,7 @@ public interface QuestionExpertService {
     /* 删去专家 */
     void delete(String id);
 
+    /* 根据userID查询专家列表 */
+    List<QuestionExpertBO> selectListByUserId(String userId);
+
 }

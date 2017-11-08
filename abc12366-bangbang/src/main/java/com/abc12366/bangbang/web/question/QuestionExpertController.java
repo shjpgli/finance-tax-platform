@@ -89,4 +89,14 @@ public class QuestionExpertController {
         questionExpertService.modify(questionExpert);
         return ResponseEntity.ok(Utils.kv("data", questionExpert));
     }
+
+    /* 专家列表查询 */
+    @GetMapping(path = "/listByUserId/{userId}")
+    public ResponseEntity selectListByUserId(@PathVariable String userId){
+
+        List<QuestionExpertBO> list = questionExpertService.selectListByUserId(userId);
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", list));
+    }
 }

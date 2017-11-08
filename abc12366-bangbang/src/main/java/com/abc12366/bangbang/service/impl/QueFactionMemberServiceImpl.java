@@ -140,6 +140,21 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
         return "";
     }
 
+    @Override
+    public String updateDuty(String memberId,String duty) {
+        //设置职位
+        try {
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("memberId", memberId);//
+            dataMap.put("duty", duty);//
+            memberMapper.updateDuty(dataMap);
+        } catch (Exception e) {
+            LOGGER.error("设置职位异常：{}", e);
+            throw new ServiceException(6133);
+        }
+        return "";
+    }
+
     @Transactional("db1TxManager")
     @Override
     public String delete(String memberId) {

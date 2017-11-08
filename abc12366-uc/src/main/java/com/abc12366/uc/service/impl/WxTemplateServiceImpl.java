@@ -6,6 +6,7 @@ import com.abc12366.uc.mapper.db1.TemplateMapper;
 import com.abc12366.uc.mapper.db2.TemplateRoMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
+import com.abc12366.uc.model.weixin.bo.template.QTemplateSendLog;
 import com.abc12366.uc.model.weixin.bo.template.Template;
 import com.abc12366.uc.model.weixin.bo.template.TemplateSendLog;
 import com.abc12366.uc.model.weixin.bo.template.WxTemplates;
@@ -90,6 +91,12 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<Template> templates = templateRoMapper.selectList(template);
         return templates;
+    }
+    
+    
+    public List<QTemplateSendLog> wxTemplateSendList(int page, int size,Map<String,Object> map){
+    	 PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+    	 return templateRoMapper.selectLog(map);
     }
 
 	@SuppressWarnings("rawtypes")

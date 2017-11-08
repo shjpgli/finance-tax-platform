@@ -7,6 +7,7 @@ import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.CheatsComment;
 import com.abc12366.bangbang.model.question.bo.CheatsCommentBo;
 import com.abc12366.bangbang.service.CheatsCommentService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,6 +46,9 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
 
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Override
     public List<CheatsCommentBo> selectList(Map<String,Object> map) {
@@ -136,6 +140,10 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             commentBo.setCommentNum(commentNum);
 
             commentMapper.insert(comment);
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(7, comment.getCheatsId(), "", comment.getId(), comment.getUserId(), "");
 
 
 

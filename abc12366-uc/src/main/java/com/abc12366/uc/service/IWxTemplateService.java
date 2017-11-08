@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.weixin.bo.template.QTemplateSendLog;
 import com.abc12366.uc.model.weixin.bo.template.Template;
 import org.springframework.http.ResponseEntity;
 
@@ -50,5 +51,14 @@ public interface IWxTemplateService {
      * @return
      */
 	ResponseEntity templateSend(String templatemsg);
+	
+	/**
+	 * 获取微信模板消息发送日志
+	 * @param page 页数
+	 * @param size 大小
+	 * @param map 参数
+	 * @return
+	 */
+	public List<QTemplateSendLog> wxTemplateSendList(int page, int size,Map<String,Object> map);
 
 }

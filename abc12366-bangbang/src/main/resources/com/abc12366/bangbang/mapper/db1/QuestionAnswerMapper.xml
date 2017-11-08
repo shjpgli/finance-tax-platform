@@ -201,4 +201,9 @@
         UPDATE bb_question_answer SET isRead = 1 WHERE id = #{id}
     </update>
 
+    <!-- 设置采纳-->
+    <update id="updateIsAccept" parameterType="java.lang.String">
+        UPDATE bb_question_answer SET isAccept = 1 WHERE id = #{id}
+    </update>
+
 </mapper>

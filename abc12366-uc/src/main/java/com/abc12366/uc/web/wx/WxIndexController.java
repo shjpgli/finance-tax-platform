@@ -24,7 +24,13 @@ public class WxIndexController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WxIndexController.class);
     @Autowired
     private IWxMsgService iWxMsgService;
-
+    /**
+     * 微信回调主入口 
+     * @param model 自带model
+     * @param request 请求上文
+     * @param response 返回下文
+     * @return
+     */
     @RequestMapping(value="/init",produces = "application/json; charset=utf-8")
     public @ResponseBody String wechatVlidate(Model model, HttpServletRequest request, HttpServletResponse response) {
     	LOGGER.info("微信服务器回调!-----------");
