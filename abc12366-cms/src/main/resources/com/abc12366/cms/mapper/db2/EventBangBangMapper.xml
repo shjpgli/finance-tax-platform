@@ -32,7 +32,7 @@
 	</select>
 
 	<select id="selectModelItem" parameterType="java.util.Map" resultType="com.abc12366.cms.model.event.EventApplyFieldBo">
-		SELECT fieldkey,fieldvalue FROM `cms_event_model_item` a LEFT JOIN cms_view_sys_dict b ON a.`field`=b.`fieldValue` WHERE
+		SELECT fieldkey,fieldvalue,isRequired FROM `cms_event_model_item` a LEFT JOIN cms_view_sys_dict b ON a.`field`=b.`fieldValue` WHERE
 		b.dictid='bmbtzl' AND	eventid=#{eventid}
 	</select>
 
