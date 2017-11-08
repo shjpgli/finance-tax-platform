@@ -14,9 +14,9 @@
         FROM uc_wxtemplate
         <where>
             1 = 1
-            <if test="title != null">and title like CONCAT('%',#{title},'%')</if>
-            <if test="primary_industry != null">and primary_industry = #{primary_industry}</if>
-            <if test="deputy_industry != null">and deputy_industry = #{deputy_industry}</if>
+            <if test="title != null and title != ''">and title like CONCAT('%',#{title},'%')</if>
+            <if test="primary_industry != null and primary_industry != ''">and primary_industry = #{primary_industry}</if>
+            <if test="deputy_industry != null and deputy_industry != ''">and deputy_industry = #{deputy_industry}</if>
         </where>
         ORDER BY lastUpdate DESC
     </select>
@@ -27,5 +27,28 @@
         <include refid="Base_Column_List"/>
         FROM uc_wxtemplate
         WHERE template_id = #{id}
+    </select>
+    
+    
+    <select id="selectLog" resultType="com.abc12366.uc.model.weixin.bo.template.QTemplateSendLog"
+            parameterType="java.util.Map">
+        SELECT 
+            l.id, l.createdate, l.returncode, l.returnmsg, l.templateval, u.username, u.nickname  
+        FROM  
+            uc_wxtemplate_log l, uc_user u 
+        WHERE 
+            l.userId=u.id
+        <if test="nickname != null and nickname != ''"> and u.nickname like CONCAT('%',#{nickname},'%') </if>
+        <if test="username != null and username != ''"> and u.username =#{username} </if>
+        <if test="beginTime != null"> 
+          <![CDATA[
+              and date_format(l.createdate, '%Y-%m-%d') >= date_format(#{beginTime}, '%Y-%m-%d')
+          ]]>
+        </if>
+        <if test="endTime != null"> 
+          <![CDATA[
+              and date_format(l.createdate, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+          ]]>
+        </if>
     </select>
 </mapper>

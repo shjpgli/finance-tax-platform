@@ -41,4 +41,11 @@ public interface OrderExchangeRoMapper {
      * @return Integer
      */
     Integer selectTodoListCount(String status);
+
+    /**
+     * 根据订单号查询审批通过的退换货记录
+     * @param orderNo
+     * @return
+     */
+    OrderExchange selectByOrderNoAndStatus(String orderNo);
 }

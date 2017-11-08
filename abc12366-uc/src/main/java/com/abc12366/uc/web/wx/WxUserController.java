@@ -30,7 +30,11 @@ public class WxUserController {
     @Autowired
     private IWxPersonService iWxPersonService;
 
-    //同步微信用户到本地数据库
+    /**
+     * 同步微信用户到本地数据库
+     * @param request 上下文
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PostMapping("/wxuser/synchro")
     public ResponseEntity synchroUser(HttpServletRequest request) {
@@ -41,7 +45,13 @@ public class WxUserController {
         }
     }
 
-    //数据库获取微信用户列表
+    /**
+     * 数据库获取微信用户列表
+     * @param person  用户
+     * @param page 页数
+     * @param size 大小
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxuser/list")
     public ResponseEntity selectList(WxPerson person,
@@ -58,7 +68,11 @@ public class WxUserController {
         return responseEntity;
     }
 
-    //查看单个用户详细信息
+    /**
+     * 查看单个用户详细信息
+     * @param openid 微信id
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxuser/{openid}")
     public ResponseEntity select(@PathVariable("openid") String openid) {
@@ -71,7 +85,11 @@ public class WxUserController {
         return responseEntity;
     }
 
-    //从微信服务器同步单个用户信息
+    /**
+     * 从微信服务器同步单个用户信息
+     * @param openid 微信id
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PutMapping("/wxuser/synchro/{openid}")
     public ResponseEntity synchroOne(@PathVariable("openid") String openid) {
@@ -84,7 +102,11 @@ public class WxUserController {
         return responseEntity;
     }
     
-    
+    /**
+     * 从微信获取用户信息
+     * @param openid 微信ID
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxuser/getOneFromWx/{openid}")
     public ResponseEntity getOneFromWx(@PathVariable("openid") String openid) {

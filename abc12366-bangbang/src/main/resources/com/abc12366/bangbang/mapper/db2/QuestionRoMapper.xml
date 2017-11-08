@@ -280,7 +280,7 @@
         (SELECT count(*) FROM bb_question_comment where userId = #{userId}) commentNum,
         (SELECT count(*) FROM bb_question_answer where isAccept = '1' and userId = #{userId}) acceptNum,
         (SELECT count(*) FROM bb_question_attention where isRead = 0 and attentionUserId = #{userId}) fansNum,
-        (SELECT coun(*) FROM bb_question_medal_user mu where mu.userId = #{userId}) medalNum,
+        (SELECT count(*) FROM bb_question_medal_user mu where mu.userId = #{userId}) medalNum,
         (select count(*) from bb_question_answer a where a.isRead = 0 and
           a.questionId in(select q.id from bb_question q where q.userId = #{userId})) newAnswerNum,
 		(select count(*) from bb_question q where
