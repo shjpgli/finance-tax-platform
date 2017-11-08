@@ -16,6 +16,12 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class MyQuestionTjBo implements Serializable {
 
+    /**提问次数**int(11)**/
+    private Integer questionNum;
+
+    /**点赞次数**int(11)**/
+    private Integer likeNum;
+
     /**回复次数**int(11)**/
     private Integer answerNum;
 
@@ -24,6 +30,12 @@ public class MyQuestionTjBo implements Serializable {
 
     /**采纳次数**int(11)**/
     private Integer acceptNum;
+
+    /**收藏数**int(11)**/
+    private Integer collectNum;
+
+    /**我的关注数量**int(11)**/
+    private Integer attentionNum;
 
     /**我的粉丝数量**int(11)**/
     private Integer fansNum;
@@ -91,5 +103,41 @@ public class MyQuestionTjBo implements Serializable {
 
     public void setNewInviteNum(Integer newInviteNum) {
         this.newInviteNum = newInviteNum;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public MyQuestionTjBo setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
+        return this;
+    }
+
+    public Integer getQuestionNum() {
+        return questionNum;
+    }
+
+    public MyQuestionTjBo setQuestionNum(Integer questionNum) {
+        this.questionNum = questionNum;
+        return this;
+    }
+
+    public Integer getAttentionNum() {
+        return attentionNum;
+    }
+
+    public MyQuestionTjBo setAttentionNum(Integer attentionNum) {
+        this.attentionNum = attentionNum;
+        return this;
+    }
+
+    public Integer getLikeNum() {
+        return likeNum;
+    }
+
+    public MyQuestionTjBo setLikeNum(Integer likeNum) {
+        this.likeNum = likeNum;
+        return this;
     }
 }

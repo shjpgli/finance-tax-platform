@@ -353,11 +353,7 @@ public class QuestionController {
      * 我的帮帮
      */
     @GetMapping(path = "/selectMybangbang/{userId}")
-    public ResponseEntity selectMybangbang(@PathVariable String userId,
-                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}", userId, page, size);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+    public ResponseEntity selectMybangbang(@PathVariable String userId) {
         MyQuestionTjBo myQuestionTjBo = questionService.selectMybangbang(userId);
         return ResponseEntity.ok(Utils.kv("data", myQuestionTjBo));
     }
