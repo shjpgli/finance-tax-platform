@@ -20,7 +20,7 @@
     <select id="selectListByFactionId" resultType="com.abc12366.bangbang.model.question.bo.QuestionMedalFactionBo" parameterType="java.util.Map">
         SELECT
             mf.id,	medalId,	mf.factionId,	medalTime,m.image,m.name
-        FROM bb_question_medal_faction mf left join bb_question_medal m on mu.medalId = m.id
+        FROM bb_question_medal_faction mf left join bb_question_medal m on mf.medalId = m.id
         WHERE mf.factionId = #{factionId}
         ORDER BY medalTime DESC
     </select>
