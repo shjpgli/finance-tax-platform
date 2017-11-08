@@ -504,41 +504,43 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             } else {
                 throw new ServiceException(4956);
             }
-        } else if (order != null && "POINTS".equals(order.getTradeMethod())) {
-            //修改订单状态
-            oe.setStatus("8");
-            oe.setRefundRemark(data.getRefundRemark());
-            oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
-            orderExchangeMapper.update(oe);
-
-            //将订单状态改成已结束
-            order.setOrderStatus("7");
-            orderMapper.update(order);
-
-            LOGGER.info("支付宝退款成功,插入退款流水记录");
-            String tradeNo = DataUtils.getJYLSH();
-            Trade trade = new Trade();
-            trade.setOrderNo(oe.getOrderNo());
-            trade.setTradeNo(tradeNo);
-            Date date = new Date();
-            trade.setCreateTime(date);
-            tradeMapper.insert(trade);
-
-            TradeLog tradeLog = new TradeLog();
-            tradeLog.setTradeNo(tradeNo);
-            tradeLog.setAliTrandeNo(oe.getOrderNo());
-            tradeLog.setTradeStatus("1");
-            tradeLog.setTradeType("2");
-            tradeLog.setAmount(Double.parseDouble("-" + order.getTotalPrice()));
-            tradeLog.setCreateTime(date);
-            tradeLog.setLastUpdate(date);
-            tradeLog.setPayMethod("POINTS");
-            tradeLogService.insertTradeLog(tradeLog);
-            //退积分
-            insertPoints(order);
-
         } else {
-            throw new ServiceException(4957);
+            if (order != null && "POINTS".equals(order.getTradeMethod())) {
+                //修改订单状态
+                oe.setStatus("8");
+                oe.setRefundRemark(data.getRefundRemark());
+                oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+                orderExchangeMapper.update(oe);
+
+                //将订单状态改成已结束
+                order.setOrderStatus("7");
+                orderMapper.update(order);
+
+                LOGGER.info("支付宝退款成功,插入退款流水记录");
+                String tradeNo = DataUtils.getJYLSH();
+                Trade trade = new Trade();
+                trade.setOrderNo(oe.getOrderNo());
+                trade.setTradeNo(tradeNo);
+                Date date = new Date();
+                trade.setCreateTime(date);
+                tradeMapper.insert(trade);
+
+                TradeLog tradeLog = new TradeLog();
+                tradeLog.setTradeNo(tradeNo);
+                tradeLog.setAliTrandeNo(oe.getOrderNo());
+                tradeLog.setTradeStatus("1");
+                tradeLog.setTradeType("2");
+                tradeLog.setAmount(Double.parseDouble("-" + order.getTotalPrice()));
+                tradeLog.setCreateTime(date);
+                tradeLog.setLastUpdate(date);
+                tradeLog.setPayMethod("POINTS");
+                tradeLogService.insertTradeLog(tradeLog);
+                //退积分
+                insertPoints(order, data.getAmount());
+
+            } else {
+                throw new ServiceException(4957);
+            }
         }
         return ResponseEntity.ok(Utils.kv());
     }
@@ -548,7 +550,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
      *
      * @param orderBO
      */
-    private void insertPoints(Order orderBO) {
+    private void insertPoints(Order orderBO,Double amount) {
         //如果积分规则为空则返回
         PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_ORDER_RETURN_CODE);
         if (pointsRuleBO == null) {
@@ -559,7 +561,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setId(Utils.uuid());
         //成交总积分 - 赠送积分
-        pointsLog.setIncome((int) (orderBO.getTotalPrice() - orderBO.getGiftPoints()));
+        pointsLog.setIncome(amount.intValue());
         pointsLog.setRemark("用户退单- 订单号：" + orderBO.getOrderNo());
         pointsLog.setLogType("ORDER_EXCHANGE");
         pointsLogService.insertNoVip(pointsLog);
