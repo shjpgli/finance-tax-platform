@@ -27,7 +27,8 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectTagList" resultType="com.abc12366.bangbang.model.question.bo.QuestionTagBo" parameterType="java.lang.String">
         SELECT
-        a.tagId,COUNT(a.tagId) priority,(select name from abc12366_bangbang.bb_knowledge_tag where id = a.tagId) tagName
+        a.tagId,COUNT(a.tagId) priority,(select name from abc12366_bangbang.bb_knowledge_tag where id = a.tagId) tagName,
+        (select classifyId from abc12366_bangbang.bb_question_classify_tag where tagId = a.tagId limit 1) classifyCode
         FROM bb_question_tag a
 		WHERE 1=1
 		GROUP BY a.tagId order by priority desc
