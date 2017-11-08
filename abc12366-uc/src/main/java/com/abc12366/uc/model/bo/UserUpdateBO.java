@@ -3,7 +3,6 @@ package com.abc12366.uc.model.bo;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -14,8 +13,7 @@ import java.util.Date;
 public class UserUpdateBO {
 
     private String id;
-    @Size(min = 6, max = 32, message = "用户名长度只能在6到32之间")
-    @Pattern(regexp = "^[a-zA-Z0-9]{6,32}$", message = "用户名只能为数字字母组合！")
+    @Pattern(regexp = "^[a-zA-Z0-9]{3,15}$", message = "请输入3-15位字母或数字的用户名！")
     private String username;
 //    @Pattern(regexp = "^\\d{11}$",message = "手机号码格式不正确")
 //    @Size(min = 11, max = 11)
