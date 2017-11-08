@@ -286,26 +286,24 @@ public class UserBindServiceImpl implements UserBindService {
             return false;
         }
         try {
-            HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
-            if (hngsAppLoginResponse != null) {
-                HttpHeaders headers = new HttpHeaders();
-                //headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
-                headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-                headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
-                //headers.add("Content-Type", "application/json");
-                //SpringCtxHolder.getProperty("wsbssoa.hngs.url") +
-                String api = "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
-                String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+Base64.getEncoder().encodeToString(api.getBytes());
-                HttpEntity requestEntity = new HttpEntity(null, headers);
-                ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-                if (soaUtil.isExchangeSuccessful(responseEntity)) {
-                    DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
-                    if (!StringUtils.isEmpty(dzsjSmrzBO.getSmrzbz())&&dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
-                        LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
-                        return true;
-                    }
+//            HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
+//            if (hngsAppLoginResponse != null) {
+//
+//            }
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+            headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
+            String api = "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
+            String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+Base64.getEncoder().encodeToString(api.getBytes());
+            HttpEntity requestEntity = new HttpEntity(null, headers);
+            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+                DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
+                if (!StringUtils.isEmpty(dzsjSmrzBO.getSmrzbz())&&dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
                     LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
+                    return true;
                 }
+                LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
             }
         } catch (Exception e) {
             e.printStackTrace();

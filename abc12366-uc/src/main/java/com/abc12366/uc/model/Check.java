@@ -71,4 +71,16 @@ public class Check {
     public void setOrderby(String orderby) {
         this.orderby = orderby;
     }
+
+    @Override
+    public String toString() {
+        return "Check{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", createTime=" + createTime +
+                ", checkDate=" + checkDate +
+                ", orderby='" + orderby + '\'' +
+                ", isReCheck=" + isReCheck +
+                '}';
+    }
 }
