@@ -80,7 +80,7 @@ public class CheatsCollectServiceImpl implements CheatsCollectService {
 
         //帮邦日志记录表
         //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
-        bangBangDtLogUtil.insertLog(8, collect.getCheatsId(), "", collect.getCheatsId(), collect.getUserId(), "");
+        bangBangDtLogUtil.insertLog(8, collect.getCheatsId(), "", collect.getCollectId(), collect.getUserId(), "");
 
 
         return collectCnt+"";
