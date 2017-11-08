@@ -42,6 +42,11 @@ public class InvoiceExpressExcel implements Serializable {
     private String cargoContent;
 
     /**
+     * 未合并的内容
+     */
+    private String content;
+
+    /**
      * 寄托物数量
      **/
     private Integer cargoNum;
@@ -114,5 +119,13 @@ public class InvoiceExpressExcel implements Serializable {
 
     public void setWaybillNum(String waybillNum) {
         this.waybillNum = waybillNum;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
