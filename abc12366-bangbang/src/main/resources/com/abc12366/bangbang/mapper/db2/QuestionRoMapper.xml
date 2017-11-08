@@ -280,10 +280,11 @@
         (SELECT COUNT(1) FROM bb_question_like WHERE userId = #{userId}) likeNum,
         (SELECT COUNT(1) FROM bb_question_collect WHERE userId = #{userId}) collectNum,
         (SELECT COUNT(1) FROM bb_question_attention WHERE userId = #{userId}) attentionNum,
+        (SELECT count(*) FROM bb_question_attention where attentionUserId = #{userId}) fansNum,
         (SELECT count(*) FROM bb_question_answer where parentId = '' and userId = #{userId}) answerNum,
         (SELECT count(*) FROM bb_question_comment where userId = #{userId}) commentNum,
         (SELECT count(*) FROM bb_question_answer where isAccept = '1' and userId = #{userId}) acceptNum,
-        (SELECT count(*) FROM bb_question_attention where isRead = 0 and attentionUserId = #{userId}) fansNum,
+        (SELECT count(*) FROM bb_question_attention where isRead = 0 and attentionUserId = #{userId}) newFansNum,
         (SELECT count(*) FROM bb_question_medal_user mu where mu.userId = #{userId}) medalNum,
         (select count(*) from bb_question_answer a where a.isRead = 0 and
           a.questionId in(select q.id from bb_question q where q.userId = #{userId})) newAnswerNum,

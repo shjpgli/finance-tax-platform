@@ -40,6 +40,9 @@ public class MyQuestionTjBo implements Serializable {
     /**我的粉丝数量**int(11)**/
     private Integer fansNum;
 
+    /**我的粉丝角标**int(11)**/
+    private Integer newFansNum;
+
     /**勋章数**int(11)**/
     private Integer medalNum;
 
@@ -138,6 +141,15 @@ public class MyQuestionTjBo implements Serializable {
 
     public MyQuestionTjBo setLikeNum(Integer likeNum) {
         this.likeNum = likeNum;
+        return this;
+    }
+
+    public Integer getNewFansNum() {
+        return newFansNum;
+    }
+
+    public MyQuestionTjBo setNewFansNum(Integer newFansNum) {
+        this.newFansNum = newFansNum;
         return this;
     }
 }
