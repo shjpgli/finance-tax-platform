@@ -140,4 +140,9 @@
 		 WHERE memberId = #{memberId}
 	</update>
 
+    <update id="updateDuty" parameterType="java.util.Map">
+        UPDATE bb_question_faction_member SET duty = #{duty}
+        where  memberId = #{memberId}
+    </update>
+
 </mapper>

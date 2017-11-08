@@ -26,6 +26,8 @@ public interface QueAnswerService {
 
     String updateIsRead(String id);
 
+    String updateIsAccept(String id);
+
     List<QuestionAnswerBo> selectMyAnswerList(Map<String, Object> map);
 
 }

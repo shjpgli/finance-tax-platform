@@ -183,5 +183,17 @@ public class QueAnswerController {
         return ResponseEntity.ok(Utils.kv("data", id));
     }
 
+    /**
+     * 设置为采纳
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/updateIsAccept/{id}")
+    public ResponseEntity updateIsAccept(@PathVariable("id") String id) {
+        queAnswerService.updateIsAccept(id);
+        return ResponseEntity.ok(Utils.kv("data", id));
+    }
+
 
 }

@@ -3,6 +3,8 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.question.QuestionFactionMember;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 /**
  * 
  * QuestionFactionMemberMapper数据库操作接口类
@@ -46,5 +48,12 @@ public interface QuestionFactionMemberMapper{
 	 * 
 	 **/
 	int updateByPrimaryKey(QuestionFactionMember record);
+
+    /**
+     *
+     * 设置职位
+     *
+     **/
+    int updateDuty(Map map);
 
 }

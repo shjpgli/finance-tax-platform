@@ -60,4 +60,11 @@ public interface QuestionAnswerMapper{
      **/
     int updateIsRead(@Param("id") String id);
 
+    /**
+     *
+     * 设置为采纳
+     *
+     **/
+    int updateIsAccept(@Param("id") String id);
+
 }

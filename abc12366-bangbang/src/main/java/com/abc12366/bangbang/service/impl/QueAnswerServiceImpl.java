@@ -305,4 +305,16 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         return "";
     }
 
+    @Override
+    public String updateIsAccept(String id) {
+        //设置为采纳
+        try {
+            answerMapper.updateIsAccept(id);
+        } catch (Exception e) {
+            LOGGER.error("更新问题回复信息异常：{}", e);
+            throw new ServiceException(6113);
+        }
+        return "";
+    }
+
 }
