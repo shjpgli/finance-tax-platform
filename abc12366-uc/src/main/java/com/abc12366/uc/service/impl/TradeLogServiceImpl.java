@@ -88,10 +88,15 @@ public class TradeLogServiceImpl implements TradeLogService {
 
     @Override
     public TradeLog updateCompare(TradeLog log) {
-        TradeLog tradeLog = tradeLogRoMapper.selectByPrimaryKey(log.getTradeNo());
-        tradeLog.setCompareStatus(log.getCompareStatus());
-        tradeLog.setCompareTime(new Date());
-        tradeLogMapper.update(tradeLog);
-        return tradeLog;
+//        TradeLog tradeLog = tradeLogRoMapper.selectByPrimaryKey(log.getTradeNo());
+//        tradeLog.setCompareStatus(log.getCompareStatus());
+//        tradeLog.setCompareTime(new Date());
+        log.setCreateTime(new Date());
+        int update = tradeLogMapper.update(log);
+        if(update != 1){
+            LOGGER.error("自动对账异常", log);
+            throw new ServiceException(9999,"对账数组不存在!");
+        }
+        return log;
     }
 }
