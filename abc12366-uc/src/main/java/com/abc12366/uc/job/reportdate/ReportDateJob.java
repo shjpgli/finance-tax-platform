@@ -90,7 +90,7 @@ public class ReportDateJob implements Job {
     	headers2.add("Version", "1");
         HttpEntity httpEntity = new HttpEntity(headers2);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("abc12366.message.url") +"/dzsb/get?api="
+        ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("abc12366.message.url") +"/hngs/get?api="
                         +new BASE64Encoder().encode(("/ggfw/bsrl/getsbrq?sbnf=" + new SimpleDateFormat("yyyy").format(new Date())).getBytes()), HttpMethod.GET,
 				httpEntity, String.class);
 

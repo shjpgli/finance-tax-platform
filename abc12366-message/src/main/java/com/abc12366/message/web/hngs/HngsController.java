@@ -34,7 +34,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 @Controller
-@RequestMapping(path = "/dzsb", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(path = "/hngs", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class HngsController {
 	
 	// App缓存信息
