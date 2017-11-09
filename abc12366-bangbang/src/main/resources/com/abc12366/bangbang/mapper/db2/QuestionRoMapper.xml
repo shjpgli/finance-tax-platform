@@ -309,7 +309,7 @@
         SELECT
             l.qlogType,l.createTime,
 				CASE
-				WHEN bbType in(1,2,3,5) THEN q.id
+				WHEN qlogType in(1,2,3,5) THEN q.id
                 WHEN qlogType in(6,7,9) THEN ch.id
                  ELSE '' END  as titleId,
 
