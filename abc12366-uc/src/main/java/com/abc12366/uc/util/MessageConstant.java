@@ -5,7 +5,7 @@ package com.abc12366.uc.util;
  */
 public class MessageConstant {
 	//电子申报系统信息查询数量
-	public static final Integer DZSBQNUM=200;
+	public static final String DZSBQNUM="200";
 	
     //消息类型
     public static final String SYS_MESSAGE = "1";
@@ -18,6 +18,7 @@ public class MessageConstant {
     public static final String DZFPDD = "DZFPDD";//电子发票订单
     public static final String HYDQTX = "HYDQTX";//会员到期提醒
     public static final String SBXQTX = "SBXQTX";//会员到期提醒
+    public static final String XTTX = "XTTX";//系统提醒
 
     public static final String VIEW_DETAILS = "查看详情";
 

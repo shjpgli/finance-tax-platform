@@ -191,4 +191,8 @@
         SELECT * FROM uc_user where id=#{id} and wxopenid=#{wxopenid}
     </select>
     
+    <select id="findByHngsNsrsbh" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
+        SELECT u.* FROM  uc_user_hngs h, uc_user u where h.userId=u.id and h.nsrsbh=#{nsrshb}
+    </select>
+    
 </mapper>

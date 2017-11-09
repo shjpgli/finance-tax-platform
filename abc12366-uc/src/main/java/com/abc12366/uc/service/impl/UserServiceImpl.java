@@ -668,4 +668,9 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+	@Override
+	public List<User> findByHngsNsrsbh(String nsrsbh) {
+		return userRoMapper.findByHngsNsrsbh(nsrsbh);
+	}
 }

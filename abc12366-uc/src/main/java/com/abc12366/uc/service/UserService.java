@@ -111,5 +111,16 @@ public interface UserService {
 	 * @return
 	 */
 	List<UserBO> getNomalList(Map<String, Object> map);
+	/**
+	 * 微信绑定关系修改
+	 * @param userUpdateDTO
+	 * @return
+	 */
 	int changeWxBdxx(UserUpdateBO userUpdateDTO);
+	/**
+	 * 通过绑定的国税纳税人识别号查询用户信息
+	 * @param nsrsbh
+	 * @return
+	 */
+	List<User> findByHngsNsrsbh(String nsrsbh);
 }
