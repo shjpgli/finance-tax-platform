@@ -96,8 +96,10 @@ public class SbxxRemindJob implements Job{
 	                        dataList.put("keyword4", "申报成功");
 	                        dataList.put("keyword4Color", "#00DB00");
 	                        dataList.put("keyword5", dzsbXxInfo.getWcrq());
-	        				                                             
-	        				msgSendService.sendMsg(users.get(i), sysMsg, "YeYkFYIhmbSKdlCTmY8XF5qrR6o6ykYYPLN41DC3mOQ", dataList, dxmsg);
+	                        
+	                        for(int j=0;j<users.size();j++){
+	                        	msgSendService.sendMsg(users.get(j), sysMsg, "YeYkFYIhmbSKdlCTmY8XF5qrR6o6ykYYPLN41DC3mOQ", dataList, dxmsg);
+	                        }
 	        			}else{
 	        				LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]申报信息，未查到相关用户信息,纳税人名称:"+dzsbXxInfo.getNsrmc());
 	        			}
