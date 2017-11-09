@@ -21,6 +21,8 @@ public class DzsbXxInfo {
     private Double ybtse;//金额
     private Double kkje;//金额
     
+    private String sbqx;//申报期限
+    
     
 	public String getNsrsbh() {
 		return nsrsbh;
@@ -94,6 +96,12 @@ public class DzsbXxInfo {
 	}
 	public void setLrrq(String lrrq) {
 		this.lrrq = lrrq;
+	}
+	public String getSbqx() {
+		return sbqx;
+	}
+	public void setSbqx(String sbqx) {
+		this.sbqx = sbqx;
 	}
     
     
