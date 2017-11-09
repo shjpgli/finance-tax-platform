@@ -1,8 +1,8 @@
-package com.abc12366.uc.service.impl;
+package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.uc.mapper.db2.OrderLogRoMapper;
 import com.abc12366.uc.model.OrderLog;
-import com.abc12366.uc.service.OrderLogService;
+import com.abc12366.uc.service.order.OrderLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

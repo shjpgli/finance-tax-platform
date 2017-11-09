@@ -3,13 +3,11 @@ package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
-import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.TradeLogBO;
-import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.pay.*;
 import com.abc12366.uc.model.pay.bo.AliCodePay;
 import com.abc12366.uc.model.pay.bo.AliRefund;
-import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.order.TradeLogService;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.QRCodeUtil;
