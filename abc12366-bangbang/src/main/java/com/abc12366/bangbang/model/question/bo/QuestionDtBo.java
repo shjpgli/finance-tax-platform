@@ -46,6 +46,9 @@ public class QuestionDtBo implements Serializable {
 	/**简短回答**/
 	private String shortAnswer;
 
+    /**简短回答**/
+    private String commentTxt;
+
     /**回答图片**/
     private String answerImage;
 
@@ -190,5 +193,13 @@ public class QuestionDtBo implements Serializable {
 
     public void setCommentNum(Integer commentNum) {
         this.commentNum = commentNum;
+    }
+
+    public String getCommentTxt() {
+        return commentTxt;
+    }
+
+    public void setCommentTxt(String commentTxt) {
+        this.commentTxt = commentTxt;
     }
 }
