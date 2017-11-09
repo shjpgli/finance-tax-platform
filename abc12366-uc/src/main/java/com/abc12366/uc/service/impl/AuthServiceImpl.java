@@ -5,6 +5,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.model.App;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UcUserLoginLogMapper;
@@ -12,11 +13,13 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.BaseObject;
+import com.abc12366.uc.model.Token;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.RandomNumber;
-import com.abc12366.gateway.util.UCConstant;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -457,7 +460,8 @@ public class AuthServiceImpl implements AuthService {
 
             //查询系统任务
             //新的查询系统任务方法：根据编码查询
-            ExperienceRuleBO experienceRuleBO = experienceRuleService.selectValidOneByCode(UCConstant.EXP_RULE_LOGIN_CODE);
+            ExperienceRuleBO experienceRuleBO = experienceRuleService.selectValidOneByCode(UCConstant
+                    .EXP_RULE_LOGIN_CODE);
             if (experienceRuleBO == null) {
                 return;
             }
@@ -790,6 +794,91 @@ public class AuthServiceImpl implements AuthService {
             ContinuePasswordWrong(user.getId());
         }
         throw new ServiceException(4201);
+    }
+
+    @Override
+    public String verifyPhone(String phone) throws Exception {
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(phone);
+        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        if (user == null) {
+            LOGGER.warn("登录失败，该用户不存在，参数:{}", phone);
+            throw new ServiceException(4018);
+        }
+
+        //无效用户
+        if (!user.getStatus()) {
+            throw new ServiceException(4038);
+        }
+
+        String userToken = Utils.token(Utils.uuid());
+        String appId = Utils.getAppId();
+        Token queryToken = tokenRoMapper.selectOne(user.getId(), appId);
+        int result;
+        //加入uc_token表有记录（根据userId和appId），则更新，没有则新增，重置密码时需要带上此token
+        if (queryToken != null) {
+            //如果token失效则生成新的token
+            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System
+                    .currentTimeMillis()) {
+                userToken = queryToken.getToken();
+            } else {
+                queryToken.setToken(userToken);
+            }
+            queryToken.setLastTokenResetTime(new Date());
+            result = tokenMapper.update(queryToken);
+        } else {
+            Token token = new Token();
+            token.setId(Utils.uuid());
+            token.setAppId(appId);
+            token.setUserId(user.getId());
+            token.setToken(userToken);
+            token.setLastTokenResetTime(new Date());
+            result = tokenMapper.insert(token);
+        }
+        if (result != 1) {
+            LOGGER.warn("设置token失败，参数:{}:{}", phone, appId);
+            throw new ServiceException(4101);
+        }
+
+        return userToken;
+    }
+
+    @Override
+    public boolean resetPasswordByPhone(ResetPasswordBO bo) throws Exception {
+        // 判断用户是否存在
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(bo.getPhone());
+        User userExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        if (userExist == null) {
+            throw new ServiceException(4018);
+        }
+
+        // 验证手机号时存储的token是否与用户传输的相同
+        Token queryToken = tokenRoMapper.selectOne(userExist.getId(), Utils.getAppId());
+        if (queryToken == null || !bo.getToken().equals(queryToken.getToken())) {
+            throw new ServiceException(4023);
+        }
+
+        String password = rsaService.decode(bo.getPassword());
+        String encodePassword = Utils.md5(password + userExist.getSalt());
+
+        // 修改密码不能为旧密码
+        if (encodePassword.equals(userExist.getPassword())) {
+            throw new ServiceException(4040);
+        }
+
+        // 更新密码
+        User user = new User();
+        user.setId(userExist.getId());
+        user.setPassword(encodePassword);
+        user.setLastUpdate(new Date());
+        int result = userMapper.update(user);
+        if (result != 1) {
+            throw new ServiceException(4023);
+        }
+        // 删除token
+        tokenMapper.delete(bo.getToken());
+        return true;
     }
 
     //用户号码是否因为连续输错密码被锁

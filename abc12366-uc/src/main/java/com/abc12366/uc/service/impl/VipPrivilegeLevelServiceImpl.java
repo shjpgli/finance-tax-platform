@@ -43,13 +43,14 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
     //指定会员id 权益id 查询结果
     @Override
     public VipPrivilegeLevelBO selectLevelIdPrivilegeId(VipPrivilegeLevelBO obj) {
-        if (obj.getLevelId() == null || obj.getLevelId().isEmpty() || obj.getPrivilegeId() == null || obj.getPrivilegeId().isEmpty()) {
+        if (obj.getLevelId() == null || obj.getLevelId().isEmpty() || obj.getPrivilegeId() == null || obj
+                .getPrivilegeId().isEmpty()) {
             LOGGER.warn("操作失败，参数：" + obj);
             throw new ServiceException(4101);
         }
-        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        return findObj;
+        return vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
     }
+
     //先查询，不存在就新建 存在就修改
     @Override
     public VipPrivilegeLevelBO addOrUpdate(VipPrivilegeLevelBO obj) {
@@ -70,11 +71,12 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
     public Integer updates(List<VipPrivilegeLevelBO> list) {
         Integer fori = 0;
         for (VipPrivilegeLevelBO obj : list) {
-            VipPrivilegeLevelBO tmpObj = addOrUpdate(obj);
+            addOrUpdate(obj);
             fori++;   //暂时没考虑中间异常
         }
         return fori;
     }
+
     @Override
     public Integer adds(List<VipPrivilegeLevelBO> list) {
         Integer fori = 0;
@@ -87,28 +89,28 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
         }
         return fori;
     }
+
     @Override
-    public Integer updateByPrivilege(String privilege,List<VipPrivilegeLevelBO> list) {
-        if(privilege == null){
-            LOGGER.warn("操作失败，参数：" + privilege);
+    public Integer updateByPrivilege(String privilege, List<VipPrivilegeLevelBO> list) {
+        if (privilege == null) {
+            LOGGER.warn("操作失败");
             throw new ServiceException(4101);
         }
         this.deleteByPrivilege(privilege);
 
-        Integer i=  adds(list);
-
-        return i;
+        return adds(list);
     }
+
     @Override
-    public Integer updateByLevel(String level,List<VipPrivilegeLevelBO> list) {
-        if(level == null){
-            LOGGER.warn("操作失败，参数：" + level);
+    public Integer updateByLevel(String level, List<VipPrivilegeLevelBO> list) {
+        if (level == null) {
+            LOGGER.warn("操作失败");
             throw new ServiceException(4101);
         }
         this.deleteByLevel(level);
-
         return adds(list);
     }
+
     @Override
     public VipPrivilegeLevelBO selectOne(String id) {
         return vipPrivilegeLevelRoMapper.selectOne(id);
@@ -127,10 +129,9 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
     @Override
     public List<List<VipPrivilegeLevelBO>> selectList() {
         List<VipLevelBO> list = vipLevelRoMapper.selectList(null);
-        List<List<VipPrivilegeLevelBO>> returnList = new ArrayList<List<VipPrivilegeLevelBO>>();
+        List<List<VipPrivilegeLevelBO>> returnList = new ArrayList<>();
         for (VipLevelBO vipLevelBO : list) {
-            String levelId = vipLevelBO.getId();
-            List<VipPrivilegeLevelBO> levelList = vipPrivilegeLevelRoMapper.selectList(levelId);
+            List<VipPrivilegeLevelBO> levelList = vipPrivilegeLevelRoMapper.selectList(vipLevelBO.getLevelCode());
             if (levelList != null && levelList.size() > 0) {
                 returnList.add(levelList);
             }
@@ -143,12 +144,13 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
 
         return vipPrivilegeLevelRoMapper.selectList(levelId);
     }
+
     @Override
-    public List<VipPrivilegeLevelBO> selectListByLevelName(String levelname){
+    public List<VipPrivilegeLevelBO> selectListByLevelName(String levelname) {
 
-        VipLevelBO obj =vipLevelRoMapper.selectByLevel(levelname);
+        VipLevelBO obj = vipLevelRoMapper.selectByLevel(levelname);
 
-        if (obj.getId()==null || obj.getId().isEmpty()){
+        if (obj.getId() == null || obj.getId().isEmpty()) {
             LOGGER.warn("操作失败，参数：" + levelname);
             throw new ServiceException(4101);
         }
@@ -220,14 +222,12 @@ public class VipPrivilegeLevelServiceImpl implements VipPrivilegeLevelService {
 
     @Override
     public int deleteByPrivilege(String privilegeId) {
-        int tmpi = vipPrivilegeLevelMapper.deleteByPrivilege(privilegeId);
-        return tmpi;
+        return vipPrivilegeLevelMapper.deleteByPrivilege(privilegeId);
     }
 
     @Override
     public int deleteByLevel(String levelId) {
-        int tmpi = vipPrivilegeLevelMapper.deleteByLevel(levelId);
-        return tmpi;
+        return vipPrivilegeLevelMapper.deleteByLevel(levelId);
     }
 
     @Override
