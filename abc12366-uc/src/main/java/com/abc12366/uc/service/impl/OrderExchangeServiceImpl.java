@@ -104,6 +104,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Autowired
     private IWxTemplateService templateService;
 
+    @Autowired
+    private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
+
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
@@ -240,42 +243,51 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                         throw new ServiceException(4102, "订单信息查询失败");
                     }
-                    ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(data.getExpressComp());
-                    if (expressComp == null) {
-                        LOGGER.warn("物流公司查询失败：{}", data.getExpressComp());
-                        throw new ServiceException(4102, "物流公司查询失败");
-                    }
-                    Message message = new Message();
-                    message.setBusinessId(order.getOrderNo());
-                    message.setType("SPDD");
-                    String content = MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo()).replaceAll("\\{#DATA.COMP\\}", expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", data.getExpressNo());
-                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                    message.setContent(content);
-                    message.setUserId(order.getUserId());
-                    messageSendUtil.sendMessage(message, request);
-
                     User user = userRoMapper.selectOne(order.getUserId());
-                    //微信消息
-                    if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                        //TODO 5 退换货发货
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("userId", user.getId());
-                        map.put("openId", user.getWxopenid());
-                        map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
-                        map.put("remark", "感谢您的使用。");
-                        map.put("keyword1", order.getConsignee());
-                        map.put("keyword2", order.getContactNumber());
-                        map.put("keyword3", expressComp.getCompName());
-                        map.put("keyword4", data.getExpressNo());
-                        map.put("keyword5", order.getOrderNo());
-                        templateService.templateSend("lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas", map);
-                    }
+                    //查询会员特权-业务提醒
+                    VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+                    obj.setLevelId(user.getVipLevel());
+                    obj.setPrivilegeId(MessageConstant.YWTX_CODE);
+                    VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+                    //查看业务提醒是否启用
+                    if(findObj != null && findObj.getStatus()){
+                        ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(data.getExpressComp());
+                        if (expressComp == null) {
+                            LOGGER.warn("物流公司查询失败：{}", data.getExpressComp());
+                            throw new ServiceException(4102, "物流公司查询失败");
+                        }
+                        Message message = new Message();
+                        message.setBusinessId(order.getOrderNo());
+                        message.setType("SPDD");
+                        String content = MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo()).replaceAll("\\{#DATA.COMP\\}", expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", data.getExpressNo());
+                        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                        message.setContent(content);
+                        message.setUserId(order.getUserId());
 
-                    //短信消息
-                    if (("VIP3".equalsIgnoreCase(user.getVipLevel())
-                            || "VIP4".equalsIgnoreCase(user.getVipLevel()))
-                            && StringUtils.isNotEmpty(user.getPhone())) {
-                        sendPhoneMessage(request,content,user);
+                        if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                            messageSendUtil.sendMessage(message, request);
+                        }
+
+
+                        //微信消息
+                        if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("userId", user.getId());
+                            map.put("openId", user.getWxopenid());
+                            map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
+                            map.put("remark", "感谢您的使用。");
+                            map.put("keyword1", order.getConsignee());
+                            map.put("keyword2", order.getContactNumber());
+                            map.put("keyword3", expressComp.getCompName());
+                            map.put("keyword4", data.getExpressNo());
+                            map.put("keyword5", order.getOrderNo());
+                            templateService.templateSend("lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas", map);
+                        }
+
+                        //短信消息
+                        if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                            sendPhoneMessage(request,content,user);
+                        }
                     }
                 }else {
                     LOGGER.warn("只有审批通过的数据才能进行导入：{}", data.getOrderNo());
@@ -382,130 +394,138 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         //查询订单信息
         Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
         //判断是RMB、积分
-        if (order != null && "RMB".equals(order.getTradeMethod())) {
-            if ("ALIPAY".equals(order.getPayMethod())) {
-                // 查询交易日志中支付成功的订单
-                TradeLog log = new TradeLog();
-                log.setTradeNo(oe.getOrderNo());
-                log.setTradeStatus("1");
-                log.setPayMethod("ALIPAY");
-                List<TradeLog> logList = tradeLogRoMapper.selectList(log);
+        if(order != null){
+            if (data.getAmount() >= order.getTotalPrice()) {
+                LOGGER.info("退款金额不能大于订单成交总金额，{}", data.getAmount());
+                throw new ServiceException(4919);
+            }
+            if ("RMB".equals(order.getTradeMethod())) {
+                if ("ALIPAY".equals(order.getPayMethod())) {
+                    // 查询交易日志中支付成功的订单
+                    TradeLog log = new TradeLog();
+                    log.setTradeNo(oe.getOrderNo());
+                    log.setTradeStatus("1");
+                    log.setPayMethod("ALIPAY");
+                    List<TradeLog> logList = tradeLogRoMapper.selectList(log);
 
-                if (data.getAmount() >= order.getTotalPrice()) {
-                    LOGGER.info("退款金额不能大于订单成交总金额，{}", data.getAmount());
-                    throw new ServiceException(4919);
-                }
-                if (logList.size() > 0) {
-                    for (int i = 0; i < logList.size(); i++) {
-                        if (logList.get(i).getAmount() >= data.getAmount()) {
-                            AliRefund refund = new AliRefund();
-                            refund.setOut_trade_no(logList.get(i).getTradeNo());
-                            refund.setTrade_no(logList.get(i).getAliTrandeNo());
-                            refund.setRefund_amount(String.valueOf(data.getAmount()));
-                            refund.setRefund_reason(data.getAdminRemark());
-                            String out_request_no = log.getTradeNo() + "_" + logList.size();
-                            refund.setOut_request_no(out_request_no);
+                    if (logList.size() > 0) {
+                        for (int i = 0; i < logList.size(); i++) {
+                            if (logList.get(i).getAmount() >= data.getAmount()) {
+                                AliRefund refund = new AliRefund();
+                                refund.setOut_trade_no(logList.get(i).getTradeNo());
+                                refund.setTrade_no(logList.get(i).getAliTrandeNo());
+                                refund.setRefund_amount(String.valueOf(data.getAmount()));
+                                refund.setRefund_reason(data.getAdminRemark());
+                                String out_request_no = log.getTradeNo() + "_" + logList.size();
+                                refund.setOut_request_no(out_request_no);
 
-                            try {
-                                AlipayClient alipayClient = AliPayConfig.getInstance();
-                                AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-                                request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
-                                AlipayTradeRefundResponse response = alipayClient.execute(request);
-                                LOGGER.info("支付宝退款支付宝返回信息{}", JSON.toJSONString(response));
-                                if (response.isSuccess()) {
+                                try {
+                                    AlipayClient alipayClient = AliPayConfig.getInstance();
+                                    AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+                                    request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
+                                    AlipayTradeRefundResponse response = alipayClient.execute(request);
+                                    LOGGER.info("支付宝退款支付宝返回信息{}", JSON.toJSONString(response));
+                                    if (response.isSuccess()) {
 
-                                    JSONObject object = JSON.parseObject(response.getBody());
-                                    RefundRes refundRes = JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
+                                        JSONObject object = JSON.parseObject(response.getBody());
+                                        RefundRes refundRes = JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
 
-                                    LOGGER.info("支付宝退款成功,插入退款流水记录");
-                                    String tradeNo = DataUtils.getJYLSH();
-                                    Trade trade = new Trade();
-                                    trade.setOrderNo(oe.getOrderNo());
-                                    trade.setTradeNo(tradeNo);
-                                    Date date = new Date();
-                                    trade.setCreateTime(date);
-                                    tradeMapper.insert(trade);
+                                        LOGGER.info("支付宝退款成功,插入退款流水记录");
+                                        String tradeNo = DataUtils.getJYLSH();
+                                        Trade trade = new Trade();
+                                        trade.setOrderNo(oe.getOrderNo());
+                                        trade.setTradeNo(tradeNo);
+                                        Date date = new Date();
+                                        trade.setCreateTime(date);
+                                        tradeMapper.insert(trade);
 
-                                    TradeLog tradeLog = new TradeLog();
-                                    tradeLog.setTradeNo(tradeNo);
-                                    tradeLog.setAliTrandeNo(refundRes.getTrade_no());
-                                    tradeLog.setTradeStatus("1");
-                                    tradeLog.setTradeType("2");
-                                    tradeLog.setAmount(Double.parseDouble("-" + refundRes.getRefund_fee()));
-                                    tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
-                                    Timestamp now = new Timestamp(System.currentTimeMillis());
-                                    tradeLog.setCreateTime(now);
-                                    tradeLog.setLastUpdate(now);
-                                    tradeLog.setPayMethod("ALIPAY");
-                                    tradeLogService.insertTradeLog(tradeLog);
+                                        TradeLog tradeLog = new TradeLog();
+                                        tradeLog.setTradeNo(tradeNo);
+                                        tradeLog.setAliTrandeNo(refundRes.getTrade_no());
+                                        tradeLog.setTradeStatus("1");
+                                        tradeLog.setTradeType("2");
+                                        tradeLog.setAmount(Double.parseDouble("-" + refundRes.getRefund_fee()));
+                                        tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
+                                        Timestamp now = new Timestamp(System.currentTimeMillis());
+                                        tradeLog.setCreateTime(now);
+                                        tradeLog.setLastUpdate(now);
+                                        tradeLog.setPayMethod("ALIPAY");
+                                        tradeLogService.insertTradeLog(tradeLog);
 
-                                    oe.setStatus("8");
-                                    oe.setRefundRemark(data.getRefundRemark());
-                                    oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
-                                    orderExchangeMapper.update(oe);
-                                    // 插入订单日志-已退款
-                                    // insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
+                                        oe.setStatus("8");
+                                        oe.setRefundRemark(data.getRefundRemark());
+                                        oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+                                        orderExchangeMapper.update(oe);
+                                        // 插入订单日志-已退款
+                                        // insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
 
 
-                                    // 插入订单日志-已完成
-                                    insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+                                        // 插入订单日志-已完成
+                                        insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款", "1", oe.getId());
 
-                                    //发送消息
-                                    if (order == null) {
-                                        LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
-                                        throw new ServiceException(4102, "订单信息查询失败");
+                                        //发送消息
+                                        if (order == null) {
+                                            LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
+                                            throw new ServiceException(4102, "订单信息查询失败");
+                                        }
+                                        //将订单状态改成已结束
+                                        order.setOrderStatus("7");
+                                        orderMapper.update(order);
+                                        User user = userRoMapper.selectOne(order.getUserId());
+                                        //查询会员特权-业务提醒
+                                        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+                                        obj.setLevelId(user.getVipLevel());
+                                        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
+                                        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+                                        //查看业务提醒是否启用
+                                        if(findObj != null && findObj.getStatus()){
+                                            //服务类型：1-换货 2-退货
+                                            Message message = new Message();
+                                            message.setBusinessId(oe.getOrderNo());
+                                            message.setBusiType(MessageConstant.SPDD);
+                                            message.setType(MessageConstant.SYS_MESSAGE);
+                                            String content = MessageConstant.REFUND_PREFIX + refundRes.getRefund_fee() + MessageConstant.REFUND_SUFFIX + order.getOrderNo();
+                                            message.setContent(content);
+                                            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                                            message.setUserId(order.getUserId());
+                                            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                                                messageSendUtil.sendMessage(message, httpServletRequest);
+                                            }
+
+                                            //微信消息
+                                            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                                                Map<String, String> map = new HashMap<String, String>();
+                                                map.put("userId", user.getId());
+                                                map.put("openId", user.getWxopenid());
+                                                map.put("first", "您好，欢迎使用财税平台");
+                                                map.put("remark", "感谢使用财税平台，祝您生活愉快！");
+                                                map.put("keyword1", content);
+                                                map.put("keyword2", refundRes.getRefund_fee());
+                                                map.put("keyword3", DataUtils.dateToStr(new Date()));
+                                                templateService.templateSend("NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM", map);
+                                            }
+
+                                            //短信消息
+                                            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                                                sendPhoneMessage(httpServletRequest,content,user);
+                                            }
+                                        }
+                                        return ResponseEntity.ok(Utils.kv("data", refundRes));
+                                    } else {
+                                        return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
                                     }
-                                    //将订单状态改成已结束
-                                    order.setOrderStatus("7");
-                                    orderMapper.update(order);
-                                    //服务类型：1-换货 2-退货
-                                    Message message = new Message();
-                                    message.setBusinessId(oe.getOrderNo());
-                                    message.setBusiType(MessageConstant.SPDD);
-                                    message.setType(MessageConstant.SYS_MESSAGE);
-                                    String content = MessageConstant.REFUND_PREFIX + refundRes.getRefund_fee() + MessageConstant.REFUND_SUFFIX + order.getOrderNo();
-                                    message.setContent(content);
-                                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                                    message.setUserId(order.getUserId());
-                                    messageSendUtil.sendMessage(message, httpServletRequest);
-                                    User user = userRoMapper.selectOne(order.getUserId());
-                                    //微信消息
-                                    if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                                        //TODO 6 支付宝退款
-                                        Map<String, String> map = new HashMap<String, String>();
-                                        map.put("userId", user.getId());
-                                        map.put("openId", user.getWxopenid());
-                                        map.put("first", "您好，欢迎使用财税平台");
-                                        map.put("remark", "感谢使用财税平台，祝您生活愉快！");
-                                        map.put("keyword1", content);
-                                        map.put("keyword2", refundRes.getRefund_fee());
-                                        map.put("keyword3", DataUtils.dateToStr(new Date()));
-                                        templateService.templateSend("NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM", map);
-                                    }
-
-                                    //短信消息
-                                    if (("VIP3".equalsIgnoreCase(user.getVipLevel())
-                                            || "VIP4".equalsIgnoreCase(user.getVipLevel()))
-                                            && StringUtils.isNotEmpty(user.getPhone())) {
-                                        sendPhoneMessage(httpServletRequest,content,user);
-                                    }
-                                    return ResponseEntity.ok(Utils.kv("data", refundRes));
-                                } else {
-                                    return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
+                                } catch (Exception e) {
+                                    LOGGER.error("支付宝退款失败：", e);
+                                    return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
                                 }
-                            } catch (Exception e) {
-                                LOGGER.error("支付宝退款失败：", e);
-                                return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
                             }
                         }
                     }
-                }
 
-            } else {
-                throw new ServiceException(4956);
-            }
-        } else {
-            if (order != null && "POINTS".equals(order.getTradeMethod())) {
+                } else {
+                    throw new ServiceException(4956);
+                }
+            } else if("POINTS".equals(order.getTradeMethod())){
                 //修改订单状态
                 oe.setStatus("8");
                 oe.setRefundRemark(data.getRefundRemark());
@@ -645,41 +665,50 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
                 throw new ServiceException(4102, "订单信息查询失败");
             }
-            //服务类型：1-换货 2-退货
-            Message message = new Message();
-            String content = "";
-            if ("1".equals(oe.getType())) {
-                content = MessageConstant.EXCHANGE_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
-            } else if ("2".equals(oe.getType())) {
-                content = MessageConstant.RETREAT_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
-            }
-            message.setContent(content);
-            message.setBusinessId(oe.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setUserId(order.getUserId());
-            messageSendUtil.sendMessage(message, request);
 
             User user = userRoMapper.selectOne(order.getUserId());
-            //微信消息
-            if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 4 拒绝退换货
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", user.getId());
-                map.put("openId", user.getWxopenid());
-                map.put("first", "您好，审核结果如下");
-                map.put("remark", "感谢您的使用。");
-                map.put("keyword1", data.getId());
-                map.put("keyword2", content);
-                templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
-            }
+            //查询会员特权-业务提醒
+            VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+            obj.setLevelId(user.getVipLevel());
+            obj.setPrivilegeId(MessageConstant.YWTX_CODE);
+            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+            //查看业务提醒是否启用
+            if(findObj != null && findObj.getStatus()){
+                //服务类型：1-换货 2-退货
+                Message message = new Message();
+                String content = "";
+                if ("1".equals(oe.getType())) {
+                    content = MessageConstant.EXCHANGE_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                } else if ("2".equals(oe.getType())) {
+                    content = MessageConstant.RETREAT_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                }
+                message.setContent(content);
+                message.setBusinessId(oe.getOrderNo());
+                message.setBusiType(MessageConstant.SPDD);
+                message.setType(MessageConstant.SYS_MESSAGE);
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                message.setUserId(order.getUserId());
 
-            //短信消息
-            if (("VIP3".equalsIgnoreCase(user.getVipLevel())
-                    || "VIP4".equalsIgnoreCase(user.getVipLevel()))
-                    && StringUtils.isNotEmpty(user.getPhone())) {
-                sendPhoneMessage(request,content,user);
+                if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                    messageSendUtil.sendMessage(message, request);
+                }
+
+                //微信消息
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("userId", user.getId());
+                    map.put("openId", user.getWxopenid());
+                    map.put("first", "您好，审核结果如下");
+                    map.put("remark", "感谢您的使用。");
+                    map.put("keyword1", data.getId());
+                    map.put("keyword2", content);
+                    templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
+                }
+
+                //短信消息
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                    sendPhoneMessage(request,content,user);
+                }
             }
 
         }
@@ -712,41 +741,49 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102, "订单信息查询失败");
             }
-            //服务类型：1-换货 2-退货
-            Message message = new Message();
-            String content = "";
-            if ("1".equals(oe.getType())) {
-                content = MessageConstant.EXCHANGE_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
-            } else if ("2".equals(oe.getType())) {
-                content = MessageConstant.RETREAT_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
-            }
-            message.setContent(content);
-            message.setBusinessId(oe.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setUserId(order.getUserId());
-            messageSendUtil.sendMessage(message, request);
-
             User user = userRoMapper.selectOne(order.getUserId());
-            //微信消息
-            if (StringUtils.isNotEmpty(user.getWxopenid())) {
-                //TODO 3 同意退货
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", user.getId());
-                map.put("openId", user.getWxopenid());
-                map.put("first", "您好，审核结果如下");
-                map.put("remark", "感谢您的使用。");
-                map.put("keyword1", data.getId());
-                map.put("keyword2", content);
-                templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
-            }
+            //查询会员特权-业务提醒
+            VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+            obj.setLevelId(user.getVipLevel());
+            obj.setPrivilegeId(MessageConstant.YWTX_CODE);
+            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+            //查看业务提醒是否启用
+            if(findObj != null && findObj.getStatus()){
+                Message message = new Message();
+                String content = "";
+                //服务类型：1-换货 2-退货
+                if ("1".equals(oe.getType())) {
+                    content = MessageConstant.EXCHANGE_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                } else if ("2".equals(oe.getType())) {
+                    content = MessageConstant.RETREAT_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                }
+                //web消息
+                if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                    message.setContent(content);
+                    message.setBusinessId(oe.getOrderNo());
+                    message.setBusiType(MessageConstant.SPDD);
+                    message.setType(MessageConstant.SYS_MESSAGE);
+                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                    message.setUserId(order.getUserId());
+                    messageSendUtil.sendMessage(message, request);
+                }
 
-            //短信消息
-            if (("VIP3".equalsIgnoreCase(user.getVipLevel())
-                    || "VIP4".equalsIgnoreCase(user.getVipLevel()))
-                    && StringUtils.isNotEmpty(user.getPhone())) {
-                sendPhoneMessage(request, content, user);
+                //微信消息
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("userId", user.getId());
+                    map.put("openId", user.getWxopenid());
+                    map.put("first", "您好，审核结果如下");
+                    map.put("remark", "感谢您的使用。");
+                    map.put("keyword1", data.getId());
+                    map.put("keyword2", content);
+                    templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
+                }
+
+                //短信消息
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                    sendPhoneMessage(request, content, user);
+                }
             }
         }
         return oe;

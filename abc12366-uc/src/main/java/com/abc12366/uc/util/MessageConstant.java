@@ -17,6 +17,13 @@ public class MessageConstant {
     public static final String SBXQTX = "SBXQTX";//会员到期提醒
 
     public static final String VIEW_DETAILS = "查看详情";
+
+
+    public static final String YWTX_WEB = "web";    //web消息
+    public static final String YWTX_WECHAT = "wechat";  //微信消息
+    public static final String YWTX_MESSAGE = "message";    //短信消息
+    public static final String YWTX_CODE = "A_YWTX";    //业务提醒代码
+
     /**实物商品**/
     //发货
     public static final String DELIVER_GOODS_PREFIX = "您的宝贝已发出，订单号：";
