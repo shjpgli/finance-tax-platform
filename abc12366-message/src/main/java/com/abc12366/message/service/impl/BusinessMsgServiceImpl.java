@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户消息服务
@@ -121,5 +122,11 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         } else {
             return Utils.bodyStatus(4024);
         }
+    }
+
+    @Override
+    public List<BusinessMessage> selectListByUsername(Map<String, String> map, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return businessMsgRoMapper.selectListByUsername(map);
     }
 }

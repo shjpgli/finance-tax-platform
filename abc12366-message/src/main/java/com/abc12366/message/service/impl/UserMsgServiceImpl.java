@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户消息服务
@@ -127,5 +128,17 @@ public class UserMsgServiceImpl implements UserMsgService {
     public List<UserMessageForBangbang> selectListForBangbang(String userId, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return userMsgRoMapper.UserMessageForBangbang(userId);
+    }
+
+    @Override
+    public List<UserMessageForBangbang> selectListToUser(Map<String, String> map, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return userMsgRoMapper.selectListToUser(map);
+    }
+
+    @Override
+    public List<UserMessageForBangbang> selectListByUser(Map<String, String> map, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return userMsgRoMapper.selectListByUser(map);
     }
 }
