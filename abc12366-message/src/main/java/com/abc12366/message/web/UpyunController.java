@@ -30,18 +30,21 @@ public class UpyunController {
 
     /**
      * 查询又拍云短信内容模板列表接口
+     *
      * @param status
      * @param page
      * @param size
      * @return ResponseEntity {@linkplain com.abc12366.message.model.UpyunTemplate}
      */
     @GetMapping(path = "/templates")
-    public ResponseEntity selectList(@RequestParam(value = "status",required = false) String status,
+    public ResponseEntity selectList(@RequestParam(value = "status", required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         LOGGER.info("查询又拍云短信模板列表");
-        List<UpyunTemplate> teplateList = upyunService.selectList();
+        Map<String, String> map = new HashMap<>();
+        map.put("status", status == null ? null : status.trim());
+        List<UpyunTemplate> teplateList = upyunService.selectList(map);
         LOGGER.info("查询到的又拍云短信内容模板有：{}", teplateList);
         return (teplateList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -50,10 +53,11 @@ public class UpyunController {
 
     /**
      * 同步又拍云配置的短信模板到本地
+     *
      * @return ResponseEntity
      */
     @PostMapping(path = "/synchronize/template")
-    public ResponseEntity synchronizeTemplate(){
+    public ResponseEntity synchronizeTemplate() {
         LOGGER.info("同步又拍云配置的短信模板到本地");
         upyunService.synchronizeTemplate();
         LOGGER.info("同步又拍云配置的短信模板到本地成功");

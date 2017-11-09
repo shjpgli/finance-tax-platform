@@ -210,10 +210,10 @@ public class UserMsgController {
 
     /**
      * 根据用户名查询发给这个用户的消息
-     * @param username
-     * @param page
-     * @param size
-     * @return
+     * @param username 用户名
+     * @param page 页码
+     * @param size 每页数据量
+     * @return  ResponseEntity {@linkplain com.abc12366.message.model.bo.UserMessageForBangbang}
      */
     @GetMapping(path = "/to")
     public ResponseEntity selectListToUser(@RequestParam String username,
@@ -239,10 +239,10 @@ public class UserMsgController {
 
     /**
      * 根据用户名查询这个用户发出去的消息
-     * @param username
-     * @param page
-     * @param size
-     * @return
+     * @param username 用户名
+     * @param page 页码
+     * @param size 每页数据量
+     * @return  ResponseEntity {@linkplain com.abc12366.message.model.bo.UserMessageForBangbang}
      */
     @GetMapping(path = "/by")
     public ResponseEntity selectListByUser(@RequestParam String username,
