@@ -172,62 +172,118 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     //登录网上报税接口
+//    @Override
+//    public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws
+//            Exception {
+//        HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
+//        if (hngsAppLoginResponse != null) {
+//            String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/login";
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
+//            headers.add("Content-Type", "application/json");
+//
+//            Map<String, Object> requestBody = new HashMap<>();
+//
+//            requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
+//            Timestamp timestamp = new Timestamp(new Date().getTime());
+//            requestBody.put("timestamp", Long.toString(timestamp.getTime()));
+//            requestBody.put("roleId", userHngsInsertBO.getRole());
+//            String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
+//            //String pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
+//            String pw = Utils.md5(userHngsInsertBO.getPassword());
+//            try {
+//                RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
+//                pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
+//                        ("iso-8859-1")), "iso-8859-1");
+//                nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")),
+//                        "iso-8859-1");
+////                nsrsbh = mainService.RSAEncrypt(request, new MD5(nsrsbh + timestamp.getTime()).compute());
+////                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
+//            } catch (Exception e) {
+//                String msg = "获取公钥并加密时异常。";
+//                LOGGER.error(msg, e);
+//                throw new ServiceException(4192);
+//            }
+//            requestBody.put("djm", pw);
+//            requestBody.put("nsrsbh", nsrsbh);
+//            //生成伪密码
+//            Random rd = new Random();
+//            int randomInt = rd.nextInt(10000);
+//            requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
+//
+//            HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+//            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+//            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+//                HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+//                if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
+//                    List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
+//                    List<AuthorizationDto> filteredAuthList = new ArrayList<>();
+//                    for (int i = 0; i < authList.size(); i++) {
+//                        AuthorizationDto auth = authList.get(i);
+//                        if (auth.getYyfwDm().trim().startsWith("FU")) {
+//                            filteredAuthList.add(auth);
+//                        }
+//                    }
+//                    nsrLoginResponse.setMenuList(filteredAuthList);
+//                }
+//                return nsrLoginResponse;
+//            }
+//        }
+//        return null;
+//    }
     @Override
-    public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws
-            Exception {
-        HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
-        if (hngsAppLoginResponse != null) {
-            String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/login";
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
-            headers.add("Content-Type", "application/json");
+    public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+        headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
+        headers.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
+        String api = "/login";
+        String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/post?api="+api;
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        requestBody.put("timestamp", Long.toString(timestamp.getTime()));
+        requestBody.put("roleId", userHngsInsertBO.getRole());
+        String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
+        //加密
+        //String pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
+        String pw;
+        try {
+            //未加密
+            pw = Utils.md5(userHngsInsertBO.getPassword());
+            RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
+            pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
+                    ("iso-8859-1")), "iso-8859-1");
+            nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")),
+                    "iso-8859-1");
+        } catch (Exception e) {
+            String msg = "获取公钥并加密时异常。";
+            LOGGER.error(msg, e);
+            throw new ServiceException(4192);
+        }
+        requestBody.put("djm", pw);
+        requestBody.put("nsrsbh", nsrsbh);
+        //生成伪密码
+        Random rd = new Random();
+        int randomInt = rd.nextInt(10000);
+        requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
 
-            Map<String, Object> requestBody = new HashMap<>();
-
-            requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
-            Timestamp timestamp = new Timestamp(new Date().getTime());
-            requestBody.put("timestamp", Long.toString(timestamp.getTime()));
-            requestBody.put("roleId", userHngsInsertBO.getRole());
-            String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
-            String pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
-
-            try {
-                RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
-                pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
-                        ("iso-8859-1")), "iso-8859-1");
-                nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")),
-                        "iso-8859-1");
-//                nsrsbh = mainService.RSAEncrypt(request, new MD5(nsrsbh + timestamp.getTime()).compute());
-//                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
-            } catch (Exception e) {
-                String msg = "获取公钥并加密时异常。";
-                LOGGER.error(msg, e);
-                throw new ServiceException(4192);
-            }
-            requestBody.put("djm", pw);
-            requestBody.put("nsrsbh", nsrsbh);
-            //生成伪密码
-            Random rd = new Random();
-            int randomInt = rd.nextInt(10000);
-            requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
-
-            HttpEntity requestEntity = new HttpEntity(requestBody, headers);
-            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-            if (soaUtil.isExchangeSuccessful(responseEntity)) {
-                HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
-                if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
-                    List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
-                    List<AuthorizationDto> filteredAuthList = new ArrayList<>();
-                    for (int i = 0; i < authList.size(); i++) {
-                        AuthorizationDto auth = authList.get(i);
-                        if (auth.getYyfwDm().trim().startsWith("FU")) {
-                            filteredAuthList.add(auth);
-                        }
+        HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+            HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+            if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
+                List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
+                List<AuthorizationDto> filteredAuthList = new ArrayList<>();
+                for (int i = 0; i < authList.size(); i++) {
+                    AuthorizationDto auth = authList.get(i);
+                    if (auth.getYyfwDm().trim().startsWith("FU")) {
+                        filteredAuthList.add(auth);
                     }
-                    nsrLoginResponse.setMenuList(filteredAuthList);
                 }
-                return nsrLoginResponse;
+                nsrLoginResponse.setMenuList(filteredAuthList);
             }
+            return nsrLoginResponse;
         }
         return null;
     }
@@ -241,8 +297,8 @@ public class UserBindServiceImpl implements UserBindService {
                 appCache.containsKey("expiresIn") && !StringUtils.isEmpty(appCache.get("expiresIn"))) {
             try {
                 Date expiredDate = (Date) appCache.get("expiresIn");
-                //加10分钟的缓冲时间减少误差
-                if (expiredDate != null && expiredDate.getTime() > (System.currentTimeMillis() + 10 * 60 * 1000)) {
+                //加60分钟的缓冲时间减少误差
+                if (expiredDate != null && expiredDate.getTime() > (System.currentTimeMillis() + 60 * 60 * 1000)) {
                     hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
                     hngsAppLoginResponse.setExpiresTime(expiredDate);
                 }

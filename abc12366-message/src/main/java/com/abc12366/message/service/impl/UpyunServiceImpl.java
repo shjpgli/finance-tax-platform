@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -47,11 +48,9 @@ public class UpyunServiceImpl implements UpyunService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-
     @Override
-    public List<UpyunTemplate> selectList() {
-        return upyunRoMapper.selectList();
+    public List<UpyunTemplate> selectList(Map<String, String> map) {
+        return upyunRoMapper.selectList(map);
     }
 
     @Override
