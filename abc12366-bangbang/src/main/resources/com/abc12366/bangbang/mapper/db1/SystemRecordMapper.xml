@@ -8,7 +8,7 @@
         minute,pageTitle,ruleCode,
         pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime)
         values (#{id},#{userId},#{sessionId},#{browseDate},#{year},#{week},#{referer},#{month},#{day},#{hour},
-        #{minute},#{pageTitle},#{pageUrl},#{stayLong},#{feature},#{appName},#{ip},
+        #{minute},#{pageTitle},#{ruleCode},#{pageUrl},#{stayLong},#{feature},#{appName},#{ip},
         #{location},#{browseType},#{browseVersion},#{os},#{device},#{remark},#{createTime})
     </insert>
 

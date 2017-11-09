@@ -56,12 +56,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         // 前置日志、黑名单、后置日志、接口计数拦截
         registry.addInterceptor(logInterceptor())
                 .excludePathPatterns("/druid/**")
-                        //第三方交易回调地址
+                        // 第三方交易回调地址
                 .excludePathPatterns("/payreturn/**")
-                        //微信服务回调地址
+                        // 微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
-        
-        
 
         // App验证、授权拦截
         registry.addInterceptor(appInterceptor())
@@ -72,17 +70,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
-                        //第三方交易回调地址
+                        // 第三方交易回调地址
                 .excludePathPatterns("/payreturn/**")
-                //微信回调地址
+                        // 微信回调地址
                 .excludePathPatterns("/wechatserver/init/**")
                         // 操作员登录、登出、token验证自动刷新
                 .excludePathPatterns("/admin/token/**")
-                        //微信服务回调地址
+                        // 微信服务回调地址
                 .excludePathPatterns("/wechatserver/*");
 
 
-        //前台用户访问拦截器迁移到网关后的
+        // 前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
                 .excludePathPatterns("/app/**")
@@ -94,36 +92,41 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test")
                         // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
-                .excludePathPatterns("/login","/login/js", "/verifylogin", "/logout/**", "/refresh", "/register", "/user/token/**", "/user/u/**")
-                        //根据用户ID查看用户简单信息：用户ID，用户昵称，用户头像，擅长领域
+                .excludePathPatterns("/login", "/login/js", "/verifylogin", "/logout/**", "/refresh", "/register",
+                        "/user/token/**", "/user/u/**")
+                        // 用户通过手机号重置密码
+                .excludePathPatterns("/verifyphone", "/resetpassword")
+                        // 根据用户ID查看用户简单信息：用户ID，用户昵称，用户头像，擅长领域
                 .excludePathPatterns("/user/notoken/simple/{userId}")
                         // 操作员登录、登出、token验证自动刷新
                 .excludePathPatterns("/admin/login", "/admin/logout/**", "/admin/token/**")
-                        //第三方交易毁回调地址
+                        // 第三方交易毁回调地址
                 .excludePathPatterns("/payreturn/**")
-                        //微信服务回调地址
-                .excludePathPatterns("/wechatserver/*","/wxTemplate/send/*")
-                        //用户等级接口地址
+                        // 微信服务回调地址
+                .excludePathPatterns("/wechatserver/*", "/wxTemplate/send/*")
+                        // 用户等级接口地址
                 .excludePathPatterns("/uvip/level/**")
-                        //用户签到排行榜
+                        // 用户签到排行榜
                 .excludePathPatterns("/check/rank")
-                        //计算用户经验值接口
+                        // 计算用户经验值接口
                 .excludePathPatterns("/experience/compute")
-                //根据省市区编号查询名称
+                        // 根据省市区编号查询名称
                 .excludePathPatterns("/provinceorcityorarea")
-                //JS获取微信信息
-                .excludePathPatterns("/wxgzh/getuserid/**","/wxgzh/getuserinfo/**","/wxgzh/getwxJsConfig","/user/wx/**","/user/wx/openid/**","/wx/redpack","/wx/activity/redpack","/wxuser/getOneFromWx/**")
-                        //
+                        // JS获取微信信息
+                .excludePathPatterns("/wxgzh/getuserid/**", "/wxgzh/getuserinfo/**", "/wxgzh/getwxJsConfig",
+                        "/user/wx/**", "/user/wx/openid/**", "/wx/redpack", "/wx/activity/redpack",
+                        "/wxuser/getOneFromWx/**")
+                        // rsa密码
                 .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
-                        //微信回调地址
+                        // 微信回调地址
                 .excludePathPatterns("/wechatserver/init/**")
-                        //好会计
+                        // 好会计
                 .excludePathPatterns("/userhkj/token")
-                        //用户验证码登录发送验证码短信
+                        // 用户验证码登录发送验证码短信
                 .excludePathPatterns("/user/phonelogin/code")
-                // 根据微信活动生成红包口令, 查询微信红包活动
+                        // 根据微信活动生成红包口令, 查询微信红包活动
                 .excludePathPatterns("/wx/redpack/{activityId}", "/wx/activity/redpack")
-                //批量用户奖励积分接口
+                        // 批量用户奖励积分接口
                 .excludePathPatterns("/points/batch/award");
     }
 }

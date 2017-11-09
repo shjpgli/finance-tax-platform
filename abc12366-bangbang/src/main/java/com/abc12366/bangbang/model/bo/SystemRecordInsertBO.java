@@ -90,6 +90,7 @@ public class SystemRecordInsertBO {
     /**
      * 规则代码：经验值规则代码
      */
+    @Length(max = 20)
     private String ruleCode;
 
     public String getUserId() {
