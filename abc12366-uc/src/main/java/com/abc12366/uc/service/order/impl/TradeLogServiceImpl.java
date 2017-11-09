@@ -1,4 +1,4 @@
-package com.abc12366.uc.service.impl;
+package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.TradeLogMapper;
@@ -6,7 +6,7 @@ import com.abc12366.uc.mapper.db2.TradeLogRoMapper;
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.bo.TradeBillBO;
 import com.abc12366.uc.model.bo.TradeLogBO;
-import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.order.TradeLogService;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
