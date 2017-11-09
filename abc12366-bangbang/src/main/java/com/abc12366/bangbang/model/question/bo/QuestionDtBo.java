@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class QuestionDtBo implements Serializable {
 
-	/**动态类型**varchar(64)**/
+	/**动态类型：2、回答了问题，3、评论了回答，5、点赞了回答，7、评论了秘籍，9、点赞了秘籍**varchar(64)**/
 	private String qlogType;
 
 	/**动态时间**varchar(64)**/
