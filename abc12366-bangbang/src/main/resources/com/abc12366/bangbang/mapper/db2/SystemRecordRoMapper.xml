@@ -18,16 +18,6 @@
             <if test="location!=null">
                 and location=#{location}
             </if>
-            <if test="yyyyMMdd!=null">
-                <![CDATA[
-                and date_format(createTime, '%Y%m%d') >= date_format(#{yyyyMMdd}, '%Y%m%d')
-                ]]>
-            </if>
-            <if test="yyyyMMdd!=null">
-                <![CDATA[
-                and date_format(createTime, '%Y%m%d') <= date_format(#{yyyyMMdd}, '%Y%m%d')
-                ]]>
-            </if>
         </where>
         ORDER BY createTime DESC
     </select>
