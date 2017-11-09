@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户消息服务
@@ -57,6 +59,28 @@ public class UserMsgController {
 
             PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
             responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 查询用户消息未读数量
+     *
+     * @param type 消息类型，默认查询所有消息
+     * @return 消息未读总数
+     */
+    @GetMapping("/unread/count")
+    public ResponseEntity unreadCount(@RequestParam(value = "type", required = false) String type) {
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = Utils.getUserId();
+
+        if (!StringUtils.isEmpty(userId)) {
+            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).build();
+            int count = userMsgService.unreadCount(um);
+            responseEntity = ResponseEntity.ok(Utils.kv("data", count));
         }
 
         LOGGER.info("{}", responseEntity);
@@ -117,8 +141,8 @@ public class UserMsgController {
     /**
      * 直接将'未读'消息置为'已读'，不需要进入消息
      *
-     * @param id
-     * @return
+     * @param id 消息主键
+     * @return 消息对象
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@PathVariable("id") String id) {
@@ -181,6 +205,64 @@ public class UserMsgController {
         }
 
         LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 根据用户名查询发给这个用户的消息
+     * @param username
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping(path = "/to")
+    public ResponseEntity selectListToUser(@RequestParam String username,
+                                               @RequestParam(required = false) String status,
+                                                @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
+                                               ) {
+        LOGGER.info("根据用户名查询发给这个用户的消息，username:{},{},{}", username,page, size);
+        Map<String, String> map = new HashMap<>();
+        map.put("username", username.trim());
+        map.put("status", status == null ? null : status.trim());
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        List<UserMessageForBangbang> dataList = userMsgService.selectListToUser(map, page, size);
+        if (!StringUtils.isEmpty(dataList) && dataList.size() > 0) {
+            PageInfo<UserMessageForBangbang> pageInfo = new PageInfo<>(dataList);
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("查询到的发给这个用户{}的消息有：{}", username,dataList);
+        return responseEntity;
+    }
+
+    /**
+     * 根据用户名查询这个用户发出去的消息
+     * @param username
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping(path = "/by")
+    public ResponseEntity selectListByUser(@RequestParam String username,
+                                           @RequestParam(required = false) String status,
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
+                                           ) {
+        LOGGER.info("根据用户名查询发给这个用户的消息，username:{},{},{}", username,page, size);
+        Map<String, String> map = new HashMap<>();
+        map.put("username", username.trim());
+        map.put("status", status == null ? null : status.trim());
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        List<UserMessageForBangbang> dataList = userMsgService.selectListByUser(map, page, size);
+        if (!StringUtils.isEmpty(dataList) && dataList.size() > 0) {
+            PageInfo<UserMessageForBangbang> pageInfo = new PageInfo<>(dataList);
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("查询到的发给这个用户{}的消息有：{}", username,dataList);
         return responseEntity;
     }
 }

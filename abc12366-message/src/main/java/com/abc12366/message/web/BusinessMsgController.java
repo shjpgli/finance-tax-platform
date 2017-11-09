@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 业务消息服务
@@ -33,7 +35,7 @@ public class BusinessMsgController {
     @Autowired
     private BusinessMsgService businessMsgService;
 
-    /**BusinessCBusinessC
+    /**
      * 获取当前用户业务消息列表
      *
      * @param type     消息类型
@@ -64,6 +66,30 @@ public class BusinessMsgController {
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
             responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 查询业务消息未读数量
+     *
+     * @param type     消息类型，默认查询所有类型消息
+     * @param busiType 业务类型，默认查询所有类型
+     * @return 消息未读总数
+     */
+    @GetMapping("/unread/count")
+    public ResponseEntity unreadCount(@RequestParam(value = "type", required = false) String type,
+                                      @RequestParam(value = "busiType", required = false) String busiType) {
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = Utils.getUserId();
+
+        if (!StringUtils.isEmpty(userId)) {
+            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).build();
+            int count = businessMsgService.unreadCount(bm);
+            responseEntity = ResponseEntity.ok(Utils.kv("data", count));
         }
 
         LOGGER.info("{}", responseEntity);
@@ -169,7 +195,7 @@ public class BusinessMsgController {
      * @param data BusinessMessage
      * @return ResponseEntity
      */
-    @PostMapping(path="/system")
+    @PostMapping(path = "/system")
     public ResponseEntity insertBySystem(@Valid @RequestBody BusinessMessage data) {
         LOGGER.info("{}", data);
 
@@ -177,6 +203,44 @@ public class BusinessMsgController {
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 根据用户名查询业务消息列表
+     *
+     * @param type     消息类型
+     * @param busiType 业务类型
+     * @param status   状态
+     * @param page     当前页
+     * @param size     每页大小
+     * @param request  HttpServletRequest
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/username")
+    public ResponseEntity selectListByUsername(
+            @RequestParam() String username,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String busiType,
+            @RequestParam(required = false) String status,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+            HttpServletRequest request) {
+        LOGGER.info("根据用户名查询业务消息列表：username：{}，{},{}", username, page, size);
+        Map<String, String> map = new HashMap<>();
+        map.put("username", username.trim());
+        map.put("type", type == null ? null : type.trim());
+        map.put("busiType", busiType == null ? null : busiType.trim());
+        map.put("status", status == null ? null : status.trim());
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        List<BusinessMessage> dataList = businessMsgService.selectListByUsername(map, page, size);
+
+        if (!StringUtils.isEmpty(dataList) && dataList.size() > 0) {
+            PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("发送给{}的消息有：{}", username, dataList);
         return responseEntity;
     }
 }

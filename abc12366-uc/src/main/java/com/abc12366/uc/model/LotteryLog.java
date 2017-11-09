@@ -10,6 +10,15 @@ import java.util.Date;
 
 public class LotteryLog{
     private String remake;
+private String addressId;
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
+    }
 
     public String getRemake() {
         return remake;

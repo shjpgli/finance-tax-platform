@@ -50,4 +50,6 @@ public interface UserRoMapper {
 	List<UserBO> getNomalList(Map<String, Object> map);
 
 	User selectByWxUserId(User users);
+
+	List<User> findByHngsNsrsbh(String nsrsbh);
 }

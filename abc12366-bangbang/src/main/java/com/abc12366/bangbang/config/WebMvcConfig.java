@@ -61,6 +61,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test");
 
+
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
@@ -158,6 +159,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/cheats/selectCheats/**")
                         //秘籍评论列表查询
                 .excludePathPatterns("/cheatsComment/selectList")
+                .excludePathPatterns("/search/list")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",

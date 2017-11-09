@@ -5,6 +5,7 @@ import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户消息服务
@@ -27,4 +28,21 @@ public interface BusinessMsgService {
     BusinessMessage selectOne(String id);
 
     BodyStatus delete(BusinessMessage data);
+
+    /**
+     * 根据用户名查询业务消息
+     * @param map
+     * @param page
+     * @param size
+     * @return
+     */
+    List<BusinessMessage> selectListByUsername(Map<String, String> map, int page, int size);
+
+    /**
+     * 查询业务消息未读数量
+     *
+     * @param bm type,busiType
+     * @return 消息未读总数
+     */
+    int unreadCount(BusinessMessage bm);
 }
