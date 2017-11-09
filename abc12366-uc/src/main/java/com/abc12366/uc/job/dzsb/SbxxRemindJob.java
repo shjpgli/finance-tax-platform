@@ -74,7 +74,7 @@ public class SbxxRemindJob implements Job{
 	        map.put("lrrq", dzsbTime.getLasttime());
 	        map.put("maxcount", MessageConstant.DZSBQNUM);
 	        DzsbJob job=client.processYw(map);
-	        if("00000000".equals(job.getRescode())){//查询失败
+	        if("00000000".equals(job.getRescode())){//查询成功
 	        	List<DzsbXxInfo> dzsbXxInfos= job.getDataList();
 	        	if(dzsbXxInfos!=null && dzsbXxInfos.size()>0){//查询到数据
 	        		//处理数据
@@ -121,7 +121,7 @@ public class SbxxRemindJob implements Job{
 	        		dzsbTimeService.insert(dzsbTime);
 	        		break;
 	        	}
-	        }else{
+	        }else{//查询失败
 	        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]申报信息异常:"+job.getMessage());
 	        }
 		}	

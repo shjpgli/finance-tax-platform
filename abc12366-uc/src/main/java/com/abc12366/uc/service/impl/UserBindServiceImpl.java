@@ -245,12 +245,9 @@ public class UserBindServiceImpl implements UserBindService {
         requestBody.put("timestamp", Long.toString(timestamp.getTime()));
         requestBody.put("roleId", userHngsInsertBO.getRole());
         String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
-        //加密
-        //String pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
         String pw;
         try {
-            //未加密
-            pw = Utils.md5(userHngsInsertBO.getPassword());
+            pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
             RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
             pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
                     ("iso-8859-1")), "iso-8859-1");
