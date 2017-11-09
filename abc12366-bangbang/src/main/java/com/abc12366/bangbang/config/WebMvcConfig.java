@@ -61,6 +61,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test");
 
+
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
@@ -133,8 +134,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //优秀邦派列表查询
                 .excludePathPatterns("/queFaction/selectListExcellent")
                         //个人主页
-                .excludePathPatterns("/questionbb/selectMybangbang/{userId}", "/questionExpert/listByUserId/{userId}",
-                        "/queAttention/selectUserList/{attentionUserId}", "/queAttention/selectAttentionUserList/{userId}")
+                .excludePathPatterns("/questionbb/selectMybangbang/{userId}","/questionExpert/listByUserId/{userId}",
+                        "/queAttention/selectUserList/{attentionUserId}","/queAttention/selectAttentionUserList/{userId}",
+                        "/queAnswer/selectMyAnswerList")
                 //江湖榜 统计
                 .excludePathPatterns("/queCount/**")
                         //潜力邦派列表查询
@@ -159,6 +161,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/cheatsComment/selectList")
                         //帮邦用户列表查询
                 .excludePathPatterns("/qcuser/selectList")
+                .excludePathPatterns("/search/list")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",

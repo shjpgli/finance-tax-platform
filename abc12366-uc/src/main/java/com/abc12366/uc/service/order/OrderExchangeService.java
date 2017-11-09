@@ -1,4 +1,4 @@
-package com.abc12366.uc.service;
+package com.abc12366.uc.service.order;
 
 import com.abc12366.uc.model.OrderExchange;
 import com.abc12366.uc.model.bo.*;

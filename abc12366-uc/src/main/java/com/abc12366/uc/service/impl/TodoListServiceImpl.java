@@ -2,7 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.uc.model.bo.OrderStatBO;
 import com.abc12366.uc.service.InvoiceService;
-import com.abc12366.uc.service.OrderExchangeService;
+import com.abc12366.uc.service.order.OrderExchangeService;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.service.TodoListService;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
