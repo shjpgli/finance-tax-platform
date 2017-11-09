@@ -1,21 +1,19 @@
 package com.abc12366.uc.job.reportdate;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.gateway.service.AppService;
-import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.service.IWxTemplateService;
+import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.MessageConstant;
-import com.abc12366.uc.util.MessageSendUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -41,15 +39,8 @@ public class ReportDateJob implements Job {
 
     @Autowired
     private UserService userService;
-
     @Autowired
-    private MessageSendUtil messageSendUtil;
-
-    @Autowired
-    private IWxTemplateService templateService;
-
-    @Autowired
-    private AppService appService;
+    private static IMsgSendService msgSendService;
 
     private String shenqqix = "";//申报期限
 
@@ -66,9 +57,7 @@ public class ReportDateJob implements Job {
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
         userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
-        messageSendUtil = (MessageSendUtil) SpringCtxHolder.getApplicationContext().getBean("messageSendUtil");
-        templateService = (IWxTemplateService) SpringCtxHolder.getApplicationContext().getBean("templateService");
-        appService = (AppService) SpringCtxHolder.getApplicationContext().getBean("appService");
+        msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal_1 = Calendar.getInstance();//获取当前日期
@@ -80,9 +69,6 @@ public class ReportDateJob implements Job {
         cale.set(Calendar.DAY_OF_MONTH, 0);
         pmonthL = format.format(cale.getTime());
         
-        //获取运营管理系统accessToken
-        accessToken = appService.selectByName("abc12366-admin").getAccessToken();
-        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
         LOGGER.info("电子税局获取办税期限..............");
         HttpHeaders headers2 = new HttpHeaders();
@@ -170,93 +156,49 @@ public class ReportDateJob implements Job {
 
             //业务处理
             for (UserBO userBO : userList) {
-                LOGGER.info("用户:" + JSONObject.toJSONString(userBO));
+            	User user = new User();
+                BeanUtils.copyProperties(userBO, user);
+                LOGGER.info("用户:" + JSONObject.toJSONString(user));
                 //1.会员是否快到期
                 if (!"VIP0".equalsIgnoreCase(userBO.getVipLevel())
                         && chargeDate(userBO.getVipExpireDate())) {
-
-                    //普通消息
-                    LOGGER.info("用户:" + userBO.getId() + ",会员过期提醒：" + userBO.getVipLevel());
-                    Message message = new Message();
-                    message.setBusinessId(userBO.getId());
-                    message.setBusiType(MessageConstant.HYDQTX);
-                    message.setType(MessageConstant.SYS_MESSAGE);
-                    message.setContent(MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName
-							()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate())));
-                    message.setUserId(userBO.getId());
-                    messageSendUtil.sendMessage(message, accessToken);
-
-                    //微信消息
-                    if (StringUtils.isNotEmpty(userBO.getWxopenid())) {
-                        Map<String, String> dataList = new HashMap<String, String>();
-                        dataList.put("userId", userBO.getId());
-                        dataList.put("openId", userBO.getWxopenid());
-                        dataList.put("first", "您的会员即将过期");
-                        dataList.put("remark", "您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
-                        dataList.put("keyword1", userBO.getVipLevelName());
-                        dataList.put("keyword1Color", "#00DB00");
-                        dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
-                        dataList.put("keyword2Color", "#00DB00");
-                        dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
-                        templateService.templateSend("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList);
-                    }
-
-                    //短信消息
-                    if (("VIP3".equalsIgnoreCase(userBO.getVipLevel())
-                            || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
-                            && StringUtils.isNotEmpty(userBO.getPhone())) {
-                        String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO
-								.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
-								()));
-                        Map<String,String> maps=new HashMap<String,String>();
-                        maps.put("var", vdxMsg);
-                        List<Map<String,String>> list= new ArrayList<Map<String,String>>();
-                        list.add(maps);
-                        
-                        messageSendUtil.sendPhoneMessage(userBO.getPhone(),"529", list, accessToken);
-                    }
+                	LOGGER.info("用户:" + userBO.getId() + ",会员过期信息提醒：" + userBO.getVipLevel()+";过期时间:"+userBO.getVipExpireDate());
+                    String sysMsg=MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
+                    
+                    Map<String, String> dataList = new HashMap<String, String>();
+                    dataList.put("first", "您的会员即将过期");
+                    dataList.put("remark", "您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
+                    dataList.put("keyword1", userBO.getVipLevelName());
+                    dataList.put("keyword1Color", "#00DB00");
+                    dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
+                    dataList.put("keyword2Color", "#00DB00");
+                    dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
+                   
+                    String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO
+							.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
+							()));
+                    
+                    msgSendService.sendMsg(user, sysMsg, "tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList, vdxMsg);
                 }
 
                 //2.申报期信息发送
                 LOGGER.info("用户:" + userBO.getId() + ",申报期信息提醒：" + userBO.getVipLevel());
-                Message message = new Message();
-                message.setBusinessId(userBO.getId());
-                message.setBusiType(MessageConstant.SBXQTX);
-                message.setType(MessageConstant.SYS_MESSAGE);
-                message.setContent(MessageConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix));
-                message.setUserId(userBO.getId());
-                messageSendUtil.sendMessage(message, accessToken);
-
-                if (!"VIP0".equalsIgnoreCase(userBO.getVipLevel())
-                        && StringUtils.isNotEmpty(userBO.getWxopenid())) {
-                    Map<String, String> dataList = new HashMap<String, String>();
-                    dataList.put("userId", userBO.getId());
-                    dataList.put("openId", userBO.getWxopenid());
-                    dataList.put("first", "财税专家会员提醒，本月纳税申报可申报的报表种类如下：");
-                    dataList.put("remark", "实际申报种类以税务局核定信息为准，请您在申报期限内及时进行申报缴税！");
-                    dataList.put("keyword1", "增值税、消费税、所得税、财务报表");
-                    dataList.put("keyword1Color", "#00DB00");
-                    dataList.put("keyword2", pmonthF + "至" + pmonthL);
-                    dataList.put("keyword2Color", "#00DB00");
-                    dataList.put("keyword3", shenqqix);
-                    dataList.put("keyword3Color", "#00DB00");
-                    dataList.put("url", SpringCtxHolder.getProperty("mbxx.sbqx.url"));
-                    templateService.templateSend("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList);
-                }
-
-                //短信消息
-                if (("VIP3".equalsIgnoreCase(userBO.getVipLevel())
-                        || "VIP4".equalsIgnoreCase(userBO.getVipLevel()))
-                        && StringUtils.isNotEmpty(userBO.getPhone())) {
-                	
-                    String vdxMsg = MessageConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
-                    Map<String,String> maps=new HashMap<String,String>();
-                    maps.put("var", vdxMsg);
-                    List<Map<String,String>> list= new ArrayList<Map<String,String>>();
-                    list.add(maps);
-                    
-                    messageSendUtil.sendPhoneMessage(userBO.getPhone(),"529", list, accessToken);
-                }
+                String sysMsg=MessageConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
+                
+                Map<String, String> dataList = new HashMap<String, String>();
+                dataList.put("first", "财税专家会员提醒，本月纳税申报可申报的报表种类如下：");
+                dataList.put("remark", "实际申报种类以税务局核定信息为准，请您在申报期限内及时进行申报缴税！");
+                dataList.put("keyword1", "增值税、消费税、所得税、财务报表");
+                dataList.put("keyword1Color", "#00DB00");
+                dataList.put("keyword2", pmonthF + "至" + pmonthL);
+                dataList.put("keyword2Color", "#00DB00");
+                dataList.put("keyword3", shenqqix);
+                dataList.put("keyword3Color", "#00DB00");
+                dataList.put("url", SpringCtxHolder.getProperty("mbxx.sbqx.url"));
+                
+                String vdxMsg = MessageConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
+                
+                msgSendService.sendMsg(user, sysMsg, "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, vdxMsg);
             }
             return 1;
         }
