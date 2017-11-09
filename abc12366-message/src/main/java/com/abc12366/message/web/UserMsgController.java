@@ -66,6 +66,28 @@ public class UserMsgController {
     }
 
     /**
+     * 查询用户消息未读数量
+     *
+     * @param type 消息类型，默认查询所有消息
+     * @return 消息未读总数
+     */
+    @GetMapping("/unread/count")
+    public ResponseEntity unreadCount(@RequestParam(value = "type", required = false) String type) {
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = Utils.getUserId();
+
+        if (!StringUtils.isEmpty(userId)) {
+            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).build();
+            int count = userMsgService.unreadCount(um);
+            responseEntity = ResponseEntity.ok(Utils.kv("data", count));
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
      * 发送用户消息
      *
      * @param data UserMessage
@@ -119,8 +141,8 @@ public class UserMsgController {
     /**
      * 直接将'未读'消息置为'已读'，不需要进入消息
      *
-     * @param id
-     * @return
+     * @param id 消息主键
+     * @return 消息对象
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@PathVariable("id") String id) {

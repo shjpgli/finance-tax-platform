@@ -13,12 +13,10 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +49,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         if (data != null) {
             data.setId(Utils.uuid());
             data.setStatus("1");
-            Timestamp now = new Timestamp(new Date().getTime());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             data.setCreateTime(now);
             data.setLastUpdate(now);
             businessMsgMapper.insert(data);
@@ -65,7 +63,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         if (data != null && data.getUserIds().size() > 0) {
             dataList = new ArrayList<>();
             for (String userId: data.getUserIds()) {
-                Timestamp now = new Timestamp(new Date().getTime());
+                Timestamp now = new Timestamp(System.currentTimeMillis());
                 BusinessMessage bm = new BusinessMessage.Builder()
                         .id(Utils.uuid())
                         .userId(userId)
@@ -96,7 +94,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         BusinessMessage bm = businessMsgRoMapper.selectOne(data.getId());
         if (bm != null) {
             bm.setStatus(data.getStatus());
-            bm.setLastUpdate(new Timestamp(new Date().getTime()));
+            bm.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             businessMsgMapper.update(bm);
         }
         return bm;
@@ -105,7 +103,8 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     @Override
     public BusinessMessage selectOne(String id) {
         BusinessMessage data = businessMsgRoMapper.selectOne(id);
-        if ("1".equals(data.getStatus())) { // 如果消息未读，置为已读
+        // 如果消息未读，置为已读
+        if ("1".equals(data.getStatus())) {
             data.setStatus("2");
             this.update(data);
         }
@@ -115,7 +114,8 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     @Override
     public BodyStatus delete(BusinessMessage data) {
         BusinessMessage bm = this.selectOne(data.getId());
-        if (data.getUserId().equals(bm.getUserId())) { // 是否为本人操作
+        // 是否为本人操作
+        if (data.getUserId().equals(bm.getUserId())) {
             bm.setStatus("0");
             this.update(bm);
             return Utils.bodyStatus(2000);
@@ -128,5 +128,10 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     public List<BusinessMessage> selectListByUsername(Map<String, String> map, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return businessMsgRoMapper.selectListByUsername(map);
+    }
+
+    @Override
+    public int unreadCount(BusinessMessage bm) {
+        return businessMsgRoMapper.unreadCount(bm);
     }
 }
