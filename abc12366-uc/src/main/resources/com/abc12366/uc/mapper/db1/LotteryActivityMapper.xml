@@ -5,9 +5,11 @@
 <insert id="insert" parameterType="com.abc12366.uc.model.LotteryActivity">
 insert into uc_lottery_activity(
 id,name,types,description,count,label,userLevel,url,startTime,endTime,status,templateId,createTime,timeStock,timeCount,timeDay,luckTime
+,userLotteryMax,userLotteryMaxDay,getlotteyDay,userFreeCount
 )values(
 #{id},#{name},#{types},#{description},#{count},#{label},#{userLevel},#{url},#{startTime},#{endTime},#{status},#{templateId},#{createTime}
-,#{timeStock},#{timeCount},#{timeDay},#{luckTime})
+,#{timeStock},#{timeCount},#{timeDay},#{luckTime}
+,#{userLotteryMax},#{userLotteryMaxDay},#{getlotteyDay},#{userFreeCount})
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.LotteryActivity">
 update  uc_lottery_activity 
@@ -23,6 +25,11 @@ update  uc_lottery_activity
 <if test="endTime!=null">endTime=#{endTime},</if>
 <if test="status!=null">status=#{status},</if>
 <if test="templateId!=null">templateId=#{templateId},</if>
+
+    <if test="userLotteryMax!=null">userLotteryMax=#{userLotteryMax},</if>
+    <if test="userLotteryMaxDay!=null">userLotteryMaxDay=#{userLotteryMaxDay},</if>
+    <if test="getlotteyDay!=null">getlotteyDay=#{getlotteyDay},</if>
+    <if test="userFreeCount!=null">userFreeCount=#{userFreeCount},</if>
 
     <if test="timeStock!=null">timeStock=#{timeStock},</if>
     <if test="timeCount!=null">timeCount=#{timeCount},</if>

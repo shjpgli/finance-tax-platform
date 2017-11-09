@@ -66,6 +66,11 @@ public class LotteryLogController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    @GetMapping(path = "/getLottery")
+    public ResponseEntity getLottery( @RequestParam(required = true) String logId,@RequestParam(required = false) String dizhiId) {
+//领奖接口
+        return null;
+    }
     @PostMapping
     public ResponseEntity insert(@RequestBody LotteryLogBO lotteryLogBO) {
         LOGGER.info("insert:{}", lotteryLogBO);
