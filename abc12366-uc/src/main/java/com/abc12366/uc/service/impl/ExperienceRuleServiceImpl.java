@@ -168,7 +168,7 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
             throw new ServiceException(4614);
         }
 
-        if(status.equals("false")){
+        if (status.equals("false")) {
             //修改停用经验值规则之前做校验：是否有关联的任务在使用此条规则，若有，则不允许修改此条规则
             isValidSysTaskRelatedTheRule(id);
         }
@@ -190,7 +190,7 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
     @Override
     public void isValidSysTaskRelatedTheRule(String ruleId) {
         SysTask sysTask = sysTaskRoMapper.selectValidSysTaskByRuleId(ruleId);
-        if (sysTask != null) {
+        if (sysTask != null && !StringUtils.isEmpty(sysTask.getStatus()) && sysTask.getStatus()) {
             throw new ServiceException(4713);
         }
     }

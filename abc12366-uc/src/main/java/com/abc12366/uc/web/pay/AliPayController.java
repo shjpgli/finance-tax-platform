@@ -3,12 +3,14 @@ package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.bo.ProductBO;
 import com.abc12366.uc.model.bo.TradeLogBO;
 import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.pay.*;
 import com.abc12366.uc.model.pay.bo.AliCodePay;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.QRCodeUtil;
 import com.alibaba.fastjson.JSON;
@@ -39,7 +41,11 @@ public class AliPayController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AliPayController.class);
 	@Autowired
 	private TradeLogService tradeLogService;
-    
+
+	@Autowired
+	private OrderService orderService;
+
+
 	/**
 	 * 支付宝支付接口,返回支付页面
 	 * @return
@@ -65,8 +71,8 @@ public class AliPayController {
 		}
 		
 	}
-	
-	
+
+
 	/**
 	 * 支付宝支付接口,返回二维码
 	 * @param payReq 支付内容
@@ -76,6 +82,9 @@ public class AliPayController {
 	@PostMapping("/paycode")
 	public ResponseEntity aliPayCode(@RequestBody AliCodePay payReq){
 		try {
+			//查询订单库存
+            orderService.selectStock(payReq.getOut_trade_no());
+
 			LOGGER.info("支付宝二维码支付接收信息{}",JSON.toJSONString(payReq));
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();

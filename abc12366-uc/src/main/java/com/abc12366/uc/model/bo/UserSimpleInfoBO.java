@@ -7,9 +7,21 @@ package com.abc12366.uc.model.bo;
  * Time: 10:31
  */
 public class UserSimpleInfoBO {
+    /**
+     * 用户ID
+     */
     private String id;
+    /**
+     * 用户昵称
+     */
     private String nickName;
+    /**
+     * 用户头像图片路径
+     */
     private String userPicturePath;
+    /**
+     * 用户标签
+     */
     private String tags;
 
     public UserSimpleInfoBO() {

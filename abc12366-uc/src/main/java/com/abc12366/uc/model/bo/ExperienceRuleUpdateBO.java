@@ -10,11 +10,11 @@ import javax.validation.constraints.Size;
  */
 public class ExperienceRuleUpdateBO {
     //规则名称
-    @Size(max = 32)
+    @Size(max = 32,message = "规则名称参数name过长")
     private String name;
 
     //规则编码
-    @Size(max = 10)
+    @Size(max = 10,message = "规则编码参数code过长")
     private String code;
 
     //经验值
@@ -25,14 +25,14 @@ public class ExperienceRuleUpdateBO {
     private String description;
 
     //经验值类型
-    @Size(max = 1)
+    @Size(max = 1,message = "经验值类型参数type过长")
     private String type;
 
     //规则状态
     private Boolean status;
 
     //经验值规则周期限制:D:日，M：月，Y：年，A：无限制
-    @Size(max = 5)
+    @Size(max = 5,message = "周期参数period过长")
     private String period;
 
     //经验值规则频率/次数

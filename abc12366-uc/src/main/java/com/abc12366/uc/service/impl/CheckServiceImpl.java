@@ -78,6 +78,12 @@ public class CheckServiceImpl implements CheckService {
                 }
             }
         }
+        //记录签到
+        insert(check);
+
+        //签到统计
+        continuingCheck(check.getUserId());
+
         //完成任务埋点,如果任务不存在或失效则返回
         if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_CODE)) {
             return 0;
@@ -87,12 +93,6 @@ public class CheckServiceImpl implements CheckService {
         if (!pointsLog(check.getUserId(), points)) {
             return 0;
         }
-
-        //记录签到
-        insert(check);
-
-        //签到统计
-        continuingCheck(check.getUserId());
 
         PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
         if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {

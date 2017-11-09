@@ -39,4 +39,28 @@
     AND mu.createTime > date_sub(now(), interval '181 0:0:0' day_second)
     ORDER BY mu.createTime DESC
     </select>
+
+    <select id="selectListToUser" parameterType="java.util.Map"
+            resultType="com.abc12366.message.model.bo.UserMessageForBangbang">
+        SELECT
+        mu.id, mu.fromUserId, mu.toUserId, mu.content, mu.status, mu.type, mu.createTime, mu.lastUpdate,
+        (select a.nickname from msg_uc_user a where a.id=mu.fromUserId) nickname,
+        (select a.userPicturePath from msg_uc_user a where a.id=mu.fromUserId) userPicturePath
+        FROM msg_user_message mu join msg_uc_user muu on mu.toUserId=muu.id
+        WHERE muu.username = #{username}
+        <if test="status!=null and status!=''">AND mu.status = #{status}</if>
+        ORDER BY mu.createTime DESC
+    </select>
+
+    <select id="selectListByUser" parameterType="java.util.Map"
+            resultType="com.abc12366.message.model.bo.UserMessageForBangbang">
+        SELECT
+        mu.id, mu.fromUserId, mu.toUserId, mu.content, mu.status, mu.type, mu.createTime, mu.lastUpdate,
+        (select a.nickname from msg_uc_user a where a.id=mu.toUserId) nickname,
+        (select a.userPicturePath from msg_uc_user a where a.id=mu.toUserId) userPicturePath
+        FROM msg_user_message mu join msg_uc_user muu on mu.fromUserId=muu.id
+        WHERE muu.username = #{username}
+        <if test="status!=null and status!=''">AND mu.status = #{status}</if>
+        ORDER BY mu.createTime DESC
+    </select>
 </mapper>

@@ -9,8 +9,27 @@ import java.util.Date;
 
 
 public class LotteryLogBO{
+    private Boolean lotterySend;
+
+    public Boolean getLotterySend() {
+        return lotterySend;
+    }
+
+    public void setLotterySend(Boolean lotterySend) {
+        this.lotterySend = lotterySend;
+    }
+
     private String remake;
     private String activityName;
+private String lotteryLevel;
+
+    public String getLotteryLevel() {
+        return lotteryLevel;
+    }
+
+    public void setLotteryLevel(String lotteryLevel) {
+        this.lotteryLevel = lotteryLevel;
+    }
 
     public String getActivityName() {
         return activityName;

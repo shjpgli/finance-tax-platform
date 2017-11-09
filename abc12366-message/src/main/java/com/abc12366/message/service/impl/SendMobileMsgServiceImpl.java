@@ -71,7 +71,7 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
     @Override
     public void sendMsgByUppyun(MobileMsgBO mobileMsgBO) {
         //发送通知类短信接口地址
-        String url = SpringCtxHolder.getProperty("message.upyun.send.url");
+        String url = SpringCtxHolder.getProperty("message.upyun.send.url")+"/messages";
         //调用又拍接口请求头设置
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", config.getContentType());
