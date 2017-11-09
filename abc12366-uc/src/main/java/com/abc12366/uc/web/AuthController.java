@@ -4,10 +4,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.web.BaseController;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.UserReturnBO;
-import com.abc12366.uc.model.bo.VerifyingCodeBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IpService;
 import com.abc12366.uc.service.TodoTaskService;
@@ -154,6 +151,44 @@ public class AuthController extends BaseController {
             authService.loginByVerifyFail(loginBO);
             return null;
         }
+    }
+
+    /**
+     * 用户通过手机号码+验证码的方式身份验证
+     *
+     * @param loginBO 手机号、验证码、验证码类型
+     * @param request HttpServletRequest
+     * @return token 重置密码时需要带上的token
+     * @throws Exception md5加密异常
+     */
+    @PostMapping(path = "/verifyphone")
+    public ResponseEntity verifyPhone(@Valid @RequestBody VerifyingCodeBO loginBO,
+                                      HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", loginBO);
+
+        //进行手机验证码验证
+        if (authService.verifyCode(loginBO, request)) {
+            String token = authService.verifyPhone(loginBO.getPhone());
+            LOGGER.info("{}", token);
+            return ResponseEntity.ok(Utils.kv("data", token));
+        } else {
+            throw new ServiceException(4201);
+        }
+    }
+
+    /**
+     * 通过手机号修改密码
+     *
+     * @param bo ResetPasswordBO
+     * @return true:成功, false:失败
+     * @throws Exception md5加密异常
+     */
+    @PostMapping(path = "/resetpassword")
+    public ResponseEntity resetPasswordByPhone(@Valid @RequestBody ResetPasswordBO bo) throws Exception {
+        LOGGER.info("{}", bo);
+        boolean result = authService.resetPasswordByPhone(bo);
+        LOGGER.info("{}", result);
+        return ResponseEntity.ok(Utils.kv("data", result));
     }
 
     /**

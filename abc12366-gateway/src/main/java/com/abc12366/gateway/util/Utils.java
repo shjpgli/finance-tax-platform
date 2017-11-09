@@ -235,6 +235,16 @@ public class Utils {
         return userId;
     }
 
+    public static String getAppId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        String appId = (String) request.getAttribute(Constant.APP_ID);
+        if (StringUtils.isEmpty(appId)) {
+            throw new ServiceException(4044);
+        }
+        return appId;
+    }
+
     public static ServletRegistrationBean getServletRegistrationBean() throws IOException {
         ServletRegistrationBean reg = new ServletRegistrationBean();
         reg.setServlet(new StatViewServlet());
