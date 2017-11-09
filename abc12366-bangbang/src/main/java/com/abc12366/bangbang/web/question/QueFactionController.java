@@ -5,10 +5,8 @@ import com.abc12366.bangbang.mapper.db2.QuestionFactionClassifyRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionTagRoMapper;
 import com.abc12366.bangbang.model.question.QuestionFactionClassify;
 import com.abc12366.bangbang.model.question.QuestionFactionTag;
-import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionListBo;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
+import com.abc12366.bangbang.model.question.bo.*;
+import com.abc12366.bangbang.service.QueFactionHonorService;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -21,9 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 邦派管理模块
@@ -39,6 +36,9 @@ public class QueFactionController {
 
     @Autowired
     private QueFactionService queFactionService;
+
+    @Autowired
+    private QueFactionHonorService honorService;
 
     @Autowired
     private QuestionFactionTagRoMapper tagRoMapper;
@@ -200,6 +200,42 @@ public class QueFactionController {
         //删除邦派信息
         String rtn = queFactionService.delete(factionId);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+
+    /**
+     * 邦派排行列表查询
+     */
+    @GetMapping(path = "/selecFactionPhList")
+    public ResponseEntity selecFactionPhList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "honorTime", required = false) String honorTime) {
+        if(honorTime == null || "".equals(honorTime)){
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+            Calendar c = Calendar.getInstance();
+
+            //过去一月
+            c.setTime(new Date());
+            c.add(Calendar.MONTH, -1);
+            Date m = c.getTime();
+            honorTime = format.format(m);
+        }
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionPhBo> dataList = honorService.selectList(honorTime);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 邦派排行列表查询
+     */
+    @GetMapping(path = "/selecFactionljPhList")
+    public ResponseEntity selecFactionljPhList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionPhBo> dataList = honorService.selectljList();
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
     }
 
 

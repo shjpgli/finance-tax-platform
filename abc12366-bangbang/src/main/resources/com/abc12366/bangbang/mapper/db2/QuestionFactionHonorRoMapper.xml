@@ -16,5 +16,19 @@
 		 WHERE id = #{id}
 	</select>
 
+    <!-- 查询上月邦派排名 -->
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionPhBo" parameterType="java.lang.String">
+        SELECT h.factionId,f.factionName,f.factionImg,h.honor FROM
+            bb_question_faction_honor h left join bb_question_faction f on h.factionId = f.factionId
+            where h.honorTime = #{honorTime} order by honor desc
+    </select>
+
+    <!-- 查询邦派累计排名 -->
+    <select id="selectljList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionPhBo" parameterType="java.lang.String">
+        SELECT h.factionId,f.factionName,f.factionImg,sum(h.honor) honor FROM
+            bb_question_faction_honor h left join bb_question_faction f on h.factionId = f.factionId
+            where 1=1 group by factionId order by honor desc
+    </select>
+
 
 </mapper>

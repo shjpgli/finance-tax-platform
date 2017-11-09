@@ -133,11 +133,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/questionbb/updateBrowseNum/**")
                         //优秀邦派列表查询
                 .excludePathPatterns("/queFaction/selectListExcellent")
+                        //邦派上月排行列表查询
+                .excludePathPatterns("/queFaction/selecFactionPhList")
+                        //邦派累计列表查询
+                .excludePathPatterns("/queFaction/selecFactionljPhList")
                         //个人主页
-                .excludePathPatterns("/questionbb/selectMybangbang/{userId}","/questionExpert/listByUserId/{userId}",
-                        "/queAttention/selectUserList/{attentionUserId}","/queAttention/selectAttentionUserList/{userId}",
+                .excludePathPatterns("/questionbb/selectMybangbang/{userId}", "/questionExpert/listByUserId/{userId}",
+                        "/queAttention/selectUserList/{attentionUserId}", "/queAttention/selectAttentionUserList/{userId}",
                         "/queAnswer/selectMyAnswerList")
-                //江湖榜 统计
+                        //江湖榜 统计
                 .excludePathPatterns("/queCount/**")
                         //潜力邦派列表查询
                 .excludePathPatterns("/queFaction/selectListPotential")
