@@ -4,6 +4,9 @@ package com.abc12366.uc.util;
  * Created by Administrator on 2017/9/18.
  */
 public class MessageConstant {
+	//电子申报系统信息查询数量
+	public static final Integer DZSBQNUM=200;
+	
     //消息类型
     public static final String SYS_MESSAGE = "1";
     public static final String BANGBANG_MESSAGE = "2";
