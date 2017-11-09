@@ -7,10 +7,10 @@
         id,title,sign,type,content,status,reason,createTime,synchronizeTime,templateId,
         ownerId,ownerName,ownerIndustry,ownerMarketing
     </sql>
-    <select id="selectList" resultType="com.abc12366.message.model.UpyunTemplate" parameterType="java.lang.String">
+    <select id="selectList" resultType="com.abc12366.message.model.UpyunTemplate" parameterType="java.util.Map">
         select <include refid="Base_Column"/>
         from msg_upyun_template
         WHERE 1=1
-        <if test="status!=null">AND status = #{status}</if>
+        <if test="status!=null and status!=''">AND status = #{status}</if>
     </select>
 </mapper>

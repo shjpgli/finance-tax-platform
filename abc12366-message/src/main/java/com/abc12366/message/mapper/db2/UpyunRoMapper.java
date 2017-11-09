@@ -3,6 +3,7 @@ package com.abc12366.message.mapper.db2;
 import com.abc12366.message.model.UpyunTemplate;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -10,5 +11,5 @@ import java.util.List;
  * Time: 16:01
  */
 public interface UpyunRoMapper {
-    List<UpyunTemplate> selectList();
+    List<UpyunTemplate> selectList(Map<String, String> map);
 }
