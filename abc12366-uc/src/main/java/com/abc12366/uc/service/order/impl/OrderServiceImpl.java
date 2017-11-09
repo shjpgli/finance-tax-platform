@@ -17,6 +17,7 @@ import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -804,7 +805,8 @@ public class OrderServiceImpl implements OrderService {
         int stock = prBO.getStock() - num;
         if (stock < 0) {
             LOGGER.info("库存不足,请联系管理员：{}", stock);
-            throw new ServiceException(4905);
+            orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
+            //throw new ServiceException(4905);
         }
         prBO.setStock(stock);
         Product product = new Product();
@@ -823,6 +825,32 @@ public class OrderServiceImpl implements OrderService {
         repo.setRemark(orderBO.getOrderNo());
         repo.setOptionUser(orderBO.getUserId());
         productRepoMapper.insert(repo);
+    }
+
+    @Override
+    public void selectStock(String tradeNo) {
+        LOGGER.info("根据交易流水号判断库存{}", tradeNo);
+        List<OrderBO> orderBOList = orderRoMapper.selectByTradeNo(tradeNo);
+
+        for (OrderBO orderBO : orderBOList) {
+            OrderProductBO pBO = new OrderProductBO();
+            String orderNo = orderBO.getOrderNo();
+            pBO.setOrderNo(orderNo);
+            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+            for (OrderProductBO orderProductBO : orderProductBOs) {
+                //查询产品库存信息
+                ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+                orderProductBO.setOrderNo(orderBO.getOrderNo());
+                //减去Product库存数量
+                int num = orderProductBO.getNum();
+                int stock = prBO.getStock() - num;
+                if (stock < 0) {
+                    LOGGER.info("库存不足,请联系管理员：{}", stock);
+                    orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
+                    throw new ServiceException(4905);
+                }
+            }
+        }
     }
 
     /**

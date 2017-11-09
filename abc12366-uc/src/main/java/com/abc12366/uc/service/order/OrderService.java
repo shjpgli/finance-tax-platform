@@ -297,4 +297,10 @@ public interface OrderService {
      * @param orderBO
      */
     void adminDeleteOrder(OrderBO orderBO);
+
+    /**
+     * 根据订单号查询订单库存
+     * @param tradeNo
+     */
+    void selectStock(String tradeNo);
 }
