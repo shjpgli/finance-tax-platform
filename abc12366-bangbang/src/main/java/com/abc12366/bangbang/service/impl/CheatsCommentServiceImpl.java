@@ -143,7 +143,7 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
 
             //帮邦日志记录表
             //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
-            bangBangDtLogUtil.insertLog(7, comment.getCheatsId(), "", comment.getId(), comment.getUserId(), "");
+            bangBangDtLogUtil.insertLog(7,2, comment.getCheatsId(), "", comment.getId(),comment.getCommentTxt(),comment.getUserId(), "");
 
 
 

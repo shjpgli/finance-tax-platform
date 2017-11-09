@@ -301,7 +301,7 @@ public class QuestionServiceImpl implements QuestionService {
 
             //帮邦日志记录表
             //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
-            bangBangDtLogUtil.insertLog(1,question.getId(),"",question.getId(),question.getUserId(),"");
+//            bangBangDtLogUtil.insertLog(1,question.getId(),"",question.getId(),question.getUserId(),"");
 
 
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";

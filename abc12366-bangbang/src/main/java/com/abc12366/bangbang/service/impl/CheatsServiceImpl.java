@@ -224,7 +224,7 @@ public class CheatsServiceImpl implements CheatsService {
 
             //帮邦日志记录表
             //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
-            bangBangDtLogUtil.insertLog(6, cheats.getId(), "", cheats.getId(), cheats.getUserId(), "");
+//            bangBangDtLogUtil.insertLog(6, cheats.getId(), "", cheats.getId(), cheats.getUserId(), "");
 
 
         } catch (Exception e) {

@@ -32,6 +32,12 @@ public class QuestionLog implements Serializable {
     /**日志类型**varchar(64)**/
     private Integer qlogType;
 
+    /**日志类型1、问答，2、秘籍**varchar(64)**/
+    private Integer bbType;
+
+    /**评论内容**datetime**/
+    private String commentTxt;
+
     /**创建时间**datetime**/
     private java.util.Date createTime;
 
@@ -97,5 +103,21 @@ public class QuestionLog implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getBbType() {
+        return bbType;
+    }
+
+    public void setBbType(Integer bbType) {
+        this.bbType = bbType;
+    }
+
+    public String getCommentTxt() {
+        return commentTxt;
+    }
+
+    public void setCommentTxt(String commentTxt) {
+        this.commentTxt = commentTxt;
     }
 }

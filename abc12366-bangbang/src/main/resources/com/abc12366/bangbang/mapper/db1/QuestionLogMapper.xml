@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionLog">
 		 INSERT INTO bb_question_log
- 		(id,userId,attentionUserId,qcId,answerId,sourceId,qlogType,createTime)
+ 		(id,userId,attentionUserId,qcId,answerId,sourceId,qlogType,bbType,commentTxt,createTime)
 		 VALUES 
- 		(#{id},#{userId},#{attentionUserId},#{qcId},#{answerId},#{sourceId},#{qlogType},#{createTime})
+ 		(#{id},#{userId},#{attentionUserId},#{qcId},#{answerId},#{sourceId},#{qlogType},#{bbType},#{commentTxt},#{createTime})
 	</insert>
 
 </mapper>
