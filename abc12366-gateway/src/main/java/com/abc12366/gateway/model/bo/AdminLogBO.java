@@ -20,7 +20,7 @@ public class AdminLogBO {
     @Length(max = 50)
     private String businessName;
     // 业务数据
-    @Length(max = 1000)
+    @Length(max = 3000)
     private String businessData;
     // 操作类型：POST（新增）、PUT（修改）、GET（查询）、DELETE（删除）
     @NotEmpty

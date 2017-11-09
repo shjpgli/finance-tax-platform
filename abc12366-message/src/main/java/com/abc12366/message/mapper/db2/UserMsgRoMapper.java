@@ -16,4 +16,12 @@ public interface UserMsgRoMapper {
     UserMessage selectOne(String id);
 
     List<UserMessageForBangbang> UserMessageForBangbang(String userId);
+
+    /**
+     * 查询用户消息未读总数
+     *
+     * @param data 用户消息对象，userId,type
+     * @return 未读消息数
+     */
+    int unreadCount(UserMessage data);
 }

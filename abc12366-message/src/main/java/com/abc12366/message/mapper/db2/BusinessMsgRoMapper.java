@@ -13,4 +13,12 @@ public interface BusinessMsgRoMapper {
     List<BusinessMessage> selectList(BusinessMessage data);
 
     BusinessMessage selectOne(String id);
+
+    /**
+     * 查询业务消息未读数量
+     *
+     * @param bm type,busiType
+     * @return 消息未读总数
+     */
+    int unreadCount(BusinessMessage bm);
 }

@@ -33,7 +33,7 @@ public class BusinessMsgController {
     @Autowired
     private BusinessMsgService businessMsgService;
 
-    /**BusinessCBusinessC
+    /**
      * 获取当前用户业务消息列表
      *
      * @param type     消息类型
@@ -64,6 +64,30 @@ public class BusinessMsgController {
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
             responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 查询业务消息未读数量
+     *
+     * @param type     消息类型，默认查询所有类型消息
+     * @param busiType 业务类型，默认查询所有类型
+     * @return 消息未读总数
+     */
+    @GetMapping("/unread/count")
+    public ResponseEntity unreadCount(@RequestParam(value = "type", required = false) String type,
+                                      @RequestParam(value = "busiType", required = false) String busiType) {
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = Utils.getUserId();
+
+        if (!StringUtils.isEmpty(userId)) {
+            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).build();
+            int count = businessMsgService.unreadCount(bm);
+            responseEntity = ResponseEntity.ok(Utils.kv("data", count));
         }
 
         LOGGER.info("{}", responseEntity);
@@ -169,7 +193,7 @@ public class BusinessMsgController {
      * @param data BusinessMessage
      * @return ResponseEntity
      */
-    @PostMapping(path="/system")
+    @PostMapping(path = "/system")
     public ResponseEntity insertBySystem(@Valid @RequestBody BusinessMessage data) {
         LOGGER.info("{}", data);
 

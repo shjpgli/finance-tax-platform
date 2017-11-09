@@ -122,4 +122,9 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             return Utils.bodyStatus(4024);
         }
     }
+
+    @Override
+    public int unreadCount(BusinessMessage bm) {
+        return businessMsgRoMapper.unreadCount(bm);
+    }
 }
