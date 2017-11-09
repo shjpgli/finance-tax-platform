@@ -134,7 +134,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/queFaction/selectListExcellent")
                         //个人主页
                 .excludePathPatterns("/questionbb/selectMybangbang/{userId}","/questionExpert/listByUserId/{userId}",
-                        "/queAttention/selectUserList/{attentionUserId}","/queAttention/selectAttentionUserList/{userId}")
+                        "/queAttention/selectUserList/{attentionUserId}","/queAttention/selectAttentionUserList/{userId}",
+                        "/queAnswer/selectMyAnswerList")
                 //江湖榜 统计
                 .excludePathPatterns("/queCount/**")
                         //潜力邦派列表查询
