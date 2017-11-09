@@ -63,7 +63,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
 
         //帮邦日志记录表
         //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
-        bangBangDtLogUtil.insertLog(10, "", "", "", attention.getUserId(), attention.getAttentionUserId());
+//        bangBangDtLogUtil.insertLog(10, "", "", "", attention.getUserId(), attention.getAttentionUserId());
 
 
         int attentionCnt = attentionRoMapper.selectAttentionCnt(id);
