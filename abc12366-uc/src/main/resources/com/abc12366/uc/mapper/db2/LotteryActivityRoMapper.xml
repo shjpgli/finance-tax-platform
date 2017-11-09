@@ -5,6 +5,7 @@
 <select id="selectList" resultType="com.abc12366.uc.model.bo.LotteryActivityBO" parameterType="java.util.Map">
  SELECT   (select a.name from uc_lottery_template a where a.id=z.templateId) as templateName,
    id,name,types,description,count,label,userLevel,url,startTime,endTime,status,templateId,createTime,timeStock,timeCount,timeDay,luckTime
+    ,userLotteryMax,userLotteryMaxDay,getlotteyDay,userFreeCount
  from uc_lottery_activity  z
 <where>
 <if test="name!=null">
@@ -19,6 +20,7 @@ ORDER BY createTime DESC
 <select id="selectOne" resultType="com.abc12366.uc.model.bo.LotteryActivityBO" parameterType="java.lang.String">
 SELECT   (select a.name from uc_lottery_template a where a.id=z.templateId) as templateName,
 id,name,types,description,count,label,userLevel,url,startTime,endTime,status,templateId,createTime,timeStock,timeCount,timeDay,luckTime
+,userLotteryMax,userLotteryMaxDay,getlotteyDay,userFreeCount
  from uc_lottery_activity z
 where id=#{id}
 </select>
