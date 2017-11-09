@@ -60,4 +60,6 @@ public interface QuestionService {
     QuestionTagListBo updateQuesTag(QuestionTagListBo questionTagListBo);
 
     QuestionInvite updateIsRead(QuestionInvite invite);
+
+    List<QuestionDtBo> selectQcDtList(String userId);
 }

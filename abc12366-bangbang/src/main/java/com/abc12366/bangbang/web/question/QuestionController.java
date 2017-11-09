@@ -417,4 +417,21 @@ public class QuestionController {
         invite = questionService.updateIsRead(invite);
         return ResponseEntity.ok(Utils.kv("data", invite));
     }
+
+    /**
+     * 查询我的动态
+     */
+    @GetMapping(path = "/selectQcDtList/{userId}")
+    public ResponseEntity selectQcDtList(@PathVariable String userId,
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionDtBo> questionBoList = questionService.selectQcDtList(userId);
+        return (questionBoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
+                        ()));
+    }
+
 }

@@ -546,4 +546,11 @@ public class QuestionServiceImpl implements QuestionService {
         return invite;
     }
 
+    @Override
+    public List<QuestionDtBo> selectQcDtList(String userId) {
+        //我的动态
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectQcDtList(userId);
+    }
+
 }
