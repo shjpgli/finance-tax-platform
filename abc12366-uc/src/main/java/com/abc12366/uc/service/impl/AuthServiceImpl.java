@@ -298,16 +298,6 @@ public class AuthServiceImpl implements AuthService {
         // 在request中设置userId，记录日志使用
         Utils.setUserId(userBO.getId());
 
-        try{
-            //发消息
-            userFeedbackMsgService.unrealname();
-            userFeedbackMsgService.check();
-            userFeedbackMsgService.undotask();
-        }catch(Exception e){
-            e.printStackTrace();
-            LOGGER.error("用户登录后发送消息提醒异常：{}", e);
-        }
-
         // 用户信息写入redis
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
                 TimeUnit.SECONDS);
@@ -521,6 +511,16 @@ public class AuthServiceImpl implements AuthService {
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
             todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
+        }
+
+        try{
+            //发消息
+            userFeedbackMsgService.unrealname();
+            userFeedbackMsgService.check();
+            userFeedbackMsgService.undotask();
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("用户登录后发送消息提醒异常：{}", e);
         }
     }
 
