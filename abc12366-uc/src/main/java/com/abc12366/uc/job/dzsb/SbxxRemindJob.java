@@ -124,6 +124,7 @@ public class SbxxRemindJob implements StatefulJob{
 	        	}
 	        }else{//查询失败
 	        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]申报信息异常:"+job.getMessage());
+	        	break;
 	        }
 		}	
 	}

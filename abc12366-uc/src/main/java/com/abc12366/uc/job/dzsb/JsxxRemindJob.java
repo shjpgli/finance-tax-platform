@@ -123,6 +123,7 @@ public class JsxxRemindJob implements StatefulJob{
 	        	}
 	        }else{//查询失败
 	        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]缴税信息异常:"+job.getMessage());
+	        	break;
 	        }
 		}	
 		
