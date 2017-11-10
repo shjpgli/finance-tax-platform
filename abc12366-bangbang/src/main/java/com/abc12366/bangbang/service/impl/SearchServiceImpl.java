@@ -37,6 +37,9 @@ public class SearchServiceImpl implements SearchService {
                     if(maps!=null&&maps.size()>0){
                         questionSearchBo.setShortAnswer(maps.get("shortAnswer"));
                         questionSearchBo.setAnswerId(maps.get("id"));
+                        questionSearchBo.setLikeNum(Integer.parseInt(maps.get("likenum")));
+                        questionSearchBo.setTreadNum(Integer.parseInt(maps.get("treadNum")));
+                        questionSearchBo.setCommentNum(Integer.parseInt(maps.get("commentNum")));
                     }
                     Map<String, String> map = searchMapper.queryUser(questionSearchBo.getUserid());
                     if(map!=null&&map.size()>0){
