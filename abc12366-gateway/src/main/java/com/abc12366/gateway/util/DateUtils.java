@@ -1,5 +1,7 @@
 package com.abc12366.gateway.util;
 
+import com.abc12366.gateway.exception.ServiceException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -96,6 +98,7 @@ public class DateUtils {
             date = format.parse(str);
         } catch (ParseException e) {
             e.printStackTrace();
+            throw new ServiceException(4805);
         }
         return date;
     }

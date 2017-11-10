@@ -3,6 +3,7 @@ package com.abc12366.message.service;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 
 import java.util.List;
@@ -84,22 +85,7 @@ public interface UserMsgService {
      * @param size
      * @return
      */
-    List<UserMessageForBangbang> selectListToUser(Map<String, String> map, int page, int size);
+    List<UserMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size);
 
-    /**
-     * 根据用户名查询这个用户发出去的消息
-     * @param map
-     * @param page
-     * @param size
-     * @return
-     */
-    List<UserMessageForBangbang> selectListByUser(Map<String, String> map, int page, int size);
-
-    /**
-     * 查询用户消息未读总数
-     *
-     * @param data 用户消息对象，userId,type
-     * @return 未读消息数
-     */
     int unreadCount(UserMessage data);
 }

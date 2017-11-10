@@ -56,7 +56,7 @@ public class AcceptClient {
     public DzsbJob processYw(Map<String, String> map) {
     	DzsbJob dzsbJob=new DzsbJob();
     	dzsbJob.setYwlx(map.get("ywid").toUpperCase());
-        String target = "http://testdzsb.abc12366.com/tdps-accept/services/AcceptService/";
+        String target =  SpringCtxHolder.getProperty("tdps.api.url") +"/tdps-accept/services/AcceptService/";
         try {
             AcceptServiceStub.AcceptRequest request = new AcceptServiceStub.AcceptRequest();
             request.setTiripPkgStr(pkgutil.generatorPkgStrbyTdps(map));

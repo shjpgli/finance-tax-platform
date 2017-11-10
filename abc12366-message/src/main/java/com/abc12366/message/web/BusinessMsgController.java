@@ -2,9 +2,11 @@ package com.abc12366.message.web;
 
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BusinessMessageAdmin;
 import com.abc12366.message.service.BusinessMsgService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -219,24 +222,37 @@ public class BusinessMsgController {
      */
     @GetMapping(path = "/username")
     public ResponseEntity selectListByUsername(
-            @RequestParam() String username,
+            @RequestParam(required = false) String username,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String busiType,
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
             HttpServletRequest request) {
         LOGGER.info("根据用户名查询业务消息列表：username：{}，{},{}", username, page, size);
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("username", username.trim());
         map.put("type", type == null ? null : type.trim());
         map.put("busiType", busiType == null ? null : busiType.trim());
         map.put("status", status == null ? null : status.trim());
+        if(!StringUtils.isEmpty(startDate)){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.StrToDate(startDate));
+            map.put("startDate", calendar.getTime());
+        }
+        if(!StringUtils.isEmpty(endDate)){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.StrToDate(endDate));
+            calendar.add(Calendar.DAY_OF_MONTH,1);
+            map.put("endDate", calendar.getTime());
+        }
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
-        List<BusinessMessage> dataList = businessMsgService.selectListByUsername(map, page, size);
+        List<BusinessMessageAdmin> dataList = businessMsgService.selectListByUsername(map, page, size);
 
         if (!StringUtils.isEmpty(dataList) && dataList.size() > 0) {
-            PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
+            PageInfo<BusinessMessageAdmin> pageInfo = new PageInfo<>(dataList);
             responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
         }
 

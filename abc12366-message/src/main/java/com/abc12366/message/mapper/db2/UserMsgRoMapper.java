@@ -1,6 +1,7 @@
 package com.abc12366.message.mapper.db2;
 
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface UserMsgRoMapper {
 
     List<UserMessageForBangbang> UserMessageForBangbang(String userId);
 
-    List<UserMessageForBangbang> selectListToUser(Map<String, String> map);
+    List<UserMessageAdmin> selectListByUsername(Map<String, Object> map);
 
     List<UserMessageForBangbang> selectListByUser(Map<String, String> map);
 

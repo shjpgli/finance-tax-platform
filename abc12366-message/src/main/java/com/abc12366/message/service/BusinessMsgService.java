@@ -3,6 +3,7 @@ package com.abc12366.message.service;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BusinessMessageAdmin;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public interface BusinessMsgService {
      * @param size
      * @return
      */
-    List<BusinessMessage> selectListByUsername(Map<String, String> map, int page, int size);
+    List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size);
 
     /**
      * 查询业务消息未读数量

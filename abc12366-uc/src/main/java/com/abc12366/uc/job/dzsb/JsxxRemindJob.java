@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,8 @@ import com.abc12366.uc.webservice.AcceptClient;
  * @author zhushuai 2017-11-9
  *
  */
-public class JsxxRemindJob implements Job{
+@SuppressWarnings("deprecation")
+public class JsxxRemindJob implements StatefulJob{
 	private static final Logger LOGGER = LoggerFactory.getLogger(JsxxRemindJob.class);
 	
     private static String YWLX="NOTIFY_JSXX";
@@ -122,6 +123,7 @@ public class JsxxRemindJob implements Job{
 	        	}
 	        }else{//查询失败
 	        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]缴税信息异常:"+job.getMessage());
+	        	break;
 	        }
 		}	
 		

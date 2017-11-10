@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,8 @@ import com.abc12366.uc.webservice.AcceptClient;
  * @author zhushuai 2017-11-9
  *
  */
-public class CjxxRemindJob implements Job{
+@SuppressWarnings("deprecation")
+public class CjxxRemindJob implements StatefulJob{
 	private static final Logger LOGGER = LoggerFactory.getLogger(CjxxRemindJob.class);
 	
 	private static String YWLX="NOTIFY_CJXX";
@@ -53,6 +54,7 @@ public class CjxxRemindJob implements Job{
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
 		
 		//查询申报期限
 		Map<String, String> mapA = new HashMap<>();
@@ -134,6 +136,7 @@ public class CjxxRemindJob implements Job{
         		        	}
         		        }else{//查询失败
         		        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]催缴信息异常:"+job.getMessage());
+        		        	break;
         		        }
         			}		
         		}

@@ -6,6 +6,7 @@ import com.abc12366.message.mapper.db1.BusinessMsgMapper;
 import com.abc12366.message.mapper.db2.BusinessMsgRoMapper;
 import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BusinessMessageAdmin;
 import com.abc12366.message.service.BusinessMsgService;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
@@ -125,7 +126,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     }
 
     @Override
-    public List<BusinessMessage> selectListByUsername(Map<String, String> map, int page, int size) {
+    public List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return businessMsgRoMapper.selectListByUsername(map);
     }

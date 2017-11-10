@@ -1,6 +1,7 @@
 package com.abc12366.message.mapper.db2;
 
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BusinessMessageAdmin;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ public interface BusinessMsgRoMapper {
 
     BusinessMessage selectOne(String id);
 
-    List<BusinessMessage> selectListByUsername(Map<String, String> map);
+    List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map);
 
     /**
      * 查询业务消息未读数量

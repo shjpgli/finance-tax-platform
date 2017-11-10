@@ -17,7 +17,6 @@ public class ResetPasswordBO {
     private String phone;
 
     @NotEmpty
-    @Length(min = 8, max = 32)
     private String password;
 
     @NotEmpty
