@@ -86,7 +86,6 @@ public class MsgSendServiceImpl implements IMsgSendService{
                  List<Map<String,String>> list= new ArrayList<Map<String,String>>();
                  list.add(maps);
                  messageSendUtil.sendPhoneMessage(user.getPhone(),"529", list, accessToken);
-
              }
          }
     }
