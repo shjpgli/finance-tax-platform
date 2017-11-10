@@ -18,6 +18,9 @@ public class QuestionHeadmanBo {
     /**掌门人电话**/
     private String phone;
 
+    /**自我介绍**/
+    private String introduce;
+
     /**申请理由**/
     private String applyReason;
 
@@ -83,6 +86,14 @@ public class QuestionHeadmanBo {
     public QuestionHeadmanBo setPhone(String phone) {
         this.phone = phone;
         return this;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 
     public String getApplyReason() {
