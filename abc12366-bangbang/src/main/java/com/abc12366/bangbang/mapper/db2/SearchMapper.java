@@ -22,7 +22,7 @@ public interface SearchMapper {
 
     Integer queryComment(@Param("questionid") String questionid);
 
-    Map<String,String> queryAnswer(@Param("questionid") String questionid);
+    Map<String,Object> queryAnswer(@Param("questionid") String questionid);
 
     List<CheatsSearchBo> queryCheats(@Param("text") String text);
 }
