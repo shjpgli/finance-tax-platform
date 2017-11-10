@@ -1,9 +1,8 @@
-package com.abc12366.bangbang.web.Question;
+package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.CheatsSearchBo;
 import com.abc12366.bangbang.model.question.QuestionSearchBo;
 import com.abc12366.bangbang.model.question.SearchBo;
-import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 import com.abc12366.bangbang.service.SearchService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
@@ -29,7 +28,7 @@ import java.util.List;
 public class SearchController {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(com.abc12366.bangbang.web.Question.SearchController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(com.abc12366.bangbang.web.question.SearchController.class);
 
 
     @Autowired
@@ -59,5 +58,48 @@ public class SearchController {
             throw new ServiceException(5000);
         }
         return ResponseEntity.ok(Utils.kv("data", searchBo));
+    }
+
+
+    /* 秘籍搜索列表查询 */
+    @GetMapping(path = "/cheats/list")
+    public ResponseEntity cheatslist(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "text", defaultValue = "") String text,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        LOGGER.info("参数值:"+text);
+        List<CheatsSearchBo> listcheats=null;
+        if(text!=null&&!"".equals(text)){
+
+            listcheats = searchService.queryCheatsSearch(text);
+
+        }else{
+            LOGGER.info("搜索值缺少  {}");
+            throw new ServiceException(5000);
+        }
+        return (listcheats == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) listcheats, "total", ((Page) listcheats).getTotal()));
+    }
+
+    /* 话题搜索列表查询 */
+    @GetMapping(path = "/question/list")
+    public ResponseEntity questionlist(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "text", defaultValue = "") String text,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        LOGGER.info("参数值:"+text);
+        List<QuestionSearchBo> list=null;
+        if(text!=null&&!"".equals(text)){
+
+            list = searchService.queryQuestionSearch(text);
+
+        }else{
+            LOGGER.info("搜索值缺少  {}");
+            throw new ServiceException(5000);
+        }
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 }
