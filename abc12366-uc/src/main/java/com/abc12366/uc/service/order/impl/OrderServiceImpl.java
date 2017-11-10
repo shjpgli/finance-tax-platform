@@ -17,6 +17,7 @@ import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -879,7 +880,7 @@ public class OrderServiceImpl implements OrderService {
 
 
             //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("userId", user.getId());
                 map.put("openId", user.getWxopenid());
@@ -892,7 +893,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //短信消息
-            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                 sendPhoneMessage(request, content, user);
             }
         }
@@ -923,7 +924,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("userId", user.getId());
                 map.put("openId", user.getWxopenid());
@@ -935,7 +936,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //短信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal2())){
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                 sendPhoneMessage(request, content, user);
             }
         }
@@ -1143,7 +1144,7 @@ public class OrderServiceImpl implements OrderService {
                     message.setUserId(order.getUserId());
                     messageSendUtil.sendMessage(message, request);
                 }
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     //发送微信消息
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
@@ -1156,7 +1157,7 @@ public class OrderServiceImpl implements OrderService {
                     templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
                 }
                 //发送短信
-                if(findObj.getVal3() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request, content, user);
 
                 }
@@ -1225,7 +1226,7 @@ public class OrderServiceImpl implements OrderService {
                 messageSendUtil.sendMessage(message, request);
             }
             //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("userId", user.getId());
                 map.put("openId", user.getWxopenid());
@@ -1238,7 +1239,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //短信消息
-            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                 sendPhoneMessage(request, content, user);
             }
         }
