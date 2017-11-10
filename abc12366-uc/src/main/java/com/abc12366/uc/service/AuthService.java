@@ -25,14 +25,13 @@ public interface AuthService {
     UserReturnBO register(RegisterBO registerBO, HttpServletRequest request);
 
     /**
-     * 用户手机号登陆
+     * 用户登陆
      *
-     * @param loginBO     LoginBO
-     * @param accessToken 应用访问token
-     * @return Map token,expires_in,用户信息
-     * @throws Exception 加密异常
+     * @param loginBO LoginBO
+     * @param channel 登陆方式：1-用户名+密码，2-js用户名+密码，3-手机号+短信验证码
+     * @return Map:token,expires_in,用户信息
      */
-    Map login(LoginBO loginBO, String accessToken) throws Exception;
+    Map login(LoginBO loginBO, String channel);
 
     Map loginJs(LoginBO loginBO, String token) throws Exception;
 
@@ -78,4 +77,9 @@ public interface AuthService {
      * @return true:成功, false:失败
      */
     boolean resetPasswordByPhone(ResetPasswordBO bo) throws Exception;
+
+    /**
+     * 登陆之后需要处理的业务
+     */
+    void todoAfterLogin(HttpServletRequest request);
 }
