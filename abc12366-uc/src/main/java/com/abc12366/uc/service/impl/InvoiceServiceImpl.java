@@ -461,7 +461,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     messageSendUtil.sendMessage(message, request);
                 }
 
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     //发送微信消息
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
@@ -476,7 +476,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     templateService.templateSend("lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas", map);
 
                 }
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     //发送短信
                     sendPhoneMessage(request,content,user);
                 }
@@ -772,7 +772,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                         messageSendUtil.sendMessage(message, request);
                     }
 
-                    if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                    if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid()) ){
                         //发送微信消息
                         Map<String, String> dataList = new HashMap<String, String>();
                         dataList.put("userId", user.getId());
@@ -785,7 +785,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                         dataList.put("keyword4", DataUtils.dateToStr(new Date()));
                         templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
                     }
-                    if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                    if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone()) ){
                         //发送短信
                         sendPhoneMessage(request,content,user);
                     }
@@ -832,7 +832,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     }
 
                     //微信消息
-                    if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                    if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("userId", user.getId());
                         map.put("openId", user.getWxopenid());
@@ -844,7 +844,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     }
 
                     //短信消息
-                    if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                    if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                         sendPhoneMessage(request,content,user);
                     }
                 }
@@ -932,7 +932,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     messageSendUtil.sendMessage(message, request);
                 }
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -944,7 +944,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request,content,user);
                 }
             }
@@ -976,7 +976,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
 
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -988,7 +988,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request,content,user);
                 }
             }
