@@ -28,18 +28,14 @@ public interface AuthService {
      * 用户登陆
      *
      * @param loginBO LoginBO
-     * @param channel 登陆方式：1-用户名+密码，2-js用户名+密码，3-手机号+短信验证码
+     * @param channel 登陆方式：1-用户名/手机号+密码，2-js用户名/手机号+密码，3-手机号+短信验证码，4-openId登陆
      * @return Map:token,expires_in,用户信息
      */
     Map login(LoginBO loginBO, String channel);
 
-    Map loginJs(LoginBO loginBO, String token) throws Exception;
-
     boolean isAuthentication(String userToken, HttpServletRequest request);
 
     boolean refreshToken(String token);
-
-    Map loginByVerifyingCode(VerifyingCodeBO loginBO, String header) throws Exception;
 
     /**
      * 校验短信验证码是否正确
@@ -57,8 +53,11 @@ public interface AuthService {
      */
     void logout(String token);
 
-    Map loginByopenid(UserBO user, String header) throws Exception;
-
+    /**
+     * 通过验证码登陆失败后的业务处理
+     *
+     * @param loginBO VerifyingCodeBO
+     */
     void loginByVerifyFail(VerifyingCodeBO loginBO);
 
     /**

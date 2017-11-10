@@ -6,6 +6,7 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.web.BaseController;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
+import com.abc12366.uc.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class AuthController extends BaseController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private UserService userService;
 
     public AuthController(RestTemplate restTemplate) {
         super(restTemplate);
@@ -113,6 +117,20 @@ public class AuthController extends BaseController {
             authService.loginByVerifyFail(loginBO);
             return null;
         }
+    }
+
+    @GetMapping(path = "/user/u/openid/{openid}")
+    public ResponseEntity loginByOpenId(@PathVariable String openid, HttpServletRequest request) {
+        LOGGER.info("{}", openid);
+        UserBO user = userService.selectByopenid(openid);
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        LoginBO bo = new LoginBO();
+        bo.setUsernameOrPhone(user.getUsername());
+        Map token = authService.login(bo, "4");
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", token));
     }
 
     /**
