@@ -5,8 +5,10 @@
     <insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
 insert into uc_lottery_log(
 id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake,addressId
+ ,kuaidiGS ,  kuaididanhao, sendRemake  ,sendRemake2
 )values(
-#{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip},#{remake},#{addressId})
+#{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip},#{remake},#{addressId}
+,#{kuaidiGS},#{kuaididanhao},#{sendRemake},#{sendRemake2})
 </insert>
     <update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
         update uc_lottery_log
@@ -21,6 +23,10 @@ id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,rem
             <if test="upoint!=null">upoint=#{upoint},</if>
             <if test="ip!=null">ip=#{ip},</if>
             <if test="addressId!=null">addressId=#{addressId},</if>
+            <if test="kuaidiGS!=null">kuaidiGS=#{kuaidiGS},</if>
+            <if test="kuaididanhao!=null">kuaididanhao=#{kuaididanhao},</if>
+            <if test="sendRemake!=null">sendRemake=#{sendRemake},</if>
+            <if test="sendRemake2!=null">sendRemake2=#{sendRemake2},</if>
             <if test="remake!=null">remake=#{remake}</if>
         </set>
         where id=#{id}

@@ -246,6 +246,7 @@ private  boolean luckDo(LotteryActivityBO lottery){
         if ("".equals(remake) && lottery != null)
         {//假如这个值为空 说明抽中了
             lotteryLogBO.setIsluck(1);
+            lotteryLogBO.setState("未领取");
             lotteryLogBO.setLotteryId(lottery.getId());
             lotteryLogBO.setLotteryName(lottery.getName());
 
@@ -255,13 +256,14 @@ private  boolean luckDo(LotteryActivityBO lottery){
             obj.setBalance(obj.getBalance() + 1);
             lotteryActivityprizeService.update(obj,obj.getId());
             lotteryActivityBO.setTimeCount(lotteryActivityBO.getTimeCount()+1);
+
+
         } else
 
         {
             lotteryLogBO.setIsluck(0);
             obj = null;
         }
-
         LotteryLogBO logs = lotteryLogService.insert(lotteryLogBO);
         lotteryActivityBO.setCount((lotteryActivityBO.getCount() + 1));
         lotteryActivityBO.setLuckTime(date);

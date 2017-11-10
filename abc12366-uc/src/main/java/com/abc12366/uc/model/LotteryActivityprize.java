@@ -9,6 +9,16 @@ import java.util.Date;
 
 
 public class LotteryActivityprize{
+    private Integer sort;
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     /** 时段投库存 */
     private Integer timeStock;
     /** 时段段时间 */

@@ -78,6 +78,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private VipLogService vipLogService;
 
+    @Autowired
+    private UserFeedbackMsgService userFeedbackMsgService;
+
     @Override
     public List<UserBO> selectList(Map<String, Object> map) {
         //解析多标签名称参数
@@ -304,8 +307,15 @@ public class UserServiceImpl implements UserService {
         //删除token
         tokenMapper.delete(token);
 
-        //首次修改密码任务埋点
-        todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
+        try {
+            //发消息
+            userFeedbackMsgService.updatePasswordSuccessNotice();
+            //首次修改密码任务埋点
+            todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         return true;
     }
 
