@@ -9,6 +9,53 @@ import java.util.Date;
 
 
 public class LotteryLogBO{
+    private String kuaidiGS;
+    private String kuaididanhao;
+    private String sendRemake ;
+    private String sendRemake2;
+
+    public String getKuaidiGS() {
+        return kuaidiGS;
+    }
+
+    public void setKuaidiGS(String kuaidiGS) {
+        this.kuaidiGS = kuaidiGS;
+    }
+
+    public String getKuaididanhao() {
+        return kuaididanhao;
+    }
+
+    public void setKuaididanhao(String kuaididanhao) {
+        this.kuaididanhao = kuaididanhao;
+    }
+
+    public String getSendRemake() {
+        return sendRemake;
+    }
+
+    public void setSendRemake(String sendRemake) {
+        this.sendRemake = sendRemake;
+    }
+
+    public String getSendRemake2() {
+        return sendRemake2;
+    }
+
+    public void setSendRemake2(String sendRemake2) {
+        this.sendRemake2 = sendRemake2;
+    }
+
+    private String addressId;
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
+    }
+
     private Boolean lotterySend;
 
     public Boolean getLotterySend() {

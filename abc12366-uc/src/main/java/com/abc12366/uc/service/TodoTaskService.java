@@ -80,9 +80,9 @@ public interface TodoTaskService {
 
     /**
      * 生成用户所有待办任务
-     * @param loginBO {@linkplain com.abc12366.uc.model.bo.LoginBO}
+     * @param userId 用户ID
      */
-    void generateAllTodoTaskList(LoginBO loginBO);
+    void generateAllTodoTaskList(String userId);
 
     /**
      * 查询用户日常任务列表

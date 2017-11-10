@@ -51,5 +51,12 @@ public class QuestionHeadmanController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /* 掌门人添加 */
+    @PostMapping(path = "/add")
+    public ResponseEntity add(@RequestBody QuestionHeadmanBo headmanBo) {
+        questionHeadmanService.add(headmanBo);
+        return ResponseEntity.ok(Utils.kv("data", headmanBo));
+    }
+
 
 }

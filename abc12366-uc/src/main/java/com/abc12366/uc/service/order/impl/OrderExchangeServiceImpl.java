@@ -29,6 +29,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -270,7 +271,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
 
                         //微信消息
-                        if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                        if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                             Map<String, String> map = new HashMap<String, String>();
                             map.put("userId", user.getId());
                             map.put("openId", user.getWxopenid());
@@ -285,7 +286,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         }
 
                         //短信消息
-                        if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                        if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                             sendPhoneMessage(request,content,user);
                         }
                     }
@@ -493,7 +494,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                             }
 
                                             //微信消息
-                                            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                                            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                                                 Map<String, String> map = new HashMap<String, String>();
                                                 map.put("userId", user.getId());
                                                 map.put("openId", user.getWxopenid());
@@ -506,7 +507,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                             }
 
                                             //短信消息
-                                            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                                            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                                                 sendPhoneMessage(httpServletRequest,content,user);
                                             }
                                         }
@@ -694,7 +695,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -706,7 +707,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request,content,user);
                 }
             }
@@ -769,7 +770,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -781,7 +782,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request, content, user);
                 }
             }

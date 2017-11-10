@@ -57,6 +57,9 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
     @Autowired
     private PointsRuleService pointsRuleService;
 
+    @Autowired
+    private UserFeedbackMsgService userFeedbackMsgService;
+
     @Transactional("db1TxManager")
     @Override
     public ExperienceLogQueryBO insert(ExperienceLogBO experienceLogBO) {
@@ -148,6 +151,12 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
             pointsLogBO.setRuleId(pointsRuleBO.getId());
             pointsLogBO.setRemark("用户等级提升奖励");
             pointsLogService.insert(pointsLogBO);
+
+            try{
+                userFeedbackMsgService.expLevelUp();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

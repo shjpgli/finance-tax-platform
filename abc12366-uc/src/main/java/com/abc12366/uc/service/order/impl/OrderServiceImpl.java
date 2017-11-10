@@ -17,6 +17,7 @@ import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -835,15 +836,17 @@ public class OrderServiceImpl implements OrderService {
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
             for (OrderProductBO orderProductBO : orderProductBOs) {
                 //查询产品库存信息
-                ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
-                orderProductBO.setOrderNo(orderBO.getOrderNo());
-                //减去Product库存数量
-                int num = orderProductBO.getNum();
-                int stock = prBO.getStock() - num;
-                if (stock < 0) {
-                    LOGGER.info("库存不足,请联系管理员：{}", stock);
-                    orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
-                    throw new ServiceException(4905);
+                if(orderProductBO.getProductId() != null && !"".equals(orderProductBO.getProductId())){
+                    ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+                    orderProductBO.setOrderNo(orderBO.getOrderNo());
+                    //减去Product库存数量
+                    int num = orderProductBO.getNum();
+                    int stock = prBO.getStock() - num;
+                    if (stock < 0) {
+                        LOGGER.info("库存不足,请联系管理员：{}", stock);
+                        orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
+                        throw new ServiceException(4905);
+                    }
                 }
             }
         }
@@ -877,7 +880,7 @@ public class OrderServiceImpl implements OrderService {
 
 
             //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("userId", user.getId());
                 map.put("openId", user.getWxopenid());
@@ -890,7 +893,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //短信消息
-            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                 sendPhoneMessage(request, content, user);
             }
         }
@@ -921,7 +924,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("userId", user.getId());
                 map.put("openId", user.getWxopenid());
@@ -933,7 +936,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //短信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal2())){
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                 sendPhoneMessage(request, content, user);
             }
         }
@@ -1141,7 +1144,7 @@ public class OrderServiceImpl implements OrderService {
                     message.setUserId(order.getUserId());
                     messageSendUtil.sendMessage(message, request);
                 }
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     //发送微信消息
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
@@ -1154,7 +1157,7 @@ public class OrderServiceImpl implements OrderService {
                     templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
                 }
                 //发送短信
-                if(findObj.getVal3() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request, content, user);
 
                 }
@@ -1223,7 +1226,7 @@ public class OrderServiceImpl implements OrderService {
                 messageSendUtil.sendMessage(message, request);
             }
             //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("userId", user.getId());
                 map.put("openId", user.getWxopenid());
@@ -1236,7 +1239,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //短信消息
-            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                 sendPhoneMessage(request, content, user);
             }
         }

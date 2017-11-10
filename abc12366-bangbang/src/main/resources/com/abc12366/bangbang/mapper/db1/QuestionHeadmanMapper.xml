@@ -36,9 +36,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionHeadman">
 		 INSERT INTO bb_question_headman
- 		(id,name,phone,applyReason,createTime,userId,factionId,classifyCode,status,updateTime,updateAdmin)
+ 		(id,name,phone,introduce,applyReason,createTime,userId,factionId,classifyCode,status,updateTime,updateAdmin)
 		 VALUES 
- 		(#{id},#{name},#{phone},#{applyReason},now(),#{userId},#{factionId},#{classifyCode},#{status},now(),#{updateAdmin})
+ 		(#{id},#{name},#{phone},#{introduce},#{applyReason},now(),#{userId},#{factionId},#{classifyCode},#{status},now(),#{updateAdmin})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

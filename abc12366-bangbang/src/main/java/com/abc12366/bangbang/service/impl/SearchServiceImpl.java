@@ -33,10 +33,23 @@ public class SearchServiceImpl implements SearchService {
             list = searchMapper.queryQuestionSearch(text+"*");
             if(list!=null&&list.size()>0){
                 for(QuestionSearchBo questionSearchBo : list){
-                    Map<String, String> maps = searchMapper.queryAnswer(questionSearchBo.getQuestionid());
+                    Map<String, Object> maps = searchMapper.queryAnswer(questionSearchBo.getQuestionid());
                     if(maps!=null&&maps.size()>0){
-                        questionSearchBo.setShortAnswer(maps.get("shortAnswer"));
-                        questionSearchBo.setAnswerId(maps.get("id"));
+                        if(maps.get("shortAnswer")!=null){
+                            questionSearchBo.setShortAnswer(maps.get("shortAnswer").toString());
+                        }
+                        questionSearchBo.setAnswerId(maps.get("id").toString());
+                        if(maps.get("likenum")!=null&&!"".equals(maps.get("likenum").toString())){
+                            questionSearchBo.setLikeNum(Integer.parseInt(maps.get("likenum").toString()));
+                        }
+                        if(maps.get("treadNum")!=null&&!"".equals(maps.get("treadNum"))){
+                            int treadNum = Integer.parseInt(maps.get("treadNum").toString());
+                            questionSearchBo.setTreadNum(treadNum);
+                        }
+                        if(maps.get("commentNum")!=null&&!"".equals(maps.get("commentNum").toString())){
+                            int commentNum = Integer.parseInt(maps.get("commentNum").toString());
+                            questionSearchBo.setCommentNum(commentNum);
+                        }
                     }
                     Map<String, String> map = searchMapper.queryUser(questionSearchBo.getUserid());
                     if(map!=null&&map.size()>0){

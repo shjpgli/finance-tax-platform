@@ -55,68 +55,75 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     @Transactional("db1TxManager")
     @Override
     public void doTask(String userId, String taskCode) {
-        //SysTaskBO sysTaskBO = sysTaskService.selectOne(sysTaskId);
-        //新的查询系统任务方法：根据编码查询
-        SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
-        LOGGER.info("用户正在完成任务，用户ID：{},任务名称:{}", userId, sysTaskBO);
-        if (sysTaskBO == null) {
-            return;
+        try{
+            //SysTaskBO sysTaskBO = sysTaskService.selectOne(sysTaskId);
+            //新的查询系统任务方法：根据编码查询
+            SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
+            LOGGER.info("用户正在完成任务，用户ID：{},任务名称:{}", userId, sysTaskBO);
+            if (sysTaskBO == null) {
+                return;
+            }
+            //做特殊任务
+            if (sysTaskBO.getType().trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
+                doTaskSpecial(userId, sysTaskBO);
+            }
+            //做其他任务
+            String dateType = sysTaskBO.getDateType();
+            switch (dateType.trim()) {
+                case UCConstant.TASK_TIME_ONETIME_TYPE:
+                    doTaskOneTime(userId, sysTaskBO);
+                    break;
+                case UCConstant.TASK_TIME_DAY_TYPE:
+                    doTaskDay(userId, sysTaskBO);
+                    break;
+                case UCConstant.TASK_TIME_MONTH_TYPE:
+                    doTaskMonth(userId, sysTaskBO);
+                    break;
+                case UCConstant.TASK_TIME_YEAR_TYPE:
+                    doTaskYear(userId, sysTaskBO);
+                    break;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("做任务出现异常：{}" , e);
         }
-        //做特殊任务
-        if (sysTaskBO.getType().trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
-            doTaskSpecial(userId, sysTaskBO);
-        }
-        //做其他任务
-        String dateType = sysTaskBO.getDateType();
-        switch (dateType.trim()) {
-            case UCConstant.TASK_TIME_ONETIME_TYPE:
-                doTaskOneTime(userId, sysTaskBO);
-                break;
-            case UCConstant.TASK_TIME_DAY_TYPE:
-                doTaskDay(userId, sysTaskBO);
-                break;
-            case UCConstant.TASK_TIME_MONTH_TYPE:
-                doTaskMonth(userId, sysTaskBO);
-                break;
-            case UCConstant.TASK_TIME_YEAR_TYPE:
-                doTaskYear(userId, sysTaskBO);
-                break;
-        }
+
     }
 
     @Transactional("db1TxManager")
     @Override
     public boolean doTaskWithouComputeAward(String userId, String taskCode) {
-        //查询系统任务方法：根据编码查询
-        SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
-        if (sysTaskBO == null) {
-            return false;
+        try{
+            //查询系统任务方法：根据编码查询
+            SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
+            if (sysTaskBO == null) {
+                return false;
+            }
+
+            //用户每完成当天一项任务一次，更新已完成数，当已完成数等于该项任务数量，更新该项任务数量为已完成
+            TodoTask todoTask = selectOne(userId, sysTaskBO.getId());
+
+            //如果该项任务已完成，则返回
+            if (todoTask == null || todoTask.getStatus().trim().equals(UCConstant.TASK_FINISHED)) {
+                return false;
+            }
+
+            todoTask.setFinishedCount(todoTask.getFinishedCount() + 1);
+            if (todoTask.getFinishedCount() >= todoTask.getAllCount()) {
+                todoTask.setStatus(UCConstant.TASK_FINISHED);
+            }
+            todoTask.setLastUpdate(new Date());
+            update(todoTask);
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("做任务出现异常：{}", e);
         }
 
-        //用户每完成当天一项任务一次，更新已完成数，当已完成数等于该项任务数量，更新该项任务数量为已完成
-        TodoTask todoTask = selectOne(userId, sysTaskBO.getId());
-
-        //如果该项任务已完成，则返回
-        if (todoTask == null || todoTask.getStatus().trim().equals(UCConstant.TASK_FINISHED)) {
-            return false;
-        }
-
-        todoTask.setFinishedCount(todoTask.getFinishedCount() + 1);
-        if (todoTask.getFinishedCount() >= todoTask.getAllCount()) {
-            todoTask.setStatus(UCConstant.TASK_FINISHED);
-        }
-        todoTask.setLastUpdate(new Date());
-        update(todoTask);
         return true;
     }
 
     @Override
-    public void generateAllTodoTaskList(LoginBO loginBO) {
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
-        if (user == null) {
-            return;
-        }
-        String userId = user.getId();
+    public void generateAllTodoTaskList(String userId) {
         //1.生成一次性任务
         generateOneTimeTaskList(userId);
 

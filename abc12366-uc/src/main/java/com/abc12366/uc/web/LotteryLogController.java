@@ -5,6 +5,7 @@ package com.abc12366.uc.web;
  * Date: 2017-09-18
  */
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.LotteryLogBO;
@@ -66,10 +67,29 @@ public class LotteryLogController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    /**
+     * 领奖接口
+     * @param lotteryLogId
+     * @param addressId
+     * @return
+     */
     @GetMapping(path = "/getLottery")
-    public ResponseEntity getLottery( @RequestParam(required = true) String logId,@RequestParam(required = false) String dizhiId) {
-//领奖接口
-        return null;
+    public ResponseEntity getLottery( @RequestParam(required = true) String lotteryLogId,@RequestParam(required = false) String addressId) {
+        if(lotteryLogId==null || lotteryLogId.isEmpty()){
+            throw new ServiceException(9999,"id为空");
+        }
+        LotteryLogBO returnObj = lotteryLogService.selectOne(lotteryLogId);
+        if (returnObj ==null){
+            throw new ServiceException(9999,"id错误，请验证");
+        }
+        if("未领取".equals(returnObj.getState())){
+            returnObj.setState("发货中");
+            returnObj.setAddressId(addressId);
+            returnObj = lotteryLogService.update(returnObj,returnObj.getId());
+            return ResponseEntity.ok(Utils.kv("data", returnObj));
+        }else{
+            throw new ServiceException(9999,"奖品状态不是未领取");
+        }
     }
     @PostMapping
     public ResponseEntity insert(@RequestBody LotteryLogBO lotteryLogBO) {

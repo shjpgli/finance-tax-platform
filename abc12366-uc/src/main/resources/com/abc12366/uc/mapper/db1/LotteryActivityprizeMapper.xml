@@ -4,14 +4,15 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryActivityprizeMapper">
 <insert id="insert" parameterType="com.abc12366.uc.model.LotteryActivityprize">
 insert into uc_lottery_activityprize(
-id,activityId,lotteryId,val1,description,status,createTime,lastTime,startTime,endTime,luck,balance,amount,timeStock,timeCount,timeDay
+id,activityId,lotteryId,val1,description,status,createTime,lastTime,startTime,endTime,luck,balance,amount,timeStock,timeCount,timeDay,sort
 )values(
 #{id},#{activityId},#{lotteryId},#{val1},#{description},#{status},#{createTime},#{lastTime},#{startTime},#{endTime},#{luck},#{balance},#{amount}
-,#{timeStock},#{timeCount},#{timeDay})
+,#{timeStock},#{timeCount},#{timeDay},#{sort})
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.LotteryActivityprize">
 update  uc_lottery_activityprize 
 <set>
+    <if test="sort!=null">sort=#{sort},</if>
 <if test="activityId!=null">activityId=#{activityId},</if>
 <if test="lotteryId!=null">lotteryId=#{lotteryId},</if>
 <if test="val1!=null">val1=#{val1},</if>
