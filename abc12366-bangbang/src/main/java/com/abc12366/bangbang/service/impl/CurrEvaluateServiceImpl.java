@@ -165,4 +165,17 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
         return "";
     }
 
+    @Override
+    public int selectEvaluateCnt(Map<String,Object> map) {
+        int cnt = 0;
+        try {
+            //查询评价次数
+            cnt = evaluateRoMapper.selectEvaluateCnt(map);
+        } catch (Exception e) {
+            LOGGER.error("查询评价次数信息异常：{}", e);
+            throw new ServiceException(4311);
+        }
+        return cnt;
+    }
+
 }

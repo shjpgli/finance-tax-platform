@@ -97,5 +97,13 @@
         WHERE questionId = #{questionId} AND userId = #{userId}
     </select>
 
+    <!-- 查询问题是否采纳过 -->
+    <select id="selectAcceptCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(id)
+        FROM bb_question_answer
+        WHERE questionId = #{questionId} AND isAccept = 1
+    </select>
+
 
 </mapper>

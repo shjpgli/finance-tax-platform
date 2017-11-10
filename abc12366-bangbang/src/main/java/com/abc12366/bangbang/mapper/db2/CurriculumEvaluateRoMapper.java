@@ -33,5 +33,9 @@ public interface CurriculumEvaluateRoMapper {
      **/
     List<CurriculumEvaluateBo> selectListBycurrId(Map<String, Object> map);
 
+    /**
+     * 查询评价次数
+     **/
+    int selectEvaluateCnt(Map<String, Object> map);
 
 }

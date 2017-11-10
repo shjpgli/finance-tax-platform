@@ -117,4 +117,19 @@ public class CurrEvaluateController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 课程评价次数
+     */
+    @GetMapping(path = "/selectEvaluateCnt")
+    public ResponseEntity selectEvaluateCnt(@RequestParam(value = "curriculumId", required = false) String curriculumId,
+                                         @RequestParam(value = "userId", required = false) String userId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("curriculumId",curriculumId);
+        dataMap.put("userId",userId);
+
+        int rtn = currEvaluateService.selectEvaluateCnt(dataMap);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+
+    }
+
 }
