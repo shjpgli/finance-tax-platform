@@ -306,7 +306,12 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     }
 
     @Override
-    public String updateIsAccept(String id) {
+    public String updateIsAccept(String questionId,String id) {
+        int cnt = answerRoMapper.selectAcceptCnt(questionId);
+        if(cnt >0){
+            //该问题已有采纳的回复，请勿重复采纳
+            throw new ServiceException(6190);
+        }
         //设置为采纳
         try {
             answerMapper.updateIsAccept(id);

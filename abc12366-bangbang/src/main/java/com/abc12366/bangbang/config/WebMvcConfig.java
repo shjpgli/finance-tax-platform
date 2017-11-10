@@ -167,7 +167,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/cheatsComment/selectList")
                         //帮邦用户列表查询
                 .excludePathPatterns("/qcuser/selectList")
-                .excludePathPatterns("/search/list")
+                        /*帮邦搜索*/
+                .excludePathPatterns("/search/list","/search/cheats/list","/search/question/list")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",

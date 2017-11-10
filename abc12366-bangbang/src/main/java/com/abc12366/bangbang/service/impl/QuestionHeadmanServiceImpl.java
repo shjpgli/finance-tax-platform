@@ -45,6 +45,7 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         BeanUtils.copyProperties(headmanBo, headman);
         headman.setId(Utils.uuid());
         headman.setUserId(Utils.getUserId());
+        headman.setStatus("apply");
         questionHeadmanMapper.insert(headman);
 //        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
 //        for (String classifyId:headmanBo.getClassifyIds()){

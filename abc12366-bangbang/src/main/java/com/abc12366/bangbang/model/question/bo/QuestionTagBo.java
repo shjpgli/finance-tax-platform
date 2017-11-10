@@ -25,6 +25,9 @@ public class QuestionTagBo implements Serializable {
     /**分类代码**varchar(100)**/
     private String classifyCode;
 
+    /**父分类代码**varchar(100)**/
+    private String parentCode;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -64,5 +67,13 @@ public class QuestionTagBo implements Serializable {
 
     public void setClassifyCode(String classifyCode) {
         this.classifyCode = classifyCode;
+    }
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
     }
 }

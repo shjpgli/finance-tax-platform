@@ -44,6 +44,20 @@
         </if>
     </select>
 
+    <!-- 查询评价次数 -->
+    <select id="selectEvaluateCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(evaluateId)
+        FROM bb_curriculum_evaluate
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId}
+        </if>
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId = #{curriculumId}
+        </if>
+    </select>
+
 
 
 </mapper>

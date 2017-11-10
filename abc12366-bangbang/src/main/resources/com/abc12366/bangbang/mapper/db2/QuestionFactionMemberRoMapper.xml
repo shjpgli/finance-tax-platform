@@ -78,4 +78,12 @@
             AND factionId = #{factionId} ) b where b.plcnt >2 and b.likecnt >6;
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectMemberDutyCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM bb_question_faction_member
+        WHERE factionId = (select factionId from bb_question_faction_member m where m.memberId = #{factionId} limit 1) and duty = #{duty}
+    </select>
+
 </mapper>

@@ -57,5 +57,12 @@ public interface QuestionAnswerRoMapper {
      **/
     int  selectMyAnswerCnt(Map<String, Object> map);
 
+    /**
+     *
+     * 查询问题是否采纳过
+     *
+     **/
+    int selectAcceptCnt(@Param("questionId") String questionId);
+
 
 }

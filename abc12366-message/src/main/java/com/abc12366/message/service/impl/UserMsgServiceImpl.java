@@ -6,6 +6,7 @@ import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
 import com.alibaba.fastjson.JSON;
@@ -131,15 +132,9 @@ public class UserMsgServiceImpl implements UserMsgService {
     }
 
     @Override
-    public List<UserMessageForBangbang> selectListToUser(Map<String, String> map, int page, int size) {
+    public List<UserMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return userMsgRoMapper.selectListToUser(map);
-    }
-
-    @Override
-    public List<UserMessageForBangbang> selectListByUser(Map<String, String> map, int page, int size) {
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return userMsgRoMapper.selectListByUser(map);
+        return userMsgRoMapper.selectListByUsername(map);
     }
 
     @Override

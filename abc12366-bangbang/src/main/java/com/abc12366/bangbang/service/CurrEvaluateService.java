@@ -23,4 +23,6 @@ public interface CurrEvaluateService {
 
     String delete(String evaluateId);
 
+    int selectEvaluateCnt(Map<String, Object> map);
+
 }

@@ -59,5 +59,12 @@ public interface QuestionFactionMemberRoMapper {
      **/
     List<QuestionMemberHonor> selectMemberHonorList(@Param("factionId") String factionId);
 
+    /**
+     *
+     * 查询职位数量
+     *
+     **/
+    int selectMemberDutyCnt(Map<String, Object> map);
+
 
 }
