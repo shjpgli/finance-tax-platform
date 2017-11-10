@@ -54,6 +54,7 @@ public class CjxxRemindJob implements Job{
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
+		
 		//查询申报期限
 		Map<String, String> mapA = new HashMap<>();
 		mapA.put("serviceid", "GY01");
