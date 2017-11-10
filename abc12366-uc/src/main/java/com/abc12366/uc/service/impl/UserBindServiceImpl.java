@@ -285,52 +285,52 @@ public class UserBindServiceImpl implements UserBindService {
         return null;
     }
 
-    @Override
-    public HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
-        HngsAppLoginResponse hngsAppLoginResponse = new HngsAppLoginResponse();
-
-        //先到缓存里查看是否有有效accessToken
-        if (appCache.containsKey("accessToken") && !StringUtils.isEmpty(appCache.get("accessToken")) &&
-                appCache.containsKey("expiresIn") && !StringUtils.isEmpty(appCache.get("expiresIn"))) {
-            try {
-                Date expiredDate = (Date) appCache.get("expiresIn");
-                //加60分钟的缓冲时间减少误差
-                if (expiredDate != null && expiredDate.getTime() > (System.currentTimeMillis() + 60 * 60 * 1000)) {
-                    hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
-                    hngsAppLoginResponse.setExpiresTime(expiredDate);
-                }
-                request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
-                return hngsAppLoginResponse;
-            } catch (Exception e) {
-
-            }
-        }
-
-        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url");
-        HttpHeaders headers = new HttpHeaders();
-
-        Map<String, Object> requestBody = new HashMap<>();
-        String appId = SpringCtxHolder.getProperty("APPID");
-        String secret = SpringCtxHolder.getProperty("SECRET");
-        requestBody.put("appId", appId);
-        requestBody.put("secret", secret);
-
-//        String requestBody = "{\"appId\":\"ETAX_PC\",\"secret\":\"3A6ABF6B62EA0190E053550C483DD05A\"}";
-
-        HttpEntity requestEntity = new HttpEntity(requestBody, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity responseEntity = restTemplate.exchange(url + "/app/login", HttpMethod.POST, requestEntity, String.class);
-        if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
-                    HngsAppLoginResponse.class);
-            request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
-            appCache.put("accessToken", hngsAppLoginResponse.getAccessToken());
-            appCache.put("expiresIn", hngsAppLoginResponse.getExpiresTime());
-            LOGGER.info("uc调用电子税局应用登录接口成功，accessToken：{}", hngsAppLoginResponse.getAccessToken());
-            return hngsAppLoginResponse;
-        }
-        return null;
-    }
+//    @Override
+//    public HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
+//        HngsAppLoginResponse hngsAppLoginResponse = new HngsAppLoginResponse();
+//
+//        //先到缓存里查看是否有有效accessToken
+//        if (appCache.containsKey("accessToken") && !StringUtils.isEmpty(appCache.get("accessToken")) &&
+//                appCache.containsKey("expiresIn") && !StringUtils.isEmpty(appCache.get("expiresIn"))) {
+//            try {
+//                Date expiredDate = (Date) appCache.get("expiresIn");
+//                //加60分钟的缓冲时间减少误差
+//                if (expiredDate != null && expiredDate.getTime() > (System.currentTimeMillis() + 60 * 60 * 1000)) {
+//                    hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
+//                    hngsAppLoginResponse.setExpiresTime(expiredDate);
+//                }
+//                request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
+//                return hngsAppLoginResponse;
+//            } catch (Exception e) {
+//
+//            }
+//        }
+//
+//        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url");
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        Map<String, Object> requestBody = new HashMap<>();
+//        String appId = SpringCtxHolder.getProperty("APPID");
+//        String secret = SpringCtxHolder.getProperty("SECRET");
+//        requestBody.put("appId", appId);
+//        requestBody.put("secret", secret);
+//
+////        String requestBody = "{\"appId\":\"ETAX_PC\",\"secret\":\"3A6ABF6B62EA0190E053550C483DD05A\"}";
+//
+//        HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+//        RestTemplate restTemplate = new RestTemplate();
+//        ResponseEntity responseEntity = restTemplate.exchange(url + "/app/login", HttpMethod.POST, requestEntity, String.class);
+//        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+//            hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
+//                    HngsAppLoginResponse.class);
+//            request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
+//            appCache.put("accessToken", hngsAppLoginResponse.getAccessToken());
+//            appCache.put("expiresIn", hngsAppLoginResponse.getExpiresTime());
+//            LOGGER.info("uc调用电子税局应用登录接口成功，accessToken：{}", hngsAppLoginResponse.getAccessToken());
+//            return hngsAppLoginResponse;
+//        }
+//        return null;
+//    }
 
     @Override
     public boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request) {
