@@ -171,11 +171,12 @@
     </select>
 
     <select id="selectSimple" parameterType="java.lang.String" resultType="com.abc12366.uc.model.bo.UserSimpleInfoBO">
-        select uu.id, uu.nickName, uu.userPicturePath,uu.tags
+        select uu.id, uu.nickName, uu.userPicturePath, uue.tags, uue.signature, uue.education,
+         uue.graduate, uue.occupation, uue.income, uue.careerDuration
         from uc_user uu
         left join uc_user_extend uue
-         on uue.userId=uu.id
-         where uu.id=#{userId}
+        on uue.userId = uu.id
+        where uu.id = #{userId}
     </select>
     
     <select id="getAllNomalCont" resultType="java.lang.Integer">
