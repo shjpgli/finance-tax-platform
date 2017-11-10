@@ -94,7 +94,7 @@ public interface QuestionRoMapper {
     /**
      * 查询(话题推荐管理)
      **/
-    List<QuestionBo> selectListTopicRecommend(TopicRecommendParamBO param);
+    List<RecommendBo> selectListTopicRecommend(TopicRecommendParamBO param);
 
     /**
      * 我管理的话题

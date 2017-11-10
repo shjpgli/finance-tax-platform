@@ -1,14 +1,12 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionInviteMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionLogMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
-import com.abc12366.bangbang.model.question.QuestionLog;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
@@ -479,7 +477,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionBo> selectList(TopicRecommendParamBO param) {
+    public List<RecommendBo> selectList(TopicRecommendParamBO param) {
         return questionRoMapper.selectListTopicRecommend(param);
     }
 

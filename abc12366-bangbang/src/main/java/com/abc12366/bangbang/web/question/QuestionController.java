@@ -280,7 +280,7 @@ public class QuestionController {
     @GetMapping(path = "/selectListTopicRecommend")
     public ResponseEntity topicRecommendList(TopicRecommendParamBO param) {
         PageHelper.startPage(param.getPage(), param.getSize(), true).pageSizeZero(true).reasonable(true);
-        List<QuestionBo> dataList = questionService.selectList(param);
+        List<RecommendBo> dataList = questionService.selectList(param);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
